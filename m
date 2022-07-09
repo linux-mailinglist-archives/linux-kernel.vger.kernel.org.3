@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCFD56CBFD
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 01:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C176C56CC00
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 01:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiGIXVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 19:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S229541AbiGIXXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 19:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGIXVX (ORCPT
+        with ESMTP id S229462AbiGIXXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 19:21:23 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8637124F13
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 16:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657408882; x=1688944882;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oITfWi4j+w3lW4w5dIdlJ6FTgZPOGpbS4WG1B8GgCiI=;
-  b=UOTdCyd19H3WNMFd7N5TFKJwoPpp3Qg/fY8GCEylphxeFEadNZmtcOA4
-   PSWkqDBisBcf6ZComPTycgQ6cmf65ur2h0QTjxJGLoRysZqwR16kgKSIz
-   sRiF2oPhZNGYFLzhLf4Tx9VAv61uH5Vjy0m7At/ia1dnjY8Hoe8gT7gzG
-   hTZZLj7AqXFb4eoK8YsqqryFP5gVGPhGPRXOoz0jprcM84lI4Exkxczdq
-   vwxNaAOG16R+rQtiDLxqTrpy8C1uwSe3EbNBO9o5wpRXhft+LmwI/8QwV
-   GUQmdj69lub77pqWILVCxYE9xZMZaPtaUo7TGCjrxFLSeEqSa37+o0BH/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="346151417"
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="346151417"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 16:21:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
-   d="scan'208";a="921367604"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Jul 2022 16:21:20 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAJlI-000PFo-34;
-        Sat, 09 Jul 2022 23:21:20 +0000
-Date:   Sun, 10 Jul 2022 07:20:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zx2c4@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [crng-random:tip 1/2] arch/x86/kernel/kexec-bzimage64.c:219:14:
- error: no member named 'ima_buffer_size' in 'struct kimage'
-Message-ID: <202207100728.6J1p2SEd-lkp@intel.com>
+        Sat, 9 Jul 2022 19:23:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4922AA46E
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 16:23:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3E286101F
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC62EC3411C
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:23:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PcOmRlfl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657409021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4luwdHtoa5TijeIa0ocStPfhJ5ySkRw52BzfnU2PTro=;
+        b=PcOmRlflZvJudt6wPN/M4269Hbb/2snzrDGtkr2F37K01WjkH/hjOkFaCaBc+qyVUE/Ibt
+        gcz0Bk7Dklfd+N0tI1Dcnh0QHWQLwVHcLWLZT0mbGdHaU94GPIxJvJjwzZ2xcP+Ua0roGq
+        WYYdM4/pvyqrQ7h+sNPhB4y/XKfx0EQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ee9c887b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sat, 9 Jul 2022 23:23:41 +0000 (UTC)
+Received: by mail-il1-f182.google.com with SMTP id v1so1201620ilg.11
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 16:23:41 -0700 (PDT)
+X-Gm-Message-State: AJIora+PLrvXTDmzLDz/fsQzycVrZZf9Ryo7A1GeonqcK76BIJAqDUMe
+        ac5gFmiETRi7U2HICJ01IY39BCj4Nd8SgsxCnyc=
+X-Google-Smtp-Source: AGRyM1u0QrOeHNn5hN7JEwN7Gon7A7YUY+3gDx6Q90PkI16F8Re6eK8n50bnZzjR+SamjqgGyks9napDt8znePeKLl8=
+X-Received: by 2002:a05:6e02:164f:b0:2dc:6d38:ff8e with SMTP id
+ v15-20020a056e02164f00b002dc6d38ff8emr2277930ilu.16.1657409019467; Sat, 09
+ Jul 2022 16:23:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:20e5:0:0:0:0 with HTTP; Sat, 9 Jul 2022 16:23:38
+ -0700 (PDT)
+In-Reply-To: <ec46a292-dcc1-c12b-25a0-491b522c2db8@zytor.com>
+References: <YslN1bo2jnnxl3E3@zx2c4.com> <20220709094853.1090735-1-Jason@zx2c4.com>
+ <ec46a292-dcc1-c12b-25a0-491b522c2db8@zytor.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 10 Jul 2022 01:23:38 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pPTWB0so2-wXmmsMQn0WhqZWwVcbpMP15U=QCt57Q_cg@mail.gmail.com>
+Message-ID: <CAHmME9pPTWB0so2-wXmmsMQn0WhqZWwVcbpMP15U=QCt57Q_cg@mail.gmail.com>
+Subject: Re: [PATCH tip v9] x86/setup: Use rng seeds from setup_data
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tip
-head:   532de96923f9c8e0ec456c1b91499327579c2aba
-commit: acc53fc31a5e3d990d8241a09438d98b1a6aee1f [1/2] x86/setup: Use rng seeds from setup_data
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220710/202207100728.6J1p2SEd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=acc53fc31a5e3d990d8241a09438d98b1a6aee1f
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random tip
-        git checkout acc53fc31a5e3d990d8241a09438d98b1a6aee1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hey Peter,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 7/10/22, H. Peter Anvin <hpa@zytor.com> wrote:
+> On 7/9/22 02:48, Jason A. Donenfeld wrote:
+>> Currently the only way x86 can get an early boot RNG seed is via EFI,
+>> which is generally always used now for physical machines, but is very
+>> rarely used in VMs, especially VMs that are optimized for starting
+>> "instantaneously", such as Firecracker's MicroVM. For tiny fast booting
+>> VMs, EFI is not something you generally need or want.
+>>
+>> Rather, here we want the ability for the image loader or firmware to
+>> pass a single random seed, exactly as device tree platforms do with the
+>> "rng-seed" property. Additionally, this is something that bootloaders
+>> can append, with their own seed file management, which is something
+>> every other major OS ecosystem has that we do not (yet).
+>>
+>> This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
+>> entries that are parsed at boot. It also takes care to zero out the seed
+>> immediately after using, in order to retain forward secrecy. This all
+>> takes about 7 trivial lines of code.
+>>
+>> Then, on kexec_file_load(), a new fresh seed is generated and passed to
+>> the next kernel, just as is done on device tree architectures when
+>> using kexec. And, importantly, I've tested that QEMU is able to properly
+>> pass SETUP_RNG_SEED as well, making this work for every step of the way.
+>> This code too is pretty straight forward.
+>>
+>> Together these measures ensure that VMs and nested kexec()'d kernels
+>> always receive a proper boot time RNG seed at the earliest possible
+>> stage from their parents:
+>>
+>>     - Host [already has strongly initialized RNG]
+>>       - QEMU [passes fresh seed in SETUP_RNG_SEED field]
+>>         - Linux [uses parent's seed and gathers entropy of its own]
+>>           - kexec [passes this in SETUP_RNG_SEED field]
+>>             - Linux [uses parent's seed and gathers entropy of its own]
+>>               - kexec [passes this in SETUP_RNG_SEED field]
+>>                 - Linux [uses parent's seed and gathers entropy of its
+>> own]
+>>                   - kexec [passes this in SETUP_RNG_SEED field]
+>> 		   - ...
+>>
+>> I've verified in several scenarios that this works quite well from a
+>> host kernel to QEMU and down inwards, mixing and matching loaders, with
+>> every layer providing a seed to the next.
+>>
+>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>
+> Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 
-All errors (new ones prefixed by >>):
+Thanks for the ack. In case your ack here is meant to communicate
+"good to go for random.git," I thought I should mention: while earlier
+versions of this patch were against my random.git tree, this one (and
+the previous) is against tip.git, because otherwise there'd be some
+annoying conflicts when merging. So if it's not too much trouble, I
+think it would make sense to apply this to tip.
 
->> arch/x86/kernel/kexec-bzimage64.c:219:14: error: no member named 'ima_buffer_size' in 'struct kimage'
-           if (!image->ima_buffer_size)
-                ~~~~~  ^
->> arch/x86/kernel/kexec-bzimage64.c:226:21: error: no member named 'ima_buffer_addr' in 'struct kimage'
-           ima->addr = image->ima_buffer_addr;
-                       ~~~~~  ^
-   arch/x86/kernel/kexec-bzimage64.c:227:21: error: no member named 'ima_buffer_size' in 'struct kimage'
-           ima->size = image->ima_buffer_size;
-                       ~~~~~  ^
-   3 errors generated.
+Jason
 
-
-vim +219 arch/x86/kernel/kexec-bzimage64.c
-
-6a2c20e7d8900ed Vivek Goyal       2014-08-08  209  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  210  static void
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  211  setup_ima_state(const struct kimage *image, struct boot_params *params,
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  212  		unsigned long params_load_addr,
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  213  		unsigned int ima_setup_data_offset)
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  214  {
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  215  	struct setup_data *sd = (void *)params + ima_setup_data_offset;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  216  	unsigned long setup_data_phys;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  217  	struct ima_setup_data *ima;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  218  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30 @219  	if (!image->ima_buffer_size)
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  220  		return;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  221  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  222  	sd->type = SETUP_IMA;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  223  	sd->len = sizeof(*ima);
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  224  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  225  	ima = (void *)sd + sizeof(struct setup_data);
-b69a2afd5afce9b Jonathan McDowell 2022-06-30 @226  	ima->addr = image->ima_buffer_addr;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  227  	ima->size = image->ima_buffer_size;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  228  
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  229  	/* Add setup data */
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  230  	setup_data_phys = params_load_addr + ima_setup_data_offset;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  231  	sd->next = params->hdr.setup_data;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  232  	params->hdr.setup_data = setup_data_phys;
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  233  }
-b69a2afd5afce9b Jonathan McDowell 2022-06-30  234  
-
-:::::: The code at line 219 was first introduced by commit
-:::::: b69a2afd5afce9bf6d56e349d6ab592c916e20f2 x86/kexec: Carry forward IMA measurement log on kexec
-
-:::::: TO: Jonathan McDowell <noodles@fb.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+>> ---
+>> Changes v8->v9:
+>> - [hpa] Update SETUP_TYPE_MAX and add SETUP_ENUM_MAX.
+>

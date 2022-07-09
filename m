@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3DA56C5E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 04:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F4556C5EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 04:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiGICAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 22:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S229631AbiGICEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 22:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiGICAd (ORCPT
+        with ESMTP id S229531AbiGICEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 22:00:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CA34E87E;
-        Fri,  8 Jul 2022 19:00:32 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LftbN5TqQzkWnW;
-        Sat,  9 Jul 2022 09:58:24 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 9 Jul 2022 10:00:30 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 9 Jul 2022 10:00:29 +0800
-Subject: Re: [PATCH v2] perf/core: Fix data race between perf_event_set_output
- and perf_mmap_close
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220704120006.98141-1-yangjihong1@huawei.com>
- <YsMGixSL4CDPTTZs@worktop.programming.kicks-ass.net>
- <YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net>
- <1e28533a-33ed-cae3-0389-c68e7c52cead@huawei.com>
-Message-ID: <3ba262b0-a92f-e57d-af31-baccca765ac3@huawei.com>
-Date:   Sat, 9 Jul 2022 10:00:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <1e28533a-33ed-cae3-0389-c68e7c52cead@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 22:04:00 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF635E312
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 19:03:58 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u15-20020a25ab0f000000b0066e49f6c461so293982ybi.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 19:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=OezEBl0OMJJ+7Kc3NMVkOfYcKC2GvNQvDhGPvh9nLMc=;
+        b=rd625VKENraqmuoeOr/ugJ4GPax+nlYNvjwj2WIHhVyPNOvbBy3bE2dp7PpsZATt7n
+         GQK8MSyoImKoGGZAJ2eOvL0MGKDZ3GmNr+AjzmJnXoVXGH6V6ZKbk3v5n/pAW4hXwn1M
+         Lm5xTUnNazLmAaJc83lEXcs4OfFf67Hjm2qC62E/zIzVDg1k3semEqyX228QIMZ0Bu1U
+         jko1YKPhPJMRI4D5xcedNzrLYLYTPkVfBcuWtoaguuGzj6qzNUPgMI0P2api/D13Jisf
+         YsxiOA8rhd6IoMaPNnnc2hshjrgc3ZK6bEZmwZmWlQX7lm6lXSZkgyFa7g6ENgac/LRp
+         jjAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=OezEBl0OMJJ+7Kc3NMVkOfYcKC2GvNQvDhGPvh9nLMc=;
+        b=ylsZyMHGMH4hCuecZdneIMG4fQj69mESfl1lBN+IH+n905d7YdXekTXo1y4gwzq8rU
+         tgTACwjaMb3HBLrPTIJOAYv+HTVp6JEBenWs648Z5li/voJAZxHvfO+VdPuSCmMgxovQ
+         mz07Czg5zqcsk8SL7qzJ7M19+S6SKsB1lb8TQi9Hgjzp60ZrssKhB6FLa4817VJIOnSd
+         0DOr0pOmi972Isv8Gmnr/SRb4qHd3T6SmDvw2dMOPw0FGHzcFMIUX6Am4IcO3UiDCA7I
+         r4Flv48G43ZXXBCirc50mgqJUxSvZKaDg+eF5qQpbbja4KXnUx3iaFryNqzUjPtXiK9x
+         m5nw==
+X-Gm-Message-State: AJIora/QDf4zIGYkVHZCGSAnkF6PtUXv2+Ct3OICMKcSFkNlnjv/zCYi
+        MDUnbGid4yWAPlZd4qiEGqy7+yzNb5Eqhw==
+X-Google-Smtp-Source: AGRyM1u3i7KcuyQkYM0KCTmxwSnUvZ+10826X2uyepp6zX8nhpS6rVvxwnkS5nLuoS4lEssz/WluJnYi9ITSHA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a0d:cbd8:0:b0:31d:a46:a1ee with SMTP id
+ n207-20020a0dcbd8000000b0031d0a46a1eemr7321378ywd.201.1657332237913; Fri, 08
+ Jul 2022 19:03:57 -0700 (PDT)
+Date:   Sat, 9 Jul 2022 02:03:55 +0000
+In-Reply-To: <20220709002858.129534-1-roman.gushchin@linux.dev>
+Message-Id: <20220709020355.bz7p4k34yw46iesp@google.com>
+Mime-Version: 1.0
+References: <20220709002858.129534-1-roman.gushchin@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf: reparent bpf maps on memcg offlining
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 2022/7/6 20:29, Yang Jihong wrote:
-> Hello,
+On Fri, Jul 08, 2022 at 05:28:58PM -0700, Roman Gushchin wrote:
+> The memory consumed by a mpf map is always accounted to the memory
+> cgroup of the process which created the map. The map can outlive
+> the memory cgroup if it's used by processes in other cgroups or
+> is pinned on bpffs. In this case the map pins the original cgroup
+> in the dying state.
 > 
-> On 2022/7/5 21:07, Peter Zijlstra wrote:
->> On Mon, Jul 04, 2022 at 05:26:04PM +0200, Peter Zijlstra wrote:
->>> On Mon, Jul 04, 2022 at 08:00:06PM +0800, Yang Jihong wrote:
->>>> Data race exists between perf_event_set_output and perf_mmap_close.
->>>> The scenario is as follows:
->>>>
->>>>                    
->>>> CPU1                                                       CPU2
->>>>                                                                      
->>>> perf_mmap_close(event2)
->>>>                                                                        
->>>> if (atomic_dec_and_test(&event2->rb->mmap_count)  // mmap_count 1 -> 0
->>>>                                                                          
->>>> detach_rest = true;
->>>> ioctl(event1, PERF_EVENT_IOC_SET_OUTPUT, event2)
->>>>    perf_event_set_output(event1, event2)
->>>>                                                                        
->>>> if (!detach_rest)
->>>>                                                                          
->>>> goto out_put;
->>>>                                                                        
->>>> list_for_each_entry_rcu(event, &event2->rb->event_list, rb_entry)
->>>>                                                                          
->>>> ring_buffer_attach(event, NULL)
->>>>                                                                        
->>>> // because event1 has not been added to event2->rb->event_list,
->>>>                                                                        
->>>> // event1->rb is not set to NULL in these loops
->>>>
->>>>      ring_buffer_attach(event1, event2->rb)
->>>>        list_add_rcu(&event1->rb_entry, &event2->rb->event_list)
->>>>
->>>> The above data race causes a problem, that is, event1->rb is not 
->>>> NULL, but event1->rb->mmap_count is 0.
->>>> If the perf_mmap interface is invoked for the fd of event1, the 
->>>> kernel keeps in the perf_mmap infinite loop:
->>>>
->>>> again:
->>>>          mutex_lock(&event->mmap_mutex);
->>>>          if (event->rb) {
->>>> <SNIP>
->>>>                  if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
->>>>                          /*
->>>>                           * Raced against perf_mmap_close() through
->>>>                           * perf_event_set_output(). Try again, hope 
->>>> for better
->>>>                           * luck.
->>>>                           */
->>>>                          mutex_unlock(&event->mmap_mutex);
->>>>                          goto again;
->>>>                  }
->>>> <SNIP>
->>>
->>> Too tired, must look again tomorrow, little feeback below.
->>
->> With brain more awake I ended up with the below. Does that work?
-I have verified that this patch can solve the problem.
-
-Do I submit this patch? Or do you submit it?
-
-Thanks,
-Yang
-
+> For other types of objects (slab objects, non-slab kernel allocations,
+> percpu objects and recently LRU pages) there is a reparenting process
+> implemented: on cgroup offlining charged objects are getting
+> reassigned to the parent cgroup. Because all charges and statistics
+> are fully recursive it's a fairly cheap operation.
 > 
-> Yes, I apply the patch on kernel versions 5.10 and mainline,
-> and it could fixed the problem.
+> For efficiency and consistency with other types of objects, let's do
+> the same for bpf maps. Fortunately thanks to the objcg API, the
+> required changes are minimal.
 > 
-> Tested-by: Yang Jihong <yangjihong1@huawei.com>
+> Please, note that individual allocations (slabs, percpu and large
+> kmallocs) already have the reparenting mechanism. This commit adds
+> it to the saved map->memcg pointer by replacing it to map->objcg.
+> Because dying cgroups are not visible for a user and all charges are
+> recursive, this commit doesn't bring any behavior changes for a user.
 > 
-> Thanks,
-> Yang
-> .
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Reviewed-by: Shakeel Butt <shakeelb@google.com>

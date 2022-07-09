@@ -2,78 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6EA56CB03
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2497856CB04
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiGISHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 14:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S229513AbiGISJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 14:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGISH3 (ORCPT
+        with ESMTP id S229448AbiGISJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 14:07:29 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9F15FDF;
-        Sat,  9 Jul 2022 11:07:25 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-fe023ab520so2351980fac.10;
-        Sat, 09 Jul 2022 11:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fZ2DlAja/+2nCGSdIH4+cPZNDYwaZSWAPaICbiz9AYM=;
-        b=CYPf091AKymWbb5KHYTb7xPPniLdyUxg/MdmhVb2t6cSo5t502Py5cw8HMWXEBjLH1
-         vILDxtLKyCK80TFXiWp571x0dk2oGF/cA1xd+bT117FzNkwLX6S9NdPjCyU0LjYSoxBf
-         eM2kOZ/HqHBUd9EAyd0i39WUQ5t+0t5qE6e0K2P8LxvTNv3QjtgAGUEKzAr9EdBOvMjV
-         I6gsREeYeKWZJZEs0WDRlz/nRvKp8R6LB3SXfoMu4H5AiAdQJFTPSVVGrkI4GXFw3WrY
-         E1AXdtJk/yvwJXT+h30IAWIfMFQRDX6roX6bfBpyXbaa2G2eex0eOqjh2kwF1MsqznH2
-         xogQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fZ2DlAja/+2nCGSdIH4+cPZNDYwaZSWAPaICbiz9AYM=;
-        b=qZbUQ37u0smfy+0seVTeeZE463z68DDolNDsbZFci/bGkrgDJBQhWO6p/WKwNsM+RE
-         jYlGFNWKmMmolDwZFFP6g6mmI1oYG66vFnt8lIJPbhzhl8yamVTvamTJ17VttSOdeE23
-         BNqOeF5TYXmb5lkAs+wCf+veE17uLTTFjPxP/Qakr9iJtzhRpri+kkV/umpJZAYmDbMa
-         crzDcnBvTBGIiSNikeVENE3G1bovWVwfPNs8M/GqgkdZyyXeuIFmgbXnGC9qcnHM9eCF
-         uLzhGMd1QLLgNc5ywIXgW5dxFKNnGNLAi8chKRCVhesV/Urv1B1BndynQp+ilVx1hKbm
-         r2cg==
-X-Gm-Message-State: AJIora8komt8R2kg2WFUe5hDrksTrzbcpzQksZj2I70/R1zBPvvORh1C
-        XgpTvM7myxZN1aj4q7Jo5KsNfHz0ucIyklo6NeFeVrppDic=
-X-Google-Smtp-Source: AGRyM1t02SzdumzFSQRTSRQJ9Jw3RvXoHXRAYYz+j/aYwo7aVDO0Q+6PAbUTzb+Nmvpl8VuNBKo4bUA/7jnhFPAx1x4=
-X-Received: by 2002:a05:6870:5896:b0:e6:6c21:3584 with SMTP id
- be22-20020a056870589600b000e66c213584mr3398536oab.220.1657390045027; Sat, 09
- Jul 2022 11:07:25 -0700 (PDT)
+        Sat, 9 Jul 2022 14:09:01 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F90413F76
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 11:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=46f1t+u0Kq4NcI1QZkVhp45Lm1NWYmJTdVTOjGrUrNk=; b=S18EurgJ6GxPICZKWQJwIYB8WT
+        ZNfXm1YICRPZTCNC5Gi0SkJLxZzKJOjFkHd6AXmtsRnuzItENrFUKzyQ6K1qR/YVwVdL1gLB/dgPl
+        zGrsCzeMUjfty0kCTqncwJXHgfVxUuTmf4G5TmgDWqcyTH4Kb6WEPKomwMkaxkT1H3w76yF0zuz1O
+        NSMYYtm/SLHRDlIuoUNrrYnvjSaTFZPLDOcKOhs5wLl5oiI/auUJJVuS1OevEI+M7cfLGOFEtDyLZ
+        YefcHBYPf8qS2+LYJ1JHzPDdp4oEIQjgxsQizA1t9OUy+YqxY1z3GdrVFsNwwPduEadDcIg2eeWmH
+        pT93f3x0kcDzbzspf1YaVw09SsQCIrurIIPyT7Afc/pDI28TwGNT1Ir0Ph/vibcDHM9yEVgfg/ZgB
+        aUkkdaqlChzFVDzaEDLVe1WPyBJjS1NY1bGi9F4xtPxfum+Ijse/hQqTqRLBGHOpOsrZpEcbtbmWo
+        OlCaLsesecYmjpKRyIL/U7F/rlrgVUJ7M+ZrtiCjRxmq9pw6ftmV0SQpJJGB1+/+y3+dno3BRqzN8
+        i792Kp0D4tG4WoUWqNxlA60NI/ezCDyGvNKR4vQxrSt9zHSnOnghUcnwAbRzM87GINoSzxUTVSWow
+        BCw8DzQYa04eqXB3s97fgVY0J0bgDmmbVsFYyKvxc=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>
+Subject: Re: [PATCH 3/3] 9p: Add mempools for RPCs
+Date:   Sat, 09 Jul 2022 20:08:41 +0200
+Message-ID: <2211309.MyIe47cYEz@silver>
+In-Reply-To: <YsmT7WHDh9NXZ/nV@codewreck.org>
+References: <20220704010945.C230AC341C7@smtp.kernel.org> <1690934.P4sCSNuWZQ@silver>
+ <YsmT7WHDh9NXZ/nV@codewreck.org>
 MIME-Version: 1.0
-References: <20220708020223.4234-1-liubo03@inspur.com>
-In-Reply-To: <20220708020223.4234-1-liubo03@inspur.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Sat, 9 Jul 2022 21:07:14 +0300
-Message-ID: <CAHNKnsQRCNowC+MSfGYNi4bmVhg5O305+hwmrWjgbesoWp8UgA@mail.gmail.com>
-Subject: Re: [PATCH] net: wwan: call ida_free when device_register fails
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 5:03 AM Bo Liu <liubo03@inspur.com> wrote:
-> when device_register() fails, we should call ida_free().
->
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+On Samstag, 9. Juli 2022 16:42:53 CEST Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Sat, Jul 09, 2022 at 04:21:46PM +0200:
+> > > The best thing to do would probably to just tell the client it can't use
+> > > the mempools for flushes -- the flushes are rare and will use small
+> > > buffers with your smaller allocations patch; I bet I wouldn't be able to
+> > > reproduce that anymore but it should probably just forbid the mempool
+> > > just in case.
+> > 
+> > So the problem is that one task ends up with more than 1 request at a
+> > time,
+> > and the buffer is allocated and associated per request, not per task. If I
+> > am not missing something, then this scenario (>1 request simultaniously
+> > per task) currently may actually only happen with p9_client_flush()
+> > calls. Which simplifies the problem.
+> 
+> Yes that should be the only case where this happens.
+> 
+> > So probably the best way would be to simply flip the call order such that
+> > p9_tag_remove() is called before p9_client_flush(), similar to how it's
+> > already done with p9_client_clunk() calls?
+> 
+> I don't think we can do that safely without some extra work - because
+> until we get the reply from the flush, the legitimate reply to the
+> original request can still come. It's perfectly possible that by the
+> time we sent the flush the server will have sent the normal reply to our
+> original request -- actually with flush stuck there it's actually almost
+> certain it has...
 
-Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Mmm, I "think" that wouldn't be something new. There is no guarantee that 
+client would not get a late response delivery by server of a request that 
+client has already thrown away.
+
+What happens on server side is: requests come in sequentially, and are started 
+to be processed exactly in that order. But then they are actually running in 
+parallel on worker threads, dispatched back and forth between threads several 
+times. And Tflush itself is really just another request. So there is no 
+guarantee that the response order corresponds to the order of requests 
+originally sent by client, and if client sent a Tflush, it might still get a 
+response to its causal, abolished "normal" request.
+
+Best regards,
+Christian Schoenebeck
+
+

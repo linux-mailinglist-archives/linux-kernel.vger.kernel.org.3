@@ -2,173 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C4F56C580
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE0D56C57C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiGIAif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 20:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S229463AbiGIAhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 20:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGIAi3 (ORCPT
+        with ESMTP id S229436AbiGIAhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:38:29 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBF88C140;
-        Fri,  8 Jul 2022 17:30:36 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657326634;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ADYFef2dhxd8+x7QZlU5pjPg3v772ubcP31/2D1XlmI=;
-        b=ikXDP09OMwIP8qm9d0t3habipvuLSnv3b4kLHC9tJODJKgs18KSBciUYYv6Htd2DuejyKl
-        dCP/CtT1BAcp68ahR7BVeYJxD4q5Yk+jT0Zxg0D4Xcnhst6mkMYlpLgMBLncVOCVua5Rsp
-        wgMdhK7K+g6JodLCa3YbJ95K74Q+aAo=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     bpf@vger.kernel.org
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH bpf-next] bpf: reparent bpf maps on memcg offlining
-Date:   Fri,  8 Jul 2022 17:28:58 -0700
-Message-Id: <20220709002858.129534-1-roman.gushchin@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 20:37:20 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084068E4E0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:37:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31c9a49a1a8so2746927b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=nIOdyfUDOuPdVLt7ksu7PVNTjcXNzQQTOJh36uQBLdI=;
+        b=NqBR7hRseYFHoMsnRFTk89V8cSnuHJV5mvA3y4Vk33uUrjNCKuHT4pl19gAUNi+Dax
+         zwBUmPo6FqBNc7pN2LWNtXwXuOcTnqJMul1rixwFNbf2XBCk+uAtRBgeb4CvFAPrGiG4
+         opdiSqMuxHB8ltpTETRZJfhINcS1BoQ5i5hQxO2AWaBweSPmnT0IikalBpA9zuIBh2Xd
+         SgGxFHmttmmj30Bw2OhlyM+D39A1L+ewjelBI1UHzvR7iOlV7e54CaCKzcw6izBmIgl/
+         5aO+m5GwAXO3eIrMIbedfkYWOji2nUj3eOuBLWq+ZH+gR+U065eF4HsZfOs3Nr7lqog7
+         5x8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=nIOdyfUDOuPdVLt7ksu7PVNTjcXNzQQTOJh36uQBLdI=;
+        b=HQGBHKImEW5eLw4Dg4JTFzWLoeUP9izy8UE9Gh3z4qdqg7sX3No/PwcQGn9rk/t6uZ
+         e5JY5ULXD11KbtiM42jSB5TfKU22oQO5iMKN3EVN7hq89rypGKZOEPump4+YYf3ei0or
+         S59wlA849tlbjDAJ/45HLZePTZXWHF6XXBHmOp6URtfBlWpFYUA4bkjwhlzMaCht9TUF
+         ALj4bUUKe+kOZqWGbx81PZGsEE/R0QetMLEacQFNBdR/nm5UL6h5tlLsyzwRdaxJDahU
+         WqjEVeT0jQOiPCBUY7YJRLzFIOcNvqH7ewSSB66V9iei+2N78lj43TbGP9PEhYIvNA8b
+         ergQ==
+X-Gm-Message-State: AJIora+ZyLMRDYZ12mY4zMxBHwaxiSduSSCEzf8iGipsPGZd5iaKvKxs
+        FZeotH/aWHCPiqum4P4YS9goFoiAKE88EdhN0w==
+X-Google-Smtp-Source: AGRyM1v89wRj4tyQeUzPicy/PVgbMHnA/2Tmjdwr9EP6QeeA76WzOe3kRu9vSoZdIO41TqInLh1rn8X0OFRk2oziZw==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
+ (user=justinstitt job=sendgmr) by 2002:a25:4290:0:b0:66e:53b2:56ed with SMTP
+ id p138-20020a254290000000b0066e53b256edmr6565221yba.254.1657327038369; Fri,
+ 08 Jul 2022 17:37:18 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 17:37:04 -0700
+Message-Id: <20220709003704.646568-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v2] net: ipv4: fix clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Justin Stitt <justinstitt@google.com>,
+        Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory consumed by a mpf map is always accounted to the memory
-cgroup of the process which created the map. The map can outlive
-the memory cgroup if it's used by processes in other cgroups or
-is pinned on bpffs. In this case the map pins the original cgroup
-in the dying state.
+When building with Clang we encounter these warnings:
+| net/ipv4/ah4.c:513:4: error: format specifies type 'unsigned short' but
+| the argument has type 'int' [-Werror,-Wformat]
+| aalg_desc->uinfo.auth.icv_fullbits / 8);
+-
+| net/ipv4/esp4.c:1114:5: error: format specifies type 'unsigned short'
+| but the argument has type 'int' [-Werror,-Wformat]
+| aalg_desc->uinfo.auth.icv_fullbits / 8);
 
-For other types of objects (slab objects, non-slab kernel allocations,
-percpu objects and recently LRU pages) there is a reparenting process
-implemented: on cgroup offlining charged objects are getting
-reassigned to the parent cgroup. Because all charges and statistics
-are fully recursive it's a fairly cheap operation.
+`aalg_desc->uinfo.auth.icv_fullbits` is a u16 but due to default
+argument promotion becomes an int.
 
-For efficiency and consistency with other types of objects, let's do
-the same for bpf maps. Fortunately thanks to the objcg API, the
-required changes are minimal.
+Variadic functions (printf-like) undergo default argument promotion.
+Documentation/core-api/printk-formats.rst specifically recommends using
+the promoted-to-type's format flag.
 
-Please, note that individual allocations (slabs, percpu and large
-kmallocs) already have the reparenting mechanism. This commit adds
-it to the saved map->memcg pointer by replacing it to map->objcg.
-Because dying cgroups are not visible for a user and all charges are
-recursive, this commit doesn't bring any behavior changes for a user.
+As per C11 6.3.1.1:
+(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+can represent all values of the original type ..., the value is
+converted to an int; otherwise, it is converted to an unsigned int.
+These are called the integer promotions.` Thus it makes sense to change
+%hu to %d not only to follow this standard but to suppress the warning
+as well.
 
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+Suggested-by: Joe Perches <joe@perches.com>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- include/linux/bpf.h  |  2 +-
- kernel/bpf/syscall.c | 35 +++++++++++++++++++++++++++--------
- 2 files changed, 28 insertions(+), 9 deletions(-)
+diff from v1 -> v2:
+* packaged two related patches together: (Suggested by Nick)
+  - https://lore.kernel.org/all/20220707181532.762452-1-justinstitt@google.com/
+  - https://lore.kernel.org/all/20220707173040.704116-1-justinstitt@google.com/
+* use Joe's suggestion regarding `%u` over `%d`.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b21f2a3452f..85a4db3e0536 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -221,7 +221,7 @@ struct bpf_map {
- 	u32 btf_vmlinux_value_type_id;
- 	struct btf *btf;
- #ifdef CONFIG_MEMCG_KMEM
--	struct mem_cgroup *memcg;
-+	struct obj_cgroup *objcg;
- #endif
- 	char name[BPF_OBJ_NAME_LEN];
- 	struct bpf_map_off_arr *off_arr;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ab688d85b2c6..432cbbc74ba6 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -419,35 +419,52 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
- #ifdef CONFIG_MEMCG_KMEM
- static void bpf_map_save_memcg(struct bpf_map *map)
- {
--	map->memcg = get_mem_cgroup_from_mm(current->mm);
-+	/* Currently if a map is created by a process belonging to the root
-+	 * memory cgroup, get_obj_cgroup_from_current() will return NULL.
-+	 * So we have to check map->objcg for being NULL each time it's
-+	 * being used.
-+	 */
-+	map->objcg = get_obj_cgroup_from_current();
- }
+ net/ipv4/ah4.c  | 2 +-
+ net/ipv4/esp4.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv4/ah4.c b/net/ipv4/ah4.c
+index 6eea1e9e998d..f8ad04470d3a 100644
+--- a/net/ipv4/ah4.c
++++ b/net/ipv4/ah4.c
+@@ -507,7 +507,7 @@ static int ah_init_state(struct xfrm_state *x)
  
- static void bpf_map_release_memcg(struct bpf_map *map)
- {
--	mem_cgroup_put(map->memcg);
-+	if (map->objcg)
-+		obj_cgroup_put(map->objcg);
-+}
-+
-+static struct mem_cgroup *bpf_map_get_memcg(struct bpf_map *map) {
-+	if (map->objcg)
-+		return get_mem_cgroup_from_objcg(map->objcg);
-+
-+	return root_mem_cgroup;
- }
- 
- void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
- 			   int node)
- {
--	struct mem_cgroup *old_memcg;
-+	struct mem_cgroup *memcg, *old_memcg;
- 	void *ptr;
- 
--	old_memcg = set_active_memcg(map->memcg);
-+	memcg = bpf_map_get_memcg(map);
-+	old_memcg = set_active_memcg(memcg);
- 	ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
- 	set_active_memcg(old_memcg);
-+	mem_cgroup_put(memcg);
- 
- 	return ptr;
- }
- 
- void *bpf_map_kzalloc(const struct bpf_map *map, size_t size, gfp_t flags)
- {
--	struct mem_cgroup *old_memcg;
-+	struct mem_cgroup *memcg, *old_memcg;
- 	void *ptr;
- 
--	old_memcg = set_active_memcg(map->memcg);
-+	memcg = bpf_map_get_memcg(map);
-+	old_memcg = set_active_memcg(memcg);
- 	ptr = kzalloc(size, flags | __GFP_ACCOUNT);
- 	set_active_memcg(old_memcg);
-+	mem_cgroup_put(memcg);
- 
- 	return ptr;
- }
-@@ -455,12 +472,14 @@ void *bpf_map_kzalloc(const struct bpf_map *map, size_t size, gfp_t flags)
- void __percpu *bpf_map_alloc_percpu(const struct bpf_map *map, size_t size,
- 				    size_t align, gfp_t flags)
- {
--	struct mem_cgroup *old_memcg;
-+	struct mem_cgroup *memcg, *old_memcg;
- 	void __percpu *ptr;
- 
--	old_memcg = set_active_memcg(map->memcg);
-+	memcg = bpf_map_get_memcg(map);
-+	old_memcg = set_active_memcg(memcg);
- 	ptr = __alloc_percpu_gfp(size, align, flags | __GFP_ACCOUNT);
- 	set_active_memcg(old_memcg);
-+	mem_cgroup_put(memcg);
- 
- 	return ptr;
- }
+ 	if (aalg_desc->uinfo.auth.icv_fullbits/8 !=
+ 	    crypto_ahash_digestsize(ahash)) {
+-		pr_info("%s: %s digestsize %u != %hu\n",
++		pr_info("%s: %s digestsize %u != %u\n",
+ 			__func__, x->aalg->alg_name,
+ 			crypto_ahash_digestsize(ahash),
+ 			aalg_desc->uinfo.auth.icv_fullbits / 8);
+diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
+index b21238df3301..b694f352ce7a 100644
+--- a/net/ipv4/esp4.c
++++ b/net/ipv4/esp4.c
+@@ -1108,7 +1108,7 @@ static int esp_init_authenc(struct xfrm_state *x)
+ 		err = -EINVAL;
+ 		if (aalg_desc->uinfo.auth.icv_fullbits / 8 !=
+ 		    crypto_aead_authsize(aead)) {
+-			pr_info("ESP: %s digestsize %u != %hu\n",
++			pr_info("ESP: %s digestsize %u != %u\n",
+ 				x->aalg->alg_name,
+ 				crypto_aead_authsize(aead),
+ 				aalg_desc->uinfo.auth.icv_fullbits / 8);
 -- 
-2.36.1
+2.37.0.rc0.161.g10f37bed90-goog
 

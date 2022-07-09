@@ -2,175 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AB156C570
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166A656C51C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiGIAOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 20:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S229959AbiGIAPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 20:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiGIAOS (ORCPT
+        with ESMTP id S229651AbiGIAPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:14:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD73D691E7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657325656; x=1688861656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iKGZIO2oZCw1cHewO3ZPvKoU8/5a+3Vwi+LdMwm+sh4=;
-  b=Ym5qo/t+2QhFXl8SCNLCCIipG2EjgPe0A+7Nw0UHA8tVIZgnHTpO/uQZ
-   XQEGwLuRgYSEcIhasg4KqqzJvo0oU4Lk0/6cLjAhv82hOXd8zkpdq5Se2
-   Q8d2d9tzSo08CKvWc0yKeMaVBN9daWxdJrQ0R2zaUAPmNtzgk98tI3vyq
-   GmedeWKCo9wwAszCjXZKgfEcvaLROgetNwflrVyEVfyDZno6+PVDjJtKa
-   CQmejDELUqIxDeL1+B8lmZqJtfCiXA0cHwlHg1j6AcDlUTCCWTwzIyPxl
-   rTnJX2fvTJ7maSOwnu/12B1BR8XzKqU18ftQiScob75kY2nC/+gSO17el
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="281942806"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="281942806"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 17:14:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="544382291"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jul 2022 17:14:13 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9y6u-000O4g-Uc;
-        Sat, 09 Jul 2022 00:14:12 +0000
-Date:   Sat, 9 Jul 2022 08:13:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>
-Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 150/161]
- drivers/gpu/drm/msm/dp/dp_drm.c:209:25: warning: excess elements in struct
- initializer
-Message-ID: <202207090808.WcWKen2x-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Jul 2022 20:15:43 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C8377495
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:15:41 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c8a5d51adso2413987b3.14
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=18zwxTMww86cndEzpYub9pnZe0fDkNY6EnCvkW/t9JY=;
+        b=msxqFvaOZSoAWLO402a9iXoMeeEmvOcEg5VOhX+o22iSw24U+MJ7v5aJbXYhjOXEcs
+         80KPM4xIH89KOQGhECF+FEZEs0ZImyjKLbt6Mjaj7LDHuEIKn4GysLo5nD9ujirYiRc4
+         IgHy2nx/83FOn6x/5OM7PPbJlxmw2aA847iuBYirfRbTGllNigutmESrvh5uJ09m2Mkv
+         l1GzyelrnzqNCsFX/zFW/lxNYJkZrXMfA3eK8aHziKCL6C/UMKfsCZEgFvs42zjW7YkW
+         SV0eehnKB7Ka7Mco0HyzgpIJXij9SbnHq6hNPjgtpyS3thEq/3GvRWmlVHpnOUQJW1kd
+         gVqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=18zwxTMww86cndEzpYub9pnZe0fDkNY6EnCvkW/t9JY=;
+        b=4yJgrQanQ5t5iJy7GCdr3lZPPGQ0PPWtjv+Bt/YBV60GokgOwCAtBvfDpgMzNOVmzh
+         VFjHUtEnGWPGAH/ijs1+7FG2PASfUayvREuh0YMeEsCyu+G4HNTZN3cGBUPjX/JYk9Yu
+         JBf2LjDlFnyMZ59LswoELUhGrWZKnhLR6i0x1LI+D+9l8E7MUUmpxkEoNYZ5PRZqGzfN
+         h9DJvl66lRkchZKCofWigsoAtSeKIwfjX5ylSHC2qe6aS5zfc3TGY32k8JykAI3s28ji
+         HpTcMPNfMC6RTvCDH4epx9EIPU3xje7ybTqCgY4ssEL77Pe5BN9CovOEX+HUfKZcXNZs
+         whHA==
+X-Gm-Message-State: AJIora8AmILtsZFDHhb4RqVou2Jj5HxMoqjR8Slr6PZto869IWhkNZBk
+        8avAryrX8hdWeUjGb+nh/yeaiq8ueCWaVpFydQ==
+X-Google-Smtp-Source: AGRyM1sfR9BLCzjhQ7iB9/w8T0nTXqnCY8GM70POd4QwcuIQdsEQRKXzL/APCV3KaFIEOVcpID4t0hTXIVbShLssFQ==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
+ (user=justinstitt job=sendgmr) by 2002:a25:907:0:b0:66e:3f14:c463 with SMTP
+ id 7-20020a250907000000b0066e3f14c463mr6447554ybj.243.1657325741218; Fri, 08
+ Jul 2022 17:15:41 -0700 (PDT)
+Date:   Fri,  8 Jul 2022 17:15:27 -0700
+Message-Id: <20220709001527.618593-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] mediatek: mt76: eeprom: fix clang -Wformat warning
+From:   Justin Stitt <justinstitt@google.com>
+To:     Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
-head:   ab88938c957f2e2edc60e19ab6df7830fc1c6914
-commit: 17570fbfe787716e607a5496dd44312eab6e733e [150/161] drm/msm/dp: employ bridge mechanism for display enable and disable
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220709/202207090808.WcWKen2x-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/17570fbfe787716e607a5496dd44312eab6e733e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
-        git checkout 17570fbfe787716e607a5496dd44312eab6e733e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/irqchip/
+When building with Clang we encounter the following warning:
+| drivers/net/wireless/mediatek/mt7601u/eeprom.c:193:5: error: format
+| specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
+| chan_bounds[idx].start + chan_bounds[idx].num - 1);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Variadic functions (printf-like) undergo default argument promotion.
+Documentation/core-api/printk-formats.rst specifically recommends using
+the promoted-to-type's format flag.
 
-All warnings (new ones prefixed by >>):
+Moreover, C11 6.3.1.1 states:
+(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+can represent all values of the original type ..., the value is
+converted to an int; otherwise, it is converted to an unsigned int.
+These are called the integer promotions.`
 
-   drivers/gpu/drm/msm/dp/dp_drm.c:16:27: error: field 'bridge' has incomplete type
-      16 |         struct drm_bridge bridge;
-         |                           ^~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c: In function 'dp_bridge_mode_set':
-   drivers/gpu/drm/msm/dp/dp_drm.c:181:55: error: invalid use of undefined type 'struct drm_bridge'
-     181 |         msm_dp_display_mode_set(dp_display, drm_bridge->encoder, mode, adjusted_mode);
-         |                                                       ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c: In function 'dp_bridge_enable':
-   drivers/gpu/drm/msm/dp/dp_drm.c:189:53: error: invalid use of undefined type 'struct drm_bridge'
-     189 |         msm_dp_display_enable(dp_display, drm_bridge->encoder);
-         |                                                     ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c: In function 'dp_bridge_disable':
-   drivers/gpu/drm/msm/dp/dp_drm.c:197:58: error: invalid use of undefined type 'struct drm_bridge'
-     197 |         msm_dp_display_pre_disable(dp_display, drm_bridge->encoder);
-         |                                                          ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c: In function 'dp_bridge_post_disable':
-   drivers/gpu/drm/msm/dp/dp_drm.c:205:54: error: invalid use of undefined type 'struct drm_bridge'
-     205 |         msm_dp_display_disable(dp_display, drm_bridge->encoder);
-         |                                                      ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c: At top level:
-   drivers/gpu/drm/msm/dp/dp_drm.c:208:21: error: variable 'dp_bridge_ops' has initializer but incomplete type
-     208 | static const struct drm_bridge_funcs dp_bridge_ops = {
-         |                     ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:209:10: error: 'const struct drm_bridge_funcs' has no member named 'enable'
-     209 |         .enable       = dp_bridge_enable,
-         |          ^~~~~~
->> drivers/gpu/drm/msm/dp/dp_drm.c:209:25: warning: excess elements in struct initializer
-     209 |         .enable       = dp_bridge_enable,
-         |                         ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:209:25: note: (near initialization for 'dp_bridge_ops')
-   drivers/gpu/drm/msm/dp/dp_drm.c:210:10: error: 'const struct drm_bridge_funcs' has no member named 'disable'
-     210 |         .disable      = dp_bridge_disable,
-         |          ^~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:210:25: warning: excess elements in struct initializer
-     210 |         .disable      = dp_bridge_disable,
-         |                         ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:210:25: note: (near initialization for 'dp_bridge_ops')
-   drivers/gpu/drm/msm/dp/dp_drm.c:211:10: error: 'const struct drm_bridge_funcs' has no member named 'post_disable'
-     211 |         .post_disable = dp_bridge_post_disable,
-         |          ^~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:211:25: warning: excess elements in struct initializer
-     211 |         .post_disable = dp_bridge_post_disable,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:211:25: note: (near initialization for 'dp_bridge_ops')
-   drivers/gpu/drm/msm/dp/dp_drm.c:212:10: error: 'const struct drm_bridge_funcs' has no member named 'mode_set'
-     212 |         .mode_set     = dp_bridge_mode_set,
-         |          ^~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:212:25: warning: excess elements in struct initializer
-     212 |         .mode_set     = dp_bridge_mode_set,
-         |                         ^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:212:25: note: (near initialization for 'dp_bridge_ops')
-   drivers/gpu/drm/msm/dp/dp_drm.c: In function 'msm_dp_bridge_init':
-   drivers/gpu/drm/msm/dp/dp_drm.c:229:15: error: invalid use of undefined type 'struct drm_bridge'
-     229 |         bridge->funcs = &dp_bridge_ops;
-         |               ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c:230:15: error: invalid use of undefined type 'struct drm_bridge'
-     230 |         bridge->encoder = encoder;
-         |               ^~
-   drivers/gpu/drm/msm/dp/dp_drm.c:232:14: error: implicit declaration of function 'drm_bridge_attach'; did you mean 'drm_bridge_detach'? [-Werror=implicit-function-declaration]
-     232 |         rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-         |              ^~~~~~~~~~~~~~~~~
-         |              drm_bridge_detach
-   drivers/gpu/drm/msm/dp/dp_drm.c:232:55: error: 'DRM_BRIDGE_ATTACH_NO_CONNECTOR' undeclared (first use in this function)
-     232 |         rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dp/dp_drm.c:232:55: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/gpu/drm/msm/dp/dp_drm.c: At top level:
-   drivers/gpu/drm/msm/dp/dp_drm.c:208:38: error: storage size of 'dp_bridge_ops' isn't known
-     208 | static const struct drm_bridge_funcs dp_bridge_ops = {
-         |                                      ^~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+With this information in hand, we really should stop using `%hh[dxu]` or
+`%h[dxu]` as they usually prompt Clang -Wformat warnings as well as go
+against documented standard recommendations.
 
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: produced warning with x86 allyesconfig.
 
-vim +209 drivers/gpu/drm/msm/dp/dp_drm.c
+ drivers/net/wireless/mediatek/mt7601u/eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   207	
-   208	static const struct drm_bridge_funcs dp_bridge_ops = {
- > 209		.enable       = dp_bridge_enable,
-   210		.disable      = dp_bridge_disable,
-   211		.post_disable = dp_bridge_post_disable,
-   212		.mode_set     = dp_bridge_mode_set,
-   213	};
-   214	
-
+diff --git a/drivers/net/wireless/mediatek/mt7601u/eeprom.c b/drivers/net/wireless/mediatek/mt7601u/eeprom.c
+index aa3b64902cf9..625bebe60538 100644
+--- a/drivers/net/wireless/mediatek/mt7601u/eeprom.c
++++ b/drivers/net/wireless/mediatek/mt7601u/eeprom.c
+@@ -188,7 +188,7 @@ mt7601u_set_country_reg(struct mt7601u_dev *dev, u8 *eeprom)
+ 
+ 	if (idx != -1)
+ 		dev_info(dev->dev,
+-			 "EEPROM country region %02hhx (channels %hhd-%hhd)\n",
++			 "EEPROM country region %02x (channels %d-%d)\n",
+ 			 val, chan_bounds[idx].start,
+ 			 chan_bounds[idx].start + chan_bounds[idx].num - 1);
+ 	else
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+

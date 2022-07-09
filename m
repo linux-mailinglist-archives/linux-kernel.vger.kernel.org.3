@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B675056C749
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 07:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4309256C74C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 07:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiGIFef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 01:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        id S229566AbiGIFkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 01:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIFec (ORCPT
+        with ESMTP id S229448AbiGIFku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 01:34:32 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76F089A81;
-        Fri,  8 Jul 2022 22:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657344868;
-        bh=WQJYEsiTE2uKcSIa88wX9tDWIRA1dKUlveQY5EoYUgs=;
-        h=X-UI-Sender-Class:Date:To:From:Subject;
-        b=i0f0K89NqWgoVBjzdY0fafkvfiTGvnzO1NBRlwsgIxjkcgUoEEXWrZ4weTRrkxNcn
-         NW7u3m50Mf3ZT2ET0FYDpzjY1iE7JOZ7z2SlWyvzh7nwaOxTzMWelpCqDXirKhFDiJ
-         xqLxElJ2pwXTsJQv+cg9MNx25qGi07jE84yhZ51I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.134.222]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQ5vW-1nwtwh3iJU-00M0As; Sat, 09
- Jul 2022 07:34:27 +0200
-Message-ID: <fe10a412-8a1b-d582-a80b-8832519e0314@gmx.de>
-Date:   Sat, 9 Jul 2022 07:33:51 +0200
+        Sat, 9 Jul 2022 01:40:50 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4A164E1E;
+        Fri,  8 Jul 2022 22:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657345249; x=1688881249;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZbV3gRfMak1R7V+ity233CxXUMLrgqK2UNyhVz9OqoU=;
+  b=l/7quTRZxZ9eCcn/q7NXxAEgyG2gnkAFts8jrCC7q4+0XntfpA8qXOTF
+   mrlauD9kL8FkKFk2wlY+pqe4AqMns/UXPxNpSy2Aoc5J+tN1TkL2hZPxi
+   yvwe7x+Piw0H47QxoRJC3ziOJoMwyHbYZdVtno7uL4cThT/2B47Pn8srN
+   o=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Jul 2022 22:40:48 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 22:40:48 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 8 Jul 2022 22:40:48 -0700
+Received: from [10.216.50.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 8 Jul 2022
+ 22:40:44 -0700
+Message-ID: <1b81980c-c32c-438d-4f08-c7481a955d18@quicinc.com>
+Date:   Sat, 9 Jul 2022 11:10:40 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCHv3] iommu/arm-smmu-qcom: Add debug support for TLB sync
+ timeouts
 Content-Language: en-US
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>
-From:   Helge Deller <deller@gmx.de>
-Subject: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365 dentry_free+0x100/0x128
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Bo1iDPqNzEIlDBTe7ZziPASjiqeLpZ4fTonwjaN0gNa3vU69Bie
- HQ3cYQhieH9i02VADN4ZB1FXOUF+Xmq+ncjsf6sSWYMBsI0cENrSB8ryMPcrM9DsXSwaTfR
- s5UC0OYqJu4hTMdgSiAbty9JITVNAiHatT/V7CLdhTZOmgf18fhWCh7bNDdRjlry8xDhqge
- 7ABeW/1l72cr7vqZ3/iHA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:evpVDAfgM/k=:FCitVBuC0+fSEB/pYdIaol
- C2VDu+NHLSjtOnHcYgYLb11qp9eIGp355AD+JkfE80nspWX3hgrgoSNyzr8NES9eoMolfDp4q
- y1wZL59hvKW1KKOep1JsY3FnTDpRJDCzDMhp+YkO89F4M/p/hiKoGt6OL+H5HSy/FeYH/xyA3
- kCeqslt5v69IRM/N+dDlqgiRluA/wz+hLirJMycoUV4mqkMT6mTZn4Sxk1tPZBK4jZc85nlMp
- 3fEmT3ah0r3Qhv+1ioAggISxeaQzdjYquLPtGoPyvvZof/K3dC+K7EBCJPBut77KDeWHzvWcD
- YY2p2UWOLt4z7q6IsPsQyrweGeVOV6v7x9jziQ52g4JQcCdPvduyu6mmIx9wBFlXWUPvwFO2k
- R1khYS6FtGbi0hkvWEAL1kAJuQJVKmUyST/EsQ8ka9QVpuvBWDjs/++Kjqrso0EgSxuGLFvRg
- ccDhjazA19+pBNorlqXJA7WxIvD/rk5l39Ls2rtQYvsavXOhLJqRxuC3mIopFwcs4dOis/iDw
- SYsBQl6aSeUigqK1ISuYPX2WUzp2Uful6bLZcyIa/Z72G7ImclTzPP8zUPcJFai83TC7pDGtQ
- YtZHscCJA3/u1E2LOuU96VVz+ymoULjx4S7B81xa4QPBsgWcXFmkPw9fZv4YP0JOHBrFwGMHG
- mtu/AwOIGZWdOR5eFXClKeHgFGQmxS8x1Qmb1QcCWZLHPw8ZLo5PGJhI8GHkEbR05bxlY+NbP
- 905fUoI2df2wXaDVCjIbx5vOJpdLMFN4RmcO9sYy6qL6FNHmcIKjtBCWeVo5NvovVc42eACV4
- ulolLpRSco9tDFWhPwSzdlYBfvv/u4zmf7sORx7TuF60KbeEBenH1ChZrPr0hUQblgdyxFSnz
- 7gA0DaVNyrDRboVqnQFBhqPBW0TijECn+/RW7gZ9fyswaktKkfRT5hei1zyX6+uZxZkyvUfJT
- y6HgNkeUTaG30Kx87NDAO9UrknbvNMVXYl6Zfq/cjxEnkFfEIiTBISspTZlcUTkLfyClgxYir
- SAue5kqn3FAMTMFpbluvOFFnGqckhdjThSAukwD6DCvfRDayWCGrd+Q6fJv2dAyEMx/hg060g
- TiFM6LijjqKX2LBMX1U2RPYG5cjQjcnNA85+7qEO0Wn0k+Ke6t6kMH48g==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+CC:     <iommu@lists.linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220708094230.4349-1-quic_saipraka@quicinc.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220708094230.4349-1-quic_saipraka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,103 +72,371 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the debian buildd servers for the parisc architecture I'm facing
-the following warning, after which it gets stuck so that I need to
-reboot the server.
-This happens rarely, but I can reproduce it after some time.
-Filesystem is tmpfs.
+On 7/8/2022 3:12 PM, Sai Prakash Ranjan wrote:
+> TLB sync timeouts can be due to various reasons such as TBU power down
+> or pending TCU/TBU invalidation/sync and so on. Debugging these often
+> require dumping of some implementation defined registers to know the
+> status of TBU/TCU operations and some of these registers are not
+> accessible in non-secure world such as from kernel and requires SMC
+> calls to read them in the secure world. So, add this debug support
+> to dump implementation defined registers for TLB sync timeout issues.
+>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> ---
+>
+> Changes in v3:
+>   * Move this debug feature to arm-smmu-qcom-debug.c (Will Deacon).
+>   * Keep single ratelimit state and remove local variable (Robin).
+>
+> Changes in v2:
+>   * Use scm call consistently so that it works on older chipsets where
+>     some of these regs are secure registers.
+>   * Add device specific data to get the implementation defined register
+>     offsets.
+>
+> ---
+>   drivers/iommu/Kconfig                         |  10 ++
+>   drivers/iommu/arm/arm-smmu/Makefile           |   1 +
+>   .../iommu/arm/arm-smmu/arm-smmu-qcom-debug.c  | 142 ++++++++++++++++++
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c    |  32 +++-
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h    |  28 ++++
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c         |   6 +-
+>   drivers/iommu/arm/arm-smmu/arm-smmu.h         |   1 +
+>   7 files changed, 211 insertions(+), 9 deletions(-)
+>   create mode 100644 drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
+>   create mode 100644 drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
+>
+> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+> index c79a0df090c0..5c5cb5bee8b6 100644
+> --- a/drivers/iommu/Kconfig
+> +++ b/drivers/iommu/Kconfig
+> @@ -363,6 +363,16 @@ config ARM_SMMU_QCOM
+>   	  When running on a Qualcomm platform that has the custom variant
+>   	  of the ARM SMMU, this needs to be built into the SMMU driver.
+>   
+> +config ARM_SMMU_QCOM_DEBUG
+> +	bool "ARM SMMU QCOM implementation defined debug support"
+> +	depends on ARM_SMMU_QCOM
+> +	help
+> +	  Support for implementation specific debug features in ARM SMMU
+> +	  hardware found in QTI platforms.
+> +
+> +	  Say Y here to enable debug for issues such as TLB sync timeouts
+> +	  which requires implementation defined register dumps.
+> +
+>   config ARM_SMMU_V3
+>   	tristate "ARM Ltd. System MMU Version 3 (SMMUv3) Support"
+>   	depends on ARM64
+> diff --git a/drivers/iommu/arm/arm-smmu/Makefile b/drivers/iommu/arm/arm-smmu/Makefile
+> index b0cc01aa20c9..2a5a95e8e3f9 100644
+> --- a/drivers/iommu/arm/arm-smmu/Makefile
+> +++ b/drivers/iommu/arm/arm-smmu/Makefile
+> @@ -3,3 +3,4 @@ obj-$(CONFIG_QCOM_IOMMU) += qcom_iommu.o
+>   obj-$(CONFIG_ARM_SMMU) += arm_smmu.o
+>   arm_smmu-objs += arm-smmu.o arm-smmu-impl.o arm-smmu-nvidia.o
+>   arm_smmu-$(CONFIG_ARM_SMMU_QCOM) += arm-smmu-qcom.o
+> +arm_smmu-$(CONFIG_ARM_SMMU_QCOM_DEBUG) += arm-smmu-qcom-debug.o
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
+> new file mode 100644
+> index 000000000000..6eed8e67a0ca
+> --- /dev/null
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom-debug.c
+> @@ -0,0 +1,142 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/of_device.h>
+> +#include <linux/qcom_scm.h>
+> +#include <linux/ratelimit.h>
+> +
+> +#include "arm-smmu.h"
+> +#include "arm-smmu-qcom.h"
+> +
+> +enum qcom_smmu_impl_reg_offset {
+> +	QCOM_SMMU_TBU_PWR_STATUS,
+> +	QCOM_SMMU_STATS_SYNC_INV_TBU_ACK,
+> +	QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR,
+> +};
+> +
+> +struct qcom_smmu_config {
+> +	const u32 *reg_offset;
+> +};
+> +
+> +void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu)
+> +{
+> +	int ret;
+> +	u32 tbu_pwr_status, sync_inv_ack, sync_inv_progress;
+> +	struct qcom_smmu *qsmmu = container_of(smmu, struct qcom_smmu, smmu);
+> +	const struct qcom_smmu_config *cfg;
+> +	static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
+> +				      DEFAULT_RATELIMIT_BURST);
+> +
+> +	if (__ratelimit(&rs)) {
+> +		dev_err(smmu->dev, "TLB sync timed out -- SMMU may be deadlocked\n");
+> +
+> +		cfg = qsmmu->cfg;
+> +		if (!cfg)
+> +			return;
+> +
+> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_TBU_PWR_STATUS],
+> +					&tbu_pwr_status);
+> +		if (ret)
+> +			dev_err(smmu->dev,
+> +				"Failed to read TBU power status: %d\n", ret);
+> +
+> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK],
+> +					&sync_inv_ack);
+> +		if (ret)
+> +			dev_err(smmu->dev,
+> +				"Failed to read TBU sync/inv ack status: %d\n", ret);
+> +
+> +		ret = qcom_scm_io_readl(smmu->ioaddr + cfg->reg_offset[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR],
+> +					&sync_inv_progress);
+> +		if (ret)
+> +			dev_err(smmu->dev,
+> +				"Failed to read TCU syn/inv progress: %d\n", ret);
+> +
+> +		dev_err(smmu->dev,
+> +			"TBU: power_status %#x sync_inv_ack %#x sync_inv_progress %#x\n",
+> +			tbu_pwr_status, sync_inv_ack, sync_inv_progress);
+> +	}
+> +}
+> +
+> +/* Implementation Defined Register Space 0 register offsets */
+> +static const u32 qcom_smmu_impl0_reg_offset[] = {
+> +	[QCOM_SMMU_TBU_PWR_STATUS]		= 0x2204,
+> +	[QCOM_SMMU_STATS_SYNC_INV_TBU_ACK]	= 0x25dc,
+> +	[QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR]	= 0x2670,
+> +};
+> +
+> +static const struct qcom_smmu_config qcm2290_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc7180_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc7280_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc8180x_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sc8280xp_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm6125_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm6350_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8150_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8250_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8350_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+> +static const struct qcom_smmu_config sm8450_smmu_cfg = {
+> +	.reg_offset = qcom_smmu_impl0_reg_offset,
+> +};
+> +
+Can we avoid these duplications?
 
-I'm happy to add debug code if necessary...
+-Akhil.
+> +static const struct of_device_id __maybe_unused qcom_smmu_impl_debug_match[] = {
+> +	{ .compatible = "qcom,msm8998-smmu-v2" },
+> +	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcm2290_smmu_cfg },
+> +	{ .compatible = "qcom,sc7180-smmu-500", .data = &sc7180_smmu_cfg },
+> +	{ .compatible = "qcom,sc7280-smmu-500", .data = &sc7280_smmu_cfg},
+> +	{ .compatible = "qcom,sc8180x-smmu-500", .data = &sc8180x_smmu_cfg },
+> +	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &sc8280xp_smmu_cfg },
+> +	{ .compatible = "qcom,sdm630-smmu-v2" },
+> +	{ .compatible = "qcom,sdm845-smmu-500" },
+> +	{ .compatible = "qcom,sm6125-smmu-500", .data = &sm6125_smmu_cfg},
+> +	{ .compatible = "qcom,sm6350-smmu-500", .data = &sm6350_smmu_cfg},
+> +	{ .compatible = "qcom,sm8150-smmu-500", .data = &sm8150_smmu_cfg },
+> +	{ .compatible = "qcom,sm8250-smmu-500", .data = &sm8250_smmu_cfg },
+> +	{ .compatible = "qcom,sm8350-smmu-500", .data = &sm8350_smmu_cfg },
+> +	{ .compatible = "qcom,sm8450-smmu-500", .data = &sm8450_smmu_cfg },
+> +	{ }
+> +};
+> +
+> +const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu)
+> +{
+> +	const struct of_device_id *match;
+> +	const struct device_node *np = smmu->dev->of_node;
+> +
+> +	match = of_match_node(qcom_smmu_impl_debug_match, np);
+> +	if (!match)
+> +		return NULL;
+> +
+> +	return match->data;
+> +}
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index 2d470d867887..de25071e33ab 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -5,23 +5,40 @@
+>   
+>   #include <linux/acpi.h>
+>   #include <linux/adreno-smmu-priv.h>
+> +#include <linux/delay.h>
+>   #include <linux/of_device.h>
+>   #include <linux/qcom_scm.h>
+>   
+>   #include "arm-smmu.h"
+> +#include "arm-smmu-qcom.h"
+>   
+> -struct qcom_smmu {
+> -	struct arm_smmu_device smmu;
+> -	bool bypass_quirk;
+> -	u8 bypass_cbndx;
+> -	u32 stall_enabled;
+> -};
+> +#define QCOM_DUMMY_VAL	-1
+>   
+>   static struct qcom_smmu *to_qcom_smmu(struct arm_smmu_device *smmu)
+>   {
+>   	return container_of(smmu, struct qcom_smmu, smmu);
+>   }
+>   
+> +static void qcom_smmu_tlb_sync(struct arm_smmu_device *smmu, int page,
+> +				int sync, int status)
+> +{
+> +	unsigned int spin_cnt, delay;
+> +	u32 reg;
+> +
+> +	arm_smmu_writel(smmu, page, sync, QCOM_DUMMY_VAL);
+> +	for (delay = 1; delay < TLB_LOOP_TIMEOUT; delay *= 2) {
+> +		for (spin_cnt = TLB_SPIN_COUNT; spin_cnt > 0; spin_cnt--) {
+> +			reg = arm_smmu_readl(smmu, page, status);
+> +			if (!(reg & ARM_SMMU_sTLBGSTATUS_GSACTIVE))
+> +				return;
+> +			cpu_relax();
+> +		}
+> +		udelay(delay);
+> +	}
+> +
+> +	qcom_smmu_tlb_sync_debug(smmu);
+> +}
+> +
+>   static void qcom_adreno_smmu_write_sctlr(struct arm_smmu_device *smmu, int idx,
+>   		u32 reg)
+>   {
+> @@ -375,6 +392,7 @@ static const struct arm_smmu_impl qcom_smmu_impl = {
+>   	.def_domain_type = qcom_smmu_def_domain_type,
+>   	.reset = qcom_smmu500_reset,
+>   	.write_s2cr = qcom_smmu_write_s2cr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+>   };
+>   
+>   static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+> @@ -383,6 +401,7 @@ static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+>   	.reset = qcom_smmu500_reset,
+>   	.alloc_context_bank = qcom_adreno_smmu_alloc_context_bank,
+>   	.write_sctlr = qcom_adreno_smmu_write_sctlr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+>   };
+>   
+>   static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+> @@ -399,6 +418,7 @@ static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+>   		return ERR_PTR(-ENOMEM);
+>   
+>   	qsmmu->smmu.impl = impl;
+> +	qsmmu->cfg = qcom_smmu_impl_data(smmu);
+>   
+>   	return &qsmmu->smmu;
+>   }
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
+> new file mode 100644
+> index 000000000000..99ec8f8629a0
+> --- /dev/null
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _ARM_SMMU_QCOM_H
+> +#define _ARM_SMMU_QCOM_H
+> +
+> +struct qcom_smmu {
+> +	struct arm_smmu_device smmu;
+> +	const struct qcom_smmu_config *cfg;
+> +	bool bypass_quirk;
+> +	u8 bypass_cbndx;
+> +	u32 stall_enabled;
+> +};
+> +
+> +#ifdef CONFIG_ARM_SMMU_QCOM_DEBUG
+> +void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu);
+> +const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu);
+> +#else
+> +static inline void qcom_smmu_tlb_sync_debug(struct arm_smmu_device *smmu) { }
+> +static inline const void *qcom_smmu_impl_data(struct arm_smmu_device *smmu)
+> +{
+> +	return NULL;
+> +}
+> +#endif
+> +
+> +#endif /* _ARM_SMMU_QCOM_H */
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 2ed3594f384e..41633e5484f8 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -2074,7 +2074,6 @@ err_reset_platform_ops: __maybe_unused;
+>   static int arm_smmu_device_probe(struct platform_device *pdev)
+>   {
+>   	struct resource *res;
+> -	resource_size_t ioaddr;
+>   	struct arm_smmu_device *smmu;
+>   	struct device *dev = &pdev->dev;
+>   	int num_irqs, i, err;
+> @@ -2098,7 +2097,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   	smmu->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>   	if (IS_ERR(smmu->base))
+>   		return PTR_ERR(smmu->base);
+> -	ioaddr = res->start;
+> +	smmu->ioaddr = res->start;
+> +
+>   	/*
+>   	 * The resource size should effectively match the value of SMMU_TOP;
+>   	 * stash that temporarily until we know PAGESIZE to validate it with.
+> @@ -2178,7 +2178,7 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	err = iommu_device_sysfs_add(&smmu->iommu, smmu->dev, NULL,
+> -				     "smmu.%pa", &ioaddr);
+> +				     "smmu.%pa", &smmu->ioaddr);
+>   	if (err) {
+>   		dev_err(dev, "Failed to register iommu in sysfs\n");
+>   		return err;
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> index 2b9b42fb6f30..703fd5817ec1 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> @@ -278,6 +278,7 @@ struct arm_smmu_device {
+>   	struct device			*dev;
+>   
+>   	void __iomem			*base;
+> +	phys_addr_t			ioaddr;
+>   	unsigned int			numpage;
+>   	unsigned int			pgshift;
+>   
 
-Helge
-
-[128321.224739] ------------[ cut here ]------------
-[128321.283492] WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365 dentry_free+=
-0x100/0x128
-[128321.371369] Modules linked in: dm_mod(E) ipt_REJECT(E) nf_reject_ipv4(=
-E) xt_multiport(E) nft_compat(E) nf_tables(E) nfnetlink(E) ipmi_si(E) ipmi=
-_devintf(E) sg(E) ipmi_msghandler(E) fuse(E) configfs(E) sunrpc(E) ip_tabl=
-es(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) btrfs(E) =
-blake2b_generic(E) xor(E) raid6_pq(E) zstd_compress(E) libcrc32c(E) crc32c=
-_generic(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) crc_t10dif(E) c=
-rct10dif_generic(E) ohci_pci(E) crct10dif_common(E) ata_generic(E) sata_si=
-l(E) ehci_pci(E) pata_sil680(E) mptspi(E) mptscsih(E) ohci_hcd(E) mptbase(=
-E) scsi_transport_spi(E) ehci_hcd(E) libata(E) scsi_mod(E) usbcore(E) e100=
-0(E) usb_common(E) scsi_common(E)
-[128322.103374] CPU: 1 PID: 14735 Comm: cc1plus Tainted: G            E   =
-  5.18.9+ #27
-[128322.195315] Hardware name: 9000/785/C8000
-[128322.247318]
-[128322.263314]      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
-[128322.323316] PSW: 00001000000001101111000000001111 Tainted: G          =
-  E
-[128322.407315] r00-03  000000000806f00f 0000000239aa8700 000000004073be90=
- 0000000239aa87a0
-[128322.507313] r04-07  00000000410e1a00 000000411c8e3b40 0000000211715ad8=
- 000000411c8e3b98
-[128322.603314] r08-11  00000000410b8e80 0000000041147200 00000000000800e0=
- 0000000041147200
-[128322.699311] r12-15  0000000000000001 0000000010000000 0000000041147200=
- 0000000041147200
-[128322.795312] r16-19  000000411c8e3b98 0000000000000000 00000000415084d0=
- 0000000002c55000
-[128322.895311] r20-23  000000000800000f 000000004fb33600 000000000800000f=
- 0000000211715b20
-[128322.991311] r24-27  000000411c8e3bd0 000000411c8e3bd0 000000411c8e3b40=
- 00000000410e1a00
-[128323.087309] r28-31  00000000416bf9d8 0000000239aa8770 0000000239aa8820=
- 000000000000cf14
-[128323.187310] sr00-03  000000000500a800 0000000000000000 000000000000000=
-0 000000000500a800
-[128323.283324] sr04-07  0000000000000000 0000000000000000 000000000000000=
-0 0000000000000000
-[128323.383313]
-[128323.399309] IASQ: 0000000000000000 0000000000000000 IAOQ: 000000004073=
-b3d4 000000004073b3d8
-[128323.503310]  IIR: 03ffe01f    ISR: 0000000010340400  IOR: 000003e6aa2a=
-87a8
-[128323.587306]  CPU:        1   CR30: 0000000212ff0ce0 CR31: ffffffffffff=
-ffff
-[128323.667328]  ORIG_R28: 0000000239aa8920
-[128323.715307]  IAOQ[0]: dentry_free+0x100/0x128
-[128323.771306]  IAOQ[1]: dentry_free+0x104/0x128
-[128323.823305]  RP(r2): __dentry_kill+0x284/0x2e8
-[128323.875347] Backtrace:
-[128323.907319]  [<000000004073be90>] __dentry_kill+0x284/0x2e8
-[128323.975309]  [<000000004073d6d8>] dput+0x334/0x5a8
-[128324.031311]  [<0000000040726d94>] step_into+0x790/0xa88
-[128324.095309]  [<0000000040728910>] path_openat+0x21c/0x1ba8
-[128324.163310]  [<000000004072c018>] do_filp_open+0x9c/0x198
-[128324.231310]  [<0000000040702320>] do_sys_openat2+0x14c/0x2a8
-[128324.299309]  [<0000000040702c54>] compat_sys_openat+0x58/0xb8
-[128324.367308]  [<0000000040303e30>] syscall_exit+0x0/0x10
-
-after that:
-
-[128324.451303] ---[ end trace 0000000000000000 ]---
-[128345.511159] rcu: INFO: rcu_sched self-detected stall on CPU
-[128345.511159] rcu:    0-...!: (5249 ticks this GP) idle=3D3c3/1/0x400000=
-0000000002 softirq=3D35954078/35954078 fqs=3D54
-[128345.511159]         (t=3D5250 jiffies g=3D33838821 q=3D175418)
-[128345.511159] rcu: rcu_sched kthread starved for 5146 jiffies! g33838821=
- f0x0 RCU_GP_WAIT_FQS(5) ->state=3D0x0 ->cpu=3D1
-[128345.511159] rcu:    Unless rcu_sched kthread gets sufficient CPU time,=
- OOM is now expected behavior.
-[128345.511159] ...
-[128345.511159]
-[128345.511159] rcu: Stack dump where RCU GP kthread last ran:
-[128345.511159] Task dump for CPU 1:
-[128345.511159] task:cc1plus         state:R  running task     stack:    0=
- pid:14735 ppid: 14734 flags:0x00000014
-[128345.511159] Backtrace:
-[128345.511159]  [<000000004071f5c8>] __legitimize_path+0x7c/0x108
-[128345.511159]  [<00000000407210d4>] lookup_fast+0x1c8/0x290
-[128345.511159]  [<00000000407277b4>] walk_component+0x1e8/0x330
-[128345.511159]  [<0000000040727be8>] link_path_walk.part.0.constprop.0+0x=
-2ec/0x4d0
-[128345.511159]  [<0000000040728844>] path_openat+0x150/0x1ba8
-[128345.511159]  [<000000004072c018>] do_filp_open+0x9c/0x198
-[128345.511159]  [<0000000040702320>] do_sys_openat2+0x14c/0x2a8
-[128345.511159]  [<0000000040702c54>] compat_sys_openat+0x58/0xb8
-[128345.511159]  [<0000000040303e30>] syscall_exit+0x0/0x10
-[128345.511159]

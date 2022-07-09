@@ -2,42 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7719856C8EE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876FA56C8E6
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiGIKSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 06:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S229515AbiGIKPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 06:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGIKSN (ORCPT
+        with ESMTP id S229469AbiGIKO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 06:18:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A543ED65
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 03:18:12 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 9 Jul 2022 06:14:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40BA3CBF4;
+        Sat,  9 Jul 2022 03:14:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lg5h245XKz4xXD;
-        Sat,  9 Jul 2022 20:18:10 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linuxppc-dev@lists.ozlabs.org, benh@kernel.crashing.org,
-        mpe@ellerman.id.au,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        paulus@samba.org
-Cc:     Juerg Haefliger <juergh@canonical.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220520115431.147593-1-juergh@canonical.com>
-References: <20220520115431.147593-1-juergh@canonical.com>
-Subject: Re: [PATCH] KVM: PPC: Kconfig: Fix indentation
-Message-Id: <165736167288.12236.9958189155534556825.b4-ty@ellerman.id.au>
-Date:   Sat, 09 Jul 2022 20:14:32 +1000
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC7AEB819C8;
+        Sat,  9 Jul 2022 10:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3137C3411C;
+        Sat,  9 Jul 2022 10:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657361696;
+        bh=MaZXRxOK6UJq6NwF+fwB1/nqC7zlw5QYTccaa+9Ayaw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WsaGeSqiIL5eSPoZZjxC5QZezQPx9Sb47SKeE4YEgd3DsuDB9BJbBu9peP8MZkvrm
+         881Q2qPsk6lrzMghJszE9g24ys0Vn4hoESk/MqSwTba2foYSh4YxLO1VQTLiNGCfrx
+         DQEuc2snQ2fhq5zNkB+WOMZIsJPFB6fULphu6rAscDeKlBjOeAR0fh+po2G9+YKUHm
+         6kNEeqXzfst0hLnvY1VcIGyibDrqZKULauinZbOkpgOGxw8jAhbixZ1KZf9doop/yr
+         ddFSijafi/bbZTH+e4aodsY4GonqVfYayVhMWUybcJBAYMsADymAIfqVxkRecAUmwb
+         lvtey2U7SIpMA==
+Date:   Sat, 9 Jul 2022 11:14:50 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        "Hans Verkuil" <hverkuil@xs4all.nl>
+Subject: Re: [GIT PULL] Linux Media vimc update for 5.20-rc1
+Message-ID: <20220709111450.12e1dd61@sal.lan>
+In-Reply-To: <7e719640-80e6-b3ab-751a-156b8e74d87b@linuxfoundation.org>
+References: <7e719640-80e6-b3ab-751a-156b8e74d87b@linuxfoundation.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,16 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 May 2022 13:54:31 +0200, Juerg Haefliger wrote:
-> The convention for indentation seems to be a single tab. Help text is
-> further indented by an additional two whitespaces. Fix the lines that
-> violate these rules.
+Hi Shuah,
+
+Em Thu, 7 Jul 2022 10:28:37 -0600
+Shuah Khan <skhan@linuxfoundation.org> escreveu:
+
+> Hi Mauro,
 > 
+> Please pull the following vimc update for Linux 5.20-rc1.
 > 
+> This vimc update Linux Media 5.20-rc1 consists of enhancement and
+> cleanup patches:
+> 
+> - add lens to vimc driver and links it with sensors using ancillary
+>    links.
+> - add documentation for lens
+> - changes to make the code readable and maintainable.
+> 
+> diff is attached.
 
-Applied to powerpc/topic/ppc-kvm.
+Please also send the patches individually to the media ML, as reviews
+happen using them.
 
-[1/1] KVM: PPC: Kconfig: Fix indentation
-      https://git.kernel.org/powerpc/c/81e9685dd41384a39adda823df8b4f6e16ec2898
+Hans,
 
-cheers
+Please let me know if you prefer to apply those on your tree, or if
+I should apply on mine a couple of days after Shuah post the patches
+at the ML.
+
+Regards,
+Mauro
+
+> 
+> thanks,
+> -- Shuah
+> 
+> ----------------------------------------------------------------
+> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+> 
+>    Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-vimc-5.20-rc1
+> 
+> for you to fetch changes up to 55c592e9cff59e0d1c4069b7fe649b02ddf6c36b:
+> 
+>    media: vimc: documentation for lens (2022-06-29 12:58:21 -0600)
+> 
+> ----------------------------------------------------------------
+> linux-media-vimc-5.20-rc1
+> 
+> This vimc update Linux Media 5.20-rc1 consists of enhancement and
+> cleanup patches:
+> 
+> - add lens to vimc driver and links it with sensors using ancillary
+>    links.
+> - add documentation for lens
+> - changes to make the code readable and maintainable.
+> 
+> ----------------------------------------------------------------
+> Daniel Oakley (3):
+>        media: vimc: expand the names of vimc entity types
+>        media: vimc: enumerate data link entities for clarity
+>        media: vimc: use data link entities enum to index the ent_config array
+> 
+> Yunke Cao (2):
+>        media: vimc: add ancillary lens
+>        media: vimc: documentation for lens
+> 
+>   Documentation/admin-guide/media/vimc.dot       |   4 +
+>   Documentation/admin-guide/media/vimc.rst       |  19 ++
+>   drivers/media/test-drivers/vimc/Makefile       |   2 +-
+>   drivers/media/test-drivers/vimc/vimc-capture.c | 270 ++++++++---------
+>   drivers/media/test-drivers/vimc/vimc-common.h  |   9 +-
+>   drivers/media/test-drivers/vimc/vimc-core.c    | 142 ++++++---
+>   drivers/media/test-drivers/vimc/vimc-debayer.c | 393 +++++++++++++------------
+>   drivers/media/test-drivers/vimc/vimc-lens.c    | 102 +++++++
+>   drivers/media/test-drivers/vimc/vimc-scaler.c  | 216 +++++++-------
+>   drivers/media/test-drivers/vimc/vimc-sensor.c  | 307 +++++++++----------
+>   10 files changed, 830 insertions(+), 634 deletions(-)
+>   create mode 100644 drivers/media/test-drivers/vimc/vimc-lens.c
+> ----------------------------------------------------------------

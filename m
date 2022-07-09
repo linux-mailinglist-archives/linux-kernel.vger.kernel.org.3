@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C71456CA40
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 17:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAC056CA44
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 17:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiGIPFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 11:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S229478AbiGIPHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 11:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGIPFt (ORCPT
+        with ESMTP id S229448AbiGIPHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 11:05:49 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D904332B
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 08:05:48 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id AC1ioAmdXZfs8AC1io6k8z; Sat, 09 Jul 2022 17:05:47 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 09 Jul 2022 17:05:47 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Chas Williams <3chas3@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
-Subject: [PATCH] atm: he: Use the bitmap API to allocate bitmaps
-Date:   Sat,  9 Jul 2022 17:05:45 +0200
-Message-Id: <7f795bd6d5b2a00f581175b7069b229c2e5a4192.1657379127.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 9 Jul 2022 11:07:20 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148B843307
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 08:07:19 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id r18so480663uan.4
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 08:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S6qZgE2uPwn/d1eg70KlTI5Q2QqMPkD9Yhl3y2T9a6U=;
+        b=KxSCPghrjFUv31Ms++e9GVPWtkY6rY/jH/g+51FNSssTeMvAxnmCV+8eq+B74E+b1U
+         uJ0R/j2EXxZ4eELUPSGQAsrOY7voZL0ORKvDlf8RkvNAPNZdESmLHBJOAL3R0Q6EV5DP
+         N6vWho1BmqXCVgyo7GfkB5ur4DvvcUuLaA3r5Qg6Q3xXWKm+eiSu99+6QrWPCRtHjqTS
+         eFXVE1hsvLWygElDtKVUazyKudTom3DKGo+Mv+B/764ri7OTlRMkueZA1kaDt48FgVSP
+         7/NU8UQ2AWfkNO/Zlua71jxqLEa+ySCrCme9U9NNYodL4D+q81z1DPgW8OB4H5kBu7Yc
+         D11w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S6qZgE2uPwn/d1eg70KlTI5Q2QqMPkD9Yhl3y2T9a6U=;
+        b=Qh0LGbIoFLvin2/axwCDfaVHjFX0gZ1gWotWTGICArZMphshWg+QprK/0HnEteDED8
+         8wrKWOtgOoiSS/DTEMVVSaBJljw+Hv8XxT2rcP3Xx68ckU0m8OjjjFO9QuFI0OH6uZqZ
+         HuZ7e0w3yB68iy+QBd2ifBIQgm0hxx5YqHvm446d/H9E3OmVkcWZBjOrUV1T7WgEqkIF
+         S7JeGF3vGk2XDI/HpNbqI55ChwVOkBPszTTvY66hs/FoVwdHBMu8t9UevUE0j0iPbEq1
+         pfSyFSlSBdBRvYP1kpLVEY93PcVXC8iQJhKJL7SHIRZYcuraGUKWjY0IDRN+LG5hOy4y
+         RQTA==
+X-Gm-Message-State: AJIora8mlmcQsc88KJByOol7+X74EQpyHRsQNavOMyUFWgh9zPkmuoqn
+        rhvK8YgRJRLqK/9fmqMhsstaFwL7C+iplGgx1d0=
+X-Google-Smtp-Source: AGRyM1uY/lfAagfKt6MUwqy5h+d3m26gcVuoVxcR+lzSdxw6U15575gzAL6lAssR+DeAgUwnypB8M+3zuJWxmA4NMFA=
+X-Received: by 2002:ab0:7d08:0:b0:382:80d2:6767 with SMTP id
+ y8-20020ab07d08000000b0038280d26767mr3432530uaw.33.1657379237868; Sat, 09 Jul
+ 2022 08:07:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:ab0:3151:0:0:0:0:0 with HTTP; Sat, 9 Jul 2022 08:07:13 -0700 (PDT)
+Reply-To: info@nitoscebu.com
+From:   "Robert Avtandilyan." <sanusilamid742@gmail.com>
+Date:   Sat, 9 Jul 2022 16:07:13 +0100
+Message-ID: <CAOaQi2BGiZh0tc3ex7WTSnS+WHFso_wt9Hju2Z0pRfEc63ynyQ@mail.gmail.com>
+Subject: Urgent Call to Rescue
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
-
-It is less verbose and it improves the semantic.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/atm/he.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/atm/he.c b/drivers/atm/he.c
-index 17f44abc9418..ad91cc6a34fc 100644
---- a/drivers/atm/he.c
-+++ b/drivers/atm/he.c
-@@ -780,14 +780,11 @@ static int he_init_group(struct he_dev *he_dev, int group)
- 		  G0_RBPS_BS + (group * 32));
- 
- 	/* bitmap table */
--	he_dev->rbpl_table = kmalloc_array(BITS_TO_LONGS(RBPL_TABLE_SIZE),
--					   sizeof(*he_dev->rbpl_table),
--					   GFP_KERNEL);
-+	he_dev->rbpl_table = bitmap_zalloc(RBPL_TABLE_SIZE, GFP_KERNEL);
- 	if (!he_dev->rbpl_table) {
- 		hprintk("unable to allocate rbpl bitmap table\n");
- 		return -ENOMEM;
- 	}
--	bitmap_zero(he_dev->rbpl_table, RBPL_TABLE_SIZE);
- 
- 	/* rbpl_virt 64-bit pointers */
- 	he_dev->rbpl_virt = kmalloc_array(RBPL_TABLE_SIZE,
-@@ -902,7 +899,7 @@ static int he_init_group(struct he_dev *he_dev, int group)
- out_free_rbpl_virt:
- 	kfree(he_dev->rbpl_virt);
- out_free_rbpl_table:
--	kfree(he_dev->rbpl_table);
-+	bitmap_free(he_dev->rbpl_table);
- 
- 	return -ENOMEM;
- }
-@@ -1578,7 +1575,7 @@ he_stop(struct he_dev *he_dev)
- 	}
- 
- 	kfree(he_dev->rbpl_virt);
--	kfree(he_dev->rbpl_table);
-+	bitmap_free(he_dev->rbpl_table);
- 	dma_pool_destroy(he_dev->rbpl_pool);
- 
- 	if (he_dev->rbrq_base)
 -- 
-2.34.1
+Hello,
 
+Greetings from Moscow - Russia.
+
+I got your contact from the internet, though I didn't keep record of
+the exact website on the internet since I'm not sure if you would be
+interested in the deal.
+
+I closed my Oil & Gas deal in Russia because of US, EU & NATO Members
+Sanctions on Russia from making wire transfer to all over Europe,
+America and Asia due to Russia military invasion on Ukraine. But
+before the sanction i have pulled my money $125, 500, 000. 00 USD from
+my bank accounts in Russia and i want you to help me and receive the
+money cash in suitcases for safe keeping place / account for
+investment.
+
+Please the earlier the better. You are entitled to 10% of the total
+sum for your help, and another 15% of profit accruing from profit on
+investments as your share benefits.
+
+I look forward to your reply for further details ASAP.
+
+Yours truly,
+
+Robert Avtandilyan.

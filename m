@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B33F56C80D
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8686D56C810
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiGIIbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 04:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S229492AbiGIIby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGIIbc (ORCPT
+        with ESMTP id S229448AbiGIIbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 04:31:32 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E53650196
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 01:31:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso686200pjo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 01:31:32 -0700 (PDT)
+        Sat, 9 Jul 2022 04:31:51 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D1466AD1
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 01:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=R138oFD5OXPog61ZjjUULV7qM4LmxY5ZWnBjLCIhJ3A=;
-        b=eo6k0oi0O9tY1GVEX+jXGlhjdRjvJ/p3qJNJfLKICJkl1STJbHQr0n8Nm0MNQAif6D
-         Bs7A9C3KNCrgmnzbHmIYtH+cU3XEvJzPJSe9/m/XaUY4eu40DX05ocNjVQ2+zhXRGQ2W
-         Z1duOXCCRYUZNG5XPufQWwyIk6rjgsZlesO3LesvMvjgRoRvdh1ak4AhUX3XBRBKcV7s
-         I/7n9FylgYxV/yK3LIh8W5EH57gKFC1x9TX2/qHahEexU4MD5jNMaLN6VaeLkzNGzx1h
-         AOf7X3fEh3lgC0w7ww3tA73W+lrBKxIsPmIpWQvXg005AdBUSGE//nGm8QISRobaprYa
-         jZmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=R138oFD5OXPog61ZjjUULV7qM4LmxY5ZWnBjLCIhJ3A=;
-        b=DJao/RhGbyt0jxmnlzhTidkkfFKmSLro2qz//RBs75hT2+yTbkYRY8e+iAOWq3rLcg
-         qUXA++DaWraG5cxI+n9uwho6EZbYQ70Pejh1sdlbGHKBq5F2aZwOu4MQ4ippiH0hoYeK
-         Cd1aqvKfVnxdj9aWyv/qALWIw2+wdMuMtGftuqUFo7jZISuxXUHSZ1tqvjCS6ltbSsCv
-         44qFgGHQgwIutunBsRGmgsyTVSnyUIYbIykNWHgMB1Bt0xxMby7aULJVy2FHuJ8oFz6E
-         1Oz7UadLU/kxiApT2ZWx7kl3n/DQ1ZVTC7kgwrPMWnsQ6KJ8i27LoZXZAHKhit//VnzF
-         XnyQ==
-X-Gm-Message-State: AJIora8J+Ttkn7KVitxSmrHYZr2goI/kBzIiSRdWj+3o5ax793vDDilv
-        EMUoHnPdEPVBqIX20k/R4Dxq
-X-Google-Smtp-Source: AGRyM1u6MLWsD3OzMYBdC5Q0lI5mvhbGGTX65Il1VYUH+N1jXPz5K+gmp9+DRdeO2/6t/RcH3rHN9A==
-X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr4700263pjg.84.1657355491510;
-        Sat, 09 Jul 2022 01:31:31 -0700 (PDT)
-Received: from thinkpad ([117.207.26.140])
-        by smtp.gmail.com with ESMTPSA id q6-20020aa78426000000b00525714c3e07sm930353pfn.48.2022.07.09.01.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 01:31:31 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 14:01:22 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping
- for the local setup
-Message-ID: <20220709083122.GQ5063@thinkpad>
-References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
- <20220610091459.17612-23-Sergey.Semin@baikalelectronics.ru>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=mO4Lux4zExqJwsq693AgROuTl+x+kJdHNbYuPHKBSt4=;
+        b=TgVX/ijFEvLZEAqewwRTuyPLSpy25GpVpFYJQKtA8fSYi5/MA0aNiH7u2/YEYlkiQoa6P7ORPk6PG
+         yOZWahlzVNMziT/ht5UMBtysZT773tSz69WcQwX5+dpfwmO/jUAtMNc+rxn/5vS9c+gc7+20uZP3Dk
+         ZJDw7fVFLkItZnveY70UQbGYe2Vow5SSniP6aJKrUUbkrSsOjkqmE4zxLTg9MlQbFB6+ZboyeAqFDu
+         DMxtTpXco05ux0xRTZMnnAHWhL5rz0aPeUrDLSbIEFjCWkePOuAxphr804WR4N2R1cO5RvEsrks+tW
+         tO1dnb8c1kCYG1n3bkdfOvHyvTpU1jA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=mO4Lux4zExqJwsq693AgROuTl+x+kJdHNbYuPHKBSt4=;
+        b=w9p/xLtYiE38/MV3LPBUup56d572jke4BSd/+BvCTTJzjswWF+S0dSaRFE3NsFFCB3Y8WIOTP/EFY
+         sICDM1ZCQ==
+X-HalOne-Cookie: 7fd59b46a51611b99b6b071a385538c9ebf1830c
+X-HalOne-ID: 91d73c41-ff61-11ec-823c-d0431ea8bb10
+Received: from mailproxy4.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 91d73c41-ff61-11ec-823c-d0431ea8bb10;
+        Sat, 09 Jul 2022 08:31:46 +0000 (UTC)
+Date:   Sat, 9 Jul 2022 10:31:45 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        list@opendingux.net, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 0/6] drm/ingenic: JZ4760(B) support and random changes
+Message-ID: <Ysk88cZO1iQhX/I2@ravnborg.org>
+References: <20220708205406.96473-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610091459.17612-23-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220708205406.96473-1-paul@crapouillou.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,76 +62,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:14:57PM +0300, Serge Semin wrote:
-> DW eDMA doesn't perform any translation of the traffic generated on the
-> CPU/Application side. It just generates read/write AXI-bus requests with
-> the specified addresses. But in case if the dma-ranges DT-property is
-> specified for a platform device node, Linux will use it to map the CPU
-> memory regions into the DMAable bus ranges. This isn't what we want for
-> the eDMA embedded into the locally accessed DW PCIe Root Port and
-> End-point. In order to work that around let's set the chan_dma_dev flag
-> for each DW eDMA channel thus forcing the client drivers to getting a
-> custom dma-ranges-less parental device for the mappings.
-> 
-> Note it will only work for the client drivers using the
-> dmaengine_get_dma_device() method to get the parental DMA device.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Hi Paul,
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Fri, Jul 08, 2022 at 09:54:00PM +0100, Paul Cercueil wrote:
+> Hi,
+> 
+> A small set of changes to the ingenic-drm driver.
+> 
+> The most notable thing is that ingenic-ipu is now its own platform
+> driver.
+It would be nice to know what is achieved by this change, I could
+see the code being a tad simpler, but the cost was more EXPORTs.
 
-Thanks,
-Mani
+With the added explanation, which you can add when applying, all patches are:
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
-> 
-> ---
-> 
-> Changelog v2:
-> - Fix the comment a bit to being clearer. (@Manivannan)
-> 
-> Changelog v3:
-> - Conditionally set dchan->dev->device.dma_coherent field since it can
->   be missing on some platforms. (@Manivannan)
-> - Remove Manivannan' rb and tb tags since the patch content has been
->   changed.
-> ---
->  drivers/dma/dw-edma/dw-edma-core.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> index 6a8282eaebaf..4f56149dc8d8 100644
-> --- a/drivers/dma/dw-edma/dw-edma-core.c
-> +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> @@ -716,6 +716,26 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
->  	if (chan->status != EDMA_ST_IDLE)
->  		return -EBUSY;
->  
-> +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
-> +	 * controlled from the CPU/Application side since in that case
-> +	 * the local memory address is left untranslated.
-> +	 */
-> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> +		dchan->dev->chan_dma_dev = true;
-> +
-> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> +    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> +    defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-> +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
-> +#endif
-> +
-> +		dma_coerce_mask_and_coherent(&dchan->dev->device,
-> +					     dma_get_mask(chan->dw->chip->dev));
-> +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
-> +	} else {
-> +		dchan->dev->chan_dma_dev = false;
-> +	}
-> +
->  	pm_runtime_get(chan->dw->chip->dev);
->  
->  	return 0;
-> -- 
-> 2.35.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+	Sam

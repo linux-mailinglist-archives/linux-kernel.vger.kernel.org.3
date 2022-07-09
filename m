@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADF156CBD0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 00:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AA856CBD9
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 00:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiGIWnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 18:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S229528AbiGIWvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 18:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGIWnK (ORCPT
+        with ESMTP id S229450AbiGIWvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 18:43:10 -0400
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C468B12098
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 15:43:09 -0700 (PDT)
-Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 269MgtuQ2280876
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Sat, 9 Jul 2022 15:42:56 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 269MgtuQ2280876
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022070501; t=1657406576;
-        bh=udIunIcx1Q/qtRW3dNxNLApGfVBM3yXCEcFBiFNLH84=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=h31lM0uLizR2v3NiLWb8OV3+CgLmR3XgAcWzVgfZh9FTLNUYsl1n6znJXcdLxxsTA
-         Sr8iPcgAFCcKrtNQGxbbGf4UjasacSXH+AdiECQ157E2oWf6RP8Kgy2syBNgl2MEMg
-         Txll8S7i5G4voz6smSYU6tVINZup7hAkse2faw3cDAnz2u3Y4gPNzI8a1lZEs9f5eE
-         1OkkObn0Y2BDYFO1eOP9UvDMQgiRZpwSceJx4Hwr1mQ/mu2HdoWV8tD0cqv9pGKgF8
-         vtvCQ12vs+4Z1Tsh0Z7c2hxZepNgfH0X08QBSplkLYQ3xlU8JszSfSBiSY3DxcwKq4
-         wPSn21TfRMY/g==
-Message-ID: <ec46a292-dcc1-c12b-25a0-491b522c2db8@zytor.com>
-Date:   Sat, 9 Jul 2022 15:42:50 -0700
+        Sat, 9 Jul 2022 18:51:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE16213EB5
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 15:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657407080; x=1688943080;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1avsvh0DsidozjjxyzxpYK3Ip0iH5McbGzDR18/Bt+E=;
+  b=c8+g9I+sdZSs9A2jC4SCBsr4piIvB3H58B7q6pIw5nWjAJfkpkL7wHuC
+   QXzznVROoYHe93k9Eg2YDXGhS51ocna5rdt8kJFXPdD5wQpy4o70GB11H
+   fATGC5YLRmJSxbrw/ObNbdDeNigpi6Cs4hdyRRH3/y18DabsqtUFmbylt
+   sSi6D7jPKivlpCpo/51JCFexd+NsS+CNSpZsZKqWzZPwdkLBbp1tEfJ1w
+   mpOWOGqvJqnKexVttcPKV3c6cHk63ycIOYcK2qf2LPaBEsPmuQZsmHwmq
+   KO8VFoRLHjO/7WPtxk7pQ/7Gxu/fP+2gxpM9IwrOL4VS1v7Kuk3+b8o22
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="348448963"
+X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
+   d="scan'208";a="348448963"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 15:51:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,259,1650956400"; 
+   d="scan'208";a="627072333"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jul 2022 15:51:19 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAJIE-000PDk-Oq;
+        Sat, 09 Jul 2022 22:51:18 +0000
+Date:   Sun, 10 Jul 2022 06:50:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/120-spmi 3/3]
+ drivers/nvmem/spmi-mfd-nvmem.c:90:3-8: No need to set .owner here. The core
+ will do it.
+Message-ID: <202207100625.KPdgo7Xg-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH tip v9] x86/setup: Use rng seeds from setup_data
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-References: <YslN1bo2jnnxl3E3@zx2c4.com>
- <20220709094853.1090735-1-Jason@zx2c4.com>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20220709094853.1090735-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/9/22 02:48, Jason A. Donenfeld wrote:
-> Currently the only way x86 can get an early boot RNG seed is via EFI,
-> which is generally always used now for physical machines, but is very
-> rarely used in VMs, especially VMs that are optimized for starting
-> "instantaneously", such as Firecracker's MicroVM. For tiny fast booting
-> VMs, EFI is not something you generally need or want.
-> 
-> Rather, here we want the ability for the image loader or firmware to
-> pass a single random seed, exactly as device tree platforms do with the
-> "rng-seed" property. Additionally, this is something that bootloaders
-> can append, with their own seed file management, which is something
-> every other major OS ecosystem has that we do not (yet).
-> 
-> This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
-> entries that are parsed at boot. It also takes care to zero out the seed
-> immediately after using, in order to retain forward secrecy. This all
-> takes about 7 trivial lines of code.
-> 
-> Then, on kexec_file_load(), a new fresh seed is generated and passed to
-> the next kernel, just as is done on device tree architectures when
-> using kexec. And, importantly, I've tested that QEMU is able to properly
-> pass SETUP_RNG_SEED as well, making this work for every step of the way.
-> This code too is pretty straight forward.
-> 
-> Together these measures ensure that VMs and nested kexec()'d kernels
-> always receive a proper boot time RNG seed at the earliest possible
-> stage from their parents:
-> 
->     - Host [already has strongly initialized RNG]
->       - QEMU [passes fresh seed in SETUP_RNG_SEED field]
->         - Linux [uses parent's seed and gathers entropy of its own]
->           - kexec [passes this in SETUP_RNG_SEED field]
->             - Linux [uses parent's seed and gathers entropy of its own]
->               - kexec [passes this in SETUP_RNG_SEED field]
->                 - Linux [uses parent's seed and gathers entropy of its own]
->                   - kexec [passes this in SETUP_RNG_SEED field]
-> 		   - ...
-> 
-> I've verified in several scenarios that this works quite well from a
-> host kernel to QEMU and down inwards, mixing and matching loaders, with
-> every layer providing a seed to the next.
-> 
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+tree:   https://github.com/AsahiLinux/linux bits/120-spmi
+head:   cfeab618c438619d550c161335ba6b242603213c
+commit: cfeab618c438619d550c161335ba6b242603213c [3/3] nvmem: Add spmi-mfd-nvmem driver
+config: xtensa-randconfig-c004-20220710 (https://download.01.org/0day-ci/archive/20220710/202207100625.KPdgo7Xg-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
 
-Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
-> Changes v8->v9:
-> - [hpa] Update SETUP_TYPE_MAX and add SETUP_ENUM_MAX.
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/nvmem/spmi-mfd-nvmem.c:90:3-8: No need to set .owner here. The core will do it.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

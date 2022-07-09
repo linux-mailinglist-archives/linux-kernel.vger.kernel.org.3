@@ -2,148 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7563D56C4F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EDA56C563
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiGIARY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 20:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S229797AbiGIAU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 20:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiGIARU (ORCPT
+        with ESMTP id S229614AbiGIAUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:17:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2CBD691DD
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657325838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ko4GkJU0Tn8zbLKOIgGsmDKDvugLe86WnU6pUPW6HE=;
-        b=Li3pFMOWaMNsqo7Bbf6Jf0+kq5zZ8sxysLoTUVbVF+hcCrO+lxhjQpCyhDTzrgHRjkrMkS
-        FjDSv7/08+xzqcuT15+ozTYW1Dok3DYt8MFLsHtbWzax6kgsOqgiTFIeEVu/27JfgBYxcH
-        k5l63tXzVhCuqLHaa7cASONrhF56ebk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-Qq9SNVonNPKWeLsxs3H5wQ-1; Fri, 08 Jul 2022 20:17:09 -0400
-X-MC-Unique: Qq9SNVonNPKWeLsxs3H5wQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EB45101A54E;
-        Sat,  9 Jul 2022 00:17:09 +0000 (UTC)
-Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A579AC35979;
-        Sat,  9 Jul 2022 00:17:08 +0000 (UTC)
-Date:   Sat, 9 Jul 2022 08:17:04 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, akpm@linux-foundation.org
-Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] proc/vmcore: fix potential memory leak in
- vmcore_init()
-Message-ID: <20220709001704.GA342876@MiWiFi-R3L-srv>
-References: <20220704081839.2232996-1-niejianglei2021@163.com>
- <YsfsIzjmhR5VQU3N@MiWiFi-R3L-srv>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsfsIzjmhR5VQU3N@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Fri, 8 Jul 2022 20:20:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E397AC18
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:20:53 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e63-20020a253742000000b0066e1afdb46aso160415yba.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=FUpf7qbhcYhqC7SCTim1z1K8LNHsfqJ6ksw1Uk9yn0w=;
+        b=E4PshmJKlIst3fmKP0Agc3adhM0zrUezSL0V+S33kL7v/UPR7J+6bVFB+UO8e0TsUj
+         0I48wF9OVUVv1mIXCj9yE7QHDEuvSkAGmMpbwclj6MMgdyxFSGQeMf5mEYjLIcURhbgE
+         AA+73HbWBlE6RXaHY5YGaCnE9xKZsKzU4nUKwparqy9m08BqagkIIn1/dOOK2X1xhnCA
+         Nf1YT1iuikTJL9w4WVeK7bKuZ1ahpiWdgnYze3RPiANWz6lGqKfaUAChznqWiWY+t+y6
+         vD0Qrcf+hyTObEXEi1D+cnPQmrV4bCCVUU3wrB07cgXUrCc6/vY+/ch6wJHSAQbcR+xP
+         imRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=FUpf7qbhcYhqC7SCTim1z1K8LNHsfqJ6ksw1Uk9yn0w=;
+        b=t57fX4uEZ7J4AGOeZlpv2MdTMQ3tj0snl6gIT8UT08tUFS/2eNTmYBTa9Cx5He1j58
+         sBqnfKwrfcZ35cwIDKz2s3P2ASC9pMK4gK7CPYanlNyVSuGDPhiddGbk1svTlwaigo/O
+         RYO9EOqqVoff/ls/Njt8iPAAZ5DkyS1zikfhWk7oCdDye1O8X2EGt9Hw5D/ZUp2IvPpN
+         jGUcMX/2drIoKFmill19Mg/7uglgf/U8oL+e1VXyDGGSUlEq07APuJk9nVNZYr/eS65v
+         qjUsbJvdIHCFflK5i/r9PvI7I/FRSy0mcuuyVg6U6PjoUW5YrX+V86rxICTbbPBuQHB9
+         ASLw==
+X-Gm-Message-State: AJIora/pqPDQbsv89kuHyX4E9M03i5izCbsuUZxISJmvoGaYfP+YCiqA
+        0c5jRJtNOStLZEHLovpNI1rkCul9N1m3/g==
+X-Google-Smtp-Source: AGRyM1svRn0hMLWKrLMB0KKM7xOXMQ2h87tkFL2IEcNUQkKnpTQ1W03aJnnf0YOD/wRy8mlZocxMHK+bWvv38Q==
+X-Received: from riochico.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:b3e])
+ (user=rsilvera job=sendgmr) by 2002:a25:900d:0:b0:66e:4dc3:be1e with SMTP id
+ s13-20020a25900d000000b0066e4dc3be1emr6533569ybl.375.1657326053054; Fri, 08
+ Jul 2022 17:20:53 -0700 (PDT)
+Date:   Sat,  9 Jul 2022 00:20:46 +0000
+Message-Id: <20220709002046.2804157-1-rsilvera@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v3] perf inject: Add a command line option to specify build ids.
+From:   Raul Silvera <rsilvera@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Raul Silvera <rsilvera@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/08/22 at 04:34pm, Baoquan He wrote:
-> On 07/04/22 at 04:18pm, Jianglei Nie wrote:
-> > elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
-> > kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
-> > predefined value. If parse_crash_elf_headers() occurs some error and
-> > returns a negetive value, the elfcorehdr_addr should be released with
-> > elfcorehdr_free().
-> > 
-> > We can fix by calling elfcorehdr_free() when parse_crash_elf_headers()
-> > fails.
-> 
-> LGTM,
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
+This commit adds the option --known-build-ids to perf inject.
+It allows the user to explicitly specify the build id for a given
+path, instead of retrieving it from the current system. This is
+useful in cases where a perf.data file is processed on a different
+system from where it was collected, or if some of the binaries are
+no longer available.
 
-Sorry, I didn't check the code change carefully. This v2 is not right. I
-thought Jianglei took my suggested code change directly. Seems he
-mistakenly took part of them and caused error.
+The build ids and paths are specified in pairs in the command line.
+Using the file:// specifier, build ids can be loaded from a file
+directly generated by perf buildid-list. This is convenient to copy
+build ids from one perf.data file to another.
 
-> 
-> > 
-> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> > ---
-> >  fs/proc/vmcore.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> > index 4eaeb645e759..86887bd90263 100644
-> > --- a/fs/proc/vmcore.c
-> > +++ b/fs/proc/vmcore.c
-> > @@ -1569,7 +1569,7 @@ static int __init vmcore_init(void)
-> >  	rc = parse_crash_elf_headers();
-> >  	if (rc) {
-> >  		pr_warn("Kdump: vmcore not initialized\n");
-> > -		return rc;
-> > +		goto fail;
-> >  	}
-> >  	elfcorehdr_free(elfcorehdr_addr);
-        ~~
-        this line should be removed.
-> >  	elfcorehdr_addr = ELFCORE_ADDR_ERR;
-> > @@ -1577,6 +1577,9 @@ static int __init vmcore_init(void)
-> >  	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
-> >  	if (proc_vmcore)
-> >  		proc_vmcore->size = vmcore_size;
-> > +
-> > +fail:
-> > +	elfcorehdr_free(elfcorehdr_addr);
-> >  	return 0;
-        ^
-        return rc;  the returned value is wrong with v2.
+** Example: In this example we use perf record to create two
+perf.data files, one with build ids and another without, and use
+perf buildid-list and perf inject to copy the build ids from the
+first file to the second.
 
-What I suggested is as below. 
+ $ perf record ls /tmp
+ $ perf record --no-buildid -o perf.data.no-buildid ls /tmp
+ $ perf buildid-list > /tmp/build-ids.txt
+ $ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
+        -i perf.data.no-buildid -o perf.data.buildid
 
-Andrew, please drop the one merged into mm-unstable branch.
+Signed-off-by: Raul Silvera <rsilvera@google.com>
+---
 
-Hi Jianglei,
+  V2 -> V3  Added documentation and removed unnecessary temps
+  V1 -> V2: Cleaned up patch description, deleted the strlist during
+            cleanup, and updated validation of the build id strings
 
-Can you post v3 with below correct change and add Andrew to CC?
+ tools/perf/Documentation/perf-inject.txt |  7 ++-
+ tools/perf/builtin-inject.c              | 57 ++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
 
-diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-index 4eaeb645e759..390515c249dd 100644
---- a/fs/proc/vmcore.c
-+++ b/fs/proc/vmcore.c
-@@ -1569,15 +1569,16 @@ static int __init vmcore_init(void)
- 	rc = parse_crash_elf_headers();
- 	if (rc) {
- 		pr_warn("Kdump: vmcore not initialized\n");
--		return rc;
-+		goto fail;
- 	}
--	elfcorehdr_free(elfcorehdr_addr);
- 	elfcorehdr_addr = ELFCORE_ADDR_ERR;
+diff --git a/tools/perf/Documentation/perf-inject.txt b/tools/perf/Documentation/perf-inject.txt
+index 0570a1ccd344..78474d941fd8 100644
+--- a/tools/perf/Documentation/perf-inject.txt
++++ b/tools/perf/Documentation/perf-inject.txt
+@@ -27,9 +27,14 @@ OPTIONS
+ --build-ids::
+         Inject build-ids into the output stream
  
- 	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
- 	if (proc_vmcore)
- 		proc_vmcore->size = vmcore_size;
--	return 0;
-+fail:
-+	elfcorehdr_free(elfcorehdr_addr);
-+	return rc;
+---buildid-all:
++--buildid-all::
+ 	Inject build-ids of all DSOs into the output stream
+ 
++--known-build-ids=::
++	Override build-ids to inject using these comma-separated pairs of
++	build-id and path. Understands file://filename to read these pairs
++	from a file, which can be generated with perf buildid-list.
++
+ -v::
+ --verbose::
+ 	Be more verbose.
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index a75bf11585b5..bf10c6478493 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -21,6 +21,7 @@
+ #include "util/data.h"
+ #include "util/auxtrace.h"
+ #include "util/jit.h"
++#include "util/string2.h"
+ #include "util/symbol.h"
+ #include "util/synthetic-events.h"
+ #include "util/thread.h"
+@@ -35,6 +36,7 @@
+ 
+ #include <linux/list.h>
+ #include <linux/string.h>
++#include <ctype.h>
+ #include <errno.h>
+ #include <signal.h>
+ 
+@@ -59,6 +61,7 @@ struct perf_inject {
+ 	struct itrace_synth_opts itrace_synth_opts;
+ 	char			event_copy[PERF_SAMPLE_MAX_SIZE];
+ 	struct perf_file_section secs[HEADER_FEAT_BITS];
++	struct strlist		*known_build_ids;
+ };
+ 
+ struct event_entry {
+@@ -570,9 +573,45 @@ static int dso__read_build_id(struct dso *dso)
+ 	return dso->has_build_id ? 0 : -1;
  }
- fs_initcall(vmcore_init);
  
++static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
++					       struct dso *dso)
++{
++	struct str_node *pos;
++	int bid_len;
++
++	strlist__for_each_entry(pos, inject->known_build_ids) {
++		const char *build_id, *dso_name;
++
++		build_id = skip_spaces(pos->s);
++		dso_name = strchr(build_id, ' ');
++		if (dso_name == NULL)
++			continue;
++		bid_len = dso_name - pos->s;
++		dso_name = skip_spaces(dso_name);
++		if (strcmp(dso->long_name, dso_name))
++			continue;
++		if (bid_len % 2 != 0 || bid_len >= SBUILD_ID_SIZE)
++			return false;
++		for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
++			if (!isxdigit(build_id[2 * ix]) ||
++			    !isxdigit(build_id[2 * ix + 1]))
++				return false;
++
++			dso->bid.data[ix] = (hex(build_id[2 * ix]) << 4 |
++					     hex(build_id[2 * ix + 1]));
++		}
++		dso->bid.size = bid_len / 2;
++		dso->has_build_id = 1;
++		return true;
++	}
++	return false;
++}
++
+ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 				struct machine *machine, u8 cpumode, u32 flags)
+ {
++	struct perf_inject *inject = container_of(tool, struct perf_inject,
++						  tool);
+ 	int err;
+ 
+ 	if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
+@@ -580,6 +619,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
+ 	if (is_no_dso_memory(dso->long_name))
+ 		return 0;
+ 
++	if (inject->known_build_ids != NULL &&
++	    perf_inject__lookup_known_build_id(inject, dso))
++		return 1;
++
+ 	if (dso__read_build_id(dso) < 0) {
+ 		pr_debug("no build_id found for %s\n", dso->long_name);
+ 		return -1;
+@@ -1076,12 +1119,16 @@ int cmd_inject(int argc, const char **argv)
+ 	};
+ 	int ret;
+ 	bool repipe = true;
++	const char *known_build_ids = NULL;
+ 
+ 	struct option options[] = {
+ 		OPT_BOOLEAN('b', "build-ids", &inject.build_ids,
+ 			    "Inject build-ids into the output stream"),
+ 		OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
+ 			    "Inject build-ids of all DSOs into the output stream"),
++		OPT_STRING(0, "known-build-ids", &known_build_ids,
++			   "buildid path [,buildid path...]",
++			   "build-ids to use for given paths"),
+ 		OPT_STRING('i', "input", &inject.input_name, "file",
+ 			   "input file name"),
+ 		OPT_STRING('o', "output", &inject.output.path, "file",
+@@ -1215,6 +1262,15 @@ int cmd_inject(int argc, const char **argv)
+ 		 */
+ 		inject.tool.ordered_events = true;
+ 		inject.tool.ordering_requires_timestamps = true;
++		if (known_build_ids != NULL) {
++			inject.known_build_ids = strlist__new(
++			    known_build_ids, NULL);
++
++			if (inject.known_build_ids == NULL) {
++				pr_err("Couldn't parse known build ids.\n");
++				goto out_delete;
++			}
++		}
+ 	}
+ 
+ 	if (inject.sched_stat) {
+@@ -1241,6 +1297,7 @@ int cmd_inject(int argc, const char **argv)
+ 	ret = __cmd_inject(&inject);
+ 
+ out_delete:
++	strlist__delete(inject.known_build_ids);
+ 	zstd_fini(&(inject.session->zstd_data));
+ 	perf_session__delete(inject.session);
+ out_close_output:
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 

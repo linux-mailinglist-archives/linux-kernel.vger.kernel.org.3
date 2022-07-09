@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F13056C6E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 06:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045E956C6E9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 06:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiGIE2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 00:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
+        id S229489AbiGIEf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 00:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGIE2c (ORCPT
+        with ESMTP id S229452AbiGIEfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 00:28:32 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C4F5F9D;
-        Fri,  8 Jul 2022 21:28:31 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id l12so359288plk.13;
-        Fri, 08 Jul 2022 21:28:31 -0700 (PDT)
+        Sat, 9 Jul 2022 00:35:25 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCEB691CD;
+        Fri,  8 Jul 2022 21:35:23 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s21so648292pjq.4;
+        Fri, 08 Jul 2022 21:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=P1ZmRAMQkKi+73jDKOIxJoV5SeHUxQ3O93b7K+9df6Q=;
-        b=Sit6D4+D1IB11o9WUsG0USK8bmhZeOQMlIsXx5F/g1jWh9wShUczZQaKcpSDGwB4Gy
-         xaRu+h0b6KwoNLvnxguvheLxaqD7/8aWeFp+eona6sOeWEydZJBFa1Q081VQGejzv9T2
-         eeBIwAZQ4ofhcNaOiF5PcMiBV3DWTkGUApnOqpUD78jcCyWTO4y16Jf62zxLcGAn18Oy
-         AGNqPNPxEJ5VqFbkSB4UxRoKtTywJcP/4Jyy5mLr7E69nujYaui7zlbyI2Tdxjdn5ywr
-         96HY3RetQcLVmn4VDH1mn2LsiR2B+mi+2RUeMH3+SJYQE+UcwCcQ8BPVP9NaR5vLMwHd
-         jdPA==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=v5yD9L6s32T5k6XeGkSUl55j73gr0LL5Hqkv0eTGMqs=;
+        b=TlGHnzG2HbqkDa6jSYYnIQwis01yN5cUOeoeZrlaiQS6ArN6UqFqYQaqyj/cHwV2gk
+         MrWOiRjgja75OBFFnyeNIJsNxHFPQUW27cP7buGTWs1K0gB4ezsxwjzz55lyGGzjsNJh
+         F01kjXBZr6ko1emTK43Ou7PpVL2ZFvr/QT1aj+FTQGE5MNlV5CpRjIFJ54LhjQ7/zpf1
+         xRDUWwrovvh45qEA1E49/Fuc8T4427zJJ6DEcJDMcOgnqNMy9SSgiicjbh1RrlJzk4eP
+         ohDNW/5UNAN9vSw6g1j6D2ml35rRN0yg3GdLufU29HWwQpC6MaWsU+JNGrYLq8/MEdjf
+         vUCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=P1ZmRAMQkKi+73jDKOIxJoV5SeHUxQ3O93b7K+9df6Q=;
-        b=0wi/pTmZNFm7uF4JwygkbBBQRleBlfircXUlgNWDTkG6P3L0N5eohSiNsIc/7bcYwA
-         6BiX3GqD/WovJAnTJoRFI8ubSKKpFJ4diBV1L5MXzIGevirxnvwHSnHjS2hCWgwgNVjh
-         0/5F0eTbIHGzuokjnmusE4ys89lmD/9MEfxRj+8cFOrg2D0A3CbvAtLSQRj26DTWzk22
-         1nnIHFbvytDB9XNgWAfdKjJQ2NWg+A76JdyiYW2ijpK1ifJ9cVVJUk5myrIGJZNkSWNG
-         NxJystBLe5xGsMtHPEj7E3UE3uD9mx1AbYmBnuz2Kf65EDIlSQTcPr1F++xnBhKjxaVR
-         jhWw==
-X-Gm-Message-State: AJIora9WvlnPJ4awRjD5xrxr5BiD74lcEMUC0Z/15i4kZmn1wEDdADkc
-        sOGp4BkJ8YNs5XuaZvwIs0M=
-X-Google-Smtp-Source: AGRyM1t00kPzOqjiMw+aqKWQ/Di9XwgqWq0GXN4A6dkrdxlf+Q1NjP//JJDZF59HpfioK/NADLijEg==
-X-Received: by 2002:a17:90a:eb17:b0:1ef:81d5:1fd0 with SMTP id j23-20020a17090aeb1700b001ef81d51fd0mr3936069pjz.29.1657340910456;
-        Fri, 08 Jul 2022 21:28:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=v5yD9L6s32T5k6XeGkSUl55j73gr0LL5Hqkv0eTGMqs=;
+        b=MpWD0DzZNP5y9Af4Z6gLQZfk6WDanezcoOAICVEm/ziBsZGRJnIx/gr3JUpgcSxbA1
+         ig4EoBM5vr4AI8+XukaqWa/dyGhEBLpn4pn0y5o9RtTKC0/UDS2cXr7waOm5woSizv2p
+         7bUjVgBiEHNEkBBIj4hXSxE5GfRii6yV1lYwrCtwGkrrCJnz0xC/rPM7eC3oLRCps+6S
+         SqQyZ+bxdturIgUT84lJlro0LwHOZw0I7J2OqHOuEK6SNwHC57PcN2abo3QBZ8RnGP4X
+         cJQihyxl9YNMvsHOFbttZ2j81sQ98Zmzs0mk8um55ygDE+lWygeGFjiLZL6oFFwU/ijn
+         wTBw==
+X-Gm-Message-State: AJIora8+JHQ29qkmrvZBngV8iPU0vt2tJD4lecbMLpBbhZ/AipnrzE5z
+        JwENEa6EsiFpL49qs6RFoR4=
+X-Google-Smtp-Source: AGRyM1sRV8fyXsuCNbhEGERYkce96bhH9r9pNNd4qdDPGr5unRkL4jZlTOTBBPRp38U82OrMV6bLKw==
+X-Received: by 2002:a17:902:d4c8:b0:16a:480b:b781 with SMTP id o8-20020a170902d4c800b0016a480bb781mr7056001plg.79.1657341323014;
+        Fri, 08 Jul 2022 21:35:23 -0700 (PDT)
 Received: from google.com ([2620:15c:202:201:5011:9ea9:1cc2:a4c0])
-        by smtp.gmail.com with ESMTPSA id u3-20020a627903000000b00528999fba99sm423242pfc.175.2022.07.08.21.28.29
+        by smtp.gmail.com with ESMTPSA id e27-20020a056a0000db00b0051bbd79fc9csm438218pfj.57.2022.07.08.21.35.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 21:28:29 -0700 (PDT)
-Date:   Fri, 8 Jul 2022 21:28:27 -0700
+        Fri, 08 Jul 2022 21:35:22 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 21:35:19 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Linux Input <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <YskD6/4iDgiIkV2G@google.com>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+To:     Artur Rojek <contact@artur-rojek.eu>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH] Input: adc-joystick - fix ordering in adc_joystick_probe()
+Message-ID: <YskFh4NHnlcryMkk@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,47 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:03:12PM +0200, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-...
->  drivers/input/joystick/as5011.c                           | 4 +---
->  drivers/input/keyboard/adp5588-keys.c                     | 4 +---
->  drivers/input/keyboard/lm8323.c                           | 4 +---
->  drivers/input/keyboard/lm8333.c                           | 4 +---
->  drivers/input/keyboard/mcs_touchkey.c                     | 4 +---
->  drivers/input/keyboard/qt1070.c                           | 4 +---
->  drivers/input/keyboard/qt2160.c                           | 4 +---
->  drivers/input/keyboard/tca6416-keypad.c                   | 4 +---
->  drivers/input/misc/adxl34x-i2c.c                          | 4 +---
->  drivers/input/misc/bma150.c                               | 4 +---
->  drivers/input/misc/cma3000_d0x_i2c.c                      | 4 +---
->  drivers/input/misc/pcf8574_keypad.c                       | 4 +---
->  drivers/input/mouse/synaptics_i2c.c                       | 4 +---
->  drivers/input/rmi4/rmi_smbus.c                            | 4 +---
->  drivers/input/touchscreen/atmel_mxt_ts.c                  | 4 +---
->  drivers/input/touchscreen/bu21013_ts.c                    | 4 +---
->  drivers/input/touchscreen/cyttsp4_i2c.c                   | 4 +---
->  drivers/input/touchscreen/edt-ft5x06.c                    | 4 +---
->  drivers/input/touchscreen/goodix.c                        | 4 +---
->  drivers/input/touchscreen/migor_ts.c                      | 4 +---
->  drivers/input/touchscreen/s6sy761.c                       | 4 +---
->  drivers/input/touchscreen/stmfts.c                        | 4 +---
+We should register the IIO buffer before we register the input device,
+because as soon as the device is registered input handlers may attach to
+it, resulting in a call to adc_joystick_open() which makes use of the said
+buffer.
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-Thanks.
+Not tested on hardware...
+
+ drivers/input/joystick/adc-joystick.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
+index 78ebca7d400a..e0cfdc84763f 100644
+--- a/drivers/input/joystick/adc-joystick.c
++++ b/drivers/input/joystick/adc-joystick.c
+@@ -222,13 +222,6 @@ static int adc_joystick_probe(struct platform_device *pdev)
+ 	if (error)
+ 		return error;
+ 
+-	input_set_drvdata(input, joy);
+-	error = input_register_device(input);
+-	if (error) {
+-		dev_err(dev, "Unable to register input device\n");
+-		return error;
+-	}
+-
+ 	joy->buffer = iio_channel_get_all_cb(dev, adc_joystick_handle, joy);
+ 	if (IS_ERR(joy->buffer)) {
+ 		dev_err(dev, "Unable to allocate callback buffer\n");
+@@ -241,6 +234,14 @@ static int adc_joystick_probe(struct platform_device *pdev)
+ 		return error;
+ 	}
+ 
++	input_set_drvdata(input, joy);
++
++	error = input_register_device(input);
++	if (error) {
++		dev_err(dev, "Unable to register input device\n");
++		return error;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.37.0.144.g8ac04bfd2-goog
+
 
 -- 
 Dmitry

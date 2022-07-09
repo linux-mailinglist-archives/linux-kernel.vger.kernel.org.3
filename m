@@ -2,116 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166A656C51C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7563D56C4F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiGIAPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 20:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S229617AbiGIARY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 20:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiGIAPn (ORCPT
+        with ESMTP id S229530AbiGIARU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:15:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C8377495
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:15:41 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31c8a5d51adso2413987b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 17:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=18zwxTMww86cndEzpYub9pnZe0fDkNY6EnCvkW/t9JY=;
-        b=msxqFvaOZSoAWLO402a9iXoMeeEmvOcEg5VOhX+o22iSw24U+MJ7v5aJbXYhjOXEcs
-         80KPM4xIH89KOQGhECF+FEZEs0ZImyjKLbt6Mjaj7LDHuEIKn4GysLo5nD9ujirYiRc4
-         IgHy2nx/83FOn6x/5OM7PPbJlxmw2aA847iuBYirfRbTGllNigutmESrvh5uJ09m2Mkv
-         l1GzyelrnzqNCsFX/zFW/lxNYJkZrXMfA3eK8aHziKCL6C/UMKfsCZEgFvs42zjW7YkW
-         SV0eehnKB7Ka7Mco0HyzgpIJXij9SbnHq6hNPjgtpyS3thEq/3GvRWmlVHpnOUQJW1kd
-         gVqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=18zwxTMww86cndEzpYub9pnZe0fDkNY6EnCvkW/t9JY=;
-        b=4yJgrQanQ5t5iJy7GCdr3lZPPGQ0PPWtjv+Bt/YBV60GokgOwCAtBvfDpgMzNOVmzh
-         VFjHUtEnGWPGAH/ijs1+7FG2PASfUayvREuh0YMeEsCyu+G4HNTZN3cGBUPjX/JYk9Yu
-         JBf2LjDlFnyMZ59LswoELUhGrWZKnhLR6i0x1LI+D+9l8E7MUUmpxkEoNYZ5PRZqGzfN
-         h9DJvl66lRkchZKCofWigsoAtSeKIwfjX5ylSHC2qe6aS5zfc3TGY32k8JykAI3s28ji
-         HpTcMPNfMC6RTvCDH4epx9EIPU3xje7ybTqCgY4ssEL77Pe5BN9CovOEX+HUfKZcXNZs
-         whHA==
-X-Gm-Message-State: AJIora8AmILtsZFDHhb4RqVou2Jj5HxMoqjR8Slr6PZto869IWhkNZBk
-        8avAryrX8hdWeUjGb+nh/yeaiq8ueCWaVpFydQ==
-X-Google-Smtp-Source: AGRyM1sfR9BLCzjhQ7iB9/w8T0nTXqnCY8GM70POd4QwcuIQdsEQRKXzL/APCV3KaFIEOVcpID4t0hTXIVbShLssFQ==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f21c:9185:9405:36f])
- (user=justinstitt job=sendgmr) by 2002:a25:907:0:b0:66e:3f14:c463 with SMTP
- id 7-20020a250907000000b0066e3f14c463mr6447554ybj.243.1657325741218; Fri, 08
- Jul 2022 17:15:41 -0700 (PDT)
-Date:   Fri,  8 Jul 2022 17:15:27 -0700
-Message-Id: <20220709001527.618593-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] mediatek: mt76: eeprom: fix clang -Wformat warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Fri, 8 Jul 2022 20:17:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2CBD691DD
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 17:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657325838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ko4GkJU0Tn8zbLKOIgGsmDKDvugLe86WnU6pUPW6HE=;
+        b=Li3pFMOWaMNsqo7Bbf6Jf0+kq5zZ8sxysLoTUVbVF+hcCrO+lxhjQpCyhDTzrgHRjkrMkS
+        FjDSv7/08+xzqcuT15+ozTYW1Dok3DYt8MFLsHtbWzax6kgsOqgiTFIeEVu/27JfgBYxcH
+        k5l63tXzVhCuqLHaa7cASONrhF56ebk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-358-Qq9SNVonNPKWeLsxs3H5wQ-1; Fri, 08 Jul 2022 20:17:09 -0400
+X-MC-Unique: Qq9SNVonNPKWeLsxs3H5wQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EB45101A54E;
+        Sat,  9 Jul 2022 00:17:09 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A579AC35979;
+        Sat,  9 Jul 2022 00:17:08 +0000 (UTC)
+Date:   Sat, 9 Jul 2022 08:17:04 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, akpm@linux-foundation.org
+Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] proc/vmcore: fix potential memory leak in
+ vmcore_init()
+Message-ID: <20220709001704.GA342876@MiWiFi-R3L-srv>
+References: <20220704081839.2232996-1-niejianglei2021@163.com>
+ <YsfsIzjmhR5VQU3N@MiWiFi-R3L-srv>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsfsIzjmhR5VQU3N@MiWiFi-R3L-srv>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter the following warning:
-| drivers/net/wireless/mediatek/mt7601u/eeprom.c:193:5: error: format
-| specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
-| chan_bounds[idx].start + chan_bounds[idx].num - 1);
+On 07/08/22 at 04:34pm, Baoquan He wrote:
+> On 07/04/22 at 04:18pm, Jianglei Nie wrote:
+> > elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
+> > kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
+> > predefined value. If parse_crash_elf_headers() occurs some error and
+> > returns a negetive value, the elfcorehdr_addr should be released with
+> > elfcorehdr_free().
+> > 
+> > We can fix by calling elfcorehdr_free() when parse_crash_elf_headers()
+> > fails.
+> 
+> LGTM,
+> 
+> Acked-by: Baoquan He <bhe@redhat.com>
 
-Variadic functions (printf-like) undergo default argument promotion.
-Documentation/core-api/printk-formats.rst specifically recommends using
-the promoted-to-type's format flag.
+Sorry, I didn't check the code change carefully. This v2 is not right. I
+thought Jianglei took my suggested code change directly. Seems he
+mistakenly took part of them and caused error.
 
-Moreover, C11 6.3.1.1 states:
-(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-can represent all values of the original type ..., the value is
-converted to an int; otherwise, it is converted to an unsigned int.
-These are called the integer promotions.`
+> 
+> > 
+> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> > ---
+> >  fs/proc/vmcore.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+> > index 4eaeb645e759..86887bd90263 100644
+> > --- a/fs/proc/vmcore.c
+> > +++ b/fs/proc/vmcore.c
+> > @@ -1569,7 +1569,7 @@ static int __init vmcore_init(void)
+> >  	rc = parse_crash_elf_headers();
+> >  	if (rc) {
+> >  		pr_warn("Kdump: vmcore not initialized\n");
+> > -		return rc;
+> > +		goto fail;
+> >  	}
+> >  	elfcorehdr_free(elfcorehdr_addr);
+        ~~
+        this line should be removed.
+> >  	elfcorehdr_addr = ELFCORE_ADDR_ERR;
+> > @@ -1577,6 +1577,9 @@ static int __init vmcore_init(void)
+> >  	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
+> >  	if (proc_vmcore)
+> >  		proc_vmcore->size = vmcore_size;
+> > +
+> > +fail:
+> > +	elfcorehdr_free(elfcorehdr_addr);
+> >  	return 0;
+        ^
+        return rc;  the returned value is wrong with v2.
 
-With this information in hand, we really should stop using `%hh[dxu]` or
-`%h[dxu]` as they usually prompt Clang -Wformat warnings as well as go
-against documented standard recommendations.
+What I suggested is as below. 
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Note: produced warning with x86 allyesconfig.
+Andrew, please drop the one merged into mm-unstable branch.
 
- drivers/net/wireless/mediatek/mt7601u/eeprom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Jianglei,
 
-diff --git a/drivers/net/wireless/mediatek/mt7601u/eeprom.c b/drivers/net/wireless/mediatek/mt7601u/eeprom.c
-index aa3b64902cf9..625bebe60538 100644
---- a/drivers/net/wireless/mediatek/mt7601u/eeprom.c
-+++ b/drivers/net/wireless/mediatek/mt7601u/eeprom.c
-@@ -188,7 +188,7 @@ mt7601u_set_country_reg(struct mt7601u_dev *dev, u8 *eeprom)
+Can you post v3 with below correct change and add Andrew to CC?
+
+diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+index 4eaeb645e759..390515c249dd 100644
+--- a/fs/proc/vmcore.c
++++ b/fs/proc/vmcore.c
+@@ -1569,15 +1569,16 @@ static int __init vmcore_init(void)
+ 	rc = parse_crash_elf_headers();
+ 	if (rc) {
+ 		pr_warn("Kdump: vmcore not initialized\n");
+-		return rc;
++		goto fail;
+ 	}
+-	elfcorehdr_free(elfcorehdr_addr);
+ 	elfcorehdr_addr = ELFCORE_ADDR_ERR;
  
- 	if (idx != -1)
- 		dev_info(dev->dev,
--			 "EEPROM country region %02hhx (channels %hhd-%hhd)\n",
-+			 "EEPROM country region %02x (channels %d-%d)\n",
- 			 val, chan_bounds[idx].start,
- 			 chan_bounds[idx].start + chan_bounds[idx].num - 1);
- 	else
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+ 	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
+ 	if (proc_vmcore)
+ 		proc_vmcore->size = vmcore_size;
+-	return 0;
++fail:
++	elfcorehdr_free(elfcorehdr_addr);
++	return rc;
+ }
+ fs_initcall(vmcore_init);
+ 
 

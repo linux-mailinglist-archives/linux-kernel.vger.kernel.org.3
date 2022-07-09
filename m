@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C142E56C8DA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3888C56C8D0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiGIKJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 06:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S229479AbiGIKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 06:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiGIKHo (ORCPT
+        with ESMTP id S229689AbiGIKHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 06:07:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9D4B0DB;
-        Sat,  9 Jul 2022 03:07:41 -0700 (PDT)
+        Sat, 9 Jul 2022 06:07:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DBB4B0DB;
+        Sat,  9 Jul 2022 03:07:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 444C9B819D6;
-        Sat,  9 Jul 2022 10:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64035C341D0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A428360E1F;
+        Sat,  9 Jul 2022 10:07:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6F5C341D1;
         Sat,  9 Jul 2022 10:07:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657361258;
-        bh=Ix9TaeoHO5faJo9weCjOecaRhyb1RB5jwjX8jAZ0dJA=;
+        bh=zey4tGTYwo+i6XOOpjzV+Gd4H28ji3iNCU1YJEXf/64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B39OsEtnUNWREm4npQzQPcw3E1TUCMWfYE/5Tdh6apqS6oZu5ze+TBprGP91QiDcZ
-         5XXJ245dmQ/E+xVGWyGJyjhWtpaT54zxfwV+ERt0rPhOsR9EE4CjfadyIBzgLGlO68
-         0ADsparZMiItL+WofTRbk6OAPZvdEjS72VRhrH//5cc3X+BeiEWhX3YmDqWnmSJ9+p
-         kMCWFBPcs3AhXTBiclvIiGQXaGadwu1SHVpknTzQdOMo4MAGksqgokBusfKOBsNimW
-         AxoDB+OS996GlJJz0kEcdv7mlhNAbHni0+Qe53sX7qjp0GweOuabGAdB/L3/NJvQ9P
-         +9JKC1IjZYOXA==
+        b=qHks/kKkzMDW2J7nd/eCLW96GmHhCGBjFXbq7AATqDMh+wDx0ZS1ilQ+X6EjuiB8F
+         VPyPOvtEZ/NEjYT6tkbki0H5K+WubVpy3yKPJ0VcYOxCXhJuB7MCOh7khOFW+TfLRK
+         G/dgshM2sWsvgiCaxMusDH6mrs9CFm05/RRAANzq90v6Em21YCiJ1UbdsHpvZSfkSi
+         twD7ASb4hpeVRLcOm9CF8VVfTAquxrMgBWKqMfnivh2Ic0c98z5IkZhDVKWFiLDgBr
+         ksWMCm31TJoaiKE6IBY9msW7tM8gFVL+FHQ8w7ghriBJbhCzhjngqH96HyCvD6uYOC
+         1pKtRH/ur3TBA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oA7N9-004EHP-OI;
+        id 1oA7N9-004EHS-Or;
         Sat, 09 Jul 2022 11:07:35 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Jonathan Corbet" <corbet@lwn.net>,
         "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@in.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 19/21] docs: ABI: sysfs-bus-nvdimm
-Date:   Sat,  9 Jul 2022 11:07:32 +0100
-Message-Id: <30144c21b82f4b1bb80e4e7af8a6fe9b9e26ad42.1657360984.git.mchehab@kernel.org>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 20/21] docs: leds: index.rst: add leds-qcom-lpg to it
+Date:   Sat,  9 Jul 2022 11:07:33 +0100
+Message-Id: <a876a10e02107babbdfb9dda5daa0d8c83ae5049.1657360984.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657360984.git.mchehab@kernel.org>
 References: <cover.1657360984.git.mchehab@kernel.org>
@@ -64,37 +62,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add blank lines, as this is required by code-block markup syntax.
+This document was added without placing it at leds index.
 
-Fix this warning:
-	Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING: Unexpected indentation.
-
-Reviewed-By: Kajol Jain<kjain@linux.ibm.com>
+Fixes: 24e2d05d1b68 ("leds: Add driver for Qualcomm LPG")
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/21] at: https://lore.kernel.org/all/cover.1657360984.git.mchehab@kernel.org/
 
- Documentation/ABI/testing/sysfs-bus-nvdimm | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/leds/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
-index 1c1f5acbf53d..eeabba807e4b 100644
---- a/Documentation/ABI/testing/sysfs-bus-nvdimm
-+++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
-@@ -18,9 +18,11 @@ Description:	(RO) Attribute group to describe the magic bits
- 		Each attribute under this group defines a bit range of the
- 		perf_event_attr.config. Supported attribute is listed
- 		below::
-+
- 		  event  = "config:0-4"  - event ID
- 
- 		For example::
-+
- 			ctl_res_cnt = "event=0x1"
- 
- What:           /sys/bus/event_source/devices/nmemX/events
+diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
+index e5d63b940045..014e009b0761 100644
+--- a/Documentation/leds/index.rst
++++ b/Documentation/leds/index.rst
+@@ -25,4 +25,5 @@ LEDs
+    leds-lp5562
+    leds-lp55xx
+    leds-mlxcpld
++   leds-qcom-lpg
+    leds-sc27xx
 -- 
 2.36.1
 

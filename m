@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E22A56C627
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A1E56C628
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 05:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiGIDJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 23:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S229496AbiGIDOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 23:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIDJY (ORCPT
+        with ESMTP id S229379AbiGIDOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:09:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB5F4E868;
-        Fri,  8 Jul 2022 20:09:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E18FB82A35;
-        Sat,  9 Jul 2022 03:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60158C341C0;
-        Sat,  9 Jul 2022 03:09:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657336160;
-        bh=gqZE/zorkl4bHDYMLQlcgo1V4ItKl51rzFkuKiRanME=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WyGbcXZtdGTjoPeTVSfC7TewJ8HXG1928XRnsG63Ut4AEEN5n29RhjMau9Y3WpxPX
-         9/MpJJViiD9z8woeASjZKm8vOwWt+z5V2QvpApSLo4WcM3gCw/wFro79Ri3O92jAoR
-         /+owXoYv6IjdE2+A5lU6jzKPvyPAuhoBZYKF22HWjlfz2Fj0UYs04MEpXXB/TImkpF
-         Zw9TuPftnK8zuCA7TxGi1DN/uXtx7EE/7F0sQ/4Zfy2BAwlJh5JNDQB22k892SlI7L
-         Rvgeq23vU6vOD2XPknwQPkNrAkR5hH+BBvYa8A2AOSsmqHRtfqSgf5jhik8SQijQ1G
-         PMehq3D78Pwtw==
-Date:   Fri, 8 Jul 2022 20:09:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        katie.morris@in-advantage.com
-Subject: Re: [PATCH v13 net-next 0/9] add support for VSC7512 control over
- SPI
-Message-ID: <20220708200918.131c0950@kernel.org>
-In-Reply-To: <20220705204743.3224692-1-colin.foster@in-advantage.com>
-References: <20220705204743.3224692-1-colin.foster@in-advantage.com>
+        Fri, 8 Jul 2022 23:14:42 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCEF5E310
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 20:14:40 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LfwGM6bg6zFq0P;
+        Sat,  9 Jul 2022 11:13:47 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 9 Jul 2022 11:14:38 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 9 Jul 2022 11:14:37 +0800
+Message-ID: <b7ae1cf8-2809-f618-5340-fb8def9a8be0@huawei.com>
+Date:   Sat, 9 Jul 2022 11:14:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v2] ntfs: fix use-after-free in ntfs_ucsncmp()
+To:     Hawkins Jiawei <yin31149@gmail.com>
+CC:     <akpm@linux-foundation.org>, <anton@tuxera.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
+        <zhangxiaoxu5@huawei.com>, <18801353760@163.com>,
+        <skhan@linuxfoundation.org>, <paskripkin@gmail.com>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+References: <20220707105329.4020708-1-chenxiaosong2@huawei.com>
+ <20220709005450.2220-1-yin31149@gmail.com>
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+In-Reply-To: <20220709005450.2220-1-yin31149@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  5 Jul 2022 13:47:34 -0700 Colin Foster wrote:
-> The patch set in general is to add support for the VSC7512, and
-> eventually the VSC7511, VSC7513 and VSC7514 devices controlled over
-> SPI. Specifically this patch set enables pinctrl, serial gpio expander
-> access, and control of an internal and an external MDIO bus.
+在 2022/7/9 8:54, Hawkins Jiawei 写道:> In my opinion, name_length field 
+just means the number of characters,
+> yet each character is a ntfschar type. So name should be
+> name_length * sizeof(ntfschar) bytes. The example is at
+> https://elixir.bootlin.com/linux/v5.19-rc5/source/fs/ntfs/attrib.c#L1667
 
-Can this go into net-next if there are no more complains over the
-weekend? Anyone still planning to review?
-
-Linus's ack on patch 6 and an MFD Ack from Lee would be great.
+Yes, thank you for your reply, I will send v3 patch.

@@ -2,87 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9789E56C5CA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 03:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E628A56C5DF
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 03:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiGIBv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 21:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S229535AbiGIBz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 21:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiGIBvz (ORCPT
+        with ESMTP id S229379AbiGIBzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 21:51:55 -0400
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3E71709
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 18:51:54 -0700 (PDT)
-Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 2691pLJW2002161
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 8 Jul 2022 18:51:22 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2691pLJW2002161
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022070501; t=1657331482;
-        bh=dPzbUbU2KTNW1KlzlD3Fu+Pwv5VzHijL+VHbQPZN/88=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=12p46JWhFkklwYxQSRDhwe+rcEsnfPufbXLyzzSgLmeFoZoAXt3bm35A2816AKZEs
-         EMf8k8qPAojkMPOBAVXHti92SxoGZULCMbeRNO44Qp10skQNUkPhPcY29nVuAmK4eG
-         mtSNC3Lz6ZXOByLZ3dZA/gVkT9AoAddhwRar5W+2xZJ1tlEjgF2TQVEA0r52F2oK5X
-         lSJ65K3bvYBm7pA+p4mpXDDfTe1iVHpCar5MY7uDn5f7Ez/qVQXOG4WIxQmgHiPWWE
-         ThCO0Moc8Ln2KHX56YepHAepxj6uHcUApc0Qgx+Dx4MTNZq6z2qsOYSTh9UoRS7aLd
-         9SkKKEPIf5C0w==
-Message-ID: <ddba81dd-cc92-699c-5274-785396a17fb5@zytor.com>
-Date:   Fri, 8 Jul 2022 18:51:16 -0700
+        Fri, 8 Jul 2022 21:55:47 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D8D65F4;
+        Fri,  8 Jul 2022 18:55:46 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id bh13so372676pgb.4;
+        Fri, 08 Jul 2022 18:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ljb+p5S2T+3uZn69+85MUtWtB8Rjy0F+vPmvHJQxGgU=;
+        b=dn16MJ44eifmsFxbi5wZMZ/TpYfEyt6Jjm1OSOZNQu3iGBwFZSA2r1SjuMPEvOAkIu
+         tJijO8m/P5qXyNPPY+fDYq8Z/lIJOBU2A36hzmxo+lzgR4KEGcOpvRFSee+Mgwi073CN
+         Ff4JlPoYvgXFTBTSOJikdS+ti/ZR6PwXgns3F91IU0/5ep4BkXqxUefMcrE7MUUhLLuy
+         36abM8WSHiTW8G5iyzoPY4I1JNgJf4GfPPv12CK2TLcjOWtf9FTeY7ElFroBK4MkbPu2
+         lCh2PvhgEZrpnNaYkxnqtdaQiN/4fTAnMQrChGDREnm+30METqAw8FOBhAfmndmouzsc
+         J4dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ljb+p5S2T+3uZn69+85MUtWtB8Rjy0F+vPmvHJQxGgU=;
+        b=AVmROw+DWpfqpHZYj+5mxKrRNwEv8qFAJY4ZPMsB1VLsGvAANAv+bypORITXhj8Ro7
+         cpvlcG1907a56C8m3nG/o2CN97Ps1ZOax4gy/84Kjgo3b8GOig3K0vIgmljqhlLhd1i0
+         wmbJqdnU9lJ7jum150rEnZZfNLb3Tiqmr/bWmv25JFkt7D514iRNfto6FQQU7xPOq+vU
+         z+Yejy/Soe8g2c4+Jz19eWtfiaIs7sEuJz1PM1JIKp93mYsgUOTd+v/2/IOVkTbIIhBZ
+         pBxPN/pu/XBQsvZYteTx7TyenzTVgxy2iv35YASITdxLe3i1hokNE3V2wMa5y8hzR/Ek
+         UV3Q==
+X-Gm-Message-State: AJIora8J13ywvB54EDtU+QdrCpiySXDty96453+oZofTnGkezU0eqYtD
+        Uxx6K4C7Hp5t0fDlDsaYen404SsxTVA=
+X-Google-Smtp-Source: AGRyM1tPrLA6pi2G0vra5t28Ap2wxm2DIenhdzuAiXdpQT16pc9cMR9SjWWOM4IGnn09Rq6LuXwFoA==
+X-Received: by 2002:a63:2cc6:0:b0:411:4fd6:49cb with SMTP id s189-20020a632cc6000000b004114fd649cbmr5667155pgs.365.1657331746403;
+        Fri, 08 Jul 2022 18:55:46 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902a3c500b00163f8eb7eb3sm176618plb.196.2022.07.08.18.55.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 18:55:45 -0700 (PDT)
+Date:   Sat, 9 Jul 2022 09:55:41 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] gpiolib: cdev: fix null pointer dereference in
+ linereq_free()
+Message-ID: <20220709015541.GA5332@sol>
+References: <20220706084507.2259415-1-warthog618@gmail.com>
+ <20220706085025.GA2259579@sol>
+ <20220707090006.GB57165@sol>
+ <CAMRc=Mcqvp4oN_tHXS1cb0AnEOU=Znd4bmSwO4ZZ1GszRfXhSA@mail.gmail.com>
+ <20220707102918.GA60169@sol>
+ <424af43a-bcaf-4f59-086d-b1afea425054@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH tip v8] x86/setup: Use rng seeds from setup_data
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-References: <20220707000852.523788-1-Jason@zx2c4.com>
- <20220708113907.891319-1-Jason@zx2c4.com>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20220708113907.891319-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <424af43a-bcaf-4f59-086d-b1afea425054@nvidia.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/8/22 04:39, Jason A. Donenfeld wrote:
+On Fri, Jul 08, 2022 at 11:24:43AM -0700, Dipen Patel wrote:
+> On 7/7/22 3:29 AM, Kent Gibson wrote:
+> > On Thu, Jul 07, 2022 at 12:19:15PM +0200, Bartosz Golaszewski wrote:
+> >> On Thu, Jul 7, 2022 at 11:00 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >>> On Wed, Jul 06, 2022 at 04:50:25PM +0800, Kent Gibson wrote:
+> >>>> On Wed, Jul 06, 2022 at 04:45:07PM +0800, Kent Gibson wrote:
+> >>>>> This patch fixes a kernel NULL pointer dereference that is reported by
+> >>>>> gpio kselftests.
+> >>>>>
+> >>>> Should be:
+> >>>>
+> >>>> Fix a kernel NULL pointer dereference reported by gpio kselftests.
+> >>>>
+> >>>> Sorry - I rushed this one a bit.
+> >>>>
+> >>> And I might not've been totally clear, but this bug is present in
+> >>> v5.19-rc1 onwards (when HTE was added), up to and including rc5.
+> >>>
+> >>> Would be good to get it fixed before v5.19 goes out the door.
+> >>>
+> >>> Cheers,
+> >>> Kent.
+> >> Yep, figured that out. Applied and fixed the commit message, thanks!
+> >>
+> > Good to hear.  I never got around to reviewing that final HTE patch
+> > and, while it did end up pretty close to what I expected, there are a
+> > few things that I would've done slightly differently that I'd like to
+> > tidy up.
+> I can create another thread to address this. Let me know.
+
+I've already got the changes locally, so don't worry. There is nothing
+critical or earth shattering in there, mainly how the hte_en flag is
+passed around.  You followed the pattern provided by polarity_change,
+which is only used on one occasion, when I would've followed the pattern
+from line->eflags, which is used more widely.
+
+Though I might take the changes a little further than I have to also
+change the polarity_change flag to follow the eflags pattern to prevent
+anyone following from falling into the same trap - still stewing on that.
+
+The basic idea is that, particularly during reconfig, the struct line
+contains the current applied state, while the desc->flags contain the
+requested state.  The polarity_change flag was a bit of a lazy shortcut
+to save from adding an active_low (or equivalent) flag to struct line.
+
+> > And also have the HTE specific code compiled out unless CONFIG_HTE is
+> > selected, as that is very likely to be the case for most builds.
+> > But that can wait for v5.20.
 > 
-> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-> index ca0796ac4403..2cbfe630230d 100644
-> --- a/arch/x86/include/uapi/asm/bootparam.h
-> +++ b/arch/x86/include/uapi/asm/bootparam.h
-> @@ -12,6 +12,7 @@
->   #define SETUP_JAILHOUSE			6
->   #define SETUP_CC_BLOB			7
->   #define SETUP_IMA			8
-> +#define SETUP_RNG_SEED			9
->   
->   #define SETUP_INDIRECT			(1<<31)
->   
+> I am assuming #ifdef CONFIG_HTE blocks around HTE blocks. I think Linus W. also
+> 
+> indicated that.
+> 
 
-Just one miss here: you need to bump SETUP_TYPE_MAX. It is a bit more 
-confusing than it needs to be that SETUP_INDIRECT sits in between, and 
-honestly I think SETUP_TYPE_MAX shouldn't include the SETUP_INDIRECT 
-bit; however, this is uapi and so we can't change that per se.
+Correct.
 
-Perhaps we should do:
-
-#define SETUP_ENUM_MAX	SETUP_RNG_SEED
-#define SETUP_INDIRECT	(1<<31)
-#define SETUP_TYPE_MAX	(SETUP_ENUM_MAX | SETUP_INDIRECT)
-
-	-hpa
+Cheers,
+Kent.

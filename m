@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27FE56CAD2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 19:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D411456CAD5
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 19:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiGIRKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 13:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S229653AbiGIRK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 13:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGIRKT (ORCPT
+        with ESMTP id S229517AbiGIRKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 13:10:19 -0400
+        Sat, 9 Jul 2022 13:10:20 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E159412093
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 10:10:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E0D11C06
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 10:10:19 -0700 (PDT)
 Received: from dslb-188-096-144-007.188.096.pools.vodafone-ip.de ([188.96.144.7] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1oADyA-0005n0-2L; Sat, 09 Jul 2022 19:10:14 +0200
+        id 1oADyA-0005n0-Vs; Sat, 09 Jul 2022 19:10:15 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 02/14] staging: r8188eu: remove EepromOrEfuse from struct eeprom_priv
-Date:   Sat,  9 Jul 2022 19:09:48 +0200
-Message-Id: <20220709171000.180481-3-martin@kaiser.cx>
+Subject: [PATCH 03/14] staging: r8188eu: remove eeprom function prototypes
+Date:   Sat,  9 Jul 2022 19:09:49 +0200
+Message-Id: <20220709171000.180481-4-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220709171000.180481-1-martin@kaiser.cx>
 References: <20220709171000.180481-1-martin@kaiser.cx>
@@ -45,63 +45,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EepromOrEfuse flag in struct eeprom_priv is used only in the
-ReadAdapterInfo8188EU function. We can remove EepromOrEfuse from struct
-eeprom_priv.
-
-As the meaning of EepromOrEfuse isn't obvious, there is a macro
-is_boot_from_eeprom that's used for checking the value. We don't need the
-macro, writing the check as !(eeValue & BOOT_FROM_EEPROM) makes it clear
-what is checked.
+Remove prototypes for non-existing eeprom functions. It seems that r8188eu
+has efuses but no eeprom.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/hal/usb_halinit.c    | 3 +--
- drivers/staging/r8188eu/include/hal_intf.h   | 2 --
- drivers/staging/r8188eu/include/rtw_eeprom.h | 1 -
- 3 files changed, 1 insertion(+), 5 deletions(-)
+ drivers/staging/r8188eu/include/rtw_eeprom.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 1a08de85a6ae..2bfd9751c685 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -937,10 +937,9 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
- 	if (res)
- 		return;
- 
--	eeprom->EepromOrEfuse		= (eeValue & BOOT_FROM_EEPROM);
- 	eeprom->bautoload_fail_flag	= !(eeValue & EEPROM_EN);
- 
--	if (!is_boot_from_eeprom(Adapter))
-+	if (!(eeValue & BOOT_FROM_EEPROM))
- 		EFUSE_ShadowMapUpdate(Adapter);
- 
- 	/* parse the eeprom/efuse content */
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index b81144932d9a..fc972d65189f 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -21,8 +21,6 @@ enum hw_variables {
- 
- typedef s32 (*c2h_id_filter)(u8 id);
- 
--#define is_boot_from_eeprom(adapter) (adapter->eeprompriv.EepromOrEfuse)
--
- void rtl8188eu_interface_configure(struct adapter *adapt);
- void ReadAdapterInfo8188EU(struct adapter *Adapter);
- void rtl8188eu_init_default_value(struct adapter *adapt);
 diff --git a/drivers/staging/r8188eu/include/rtw_eeprom.h b/drivers/staging/r8188eu/include/rtw_eeprom.h
-index d8d48ace356c..40c61f7a03be 100644
+index 40c61f7a03be..0a8792428927 100644
 --- a/drivers/staging/r8188eu/include/rtw_eeprom.h
 +++ b/drivers/staging/r8188eu/include/rtw_eeprom.h
-@@ -12,7 +12,6 @@
- struct eeprom_priv {
- 	u8		bautoload_fail_flag;
- 	u8		mac_addr[ETH_ALEN] __aligned(2); /* PermanentAddress */
--	u8		EepromOrEfuse;
+@@ -15,10 +15,4 @@ struct eeprom_priv {
  	u8		efuse_eeprom_data[HWSET_MAX_SIZE_512] __aligned(4);
  };
  
+-void eeprom_write16(struct adapter *padapter, u16 reg, u16 data);
+-u16 eeprom_read16(struct adapter *padapter, u16 reg);
+-void read_eeprom_content(struct adapter *padapter);
+-void eeprom_read_sz(struct adapter *adapt, u16 reg, u8 *data, u32 sz);
+-void read_eeprom_content_by_attrib(struct adapter *padapter);
+-
+ #endif  /* __RTL871X_EEPROM_H__ */
 -- 
 2.30.2
 

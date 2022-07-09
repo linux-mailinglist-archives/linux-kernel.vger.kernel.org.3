@@ -2,83 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5282156C824
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604DD56C836
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 10:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiGIIsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 04:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S229555AbiGII51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 04:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGIIsM (ORCPT
+        with ESMTP id S229471AbiGII5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 04:48:12 -0400
-X-Greylist: delayed 28006 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Jul 2022 01:48:11 PDT
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E084E621;
-        Sat,  9 Jul 2022 01:48:11 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 16:48:05 +0800
-From:   Yixun Lan <dlan@gentoo.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH] RISC-V/bpf: Enable bpf_probe_read{, str}()
-Message-ID: <YslAxaryvm/MfGbq@ofant>
-References: <20220703130924.57240-1-dlan@gentoo.org>
- <YsKAZUJRo5cjtZ3n@infradead.org>
- <CAEf4BzbCswMd6KU7f9SEU6xHBBPu_rTL5f+KE0OkYj63e-h-bA@mail.gmail.com>
- <712c8fac-6784-2acd-66ca-d1fd393aef23@fb.com>
- <YsUzX2IeNb/u9VmN@infradead.org>
- <YsjTVvyqdVGy1uYZ@ofant>
- <YskfMTdnd+IyzCQ0@infradead.org>
+        Sat, 9 Jul 2022 04:57:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0E357204
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 01:57:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEB7BB800C1
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 08:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E53C3411C;
+        Sat,  9 Jul 2022 08:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657357042;
+        bh=WrK+932CnJxu9v8WAmxUaGWCfO5YJRZCEWjawDqYnT0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mKeXIv7o37yXwjHMETf9VMo+OdKNjBMlaziF3eTXegwp8iyRlMY82aBekCt1x3krB
+         HCfnlt0NT2HuYIxSoyDVSBzkkZKi3n3SfjC1UBMV7pcCk0MtuQmchxb1G+4dGmIXYq
+         upBHs5aar6mp6uwfhbzyuD+AEkYXK6ZO7rDdt+1balPmGlKjiXpSZuto4Cd+JnYh7J
+         mV02M14kUsg4GmoOec2tI96vosRTsGgIE3zEZsmLKpdVmIC/dGVyp+kmneMJytUReq
+         yxWVEPE+JIXV71VjsKnWdpWpOrUdym8RW3V39Skaql3rNPwj9qOtRXPCSnclRfFP/i
+         7aoVLck14g6qA==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: save movk instructions in mov_q when the lower 16|32 bits are all zero
+Date:   Sat,  9 Jul 2022 16:48:30 +0800
+Message-Id: <20220709084830.3124-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YskfMTdnd+IyzCQ0@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph:
+Currently mov_q is used to move a constant into a 64-bit register,
+when the lower 16 or 32bits of the constant are all zero, the mov_q
+emits one or two useless movk instructions. If the mov_q macro is used
+in hot code path, we want to save the movk instructions as much as
+possible. For example, when CONFIG_ARM64_MTE is 'Y' and
+CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
+routine is the pontential optimization target:
 
-On 23:24 Fri 08 Jul     , Christoph Hellwig wrote:
-> On Sat, Jul 09, 2022 at 09:01:10AM +0800, Yixun Lan wrote:
-> > Please check the ongoing discussion [0] in the bcc tools if you're
-> > interested in, advice and comments are welcome
-> > 
-> > [0] https://github.com/iovisor/bcc/pull/4085#issuecomment-1179446738
-> 
-> I can't find a way to post there, as replying eems to require a login.
-> Is there a mailing list discussion somewhere that is broadly accessible?
+        /* set the TCR_EL1 bits */
+        mov_q   x10, TCR_MTE_FLAGS
 
-never mind, I think the logic is quite clear, we can do something in bcc:
+Before the patch:
+	mov	x10, #0x10000000000000
+	movk	x10, #0x40, lsl #32
+	movk	x10, #0x0, lsl #16
+	movk	x10, #0x0
 
-1) adopt new _{kernel,user} interface whenever possible, this will
-work fine for all arch with new kernel versions
+After the patch:
+	mov	x10, #0x10000000000000
+	movk	x10, #0x40, lsl #32
 
-2) for old kernel versions which lack the _{kernel,user} support,
-fall back to old bpf_probe_read(), but take care of the Archs which
-have overlaping address space - like s390, and just error out for it
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ arch/arm64/include/asm/assembler.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index 8c5a61aeaf8e..09f408424cae 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -568,9 +568,13 @@ alternative_endif
+ 	movz	\reg, :abs_g3:\val
+ 	movk	\reg, :abs_g2_nc:\val
+ 	.endif
++	.if ((((\val) >> 16) & 0xffff) != 0)
+ 	movk	\reg, :abs_g1_nc:\val
+ 	.endif
++	.endif
++	.if (((\val) & 0xffff) != 0)
+ 	movk	\reg, :abs_g0_nc:\val
++	.endif
+ 	.endm
+ 
+ /*
 -- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+2.34.1
+

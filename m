@@ -2,46 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCE256C78E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4134056C799
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiGIGc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 02:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S229593AbiGIGwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 02:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGIGc5 (ORCPT
+        with ESMTP id S229463AbiGIGws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 02:32:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFEA66BB7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:32:55 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lg0bs3LMmzTgm0;
-        Sat,  9 Jul 2022 14:29:13 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 9 Jul 2022 14:32:51 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 9 Jul
- 2022 14:32:50 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <anton@tuxera.com>, <akpm@linux-foundation.org>
-CC:     <linux-ntfs-dev@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <yin31149@gmail.com>
-Subject: [PATCH v3] ntfs: fix use-after-free in ntfs_ucsncmp()
-Date:   Sat, 9 Jul 2022 14:45:11 +0800
-Message-ID: <20220709064511.3304299-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 9 Jul 2022 02:52:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D686558B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:52:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6F90B82A61
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55140C341D4
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 06:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657349565;
+        bh=OItCzHGXam6f2RpFSde10A15StjZbNKKbQYgGQWL2X8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YXYFt0E8Ij3TgCUsoJLhq07xJOnDEU7zvUw1pDlWBWVtYAeRlTzPo0WnyE6pAWxtS
+         Wz0OzuoKZtFXMr8oGb0REQjuF1MDG5iVNs69CRGEV7Bow5UEKaQPXR9DV1NU/kDYv4
+         58yKRd25CSBnsOav4LnMTyDIMCAzREvO3I8lLvTK/U8qQcDPlut4I2biLvyU30UmA4
+         7eI70hMQNcSP2tS/A/Ga2ou3NVv0CtwI1bYQDXOUazMReVaJxPuYigQtH6QnIAJLo1
+         5q2PsqSEmMIznJRpTuh0e4tdAK+hDQNZLYIQzDuhWNJJfRwDVAURMOPZFz72X0VgwC
+         lCRR31TOKW0jQ==
+Received: by mail-ot1-f48.google.com with SMTP id r17-20020a056830449100b0061c1b3840a0so658696otv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 23:52:45 -0700 (PDT)
+X-Gm-Message-State: AJIora/RSZTeed+PjPx9oJj7j025llLk5V/OH0VhD2VoerPBpXqI1Ev1
+        8T/Gx065LqAbC5gDVOYCR8ItyOyxgj44fA7zbZ0=
+X-Google-Smtp-Source: AGRyM1v/vL19VArStGC5zZnGKw+rHp1LFl+18klaQ+vaUgTkXmX9bHLGmj/xFc/D4rPKBlkGaqozxcRH0jc+EUKYeYo=
+X-Received: by 2002:a05:6830:4420:b0:616:e569:8ae9 with SMTP id
+ q32-20020a056830442000b00616e5698ae9mr2892555otv.265.1657349564339; Fri, 08
+ Jul 2022 23:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <cover.1657301423.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1657301423.git.christophe.leroy@csgroup.eu>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 9 Jul 2022 08:52:33 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFqs=YAbTDJOgzpse9ZkggSxPNNJJphEA=J94FQzF55qg@mail.gmail.com>
+Message-ID: <CAMj1kXFqs=YAbTDJOgzpse9ZkggSxPNNJJphEA=J94FQzF55qg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] Implement inline static calls on PPC32 - v2
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, sv@linux.ibm.com,
+        agust@denx.de, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jason Baron <jbaron@akamai.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>, X86 ML <x86@kernel.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,101 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported use-after-free bug as follows:
+Hello Christophe,
 
-==================================================================
-BUG: KASAN: use-after-free in ntfs_ucsncmp+0x123/0x130
-Read of size 2 at addr ffff8880751acee8 by task a.out/879
+On Fri, 8 Jul 2022 at 19:32, Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> This series applies on top of the series v3 "objtool: Enable and
+> implement --mcount option on powerpc" [1] rebased on powerpc-next branch
+>
+> A few modifications are done to core parts to enable powerpc
+> implementation:
+> - R_X86_64_PC32 is abstracted to R_REL32 so that it can then be
+> redefined as R_PPC_REL32.
+> - A call to static_call_init() is added to start_kernel() to avoid
+> every architecture to have to call it
+> - Trampoline address is provided to arch_static_call_transform() even
+> when setting a site to fallback on a call to the trampoline when the
+> target is too far.
+>
+> [1] https://lore.kernel.org/lkml/70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu/T/#rb3a073c54aba563a135fba891e0c34c46e47beef
+>
+> Christophe Leroy (7):
+>   powerpc: Add missing asm/asm.h for objtool
+>   objtool/powerpc: Activate objtool on PPC32
+>   objtool: Add architecture specific R_REL32 macro
+>   objtool/powerpc: Add necessary support for inline static calls
+>   init: Call static_call_init() from start_kernel()
+>   static_call_inline: Provide trampoline address when updating sites
+>   powerpc/static_call: Implement inline static calls
+>
 
-CPU: 7 PID: 879 Comm: a.out Not tainted 5.19.0-rc4-next-20220630-00001-gcc5218c8bd2c-dirty #7
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x1c0/0x2b0
- print_address_description.constprop.0.cold+0xd4/0x484
- print_report.cold+0x55/0x232
- kasan_report+0xbf/0xf0
- ntfs_ucsncmp+0x123/0x130
- ntfs_are_names_equal.cold+0x2b/0x41
- ntfs_attr_find+0x43b/0xb90
- ntfs_attr_lookup+0x16d/0x1e0
- ntfs_read_locked_attr_inode+0x4aa/0x2360
- ntfs_attr_iget+0x1af/0x220
- ntfs_read_locked_inode+0x246c/0x5120
- ntfs_iget+0x132/0x180
- load_system_files+0x1cc6/0x3480
- ntfs_fill_super+0xa66/0x1cf0
- mount_bdev+0x38d/0x460
- legacy_get_tree+0x10d/0x220
- vfs_get_tree+0x93/0x300
- do_new_mount+0x2da/0x6d0
- path_mount+0x496/0x19d0
- __x64_sys_mount+0x284/0x300
- do_syscall_64+0x3b/0xc0
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f3f2118d9ea
-Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffc269deac8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f3f2118d9ea
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffc269dec00
-RBP: 00007ffc269dec80 R08: 00007ffc269deb00 R09: 00007ffc269dec44
-R10: 0000000000000000 R11: 0000000000000202 R12: 000055f81ab1d220
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-The buggy address belongs to the physical page:
-page:0000000085430378 refcount:1 mapcount:1 mapping:0000000000000000 index:0x555c6a81d pfn:0x751ac
-memcg:ffff888101f7e180
-anon flags: 0xfffffc00a0014(uptodate|lru|mappedtodisk|swapbacked|node=0|zone=1|lastcpupid=0x1fffff)
-raw: 000fffffc00a0014 ffffea0001bf2988 ffffea0001de2448 ffff88801712e201
-raw: 0000000555c6a81d 0000000000000000 0000000100000000 ffff888101f7e180
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8880751acd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880751ace00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8880751ace80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                                                          ^
- ffff8880751acf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880751acf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-The reason is that struct ATTR_RECORD->name_offset is 6485, end address of
-name string is out of bounds.
-
-Fix this by adding sanity check on end address of attibute name string.
-
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
----
-v1->v2: remove redundant statement
-
-v2->v3: 
-End address of name string is attribute + name_offset + name_length*sizeof(ntfschar).
-Thanks for Hawkins Jiawei's reply.
-
- fs/ntfs/attrib.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
-index 4de597a83b88..3077bb45cf01 100644
---- a/fs/ntfs/attrib.c
-+++ b/fs/ntfs/attrib.c
-@@ -592,8 +592,12 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
- 		a = (ATTR_RECORD*)((u8*)ctx->attr +
- 				le32_to_cpu(ctx->attr->length));
- 	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
--		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > (u8*)ctx->mrec +
--				le32_to_cpu(ctx->mrec->bytes_allocated))
-+		u8 *mrec_end = (u8 *)ctx->mrec +
-+		               le32_to_cpu(ctx->mrec->bytes_allocated);
-+		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-+		               a->name_length * sizeof(ntfschar);
-+		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-+		    name_end > mrec_end)
- 			break;
- 		ctx->attr = a;
- 		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
--- 
-2.31.1
-
+Could you quantify the performance gains of moving from out-of-line,
+patched tail-call branch instructions to full-fledged inline static
+calls? On x86, the retpoline problem makes this glaringly obvious, but
+on other architectures, the complexity of supporting this model may
+outweigh the performance advantages.

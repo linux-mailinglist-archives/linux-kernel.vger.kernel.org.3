@@ -2,160 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C99D56C792
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839CB56C794
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiGIGeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 02:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S229577AbiGIGkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 02:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiGIGed (ORCPT
+        with ESMTP id S229516AbiGIGka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 02:34:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FAF68707
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:34:32 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id fz10so790514pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 23:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CxOr+riclyKEWE2OhzawzBmq6aO3+4Q2I0O0/fagluc=;
-        b=h0kgstxqdqsy1+bErRwbfJwLJgRwr5nvAMXbxNuXPSEDbbIy3bIqXfjzD1OcIM3r0v
-         xTp1p1IMbqPwVDtOOrNBYcMUtpdzkSbYc4749euFDD43eyR8GGHaJ6NO1puCaElR5GIc
-         UKPGyvq1fhz1nXtDFYGpbrg76gXdNSMF/rWbLuTLtbVMPGFyhiUmpGFcDauRv7vjEmzR
-         pkF8KyAQnNFHQ17F+7iPLkXO1iiN+VF/V9iiG2GPMrv0ysPzZ2hfjGXUo5lFcFhUpoZT
-         wMz4wBaLRXkqGlhJZqpgAT3gnehOxaYyCj9ewi/utSJ3bxxtpIA2BcSulm/ulJI6aM88
-         j4ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CxOr+riclyKEWE2OhzawzBmq6aO3+4Q2I0O0/fagluc=;
-        b=DIZbiWIMEw3Ur/OlaxOXyJJl71cyTrFSUlTZniXnTIwaoNbprQD/fqC5/hD8gGZZMa
-         Zg2vWOqPQATfsm8j5F5E9Y9x7OtL/8MPhTA4/63XOZdxyytloFunXQZ/JJHQyVYdRwSy
-         CxMjhXF6wGW2rXf1t8VUxzSMrgFQRecRBBotpUuOUDhAK0oNndGv2S86OUUqTvcu+kZn
-         NQbedfD97dds7XaEGN4csYg90Gjttx881ld9VyN4N2bd8WMn6O79wwvPMJ3fR7tZsBVn
-         iZhgrAUgXXJMMD8n0rtNYYfv0n6XCfCWfLMg0OusXio3IvpTQR8rLj8qHi1Osq7tgcul
-         o7oQ==
-X-Gm-Message-State: AJIora8y40yCvNucOjtTp9qetc25TFrAuykE4QXQlk/F+HCqhRH2lobe
-        KZDaBw5Up+6aKSCmXxXX2ctV
-X-Google-Smtp-Source: AGRyM1sb1goBS69YyRO2vHlXUwJMbzymaeqvB/t7EGLSS0HcSNIDcEuqTOl7TS64etDsrmEPGV7Mhg==
-X-Received: by 2002:a17:902:efd5:b0:16b:ef4e:d40a with SMTP id ja21-20020a170902efd500b0016bef4ed40amr7495270plb.71.1657348471881;
-        Fri, 08 Jul 2022 23:34:31 -0700 (PDT)
-Received: from thinkpad ([117.207.26.140])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170902d4c700b0016a3f9e4865sm579599plg.148.2022.07.08.23.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 23:34:31 -0700 (PDT)
-Date:   Sat, 9 Jul 2022 12:04:26 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH] arm64: defconfig: Enable Qualcomm SC8280XP providers
-Message-ID: <20220709063426.GF5063@thinkpad>
-References: <20220707161014.3178798-1-bjorn.andersson@linaro.org>
- <CAA8EJpoZ4WKALrvtCtfHNTJ5FDBk-Qy=Mr4TNr8qfcc8=hSMjQ@mail.gmail.com>
- <YsibzePW58/DKWrI@ripper>
+        Sat, 9 Jul 2022 02:40:30 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1A4419A6
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 23:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657348829; x=1688884829;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G+BoR8wm+nr7ZKLBztHNG61qEu73r2abCgp17a+KsP8=;
+  b=nAOdXqNVIa9fAAvoGOMLqxWBxaG8kbqZjLF4Avb8V4mfyQFX25oMadEb
+   zn6RJxdD+dZoIkOCrDTV45WzBOnTvUpLYmqonsp4m3E1jZjzFTMiR0DlC
+   vQKz9I8R9qbrFj7OcqnQ+JR2OuRq6uGeQDnFcBeTX3zmWWV6r3eTwdEYh
+   5m8yyp4LgcvVXZLWxPwkTduKeCJum041/ENYxryQZbwWwPmQzRL8waAgx
+   lUH65DHjC+c0IdYVzeJlvpLJJD7I56kZiq3HsiOZQtyDvEKZyoKV2sudT
+   EVfplA0MVmRVyZJPsU1amKoTxyagqHXqJ/q9cobalhvJHWDRCWN6gO+hW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="310004272"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="310004272"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 23:40:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="626937272"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Jul 2022 23:40:26 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oA48g-000OOk-9k;
+        Sat, 09 Jul 2022 06:40:26 +0000
+Date:   Sat, 9 Jul 2022 14:40:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 156/161]
+ drivers/irqchip/irq-gic-v3.c:666:9: error: expected ';' before 'err'
+Message-ID: <202207091422.mERbR7Ce-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YsibzePW58/DKWrI@ripper>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 02:04:13PM -0700, Bjorn Andersson wrote:
-> On Thu 07 Jul 10:41 PDT 2022, Dmitry Baryshkov wrote:
-> 
-> > On Thu, 7 Jul 2022 at 19:07, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
-> > >
-> > > The Qualcomm SC8280XP need the global clock controller, interconnect
-> > > provider and TLMM pinctrl in order to boot. Enable these as builtin, as
-> > > they are needed in order to provide e.g. UART.
-> > >
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >  arch/arm64/configs/defconfig | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > > index d2615b37d857..8e44f6a2172c 100644
-> > > --- a/arch/arm64/configs/defconfig
-> > > +++ b/arch/arm64/configs/defconfig
-> > > @@ -541,6 +541,7 @@ CONFIG_PINCTRL_QDF2XXX=y
-> > >  CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
-> > >  CONFIG_PINCTRL_SC7180=y
-> > >  CONFIG_PINCTRL_SC7280=y
-> > > +CONFIG_PINCTRL_SC8280XP=y
-> > >  CONFIG_PINCTRL_SDM845=y
-> > >  CONFIG_PINCTRL_SM8150=y
-> > >  CONFIG_PINCTRL_SM8250=y
-> > > @@ -1056,6 +1057,7 @@ CONFIG_MSM_GCC_8998=y
-> > >  CONFIG_QCS_GCC_404=y
-> > >  CONFIG_SC_GCC_7180=y
-> > >  CONFIG_SC_GCC_7280=y
-> > > +CONFIG_SC_GCC_8280XP=y
-> > >  CONFIG_SDM_CAMCC_845=m
-> > >  CONFIG_SDM_GPUCC_845=y
-> > >  CONFIG_SDM_VIDEOCC_845=y
-> > > @@ -1266,6 +1268,7 @@ CONFIG_INTERCONNECT_QCOM_OSM_L3=m
-> > >  CONFIG_INTERCONNECT_QCOM_QCS404=m
-> > >  CONFIG_INTERCONNECT_QCOM_SC7180=m
-> > >  CONFIG_INTERCONNECT_QCOM_SC7280=y
-> > > +CONFIG_INTERCONNECT_QCOM_SC8280XP=y
-> > 
-> > = m? I see other SoCs build interconnect drivers as modules (well,
-> > except sdm845).
-> > 
-> 
-> I have interconnects specified for the UART and keeping the interconnect
-> provider as module means that the serial  until after late_initcall,
-> which in my testing implies that systemd doesn't find a proper console.
-> 
-> Perhaps this is something I'm doing incorrectly?
-> 
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
+head:   ab88938c957f2e2edc60e19ab6df7830fc1c6914
+commit: 66b9343ecbdd4d09a72bc854094a03ca858c2077 [156/161] irqchip/gic-v3: Ensure pseudo-NMIs have an ISB between ack and handling
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220709/202207091422.mERbR7Ce-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/66b9343ecbdd4d09a72bc854094a03ca858c2077
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
+        git checkout 66b9343ecbdd4d09a72bc854094a03ca858c2077
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
 
-Only couple of SoCs have defined interconnect providers for UART, so I think
-it is fine to make it built-in. It will get extended to most of the SoCs in
-future when they get optimized.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+All errors (new ones prefixed by >>):
 
-Thanks,
-Mani
+   drivers/irqchip/irq-gic-v3.c: In function 'gic_handle_nmi':
+>> drivers/irqchip/irq-gic-v3.c:666:9: error: expected ';' before 'err'
+     666 |         err = handle_domain_nmi(gic_data.domain, irqnr, regs);
+         |         ^~~
 
-> Regards,
-> Bjorn
-> 
-> > >  CONFIG_INTERCONNECT_QCOM_SDM845=y
-> > >  CONFIG_INTERCONNECT_QCOM_SM8150=m
-> > >  CONFIG_INTERCONNECT_QCOM_SM8250=m
-> > > --
-> > > 2.35.1
-> > >
-> > 
-> > 
-> > -- 
-> > With best wishes
-> > Dmitry
+
+vim +666 drivers/irqchip/irq-gic-v3.c
+
+f32c926651dcd1 Julien Thierry 2019-01-31  646  
+f32c926651dcd1 Julien Thierry 2019-01-31  647  static inline void gic_handle_nmi(u32 irqnr, struct pt_regs *regs)
+f32c926651dcd1 Julien Thierry 2019-01-31  648  {
+17ce302f3117e9 Julien Thierry 2019-06-11  649  	bool irqs_enabled = interrupts_enabled(regs);
+f32c926651dcd1 Julien Thierry 2019-01-31  650  	int err;
+f32c926651dcd1 Julien Thierry 2019-01-31  651  
+17ce302f3117e9 Julien Thierry 2019-06-11  652  	if (irqs_enabled)
+17ce302f3117e9 Julien Thierry 2019-06-11  653  		nmi_enter();
+17ce302f3117e9 Julien Thierry 2019-06-11  654  
+f32c926651dcd1 Julien Thierry 2019-01-31  655  	if (static_branch_likely(&supports_deactivate_key))
+f32c926651dcd1 Julien Thierry 2019-01-31  656  		gic_write_eoir(irqnr);
+66b9343ecbdd4d Mark Rutland   2022-05-13  657  	else
+66b9343ecbdd4d Mark Rutland   2022-05-13  658  		isb()
+66b9343ecbdd4d Mark Rutland   2022-05-13  659  
+f32c926651dcd1 Julien Thierry 2019-01-31  660  	/*
+f32c926651dcd1 Julien Thierry 2019-01-31  661  	 * Leave the PSR.I bit set to prevent other NMIs to be
+f32c926651dcd1 Julien Thierry 2019-01-31  662  	 * received while handling this one.
+f32c926651dcd1 Julien Thierry 2019-01-31  663  	 * PSR.I will be restored when we ERET to the
+f32c926651dcd1 Julien Thierry 2019-01-31  664  	 * interrupted context.
+f32c926651dcd1 Julien Thierry 2019-01-31  665  	 */
+f32c926651dcd1 Julien Thierry 2019-01-31 @666  	err = handle_domain_nmi(gic_data.domain, irqnr, regs);
+f32c926651dcd1 Julien Thierry 2019-01-31  667  	if (err)
+f32c926651dcd1 Julien Thierry 2019-01-31  668  		gic_deactivate_unhandled(irqnr);
+17ce302f3117e9 Julien Thierry 2019-06-11  669  
+17ce302f3117e9 Julien Thierry 2019-06-11  670  	if (irqs_enabled)
+17ce302f3117e9 Julien Thierry 2019-06-11  671  		nmi_exit();
+f32c926651dcd1 Julien Thierry 2019-01-31  672  }
+f32c926651dcd1 Julien Thierry 2019-01-31  673  
+
+:::::: The code at line 666 was first introduced by commit
+:::::: f32c926651dcd1683f4d896ee52609000a62a3dc irqchip/gic-v3: Handle pseudo-NMIs
+
+:::::: TO: Julien Thierry <julien.thierry@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://01.org/lkp

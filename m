@@ -2,97 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B2156C941
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 13:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C948156C94B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 13:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiGILo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 07:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S229498AbiGIL6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 07:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiGILoz (ORCPT
+        with ESMTP id S229456AbiGIL6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 07:44:55 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389AF64E11;
-        Sat,  9 Jul 2022 04:44:54 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31cf1adbf92so9927007b3.4;
-        Sat, 09 Jul 2022 04:44:54 -0700 (PDT)
+        Sat, 9 Jul 2022 07:58:48 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BC61409F
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 04:58:47 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so2531333wme.0
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 04:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WecurZc/PD+8FSgyr1LUS8UeYsQb8Bww772Y3FfisNA=;
-        b=cECSHQ/Jpc1SIPJf2KU6KHrPE59UPGYiOlnQF6JSY67SVLvYtv0ZaEaox8EzEWyehU
-         e4SjU1Mr9YkrIiB6fOhyaFnbjsR08fvg4yKLfMAPXy64671YdJZAhn0b+gnHZN/leiQl
-         AVHe8Y9SvIoM1gw0//+MRqYhUGxt2Eu+lcIasMkMT5CO664/lKLHiu94+HbBCwG0ODa+
-         LKdGwzXafms9gd2+3iK+C5E61f0P8afGg2fJax8yGvMc6r8YJrpSFE+koR4W9nC4bt4M
-         XwlizR4S/iKpuQLftjj+suHbsdG7idh3TDXVIyFgtC3RcEMz3HBjLR0SN9ymfMNqKoqg
-         4fPw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UsNbjJkPi35YcKIm8xIJWUJDks0rt+PESYRUBN9kku8=;
+        b=IB1+HRcX+LB24QOhTI9VjtgQFzYGZ45+RbXu5lKXInLxkZAdOqsghJ5pivrQiCdcf9
+         2Plmxz9JdwvOTdjo690ZwI1u6kvH3wPWEDYgQnA6uPLMakGpVkY+pCkJiL/E+yI/Ur8B
+         Pr9dl1Y0kuXIpEX3k4f9wkvDIgy+TAk/m1C0cnlIg3lL9SMNXBSVrcXK38J/7puFtZQr
+         RYjFYbPwBep78N9fyor6atRvWu94mcul8/YAgIAIvfGaN3ejNdsj1DuBYoJ6kYaxuDEg
+         HtvHE8223/bzPorqXa+WHDPIDVWuqrJ4PFZu2EbzkR8Gf+Kbdey18uxZJOGj4WVgYhYN
+         6xXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WecurZc/PD+8FSgyr1LUS8UeYsQb8Bww772Y3FfisNA=;
-        b=Qf0xjMnCdG8f4yyFpW0aRYEkY+1Ugu6R0uNGHvL6NLgn1zEzQ7PqcfUtDCLNliza59
-         lRKKyNKo2Fzeg+5fj9jXrs59vRTJMiHEtWGtNbDeD9CC4BcWhf0zAPVZA/krfuS2pY4S
-         xZShXuJHQUTWH5ZfVtw95SAeA4pt+HCQi0jm7zsFRb36Uz7og27Duw0uV9Rw0kyWWG9h
-         gKebFnRLSKI1IdPYLzUVLOLs5CSnnnuGgF4FC3ooFPKV4Af1BgznkgYv9YrmdzmcqZZw
-         0Xraadj9uAOcDLrGV2zRiyKQVafISsvnHVSRWuOYemEs5vUtWCj1GEruHRC959R7OIjw
-         v2Iw==
-X-Gm-Message-State: AJIora/YM8p3YSAj/aj0vaZl+xg0uBRkMKOhiEOAp9X2oKwUpQyqSY1P
-        1LV+34Xv60ONlsibfVX3paZ6xYnNt10XlgbP6MQ=
-X-Google-Smtp-Source: AGRyM1u/nIFaAJ6qPNU4u0ekU49mH3RtsLxWUhuQ7/nNsIH62cqo7wgZZ8iDEiBdOLaY4g53HK0MOXkNAWLvRwtYa5k=
-X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
- t133-20020a81468b000000b003184cac6576mr9010833ywa.277.1657367093389; Sat, 09
- Jul 2022 04:44:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UsNbjJkPi35YcKIm8xIJWUJDks0rt+PESYRUBN9kku8=;
+        b=u4PNS1P0ZfLTsIh2WguQvfi1SyY7wshs1p8JNNJiqg0LlUJJZWCvATJiWYJzUQ5JTg
+         HiQENXIAF7iiWJX7uIive1zNB4GQKJJdODGY+BX30s3OdRGx3YLtvBXyE/Ef0abz84lK
+         mCYeJEyeXUAw5MTm2DX0bU996pkt5VjMm/EB6WLcr4DmJWeItGxEKv/wdlxkmHPL2U6b
+         sKFPIKXvg7CIR/L6pk4oKi93v5QhKLyEvv+/lFyJrgCbsvtF1GA/zFLgTq99TbsNn2Q6
+         nhko/N3DdGri8c8uGsPPp/VfVR4Tp4VpUC7WlYFFsaFutqJcm223WWaK2OJ8GbwrN4kp
+         NCVA==
+X-Gm-Message-State: AJIora8J4gj7F7CPaySwewjx14ijXjUUuCMxMYu4OYR8wMU66E3fkR/D
+        YHpzLXLVI/rV8/MBLOFoakk=
+X-Google-Smtp-Source: AGRyM1tNlHZy4jrgiSE9aRqe/KuSFnkiJeZUNpSv0Om7RwfJF2w15lTa5FVK4l5mPUiEOp9xYnLduA==
+X-Received: by 2002:a05:600c:3d8f:b0:3a1:963d:202d with SMTP id bi15-20020a05600c3d8f00b003a1963d202dmr4980849wmb.11.1657367925933;
+        Sat, 09 Jul 2022 04:58:45 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.36.185])
+        by smtp.gmail.com with ESMTPSA id co1-20020a0560000a0100b0021cf31e1f7csm1199494wrb.102.2022.07.09.04.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Jul 2022 04:58:45 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     javierm@redhat.com
+Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        mripard@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        maarten.lankhorst@linux.intel.com, jani.nikula@linux.intel.com,
+        maira.canal@usp.br, isabbasso@riseup.net, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2 0/4] KUnit tests for RGB565 conversion
+Date:   Sat,  9 Jul 2022 13:58:33 +0200
+Message-Id: <20220709115837.560877-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220708084816.1140540-1-PaddyKP_Yao@asus.com> <20220708090731.1237488-1-PaddyKP_Yao@asus.com>
-In-Reply-To: <20220708090731.1237488-1-PaddyKP_Yao@asus.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 9 Jul 2022 13:44:16 +0200
-Message-ID: <CAHp75Vc-5Py8heCJ4bKh1-7y+U+ycJxRuYdFwiT=NM5=gLqwQw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] platform/x86: asus-wmi: Add mic-mute LED classdev support
-To:     PaddyKP_Yao <ispaddy@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Luke Jones <luke@ljones.dev>, PaddyKP_Yao@asus.com,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        acpi4asus-user <acpi4asus-user@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You have sent two patches with the same version, your submission
-confuses everybody, which one are we supposed to consider?
+Hello everyone,
 
-On Fri, Jul 8, 2022 at 11:08 AM PaddyKP_Yao <ispaddy@gmail.com> wrote:
->
-> In some new ASUS devices, hotkey Fn+F13 is used for mic mute. If mic-mute
-> LED is present by checking WMI ASUS_WMI_DEVID_MICMUTE_LED, we will add a
-> mic-mute LED classdev, asus::micmute, in the asus-wmi driver to control
-> it. The binding of mic-mute LED controls will be swithched with LED
+This series is a follow up of the XRGB8888 to RGB332 conversion KUnit
+tests.
 
-switched
+The first patch fixes a bug reported by David Gow in the XRGB8888 to
+RGB332 tests.
+Note that the fix is required for this format because internally, the
+drm_fb_xrgb8888_to_rgb332_line() function, calls le32_to_cpu().
+The other *_line() functiones don't change the endian. That's why the
+RGB565 tests don't need to make any endian conversions.
 
-> trigger.
+I'm not sure whether this inconsistency handling the endian could be
+considered a bug or not, but at list it is confusing. It'd be
+interesting to hear the opinion of the maintainers on this topic.
 
-...
+Patches 2 and 3 make the test generic and the last one tests
+drm_fb_xrgb8888_to_rgb565().
 
-Not reviewing code because of the above.
+Best wishes,
+José Expósito
 
-Hint: `git format-patch -vX ...`, where X is a version number will
-help. And when cooking a new version don't forget to add a changelog
-between versions.
+Changes since v1:
 
+ - Fix a bug reported by David Gow in the XRGB8888 to RGB332 tests
+ - Simplify the test structure as suggested by David Gow
+ - Add Tested-by Tales L. Aparecida and Acked-by Thomas Zimmermann
+ - Fix link in the last patch (Thomas Zimmermann)
+
+José Expósito (4):
+  drm/format-helper: Fix test on big endian architectures
+  drm/format-helper: Rename test cases to make them more generic
+  drm/format-helper: Support multiple target formats results
+  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb565()
+
+ .../gpu/drm/tests/drm_format_helper_test.c    | 167 ++++++++++++++----
+ 1 file changed, 136 insertions(+), 31 deletions(-)
+
+
+base-commit: 6fde8eec71796f3534f0c274066862829813b21f
+prerequisite-patch-id: 8a16f4c8004d6161035eaea275c8eafaa0ac927e
+prerequisite-patch-id: 53fded2a49e6212b546db76ec52563a683752e65
+prerequisite-patch-id: 294b0ca27a6ee57096c8f097c0572336b8a2d583
+prerequisite-patch-id: 5e05bfc5287d16c207bfc616b2776ad72eb4ab29
+prerequisite-patch-id: e94560be85dffb62a5b3cf58d1f0fc3d278ad806
+prerequisite-patch-id: a471df39c7b32c69dd2b138a7d0af015ea42e00a
+prerequisite-patch-id: 04e8b96dd1319088e45d4b4dc4beb29889b30941
+prerequisite-patch-id: bda9f93309910ca6d9528c9c560a3ccb7c388bfa
+prerequisite-patch-id: f45a301abf3874302b47751378d1cb4da01a1e2a
+prerequisite-patch-id: 7e8d74a4769f5bc8f2a1ced1de64aa13ea7b9d6c
+prerequisite-patch-id: cfa9be5a3b48cada74c681ebe967ef2a3ac572a0
+prerequisite-patch-id: f4d0b5ba40437486248a6df6ab022a3428898273
+prerequisite-patch-id: f6380c88b6640cd57b867a59ed42a2fc754fa9e4
+prerequisite-patch-id: 112685a3c337b3bc8ff9507ab832c6322a77a2cc
+prerequisite-patch-id: 3f69109f64a8b7ac85a0332d177c8b2216cc747c
+prerequisite-patch-id: 7f0a3edb0b94bd54681d67c50a23008ccdb18c00
+prerequisite-patch-id: bfb6024a0e542cdc89f1f2a98cc249a2c071c68f
+prerequisite-patch-id: b569ec32d7a4a9c7be317e8a8f0177ad4f696a10
+prerequisite-patch-id: f1f7adf96de1501469c223a50d6405dc4b378982
+prerequisite-patch-id: ce194443e4d40ded9bcec371717566398333e1db
+prerequisite-patch-id: 253ba111d18eea436c45fc43216b7d3ddba41388
+prerequisite-patch-id: fac3f1b822c5154bc16eae9eb97b95fa19c178ad
+prerequisite-patch-id: 7eeca32e531b0d97d67285c106c1e721158da931
+prerequisite-patch-id: 2b1b9ce615e8856f7e236f5fbaf7dfcd625da2ea
+prerequisite-patch-id: 6e45198758680c3ed23f58ee049d93f63d316d88
+prerequisite-patch-id: 58c3a87ebf0a31d65a3a787121a066013e1da82e
+prerequisite-patch-id: e62f9ef9e892d075778094ee5b4e4e9d9cc76c86
+prerequisite-patch-id: 3a7abafa7b011cbeca304f8af85b88aefc55cf64
+prerequisite-patch-id: 1146b840a8ff43a4fdc8382c6c4d133aae6ec2fa
+prerequisite-patch-id: 1455f1117f208d983759d89b750440d349a880c2
+prerequisite-patch-id: 92d0eb8a4e06da97b18a5cf28a81fc90158c444d
+prerequisite-patch-id: 2ab38ae9cea6d979bff04345550a1a848b55a091
+prerequisite-patch-id: 25b591d59400b972ed1b709d932feaba0d5f642e
+prerequisite-patch-id: 003dca01353bba78d1a05baa5852acb1b313a154
+prerequisite-patch-id: f7beda6d5b2aa56ecd5ce610f36db704d1fbd653
+prerequisite-patch-id: f641abe09200a8b9507124949bab294a05529175
+prerequisite-patch-id: 1fa4294e769b40dca3b89fa160c4ae1ff9eff8b7
+prerequisite-patch-id: 9d04c01b752031e874286e121a64844891008a14
+prerequisite-patch-id: f34a698723d7df6b6a4d17686395af8b694186e2
+prerequisite-patch-id: 488ab7cec987c0a6c8c032fc74ad79a40bf546f9
+prerequisite-patch-id: a5a4c847fb9b55f53eaef99b353749f61dd1f72f
+prerequisite-patch-id: 443d79ee1834963cb1f2a4e0007d02e419a2f5ff
+prerequisite-patch-id: 15add4faa533058e2ef962aeb7563835c6cbd82a
+prerequisite-patch-id: 6afb078b02085c4b24136bff54941a11090ea738
+prerequisite-patch-id: da36728d198481270fb9695c7d86d210111353c2
+prerequisite-patch-id: eb412a9ebab86d80a96f3c32690e5a96ed5a9ebc
+prerequisite-patch-id: e33a4314f9bb9caf819f5e350c50b5b571d68e37
+prerequisite-patch-id: 10ec9def77f602a29e20ac1b4193bbc7e932a7f5
+prerequisite-patch-id: 970edbb64a43f50ac7e80f2f0258767a08b8294c
+prerequisite-patch-id: f089485485d6e374fca925da2b904867c8e60a74
+prerequisite-patch-id: b60e812dbb263d1b9c27f46bf487f4f73568a9d0
+prerequisite-patch-id: 6344323c6242f0fa4402003f63cac9bc63fc7752
+prerequisite-patch-id: b4d1a179227563da227593d7588306c9e676c6af
+prerequisite-patch-id: 48dbb90b0dbd77ad1e6ae8101804d23bb855645f
+prerequisite-patch-id: f104eb773c8c0b0ead12b8576ce0052c646cf598
+prerequisite-patch-id: 4e6659a16896cb1546dc272a7db2893873d3d7c0
+prerequisite-patch-id: ea56ba8675748e2fb5a942244a77a17ca1650de5
+prerequisite-patch-id: df4cd3120fe4bb1ae6322ae908739fb1f620e660
+prerequisite-patch-id: 533aee0b212f50f0dcf705b7e04c626340f4bd36
+prerequisite-patch-id: 599329c73d4c591a95c8031a41c080115a6d602b
+prerequisite-patch-id: 0f27a6299d98e481e523a93f2c494079b4c2ad4a
+prerequisite-patch-id: 7621b25a47ee43ae20862c285e0b2d236311788b
+prerequisite-patch-id: 72b2b9c39cf28cf2c2282231838184caba0b250d
+prerequisite-patch-id: 80bf2499edfee73e4e4672619ee4da47df53d4c5
+prerequisite-patch-id: 97745925e55ae5c66e379a637f0c432b5cd4c5a9
+prerequisite-patch-id: 76d682950bf55d9b6a6e4df9dcd52278f534d41c
+prerequisite-patch-id: 4bf1847249b002130e4e59d8a83ad6af0b27508f
+prerequisite-patch-id: 1760ca541aa2cf8e892d7e6b8620b566f5d9bd05
+prerequisite-patch-id: f63faffa66e94f9f330fda71dfc9f4a55b4f3d07
+prerequisite-patch-id: cb8e14eefb9813f539ba1a5b5f78be5df351888d
+prerequisite-patch-id: d42116fc0ae5898cdcf0d47d99866a0e328d27c7
+prerequisite-patch-id: bc81a5b598bdc0e91286cef08957f5ed627b6a41
+prerequisite-patch-id: 693319f739fbffa8be024f7a6ef8265caa48ef1b
+prerequisite-patch-id: e10dc3d38993222d15a095f33f5150c1998d2c62
+prerequisite-patch-id: 6b2a39c25f3938b86cb71ed70b7330ded34e0a2e
+prerequisite-patch-id: cde017ae3f0c1691dcb437095804ef5207520f9a
+prerequisite-patch-id: 1c79ba2de78c4fbf91a4371c32f8e31bcffe5493
+prerequisite-patch-id: 00079a82e7089c6aacb7610953b6fbe99167dba1
+prerequisite-patch-id: 609e49dc054b83b9e4b5961e9a7c956a3d54ab51
+prerequisite-patch-id: a8394a54421133ddfaeb486d13a135479beb12ad
+prerequisite-patch-id: 25eaeb161a40979bfa8ca4ee6246a5338d61e972
+prerequisite-patch-id: be89047878944cfb969e544179f42008a3b9dae4
+prerequisite-patch-id: 45bc4815468fc4c240b9291e87195ba6a56c8ced
+prerequisite-patch-id: df771a5eda31e2bf8a1d46f6d38049d76fd8fa3c
+prerequisite-patch-id: 3031536f5d0e359d3ff190b08e8dd8b0a1cd9bff
+prerequisite-patch-id: 4c241d97f6c49494f73978ec24691b91e5ef96af
+prerequisite-patch-id: a0c4a7df919ffcfd2698d7a8aaf8ae08e5005153
+prerequisite-patch-id: dd85b9081eb9bc7e15a54ac958a844afc88f6716
+prerequisite-patch-id: fdee5e717d385329c229a42b7aea83d29ab6d2b6
+prerequisite-patch-id: 7caeb6f71b1d618fe310bb05cc5f3e6b48bd16e9
+prerequisite-patch-id: ed364b5c9a5014df39654a6ba626baa7f67cf99a
+prerequisite-patch-id: 56d211f7e8c7601370370e07bedff01f9f3cd4df
+prerequisite-patch-id: 1c43718b51bf2e0ae545367b48b2a353f0f7289f
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

@@ -2,126 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE0156CA82
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E1456CA88
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 18:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiGIQG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 12:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        id S229541AbiGIQLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 12:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiGIQG1 (ORCPT
+        with ESMTP id S229488AbiGIQLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 12:06:27 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4270013E0F
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 09:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=ZlPlNDk/FmGLbnfej0pJ166q9k37
-        AQWgI23YOHarBQA=; b=X5Mi2WhSYS3ssU4FsbaksAQh0rgRXfmD5uQx0ub0NDEG
-        fAjVxPN3rvuXQKUfQXG4XvEQNGhG2AZedqVZIDIKCrjJc2ERKolCnlt2VsB9lN9S
-        FRCKR2XypfJgZC6yWnT/a5hIRYXSpyyBctBBy6Gl7zdebmV7BKrmH/WUGNkVn0U=
-Received: (qmail 2909422 invoked from network); 9 Jul 2022 18:06:20 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jul 2022 18:06:20 +0200
-X-UD-Smtp-Session: l3s3148p1@d4uyf2HjmQdZD+wL
-Date:   Sat, 9 Jul 2022 18:06:17 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-Subject: Re: [PATCH v2 2/2] i2c: Introduce i2c_str_read_write() and make use
- of it
-Message-ID: <YsmneQ1VAKXMU7eP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Till Harbaum <till@harbaum.org>
-References: <20220703154232.55549-1-andriy.shevchenko@linux.intel.com>
- <20220703154232.55549-2-andriy.shevchenko@linux.intel.com>
- <YsWI4nzQa9gmqKdw@shikoro>
- <YsgBkDeq/KeQ15HU@smile.fi.intel.com>
- <YsgcZHzjzqyJjKqQ@shikoro>
- <CAHp75VdJ2AT30md_nR3a_hY6L511w+4oqsAJ-CoE2gXitXCrNw@mail.gmail.com>
+        Sat, 9 Jul 2022 12:11:33 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3054F2CCAA
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 09:11:32 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id AD3JoHrjCJXxRAD3Kol9tD; Sat, 09 Jul 2022 18:11:30 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 09 Jul 2022 18:11:30 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-s390@vger.kernel.org
+Subject: [PATCH] s390/pci: Use the bitmap API to allocate bitmaps
+Date:   Sat,  9 Jul 2022 18:11:28 +0200
+Message-Id: <8d35e482f710889a45d46f808155738ef87d46c4.1657383052.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zHbyfqMzo6/Cti3A"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdJ2AT30md_nR3a_hY6L511w+4oqsAJ-CoE2gXitXCrNw@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 
---zHbyfqMzo6/Cti3A
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It is less verbose and it improves the semantic.
 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+I don't know why commit c506fff3d3a8 ("s390/pci: resize iomap") has turned
+this bitmap from a statically defined bitmap to a runtime-allocated one.
 
-> Okay, let me find another subsystem where this will be more useful. Do
+Going back to a:
+	static DECLARE_BITMAP(zpci_iomap_bitmap, ZPCI_IOMAP_ENTRIES);
+would slightly simply code.
+---
+ arch/s390/pci/pci.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Yes :)
+diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+index bc980fd313d5..b965553de143 100644
+--- a/arch/s390/pci/pci.c
++++ b/arch/s390/pci/pci.c
+@@ -1059,8 +1059,7 @@ static int zpci_mem_init(void)
+ 	if (!zpci_iomap_start)
+ 		goto error_iomap;
+ 
+-	zpci_iomap_bitmap = kcalloc(BITS_TO_LONGS(ZPCI_IOMAP_ENTRIES),
+-				    sizeof(*zpci_iomap_bitmap), GFP_KERNEL);
++	zpci_iomap_bitmap = bitmap_zalloc(ZPCI_IOMAP_ENTRIES, GFP_KERNEL);
+ 	if (!zpci_iomap_bitmap)
+ 		goto error_iomap_bitmap;
+ 
+@@ -1078,7 +1077,7 @@ static int zpci_mem_init(void)
+ 
+ static void zpci_mem_exit(void)
+ {
+-	kfree(zpci_iomap_bitmap);
++	bitmap_free(zpci_iomap_bitmap);
+ 	kfree(zpci_iomap_start);
+ 	kmem_cache_destroy(zdev_fmb_cache);
+ }
+-- 
+2.34.1
 
-> yuo have any wiki page about TODO in i2c subsys for kernel newbies (it
-> would be good task to add)?
-
-There is https://i2c.wiki.kernel.org/index.php/Main_Page but it is not
-kept up to date. Do you mean "cleaning drivers from dbg messages"?
-
-
---zHbyfqMzo6/Cti3A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLJp3UACgkQFA3kzBSg
-KbZbDA/9FIe+AyjmEg9ON3TYLjMcM21C05cj4cxDDSX5aoeBkpRSkfXkuhj1U/A7
-u5wRPnB6miHwtwEQXhic9osorCz4/jY7nq0klnoZQUBHVaHkWUsAq2e2qxZcgSR3
-eDtSFwThH0gHhanBXzL/gOT8I7eahqT6RwCCLK3S82nJQvw5Y9onoavSFNyd0/2g
-8FqF+lb6qnDsseaYy4PTzP443/2Dwzc9TY3Q9T/ndm3kR8L9M0pQIsr/TiwlevQl
-917dl0A7BXUqnispE/kswzyDUvneB00aWjGPd9QQ1pEpsheqKo+tgbfdzMFfeEyP
-Z4RO1eNjJHU8cqIoR3NXH32bdTSQyxSCHKQK2KE1G7ZRPbMJ68tsa52MXf1iTYGH
-U7DTmWTsOtBU0eQzcX0vSEcIpjfn7dP3IGwvlMExx40mP+9RcP6zrt+u3b74wpeK
-gCIghaZ906PH6W9OetFH6H9EXju1M37b3jCdCWednDcWEnwvNIxPdmcPGrl7D/K+
-tD+pKE1bVMZBIYnj+QG+ULSzIb2HCIseWXxiMgdklPs7q9J+AZD2ayIumKuDeQn2
-E++oGGmww0s+bjhYTG1WkVUN0Es5h9AwXFEcJfkaXBkiSi8KQixfnotFrSOpNVmm
-XsE9AdyrN3AFFQ5qWmGiAMbDhQ29gQz1+pHY6221Bqe6YMSMrYI=
-=AtXT
------END PGP SIGNATURE-----
-
---zHbyfqMzo6/Cti3A--

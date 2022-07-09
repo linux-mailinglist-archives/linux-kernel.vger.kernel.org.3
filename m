@@ -2,136 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C176C56CC00
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 01:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6191B56CC0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 01:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiGIXXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 19:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S229530AbiGIXog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 19:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGIXXr (ORCPT
+        with ESMTP id S229454AbiGIXoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 19:23:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4922AA46E
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 16:23:46 -0700 (PDT)
+        Sat, 9 Jul 2022 19:44:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069B613FB4;
+        Sat,  9 Jul 2022 16:44:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3E286101F
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC62EC3411C
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:23:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PcOmRlfl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657409021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4luwdHtoa5TijeIa0ocStPfhJ5ySkRw52BzfnU2PTro=;
-        b=PcOmRlflZvJudt6wPN/M4269Hbb/2snzrDGtkr2F37K01WjkH/hjOkFaCaBc+qyVUE/Ibt
-        gcz0Bk7Dklfd+N0tI1Dcnh0QHWQLwVHcLWLZT0mbGdHaU94GPIxJvJjwzZ2xcP+Ua0roGq
-        WYYdM4/pvyqrQ7h+sNPhB4y/XKfx0EQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ee9c887b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Sat, 9 Jul 2022 23:23:41 +0000 (UTC)
-Received: by mail-il1-f182.google.com with SMTP id v1so1201620ilg.11
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 16:23:41 -0700 (PDT)
-X-Gm-Message-State: AJIora+PLrvXTDmzLDz/fsQzycVrZZf9Ryo7A1GeonqcK76BIJAqDUMe
-        ac5gFmiETRi7U2HICJ01IY39BCj4Nd8SgsxCnyc=
-X-Google-Smtp-Source: AGRyM1u0QrOeHNn5hN7JEwN7Gon7A7YUY+3gDx6Q90PkI16F8Re6eK8n50bnZzjR+SamjqgGyks9napDt8znePeKLl8=
-X-Received: by 2002:a05:6e02:164f:b0:2dc:6d38:ff8e with SMTP id
- v15-20020a056e02164f00b002dc6d38ff8emr2277930ilu.16.1657409019467; Sat, 09
- Jul 2022 16:23:39 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B97961028;
+        Sat,  9 Jul 2022 23:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8353FC3411C;
+        Sat,  9 Jul 2022 23:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657410272;
+        bh=LnoaqXRv2WKrbzdXL70EhC6iXdeoUePoQmX6BO80Qck=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VPiYGrWMNisx36kXI+JhA+E6/1BN4VUL7JrEx93n4da0urjEtebPSIcDJ37lmVps9
+         Yg1mGs31GRLvnLW9Ycr1GGLyI9s7cXAJsfwWNa7PSzDa8DiPh6iM8GWlIRIanUvPpG
+         fdhjsKXclduQwz4zdixk+nRM/tRXsb2tjGiFtZGPdLws7uHg/3FRV6E4qHlh5Vic9X
+         5yueXm/IbJW6lhA2rn0pg6w2oJND60ANB5PBoTPky5O7s6OJeBJMXgCIX6WIzivDF+
+         H6U0Vgh2LSZwLNTtE7ElQYFBSwiSCpg8FQpbzjldrRPl7JZz6l6tt8+RJdk+Lucnjo
+         jLopmLMRWr1gg==
+Date:   Sat, 9 Jul 2022 18:44:30 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <20220709234430.GA489657@bhelgaas>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:20e5:0:0:0:0 with HTTP; Sat, 9 Jul 2022 16:23:38
- -0700 (PDT)
-In-Reply-To: <ec46a292-dcc1-c12b-25a0-491b522c2db8@zytor.com>
-References: <YslN1bo2jnnxl3E3@zx2c4.com> <20220709094853.1090735-1-Jason@zx2c4.com>
- <ec46a292-dcc1-c12b-25a0-491b522c2db8@zytor.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 10 Jul 2022 01:23:38 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pPTWB0so2-wXmmsMQn0WhqZWwVcbpMP15U=QCt57Q_cg@mail.gmail.com>
-Message-ID: <CAHmME9pPTWB0so2-wXmmsMQn0WhqZWwVcbpMP15U=QCt57Q_cg@mail.gmail.com>
-Subject: Re: [PATCH tip v9] x86/setup: Use rng seeds from setup_data
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220709143151.qhoa7vjcidxadrvt@pali>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Peter,
+[+cc Marc, since he commented on this]
 
-On 7/10/22, H. Peter Anvin <hpa@zytor.com> wrote:
-> On 7/9/22 02:48, Jason A. Donenfeld wrote:
->> Currently the only way x86 can get an early boot RNG seed is via EFI,
->> which is generally always used now for physical machines, but is very
->> rarely used in VMs, especially VMs that are optimized for starting
->> "instantaneously", such as Firecracker's MicroVM. For tiny fast booting
->> VMs, EFI is not something you generally need or want.
->>
->> Rather, here we want the ability for the image loader or firmware to
->> pass a single random seed, exactly as device tree platforms do with the
->> "rng-seed" property. Additionally, this is something that bootloaders
->> can append, with their own seed file management, which is something
->> every other major OS ecosystem has that we do not (yet).
->>
->> This patch adds SETUP_RNG_SEED, similar to the other seven setup_data
->> entries that are parsed at boot. It also takes care to zero out the seed
->> immediately after using, in order to retain forward secrecy. This all
->> takes about 7 trivial lines of code.
->>
->> Then, on kexec_file_load(), a new fresh seed is generated and passed to
->> the next kernel, just as is done on device tree architectures when
->> using kexec. And, importantly, I've tested that QEMU is able to properly
->> pass SETUP_RNG_SEED as well, making this work for every step of the way.
->> This code too is pretty straight forward.
->>
->> Together these measures ensure that VMs and nested kexec()'d kernels
->> always receive a proper boot time RNG seed at the earliest possible
->> stage from their parents:
->>
->>     - Host [already has strongly initialized RNG]
->>       - QEMU [passes fresh seed in SETUP_RNG_SEED field]
->>         - Linux [uses parent's seed and gathers entropy of its own]
->>           - kexec [passes this in SETUP_RNG_SEED field]
->>             - Linux [uses parent's seed and gathers entropy of its own]
->>               - kexec [passes this in SETUP_RNG_SEED field]
->>                 - Linux [uses parent's seed and gathers entropy of its
->> own]
->>                   - kexec [passes this in SETUP_RNG_SEED field]
->> 		   - ...
->>
->> I've verified in several scenarios that this works quite well from a
->> host kernel to QEMU and down inwards, mixing and matching loaders, with
->> every layer providing a seed to the next.
->>
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->
-> Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
+> On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
+> > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> > > > instead of chained IRQ handler in pci-mvebu.c driver.
+> > > >
+> > > > This change fixes affinity support and allows to pin interrupts from
+> > > > different PCIe controllers to different CPU cores.
+> > > 
+> > > Several other drivers use irq_set_chained_handler_and_data().  Do any
+> > > of them need similar changes?  The commit log suggests that using
+> > > chained IRQ handlers breaks affinity support.  But perhaps that's not
+> > > the case and the real culprit is some other difference between mvebu
+> > > and the other drivers.
+> > 
+> > And there is another reason to not use irq_set_chained_handler_and_data
+> > and instead use devm_request_irq(). Armada XP has some interrupts
+> > shared and it looks like that irq_set_chained_handler_and_data() API
+> > does not handle shared interrupt sources too.
+> > 
+> > I can update commit message to mention also this fact.
+> 
+> Anything needed from me to improve this fix?
 
-Thanks for the ack. In case your ack here is meant to communicate
-"good to go for random.git," I thought I should mention: while earlier
-versions of this patch were against my random.git tree, this one (and
-the previous) is against tip.git, because otherwise there'd be some
-annoying conflicts when merging. So if it's not too much trouble, I
-think it would make sense to apply this to tip.
+My impression from Marc's response [1] was that this patch would
+"break the contract the kernel has with userspace" and he didn't think
+this was acceptable.  But maybe I'm not understanding it correctly.
 
-Jason
+In any event, I'm waiting for you to continue that discussion.  Maybe
+there's an argument for doing this even though it breaks some
+userspace expectations.  If so, that should be acknowledged and
+explained.  Or maybe there's an alternative implementation.  Marc
+gave a link to some suggestions [2], which I haven't looked into, but
+maybe you could.
 
->
->> ---
->> Changes v8->v9:
->> - [hpa] Update SETUP_TYPE_MAX and add SETUP_ENUM_MAX.
->
+[1] https://lore.kernel.org/r/874k0bf7f7.wl-maz@kernel.org
+[2] https://lore.kernel.org/all/20220502102137.764606ee@thinkpad/
+
+> > > > Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > ---
+> > > > Hello Bjorn! This is basically same issue as for pci-aardvark.c:
+> > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> > > > 
+> > > > I tested this patch with pci=nomsi in cmdline (to force kernel to use
+> > > > legacy intx instead of MSI) on A385 and checked that I can set affinity
+> > > > via /proc/irq/XX/smp_affinity file for every mvebu pcie controller to
+> > > > different CPU and legacy interrupts from different cards/controllers
+> > > > were handled by different CPUs.
+> > > > 
+> > > > I think that this is important on Armada XP platforms which have many
+> > > > independent PCIe controllers (IIRC up to 10) and many cores (up to 4).
+> > > > ---
+> > > >  drivers/pci/controller/pci-mvebu.c | 30 +++++++++++++++++-------------
+> > > >  1 file changed, 17 insertions(+), 13 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > > index 8f76d4bda356..de67ea39fea5 100644
+> > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > @@ -1017,16 +1017,13 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
+> > > >  	return 0;
+> > > >  }
+> > > >  
+> > > > -static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> > > > +static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+> > > >  {
+> > > > -	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
+> > > > -	struct irq_chip *chip = irq_desc_get_chip(desc);
+> > > > +	struct mvebu_pcie_port *port = arg;
+> > > >  	struct device *dev = &port->pcie->pdev->dev;
+> > > >  	u32 cause, unmask, status;
+> > > >  	int i;
+> > > >  
+> > > > -	chained_irq_enter(chip, desc);
+> > > > -
+> > > >  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+> > > >  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > >  	status = cause & unmask;
+> > > > @@ -1040,7 +1037,7 @@ static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+> > > >  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
+> > > >  	}
+> > > >  
+> > > > -	chained_irq_exit(chip, desc);
+> > > > +	return status ? IRQ_HANDLED : IRQ_NONE;
+> > > >  }
+> > > >  
+> > > >  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> > > > @@ -1490,9 +1487,20 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
+> > > >  				mvebu_pcie_powerdown(port);
+> > > >  				continue;
+> > > >  			}
+> > > > -			irq_set_chained_handler_and_data(irq,
+> > > > -							 mvebu_pcie_irq_handler,
+> > > > -							 port);
+> > > > +
+> > > > +			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
+> > > > +					       IRQF_SHARED | IRQF_NO_THREAD,
+> > > > +					       port->name, port);
+> > > > +			if (ret) {
+> > > > +				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
+> > > > +					port->name, ret);
+> > > > +				irq_domain_remove(port->intx_irq_domain);
+> > > > +				pci_bridge_emul_cleanup(&port->bridge);
+> > > > +				devm_iounmap(dev, port->base);
+> > > > +				port->base = NULL;
+> > > > +				mvebu_pcie_powerdown(port);
+> > > > +				continue;
+> > > > +			}
+> > > >  		}
+> > > >  
+> > > >  		/*
+> > > > @@ -1599,7 +1607,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+> > > >  
+> > > >  	for (i = 0; i < pcie->nports; i++) {
+> > > >  		struct mvebu_pcie_port *port = &pcie->ports[i];
+> > > > -		int irq = port->intx_irq;
+> > > >  
+> > > >  		if (!port->base)
+> > > >  			continue;
+> > > > @@ -1615,9 +1622,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+> > > >  		/* Clear all interrupt causes. */
+> > > >  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > >  
+> > > > -		if (irq > 0)
+> > > > -			irq_set_chained_handler_and_data(irq, NULL, NULL);
+> > > > -
+> > > >  		/* Remove IRQ domains. */
+> > > >  		if (port->intx_irq_domain)
+> > > >  			irq_domain_remove(port->intx_irq_domain);
+> > > > -- 
+> > > > 2.20.1
+> > > > 

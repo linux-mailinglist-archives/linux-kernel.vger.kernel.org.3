@@ -2,63 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977D856C8C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7719856C8EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiGIKI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 06:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S229530AbiGIKSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 06:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiGIKHn (ORCPT
+        with ESMTP id S229510AbiGIKSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 06:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1BF4B4B5;
-        Sat,  9 Jul 2022 03:07:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 9 Jul 2022 06:18:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A543ED65
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 03:18:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB0960E96;
-        Sat,  9 Jul 2022 10:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81939C385A9;
-        Sat,  9 Jul 2022 10:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657361258;
-        bh=55E4N17aXi/OdUFEEFl7AvCQy6V+4IMeLShqiXZ/LR4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BcAgM5p4BaJffDY0NmEhUVZuGOVesGqvBixS3FGpvkwhfuSBs7j+atRVgyDjYraS9
-         hdIEgjpGoG0U2gRCAB6oqPF4xGFjMkUs/uQP9shQEMiO0+9KAYfvWVVlSUnQl4k5dQ
-         02fDNEyQrugFuWNdOKzVLjN3LFJZmKgLZ6IhwNImKE3YUKBgo6ceIpHE/3YlE15qed
-         cWRsvTBMREXkeZSQFDgeL5uI8809hyKHGc51i8VGqN5AGljK7z5MS3eJ4BILzZJoyM
-         dg04Zv/+awz3Oul31vRn2IZE+13Mm7qpUaw2JgFxMGv5TT+MDNgzsTeQB4jMFpLsDt
-         HCJlo421+s7dg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oA7N9-004EHV-PT;
-        Sat, 09 Jul 2022 11:07:35 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lg5h245XKz4xXD;
+        Sat,  9 Jul 2022 20:18:10 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     linuxppc-dev@lists.ozlabs.org, benh@kernel.crashing.org,
+        mpe@ellerman.id.au,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        paulus@samba.org
+Cc:     Juerg Haefliger <juergh@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 21/21] Documentation: coresight: fix binding wildcards
-Date:   Sat,  9 Jul 2022 11:07:34 +0100
-Message-Id: <e8289cf7306a24c20d2f43251f6f7d0d74d7667b.1657360984.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657360984.git.mchehab@kernel.org>
-References: <cover.1657360984.git.mchehab@kernel.org>
+In-Reply-To: <20220520115431.147593-1-juergh@canonical.com>
+References: <20220520115431.147593-1-juergh@canonical.com>
+Subject: Re: [PATCH] KVM: PPC: Kconfig: Fix indentation
+Message-Id: <165736167288.12236.9958189155534556825.b4-ty@ellerman.id.au>
+Date:   Sat, 09 Jul 2022 20:14:32 +1000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,41 +45,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The changeset c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-fixed a Sphinx warning but introduced a new warning while building
-the docs:
-	Documentation/trace/coresight/coresight.rst: Documentation/devicetree/bindings/arm/arm,coresight-
+On Fri, 20 May 2022 13:54:31 +0200, Juerg Haefliger wrote:
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
+> violate these rules.
+> 
+> 
 
-As it basically broke the cross-reference breakage detector that
-runs during the Kernel build. Address it the proper way by marking
-the references to such documents as a code block. This should make
-Sphinx automarkup.py extension happy while allowing the script
-to check if the doc reference is pointing to the right place.
+Applied to powerpc/topic/ppc-kvm.
 
-Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+[1/1] KVM: PPC: Kconfig: Fix indentation
+      https://git.kernel.org/powerpc/c/81e9685dd41384a39adda823df8b4f6e16ec2898
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v3 00/21] at: https://lore.kernel.org/all/cover.1657360984.git.mchehab@kernel.org/
-
- Documentation/trace/coresight/coresight.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-index 4a71ea6cb390..826e59a698da 100644
---- a/Documentation/trace/coresight/coresight.rst
-+++ b/Documentation/trace/coresight/coresight.rst
-@@ -130,7 +130,7 @@ Misc:
- Device Tree Bindings
- --------------------
- 
--See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
-+See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
- 
- As of this writing drivers for ITM, STMs and CTIs are not provided but are
- expected to be added as the solution matures.
--- 
-2.36.1
-
+cheers

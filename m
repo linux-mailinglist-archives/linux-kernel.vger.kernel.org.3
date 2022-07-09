@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B662D56CB18
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB8356CB19
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 20:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiGIShM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 14:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S229564AbiGIShP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 14:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGIShL (ORCPT
+        with ESMTP id S229515AbiGIShL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 9 Jul 2022 14:37:11 -0400
 Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1F2E6BB
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 11:37:07 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 9058 invoked from network); 9 Jul 2022 20:37:03 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB52E6BD
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 11:37:10 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 11368 invoked from network); 9 Jul 2022 20:37:07 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1657391824; bh=PnTIgijObtdHBzPdGf97iNIAxypJwO/J5OJygIk/A+Q=;
+          t=1657391828; bh=9/lobc05iJLVKuQOLEHNyKmvwdtlHkHBYT8ylRLK7/8=;
           h=From:To:Cc:Subject;
-          b=M3xXvXPo44c/oTFtofd97vXupQxZZRnHZ1QXVOSPw4+yIaVOyozndF1N0qedu+hmX
-           iWYIpTCxTwdLyxWyxyXo8glXqq/SXci9daFK2ahe4hCDn9SitX/S1V2jzUdBdh2lJb
-           YcIJlSh1Z7Kc4K1csdNYZhmnvjQHx4D8GzINnbz4=
+          b=C6nQHHYfEUiIq6VK/cV2YsTXQ8na/t/Burko/i9sZtMjWGbquONRg4bIRX6LIIieE
+           5bYqagOlG4kCYrspI7mlVs9gAg06iJ9+F1FPzxNnxOfh7XuffBiW2NC1h5ELjhCUAr
+           3hQEHCak+3na03GsXT4GKdNzbVGLTJbYlb7e26hY=
 Received: from aafi210.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.138.210])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-kernel@vger.kernel.org>; 9 Jul 2022 20:37:03 +0200
+          for <linux-kernel@vger.kernel.org>; 9 Jul 2022 20:37:07 +0200
 From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 To:     linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
@@ -33,18 +33,22 @@ Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH v3 1/2] x86/rtc: rewrite mach_get_cmos_time to delete duplicated code
-Date:   Sat,  9 Jul 2022 20:36:49 +0200
-Message-Id: <20220709183650.74955-1-mat.jonczyk@o2.pl>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [PATCH v3 2/2] x86/rtc: rename mach_set_rtc_mmss
+Date:   Sat,  9 Jul 2022 20:36:50 +0200
+Message-Id: <20220709183650.74955-2-mat.jonczyk@o2.pl>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220709183650.74955-1-mat.jonczyk@o2.pl>
+References: <20220709183650.74955-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 9d5acd286c9464547322a3e133dbf717
+X-WP-MailID: c8561f07e3dc0770976453636e08b2c3
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [UWOE]                               
+X-WP-SPAM: NO 0000000 [QdM0]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -55,42 +59,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are functions in drivers/rtc/rtc-mc146818-lib.c that handle
-reading from / writing to the CMOS RTC clock. mach_get_cmos_time() in
-arch/x86/kernel/rtc.c did not use them and was mostly a duplicate of
-mc146818_get_time(). Modify mach_get_cmos_time() to use
-mc146818_get_time() and remove the duplicated code.
-
-mach_get_cmos_time() used a different algorithm than
-mc146818_get_time(), but these functions are equivalent. The major
-differences are:
-
-- mc146818_get_time() is better refined and handles various edge
-  conditions,
-
-- when the UIP ("Update in progress") bit of the RTC is set,
-  mach_get_cmos_time() was busy waiting with cpu_relax() while
-  mc146818_get_time() is using mdelay(1) in every loop iteration.
-  (However, there is my commit queued for Linux 5.20
-  in Mr Alexandre Belloni's tree to decrease this period to 100us:
-commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
-  ),
-
-- mach_get_cmos_time() assumed that the RTC year is >= 2000, which
-  may not be true on some old boxes with a dead battery,
-
-- mach_get_cmos_time() was holding the rtc_lock for a long time
-  and could hang if the RTC is broken or not present.
-
-The RTC writing counterpart, mach_set_rtc_mmss() is already using
-mc146818_get_time() from drivers/rtc. This was done in
-        commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
-It appears that mach_get_cmos_time() was simply forgotten.
-
-mach_get_cmos_time() is really used only in read_persistent_clock64(),
-which is called only in a few places in kernel/time/timekeeping.c .
-
-Tested on 3 computers.
+Once upon a time, before
+commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
+in 2013, the function set only the minute and seconds registers
+of the CMOS RTC. This is no longer true, so rename the function to
+mach_set_cmos_time.
 
 Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -99,123 +72,66 @@ Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: x86@kernel.org
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
 
 ---
+ arch/x86/include/asm/mc146818rtc.h | 2 +-
+ arch/x86/kernel/rtc.c              | 4 ++--
+ arch/x86/kernel/x86_init.c         | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-v2:
-  - use pr_err() in place of pr_err_ratelimited(). mach_get_cmos_time()
-    is not called frequently, so ratelimiting is not necessary.
-  - tweak the commit description.
 v3:
-  - update the commit description,
-  - drop the cover letter.
+  - add more people to the Cc list.
 
- arch/x86/kernel/rtc.c | 59 +++++--------------------------------------
- 1 file changed, 7 insertions(+), 52 deletions(-)
-
+diff --git a/arch/x86/include/asm/mc146818rtc.h b/arch/x86/include/asm/mc146818rtc.h
+index 97198001e567..6115bb3d5795 100644
+--- a/arch/x86/include/asm/mc146818rtc.h
++++ b/arch/x86/include/asm/mc146818rtc.h
+@@ -95,7 +95,7 @@ static inline unsigned char current_lock_cmos_reg(void)
+ unsigned char rtc_cmos_read(unsigned char addr);
+ void rtc_cmos_write(unsigned char val, unsigned char addr);
+ 
+-extern int mach_set_rtc_mmss(const struct timespec64 *now);
++extern int mach_set_cmos_time(const struct timespec64 *now);
+ extern void mach_get_cmos_time(struct timespec64 *now);
+ 
+ #define RTC_IRQ 8
 diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
-index 586f718b8e95..1cadc8a15267 100644
+index 1cadc8a15267..349046434513 100644
 --- a/arch/x86/kernel/rtc.c
 +++ b/arch/x86/kernel/rtc.c
-@@ -4,11 +4,8 @@
-  */
- #include <linux/platform_device.h>
- #include <linux/mc146818rtc.h>
--#include <linux/acpi.h>
--#include <linux/bcd.h>
- #include <linux/export.h>
- #include <linux/pnp.h>
--#include <linux/of.h>
- 
- #include <asm/vsyscall.h>
- #include <asm/x86_init.h>
-@@ -20,15 +17,12 @@
- /*
-  * This is a special lock that is owned by the CPU and holds the index
-  * register we are working with.  It is required for NMI access to the
-- * CMOS/RTC registers.  See include/asm-i386/mc146818rtc.h for details.
-+ * CMOS/RTC registers.  See arch/x86/include/asm/mc146818rtc.h for details.
-  */
- volatile unsigned long cmos_lock;
- EXPORT_SYMBOL(cmos_lock);
- #endif /* CONFIG_X86_32 */
- 
--/* For two digit years assume time is always after that */
--#define CMOS_YEARS_OFFS 2000
--
- DEFINE_SPINLOCK(rtc_lock);
+@@ -27,13 +27,13 @@ DEFINE_SPINLOCK(rtc_lock);
  EXPORT_SYMBOL(rtc_lock);
  
-@@ -62,8 +56,7 @@ int mach_set_rtc_mmss(const struct timespec64 *now)
- 
- void mach_get_cmos_time(struct timespec64 *now)
+ /*
+- * In order to set the CMOS clock precisely, set_rtc_mmss has to be
++ * In order to set the CMOS clock precisely, mach_set_cmos_time has to be
+  * called 500 ms after the second nowtime has started, because when
+  * nowtime is written into the registers of the CMOS clock, it will
+  * jump to the next second precisely 500 ms later. Check the Motorola
+  * MC146818A or Dallas DS12887 data sheet for details.
+  */
+-int mach_set_rtc_mmss(const struct timespec64 *now)
++int mach_set_cmos_time(const struct timespec64 *now)
  {
--	unsigned int status, year, mon, day, hour, min, sec, century = 0;
--	unsigned long flags;
-+	struct rtc_time tm;
- 
- 	/*
- 	 * If pm_trace abused the RTC as storage, set the timespec to 0,
-@@ -74,51 +67,13 @@ void mach_get_cmos_time(struct timespec64 *now)
- 		return;
- 	}
- 
--	spin_lock_irqsave(&rtc_lock, flags);
--
--	/*
--	 * If UIP is clear, then we have >= 244 microseconds before
--	 * RTC registers will be updated.  Spec sheet says that this
--	 * is the reliable way to read RTC - registers. If UIP is set
--	 * then the register access might be invalid.
--	 */
--	while ((CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP))
--		cpu_relax();
--
--	sec = CMOS_READ(RTC_SECONDS);
--	min = CMOS_READ(RTC_MINUTES);
--	hour = CMOS_READ(RTC_HOURS);
--	day = CMOS_READ(RTC_DAY_OF_MONTH);
--	mon = CMOS_READ(RTC_MONTH);
--	year = CMOS_READ(RTC_YEAR);
--
--#ifdef CONFIG_ACPI
--	if (acpi_gbl_FADT.header.revision >= FADT2_REVISION_ID &&
--	    acpi_gbl_FADT.century)
--		century = CMOS_READ(acpi_gbl_FADT.century);
--#endif
--
--	status = CMOS_READ(RTC_CONTROL);
--	WARN_ON_ONCE(RTC_ALWAYS_BCD && (status & RTC_DM_BINARY));
--
--	spin_unlock_irqrestore(&rtc_lock, flags);
--
--	if (RTC_ALWAYS_BCD || !(status & RTC_DM_BINARY)) {
--		sec = bcd2bin(sec);
--		min = bcd2bin(min);
--		hour = bcd2bin(hour);
--		day = bcd2bin(day);
--		mon = bcd2bin(mon);
--		year = bcd2bin(year);
-+	if (mc146818_get_time(&tm)) {
-+		pr_err("Unable to read current time from RTC\n");
-+		now->tv_sec = now->tv_nsec = 0;
-+		return;
- 	}
- 
--	if (century) {
--		century = bcd2bin(century);
--		year += century * 100;
--	} else
--		year += CMOS_YEARS_OFFS;
--
--	now->tv_sec = mktime64(year, mon, day, hour, min, sec);
-+	now->tv_sec = rtc_tm_to_time64(&tm);
- 	now->tv_nsec = 0;
- }
- 
+ 	unsigned long long nowtime = now->tv_sec;
+ 	struct rtc_time tm;
+diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+index e84ee5cdbd8c..57353519bc11 100644
+--- a/arch/x86/kernel/x86_init.c
++++ b/arch/x86/kernel/x86_init.c
+@@ -138,7 +138,7 @@ struct x86_platform_ops x86_platform __ro_after_init = {
+ 	.calibrate_cpu			= native_calibrate_cpu_early,
+ 	.calibrate_tsc			= native_calibrate_tsc,
+ 	.get_wallclock			= mach_get_cmos_time,
+-	.set_wallclock			= mach_set_rtc_mmss,
++	.set_wallclock			= mach_set_cmos_time,
+ 	.iommu_shutdown			= iommu_shutdown_noop,
+ 	.is_untracked_pat_range		= is_ISA_range,
+ 	.nmi_init			= default_nmi_init,
 -- 
 2.25.1
 

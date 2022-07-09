@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2085E56C777
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28B156C77A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 08:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiGIGID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 02:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S229522AbiGIGL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 02:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiGIGIC (ORCPT
+        with ESMTP id S229454AbiGIGLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 02:08:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE5614099;
-        Fri,  8 Jul 2022 23:08:01 -0700 (PDT)
+        Sat, 9 Jul 2022 02:11:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8904366AEF;
+        Fri,  8 Jul 2022 23:11:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26BF860C34;
-        Sat,  9 Jul 2022 06:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186A6C3411C;
-        Sat,  9 Jul 2022 06:07:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C224DCE2DB4;
+        Sat,  9 Jul 2022 06:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9BCFC3411C;
+        Sat,  9 Jul 2022 06:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657346880;
-        bh=vmb51TA7agNZ9Oxx2u8lZxkAmvViGJooTKdRirJS8UY=;
+        s=k20201202; t=1657347109;
+        bh=/ahQ1nH2C/pIVzBpq5RwmOzj0+TITAHKgJHk11EubCc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TKPBEYO1++gFz84IcM+gPuaixDVDAksUkdSSmYOICPc6V7bEN9BgK5aMiFtsOYCaI
-         h87WL0V9orAb3+Ytv9AWCE2GzxUVrD21zpGe58PeuWrg1A+cnQhN1K7g8MhD9uHIvC
-         9oi+h/rCco2X5XHkELQsbW4YHzfPyAuqFBN+FCqd47+YWpgfR7Arkk5AlHLT0o7gVL
-         NuRnjL6JCV8sDfihVGZr/8Z54UIipOhvn0CvGQQddarCAaG6DUYRmz33F8h+CYqDix
-         WeROnQe9bXVcsEFP4LXxMUyqM3wEPkI7LMx5IKCGy5pOGwfH5GXVxeWe19qaWzaL2x
-         omT4FbkLXJ+NQ==
-Date:   Sat, 9 Jul 2022 11:37:49 +0530
+        b=JE/6zsGUH7fXG9aGUwH1LUWn3+1OMcK7wCzm2tc4+J3YpPvikEsD30RhksL2DdfuG
+         DMEzqyRVMe2zbGpzrO6qalX0774p2aRojFmoplDT9jGieMdF/zkVYCN+Zs0J60T8TO
+         Z/OOJW5aRTorHoC6eaQGqzoxD/PI0lb4UM3ygse9ePGFxPqBHnJWx9z/Lhu5PIvVhB
+         j0pAbVsZTHDdn4g04pIRHrouGD+3wBSWCSWaOxIN2lhNDFBtl0M5Bu2YYb3f4KVWr4
+         9U+/kTgzUNkkEW1do/req0shZDmNsL8hZ6i+ndj1o/xUuGORSdDxDKl9DvLr4P6kZ1
+         b2doX0FvKJPnQ==
+Date:   Sat, 9 Jul 2022 11:41:39 +0530
 From:   Manivannan Sadhasivam <mani@kernel.org>
 To:     Bo Liu <liubo03@inspur.com>
-Cc:     mani@kernel.org, quic_hemantk@quicinc.com, mhi@lists.linux.dev,
+Cc:     quic_hemantk@quicinc.com, mhi@lists.linux.dev,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] bus: mhi: ep: Check dev_set_name() return value
-Message-ID: <20220709060749.GB5063@thinkpad>
+Message-ID: <20220709061139.GE5063@thinkpad>
 References: <20220708015948.4091-1-liubo03@inspur.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -60,7 +60,7 @@ On Thu, Jul 07, 2022 at 09:59:48PM -0400, Bo Liu wrote:
 > 
 > Signed-off-by: Bo Liu <liubo03@inspur.com>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Applied to mhi-next!
 
 Thanks,
 Mani

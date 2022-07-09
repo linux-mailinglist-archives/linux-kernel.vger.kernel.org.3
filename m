@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0119A56C72E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 06:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53A756C733
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 07:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiGIE6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 00:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
+        id S229503AbiGIFIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 01:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGIE60 (ORCPT
+        with ESMTP id S229459AbiGIFIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 00:58:26 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FA0140D5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 21:58:25 -0700 (PDT)
+        Sat, 9 Jul 2022 01:08:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD126419B7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 22:08:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657342705; x=1688878705;
+  t=1657343318; x=1688879318;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lPTPaQZLNZPArjlIMR5jDK+FGVRiuQGygDNlrhF2rfo=;
-  b=PZJAqogFNtKZozGZheP+qzFjvZYFOUXlS+ibEGd68DhtOpa1N7PoVymU
-   Xk2kw6b2xa3gqx9MUNwJSnzjSU+TPcJ1mSQzT5MgzFDsPjbG1Vp2HuA1+
-   Gk6OAMfvd5f3VafNTZ4vqgPXF436aQs3OPfy3koV04RTvznazGuEVK/Oc
-   ULim0U+7wPOg60TVdt2fAERFlS4CZFsLlV4Xpnzxheox8/ZDMPcpILJOf
-   Sl1K4RS+xmI7XLPKEMVMu0qpms+vaARpQkkZKm1FKS7g7y5uSZZVQBg8z
-   REejFYeBk+Yv645krmZnDkKgnvT8BuTsxMmpEL6KZBSrsCVaPRFWRxU4X
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="284430236"
+  bh=wtuOMyZOkzBCSsW8CQ0ER1Qwt39HNRSKhXgxugr0VEA=;
+  b=a56qK/g1NuPfy2Fw/Tb21INUru8CvXjATCkHMQYPZQu8DDkIY2NtrnGG
+   4mg02LGJLbqsNzcDFyQI4mZvIwjiznrKUNxqUaSWs6DwPRidAO/7pcNWU
+   7O8zgII93dIjUPCk8P8o5HUWU+OVDGuQbv1QU41QMZclvWfrIGOf4s/BG
+   g+Z5JHq5X5v36s766SXGEv3MSU9XFnNai7fBfczGDY6Qs2Zs7pKIZZh1p
+   Fsa551+M1XatGfnDwo17nS5ZwZFUYEo7jz7e2UyeD+RDUaEs1U/5GvhJV
+   C307MyZh861W6x8nCw5RhWzPQHlvgL8cV3NgTzqy5AuXP9fXjhDCpdwpK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="281961011"
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="284430236"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 21:58:25 -0700
+   d="scan'208";a="281961011"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 22:08:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="921215076"
+   d="scan'208";a="621471375"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jul 2022 21:58:24 -0700
+  by orsmga008.jf.intel.com with ESMTP; 08 Jul 2022 22:08:34 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oA2Xv-000OKp-Q1;
-        Sat, 09 Jul 2022 04:58:23 +0000
-Date:   Sat, 9 Jul 2022 12:57:59 +0800
+        id 1oA2hc-000OLG-1f;
+        Sat, 09 Jul 2022 05:08:24 +0000
+Date:   Sat, 9 Jul 2022 13:08:19 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [mcgrof-next:20220707-dm-zoned-npo2 2/13] block/blk-core.c:564:38:
- error: passing argument 1 of 'bdev_is_zone_start' from incompatible pointer
- type
-Message-ID: <202207091216.V26XwOPw-lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 54/61] ERROR:
+ modpost: "__tracepoint_netfs_dirty_inode" [fs/afs/kafs.ko] undefined!
+Message-ID: <202207091311.GTE1zoEm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,46 +63,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20220707-dm-zoned-npo2
-head:   3d1b6e41f76394610669e380da4f65bc5e7cf8ac
-commit: 74b3d453820c74ad03aefe4d9ec44c27f6bffe00 [2/13] block: allow blk-zoned devices to have non-power-of-2 zone size
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220709/202207091216.V26XwOPw-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   ce4670495468b797b0c5927fcb661bc0da48b9ab
+commit: cff18819f1fb4e28fe8691691de86e9c902abc47 [54/61] Fixes
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220709/202207091311.GTE1zoEm-lkp@intel.com/config)
 compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=74b3d453820c74ad03aefe4d9ec44c27f6bffe00
-        git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
-        git fetch --no-tags mcgrof-next 20220707-dm-zoned-npo2
-        git checkout 74b3d453820c74ad03aefe4d9ec44c27f6bffe00
+        # https://github.com/ammarfaizi2/linux-block/commit/cff18819f1fb4e28fe8691691de86e9c902abc47
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout cff18819f1fb4e28fe8691691de86e9c902abc47
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   block/blk-core.c: In function 'bio_sector_zone_start':
->> block/blk-core.c:564:38: error: passing argument 1 of 'bdev_is_zone_start' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     564 |         return bdev_is_zone_start(bio->bi_bdev, bio->bi_iter.bi_sector);
-         |                                   ~~~^~~~~~~~~
-         |                                      |
-         |                                      struct block_device *
-   In file included from block/blk-core.c:18:
-   include/linux/blkdev.h:772:55: note: expected 'struct gendisk *' but argument is of type 'struct block_device *'
-     772 | static inline bool bdev_is_zone_start(struct gendisk *disk, sector_t sec)
-         |                                       ~~~~~~~~~~~~~~~~^~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/bdev_is_zone_start +564 block/blk-core.c
-
-   561	
-   562	static inline bool bio_sector_zone_start(struct bio *bio)
-   563	{
- > 564		return bdev_is_zone_start(bio->bi_bdev, bio->bi_iter.bi_sector);
-   565	}
-   566	
+>> ERROR: modpost: "__SCT__tp_func_netfs_write_inode" [fs/afs/kafs.ko] undefined!
+>> ERROR: modpost: "__tracepoint_netfs_dirty_inode" [fs/afs/kafs.ko] undefined!
+>> ERROR: modpost: "__tracepoint_netfs_write_inode" [fs/afs/kafs.ko] undefined!
+>> ERROR: modpost: "__SCT__tp_func_netfs_dirty_inode" [fs/afs/kafs.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service

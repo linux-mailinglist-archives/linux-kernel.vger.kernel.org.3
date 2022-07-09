@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DBB56C575
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B03656C538
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 02:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiGHXsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Jul 2022 19:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S229524AbiGHX6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Jul 2022 19:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGHXsP (ORCPT
+        with ESMTP id S229493AbiGHX55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:48:15 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CDDA79F7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:48:13 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u13so176385lfn.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:48:13 -0700 (PDT)
+        Fri, 8 Jul 2022 19:57:57 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A42364E1E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Jul 2022 16:57:56 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so297699otk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Jul 2022 16:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pv/kMkRXLTmjNlh49xKQLUzHkabn6pqCOnhb5uu/n7E=;
-        b=Iqd/944B5JiBG7p6ksdmO0GUZ4qrnQMi/cOZtevlIaX7we0yVtFSiQV6u/gVu87PVu
-         iSdor1XOrotUAnhOBPJnkHwpepagsDEG7xfH1y7+7UwJnJHrhiBpn0rqcXVAv/btO3ko
-         t/fEV8xFM8pDS3IaDHC5dcc6c4kMMjBwu8a7Pk4HB0XtW03UwVqZ0acr6lq97X7/9MSn
-         OMtrHoVJgmuF8/yNZnpIA9Ko+0UDIRksYUoZE0w5bgsaI68L0hszdNPHfh2zTm+Ll9Vi
-         ycVv4QI8zAXSdOBrYxfw3A5x3VjJnvrw49gQM+Eh+dFXuNmCY8NK0u5F5M3HFGYNuyT9
-         eTbA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tWF/s9fPBWfw5t609Fn2UK+Vk7f88dQdzrSOQJuRbMo=;
+        b=sZlMvWRLQe30/XJ0aLol9/n5HlBPhw2IW0PLYT07CsN/xcCztxNCC87uQMOOnYXU9M
+         g36FZIriTtbmenTISxgRuqKawPOblsdV6Is5zNzLZ0Ucny9htBl9ljNDxKSev/1zv2Vg
+         kBgC3ZV2UMqY5EZIr+RSXX8OaqtjprKSrePRSlovdqXOIlEIlCAxtCYgSia2OukXmc9Y
+         x/GXyaDoO8GrcSTedfor1w3QXi6VFU0Y3xSNr/P8u7nnAsiJjB/CwhaGA9q9Dw0Pslc5
+         t62FZAD21Y5y+M+O912z0fCD0k+XE51+nSb5cW8B6f/Er3Hy4ivaaB1yMpoFo+ylNyoJ
+         9IMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pv/kMkRXLTmjNlh49xKQLUzHkabn6pqCOnhb5uu/n7E=;
-        b=ppcR65Tp2KNt5vrbsJwyPz22k0T5bOa88MY/9CZpr/HVWxosV6t+ylm7eky9BdYzkJ
-         4IK6udNnO/sKMF7UERW6aWWvKIhCfBXg/IU83olFogqX5snT8Ao2Ghnyn2sCVEyQBrzJ
-         KYz8Ysz0d2XMFnk6227La53qZzW6WPQbYcWHR8gTbFulhsa9kr+bPH4G3Jv63ZWWAL0k
-         zLulcfLAnz8JN+S+DDK27SOizpx/hZSmAWuP4FOyG0Bqc5vX7hrgSlouuopZTnsMQUxq
-         T8Cf8apYUagT8VRl/kIlsvZaF1hRY3gZwb/8VD4n12YUNQ8bW/IYfK14ryHofrh89yS1
-         jmHw==
-X-Gm-Message-State: AJIora+w3/c9Z7ERAdfZ/CeX/AhcZmysMdMjayT2Y9JLSSO45VKrd6DA
-        8fPpPllm4wn4FQgjAGZQ5rQdDYM0Ge2g0noFIr3EPA==
-X-Google-Smtp-Source: AGRyM1uoxri5xBzbkCOkKoBGRKW38ISN7unT41Wp5JJBP9Qk62V89Vj/Xf1lfVnuMPdipiZkscI6YtbzhbxPPQIRiaA=
-X-Received: by 2002:a05:6512:2623:b0:47d:ace7:c804 with SMTP id
- bt35-20020a056512262300b0047dace7c804mr3937905lfb.647.1657324091178; Fri, 08
- Jul 2022 16:48:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tWF/s9fPBWfw5t609Fn2UK+Vk7f88dQdzrSOQJuRbMo=;
+        b=Ljf04LdC2OaXkc7OTokCB3UIymKDwx87GSOyHB8lmDea0afWQ0U7zPu8pDcAteM5at
+         OOPNNC1Q6EWjmAQA+fbjh8wMJ5IB3U41k0z8O+OpPH1y2UbRVqo3hBqVfyI/b+Xp/SBH
+         Piv2ZVjNLv9s/emmwfQHczm9UzcAUAxts8Fo4rv75jJjmiHO7lV0Z5NXEaxIb2RJnPeh
+         hZbP8XY02mFkR6/7OFTmUmqpi+kxrCDZ7X2/slcgilcDg7DKKfa76n9a9Vkh4hzz3b0Q
+         7pF+PF8lGfBY6s/DeuCszBm9Tn/Tvug9IHzHBcgDEOEsMNXZRGlo6RV2Nra+H19x+lXz
+         rzJQ==
+X-Gm-Message-State: AJIora+fRMp6HKIpGcqK29rJJNF8yq9SZuZN7cSgPjsGdWCRT6SzP2S2
+        WF6DbAVX7uzjIot6xSv6iu2b5Q==
+X-Google-Smtp-Source: AGRyM1sayYZveNaBAdkzox5wgW0QyMHzCBPj+d8pjevlxGkJlR44N1/sjrM+bBqpGH8+0D35Q4Wqng==
+X-Received: by 2002:a05:6830:418c:b0:616:8635:4b26 with SMTP id r12-20020a056830418c00b0061686354b26mr2709612otu.12.1657324675653;
+        Fri, 08 Jul 2022 16:57:55 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id cm12-20020a056830650c00b0061c2edb5117sm176907otb.1.2022.07.08.16.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 16:57:55 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Bean Huo <beanhuo@micron.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yue Hu <huyue2@yulong.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: ufs: ufshcd: Drop loglevel of WriteBoost message
+Date:   Fri,  8 Jul 2022 17:00:27 -0700
+Message-Id: <20220709000027.3929970-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220708232653.556488-1-justinstitt@google.com>
-In-Reply-To: <20220708232653.556488-1-justinstitt@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 8 Jul 2022 16:47:59 -0700
-Message-ID: <CAKwvOdnhzwg0OswLc+RwgX0=Z4beF6EEO09w8Ezdhg-YyXQeJg@mail.gmail.com>
-Subject: Re: [PATCH] amd-xgbe: fix clang -Wformat warnings
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 4:27 PM Justin Stitt <justinstitt@google.com> wrote:
->
-> When building with Clang we encounter the following warning:
-> | drivers/net/ethernet/amd/xgbe/xgbe-dcb.c:234:42: error: format specifies
-> | type 'unsigned char' but the argument has type '__u16' (aka 'unsigned
-> | short') [-Werror,-Wformat] pfc->pfc_cap, pfc->pfc_en, pfc->mbc,
-> | pfc->delay);
->
-> pfc->pfc_cap , pfc->pfc_cn, pfc->mbc are all of type `u8` while pfc->delay is
-> of type `u16`. The correct format specifiers `%hh[u|x]` were used for
-> the first three but not for pfc->delay, which is causing the warning
-> above.
->
-> Variadic functions (printf-like) undergo default argument promotion.
-> Documentation/core-api/printk-formats.rst specifically recommends using
-> the promoted-to-type's format flag. In this case `%d` (or `%x` to
-> maintain hex representation) should be used since both u8's and u16's
-> are fully representable by an int.
->
-> Moreover, C11 6.3.1.1 states:
-> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
-> can represent all values of the original type ..., the value is
-> converted to an int; otherwise, it is converted to an unsigned int.
-> These are called the integer promotions.`
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Commit '3b5f3c0d0548 ("scsi: ufs: core: Tidy up WB configuration code")'
+changed the log level of the write boost enable/disable notification
+from debug to info, this results in a lot of noise in the kernel log
+during normal operation.
 
-Thanks for the patch, this fixes an instance of -Wformat I observe for
-x86_64 allmodconfig.  I thought you had already fixed this file up?
-https://lore.kernel.org/llvm/20220607191119.20686-1-jstitt007@gmail.com/
-which was merged. I'm guessing that was from a defconfig, while this
-was from an allmodconfig?
-Seems like there's a bunch of config ifdef'ery around the definition
-of netif_dbg.
+Drop it back to debug level to avoid this.
 
-Either way, thanks for the patches and
+Fixes: 3b5f3c0d0548 ("scsi: ufs: core: Tidy up WB configuration code")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/ufs/core/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
-> For clarification, the first three parameters given to netif_dbg did NOT
-> cause a -Wformat warning. I changed them simply to follow what the
-> standard and documentation recommend.
->
->  drivers/net/ethernet/amd/xgbe/xgbe-dcb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-> index 895d35639129..c68ace804e37 100644
-> --- a/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-> +++ b/drivers/net/ethernet/amd/xgbe/xgbe-dcb.c
-> @@ -230,7 +230,7 @@ static int xgbe_dcb_ieee_setpfc(struct net_device *netdev,
->         struct xgbe_prv_data *pdata = netdev_priv(netdev);
->
->         netif_dbg(pdata, drv, netdev,
-> -                 "cap=%hhu, en=%#hhx, mbc=%hhu, delay=%hhu\n",
-> +                 "cap=%d, en=%#x, mbc=%d, delay=%d\n",
->                   pfc->pfc_cap, pfc->pfc_en, pfc->mbc, pfc->delay);
->
->         /* Check PFC for supported number of traffic classes */
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
-
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 22042ee3af14..be65d5bf123e 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -5747,7 +5747,7 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ 	}
+ 
+ 	hba->dev_info.wb_enabled = enable;
+-	dev_info(hba->dev, "%s Write Booster %s\n",
++	dev_dbg(hba->dev, "%s Write Booster %s\n",
+ 			__func__, enable ? "enabled" : "disabled");
+ 
+ 	return ret;
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.1
+

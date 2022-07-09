@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10AA56C908
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E85E56C90A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Jul 2022 12:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiGIKfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 06:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S229561AbiGIKly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 06:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiGIKfC (ORCPT
+        with ESMTP id S229454AbiGIKlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 06:35:02 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AA265580
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 03:35:01 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id x22so660819qkf.13
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 03:35:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gYYq2mWCFBLoiPh2Ay9Qcz2ku4io1G7S8HaCDNUt9gI=;
-        b=kQPcxFY4lfjfImMvKPjTX9byhy5bzB7Rbp8zOVkiaCkI5jHM8lWBDixXsM8otdQGa0
-         C4ict/2SN3vlG6EC4kekhqUi17+g7Jaf5XdtPP8kwYEt2tc/Tcy73IuMvfwzwDPIq3Io
-         IwH+HNcga7pnl/ijhuOu+lMDoSoVgd9QwSIeox+HN6+520Q6I1I7/EnEq8kk249kMn6m
-         fX+EJKBGjkJDNG1G1W3MtL7xHUMD33MNxmYOk55pxCaEMUEDI9iX0+w8YuRX+A1dGKyd
-         hX6gBtHjgi7lSsu0Svu+oCrKW7xJ1sIMsx8z6iqR7elTIYIEfeRkJBmqwSSsztL1lLUr
-         Y+Yw==
-X-Gm-Message-State: AJIora/15HYNXM7NafzXwVeXRzbj0FJr70+WR4ecfEU2HgnqFi7abhm1
-        vuLjlJHCaHtuWiTf/6cUVq2udd7Yg39JDQ==
-X-Google-Smtp-Source: AGRyM1tIYfnqebDUoqxtiCXc15BSt75+gZngpmn/+fHFdlkionLvMg0IKUogM19A12Yb4Cg6EguiFQ==
-X-Received: by 2002:a37:a154:0:b0:6b5:74ef:5b36 with SMTP id k81-20020a37a154000000b006b574ef5b36mr721779qke.168.1657362900376;
-        Sat, 09 Jul 2022 03:35:00 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id g2-20020ac84b62000000b0031eae039188sm703271qts.90.2022.07.09.03.34.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Jul 2022 03:34:57 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 75so248366ybf.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 03:34:56 -0700 (PDT)
-X-Received: by 2002:a05:6902:1246:b0:66e:ea31:8d05 with SMTP id
- t6-20020a056902124600b0066eea318d05mr2374600ybu.89.1657362896428; Sat, 09 Jul
- 2022 03:34:56 -0700 (PDT)
+        Sat, 9 Jul 2022 06:41:53 -0400
+Received: from email.cn (m218-171.88.com [110.43.218.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1092420BC3;
+        Sat,  9 Jul 2022 03:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cn;
+        s=dkim; h=Date:From:To; bh=r3m94tTtK7I6eGh7AMqOljittZ51GScc3vlJq
+        wvf8Ig=; b=BoVkBifoaoOo8xlUAWrrTUjhlIPNLKOGdcP/PHioDdwOhD0Fz2Va2
+        f+NRhCMVYemzYGxnO8W2CXsNnDcgyMOEySJa7uLn264E7BARWs6fRlWl3Z17TWfw
+        kthkZo8lCRk8hwI4ZXeZpJJ9mOD/goabziXlhk0adA8qZWUxOPw3nM=
+Received: from [127.0.0.1] (unknown [36.63.165.10])
+        by v_coremail2-frontend-1 (Coremail) with SMTP id LCKnCgC3Z2RjW8liJQUiAA--.22530S2;
+        Sat, 09 Jul 2022 18:41:41 +0800 (CST)
+Date:   Sat, 09 Jul 2022 18:41:38 +0800
+From:   Wu XiangCheng <bobwxc@email.cn>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alex Shi <alexs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_04/21=5D_docs=3A_zh=5FCN=3A_page=5F?= =?US-ASCII?Q?migration=3A_fix_reference_to_mm_index=2Erst?=
+In-Reply-To: <b263eef6480040befa582e8e00162e6fb4407853.1657360984.git.mchehab@kernel.org>
+References: <cover.1657360984.git.mchehab@kernel.org> <b263eef6480040befa582e8e00162e6fb4407853.1657360984.git.mchehab@kernel.org>
+Message-ID: <AA3C4F86-E1AE-4799-BC71-28B22B12A388@email.cn>
 MIME-Version: 1.0
-References: <20220531174514.1586248-1-laurent@vivier.eu> <CAMuHMdUbUZU3YA6nDC_LDAfUYQVmHTuCzrCfxDqwF=ZZyR5fqw@mail.gmail.com>
- <YseHZq/u9OkVltxW@zx2c4.com> <CAMuHMdX7JPKJbth9xw4MbPbi29fgQNSva0r394JX-etEZiUJ_A@mail.gmail.com>
- <YsjHiZeUxo7RXxAu@zx2c4.com>
-In-Reply-To: <YsjHiZeUxo7RXxAu@zx2c4.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 9 Jul 2022 12:34:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXLzAzb+GBXgU_+aGwcVd0U5ZDjoakopW62brpYmTEm3g@mail.gmail.com>
-Message-ID: <CAMuHMdXLzAzb+GBXgU_+aGwcVd0U5ZDjoakopW62brpYmTEm3g@mail.gmail.com>
-Subject: Re: [PATCH] m68k: virt: Kconfig minor fixes
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID: LCKnCgC3Z2RjW8liJQUiAA--.22530S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrKw1fArW7Ar4xJr45Cr4Uurg_yoW8Jr18pF
+        1vkr4Iga9Iyw1rGr48Wr42k3WUA3WxGa13Gr1DtwnYqFZ8Aw4vkryagw4qg3Z7Xry09FWU
+        WFs3Kryjg3yjywUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUqqb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+        cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+        v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4
+        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26F4U
+        Jr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCF04
+        k20xvE74AGY7Cv6cx26F4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
+        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+        xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+        1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUU0tC7UU
+        UUU==
+X-Originating-IP: [36.63.165.10]
+X-CM-SenderInfo: pere453f6hztlloou0/
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
 
-On Sat, Jul 9, 2022 at 2:11 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> On Fri, Jul 08, 2022 at 09:24:59AM +0200, Geert Uytterhoeven wrote:
-> > On Fri, Jul 8, 2022 at 3:25 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > On Thu, Jun 02, 2022 at 09:13:14AM +0200, Geert Uytterhoeven wrote:
-> > > > On Tue, May 31, 2022 at 7:45 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> > > > > Select VIRTIO_MENU as it is needed by VIRTIO_MMIO.
-> > > > >
-> > > > > Add an ending period at the end the virt machine help message.
-> > > > >
-> > > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> > > >
-> > > > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > i.e. will queue in the m68k for-v5.20 branch.
-> > >
-> > > Shouldn't this fix make it for 5.19? It causes Kconfig warnings during
-> > > builds. So this seems like a ordinary mid-cycle bug that can be fixed.
-> > >
-> > > For example, if you ctrl+f for "unmet direct" in this log, you'll see
-> > > this splat in the wireguard CI:
-> > > https://build.wireguard.com/random/108f4fea7b6053dfd09039af74c0ac0c32c956be/m68k.log
-> >
-> > These are merely configuration warnings, there is no build or runtime
-> > failure.
-> > I reverted this patch, disabled CONFIG_VIRTIO_MENU (which BTW defaults
-> > to y), built and booted a kernel fine, and could login on the console.
-> >
-> > So IMHO it can wait.
+
+=E4=BA=8E 2022=E5=B9=B47=E6=9C=889=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=886:=
+07:17, Mauro Carvalho Chehab <mchehab@kernel=2Eorg> =E5=86=99=E5=88=B0:
+>This got renamed, so we need to also rename at page_migration=2Erst=2E
 >
-> Okay, no problem. I suppose 5.19 isn't likely to be an LTS anyway.
+>Fixes: ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
+>Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel=2Eorg>
 
-I expect this to be auto-backported to stable 5.18.x and 5.19.x anyway.
+Acked-by: Wu XiangCheng <bobwxc@email=2Ecn>
 
-Gr{oetje,eeting}s,
+Thanks,
+Wu
 
-                        Geert
+>---
+>
+>To avoid mailbombing on a large number of people, only mailing lists were=
+ C/C on the cover=2E
+>See [PATCH v3 00/21] at: https://lore=2Ekernel=2Eorg/all/cover=2E16573609=
+84=2Egit=2Emchehab@kernel=2Eorg/
+>
+> Documentation/translations/zh_CN/mm/page_migration=2Erst | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/Documentation/translations/zh_CN/mm/page_migration=2Erst b/D=
+ocumentation/translations/zh_CN/mm/page_migration=2Erst
+>index 566880a41ea0=2E=2Eea9647d060fb 100644
+>--- a/Documentation/translations/zh_CN/mm/page_migration=2Erst
+>+++ b/Documentation/translations/zh_CN/mm/page_migration=2Erst
+>@@ -1,6 +1,6 @@
+> =2E=2E include:: =2E=2E/disclaimer-zh_CN=2Erst
+>=20
+>-:Original: Documentation/vm/index=2Erst
+>+:Original: Documentation/mm/index=2Erst
+>=20
+> :=E7=BF=BB=E8=AF=91:
+>=20
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,183 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D862D56CE1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBF256CE23
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 11:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiGJI4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 04:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S229664AbiGJJAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 05:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiGJIz7 (ORCPT
+        with ESMTP id S229495AbiGJJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 04:55:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B21901F
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 01:55:57 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 08:55:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657443356;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TU6/Bu1V1S4/6yvxMkEVbW5OTfcRXr5oxRrBsJWkqW4=;
-        b=iNwBpvVxBATeNIUk97wpeQIoLimQ/2CE3H4Q0CfpTqiCtvemB8t+kcxDZOgN4Y/OzUgxgW
-        GixiEBXiSZ8ptM3ioPTf4xInRZqgkuYyQVPdd/LEJVy1JlEqNc5koWBxzii6DtnEaP8mUf
-        3vDvP6fmtFvk+YvhPUzNTAJHQXQGSr9BfXNU0gjyDNR9CAzEBf2InteISo+Y6WLxgq/q/j
-        yNZNbykJCQ2/CfCvFoKcLLx3rqDQ0qBBV9roWusvO4NG21D6r35KUCb660S+RlRQwA3Az8
-        LARBGllojbdxUbOlw8WIJDGTY4zR8q5Uxhyw/Opsur5BrDn3wr2Bg8pFKVvRUQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657443356;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TU6/Bu1V1S4/6yvxMkEVbW5OTfcRXr5oxRrBsJWkqW4=;
-        b=VtWgUWL9h79wN54Zo+5oc/XmmVPTpqtpt6gEExjkA3OBp+tCiSs9mwXDwIB9jkR7ItPOXM
-        Y27GNmMawfosL0Bg==
-From:   "irqchip-bot for Samuel Holland" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/sifive-plic: Make better use of
- the effective affinity mask
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220701202440.59059-2-samuel@sholland.org>
-References: <20220701202440.59059-2-samuel@sholland.org>
+        Sun, 10 Jul 2022 05:00:17 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BEA11A18;
+        Sun, 10 Jul 2022 02:00:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A72D55C00D5;
+        Sun, 10 Jul 2022 05:00:16 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sun, 10 Jul 2022 05:00:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657443616; x=1657530016; bh=FuH+7xDCBPPGGPgblHUmZHZZT8Lo
+        ZV54xq/hlaP9zuk=; b=ZwFdihFDwFWT52Z+xMrCwILk2r9H5a1IF+CrInbmw4uv
+        otrpDIsjKctIa1zFFfPJOAgbf+2a3Fq/GDePfAryXvPsezoS5mpkf6Yea8b+NBYQ
+        4XoZ1bUor/6r/6DZa/SK+JW3O386fSdfqiE8XLtCdts8m1yQbhgAHdZqTUwJHYSt
+        rGhkNk6of8466FXBrYUl/r1A8ITDrLcG2mlm5Em6LzWGq5H9dcTHXmlcQn9iWm5f
+        A8LoVgQAJyFTuzv/JPcOwe4puFlGtVplQ1kEiGoviKp1WRxO5liGIHrMReqpN+rK
+        k2Xhq3DSPJgKRUZr8oiIp2mDaRIZ9JAGSzDT8Rt7lQ==
+X-ME-Sender: <xms:IJXKYkr03nXPzgjWA50z4pescZ3eQGf9iPP7enI1ZGlZMqYOAF0ZvA>
+    <xme:IJXKYqqbliegcjRfDjzNaQUSwx-xnMSwM_VA4EUyw43Qmwi6583saYrDdzmhm-Nq6
+    yD3HlmAgghJCSU>
+X-ME-Received: <xmr:IJXKYpNbEw9w4NpVITrw8aa9Wix1IsQsh-2MSjOMyXPYGYpBonMDKLuvjbwM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejuddguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihgu
+    ohhstghhrdhorhhgqeenucggtffrrghtthgvrhhnpedvudefveekheeugeeftddvveefgf
+    duieefudeifefgleekheegleegjeejgeeghfenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:IJXKYr576_kv1WzU1ih1AAhkmWVcYvVyZXNDqeVEnWxn44hdEKNAFA>
+    <xmx:IJXKYj4o3A0uOxIWxpQM6jFpW06codvyAILFEsj3Av09CkCOE95ZVQ>
+    <xmx:IJXKYrhy8xA2IBZUoeqcH2jTabPj6K3gD4xKnMSNoSnBxOiaquAMaw>
+    <xmx:IJXKYqKc2dOhvO2s6mOKnCK4tycYj9diymruj91pTHfGMS0GU0nraw>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 10 Jul 2022 05:00:15 -0400 (EDT)
+Date:   Sun, 10 Jul 2022 12:00:13 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>, vikas.gupta@broadcom.com
+Cc:     jiri@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, stephen@networkplumber.org,
+        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v2 1/3] devlink: introduce framework for
+ selftests
+Message-ID: <YsqVHWhNLOP5qKlk@shredder>
+References: <20220628164241.44360-1-vikas.gupta@broadcom.com>
+ <20220707182950.29348-1-vikas.gupta@broadcom.com>
+ <20220707182950.29348-2-vikas.gupta@broadcom.com>
+ <20220707182022.78d750a7@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165744335515.15455.17575115041613134708.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707182022.78d750a7@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Thu, Jul 07, 2022 at 06:20:22PM -0700, Jakub Kicinski wrote:
+> On Thu,  7 Jul 2022 23:59:48 +0530 Vikas Gupta wrote:
+> >  static const struct genl_small_ops devlink_nl_ops[] = {
+> > @@ -9361,6 +9493,18 @@ static const struct genl_small_ops devlink_nl_ops[] = {
+> >  		.doit = devlink_nl_cmd_trap_policer_set_doit,
+> >  		.flags = GENL_ADMIN_PERM,
+> >  	},
+> > +	{
+> > +		.cmd = DEVLINK_CMD_SELFTESTS_SHOW,
+> > +		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+> 
+> I think we can validate strict for new commands, so no validation flags
+> needed.
+> 
+> > +		.doit = devlink_nl_cmd_selftests_show,
+> 
+> What about dump? Listing all tests on all devices?
+> 
+> > +		.flags = GENL_ADMIN_PERM,
 
-Commit-ID:     de078949218242d57f791b63fac87cdb09cb0424
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/de078949218242d57f791b63fac87cdb09cb0424
-Author:        Samuel Holland <samuel@sholland.org>
-AuthorDate:    Fri, 01 Jul 2022 15:24:39 -05:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sun, 10 Jul 2022 09:50:04 +01:00
+Related to Jakub's question, is there a reason that the show command
+requires 'GENL_ADMIN_PERM' ?
 
-irqchip/sifive-plic: Make better use of the effective affinity mask
-
-The PLIC driver already updates the effective affinity mask in its
-.irq_set_affinity callback. Take advantage of that information to only
-touch bits (and take spinlocks) for the specific relevant hart contexts.
-
-First, make sure the effective affinity mask is set before IRQ startup.
-
-Then, since this mask already takes priv->lmask into account, checking
-that mask later is no longer needed (and handler->present is equivalent
-to the bit being set in priv->lmask).
-
-Finally, when (un)masking or changing affinity, only clear/set the
-enable bits in the specific old/new context(s). The cpumask operations
-in plic_irq_unmask() are not needed because they duplicate the code in
-plic_set_affinity().
-
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220701202440.59059-2-samuel@sholland.org
----
- drivers/irqchip/Kconfig           |  1 +
- drivers/irqchip/irq-sifive-plic.c | 27 +++++++++------------------
- 2 files changed, 10 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 462adac..ea7b748 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -531,6 +531,7 @@ config SIFIVE_PLIC
- 	bool "SiFive Platform-Level Interrupt Controller"
- 	depends on RISCV
- 	select IRQ_DOMAIN_HIERARCHY
-+	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
- 	help
- 	   This enables support for the PLIC chip found in SiFive (and
- 	   potentially other) RISC-V systems.  The PLIC controls devices
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index b3a36dc..46595e6 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -114,31 +114,18 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
- 	for_each_cpu(cpu, mask) {
- 		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
- 
--		if (handler->present &&
--		    cpumask_test_cpu(cpu, &handler->priv->lmask))
--			plic_toggle(handler, d->hwirq, enable);
-+		plic_toggle(handler, d->hwirq, enable);
- 	}
- }
- 
- static void plic_irq_unmask(struct irq_data *d)
- {
--	struct cpumask amask;
--	unsigned int cpu;
--	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
--
--	cpumask_and(&amask, &priv->lmask, cpu_online_mask);
--	cpu = cpumask_any_and(irq_data_get_affinity_mask(d),
--					   &amask);
--	if (WARN_ON_ONCE(cpu >= nr_cpu_ids))
--		return;
--	plic_irq_toggle(cpumask_of(cpu), d, 1);
-+	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 1);
- }
- 
- static void plic_irq_mask(struct irq_data *d)
- {
--	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
--
--	plic_irq_toggle(&priv->lmask, d, 0);
-+	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 0);
- }
- 
- #ifdef CONFIG_SMP
-@@ -159,11 +146,13 @@ static int plic_set_affinity(struct irq_data *d,
- 	if (cpu >= nr_cpu_ids)
- 		return -EINVAL;
- 
--	plic_irq_toggle(&priv->lmask, d, 0);
--	plic_irq_toggle(cpumask_of(cpu), d, !irqd_irq_masked(d));
-+	plic_irq_mask(d);
- 
- 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
- 
-+	if (!irqd_irq_masked(d))
-+		plic_irq_unmask(d);
-+
- 	return IRQ_SET_MASK_OK_DONE;
- }
- #endif
-@@ -190,6 +179,7 @@ static struct irq_chip plic_edge_chip = {
- 	.irq_set_affinity = plic_set_affinity,
- #endif
- 	.irq_set_type	= plic_irq_set_type,
-+	.flags		= IRQCHIP_AFFINITY_PRE_STARTUP,
- };
- 
- static struct irq_chip plic_chip = {
-@@ -201,6 +191,7 @@ static struct irq_chip plic_chip = {
- 	.irq_set_affinity = plic_set_affinity,
- #endif
- 	.irq_set_type	= plic_irq_set_type,
-+	.flags		= IRQCHIP_AFFINITY_PRE_STARTUP,
- };
- 
- static int plic_irq_set_type(struct irq_data *d, unsigned int type)
+> > +	},
+> > +	{
+> > +		.cmd = DEVLINK_CMD_SELFTESTS_RUN,
+> > +		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+> > +		.doit = devlink_nl_cmd_selftests_run,
+> > +		.flags = GENL_ADMIN_PERM,
+> > +	},
+> >  };
+> >  
+> >  static struct genl_family devlink_nl_family __ro_after_init = {
+> 

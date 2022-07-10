@@ -2,74 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EB756CC6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4641D56CC73
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiGJC1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 22:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S229607AbiGJCjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 22:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiGJC1l (ORCPT
+        with ESMTP id S229561AbiGJCjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 22:27:41 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EE8275FC
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 19:27:39 -0700 (PDT)
-Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26A2Rc5T088850;
-        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
- Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26A2Rc4F088845
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 10 Jul 2022 11:27:38 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1fa33281-7671-d9af-8155-daf0558b56f1@I-love.SAKURA.ne.jp>
-Date:   Sun, 10 Jul 2022 11:27:34 +0900
+        Sat, 9 Jul 2022 22:39:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CB612764;
+        Sat,  9 Jul 2022 19:39:43 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LgWPf57vszhYsn;
+        Sun, 10 Jul 2022 10:37:10 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 10 Jul 2022 10:39:38 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 10 Jul 2022 10:39:37 +0800
+Subject: Re: [PATCH RESEND v6 0/8] bugfix and cleanup for blk-throttle
+To:     Yu Kuai <yukuai1@huaweicloud.com>, <tj@kernel.org>,
+        <mkoutny@suse.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <a146b8ff-4287-44b7-00b2-74681963ac49@huawei.com>
+Date:   Sun, 10 Jul 2022 10:39:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] char: misc: make misc_open() and misc_register() killable
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <YsL5pUuydMWJ9dSQ@kroah.com>
- <617f64e3-74c8-f98b-3430-bd476867e483@I-love.SAKURA.ne.jp>
- <5665ccb2-b92b-9e1f-8bb5-a950986450ec@I-love.SAKURA.ne.jp>
- <YsRHwy6+5gask+KT@kroah.com>
- <064bbe2a-c18e-203e-9e01-b32fe9baa390@I-love.SAKURA.ne.jp>
- <7ddb25ff-60e5-75be-8080-2a7465cca68c@I-love.SAKURA.ne.jp>
- <YsUtBERm94k/iZTy@kroah.com>
- <a6d98824-56c8-6d92-bb1b-eb065b57cb81@I-love.SAKURA.ne.jp>
- <815866b5-842e-4829-5ed8-26a5f1e856a4@suse.com>
- <22c61a75-8140-c62d-ffe0-efd6e9fa38ee@I-love.SAKURA.ne.jp>
- <YsgzHc54onQ1DeFc@kroah.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YsgzHc54onQ1DeFc@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220701093441.885741-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/08 22:37, Greg KH wrote:
-> Can you make this a patch series, it's hard to tease out what the
-> different things are attempting to do here :(
+Hi!
 
-I see. Posted v2 at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
+ÔÚ 2022/07/01 17:34, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Resend v5 by a new mail address(huaweicloud.com) because old
+> address(huawei.com)has some problem that emails can end up in spam.
+> Please let me know if anyone still see this patchset end up in spam.
+> 
+> Changes in v6:
+>   - rename parameter in patch 3
+>   - add comments and reviewed tag for patch 4
+> Changes in v5:
+>   - add comments in patch 4
+>   - clear bytes/io_skipped in throtl_start_new_slice_with_credit() in
+>   patch 4
+>   - and cleanup patches 5-8
+> Changes in v4:
+>   - add reviewed-by tag for patch 1
+>   - add patch 2,3
+>   - use a different way to fix io hung in patch 4
+> Changes in v3:
+>   - fix a check in patch 1
+>   - fix link err in patch 2 on 32-bit platform
+>   - handle overflow in patch 2
+> Changes in v2:
+>   - use a new solution suggested by Ming
+>   - change the title of patch 1
+>   - add patch 2
+> 
+> Patch 1 fix that blk-throttle can't work if multiple bios are throttle,
+> Patch 2 fix overflow while calculating wait time
+> Patch 3,4 fix io hung due to configuration updates.
+> Patch 5-8 are cleanup patches, there are no functional changes, just
+> some places that I think can be optimized during code review.
+
+Jens and Michal,
+
+Can you receive this patchset normally(not end up in spam)?
+
+If so, Tejun, can you take a look? This patchset do fix some problems in
+blk-throttle.
+
+BTW, Michal and Ming, it'll be great if you can take a look at other
+patches as well.
+
+Thansk,
+Kuai
+> 
+> Previous version:
+> v1: https://lore.kernel.org/all/20220517134909.2910251-1-yukuai3@huawei.com/
+> v2: https://lore.kernel.org/all/20220518072751.1188163-1-yukuai3@huawei.com/
+> v3: https://lore.kernel.org/all/20220519085811.879097-1-yukuai3@huawei.com/
+> v4: https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
+> v5: https://lore.kernel.org/all/20220528064330.3471000-1-yukuai3@huawei.com/
+> 
+> Yu Kuai (8):
+>    blk-throttle: fix that io throttle can only work for single bio
+>    blk-throttle: prevent overflow while calculating wait time
+>    blk-throttle: factor out code to calculate ios/bytes_allowed
+>    blk-throttle: fix io hung due to config updates
+>    blk-throttle: use 'READ/WRITE' instead of '0/1'
+>    blk-throttle: calling throtl_dequeue/enqueue_tg in pairs
+>    blk-throttle: cleanup tg_update_disptime()
+>    blk-throttle: clean up flag 'THROTL_TG_PENDING'
+> 
+>   block/blk-throttle.c | 168 +++++++++++++++++++++++++++++--------------
+>   block/blk-throttle.h |  16 +++--
+>   2 files changed, 128 insertions(+), 56 deletions(-)
+> 

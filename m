@@ -2,194 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5A756CE92
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEBF56CE9B
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiGJKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 06:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
+        id S229570AbiGJKny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 06:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJKa3 (ORCPT
+        with ESMTP id S229491AbiGJKnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 06:30:29 -0400
-Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5048AE014
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:30:25 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [124.236.130.231])
-        by mail-app3 (Coremail) with SMTP id cC_KCgCn_g0qqspieOgzAA--.17083S2;
-        Sun, 10 Jul 2022 18:30:10 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-staging@lists.linux.dev, gregkh@linuxfoundation.org
-Cc:     davem@davemloft.net, alexander.deucher@amd.com, broonie@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH v2 RESEND] staging: rtl8192u: Fix sleep in atomic context bug in dm_fsync_timer_callback
-Date:   Sun, 10 Jul 2022 18:30:02 +0800
-Message-Id: <20220710103002.63283-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgCn_g0qqspieOgzAA--.17083S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKF15Wr15trykGw1fAry5urg_yoW7Kry3p3
-        ya9w1xAr4UZF4jk3WDAa1DZF1rK3ykGas3G3WkJw4FvrnavF1DXa4vyryUJFW5XrZ09w13
-        Z348ZF43u3WDKr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwHAVZdtamueQABsJ
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 10 Jul 2022 06:43:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C588C1033
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657449830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sE852ravTvVsPO18Sdl2baOG3S42zcZNkqm0cGHZglM=;
+        b=HbNfgrKtjFGEswdcw55yj0KNK2qvUesoMr45HZy10B91VcPlUIo0EIvDQpF+DBe9J1cHhU
+        2zLqNH0x+6kxCa/kKOYwV0Wy5Ks4U1P+BfhtVhIRhyt9eEaEXk0faDcZ4ZLUKVhp4GQMpB
+        AvGuxcZwjjy/X2ZbLJQ57eRUzf63QvU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-HkjtQ0zcPx69sVE7rPWjLA-1; Sun, 10 Jul 2022 06:43:49 -0400
+X-MC-Unique: HkjtQ0zcPx69sVE7rPWjLA-1
+Received: by mail-ed1-f71.google.com with SMTP id h17-20020a056402281100b0043aa5c0493dso2433576ede.16
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sE852ravTvVsPO18Sdl2baOG3S42zcZNkqm0cGHZglM=;
+        b=yoFOOQXBI9+fOIcSu2gp4EX8ej/H81oCLAEiTFa0U/+1Oq2f6YyHSWEmggZQt+oDxS
+         ff4ni7g+kAU2R29VtKCNVv8hEsxSPjdfatw9RDeBkv/P5UyGt41G/JHFPSRgwgrTgoMg
+         7O1MGNE6Dw6SbbNMjN6E3LMksqd+jO6A3YLTctpcGD/YL42yDvHIxVCVUSe2dUSsaEP3
+         FPQ43x4ylf0NcOgKj1Tl8ZR2RBrbkXn9OOHPUUFPBdoeBXN1WvPXKAdyKMyXquvZS5mZ
+         Zcz5jBfKWRFlPmcaNs5hvdfv7iolTbiE2fempdrb9LLr0dmkmPYEZWLyprCAlGJyv0eD
+         uALg==
+X-Gm-Message-State: AJIora8a7n6/o6IA8ypRve2UIJdW9rLCIsI8fzVZcLK7ycEYjxa4mQ7h
+        L8ck2VZ5iUjjgVP3iiYTpFGfPWN1ScCi8QrKol/cwHIXGuy7yj4JuUAITFBQj5r09cqHNp54Yeg
+        jitMEB6AWB5LlZ1S+eR7ZFghB
+X-Received: by 2002:a17:906:106:b0:715:7cdf:400f with SMTP id 6-20020a170906010600b007157cdf400fmr13258587eje.1.1657449827530;
+        Sun, 10 Jul 2022 03:43:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tOUSITMELdjSeJP9iBLs0F347SSLFLqXqHZEGAsoNzaXrTDc+RCSt9SVkaJYi8qOot4OaaYQ==
+X-Received: by 2002:a17:906:106:b0:715:7cdf:400f with SMTP id 6-20020a170906010600b007157cdf400fmr13258569eje.1.1657449827331;
+        Sun, 10 Jul 2022 03:43:47 -0700 (PDT)
+Received: from localhost ([185.140.112.229])
+        by smtp.gmail.com with ESMTPSA id q16-20020a50aa90000000b0043aba618bf6sm2525690edc.80.2022.07.10.03.43.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 03:43:46 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 12:43:44 +0200
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     ondrej.valousek.xm@renesas.com,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bfields@fieldses.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [GIT PULL] nfsd changes for 5.18
+Message-ID: <20220710124344.36dfd857@redhat.com>
+In-Reply-To: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
+References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are sleep in atomic context bugs when dm_fsync_timer_callback is
-executing. The root cause is that the memory allocation functions with
-GFP_KERNEL or GFP_NOIO parameters are called in dm_fsync_timer_callback
-which is a timer handler. The call paths that could trigger bugs are
-shown below:
+On Mon, 21 Mar 2022 14:12:31 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-    (interrupt context)
-dm_fsync_timer_callback
-  write_nic_byte
-    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
-    usb_control_msg
-      kmalloc(.., GFP_NOIO); //may sleep
-  write_nic_dword
-    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
-    usb_control_msg
-      kmalloc(.., GFP_NOIO); //may sleep
+couldn't find offender patch on ML so replying here
 
-This patch uses delayed work to replace timer and moves the operations
-that may sleep into the delayed work in order to mitigate bugs.
+> Hi Linus-
+> 
+> The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
+> 
+>   Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-5.18
+> 
+> for you to fetch changes up to 4fc5f5346592cdc91689455d83885b0af65d71b8:
+> 
+>   nfsd: fix using the correct variable for sizeof() (2022-03-20 12:49:38 -0400)
+> 
+> ----------------------------------------------------------------
+> New features:
+> - NFSv3 support in NFSD is now always built
+> - Added NFSD support for the NFSv4 birth-time file attribute
+[...]
 
-Fixes: 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in v2:
-  - Use delayed work to replace timer.
+> Ondrej Valousek (1):
+>       nfsd: Add support for the birth time attribute
 
- drivers/staging/rtl8192u/r8192U.h    |  2 +-
- drivers/staging/rtl8192u/r8192U_dm.c | 38 +++++++++++++---------------
- drivers/staging/rtl8192u/r8192U_dm.h |  2 +-
- 3 files changed, 20 insertions(+), 22 deletions(-)
+This patch regressed clients that support TIME_CREATE attribute.
+Starting with this patch client might think that server supports
+TIME_CREATE and start sending this attribute in its requests.
+However kernel on server side (since this patch and to
+current master) upon getting such request will return EINVAL.
+(my guess is that TIME_CREATE not being decoded properly and
+that messes up request parsing).
 
-diff --git a/drivers/staging/rtl8192u/r8192U.h b/drivers/staging/rtl8192u/r8192U.h
-index 14ca00a2789..1942cb84937 100644
---- a/drivers/staging/rtl8192u/r8192U.h
-+++ b/drivers/staging/rtl8192u/r8192U.h
-@@ -1013,7 +1013,7 @@ typedef struct r8192_priv {
- 	bool		bis_any_nonbepkts;
- 	bool		bcurrent_turbo_EDCA;
- 	bool		bis_cur_rdlstate;
--	struct timer_list fsync_timer;
-+	struct delayed_work fsync_work;
- 	bool bfsync_processing;	/* 500ms Fsync timer is active or not */
- 	u32	rate_record;
- 	u32	rateCountDiffRecord;
-diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
-index 725bf5ca9e3..0fcfcaa6500 100644
---- a/drivers/staging/rtl8192u/r8192U_dm.c
-+++ b/drivers/staging/rtl8192u/r8192U_dm.c
-@@ -2578,19 +2578,20 @@ static void dm_init_fsync(struct net_device *dev)
- 	priv->ieee80211->fsync_seconddiff_ratethreshold = 200;
- 	priv->ieee80211->fsync_state = Default_Fsync;
- 	priv->framesyncMonitor = 1;	/* current default 0xc38 monitor on */
--	timer_setup(&priv->fsync_timer, dm_fsync_timer_callback, 0);
-+	INIT_DELAYED_WORK(&priv->fsync_work, dm_fsync_work_callback);
- }
- 
- static void dm_deInit_fsync(struct net_device *dev)
- {
- 	struct r8192_priv *priv = ieee80211_priv(dev);
- 
--	del_timer_sync(&priv->fsync_timer);
-+	cancel_delayed_work_sync(&priv->fsync_work);
- }
- 
--void dm_fsync_timer_callback(struct timer_list *t)
-+void dm_fsync_work_callback(struct work_struct *work)
- {
--	struct r8192_priv *priv = from_timer(priv, t, fsync_timer);
-+	struct r8192_priv *priv =
-+	    container_of(work, struct r8192_priv, fsync_work.work);
- 	struct net_device *dev = priv->ieee80211->dev;
- 	u32 rate_index, rate_count = 0, rate_count_diff = 0;
- 	bool		bSwitchFromCountDiff = false;
-@@ -2657,17 +2658,16 @@ void dm_fsync_timer_callback(struct timer_list *t)
- 			}
- 		}
- 		if (bDoubleTimeInterval) {
--			if (timer_pending(&priv->fsync_timer))
--				del_timer_sync(&priv->fsync_timer);
--			priv->fsync_timer.expires = jiffies +
--				msecs_to_jiffies(priv->ieee80211->fsync_time_interval*priv->ieee80211->fsync_multiple_timeinterval);
--			add_timer(&priv->fsync_timer);
-+			cancel_delayed_work_sync(&priv->fsync_work);
-+			schedule_delayed_work(&priv->fsync_work,
-+					      msecs_to_jiffies(priv
-+					      ->ieee80211->fsync_time_interval *
-+					      priv->ieee80211->fsync_multiple_timeinterval));
- 		} else {
--			if (timer_pending(&priv->fsync_timer))
--				del_timer_sync(&priv->fsync_timer);
--			priv->fsync_timer.expires = jiffies +
--				msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
--			add_timer(&priv->fsync_timer);
-+			cancel_delayed_work_sync(&priv->fsync_work);
-+			schedule_delayed_work(&priv->fsync_work,
-+					      msecs_to_jiffies(priv
-+					      ->ieee80211->fsync_time_interval));
- 		}
- 	} else {
- 		/* Let Register return to default value; */
-@@ -2695,7 +2695,7 @@ static void dm_EndSWFsync(struct net_device *dev)
- 	struct r8192_priv *priv = ieee80211_priv(dev);
- 
- 	RT_TRACE(COMP_HALDM, "%s\n", __func__);
--	del_timer_sync(&(priv->fsync_timer));
-+	cancel_delayed_work_sync(&priv->fsync_work);
- 
- 	/* Let Register return to default value; */
- 	if (priv->bswitch_fsync) {
-@@ -2736,11 +2736,9 @@ static void dm_StartSWFsync(struct net_device *dev)
- 		if (priv->ieee80211->fsync_rate_bitmap &  rateBitmap)
- 			priv->rate_record += priv->stats.received_rate_histogram[1][rateIndex];
- 	}
--	if (timer_pending(&priv->fsync_timer))
--		del_timer_sync(&priv->fsync_timer);
--	priv->fsync_timer.expires = jiffies +
--			msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
--	add_timer(&priv->fsync_timer);
-+	cancel_delayed_work_sync(&priv->fsync_work);
-+	schedule_delayed_work(&priv->fsync_work,
-+			      msecs_to_jiffies(priv->ieee80211->fsync_time_interval));
- 
- 	write_nic_dword(dev, rOFDM0_RxDetector2, 0x465c12cd);
- }
-diff --git a/drivers/staging/rtl8192u/r8192U_dm.h b/drivers/staging/rtl8192u/r8192U_dm.h
-index 0b2a1c68859..2159018b4e3 100644
---- a/drivers/staging/rtl8192u/r8192U_dm.h
-+++ b/drivers/staging/rtl8192u/r8192U_dm.h
-@@ -166,7 +166,7 @@ void dm_force_tx_fw_info(struct net_device *dev,
- void dm_init_edca_turbo(struct net_device *dev);
- void dm_rf_operation_test_callback(unsigned long data);
- void dm_rf_pathcheck_workitemcallback(struct work_struct *work);
--void dm_fsync_timer_callback(struct timer_list *t);
-+void dm_fsync_work_callback(struct work_struct *work);
- void dm_cck_txpower_adjust(struct net_device *dev, bool  binch14);
- void dm_shadow_init(struct net_device *dev);
- void dm_initialize_txpower_tracking(struct net_device *dev);
--- 
-2.17.1
+End result is unusable mount (unless it's treated as readonly).
+
+Reproduces with current master (HEAD at e5524c2a1fc40) and MacOS
+client (Big Sur or newest Monterey).
+
+server is typical setup exporting files from XFS (Fedora36)
+
+ #  rpcdebug -m nfsd -s all
+
+on client:
+
+ % mount -t nfs -o vers=4,rw,nfc,sec=sys testnas:/mnt  ~/test
+ % touch ~/test/fff
+     touch: test/fff: Invalid argument
+
+server logs:
+
+ nfsd: fh_compose(exp fd:00/128 fff, ino=0)
+ NFSD: nfsd4_open filename  op_openowner 0000000000000000
+
+Here is a request the touch generates:
+        Network File System, Ops(6): PUTFH, SAVEFH, OPEN, GETATTR, RESTOREFH, GETATTR
+            [Program Version: 4]
+            [V4 Procedure: COMPOUND (1)]
+            Tag: create
+            minorversion: 0
+            Operations (count: 6): PUTFH, SAVEFH, OPEN, GETATTR, RESTOREFH, GETATTR
+                Opcode: PUTFH (22)
+                Opcode: SAVEFH (32)
+                Opcode: OPEN (18)
+                    seqid: 0x00000004
+                    share_access: OPEN4_SHARE_ACCESS_BOTH (3)
+                    share_deny: OPEN4_SHARE_DENY_NONE (0)
+                    clientid: 0xba93c9620aec46ea
+                    owner: <DATA>
+                    Open Type: OPEN4_CREATE (1)
+                        Create Mode: UNCHECKED4 (0)
+                        Attr mask: 0x00040002 (Mode, Time_Create)
+                            reco_attr: Mode (33)
+                            reco_attr: Time_Create (50)
+                    Claim Type: CLAIM_NULL (0)
+                        Name: fff
+
+        [...]
+
+when trying to copy file via GUI (Finder) it goes a different route
+but ends up with error anyway and with leftover 0-length file on server
+with messed up permissions, i.e.
+
+open/create without Time_Create succeeds but followup
+setattr with Time_Create fails EINVAL.
+
+        Network File System, Ops(3): PUTFH, SETATTR, GETATTR
+            [Program Version: 4]
+            [V4 Procedure: COMPOUND (1)]
+            Tag: setattr
+            minorversion: 0
+            Operations (count: 3): PUTFH, SETATTR, GETATTR
+                Opcode: PUTFH (22)
+                Opcode: SETATTR (34)
+                    StateID
+                    Attr mask: 0x00450002 (Mode, Time_Access_Set, Time_Create, Time_Modify_Set)
+                        reco_attr: Mode (33)
+                        reco_attr: Time_Access_Set (48)
+                        reco_attr: Time_Create (50)
+                        reco_attr: Time_Modify_Set (54)
+                Opcode: GETATTR (9)
+            [Main Opcode: SETATTR (34)]
+
+[...]
+> --
+> Chuck Lever
+> 
+> 
+> 
 

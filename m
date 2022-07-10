@@ -2,85 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BACF56CE8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5A756CE92
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiGJKYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 06:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S229557AbiGJKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 06:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJKYu (ORCPT
+        with ESMTP id S229450AbiGJKa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 06:24:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92680101F4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:24:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2B3B80A2A
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 10:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658B4C3411E;
-        Sun, 10 Jul 2022 10:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657448686;
-        bh=w7m3jDJj+v364kHW38aSZuC7EI6ALLFCYEuyEhaKXM4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y6LiU1gkY8U/MdYzfZYfZgeUR63DckW5+YfN89+2AqO43Il3UXalmmOyaGvbDz+BM
-         nvZg+cDq/zhKx5O1za5vLP22XnJ8mJIhik+2qplliaHEubwL+Xan0sPHi+9yQ7IyO2
-         KsjhRSY55Px/MJdTXSBQDCjWWiapm4JDijoys6Kg=
-Date:   Sun, 10 Jul 2022 12:24:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] firmware_loader: Replace kmap() with kmap_local_page()
-Message-ID: <Ysqo6RjF/njUcOor@kroah.com>
-References: <20220710101156.26139-1-fmdefrancesco@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220710101156.26139-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 10 Jul 2022 06:30:29 -0400
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5048AE014
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:30:25 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [124.236.130.231])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCn_g0qqspieOgzAA--.17083S2;
+        Sun, 10 Jul 2022 18:30:10 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-staging@lists.linux.dev, gregkh@linuxfoundation.org
+Cc:     davem@davemloft.net, alexander.deucher@amd.com, broonie@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v2 RESEND] staging: rtl8192u: Fix sleep in atomic context bug in dm_fsync_timer_callback
+Date:   Sun, 10 Jul 2022 18:30:02 +0800
+Message-Id: <20220710103002.63283-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCn_g0qqspieOgzAA--.17083S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKF15Wr15trykGw1fAry5urg_yoW7Kry3p3
+        ya9w1xAr4UZF4jk3WDAa1DZF1rK3ykGas3G3WkJw4FvrnavF1DXa4vyryUJFW5XrZ09w13
+        Z348ZF43u3WDKr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwHAVZdtamueQABsJ
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 12:11:56PM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page().
-> 
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
+There are sleep in atomic context bugs when dm_fsync_timer_callback is
+executing. The root cause is that the memory allocation functions with
+GFP_KERNEL or GFP_NOIO parameters are called in dm_fsync_timer_callback
+which is a timer handler. The call paths that could trigger bugs are
+shown below:
 
-But that is not the case here for this kmap() instance?  If this is a
-simple search/replace, why is this not just done once and be done with
-it?
+    (interrupt context)
+dm_fsync_timer_callback
+  write_nic_byte
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
+  write_nic_dword
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
 
-> Call kmap_local_page() in firmware_loader wherever kmap() is currently
-> used. In firmware_rw() use the copy_{from,to}_page() helpers instead of
-> open coding the local mappings plus memcpy().
+This patch uses delayed work to replace timer and moves the operations
+that may sleep into the delayed work in order to mitigate bugs.
 
-Isn't that just a different cleanup than the kmap() change?  Or is that
-tied to the fact that the other buffer is now allocated with
-kmap_local_page() instead of kmap()?
+Fixes: 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Use delayed work to replace timer.
 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  drivers/base/firmware_loader/main.c  | 4 ++--
->  drivers/base/firmware_loader/sysfs.c | 9 ++++-----
->  2 files changed, 6 insertions(+), 7 deletions(-)
+ drivers/staging/rtl8192u/r8192U.h    |  2 +-
+ drivers/staging/rtl8192u/r8192U_dm.c | 38 +++++++++++++---------------
+ drivers/staging/rtl8192u/r8192U_dm.h |  2 +-
+ 3 files changed, 20 insertions(+), 22 deletions(-)
 
-Did you run this through the firmware test framework?
+diff --git a/drivers/staging/rtl8192u/r8192U.h b/drivers/staging/rtl8192u/r8192U.h
+index 14ca00a2789..1942cb84937 100644
+--- a/drivers/staging/rtl8192u/r8192U.h
++++ b/drivers/staging/rtl8192u/r8192U.h
+@@ -1013,7 +1013,7 @@ typedef struct r8192_priv {
+ 	bool		bis_any_nonbepkts;
+ 	bool		bcurrent_turbo_EDCA;
+ 	bool		bis_cur_rdlstate;
+-	struct timer_list fsync_timer;
++	struct delayed_work fsync_work;
+ 	bool bfsync_processing;	/* 500ms Fsync timer is active or not */
+ 	u32	rate_record;
+ 	u32	rateCountDiffRecord;
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
+index 725bf5ca9e3..0fcfcaa6500 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.c
++++ b/drivers/staging/rtl8192u/r8192U_dm.c
+@@ -2578,19 +2578,20 @@ static void dm_init_fsync(struct net_device *dev)
+ 	priv->ieee80211->fsync_seconddiff_ratethreshold = 200;
+ 	priv->ieee80211->fsync_state = Default_Fsync;
+ 	priv->framesyncMonitor = 1;	/* current default 0xc38 monitor on */
+-	timer_setup(&priv->fsync_timer, dm_fsync_timer_callback, 0);
++	INIT_DELAYED_WORK(&priv->fsync_work, dm_fsync_work_callback);
+ }
+ 
+ static void dm_deInit_fsync(struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+-	del_timer_sync(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
+ }
+ 
+-void dm_fsync_timer_callback(struct timer_list *t)
++void dm_fsync_work_callback(struct work_struct *work)
+ {
+-	struct r8192_priv *priv = from_timer(priv, t, fsync_timer);
++	struct r8192_priv *priv =
++	    container_of(work, struct r8192_priv, fsync_work.work);
+ 	struct net_device *dev = priv->ieee80211->dev;
+ 	u32 rate_index, rate_count = 0, rate_count_diff = 0;
+ 	bool		bSwitchFromCountDiff = false;
+@@ -2657,17 +2658,16 @@ void dm_fsync_timer_callback(struct timer_list *t)
+ 			}
+ 		}
+ 		if (bDoubleTimeInterval) {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval*priv->ieee80211->fsync_multiple_timeinterval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval *
++					      priv->ieee80211->fsync_multiple_timeinterval));
+ 		} else {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval));
+ 		}
+ 	} else {
+ 		/* Let Register return to default value; */
+@@ -2695,7 +2695,7 @@ static void dm_EndSWFsync(struct net_device *dev)
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+ 	RT_TRACE(COMP_HALDM, "%s\n", __func__);
+-	del_timer_sync(&(priv->fsync_timer));
++	cancel_delayed_work_sync(&priv->fsync_work);
+ 
+ 	/* Let Register return to default value; */
+ 	if (priv->bswitch_fsync) {
+@@ -2736,11 +2736,9 @@ static void dm_StartSWFsync(struct net_device *dev)
+ 		if (priv->ieee80211->fsync_rate_bitmap &  rateBitmap)
+ 			priv->rate_record += priv->stats.received_rate_histogram[1][rateIndex];
+ 	}
+-	if (timer_pending(&priv->fsync_timer))
+-		del_timer_sync(&priv->fsync_timer);
+-	priv->fsync_timer.expires = jiffies +
+-			msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-	add_timer(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
++	schedule_delayed_work(&priv->fsync_work,
++			      msecs_to_jiffies(priv->ieee80211->fsync_time_interval));
+ 
+ 	write_nic_dword(dev, rOFDM0_RxDetector2, 0x465c12cd);
+ }
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.h b/drivers/staging/rtl8192u/r8192U_dm.h
+index 0b2a1c68859..2159018b4e3 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.h
++++ b/drivers/staging/rtl8192u/r8192U_dm.h
+@@ -166,7 +166,7 @@ void dm_force_tx_fw_info(struct net_device *dev,
+ void dm_init_edca_turbo(struct net_device *dev);
+ void dm_rf_operation_test_callback(unsigned long data);
+ void dm_rf_pathcheck_workitemcallback(struct work_struct *work);
+-void dm_fsync_timer_callback(struct timer_list *t);
++void dm_fsync_work_callback(struct work_struct *work);
+ void dm_cck_txpower_adjust(struct net_device *dev, bool  binch14);
+ void dm_shadow_init(struct net_device *dev);
+ void dm_initialize_txpower_tracking(struct net_device *dev);
+-- 
+2.17.1
 
-thanks,
-
-greg k-h

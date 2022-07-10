@@ -2,108 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D676556CE84
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D9356CE87
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 12:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiGJKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 06:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S229547AbiGJKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 06:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGJKQA (ORCPT
+        with ESMTP id S229476AbiGJKTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 06:16:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D725612600;
-        Sun, 10 Jul 2022 03:15:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 10 Jul 2022 06:19:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ADCDF62
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 03:19:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CFD1B80A29;
-        Sun, 10 Jul 2022 10:15:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62459C3411E;
-        Sun, 10 Jul 2022 10:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657448157;
-        bh=GCv9XYzyLfxbuwZ58INX2UzxLUEVrBaQalSsByPr00A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Heck747PzToMtNCTo6wLiw5cuQotqiXzQlnPEP4x9f6O0cmeNKLtfQXUatET81NNP
-         EPg0rkjW9J/EdH74osSwr9mzY/yRrcU2OL8NX+ZQF88HSEUgFMBt7wlJs1IYvhEsFS
-         hdQ1UPx0T87AJORYHAz6yBJzBy/cBb9MTVHQD6lo=
-Date:   Sun, 10 Jul 2022 12:15:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Joseph, Jithu" <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, ashok.raj@intel.com,
-        tony.luck@intel.com, ravi.v.shankar@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH] platform/x86/intel/ifs: Allow non-default names for IFS
- image
-Message-ID: <Ysqm1BRbCTtWfAcW@kroah.com>
-References: <20220708151938.986530-1-jithu.joseph@intel.com>
- <YshNAh6awfPFmxzU@kroah.com>
- <33a6193e-1084-ae5f-1f80-232274f71bd0@intel.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3BA8B1FE25;
+        Sun, 10 Jul 2022 10:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657448346; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9elos7vJtR/xFlEIjFrioFxIi9AoQZ1tt+FVTKRmUoY=;
+        b=mQrm2gYsBlfEd629FUdc5Gu52aFDoZ9HSvO5nyA/5zR37k3wTOc5yIHc/0hYfLziLlY+7p
+        0cHbLC3xwZchEv/OMwuk2pCRtqrkEX5vIj7qZVeoFXW/TonNYl0ZM+BrWTkdGe+vqYsNmf
+        5A6qeLRGMYJjT3r4GqqB+lJOb/NKqyQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657448346;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9elos7vJtR/xFlEIjFrioFxIi9AoQZ1tt+FVTKRmUoY=;
+        b=J2DsACW6wS0jx+OGhxRqllJATPUUIj1LZ+fg+9acfmeX8LUY2MXkYDIWDHd3w4msdxkgHQ
+        DzQtITERSMkIZBBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23DBC132FD;
+        Sun, 10 Jul 2022 10:19:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id o629CJqnymL0HAAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 10 Jul 2022 10:19:06 +0000
+Date:   Sun, 10 Jul 2022 12:19:00 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for v5.19-rc6
+Message-ID: <YsqnlPzrnQThDLil@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <33a6193e-1084-ae5f-1f80-232274f71bd0@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 11:34:40AM -0700, Joseph, Jithu wrote:
-> 
-> 
-> On 7/8/2022 8:28 AM, Greg KH wrote:
-> > On Fri, Jul 08, 2022 at 08:19:38AM -0700, Jithu Joseph wrote:
-> >> Existing implementation limits IFS image to be loaded only from
-> >> a default file-name (ff-mm-ss.scan).
-> >>
-> 
-> > 
-> > Ick, but now what namespace are you saying that path is in?  If you need
-> > debugging stuff, then put the api/interface in debugfs and use it there,
-> > don't overload the existing sysfs api to do something different here.
-> 
-> The namespace related confusion could be because, the original commit message
-> was not using full path-names. The below write-up tries to be more clear on this
-> 
-> Existing implementation limits IFS images to be loaded only from
-> a default file-name /lib/firmware/intel/ifs/ff-mm-ss.scan.
-> 
-> But there are situations where there may be multiple scan files
-> that can be run on a particular system stored in /lib/firmware/intel/ifs
-> 
-> E.g.
-> 1. Because test contents are larger than the memory reserved for IFS by BIOS
-> 2. To provide increased test coverage
-> 3. Custom test files to debug certain specific issues in the field
-> 
-> Renaming each of these to ff-mm-ss.scan and then loading might be
-> possible in some environments. But on systems where /lib is read-only
-> this is not a practical solution.
-> 
-> Extend the semantics of the driver /sys/devices/virtual/misc/intel_ifs_0/reload
-> file:
-> 
->   Writing "1" remains the legacy behavior to load from the default
->   ff-mm-ss.scan file.
-> 
->   Writing some other string is interpreted as a filename in
->   /lib/firmware/intel/ifs to be loaded instead of the default file.
+Hi Linus,
 
-Ick, you are overloading an existing sysfs file to do different things
-based on random stuff.  This is a brand-new api that you are already
-messing with in crazy ways.  Why not just revert the whole thing and
-start over as obviously this was not tested well with real devices.
+please pull a couple of urgent x86 fixes for 5.19.
 
-And what is wrong with a firmware file called '1'?  :)
+Thx.
 
-thanks,
+---
 
-greg k-h
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.19_rc6
+
+for you to fetch changes up to cb8a4beac39b90cd60abbf9fd639a3357274e469:
+
+  x86/boot: Fix the setup data types max limit (2022-07-10 11:17:40 +0200)
+
+----------------------------------------------------------------
+- Prepare for and clear .brk early in order to address XenPV guests
+failures where the hypervisor verifies page tables and uninitialized
+data in that range leads to bogus failures in those checks
+
+- Add any potential setup_data entries supplied at boot to the identity
+pagetable mappings to prevent kexec kernel boot failures. Usually, this
+is not a problem for the normal kernel as those mappings are part of
+the initially mapped 2M pages but if kexec gets to allocate the second
+kernel somewhere else, those setup_data entries need to be mapped there
+too.
+
+- Fix objtool not to discard text references from the __tracepoints
+section so that ENDBR validation still works
+
+- Correct the setup_data types limit as it is user-visible, before 5.19
+releases
+
+----------------------------------------------------------------
+Borislav Petkov (1):
+      x86/boot: Fix the setup data types max limit
+
+Juergen Gross (3):
+      x86/xen: Use clear_bss() for Xen PV guests
+      x86: Clear .brk area at early boot
+      x86: Fix .brk attribute in linker script
+
+Michael Roth (1):
+      x86/compressed/64: Add identity mappings for setup_data entries
+
+Peter Zijlstra (1):
+      x86/ibt, objtool: Don't discard text references from tracepoint section
+
+ arch/x86/boot/compressed/ident_map_64.c | 13 +++++++++++++
+ arch/x86/include/asm/setup.h            |  3 +++
+ arch/x86/include/uapi/asm/bootparam.h   |  2 +-
+ arch/x86/kernel/head64.c                |  4 +++-
+ arch/x86/kernel/vmlinux.lds.S           |  2 +-
+ arch/x86/xen/enlighten_pv.c             |  8 ++++++--
+ arch/x86/xen/xen-head.S                 | 10 +---------
+ tools/objtool/check.c                   |  3 +--
+ 8 files changed, 29 insertions(+), 16 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

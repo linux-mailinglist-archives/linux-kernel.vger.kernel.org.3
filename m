@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4342756D0A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 19:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C0356D0A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 19:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiGJRwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 13:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        id S229623AbiGJRxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 13:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiGJRwl (ORCPT
+        with ESMTP id S229502AbiGJRxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 13:52:41 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EE01055E;
-        Sun, 10 Jul 2022 10:52:40 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bu1so3209347wrb.9;
-        Sun, 10 Jul 2022 10:52:39 -0700 (PDT)
+        Sun, 10 Jul 2022 13:53:14 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2081055C;
+        Sun, 10 Jul 2022 10:53:12 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso4444182fac.7;
+        Sun, 10 Jul 2022 10:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AeSUffjgrxLIDrHX0WRm/GzkZY58B1bVWJKIzfHMVqY=;
-        b=Fx0xAcxQswDl6PZOZPn4Ig2Gi+z8tQ3eW9sjga5TlDz1ubNvvqGiBOz+y61CqBBRrG
-         7rtnn+Sw8cpEQvDGJeAhqBOD2vpmj0W+qQamEdEDi+vSGoGM2WYrTOozWjIRgwlYwtTH
-         6MfIw+1j+v1FJsv8wmAWP03om3TOARE3okCdLHnzZoVhfe95oH++xbARRkV/iuvd7bO1
-         vuYRUpxD0kMucxII8XXDqzNB1lTZ5so7rodpfMJXSLM3aCUofra54ax6iITHa5BTOes7
-         8iviher/DChZKOOk2kr2wpZ0HjbcsbHAVb/L7+/mFqPcnWEzJLftQhpIAp9eJCEoPRKC
-         vlBg==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=eSwcZesmzsEIOMZznmFtXUZFeRKLoTj+6EmfyIc9CJ0=;
+        b=lukMb3WrJZnRVKi08+l/vnzxS7gK18/l3x4wMmDHbWNmHmDMY5VcmHt40eTeMDmulq
+         Is6DaZ/pWaA/iZQv7rx4ohUI+as5x0Vh3Vm934TFqF/V10ZtFqQE3M4rsmLmakZr0tRB
+         SV1qb7tm3RyHMZjDIrsqj5a9Qz7t/SND8kWGmbTrBONc5q+m29A1cQdi+EwA57uki6OR
+         AnjgbwbNlFjAbel4NFLFfzoiP2rbp5t/0fWBtLFBFQMFGg8SdVDQauilForHInEZlPLv
+         oiYFsHtt9ZxqQovj0wRPmMucscTh3hK18y325vP8/OwqojPVtttETB8d2oFY8NzK+PEA
+         OJwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AeSUffjgrxLIDrHX0WRm/GzkZY58B1bVWJKIzfHMVqY=;
-        b=ivLaNDuCL+Wd1u0ZtVImSihYim6I0PAMlR1EAdFlNeV3Tf1qqoS218KV36dfQXWVvS
-         japkHG/3SF3ZYqhfuGnmorVK2SjPfgrHT21uFVsXgbvr4I5RXeY59MuGU4Oj3uzz3E7B
-         3U60Hf427bZdyHZVeCqN+frTspKnBy8kN/QPzWfSLiKjCSgNdQ+uK9lzsq/SAnKSAdWq
-         /LAtW8IQN9HnHJiuKjJ5rZtn2Aw76RKaZAymgQyNkhi/ZBi281dZL7+PX6bS24xyqGac
-         hQvpHmXsTDUpmNi0uyGstg4C4pM/xEQjaSk9Or4skVPHZI0pY+o3+/QfgxEdRXIvF+4w
-         elLw==
-X-Gm-Message-State: AJIora9RVBBLUyUZ37yYtK0OklL/mAS5uWjQ4GnjD9j0ZRbfC2eXvWn/
-        TrizREudIZmNSZ0CtW9/14gVl+aZ3Tw=
-X-Google-Smtp-Source: AGRyM1tO70VRNWP+zx9h+dZMqVSgs/r1nVqGy2ngqLU80XsFfk9kYgm6wOt2MUcya3rcsubm/NQJDA==
-X-Received: by 2002:a5d:6dab:0:b0:21d:9fc8:3029 with SMTP id u11-20020a5d6dab000000b0021d9fc83029mr4189820wrs.172.1657475558497;
-        Sun, 10 Jul 2022 10:52:38 -0700 (PDT)
-Received: from roman-Latitude-3400.globallogic.com ([195.234.74.2])
-        by smtp.gmail.com with ESMTPSA id c8-20020a7bc848000000b003a2e7c13a3asm840346wml.42.2022.07.10.10.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 10:52:38 -0700 (PDT)
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-To:     samuel@sholland.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, mripard@kernel.org,
-        wens@csie.org, jernej.skrabec@gmail.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Roman Stratiienko <r.stratiienko@gmail.com>
-Subject: [RFC] ccu-sun50i-h6: Bump-up DDR0 PLL to 1800MHz
-Date:   Sun, 10 Jul 2022 20:52:14 +0300
-Message-Id: <20220710175214.544748-1-r.stratiienko@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=eSwcZesmzsEIOMZznmFtXUZFeRKLoTj+6EmfyIc9CJ0=;
+        b=VHvatbXaM4qGpxfvNM0GQB/2HQovFE8FUiuU6lRpDJuL9KtzEI2Tto7UStkS7Wb2Ct
+         GzmyH7KHy79VhhvmPOaOTPmpd/UXeBOdkqbKrCIikZ+IFuKq010JpuUlXvqCvnAAutYF
+         EjuR+JzbRAs9jfyUvkIx9Ek1U/TA3cRsGQ5sOpC/2Ezkqwq/8MbntmZhswuqK2Lk9rOt
+         pnJnisuvio/sH8yr+U9KcCpV8hTkcswybFu+AteQ4F8qUKVGCrixi8Gclsr3oF4DDtLx
+         oUzfdzL+TbDqfXm/n6W4sdZihbw51DtCN2SCgLWJ8ooAlUGu55e4HW/muf/y5nz15pZ5
+         u9eQ==
+X-Gm-Message-State: AJIora9RV0D/y0BsgjsLUyBiTp0dtxNI7TdBBI2BHiBrnxQgCrT5VYlw
+        9ob2gaIYuMGx28j4Z5Z+YpEq5Bb8Wlk8P3cTdI0=
+X-Google-Smtp-Source: AGRyM1tnkeq2oBx0pSKbTlrm3liHRSCnqKw+CZZmwtMuiDcKeNzy5EQR+FOOYpHycH4jYWmWlJKcfnDT+Xnm5qs0hFM=
+X-Received: by 2002:a05:6870:709f:b0:fe:2006:a858 with SMTP id
+ v31-20020a056870709f00b000fe2006a858mr5405754oae.128.1657475592193; Sun, 10
+ Jul 2022 10:53:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de> <CA+icZUVgLh=x-mWmvuQaCBO-eH5ebnA_rTDqnb+1oJVzVO=hmQ@mail.gmail.com>
+In-Reply-To: <CA+icZUVgLh=x-mWmvuQaCBO-eH5ebnA_rTDqnb+1oJVzVO=hmQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 10 Jul 2022 19:52:36 +0200
+Message-ID: <CA+icZUV=dVFADBS4cEnQKWRQhy7LCVXzNQQQX92Gbd5M53c-cA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+To:     Andres Freund <andres@anarazel.de>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,40 +72,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While debugging complex animated composition cases  I noticed a glitch
-which as it turned-out eventually was caused by lack of memory bandwidth.
+On Sun, Jul 10, 2022 at 1:43 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sun, Jul 3, 2022 at 11:25 PM Andres Freund <andres@anarazel.de> wrote:
+> >
+> > binutils changed the signature of init_disassemble_info(), which now causes
+> > compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
+> > binutils commit:
+> > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+> >
+>
+> HI,
+>
+> what was the base for this patchset?
+> I tried with Linux v5.19-rc5 and it doesn not apply cleanly.
+>
 
-I can't find a DRAMC manual to check what input frequency must be
-supplied to avoid exceeding the 800MHz LPDDR3 which is installed on
-my orangepi3 board. But the system is running stable so far.
+More coffee.
 
-Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
----
- drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+$ egrep 'Auto-detecting|disassembler' make-log_perf-python3.10-install_bin.txt
+15:Auto-detecting system features:
+36:...        disassembler-four-args: [ on  ]
+37:...      disassembler-init-styled: [ on  ]
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-index 750368a86b8b6..abdde80307993 100644
---- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
-@@ -1203,6 +1203,17 @@ static int sun50i_h6_ccu_probe(struct platform_device *pdev)
- 	val &= ~GENMASK(3, 0);
- 	writel(val, reg + gpu_clk.common.reg);
- 
-+	/*
-+	 * Increase DDR0 PLL from 1488(default) to 1800MHz.
-+	 * (DE3.0 require higher memory bandwidth while displaying
-+	 * complex composition at 1920x1080@60FPS)
-+	 */
-+
-+	val = readl(reg + SUN50I_H6_PLL_DDR0_REG);
-+	val &= ~GENMASK(15, 0);
-+	val |= 74 << 8;
-+	writel(val, reg + SUN50I_H6_PLL_DDR0_REG);
-+
- 	/* Enable the lock bits on all PLLs */
- 	for (i = 0; i < ARRAY_SIZE(pll_regs); i++) {
- 		val = readl(reg + pll_regs[i]);
--- 
-2.34.1
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 
+-Sedat-
+
+>
+> > I first fixed this without introducing the compat header, as suggested by
+> > Quentin, but I thought the amount of repeated boilerplate was a bit too
+> > much. So instead I introduced a compat header to wrap the API changes. Even
+> > tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
+> > looks nicer this way.
+> >
+> > I'm not regular contributor, so it very well might be my procedures are a
+> > bit off...
+> >
+> > I am not sure I added the right [number of] people to CC?
+> >
+> > WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
+> > nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
+> > in feature/Makefile and why -ldl isn't needed in the other places. But...
+> >
+> > V2:
+> > - split patches further, so that tools/bpf and tools/perf part are entirely
+> >   separate
+> > - included a bit more information about tests I did in commit messages
+> > - add a maybe_unused to fprintf_json_styled's style argument
+> >
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > Cc: Quentin Monnet <quentin@isovalent.com>
+> > To: bpf@vger.kernel.org
+> > To: linux-kernel@vger.kernel.org
+> > Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+> > Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
+> >
+> > Andres Freund (5):
+> >   tools build: add feature test for init_disassemble_info API changes
+> >   tools include: add dis-asm-compat.h to handle version differences
+> >   tools perf: Fix compilation error with new binutils
+> >   tools bpf_jit_disasm: Fix compilation error with new binutils
+> >   tools bpftool: Fix compilation error with new binutils
+> >
+> >  tools/bpf/Makefile                            |  7 ++-
+> >  tools/bpf/bpf_jit_disasm.c                    |  5 +-
+> >  tools/bpf/bpftool/Makefile                    |  7 ++-
+> >  tools/bpf/bpftool/jit_disasm.c                | 42 ++++++++++++---
+> >  tools/build/Makefile.feature                  |  4 +-
+> >  tools/build/feature/Makefile                  |  4 ++
+> >  tools/build/feature/test-all.c                |  4 ++
+> >  .../feature/test-disassembler-init-styled.c   | 13 +++++
+> >  tools/include/tools/dis-asm-compat.h          | 53 +++++++++++++++++++
+> >  tools/perf/Makefile.config                    |  8 +++
+> >  tools/perf/util/annotate.c                    |  7 +--
+> >  11 files changed, 137 insertions(+), 17 deletions(-)
+> >  create mode 100644 tools/build/feature/test-disassembler-init-styled.c
+> >  create mode 100644 tools/include/tools/dis-asm-compat.h
+> >
+> > --
+> > 2.37.0.3.g30cc8d0f14
+> >

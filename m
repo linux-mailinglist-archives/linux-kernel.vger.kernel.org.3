@@ -2,75 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B4F56CF05
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FA356CF0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiGJM10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 08:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S229510AbiGJMe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 08:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGJM1Z (ORCPT
+        with ESMTP id S229495AbiGJMez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 08:27:25 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D43E0F2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:27:23 -0700 (PDT)
-Received: from zn.tnic (p200300ea970ff643329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f643:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 547E11EC01D4;
-        Sun, 10 Jul 2022 14:27:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657456038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=J4RWO6tkR4gZwdaGb8kJFZOpsJ0WNMT+Yzp1DE8/sJw=;
-        b=KK7+CkNHFu2fA7h+rRT2zHVv0e7iqdmiLViQBgyLzzrKBBeoeTaozayFHMnfhI5AQo5t6b
-        iHg7y/tZ9dkjKn6D5p2674UOVZ8/GpJIZ88IpHxvCpyiuu+F9Z+3ngwsezRORA3djfh6al
-        CtzPyc0H43dwI5I4elxDxpJZQ/51Xa4=
-Date:   Sun, 10 Jul 2022 14:27:13 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH tip v8] x86/setup: Use rng seeds from setup_data
-Message-ID: <YsrFoaQzoO7NlgPN@zn.tnic>
-References: <20220707000852.523788-1-Jason@zx2c4.com>
- <20220708113907.891319-1-Jason@zx2c4.com>
- <ddba81dd-cc92-699c-5274-785396a17fb5@zytor.com>
- <YslPKbrmwF0uSm7p@zn.tnic>
- <191d8f96-7573-bd0e-9ca4-3fc22c5c9a49@zytor.com>
- <Ysn5uvBKBpcZ4j6m@zn.tnic>
- <8e5eb2db-ce31-3dc8-8f75-3959036686f8@zytor.com>
- <YsqfuPeB5jhFU9g5@zn.tnic>
- <CAHmME9rBRvU1z5Je1B2ahiTWuBaeJ9mHmohMAxLeoPMubT1+zw@mail.gmail.com>
+        Sun, 10 Jul 2022 08:34:55 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6048B10FD4;
+        Sun, 10 Jul 2022 05:34:54 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 26ACYVGp013659;
+        Sun, 10 Jul 2022 21:34:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 26ACYVGp013659
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657456472;
+        bh=B2JTrFJTTdFfRiEQWLxjG92WpQ+NN8/ex/zjlQ5UzQQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=svZSzdI7CMecciwzPU/eLLXAUC/ZO3wkmACMX2gUTU4E0behpynjoWAFKWuzjQ4Uu
+         wES0z5XfiARD5+0Ru1QhSSu01pMBKmYyc//DrsMi75ggRkZL1TUYy1swxw7BQDdX6u
+         mAXRMCHOVrIU0abEk123qtFLYJE/k/rA4UqfoTKLecFJDJqo0uvuQ9H6Catgnv4tNa
+         lktuyqt4lGU8weJI+vf2XzsskQowpQyFFTj6R1a+ml7JTifKF6iqg56tx3+GM3EjBM
+         tx37CTgcaavEZqa7sGzWAsAOqUvEuxOiOWTm2igYhHGAcRw4AbBftfsndhLY29wD23
+         Mfm+oODHBlilQ==
+X-Nifty-SrcIP: [209.85.221.42]
+Received: by mail-wr1-f42.google.com with SMTP id q9so3828229wrd.8;
+        Sun, 10 Jul 2022 05:34:31 -0700 (PDT)
+X-Gm-Message-State: AJIora9VMezEi6ajCldTYNLZOy/FBOO1Dr0sxYCd9HMxMVXmQZn5hrnc
+        0fxKxa3l2abQZL20qtR00+MdJ7k7EbZyBIWe2sc=
+X-Google-Smtp-Source: AGRyM1tHqIO9l40jo4uaZ0NIOAzYYnLNgFoLh08igUollBZVuxHvOsLrkCB6gIP20AM3ooZ57xg+vU/rAogbC2LkDl8=
+X-Received: by 2002:a5d:4e08:0:b0:21d:a689:7dd1 with SMTP id
+ p8-20020a5d4e08000000b0021da6897dd1mr554603wrt.477.1657456470327; Sun, 10 Jul
+ 2022 05:34:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9rBRvU1z5Je1B2ahiTWuBaeJ9mHmohMAxLeoPMubT1+zw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 10 Jul 2022 21:33:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATwuZpJNN1hwmb==yBXs9msh+Yc7pCVMxujsB1885QakQ@mail.gmail.com>
+Message-ID: <CAK7LNATwuZpJNN1hwmb==yBXs9msh+Yc7pCVMxujsB1885QakQ@mail.gmail.com>
+Subject: [GIT PULL] Kbuild fixes for v5.19-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 01:11:16PM +0200, Jason A. Donenfeld wrote:
-> Do you want me to rebase mine on top of the 5.19 fixup? Or is that
-> trivial enough that you'll just do it when applying?
+Hi Linus,
 
-Yeah, I'll take care of it, no worries.
+Please pull Kbuild fixes.
+Thanks.
 
-Thx.
+
+
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-fixes-v5.19-3
+
+for you to fetch changes up to f5a4618587fb5c5eb5fec3dcce165ca8fd7d7f91:
+
+  kbuild: remove unused cmd_none in scripts/Makefile.modinst
+(2022-07-10 21:25:15 +0900)
+
+----------------------------------------------------------------
+Kbuild fixes for v5.19 (3rd)
+
+ - Adjust gen_compile_commands.py to the format change of *.mod files
+
+ - Remove unused macro in scripts/Makefile.modinst
+
+----------------------------------------------------------------
+John Hubbard (1):
+      gen_compile_commands: handle multiple lines per .mod file
+
+Masahiro Yamada (1):
+      kbuild: remove unused cmd_none in scripts/Makefile.modinst
+
+ scripts/Makefile.modinst                    | 3 ---
+ scripts/clang-tools/gen_compile_commands.py | 6 +++---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best Regards
+Masahiro Yamada

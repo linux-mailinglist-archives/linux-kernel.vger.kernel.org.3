@@ -2,124 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8CF56D13C
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 22:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC62156D13A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 22:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiGJUTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 16:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        id S229634AbiGJUTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 16:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGJUTI (ORCPT
+        with ESMTP id S229581AbiGJUTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 16:19:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E209911C2C
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 13:19:06 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id h23so5658057ejj.12
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 13:19:06 -0700 (PDT)
+        Sun, 10 Jul 2022 16:19:10 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C1A11C2C;
+        Sun, 10 Jul 2022 13:19:09 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z12so4640655wrq.7;
+        Sun, 10 Jul 2022 13:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2dNNm+2Z7DDTrnInVJhwVhx6QVDRUW2xps/sEbVOHiU=;
-        b=Dwui2oCyaMCi3tSvwOpjfJZZGOdnlgOydmP1frvpBNLn1BUL+tcGUAax1agMvlcYsy
-         WUnVjcydaCNS2c83Y/M8M9fEQ0Dt/vN+P73bxohbthMchvleQX+gARGjXCQ0DPshKc+1
-         1Idou1dB1cCjuH6ciMb6E3eETHHFU+dp/zFOGgSIcpU4SyTmIgdke91A1zteEP58u+EU
-         jE7frmfd6Tu97whiyPZAF5l0z0/mMCor34Z30cn9bluePt2Yiz8BhkLugKMvuB/qvprN
-         4v2y+6A/Li1tt9gc6GiTGggYzrjXs/Q7nANLT4zKc+MRApKm6fGZil+sGy4AWIkw5cKt
-         1LqA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+4LoPEsOm9PcR/r7ehdFP74w+Fi1gnsISSscNQ2/Q78=;
+        b=PkSkgPbDyvs4YxkDlBo2UKihg/1fnWxscImG+AlHErPYhCCF0P4XewLi9y6PgNyqcu
+         lhmRT76a2U0h0Y0xiyVS4JhE9dhN1NKKdCkZsqUz25MQE4qdoTCsR1N/3kMOyfU5qjgQ
+         aVa0LZ26Clq9Xtx0wcnXpyCVHmofwybeCkVJ2e04XWn/7aeMsnuXeilsrJBf2T5cYqVh
+         BlvPc+zY7GPV9PGX2UD/tEhbmcl1szbXAqboRP3f0jtnWZKPJd/oF6oiOhFj9ktuUNol
+         eugMQ+QQ6AQKXcMezphEziY1g0IZSWMpDE2x6sFbi3UPxC7G/XalxOTxPuKVp+Kwah3n
+         qV0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2dNNm+2Z7DDTrnInVJhwVhx6QVDRUW2xps/sEbVOHiU=;
-        b=AxAuqg7bspGfTATGmoyXyEaWTmcb5VBa5NEKM4gqVjg5GBTZy5hEKIMZKdm11/hxwK
-         GX0jsCoK+v3MuErcLoNsKSiQPl7fOrhYY+kXEnGP6tTPdzuvEB3QvadWZeP8AcYBJ6zK
-         DhEJmVU3VyTTk/em/Y+JDf2TZu/IXryrX8GktwYud0avtmCbqH7MPKL/8xQTrPuKFX9Q
-         xqo0/BtBYRaYj3Nv3rro6d3NkQTOUKXQt4wusEQPfinfE3TRM9LJEJJuFDDmaij8W9Do
-         qnTh5HEcBSMPVVfTMELJE01MyKVegLwjZmxO6+skPWAXpTIHO84eg77RPUZcTGYaiseS
-         Bjhg==
-X-Gm-Message-State: AJIora9IQct16c6GsEXKjANgn539GWMYSl/y/p4nt5B9jLvB25z/kdB3
-        vabMKbgjCkbweHddqKV1XiyKfA==
-X-Google-Smtp-Source: AGRyM1sN+yMDd9eMlY/wC+lb+z5dP2YfafkBCnRXR4CiepxY34tTWOLWn1G0hHHRtHX0158SS/jnSQ==
-X-Received: by 2002:a17:906:9bdd:b0:72b:3cab:eade with SMTP id de29-20020a1709069bdd00b0072b3cabeademr7647876ejc.58.1657484345371;
-        Sun, 10 Jul 2022 13:19:05 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:8f5b:bf6f:385:d647? ([2a02:578:8593:1200:8f5b:bf6f:385:d647])
-        by smtp.gmail.com with ESMTPSA id f8-20020a50fc88000000b0043a8286a18csm3230479edq.30.2022.07.10.13.19.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 13:19:04 -0700 (PDT)
-Message-ID: <428689f2-ad91-e1b4-64c5-c1c4802e2cbe@tessares.net>
-Date:   Sun, 10 Jul 2022 22:19:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH bpf-next] bpf: fix 'dubious one-bit signed bitfield'
- warnings
-Content-Language: en-GB
-To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>
-Cc:     mptcp@lists.linux.dev, bpf@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+4LoPEsOm9PcR/r7ehdFP74w+Fi1gnsISSscNQ2/Q78=;
+        b=Wnj0nOcXDHG8+PE/gYGiNnLRt/bvtYrm23Urqd/fq5b2nG5yIqTfGaS2J0PqwEx78Y
+         fYyn/jSA0QU8w85lOuX+m+LFa0sUMprAOwhdzgE+tGEbsL+cZIVOJZIIg+C5AF0SPfCD
+         j58lOQcOz2v/I71l/XIDuBjtYvwERR7BtZxWHmtmOC9bjyaHSbKrmQ2xCWV1xuTrd+bm
+         yLppSGD6PhAnDYvzlwTl+K/4phHTel80/7RsbXBPHIOwJCbMvUT9spNj1CI3KmVqvJZ8
+         x/JGkidAKGmuJenyk3nQbnRpz5Nm39NuZUcVKxMSkEshtTE5wTP7zf6tMzPO00ZODcL1
+         t5ug==
+X-Gm-Message-State: AJIora8y+QLqcwrIqTrN+Ismic/bim4oJroNPYWGzRonVhgIHTc1N/+I
+        lxo4NFMm2cNXKv/MFMV/LWRCIdJ6NugJVA==
+X-Google-Smtp-Source: AGRyM1tgCCWxYVHcQrMLh985IY8zqRxEdd6qLWzO/Wy0iFFVuUCJol9zlgdT9Y7nuA/xmzN2kWuuNw==
+X-Received: by 2002:adf:fe81:0:b0:21b:88ea:6981 with SMTP id l1-20020adffe81000000b0021b88ea6981mr14255998wrr.616.1657484347662;
+        Sun, 10 Jul 2022 13:19:07 -0700 (PDT)
+Received: from reki (62-170-35.netrun.cytanet.com.cy. [62.228.170.35])
+        by smtp.gmail.com with ESMTPSA id v26-20020a1cf71a000000b003974a00697esm8142900wmh.38.2022.07.10.13.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 13:19:07 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 23:19:05 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
         linux-kernel@vger.kernel.org
-References: <20220710083523.1620722-1-matthieu.baerts@tessares.net>
- <fd51d0bb-8908-ede1-6d7a-37ed82badebf@fb.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <fd51d0bb-8908-ede1-6d7a-37ed82badebf@fb.com>
+Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: forced_eject attribute
+Message-ID: <20220710231905.1fa80848@reki>
+In-Reply-To: <YscWpjFlV60NybEA@rowland.harvard.edu>
+References: <20220707170912.70505-1-mdevaev@gmail.com>
+        <YscWpjFlV60NybEA@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yonghong,
+=D0=92 Thu, 7 Jul 2022 13:23:50 -0400
+Alan Stern <stern@rowland.harvard.edu> wrote:
 
-Thank you for the review!
+> Greg's patch bot is going to complain that you didn't describe the=20
+> differences between v2 and v3 at this point.
 
-On 10/07/2022 18:59, Yonghong Song wrote:> On 7/10/22 1:35 AM, Matthieu
-Baerts wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 81b19669efba..2ac424641cc3 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -345,10 +345,10 @@ struct bpf_verifier_state_list {
->>   };
->>     struct bpf_loop_inline_state {
->> -    int initialized:1; /* set to true upon first entry */
->> -    int fit_for_inline:1; /* true if callback function is the same
->> -                   * at each call and flags are always zero
->> -                   */
->> +    bool initialized; /* set to true upon first entry */
->> +    bool fit_for_inline; /* true if callback function is the same
->> +                  * at each call and flags are always zero
->> +                  */
-> 
-> I think changing 'int' to 'unsigned' is a better alternative for
-> potentially adding more bitfields in the future. This is also a pattern
-> for many other kernel data structures.
+Fixed
 
-There was room, I was not sure if it would be OK but I saw 'bool' were
-often used in structures from this bpf_verifier.h file.
+> ...  How about putting a comment line here, explaining that this=20
+> override will cause the medium to be ejected no matter what the host=20
+> wants?
 
-I can of course switch to an unsigned one. I would have picked 'u8' when
-looking at the structures around but any preferences from you?
-'unsigned', 'unsigned int', 'u8', 'u32'?
+Yep, I've added.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Added, thank you! Submitted v4.

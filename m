@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F16956CC78
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A6A56CC79
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiGJCk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 22:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S229628AbiGJCoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 22:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGJCkz (ORCPT
+        with ESMTP id S229450AbiGJCob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 22:40:55 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BE913D5C;
-        Sat,  9 Jul 2022 19:40:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LgWSq1fdKz6P4H3;
-        Sun, 10 Jul 2022 10:39:55 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgAHamkwPMpiR35SAg--.17742S3;
-        Sun, 10 Jul 2022 10:40:50 +0800 (CST)
-Subject: Re: [PATCH RESEND v6 0/8] bugfix and cleanup for blk-throttle
-To:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, mkoutny@suse.com,
-        axboe@kernel.dk, ming.lei@redhat.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <e1d6b26d-2eae-7b78-277a-0bb737dc9c4b@huaweicloud.com>
-Date:   Sun, 10 Jul 2022 10:40:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 9 Jul 2022 22:44:31 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B06D1C12B
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 19:44:30 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id m14so1830051plg.5
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 19:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Td9R7D+qC/sMrhxG2LUChiBMYtVspYLdwWn5UPLa0rQ=;
+        b=ID7O6bC5bpkfC97xVK1WmL4cK0rmIQwCVkBnnWXEw+FeZydHF/A0lUaxWiRS1ul2O6
+         RqwXHNTMS5uZQHrQKh+HfwXT4o/Fyvs4VtETTTD1SFqtA6VXmvi7gDsuwYeNXsExt2Md
+         NThMplvCVYO/eVSawc1VhPTK/kC28i4CX7pkUm58QKIAiEDUcGVi+yAUn5ZVUqR5cB8e
+         AVureMr6Ti60j0glaY0aw8m4yMikhRRc6ft/Gc6EML1QCr5c9mizWqLz5ukxlO+vGsZO
+         MlvH7lX/Ih9jrcSesucLClCq3P5fIqZyhTahcdM9c/V1e1NTMFz9et7sumFSyOrTxkOv
+         SdJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Td9R7D+qC/sMrhxG2LUChiBMYtVspYLdwWn5UPLa0rQ=;
+        b=TdxBnnfLID0Eh2Qo/aGb7XEVRJ2rl73sIsWgNAglBUPJWruiX3xetIm5sTvc8FgAkV
+         gDDC5RtklhRKbPVCm+h7Bp7W01Lb1kL+oJsxP9/e7c7OJ9lrO/CnB1vnCuH7sybYOmsM
+         9NtJaHLu/qO6nx44VNEjfcnkHSWMUWC92hna8lXt2CBwp4XgBIrm4LWrvH6rI0x+/G15
+         wS9Vf8KimmUeele7h72MZnHlS+6KyEHmOkYJAXmRzaY5S8rFP6gsd1JFBgExxEjTzebO
+         0h+A95VKmn0TWjBpvAgQWf1HAqYV5HiGonkDeA6gxPwxl7FELNFJqTirtot3nrHcz58E
+         jU2g==
+X-Gm-Message-State: AJIora/vArixt8R1bACZGftzWNHvYP/DswMAcpvrbhKj7WHuwt9jqyAT
+        w0Ofwr8PuzF+xAIi1UtyJlPYZHQiQK8dLopU9uI=
+X-Google-Smtp-Source: AGRyM1vlCNVeriY72xOZyYmZQtWUl4CtMbaHsSTlkTxXRorYL5PSin5sJ7fk2W4waFuGuoeAxJCjpn6ITWT7Q2HlR6o=
+X-Received: by 2002:a17:902:d509:b0:16c:85c:8f31 with SMTP id
+ b9-20020a170902d50900b0016c085c8f31mr11404457plg.131.1657421069396; Sat, 09
+ Jul 2022 19:44:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220701093441.885741-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgAHamkwPMpiR35SAg--.17742S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr4xJr1xJw43ZFWrXw4UXFb_yoW5Gr48pF
-        Waqr45Cw4UJrnrCw43Gw43ZFWrGan7Xw15X3sxJw1fu3WqvryUtr1v9w4ruFyIyFZ7KrWI
-        9F1jqFn7CFyUZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6a10:a4c6:b0:2b8:6c3c:5636 with HTTP; Sat, 9 Jul 2022
+ 19:44:28 -0700 (PDT)
+Reply-To: rolloba75765@gmail.com
+From:   Roland LOBA <lll160vin@gmail.com>
+Date:   Sat, 9 Jul 2022 19:44:28 -0700
+Message-ID: <CAO=sFaq0urW-1XkkgiY8cgeY1kVCMwO+xW2PuwTmApUgH5mc9A@mail.gmail.com>
+Subject: NICE TO MEET YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:643 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lll160vin[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rolloba75765[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+It=E2=80=99s nice to meet you,
 
-ÔÚ 2022/07/01 17:34, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Resend v5 by a new mail address(huaweicloud.com) because old
-> address(huawei.com)has some problem that emails can end up in spam.
-> Please let me know if anyone still see this patchset end up in spam.
-> 
-> Changes in v6:
->   - rename parameter in patch 3
->   - add comments and reviewed tag for patch 4
-> Changes in v5:
->   - add comments in patch 4
->   - clear bytes/io_skipped in throtl_start_new_slice_with_credit() in
->   patch 4
->   - and cleanup patches 5-8
-> Changes in v4:
->   - add reviewed-by tag for patch 1
->   - add patch 2,3
->   - use a different way to fix io hung in patch 4
-> Changes in v3:
->   - fix a check in patch 1
->   - fix link err in patch 2 on 32-bit platform
->   - handle overflow in patch 2
-> Changes in v2:
->   - use a new solution suggested by Ming
->   - change the title of patch 1
->   - add patch 2
-> 
-> Patch 1 fix that blk-throttle can't work if multiple bios are throttle,
-> Patch 2 fix overflow while calculating wait time
-> Patch 3,4 fix io hung due to configuration updates.
-> Patch 5-8 are cleanup patches, there are no functional changes, just
-> some places that I think can be optimized during code review.
-> 
-Jens and Michal,
+I hope this Message finds you well.
 
-Can you receive this patchset normally(not end up in spam)?
+My name is Mr. Roland LOBA. I need your cooperation for an investment
+partnership. I will provide the FUND for the investment.
 
-If so, Tejun, can you take a look? This patchset do fix some problems in
-blk-throttle.
+Please confirm the receipt of this Message so that I will give you more
+Details of my Investment plans.
 
-BTW, Michal and Ming, it'll be great if you can take a look at other
-patches as well.
+I look forward to hearing from you soon.
 
-Thansk,
-Kuai
-> Previous version:
-> v1: https://lore.kernel.org/all/20220517134909.2910251-1-yukuai3@huawei.com/
-> v2: https://lore.kernel.org/all/20220518072751.1188163-1-yukuai3@huawei.com/
-> v3: https://lore.kernel.org/all/20220519085811.879097-1-yukuai3@huawei.com/
-> v4: https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
-> v5: https://lore.kernel.org/all/20220528064330.3471000-1-yukuai3@huawei.com/
-> 
-> Yu Kuai (8):
->    blk-throttle: fix that io throttle can only work for single bio
->    blk-throttle: prevent overflow while calculating wait time
->    blk-throttle: factor out code to calculate ios/bytes_allowed
->    blk-throttle: fix io hung due to config updates
->    blk-throttle: use 'READ/WRITE' instead of '0/1'
->    blk-throttle: calling throtl_dequeue/enqueue_tg in pairs
->    blk-throttle: cleanup tg_update_disptime()
->    blk-throttle: clean up flag 'THROTL_TG_PENDING'
-> 
->   block/blk-throttle.c | 168 +++++++++++++++++++++++++++++--------------
->   block/blk-throttle.h |  16 +++--
->   2 files changed, 128 insertions(+), 56 deletions(-)
-> 
-
+Thank you in advance,
+Mr. Roland LOBA

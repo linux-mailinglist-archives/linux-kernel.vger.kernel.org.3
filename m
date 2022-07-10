@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EFB56D51B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CF956D601
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiGKHDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S229954AbiGKHK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGKHDH (ORCPT
+        with ESMTP id S229948AbiGKHJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:03:07 -0400
+        Mon, 11 Jul 2022 03:09:50 -0400
 Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7338F192A8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:03:06 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id b2so3689585plx.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:03:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE04010B6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:08:39 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id z1so3715329plb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vvcpBMBhsK4WThjIJ06GBib55a72jQWIvp45WwzhM0M=;
-        b=nVo8rx6VOOC28p9T/aKSRT17oSfJld+SgNKLaQjWe4lXHAxea0/9ZefGQSJAMHQrp/
-         dSHJkpNxq3Bb2zD532BR6aNt22z7Lt0+oSYhud365U9Qz68ryiRKugzYUwJjAxdnX7AT
-         Y7u/qvoq/y5cNHc56lg8GUiS/93nph1JCKeBA5SBnbMmj2c9eUxamuf/qdtsHfPpxXvA
-         u0Vhkb5LcjuYiKfEF5QIYG1ikfV6pLK0QHlCHwVvmS9DeU19pzTflNUj7T6XykIKuKcD
-         SuEA0g98a0qX+9h2G+0bWfU4naTGFPNyp9tmY/uz7qn3YJ6cE3vgvNPrSOOVru0AnhZK
-         eZhQ==
+        bh=gadZ2vlA0vhG8v4UXRsB+M5kKIdI90uIBWjUdQuHTNc=;
+        b=D5MgeewHNkpkpqDDGFH3D80y0Da/7tBDDUUtBY0dz+iSjWpsLsHib/uFA8dZ4NSr+M
+         lFWnI+v3sWNqFBp9F761RtlFHl6/obN4DUkTE+nhabIQ30fIfV+4R43ptqfiFyNeti1c
+         oJPELdFS6UJy3HwUlfVEd7BzB5GnTHE618HCcaG+ldnoeD+Z/sMAjVXbueiehq0/0fHq
+         UIiZtNWXfrRp6y8cRvFBcbEmT6hy+/f02iG4/Hfz+migmqhSGMThOJhJLsgnaQY7wOs5
+         D9eU+zxxJQch59qxvc1EcAUyFYeSAcdTTLJmjqQWqOUCidQwrve+/03xHbrQMPVsXrxV
+         sH1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vvcpBMBhsK4WThjIJ06GBib55a72jQWIvp45WwzhM0M=;
-        b=BcM50IBlNLENYUB+yaBKNNkCRWepaue4/JzyLWznVOghcGKmdmEFw2KDvVoPUxh6x7
-         W8xN4akfALMUWpnL+Hoq23ByR4pnzaG157fzl9xQqd/Ocoa8OEQM0yxYDQXj0jcGrq92
-         zfyP+o7nd8LDqzSM9ccXt/3rOxrR6dDrvbKpMpryoEq9ZAJMzfYg/d7bi2FSehZHkhXU
-         9yhjhAXkiYMOpsaw/Bw/42TNAEfUl3HXQQp0qeFLmi+yNRgyzVERZywrWAW+8g5YZDoH
-         s4fZYhOBXLkoVcg0TcMEAAH9NQUa11fnUWh0wRnyKLVBioeqagRn7as6XolRpH6Gbggm
-         6Uyg==
-X-Gm-Message-State: AJIora8R3siWix2EPvIYGGTRanfblCL54H21bupaUgBCtK4mrZ4sPLrz
-        Y0f59OFVcjIxLDUsFQ13Nz2wpMJCpog=
-X-Google-Smtp-Source: AGRyM1tkRMMSGieV9B+4jTa6gBCbgS/VOYk6R3OP4PWsI/ErIO73Qcxhm9Awn7/7FYSemvdlQPOzYw==
-X-Received: by 2002:a17:903:22cf:b0:16c:4145:75c5 with SMTP id y15-20020a17090322cf00b0016c414575c5mr5717431plg.127.1657522985449;
-        Mon, 11 Jul 2022 00:03:05 -0700 (PDT)
+        bh=gadZ2vlA0vhG8v4UXRsB+M5kKIdI90uIBWjUdQuHTNc=;
+        b=1m2yS1z7c26h7I95PZeaB+3GjGleDICUJGk/fGweuwsLeD/evP+OnaDGD63HUz5iNq
+         BSZVdX8HHCowQOx1/YrsSpu5xKo3yHntPyk90D8JROr0/U28ImxyAvM5DgvSl5HtDi3r
+         rqVJ8OM95qZdLiZrNZeJq+zRArpZ1BNoHbQnU8QGAEPbGwrKhNB+Qjn93QoC6oN9TQTt
+         oXjgYT5TQCeg7JifrSSTugJv7JNHcP+O+ZK3e5ugvXs6CRtzUUx/Skjr8Vaz6xNKhCe/
+         hIuGQ4zN3eIwZmeknnIoDmFX/Jn4I2hS2z6mP/ev/bctgm2efQ4zg1S/s8X2dQ3GcBOQ
+         zC+Q==
+X-Gm-Message-State: AJIora/YUvFGYQp1Rvje8NnvtU+fXgam0nzQzdnveZrJsXpV3UJ3zx2j
+        wREJYTrtJ7wC/1MD5fgxY/G/2xTqbRQ=
+X-Google-Smtp-Source: AGRyM1vkch1kARi9+43efKCVChFZNhmprUPtukujgVbk1oomBgpudfZ208drnPRfnRXj5F25t/VQOQ==
+X-Received: by 2002:a17:90a:4704:b0:1ef:f369:bd0e with SMTP id h4-20020a17090a470400b001eff369bd0emr15844315pjg.20.1657523318876;
+        Mon, 11 Jul 2022 00:08:38 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id ge16-20020a17090b0e1000b001efa4a1bb3esm3967305pjb.35.2022.07.11.00.03.04
+        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b0052ac99c2c1csm1945705pfb.83.2022.07.11.00.08.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 00:03:04 -0700 (PDT)
+        Mon, 11 Jul 2022 00:08:38 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
-To:     linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Dave Hansen <dave.hansen@linux.intel.com>
 Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, Linux MM <linux-mm@kvack.org>,
         Nadav Amit <namit@vmware.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH v2] x86/mm/tlb: ignore f->new_tlb_gen when zero
-Date:   Sun, 10 Jul 2022 16:28:37 -0700
-Message-Id: <20220710232837.3618-1-namit@vmware.com>
+Subject: [PATCH] x86/mm/tlb: Skip tracing when flush is not done
+Date:   Sun, 10 Jul 2022 16:33:55 -0700
+Message-Id: <20220710233355.4066-1-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -76,103 +75,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
-possible") introduced an optimization of skipping the flush if the TLB
-generation that is flushed (as provided in flush_tlb_info) was already
-flushed.
+Currently, if flush_tlb_func() does not flush for some reason, the
+tracing of the flush will be done only in certain cases, depending on
+the reason of the flush. Be consistent and just do not trace in all
+cases when the flush was eventually not done.
 
-However, arch_tlbbatch_flush() does not provide any generation in
-flush_tlb_info. As a result, try_to_unmap_one() would not perform any
-TLB flushes.
-
-Fix it by checking whether f->new_tlb_gen is nonzero. Zero value is
-anyhow is an invalid generation value. To avoid future confusions,
-introduce TLB_GENERATION_INVALID constant and use it properly. Add some
-assertions to check no partial flushes are done with
-TLB_GENERATION_INVALID or when f->mm is NULL, since this does not make
-any sense.
-
-In addition, add the missing unlikely().
-
-Fixes: aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when possible")
-Reported-by: Hugh Dickins <hughd@google.com>
-Tested-by: Hugh Dickins <hughd@google.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
 Cc: Andy Lutomirski <luto@kernel.org>
 Signed-off-by: Nadav Amit <namit@vmware.com>
-
 ---
+ arch/x86/mm/tlb.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-v1 -> v2:
-* Introduce TLB_GENERATION_INVALID to clarify intent.
-* Leave the early return and do not "goto out".
-* Add some assertions to check and document in code the relationship
-  between TLB_GENERATION_INVALID and TLB_FLUSH_ALL.
----
- arch/x86/include/asm/tlbflush.h |  1 +
- arch/x86/mm/tlb.c               | 15 ++++++++++++---
- 2 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 4af5579c7ef7..cda3118f3b27 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -16,6 +16,7 @@
- void __flush_tlb_all(void);
- 
- #define TLB_FLUSH_ALL	-1UL
-+#define TLB_GENERATION_INVALID	0
- 
- void cr4_update_irqsoff(unsigned long set, unsigned long clear);
- unsigned long cr4_read_shadow(void);
 diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index d9314cc8b81f..0f346c51dd99 100644
+index 0f346c51dd99..5c17b86b928d 100644
 --- a/arch/x86/mm/tlb.c
 +++ b/arch/x86/mm/tlb.c
-@@ -771,7 +771,8 @@ static void flush_tlb_func(void *info)
- 		return;
+@@ -736,7 +736,7 @@ static void flush_tlb_func(void *info)
+ 	u32 loaded_mm_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
+ 	u64 local_tlb_gen = this_cpu_read(cpu_tlbstate.ctxs[loaded_mm_asid].tlb_gen);
+ 	bool local = smp_processor_id() == f->initiating_cpu;
+-	unsigned long nr_invalidate = 0;
++	unsigned long nr_invalidate;
+ 	u64 mm_tlb_gen;
+ 
+ 	/* This code cannot presently handle being reentered. */
+@@ -795,7 +795,7 @@ static void flush_tlb_func(void *info)
+ 		 * be handled can catch us all the way up, leaving no work for
+ 		 * the second flush.
+ 		 */
+-		goto done;
++		return;
  	}
  
--	if (f->new_tlb_gen <= local_tlb_gen) {
-+	if (unlikely(f->new_tlb_gen != TLB_GENERATION_INVALID &&
-+		     f->new_tlb_gen <= local_tlb_gen)) {
- 		/*
- 		 * The TLB is already up to date in respect to f->new_tlb_gen.
- 		 * While the core might be still behind mm_tlb_gen, checking
-@@ -843,6 +844,12 @@ static void flush_tlb_func(void *info)
- 		/* Partial flush */
- 		unsigned long addr = f->start;
+ 	WARN_ON_ONCE(local_tlb_gen > mm_tlb_gen);
+@@ -871,7 +871,6 @@ static void flush_tlb_func(void *info)
+ 	this_cpu_write(cpu_tlbstate.ctxs[loaded_mm_asid].tlb_gen, mm_tlb_gen);
  
-+		/* Partial flush cannot have invalid generations */
-+		VM_BUG_ON(f->new_tlb_gen == TLB_GENERATION_INVALID);
-+
-+		/* Partial flush must have valid mm */
-+		VM_BUG_ON(f->mm == NULL);
-+
- 		nr_invalidate = (f->end - f->start) >> f->stride_shift;
- 
- 		while (addr < f->end) {
-@@ -1045,7 +1052,8 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
- 		struct flush_tlb_info *info;
- 
- 		preempt_disable();
--		info = get_flush_tlb_info(NULL, start, end, 0, false, 0);
-+		info = get_flush_tlb_info(NULL, start, end, 0, false,
-+					  TLB_GENERATION_INVALID);
- 
- 		on_each_cpu(do_kernel_range_flush, info, 1);
- 
-@@ -1214,7 +1222,8 @@ void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
- 
- 	int cpu = get_cpu();
- 
--	info = get_flush_tlb_info(NULL, 0, TLB_FLUSH_ALL, 0, false, 0);
-+	info = get_flush_tlb_info(NULL, 0, TLB_FLUSH_ALL, 0, false,
-+				  TLB_GENERATION_INVALID);
- 	/*
- 	 * flush_tlb_multi() is not optimized for the common case in which only
- 	 * a local TLB flush is needed. Optimize this use-case by calling
+ 	/* Tracing is done in a unified manner to reduce the code size */
+-done:
+ 	trace_tlb_flush(!local ? TLB_REMOTE_SHOOTDOWN :
+ 				(f->mm == NULL) ? TLB_LOCAL_SHOOTDOWN :
+ 						  TLB_LOCAL_MM_SHOOTDOWN,
 -- 
 2.25.1
 

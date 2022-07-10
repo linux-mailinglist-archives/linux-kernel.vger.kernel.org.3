@@ -2,130 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31756D1DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF3056D1DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiGJXEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 19:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S229637AbiGJXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 19:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJXEq (ORCPT
+        with ESMTP id S229463AbiGJXFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 19:04:46 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597FBF599
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:04:44 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bu42so6103652lfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p3eF7/3YZ7rIKKStNQt75RnsLq+WT1feGCVcwXzz/uI=;
-        b=D9u3/PqoDWsohZRxqIhl7zMDCtr1rR6HcbqK4ie4MGbL09YbSVqbv4KNPR/b30iI2/
-         yLYSbDvo+nSUOQpknGd63sOYc+XzftwHyynHqusAWPYWJHxHEGhnCgDxd8CtzT6I3Sjv
-         ZSIFMjuS0Y9RJW+WKeRindRAk0/+0p+omOKH9ThPN2V75KU4BDCYIMECo7RJQea0Ie2v
-         jvT8OWxgVZNm3MqRxYS781o2keDoD2SMSv5s4Z0RdwHSpDsilBZxFgzj/ii45EGMDTOS
-         JYbZaSi45J1VyKhDkV5DqiB+lP51KKJLshTdDYaQtnOdp+GZgE1QKAVuAmjp8HXUeEMp
-         JBYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p3eF7/3YZ7rIKKStNQt75RnsLq+WT1feGCVcwXzz/uI=;
-        b=vx/cFahshPPPo/iqtxQmy++NNTdU+VYDP4hmppBUtJ/+9laOIBSOi5U2+dWXzC/GR5
-         cSdPyJaht/5kIQ7R9ZlH2KEnm1TL/Mv3YHsmOjQqYVQDjipARkVOPcLvAMSstPEWNE+v
-         uYOG3Sj4byS4WPdQYzoIlgGKXffYXKjkN5yvIWMkhDST4u0AA9xQz6onmZ/MWijvoIhM
-         L2o7ErfSoCLoncBSmfduxlLfI1vc0xb2Kg7q7wPc83uiLlb7yQ/91kSJycO5SRF5wrEu
-         lznGjOg1HaBi3+kjtumW53CMuS0Ox+f7TvTRGgdIvlfkA7rYQIqJzxWD0+oqPS3epVNk
-         TxPw==
-X-Gm-Message-State: AJIora/7N5aVOPEPnAumS71OJcRVQZKpDd8qV/tp7Xs8LiMCWKd/V1qg
-        a2KfSzNlBj0x5IJSR3bp0fuqEAtM5VWhsJPHSo1DiQ==
-X-Google-Smtp-Source: AGRyM1ullE+R0OOwt9+0nk05VmjzL/rnKXOzOo0zF0uLxr+6lUyQ1Vf9sRaETxu+k2ZRwmsM4OvKJj735krWmhsnWM0=
-X-Received: by 2002:a05:6512:2252:b0:489:dede:1cb3 with SMTP id
- i18-20020a056512225200b00489dede1cb3mr941409lfu.503.1657494282616; Sun, 10
- Jul 2022 16:04:42 -0700 (PDT)
+        Sun, 10 Jul 2022 19:05:42 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A532CF597;
+        Sun, 10 Jul 2022 16:05:41 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0733C5C010F;
+        Sun, 10 Jul 2022 19:05:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 10 Jul 2022 19:05:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm2; t=1657494339; x=
+        1657580739; bh=f9bSjqSEnIXH1UABF2q7HoN67rLpDoOJdF+QGXn1KUY=; b=n
+        ImRps3NNA9r8Ob0rontYzLsDJVt0ZKLdUPlwsX95x6GpbRD6x7Lyn02YYRWcPfYL
+        0VB408VfRNmsr7fuMixiDSJwzLQyGX6MyZgJHVZs1/aRPXq4IQi+ToW9sgeLHC9r
+        3K4OlkDn1n9DDTGW/BcRQZFjZRxwVsJNilVdcAgTFAxSTMjlH2qCbfItNvJ5LN97
+        83Z+wBkAHz6Zh8Nn93mhQxkpY1bQHO/H1wI1+TTIM00Nf+lb6a+g3DJUbt6YtT9P
+        hI1VuWdLykvFiSBM6s+sIIYmcpm9Zg/ufniYgw50zJLNDfWxBpUc388JdyG1RHCi
+        pzlxG/mF50z8cuOY+iFjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1657494339; x=1657580739; bh=f9bSjqSEnIXH1UABF2q7HoN67rLpDoOJdF+
+        QGXn1KUY=; b=alILd2VqdjjP7T0DMJumMBXvyb06DgdGontjC9CN3A+FDaaueyI
+        xVrkIj4AeGQOcN651bBOBMgm+ZVqCW0xNBNjdSS1aFkl30TLmV0/reDYtKe9EMvR
+        ptroAa1dMqCNnif0v6TbAJMHh9OsQrN6nxSDioemRAzFhc2rEOq2oyCD+j7Ixp3T
+        pCD2m3czGe0Yk3FHgfQn7MKYgQySVfQ5aivwMpIjaK99ZQFzooArZGBHxbp3jhf3
+        g/tzSzKRwTElGqtf9VHWQWP8thKU4Y3cFYPWCTrsFxlTCPKob8raooKgyBf6jU3c
+        lI8sXehCvrvYYAUinIl7tBTgghiQ2yTspvg==
+X-ME-Sender: <xms:QlvLYrYimvrXsyUHJI3Iq8i-pAXr9yFJ4Ov1RskGM0LfEl78Dsk9Uw>
+    <xme:QlvLYqZnjkpWuxgjAGGOz-KxJLs2fBE2DIQtn6xlUCnDU68JiTP8pqkU1APSNSs-j
+    gzzn9uMDXmtUVo>
+X-ME-Received: <xmr:QlvLYt-dKSjZ6RG-qp2MOhAhEnjnf5z2_OlK5_vqSp7XPBGMQDDmLcMkP7sTIM7WZfmMo2qY8oju>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejvddgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgvmhhiucfo
+    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
+    grsgdrtghomheqnecuggftrfgrthhtvghrnhepvdefgeekvdekgfffgeekhfeijedtffek
+    hefhleehfeejueetgfelgefgtdevieelnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
+    sgdrtghomh
+X-ME-Proxy: <xmx:QlvLYhr-Ba7EtRQht-ODUj7gNfFYD1U4pG36EVbcDrX3kWHAUI7rSw>
+    <xmx:QlvLYmpRFIPGyFast4ehq-otrzPRgX4xrmXIkzmhjEkVPtfhMciH1g>
+    <xmx:QlvLYnSCaoul2rBMKybiCc5DdWMUsyjSKZ5HevK-8z-KoB5mus73FA>
+    <xmx:Q1vLYvnWBqnYHkxAO5SDNNEWYqEkpN5YfwGc3B1WLT6XdB0hyatxZA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 10 Jul 2022 19:05:38 -0400 (EDT)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v3] xen/gntdev: Ignore failure to unmap INVALID_GRANT_HANDLE
+Date:   Sun, 10 Jul 2022 19:05:22 -0400
+Message-Id: <20220710230522.1563-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220702213724.3949-1-semen.protsenko@linaro.org>
- <CAPLW+4kYbG7PRYo_L6N5xMa+F9DFBpyph4B+zb2R4kBbE3EKHg@mail.gmail.com> <67943ec4dcfe85d6d616a5507437d99f6c5638a2.camel@gmail.com>
-In-Reply-To: <67943ec4dcfe85d6d616a5507437d99f6c5638a2.camel@gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 11 Jul 2022 02:04:31 +0300
-Message-ID: <CAPLW+4kU3gLfSRa4cm+374Fh4ooCag7kSk_cwhDe=M8ewMzcbw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] iommu/exynos: Add basic support for SysMMU v7
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Jul 2022 at 13:47, David Virag <virag.david003@gmail.com> wrote:
->
-> On Sun, 2022-07-03 at 00:48 +0300, Sam Protsenko wrote:
-> [...]
-> > Hi Marek,
-> >
-> > As I understand, you have some board with SysMMU v7, which is not VM
-> > capable (judging from the patches you shared earlier). Could you
-> > please somehow verify if this series works fine for you? For example,
-> > this testing driver [1] can be helpful.
-> >
-> > Thanks!
-> >
-> > [1]
-> > https://github.com/joe-skb7/linux/commit/bbadd46fa525fe1fef2ccbdfff81f7d29caf0506
->
-> Hi Sam,
->
-> Not Marek here, but I wanted to try this on my jackpotlte (Exynos
-> 7885). The driver reports it's DPU sysmmu as version 7.2, and manually
-> reading the capabilities registers it looks like it has the 2nd
-> capability register but not the VM capability.
->
-> After applying your patches, adding your test driver (with SYSMMU_BASE
-> corrected to 7885 value), and adding the sysmmu to dt, I tried to cat
-> the test file that it creates in debugfs and I got an SError kernel
-> panic.
->
-> I tried tracing where the SError happens and it looks like it's this
-> line:
->         /* Preload for emulation */
->         iowrite32(rw | vpn, obj->reg_base + MMU_EMU_PRELOAD);
->
-> Trying to read the EMU registers using devmem results in a "Bus error".
->
-> Could these emulation registers be missing from my SysMMU? Do you have
-> any info on what version should have it? Or maybe some capability bit?
-> I'll try testing it with DECON/DPP later and see if it works that way.
->
+The error paths of gntdev_mmap() can call unmap_grant_pages() even
+though not all of the pages have been successfully mapped.  This will
+trigger the WARN_ON()s in __unmap_grant_pages_done().  The number of
+warnings can be very large; I have observed thousands of lines of
+warnings in the systemd journal.
 
-I don't have any manuals for v7.2, so I can only assume. Yes, it looks
-to me very much like those EMU registers are missing in your SysMMU
-IP-core: I remember seeing some similar SError messages while trying
-to access some incorrect MMIO addresses. Good news is that once this
-patch series is fixed and accepted, you can *probably* base your work
-on top of it (as I only validated it with EMU registers for now). I
-mean you can add some real IP-core users of that IOMMU, like graphics
-(DPU), audio, camera, etc. Not sure though if it would be enough to
-just add some DTS nodes, or your SoC support has to be added to some
-drivers first.
+Avoid this problem by only warning on unmapping failure if the handle
+being unmapped is not INVALID_GRANT_HANDLE.  The handle field of any
+page that was not successfully mapped will be INVALID_GRANT_HANDLE, so
+this catches all cases where unmapping can legitimately fail.
 
-> Best regards,
-> David
+Suggested-by: Juergen Gross <jgross@suse.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
+---
+ drivers/xen/gntdev.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+Changes since v2:
+
+- Use unmap_ops instead of kunmap_ops in the first WARN_ON
+
+Changes since v1:
+
+- Explicitly check for a status other than GNTST_okay instead of
+  implicitly checking that it is nonzero.
+- Avoid wrapping a line as within a comparison, as this makes the code
+  hard to read.
+
+diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
+index 4b56c39f766d4da68570d08d963f6ef40c8d9c37..84b143eef395b1585f3a8c0fdcb301ce9fbc52ec 100644
+--- a/drivers/xen/gntdev.c
++++ b/drivers/xen/gntdev.c
+@@ -396,13 +396,15 @@ static void __unmap_grant_pages_done(int result,
+ 	unsigned int offset = data->unmap_ops - map->unmap_ops;
+ 
+ 	for (i = 0; i < data->count; i++) {
+-		WARN_ON(map->unmap_ops[offset+i].status);
++		WARN_ON(map->unmap_ops[offset + i].status != GNTST_okay &&
++			map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
+ 		pr_debug("unmap handle=%d st=%d\n",
+ 			map->unmap_ops[offset+i].handle,
+ 			map->unmap_ops[offset+i].status);
+ 		map->unmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
+ 		if (use_ptemod) {
+-			WARN_ON(map->kunmap_ops[offset+i].status);
++			WARN_ON(map->kunmap_ops[offset + i].status != GNTST_okay &&
++				map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
+ 			pr_debug("kunmap handle=%u st=%d\n",
+ 				 map->kunmap_ops[offset+i].handle,
+ 				 map->kunmap_ops[offset+i].status);
+-- 
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab

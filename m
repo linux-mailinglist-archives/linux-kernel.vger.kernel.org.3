@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB40656D0B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C6C56D0BA
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiGJSWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 14:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S229585AbiGJSZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 14:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJSWH (ORCPT
+        with ESMTP id S229463AbiGJSZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 14:22:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E23EE07;
-        Sun, 10 Jul 2022 11:22:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0338160E8B;
-        Sun, 10 Jul 2022 18:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5630BC341C8;
-        Sun, 10 Jul 2022 18:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657477323;
-        bh=fFLHdaTrkdL546hiavbwZ4q6JyKxUPTO4mCIXRkM4ZQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ojK40enGcuer2RNiPxNMGa9P6bv06ZfLhTK1nB7O87SXb1qLc3JDuplfTYSIZ5V8P
-         SkoP7BOBQ8IxIenw8rrTP7Z1XnoKNRjWqbIEwnl2u8Iikx62dRbdbe9fY5QK8Qwwkt
-         l1yvo3vUc3Avxlcr3I3QjLVkEzknIDVPh6X5ZBKpZF7YyC+/UQii9IyKm21YNQQrqI
-         1ITC+VnR/nb+3e1lTPG9/uYZ4eSd3CYuPwg71ptlUKwmKQooutWLfCxCjvkYuGdWzE
-         V2ZZaX7713W03hxWC9opx5v22vgRsAW9yzgd+2BAhLGImT67qbtdg6L9BnXy/bAinB
-         wUeIRALm4Al5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33339E45BE0;
-        Sun, 10 Jul 2022 18:22:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 10 Jul 2022 14:25:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8875F13D1C;
+        Sun, 10 Jul 2022 11:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657477526; x=1689013526;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6aFXrMG+va2IZjOmp0OkSsM4/LOorOUIHVe5fbwzo7g=;
+  b=eRZsrTin40xOegmwDtY3wM0qUcCykxiJKdu0qbTPWjgW3GoNYKlI7Zh0
+   M/WywLMdVNa6wxYVcqJdrLA+uohjEFDHKIO0QlAEYCH8Dk4tP3H5fYF4U
+   XPKZtApFjDfvXnAjn088/Wk6ctnL3+/h9UAc97vaxj0bASxj7hvIIHkZI
+   lUi4VKUPtgfpLK80BuzUxlZlIKTmCJRMkxWIQqPhfL+8k4OXUqFO3ok2Y
+   vmKSkikYPjS50b9oph4scy1VaNa5R8ooHlwMtVQIf/VC04gvv+KbwgWMz
+   Zkk9XuSDvrkO18eUg+R6XPrJiKzSd/Bf8Yrq19Uu1dywi+WTReNTZ2uH7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282081436"
+X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
+   d="scan'208";a="282081436"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:25:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
+   d="scan'208";a="736864827"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:25:25 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>, markgross@kernel.org,
+        ashok.raj@intel.com, ravi.v.shankar@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH 0/2] Two fixes for IFS
+Date:   Sun, 10 Jul 2022 11:25:19 -0700
+Message-Id: <20220710182521.60642-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <c416b93b-8adc-d9a8-ef0d-594cce6d9a9d@redhat.com>
+References: <c416b93b-8adc-d9a8-ef0d-594cce6d9a9d@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH v5 00/12] octeontx2: Exact Match Table.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165747732320.1773.1868461985348849288.git-patchwork-notify@kernel.org>
-Date:   Sun, 10 Jul 2022 18:22:03 +0000
-References: <20220708044151.2972645-1-rkannoth@marvell.com>
-In-Reply-To: <20220708044151.2972645-1-rkannoth@marvell.com>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,50 +62,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hans ... if you are pushing to Linus to add "BROKEN", then could
+you include these two patches to make it fractionally less broken?
 
-This series was applied to bpf/bpf-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+-Tony
 
-On Fri, 8 Jul 2022 10:11:39 +0530 you wrote:
-> Exact match table and Field hash support for CN10KB silicon
-> 
-> ChangeLog
-> ---------
->   1) V0 to V1
->      a) Removed change IDs from all patches.
-> 
-> [...]
+Jithu Joseph (2):
+  Documentation: Correct IFS reload documentation
+  platform/x86/intel/ifs: return error on load failure
 
-Here is the summary with links:
-  - [net-next,v5,01/12] octeontx2-af: Use hashed field in MCAM key
-    https://git.kernel.org/bpf/bpf-next/c/a95ab93550d3
-  - [net-next,v5,02/12] octeontx2-af: Exact match support
-    (no matching commit)
-  - [net-next,v5,03/12] octeontx2-af: Exact match scan from kex profile
-    https://git.kernel.org/bpf/bpf-next/c/60ec39311750
-  - [net-next,v5,04/12] octeontx2-af: devlink configuration support
-    (no matching commit)
-  - [net-next,v5,05/12] octeontx2-af: FLR handler for exact match table.
-    https://git.kernel.org/bpf/bpf-next/c/799f02ef2ce3
-  - [net-next,v5,06/12] octeontx2-af: Drop rules for NPC MCAM
-    (no matching commit)
-  - [net-next,v5,07/12] octeontx2-af: Debugsfs support for exact match.
-    https://git.kernel.org/bpf/bpf-next/c/01b9228b20ad
-  - [net-next,v5,08/12] octeontx2: Modify mbox request and response structures
-    https://git.kernel.org/bpf/bpf-next/c/68793a8bbfcd
-  - [net-next,v5,09/12] octeontx2-af: Wrapper functions for MAC addr add/del/update/reset
-    (no matching commit)
-  - [net-next,v5,10/12] octeontx2-af: Invoke exact match functions if supported
-    https://git.kernel.org/bpf/bpf-next/c/84926eb57dbf
-  - [net-next,v5,11/12] octeontx2-pf: Add support for exact match table.
-    https://git.kernel.org/bpf/bpf-next/c/e56468377fa0
-  - [net-next,v5,12/12] octeontx2-af: Enable Exact match flag in kex profile
-    https://git.kernel.org/bpf/bpf-next/c/7189d28e7e2d
+ drivers/platform/x86/intel/ifs/ifs.h  | 2 +-
+ drivers/platform/x86/intel/ifs/load.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.3
 

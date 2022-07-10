@@ -2,120 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC6356CC2F
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898C856CC3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiGJBbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 21:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S229590AbiGJCIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 22:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGJBbk (ORCPT
+        with ESMTP id S229462AbiGJCIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 21:31:40 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9236015A21;
-        Sat,  9 Jul 2022 18:31:39 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id y22so532127qki.7;
-        Sat, 09 Jul 2022 18:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W+RUA8QatinY3k/ikkS0kUMcoOi6M3AlFiU1N+5j9MI=;
-        b=lSv4WQ8HlrpD3fVbm2Yhta7lhAIa3r+j6LUNquuxXWx2DuXhRxAZQvSqg/m50VHKQC
-         EW2osXIdWeE0MtrdWqzVDzrQjkrGeyYPyCKgzZYNiqJBwp6Sx22neu2OghHSswDtN1TS
-         ZKTRrW6SDlcsPxo6Wxu68ICDQMwwau5BO3t1uZy8sRpiyPyBOpr+2Jq37ihO6ak4mohw
-         yF257n4+LPPgDq42Ny5XWkqHaeO3Aj9oDHOGZnHYb+nTg5Ew6EAjOwuAnlVT0YnOteKq
-         Pd1Qxtbb6XTFAnVRrGC125EkJuzp5ZYO+yodyR0vrujo9vuLRLbZEwww/xGvmLDWxq2Y
-         A8Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W+RUA8QatinY3k/ikkS0kUMcoOi6M3AlFiU1N+5j9MI=;
-        b=T0ltGjJKE+ZMumigFn8d9AZIzM0COGXTq/hofB5XTPDEXKLIObvTjeeiIIYalVJFLM
-         oXpMlV6/oXu1ThlidzChB2VZ0qbNumz0FojyvkTdo/RXLW1/uHAtDE7LvRyGz+ok86gv
-         kOAdIZaorpd05iu0jZsJpTpHpyazPl4GkGwiT8YsJhxA6sO/aHAOfQjbjLon5ePvzjrW
-         uqrUP3HWcP7Zr+qGT6npF78ZReQYo4rTxcB8prsA0eHOJ2gwdk7d1gdcjxiWP9iMvYtR
-         w3v4lpF1zeY7UaZfdT6YRFYPoM5GdLI2+iKNrE3HDNlZLaQdp84GlGAdVVyenBBw7P/u
-         bsMA==
-X-Gm-Message-State: AJIora8FUZQfcuSPuEzeOfKBxIXnrL/+QZVxTkGpIbvJ5qrED99BA1cV
-        t9viL0y9F1y2GIpJKMDgtNU=
-X-Google-Smtp-Source: AGRyM1vS5JUfU8T3Ux084nZAemZhx6XwdCnyFbQzlb424f0DwOZriBhvMfpqBHpAZWiHp+aa7w0wBg==
-X-Received: by 2002:a37:9241:0:b0:6b5:738c:be25 with SMTP id u62-20020a379241000000b006b5738cbe25mr3094264qkd.178.1657416698628;
-        Sat, 09 Jul 2022 18:31:38 -0700 (PDT)
-Received: from shaak.xiphos.ca (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id j13-20020a05620a410d00b006b575a9775csm2137258qko.45.2022.07.09.18.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 18:31:38 -0700 (PDT)
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     liambeguin@gmail.com, jic23@kernel.org, geert@linux-m68k.org
-Cc:     peda@axentia.se, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] iio: test: rework Kconfig to support modules
-Date:   Sat,  9 Jul 2022 21:31:09 -0400
-Message-Id: <20220710013109.3349104-6-liambeguin@gmail.com>
-X-Mailer: git-send-email 2.35.1.4.g5d01301f2b86
-In-Reply-To: <20220710013109.3349104-1-liambeguin@gmail.com>
-References: <20220710013109.3349104-1-liambeguin@gmail.com>
+        Sat, 9 Jul 2022 22:08:22 -0400
+X-Greylist: delayed 1861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Jul 2022 19:08:19 PDT
+Received: from m1564.mail.126.com (m1564.mail.126.com [220.181.15.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5792240B8;
+        Sat,  9 Jul 2022 19:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=WFSNP
+        JpuFwKyWrFFhWsrKhOuZQcpVRI7jra+CFun2n4=; b=W81/vhCqkxlEdzAL4oRkE
+        J5wXAQhSvDx06iN5XnU51iBp9sRYPzuM5Ow4FpEe/5TnwsCwRUmHAN2rlRgnLcMJ
+        IBIpDwoOGfZ4qrkB0TPj1hSKb/U9hYvBpgb/22k/vKqQ5B0Cf+k0ROpqyxLfSctl
+        2TBu+w4KQjAJ/Rw28Qst6Q=
+Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr64
+ (Coremail) ; Sun, 10 Jul 2022 09:37:10 +0800 (CST)
+X-Originating-IP: [124.16.139.61]
+Date:   Sun, 10 Jul 2022 09:37:10 +0800 (CST)
+From:   "Liang He" <windhl@126.com>
+To:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] input/serio: Fix refcount leak bug in i8042-sparcio
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <YskI088DEjt39Dqm@google.com>
+References: <20220619073036.4067872-1-windhl@126.com>
+ <YskI088DEjt39Dqm@google.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <5b7bcbf5.3f6.181e5c0dcff.Coremail.windhl@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: QMqowAD3BnNHLcpiobZIAA--.51094W
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QU5F1pEAXnn2QABsf
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rework the IIO test Kconfig to support building KUnit tests as modules.
-This lets users execute tests at runtime in addition to the usual
-tools/testing/kunit/kunit.py script.
-
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
----
- drivers/iio/test/Kconfig | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
-index 7dbf51bc4934..82924727b2cc 100644
---- a/drivers/iio/test/Kconfig
-+++ b/drivers/iio/test/Kconfig
-@@ -5,15 +5,25 @@
- 
- # Keep in alphabetical order
- config IIO_RESCALE_KUNIT_TEST
--	bool "Test IIO rescale conversion functions"
--	depends on KUNIT=y && IIO_RESCALE=y
-+	tristate "Test IIO rescale conversion functions" if !KUNIT_ALL_TESTS
-+	depends on KUNIT && IIO_RESCALE
- 	default KUNIT_ALL_TESTS
- 	help
--	  If you want to run tests on the iio-rescale code say Y here.
-+	  build unit tests for the iio-rescale code.
- 
--	  This takes advantage of ARCH=um to run tests and should be used by
--	  developers to tests their changes to the rescaling logic.
-+	  For more information on KUnit and unit tests in general, please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
- 
- config IIO_FORMAT_KUNIT_TEST
--        bool "Test IIO formatting functions"
--        depends on KUNIT=y
-+	tristate "Test IIO formatting functions" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  build unit tests for the IIO formatting functions.
-+
-+	  For more information on KUnit and unit tests in general, please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
--- 
-2.35.1.4.g5d01301f2b86
-
+CgoKCgpBdCAyMDIyLTA3LTA5IDEyOjQ5OjIzLCAiRG1pdHJ5IFRvcm9raG92IiA8ZG1pdHJ5LnRv
+cm9raG92QGdtYWlsLmNvbT4gd3JvdGU6Cj5IaSBMaWFuZywKPgo+T24gU3VuLCBKdW4gMTksIDIw
+MjIgYXQgMDM6MzA6MzZQTSArMDgwMCwgTGlhbmcgSGUgd3JvdGU6Cj4+IEluIGk4MDQyX3BsYXRm
+b3JtX2luaXQoKSBhbmQgaTgwNDJfcGxhdGZvcm1fZXhpdCgpLCB3ZSBuZWVkIGNhbGwKPj4gb2Zf
+bm9kZV9wdXQoKSB0byBrZWVwIHJlZmNvdW50IGJhbGFuY2UuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5
+OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy9pbnB1dC9zZXJp
+by9pODA0Mi1zcGFyY2lvLmggfCA0ICsrKysKPj4gIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlv
+bnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2lucHV0L3NlcmlvL2k4MDQyLXNwYXJj
+aW8uaCBiL2RyaXZlcnMvaW5wdXQvc2VyaW8vaTgwNDItc3BhcmNpby5oCj4+IGluZGV4IGZjZTc2
+ODEyODQzYi4uYTJhOWRiOTIyMGQ3IDEwMDY0NAo+PiAtLS0gYS9kcml2ZXJzL2lucHV0L3Nlcmlv
+L2k4MDQyLXNwYXJjaW8uaAo+PiArKysgYi9kcml2ZXJzL2lucHV0L3NlcmlvL2k4MDQyLXNwYXJj
+aW8uaAo+PiBAQCAtMTA4LDYgKzEwOCw4IEBAIHN0YXRpYyBpbnQgX19pbml0IGk4MDQyX3BsYXRm
+b3JtX2luaXQodm9pZCkKPj4gIAlzdHJ1Y3QgZGV2aWNlX25vZGUgKnJvb3QgPSBvZl9maW5kX25v
+ZGVfYnlfcGF0aCgiLyIpOwo+PiAgCWNvbnN0IGNoYXIgKm5hbWUgPSBvZl9nZXRfcHJvcGVydHko
+cm9vdCwgIm5hbWUiLCBOVUxMKTsKPj4gIAo+PiArCW9mX25vZGVfcHV0KHJvb3QpOwo+PiArCj4+
+ICAJaWYgKG5hbWUgJiYgIXN0cmNtcChuYW1lLCAiU1VOVyxKYXZhU3RhdGlvbi0xIikpIHsKPj4g
+IAkJLyogSGFyZGNvZGVkIHZhbHVlcyBmb3IgTXJDb2ZmZWUuICAqLwo+PiAgCQlpODA0Ml9rYmRf
+aXJxID0gaTgwNDJfYXV4X2lycSA9IDEzIHwgMHgyMDsKPj4gQEAgLTEzOSw2ICsxNDEsOCBAQCBz
+dGF0aWMgaW5saW5lIHZvaWQgaTgwNDJfcGxhdGZvcm1fZXhpdCh2b2lkKQo+PiAgCXN0cnVjdCBk
+ZXZpY2Vfbm9kZSAqcm9vdCA9IG9mX2ZpbmRfbm9kZV9ieV9wYXRoKCIvIik7Cj4+ICAJY29uc3Qg
+Y2hhciAqbmFtZSA9IG9mX2dldF9wcm9wZXJ0eShyb290LCAibmFtZSIsIE5VTEwpOwo+PiAgCj4+
+ICsJb2Zfbm9kZV9wdXQocm9vdCk7Cj4+ICsKPj4gIAlpZiAoIW5hbWUgfHwgc3RyY21wKG5hbWUs
+ICJTVU5XLEphdmFTdGF0aW9uLTEiKSkKPj4gIAkJcGxhdGZvcm1fZHJpdmVyX3VucmVnaXN0ZXIo
+JnNwYXJjX2k4MDQyX2RyaXZlcik7Cj4+ICB9Cj4KPlRoZXJlIGFscmVhZHkgd2FzIGFuIGF0dGVt
+cHQgdG8gZml4IHRoaXMgaXNzdWUgaW4gYSBzbGlnaHRseSBiZXR0ZXIgd2F5LAo+dW5mb3J0dW5h
+dGVseSB0aGUgb3JpZ2luYWwgYXV0aG9yIGRpZCBub3QgZmluaXNoIHRoZSB3b3JrOgo+Cj5odHRw
+czovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAxODEyMTIxNjM1NDguMjM3MjMtMS10aW55LndpbmR6
+ekBnbWFpbC5jb20vCj4KPlRoYW5rcy4KPgo+LS0gCj5EbWl0cnkKCkhpLCBEbWlydHJ5LAoKVGhh
+bmtzIGZvciByZXZpZXdpbmcgbXkgcGF0Y2ggY29kZS4KClRoZSBMaSdzIHBhdGNoIGFkZHMgYSBo
+ZWxwZXIgYW5kIGlzIGJldHRlciB0aGFuIG1pbmUuCgpUaGFua3MgYWdhaW4sCgpMaWFuZyAK

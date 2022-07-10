@@ -2,157 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C0356D0A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 19:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E1656D0A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 19:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiGJRxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 13:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S229512AbiGJR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 13:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGJRxO (ORCPT
+        with ESMTP id S229463AbiGJR5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 13:53:14 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2081055C;
-        Sun, 10 Jul 2022 10:53:12 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso4444182fac.7;
-        Sun, 10 Jul 2022 10:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=eSwcZesmzsEIOMZznmFtXUZFeRKLoTj+6EmfyIc9CJ0=;
-        b=lukMb3WrJZnRVKi08+l/vnzxS7gK18/l3x4wMmDHbWNmHmDMY5VcmHt40eTeMDmulq
-         Is6DaZ/pWaA/iZQv7rx4ohUI+as5x0Vh3Vm934TFqF/V10ZtFqQE3M4rsmLmakZr0tRB
-         SV1qb7tm3RyHMZjDIrsqj5a9Qz7t/SND8kWGmbTrBONc5q+m29A1cQdi+EwA57uki6OR
-         AnjgbwbNlFjAbel4NFLFfzoiP2rbp5t/0fWBtLFBFQMFGg8SdVDQauilForHInEZlPLv
-         oiYFsHtt9ZxqQovj0wRPmMucscTh3hK18y325vP8/OwqojPVtttETB8d2oFY8NzK+PEA
-         OJwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=eSwcZesmzsEIOMZznmFtXUZFeRKLoTj+6EmfyIc9CJ0=;
-        b=VHvatbXaM4qGpxfvNM0GQB/2HQovFE8FUiuU6lRpDJuL9KtzEI2Tto7UStkS7Wb2Ct
-         GzmyH7KHy79VhhvmPOaOTPmpd/UXeBOdkqbKrCIikZ+IFuKq010JpuUlXvqCvnAAutYF
-         EjuR+JzbRAs9jfyUvkIx9Ek1U/TA3cRsGQ5sOpC/2Ezkqwq/8MbntmZhswuqK2Lk9rOt
-         pnJnisuvio/sH8yr+U9KcCpV8hTkcswybFu+AteQ4F8qUKVGCrixi8Gclsr3oF4DDtLx
-         oUzfdzL+TbDqfXm/n6W4sdZihbw51DtCN2SCgLWJ8ooAlUGu55e4HW/muf/y5nz15pZ5
-         u9eQ==
-X-Gm-Message-State: AJIora9RV0D/y0BsgjsLUyBiTp0dtxNI7TdBBI2BHiBrnxQgCrT5VYlw
-        9ob2gaIYuMGx28j4Z5Z+YpEq5Bb8Wlk8P3cTdI0=
-X-Google-Smtp-Source: AGRyM1tnkeq2oBx0pSKbTlrm3liHRSCnqKw+CZZmwtMuiDcKeNzy5EQR+FOOYpHycH4jYWmWlJKcfnDT+Xnm5qs0hFM=
-X-Received: by 2002:a05:6870:709f:b0:fe:2006:a858 with SMTP id
- v31-20020a056870709f00b000fe2006a858mr5405754oae.128.1657475592193; Sun, 10
- Jul 2022 10:53:12 -0700 (PDT)
+        Sun, 10 Jul 2022 13:57:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888511837
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 10:57:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B97AB80B79
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 17:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CE9C3411E;
+        Sun, 10 Jul 2022 17:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657475851;
+        bh=NSVT8pRObvkt/VAUFyL3V+ogDaz+KTUNsHES7wK8hvM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nDCtJFQef1NjSVO1hZyUQllM++oTBPR3q7ko8iMd2YNeFxmUwECOkutSTzY9spKSg
+         PIt0bfkcE8EgTBb4y0tB1WqPJ9CYxmVT8KpyHi8q6lzXymqkICKI8ZGsu1Vw9y/FKf
+         agP5kWIHlL/nN9bdBmVs+pLbdZ50L0iI2Vq2KeTrPcvMhY0eopk6aPj4KVuDEteePO
+         1COBnOpMKeYWwwPn0Y5JAZAsrWXFDawx9/l0rkCDpCMX4MY0oppNcjOfK1KuipHxVh
+         QrBPkdFCfdsP/j2pLzJAwuOuiBLG5NDymbyMoHfTI74TceBNmdUPT1hGahhy3iuFtT
+         R4ecJtT0kMlsw==
+Received: by pali.im (Postfix)
+        id C193B792; Sun, 10 Jul 2022 19:57:27 +0200 (CEST)
+Date:   Sun, 10 Jul 2022 19:57:27 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <michael@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
+Message-ID: <20220710175727.ee52xoqfwlphjxv5@pali>
+References: <20220524093939.30927-1-pali@kernel.org>
+ <20220702094405.tp7eo4df7fjvn2ng@pali>
+ <8D562851-304F-4153-9194-426CC22B7FF2@ellerman.id.au>
+ <20220704103951.nm4m4kpgnus3ucqo@pali>
+ <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com>
+ <20220704131358.fy3z7tjcmk2m6pfh@pali>
+ <20220708171422.mpbhb4ejarwnce6m@pali>
+ <358f5a57-5eee-56af-fe73-f5d11cfad98e@csgroup.eu>
+ <20220709102305.t2ouadn6zscp2m7i@pali>
+ <c77df184-c79c-8d81-0327-9eaefb71c890@csgroup.eu>
 MIME-Version: 1.0
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220703212551.1114923-1-andres@anarazel.de> <CA+icZUVgLh=x-mWmvuQaCBO-eH5ebnA_rTDqnb+1oJVzVO=hmQ@mail.gmail.com>
-In-Reply-To: <CA+icZUVgLh=x-mWmvuQaCBO-eH5ebnA_rTDqnb+1oJVzVO=hmQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 10 Jul 2022 19:52:36 +0200
-Message-ID: <CA+icZUV=dVFADBS4cEnQKWRQhy7LCVXzNQQQX92Gbd5M53c-cA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
- init_disassemble_info API changes
-To:     Andres Freund <andres@anarazel.de>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c77df184-c79c-8d81-0327-9eaefb71c890@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 1:43 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Sun, Jul 3, 2022 at 11:25 PM Andres Freund <andres@anarazel.de> wrote:
-> >
-> > binutils changed the signature of init_disassemble_info(), which now causes
-> > compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
-> > binutils commit:
-> > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
-> >
->
-> HI,
->
-> what was the base for this patchset?
-> I tried with Linux v5.19-rc5 and it doesn not apply cleanly.
->
+On Sunday 10 July 2022 17:38:33 Christophe Leroy wrote:
+> Le 09/07/2022 à 12:23, Pali Rohár a écrit :
+> >>>    
+> >>> -ifdef CONFIG_PPC_BOOK3S_64
+> >>>    ifdef CONFIG_CPU_LITTLE_ENDIAN
+> >>> -CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power8
+> >>> -CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power9,-mtune=power8)
+> >>> +CFLAGS-$(CONFIG_PPC_BOOK3S_64) += -mcpu=power8
+> >>> +CFLAGS-$(CONFIG_PPC_BOOK3S_64) += $(call cc-option,-mtune=power9,-mtune=power8)
+> >>>    else
+> >>> -CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power7,$(call cc-option,-mtune=power5))
+> >>> -CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mcpu=power5,-mcpu=power4)
+> >>> -endif
+> >>> -else ifdef CONFIG_PPC_BOOK3E_64
+> >>> -CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=powerpc64
+> >>> +CFLAGS-$(CONFIG_PPC_BOOK3S_64) += $(call cc-option,-mtune=power7,$(call cc-option,-mtune=power5))
+> >>> +CFLAGS-$(CONFIG_PPC_BOOK3S_64) += $(call cc-option,-mcpu=power5,-mcpu=power4)
+> >>
+> >> So before that change I got -mcpu=power9
+> >>
+> >> Now I get -mtune=power7 -mcpu=power5 -mcpu=power9
+> > 
+> > I did it like Arnd wrote.
+> > 
+> > And seems that it does not work and now is fully out of the scope of the
+> > original issue. Now I'm really lost here.
+> > 
+> > So I nobody comes with better solution, I would prefer to stick with my
+> > original version which targets _only_ e500 cores.
+> > 
+> > Any other suggestion?
+> 
+> I sent a patch based on the TARGET_CPU logic, does it work for you ?
+> 
+> Christophe
 
-More coffee.
+Perfect, it works! Thank you.
 
-$ egrep 'Auto-detecting|disassembler' make-log_perf-python3.10-install_bin.txt
-15:Auto-detecting system features:
-36:...        disassembler-four-args: [ on  ]
-37:...      disassembler-init-styled: [ on  ]
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
-
--Sedat-
-
->
-> > I first fixed this without introducing the compat header, as suggested by
-> > Quentin, but I thought the amount of repeated boilerplate was a bit too
-> > much. So instead I introduced a compat header to wrap the API changes. Even
-> > tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
-> > looks nicer this way.
-> >
-> > I'm not regular contributor, so it very well might be my procedures are a
-> > bit off...
-> >
-> > I am not sure I added the right [number of] people to CC?
-> >
-> > WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
-> > nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
-> > in feature/Makefile and why -ldl isn't needed in the other places. But...
-> >
-> > V2:
-> > - split patches further, so that tools/bpf and tools/perf part are entirely
-> >   separate
-> > - included a bit more information about tests I did in commit messages
-> > - add a maybe_unused to fprintf_json_styled's style argument
-> >
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> > Cc: Quentin Monnet <quentin@isovalent.com>
-> > To: bpf@vger.kernel.org
-> > To: linux-kernel@vger.kernel.org
-> > Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-> > Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
-> >
-> > Andres Freund (5):
-> >   tools build: add feature test for init_disassemble_info API changes
-> >   tools include: add dis-asm-compat.h to handle version differences
-> >   tools perf: Fix compilation error with new binutils
-> >   tools bpf_jit_disasm: Fix compilation error with new binutils
-> >   tools bpftool: Fix compilation error with new binutils
-> >
-> >  tools/bpf/Makefile                            |  7 ++-
-> >  tools/bpf/bpf_jit_disasm.c                    |  5 +-
-> >  tools/bpf/bpftool/Makefile                    |  7 ++-
-> >  tools/bpf/bpftool/jit_disasm.c                | 42 ++++++++++++---
-> >  tools/build/Makefile.feature                  |  4 +-
-> >  tools/build/feature/Makefile                  |  4 ++
-> >  tools/build/feature/test-all.c                |  4 ++
-> >  .../feature/test-disassembler-init-styled.c   | 13 +++++
-> >  tools/include/tools/dis-asm-compat.h          | 53 +++++++++++++++++++
-> >  tools/perf/Makefile.config                    |  8 +++
-> >  tools/perf/util/annotate.c                    |  7 +--
-> >  11 files changed, 137 insertions(+), 17 deletions(-)
-> >  create mode 100644 tools/build/feature/test-disassembler-init-styled.c
-> >  create mode 100644 tools/include/tools/dis-asm-compat.h
-> >
-> > --
-> > 2.37.0.3.g30cc8d0f14
-> >
+Anyway, same problem is with arch/powerpc/boot/Makefile file when
+building "uImage" target. There is hardcoded -mcpu=powerpc flag.

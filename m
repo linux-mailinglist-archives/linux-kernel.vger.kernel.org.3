@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36C656CC23
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8683F56CC28
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiGJBNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 21:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S229540AbiGJBWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 21:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJBN3 (ORCPT
+        with ESMTP id S229450AbiGJBWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 21:13:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E442310FF2;
-        Sat,  9 Jul 2022 18:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657415607; x=1688951607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OhWo23JWwfXIx3sgChlYW09NF6N1Xz6MXcIILyS2Nto=;
-  b=Opj0iOw6ckGTWHiK9WSFFv3zL91yaMdv+DoIEFdfmwXT5Agfeml2v4f8
-   vm0ONvCjzRfMJQNPQf6QnGjEGJm86Vfqm+baXxJIfnsLz6zypZZhcBzVB
-   WXQxVg65eaEMdmgeedgpO4k2tltg3nyV0gmKDGdUknRgc08xTqGoq8nvt
-   QW9IBchWJdjbClA5M6Rc3YiieL8/QdI2NJ3gnEg9u4JEzPwB+6kh8jgZw
-   SqrAcYgunX7Qt0vjHlMbP4yJS7EArpNnbAXZOof39oOcDeuDlcMMLTCBv
-   YTe6sZpFgmXjIyAUZkc/mT+lS8IseSu1PBf4rvIBJIHdr5OoEqSv23CD6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="348455567"
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="348455567"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 18:13:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="594494740"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jul 2022 18:13:24 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oALVj-000PLG-Jk;
-        Sun, 10 Jul 2022 01:13:23 +0000
-Date:   Sun, 10 Jul 2022 09:12:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v4 12/12] thermal/of: Initialize trip points separately
-Message-ID: <202207100924.K7DHJPX2-lkp@intel.com>
-References: <20220709223229.1619339-13-daniel.lezcano@linexp.org>
+        Sat, 9 Jul 2022 21:22:14 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E61FEE23
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 18:22:13 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 70so2097973pfx.1
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 18:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYoGrbu/lavwm2Al6qo83Dqjha+dsixArTpwHQ6cIJc=;
+        b=OcDjMK2mQbjjBkah53yxyxRIKDOmKb8CFZ7uUmcvlCGp8708Cuyys1scVN2LfeGTGB
+         QlInZDJqFPsTP8YhJDz5c+mvvHq+nKvU2pHFf57bDOYTDyP7BLuc9R273pdjVSYV5HIt
+         avTkL32WmBqOGXtjmJp7jYOsbu7OFbgrB2pTPWHXBELX/nDidObQswwZV8dm0Goqsp55
+         WJb7il+Xit8XnT4EVHmzIS8jpxkqiyHVKUDPa/D3E7qqyOYjaDSr9WajZvtklARFKySi
+         ReSFBTHnpLt8lvvH7moLmK44Yq4DWAJAI87YndRZfi1VAnhtxhK8PT1l5Zzsp6LDBeLe
+         1KNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYoGrbu/lavwm2Al6qo83Dqjha+dsixArTpwHQ6cIJc=;
+        b=m2pFUzrxRlivBz0PX3wX50rnlNbHCntmkLzfO62aJD374xxb4TsIsOmQsA5ZRUmpt0
+         hmjn2c5p+nax6R6ErMvM3jcFScK3ZWYYbjFKuvyUp5UetiVodyTRHXct1CdM2UKBLp2d
+         C3g0w9SuQoWkFoSIGj6ZwAADpNvsMxqpBoIqBQnwWz+mfhgOn8qraPqr3s6WQiUa62wa
+         RuUD96XmaTOT8LDmyDHl5zYYLV51VDbdM3e8SnGgUBxK0Ug3+QPwpJdVcDeaPpwmlFWg
+         4UC9rh4vo2+KOu88xokIVWJd8nt7Q+GUHfJqpHxygelH8CZYnnWggzHdno97kdSGFY07
+         PRlA==
+X-Gm-Message-State: AJIora+/o+47irgRViOdKjNUa958I2SbjU5+2UhjsUechJS92lRy+NFP
+        KHVkQ6HS81m2UBXwQU0cwZ2XrA==
+X-Google-Smtp-Source: AGRyM1ssa+hPKWNqIf5w5Dg+O3CPj7Diw4dUApBmB4+7U10MguqEtl5yWIStKxSKa8nhwDL4z/y0Iw==
+X-Received: by 2002:a63:69c9:0:b0:411:994d:1e12 with SMTP id e192-20020a6369c9000000b00411994d1e12mr9547746pgc.383.1657416132566;
+        Sat, 09 Jul 2022 18:22:12 -0700 (PDT)
+Received: from leo-build-box.lan (n058152077154.netvigator.com. [58.152.77.154])
+        by smtp.gmail.com with ESMTPSA id b73-20020a621b4c000000b0052ab7985e18sm2078331pfb.61.2022.07.09.18.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Jul 2022 18:22:12 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>, Chang Rui <changruinj@gmail.com>
+Subject: [RFC PATCH v1] perf symbol: Correct address for bss symbols
+Date:   Sun, 10 Jul 2022 09:22:04 +0800
+Message-Id: <20220710012204.2390293-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220709223229.1619339-13-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,174 +74,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+When using 'perf mem' and 'perf c2c', an issue is observed that tool
+reports the wrong offset for global data symbols.  This is a common
+issue on both x86 and Arm64 platforms.
 
-I love your patch! Perhaps something to improve:
+Let's see an example, for a test program, below is the disassembly for
+its .bss section which is dumped with objdump:
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on tegra/for-next linus/master v5.19-rc5 next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  ...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-OF-rework/20220710-063550
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220710/202207100924.K7DHJPX2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ae09a5baa03d816f54f1e0654fd0ad08eab5d427
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-OF-rework/20220710-063550
-        git checkout ae09a5baa03d816f54f1e0654fd0ad08eab5d427
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
+  Disassembly of section .data:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+  0000000000004000 <__data_start>:
+  	...
 
-All warnings (new ones prefixed by >>):
+  0000000000004008 <__dso_handle>:
+      4008:	08 40 00             	or     %al,0x0(%rax)
+      400b:	00 00                	add    %al,(%rax)
+      400d:	00 00                	add    %al,(%rax)
+  	...
 
->> drivers/thermal/thermal_of.c:977:6: warning: variable 'gchild' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!tz->tbps) {
-               ^~~~~~~~~
-   drivers/thermal/thermal_of.c:1010:14: note: uninitialized use occurs here
-           of_node_put(gchild);
-                       ^~~~~~
-   drivers/thermal/thermal_of.c:977:2: note: remove the 'if' if its condition is always false
-           if (!tz->tbps) {
-           ^~~~~~~~~~~~~~~~
-   drivers/thermal/thermal_of.c:917:43: note: initialize the variable 'gchild' to silence this warning
-           struct device_node *child = NULL, *gchild;
-                                                    ^
-                                                     = NULL
-   1 warning generated.
+  0000000000004010 <wait_to_begin>:
+      4010:	01 00                	add    %eax,(%rax)
+      4012:	00 00                	add    %al,(%rax)
+      4014:	00 00                	add    %al,(%rax)
+  	...
 
+  0000000000004018 <lock_thd_name>:
+      4018:	08 20                	or     %ah,(%rax)
+      401a:	00 00                	add    %al,(%rax)
+      401c:	00 00                	add    %al,(%rax)
+  	...
 
-vim +977 drivers/thermal/thermal_of.c
+  0000000000004020 <reader_thd_name>:
+      4020:	10 20                	adc    %ah,(%rax)
+      4022:	00 00                	add    %al,(%rax)
+      4024:	00 00                	add    %al,(%rax)
+  	...
 
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   899  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   900  /**
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   901   * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   902   * @np: DT node containing a thermal zone node
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   903   *
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   904   * This function parses a thermal zone type of node represented by
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   905   * @np parameter and fills the read data into a __thermal_zone data structure
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   906   * and return this pointer.
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   907   *
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   908   * TODO: Missing properties to parse: thermal-sensor-names
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   909   *
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   910   * Return: On success returns a valid struct __thermal_zone,
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   911   * otherwise, it returns a corresponding ERR_PTR(). Caller must
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   912   * check the return value with help of IS_ERR() helper.
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   913   */
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   914  static struct __thermal_zone
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   915  __init *thermal_of_build_thermal_zone(struct device_node *np)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   916  {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   917  	struct device_node *child = NULL, *gchild;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   918  	struct __thermal_zone *tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   919  	int ret, i;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   920  	u32 prop, coef[2];
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   921  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   922  	if (!np) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   923  		pr_err("no thermal zone np\n");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   924  		return ERR_PTR(-EINVAL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   925  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   926  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   927  	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   928  	if (!tz)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   929  		return ERR_PTR(-ENOMEM);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   930  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   931  	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   932  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   933  		pr_err("%pOFn: missing polling-delay-passive property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   934  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   935  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   936  	tz->passive_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   937  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   938  	ret = of_property_read_u32(np, "polling-delay", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   939  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   940  		pr_err("%pOFn: missing polling-delay property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   941  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   942  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   943  	tz->polling_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   944  
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   945  	/*
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   946  	 * REVIST: for now, the thermal framework supports only
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   947  	 * one sensor per thermal zone. Thus, we are considering
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   948  	 * only the first two values as slope and offset.
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   949  	 */
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   950  	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   951  	if (ret == 0) {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   952  		tz->slope = coef[0];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   953  		tz->offset = coef[1];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   954  	} else {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   955  		tz->slope = 1;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   956  		tz->offset = 0;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   957  	}
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   958  
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   959  	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   960  	if (IS_ERR(tz->trips)) {
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   961  		ret = PTR_ERR(tz->trips);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   962  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   963  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   964  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   965  	/* cooling-maps */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   966  	child = of_get_child_by_name(np, "cooling-maps");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   967  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   968  	/* cooling-maps not provided */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   969  	if (!child)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   970  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   971  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   972  	tz->num_tbps = of_get_child_count(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   973  	if (tz->num_tbps == 0)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   974  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   975  
-6396bb221514d2 drivers/thermal/of-thermal.c Kees Cook          2018-06-12   976  	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  @977  	if (!tz->tbps) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   978  		ret = -ENOMEM;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   979  		goto free_trips;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   980  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   981  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   982  	i = 0;
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   983  	for_each_child_of_node(child, gchild) {
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   984  		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   985  		if (ret) {
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   986  			of_node_put(gchild);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   987  			goto free_tbps;
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   988  		}
-ae09a5baa03d81 drivers/thermal/thermal_of.c Daniel Lezcano     2022-07-10   989  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   990  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   991  finish:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   992  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   993  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   994  	return tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   995  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   996  free_tbps:
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   997  	for (i = i - 1; i >= 0; i--) {
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   998  		struct __thermal_bind_params *tbp = tz->tbps + i;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   999  		int j;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1000  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1001  		for (j = 0; j < tbp->count; j++)
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1002  			of_node_put(tbp->tcbp[j].cooling_device);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1003  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1004  		kfree(tbp->tcbp);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1005  	}
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08  1006  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1007  	kfree(tz->tbps);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1008  free_trips:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1009  	kfree(tz->trips);
-c2aad93c7edd5e drivers/thermal/of-thermal.c Vladimir Zapolskiy 2014-09-29  1010  	of_node_put(gchild);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1011  free_tz:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1012  	kfree(tz);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1013  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1014  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1015  	return ERR_PTR(ret);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1016  }
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1017  
+  Disassembly of section .bss:
 
+  0000000000004040 <completed.0>:
+  	...
+
+  0000000000004080 <buf1>:
+  	...
+
+  00000000000040c0 <buf2>:
+  	...
+
+  0000000000004100 <thread>:
+  	...
+
+First we used 'perf mem record' to run the test program and then used
+'perf --debug verbose=4 mem report' to observe what's the symbol info
+for 'buf1' and 'buf2' structures.
+
+  # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
+  # ./perf --debug verbose=4 mem report
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
+    symbol__new: buf2 0x30a8-0x30e8
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
+    symbol__new: buf1 0x3068-0x30a8
+    ...
+
+Perf tool relies on libelf to parse symbols, here 'st_value' is the
+address from executable file, 'sh_addr' is the belonged section's linked
+start address, and 'sh_offset' is the dynamic loaded address for this
+section, then perf tool uses below formula to adjust symbol address:
+
+  adjusted_address = st_value - sh_addr + sh_offset
+
+So we can see the final adjusted address ranges for buf1 and buf2 are
+[0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
+incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
+compiler attribute with 64-byte alignment.
+
+The problem happens for 'sh_offset', libelf returns it as 0x3028 which
+is not 64-byte aligned, on the other hand, we can see both 'st_value'
+and 'sh_addr' are 64-byte aligned.  Combining with disassembly, it's
+likely libelf uses the .data section end address as .bss section
+start address, therefore, it doesn't respect the alignment attribute for
+structures in .bss section.
+
+Since .data and .bss sections are in the continuous virtual address
+space, and .data section info returned by libelf is reliable, to fix
+this issue, if detects it's a bss symbol, it rolls back to use .data
+section info to adjust symbol's virtual address.
+
+Essentially, we need to fix libelf to return correct offsets for
+sections, on the other hand, we live commonly with existed versions of
+libelf.  So we also need this change in perf tool.
+
+Fixes: f17e04afaff8 ("perf report: Fix ELF symbol parsing")
+Reported-by: Chang Rui <changruinj@gmail.com>
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+ tools/perf/util/dso.h        |  1 +
+ tools/perf/util/symbol-elf.c | 26 ++++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 3a9fd4d389b5..00f57f4ac6bc 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -180,6 +180,7 @@ struct dso {
+ 	u8		 rel;
+ 	struct build_id	 bid;
+ 	u64		 text_offset;
++	int		 data_sec_index;
+ 	const char	 *short_name;
+ 	const char	 *long_name;
+ 	u16		 long_name_len;
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index ecd377938eea..ed65dd26d58e 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -1095,6 +1095,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 	Elf *elf;
+ 	int nr = 0;
+ 	bool remap_kernel = false, adjust_kernel_syms = false;
++	size_t sec_index;
+ 
+ 	if (kmap && !kmaps)
+ 		return -1;
+@@ -1113,6 +1114,10 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 				".text", NULL))
+ 		dso->text_offset = tshdr.sh_addr - tshdr.sh_offset;
+ 
++	if (elf_section_by_name(runtime_ss->elf, &runtime_ss->ehdr, &tshdr,
++				".data", &sec_index))
++		dso->data_sec_index = sec_index;
++
+ 	if (runtime_ss->opdsec)
+ 		opddata = elf_rawdata(runtime_ss->opdsec, NULL);
+ 
+@@ -1227,6 +1232,27 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 
+ 		gelf_getshdr(sec, &shdr);
+ 
++		/*
++		 * When the first data structure in .bss section is attributed
++		 * with alignment (e.g. 64-byte aligned), libelf doesn't reflect
++		 * the alignment in the 'shdr.sh_offset' field, at the end the
++		 * field is filled with the end loading address of a prior
++		 * section rather than the aligned address of .bss section.
++		 * This leads to mess for later parsing .bss symbols.
++		 *
++		 * Since .data and .bss sections are in the continuous virtual
++		 * address space, and .data section's info is reliable.  So if
++		 * detects it's a bss symbol, we retrieve .data section info
++		 * for adjusting address.
++		 */
++		if (!strcmp(elf_sec__name(&shdr, secstrs_sym), ".bss")) {
++			sec = elf_getscn(syms_ss->elf, dso->data_sec_index);
++			if (!sec)
++				goto out_elf_end;
++
++			gelf_getshdr(sec, &shdr);
++		}
++
+ 		secstrs = secstrs_sym;
+ 
+ 		/*
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

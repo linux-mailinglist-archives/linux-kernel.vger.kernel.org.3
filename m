@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF9156CC92
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 06:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B2856CC93
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 06:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiGJEJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 00:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S229635AbiGJEJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 00:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJEJg (ORCPT
+        with ESMTP id S229562AbiGJEJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 00:09:36 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE412D3B;
+        Sun, 10 Jul 2022 00:09:37 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBFE12D3C;
         Sat,  9 Jul 2022 21:09:35 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LgYR83wbqz6PCRP;
-        Sun, 10 Jul 2022 12:08:36 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LgYRK1vLQzl0rR;
+        Sun, 10 Jul 2022 12:08:45 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgB32mn4UMpiguJUAg--.16364S5;
+        by APP3 (Coremail) with SMTP id _Ch0CgB32mn4UMpiguJUAg--.16364S6;
         Sun, 10 Jul 2022 12:09:33 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     axboe@kernel.dk, asml.silence@gmail.com, osandov@fb.com,
@@ -27,21 +27,21 @@ To:     axboe@kernel.dk, asml.silence@gmail.com, osandov@fb.com,
 Cc:     kbusch@kernel.org, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org, yukuai3@huawei.com,
         yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH RFC v3 1/3] sbitmap: fix that same waitqueue can be woken up continuously
-Date:   Sun, 10 Jul 2022 12:21:58 +0800
-Message-Id: <20220710042200.20936-2-yukuai1@huaweicloud.com>
+Subject: [PATCH RFC v3 2/3] sbitmap: fix invalid wakeup on the wrong waitqueue
+Date:   Sun, 10 Jul 2022 12:21:59 +0800
+Message-Id: <20220710042200.20936-3-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220710042200.20936-1-yukuai1@huaweicloud.com>
 References: <20220710042200.20936-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgB32mn4UMpiguJUAg--.16364S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47GrW5ur4fWFWxXFyftFb_yoW8Cry7pa
-        17XFyvvr4jqry2k3ykXF4UAw15GwnF9r9rGr4rG3WjvFsrKr45J3WvvFs8ur18uFsrCayr
-        JF47tFW3Gr4UXFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+X-CM-TRANSID: _Ch0CgB32mn4UMpiguJUAg--.16364S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr17AF4xtFWrXr4xtF1DKFg_yoW5Gr17pr
+        43GFn2qanYvrWIywsrJr4jy3WYk3yvk3yxGrW5G348Cr17trsIkr10grn3Zry8CrZ5XFy3
+        Jr43JrZ3CFyUXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
         xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
@@ -51,7 +51,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47GrW5ur4fWFWxXFyftFb_yoW8Cry7pa
         Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
         0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
         JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU=
+        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjYiiDUUUUU=
         =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
@@ -66,68 +66,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-__sbq_wake_up		__sbq_wake_up
- sbq_wake_ptr -> assume	0
-			 sbq_wake_ptr -> 0
- atomic_dec_return
-			atomic_dec_return
- atomic_cmpxchg -> succeed
-			 atomic_cmpxchg -> failed
-			  return true
+For example, 2 * wake_batch tags are put, while only wake_batch threads
+are woken:
 
-			__sbq_wake_up
-			 sbq_wake_ptr
-			  atomic_read(&sbq->wake_index) -> still 0
- sbq_index_atomic_inc -> inc to 1
-			  if (waitqueue_active(&ws->wait))
-			   if (wake_index != atomic_read(&sbq->wake_index))
-			    atomic_set -> reset from 1 to 0
- wake_up_nr -> wake up first waitqueue
-			    // continue to wake up in first waitqueue
+__sbq_wake_up
+ atomic_cmpxchg -> reset wait_cnt
+			__sbq_wake_up -> decrease wait_cnt
+			...
+			__sbq_wake_up -> wait_cnt is decreased to 0 again
+			 atomic_cmpxchg
+			 sbq_index_atomic_inc -> increase wake_index
+			 wake_up_nr -> wake up and waitqueue might be empty
+ sbq_index_atomic_inc -> increase again, one waitqueue is skipped
+ wake_up_nr -> invalid wake up because old wakequeue might be empty
 
-Fix the problem by using atomic_cmpxchg() instead of atomic_set()
-to update 'wake_index'.
+To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
 
-Fixes: 417232880c8a ("sbitmap: Replace cmpxchg with xchg")
+Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- lib/sbitmap.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ lib/sbitmap.c | 45 +++++++++++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
 
 diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 29eb0484215a..b46fce1beb3a 100644
+index b46fce1beb3a..57095dd88a33 100644
 --- a/lib/sbitmap.c
 +++ b/lib/sbitmap.c
-@@ -579,19 +579,24 @@ EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
+@@ -616,32 +616,33 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+ 		return false;
  
- static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
- {
--	int i, wake_index;
-+	int i, wake_index, old_wake_index;
+ 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+-	if (wait_cnt <= 0) {
+-		int ret;
++	if (wait_cnt > 0)
++		return false;
  
-+again:
- 	if (!atomic_read(&sbq->ws_active))
- 		return NULL;
+-		wake_batch = READ_ONCE(sbq->wake_batch);
++	/*
++	 * For concurrent callers of this, callers should call this function
++	 * again to wakeup a new batch on a different 'ws'.
++	 */
++	if (wait_cnt < 0)
++		return true;
  
--	wake_index = atomic_read(&sbq->wake_index);
-+	old_wake_index = wake_index = atomic_read(&sbq->wake_index);
- 	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
- 		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+-		/*
+-		 * Pairs with the memory barrier in sbitmap_queue_resize() to
+-		 * ensure that we see the batch size update before the wait
+-		 * count is reset.
+-		 */
+-		smp_mb__before_atomic();
++	wake_batch = READ_ONCE(sbq->wake_batch);
  
- 		if (waitqueue_active(&ws->wait)) {
--			if (wake_index != atomic_read(&sbq->wake_index))
--				atomic_set(&sbq->wake_index, wake_index);
--			return ws;
-+			if (wake_index == old_wake_index)
-+				return ws;
-+
-+			if (atomic_cmpxchg(&sbq->wake_index, old_wake_index,
-+					   wake_index) == old_wake_index)
-+				return ws;
-+			goto again;
- 		}
+-		/*
+-		 * For concurrent callers of this, the one that failed the
+-		 * atomic_cmpxhcg() race should call this function again
+-		 * to wakeup a new batch on a different 'ws'.
+-		 */
+-		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
+-		if (ret == wait_cnt) {
+-			sbq_index_atomic_inc(&sbq->wake_index);
+-			wake_up_nr(&ws->wait, wake_batch);
+-			return false;
+-		}
++	/*
++	 * Pairs with the memory barrier in sbitmap_queue_resize() to
++	 * ensure that we see the batch size update before the wait
++	 * count is reset.
++	 */
++	smp_mb__before_atomic();
  
- 		wake_index = sbq_index_inc(wake_index);
+-		return true;
+-	}
++	/*
++	 * Increase wake_index before updating wait_cnt, otherwise concurrent
++	 * callers can see valid wait_cnt in old waitqueue, which can cause
++	 * invalid wakeup on the old waitqueue.
++	 */
++	sbq_index_atomic_inc(&sbq->wake_index);
++	atomic_set(&ws->wait_cnt, wake_batch);
++	wake_up_nr(&ws->wait, wake_batch);
+ 
+ 	return false;
+ }
 -- 
 2.31.1
 

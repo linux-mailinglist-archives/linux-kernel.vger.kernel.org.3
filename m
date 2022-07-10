@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4933C56CCE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 06:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A7D56CD21
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 06:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiGJEej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 00:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S229699AbiGJEw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 00:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGJEeh (ORCPT
+        with ESMTP id S229454AbiGJEw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 00:34:37 -0400
+        Sun, 10 Jul 2022 00:52:57 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76611145F;
-        Sat,  9 Jul 2022 21:34:32 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1657427654tyba4nv9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488C2E0EA;
+        Sat,  9 Jul 2022 21:52:51 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1657428757ts9pb3l3
 Received: from localhost.localdomain ( [182.148.15.109])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 10 Jul 2022 12:34:11 +0800 (CST)
+        id ; Sun, 10 Jul 2022 12:52:35 +0800 (CST)
 X-QQ-SSF: 01000000002000B0C000C00A0000000
-X-QQ-FEAT: BYjrFJkuRRd+wl4E6Z47xa6NTp1+QyC6Ef9V2qKYyzNW6zZe6omfGzPHk9z6j
-        U5RDKqKPEsVC/wF6KeL2UpDNAitKEUDL8HqJ7NLNPo03rBcSSpFSEI7mYNVmlc6ztaEFfzc
-        svk4SLzMmIUEnPV91TJjIqWLTaPIWvdUJQNkPhlaDZRytByctbGydoecyONNhFiSlR+5BDk
-        LypQt9+cGxN5jYBJGNn+7Hm1iS9xNrLPEvvurwGqbjwvFvtCFMJIibK/fsaExpGYnaoYVsh
-        529g2V6FYWNj52dlNUJ/l3xzZGiDbEBkolHujA+OVLLwGkiKhzyioFQt8j/YkQ/q7Xo3Gyf
-        zUqBqdIpw7yxikHxPfh9INhj8+icibh0k5lOqOHay2wrCVOmPE=
+X-QQ-FEAT: 3ppQUczvdPs31HfZuafa++J6npiEHF//M4pNr+p1rzVl8VAtco08n9yoqzw4k
+        OvbVq086tu7BACghh1B90C9NVDTbxRG5DWZnBz9IIdTdVLn2njktEGAdSfpxbEA0SUnLDq7
+        MLOJH7ghDybFXRr16wWM5BMpKkgXTQ+zmhC80tn3nLnqzJrBYO1UcDcLtX71H/RYPoUrn2Y
+        C6vRW3FOKgMZsuDlTAeVDmsFK/0NIcIbHK8pAA0raQJO9diM5beyKRK+XUpm8b3IW9b7nL1
+        oNig5msyLdtParOZ7jGj87kcOGIPM8E82Qg1O/Jdw2efxROJVvzEdN/snfhu/7zVBalm+bw
+        tcg8U43RSRdLNV7a7Cu3JSGf5k0z7rgT9AVcDGxuvbrXvT/JpGGGobinEFpeg==
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
         linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] wifi: wl1251: fix repeated words in comments
-Date:   Sun, 10 Jul 2022 12:34:05 +0800
-Message-Id: <20220710043405.38304-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] acpi/acpica: fix repeated words in comments
+Date:   Sun, 10 Jul 2022 12:52:18 +0800
+Message-Id: <20220710045218.55021-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+ Delete the redundant word 'is'.
+ Delete the redundant word 'a'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/net/wireless/ti/wl1251/acx.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpica/exconvrt.c | 2 +-
+ drivers/acpi/acpica/nsprepkg.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ti/wl1251/acx.h b/drivers/net/wireless/ti/wl1251/acx.h
-index 1da6ba95d3d4..1da6ab664e41 100644
---- a/drivers/net/wireless/ti/wl1251/acx.h
-+++ b/drivers/net/wireless/ti/wl1251/acx.h
-@@ -1229,7 +1229,7 @@ struct wl1251_acx_arp_filter {
- 	u8 address[16];	/* The IP address used to filter ARP packets.
- 			   ARP packets that do not match this address are
- 			   dropped. When the IP Version is 4, the last 12
--			   bytes of the the address are ignored. */
-+			   bytes of the address are ignored. */
- } __attribute__((packed));
+diff --git a/drivers/acpi/acpica/exconvrt.c b/drivers/acpi/acpica/exconvrt.c
+index 8de5d47ad485..7a66a70fa974 100644
+--- a/drivers/acpi/acpica/exconvrt.c
++++ b/drivers/acpi/acpica/exconvrt.c
+@@ -446,7 +446,7 @@ acpi_ex_convert_to_string(union acpi_operand_object * obj_desc,
+ 			 * Explicit conversion from the to_decimal_string ASL operator.
+ 			 *
+ 			 * From ACPI: "If the input is a buffer, it is converted to a
+-			 * a string of decimal values separated by commas."
++			 * string of decimal values separated by commas."
+ 			 */
+ 			base = 10;
  
- struct wl1251_acx_ac_cfg {
+diff --git a/drivers/acpi/acpica/nsprepkg.c b/drivers/acpi/acpica/nsprepkg.c
+index 82932c9a774b..2afc5baa325c 100644
+--- a/drivers/acpi/acpica/nsprepkg.c
++++ b/drivers/acpi/acpica/nsprepkg.c
+@@ -540,7 +540,7 @@ acpi_ns_check_package_list(struct acpi_evaluate_info *info,
+ 
+ 			/*
+ 			 * Make sure package is large enough for the Count and is
+-			 * is as large as the minimum size
++			 * as large as the minimum size
+ 			 */
+ 			expected_count = (u32)(*sub_elements)->integer.value;
+ 			if (sub_package->package.count < expected_count) {
 -- 
 2.36.1
 

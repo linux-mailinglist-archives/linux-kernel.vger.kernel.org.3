@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527DA56D1CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 00:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA9E56D1CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 00:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiGJW2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 18:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S229543AbiGJW1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 18:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJW2P (ORCPT
+        with ESMTP id S229463AbiGJW1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 18:28:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FBA13EBC;
-        Sun, 10 Jul 2022 15:28:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh1qq71Bzz4xhn;
-        Mon, 11 Jul 2022 08:28:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657492088;
-        bh=t2x2etyRIE9UyBEZxb6gCj5pB9F+yYo2kF1BwbNXc80=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M11jrNWPw7pyiQvQhFU7d4enjLEA8FLuj6KPKofCJFSmYWXdVhJSNCIqm/jbDWZfS
-         6QlmKRmkXdsNG9pYExPQEI10FePRb4GdkDLuBEmWbM2E4lkR0CPwZ7x9cL9ct8MKHQ
-         yYoHry4Gd5Yqpx0hMeIL9NusFmpvNE8jEkHeUFlptmmHQmb9+hDb73mt/SnS5l0Y12
-         8qmYZpRc3rvVgbdVPOXGpYsZKCiujIUZ/9kSFn+7FoGWEnfpBgYY5b/XxQ3dwVogRz
-         NNa3G0yMDg4kkAsE65nDnfZ6JoxppeFQ74aKOlHe4qiBf3WpoUIa8sWZMRwaoc5OXa
-         7HxSN9ksaSwWA==
-Date:   Mon, 11 Jul 2022 08:28:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20220711082807.745ee22d@canb.auug.org.au>
-In-Reply-To: <YshKnxb4VwXycPO8@magnolia>
-References: <20220708194437.7eafe774@canb.auug.org.au>
-        <YshKnxb4VwXycPO8@magnolia>
+        Sun, 10 Jul 2022 18:27:42 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2771EA1B4;
+        Sun, 10 Jul 2022 15:27:41 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 06:28:46 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1657492059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZUFb5ucO1JJlddQkXqD+0kfsu3ItWuXMmHu5j+INC1Q=;
+        b=laM9f48VefRkClFbhgfpIKhMHyWQu0k9ZxfIiwuQBKg701eA/tlpKG1C384CQnjzpiq1NE
+        Rihkx2xXv2f5yzuri9JIArQ+ZlWPw6dPqYgI28M6ql98Fese0NFMBRgAkJUnBTtVyG6sqB
+        rv33k2eZCqLAh34wY9FMIy2AldR15iU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
+Message-ID: <YstSnnCL45wne7K9@geo.homenetwork>
+References: <cover.1655368610.git.bristot@kernel.org>
+ <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
+ <YsXLDvjHqOxYtckg@geo.homenetwork>
+ <adbf8277-e680-9357-950d-22cf54b1f6ff@kernel.org>
+ <YsrsL8zCNcwvdQS8@geo.homenetwork>
+ <20220710114242.745d65b3@rorschach.local.home>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7D3RKxNX24FwTFPfEbTajvY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220710114242.745d65b3@rorschach.local.home>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,67 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/7D3RKxNX24FwTFPfEbTajvY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jul 10, 2022 at 11:42:42AM -0400, Steven Rostedt wrote:
 
-Hi Darrick,
+> On Sun, 10 Jul 2022 23:11:43 +0800
+> Tao Zhou <tao.zhou@linux.dev> wrote:
+> 
+> > The @*pos of enable_monitors_start() can not be -1 or other negative value.
+> > And I checked that the *pos is 0(right?). That is safe. Sorry for not being
+> > that ture and maybe this is a notice here. Because if it is a negative value,
+> > the returned m_def is a point to a data place 16 bytes before &rv_monitors_list.
+> > That is a not ture rv_monitors_list stucture data. But it is not possiable now.
+> > Maybe "inspired" from your question. Look it more, I image this simulation.
+> > If the monitor(and all is enabled) is more enough to let the *pos to increase
+> > to -1. And the returned m_def is last monitor that returned from enable_monitors_start().
+> > The enable_monitors_next() check from the last monitor and return NULL.
+> > Only show the last monitor. This will not really happen I think.
+> > But I am not focus enough to the seq file code or others now, so this may be
+> > more possible to be not right. Late reply continued from me..
+> 
+> 
+> So basically you are saying we should have:
+> 
+> > +static void *enabled_monitors_start(struct seq_file *m, loff_t *pos)
+> > +{
+> > +       struct rv_monitor_def *m_def;
+> > +       loff_t l;
+> > +
+> > +       mutex_lock(&rv_interface_lock);
+> 
+> 	if (list_empty(&rv_monitors_list->list))
+> 		return NULL;
+> ?
 
-On Fri, 8 Jul 2022 08:17:51 -0700 "Darrick J. Wong" <djwong@kernel.org> wro=
-te:
->
-> This isn't quite correct -- references to xfs_perag objects must be
-> released once they are acquired.  The following patch against today's
-> tree fixes this problem:
->=20
-> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> index f3c62c19475e..69d9c83ea4b2 100644
-> --- a/fs/xfs/xfs_notify_failure.c
-> +++ b/fs/xfs/xfs_notify_failure.c
-> @@ -127,10 +127,12 @@ xfs_dax_notify_ddev_failure(
-> =20
->  		pag =3D xfs_perag_get(mp, agno);
->  		error =3D xfs_alloc_read_agf(pag, tp, 0, &agf_bp);
-> -		if (error)
-> +		if (error) {
-> +			xfs_perag_put(pag);
->  			break;
-> +		}
-> =20
-> -		cur =3D xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
-> +		cur =3D xfs_rmapbt_init_cursor(mp, tp, agf_bp, pag);
-> =20
->  		/*
->  		 * Set the rmap range from ri_low to ri_high, which represents
-> @@ -151,6 +153,7 @@ xfs_dax_notify_ddev_failure(
->  				xfs_dax_failure_fn, &notify);
->  		xfs_btree_del_cursor(cur, error);
->  		xfs_trans_brelse(tp, agf_bp);
-> +		xfs_perag_put(pag);
->  		if (error)
->  			break;
-> =20
+From the function itself, this looks safer. Thanks.
 
-Thanks, I will add that to the resolution from today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7D3RKxNX24FwTFPfEbTajvY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLUncACgkQAVBC80lX
-0GwlqAf/WeUw62MEgfmaLpCUh5mt5gqu50WTo4hdDHEOXVoMxDFqz1EY/LbzAcUu
-twtMKf60dMR1IS3zbgekFKLVuAjGu4Nwrjvj+nha6EOjxyf/4o4a3IZyL69NN8HY
-/hJsw3hQ7Fj1N7PfdF/gbj90+IU5Tpejdx4gDTqdMfoLuzjsatQVc4zM3IKneB3h
-gqDYttyBbQA33VwvCxPmkh3kSfk5ZnGN+bWTcAUyqk0WMDma3XTENZgMpIGP5308
-3OMHayMLhsJQL/TXfcLLKNm1qbQuJV2JvB4ayp1X1D7zQ9bO5yeorZAGVy/r3qyJ
-DYQVDxlSJxWcnvkpmsCopzdIy0aoYQ==
-=RLOP
------END PGP SIGNATURE-----
-
---Sig_/7D3RKxNX24FwTFPfEbTajvY--
+> Probably safer to have that.
+> 
+> -- Steve
+> 
+> 
+> > +       m_def = list_entry(&rv_monitors_list, struct rv_monitor_def, list);
+> > +
+> > +       for (l = 0; l <= *pos; ) {
+> > +               m_def = enabled_monitors_next(m, m_def, &l);
+> > +               if (!m_def)
+> > +                       break;
+> > +       }
+> > +
+> > +       return m_def;
+> > +}

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8064856CF1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F0056CF24
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiGJMfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 08:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S229601AbiGJMgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 08:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiGJMfb (ORCPT
+        with ESMTP id S229697AbiGJMfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 08:35:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BB911443
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:35:28 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id a5so3822322wrx.12
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:35:28 -0700 (PDT)
+        Sun, 10 Jul 2022 08:35:41 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95B13DD9
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:35:33 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id y22-20020a7bcd96000000b003a2e2725e89so1295715wmj.0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XDBCqCi5qpLpV3N/M8gq3K+ocUXlMKc797KB4nwKvLU=;
-        b=T9EDchFlGT4kE8VFbio2ci9HzYc71XyBwd+huTje1aKumQMtWF2nvYLaaHzcovCqtU
-         PchUPMJiXvD3P288if8JrBRE5YS7IqPOaNdKrO8p2D7i6E7yQUj/Sd2Oh17g+Oulyl6R
-         7uXF3gazDiZebiSs8OEjOck1RW3uit9PiQ6gClfYEDmp7GSrBPM443boAiKgJJh9Yhzh
-         /F/buSf/Tdb4Odv6kfeOaCw41N1WnEjknu1TBae6T7Ki9/efUyGxg9QdPLcdubhR7glv
-         y78vVxrElnx0ZZwm+0KpBxKeR2d1bvagWArAky5badjcTIv4DABMkEtQAJVPanwjc5mZ
-         B23w==
+        bh=L3skzrLPntV9feVuTsato+Vtj+oVFJD2KdodKzkC6Z0=;
+        b=sAEw6cqMT71U33e7SfvrJcyAd2gE6AbB0vJgY7xd/u/Wf5P7Hgv4HIFH8Mt4pPTBY0
+         H9UwhD872eu7I05zlTmOX9jsuLJsZDjjJ1LRqKrn1NDYfKMmkU56VKQUJUjL5M7WBnkT
+         1QaAyYFnQVv5YPzkOky3WVzZyA6XSwuSRhqV06xWzJtUnnBYjRsJoiQNLPM8ndVaihE5
+         Wr1J6d4itq6U7yWXS3Dm+BJa8bCiy5a4ZUzkPLXZoaJcW4nkZnlPJ/z/LeY8HSZnOT1N
+         rXLj1WPcg3HCbMFRxoU7L6z8Dp5trADaQG3vOi7apEGkXPR5E5tTYGd0lCfH6A9uHe6a
+         EI7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XDBCqCi5qpLpV3N/M8gq3K+ocUXlMKc797KB4nwKvLU=;
-        b=Pp/y9OWLm7QXiX+cE1UxVnxblA48jQuire0U3ft4IixgyXSiC/0GW3d1pWUSz43jtf
-         RPFOl7ar9waXvD5NaGQVQMZwvbVJCfaFleBTwPqihmgarN6B8rthL9fqWZeS7ZEh2GMe
-         6OBjonQsFepL1BCHdIJOP79oomOHlQ76argwCPflGFfad+z6i/LUZm9BqAg26DDmC6Wq
-         HLdybGRIWEPNuMgZdMuAHt8ulmQdPvn+seLsJyTOeukGHhyPTryBNJlY7YQ0BvBzO5LW
-         C/L7hFkD27FzqpClomRMEXKG0vG/kInQ+Dg+4GLB9PV4pvbi1ulXhQGhw0xJcGovVWga
-         F0PA==
-X-Gm-Message-State: AJIora+PnLZsBED6iwWJm5V64XGQQzqvfFirXV6wfAWrD7s98uETrUuh
-        PMadDFZSFgjEbhdjfFrhxqpScg==
-X-Google-Smtp-Source: AGRyM1tRXEejFGVqxpRyRsE0/11z+sUMc9mvfhAoyrwAATIdkz4+rrRtebjinqNsHpVJLQf8MLH5+g==
-X-Received: by 2002:a5d:5451:0:b0:21d:2295:6a05 with SMTP id w17-20020a5d5451000000b0021d22956a05mr12204812wrv.302.1657456527458;
-        Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
+        bh=L3skzrLPntV9feVuTsato+Vtj+oVFJD2KdodKzkC6Z0=;
+        b=wM6Xk9+rzOVU55Rm6RsH707MRb/OmJd12ZWkeVqOnO1nJh/JIkEGIBL5vsxGXJbDGT
+         WVkw51VKKAiYMirwV7ZJNIQIt1SJtw13bvODtv8BeKGPsnN0Ww3myHj5sJklMdxHy9+z
+         b0s1Im1rWdxrKuEB7lRJ9dwL4zOYvl5EGfuJWFVOdbUu2S+o//yqB8RL7tJhhaOWw1Rx
+         xHXhHUO0iK8B/4zqC03KRD1DeGVLr8iZs+CViNcuXSG/lLDBFBcRAoySeuw/CwEb46LJ
+         Ps61qcl2cROXawmp2H999lnBGU0ajQKTihYrqfq42MmWq0v5yXV/rL/AaBysNNz4cgkp
+         TcTg==
+X-Gm-Message-State: AJIora+/EJGFmGO6gbmNVL0dWSpCj3GlXiVqrVFodL+V9QqhomC+OV6A
+        lGnRodTZ0CXfy08/8KL4FmheFw==
+X-Google-Smtp-Source: AGRyM1vyUbaeoRaMhBmtCkfSXCX5V+7e9GTFAynDXwVIc5gIYTc+2A6USfeykIpaXMES3eiUTmijkw==
+X-Received: by 2002:a05:600c:4f08:b0:3a1:99ed:4f1f with SMTP id l8-20020a05600c4f0800b003a199ed4f1fmr10121049wmq.199.1657456532071;
+        Sun, 10 Jul 2022 05:35:32 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.26
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a0375c4f73sm3775144wmg.44.2022.07.10.05.35.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 05:35:27 -0700 (PDT)
+        Sun, 10 Jul 2022 05:35:31 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: [PATCH v5 07/12] thermal/core: Rename trips to ntrips
-Date:   Sun, 10 Jul 2022 14:35:06 +0200
-Message-Id: <20220710123512.1714714-8-daniel.lezcano@linexp.org>
+Subject: [PATCH v5 07/12] thermal/core: Rename 'trips' to 'num_trips'
+Date:   Sun, 10 Jul 2022 14:35:07 +0200
+Message-Id: <20220710123512.1714714-9-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
 References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
@@ -77,7 +77,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to use thermal trips defined in the thermal structure, rename
-the 'trips' field to 'ntrips' to have the 'trips' field containing the
+the 'trips' field to 'num_trips' to have the 'trips' field containing the
 thermal trip points.
 
 Cc: Alexandre Bailon <abailon@baylibre.com>

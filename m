@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D89556CEE5
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBECE56CEEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 14:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiGJMJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 08:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S229537AbiGJMNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 08:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGJMJI (ORCPT
+        with ESMTP id S229476AbiGJMM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 08:09:08 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1385FF4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:09:07 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id z15-20020a5e860f000000b0067b75905a72so1437193ioj.1
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:09:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=epou9RWig8HA8TLCWLBb4ZySx06Vqb96nm3hDRhalFs=;
-        b=c20FKeZGxNTosJJ98s8CBOxeLPO8aPdtD2EuAUX9GzKqiuqVh+s0wloTManGSXRUEG
-         i4em6vzqiLlbn0ZuNV0qgurn6IUojdXZt6MkV3FAPXNOS6aQml12XfMfiItsBWbO8kLu
-         ZX8co7vW0aSEcGoQMEmQk3DnEHR09/qKTcD8peR6fyu6Z/NkCA2HYMV9ozLfKQsaa117
-         mYNSktK+nwfkymPxT5hzhezpqhj6yD/NssOxolGkMlzw2JHBfuz2jf/uFSSfqoEyF+v4
-         bm4cOIJeTvuT2u3pA3NTuSxhAi7sEUb4AJSWP67KXXY3+M5gmrSKfvXJzJPNk61JXs9z
-         Id/A==
-X-Gm-Message-State: AJIora+jOFhaejrL8LMvs+7XCbZEZYE3vL6DGqRbc88HV1msYMXi30Fj
-        9dkA5XbRp5B/u7cZ1ndBAcA0XzWjztitE4uDnsRV6OTF3XCU
-X-Google-Smtp-Source: AGRyM1sk1d/eute9l6IoqQmF283TygGF+cPxbET3l/N2O4IpqRy+Bv77WtsnET7VyUrPjLCiLEaCNbgVvKjzdzRl1SZCjE9UWf8c
+        Sun, 10 Jul 2022 08:12:58 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266AD13D4E
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 05:12:57 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id AVnvoW3X8V0xUAVnwoV0dy; Sun, 10 Jul 2022 14:12:55 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 10 Jul 2022 14:12:55 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH 1/3] crypto: marvell/octeontx: Simplify bitmap declaration
+Date:   Sun, 10 Jul 2022 14:12:50 +0200
+Message-Id: <eb4dc7930c66b659718555edcf7fc1bbea6f5298.1657455082.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:15c5:b0:33f:d14:beb9 with SMTP id
- i5-20020a05663815c500b0033f0d14beb9mr7083247jat.217.1657454946854; Sun, 10
- Jul 2022 05:09:06 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 05:09:06 -0700
-In-Reply-To: <20220710100747.2575-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056af2d05e3724d21@google.com>
-Subject: Re: [syzbot] INFO: task hung in io_uring_del_tctx_node (2)
-From:   syzbot <syzbot+771a9fd5d128e0a5708c@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+'OTX_CPT_ENGS_BITMASK_LEN' is only used to allocate a bitmap. This macro
+only works because OTX_CPT_MAX_ENGINES is 64. BITS_TO_LONGS() should be
+used to compute the correct size.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+In order to simplify the code, remove OTX_CPT_ENGS_BITMASK_LEN and use
+DECLARE_BITMAP to declare the 'bits' bitmap.
 
-Reported-and-tested-by: syzbot+771a9fd5d128e0a5708c@syzkaller.appspotmail.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/crypto/marvell/octeontx/otx_cptpf_ucode.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Tested on:
+diff --git a/drivers/crypto/marvell/octeontx/otx_cptpf_ucode.h b/drivers/crypto/marvell/octeontx/otx_cptpf_ucode.h
+index 8620ac87a447..e7e9d1a9a0db 100644
+--- a/drivers/crypto/marvell/octeontx/otx_cptpf_ucode.h
++++ b/drivers/crypto/marvell/octeontx/otx_cptpf_ucode.h
+@@ -39,8 +39,6 @@
+ /* Maximum number of supported engines/cores on OcteonTX 83XX platform */
+ #define OTX_CPT_MAX_ENGINES		64
+ 
+-#define OTX_CPT_ENGS_BITMASK_LEN	(OTX_CPT_MAX_ENGINES/(BITS_PER_BYTE * \
+-					 sizeof(unsigned long)))
+ 
+ /* Microcode types */
+ enum otx_cpt_ucode_type {
+@@ -54,7 +52,7 @@ enum otx_cpt_ucode_type {
+ };
+ 
+ struct otx_cpt_bitmap {
+-	unsigned long bits[OTX_CPT_ENGS_BITMASK_LEN];
++	DECLARE_BITMAP(bits, OTX_CPT_MAX_ENGINES);
+ 	int size;
+ };
+ 
+-- 
+2.34.1
 
-commit:         cb71b93c Add linux-next specific files for 20220628
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11f557ec080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=771a9fd5d128e0a5708c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=113c2eb7f00000
-
-Note: testing is done by a robot and is best-effort only.

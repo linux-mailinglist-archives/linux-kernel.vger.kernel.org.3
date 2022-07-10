@@ -2,174 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EA356D000
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 18:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2B756D002
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 18:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiGJQOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 12:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S229666AbiGJQP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 12:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGJQO3 (ORCPT
+        with ESMTP id S229510AbiGJQP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 12:14:29 -0400
+        Sun, 10 Jul 2022 12:15:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11B35641B
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 09:14:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB4D413CEA
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 09:15:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657469668;
+        s=mimecast20190719; t=1657469724;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AFxyhw3hxCeITYGqSpvXClKGZ7TaZDyQ/0GKQi35CAo=;
-        b=IkX+Wd2cfOOv1djN/T2iSvSgZjXtusNAQ0mkaMgsBGonic+vkIaSg4obPfpuZ84jLq90Jg
-        7st4ts7nocyOT8KG/e0yl5RRosKo6ZGQo6MuJ9ANlnURp1EBg7wqSj6bPcvor2jm7V6olR
-        FgdQ+ErowwVzJfJNRoG9RNyvxRRfPr4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=133XWo39tBHS9yD9g4gr4qHAW5X2q9Mng/lIiHA+9FM=;
+        b=BuIlxoWCYlfrEdRTpkN+cqZp3lJWhZVhbGK2ysAuwUpOLdeuUWs9XpV88+obf0oMSBx8cu
+        64nDLQy8M7zcrubXv6TXn7mo2sAyBYOBnq0fZOmRieGnJVqihOrs3M5+GFXr1xPoxMYBDl
+        GS8iQA+9oGVmta6BTcUQBfZjydJyvIU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-sE9D9AO3Ny2pvCzrQGjlJg-1; Sun, 10 Jul 2022 12:14:26 -0400
-X-MC-Unique: sE9D9AO3Ny2pvCzrQGjlJg-1
-Received: by mail-ed1-f70.google.com with SMTP id j6-20020a05640211c600b0043a8ea2c138so2716016edw.2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 09:14:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AFxyhw3hxCeITYGqSpvXClKGZ7TaZDyQ/0GKQi35CAo=;
-        b=e0KMKDZzlB5DstMaZt8f5AMx/6XCeJ20631W/n3kXcroAv+RP8sfplB6/iZGNyo2Ca
-         fn2WB5S4NhvL5VwxJgakfGhjvZUrJ9QQz8XG+fM/mY5NGhoyVYmfUj0goxnsJrGtz0qt
-         vW1zS+dVcYrveItdBwSmGk/8g3hEBgzIVz9+YTn3pJIzmklp8ZN/GvUFude8ew2lLpB8
-         wkWHw3L4veYE0VCe2J3YnbTKwoQLD2Hmp/sGH5TA+ZeeaqlkfBkWVY+RivxNbVx90Eo1
-         /Cv3PIsN/r1fMR9Jl07tr9xPQEgHEDVnbU7DAn/c66eEXBJfF8uHLvXPNQ16xENuuRNa
-         9DNw==
-X-Gm-Message-State: AJIora9UNcBwiwOPO7Z+7jMMOPlvUAPwW9SGgDej9P+O8Db5dCgpQEen
-        sWPxKXldFFKBQvmu3gkDAK76M2mfBaysrzyrvgRoCUDtYhOAr2la6VXdPGTgQMiTWDpQLh2nZUg
-        a5+q60pto1dF22Q+blXVkmyhj
-X-Received: by 2002:aa7:d143:0:b0:43a:88f4:4ec1 with SMTP id r3-20020aa7d143000000b0043a88f44ec1mr19442267edo.141.1657469665610;
-        Sun, 10 Jul 2022 09:14:25 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vhzc/cdal9a4+4hJM9ZpgcURVq2YCEddp9nP2O73BIffQ2uRNftTxYpAqo9taQcZY2/dOvDg==
-X-Received: by 2002:aa7:d143:0:b0:43a:88f4:4ec1 with SMTP id r3-20020aa7d143000000b0043a88f44ec1mr19442240edo.141.1657469665413;
-        Sun, 10 Jul 2022 09:14:25 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id sd33-20020a1709076e2100b0072afb23fb9esm1723591ejc.16.2022.07.10.09.14.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 09:14:25 -0700 (PDT)
-Message-ID: <08d17a63-3c77-0422-b2a9-64f154358276@redhat.com>
-Date:   Sun, 10 Jul 2022 18:14:24 +0200
+ us-mta-313-tdNV6dv0PImJzydFmHnLMw-1; Sun, 10 Jul 2022 12:15:20 -0400
+X-MC-Unique: tdNV6dv0PImJzydFmHnLMw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2644F2A59547;
+        Sun, 10 Jul 2022 16:15:20 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D32442026D64;
+        Sun, 10 Jul 2022 16:15:17 +0000 (UTC)
+Message-ID: <641b171f53cb6a1e596e9591065a694fd2a59b69.camel@redhat.com>
+Subject: Re: [PATCHv2 3/7] KVM: SVM: Add VNMI support in get/set_nmi_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 10 Jul 2022 19:15:16 +0300
+In-Reply-To: <20220709134230.2397-4-santosh.shukla@amd.com>
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+         <20220709134230.2397-4-santosh.shukla@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/6] platform/x86: serial-multi-instantiate: Improve
- autodetection
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>
-References: <20220709211653.18938-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220709211653.18938-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 7/9/22 23:16, Andy Shevchenko wrote:
-> Instead of calling specific resource counter, let just probe each
-> of the type and see what it says. Return -ENOENT if no resources
-> found.
+On Sat, 2022-07-09 at 19:12 +0530, Santosh Shukla wrote:
+> VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK as
+> read-only in the hypervisor and do not populate set accessors.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Thank you for your patch-series, I've applied the series to my
-review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
+> Adding API(get_vnmi_vmcb) in order to return the correct vmcb for L1 or
+> L2.
+> 
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
 > ---
-> v2: squashed patch 1, restored behaviour, added comment, dropped message (Hans)
->  .../platform/x86/serial-multi-instantiate.c   | 23 ++++++++++++-------
->  1 file changed, 15 insertions(+), 8 deletions(-)
+> v2:
+> - Added get_vnmi_vmcb API to return vmcb for l1 and l2.
+> - Use get_vnmi_vmcb to get correct vmcb in func -
+>   is_vnmi_enabled/_mask_set()
+> - removed vnmi check from is_vnmi_enabled() func.
 > 
-> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
-> index 1e8063b7c169..366087a9fce2 100644
-> --- a/drivers/platform/x86/serial-multi-instantiate.c
-> +++ b/drivers/platform/x86/serial-multi-instantiate.c
-> @@ -100,7 +100,7 @@ static int smi_spi_probe(struct platform_device *pdev, struct acpi_device *adev,
->  	if (ret < 0)
->  		return ret;
->  	else if (!ret)
-> -		return -ENODEV;
-> +		return -ENOENT;
+>  arch/x86/kvm/svm/svm.c | 12 ++++++++++--
+>  arch/x86/kvm/svm/svm.h | 32 ++++++++++++++++++++++++++++++++
+>  2 files changed, 42 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index baaf35be36e5..3574e804d757 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -198,7 +198,7 @@ module_param(dump_invalid_vmcb, bool, 0644);
+>  bool intercept_smi = true;
+>  module_param(intercept_smi, bool, 0444);
 >  
->  	count = ret;
+> -static bool vnmi;
+> +bool vnmi = true;
+>  module_param(vnmi, bool, 0444);
 >  
-> @@ -184,7 +184,7 @@ static int smi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev,
->  	if (ret < 0)
->  		return ret;
->  	else if (!ret)
-> -		return -ENODEV;
-> +		return -ENOENT;
+>  static bool svm_gp_erratum_intercept = true;
+> @@ -3503,13 +3503,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
 >  
->  	count = ret;
->  
-> @@ -232,6 +232,7 @@ static int smi_probe(struct platform_device *pdev)
->  	const struct smi_node *node;
->  	struct acpi_device *adev;
->  	struct smi *smi;
-> +	int ret;
->  
->  	adev = ACPI_COMPANION(dev);
->  	if (!adev)
-> @@ -255,15 +256,21 @@ static int smi_probe(struct platform_device *pdev)
->  	case SMI_SPI:
->  		return smi_spi_probe(pdev, adev, smi, node->instances);
->  	case SMI_AUTO_DETECT:
-> -		if (i2c_acpi_client_count(adev) > 0)
-> -			return smi_i2c_probe(pdev, adev, smi, node->instances);
-> -		else
-> -			return smi_spi_probe(pdev, adev, smi, node->instances);
-> +		/*
-> +		 * For backwards-compatibility with the existing nodes I2C
-> +		 * is checked first and if such entries are found ONLY I2C
-> +		 * devices are created. Since some existing nodes that were
-> +		 * already handled by this driver could also contain unrelated
-> +		 * SpiSerialBus nodes that were previously ignored, and this
-> +		 * preserves that behavior.
-> +		 */
-> +		ret = smi_i2c_probe(pdev, adev, smi, node->instances);
-> +		if (ret != -ENOENT)
-> +			return ret;
-> +		return smi_spi_probe(pdev, adev, smi, node->instances);
->  	default:
->  		return -EINVAL;
->  	}
-> -
-> -	return 0; /* never reached */
+>  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+>  {
+> -	return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (is_vnmi_enabled(svm))
+> +		return is_vnmi_mask_set(svm);
+> +	else
+> +		return !!(vcpu->arch.hflags & HF_NMI_MASK);
 >  }
 >  
->  static int smi_remove(struct platform_device *pdev)
+>  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> +	if (is_vnmi_enabled(svm))
+> +		return;
+> +
+>  	if (masked) {
+>  		vcpu->arch.hflags |= HF_NMI_MASK;
+>  		if (!sev_es_guest(vcpu->kvm))
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 9223ac100ef5..f36e30df6202 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern int vgif;
+>  extern bool intercept_smi;
+> +extern bool vnmi;
+>  
+>  /*
+>   * Clean bits in VMCB.
+> @@ -509,6 +510,37 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
+>  	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
+>  }
+>  
+> +static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
+> +{
+> +	if (!vnmi)
+> +		return NULL;
+> +
+> +	if (is_guest_mode(&svm->vcpu))
+> +		return svm->nested.vmcb02.ptr;
+> +	else
+> +		return svm->vmcb01.ptr;
+> +}
+
+This is better but still not enough to support nesting:
+
+
+Let me explain the cases that we need to cover:
+
+
+1. non nested case, vmcb01 has all the VNMI settings,
+and I think it should work, but need to review the patches again.
+
+
+
+2. L1 uses vNMI, L2 doesn't use vNMI (nested_vnmi_enabled() == false).
+
+  In this case, vNMI settings just need to be copied from vmcb01 to vmcb02
+  and vise versa during nested entry and exit.
+
+
+  This means that nested_vmcb02_prepare_control in this case should copy
+  all 3 bits from vmcb01 to vmcb02, and vise versa nested_svm_vmexit
+  should copy them back.
+
+  Currently I see no indication of this being done in this patch series.
+
+  vmcb02 should indeed be used to read vnmi bits (like done above).
+
+
+3. L1 uses vNMI, L2 uses vNMI:
+
+  - First of all in this case all 3 vNMI bits should be copied from vmcb12
+    to vmcb02 on nested entry and back on nested VM exit.
+
+    I *think* this is done correctly in the patch 6, but I need to check again.
+
+ 
+  - Second issue, depends on vNMI spec which we still don't have, and it
+    relates to the fact on what to do if NMIs are not intercepted by
+    the (nested) hypervisor, and L0 wants to inject an NMI
+
+    (from L1 point of view it means that a 'real' NMI is about to be
+    received while L2 is running).
+
+
+    - If VNMI is not allowed to be enabled when NMIs are not intercepted,
+      (vast majority of nested hypervisors will want to intercept real NMIs)
+      then everything is fine -
+
+      this means that if nested vNMI is enabled, then L1 will have
+      to intercept 'real' NMIs, and thus L0 would be able to always
+      inject 'real' NMIs while L2 is running by doing a VM exit to L1 without
+      touching any vNMI state.
+
+    - If the vNMI spec states that if vNMI is enabled, real NMIs
+      are not intercepted and a real NMI is arriving, then the CPU
+      will use vNMI state to handle it (that is it will set the 'pending'
+      bit, then check if 'masked' bit is set, and if not, move pending to masked
+      and deliver NMI to L2, in this case, it is indeed right to use vmcb02
+      and keep on using VNMI for NMIs that are directed to L1,
+      but I highly doubt that this is the case.
+
+
+    - Most likely case - vNMI is allowed without NMI intercept,
+      and real NMI does't consult the vNMI bits, but rather uses 'hosts'
+      NMI masking. IRET doesn't affect host's NMI' masking as well.
+
+
+      In this case, when L0 wants to inject NMI to a nested guest
+      that has vNMI enabled, and doesn't intercept NMIs, it
+      has to:
+
+      - still consult the vNMI pending/masked bits of *vmcb01*,
+        to know if it can inject a NMI
+
+      - if it can inject it, it should update *manually* the pending/masked bits
+        of vmcb01 as well, so that L1's vNMI the state remains consistent.
+
+      - inject the NMI to L2, in the old fashioned way with EVENTINJ,
+	or open NMI window by intercepting IRET if NMI is masked.
+
+
+Best regards,
+	Maxim Levitsky
+
+
+
+
+> +
+> +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (vmcb)
+> +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+> +	else
+> +		return false;
+> +}
+> +
+> +static inline bool is_vnmi_mask_set(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> +
+> +	if (vmcb)
+> +		return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> +	else
+> +		return false;
+> +}
+> +
+>  /* svm.c */
+>  #define MSR_INVALID				0xffffffffU
+>  
+
 

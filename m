@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED1756CC2E
+	by mail.lfdr.de (Postfix) with ESMTP id D44D756CC30
 	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229594AbiGJBbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 21:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S229593AbiGJBbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 21:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiGJBbg (ORCPT
+        with ESMTP id S229572AbiGJBbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 21:31:36 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE7A1571F;
-        Sat,  9 Jul 2022 18:31:35 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id i21so1907579qtw.12;
-        Sat, 09 Jul 2022 18:31:35 -0700 (PDT)
+        Sat, 9 Jul 2022 21:31:37 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513B315827;
+        Sat,  9 Jul 2022 18:31:36 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id w1so3166642qtv.9;
+        Sat, 09 Jul 2022 18:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ev0/JwIhf1IIvfZYtY2DhmTLI/RSQbxnQZu2/o+AGzM=;
-        b=ZmYUJcdHvDbBCAGOIbyPkhIezwkEUexcyLIpVTznP3lFB5OXwbjNYTl2yaxri5ve/c
-         rvWn88RJsTJDgidJWZckeUivc6iMO9g/RvvZH3W+sMDqtAu0RHdD0YnH8WrcOznKe4h9
-         QvU9cPG5Bjblt0oMha2eytVvf1kbZDvmUlDnlg9FpLm2drWsXiTDDJA+ZrGSsh3+Y2cQ
-         oQCDwpnGR954jQa9VgAy8akGAxz3PkQKrtlMkJRDBGwqO1tTIqWQ2RnALmtSkm04hnx3
-         xFV7gNT2al1vaoKwBscOVh+ZKVKFwFvdcqSLElC69wbWU6YEWLJwi67b7qR2geOSD0Fp
-         y2cg==
+        bh=OAhACMP8NRjsirEZE+z16gjH7i5C3HZ292R+HFdkx9k=;
+        b=mfPbIS613Kx/cMDOmt/B7M1fQAt089SmAgR4QyFzVx1g8bKizX2l2WSeKZj2kMvccB
+         hG7vIZCzRX7qw4dYQ3B+KXabhZzB3OwQZz+qv3IFOLEH2uEDYiF5aOU6IYQaKVX71NVB
+         ze3O1w4N3mh6mW3FEMHuP5lGfSOehBb9GUsx81BvftHgqsxghX2CsUWltv5q/wLLBBn4
+         Jh7xn6+pDlbLUZdHXq9yF4PJNknNBqcJxZElZPkKBAn3fXMBsx35maMM72xhRHDbhgvi
+         tDYA6cKLSgA3KpAkZin03L6md3oMLb2YlRrmoXJEEMtILWWoSTmYB3WbNBbEHp2sfvq2
+         41cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ev0/JwIhf1IIvfZYtY2DhmTLI/RSQbxnQZu2/o+AGzM=;
-        b=D0pf06jjvxrZK0HlTrUEhbuvN1AeeKu6nsEnj1oFdkvTaOvmEhPXe1AHZ856bBp+w4
-         uNpssCw1R5FpO2zLOAXdtg2AS+IewNTrP0mzjF5xPuGU7bMovVMEC36ABo3OII2yPPmv
-         5Ts2EcrKktjlnALz+jq+vlsXhSlqcGMnL/C8bsv7abaExTl0Nfk2eWLclrNcpLgOU9UI
-         xF/DTqg1WQjt8cujqBP80xzXwKB0graZRot1xTXYVW7SBuupS4epMsYGBLBr7YBn6mbm
-         1GNgoW2gA6XKbIkCckb6KbZtlvyRyZ0ubVwjS17D7uUFz71/WlLk28qjU7ohkNvhM1+K
-         wCPw==
-X-Gm-Message-State: AJIora9MyHCO9hi+o0NX7Jvf56c4wN5sMXQ3lILhVEk41Flv6TDr7eX+
-        +xGFFX52VtNaCPLUP5GGcsg=
-X-Google-Smtp-Source: AGRyM1t4JkflM/iuyD53lfdgfjSqMWy8diZh9ftsJLzP0I6Fm7p8PZGVOBMBhOJNWsjfd/lx9Lc8VA==
-X-Received: by 2002:ac8:59c5:0:b0:31d:4bfe:fd5a with SMTP id f5-20020ac859c5000000b0031d4bfefd5amr8828300qtf.59.1657416694690;
-        Sat, 09 Jul 2022 18:31:34 -0700 (PDT)
+        bh=OAhACMP8NRjsirEZE+z16gjH7i5C3HZ292R+HFdkx9k=;
+        b=GnQJp1NDsPYls8DMGkz4YlKl5TIGBO+g8dkmM9E6Zwr0c2Ibb1/KG5OWglGNiack8I
+         0AGC3SOyGfPmjdu/aXBcUo3rNYkt+Cei/3WtMYcNttem8p3amHv4m8XIj/2gvcWbq1yB
+         LytZN978isi0Cz37iChy1sqMkxR72TttIBUcv7wpMJZcgLd2jpfbn6hcuvMOOMsZp33K
+         aT8miaVpkv8B2OF4Cw3vZBTmxt6KO16Z1JDGGZ54XolpdhmZlxwpsQ5gu/sdKbBqtLNu
+         saoCvw23BrMBT4WtOnBOj+DfRDJ8GtQnjEJ905ntin9qOB1CszpMtIyFiOIolC2+HPmW
+         shjg==
+X-Gm-Message-State: AJIora9x4ifyyDBZhuImMxvvWvjfswwrWHrmQnklbkaH0hNRmxt0aB0s
+        oOqpKSqoG3Vx8Jq2E1pti/o=
+X-Google-Smtp-Source: AGRyM1s41+OQyssEKfO4jvSAr4ZuiDzeW3OeWU3FIZD0v31fNCSL5HU1TS0jbbxXm09F3vcM8TI3cw==
+X-Received: by 2002:ac8:5e07:0:b0:31e:a826:b3ce with SMTP id h7-20020ac85e07000000b0031ea826b3cemr7572768qtx.214.1657416696010;
+        Sat, 09 Jul 2022 18:31:36 -0700 (PDT)
 Received: from shaak.xiphos.ca (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id j13-20020a05620a410d00b006b575a9775csm2137258qko.45.2022.07.09.18.31.33
+        by smtp.gmail.com with ESMTPSA id j13-20020a05620a410d00b006b575a9775csm2137258qko.45.2022.07.09.18.31.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 18:31:33 -0700 (PDT)
+        Sat, 09 Jul 2022 18:31:35 -0700 (PDT)
 From:   Liam Beguin <liambeguin@gmail.com>
 To:     liambeguin@gmail.com, jic23@kernel.org, geert@linux-m68k.org
 Cc:     peda@axentia.se, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/5] iio: test: format: add MODULE_* information
-Date:   Sat,  9 Jul 2022 21:31:06 -0400
-Message-Id: <20220710013109.3349104-3-liambeguin@gmail.com>
+Subject: [PATCH v1 3/5] iio: test: format: follow CONFIG_ naming convention
+Date:   Sat,  9 Jul 2022 21:31:07 -0400
+Message-Id: <20220710013109.3349104-4-liambeguin@gmail.com>
 X-Mailer: git-send-email 2.35.1.4.g5d01301f2b86
 In-Reply-To: <20220710013109.3349104-1-liambeguin@gmail.com>
 References: <20220710013109.3349104-1-liambeguin@gmail.com>
@@ -70,25 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for module support, add missing MODULE_* information.
+The KUnit documentation indicates that all KUnit Kconfig entries must
+match CONFIG_<name>_KUNIT_TEST: where <name> is the name of the test
+suite. Rename the IIO_TEST_FORMAT configuration accordingly.
 
 Signed-off-by: Liam Beguin <liambeguin@gmail.com>
 ---
- drivers/iio/test/iio-test-format.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/test/Kconfig  | 2 +-
+ drivers/iio/test/Makefile | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/test/iio-test-format.c b/drivers/iio/test/iio-test-format.c
-index 237321436b83..fc67e6b73df7 100644
---- a/drivers/iio/test/iio-test-format.c
-+++ b/drivers/iio/test/iio-test-format.c
-@@ -265,3 +265,7 @@ static struct kunit_suite iio_format_test_suite = {
- 	.test_cases = iio_format_test_cases,
- };
- kunit_test_suite(iio_format_test_suite);
-+
-+MODULE_AUTHOR("Lars-Peter Clausen <lars@metafoo.de>");
-+MODULE_DESCRIPTION("Test IIO formatting functions");
-+MODULE_LICENSE("GPL v2");
+diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
+index 4c66c3f18c34..7dbf51bc4934 100644
+--- a/drivers/iio/test/Kconfig
++++ b/drivers/iio/test/Kconfig
+@@ -14,6 +14,6 @@ config IIO_RESCALE_KUNIT_TEST
+ 	  This takes advantage of ARCH=um to run tests and should be used by
+ 	  developers to tests their changes to the rescaling logic.
+ 
+-config IIO_TEST_FORMAT
++config IIO_FORMAT_KUNIT_TEST
+         bool "Test IIO formatting functions"
+         depends on KUNIT=y
+diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
+index 880360f8d02c..d76eaf36da82 100644
+--- a/drivers/iio/test/Makefile
++++ b/drivers/iio/test/Makefile
+@@ -5,5 +5,5 @@
+ 
+ # Keep in alphabetical order
+ obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
+-obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
++obj-$(CONFIG_IIO_FORMAT_KUNIT_TEST) += iio-test-format.o
+ CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
 -- 
 2.35.1.4.g5d01301f2b86
 

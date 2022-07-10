@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D76356CFA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B0C56CFAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiGJPKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 11:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S229530AbiGJPMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 11:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJPKm (ORCPT
+        with ESMTP id S229450AbiGJPMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 11:10:42 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5BFBC3D;
-        Sun, 10 Jul 2022 08:10:40 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 23:11:43 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657465838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0UOCOqJq0ioAcZ5Z49JdedUtI2TrrKl6ffe5dJ/eKU0=;
-        b=f3Sg3+lNmVYNGh4qBcAkegLpjMfHkxPjWwgJ8gYk+HVK33HzO7TrwHBMouuCTkQ1ahIdkL
-        Z9zQyXF/zkK7wIbBppISjObH8xuJ/Jj7boCwWyQbwC38n7puW4pPkqLozvuY3jP9IhnFMc
-        fEnXcokjwQtIQenDMAceop9E6vEXdHE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
-Message-ID: <YsrsL8zCNcwvdQS8@geo.homenetwork>
-References: <cover.1655368610.git.bristot@kernel.org>
- <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
- <YsXLDvjHqOxYtckg@geo.homenetwork>
- <adbf8277-e680-9357-950d-22cf54b1f6ff@kernel.org>
+        Sun, 10 Jul 2022 11:12:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272DABC99
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 08:12:51 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bx13so3639660ljb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 08:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NrSFqXui8IuFWW18AV7BX9JJnZg6RCMbeeOF3ySerrE=;
+        b=QMoJgDgrWpoHgt8V935Yj0tZ7gW3LZdDygouB/iufA4mk/EYDXJyLplXfyn9C8aN3A
+         uIDA0Tu/wnZF2BfBFlpKqh4VyroAYuQZqBcdpiZdNqmtc1Z5K0m7VaZCj9hr+NPEj35l
+         BPUIU1LpogI7MI0Z2g9xvpzLPWDCfvUhqRZswOndvhygeYTuQ8N329fsjMyYoMlPMYqw
+         F5KZ/a6Qya+85rPNA5stUj9xKIurX7xzNqVFP9yMbwrQYxAP3NoSkTUTKHqlfCKkzx6r
+         PnWE30Qp6vO43T+WD+r3zVXt+y24fZZfpGbNtPSRRMTbGF8XcgFbk+cwU5SF+8I8uRG7
+         8q0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NrSFqXui8IuFWW18AV7BX9JJnZg6RCMbeeOF3ySerrE=;
+        b=XbvGYb9hwKiKwKkuPySp3fSEJTV651kz4Ek0Jl5dpKMcIH6UTQv6HvvJ+/R0GKVMWQ
+         oPJhlyHZXSzbteY9kV2Cp61Rcv38N/pZ8pBbcfEt020bx+X2jmQJvh0Gl3oOPLqapWHn
+         MZf/zokm0Zd3iYzEAEwm+FYEQ1vvZuIJc0oziy6dKEmKOIIgxmIPdX4tx+1P6YZvQhSx
+         02AFTeoNhRgnCUw1q6UXoULg+Bc/Yf4Yl1WE6fgzTpBNl9myy+42HKm5W9vMTHRPc769
+         8iN89UuJKz7E+K4JngnxvJTwDEFVk43Ay5G4CSGzt+P+4Hwbjwj7vAjWFAlPCvKPxpxA
+         jd3g==
+X-Gm-Message-State: AJIora+vJiw72OyTpPcsQl230jz1mMZTeGVBTDdi/C5ny4Q4THmJVWGp
+        VUOywu8aMmEYC+OWSgpv9LAmDw==
+X-Google-Smtp-Source: AGRyM1u4TGEfXbOJWoo2B3uuptUDQWrvhmxrihGijpLpTSzFLDT2nPpmDzKjXMxyCnypzScxX8fVbA==
+X-Received: by 2002:a2e:83c7:0:b0:25b:c007:29e0 with SMTP id s7-20020a2e83c7000000b0025bc00729e0mr7525140ljh.378.1657465969512;
+        Sun, 10 Jul 2022 08:12:49 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cac-200.bb.online.no. [88.92.172.200])
+        by smtp.gmail.com with ESMTPSA id y18-20020a199152000000b00486d8a63c07sm976213lfj.121.2022.07.10.08.12.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Jul 2022 08:12:49 -0700 (PDT)
+Message-ID: <f6ab024a-582f-45b0-7d26-94a85858c761@linaro.org>
+Date:   Sun, 10 Jul 2022 17:12:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adbf8277-e680-9357-950d-22cf54b1f6ff@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 25/33] dt-bindings: crypto: rockchip: convert to new
+ driver bindings
+Content-Language: en-US
+To:     LABBE Corentin <clabbe@baylibre.com>
+Cc:     Rob Herring <robh@kernel.org>, john@metanate.com, heiko@sntech.de,
+        p.zabel@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        didi.debian@cknow.org, herbert@gondor.apana.org.au,
+        sboyd@kernel.org, mturquette@baylibre.com,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220706090412.806101-1-clabbe@baylibre.com>
+ <20220706090412.806101-26-clabbe@baylibre.com>
+ <1657114144.957232.4099933.nullmailer@robh.at.kernel.org>
+ <YsWcGDwPCX+/95i3@Red> <3e47b853-bb82-8766-8884-3da931c038a2@linaro.org>
+ <YsabXrOyAsCkUUVN@Red>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YsabXrOyAsCkUUVN@Red>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:39:47PM +0200,
-Daniel Bristot de Oliveira wrote:
-
-> Hey Tao!
+On 07/07/2022 10:37, LABBE Corentin wrote:
+> Le Wed, Jul 06, 2022 at 05:25:21PM +0200, Krzysztof Kozlowski a écrit :
+>> On 06/07/2022 16:28, LABBE Corentin wrote:
+>>> Le Wed, Jul 06, 2022 at 07:29:04AM -0600, Rob Herring a écrit :
+>>>> On Wed, 06 Jul 2022 09:04:04 +0000, Corentin Labbe wrote:
+>>>>> The latest addition to the rockchip crypto driver need to update the
+>>>>> driver bindings.
+>>>>>
+>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>>>>> ---
+>>>>>  .../crypto/rockchip,rk3288-crypto.yaml        | 85 +++++++++++++++++--
+>>>>>  1 file changed, 77 insertions(+), 8 deletions(-)
+>>>>>
+>>>>
+>>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>>
+>>>> yamllint warnings/errors:
+>>>>
+>>>> dtschema/dtc warnings/errors:
+>>>> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:0:then:properties:clock-names: 'oneOf' conditional failed, one must be fixed:
+>>>> 	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too long
+>>>> 	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too short
+>>>> 	False schema does not allow 4
+>>>> 	1 was expected
+>>>> 	4 is greater than the maximum of 2
+>>>> 	4 is greater than the maximum of 3
+>>>
+>>> Hello
+>>>
+>>> I upgraded to dt-schema 2022.07 and fail to reproduce all errors.
+>>
+>> Visible on older dtschema (2022.6.dev10+gcd64f75fe091), visible on
+>> newest (2022.7).
+>>
+>> Exactly the same error.
+>>
 > 
-> On 7/6/22 19:49, Tao Zhou wrote:
-> >> +static void *enabled_monitors_start(struct seq_file *m, loff_t *pos)
-> >> +{
-> >> +	struct rv_monitor_def *m_def;
-> >> +	loff_t l;
-> >> +
-> >> +	mutex_lock(&rv_interface_lock);
-> >> +	m_def = list_entry(&rv_monitors_list, struct rv_monitor_def, list);
-> > I realized this m_def is not real but vain. Is it possible the loop is
-> > skiped and just return m_def that is not valid.
+> Hello
 > 
-> that is empty... not a problem.
-> 
-> I am not seeing (the possible) problem here. Could you simulate/reproduce the problem?
+> I am sorry, I finally succesfully reproduced it.
+> Just doing what the hints gives (removing max/min-items) from "static" list fix the issue.
 
-The @*pos of enable_monitors_start() can not be -1 or other negative value.
-And I checked that the *pos is 0(right?). That is safe. Sorry for not being
-that ture and maybe this is a notice here. Because if it is a negative value,
-the returned m_def is a point to a data place 16 bytes before &rv_monitors_list.
-That is a not ture rv_monitors_list stucture data. But it is not possiable now.
-Maybe "inspired" from your question. Look it more, I image this simulation.
-If the monitor(and all is enabled) is more enough to let the *pos to increase
-to -1. And the returned m_def is last monitor that returned from enable_monitors_start().
-The enable_monitors_next() check from the last monitor and return NULL.
-Only show the last monitor. This will not really happen I think.
-But I am not focus enough to the seq file code or others now, so this may be
-more possible to be not right. Late reply continued from me..
+Not sure what do you mean by "static list". I think you should drop
+min/maxItems from clock-names/reset-names in allOf:if:then sections.
 
-Thanks,
-Tao
+> Does I need to remove your Reviewed-by ?
+
+Let's drop, so it will be back to my to-review queue.
+
+Best regards,
+Krzysztof

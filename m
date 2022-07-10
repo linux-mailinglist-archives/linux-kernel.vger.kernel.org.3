@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9D556D1E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA9356D1E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiGJXGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 19:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S229560AbiGJXGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 19:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGJXGH (ORCPT
+        with ESMTP id S229543AbiGJXGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 19:06:07 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3394011C27
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:06 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p4so2149091wms.0
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:06 -0700 (PDT)
+        Sun, 10 Jul 2022 19:06:08 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490E610FC0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:07 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id d13-20020a05600c34cd00b003a2dc1cf0b4so2089658wmq.4
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nPSylhn+MlXQwMJ3vmZOIwjj2PtaM6NrgjfZcN53+0=;
-        b=CWRIoXAEBDxrC9bGiRj/zi0DuboIft9UCUJ6qcWP0RVbGkX7Y5SwMT2aY+dZ0UhR1Y
-         go5ObEyQjNAMrvff2gfgj2ZrVRsxpO61Oylg+EjuHaGeyqyFBPeU2Lds0h4LE/5WyJKW
-         +V1MNAq/XY3lzTsRSTUlschbddDtj5ImuWtiEtVYeupQr1Kg3CLGQzmu8X/b/xv70QQo
-         9nQg5wr8aAkt14BvuWmEN2REp9cu8yfBTrbFu7E0VqD1eANxZ1+lZENpsSNvRkxh7WCY
-         82MTXJZ5r/hf3LK4YWCo4gfxegYLDmauOwxHlD5MWzc9Mpbs7byI3GBIYgj48vFWLH0q
-         bzxw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=t3ZTmvONYAL3UmGbG2MULEJQEOXDk4bgL9Jsh2UKHR0=;
+        b=shjCmOtmTJr3WRbag5oJo/fGtuTm1xqY1Edpx4CJaaiZU343eW60a+82utSz3xgQ6p
+         aWRh/+ep3FFT5CK/PAucz0i721CP1Tv8cjbvbTE+AhRlyVXwHm1otNklh+FMTNdiFjGu
+         55b4myBFjVznKA/z4iJAZwDdSIxXuSi6gp/LWCCvEsbgcxfUZ4MfqtLHHpblqvIri1yB
+         4RSYvjtpzs5XMxP29a/xlpF8IaGDvpGJYFFUEVEiNzzzu5RYpUG3VKKrJ5x5b4C4v8W/
+         VUvCmv7rG2tPfBge19Ypz0vXdpnvffjH4V94S0rjZ2GonwrfU21td/QHNbZRnyGdBDo1
+         n0nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/nPSylhn+MlXQwMJ3vmZOIwjj2PtaM6NrgjfZcN53+0=;
-        b=HJ8B8bOeZjjWyB3gZReTaBc0Q1AqZ/IqRjahEfSa6B13jHos8s3nZSCowGCdDUa6Qd
-         IzOFr2/P2aITNE9lJaQpq4icAonTNnr7tIiVMYM+e9G7wz+EZKQBmQx7DnBpBn8k8frD
-         krVhWXVXaPyYtuab7CWciH2zTmyBmz1v6oDTT8cIf0uezjAIxpSrRPJGgcha/tgZuOAl
-         t5KlBlFf96pDexjadhkrNEtDlUbcDbHcDaSD9LO8bCT1qgtPAxJLaNf8YzhabV+mDs8f
-         HVcxDi0g3PaupnvV/Uuu59JixY3BcTICZRvh0V2rPSTHXQNX36/8GDomPPvhHLFo9Xbd
-         J1hw==
-X-Gm-Message-State: AJIora8cD1xIpFENC+XgG5r4m7sEb1sUGQq6gqQ+LFu5Lobm/EpKkrBH
-        zg2t3AeYnZ3wCN/fHioxojFpfA==
-X-Google-Smtp-Source: AGRyM1srekra2VL2j8jif81CwmQn3XpY1r37W6j6+iJVlQaoKvaJeqI5+ah5MAAvaw+ScSAyLOyKdw==
-X-Received: by 2002:a05:600c:190b:b0:3a0:ac8a:7c2d with SMTP id j11-20020a05600c190b00b003a0ac8a7c2dmr12650759wmq.205.1657494364733;
-        Sun, 10 Jul 2022 16:06:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=t3ZTmvONYAL3UmGbG2MULEJQEOXDk4bgL9Jsh2UKHR0=;
+        b=gFa1HFli23KGN2oioC6vuDNyVxIkrfyw5tKfv57ZLBdjJojat1n1sLzIFii8tW+998
+         TuzRqFnpUEVvyX8Lvswx2BKLj7t4T5zFkwx4X+jCG05oZRSH/M94r2CKRtR3Bf7zbV91
+         we9/lGKCENFCCCR5vh2W2vk5RjMqk/YNAz9jGmMIF4V85p1QqV2kYzp8O4Qu9/BQ8B3B
+         pmWVQLsOMCz4dwekbm+HbZNj9KzVHM8FY39EcQL+y/Eaz12bLv1Ad7SvOQ7H6iag34dm
+         l8ERNaVhmZyvrY9MqUaUq0FgBlynNCJXHtuWTL56QYpJlj0sJtAVLe3FuCtsj6CSaMx3
+         V+xA==
+X-Gm-Message-State: AJIora8f4Mj6B0/exR5wBsxDiLo5lnaQ4eh+ZVYUdmeg/2uXw3YXeSKC
+        W2NT+C9S983kApvVGMRhIXbhCw==
+X-Google-Smtp-Source: AGRyM1u43KlHkERt90c0V0mKxMDOvNBrf0leawFGzCy7FxHSo4Rkj7KffUTXFcFXeKS8Uks57TmrnA==
+X-Received: by 2002:a05:600c:6024:b0:3a0:4ea4:cfa4 with SMTP id az36-20020a05600c602400b003a04ea4cfa4mr12564968wmb.119.1657494365850;
+        Sun, 10 Jul 2022 16:06:05 -0700 (PDT)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id i15-20020adfefcf000000b0021d82a6095bsm4423810wrp.95.2022.07.10.16.06.04
+        by smtp.gmail.com with ESMTPSA id n4-20020a5d6604000000b0021d650e4df4sm4436047wru.87.2022.07.10.16.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 16:06:04 -0700 (PDT)
+        Sun, 10 Jul 2022 16:06:05 -0700 (PDT)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -60,10 +60,12 @@ Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/7] iommu/exynos: Add basic support for SysMMU v7
-Date:   Mon, 11 Jul 2022 02:05:56 +0300
-Message-Id: <20220710230603.13526-1-semen.protsenko@linaro.org>
+Subject: [PATCH v2 1/7] iommu/exynos: Reuse SysMMU constants for page size and order
+Date:   Mon, 11 Jul 2022 02:05:57 +0300
+Message-Id: <20220710230603.13526-2-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220710230603.13526-1-semen.protsenko@linaro.org>
+References: <20220710230603.13526-1-semen.protsenko@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,66 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add minimal viable support for SysMMU v7.x, which can be found in modern
-Exynos chips (like Exynos850 or Google's GS101). SysMMU v7.x may
-implement VM register set, and those registers should be initialized
-properly if present. Usually 8 translation domains are supported via VM
-registers (0..7), but only n=0 (default) is used for now.
+Using SZ_4K in context of SysMMU driver is better than using PAGE_SIZE,
+as PAGE_SIZE might have different value on different platforms. Though
+it would be even better to use more specific constants, already existing
+in SysMMU driver. Make the code more strict by using SPAGE_ORDER and
+SPAGE_SIZE constants.
 
-Existing exynos-iommu driver only supports SysMMU versions up to v5. But
-it's pretty much ready for basic usage with SysMMU v7, only small
-changes have to be done. As SysMMU version is tested dynamically (by
-reading the corresponding register), there is no need to introduce new
-compatible string.
+It also makes sense, as __sysmmu_tlb_invalidate_entry() also uses
+SPAGE_* constants for further calculations with num_inv param, so it's
+logical that num_inv should be previously calculated using also SPAGE_*
+values.
 
-The only major change is that SysMMU v7 can have different register
-layouts:
-  - with Virtual Machine support
-  - without Virtual Machine support
-
-That can be checked by reading the capability registers. In the case if
-SysMMU IP-core is VM-capable, the VM registers have to be used, and some
-additional initialization is needed. That is the case on E850-96 board,
-which non-secure SysMMU (v7.4) implements VM-capable register set.
-
-Another required change to make SysMMU v7 functional (at least the one
-that have VM registers), is to enable default VM instance. That should
-be added to the code enabling MMU itself. Insights for that change were
-taken by comparing the I/O dump (writel() / readl() operations) for the
-vendor driver and this upstream driver.
-
-The patch series was tested on E850-96 board. Because at the moment
-there are no SysMMU users for that board, the testing was done using so
-called "Emulated Translation" registers available on SysMMU v7. That
-allows one to initiate the translation from CPU, by writing to those
-registers, and then reading the corresponding TLB registers to find out
-the translation result. The testing driver can be found in [1] tree.
-
-Thanks to Marek, who did let me know it only takes a slight change of
-registers to make this driver work with v7.
-
-[1] https://github.com/joe-skb7/linux/tree/e850-96-mainline-iommu
-
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
 Changes in v2:
-  - Addressed all comments on review
-  - Reworked commit messages correspondingly
-  - Added new patch: "iommu/exynos: Handle failed registration properly"
-  - Added new patch: "iommu/exynos: Add SysMMU v7 register sets"
-  - Added new patch: "iommu/exynos: Reuse SysMMU constants for page size
-    and order"
+  - (none) This patch is new and added in v2
 
-Sam Protsenko (7):
-  iommu/exynos: Reuse SysMMU constants for page size and order
-  iommu/exynos: Handle failed IOMMU device registration properly
-  iommu/exynos: Set correct dma mask for SysMMU v5+
-  iommu/exynos: Use lookup based approach to access registers
-  iommu/exynos: Check if SysMMU v7 has VM registers
-  iommu/exynos: Add SysMMU v7 register sets
-  iommu/exynos: Enable default VM instance on SysMMU v7
+ drivers/iommu/exynos-iommu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/iommu/exynos-iommu.c | 219 ++++++++++++++++++++++++++---------
- 1 file changed, 166 insertions(+), 53 deletions(-)
-
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index 79729892eb48..8f80aaa35092 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -340,7 +340,7 @@ static void __sysmmu_set_ptbase(struct sysmmu_drvdata *data, phys_addr_t pgd)
+ 	if (MMU_MAJ_VER(data->version) < 5)
+ 		writel(pgd, data->sfrbase + REG_PT_BASE_ADDR);
+ 	else
+-		writel(pgd / SZ_4K, data->sfrbase + REG_V5_PT_BASE_PFN);
++		writel(pgd >> SPAGE_ORDER, data->sfrbase + REG_V5_PT_BASE_PFN);
+ 
+ 	__sysmmu_tlb_invalidate(data);
+ }
+@@ -550,7 +550,7 @@ static void sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
+ 		 * 64KB page can be one of 16 consecutive sets.
+ 		 */
+ 		if (MMU_MAJ_VER(data->version) == 2)
+-			num_inv = min_t(unsigned int, size / SZ_4K, 64);
++			num_inv = min_t(unsigned int, size / SPAGE_SIZE, 64);
+ 
+ 		if (sysmmu_block(data)) {
+ 			__sysmmu_tlb_invalidate_entry(data, iova, num_inv);
 -- 
 2.30.2
 

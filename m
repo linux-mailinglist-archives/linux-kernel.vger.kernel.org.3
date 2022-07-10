@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733E756D109
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 21:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC21356D10D
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 21:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiGJTU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 15:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S229515AbiGJT0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 15:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGJTU1 (ORCPT
+        with ESMTP id S229469AbiGJT0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 15:20:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3F2BC9A
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 12:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657480825; x=1689016825;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=69gOGoGXhW2chzFXjKMMkPA8Ddg/6/ejvL81GS1H418=;
-  b=ZXP2o05uhDoyIuwxdJwwS9sDkYt6TSAla6HYhQ+ermJlfm8A1XatMij5
-   3z6yGYoPd523yXkZDOJWZG4ZEmigfMo5mL5V4pf3FT+M7zVDWOo7fc6fl
-   kmwo7Eb3TCmRn6yhgG3X74lt2PTlY2/RQfm2aZfLtNJ33xorIT1Qcufgk
-   MCVV5AHB7z6v97XRF1+XUY4VAvadJEon2iVguYPuIhO7rHf9plwOwCUOE
-   iwlX4J7RDaeTsZ/yeBVFc3XgbaufVqqhNO7E2Er9KVhTiObZbeG++PsiW
-   owKCTtcrtPY+aXdi4L8oNIBuP+32a7j0bLYHByw/088vdqcay9rdnPL3c
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284555243"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="284555243"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 12:20:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="594657655"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 10 Jul 2022 12:20:24 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAcTf-000Q7k-K5;
-        Sun, 10 Jul 2022 19:20:23 +0000
-Date:   Mon, 11 Jul 2022 03:20:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ogabbay:gaudi2 52/62]
- drivers/misc/habanalabs/gaudi2/gaudi2.c:9500:48-53: WARNING: conversion to
- bool not needed here
-Message-ID: <202207110303.LlORIomX-lkp@intel.com>
+        Sun, 10 Jul 2022 15:26:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717CA463
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 12:26:05 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oAcYp-0004Aj-Hj; Sun, 10 Jul 2022 21:25:43 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-14f9-9001-5433-5e4f.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:14f9:9001:5433:5e4f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4A9BCACF60;
+        Sun, 10 Jul 2022 19:25:18 +0000 (UTC)
+Date:   Sun, 10 Jul 2022 21:25:17 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Subject: Re: [PATCH v1 2/2] arm64: dts: imx8mm-verdin: use level interrupt
+ for mcp251xfd
+Message-ID: <20220710192517.cbky3cl7j325j3xq@pengutronix.de>
+References: <20220708124205.59564-1-andrejs.cainikovs@toradex.com>
+ <20220708124205.59564-3-andrejs.cainikovs@toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rkuzb2y3zhcm35uy"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220708124205.59564-3-andrejs.cainikovs@toradex.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,21 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git gaudi2
-head:   cdf0db9c5190d3f87662583db935ef9f5c0b7e4a
-commit: db0c0cf75ce55851443487f3b7c6e033f112102d [52/62] habanalabs: add gaudi2 asic-specific code
-config: xtensa-randconfig-c004-20220710 (https://download.01.org/0day-ci/archive/20220711/202207110303.LlORIomX-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--rkuzb2y3zhcm35uy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 08.07.2022 14:42:05, Andrejs Cainikovs wrote:
+> Switch to level interrupt for mcp251xfd. This will make sure no
+> interrupts are lost.
+>=20
+> Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/misc/habanalabs/gaudi2/gaudi2.c:9500:48-53: WARNING: conversion to bool not needed here
---
->> drivers/misc/habanalabs/gaudi2/gaudi2.c:8016:2-3: Unneeded semicolon
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+as per https://lore.kernel.org/linux-arm-kernel/20220621195046.rnv66d2333wj=
+mtow@pengutronix.de
+
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rkuzb2y3zhcm35uy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLLJ5sACgkQrX5LkNig
+010vEgf9He+HpOSbzMgfnzg5Zeg9AyQEquAJ6PcdNByV35te24a1nBeBcVLk5anP
+TzPBkeh14mkwkabUyUNk2u6/Qj1+XWvgZcDbZvggryvVlVJmJRkcvnAg3SB8OGUE
+0/bY1yI2dKC6kNHwxPfXyXiVkHK7DFvM4rQ00uYH5bp3j2od+Irq6xaV/8Ee7B4l
+2W1vm1+FF6pvI+7uWynyHI8MJs7p+NaQrPv+L9l9Dh3BsAj0tWcMUKxus4kuF6Er
+H5+hcheuh6XU3Z2byiFYz9QbQCEEm9/RiSmJEly+J9670UI1L/Xf6QcmikJFvB8V
+8p/UjpeIj+8Rz60xvFt9zvxVTDf4PA==
+=hEQH
+-----END PGP SIGNATURE-----
+
+--rkuzb2y3zhcm35uy--

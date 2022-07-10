@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDAE56CF7F
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 16:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA45E56CF84
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 16:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiGJOtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 10:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S229543AbiGJO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 10:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJOtl (ORCPT
+        with ESMTP id S229450AbiGJO5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 10:49:41 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0CE09D;
-        Sun, 10 Jul 2022 07:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=WJOfGDr7u/BDDToEE9Qvjgh28U6lSAYZqnZi422JXYY=; b=Sk5AKrhUTgnBq8NkdSEVntBrug
-        mPi63BSKjiStajFW8QukCAZqdAsWKMB1K/phOnT5IzYZeiO2hO/17R4aLh/gl0ZQNqCvtkjPA2BCV
-        7ByjyApVa9Y+nKo6MiO/4tqFmtnaMvtDeV5Ezit500f2R7aBFWxLoXph8HZlgXbrL7iiDkJhlGZa7
-        oYmFd/E+7E8RpkowUfyDnj5IxvZ2Z6CDwiDfzz6rHaqLFD8PlYLjFkfA/ASs5gO0TV2UoHL0wdl77
-        B7jNcRSz/N4wrmxYqd2Hs00jfiDNPRB2wxlBhcPbayAL3xxFG0nl/qQhuVtnwA1Iwv9ZqbRMh1MYz
-        QWoSPIBR07rlAyOFO+vB17tTtmh6pqBA54wZPwHWIx1ofy9mimoANDsqFHp5ykaseoh47q5hekjg+
-        nWudIjDbeLiwl90BZFmFOlToFGpxUh4wgR2HfEDbcX0iIqgPaJzJUatT6HMGZk3d3HX84S2M0hn0z
-        8HK/yUNG8KqBG6Ocq9b3XZvtGqjNtXj70ekSUHr1CFV/E4EQ3ULqxeqTw1fsA85br1fXZWZq1BiZ/
-        ZeXJYiFVciaYYBJ84Qw0R5yRH6oCtHOoT8vdKo8csT4iBb9jW9HvanNNHFcTn9pf1UNNyM64FB+M1
-        2CelIqseABwnf4M+EwNZOr9wm9mSzWBc9U7G+p8rY=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net/9p: Initialize the iounit field during fid creation
-Date:   Sun, 10 Jul 2022 16:48:29 +0200
-Message-ID: <1984068.YOKu8ataPd@silver>
-In-Reply-To: <20220710141402.803295-1-tyhicks@linux.microsoft.com>
-References: <20220710141402.803295-1-tyhicks@linux.microsoft.com>
+        Sun, 10 Jul 2022 10:57:39 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6465101DB
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 07:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657465058; x=1689001058;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lcyjCDje10SpJWNiPBkba8dsUZ24Y1DlZacBkm+rx+E=;
+  b=imOC35rkjLdigN38zrU0Uo3qssaJewRQjov0E+dhvTN/tlGVcw4k89oq
+   v4LUEXy+LsNnJQJUnPEHAYKgTZey+OzOru6Vap4ePWrm9HmN6FUKfGEpt
+   veOghLyJpavTGsMg433COonL/Eu+SttRJjZ5QZUKINLQxy1R2/hDRf1iN
+   w=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 10 Jul 2022 07:57:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 07:57:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 10 Jul 2022 07:57:36 -0700
+Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 10 Jul
+ 2022 07:57:36 -0700
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+CC:     Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+Date:   Sun, 10 Jul 2022 07:57:21 -0700
+Message-ID: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sonntag, 10. Juli 2022 16:14:02 CEST Tyler Hicks wrote:
-> Ensure that the fid's iounit field is set to zero when a new fid is
-> created. Certain 9P operations, such as OPEN and CREATE, allow the
-> server to reply with an iounit size which the client code assigns to the
-> p9_fid struct shortly after the fid is created by p9_fid_create(). On
-> the other hand, an XATTRWALK operation doesn't allow for the server to
-> specify an iounit value. The iounit field of the newly allocated p9_fid
-> struct remained uninitialized in that case. Depending on allocation
-> patterns, the iounit value could have been something reasonable that was
-> carried over from previously freed fids or, in the worst case, could
-> have been arbitrary values from non-fid related usages of the memory
-> location.
-> 
-> The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
-> after the uninitialized iounit field resulted in the typical sequence of
-> two getxattr(2) syscalls, one to get the size of an xattr and another
-> after allocating a sufficiently sized buffer to fit the xattr value, to
-> hit an unexpected ERANGE error in the second call to getxattr(2). An
-> uninitialized iounit field would sometimes force rsize to be smaller
-> than the xattr value size in p9_client_read_once() and the 9P server in
-> WSL refused to chunk up the READ on the attr_fid and, instead, returned
-> ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
-> the READ and this problem goes undetected there.
-> 
-> Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Add support for Winbond W25Q512NW-IQ/IN
 
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+datasheet:
+https://www.winbond.com/resource-files/W25Q512NW%20RevB%2007192021.pdf
 
-> ---
-> 
-> v2:
-> - Add Fixes tag
-> - Improve commit message clarity to make it clear that this only affects
->   xattr get/set
-> - kzalloc() the entire fid struct instead of individually zeroing each
->   member
->   - Thanks to Christophe JAILLET for the suggestion
-> v1: https://lore.kernel.org/lkml/20220710062557.GA272934@sequoia/
-> 
->  net/9p/client.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index 8bba0d9cf975..371519e7b885 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -889,16 +889,13 @@ static struct p9_fid *p9_fid_create(struct p9_client
-> *clnt) struct p9_fid *fid;
-> 
->  	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
-> -	fid = kmalloc(sizeof(*fid), GFP_KERNEL);
-> +	fid = kzalloc(sizeof(*fid), GFP_KERNEL);
->  	if (!fid)
->  		return NULL;
-> 
-> -	memset(&fid->qid, 0, sizeof(fid->qid));
->  	fid->mode = -1;
->  	fid->uid = current_fsuid();
->  	fid->clnt = clnt;
-> -	fid->rdir = NULL;
-> -	fid->fid = 0;
->  	refcount_set(&fid->count, 1);
-> 
->  	idr_preload(GFP_KERNEL);
+Test result on AST2600 SoC's SPI controller:
+$ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/jedec_id
+ef6020
 
+$ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/manufacturer
+winbond
+
+$ cat /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/partname
+w25q512nwq
+
+$ hexdump /sys/bus/platform/devices/1e620000.spi/spi_master/spi0/spi0.1/spi-nor/sfdp
+0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
+0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
+0000020 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+0000080 20e5 fffb ffff 1fff eb44 6b08 3b08 bb42
+0000090 fffe ffff ffff 0000 ffff eb40 200c 520f
+00000a0 d810 0000 0233 00a6 e781 d914 63e9 3376
+00000b0 757a 757a bdf7 5cd5 f719 ff5d 70e9 a5f9
+00000c0 ffff ffff ffff ffff ffff ffff ffff ffff
+00000d0 0aff fff0 ff21 ffdc
+00000d8
+
+Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+---
+ drivers/mtd/spi-nor/winbond.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index ffaa24055259..d6f1a3b7267e 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -133,6 +133,9 @@ static const struct flash_info winbond_nor_parts[] = {
+ 	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ |
+ 			      SPI_NOR_DUAL_READ) },
++	{ "w25q512nwq", INFO(0xef6020, 0, 64 * 1024, 1024)
++		PARSE_SFDP
++		OTP_INFO(256, 3, 0x1000, 0x1000) },
+ 	{ "w25q512nwm", INFO(0xef8020, 0, 64 * 1024, 1024)
+ 		PARSE_SFDP
+ 		OTP_INFO(256, 3, 0x1000, 0x1000) },
+-- 
+2.25.1
 

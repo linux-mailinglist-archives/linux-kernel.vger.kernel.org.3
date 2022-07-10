@@ -2,101 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779AE56CE1A
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEBA56CE1E
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiGJIzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 04:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S229664AbiGJI4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 04:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJIzp (ORCPT
+        with ESMTP id S229635AbiGJIz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 04:55:45 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176F2AD9;
-        Sun, 10 Jul 2022 01:55:44 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l42so1430714wms.5;
-        Sun, 10 Jul 2022 01:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kCc/12kJgYRwCmgyCNs4BbEuU6ksyhzPFxsHQ2CRTfw=;
-        b=dHwGhsaQw8Jneqf/dZmiEccZBSAsrkFwtsz57JMXeep7XK9A4JKt88PmzjRf+eFX/x
-         tdwWA5pxR4m/LmIro1jemoTN3hVtQ4bji9vxY2zcsHA7+VRdye8VX+gAWEAdzQjGFlWQ
-         jZqH3Q4ITEhMweb8hVeK6ygjthCgYDVPs91sA8TNzsI0sP7BrT5eVQJPoSb5+6NjnQD3
-         c02ZS6/4PhwKrv+Xcg0dI/+fjT5/35i1vC04DDtfFMcyWFngfroYQYJfVm7JeJnqHc9I
-         ZMc4/+IgSoJ3r0uFNhzoI064yBtuo2V/Qe79QWYbqnBH7zlzSTGK+biVAuKjC0I0JFF/
-         vAgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kCc/12kJgYRwCmgyCNs4BbEuU6ksyhzPFxsHQ2CRTfw=;
-        b=LasQUlARTQdrAeRiaLDIundLWSYtCSVre+oobBO/KjWcY7ts80vRw1O093EkmeLIXl
-         AtWHUS4Ry/767HihBaupC+/CRI8JIPsTLLkwj+GEH48pdsDF+3L5pHetu2AwKXtNCmKY
-         oqq7cUuRNSUFOdZDZUq6XSZYlV90/Ea7+4ZvZLIFgtkHZ7dIW0XHrAABxMhpQrUnr+eI
-         wFghg9asU0/PUSIwSoSGhSC7DZG1APpNqbEH8pJtcn+od94GX1HwVQ/rNQXV2tEHUIkG
-         RG/DbvaLTn9fNSoF23nPNp+VSD/I9CYTKuVuhJIHThjxjzIKuzYFT2w5S7J3wcqtiHEi
-         Fkjw==
-X-Gm-Message-State: AJIora80LlT79CDfdyH2mG/WPzGEhS/+TycDSIYVNfeEB7C5wyB9Isk7
-        Ra6YVm0KXNKL6c60sy6oVwMfwYLq6IE=
-X-Google-Smtp-Source: AGRyM1tsIZdYXokBVw/kf0KOxhRjd1hTQXU2iqSxN1qHS3NlVjVacwU5Xs7nWEfWx1PbdM3nLFByZQ==
-X-Received: by 2002:a05:600c:3d8b:b0:3a0:466c:b08d with SMTP id bi11-20020a05600c3d8b00b003a0466cb08dmr9321498wmb.125.1657443342724;
-        Sun, 10 Jul 2022 01:55:42 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f2e4000d7544521133919bb.dip0.t-ipconnect.de. [2003:cf:9f2e:4000:d754:4521:1339:19bb])
-        by smtp.googlemail.com with ESMTPSA id p12-20020a5d48cc000000b0021d9d13bf6csm1707467wrs.97.2022.07.10.01.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 01:55:42 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add missing sensors for X570-I GAMING
-Date:   Sun, 10 Jul 2022 10:55:38 +0200
-Message-Id: <20220710085539.1682869-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 10 Jul 2022 04:55:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D1513F69
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 01:55:56 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 08:55:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657443355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=he+6RADLOK76znUYGQLbS8FNYnriXKpKiN4rM7jMSDg=;
+        b=DyxmPIjrv3kDZ2vlXwx6VXuavxZVrmJqme9/arC/7RRSVlZSuJcWmX+glWM9LmR0QxN0/U
+        yjYT4PtxNOV5fI+Gti0k5O9jGcJje2m3MoO69MqSZiu329f6BqSVf5U3RHYf3qBVnv+A/E
+        lsRO/s3eBi1beJAM/uUL1tRmIoS7cUYfu+7aSt4ao59p+Qf+owiQJkRPusZDOgLHD+PsFF
+        xDjN4xMWbfOziBTSbvigvLbrfOnXqaLqt0J1YD5b0mHW5D3EjwYdENFkTlB57+4p7HnILR
+        NwDFhyN0d8SzXXt/rONehUqwNd9kWpbStN4Ml0d/JTTrkeuGLl3DIVNQ+kOGRg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657443355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=he+6RADLOK76znUYGQLbS8FNYnriXKpKiN4rM7jMSDg=;
+        b=oSD3meEUp7fjGbFn5OjfcxaEYVr4vTpe6ruZORcwhGBj2nrHpG6vFZf8Q6Ecta1FIA8WJ1
+        oWQurr+xDLQ62sAg==
+From:   "irqchip-bot for Samuel Holland" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/sifive-plic: Separate the enable
+ and mask operations
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220701202440.59059-3-samuel@sholland.org>
+References: <20220701202440.59059-3-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165744335323.15455.238417515877913725.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VRM and chipset temperature for ROG STRIX X570-I GAMING were missing
-according to a user contribution to the LHM project [1].
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-[1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/767
+Commit-ID:     a1706a1c5062e0908528170f853601ed53f428c8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/a1706a1c5062e0908528170f853601ed53f428c8
+Author:        Samuel Holland <samuel@sholland.org>
+AuthorDate:    Fri, 01 Jul 2022 15:24:40 -05:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Sun, 10 Jul 2022 09:50:04 +01:00
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+irqchip/sifive-plic: Separate the enable and mask operations
+
+The PLIC has two per-IRQ checks before sending an IRQ to a hart context.
+First, it checks that the IRQ's priority is nonzero. Then, it checks
+that the enable bit is set for that combination of IRQ and context.
+
+Currently, the PLIC driver sets both the priority value and the enable
+bit in its (un)mask operations. However, modifying the enable bit is
+problematic for two reasons:
+  1) The enable bits are packed, so changes are not atomic and require
+     taking a spinlock.
+  2) The following requirement from the PLIC spec, which explains the
+     racy (un)mask operations in plic_irq_eoi():
+
+       If the completion ID does not match an interrupt source
+       that is currently enabled for the target, the completion
+       is silently ignored.
+
+Both of these problems are solved by using the priority value to mask
+IRQs. Each IRQ has a separate priority register, so writing the priority
+value is atomic. And since the enable bit remains set while an IRQ is
+masked, the EOI operation works normally. The enable bits are still used
+to control the IRQ's affinity.
+
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220701202440.59059-3-samuel@sholland.org
 ---
- drivers/hwmon/asus-ec-sensors.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-sifive-plic.c | 55 ++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 625c2baa35ec..0749cd023a32 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -366,9 +366,10 @@ static const struct ec_board_info board_info[] = {
- 	},
- 	{
- 		.board_names = {"ROG STRIX X570-I GAMING"},
--		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_FAN_VRM_HS |
--			SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
--			SENSOR_IN_CPU_CORE,
-+		.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
-+			SENSOR_TEMP_T_SENSOR |
-+			SENSOR_FAN_VRM_HS | SENSOR_FAN_CHIPSET |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
--- 
-2.35.1
-
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index 46595e6..ba49381 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -108,9 +108,7 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
+ 				   struct irq_data *d, int enable)
+ {
+ 	int cpu;
+-	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
+ 
+-	writel(enable, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
+ 	for_each_cpu(cpu, mask) {
+ 		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
+ 
+@@ -118,16 +116,37 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
+ 	}
+ }
+ 
+-static void plic_irq_unmask(struct irq_data *d)
++static void plic_irq_enable(struct irq_data *d)
+ {
+ 	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 1);
+ }
+ 
+-static void plic_irq_mask(struct irq_data *d)
++static void plic_irq_disable(struct irq_data *d)
+ {
+ 	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 0);
+ }
+ 
++static void plic_irq_unmask(struct irq_data *d)
++{
++	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
++
++	writel(1, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
++}
++
++static void plic_irq_mask(struct irq_data *d)
++{
++	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
++
++	writel(0, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
++}
++
++static void plic_irq_eoi(struct irq_data *d)
++{
++	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
++
++	writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
++}
++
+ #ifdef CONFIG_SMP
+ static int plic_set_affinity(struct irq_data *d,
+ 			     const struct cpumask *mask_val, bool force)
+@@ -146,32 +165,21 @@ static int plic_set_affinity(struct irq_data *d,
+ 	if (cpu >= nr_cpu_ids)
+ 		return -EINVAL;
+ 
+-	plic_irq_mask(d);
++	plic_irq_disable(d);
+ 
+ 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+ 
+-	if (!irqd_irq_masked(d))
+-		plic_irq_unmask(d);
++	if (!irqd_irq_disabled(d))
++		plic_irq_enable(d);
+ 
+ 	return IRQ_SET_MASK_OK_DONE;
+ }
+ #endif
+ 
+-static void plic_irq_eoi(struct irq_data *d)
+-{
+-	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+-
+-	if (irqd_irq_masked(d)) {
+-		plic_irq_unmask(d);
+-		writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+-		plic_irq_mask(d);
+-	} else {
+-		writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+-	}
+-}
+-
+ static struct irq_chip plic_edge_chip = {
+ 	.name		= "SiFive PLIC",
++	.irq_enable	= plic_irq_enable,
++	.irq_disable	= plic_irq_disable,
+ 	.irq_ack	= plic_irq_eoi,
+ 	.irq_mask	= plic_irq_mask,
+ 	.irq_unmask	= plic_irq_unmask,
+@@ -184,6 +192,8 @@ static struct irq_chip plic_edge_chip = {
+ 
+ static struct irq_chip plic_chip = {
+ 	.name		= "SiFive PLIC",
++	.irq_enable	= plic_irq_enable,
++	.irq_disable	= plic_irq_disable,
+ 	.irq_mask	= plic_irq_mask,
+ 	.irq_unmask	= plic_irq_unmask,
+ 	.irq_eoi	= plic_irq_eoi,
+@@ -429,8 +439,11 @@ static int __init __plic_init(struct device_node *node,
+ 			i * CONTEXT_ENABLE_SIZE;
+ 		handler->priv = priv;
+ done:
+-		for (hwirq = 1; hwirq <= nr_irqs; hwirq++)
++		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
+ 			plic_toggle(handler, hwirq, 0);
++			writel(1, priv->regs + PRIORITY_BASE +
++				  hwirq * PRIORITY_PER_ID);
++		}
+ 		nr_handlers++;
+ 	}
+ 

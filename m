@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B058956CDB0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC03056CDBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiGJIQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 04:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S229528AbiGJIUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 04:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJIQA (ORCPT
+        with ESMTP id S229450AbiGJITm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 04:16:00 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE811816;
-        Sun, 10 Jul 2022 01:15:59 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so5643935pjl.5;
-        Sun, 10 Jul 2022 01:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uB33o1I70+FsA4di+MxL+HE0Wl1Mfr1zYKDikSzqCkM=;
-        b=cS2mM90Jze7n7/9wYlcxb2dP2mUDEFV9l8aMlD0bcYG+cSnu3LZnJ3pjqWiKfTZLkX
-         iotJ9c1PQqneBEBwd0jxdPVtbKca4kvylW0deWnYCvRfTUMSXuXPAb175maSZBWJbjPH
-         dYQkIkZBEV48tDGPgfGp+48BCAljMf9waD/1FEOsB69L8EcPvkDWkDgoBdrV83Cg22iY
-         4l/ERTWoOS3FQ3Z/3/u6ZRikFlNdGmVSEp40gXuR59r8jCutjTxn7DbX9J7i6pthC9em
-         zEO+32JJ+2nNYkhDqXQfC/fm7zqiMu4Kn1jBl1QIzxEMjny21jZeawbWg1VmMLGC/MTa
-         2ZUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uB33o1I70+FsA4di+MxL+HE0Wl1Mfr1zYKDikSzqCkM=;
-        b=T06wkWjWDVndxu0F9xoS9jmhQQ8oEpb6j6ueyQJQC1qsE4pBXC6RkCHjm3E3U6viFf
-         80rVkmDiYCTpzocVVhadO3RcBMbjivpL1jZyo6ZN7Rn/SyiIbilKqRy2D20V4c0OzGWY
-         G6Mkw+gwT8p52g+Dh0M8eN0QmgmzUyHR6IWVWDmtzu5smnALUVV0tTwYDPwJs5iLWbbT
-         W4EJPzQwvA7FHVNFpo7nfkHgYynzMHOxIvwfyyKnVOXoLx35YigwzxnHPojk4X046ikp
-         KRKrm5EYFTyI22n3ZkrIIuN/fdtIe0izca25U13rE/iProbxN2DhAfAwNlOyGgOjoeQy
-         ghfw==
-X-Gm-Message-State: AJIora8wz/+XCmbaYHKG9Gv2hO28qaKXz+JR9B/vh5nrAYRthoDCSGXa
-        lME1uvFIKBkU8ocQPHWz+As=
-X-Google-Smtp-Source: AGRyM1sCfZTsYhpidCOmAko/nyB19AWNvchwlqVMdh/xwDJ+5jJAnbqMyh8Dc2DkndQWOouh6BcwyA==
-X-Received: by 2002:a17:902:e54b:b0:16c:38e5:a9b7 with SMTP id n11-20020a170902e54b00b0016c38e5a9b7mr4514822plf.66.1657440958942;
-        Sun, 10 Jul 2022 01:15:58 -0700 (PDT)
-Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0016be6e954e8sm2355236pll.68.2022.07.10.01.15.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 01:15:58 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akihiko Odaki <akihiko.odaki@gmail.com>
-Subject: [PATCH] AMD_SFH: Add a DMI quirk entry for Chromebooks
-Date:   Sun, 10 Jul 2022 17:15:47 +0900
-Message-Id: <20220710081547.3553-1-akihiko.odaki@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 10 Jul 2022 04:19:42 -0400
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4A2BC0E;
+        Sun, 10 Jul 2022 01:19:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1657441146; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=G//ruNJWtc5KB4iy5vkg+oDxYaTZAblTm7aNahnX1lAklnS8eGAkKjdLZpOcPt3N8csTyyHBIGjL5OSxpoArIpLJuzvm8p2Gy9vKFPKmBzu2m5+wfkvXTMFXb0ua+DLOubhyfFL6HzF9+rZedqDPZP5TjEi3vAXfc66HFnhkCLw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1657441146; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=NFS2/32BxwaD6fahAeZc1AfhBJU6/YF1+CjbT7OS85w=; 
+        b=TQfGNYjIhWbat5WkxjQhtlgP4nkoe+soWGB9Tqh6zRPSp9UHKEpScFi66wvqXY55zM37TPJAaLb7UfjyJSWAOGtIcKY1d9Flpa2d+lzxDEpplxXr3zz4uEKEPzGYH8TlvvC8M8gEdotiaM2RVhHQQq2Mt8wX2rrKUIwWp3czFWc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657441146;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=NFS2/32BxwaD6fahAeZc1AfhBJU6/YF1+CjbT7OS85w=;
+        b=KvRP9GWRsA+WTCougZocM3zTL73ekzM8w95wlu3fxEmAwg4qIRZq4zFRvkHiT1B6
+        wFhaoG/Gr6UUMTxVtU0roRy5Tiu5zaxgpe7gDLfXNepk/+ylWBDPP2x89RjoRI7H7T1
+        iIhPWCegA5wX36tB2Hsxmzq8Myv0Tkx1hyOV10Ns=
+Received: from edelgard.icenowy.me (59.41.163.237 [59.41.163.237]) by mx.zohomail.com
+        with SMTPS id 1657441143425993.9029258752463; Sun, 10 Jul 2022 01:19:03 -0700 (PDT)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH v2 0/3] Allwinner R329 {R-,}PIO pinctrl support
+Date:   Sun, 10 Jul 2022 16:18:50 +0800
+Message-Id: <20220710081853.1699028-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
-of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
-functionalities, even including the registers necessary for feature
-detections.
+This patchset contains support for two pin controllers on Allwinner R329
+one, a CPUX one and a CPUS one (the standby processor on R329 is, in
+fact, a Xtensa DSP), in addition to their bindings.
 
-The behavior was observed with Lenovo ThinkPad C13 Yoga.
+Icenowy Zheng (3):
+  dt-bindings: pinctrl: document Allwinner R329 PIO and R-PIO
+  pinctrl: sunxi: add support for R329 CPUX pin controller
+  pinctrl: sunxi: add support for R329 R-PIO pin controller
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
----
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml  |   4 +
+ drivers/pinctrl/sunxi/Kconfig                 |  10 +
+ drivers/pinctrl/sunxi/Makefile                |   2 +
+ drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c | 293 +++++++++++++
+ drivers/pinctrl/sunxi/pinctrl-sun50i-r329.c   | 412 ++++++++++++++++++
+ 5 files changed, 721 insertions(+)
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-r329.c
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-index dadc491bbf6b..b91e1c95e543 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-@@ -197,6 +197,18 @@ static const struct dmi_system_id dmi_sensor_mask_overrides[] = {
- 		},
- 		.driver_data = (void *)(ACEL_EN | MAGNO_EN),
- 	},
-+	{
-+		/*
-+		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
-+		 * Hub instead of Sensor Hub Fusion and leaves MP2
-+		 * uninitialized, which disables all functionalities, even
-+		 * including the registers necessary for feature detections.
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
-+		},
-+		.driver_data = (void *)0,
-+	},
- 	{ }
- };
- 
 -- 
-2.36.1
+2.36.0
 

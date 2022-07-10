@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ADF56CD91
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 08:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8068856CD92
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 08:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiGJGpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 02:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S229535AbiGJGvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 02:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGJGpK (ORCPT
+        with ESMTP id S229469AbiGJGvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 02:45:10 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F65B13D78
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:45:09 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id AQgjoJcy1Zfs8AQgjo80s7; Sun, 10 Jul 2022 08:45:07 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 10 Jul 2022 08:45:07 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <311190f4-3eba-b2d2-1a5e-a00aad8d64dc@wanadoo.fr>
-Date:   Sun, 10 Jul 2022 08:45:04 +0200
+        Sun, 10 Jul 2022 02:51:16 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8A8EE22
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 23:51:13 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 0CB892F8502;
+        Sun, 10 Jul 2022 08:51:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1657435870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zUjZKZmWcCoAIk8YWWrP40B7FyMeMvjGz9n2xvdzI84=;
+        b=6oDodAU7dfQY/ViwnHiTyqCPWwrWrZ5rhGb4zj7BdYEnfwhpPW0h3CxLhYmU68u9CmT/Zs
+        K3zbPCIcUg+TnFB0UbxEGhFH6ciuK9N1QdDal6atTsGu1jPfWaaYCoCoG4C1UdF8kN2h8k
+        V6bsedePFbZ6ms1BLEmGwV+TvZoPe0gJr0wBFkQVbtg2FbDWxTgPv1wqJyvTfizTUmv2co
+        dgnVhTyik2nfk34cKOaPPITZyobpe/oUiytVuTXHv6LXTFoKMhdvTs1tutVL4QnE75/y3G
+        6OwzrkEeMhlBuXPAk453wXeo3TP5dX0KO3icRb0YMUkBPMKV9lOesS1xWPWtnQ==
+Message-ID: <f58ee2c553ea8ae991454a8e195dcbd2821f794c.camel@svanheule.net>
+Subject: Re: [PATCH v4 0/5] cpumask: Fix invalid uniprocessor assumptions
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        elver@google.com, gregkh@linuxfoundation.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, vschneid@redhat.com,
+        Yury Norov <yury.norov@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Date:   Sun, 10 Jul 2022 08:51:08 +0200
+In-Reply-To: <20220703133921.6800bf1e7df3b00cb586a3c1@linux-foundation.org>
+References: <cover.1656777646.git.sander@svanheule.net>
+         <20220702133840.943817a7694406a135bb48a9@linux-foundation.org>
+         <6a4ea3d21bfb4c692d257d3f38ba28c83f242dfc.camel@svanheule.net>
+         <20220703133921.6800bf1e7df3b00cb586a3c1@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] net/9p: Initialize the iounit field during fid creation
-Content-Language: en-US
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220709200005.681861-1-tyhicks@linux.microsoft.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220709200005.681861-1-tyhicks@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 09/07/2022 à 22:00, Tyler Hicks a écrit :
-> Ensure that the fid's iounit field is set to zero when a new fid is
-> created. Certain 9P operations, such as OPEN and CREATE, allow the
-> server to reply with an iounit size which the client code assigns to the
-> fid struct shortly after the fid is created in p9_fid_create(). Other
-> operations that follow a call to p9_fid_create(), such as an XATTRWALK,
-> don't include an iounit value in the reply message from the server. In
-> the latter case, the iounit field remained uninitialized. Depending on
-> allocation patterns, the iounit value could have been something
-> reasonable that was carried over from previously freed fids or, in the
-> worst case, could have been arbitrary values from non-fid related usages
-> of the memory location.
-> 
-> The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
-> after the uninitialized iounit field resulted in the typical sequence of
-> two getxattr(2) syscalls, one to get the size of an xattr and another
-> after allocating a sufficiently sized buffer to fit the xattr value, to
-> hit an unexpected ERANGE error in the second call to getxattr(2). An
-> uninitialized iounit field would sometimes force rsize to be smaller
-> than the xattr value size in p9_client_read_once() and the 9P server in
-> WSL refused to chunk up the READ on the attr_fid and, instead, returned
-> ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
-> the READ and this problem goes undetected there. However, there are
-> likely other non-xattr implications of this bug that could cause
-> inefficient communication between the client and server.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> ---
-> 
-> Note that I haven't had a chance to identify when this bug was
-> introduced so I don't yet have a proper Fixes tag. The history looked a
-> little tricky to me but I'll have another look in the coming days. We
-> started hitting this bug after trying to move from linux-5.10.y to
-> linux-5.15.y but I didn't see any obvious changes between those two
-> series. I'm not confident of this theory but perhaps the fid refcounting
-> changes impacted the fid allocation patterns enough to uncover the
-> latent bug?
-> 
->   net/9p/client.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/9p/client.c b/net/9p/client.c
-> index 8bba0d9cf975..1dfceb9154f7 100644
-> --- a/net/9p/client.c
-> +++ b/net/9p/client.c
-> @@ -899,6 +899,7 @@ static struct p9_fid *p9_fid_create(struct p9_client *clnt)
->   	fid->clnt = clnt;
->   	fid->rdir = NULL;
->   	fid->fid = 0;
-> +	fid->iounit = 0;
->   	refcount_set(&fid->count, 1);
->   
->   	idr_preload(GFP_KERNEL);
+Hi Andrew,
 
-Hi,
-you could also kzalloc 'fid' and remove the memset, "= NULL" and "= 0".
-This would be even more future proof and would save some LoC.
+On Sun, 2022-07-03 at 13:39 -0700, Andrew Morton wrote:
+> On Sun, 03 Jul 2022 09:50:51 +0200 Sander Vanheule <sander@svanheule.net>
+> wrote:
+>=20
+> > On Sat, 2022-07-02 at 13:38 -0700, Andrew Morton wrote:
+> > > On Sat,=C2=A0 2 Jul 2022 18:08:23 +0200 Sander Vanheule <sander@svanh=
+eule.net>
+> > > wrote:
+> > >=20
+> > > > On uniprocessor builds, it is currently assumed that any cpumask wi=
+ll
+> > > > contain the single CPU: cpu0. This assumption is used to provide
+> > > > optimised implementations.
+> > > >=20
+> > > > The current assumption also appears to be wrong, by ignoring the fa=
+ct
+> > > > that users can provide empty cpumask-s. This can result in bugs as
+> > > > explained in [1].
+> > >=20
+> > > It's a little unkind to send people off to some link to explain the
+> > > very core issue which this patchset addresses!=C2=A0 So I enhanced th=
+is
+> > > paragraph:
+> > >=20
+> > > : The current assumption also appears to be wrong, by ignoring the fa=
+ct
+> > > that
+> > > : users can provide empty cpumasks.=C2=A0 This can result in bugs as =
+explained
+> > > in
+> > > : [1] - for_each_cpu() will run one iteration of the loop even when p=
+assed
+> > > : an empty cpumask.
+> >=20
+> > Makes sense to add this, sorry for the inconvenience.
+> >=20
+> > Just to make sure, since I'm not familiar with the process for patches =
+going
+> > through the mm tree,
+>=20
+> Patches enter -mm in quilt form and are published in the (rebasing)
+> mm-unstable branch
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.=C2=A0 Once they ha=
+ve
+> stopped changing and have been stabilized, I move them into the
+> non-rebasing mm-stable branch.
+>=20
+> > can I still send a v5 to move the last patch forward in the series, and=
+ to
+> > include Yury's tags?
+>=20
+> I already added Yury's ack.=C2=A0 Please tell me the specific patch order=
+ing
+> and I'll take care of that.
+>=20
 
-Just my 2c,
+The updated patch order should be:
+   x86/cacheinfo: move shared cache map definitions
+   cpumask: add UP optimised for_each_*_cpu versions
+   cpumask: fix invalid uniprocessor mask assumption
+   lib/test: introduce cpumask KUnit test suite
+   cpumask: update cpumask_next_wrap() signature
 
-CJ
+Reordering the patches on my tree didn't produce any conflicts.
+
+Best,
+Sander

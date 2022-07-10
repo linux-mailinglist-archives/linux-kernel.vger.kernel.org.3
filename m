@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAF356CE6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 11:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC98856CE70
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 11:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiGJJoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 05:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S229573AbiGJJpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 05:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJJob (ORCPT
+        with ESMTP id S229450AbiGJJpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 05:44:31 -0400
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 847DDB7F2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 02:44:28 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Sun, 10 Jul 2022 17:44:16
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.231]
-Date:   Sun, 10 Jul 2022 17:44:16 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, davem@davemloft.net,
-        alexander.deucher@amd.com, kuba@kernel.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: rtl8192u: Fix sleep in atomic context bug
- in dm_fsync_timer_callback
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YrbVpbKvqdYuY84C@kroah.com>
-References: <20220623055912.84138-1-duoming@zju.edu.cn>
- <YrQ2gXtX2FOkyNgu@kroah.com>
- <1ddff589.e0f1.181944e6c1a.Coremail.duoming@zju.edu.cn>
- <482a0dc6.10f76.1819a2a3546.Coremail.duoming@zju.edu.cn>
- <YrbVpbKvqdYuY84C@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sun, 10 Jul 2022 05:45:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8790C12778
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 02:45:38 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff643329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f643:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 20AA91EC01B7;
+        Sun, 10 Jul 2022 11:45:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1657446333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=AKJ430ZgN1XdgA7qMu9v4uYf5Spa2vuStLi0ikdoxF8=;
+        b=AeuVxxsLezyAJPuEwxsCCYZrP9Nk/A5feET5ToU82yk4sTDb1+ZSwhS6Iy0OpPqDL+ndWh
+        MNWh0qrAiNJPHh9oL8XjZ+lZ/RlL6KJNBtQS63Zg/72hGcsfO8RmDWq7BQCd4EOiZ8fYwS
+        A1xL2PiZ/Tm6lfJPsvNfc4VRGjRy+vk=
+Date:   Sun, 10 Jul 2022 11:45:28 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH tip v8] x86/setup: Use rng seeds from setup_data
+Message-ID: <YsqfuPeB5jhFU9g5@zn.tnic>
+References: <20220707000852.523788-1-Jason@zx2c4.com>
+ <20220708113907.891319-1-Jason@zx2c4.com>
+ <ddba81dd-cc92-699c-5274-785396a17fb5@zytor.com>
+ <YslPKbrmwF0uSm7p@zn.tnic>
+ <191d8f96-7573-bd0e-9ca4-3fc22c5c9a49@zytor.com>
+ <Ysn5uvBKBpcZ4j6m@zn.tnic>
+ <8e5eb2db-ce31-3dc8-8f75-3959036686f8@zytor.com>
 MIME-Version: 1.0
-Message-ID: <3cd6bfda.380db.181e77ece60.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgD3_6twn8piy2EzAA--.3325W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4HAVZdtamt8QABsA
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8e5eb2db-ce31-3dc8-8f75-3959036686f8@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBTYXQsIDI1IEp1biAyMDIyIDExOjMwOjEzICswMjAwIEdyZWcgS0ggd3JvdGU6
-Cgo+IE9uIFNhdCwgSnVuIDI1LCAyMDIyIGF0IDA1OjIxOjA2UE0gKzA4MDAsIGR1b21pbmdAemp1
-LmVkdS5jbiB3cm90ZToKPiA+IEhlbGxvLAo+ID4gCj4gPiA+ID4gT24gVGh1LCBKdW4gMjMsIDIw
-MjIgYXQgMDE6NTk6MTJQTSArMDgwMCwgRHVvbWluZyBaaG91IHdyb3RlOgo+ID4gPiA+ID4gVGhl
-cmUgYXJlIHNsZWVwIGluIGF0b21pYyBjb250ZXh0IGJ1Z3Mgd2hlbiBkbV9mc3luY190aW1lcl9j
-YWxsYmFjayBpcwo+ID4gPiA+ID4gZXhlY3V0aW5nLiBUaGUgcm9vdCBjYXVzZSBpcyB0aGF0IHRo
-ZSBtZW1vcnkgYWxsb2NhdGlvbiBmdW5jdGlvbnMgd2l0aAo+ID4gPiA+ID4gR0ZQX0tFUk5FTCBv
-ciBHRlBfTk9JTyBwYXJhbWV0ZXJzIGFyZSBjYWxsZWQgaW4gZG1fZnN5bmNfdGltZXJfY2FsbGJh
-Y2sKPiA+ID4gPiA+IHdoaWNoIGlzIGEgdGltZXIgaGFuZGxlci4gVGhlIGNhbGwgcGF0aHMgdGhh
-dCBjb3VsZCB0cmlnZ2VyIGJ1Z3MgYXJlCj4gPiA+ID4gPiBzaG93biBiZWxvdzoKPiA+ID4gPiA+
-IAo+ID4gPiA+ID4gICAgIChpbnRlcnJ1cHQgY29udGV4dCkKPiA+ID4gPiA+IGRtX2ZzeW5jX3Rp
-bWVyX2NhbGxiYWNrCj4gPiA+ID4gPiAgIHdyaXRlX25pY19ieXRlCj4gPiA+ID4gPiAgICAga3ph
-bGxvYyhzaXplb2YoZGF0YSksIEdGUF9LRVJORUwpOyAvL21heSBzbGVlcAo+ID4gPiA+ID4gICAg
-IHVzYl9jb250cm9sX21zZwo+ID4gPiA+ID4gICAgICAga21hbGxvYyguLiwgR0ZQX05PSU8pOyAv
-L21heSBzbGVlcAo+ID4gPiA+ID4gICB3cml0ZV9uaWNfZHdvcmQKPiA+ID4gPiA+ICAgICBremFs
-bG9jKHNpemVvZihkYXRhKSwgR0ZQX0tFUk5FTCk7IC8vbWF5IHNsZWVwCj4gPiA+ID4gPiAgICAg
-dXNiX2NvbnRyb2xfbXNnCj4gPiA+ID4gPiAgICAgICBrbWFsbG9jKC4uLCBHRlBfTk9JTyk7IC8v
-bWF5IHNsZWVwCj4gPiA+ID4gPiAKPiA+ID4gPiA+IFRoaXMgcGF0Y2ggdXNlcyBkZWxheWVkIHdv
-cmsgdG8gcmVwbGFjZSB0aW1lciBhbmQgbW92ZXMgdGhlIG9wZXJhdGlvbnMKPiA+ID4gPiA+IHRo
-YXQgbWF5IHNsZWVwIGludG8gdGhlIGRlbGF5ZWQgd29yayBpbiBvcmRlciB0byBtaXRpZ2F0ZSBi
-dWdzLgo+ID4gPiA+ID4gCj4gPiA+ID4gPiBGaXhlczogOGZjODU5OGU2MWY2ICgiU3RhZ2luZzog
-QWRkZWQgUmVhbHRlayBydGw4MTkydSBkcml2ZXIgdG8gc3RhZ2luZyIpCj4gPiA+ID4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+ID4gPiA+IC0t
-LQo+ID4gPiA+ID4gQ2hhbmdlcyBpbiB2MjoKPiA+ID4gPiA+ICAgLSBVc2UgZGVsYXllZCB3b3Jr
-IHRvIHJlcGxhY2UgdGltZXIuCj4gPiA+ID4gCj4gPiA+ID4gRGlkIHlvdSB0ZXN0IHRoaXMgd2l0
-aCByZWFsIGhhcmR3YXJlIHRvIHZlcmlmeSBpdCBzdGlsbCB3b3Jrcz8KPiA+ID4gCj4gPiA+IEkg
-YW0gdGVzdGluZyB0aGlzIGFuZCBJIHdpbGwgZ2l2ZSB5b3UgZmVlZGJhY2sgd2l0aGluIG9uZSBv
-ciB0d28gZGF5cy4KPiA+IAo+ID4gRG8geW91IGtub3cgd2hhdCB2ZW5kb3IgaWQgYW5kIGRldmlj
-ZSBpZCB1c2UgdGhlIHI4MTkydV91c2IgZHJpdmVyPwo+IAo+IFRoZSB2ZW5kb3IvZGV2aWNlIGlk
-cyBhcmUgaW4gdGhlIGRyaXZlciBpdHNlbGYuICBBbHNvIGluIHRoZSBvdXRwdXQgb2YKPiBtb2Rp
-bmZvOgo+IAnina8gbW9kaW5mbyBkcml2ZXJzL3N0YWdpbmcvcnRsODE5MnUvcjgxOTJ1X3VzYi5r
-byB8IGdyZXAgYWxpYXMKPiAJYWxpYXM6ICAgICAgICAgIHVzYjp2MDQzRXA3QTAxZCpkYypkc2Mq
-ZHAqaWMqaXNjKmlwKmluKgo+IAlhbGlhczogICAgICAgICAgdXNiOnY1QTU3cDAyOTBkKmRjKmRz
-YypkcCppYyppc2MqaXAqaW4qCj4gCWFsaWFzOiAgICAgICAgICB1c2I6djIwMDFwMzMwMWQqZGMq
-ZHNjKmRwKmljKmlzYyppcCppbioKPiAJYWxpYXM6ICAgICAgICAgIHVzYjp2MTc0MHA5MjAxZCpk
-Yypkc2MqZHAqaWMqaXNjKmlwKmluKgo+IAlhbGlhczogICAgICAgICAgdXNiOnYwREY2cDAwMzFk
-KmRjKmRzYypkcCppYyppc2MqaXAqaW4qCj4gCWFsaWFzOiAgICAgICAgICB1c2I6djA1MERwODA1
-RWQqZGMqZHNjKmRwKmljKmlzYyppcCppbioKPiAJYWxpYXM6ICAgICAgICAgIHVzYjp2MDdBQXAw
-MDQzZCpkYypkc2MqZHAqaWMqaXNjKmlwKmluKgo+IAlhbGlhczogICAgICAgICAgdXNiOnYwQkRB
-cDg3MDlkKmRjKmRzYypkcCppYyppc2MqaXAqaW4qCj4gCj4gc2VlIHRoZSAidiIgYW5kICJwIiBw
-b3J0aW9ucyBvZiB0aGUgYWxpYXMgc3RyaW5nLiAKCkkgYW0gc29ycnkgZm9yIHRoZSBkZWxheS4g
-VGhpcyBpcyBhIHJlYWxseSBoYXJkIHdvcmssIGJ1dCBJIHN1Y2Nlc3NmdWxseSB0ZXN0IGl0LgpU
-aGlzIHBhdGNoIGNvdWxkIHJ1biB3ZWxsLgoKVGhlIGZvbGxvd2luZyBpcyB0aGUgcmVwb3J0IG9m
-IHRoZSBidWc6CgpbICAxMDQuMDU1MzIxXVsgICAgQzNdIEJVRzogc2xlZXBpbmcgZnVuY3Rpb24g
-Y2FsbGVkIGZyb20gaW52YWxpZCBjb250ZXh0IGF0IGluY2x1ZGUvbGludXgvc2NoZWQvbW0uaDoy
-NzQKWyAgMTA0LjA3NTQ5OV1bICAgIEMzXSBpbl9hdG9taWMoKTogMSwgaXJxc19kaXNhYmxlZCgp
-OiAwLCBub25fYmxvY2s6IDAsIHBpZDogMSwgbmFtZTogc3dhcHBlci8wClsgIDEwNC4wNzYzNDZd
-WyAgICBDM10gcHJlZW1wdF9jb3VudDogMTAwLCBleHBlY3RlZDogMApbICAxMDQuMDc2OTM4XVsg
-ICAgQzNdIFJDVSBuZXN0IGRlcHRoOiAwLCBleHBlY3RlZDogMApbICAxMDQuMDc2OTM4XVsgICAg
-QzNdIFByZWVtcHRpb24gZGlzYWJsZWQgYXQ6ClsgIDEwNC4wNzgxOTRdWyAgICBDM10gWzxmZmZm
-ZmZmZjg0NjAwMGEwPl0gX19kb19zb2Z0aXJxKzB4YTAvMHg1NDQKWyAgMTA0LjA4Mzk4MV1bICAg
-IEMzXSBDUFU6IDMgUElEOiAxIENvbW06IHN3YXBwZXIvMCBOb3QgdGFpbnRlZCA1LjE5LjAtcmM1
-LTAwMjEzLWc3Yzg5NWVmODg0MDMtZGlydHkgIzY1ClsgIDEwNC4wODM5ODFdWyAgICBDM10gSGFy
-ZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJWCwgMTk5NiksIEJJT1Mg
-cmVsLTEuMTQuMC0wLWcxNTU4MjFhMTk5MGItcHJlYnVpbHQucWVtdS5vcmcgMDQvMDEvMjAxNApb
-ICAxMDQuMDgzOTgxXVsgICAgQzNdIENhbGwgVHJhY2U6ClsgIDEwNC4wODM5ODFdWyAgICBDM10g
-IDxJUlE+ClsgIDEwNC4wODM5ODFdWyAgICBDM10gIGR1bXBfc3RhY2tfbHZsKzB4YmYvMHhlZQpb
-ICAxMDQuMDgzOTgxXVsgICAgQzNdICBfX21pZ2h0X3Jlc2NoZWQrMHgzODYvMHg0YjAKWyAgMTA0
-LjA4Mzk4MV1bICAgIEMzXSAgPyBpcnFfZXhpdF9yY3UrMHg0ZC8weGEwClsgIDEwNC4wODM5ODFd
-WyAgICBDM10gID8gX19kb19zb2Z0aXJxKzB4YTAvMHg1NDQKWyAgMTA0LjA4Mzk4MV1bICAgIEMz
-XSAgPyB3cml0ZV9uaWNfZHdvcmQrMHg3MC8weDE2MApbICAxMDQuMDgzOTgxXVsgICAgQzNdICBr
-bWVtX2NhY2hlX2FsbG9jX3RyYWNlKzB4M2EvMHgyNDAKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSAg
-d3JpdGVfbmljX2R3b3JkKzB4NzAvMHgxNjAKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSAgZG1fZnN5
-bmNfdGltZXJfY2FsbGJhY2srMHgxYzQvMHhkODAKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSAgPyBk
-bV9yZl9wYXRoY2hlY2tfd29ya2l0ZW1jYWxsYmFjaysweDExNTAvMHgxMTUwClsgIDEwNC4wODM5
-ODFdWyAgICBDM10gIGNhbGxfdGltZXJfZm4rMHgyZC8weDFjMApbICAxMDQuMDgzOTgxXVsgICAg
-QzNdICA/IGRtX3JmX3BhdGhjaGVja193b3JraXRlbWNhbGxiYWNrKzB4MTE1MC8weDExNTAKWyAg
-MTA0LjA4Mzk4MV1bICAgIEMzXSAgZXhwaXJlX3RpbWVycysweDFmMy8weDMyMApbICAxMDQuMDgz
-OTgxXVsgICAgQzNdICBfX3J1bl90aW1lcnMrMHgzZmYvMHg0ZDAKWyAgMTA0LjA4Mzk4MV1bICAg
-IEMzXSAgPyBsYXBpY19uZXh0X2V2ZW50KzB4NjEvMHg3MApbICAxMDQuMDgzOTgxXVsgICAgQzNd
-ICBydW5fdGltZXJfc29mdGlycSsweDQxLzB4ODAKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSAgX19k
-b19zb2Z0aXJxKzB4MjMzLzB4NTQ0ClsgIDEwNC4wODM5ODFdWyAgICBDM10gIGlycV9leGl0X3Jj
-dSsweDQxLzB4YTAKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSAgc3lzdmVjX2FwaWNfdGltZXJfaW50
-ZXJydXB0KzB4OGMvMHhiMApbICAxMDQuMDgzOTgxXVsgICAgQzNdICA8L0lSUT4KWyAgMTA0LjA4
-Mzk4MV1bICAgIEMzXSAgPFRBU0s+ClsgIDEwNC4wODM5ODFdWyAgICBDM10gIGFzbV9zeXN2ZWNf
-YXBpY190aW1lcl9pbnRlcnJ1cHQrMHgxYi8weDIwClsgIDEwNC4wODM5ODFdWyAgICBDM10gUklQ
-OiAwMDEwOnJ0bDgxOTJfdXNiX2luaXRlbmRwb2ludHMrMHhhMC8weDMxMApbICAxMDQuMDgzOTgx
-XVsgICAgQzNdIENvZGU6IDg1IGVkIDBmIDg0IDNjIDAyIDAwIDAwIDQ4IDg5IDFjIDI0IDMxIGZm
-IGJlIGMwIDBjIDAwIDAwIGU4IGEyIDE5IGI4IGZmIDQ4IDg5IGM1IDQzIDgwIDNjIDM3IDAwIDc0
-IDA4IDRjIDg5IGVmIGU4IDgwIDgKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSBSU1A6IDAwMTg6ZmZm
-Zjg4ODAwNmUyNzlmOCBFRkxBR1M6IDAwMDAwMjQ2ClsgIDEwNC4wODM5ODFdWyAgICBDM10gUkFY
-OiBmZmZmODg4MDA5N2IwMzAwIFJCWDogZmZmZjg4ODAwYmYwMDAwMCBSQ1g6IGZmZmZmZmZmODMx
-ZTE3NTEKWyAgMTA0LjA4Mzk4MV1bICAgIEMzXSBSRFg6IDAwMDAwMDAwMDAwMDAwMDEgUlNJOiAw
-MDAwMDAwMDAwMDAwMDA0IFJESTogZmZmZjg4ODAwOTdiMDMyMApbICAxMDQuMDgzOTgxXVsgICAg
-QzNdIFJCUDogZmZmZjg4ODAwOTdiMDMwMCBSMDg6IGRmZmZmYzAwMDAwMDAwMDAgUjA5OiBmZmZm
-ZWQxMDAxMmY2MDYxClsgIDEwNC4wODM5ODFdWyAgICBDM10gUjEwOiBkZmZmZTkxMDAxMmY2MDYy
-IFIxMTogMWZmZmYxMTAwMTJmNjA2MCBSMTI6IGZmZmY4ODgwMGJmMGZmZjQKWyAgMTA0LjA4Mzk4
-MV1bICAgIEMzXSBSMTM6IGZmZmY4ODgwMGJmMDkxNDAgUjE0OiBkZmZmZmMwMDAwMDAwMDAwIFIx
-NTogMWZmZmYxMTAwMTdlMTIyOAoKQWZ0ZXIgdXNpbmcgZGVsYXllZCB3b3JrIHRvIHJlcGxhY2Ug
-dGltZXIsIHRoZSBmb2xsb3dpbmcgaXMgdGhlIHJlc3VsdCB0cmlnZ2VyZWQgYnkgZ2RiLiAKQXMg
-d2UgY2FuIHNlZSwgdGhlIGRtX2ZzeW5jX3dvcmtfY2FsbGJhY2soKSBpcyBzdWNjZXNzZnVsbHkg
-dHJpZ2dlcmVkLgoKWyMwXSAweGZmZmZmZmZmODM2OGJkNmIg4oaSIGRtX2ZzeW5jX3dvcmtfY2Fs
-bGJhY2sod29yaz0weGZmZmY4ODgwMGJkYTk4YjgpClsjMV0gMHhmZmZmZmZmZjgxMThhNTgzIOKG
-kiBwcm9jZXNzX29uZV93b3JrKHdvcmtlcj0weGZmZmY4ODgwMDZmNWIyMDAsIHdvcms9MHhmZmZm
-ODg4MDBiZGE5OGI4KQpbIzJdIDB4ZmZmZmZmZmY4MTE4YjUyNiDihpIgd29ya2VyX3RocmVhZChf
-X3dvcmtlcj0weGZmZmY4ODgwMGJkYTk4YjgpClsjM10gMHhmZmZmZmZmZjgxMTk5ZDcyIOKGkiBr
-dGhyZWFkKF9jcmVhdGU9PG9wdGltaXplZCBvdXQ+KQpbIzRdIDB4ZmZmZmZmZmY4MTAwMzkwMiDi
-hpIgcmV0X2Zyb21fZm9yaygpCgpUaGUgZG1fZnN5bmNfd29ya19jYWxsYmFjaygpIGNvdWxkIHJ1
-biB3ZWxsIGFuZCB0aGVyZSBpcyBubyBidWcgcmVwb3J0IGFueW1vcmUuCgpCZXN0IHJlZ2FyZHMs
-CkR1b21pbmcgWmhvdQ==
+On Sat, Jul 09, 2022 at 03:41:19PM -0700, H. Peter Anvin wrote:
+> In ABI/API terms, that symbol has the semantic of connecting the API version
+> to the underlying ABI version; a piece of code that sees an enumeration type
+> > SETUP_ENUM_MAX must by definition treat it as an opaque blob. In the
+> future, should it become warranted, we may add flags that indicate how
+> unaware code should handle them, but I don't think we can engineer that
+> right now.
+
+Ok, let's hope it doesn't come to that and userspace behaves... <eyeroll>
+
+So, I'm going to send the below to Linus now so that 5.19 releases fixed
+and then queue Jason's patch next week.
+
+Thx.
+
+---
+
+From: Borislav Petkov <bp@suse.de>
+Date: Sun, 10 Jul 2022 11:15:47 +0200
+Subject: [PATCH] x86/boot: Fix the setup data types max limit
+
+Commit in Fixes forgot to change the SETUP_TYPE_MAX definition which
+contains the highest valid setup data type.
+
+Correct that.
+
+Fixes: 5ea98e01ab52 ("x86/boot: Add Confidential Computing type to setup_data")
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/ddba81dd-cc92-699c-5274-785396a17fb5@zytor.com
+---
+ arch/x86/include/uapi/asm/bootparam.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index bea5cdcdf532..e02a8a8ef23c 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -15,7 +15,7 @@
+ #define SETUP_INDIRECT			(1<<31)
+ 
+ /* SETUP_INDIRECT | max(SETUP_*) */
+-#define SETUP_TYPE_MAX			(SETUP_INDIRECT | SETUP_JAILHOUSE)
++#define SETUP_TYPE_MAX			(SETUP_INDIRECT | SETUP_CC_BLOB)
+ 
+ /* ram_size flags */
+ #define RAMDISK_IMAGE_START_MASK	0x07FF
+-- 
+2.35.1
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

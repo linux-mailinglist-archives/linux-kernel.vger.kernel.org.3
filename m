@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA37E56CDA6
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 09:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B058956CDB0
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiGJHkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 03:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S229515AbiGJIQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 04:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJHkF (ORCPT
+        with ESMTP id S229450AbiGJIQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 03:40:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE28BF74
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 00:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657438804; x=1688974804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i84PBKD4yiPMiyyXZv0Hnq0/GpchZGp48SXiptHJK+w=;
-  b=LJDMuh3XAFONtZ6s1jCD8ED5lU418x8U8Q5RQ76L6j4ow7r3LbwLZqJI
-   BwUx8GGRlZUUSO43fNkvRmQMAHxkLnJlsmljUUjUOo4WORfH0XSlaXnPy
-   dV44FVL/OB6wMQ3QQ8nMBVyvnc3fCudGZt8wvfc+wOPGEBTyhiCApzOPJ
-   e3ghYyRd0gIpEbGW5b7rlHR+vm/6WnS+l7EsjjkR4q9NUrIhkqwsS9Ih9
-   kZcaQAGpNe0IQ362Lrdkakp++/7TCPyw4kmP5mdq4YYZvvnSWCNJBqj1v
-   Nt4SlKVNRgGV1OQzb96zXXJcRzjNyxDWXWljpJxebZjEDr2I2lBtA+S6w
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="285616706"
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="285616706"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 00:40:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="736770281"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Jul 2022 00:40:02 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oARXt-000PZo-LI;
-        Sun, 10 Jul 2022 07:40:01 +0000
-Date:   Sun, 10 Jul 2022 15:39:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhongjun Tan <hbut_tan@163.com>, perex@perex.cz, tiwai@suse.com
-Cc:     kbuild-all@lists.01.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Zhongjun Tan <tanzhongjun@coolpad.com>
-Subject: Re: [PATCH] ALSA: usb-audio: Fix unsigned expression compared with
- zero
-Message-ID: <202207101502.ZdivUZX6-lkp@intel.com>
-References: <20220706070627.16764-1-hbut_tan@163.com>
+        Sun, 10 Jul 2022 04:16:00 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE811816;
+        Sun, 10 Jul 2022 01:15:59 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so5643935pjl.5;
+        Sun, 10 Jul 2022 01:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uB33o1I70+FsA4di+MxL+HE0Wl1Mfr1zYKDikSzqCkM=;
+        b=cS2mM90Jze7n7/9wYlcxb2dP2mUDEFV9l8aMlD0bcYG+cSnu3LZnJ3pjqWiKfTZLkX
+         iotJ9c1PQqneBEBwd0jxdPVtbKca4kvylW0deWnYCvRfTUMSXuXPAb175maSZBWJbjPH
+         dYQkIkZBEV48tDGPgfGp+48BCAljMf9waD/1FEOsB69L8EcPvkDWkDgoBdrV83Cg22iY
+         4l/ERTWoOS3FQ3Z/3/u6ZRikFlNdGmVSEp40gXuR59r8jCutjTxn7DbX9J7i6pthC9em
+         zEO+32JJ+2nNYkhDqXQfC/fm7zqiMu4Kn1jBl1QIzxEMjny21jZeawbWg1VmMLGC/MTa
+         2ZUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uB33o1I70+FsA4di+MxL+HE0Wl1Mfr1zYKDikSzqCkM=;
+        b=T06wkWjWDVndxu0F9xoS9jmhQQ8oEpb6j6ueyQJQC1qsE4pBXC6RkCHjm3E3U6viFf
+         80rVkmDiYCTpzocVVhadO3RcBMbjivpL1jZyo6ZN7Rn/SyiIbilKqRy2D20V4c0OzGWY
+         G6Mkw+gwT8p52g+Dh0M8eN0QmgmzUyHR6IWVWDmtzu5smnALUVV0tTwYDPwJs5iLWbbT
+         W4EJPzQwvA7FHVNFpo7nfkHgYynzMHOxIvwfyyKnVOXoLx35YigwzxnHPojk4X046ikp
+         KRKrm5EYFTyI22n3ZkrIIuN/fdtIe0izca25U13rE/iProbxN2DhAfAwNlOyGgOjoeQy
+         ghfw==
+X-Gm-Message-State: AJIora8wz/+XCmbaYHKG9Gv2hO28qaKXz+JR9B/vh5nrAYRthoDCSGXa
+        lME1uvFIKBkU8ocQPHWz+As=
+X-Google-Smtp-Source: AGRyM1sCfZTsYhpidCOmAko/nyB19AWNvchwlqVMdh/xwDJ+5jJAnbqMyh8Dc2DkndQWOouh6BcwyA==
+X-Received: by 2002:a17:902:e54b:b0:16c:38e5:a9b7 with SMTP id n11-20020a170902e54b00b0016c38e5a9b7mr4514822plf.66.1657440958942;
+        Sun, 10 Jul 2022 01:15:58 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0016be6e954e8sm2355236pll.68.2022.07.10.01.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 01:15:58 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akihiko Odaki <akihiko.odaki@gmail.com>
+Subject: [PATCH] AMD_SFH: Add a DMI quirk entry for Chromebooks
+Date:   Sun, 10 Jul 2022 17:15:47 +0900
+Message-Id: <20220710081547.3553-1-akihiko.odaki@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706070627.16764-1-hbut_tan@163.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhongjun,
+Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+functionalities, even including the registers necessary for feature
+detections.
 
-Thank you for the patch! Perhaps something to improve:
+The behavior was observed with Lenovo ThinkPad C13 Yoga.
 
-[auto build test WARNING on tiwai-sound/for-next]
-[also build test WARNING on linus/master v5.19-rc5 next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+---
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhongjun-Tan/ALSA-usb-audio-Fix-unsigned-expression-compared-with-zero/20220706-150825
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-config: s390-randconfig-s031-20220710 (https://download.01.org/0day-ci/archive/20220710/202207101502.ZdivUZX6-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/10d09dc3ad3a9b823d9097a68058698be90c7a74
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhongjun-Tan/ALSA-usb-audio-Fix-unsigned-expression-compared-with-zero/20220706-150825
-        git checkout 10d09dc3ad3a9b823d9097a68058698be90c7a74
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash sound/usb/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> sound/usb/pcm.c:782:32: sparse: sparse: incompatible types in comparison expression (different signedness):
->> sound/usb/pcm.c:782:32: sparse:    unsigned int *
->> sound/usb/pcm.c:782:32: sparse:    int *
-   sound/usb/pcm.c:783:32: sparse: sparse: incompatible types in comparison expression (different signedness):
-   sound/usb/pcm.c:783:32: sparse:    unsigned int *
-   sound/usb/pcm.c:783:32: sparse:    int *
-   sound/usb/pcm.c:791:40: sparse: sparse: incompatible types in comparison expression (different signedness):
-   sound/usb/pcm.c:791:40: sparse:    unsigned int *
-   sound/usb/pcm.c:791:40: sparse:    int *
-   sound/usb/pcm.c:792:40: sparse: sparse: incompatible types in comparison expression (different signedness):
-   sound/usb/pcm.c:792:40: sparse:    unsigned int *
-   sound/usb/pcm.c:792:40: sparse:    int *
-
-vim +782 sound/usb/pcm.c
-
-7726dce14c5e7e Takashi Iwai 2020-11-23  761  
-e5779998bf8b70 Daniel Mack  2010-03-04  762  static int hw_rule_rate(struct snd_pcm_hw_params *params,
-e5779998bf8b70 Daniel Mack  2010-03-04  763  			struct snd_pcm_hw_rule *rule)
-e5779998bf8b70 Daniel Mack  2010-03-04  764  {
-e5779998bf8b70 Daniel Mack  2010-03-04  765  	struct snd_usb_substream *subs = rule->private;
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  766  	struct snd_usb_audio *chip = subs->stream->chip;
-cab941b7e5cf05 Takashi Iwai 2020-11-23  767  	const struct audioformat *fp;
-e5779998bf8b70 Daniel Mack  2010-03-04  768  	struct snd_interval *it = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
-10d09dc3ad3a9b Zhongjun Tan 2022-07-06  769  	unsigned int rmin, rmax;
-10d09dc3ad3a9b Zhongjun Tan 2022-07-06  770  	int i, r;
-e5779998bf8b70 Daniel Mack  2010-03-04  771  
-e5779998bf8b70 Daniel Mack  2010-03-04  772  	hwc_debug("hw_rule_rate: (%d,%d)\n", it->min, it->max);
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  773  	rmin = UINT_MAX;
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  774  	rmax = 0;
-88766f04c4142c Eldad Zack   2013-04-03  775  	list_for_each_entry(fp, &subs->fmt_list, list) {
-e5779998bf8b70 Daniel Mack  2010-03-04  776  		if (!hw_check_valid_format(subs, params, fp))
-e5779998bf8b70 Daniel Mack  2010-03-04  777  			continue;
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  778  		r = snd_usb_endpoint_get_clock_rate(chip, fp->clock);
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  779  		if (r > 0) {
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  780  			if (!snd_interval_test(it, r))
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  781  				continue;
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29 @782  			rmin = min(rmin, r);
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  783  			rmax = max(rmax, r);
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  784  			continue;
-4e7cf1fbb34ecb Takashi Iwai 2021-09-29  785  		}
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  786  		if (fp->rate_table && fp->nr_rates) {
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  787  			for (i = 0; i < fp->nr_rates; i++) {
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  788  				r = fp->rate_table[i];
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  789  				if (!snd_interval_test(it, r))
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  790  					continue;
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  791  				rmin = min(rmin, r);
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  792  				rmax = max(rmax, r);
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  793  			}
-e5779998bf8b70 Daniel Mack  2010-03-04  794  		} else {
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  795  			rmin = min(rmin, fp->rate_min);
-bc4e94aa8e72e7 Takashi Iwai 2020-11-23  796  			rmax = max(rmax, fp->rate_max);
-e5779998bf8b70 Daniel Mack  2010-03-04  797  		}
-e5779998bf8b70 Daniel Mack  2010-03-04  798  	}
-e5779998bf8b70 Daniel Mack  2010-03-04  799  
-7726dce14c5e7e Takashi Iwai 2020-11-23  800  	return apply_hw_params_minmax(it, rmin, rmax);
-e5779998bf8b70 Daniel Mack  2010-03-04  801  }
-e5779998bf8b70 Daniel Mack  2010-03-04  802  
-
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+index dadc491bbf6b..b91e1c95e543 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -197,6 +197,18 @@ static const struct dmi_system_id dmi_sensor_mask_overrides[] = {
+ 		},
+ 		.driver_data = (void *)(ACEL_EN | MAGNO_EN),
+ 	},
++	{
++		/*
++		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
++		 * Hub instead of Sensor Hub Fusion and leaves MP2
++		 * uninitialized, which disables all functionalities, even
++		 * including the registers necessary for feature detections.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
++		},
++		.driver_data = (void *)0,
++	},
+ 	{ }
+ };
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

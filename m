@@ -2,178 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DFE56CC35
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9CD56CC3F
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGJBiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 21:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S229622AbiGJCK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 22:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGJBiD (ORCPT
+        with ESMTP id S229462AbiGJCKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 21:38:03 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D181BEB9
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 18:38:02 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id g1so1654362qkl.9
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Jul 2022 18:38:02 -0700 (PDT)
+        Sat, 9 Jul 2022 22:10:55 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70DA1183E;
+        Sat,  9 Jul 2022 19:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zg8kU8L72tPIvWCiVTIJw7BwgVkbotl+8MU4rFDgnnU=;
-        b=UAaQT1JtDJ1xuvBsX5S5V6w+9jyRdy2+ltqupEmsuQP/30BEtpMrY01IdKQDBoD0NL
-         4HOlmKpek4e9rVX4nyhJb+4GNkneEJDRKld+yLRLEgw6SZGcVaAHQL25DgYFXZd+Asqe
-         E/ns/MDptEsjBvCopunZNQ3YM+t3SGrp5gSYQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zg8kU8L72tPIvWCiVTIJw7BwgVkbotl+8MU4rFDgnnU=;
-        b=DOoYdTpfWYqTdgCRAbhzi7f94p+paUH6XC9rW6jlcfhDS64HmRbYFALYJmnmdAWNKK
-         Hi656q7/G7HFhRKUbLTXUNs77ZHpxLaNmJqVk9JNusE9YhQGvegOVOy+ULNR1VkenNNl
-         AuJtq9ufKjweDAfiek787RiDvOX5IijLjPbroNFtiL9tKw/5I98Q3oitwDTAC6xHnN+F
-         UXCmd47ym8kFHnFUv5mB8uV29BKFUgtEczHg9huQi/lCdP/0EatiL+OfRuPu305NHovP
-         IlLP7ceZYYPu6nPgXmWML0xaWYBXeTKaGbF4MD0QvPwbYYTu+PNTaK9mxM7CrUdMSHpH
-         gSRA==
-X-Gm-Message-State: AJIora/0iJ8BfjbI89vRhZqxF7C7NOtdCpHFJixxBsQJ/UhH2kz3pRDw
-        oMGCoFweEwkpYYyUzwWsQyq9Vw==
-X-Google-Smtp-Source: AGRyM1u1wLfeOuQd+BLT9o7UuMOH1Jb/yp3QUKowdVefD30sHot9hR3rTHgVPcL7Yol1J4fsYAAnyg==
-X-Received: by 2002:a05:620a:27cc:b0:6b5:4dd4:d177 with SMTP id i12-20020a05620a27cc00b006b54dd4d177mr7508946qkp.70.1657417082083;
-        Sat, 09 Jul 2022 18:38:02 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id ci17-20020a05622a261100b00304f55e56e4sm2503726qtb.40.2022.07.09.18.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Jul 2022 18:38:01 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 01:38:01 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 0/8] Implement call_rcu_lazy() and miscellaneous fixes
-Message-ID: <YsoteYyJoOSzMGsr@google.com>
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
- <Ysev2jbxFGNkLvjG@google.com>
- <20220708224514.GB1790663@paulmck-ThinkPad-P17-Gen-1>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657419054; x=1688955054;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=uW1jS+BRiXZVZbi8yQzbARgtbNZKh0+8LZgKUM2kDGE=;
+  b=cczqFFDOIHbq6s4+0QGFmnkapv+uneIIQuuU6KyCPgCS+WCI/4rPjt6U
+   cbexJKOvkk+y6nfNlgxb6ndk5QwVM1KjyzfpkQKFWvrz0xDVbr0f3VrJ/
+   7NnZijLzbGGLMhTKDM20QjiaAVpyDznTl7IOn0MFfM4sg5ToM/pBGo9vu
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Jul 2022 19:10:54 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 19:10:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sat, 9 Jul 2022 19:10:51 -0700
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sat, 9 Jul 2022 19:10:46 -0700
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        "Tao Zhang" <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Hao Zhang" <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v12 0/9] Coresight: Add support for TPDM and TPDA
+Date:   Sun, 10 Jul 2022 10:10:23 +0800
+Message-ID: <20220710021032.27455-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708224514.GB1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 03:45:14PM -0700, Paul E. McKenney wrote:
-> On Fri, Jul 08, 2022 at 04:17:30AM +0000, Joel Fernandes wrote:
-> > On Sat, Jun 25, 2022 at 08:12:06PM -0700, Paul E. McKenney wrote:
-> > > On Wed, Jun 22, 2022 at 10:50:53PM +0000, Joel Fernandes (Google) wrote:
-> > > > 
-> > > > Hello!
-> > > > Please find the next improved version of call_rcu_lazy() attached.  The main
-> > > > difference between the previous version is that it is now using bypass lists,
-> > > > and thus handling rcu_barrier() and hotplug situations, with some small changes
-> > > > to those parts.
-> > > > 
-> > > > I also don't see the TREE07 RCU stall from v1 anymore.
-> > > > 
-> > > > In the v1, we some numbers below (testing on v2 is in progress). Rushikesh,
-> > > > feel free to pull these patches into your tree. Just to note, you will also
-> > > > need to pull the call_rcu_lazy() user patches from v1. I have dropped in this
-> > > > series, just to make the series focus on the feature code first.
-> > > > 
-> > > > Following are power savings we see on top of RCU_NOCB_CPU on an Intel platform.
-> > > > The observation is that due to a 'trickle down' effect of RCU callbacks, the
-> > > > system is very lightly loaded but constantly running few RCU callbacks very
-> > > > often. This confuses the power management hardware that the system is active,
-> > > > when it is in fact idle.
-> > > > 
-> > > > For example, when ChromeOS screen is off and user is not doing anything on the
-> > > > system, we can see big power savings.
-> > > > Before:
-> > > > Pk%pc10 = 72.13
-> > > > PkgWatt = 0.58
-> > > > CorWatt = 0.04
-> > > > 
-> > > > After:
-> > > > Pk%pc10 = 81.28
-> > > > PkgWatt = 0.41
-> > > > CorWatt = 0.03
-> > > 
-> > > So not quite 30% savings in power at the package level?  Not bad at all!
-> > 
-> > Yes this is the package residency amount, not the amount of power. This % is
-> > not power.
-> 
-> So what exactly is PkgWatt, then?  If you can say.  That is where I was
-> getting the 30% from.
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-Its the total package power (SoC power) - so like not just the CPU but also
-the interconnect, other controllers and other blocks in there.
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    coresight: core: Use IDR for non-cpu bound sources' paths.
 
-This output is from the turbostat program and the number is mentioned in the
-manpage:
-"PkgWatt Watts consumed by the whole package."
-https://manpages.debian.org/testing/linux-cpupower/turbostat.8.en.html
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
+     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
 
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
 
-> > > > Further, when ChromeOS screen is ON but system is idle or lightly loaded, we
-> > > > can see that the display pipeline is constantly doing RCU callback queuing due
-> > > > to open/close of file descriptors associated with graphics buffers. This is
-> > > > attributed to the file_free_rcu() path which this patch series also touches.
-> > > > 
-> > > > This patch series adds a simple but effective, and lockless implementation of
-> > > > RCU callback batching. On memory pressure, timeout or queue growing too big, we
-> > > > initiate a flush of one or more per-CPU lists.
-> > > 
-> > > It is no longer lockless, correct?  Or am I missing something subtle?
-> > > 
-> > > Full disclosure: I don't see a whole lot of benefit to its being lockless.
-> > > But truth in advertising!  ;-)
-> > 
-> > Yes, you are right. Maybe a better way I could put it is it is "lock
-> > contention less" :D
-> 
-> Yes, "reduced lock contention" would be a good phrase.  As long as you
-> carefully indicate exactly what scenario with greater lock contention
-> you are comparing to.
-> 
-> But aren't you acquiring the bypass lock at about the same rate as it
-> would be aquired without laziness?  What am I missing here?
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add coresight components for SM8250
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
 
-You are right, why not I just drop the locking phrases from the summary.
-Anyway the main win from this work is not related to locking.
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
 
-thanks,
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
 
- - Joel
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
 
-> 
-> 							Thanx, Paul
-> 
-> > > > Similar results can be achieved by increasing jiffies_till_first_fqs, however
-> > > > that also has the effect of slowing down RCU. Especially I saw huge slow down
-> > > > of function graph tracer when increasing that.
-> > > > 
-> > > > One drawback of this series is, if another frequent RCU callback creeps up in
-> > > > the future, that's not lazy, then that will again hurt the power. However, I
-> > > > believe identifying and fixing those is a more reasonable approach than slowing
-> > > > RCU down for the whole system.
-> > > 
-> > > Very good!  I have you down as the official call_rcu_lazy() whack-a-mole
-> > > developer.  ;-)
-> > 
-> > :-D
-> > 
-> > thanks,
-> > 
-> >  - Joel
-> > 
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
+
+This patch series depends on patch series:
+"[v2,00/13] coresight: Add new API to allocate trace source ID values"
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220704081149.16797-1-mike.leach@linaro.org/
+
+Changes from V11:
+1. Clear bits for atid before setting them and relese atid when tpda
+remove. -- Suzuki K Poulose <suzuki.poulose@arm.com>
+
+Mao Jinlong (9):
+  coresight: core: Use IDR for non-cpu bound sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  arm64: dts: qcom: sm8250: Add coresight components
+  arm64: dts: qcom: sm8250: Add tpdm mm/prng
+
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+ .../bindings/arm/qcom,coresight-tpda.yaml     | 111 +++
+ .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 671 ++++++++++++++++++
+ drivers/hwtracing/coresight/Kconfig           |  23 +
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  42 +-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 208 ++++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  35 +
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 259 +++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
+ include/linux/coresight.h                     |   1 +
+ 13 files changed, 1510 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+
+-- 
+2.17.1
+

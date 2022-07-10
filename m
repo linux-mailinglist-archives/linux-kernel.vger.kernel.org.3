@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D313A56CFAA
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D76356CFA7
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiGJPLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 11:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S229585AbiGJPKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 11:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGJPLp (ORCPT
+        with ESMTP id S229450AbiGJPKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 11:11:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42962BCA8
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 08:11:44 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so6107578pjo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 08:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZiGKAq8E/61V/xfD2osUhAigUxFAGIjOAFkVRU11S5c=;
-        b=SwASqhsqF/uwpbfqLellpCwOiSzS2k5/C73tZViHwi+wlDrtSvqy/CLZnD2QvQx14O
-         05Hik6bMxgJLrqyo0hAR3hJVC2DjtGviASL9QpxRfJ2Mr7prJ0NLHiUeNc6BuYBZft4X
-         ZTAqYVdhB8j7EjMsADYyuJSDB4RG6atPSLW3MPkjzoKYaSrWiG9MEd4+xUmzJ7pjW7n0
-         v8/5ZFNEOPxeviRy8dbKLUM+VbcoYbCkWE78lVU+ATrf/m6cHHGj76Xk5hFSN2VmLNRw
-         k84hTH7nPLuk9tK4wybq6iny6+lXDfG8UDKS9AImQNoG7IoP2xyJCGkMNzNNgc+CpBIZ
-         UO2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZiGKAq8E/61V/xfD2osUhAigUxFAGIjOAFkVRU11S5c=;
-        b=C0YZhxt18+E/P3kAvFxrpTCFZ22Zm1J5GVy5+NK9Uatz3VOjQ/AvvUCxwLZEjyBoJX
-         F12n4AEa6U/KZEx2EHze6rBfVO38S+p9MbyFxz6kRqsR/EvPPn1PH0AUMatp1OOXt7ck
-         TWAbDysr75g5aGqiufSufVdxXvEc004QRPRUe20yvVgQgpjKbzu3cXjyH2Kf9PVUqMwM
-         nG10oYx4oNvaRV1cpgL6zJvwxJh4MB1Bl+m7rYQO3Ly3P0/LWwkbplYSRT6r9g24Zr7e
-         HZi55bl0oUJSXNTY6AKTi5BUOp/kwyFZZ3ViHTVyFDDOaQ7d+NEV1pD9xuC04xC5nGwg
-         pHOw==
-X-Gm-Message-State: AJIora8dvLrIxcP6gx+nBVM85M+d7+1j0KO1eWxqenoExn1SvyhePvMG
-        FmyuiCgmK8lPqrfNRirTxIsTHw==
-X-Google-Smtp-Source: AGRyM1sR9ZDu/2Ia1wh+BMIiL0MAl4yRxaD0cHdlrNSxgTTfrD37Fazff0AZYrTaHIbPHcXWL6e9XQ==
-X-Received: by 2002:a17:90b:1c86:b0:1ee:e795:a6a with SMTP id oo6-20020a17090b1c8600b001eee7950a6amr11794505pjb.205.1657465903563;
-        Sun, 10 Jul 2022 08:11:43 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([122.167.98.167])
-        by smtp.gmail.com with ESMTPSA id a200-20020a621ad1000000b0052ab37ef3absm3014756pfa.116.2022.07.10.08.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 08:11:42 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH] RISC-V: KVM: Fix SRCU deadlock caused by kvm_riscv_check_vcpu_requests()
-Date:   Sun, 10 Jul 2022 20:41:05 +0530
-Message-Id: <20220710151105.687193-1-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 10 Jul 2022 11:10:42 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5BFBC3D;
+        Sun, 10 Jul 2022 08:10:40 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 23:11:43 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1657465838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0UOCOqJq0ioAcZ5Z49JdedUtI2TrrKl6ffe5dJ/eKU0=;
+        b=f3Sg3+lNmVYNGh4qBcAkegLpjMfHkxPjWwgJ8gYk+HVK33HzO7TrwHBMouuCTkQ1ahIdkL
+        Z9zQyXF/zkK7wIbBppISjObH8xuJ/Jj7boCwWyQbwC38n7puW4pPkqLozvuY3jP9IhnFMc
+        fEnXcokjwQtIQenDMAceop9E6vEXdHE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH V4 01/20] rv: Add Runtime Verification (RV) interface
+Message-ID: <YsrsL8zCNcwvdQS8@geo.homenetwork>
+References: <cover.1655368610.git.bristot@kernel.org>
+ <60548902dbccaa7ba420e40e46835693e27f643f.1655368610.git.bristot@kernel.org>
+ <YsXLDvjHqOxYtckg@geo.homenetwork>
+ <adbf8277-e680-9357-950d-22cf54b1f6ff@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adbf8277-e680-9357-950d-22cf54b1f6ff@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kvm_riscv_check_vcpu_requests() is called with SRCU read lock held
-and for KVM_REQ_SLEEP request it will block the VCPU without releasing
-SRCU read lock. This causes KVM ioctls (such as KVM_IOEVENTFD) from
-other VCPUs of the same Guest/VM to hang/deadlock if there is any
-synchronize_srcu() or synchronize_srcu_expedited() in the path.
+On Fri, Jul 08, 2022 at 04:39:47PM +0200,
+Daniel Bristot de Oliveira wrote:
 
-To fix the above in kvm_riscv_check_vcpu_requests(), we should do SRCU
-read unlock before blocking the VCPU and do SRCU read lock after VCPU
-wakeup.
+> Hey Tao!
+> 
+> On 7/6/22 19:49, Tao Zhou wrote:
+> >> +static void *enabled_monitors_start(struct seq_file *m, loff_t *pos)
+> >> +{
+> >> +	struct rv_monitor_def *m_def;
+> >> +	loff_t l;
+> >> +
+> >> +	mutex_lock(&rv_interface_lock);
+> >> +	m_def = list_entry(&rv_monitors_list, struct rv_monitor_def, list);
+> > I realized this m_def is not real but vain. Is it possible the loop is
+> > skiped and just return m_def that is not valid.
+> 
+> that is empty... not a problem.
+> 
+> I am not seeing (the possible) problem here. Could you simulate/reproduce the problem?
 
-Fixes: cce69aff689e ("RISC-V: KVM: Implement VCPU interrupts and
-requests handling")
-Reported-by: Bin Meng <bmeng.cn@gmail.com>
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/kvm/vcpu.c | 2 ++
- 1 file changed, 2 insertions(+)
+The @*pos of enable_monitors_start() can not be -1 or other negative value.
+And I checked that the *pos is 0(right?). That is safe. Sorry for not being
+that ture and maybe this is a notice here. Because if it is a negative value,
+the returned m_def is a point to a data place 16 bytes before &rv_monitors_list.
+That is a not ture rv_monitors_list stucture data. But it is not possiable now.
+Maybe "inspired" from your question. Look it more, I image this simulation.
+If the monitor(and all is enabled) is more enough to let the *pos to increase
+to -1. And the returned m_def is last monitor that returned from enable_monitors_start().
+The enable_monitors_next() check from the last monitor and return NULL.
+Only show the last monitor. This will not really happen I think.
+But I am not focus enough to the seq file code or others now, so this may be
+more possible to be not right. Late reply continued from me..
 
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index b7a433c54d0f..5d271b597613 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -845,9 +845,11 @@ static void kvm_riscv_check_vcpu_requests(struct kvm_vcpu *vcpu)
- 
- 	if (kvm_request_pending(vcpu)) {
- 		if (kvm_check_request(KVM_REQ_SLEEP, vcpu)) {
-+			kvm_vcpu_srcu_read_unlock(vcpu);
- 			rcuwait_wait_event(wait,
- 				(!vcpu->arch.power_off) && (!vcpu->arch.pause),
- 				TASK_INTERRUPTIBLE);
-+			kvm_vcpu_srcu_read_lock(vcpu);
- 
- 			if (vcpu->arch.power_off || vcpu->arch.pause) {
- 				/*
--- 
-2.34.1
-
+Thanks,
+Tao

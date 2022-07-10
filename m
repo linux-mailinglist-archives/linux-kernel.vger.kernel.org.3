@@ -2,205 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08E956CC10
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 02:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F37156CC1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 02:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiGJAO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 20:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S229492AbiGJAw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 20:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJAO1 (ORCPT
+        with ESMTP id S229450AbiGJAw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 20:14:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DA8E0BF;
-        Sat,  9 Jul 2022 17:14:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1837360F70;
-        Sun, 10 Jul 2022 00:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C564C3411C;
-        Sun, 10 Jul 2022 00:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657412065;
-        bh=QwS6fBtfFVuN6cg1cW7OD0kOuwOSpsZ8EWICHcvBKF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QpZVJTNkz8J31rlRtIcyJkpowaKWge27eSJWfQd7MMeFsTm0RAoBfRJ/zIxYaPrNK
-         OjDRQDtbuePKrIDJ8aNzQdhHLVdcIVnuUG+U/jk8OpqS/y+nyXnZ0SqwHQomMHTh7x
-         CRcbJn+kSQ64gFASIjaVzVrEc8vBTPdEA+rNEU6tHbIDU5h6vXpd+l0lUCMi0QELb3
-         9GZwelxzOF41yH7pRVyNYG1LBSrfqVyx/fx1+xB/DVOrQeCS/XTi/YKqf6ANRc1LkS
-         NvL5KtwwDLDZJ4WcAocWZlgoeKVsQlGpLyILAOqMHyWAP33LRyEyIH2CNhdhNN9i6T
-         ObXJNx7zi0i/g==
-Received: by pali.im (Postfix)
-        id 0A931AFA; Sun, 10 Jul 2022 02:14:21 +0200 (CEST)
-Date:   Sun, 10 Jul 2022 02:14:21 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: mvebu: Dispose INTx irqs prior to removing INTx
- domain
-Message-ID: <20220710001421.lqwprzgn5jrblqcu@pali>
-References: <20220709161858.15031-1-pali@kernel.org>
+        Sat, 9 Jul 2022 20:52:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A813D7D;
+        Sat,  9 Jul 2022 17:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657414346; x=1688950346;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0WBawKch8FgdG5q67N7Y+VHMcNvqfbYKAysDrYg405o=;
+  b=R7RL5lu6EvmtSKSvrnd36UPqksSyoLgqRuvlRZ+ZSrrnoNdxF+J5TWhZ
+   QgK+tneR+MzAT7YFLxNUGiMY2Mk3w4NE00d5yfTPY6V/APyRKcA3n9ieD
+   +k+Gj8kLmd0KC0oWksbkyMIBvKt0rJ+l8GikZGPcXawddau4EQHGmPB1N
+   K5NnfN5xw+N6U5zwqy48caLu+a2HQMA9mzg0DfKh6mM3JjTsJBcmp5jvU
+   ELB59MldUnVX/RmUNFktVr9GkK6uVguNGRgE9MO50r7ZoysJMQk7EkZWs
+   MHJ1imufGDVFaTFghxloZgC61HWMsdt6XFNimvGdOiZwZaNwASoIK/FIS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="267512531"
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="267512531"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 17:52:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
+   d="scan'208";a="594492129"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 Jul 2022 17:52:23 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oALBP-000PKe-Al;
+        Sun, 10 Jul 2022 00:52:23 +0000
+Date:   Sun, 10 Jul 2022 08:52:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        linux-doc@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream-workaround 296/418] htmldocs:
+ Documentation/virt/kvm/api.rst:6679: WARNING: Definition list ends without a
+ blank line; unexpected unindent.
+Message-ID: <202207100806.ymoTKohh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220709161858.15031-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 09 July 2022 18:18:58 Pali Rohár wrote:
-> Documentation for irq_domain_remove() says that all mapping within the
-> domain must be disposed prior to domain remove.
-> 
-> Currently INTx irqs are not disposed in pci-mvebu.c device unbind callback
-> which cause that kernel crashes after unloading driver and trying to read
-> /sys/kernel/debug/irq/irqs/<num> or /proc/interrupts.
-> 
-> Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
-> Reported-by: Hajo Noerenberg <hajo-linux-bugzilla@noerenberg.de>
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   c2b43d6ee32b2f2de54395e7b2d7ba9bfa727608
+commit: e11dbdbae913817716494fb41eb22aa88e1464e0 [296/418] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+reproduce: make htmldocs
 
-Just to note, Hajo Noerenberg observed this issue during testing and
-debugging other unrelated issue in bugzilla [1] and triggered this crash
-just by calling: rmmod pci_mvebu && modprobe pci-mvebu && cat /proc/interrupts
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I suppose that other pci controller drivers with unbind / rmmod support
-would suffer from same issues.
+All warnings (new ones prefixed by >>):
 
-[1] - https://bugzilla.kernel.org/show_bug.cgi?id=216094
+>> Documentation/virt/kvm/api.rst:6679: WARNING: Definition list ends without a blank line; unexpected unindent.
 
-> ---
-> Depends on patch:
-> https://lore.kernel.org/linux-pci/20220524122817.7199-1-pali@kernel.org/
-> 
-> Here is the captured kernel crash which happens without this patch:
-> 
-> $ cat /sys/kernel/debug/irq/irqs/64
-> [  301.571370] 8<--- cut here ---
-> [  301.574496] Unable to handle kernel paging request at virtual address 0a00002a
-> [  301.581736] [0a00002a] *pgd=00000000
-> [  301.585323] Internal error: Oops: 80000005 [#1] SMP ARM
-> [  301.590560] Modules linked in:
-> [  301.593621] CPU: 1 PID: 4641 Comm: cat Not tainted 5.16.0-rc1+ #192
-> [  301.599905] Hardware name: Marvell Armada 380/385 (Device Tree)
-> [  301.605836] PC is at 0xa00002a
-> [  301.608896] LR is at irq_debug_show+0x210/0x2d4
-> [  301.613440] pc : [<0a00002a>]    lr : [<c018ca40>]    psr: 200000b3
-> [  301.619721] sp : c797fdd8  ip : 0000000b  fp : 0a00002b
-> [  301.624957] r10: c0d9a364  r9 : 00000001  r8 : 00000000
-> [  301.630192] r7 : c18fee18  r6 : c0da2a74  r5 : c18fee00  r4 : c66ec050
-> [  301.636734] r3 : 00000001  r2 : c18fee18  r1 : 00000000  r0 : c66ec050
-> [  301.643275] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-> [  301.650689] Control: 10c5387d  Table: 0790c04a  DAC: 00000051
-> [  301.656446] Register r0 information: slab seq_file start c66ec050 pointer offset 0
-> [  301.664040] Register r1 information: NULL pointer
-> [  301.668755] Register r2 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> [  301.677480] Register r3 information: non-paged memory
-> [  301.682543] Register r4 information: slab seq_file start c66ec050 pointer offset 0
-> [  301.690133] Register r5 information: slab kmalloc-256 start c18fee00 pointer offset 0 size 256
-> [  301.698770] Register r6 information: non-slab/vmalloc memory
-> [  301.704442] Register r7 information: slab kmalloc-256 start c18fee00 pointer offset 24 size 256
-> [  301.713165] Register r8 information: NULL pointer
-> [  301.717879] Register r9 information: non-paged memory
-> [  301.722941] Register r10 information: non-slab/vmalloc memory
-> [  301.728699] Register r11 information: non-paged memory
-> [  301.733848] Register r12 information: non-paged memory
-> [  301.738997] Process cat (pid: 4641, stack limit = 0xf591166e)
-> [  301.744756] Stack: (0xc797fdd8 to 0xc7980000)
-> [  301.749123] fdc0:                                                       0000000a 830d3f3e
-> [  301.757321] fde0: c1004f48 c0d9a374 c7a9cc10 c66ec050 00000000 c88af900 c797fe80 7ffff000
-> [  301.765518] fe00: 00400cc0 c66ec068 00000001 c02c5cb8 00000000 00000000 c66ec078 c797fe68
-> [  301.773715] fe20: c1cdf6c0 c7a9cc10 ffffffea c88af900 00000010 00000000 00000000 c88af900
-> [  301.781911] fe40: c1004f48 c797ff78 00001000 00004004 c03efcb8 c02c6100 00001000 00000000
-> [  301.790108] fe60: bec73e04 00001000 00000000 00000000 00001000 c797fe60 00000001 00000000
-> [  301.798304] fe80: c88af900 00000000 00000000 00000000 00000000 00000000 00000000 40040000
-> [  301.806501] fea0: 00000000 00000000 c1004f48 830d3f3e c88af900 c02c6018 c1c7a770 bec73e04
-> [  301.814697] fec0: 00001000 c797ff78 00000001 c03efd0c 00001000 c88af900 00000000 bec73e04
-> [  301.822894] fee0: c1004f48 c797ff78 00000001 c029c728 c887ca20 01100cca 0000004f 0045f000
-> [  301.831091] ff00: 00000254 c790c010 c790c010 00000000 00000000 00000000 c5f6117c eeece9b8
-> [  301.839288] ff20: 00000000 830d3f3e 00000000 c797ffb0 c79fc000 80000007 0045f5b8 00000254
-> [  301.847484] ff40: c79fc040 00000004 c887ca20 830d3f3e 00000000 c1004f48 c88af900 00000000
-> [  301.855681] ff60: 00000000 c88af900 bec73e04 00001000 00000000 c029cd68 00000000 00000000
-> [  301.863877] ff80: 00000000 830d3f3e 00000000 00000000 01000000 00000003 c0100284 c1b8abc0
-> [  301.872074] ffa0: 00000003 c0100060 00000000 00000000 00000003 bec73e04 00001000 00000000
-> [  301.880270] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> [  301.888468] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410 60000010 00000003 00000000 00000000
-> [  301.896666] [<c018ca40>] (irq_debug_show) from [<c02c5cb8>] (seq_read_iter+0x1a4/0x504)
-> [  301.904700] [<c02c5cb8>] (seq_read_iter) from [<c02c6100>] (seq_read+0xe8/0x12c)
-> [  301.912117] [<c02c6100>] (seq_read) from [<c03efd0c>] (full_proxy_read+0x54/0x70)
-> [  301.919623] [<c03efd0c>] (full_proxy_read) from [<c029c728>] (vfs_read+0xa0/0x2c8)
-> [  301.927214] [<c029c728>] (vfs_read) from [<c029cd68>] (ksys_read+0x58/0xd0)
-> [  301.934195] [<c029cd68>] (ksys_read) from [<c0100060>] (ret_fast_syscall+0x0/0x54)
-> [  301.941785] Exception stack(0xc797ffa8 to 0xc797fff0)
-> [  301.946849] ffa0:                   00000000 00000000 00000003 bec73e04 00001000 00000000
-> [  301.955045] ffc0: 00000000 00000000 01000000 00000003 00000003 00000001 00000001 00000000
-> [  301.963241] ffe0: bec73d98 bec73d88 b6f81f88 b6f81410
-> [  301.968304] Code: bad PC value
-> [  301.971365] ---[ end trace fe25fd26d042b605 ]---
-> [  301.975992] Kernel panic - not syncing: Fatal exception
-> [  301.981229] CPU0: stopping
-> [  301.983946] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D           5.16.0-rc1+ #192
-> [  301.991884] Hardware name: Marvell Armada 380/385 (Device Tree)
-> [  301.997817] [<c010e120>] (unwind_backtrace) from [<c010a170>] (show_stack+0x10/0x14)
-> [  302.005587] [<c010a170>] (show_stack) from [<c0bbf108>] (dump_stack_lvl+0x40/0x4c)
-> [  302.013179] [<c0bbf108>] (dump_stack_lvl) from [<c010c3f8>] (do_handle_IPI+0xf4/0x128)
-> [  302.021117] [<c010c3f8>] (do_handle_IPI) from [<c010c444>] (ipi_handler+0x18/0x20)
-> [  302.028707] [<c010c444>] (ipi_handler) from [<c0185c5c>] (handle_percpu_devid_irq+0x78/0x124)
-> [  302.037256] [<c0185c5c>] (handle_percpu_devid_irq) from [<c017ffb8>] (generic_handle_domain_irq+0x44/0x88)
-> [  302.046938] [<c017ffb8>] (generic_handle_domain_irq) from [<c05f051c>] (gic_handle_irq+0x74/0x88)
-> [  302.055839] [<c05f051c>] (gic_handle_irq) from [<c0bc7ef8>] (generic_handle_arch_irq+0x34/0x44)
-> [  302.064564] [<c0bc7ef8>] (generic_handle_arch_irq) from [<c0100b10>] (__irq_svc+0x50/0x68)
-> [  302.072851] Exception stack(0xc1001f00 to 0xc1001f48)
-> [  302.077916] 1f00: 000d6830 00000000 00000001 c0116be0 c1004f90 c1004fd4 00000001 00000000
-> [  302.086114] 1f20: c1004f48 c0f5d2a8 c1009e80 00000000 00000000 c1001f50 c01076f4 c01076f8
-> [  302.094309] 1f40: 60000013 ffffffff
-> [  302.097804] [<c0100b10>] (__irq_svc) from [<c01076f8>] (arch_cpu_idle+0x38/0x3c)
-> [  302.105223] [<c01076f8>] (arch_cpu_idle) from [<c0bcf3a0>] (default_idle_call+0x1c/0x2c)
-> [  302.113338] [<c0bcf3a0>] (default_idle_call) from [<c015db34>] (do_idle+0x1c8/0x218)
-> [  302.121106] [<c015db34>] (do_idle) from [<c015de40>] (cpu_startup_entry+0x18/0x20)
-> [  302.128697] [<c015de40>] (cpu_startup_entry) from [<c0f00fec>] (start_kernel+0x650/0x694)
-> [  302.136901] Rebooting in 3 seconds..
-> ---
->  drivers/pci/controller/pci-mvebu.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index 31f53a019b8f..951030052358 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -1713,8 +1713,15 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
->  
->  		/* Remove IRQ domains. */
-> -		if (port->intx_irq_domain)
-> +		if (port->intx_irq_domain) {
-> +			int virq, j;
-> +			for (j = 0; j < PCI_NUM_INTX; j++) {
-> +				virq = irq_find_mapping(port->intx_irq_domain, j);
-> +				if (virq > 0)
-> +					irq_dispose_mapping(virq);
-> +			}
->  			irq_domain_remove(port->intx_irq_domain);
-> +		}
->  
->  		/* Free config space for emulated root bridge. */
->  		pci_bridge_emul_cleanup(&port->bridge);
-> -- 
-> 2.20.1
-> 
+vim +6679 Documentation/virt/kvm/api.rst
+
+  6667	
+  6668	  };
+  6669	
+  6670	::
+  6671			/* KVM_EXIT_MEMORY_FAULT */
+  6672			struct {
+  6673	  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+  6674				__u32 flags;
+  6675				__u32 padding;
+  6676				__u64 gpa;
+  6677				__u64 size;
+  6678			} memory;
+> 6679	If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
+  6680	encountered a memory error which is not handled by KVM kernel module and
+  6681	userspace may choose to handle it. The 'flags' field indicates the memory
+  6682	properties of the exit.
+  6683	
+  6684	 - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+  6685	   private memory access when the bit is set otherwise the memory error is
+  6686	   caused by shared memory access when the bit is clear.
+  6687	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

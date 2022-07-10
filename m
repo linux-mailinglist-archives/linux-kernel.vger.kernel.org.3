@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A099056CD97
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 09:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E6456CD99
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 09:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiGJHID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 03:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S229557AbiGJHLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 03:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGJHIA (ORCPT
+        with ESMTP id S229469AbiGJHLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 03:08:00 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B631261E
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 00:07:59 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id C91812F8519;
-        Sun, 10 Jul 2022 09:07:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1657436878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=98eZSVAq1zDGzv3qQXiSN9bWKqJX1e7UtCrshS/cBJw=;
-        b=HQuj5cM8WTNUM6V9zh3pHUHOSJr+wlh+UJjuviPbRwC3hGtYYOJ5JJS8mIeO7N74SdYgJ5
-        BwDJoJsiZBeRk1Z2ze6wZnb+FwQ1kbhtL7kTltFb9SHJsZxRe98g3DxspPDyHVPwuX6xQA
-        rrW5VkA6bZUUdsCbwV1YysYHBVWzlGpeA0I/zw/Ix/kRkywGZB2512xL9jEZZky/2uHa39
-        uvF+G6jLNVKqut+vjktzyMeXmbkXjbBZbT7zsTePNh9tT6gfsZWyzYlSJLshgrEIt3fZvr
-        h3NcnGVKlD2XJy76bDsfBM3fBEIR16SK5AMr5ZXiJW6Zo4dmAFp76cLcMpND/g==
-Message-ID: <54caa91f8b430e03770854d916f6eae27a7d63f9.camel@svanheule.net>
-Subject: Re: linux-next: manual merge of the mm tree with the bitmap tree
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Sun, 10 Jul 2022 09:07:56 +0200
-In-Reply-To: <20220704172609.27ec5d8c@canb.auug.org.au>
-References: <20220704165841.1637cfff@canb.auug.org.au>
-         <20220704172609.27ec5d8c@canb.auug.org.au>
+        Sun, 10 Jul 2022 03:11:22 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20606DEA1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 00:11:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id r6-20020a5b06c6000000b006693f6a6d67so1795389ybq.7
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 00:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=yAMjD7bFyIwsVP6jYrt8xQond+JqwS9zkIdAHuIkxN4=;
+        b=liUn+rKXpXfrSoXvO27l9hLOj7oo5CX3m8yhnF3O8Uo0ba67YaoDhrup80Hbcz/pZt
+         3kEuSGbXJ20Wjh0GYHTqFpZtKEZTJfIOo6ThgYoOEp2lTm2OD1kiiQOE5AlkPCIb7FhR
+         Tgr1uBsd4QNXfMDjRN98RrNJXH2RxHP4DsVvOShzHxsugmZFmGMPWkmfqWEUF6RLrBlh
+         cvl2b5KOOrsYKyDUTpPB8jei5OI4Mvz7jOa92WwuRm+EyFtKNtzWbal3Xi9gB2ZoXySc
+         /UwtJaMhzidFnMAMzLeSU447Q7mJxgTTUU8bSkvqarH+A4jBk0DqFjmT0m4eHC3F5Kka
+         kbrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=yAMjD7bFyIwsVP6jYrt8xQond+JqwS9zkIdAHuIkxN4=;
+        b=1uXfxSt1b1NB0HGJgHISQhpOapwZ2Hb99ebIGjh7oZEFncOjMcvgJPvJiuQv5ORdcO
+         +TqaxYaz1oycDtcsVNGdOSTSSmqIemoPT/KakZUogD60wia1182tMUFZKVScWuZl2iJg
+         Jv1m8Dd/z3czC2aoYJjy9c08JQIIzba5QTMHt3UJihgiV0bpiKE0YPFTidBxvtGpsA3N
+         ycL2WwZpyLgVcYnCvILjdPjNG/thEV8jJ484UPx3JPLUjWY3Hl58b5WSNdtyVNfOu/33
+         j2E9P+0vNP/Y6brrCYXxtOn1zos2DZAwXVSgJwttc0zMWim63/8k1oXOL9fP+EYBWl+Q
+         RLrA==
+X-Gm-Message-State: AJIora8eY9b/pdq5+jK+5Epy+I9b0SRoWfgqlJxssvm7529PVsEWPhxb
+        XOIsCwIhiw7nGk19sz6DIZJt+6NGw9zA
+X-Google-Smtp-Source: AGRyM1uY19WwEDO1WCIR2j0jrtOz0gxs4GLwPuef+3yW0ZQEqrwPS8ucUN0ZHVTBtuSCTsnBGf4HM4ONI3cb
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:1844:d82b:e1a:5303])
+ (user=maskray job=sendgmr) by 2002:a05:6902:706:b0:66e:ef10:1f7 with SMTP id
+ k6-20020a056902070600b0066eef1001f7mr5952684ybt.610.1657437080152; Sun, 10
+ Jul 2022 00:11:20 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 00:11:17 -0700
+Message-Id: <20220710071117.446112-1-maskray@google.com>
+Mime-Version: 1.0
+Subject: [PATCH] riscv: Pass -mno-relax only on lld < 15.0.0
+From:   Fangrui Song <maskray@google.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     Khem Raj <raj.khem@gmail.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Fangrui Song <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+lld since
+https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec77262d392e2923e1d680f6985
+(milestone: 15.0.0) has implemented some RISC-V linker relaxation.
+-mno-relax is no longer needed in KBUILD_CFLAGS/KBUILD_AFLAGS to
+suppress R_RISCV_ALIGN which older lld can not handle:
 
-On Mon, 2022-07-04 at 17:26 +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> On Mon, 4 Jul 2022 16:58:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au>
-> wrote:
-> >=20
-> > Today's linux-next merge of the mm tree got a conflict in:
-> >=20
-> > =C2=A0 include/linux/cpumask.h
-> >=20
-> > between commits:
-> >=20
-> > =C2=A0 50e413c31800 ("lib/cpumask: change return types to unsigned")
-> > =C2=A0 e32bd0390739 ("lib/cpumask: move one-line wrappers around find_b=
-it to the
-> > header")
-> >=20
-> > from the bitmap tree and commits:
-> >=20
-> > =C2=A0 2b0b9f2665b2 ("cpumask: Fix invalid uniprocessor mask assumption=
-")
-> > =C2=A0 284d22458843 ("cpumask: update cpumask_next_wrap() signature")
-> >=20
-> > from the mm tree.
-> >=20
-> > I fixed it up (I hope, see below) and can carry the fix as necessary. T=
-his
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.=C2=A0 You may also want to consider cooperati=
-ng
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
->=20
+ld.lld: error: capability.c:(.fixup+0x0): relocation R_RISCV_ALIGN requires unimplemented linker relaxation; recompile with -mno-relax but the .o is already compiled with -mno-relax
 
-Thanks for solving the conflicts, looks fine to me. I've asked Andrew to re=
-order
-my patches. The end result for the series should be the same though, and I =
-don't
-think my patches should require too many changes anymore.
+Signed-off-by: Fangrui Song <maskray@google.com>
+---
+ arch/riscv/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If further merge conflicts arise with Yury's cpumask patches, I'm also fine=
- with
-them being run as one series if that would make things easier.
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 34cf8a598617..7e4ceb2a0981 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -37,6 +37,7 @@ else
+ endif
+ 
+ ifeq ($(CONFIG_LD_IS_LLD),y)
++ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
+ 	KBUILD_CFLAGS += -mno-relax
+ 	KBUILD_AFLAGS += -mno-relax
+ ifndef CONFIG_AS_IS_LLVM
+@@ -44,6 +45,7 @@ ifndef CONFIG_AS_IS_LLVM
+ 	KBUILD_AFLAGS += -Wa,-mno-relax
+ endif
+ endif
++endif
+ 
+ # ISA string setting
+ riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+-- 
+2.37.0.144.g8ac04bfd2-goog
 
-Best,
-Sander

@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE8456CC1D
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 02:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3BD56CC21
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 03:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiGJAwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 20:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S229525AbiGJBJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 21:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJAwb (ORCPT
+        with ESMTP id S229450AbiGJBJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 20:52:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA613DC1;
-        Sat,  9 Jul 2022 17:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657414351; x=1688950351;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wsHA4c51RxzkUCE1NRkYTGBilCE4XRq7RWUHAqgsvfg=;
-  b=SK/ndou0bx0VZd1VvogNol86Y9NfLQeKzgar8wbB/yz6aPk14DZE4kOD
-   uOV/x3ksECjBFFbsqBDtCmsu9zWe9hIxqRk17chJht47PHpvD8bgphoAg
-   klGWxmeOCiKxN9xTwLPupIj5XxtXxphJ0O4nA/TDzt/Wg5ptaFgM7q9ht
-   PGbMoZRh+u2X+HhMJda0+anVVpywS0Lu9ma4l/2PRRNsI7BwnzaJRDWAC
-   PqVFL3DtIeUFw5vXrnVaLOkQoff/H0v0AJK2ggcroBTvZZubRAwMsg0Tq
-   5Eyl5ChHuDLnRi5my0EAcS7rFcXflhS9ITxgdFAPCOZIKzDA0M3WPo+n1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="310065166"
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="310065166"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 17:52:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="721243583"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 Jul 2022 17:52:29 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oALBP-000PKa-9S;
-        Sun, 10 Jul 2022 00:52:23 +0000
-Date:   Sun, 10 Jul 2022 08:52:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 14/368] htmldocs:
- Documentation/filesystems/xfs-online-fsck-design.rst:822: WARNING: Duplicate
- explicit target name: "inode".
-Message-ID: <202207100833.M6QSi3IA-lkp@intel.com>
+        Sat, 9 Jul 2022 21:09:34 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF579F581;
+        Sat,  9 Jul 2022 18:09:33 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f11so1748268plr.4;
+        Sat, 09 Jul 2022 18:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=r5jc2nEo8bPKdDmH/H54BQ/Opl9OOO6xZc/Wuy7HkMw=;
+        b=JeFsBZtY/xigvdDMsTfmVcwpogqPlv0O8/hpQaoEvjjo0IArbvipd5tpl/ZgGE/FcH
+         trmdZAFdTr/2b+1wFAAr6EiFKxYQgiHHAD2Dnrkmk+wvKu8VubJHhJKaUrqYfGzV6PsI
+         HlH9WzU9hItxUF16wUlIOLBWfrmvyxDsMheQW63dPKH2QyV9ROdHDPYAgrTFFuIAb32E
+         MYiDhagitGHlZ63onZzjkjNs8v4fIAohY34K9EbbyISHc5I4OYuiFG98hqrBHJUSv4Ha
+         tojG+08gVYwyYrrqo394SzZIL1JJnIcazrf/GOpZQNhWG6HZF/yWy8yPkfejf/mVupYB
+         IZiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=r5jc2nEo8bPKdDmH/H54BQ/Opl9OOO6xZc/Wuy7HkMw=;
+        b=JFLJrdbEFUTHjMJDU4ebpDYh+IazSQOzAvb4jpbtv5hxBc8e98du2Qqn/7AX2M2IF3
+         hhmHaeRpsmATXOLGPTCNc1E3om4+hfxqR/x9nf+RhgoAH5tf2UNHL3jUn8nmU1th3QbS
+         6XS30i0DQ/w0F6IyKqExlfTtV/dXEVW5feCKYlA5i0UWAahBmaIDw0L6/fhh2rYfYJ1I
+         humFq/fdJPsalGvq4HfzHQj9jb2SAVgWg1z6PdMcqGrzOC9dFhRIC+O8dc7cWgT2YBEd
+         k4+J3QGqXLDuSS6v5G43Y7M5bDDar/Eexvq3QXyqKIMSh7eE6UHXb390w6ipyMNZDFVZ
+         G5oQ==
+X-Gm-Message-State: AJIora/PgNhCABXdBZxEfUK0wOyzO3BUlGlxK7OlcJB8Si5TodONVVxM
+        xlrQt1Utep+57Z6pjy1uGoI=
+X-Google-Smtp-Source: AGRyM1u0K4+UXqxpDbEfF/pxtOesHa+Ys+8HaGFSfguhd6WUGiPfpJA/RshLwZmbxMkvIuDQAOvLzg==
+X-Received: by 2002:a17:90a:9d8a:b0:1ef:7a8d:1808 with SMTP id k10-20020a17090a9d8a00b001ef7a8d1808mr9221394pjp.135.1657415373004;
+        Sat, 09 Jul 2022 18:09:33 -0700 (PDT)
+Received: from [192.168.43.80] (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa78f18000000b0052ab6590290sm2065137pfr.88.2022.07.09.18.09.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Jul 2022 18:09:32 -0700 (PDT)
+Message-ID: <954ed2c8-9e1b-e8f9-bf07-6248dc6ff954@gmail.com>
+Date:   Sun, 10 Jul 2022 08:09:23 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v13 00/14] Multi-Gen LRU Framework
+Content-Language: en-US
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>
+References: <20220706220022.968789-1-yuzhao@google.com>
+ <c576d1cc-9f67-4cf7-a851-48bc0e9f0082@gmail.com>
+ <CAOUHufbhmma8phX4arNwF10xBf7as=gtc1Y7k01f6CD3v04-QQ@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CAOUHufbhmma8phX4arNwF10xBf7as=gtc1Y7k01f6CD3v04-QQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   569bd1ce4bb5c53a1b892fbe6d99693bf637063b
-commit: 4dda10b2ba91b4d387f520a27cbd909d1d56374e [14/368] xfs: document technical aspects of kernel space file repair code
-reproduce: make htmldocs
+On 7/10/22 02:31, Yu Zhao wrote:
+> 
+> If you are on the latest mm-unstable, then please
+> git pull https://github.com/yuzhaogoogle/linux.git
+> for-mm-unstable-2022-07-09-03-05
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fetched, thanks.
 
-All warnings (new ones prefixed by >>):
-
->> Documentation/filesystems/xfs-online-fsck-design.rst:822: WARNING: Duplicate explicit target name: "inode".
-
-vim +/inode +822 Documentation/filesystems/xfs-online-fsck-design.rst
-
-08025a5b429713 Darrick J. Wong 2022-06-10  820  
-08025a5b429713 Darrick J. Wong 2022-06-10  821  Kernel Algorithms and Data Structures
-08025a5b429713 Darrick J. Wong 2022-06-10 @822  =====================================
-08025a5b429713 Darrick J. Wong 2022-06-10  823  
-
-:::::: The code at line 822 was first introduced by commit
-:::::: 08025a5b429713a0fbbbe9747c496d3de200d0ce xfs: document technical aspects of kernel space metadata repair code
-
-:::::: TO: Darrick J. Wong <djwong@kernel.org>
-:::::: CC: Darrick J. Wong <djwong@kernel.org>
+I think in the next reroll, specify --base to git-format-patch(1),
+and also mention base tree for this series.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara

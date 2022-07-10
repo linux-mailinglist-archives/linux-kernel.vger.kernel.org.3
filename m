@@ -2,195 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918E556D0B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB40656D0B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiGJSPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 14:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S229523AbiGJSWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 14:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGJSO7 (ORCPT
+        with ESMTP id S229463AbiGJSWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 14:14:59 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5E0D6252;
-        Sun, 10 Jul 2022 11:14:58 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 51B5B204C41B; Sun, 10 Jul 2022 11:14:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51B5B204C41B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657476898;
-        bh=nGGZGIK6XLCZSbEZ1/OXjmDPFwgUs7UXTafZHcI4weA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=L2rBPxAIXmzEDtfVlcnmfOW1ImTkmiS9MkWSYI+VZlgAa5TyiEgoaE6X0WZptftvF
-         UBd+8VelYU6+oYokZWk5lmHrjY/oDJey35+sHnVD1u6qrlSawb9jBC4BLnFYCJ3gLm
-         w3jAC5LN5/jHfqQc6hkU4FjjZMMkwOekZVsuy64I=
-Date:   Sun, 10 Jul 2022 11:14:58 -0700
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Shradha Gupta <shradhagupta@microsoft.com>,
-        Praveen Kumar <kumarpraveen@microsoft.com>
-Subject: [PATCH v2] Drivers: hv: vm_bus: Handle vmbus rescind calls after
- vmbus is suspended
-Message-ID: <20220710181458.GA20827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        Sun, 10 Jul 2022 14:22:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E23EE07;
+        Sun, 10 Jul 2022 11:22:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0338160E8B;
+        Sun, 10 Jul 2022 18:22:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5630BC341C8;
+        Sun, 10 Jul 2022 18:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657477323;
+        bh=fFLHdaTrkdL546hiavbwZ4q6JyKxUPTO4mCIXRkM4ZQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ojK40enGcuer2RNiPxNMGa9P6bv06ZfLhTK1nB7O87SXb1qLc3JDuplfTYSIZ5V8P
+         SkoP7BOBQ8IxIenw8rrTP7Z1XnoKNRjWqbIEwnl2u8Iikx62dRbdbe9fY5QK8Qwwkt
+         l1yvo3vUc3Avxlcr3I3QjLVkEzknIDVPh6X5ZBKpZF7YyC+/UQii9IyKm21YNQQrqI
+         1ITC+VnR/nb+3e1lTPG9/uYZ4eSd3CYuPwg71ptlUKwmKQooutWLfCxCjvkYuGdWzE
+         V2ZZaX7713W03hxWC9opx5v22vgRsAW9yzgd+2BAhLGImT67qbtdg6L9BnXy/bAinB
+         wUeIRALm4Al5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33339E45BE0;
+        Sun, 10 Jul 2022 18:22:03 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next PATCH v5 00/12] octeontx2: Exact Match Table.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165747732320.1773.1868461985348849288.git-patchwork-notify@kernel.org>
+Date:   Sun, 10 Jul 2022 18:22:03 +0000
+References: <20220708044151.2972645-1-rkannoth@marvell.com>
+In-Reply-To: <20220708044151.2972645-1-rkannoth@marvell.com>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a flag to indicate that the vmbus is suspended so we should ignore
-any offer message. Add a new work_queue for rescind msg, so we could drain
-it along with other offer work_queues upon suspension.
-It was observed that in some hibernation related scenario testing, after
-vmbus_bus_suspend() we get rescind offer message for the vmbus. This would
-lead to processing of a rescind message for a channel that has already been
-suspended.
+Hello:
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
----
+This series was applied to bpf/bpf-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Changes in v2:
-* Rename the ignore_offer_rescind_msg flag to ignore_any_offer_msg, to
-  indicate that the flag can cause any offer message to be dropped.
-* Remove redundent tasklet_enable(), tasklet_disable() calls around
-  ignore_any_offer_msg flag when value is changed from true to false.
-* Add comment about tasklet_enable() providing memory barrier.
-* In vmbus_bus_suspend() after we drain all workqueues, remove the code
-  to wait for any offer_in_progress
+On Fri, 8 Jul 2022 10:11:39 +0530 you wrote:
+> Exact match table and Field hash support for CN10KB silicon
+> 
+> ChangeLog
+> ---------
+>   1) V0 to V1
+>      a) Removed change IDs from all patches.
+> 
+> [...]
 
----
- drivers/hv/connection.c   | 11 +++++++++++
- drivers/hv/hyperv_vmbus.h |  7 +++++++
- drivers/hv/vmbus_drv.c    | 29 +++++++++++++++++++++--------
- 3 files changed, 39 insertions(+), 8 deletions(-)
+Here is the summary with links:
+  - [net-next,v5,01/12] octeontx2-af: Use hashed field in MCAM key
+    https://git.kernel.org/bpf/bpf-next/c/a95ab93550d3
+  - [net-next,v5,02/12] octeontx2-af: Exact match support
+    (no matching commit)
+  - [net-next,v5,03/12] octeontx2-af: Exact match scan from kex profile
+    https://git.kernel.org/bpf/bpf-next/c/60ec39311750
+  - [net-next,v5,04/12] octeontx2-af: devlink configuration support
+    (no matching commit)
+  - [net-next,v5,05/12] octeontx2-af: FLR handler for exact match table.
+    https://git.kernel.org/bpf/bpf-next/c/799f02ef2ce3
+  - [net-next,v5,06/12] octeontx2-af: Drop rules for NPC MCAM
+    (no matching commit)
+  - [net-next,v5,07/12] octeontx2-af: Debugsfs support for exact match.
+    https://git.kernel.org/bpf/bpf-next/c/01b9228b20ad
+  - [net-next,v5,08/12] octeontx2: Modify mbox request and response structures
+    https://git.kernel.org/bpf/bpf-next/c/68793a8bbfcd
+  - [net-next,v5,09/12] octeontx2-af: Wrapper functions for MAC addr add/del/update/reset
+    (no matching commit)
+  - [net-next,v5,10/12] octeontx2-af: Invoke exact match functions if supported
+    https://git.kernel.org/bpf/bpf-next/c/84926eb57dbf
+  - [net-next,v5,11/12] octeontx2-pf: Add support for exact match table.
+    https://git.kernel.org/bpf/bpf-next/c/e56468377fa0
+  - [net-next,v5,12/12] octeontx2-af: Enable Exact match flag in kex profile
+    https://git.kernel.org/bpf/bpf-next/c/7189d28e7e2d
 
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 6218bbf6863a..eca7afd366d6 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -171,6 +171,14 @@ int vmbus_connect(void)
- 		goto cleanup;
- 	}
- 
-+	vmbus_connection.rescind_work_queue =
-+		create_workqueue("hv_vmbus_rescind");
-+	if (!vmbus_connection.rescind_work_queue) {
-+		ret = -ENOMEM;
-+		goto cleanup;
-+	}
-+	vmbus_connection.ignore_any_offer_msg = false;
-+
- 	vmbus_connection.handle_primary_chan_wq =
- 		create_workqueue("hv_pri_chan");
- 	if (!vmbus_connection.handle_primary_chan_wq) {
-@@ -357,6 +365,9 @@ void vmbus_disconnect(void)
- 	if (vmbus_connection.handle_primary_chan_wq)
- 		destroy_workqueue(vmbus_connection.handle_primary_chan_wq);
- 
-+	if (vmbus_connection.rescind_work_queue)
-+		destroy_workqueue(vmbus_connection.rescind_work_queue);
-+
- 	if (vmbus_connection.work_queue)
- 		destroy_workqueue(vmbus_connection.work_queue);
- 
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index 4f5b824b16cf..dc673edf053c 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -261,6 +261,13 @@ struct vmbus_connection {
- 	struct workqueue_struct *work_queue;
- 	struct workqueue_struct *handle_primary_chan_wq;
- 	struct workqueue_struct *handle_sub_chan_wq;
-+	struct workqueue_struct *rescind_work_queue;
-+
-+	/*
-+	 * On suspension of the vmbus, the accumulated offer messages
-+	 * must be dropped.
-+	 */
-+	bool ignore_any_offer_msg;
- 
- 	/*
- 	 * The number of sub-channels and hv_sock channels that should be
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 547ae334e5cd..4ba0eb2441cf 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1160,7 +1160,9 @@ void vmbus_on_msg_dpc(unsigned long data)
- 			 * work queue: the RESCIND handler can not start to
- 			 * run before the OFFER handler finishes.
- 			 */
--			schedule_work(&ctx->work);
-+			if (vmbus_connection.ignore_any_offer_msg)
-+				break;
-+			queue_work(vmbus_connection.rescind_work_queue, &ctx->work);
- 			break;
- 
- 		case CHANNELMSG_OFFERCHANNEL:
-@@ -1186,6 +1188,8 @@ void vmbus_on_msg_dpc(unsigned long data)
- 			 * to the CPUs which will execute the offer & rescind
- 			 * works by the time these works will start execution.
- 			 */
-+			if (vmbus_connection.ignore_any_offer_msg)
-+				break;
- 			atomic_inc(&vmbus_connection.offer_in_progress);
- 			fallthrough;
- 
-@@ -2446,15 +2450,20 @@ static int vmbus_acpi_add(struct acpi_device *device)
- #ifdef CONFIG_PM_SLEEP
- static int vmbus_bus_suspend(struct device *dev)
- {
-+	struct hv_per_cpu_context *hv_cpu = per_cpu_ptr(
-+			hv_context.cpu_context, VMBUS_CONNECT_CPU);
- 	struct vmbus_channel *channel, *sc;
- 
--	while (atomic_read(&vmbus_connection.offer_in_progress) != 0) {
--		/*
--		 * We wait here until the completion of any channel
--		 * offers that are currently in progress.
--		 */
--		usleep_range(1000, 2000);
--	}
-+	tasklet_disable(&hv_cpu->msg_dpc);
-+	vmbus_connection.ignore_any_offer_msg = true;
-+	/* The tasklet_enable() takes care of providing a memory barrier */
-+	tasklet_enable(&hv_cpu->msg_dpc);
-+
-+	/* Drain all the workqueues as we are in suspend */
-+	drain_workqueue(vmbus_connection.rescind_work_queue);
-+	drain_workqueue(vmbus_connection.work_queue);
-+	drain_workqueue(vmbus_connection.handle_primary_chan_wq);
-+	drain_workqueue(vmbus_connection.handle_sub_chan_wq);
- 
- 	mutex_lock(&vmbus_connection.channel_mutex);
- 	list_for_each_entry(channel, &vmbus_connection.chn_list, listentry) {
-@@ -2527,10 +2536,14 @@ static int vmbus_bus_suspend(struct device *dev)
- 
- static int vmbus_bus_resume(struct device *dev)
- {
-+	struct hv_per_cpu_context *hv_cpu = per_cpu_ptr(
-+			hv_context.cpu_context, VMBUS_CONNECT_CPU);
- 	struct vmbus_channel_msginfo *msginfo;
- 	size_t msgsize;
- 	int ret;
- 
-+	vmbus_connection.ignore_any_offer_msg = false;
-+
- 	/*
- 	 * We only use the 'vmbus_proto_version', which was in use before
- 	 * hibernation, to re-negotiate with the host.
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

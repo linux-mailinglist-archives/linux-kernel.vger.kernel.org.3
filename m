@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F37156CC1C
+	by mail.lfdr.de (Postfix) with ESMTP id EBE8456CC1D
 	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 02:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiGJAw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 20:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S229515AbiGJAwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Jul 2022 20:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJAw1 (ORCPT
+        with ESMTP id S229450AbiGJAwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 20:52:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A813D7D;
-        Sat,  9 Jul 2022 17:52:25 -0700 (PDT)
+        Sat, 9 Jul 2022 20:52:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA613DC1;
+        Sat,  9 Jul 2022 17:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657414346; x=1688950346;
+  t=1657414351; x=1688950351;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0WBawKch8FgdG5q67N7Y+VHMcNvqfbYKAysDrYg405o=;
-  b=R7RL5lu6EvmtSKSvrnd36UPqksSyoLgqRuvlRZ+ZSrrnoNdxF+J5TWhZ
-   QgK+tneR+MzAT7YFLxNUGiMY2Mk3w4NE00d5yfTPY6V/APyRKcA3n9ieD
-   +k+Gj8kLmd0KC0oWksbkyMIBvKt0rJ+l8GikZGPcXawddau4EQHGmPB1N
-   K5NnfN5xw+N6U5zwqy48caLu+a2HQMA9mzg0DfKh6mM3JjTsJBcmp5jvU
-   ELB59MldUnVX/RmUNFktVr9GkK6uVguNGRgE9MO50r7ZoysJMQk7EkZWs
-   MHJ1imufGDVFaTFghxloZgC61HWMsdt6XFNimvGdOiZwZaNwASoIK/FIS
+  bh=wsHA4c51RxzkUCE1NRkYTGBilCE4XRq7RWUHAqgsvfg=;
+  b=SK/ndou0bx0VZd1VvogNol86Y9NfLQeKzgar8wbB/yz6aPk14DZE4kOD
+   uOV/x3ksECjBFFbsqBDtCmsu9zWe9hIxqRk17chJht47PHpvD8bgphoAg
+   klGWxmeOCiKxN9xTwLPupIj5XxtXxphJ0O4nA/TDzt/Wg5ptaFgM7q9ht
+   PGbMoZRh+u2X+HhMJda0+anVVpywS0Lu9ma4l/2PRRNsI7BwnzaJRDWAC
+   PqVFL3DtIeUFw5vXrnVaLOkQoff/H0v0AJK2ggcroBTvZZubRAwMsg0Tq
+   5Eyl5ChHuDLnRi5my0EAcS7rFcXflhS9ITxgdFAPCOZIKzDA0M3WPo+n1
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="267512531"
+X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="310065166"
 X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="267512531"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 17:52:25 -0700
+   d="scan'208";a="310065166"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 17:52:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="594492129"
+   d="scan'208";a="721243583"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jul 2022 17:52:23 -0700
+  by orsmga004.jf.intel.com with ESMTP; 09 Jul 2022 17:52:29 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oALBP-000PKe-Al;
+        id 1oALBP-000PKa-9S;
         Sun, 10 Jul 2022 00:52:23 +0000
-Date:   Sun, 10 Jul 2022 08:52:14 +0800
+Date:   Sun, 10 Jul 2022 08:52:19 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        linux-doc@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 296/418] htmldocs:
- Documentation/virt/kvm/api.rst:6679: WARNING: Definition list ends without a
- blank line; unexpected unindent.
-Message-ID: <202207100806.ymoTKohh-lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 14/368] htmldocs:
+ Documentation/filesystems/xfs-online-fsck-design.rst:822: WARNING: Duplicate
+ explicit target name: "inode".
+Message-ID: <202207100833.M6QSi3IA-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   c2b43d6ee32b2f2de54395e7b2d7ba9bfa727608
-commit: e11dbdbae913817716494fb41eb22aa88e1464e0 [296/418] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   569bd1ce4bb5c53a1b892fbe6d99693bf637063b
+commit: 4dda10b2ba91b4d387f520a27cbd909d1d56374e [14/368] xfs: document technical aspects of kernel space file repair code
 reproduce: make htmldocs
 
 If you fix the issue, kindly add following tag where applicable
@@ -75,31 +74,20 @@ Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> Documentation/virt/kvm/api.rst:6679: WARNING: Definition list ends without a blank line; unexpected unindent.
+>> Documentation/filesystems/xfs-online-fsck-design.rst:822: WARNING: Duplicate explicit target name: "inode".
 
-vim +6679 Documentation/virt/kvm/api.rst
+vim +/inode +822 Documentation/filesystems/xfs-online-fsck-design.rst
 
-  6667	
-  6668	  };
-  6669	
-  6670	::
-  6671			/* KVM_EXIT_MEMORY_FAULT */
-  6672			struct {
-  6673	  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
-  6674				__u32 flags;
-  6675				__u32 padding;
-  6676				__u64 gpa;
-  6677				__u64 size;
-  6678			} memory;
-> 6679	If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
-  6680	encountered a memory error which is not handled by KVM kernel module and
-  6681	userspace may choose to handle it. The 'flags' field indicates the memory
-  6682	properties of the exit.
-  6683	
-  6684	 - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
-  6685	   private memory access when the bit is set otherwise the memory error is
-  6686	   caused by shared memory access when the bit is clear.
-  6687	
+08025a5b429713 Darrick J. Wong 2022-06-10  820  
+08025a5b429713 Darrick J. Wong 2022-06-10  821  Kernel Algorithms and Data Structures
+08025a5b429713 Darrick J. Wong 2022-06-10 @822  =====================================
+08025a5b429713 Darrick J. Wong 2022-06-10  823  
+
+:::::: The code at line 822 was first introduced by commit
+:::::: 08025a5b429713a0fbbbe9747c496d3de200d0ce xfs: document technical aspects of kernel space metadata repair code
+
+:::::: TO: Darrick J. Wong <djwong@kernel.org>
+:::::: CC: Darrick J. Wong <djwong@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service

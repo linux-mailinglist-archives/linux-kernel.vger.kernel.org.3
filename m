@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A5056CFD8
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1156CFEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 18:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiGJPtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 11:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S229652AbiGJQGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 12:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJPto (ORCPT
+        with ESMTP id S229477AbiGJQGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 11:49:44 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB06AA186;
-        Sun, 10 Jul 2022 08:49:40 -0700 (PDT)
+        Sun, 10 Jul 2022 12:06:13 -0400
+X-Greylist: delayed 954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Jul 2022 09:06:07 PDT
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 066E012ACD;
+        Sun, 10 Jul 2022 09:06:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=wBpy/
-        1Al1S+IcisW01w7tkfDPuEkN3RCpqdYUq79uMk=; b=L2qeanDab5hW+MJJIpYm8
-        AwHM0BIZvvx6zPAZIEyFVNefvE9GrYp6jnUO1zz9p2svPvspJI+RoSxx83fNAofQ
-        qHk+DdatyXsMS69ozlzcLhubohgUmCIP/Hg1bK3BUqL9pchWbFsscXzz0Yttx1Ok
-        miq6BOmcdBXJyLtl5eQWLg=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Vn4na
+        ovKTOZQthrjfaP/ehRTLiCmrzMOGVk+9JX62aE=; b=F1KUBvAfY9Xhge8HUoIqp
+        s2QIWtrjjeAKg2hkUhMwfBxsnSqZ0aIwppfw1HjZww0WrR9C5Quvz7/4gLXPb+sB
+        SdNdDxgEV2KkhlFPGxz2Wrd7/ox15HG8Eh2A8615v7nyiYdXuLp3A11srtXuauoM
+        IuKWgXc4jKalDUZjR1qcVE=
 Received: from localhost.localdomain (unknown [123.58.221.99])
-        by smtp1 (Coremail) with SMTP id GdxpCgDX35_J9MpiqnY_Ng--.21432S2;
-        Sun, 10 Jul 2022 23:48:29 +0800 (CST)
+        by smtp5 (Coremail) with SMTP id HdxpCgCHlzED9cpiFZjPNQ--.1936S2;
+        Sun, 10 Jul 2022 23:49:25 +0800 (CST)
 From:   williamsukatube@163.com
-To:     dvorkin@tibbo.com, wellslutw@gmail.com, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     arinc.unal@arinc9.com, sergio.paracuellos@gmail.com,
+        linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     William Dean <williamsukatube@gmail.com>,
         Hacash Robot <hacashRobot@santino.com>
-Subject: [PATCH] pinctrl: Add check for kcalloc
-Date:   Sun, 10 Jul 2022 23:48:22 +0800
-Message-Id: <20220710154822.2610801-1-williamsukatube@163.com>
+Subject: [PATCH] pinctrl: ralink: Check for null return of devm_kcalloc
+Date:   Sun, 10 Jul 2022 23:49:22 +0800
+Message-Id: <20220710154922.2610876-1-williamsukatube@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgDX35_J9MpiqnY_Ng--.21432S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtrWrKr4UKr17GF1fGr45KFg_yoWDWwc_ua
-        yrWFyDXrWUKF1xtrsFqrn3W34Fvw45Zr1Fvr1vqFy3Aay7Xw1UJr1kuFs5Wwn7Wr98CFZx
-        G3sFyr1Fya47KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5TWlPUUUUU==
+X-CM-TRANSID: HdxpCgCHlzED9cpiFZjPNQ--.1936S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZrW7Zw48Xw1fKw4fKryDKFg_yoW8JF4xpF
+        43ur15Ary5JrsrZFWjywnrZry3Wa18KrW3Ga4j9rZFvF45Aas7Cay5Krs2qrWDCrWkuw13
+        tr4aq342gFykAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b4_-dUUUUU=
 X-Originating-IP: [123.58.221.99]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiUQ06g2DEOjWbQAAAsV
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBiAY6g1aECCBQGAAAsF
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,31 +56,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: William Dean <williamsukatube@gmail.com>
 
-As the potential failure of the kcalloc(),
-it should be better to check it in order to
-avoid the dereference of the NULL pointer.
+Because of the possible failure of the allocation, data->domains might
+be NULL pointer and will cause the dereference of the NULL pointer
+later.
+Therefore, it might be better to check it and directly return -ENOMEM
+without releasing data manually if fails, because the comment of the
+devm_kmalloc() says "Memory allocated with this function is
+automatically freed on driver detach.".
 
-Fixes: aa74c44be19c8 ("pinctrl: Add driver for Sunplus SP7021")
+Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
 Reported-by: Hacash Robot <hacashRobot@santino.com>
 Signed-off-by: William Dean <williamsukatube@gmail.com>
 ---
- drivers/pinctrl/sunplus/sppctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pinctrl/ralink/pinctrl-ralink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/sppctl.c
-index 3ba47040ac42..2b3335ab56c6 100644
---- a/drivers/pinctrl/sunplus/sppctl.c
-+++ b/drivers/pinctrl/sunplus/sppctl.c
-@@ -871,6 +871,9 @@ static int sppctl_dt_node_to_map(struct pinctrl_dev *pctldev, struct device_node
- 	}
+diff --git a/drivers/pinctrl/ralink/pinctrl-ralink.c b/drivers/pinctrl/ralink/pinctrl-ralink.c
+index 63429a287434..770862f45b3f 100644
+--- a/drivers/pinctrl/ralink/pinctrl-ralink.c
++++ b/drivers/pinctrl/ralink/pinctrl-ralink.c
+@@ -266,6 +266,8 @@ static int ralink_pinctrl_pins(struct ralink_priv *p)
+ 						p->func[i]->pin_count,
+ 						sizeof(int),
+ 						GFP_KERNEL);
++		if (!p->func[i]->pins)
++			return -ENOMEM;
+ 		for (j = 0; j < p->func[i]->pin_count; j++)
+ 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
  
- 	*map = kcalloc(*num_maps + nmG, sizeof(**map), GFP_KERNEL);
-+	if (*map == NULL)
-+		return -ENOMEM;
-+
- 	for (i = 0; i < (*num_maps); i++) {
- 		dt_pin = be32_to_cpu(list[i]);
- 		pin_num = FIELD_GET(GENMASK(31, 24), dt_pin);
 -- 
 2.25.1
 

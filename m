@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9126556CE04
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093EA56CE05
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiGJImP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 04:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S229654AbiGJImS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 04:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiGJImI (ORCPT
+        with ESMTP id S229599AbiGJImI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 10 Jul 2022 04:42:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B4919006
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 01:42:06 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 08:42:04 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D9918E06
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 01:42:07 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 08:42:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1657442525;
+        s=2020; t=1657442526;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VGAjyWU20kLrXy6l9RxttzIT5bDQOg2DBWiqxR44Xfc=;
-        b=3t3bloTP04vTCJh0D5C2uM1tzuqo1/DPEBS0eRecR2W6b1PkA8YszxPhZi18vlPP1uEX/7
-        8jAq6m9sQa+zYDvn8mCl7R5vX/7iRY6t9e6Cpjs/bwrmL4sXBTKnPdB4fH2LGrMUgQrEFA
-        MNJ8BUNbtQ1TaATemnVerLAWZitLm/PNebuiYTPu81OAl+rf68ESfsL1nolIUxcE6oMwKM
-        CDlMBcVuVr4Q5KXGlsrawC38iJSOwHtJEy1mLMvOIAineJUBLf3OixMrUH2a09L78CdxGf
-        DSHo6iMuqsraxxmrq+axcKJnswMH0OyhpwAvJ6q3RUK/YdIvIS7ns13UWD3VaQ==
+        bh=0EOtz7vpgUTS4304ddQGPp+IZwuOOLtohDNYIOhYj+U=;
+        b=g/7MARbrpRXchHYBoq36AxgChYZxI1lv4dxDJ1mdEy+iBEsGXQA8pl0blI3FIlu/igmY7j
+        F1l4OCEDW7Hn4nOLHnBdo35EluAgKje7PtQO6doEfAEzzQlRgmi672CHjzOJHZ8wDIwMKw
+        q8YRt/d8jYPnf2AKcdykKdL51IFq9Dn51d9K42Y9XmAxaKmO+kRhMRN7kTZ1HrGzq0GDlh
+        xiFnfWbtxaqUJq/4+jfyEjzUeq84B8jWBO2U90BKB+rSr2adnAMDQNXzYw1bkmyKxpq6rI
+        1WvIw9HbTHIdZepnBgaZx4Sf+yFAjHEJEOhE4vZs3xZtWhXuCMPDvNJ6zQVdsw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1657442525;
+        s=2020e; t=1657442526;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VGAjyWU20kLrXy6l9RxttzIT5bDQOg2DBWiqxR44Xfc=;
-        b=9j4Lmiqo6PR/jLT+lIFkM9DZrD3OOVGZEDmHbhIW2Zbi4PLDNx6L6bvLSbe5MeUlSPTNQH
-        gzy31cb+NWFkzsAA==
+        bh=0EOtz7vpgUTS4304ddQGPp+IZwuOOLtohDNYIOhYj+U=;
+        b=uRHtIZpHjOGUlQYAUTFH+6polTOGkYi70bkSSC0Tj8mPRNKAWx7JTP25x0wB36KrXEI5au
+        6+RyUA7dMvygZyCQ==
 From:   "irqchip-bot for Lad Prabhakar" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip: Add RZ/G2L IA55 Interrupt
- Controller driver
+Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller: Add
+ Renesas RZ/G2L Interrupt Controller
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220707182314.66610-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220707182314.66610-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220707182314.66610-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220707182314.66610-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Message-ID: <165744252435.15455.7824326514765260489.tip-bot2@tip-bot2>
+Message-ID: <165744252532.15455.8001294897666223117.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,458 +69,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     3fed09559cd8be79568d368ce02bf7f2d56259b6
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3fed09559cd8be79568d368ce02bf7f2d56259b6
+Commit-ID:     96fed779d3d4cb3c221bb70e94de59b8dec0abfc
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/96fed779d3d4cb3c221bb70e94de59b8dec0abfc
 Author:        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-AuthorDate:    Thu, 07 Jul 2022 19:23:11 +01:00
+AuthorDate:    Thu, 07 Jul 2022 19:23:10 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Sun, 10 Jul 2022 09:30:00 +01:00
 
-irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+dt-bindings: interrupt-controller: Add Renesas RZ/G2L Interrupt Controller
 
-Add a driver for the Renesas RZ/G2L Interrupt Controller.
-
-This supports external pins being used as interrupts. It supports
-one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
-to be used as IRQ lines.
+Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220707182314.66610-4-prabhakar.mahadev-lad.rj@bp.renesas.com
+Link: https://lore.kernel.org/r/20220707182314.66610-3-prabhakar.mahadev-lad.rj@bp.renesas.com
 ---
- drivers/irqchip/Kconfig             |   8 +-
- drivers/irqchip/Makefile            |   1 +-
- drivers/irqchip/irq-renesas-rzg2l.c | 393 +++++++++++++++++++++++++++-
- 3 files changed, 402 insertions(+)
- create mode 100644 drivers/irqchip/irq-renesas-rzg2l.c
+ Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml | 133 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 133 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1f23a6b..b1ab851 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -242,6 +242,14 @@ config RENESAS_RZA1_IRQC
- 	  Enable support for the Renesas RZ/A1 Interrupt Controller, to use up
- 	  to 8 external interrupts with configurable sense select.
- 
-+config RENESAS_RZG2L_IRQC
-+	bool "Renesas RZ/G2L (and alike SoC) IRQC support" if COMPILE_TEST
-+	select GENERIC_IRQ_CHIP
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  Enable support for the Renesas RZ/G2L (and alike SoC) Interrupt Controller
-+	  for external devices.
-+
- config SL28CPLD_INTC
- 	bool "Kontron sl28cpld IRQ controller"
- 	depends on MFD_SL28CPLD=y || COMPILE_TEST
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 5b67450..04cb15b 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -51,6 +51,7 @@ obj-$(CONFIG_RDA_INTC)			+= irq-rda-intc.o
- obj-$(CONFIG_RENESAS_INTC_IRQPIN)	+= irq-renesas-intc-irqpin.o
- obj-$(CONFIG_RENESAS_IRQC)		+= irq-renesas-irqc.o
- obj-$(CONFIG_RENESAS_RZA1_IRQC)		+= irq-renesas-rza1.o
-+obj-$(CONFIG_RENESAS_RZG2L_IRQC)	+= irq-renesas-rzg2l.o
- obj-$(CONFIG_VERSATILE_FPGA_IRQ)	+= irq-versatile-fpga.o
- obj-$(CONFIG_ARCH_NSPIRE)		+= irq-zevio.o
- obj-$(CONFIG_ARCH_VT8500)		+= irq-vt8500.o
-diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
 new file mode 100644
-index 0000000..25fd8ee
+index 0000000..ffbb4ab
 --- /dev/null
-+++ b/drivers/irqchip/irq-renesas-rzg2l.c
-@@ -0,0 +1,393 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/G2L IRQC Driver
-+ *
-+ * Copyright (C) 2022 Renesas Electronics Corporation.
-+ *
-+ * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/io.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqdomain.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/spinlock.h>
-+
-+#define IRQC_IRQ_START			1
-+#define IRQC_IRQ_COUNT			8
-+#define IRQC_TINT_START			(IRQC_IRQ_START + IRQC_IRQ_COUNT)
-+#define IRQC_TINT_COUNT			32
-+#define IRQC_NUM_IRQ			(IRQC_TINT_START + IRQC_TINT_COUNT)
-+
-+#define ISCR				0x10
-+#define IITSR				0x14
-+#define TSCR				0x20
-+#define TITSR0				0x24
-+#define TITSR1				0x28
-+#define TITSR0_MAX_INT			16
-+#define TITSEL_WIDTH			0x2
-+#define TSSR(n)				(0x30 + ((n) * 4))
-+#define TIEN				BIT(7)
-+#define TSSEL_SHIFT(n)			(8 * (n))
-+#define TSSEL_MASK			GENMASK(7, 0)
-+#define IRQ_MASK			0x3
-+
-+#define TSSR_OFFSET(n)			((n) % 4)
-+#define TSSR_INDEX(n)			((n) / 4)
-+
-+#define TITSR_TITSEL_EDGE_RISING	0
-+#define TITSR_TITSEL_EDGE_FALLING	1
-+#define TITSR_TITSEL_LEVEL_HIGH		2
-+#define TITSR_TITSEL_LEVEL_LOW		3
-+
-+#define IITSR_IITSEL(n, sense)		((sense) << ((n) * 2))
-+#define IITSR_IITSEL_LEVEL_LOW		0
-+#define IITSR_IITSEL_EDGE_FALLING	1
-+#define IITSR_IITSEL_EDGE_RISING	2
-+#define IITSR_IITSEL_EDGE_BOTH		3
-+#define IITSR_IITSEL_MASK(n)		IITSR_IITSEL((n), 3)
-+
-+#define TINT_EXTRACT_HWIRQ(x)           FIELD_GET(GENMASK(15, 0), (x))
-+#define TINT_EXTRACT_GPIOINT(x)         FIELD_GET(GENMASK(31, 16), (x))
-+
-+struct rzg2l_irqc_priv {
-+	void __iomem *base;
-+	struct irq_fwspec fwspec[IRQC_NUM_IRQ];
-+	raw_spinlock_t lock;
-+};
-+
-+static struct rzg2l_irqc_priv *irq_data_to_priv(struct irq_data *data)
-+{
-+	return data->domain->host_data;
-+}
-+
-+static void rzg2l_irq_eoi(struct irq_data *d)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_IRQ_START;
-+	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+	u32 bit = BIT(hw_irq);
-+	u32 reg;
-+
-+	reg = readl_relaxed(priv->base + ISCR);
-+	if (reg & bit)
-+		writel_relaxed(reg & ~bit, priv->base + ISCR);
-+}
-+
-+static void rzg2l_tint_eoi(struct irq_data *d)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_TINT_START;
-+	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+	u32 bit = BIT(hw_irq);
-+	u32 reg;
-+
-+	reg = readl_relaxed(priv->base + TSCR);
-+	if (reg & bit)
-+		writel_relaxed(reg & ~bit, priv->base + TSCR);
-+}
-+
-+static void rzg2l_irqc_eoi(struct irq_data *d)
-+{
-+	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+	unsigned int hw_irq = irqd_to_hwirq(d);
-+
-+	raw_spin_lock(&priv->lock);
-+	if (hw_irq >= IRQC_IRQ_START && hw_irq <= IRQC_IRQ_COUNT)
-+		rzg2l_irq_eoi(d);
-+	else if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ)
-+		rzg2l_tint_eoi(d);
-+	raw_spin_unlock(&priv->lock);
-+	irq_chip_eoi_parent(d);
-+}
-+
-+static void rzg2l_irqc_irq_disable(struct irq_data *d)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d);
-+
-+	if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ) {
-+		struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+		u32 offset = hw_irq - IRQC_TINT_START;
-+		u32 tssr_offset = TSSR_OFFSET(offset);
-+		u8 tssr_index = TSSR_INDEX(offset);
-+		u32 reg;
-+
-+		raw_spin_lock(&priv->lock);
-+		reg = readl_relaxed(priv->base + TSSR(tssr_index));
-+		reg &= ~(TSSEL_MASK << tssr_offset);
-+		writel_relaxed(reg, priv->base + TSSR(tssr_index));
-+		raw_spin_unlock(&priv->lock);
-+	}
-+	irq_chip_disable_parent(d);
-+}
-+
-+static void rzg2l_irqc_irq_enable(struct irq_data *d)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d);
-+
-+	if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ) {
-+		struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+		unsigned long tint = (uintptr_t)d->chip_data;
-+		u32 offset = hw_irq - IRQC_TINT_START;
-+		u32 tssr_offset = TSSR_OFFSET(offset);
-+		u8 tssr_index = TSSR_INDEX(offset);
-+		u32 reg;
-+
-+		raw_spin_lock(&priv->lock);
-+		reg = readl_relaxed(priv->base + TSSR(tssr_index));
-+		reg |= (TIEN | tint) << TSSEL_SHIFT(tssr_offset);
-+		writel_relaxed(reg, priv->base + TSSR(tssr_index));
-+		raw_spin_unlock(&priv->lock);
-+	}
-+	irq_chip_enable_parent(d);
-+}
-+
-+static int rzg2l_irq_set_type(struct irq_data *d, unsigned int type)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_IRQ_START;
-+	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+	u16 sense, tmp;
-+
-+	switch (type & IRQ_TYPE_SENSE_MASK) {
-+	case IRQ_TYPE_LEVEL_LOW:
-+		sense = IITSR_IITSEL_LEVEL_LOW;
-+		break;
-+
-+	case IRQ_TYPE_EDGE_FALLING:
-+		sense = IITSR_IITSEL_EDGE_FALLING;
-+		break;
-+
-+	case IRQ_TYPE_EDGE_RISING:
-+		sense = IITSR_IITSEL_EDGE_RISING;
-+		break;
-+
-+	case IRQ_TYPE_EDGE_BOTH:
-+		sense = IITSR_IITSEL_EDGE_BOTH;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	raw_spin_lock(&priv->lock);
-+	tmp = readl_relaxed(priv->base + IITSR);
-+	tmp &= ~IITSR_IITSEL_MASK(hw_irq);
-+	tmp |= IITSR_IITSEL(hw_irq, sense);
-+	writel_relaxed(tmp, priv->base + IITSR);
-+	raw_spin_unlock(&priv->lock);
-+
-+	return 0;
-+}
-+
-+static int rzg2l_tint_set_edge(struct irq_data *d, unsigned int type)
-+{
-+	struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-+	unsigned int hwirq = irqd_to_hwirq(d);
-+	u32 titseln = hwirq - IRQC_TINT_START;
-+	u32 offset;
-+	u8 sense;
-+	u32 reg;
-+
-+	switch (type & IRQ_TYPE_SENSE_MASK) {
-+	case IRQ_TYPE_EDGE_RISING:
-+		sense = TITSR_TITSEL_EDGE_RISING;
-+		break;
-+
-+	case IRQ_TYPE_EDGE_FALLING:
-+		sense = TITSR_TITSEL_EDGE_FALLING;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	offset = TITSR0;
-+	if (titseln >= TITSR0_MAX_INT) {
-+		titseln -= TITSR0_MAX_INT;
-+		offset = TITSR1;
-+	}
-+
-+	raw_spin_lock(&priv->lock);
-+	reg = readl_relaxed(priv->base + offset);
-+	reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
-+	reg |= sense << (titseln * TITSEL_WIDTH);
-+	writel_relaxed(reg, priv->base + offset);
-+	raw_spin_unlock(&priv->lock);
-+
-+	return 0;
-+}
-+
-+static int rzg2l_irqc_set_type(struct irq_data *d, unsigned int type)
-+{
-+	unsigned int hw_irq = irqd_to_hwirq(d);
-+	int ret = -EINVAL;
-+
-+	if (hw_irq >= IRQC_IRQ_START && hw_irq <= IRQC_IRQ_COUNT)
-+		ret = rzg2l_irq_set_type(d, type);
-+	else if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ)
-+		ret = rzg2l_tint_set_edge(d, type);
-+	if (ret)
-+		return ret;
-+
-+	return irq_chip_set_type_parent(d, IRQ_TYPE_LEVEL_HIGH);
-+}
-+
-+static const struct irq_chip irqc_chip = {
-+	.name			= "rzg2l-irqc",
-+	.irq_eoi		= rzg2l_irqc_eoi,
-+	.irq_mask		= irq_chip_mask_parent,
-+	.irq_unmask		= irq_chip_unmask_parent,
-+	.irq_disable		= rzg2l_irqc_irq_disable,
-+	.irq_enable		= rzg2l_irqc_irq_enable,
-+	.irq_get_irqchip_state	= irq_chip_get_parent_state,
-+	.irq_set_irqchip_state	= irq_chip_set_parent_state,
-+	.irq_retrigger		= irq_chip_retrigger_hierarchy,
-+	.irq_set_type		= rzg2l_irqc_set_type,
-+	.flags			= IRQCHIP_MASK_ON_SUSPEND |
-+				  IRQCHIP_SET_TYPE_MASKED |
-+				  IRQCHIP_SKIP_SET_WAKE,
-+};
-+
-+static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned int virq,
-+			    unsigned int nr_irqs, void *arg)
-+{
-+	struct rzg2l_irqc_priv *priv = domain->host_data;
-+	unsigned long tint = 0;
-+	irq_hw_number_t hwirq;
-+	unsigned int type;
-+	int ret;
-+
-+	ret = irq_domain_translate_twocell(domain, arg, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * For TINT interrupts ie where pinctrl driver is child of irqc domain
-+	 * the hwirq and TINT are encoded in fwspec->param[0].
-+	 * hwirq for TINT range from 9-40, hwirq is embedded 0-15 bits and TINT
-+	 * from 16-31 bits. TINT from the pinctrl driver needs to be programmed
-+	 * in IRQC registers to enable a given gpio pin as interrupt.
-+	 */
-+	if (hwirq > IRQC_IRQ_COUNT) {
-+		tint = TINT_EXTRACT_GPIOINT(hwirq);
-+		hwirq = TINT_EXTRACT_HWIRQ(hwirq);
-+
-+		if (hwirq < IRQC_TINT_START)
-+			return -EINVAL;
-+	}
-+
-+	if (hwirq > (IRQC_NUM_IRQ - 1))
-+		return -EINVAL;
-+
-+	ret = irq_domain_set_hwirq_and_chip(domain, virq, hwirq, &irqc_chip,
-+					    (void *)(uintptr_t)tint);
-+	if (ret)
-+		return ret;
-+
-+	return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &priv->fwspec[hwirq]);
-+}
-+
-+static const struct irq_domain_ops rzg2l_irqc_domain_ops = {
-+	.alloc = rzg2l_irqc_alloc,
-+	.free = irq_domain_free_irqs_common,
-+	.translate = irq_domain_translate_twocell,
-+};
-+
-+static int rzg2l_irqc_parse_interrupts(struct rzg2l_irqc_priv *priv,
-+				       struct device_node *np)
-+{
-+	struct of_phandle_args map;
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < IRQC_NUM_IRQ; i++) {
-+		ret = of_irq_parse_one(np, i, &map);
-+		if (ret)
-+			return ret;
-+		of_phandle_args_to_fwspec(np, map.args, map.args_count,
-+					  &priv->fwspec[i]);
-+	}
-+
-+	return 0;
-+}
-+
-+static int rzg2l_irqc_init(struct device_node *node, struct device_node *parent)
-+{
-+	struct irq_domain *irq_domain, *parent_domain;
-+	struct platform_device *pdev;
-+	struct reset_control *resetn;
-+	struct rzg2l_irqc_priv *priv;
-+	int ret;
-+
-+	pdev = of_find_device_by_node(node);
-+	if (!pdev)
-+		return -ENODEV;
-+
-+	parent_domain = irq_find_host(parent);
-+	if (!parent_domain) {
-+		dev_err(&pdev->dev, "cannot find parent domain\n");
-+		return -ENODEV;
-+	}
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, NULL);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	ret = rzg2l_irqc_parse_interrupts(priv, node);
-+	if (ret) {
-+		dev_err(&pdev->dev, "cannot parse interrupts: %d\n", ret);
-+		return ret;
-+	}
-+
-+	resetn = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(resetn))
-+		return PTR_ERR(resetn);
-+
-+	ret = reset_control_deassert(resetn);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to deassert resetn pin, %d\n", ret);
-+		return ret;
-+	}
-+
-+	pm_runtime_enable(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "pm_runtime_resume_and_get failed: %d\n", ret);
-+		goto pm_disable;
-+	}
-+
-+	raw_spin_lock_init(&priv->lock);
-+
-+	irq_domain = irq_domain_add_hierarchy(parent_domain, 0, IRQC_NUM_IRQ,
-+					      node, &rzg2l_irqc_domain_ops,
-+					      priv);
-+	if (!irq_domain) {
-+		dev_err(&pdev->dev, "failed to add irq domain\n");
-+		ret = -ENOMEM;
-+		goto pm_put;
-+	}
-+
-+	return 0;
-+
-+pm_put:
-+	pm_runtime_put(&pdev->dev);
-+pm_disable:
-+	pm_runtime_disable(&pdev->dev);
-+	reset_control_assert(resetn);
-+	return ret;
-+}
-+
-+IRQCHIP_PLATFORM_DRIVER_BEGIN(rzg2l_irqc)
-+IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
-+IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
-+MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
-+MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
-+MODULE_LICENSE("GPL");
++++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/renesas,rzg2l-irqc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/G2L (and alike SoC's) Interrupt Controller (IA55)
++
++maintainers:
++  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++description: |
++  IA55 performs various interrupt controls including synchronization for the external
++  interrupts of NMI, IRQ, and GPIOINT and the interrupts of the built-in peripheral
++  interrupts output by each IP. And it notifies the interrupt to the GIC
++    - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
++    - GPIO pins used as external interrupt input pins, mapped to 32 GIC SPI interrupts
++    - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
++      stand-up edge detection interrupts)
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,r9a07g044-irqc    # RZ/G2L
++      - const: renesas,rzg2l-irqc
++
++  '#interrupt-cells':
++    description: The first cell should contain external interrupt number (IRQ0-7) and the
++                 second cell is used to specify the flag.
++    const: 2
++
++  '#address-cells':
++    const: 0
++
++  interrupt-controller: true
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 41
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: clk
++      - const: pclk
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - '#interrupt-cells'
++  - '#address-cells'
++  - interrupt-controller
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - power-domains
++  - resets
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/r9a07g044-cpg.h>
++
++    irqc: interrupt-controller@110a0000 {
++            compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
++            reg = <0x110a0000 0x10000>;
++            #interrupt-cells = <2>;
++            #address-cells = <0>;
++            interrupt-controller;
++            interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
++                     <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
++            clock-names = "clk", "pclk";
++            power-domains = <&cpg>;
++            resets = <&cpg R9A07G044_IA55_RESETN>;
++    };

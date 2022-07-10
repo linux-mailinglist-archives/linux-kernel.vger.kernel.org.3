@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C3C56CC61
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A4556CC62
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 04:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiGJCV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Jul 2022 22:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S229544AbiGJCXf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 9 Jul 2022 22:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJCVY (ORCPT
+        with ESMTP id S229450AbiGJCXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Jul 2022 22:21:24 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650DC2496C;
-        Sat,  9 Jul 2022 19:21:23 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id l12so1787759plk.13;
-        Sat, 09 Jul 2022 19:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZlKUbM7taPYwA2QJB6xuqDO4kfQ1tX0E5DhsBeXBePk=;
-        b=Q6/hidf96cnh0bHovF+9avDw+gHX9U4hdCWCsLmxH6xRsrF/Yd27VaAjXODOW5sSpX
-         VRKXXkutzPIQE/rAtKrCDV8L9iJ+9FluXOA9cBS1+71NFIaPBsbGQZY4vkjci0g7RXnD
-         yXB2yWUISz6y+JUKCldQzbsF+Sy0Kg8RS2ftGTBOmHwq7SgjWsZyqanuO0APhGIa7BZK
-         6djI/sCqtvyuxjuI/4P+wC3A19bsp91R3NnUQHm63J7wPlMhgqSrlaeZ8/NFz2pXptB5
-         eNYaSy1jBrpfGFh+ItrQd1c0CAT+AHJrB7iBpcCU3dx6S07L4gH+x/IGqokBrYsfYsi4
-         aIzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZlKUbM7taPYwA2QJB6xuqDO4kfQ1tX0E5DhsBeXBePk=;
-        b=n1AhYUeNM2RjhuwNLcW6fgaf/blovqQdvCZvQiuTSw6V96Z25T6wHgexmCBNwIAWOt
-         17ZfJxsV2LdAzgOw1n98VsfEQOXm0y5U5T3d/+VJLLrh0y6ZSuTVJ5jE6WsaN2pTx7p1
-         /zT8a0/vGzoqOBUlfG2yV3M43SuyqxgFGOU8iLXzD12jhKILnjIg3uUaGmw1qI7mRRGX
-         JCXI5IDANbAY/9kzpIk73QrHOYx4F0x+Sim9YnTCgThgjOTC2zBMP+k8dyIPldzklW02
-         eFw9U+06ZhIdva2SncoeY0+zQTuPxUoi4HscivBnjKpzOTNieb5g2qLFcZwdc2RrxoiK
-         RRuQ==
-X-Gm-Message-State: AJIora8PBZYfD4niRDlzHskOcBPTdJLITYkJ27fBgoH5Gvqb9QcEDp23
-        O7vf4/Ct/PxChoX1TyduAwM=
-X-Google-Smtp-Source: AGRyM1ulhJBq/HMMYp/UkYSWjJb3v0BHhTgessx/GQV71tikgEWpbFPJvUDyo2hcqGSO+FEqtwb/aA==
-X-Received: by 2002:a17:902:6503:b0:16a:4db1:8d5a with SMTP id b3-20020a170902650300b0016a4db18d5amr11788942plk.133.1657419682872;
-        Sat, 09 Jul 2022 19:21:22 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
-        by smtp.gmail.com with ESMTPSA id q4-20020aa79604000000b0052ab54a4711sm2103153pfg.150.2022.07.09.19.21.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Jul 2022 19:21:22 -0700 (PDT)
-Message-ID: <459c061f-74fd-a9b5-2132-bbf9064daa47@gmail.com>
-Date:   Sun, 10 Jul 2022 09:21:12 +0700
+        Sat, 9 Jul 2022 22:23:33 -0400
+Received: from relay3.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790C62739
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Jul 2022 19:23:32 -0700 (PDT)
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 429B0349A9;
+        Sun, 10 Jul 2022 02:23:31 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id DA4D11D;
+        Sun, 10 Jul 2022 02:23:21 +0000 (UTC)
+Message-ID: <1827050fdadb6173118fb396ad1fead23cda809f.camel@perches.com>
+Subject: Re: [PATCH] staging: qlge: Fix indentation issue under long for loop
+From:   Joe Perches <joe@perches.com>
+To:     Binyi Han <dantengknight@gmail.com>,
+        Manish Chopra <manishc@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com, Coiby Xu <coiby.xu@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 09 Jul 2022 19:23:20 -0700
+In-Reply-To: <20220710021629.GA11852@cloud-MacBookPro>
+References: <20220710021629.GA11852@cloud-MacBookPro>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v13 14/14] mm: multi-gen LRU: design doc
-Content-Language: en-US
-To:     Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220706220022.968789-1-yuzhao@google.com>
- <20220706220022.968789-15-yuzhao@google.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220706220022.968789-15-yuzhao@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: j5whdcny5gq31cufr8s8931z1g8b14hp
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: DA4D11D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/1/dpiimQNhY7LZ/+ZAispFO3ewJM53Ds=
+X-HE-Tag: 1657419801-289789
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 05:00, Yu Zhao wrote:
-> Add a design doc.
+On Sat, 2022-07-09 at 19:16 -0700, Binyi Han wrote:
+> Fix indentation issue to adhere to Linux kernel coding style.
+> Issue found by checkpatch.
 > 
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> Acked-by: Brian Geffon <bgeffon@google.com>
-> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Acked-by: Steven Barrett <steven@liquorix.net>
-> Acked-by: Suleiman Souhlal <suleiman@google.com>
-> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-> Tested-by: Donald Carr <d@chaos-reins.com>
-> Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> Signed-off-by: Binyi Han <dantengknight@gmail.com>
+> ---
+>  drivers/staging/qlge/qlge_main.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+[]
+> @@ -3009,8 +3009,8 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
+>  
+>  		for (page_entries = 0; page_entries <
+>  			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++)
 
-The documentation looks OK (no new warnings).
+Probably better to change the for loop to 3 lines as well.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+		for (page_entries = 0;
+		     page_entries < MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN);
+		     page_entries++)
 
--- 
-An old man doll... just what I always wanted! - Clara
+> @@ -3024,8 +3024,8 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
+>  
+>  		for (page_entries = 0; page_entries <
+>  			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++)
+> -				base_indirect_ptr[page_entries] =
+> -					cpu_to_le64(tmp + (page_entries * DB_PAGE_SIZE));
+> +			base_indirect_ptr[page_entries] =
+> +				cpu_to_le64(tmp + (page_entries * DB_PAGE_SIZE));
+
+etc...
+

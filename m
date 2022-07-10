@@ -2,74 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B0B56D0AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918E556D0B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiGJSMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 14:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S229622AbiGJSPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 14:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGJSMf (ORCPT
+        with ESMTP id S229476AbiGJSO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 14:12:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F570A188;
-        Sun, 10 Jul 2022 11:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657476755; x=1689012755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kp/CSizk1lD3N+N92mt1x3FTwXV7OEfzLNstnxjIUno=;
-  b=lRr42yzMLsp2cenaWspBAPkuCC+WsDtXhJjJsTo1pP96g9KCJUKCz3gz
-   7V0pW+E+R0rsv/0bbgPsq4uzTfOibpWe/rm9Pv8QhwFHG7Z4f4pIsiLCY
-   wA6DpxXMH3RA+d8hq7kpP4WtPsXW1Ax1mNDm8MwFUvx7OFuE27e9MxdJ0
-   0kM9qaPdB4Xe0lL0pb7dxY++ZrJIP5KJpoLwBMoZzdgvCkFj87Os42ECG
-   QdjhQQuyWZu9jQ+QLLgM3mMU3UpWWDXQ4paMMFlPQEZv7HIIJSk1AVWLr
-   RqPvoRwtrz0YOJzr/VKNymMVOoWtA2shFE0cicuaMAeEMy8Iez8azaZ5o
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285657809"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="285657809"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:12:34 -0700
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="621818834"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:12:34 -0700
-Date:   Sun, 10 Jul 2022 11:12:33 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org,
-        ashok.raj@intel.com, gregkh@linuxfoundation.org,
-        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2] platform/x86/intel/ifs: Allow non-default names for
- IFS image
-Message-ID: <YssWkQegNlki4XNZ@agluck-desk3.sc.intel.com>
-References: <20220710160011.995800-1-jithu.joseph@intel.com>
- <535ccbeb-b6e5-b7ef-47b4-894af24c00b0@redhat.com>
+        Sun, 10 Jul 2022 14:14:59 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5E0D6252;
+        Sun, 10 Jul 2022 11:14:58 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 51B5B204C41B; Sun, 10 Jul 2022 11:14:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51B5B204C41B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1657476898;
+        bh=nGGZGIK6XLCZSbEZ1/OXjmDPFwgUs7UXTafZHcI4weA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L2rBPxAIXmzEDtfVlcnmfOW1ImTkmiS9MkWSYI+VZlgAa5TyiEgoaE6X0WZptftvF
+         UBd+8VelYU6+oYokZWk5lmHrjY/oDJey35+sHnVD1u6qrlSawb9jBC4BLnFYCJ3gLm
+         w3jAC5LN5/jHfqQc6hkU4FjjZMMkwOekZVsuy64I=
+Date:   Sun, 10 Jul 2022 11:14:58 -0700
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Shradha Gupta <shradhagupta@microsoft.com>,
+        Praveen Kumar <kumarpraveen@microsoft.com>
+Subject: [PATCH v2] Drivers: hv: vm_bus: Handle vmbus rescind calls after
+ vmbus is suspended
+Message-ID: <20220710181458.GA20827@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <535ccbeb-b6e5-b7ef-47b4-894af24c00b0@redhat.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 06:12:44PM +0200, Hans de Goede wrote:
-> Not doing the initial load at module-load time will also speed-up
-> the module initialization and thus booting the system. Especially
-> on many-core servers this might make a measurable difference
-> in module-init time.
+Add a flag to indicate that the vmbus is suspended so we should ignore
+any offer message. Add a new work_queue for rescind msg, so we could drain
+it along with other offer work_queues upon suspension.
+It was observed that in some hibernation related scenario testing, after
+vmbus_bus_suspend() we get rescind offer message for the vmbus. This would
+lead to processing of a rescind message for a channel that has already been
+suspended.
 
-The load is per-socket, not per core. So "many-core" doesn't matter
-as much as number of sockets.
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+---
 
--Tony
+Changes in v2:
+* Rename the ignore_offer_rescind_msg flag to ignore_any_offer_msg, to
+  indicate that the flag can cause any offer message to be dropped.
+* Remove redundent tasklet_enable(), tasklet_disable() calls around
+  ignore_any_offer_msg flag when value is changed from true to false.
+* Add comment about tasklet_enable() providing memory barrier.
+* In vmbus_bus_suspend() after we drain all workqueues, remove the code
+  to wait for any offer_in_progress
+
+---
+ drivers/hv/connection.c   | 11 +++++++++++
+ drivers/hv/hyperv_vmbus.h |  7 +++++++
+ drivers/hv/vmbus_drv.c    | 29 +++++++++++++++++++++--------
+ 3 files changed, 39 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index 6218bbf6863a..eca7afd366d6 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -171,6 +171,14 @@ int vmbus_connect(void)
+ 		goto cleanup;
+ 	}
+ 
++	vmbus_connection.rescind_work_queue =
++		create_workqueue("hv_vmbus_rescind");
++	if (!vmbus_connection.rescind_work_queue) {
++		ret = -ENOMEM;
++		goto cleanup;
++	}
++	vmbus_connection.ignore_any_offer_msg = false;
++
+ 	vmbus_connection.handle_primary_chan_wq =
+ 		create_workqueue("hv_pri_chan");
+ 	if (!vmbus_connection.handle_primary_chan_wq) {
+@@ -357,6 +365,9 @@ void vmbus_disconnect(void)
+ 	if (vmbus_connection.handle_primary_chan_wq)
+ 		destroy_workqueue(vmbus_connection.handle_primary_chan_wq);
+ 
++	if (vmbus_connection.rescind_work_queue)
++		destroy_workqueue(vmbus_connection.rescind_work_queue);
++
+ 	if (vmbus_connection.work_queue)
+ 		destroy_workqueue(vmbus_connection.work_queue);
+ 
+diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+index 4f5b824b16cf..dc673edf053c 100644
+--- a/drivers/hv/hyperv_vmbus.h
++++ b/drivers/hv/hyperv_vmbus.h
+@@ -261,6 +261,13 @@ struct vmbus_connection {
+ 	struct workqueue_struct *work_queue;
+ 	struct workqueue_struct *handle_primary_chan_wq;
+ 	struct workqueue_struct *handle_sub_chan_wq;
++	struct workqueue_struct *rescind_work_queue;
++
++	/*
++	 * On suspension of the vmbus, the accumulated offer messages
++	 * must be dropped.
++	 */
++	bool ignore_any_offer_msg;
+ 
+ 	/*
+ 	 * The number of sub-channels and hv_sock channels that should be
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 547ae334e5cd..4ba0eb2441cf 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1160,7 +1160,9 @@ void vmbus_on_msg_dpc(unsigned long data)
+ 			 * work queue: the RESCIND handler can not start to
+ 			 * run before the OFFER handler finishes.
+ 			 */
+-			schedule_work(&ctx->work);
++			if (vmbus_connection.ignore_any_offer_msg)
++				break;
++			queue_work(vmbus_connection.rescind_work_queue, &ctx->work);
+ 			break;
+ 
+ 		case CHANNELMSG_OFFERCHANNEL:
+@@ -1186,6 +1188,8 @@ void vmbus_on_msg_dpc(unsigned long data)
+ 			 * to the CPUs which will execute the offer & rescind
+ 			 * works by the time these works will start execution.
+ 			 */
++			if (vmbus_connection.ignore_any_offer_msg)
++				break;
+ 			atomic_inc(&vmbus_connection.offer_in_progress);
+ 			fallthrough;
+ 
+@@ -2446,15 +2450,20 @@ static int vmbus_acpi_add(struct acpi_device *device)
+ #ifdef CONFIG_PM_SLEEP
+ static int vmbus_bus_suspend(struct device *dev)
+ {
++	struct hv_per_cpu_context *hv_cpu = per_cpu_ptr(
++			hv_context.cpu_context, VMBUS_CONNECT_CPU);
+ 	struct vmbus_channel *channel, *sc;
+ 
+-	while (atomic_read(&vmbus_connection.offer_in_progress) != 0) {
+-		/*
+-		 * We wait here until the completion of any channel
+-		 * offers that are currently in progress.
+-		 */
+-		usleep_range(1000, 2000);
+-	}
++	tasklet_disable(&hv_cpu->msg_dpc);
++	vmbus_connection.ignore_any_offer_msg = true;
++	/* The tasklet_enable() takes care of providing a memory barrier */
++	tasklet_enable(&hv_cpu->msg_dpc);
++
++	/* Drain all the workqueues as we are in suspend */
++	drain_workqueue(vmbus_connection.rescind_work_queue);
++	drain_workqueue(vmbus_connection.work_queue);
++	drain_workqueue(vmbus_connection.handle_primary_chan_wq);
++	drain_workqueue(vmbus_connection.handle_sub_chan_wq);
+ 
+ 	mutex_lock(&vmbus_connection.channel_mutex);
+ 	list_for_each_entry(channel, &vmbus_connection.chn_list, listentry) {
+@@ -2527,10 +2536,14 @@ static int vmbus_bus_suspend(struct device *dev)
+ 
+ static int vmbus_bus_resume(struct device *dev)
+ {
++	struct hv_per_cpu_context *hv_cpu = per_cpu_ptr(
++			hv_context.cpu_context, VMBUS_CONNECT_CPU);
+ 	struct vmbus_channel_msginfo *msginfo;
+ 	size_t msgsize;
+ 	int ret;
+ 
++	vmbus_connection.ignore_any_offer_msg = false;
++
+ 	/*
+ 	 * We only use the 'vmbus_proto_version', which was in use before
+ 	 * hibernation, to re-negotiate with the host.
+-- 
+2.17.1
+

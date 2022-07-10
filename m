@@ -2,178 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3775256CFD6
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A5056CFD8
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 17:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiGJPsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 11:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S229567AbiGJPtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 11:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGJPsD (ORCPT
+        with ESMTP id S229463AbiGJPto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 11:48:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6614EE003;
-        Sun, 10 Jul 2022 08:48:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29C4AB80AB5;
-        Sun, 10 Jul 2022 15:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C58C3411E;
-        Sun, 10 Jul 2022 15:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657468079;
-        bh=abz1JSjbtNOHbSndNZUJjKFTIeCcIyNe++Q4Es2GxHI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=VYY3P/6SPW3pOUMuW1Hlsj9meo5RDepXSaU7eA5/Y9ztSKp3QANzggeFve4W9SIbo
-         UdPkQq767tvnOU5i/zWITthh24zm/hFdWCwzCBO7U6FnRj3rzILYj/TTnXUeC9CHOv
-         kdooaS3k+Ikug4dcKaDNVTmmGVKSLv0eNPYMmTtFFC2Cyy54AXSElgIUjtk2pt/96a
-         S2CgM6UQHxlrwOQyznjD/I45HpExT/Z3z4gEaPCv0em3mNHtzWkUsCoi1sj4eoRjjQ
-         LtDab7qrDYH+iPs5wzMVMWOEgSCkOzR60p3qrUxQvdUb2/1lEUA6wDPCC0y1jQuN6Z
-         ERxsNUz2nGGqw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 792CB5C0399; Sun, 10 Jul 2022 08:47:59 -0700 (PDT)
-Date:   Sun, 10 Jul 2022 08:47:59 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 0/8] Implement call_rcu_lazy() and miscellaneous fixes
-Message-ID: <20220710154759.GG1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
- <Ysev2jbxFGNkLvjG@google.com>
- <20220708224514.GB1790663@paulmck-ThinkPad-P17-Gen-1>
- <YsoteYyJoOSzMGsr@google.com>
+        Sun, 10 Jul 2022 11:49:44 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB06AA186;
+        Sun, 10 Jul 2022 08:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=wBpy/
+        1Al1S+IcisW01w7tkfDPuEkN3RCpqdYUq79uMk=; b=L2qeanDab5hW+MJJIpYm8
+        AwHM0BIZvvx6zPAZIEyFVNefvE9GrYp6jnUO1zz9p2svPvspJI+RoSxx83fNAofQ
+        qHk+DdatyXsMS69ozlzcLhubohgUmCIP/Hg1bK3BUqL9pchWbFsscXzz0Yttx1Ok
+        miq6BOmcdBXJyLtl5eQWLg=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp1 (Coremail) with SMTP id GdxpCgDX35_J9MpiqnY_Ng--.21432S2;
+        Sun, 10 Jul 2022 23:48:29 +0800 (CST)
+From:   williamsukatube@163.com
+To:     dvorkin@tibbo.com, wellslutw@gmail.com, linus.walleij@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH] pinctrl: Add check for kcalloc
+Date:   Sun, 10 Jul 2022 23:48:22 +0800
+Message-Id: <20220710154822.2610801-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsoteYyJoOSzMGsr@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgDX35_J9MpiqnY_Ng--.21432S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtrWrKr4UKr17GF1fGr45KFg_yoWDWwc_ua
+        yrWFyDXrWUKF1xtrsFqrn3W34Fvw45Zr1Fvr1vqFy3Aay7Xw1UJr1kuFs5Wwn7Wr98CFZx
+        G3sFyr1Fya47KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5TWlPUUUUU==
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiUQ06g2DEOjWbQAAAsV
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 01:38:01AM +0000, Joel Fernandes wrote:
-> On Fri, Jul 08, 2022 at 03:45:14PM -0700, Paul E. McKenney wrote:
-> > On Fri, Jul 08, 2022 at 04:17:30AM +0000, Joel Fernandes wrote:
-> > > On Sat, Jun 25, 2022 at 08:12:06PM -0700, Paul E. McKenney wrote:
-> > > > On Wed, Jun 22, 2022 at 10:50:53PM +0000, Joel Fernandes (Google) wrote:
-> > > > > 
-> > > > > Hello!
-> > > > > Please find the next improved version of call_rcu_lazy() attached.  The main
-> > > > > difference between the previous version is that it is now using bypass lists,
-> > > > > and thus handling rcu_barrier() and hotplug situations, with some small changes
-> > > > > to those parts.
-> > > > > 
-> > > > > I also don't see the TREE07 RCU stall from v1 anymore.
-> > > > > 
-> > > > > In the v1, we some numbers below (testing on v2 is in progress). Rushikesh,
-> > > > > feel free to pull these patches into your tree. Just to note, you will also
-> > > > > need to pull the call_rcu_lazy() user patches from v1. I have dropped in this
-> > > > > series, just to make the series focus on the feature code first.
-> > > > > 
-> > > > > Following are power savings we see on top of RCU_NOCB_CPU on an Intel platform.
-> > > > > The observation is that due to a 'trickle down' effect of RCU callbacks, the
-> > > > > system is very lightly loaded but constantly running few RCU callbacks very
-> > > > > often. This confuses the power management hardware that the system is active,
-> > > > > when it is in fact idle.
-> > > > > 
-> > > > > For example, when ChromeOS screen is off and user is not doing anything on the
-> > > > > system, we can see big power savings.
-> > > > > Before:
-> > > > > Pk%pc10 = 72.13
-> > > > > PkgWatt = 0.58
-> > > > > CorWatt = 0.04
-> > > > > 
-> > > > > After:
-> > > > > Pk%pc10 = 81.28
-> > > > > PkgWatt = 0.41
-> > > > > CorWatt = 0.03
-> > > > 
-> > > > So not quite 30% savings in power at the package level?  Not bad at all!
-> > > 
-> > > Yes this is the package residency amount, not the amount of power. This % is
-> > > not power.
-> > 
-> > So what exactly is PkgWatt, then?  If you can say.  That is where I was
-> > getting the 30% from.
-> 
-> Its the total package power (SoC power) - so like not just the CPU but also
-> the interconnect, other controllers and other blocks in there.
-> 
-> This output is from the turbostat program and the number is mentioned in the
-> manpage:
-> "PkgWatt Watts consumed by the whole package."
-> https://manpages.debian.org/testing/linux-cpupower/turbostat.8.en.html
+From: William Dean <williamsukatube@gmail.com>
 
-Are we back to about a 30% savings in power at the package level?  ;-)
+As the potential failure of the kcalloc(),
+it should be better to check it in order to
+avoid the dereference of the NULL pointer.
 
-Either way, please quantify your "big power savings" by calculating and
-stating a percentage decrease.
+Fixes: aa74c44be19c8 ("pinctrl: Add driver for Sunplus SP7021")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/pinctrl/sunplus/sppctl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> > > > > Further, when ChromeOS screen is ON but system is idle or lightly loaded, we
-> > > > > can see that the display pipeline is constantly doing RCU callback queuing due
-> > > > > to open/close of file descriptors associated with graphics buffers. This is
-> > > > > attributed to the file_free_rcu() path which this patch series also touches.
-> > > > > 
-> > > > > This patch series adds a simple but effective, and lockless implementation of
-> > > > > RCU callback batching. On memory pressure, timeout or queue growing too big, we
-> > > > > initiate a flush of one or more per-CPU lists.
-> > > > 
-> > > > It is no longer lockless, correct?  Or am I missing something subtle?
-> > > > 
-> > > > Full disclosure: I don't see a whole lot of benefit to its being lockless.
-> > > > But truth in advertising!  ;-)
-> > > 
-> > > Yes, you are right. Maybe a better way I could put it is it is "lock
-> > > contention less" :D
-> > 
-> > Yes, "reduced lock contention" would be a good phrase.  As long as you
-> > carefully indicate exactly what scenario with greater lock contention
-> > you are comparing to.
-> > 
-> > But aren't you acquiring the bypass lock at about the same rate as it
-> > would be aquired without laziness?  What am I missing here?
-> 
-> You are right, why not I just drop the locking phrases from the summary.
-> Anyway the main win from this work is not related to locking.
+diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/sppctl.c
+index 3ba47040ac42..2b3335ab56c6 100644
+--- a/drivers/pinctrl/sunplus/sppctl.c
++++ b/drivers/pinctrl/sunplus/sppctl.c
+@@ -871,6 +871,9 @@ static int sppctl_dt_node_to_map(struct pinctrl_dev *pctldev, struct device_node
+ 	}
+ 
+ 	*map = kcalloc(*num_maps + nmG, sizeof(**map), GFP_KERNEL);
++	if (*map == NULL)
++		return -ENOMEM;
++
+ 	for (i = 0; i < (*num_maps); i++) {
+ 		dt_pin = be32_to_cpu(list[i]);
+ 		pin_num = FIELD_GET(GENMASK(31, 24), dt_pin);
+-- 
+2.25.1
 
-Sounds good!
-
-							Thanx, Paul
-
-> thanks,
-> 
->  - Joel
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > > > > Similar results can be achieved by increasing jiffies_till_first_fqs, however
-> > > > > that also has the effect of slowing down RCU. Especially I saw huge slow down
-> > > > > of function graph tracer when increasing that.
-> > > > > 
-> > > > > One drawback of this series is, if another frequent RCU callback creeps up in
-> > > > > the future, that's not lazy, then that will again hurt the power. However, I
-> > > > > believe identifying and fixing those is a more reasonable approach than slowing
-> > > > > RCU down for the whole system.
-> > > > 
-> > > > Very good!  I have you down as the official call_rcu_lazy() whack-a-mole
-> > > > developer.  ;-)
-> > > 
-> > > :-D
-> > > 
-> > > thanks,
-> > > 
-> > >  - Joel
-> > > 

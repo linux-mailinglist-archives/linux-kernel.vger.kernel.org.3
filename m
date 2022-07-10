@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBE456D19E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 23:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD3556D19F
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 23:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiGJV1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 17:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S229921AbiGJV1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 17:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiGJV0W (ORCPT
+        with ESMTP id S229820AbiGJV0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 17:26:22 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDFA17063
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:25:36 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v14so4766850wra.5
+        Sun, 10 Jul 2022 17:26:23 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6131706B
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:25:37 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z12so4759041wrq.7
         for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JHt96uT4Q7BwS4NdRXSU1MVIN9ZQRmgKBYoUqlA70sg=;
-        b=FTmtHevb/2lCiduv1bxN2jNSRFQIRp1jQ/TUsaCdBwAW/diJI+MM6X5FtZpJwCzVf3
-         xFWyF1+0v3PX7grCleGiUZm577zgV6OCoxe/iNYb6agevNc8T+GA5VXWgMU5cpaWYEBF
-         7FDYF6mc+ZQkiaNF9fOgCkXuuWuHDE3v6XnFCI0Lfr/ViYuHr7P9EZThxmTbJYEqO7Lc
-         3kEoa0C2AA2hLg3U7vfgE7HgyBpa1NzcFta7EJPcXQvO8K+9vcDp834AfTGXBZ0+eZqT
-         D/ZCenPS+afAUNbazuch9U8MPl56fezX+Sfhj2+98avOEg11/9H4dBRFDs+0XsBTrxTT
-         nMfw==
+        bh=ZwqLH//W1+QEOMAk/S4a/3Zrx4GN2+Bea3NwAVXcO70=;
+        b=clgX/y+/32mEh9l/6iuJB3mbxw5oYz4wdwoyICnbeWlyhTs62a/IQb2+0m0RoIii+r
+         9HGkAQBSuW4ev20frhVaMPM/82lKEeHJdn6gFM82nLeeZrdu0SKKGC0fbf6CLoYbClD9
+         2SviVQITEyeLGCpZ2jzA+yP7uePb3u8UAPCjBBTKedy0WRtpwCgvgr6KTEInvlOwWgjC
+         cx5eCCnUBw5JzBjVu8ELgcblOhpc4m9DjEUjJJ0b0O/4oFT/Su0v1H5VxvOWU7n3qsZZ
+         WiDGfGcyEikv93+5r5cKSu53Q98r7JlGUpk86h07BZQrY0HV+WCiFd2OtcOxBLlGoMKJ
+         geGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JHt96uT4Q7BwS4NdRXSU1MVIN9ZQRmgKBYoUqlA70sg=;
-        b=2LSj+rZCDRyGSROSoA9iDWYzJsW/g75iOUafr0PuXqdoLlqJ4VvIwjy4Uu6Bg/odIZ
-         bMhaDQ/xMaJszumRaJKNuUYy4CD6jwxnaw1vKTytyJOzR96rRUQwfKvgeh8k7xSLV0rM
-         Kt1qOWYjEUIYRbxpYDh7W4j9a+aRzl7dX+czAMcRmx0yVEfUNIqKIWETzYnOeRXorS9E
-         S461lNUwjZzHCWUWOjKzh/M6wbNnCu6EbsC3wGRfev55oI9KkFoVGEkbr3AHo3bYJrf5
-         6olyP2SqrIG+zfL60wyJqJTedhmvJ6HX6ZLcdt9ogbhubzNjmP5Ciz//Og3fxyMoF3Do
-         Masg==
-X-Gm-Message-State: AJIora9d+5TJgxyPcTzVLo3fTAYfs6MFC3CNQqCtqAthfHqx/mRabDUd
-        HgkqxSBuXFU1JFJsFCiW/DUZjQ==
-X-Google-Smtp-Source: AGRyM1uU2a9N+Tlm73VXF1neUxMMjGVz19hV+EhKo6BBv9h2XUa3CSeloMqm50v7vGSnm5mdnJA8Kw==
-X-Received: by 2002:a5d:6d0d:0:b0:21d:7ae5:22ee with SMTP id e13-20020a5d6d0d000000b0021d7ae522eemr13289006wrq.152.1657488321495;
-        Sun, 10 Jul 2022 14:25:21 -0700 (PDT)
+        bh=ZwqLH//W1+QEOMAk/S4a/3Zrx4GN2+Bea3NwAVXcO70=;
+        b=NYvpqCTUkaRjcpoA9kdVmRjLT273vVXXcDpwGerg6h0qjZm7hdnAmkkMiXnA9NsQH0
+         j0Gm2nX2oEDiGwGTLM3gWXl1JVRtd2KQ8w/2wg9MqlcJL4ijwIVrVgh5YntlOU5XGVeA
+         T1u6j7eQ04aRALGmbEFGWs5MCsCcgmy5dKp5M0elqsjhLkcwz/rTolowPZ11kdfKNnMu
+         D2dN9tFY/KrkqA1+OyCkLu4OboBeOWYHg+S8iFiOrXcxJ1i6cIJoeiw1TUm5mgTFWPPk
+         xNPT9bNxWyTTcRAC2MtNdK0kckLU8cjb4lIAz/J7LabF9iythibLSI/IbyfJnBDuO75Y
+         k3Fw==
+X-Gm-Message-State: AJIora/nDj5lpw9ynGea1H/IAP1tYtm6CkN45oOVcrzgfGBr1gDvAUb/
+        M5FNDENYb8cfjV8nTSD1SbCiRQ==
+X-Google-Smtp-Source: AGRyM1sjOeQpf0Z7hmGR89J+3e9HHSig/8dGQ1+XVo+nYwSo2953t3SZUm8Anb/OMRa0RMEkLOpbtw==
+X-Received: by 2002:a5d:47ca:0:b0:21d:9f54:ef97 with SMTP id o10-20020a5d47ca000000b0021d9f54ef97mr4924054wrc.478.1657488322655;
+        Sun, 10 Jul 2022 14:25:22 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c7c0:6823:f3ce:2447])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.20
+        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 14:25:21 -0700 (PDT)
+        Sun, 10 Jul 2022 14:25:22 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
         amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-input@vger.kernel.org (open list:INPUT (KEYBOARD, MOUSE, JOYSTICK
-        , TOUCHSCREEN)...),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
-        sunXi SoC support),
-        linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support)
-Subject: [PATCH v1 28/33] input/drivers/touchscreen_sun4i: Switch to new of thermal API
-Date:   Sun, 10 Jul 2022 23:24:18 +0200
-Message-Id: <20220710212423.681301-29-daniel.lezcano@linexp.org>
+        linux-pm@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 29/33] regulator/drivers/max8976: Switch to new of thermal API
+Date:   Sun, 10 Jul 2022 23:24:19 +0200
+Message-Id: <20220710212423.681301-30-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220710212423.681301-1-daniel.lezcano@linexp.org>
 References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
@@ -87,40 +79,45 @@ Use this new API.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
 ---
- drivers/input/touchscreen/sun4i-ts.c | 10 +++++-----
+ drivers/regulator/max8973-regulator.c | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/input/touchscreen/sun4i-ts.c b/drivers/input/touchscreen/sun4i-ts.c
-index 742a7e96c1b5..7cee09504e34 100644
---- a/drivers/input/touchscreen/sun4i-ts.c
-+++ b/drivers/input/touchscreen/sun4i-ts.c
-@@ -192,12 +192,12 @@ static int sun4i_get_temp(const struct sun4i_ts_data *ts, int *temp)
- 	return 0;
+diff --git a/drivers/regulator/max8973-regulator.c b/drivers/regulator/max8973-regulator.c
+index cb7e50003f70..45d4395fcc06 100644
+--- a/drivers/regulator/max8973-regulator.c
++++ b/drivers/regulator/max8973-regulator.c
+@@ -447,9 +447,9 @@ static int max8973_init_dcdc(struct max8973_chip *max,
+ 	return ret;
  }
  
--static int sun4i_get_tz_temp(void *data, int *temp)
-+static int sun4i_get_tz_temp(struct thermal_zone_device *tz, int *temp)
+-static int max8973_thermal_read_temp(void *data, int *temp)
++static int max8973_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
  {
--	return sun4i_get_temp(data, temp);
-+	return sun4i_get_temp(tz->devdata, temp);
+-	struct max8973_chip *mchip = data;
++	struct max8973_chip *mchip = tz->devdata;
+ 	unsigned int val;
+ 	int ret;
+ 
+@@ -478,7 +478,7 @@ static irqreturn_t max8973_thermal_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
  }
  
--static const struct thermal_zone_of_device_ops sun4i_ts_tz_ops = {
-+static struct thermal_zone_device_ops sun4i_ts_tz_ops = {
- 	.get_temp = sun4i_get_tz_temp,
+-static const struct thermal_zone_of_device_ops max77621_tz_ops = {
++static struct thermal_zone_device_ops max77621_tz_ops = {
+ 	.get_temp = max8973_thermal_read_temp,
  };
  
-@@ -356,8 +356,8 @@ static int sun4i_ts_probe(struct platform_device *pdev)
- 	if (IS_ERR(hwmon))
- 		return PTR_ERR(hwmon);
+@@ -492,8 +492,8 @@ static int max8973_thermal_init(struct max8973_chip *mchip)
+ 	if (mchip->id != MAX77621)
+ 		return 0;
  
--	thermal = devm_thermal_zone_of_sensor_register(ts->dev, 0, ts,
--						       &sun4i_ts_tz_ops);
-+	thermal = devm_thermal_of_zone_register(ts->dev, 0, ts,
-+						&sun4i_ts_tz_ops);
- 	if (IS_ERR(thermal))
- 		return PTR_ERR(thermal);
- 
+-	tzd = devm_thermal_zone_of_sensor_register(mchip->dev, 0, mchip,
+-						   &max77621_tz_ops);
++	tzd = devm_thermal_of_zone_register(mchip->dev, 0, mchip,
++					    &max77621_tz_ops);
+ 	if (IS_ERR(tzd)) {
+ 		ret = PTR_ERR(tzd);
+ 		dev_err(mchip->dev, "Failed to register thermal sensor: %d\n",
 -- 
 2.25.1
 

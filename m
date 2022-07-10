@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BDD56D0F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 21:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B5D56D0FC
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 21:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiGJTHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 15:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S229608AbiGJTJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 15:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJTHT (ORCPT
+        with ESMTP id S229463AbiGJTJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 15:07:19 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2A11C07;
-        Sun, 10 Jul 2022 12:07:18 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p129so5642863yba.7;
-        Sun, 10 Jul 2022 12:07:18 -0700 (PDT)
+        Sun, 10 Jul 2022 15:09:03 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB51411C3E;
+        Sun, 10 Jul 2022 12:09:02 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31c9b70c382so30626777b3.6;
+        Sun, 10 Jul 2022 12:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5pJ2mY4u3LGxMAcCpcPEWdZJC2DKdA33cpYfSaprjpk=;
-        b=b6kLel3P40kfn9mtHJmNm3A1puIDxVDvFW+w5n8REW2Qr+jWiPzYUowghbkcalrq+u
-         33xJ4rXHnbR1pUhKTvdompZTuFumz9ZG1Qtg9PkbxxzQyvFpmFBGU5a+ZlbpzrlBTP4O
-         IQHGa00tcG5NDbi47W1nGe+3g6hNLh9EKDZrJYOcZr1Ma/QPqWhfinJATrT8mdWLWovO
-         4atAiGuKR290iDhuftFvqzF7T6FOE9IXZpIg4l/zBFrP4D8a0mepbDWg6V2xikT6ya/K
-         hq0aL93vMlXZeV6rukAJ93G609V73mJrSeH+JvTjQ4+PCbEhlBOst81Hi9Z9XLA4/zto
-         +qVA==
+        bh=g8uBrLbWc94Zt3/5+ItReRZraOQhpXiAxYkcJ2+dIok=;
+        b=YvHdS0dcpg797mdkhiGVt5EYXBki+VqxBmuaZtbSw/FuLBBGfXBkeEFpMyGUeCoeOZ
+         tkN4QAWerGT9YiJHy9rhnaldPXCG1SAmfWff89/ppYzAKuvVpWFLjzvYudlRJvBkcgq3
+         29kKJgs7KrfCsqID+Oap4Xo7rbUTL1JG7rqcyCKolRHR/tpmysEwCwwMuRysEksm6ODA
+         FkQjCGhKS+j4Xv6uaQM5cF/dnqrveBhpH7vwfdmZu6WHTLH///Yj+F0iAr1qaauC5IHH
+         OzWOkmx465cLskT5lAxwt+Y8vjb6ugJV95myiv6v7NWz6rpuoo+oD5rxEZQYVQbEZA8e
+         3QbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5pJ2mY4u3LGxMAcCpcPEWdZJC2DKdA33cpYfSaprjpk=;
-        b=sUOnD3UzejfLrVsYHNyVy2XlsNcv4MndUnyV/GMj1meDzodsS9k7xO5zPU944y9BXZ
-         bdK1PnqQrOA2i4qXGkIPYB4td8xXEjCr+3juMIKynDOzJrzmNzQ9pi+MbSO1wuP8L7bz
-         bDSibDDmiVUpLXBrMRBuXb0gsTQw4lmvYezY2JInCZDk2FykN8id9pBSNKLqfTP2w1xW
-         wKO9ohURImRYG8KBrjDeKzZ7hQYQsvu8HWIDRIQZ/9/hzRajf2lWl0UI8it3hIevxvqw
-         l+L1OHTqOy/vHhFRfUa9kgZKy5PiyjBEESVuF8FSOS6r6I2Q5pSVWU7tEAj7hy8oF0T1
-         XWgw==
-X-Gm-Message-State: AJIora8HJgHQCf84tlX8hOsKG6tOsFfhfxPKl0XJa3xUCoL/+UJYM6WR
-        TodEpXXrIZgy1HJtn0wA/nYOSgPlB9yTCcKrmRs=
-X-Google-Smtp-Source: AGRyM1usMvKd9f2/H5alDs+qjUrsqY+va9QV6ErxeZWmxYWH5zM60anQcdnlEiOVWdGy8L9IlScLjQt6eOQ+XffYNqY=
-X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
- b198-20020a25cbcf000000b0066e8893a02cmr14363105ybg.460.1657480037999; Sun, 10
- Jul 2022 12:07:17 -0700 (PDT)
+        bh=g8uBrLbWc94Zt3/5+ItReRZraOQhpXiAxYkcJ2+dIok=;
+        b=ccAZDwKLkeXx7aEDAiXgCTlajVs3rnP/JurrKs6FhJHMp4ajLqNZD6dCs2D6Tlzm33
+         3VxuDDs4jR0TuY5y0E9PaJZUi5bsxPzAPWggriFIuPsP73BEoQo+FnkETUzNFLnggWxJ
+         Clx2Ou2zg5hbKZNKUeby7Euyd6RuDr3N2MOt8adsM+YPrzr7zneAnQKOCvWvA9lC9W8c
+         xrfSq5GZ/qnJMkKtIYkGR3xyeDqErq2sQhcrOQw3gwf03S84ntY0dfqFDC03G9NGM1Fu
+         spNT85I1iabwnCcoJBx2LpzSeSs/PfkurXlZ8ILwFKqaolusS9dxU0LwxZVAL8XOs/X2
+         D/HA==
+X-Gm-Message-State: AJIora/M1+tBEOnIjOCS+7h9Li1bZ5z7q6XvLwr3pogz2GrxNeGnjGS2
+        YoXL7+AY9U5AS+EIXOTpdJfpnERyWPVCazoGid0=
+X-Google-Smtp-Source: AGRyM1uQhf5F8te2uFSd0prGAFf6uTxYdIFIrz6w9GanRjKRI0AwDZInMAcv9znJU/AI6ZDy3jbdkzHSycFBE5OPSlE=
+X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
+ t133-20020a81468b000000b003184cac6576mr15721393ywa.277.1657480141962; Sun, 10
+ Jul 2022 12:09:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220710081853.1699028-1-uwu@icenowy.me> <20220710081853.1699028-3-uwu@icenowy.me>
-In-Reply-To: <20220710081853.1699028-3-uwu@icenowy.me>
+References: <20220710081853.1699028-1-uwu@icenowy.me> <20220710081853.1699028-4-uwu@icenowy.me>
+In-Reply-To: <20220710081853.1699028-4-uwu@icenowy.me>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 10 Jul 2022 21:06:41 +0200
-Message-ID: <CAHp75Vdso_PGUomjmKaF1ytdUe4qLeAbpwkNmcRng9aNHs7g8w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] pinctrl: sunxi: add support for R329 CPUX pin controller
+Date:   Sun, 10 Jul 2022 21:08:24 +0200
+Message-ID: <CAHp75VcK4nF6TxE2e3s-qTE5RKLuAeKykoKN3usXe+NiJX4Eng@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] pinctrl: sunxi: add support for R329 R-PIO pin controller
 To:     Icenowy Zheng <uwu@icenowy.me>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -75,27 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 10:22 AM Icenowy Zheng <uwu@icenowy.me> wrote:
+On Sun, Jul 10, 2022 at 10:28 AM Icenowy Zheng <uwu@icenowy.me> wrote:
 >
-> Allwinner R329 SoC has two pin controllers similar to ones on previous
-> SoCs, one in CPUX power domain and another in CPUS.
+> Allwinner R320 SoC has a pin controller in the CPUS power domain.
 >
-> This patch adds support for the CPUX domain pin controller.
+> Add support for it.
 
-...
-
-> +#include <linux/module.h>
+> +#include <linux/init.h>
 > +#include <linux/platform_device.h>
-
 > +#include <linux/of.h>
 > +#include <linux/of_device.h>
-
-No use of these.
-
 > +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/reset.h>
 
-Missed headers:
-mod_devicetable.h
+Same comment as per previous patch.
+Also I forgot to mention kernel.h from which ARRAY_SIZE() is currently
+available.
 
 > +#include "pinctrl-sunxi.h"
 

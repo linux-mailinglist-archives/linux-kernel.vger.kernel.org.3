@@ -2,410 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371F756CDB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8967C56CDB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 10:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiGJIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 04:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S229572AbiGJIUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 04:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGJIUG (ORCPT
+        with ESMTP id S229476AbiGJIUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 04:20:06 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F233CE34;
-        Sun, 10 Jul 2022 01:19:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657441174; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=FIM+EX7ovvlLzGXv1cKalp+eDlLfAiQvQr+jEICi4yoD+lb5hIPBWR4gDa7Vnho6TLH8hkQXiOW+hpGAtQlUIF8ZXvq2MDqirmrV2j+IGbGLkmAJtusVfMfTvYiSQQoN9Ez3Nt7Z5qvo+ciIopnczP/S60JkKz6oK9fGbUxoC2I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657441174; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=YNNPisOclSY1WNs3Yuqxf8pp+Fad1U2feZ/xWyTJay0=; 
-        b=N0XZj2QGIvwKHRaMC8BJppj2lk5iebV+3ErbfJh1rv7oP+YKdfxHkqkfdjx/QnwrzZb9sFqjycmiyutoPvWwOC8eKuZlDmjBdHZJ3VdSs79Y0gNKZGhUTkZNWlM9k8/+0KaXCPFypj2s136H6c+WljHIXCNrHMsjUmhhkG4OWH4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657441174;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=YNNPisOclSY1WNs3Yuqxf8pp+Fad1U2feZ/xWyTJay0=;
-        b=Qc5CtGcTpqKp5Q1IJB1scLEnU0WZxzuU4JhM+vzGkLNHWlsm1DFEE4QSF929y7Qh
-        H7nho++5YRV5cx+dTyyjMKX+6w9FgzeiJjHmtRWn+gHLiQG02Z79h6Aefzxdf3GulYL
-        2NJ7XIwTOxe3l12dHmma2m4M8a5eHZuRA97LlTJI=
-Received: from edelgard.icenowy.me (59.41.163.237 [59.41.163.237]) by mx.zohomail.com
-        with SMTPS id 165744117214261.50355713094916; Sun, 10 Jul 2022 01:19:32 -0700 (PDT)
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2 3/3] pinctrl: sunxi: add support for R329 R-PIO pin controller
-Date:   Sun, 10 Jul 2022 16:18:53 +0800
-Message-Id: <20220710081853.1699028-4-uwu@icenowy.me>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220710081853.1699028-1-uwu@icenowy.me>
-References: <20220710081853.1699028-1-uwu@icenowy.me>
+        Sun, 10 Jul 2022 04:20:36 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43387BC0E;
+        Sun, 10 Jul 2022 01:20:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dg7V3AP9cETJQSsFjRRw0Ri+5zclojKL8ZjjrXD8JwzovIZLrxCXMkLHFOzJLqoVI87Iwv66TQgT5em085HnQmyZBnrWuaICX36pyJe+RvlXCo5JN2qOdNxmr3p/w/HxidvJ7yv9wByQCaBW8XTE0u1Ta/pavMe8TuHonSVa1DNBBk5uQMf0EnQb6fQzV4TKNB7t2bwuB9WGTJn4fOLUaPBbaM/imQ6KmmJ1aI68NnYfd60Q687zqJtwL74kGlpFWse2WQ4z31AB1IaPooG7iSjrFzb0eCGjTNL6qgM8fjwVn43n2gaqqZ5qS+dquTxDec+UJQfGhU5cDxCM5+IhHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6aOSOUd9RBEHqOP1XcSOPcC/VbZMbNhD9MrOCZg4pkA=;
+ b=ZsqW2ANbPVeWiYJLpgF2bgrwZNweXZgyT5OB3gWwBglTCIx5TDq4i3/ITRUUG3lTXxESmznsU/491OAp5Lcu0N36w9nbR25rHKe383bJ5v0jFVQEjsay6pIGdL6FmzblofX1srNVHDijX6ocJyHm3gY1J+lKnwH2dgQf09fhN/VSpi5hftYOE36n+znwp7flhWB9PTPJl8l7ouRA0q9AAT44BNv7fJVCFtB/y7yDJPKe3OZUUgCBzQhVuy2Tq7/7Y2l286n0sCHD74pKQnMB1iUA8OFBSI0wxsM4+P//EqG0vjBROu4XTTlgIjQMhlhQt89GTxEWsCcm0ynMgep9Vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6aOSOUd9RBEHqOP1XcSOPcC/VbZMbNhD9MrOCZg4pkA=;
+ b=cYCXhwwFC+6mNEoVFRjlhKGEOUKSpAD6VIWtM1VoiCy0C57G6Uj6RMrW3N9BFCnnZO3F6PxS/TOHVweKZ0pYViulJd6WGMYW36xuD9hva/ykV/qSPCUL0TnsQ72rnaIcgmRvQUZlJcFV6Y+Sg27P5AaxwzjSBf8MByHVjdduJHr7ul71c+DjlYQOxtLPnQh1/Pv30ygmXWE9xqvusUv7bjKaOmbYD+I3KPBugezScCKQ0Jy9/lTS0C6SAPqVo1ZvBNDOWRgcHH0VzE0UORPDPGlQoZwibHFD00bMK/2hYeNPDt2BLZ1hJVu3lI1q/1xMTbAbd9Swc/Mbyz4OqDto1Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CH2PR12MB4037.namprd12.prod.outlook.com (2603:10b6:610:7a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Sun, 10 Jul
+ 2022 08:20:33 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::a525:8fcf:95ec:f7ad]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::a525:8fcf:95ec:f7ad%9]) with mapi id 15.20.5417.025; Sun, 10 Jul 2022
+ 08:20:33 +0000
+Date:   Sun, 10 Jul 2022 11:20:27 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 1/6] net: bridge: add locked entry fdb flag
+ to extend locked port feature
+Message-ID: <YsqLyxTRtUjzDj6D@shredder>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-2-netdev@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707152930.1789437-2-netdev@kapio-technology.com>
+X-ClientProxiedBy: MR1P264CA0153.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:54::11) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9b9542cd-be34-46ee-13e6-08da624d0ee9
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4037:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2U9f43Eq0iuU+Lk4fZrpjLFahKQymNh20MSjQUn6irw540lUcw8oCrQAHJfVTcGFI2ApcAMnhc40rqafxTXaR1P22FxFJllKcGH1EUUP3It3iSKRdLRSCyKNz+Oiu0ffY8HqA/kwEtj8Ejvx4y5xgPWq8AdJZl6V9uH9lgwlmXblRDWbfNoZnzlvFNeFoXscBGdEIZoW6pxUYhpRjUmZQCJAxfAW7RYsrt4+KdktZqDUODuFMB4W30fIZBNI5EKnS/W14HCMdn5VVZL8lPdCao+6+tYePsrFzWjt03sIaNjiIXMLepcwqA/p6s6RsucxX7sAc1YFyapSBSFG1j6qjjyprsqP3+nO26hA8ZzNR+pAMlPm9J6XNH5wpekqabPcNhU6Q7bgtZ2EjqZgqiHF3aUlSxwjZFCgL45kX/AUp5Hq8Ifp7+o73RcaIm1rM8hlTUb2M1fA7y3NsOkRhPPawWOLUfx9fydiMbtf9Qca1uXBUSqbp5LN7MD7ZVo1tn01jRfevUIjKdey1fz2wR3RN92V1q2SJtnKDhgENxBU99sSYmcrMChJaoH/dgwp+MH/l3a3UQ21FbpufHl+jwiwe5WQhPKKC1o0e9Itzpq2iGc1iRvYNR5Bc0l/8RPAvOUYkjEl9SIS6yC3I8orIMzlkF3eJVp1wlSsIozygHf2KCbgK/rZkn3M5nbPYprbB4xDrgpPmqV4TEJ/Z0r1pAhtthU8/LV6zoPGqB2iCjYO6OKC8khmUIStUhrBho5sXQ6mAlK41naEacb9KDYPed+UVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(41300700001)(6512007)(9686003)(6666004)(2906002)(33716001)(86362001)(6486002)(478600001)(26005)(6506007)(316002)(6916009)(54906003)(38100700002)(8936002)(7416002)(8676002)(66476007)(66556008)(66946007)(5660300002)(4326008)(83380400001)(66574015)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/K/T0k9eMOhvikHJLFAoLauXFIIB+yEdE2dTPHB6Lid1cFd1LmwN35AcnH0N?=
+ =?us-ascii?Q?UqN1/7kJ7Q3nv59ea5LcIPc2HEPk6xmPNJIWvZ3TN+4podUPBB+1eGv4t7ao?=
+ =?us-ascii?Q?9ExVgwHkWf4RdtHCmnjslTHu3hdqauEuBkm0a0WDKoA3IEJcZSRo75cVap7b?=
+ =?us-ascii?Q?tp7JP3s0hfg2jPuC31tVeZWM7DbG6sflZG5pkI4Pb2p347J7Vs/Xj5K53wkp?=
+ =?us-ascii?Q?DHZt70CExJu2wt7e3aGkYwW39zCMqeNDdCRE16DYFoV/Dt/TcHABa6WOtQaf?=
+ =?us-ascii?Q?3n4DVPtVs2+bEGC8J9FZOxsbR/9SXfcFThA0YlymEpFJ/iSNOjbok4EWm5ch?=
+ =?us-ascii?Q?y3ZKQzc9j0XabWwxIYu9i+viDyN4s7DhQvkEwnflHrMMbmaeAh+r/ACXbywF?=
+ =?us-ascii?Q?ocIX8E4Np5K1BFAt7XPp66BAIZIQl5jOWM8XMw14HfZvUlKHqZazWTQDxCdX?=
+ =?us-ascii?Q?wmeDmom0zX1tn2Vy9gxPa6x2vkeGcgyv2MOO52JIUIYPe9n6PB9KoHW2FFBR?=
+ =?us-ascii?Q?gJv9vYXiBSoDwt+1VxozX0ZV9l4KaT7nvn4LLq/ELF66vJLa4WrGygo2VGO0?=
+ =?us-ascii?Q?30wM9981Yushn+QhUwYQ/542v+qaCVTMJWTlbeywgaEzLcf4sVG6G0n1nPhL?=
+ =?us-ascii?Q?mtNA0C34jPMr6fLou1NOzsNJV6mG7GTb9biR4kmv2db0raXFngo2JRj0UlfG?=
+ =?us-ascii?Q?ICUngwHZP5XZoCqSS7CVP13CrP+LS5jsSUO/eCo6m3rALhI8AhJBHR5gqh4s?=
+ =?us-ascii?Q?GJDajzkxPBNorsq1MGj5n69K7+IzITq3DCNicLkOCF4GtTyigbgACv5raUc6?=
+ =?us-ascii?Q?48Y8cTrQ5d+W3GQ8M43MQ/qb/dIRyOgOOIWD8/4THC9APi8UiGZujTO1AGJ+?=
+ =?us-ascii?Q?T8uHzPJ9Zu19GShAriJjT04j+O2J6S+o/11Wyq5mr7wQSlUQcilO4PVt1PSk?=
+ =?us-ascii?Q?JKC+5WzTvnHseytcYfZNabHf1STWVcaOcryNC6Siq4NIdgyVO8tHfiG5DhII?=
+ =?us-ascii?Q?FnE2PfV6eBOeOIr3KHHQRn1i0jxntC3S+zVX/FrKNe7T1wPnf6aq4yuPpinA?=
+ =?us-ascii?Q?YcTPSEC/CkG5UM745QiwHRyCJoVsEdwqoRevEg97NWKmnfVPGvdvZ/HuQ0zf?=
+ =?us-ascii?Q?7PO/W9hLXRlmOc+VqaTIFMHQ3if7DMXJrv+pMstmQSsYrs2NNxXh8wlJxDRZ?=
+ =?us-ascii?Q?zSlIFiW3oJYpL7TelLPAOwhBG+kVIDe0NgDFRFRa0i23lLNlpPRp3ojmNSX3?=
+ =?us-ascii?Q?9PZIDLBn3lzQwKj03k+6/mBSAzA8ucintpivO5rbKFVKLZu6j5nCwpkqR1f5?=
+ =?us-ascii?Q?saVYob2ymthFro6WhMXqxu3YavzFDLpxoonsK3q1BEyTjEinbjmAS+ygwh1a?=
+ =?us-ascii?Q?bubrWuQzN3QJl5JN2R+8HqoIDm1XrEgGxt5mS69QNGAp+QpPSYrbe8fAsTR5?=
+ =?us-ascii?Q?kcoKbr9ZYmKfl+bkfoFCEJX01kKecxN1kcFmzQwvDTRTOPAqf1+hGV7E1xWZ?=
+ =?us-ascii?Q?+JrHgBh0oGEmoCkk3dPU/9I4d/0u2+B77x1DawtXdIVumOfL/UkvggNspMgD?=
+ =?us-ascii?Q?loQIs9WRdhHtbd3Ruq5K7vPvop+/1nkRi7MhHXVb?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b9542cd-be34-46ee-13e6-08da624d0ee9
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2022 08:20:32.9755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qMnLUzSs3N6wKpoxApqpO9eavR86ydw+08yYxywhfSpdOXuuWMbC5Pr/WIRF04AwzUap2+FKrrRox4gdJ466IQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4037
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner R320 SoC has a pin controller in the CPUS power domain.
+On Thu, Jul 07, 2022 at 05:29:25PM +0200, Hans Schultz wrote:
+> Add an intermediate state for clients behind a locked port to allow for
+> possible opening of the port for said clients. The clients mac address
+> will be added with the locked flag set, denying access through the port
+> for the mac address, but also creating a new FDB add event giving
+> userspace daemons the ability to unlock the mac address. This feature
+> corresponds to the Mac-Auth and MAC Authentication Bypass (MAB) named
+> features. The latter defined by Cisco.
+> 
+> Only the kernel can set this FDB entry flag, while userspace can read
+> the flag and remove it by replacing or deleting the FDB entry.
+> 
+> Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
+> ---
+>  include/uapi/linux/neighbour.h |  1 +
+>  net/bridge/br_fdb.c            | 12 ++++++++++++
+>  net/bridge/br_input.c          | 10 +++++++++-
+>  net/bridge/br_private.h        |  3 ++-
+>  4 files changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+> index 39c565e460c7..76d65b481086 100644
+> --- a/include/uapi/linux/neighbour.h
+> +++ b/include/uapi/linux/neighbour.h
+> @@ -53,6 +53,7 @@ enum {
+>  #define NTF_ROUTER	(1 << 7)
+>  /* Extended flags under NDA_FLAGS_EXT: */
+>  #define NTF_EXT_MANAGED	(1 << 0)
+> +#define NTF_EXT_LOCKED	(1 << 1)
+>  
+>  /*
+>   *	Neighbor Cache Entry States.
+> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> index e7f4fccb6adb..ee9064a536ae 100644
+> --- a/net/bridge/br_fdb.c
+> +++ b/net/bridge/br_fdb.c
+> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>  	struct nda_cacheinfo ci;
+>  	struct nlmsghdr *nlh;
+>  	struct ndmsg *ndm;
+> +	u32 ext_flags = 0;
+>  
+>  	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
+>  	if (nlh == NULL)
+> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>  		ndm->ndm_flags |= NTF_EXT_LEARNED;
+>  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
+>  		ndm->ndm_flags |= NTF_STICKY;
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
+> +		ext_flags |= NTF_EXT_LOCKED;
+>  
+>  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
+>  		goto nla_put_failure;
+>  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
+>  		goto nla_put_failure;
+> +	if (nla_put_u32(skb, NDA_FLAGS_EXT, ext_flags))
+> +		goto nla_put_failure;
+> +
+>  	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
+>  	ci.ndm_confirmed = 0;
+>  	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
+> @@ -171,6 +177,7 @@ static inline size_t fdb_nlmsg_size(void)
+>  	return NLMSG_ALIGN(sizeof(struct ndmsg))
+>  		+ nla_total_size(ETH_ALEN) /* NDA_LLADDR */
+>  		+ nla_total_size(sizeof(u32)) /* NDA_MASTER */
+> +		+ nla_total_size(sizeof(u32)) /* NDA_FLAGS_EXT */
 
-Add support for it.
+Need to add validation that 'NTF_EXT_LOCKED' is not set in
+'NDA_FLAGS_EXT' in entries installed by user space.
 
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-Acked-by: Maxime Ripard <maxime@cerno.tech>
----
-Changes in v2:
-- Fixes of the driver name in comment.
-- Update the copyright part to cover my work outside Sipeed.
-- Added Maxime's ACK.
+>  		+ nla_total_size(sizeof(u16)) /* NDA_VLAN */
+>  		+ nla_total_size(sizeof(struct nda_cacheinfo))
+>  		+ nla_total_size(0) /* NDA_FDB_EXT_ATTRS */
+> @@ -1082,6 +1089,11 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+>  		modified = true;
+>  	}
+>  
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags)) {
+> +		clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+> +		modified = true;
+> +	}
+> +
+>  	if (fdb_handle_notify(fdb, notify))
+>  		modified = true;
+>  
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index 68b3e850bcb9..3d15548cfda6 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -110,8 +110,16 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+>  
+>  		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
+> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
+> +		    test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
+> +			if (!fdb_src) {
+> +				unsigned long flags = 0;
+> +
+> +				__set_bit(BR_FDB_ENTRY_LOCKED, &flags);
+> +				br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
+> +			}
 
- drivers/pinctrl/sunxi/Kconfig                 |   5 +
- drivers/pinctrl/sunxi/Makefile                |   1 +
- drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c | 293 ++++++++++++++++++
- 3 files changed, 299 insertions(+)
- create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c
+We need a better definition of what 'BR_FDB_ENTRY_LOCKED' means. An
+entry marked with this flag is not good enough to let traffic with this
+SA ingress from a locked port, but if traffic is received from a
+different port with this DA, the bridge will forward it as known
+unicast.
 
-diff --git a/drivers/pinctrl/sunxi/Kconfig b/drivers/pinctrl/sunxi/Kconfig
-index bc97610a79c9..9a005b719ac4 100644
---- a/drivers/pinctrl/sunxi/Kconfig
-+++ b/drivers/pinctrl/sunxi/Kconfig
-@@ -131,4 +131,9 @@ config PINCTRL_SUN50I_R329
- 	default ARM64 && ARCH_SUNXI
- 	select PINCTRL_SUNXI
- 
-+config PINCTRL_SUN50I_R329_R
-+	bool "Support for the Allwinner R329 R-PIO"
-+	default ARM64 && ARCH_SUNXI
-+	select PINCTRL_SUNXI
-+
- endif
-diff --git a/drivers/pinctrl/sunxi/Makefile b/drivers/pinctrl/sunxi/Makefile
-index e33f7c5f1ff9..245840a7959e 100644
---- a/drivers/pinctrl/sunxi/Makefile
-+++ b/drivers/pinctrl/sunxi/Makefile
-@@ -26,5 +26,6 @@ obj-$(CONFIG_PINCTRL_SUN50I_H6_R)	+= pinctrl-sun50i-h6-r.o
- obj-$(CONFIG_PINCTRL_SUN50I_H616)	+= pinctrl-sun50i-h616.o
- obj-$(CONFIG_PINCTRL_SUN50I_H616_R)	+= pinctrl-sun50i-h616-r.o
- obj-$(CONFIG_PINCTRL_SUN50I_R329)	+= pinctrl-sun50i-r329.o
-+obj-$(CONFIG_PINCTRL_SUN50I_R329_R)	+= pinctrl-sun50i-r329-r.o
- obj-$(CONFIG_PINCTRL_SUN9I_A80)		+= pinctrl-sun9i-a80.o
- obj-$(CONFIG_PINCTRL_SUN9I_A80_R)	+= pinctrl-sun9i-a80-r.o
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c b/drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c
-new file mode 100644
-index 000000000000..0d9b5a5a0ee2
---- /dev/null
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-r329-r.c
-@@ -0,0 +1,293 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Allwinner R329 R_PIO pin controller driver
-+ *
-+ * Copyright (C) 2021 Shenzhen Sipeed Technology Co., Ltd.
-+ * Copyright (C) 2022 Icenowy Zheng <uwu@icenowy.me>
-+ *
-+ * Based on former work, which is:
-+ *   Copyright (C) 2020 Arm Ltd.
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/reset.h>
-+
-+#include "pinctrl-sunxi.h"
-+
-+static const struct sunxi_desc_pin sun50i_r329_r_pins[] = {
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 0),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2s0"),		/* LRCK */
-+		  SUNXI_FUNCTION(0x4, "s_dmic"),	/* DATA3 */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM0 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 0)),	/* PL_EINT0 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 1),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2s0"),		/* BCLK */
-+		  SUNXI_FUNCTION(0x4, "s_dmic"),	/* DATA2 */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM1 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 1)),	/* PL_EINT1 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 2),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2s0_dout0"),
-+		  SUNXI_FUNCTION(0x3, "s_i2s0_din1"),
-+		  SUNXI_FUNCTION(0x4, "s_dmic"),	/* DATA1 */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM2 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 2)),	/* PL_EINT2 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 3),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2s0_dout1"),
-+		  SUNXI_FUNCTION(0x3, "s_i2s0_din0"),
-+		  SUNXI_FUNCTION(0x4, "s_dmic"),	/* DATA0 */
-+		  SUNXI_FUNCTION(0x5, "s_i2c"),		/* SDA */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 3)),	/* PL_EINT3 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 4),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2s0"),		/* MCLK */
-+		  SUNXI_FUNCTION(0x3, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION(0x4, "s_dmic"),	/* CLK */
-+		  SUNXI_FUNCTION(0x5, "s_i2c"),		/* SCK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 4)),	/* PL_EINT4 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 5),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2c"),		/* SDA */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM3 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 5)),	/* PL_EINT5 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 6),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2c"),		/* SCK */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM4 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 6)),	/* PL_EINT6 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 7),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION(0x4, "clock"),		/* X32KFOUT */
-+		  SUNXI_FUNCTION(0x5, "s_pwm"),		/* PWM5 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 7)),	/* PL_EINT7 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 8),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_uart"),	/* TX */
-+		  SUNXI_FUNCTION(0x3, "s_i2c"),		/* SDA */
-+		  SUNXI_FUNCTION(0x4, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 8)),	/* PL_EINT8 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 9),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_uart"),	/* RX */
-+		  SUNXI_FUNCTION(0x3, "s_i2c"),		/* SCK */
-+		  SUNXI_FUNCTION(0x4, "clock"),		/* X32KFOUT */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 9)),	/* PL_EINT9 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(L, 10),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 10)),	/* PL_EINT10 */
-+	/* Hole */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 0),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_uart"),	/* TX */
-+		  SUNXI_FUNCTION(0x3, "s_jtag"),	/* MS */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 0)),	/* PM_EINT0 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 1),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_uart"),	/* RX */
-+		  SUNXI_FUNCTION(0x3, "s_jtag"),	/* CK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 1)),	/* PM_EINT1 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 2),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "s_jtag"),	/* DO */
-+		  SUNXI_FUNCTION(0x4, "s_i2c"),		/* SDA */
-+		  SUNXI_FUNCTION(0x5, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 2)),	/* PM_EINT2 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 3),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2c"),		/* SDA */
-+		  SUNXI_FUNCTION(0x3, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 3)),	/* PM_EINT3 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 4),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_i2c"),		/* SCK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 4)),	/* PM_EINT4 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 5),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "clock"),		/* X32KFOUT */
-+		  SUNXI_FUNCTION(0x3, "s_jtag"),	/* DI */
-+		  SUNXI_FUNCTION(0x4, "s_i2c"),		/* SCK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 5)),	/* PM_EINT5 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 6),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "nmi"),
-+		  SUNXI_FUNCTION(0x3, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION(0x4, "clock"),		/* X32KFOUT */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 6)),	/* PM_EINT6 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 7),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x2, "s_ir"),		/* RX */
-+		  SUNXI_FUNCTION(0x3, "clock"),		/* X32KFOUT */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 7)),	/* PM_EINT7 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(M, 8),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 1, 8)),	/* PM_EINT8 */
-+	/* Hole */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 0),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 0)),	/* PN_EINT0 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 1),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* MDC */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 1)),	/* PN_EINT1 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 2),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* MDIO */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 2)),	/* PN_EINT2 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 3),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXD3 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 3)),	/* PN_EINT3 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 4),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXCK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 4)),	/* PN_EINT4 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 5),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXD2 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 5)),	/* PN_EINT5 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 6),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXD0 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 6)),	/* PN_EINT6 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 7),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXCK */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 7)),	/* PN_EINT7 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 8),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXERR */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 8)),	/* PN_EINT8 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 9),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXCTL/TXEN */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 9)),	/* PN_EINT9 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 10),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXD3 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 10)),	/* PN_EINT10 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 11),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXD1 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 11)),	/* PN_EINT11 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 12),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* RXCTL/CRS_DV */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 12)),	/* PN_EINT12 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 13),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXD2 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 13)),	/* PN_EINT13 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 14),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXD1 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 14)),	/* PN_EINT14 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 15),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* TXD0 */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 15)),	/* PN_EINT15 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 16),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* EPHY-25M */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 16)),	/* PN_EINT16 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 17),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION(0x3, "emac"),		/* CLKIN */
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 17)),	/* PN_EINT17 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 18),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 18)),	/* PN_EINT18 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 19),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 19)),	/* PN_EINT19 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 20),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 20)),	/* PN_EINT20 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 21),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 21)),	/* PN_EINT21 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 22),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 22)),	/* PN_EINT22 */
-+	SUNXI_PIN(SUNXI_PINCTRL_PIN(N, 23),
-+		  SUNXI_FUNCTION(0x0, "gpio_in"),
-+		  SUNXI_FUNCTION(0x1, "gpio_out"),
-+		  SUNXI_FUNCTION_IRQ_BANK(0x6, 2, 23)),	/* PN_EINT23 */
-+};
-+
-+static const struct sunxi_pinctrl_desc sun50i_r329_r_pinctrl_data = {
-+	.pins = sun50i_r329_r_pins,
-+	.npins = ARRAY_SIZE(sun50i_r329_r_pins),
-+	.pin_base = PL_BASE,
-+	.irq_banks = 3,
-+	.io_bias_cfg_variant = BIAS_VOLTAGE_PIO_POW_MODE_SEL,
-+};
-+
-+static int sun50i_r329_r_pinctrl_probe(struct platform_device *pdev)
-+{
-+	return sunxi_pinctrl_init(pdev,
-+				  &sun50i_r329_r_pinctrl_data);
-+}
-+
-+static const struct of_device_id sun50i_r329_r_pinctrl_match[] = {
-+	{ .compatible = "allwinner,sun50i-r329-r-pinctrl", },
-+	{}
-+};
-+
-+static struct platform_driver sun50i_r329_r_pinctrl_driver = {
-+	.probe	= sun50i_r329_r_pinctrl_probe,
-+	.driver	= {
-+		.name		= "sun50i-r329-r-pinctrl",
-+		.of_match_table	= sun50i_r329_r_pinctrl_match,
-+	},
-+};
--- 
-2.36.0
+If we are going to tell switchdev drivers to ignore locked entries,
+packets with this DA will be flooded as unknown unicast in hardware. For
+mv88e6xxx you write "The mac address triggering the ATU miss violation
+will be added to the ATU with a zero-DPV". What does it mean? Traffic
+with this DA will be blackholed?
 
+It would be good to agree on one consistent behavior for all hardware
+implementations and the bridge driver. Do you know what happens in other
+implementations (e.g., Cisco)?
+
+FWIW, to me it makes sense to have the bridge ignore locked entries and
+let traffic be flooded. If user space does not want traffic to egress a
+locked port, then it can turn off flooding on the port while it is
+locked.
+
+>  			goto drop;
+> +		}
+>  	}
+>  
+>  	nbp_switchdev_frame_mark(p, skb);
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index 06e5f6faa431..47a3598d25c8 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -251,7 +251,8 @@ enum {
+>  	BR_FDB_ADDED_BY_EXT_LEARN,
+>  	BR_FDB_OFFLOADED,
+>  	BR_FDB_NOTIFY,
+> -	BR_FDB_NOTIFY_INACTIVE
+> +	BR_FDB_NOTIFY_INACTIVE,
+> +	BR_FDB_ENTRY_LOCKED,
+>  };
+>  
+>  struct net_bridge_fdb_key {
+> -- 
+> 2.30.2
+> 

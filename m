@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E4A56CF7D
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 16:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDAE56CF7F
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 16:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiGJOnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 10:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S229567AbiGJOtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 10:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGJOng (ORCPT
+        with ESMTP id S229450AbiGJOtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 10:43:36 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008A8289
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 07:43:30 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a10so1752731ljj.5
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 07:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=19MhE5ZfrhXv+XYWE6FLNmmTUzoahjHoCzilM+giJ+k=;
-        b=a6NBszHDHT2cYh8kUOScD2ibqpT7ddU8tPcRl7sHY3jNSJ67rLDQhZaKXkmpA9VE4J
-         djRGj6ZfDFIzZ3DaWFRWpNWAQKCeVRmgoxOaE5GXzYb7UqQDz4k8eJXO6qeo0GjeervX
-         09kLWWT8N2WdlFT8TWP2nz0zll+8m50DANAXC316JkJvnYWJVSALekLWrpwcjz0XJIpE
-         uT+7UF5KJSTFq9hJ2zH95LlIPbOCiTG6e+OcfIY1Nh210xV0hyFi6mOYmCquA9um8YAw
-         bDTQTHHesldrsCGKGNQjAmmGh0Kpkotdrsw7tKmwupKa7ISfRoiBR9TwGb9tVCUNa6a1
-         nq8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=19MhE5ZfrhXv+XYWE6FLNmmTUzoahjHoCzilM+giJ+k=;
-        b=rYHoRNykbhRf0fdKtJH/zYRhh+NkHX5hyZ9jW+s8+AoWaVzcLoIXa7ecUNdsJ7GBLx
-         /MqVQqKMt9LYbJjrkvb5vWxuNhJXDitwJEkp+/Pp19IOxW+sqKGocsaxBHojLjDc4Gdb
-         gn7sRydtElWCja6DHj+iAbtZ3FICuAfSY9NHaUrA1BqFrZbijcnGDBeua0L4OLPUTi84
-         OPbNqYUjpvaRlDi3WCCSMMCKdZPlqob2urErEnV/iW46ESlquRawmHJqoaAvikMh+STu
-         z56odpzgOD86OQWO+inPovdC/+xcAlx7i5Bnc3WmxLIZBh4OZSjpORbSPfYUDxVRUA/h
-         jNAw==
-X-Gm-Message-State: AJIora+qAJmjkVA214JCDJCmvegks64Swc0QGjx4/0Gh9O8/MHA3SMrw
-        uwQi77Rm0ng6NTCKMIdRJb2+ug==
-X-Google-Smtp-Source: AGRyM1tJ59Oz9cXf8kXE8WHZfYzZXD2CdrY2JUdL5IwSncxq0RpO5KsqvhUTSVlUVMmSv/rTAHqY9A==
-X-Received: by 2002:a2e:a54a:0:b0:25a:6609:835a with SMTP id e10-20020a2ea54a000000b0025a6609835amr7310297ljn.408.1657464209307;
-        Sun, 10 Jul 2022 07:43:29 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cac-200.bb.online.no. [88.92.172.200])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056512325500b0047255d21132sm960283lfr.97.2022.07.10.07.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 07:43:28 -0700 (PDT)
-Message-ID: <b2bf6fed-2f98-da42-076f-9a4ef3b13fd5@linaro.org>
-Date:   Sun, 10 Jul 2022 16:43:26 +0200
+        Sun, 10 Jul 2022 10:49:41 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0CE09D;
+        Sun, 10 Jul 2022 07:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=WJOfGDr7u/BDDToEE9Qvjgh28U6lSAYZqnZi422JXYY=; b=Sk5AKrhUTgnBq8NkdSEVntBrug
+        mPi63BSKjiStajFW8QukCAZqdAsWKMB1K/phOnT5IzYZeiO2hO/17R4aLh/gl0ZQNqCvtkjPA2BCV
+        7ByjyApVa9Y+nKo6MiO/4tqFmtnaMvtDeV5Ezit500f2R7aBFWxLoXph8HZlgXbrL7iiDkJhlGZa7
+        oYmFd/E+7E8RpkowUfyDnj5IxvZ2Z6CDwiDfzz6rHaqLFD8PlYLjFkfA/ASs5gO0TV2UoHL0wdl77
+        B7jNcRSz/N4wrmxYqd2Hs00jfiDNPRB2wxlBhcPbayAL3xxFG0nl/qQhuVtnwA1Iwv9ZqbRMh1MYz
+        QWoSPIBR07rlAyOFO+vB17tTtmh6pqBA54wZPwHWIx1ofy9mimoANDsqFHp5ykaseoh47q5hekjg+
+        nWudIjDbeLiwl90BZFmFOlToFGpxUh4wgR2HfEDbcX0iIqgPaJzJUatT6HMGZk3d3HX84S2M0hn0z
+        8HK/yUNG8KqBG6Ocq9b3XZvtGqjNtXj70ekSUHr1CFV/E4EQ3ULqxeqTw1fsA85br1fXZWZq1BiZ/
+        ZeXJYiFVciaYYBJ84Qw0R5yRH6oCtHOoT8vdKo8csT4iBb9jW9HvanNNHFcTn9pf1UNNyM64FB+M1
+        2CelIqseABwnf4M+EwNZOr9wm9mSzWBc9U7G+p8rY=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net/9p: Initialize the iounit field during fid creation
+Date:   Sun, 10 Jul 2022 16:48:29 +0200
+Message-ID: <1984068.YOKu8ataPd@silver>
+In-Reply-To: <20220710141402.803295-1-tyhicks@linux.microsoft.com>
+References: <20220710141402.803295-1-tyhicks@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/6] dt-bindings/display: ingenic: Add compatible string
- for the JZ4760(B)
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        list@opendingux.net, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20220708205406.96473-1-paul@crapouillou.net>
- <20220708205406.96473-2-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220708205406.96473-2-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/07/2022 22:54, Paul Cercueil wrote:
-> Add compatible strings for the LCD controllers found in the JZ4760 and
-> JZ4760B SoCs from Ingenic.
+On Sonntag, 10. Juli 2022 16:14:02 CEST Tyler Hicks wrote:
+> Ensure that the fid's iounit field is set to zero when a new fid is
+> created. Certain 9P operations, such as OPEN and CREATE, allow the
+> server to reply with an iounit size which the client code assigns to the
+> p9_fid struct shortly after the fid is created by p9_fid_create(). On
+> the other hand, an XATTRWALK operation doesn't allow for the server to
+> specify an iounit value. The iounit field of the newly allocated p9_fid
+> struct remained uninitialized in that case. Depending on allocation
+> patterns, the iounit value could have been something reasonable that was
+> carried over from previously freed fids or, in the worst case, could
+> have been arbitrary values from non-fid related usages of the memory
+> location.
 > 
+> The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
+> after the uninitialized iounit field resulted in the typical sequence of
+> two getxattr(2) syscalls, one to get the size of an xattr and another
+> after allocating a sufficiently sized buffer to fit the xattr value, to
+> hit an unexpected ERANGE error in the second call to getxattr(2). An
+> uninitialized iounit field would sometimes force rsize to be smaller
+> than the xattr value size in p9_client_read_once() and the 9P server in
+> WSL refused to chunk up the READ on the attr_fid and, instead, returned
+> ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
+> the READ and this problem goes undetected there.
+> 
+> Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+
+> ---
+> 
+> v2:
+> - Add Fixes tag
+> - Improve commit message clarity to make it clear that this only affects
+>   xattr get/set
+> - kzalloc() the entire fid struct instead of individually zeroing each
+>   member
+>   - Thanks to Christophe JAILLET for the suggestion
+> v1: https://lore.kernel.org/lkml/20220710062557.GA272934@sequoia/
+> 
+>  net/9p/client.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index 8bba0d9cf975..371519e7b885 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -889,16 +889,13 @@ static struct p9_fid *p9_fid_create(struct p9_client
+> *clnt) struct p9_fid *fid;
+> 
+>  	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
+> -	fid = kmalloc(sizeof(*fid), GFP_KERNEL);
+> +	fid = kzalloc(sizeof(*fid), GFP_KERNEL);
+>  	if (!fid)
+>  		return NULL;
+> 
+> -	memset(&fid->qid, 0, sizeof(fid->qid));
+>  	fid->mode = -1;
+>  	fid->uid = current_fsuid();
+>  	fid->clnt = clnt;
+> -	fid->rdir = NULL;
+> -	fid->fid = 0;
+>  	refcount_set(&fid->count, 1);
+> 
+>  	idr_preload(GFP_KERNEL);
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

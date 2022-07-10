@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA53456D0E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E98256D0E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiGJSxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 14:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S229555AbiGJS4Z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 10 Jul 2022 14:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGJSxi (ORCPT
+        with ESMTP id S229463AbiGJS4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 14:53:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FE3BC07
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 11:53:37 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f39so5517248lfv.3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 11:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MjnWXdJX+ay9kx38kvyoZNCAXjqkrOK+MR+sD5e42MA=;
-        b=cCAnTvGpgv1VOxq4QkKFQPUKm0OlnZAicTALdTpQkPW6ZkfzK5lfFKgErveXFEI1Wd
-         MpatJxtSvCVNb95GYpikEYkKUaEBzwBkS6TTqh+P+ByzCWcD91l/slOwCYBvcoyDdiMP
-         5U32Dk4It78u4TtWOvdC+Q2jefWz2Al03roAtnxw6M9T7VrkgpbUXJTLFdFHU5zpxEF1
-         5MGKdk5/L6AomK9B5OhwJK0Oru6FNGSTj+8GrmvdRjVKZ3n4gqdRSpQTiCYNkpw1E2I4
-         8nE96IEzRTQRZEDAwq0erFlfDJd8w6p28D+5kWQ5nF3YFdUXUoSQCpFFdkEIxGT0n0kb
-         JaPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MjnWXdJX+ay9kx38kvyoZNCAXjqkrOK+MR+sD5e42MA=;
-        b=M4PF5VbxBtUMw+Oam9z0tUJe7UoZO8Nbs6pWypfzSTcELHg03ZRIvwRtIO8M6Kzm5S
-         xdoHy6GyQ+xtCyXvv9JvtKUWPCtc/Hc0m8YYZ5urkeorfEeZyn4OuvLbEDAFEMK5u4Us
-         OfHYT6jaym2n5J9dH/Z+Dri45FCOrEx5unExlz3oVku4Vl83/kUXbkX6yXq5+e2JNIJs
-         VUKy4zHF7zSSCQUS1i5n0jcqyDL6JBWXJ6uHlInvZvaHLCIw+izR1N4jtk2Bduytx+fe
-         W8q4V0+2aSWXJEUyWifEsdb3Qdq2QfwTNQhd9TEj8j6Qk2H9Bq3Rce6EF2OzrGxrSJlQ
-         u9NQ==
-X-Gm-Message-State: AJIora8C6iUDyf2h3ONcZkLmIJsbEZvgwzE0NWjBM2i6tGfETbOmzSAD
-        hrKpkayNFM3h6tdETYHe/2EauoEGLmYdNA==
-X-Google-Smtp-Source: AGRyM1uya0WGuv+8UUTsP18UtqUbrCvMhNHmF2mxy6w3S1UINsH8YvDnWNIxXJgNYXN1MAa0V+9leQ==
-X-Received: by 2002:a05:6512:3f12:b0:47f:51de:d067 with SMTP id y18-20020a0565123f1200b0047f51ded067mr9074357lfa.146.1657479215403;
-        Sun, 10 Jul 2022 11:53:35 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.143])
-        by smtp.gmail.com with ESMTPSA id o19-20020ac24e93000000b004793b9c2c12sm837853lfr.124.2022.07.10.11.53.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Jul 2022 11:53:34 -0700 (PDT)
-Message-ID: <1a64fc6a-a33d-03f4-ec12-980e42148061@openvz.org>
-Date:   Sun, 10 Jul 2022 21:53:34 +0300
+        Sun, 10 Jul 2022 14:56:23 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0579140A6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 11:56:21 -0700 (PDT)
+Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M4JeB-1oAL7S3j9t-000IOH for <linux-kernel@vger.kernel.org>; Sun, 10 Jul
+ 2022 20:56:20 +0200
+Received: by mail-yb1-f181.google.com with SMTP id n74so5626117yba.3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 11:56:19 -0700 (PDT)
+X-Gm-Message-State: AJIora9ON5xe2Xqk6IzTV5T2z5yB61XhPi8CmTRnxiHXtSp6TswtAmPu
+        QJNfcaVLUx1OG6ME2PbT8T+N1hXVfFllV+HiDL4=
+X-Google-Smtp-Source: AGRyM1vC8Psjq8TKqTYophNIDYGT63nbqvav729u+ibTi3lCuwuf8F4ff1EERlfLRC55htVqfUGVKk+aL3IGcrOWv8U=
+X-Received: by 2002:a05:6902:120f:b0:668:2228:9627 with SMTP id
+ s15-20020a056902120f00b0066822289627mr15013108ybu.134.1657479378691; Sun, 10
+ Jul 2022 11:56:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
- mkdir, cgroup
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>
-Cc:     kernel@openvz.org, Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cgroups <cgroups@vger.kernel.org>
-References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
- <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
- <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
- <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
- <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
- <YrXDV7uPpmDigh3G@dhcp22.suse.cz>
- <CALvZod6U8DvMUcuUNfpQRwfkevQB7=nP4ZLA2gWGNf_JGdyARQ@mail.gmail.com>
- <Yr7Ukyy0vhBjebo4@dhcp22.suse.cz>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <Yr7Ukyy0vhBjebo4@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <e547df86b7195bb9cc5558afb4c74aeefe286849.1657474606.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <e547df86b7195bb9cc5558afb4c74aeefe286849.1657474606.git.christophe.leroy@csgroup.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 10 Jul 2022 20:56:02 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Wd_CR8EPqdPEp6kgjrymvw3cEuHCZZ8AvoT-sHVX2nQ@mail.gmail.com>
+Message-ID: <CAK8P3a2Wd_CR8EPqdPEp6kgjrymvw3cEuHCZZ8AvoT-sHVX2nQ@mail.gmail.com>
+Subject: Re: [PATCH] powerpc/32: Don't always pass -mcpu=powerpc to the compiler
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:/nOHuyOpTYhEByXNAmkHHQmhIzNRCKxiz0GI78R8e7xLrOVnP/w
+ bKLbUQ2n0+RUEa3rko+7T1Gsjxo8zs9pqzBQiKLcGN281eEvAhnxYZ+BCiRdvA5nnf32ulj
+ IjQWtukitI/0s6CoVPU/jydmqtG2ABlg83+DTdkFxZ+8yFdPFTbiVNVz8Rzy+G0qz93YtuB
+ pL4fcVkiM1Dv9YQHk3cNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/+eUZtud8KM=:jhth1yumkIrYAgKp0zA+IM
+ pvx2ahResbbo3dwvsVNnlLiRbdgXmn0b7HxukCMFcdjQvWZGSI+9pUMKWF7SjVMjBHd+tlQC/
+ 3XUQ2TgX32621yHxtMZE/YsbRupnX47pJ/Wb60lObuwanKgja43GtBzNILXW/WKHY6Ljhqisw
+ S0bEYYpoJw0yax4zf1hEydldfvYM05zuqkWRP7al7rqtVp9XCTjdbgxTRSlf2Ox4nbWB2ioIo
+ ZLsBMU5+s/0Ew2555ctYFqXvKW9sdXF3LrLg5STigtpSYF/zP61GodmVPtHe16xNVOJAKwjPY
+ rOOeag1qZkoK1aZa2oh0eirBgs0ERGrLFz7uLpYjoADiXsypa+KG0O8ZxPYhEYnVFapym78DY
+ 7Jq1fzSRB8qDBgpM0cP0CRZOtgABRrDW9kyaCvA5Cdj7adCbr9qDorJVfA0lwnN8ZonspcH8B
+ V7fqdPoxTOHihJoqQOA4j8Z7pnpRaHOU2v5pjr1tXWTF3sfgykSs1BwVqOrkGB6ZYhKCo/i4k
+ Cy2+bBbBdFmob08hW6HQ/NShvqyJ/ok3BSTGi2u7g/mBlLzyUcp89KPB3K+JNZ2ylUUINa7uI
+ 6h78xXZ8IF3VrT1N35zl7J88vsMYwCO7NUOfJnJQsZyWOL3nwjiOBvzUaYH+SpTO8kAAf5U/W
+ 4GgjnCTetbc0oAm5s64ZTAnegzMuQVQhwuQDtsYdLRqPvK++3KGS05R6ULmwWmimWngbVp1lh
+ gBWzMZlKftDwbvOzZnh+lVSWs39NRxPd0L6l6Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/1/22 14:03, Michal Hocko wrote:
-> On Mon 27-06-22 09:37:14, Shakeel Butt wrote:
->> On Fri, Jun 24, 2022 at 6:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
->>> Is it even possible to prevent from id
->>> depletion by the memory consumption? Any medium sized memcg can easily
->>> consume all the ids AFAICS.
->>
->> Though the patch series is pitched as protection against OOMs, I think
->> it is beneficial irrespective. Protection against an adversarial actor
->> should not be the aim here. IMO this patch series improves the memory
->> association to the actual user which is better than unattributed
->> memory treated as system overhead.
-> 
-> Considering the amount of memory and "normal" cgroup usage (I guess we
-> can agree that delegated subtrees do not count their cgroups in
-> thousands) is this really something that is worth bothering with?
-> 
-> I mean, these patches are really small and not really disruptive so I do
-> not really see any problem with them. Except that they clearly add a
-> maintenance overhead. Not directly with the memory they track but any
-> future cgroup/memcg metadata related objects would need to be tracked as
-> well and I am worried this will get quickly out of sync. So we will have
-> a half assed solution in place that doesn't really help any containment
-> nor it provides a good and robust consumption tracking.
-> 
-> All that being said I find these changes rather without a great value or
-> use.
+On Sun, Jul 10, 2022 at 7:36 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> Since commit 4bf4f42a2feb ("powerpc/kbuild: Set default generic
+> machine type for 32-bit compile"), when building a 32 bits kernel
+> with a bi-arch version of GCC, or when building a book3s/32 kernel,
+> the option -mcpu=powerpc is passed to GCC at all time, relying on it
+> being eventually overriden by a subsequent -mcpu=xxxx.
+>
+> But when building the same kernel with a 32 bits only version of GCC,
+> that is not done, relying on gcc being built with the expected default
+> CPU.
+>
+> This logic has two problems. First, it is a bit fragile to rely on
+> whether the GCC version is bi-arch or not, because today we can have
+> bi-arch versions of GCC configured with a 32 bits default. Second,
+> there are some versions of GCC which don't support -mcpu=powerpc,
+> for instance for e500 SPE-only versions.
+>
+> So, stop relying on this approximative logic and allow the user to
+> decide whether he/she wants to use the toolchain's default CPU or if
+> he/she wants to set one, and allow only possible CPUs based on the
+> selected target.
+>
+> Reported-by: Pali Rohár <pali@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Segher Boessenkool <segher@kernel.crashing.org>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Dear Michal,
-I sill have 2 questions:
-1) if you do not want to account any memory allocated for cgroup objects,
-should you perhaps revert commit 3e38e0aaca9e "mm: memcg: charge memcg percpu
-memory to the parent cgroup". Is it an exception perhaps?
-(in fact I hope you will not revert this patch, I just would like to know 
-your explanations about this accounting)
-2) my patch set includes kernfs accounting required for proper netdevices accounting
+Looks good to me,
 
-Allocs  Alloc   Allocation
-number  size
---------------------------------------------
-1   +  128      (__kernfs_new_node+0x4d)	kernfs node
-1   +   88      (__kernfs_iattrs+0x57)		kernfs iattrs
-1   +   96      (simple_xattr_alloc+0x28)	simple_xattr, can grow over 4Kb
-1       32      (simple_xattr_set+0x59)
-1       8       (__kernfs_new_node+0x30)
-
- 2/9] memcg: enable accounting for kernfs nodes
- 3/9] memcg: enable accounting for kernfs iattrs
- 4/9] memcg: enable accounting for struct simple_xattr
-
-What do you think about them? Should I resend them as a new separate patch set?
-
-Thank you,
-	Vasily Averin
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

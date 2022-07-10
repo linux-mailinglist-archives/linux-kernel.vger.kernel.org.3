@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512B456D0BC
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752256D0C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 20:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiGJSZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 14:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S229545AbiGJSkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 14:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiGJSZ1 (ORCPT
+        with ESMTP id S229476AbiGJSkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 14:25:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C5E13D23;
-        Sun, 10 Jul 2022 11:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657477527; x=1689013527;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5y4vwrb2+7xCrIUmxJiHnlCdSDFJBBSO+45IgJpkgxw=;
-  b=SnCcaYNosi8C9jmW+x3AgC6Z7bkeBtHscb504TDuBN518qPkDTMgq3MT
-   UIM6p6wdeihWc/3JNllZJRE2RiIteKsHe1NEa3QmiI/vbt1hUqRlhG6a8
-   Dt5DY/KCNaj5tTT55w3xyW0a2iKUnUEFV428TsbFe/cQMOwd41HOF+Ebh
-   d8R8af7QbxVJ5K01NDG/54+0yvJyFukhce8NZkjm0kg/ju+N4GclYQX49
-   roNL3sKSMgzMscp/TtWAiKmK0BBifeGVIKhVApAXVDMMBQ/vP82NCXFQU
-   G6e4wNV2wMROPTGHiWEF+6dzxR3lglx0l/GqWDsCRzkEHappv5/eUNSQv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282081438"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="282081438"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:25:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="736864833"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 11:25:26 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>, markgross@kernel.org,
-        ashok.raj@intel.com, ravi.v.shankar@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [PATCH 2/2] platform/x86/intel/ifs: return error on load failure
-Date:   Sun, 10 Jul 2022 11:25:21 -0700
-Message-Id: <20220710182521.60642-3-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220710182521.60642-1-tony.luck@intel.com>
-References: <c416b93b-8adc-d9a8-ef0d-594cce6d9a9d@redhat.com>
- <20220710182521.60642-1-tony.luck@intel.com>
+        Sun, 10 Jul 2022 14:40:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F7876582
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 11:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657478399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PK31/2GE0G98zBGdjRM86T9CruKZs78e4NoZFS26uQ=;
+        b=d7qziCvdsjBvQLHRAHgvW78gCEg+YSEeaIm9wjWN1UbBsuTo81vU3BR0aLm5n637x7eYpI
+        CVk5PqdkK32pSbMR0y+6Zea7oFBOuigt1RkK0topiFAgFDsXocJO6CKEGiro8KMPgsvL50
+        VoSmrjJxpjBZAwjKfVMgWX5YLtjQrwY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-306-ZLL2xZYWM1uRMCkkfBQ2Ig-1; Sun, 10 Jul 2022 14:39:52 -0400
+X-MC-Unique: ZLL2xZYWM1uRMCkkfBQ2Ig-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9C823801F4B;
+        Sun, 10 Jul 2022 18:39:51 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FCEB18EB9;
+        Sun, 10 Jul 2022 18:39:49 +0000 (UTC)
+Message-ID: <3b965c2ca4bcd76359573d416f9bdfa541429402.camel@redhat.com>
+Subject: Re: [PATCH 3/7] KVM: SVM: Add VNMI support in get/set_nmi_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     "Shukla, Santosh" <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 10 Jul 2022 21:39:48 +0300
+In-Reply-To: <fcf79616-ccbe-1137-6080-57d00773ff83@amd.com>
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+         <20220602142620.3196-4-santosh.shukla@amd.com>
+         <d3f2da59b5afd300531ae428174c1f91d731e655.camel@redhat.com>
+         <91c551a2-11fc-202f-2a8f-75b6374286b6@amd.com>
+         <fcf79616-ccbe-1137-6080-57d00773ff83@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,35 +71,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jithu Joseph <jithu.joseph@intel.com>
+On Fri, 2022-06-17 at 20:18 +0530, Shukla, Santosh wrote:
+> 
+> On 6/17/2022 8:15 PM, Shukla, Santosh wrote:
+> > 
+> > On 6/7/2022 6:37 PM, Maxim Levitsky wrote:
+> > > On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+> > > > VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> > > > NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK as
+> > > > read-only in the hypervisor and do not populate set accessors.
+> > > > 
+> > > > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> > > > ---
+> > > >  arch/x86/kvm/svm/svm.c | 20 +++++++++++++++++++-
+> > > >  1 file changed, 19 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > > index 860f28c668bd..d67a54517d95 100644
+> > > > --- a/arch/x86/kvm/svm/svm.c
+> > > > +++ b/arch/x86/kvm/svm/svm.c
+> > > > @@ -323,6 +323,16 @@ static int is_external_interrupt(u32 info)
+> > > >         return info == (SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_INTR);
+> > > >  }
+> > > >  
+> > > > +static bool is_vnmi_enabled(struct vmcb *vmcb)
+> > > > +{
+> > > > +       return vnmi && (vmcb->control.int_ctl & V_NMI_ENABLE);
+> > > > +}
+> > > 
+> > > Following Paolo's suggestion I recently removed vgif_enabled(),
+> > > based on the logic that vgif_enabled == vgif, because
+> > > we always enable vGIF for L1 as long as 'vgif' module param is set,
+> > > which is set unless either hardware or user cleared it.
+> > > 
+> > Yes. In v2, Thanks!.
+> > 
+> > > Note that here vmcb is the current vmcb, which can be vmcb02,
+> > > and it might be wrong
+> > > 
+> > > > +
+> > > > +static bool is_vnmi_mask_set(struct vmcb *vmcb)
+> > > > +{
+> > > > +       return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> > > > +}
+> > > > +
+> > > >  static u32 svm_get_interrupt_shadow(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > >         struct vcpu_svm *svm = to_svm(vcpu);
+> > > > @@ -3502,13 +3512,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > > >  
+> > > >  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > > -       return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> > > > +       struct vcpu_svm *svm = to_svm(vcpu);
+> > > > +
+> > > > +       if (is_vnmi_enabled(svm->vmcb))
+> > > > +               return is_vnmi_mask_set(svm->vmcb);
+> > > > +       else
+> > > > +               return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> > > >  }
+> > > >  
+> > > >  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> > > >  {
+> > > >         struct vcpu_svm *svm = to_svm(vcpu);
+> > > >  
+> > > > +       if (is_vnmi_enabled(svm->vmcb))
+> > > > +               return;
+> > > 
+> > > What if the KVM wants to mask NMI, shoudn't we update the 
+> > > V_NMI_MASK value in int_ctl instead of doing nothing?
+> > > 
+> 
+> V_NMI_MASK is cpu controlled meaning HW sets the mask while processing
+> event and clears right after processing, so in away its Read-only for hypervisor.
 
-A bug in ifs_load_firmware() error path will make it return
-SUCCESS in the event of failure.
+And yet, svm_set_nmi_mask is called when KVM wants to explicitly mask NMI
+without injecting a NMI, it does this when entering (emulated) SMI.
 
-If ifs_image_sanity_check() fails, then "ret" is still zero (from
-the earlier successful call to request_firmware_direct().
+So the KVM has to set V_NMI_MASK here, even though no real NMI was received.
 
-Reinitialize the return variable with appropriate error code.
+Best regards,
+	Maxim Levitsky
+> 
+> > > Best regards,
+> > > 	Maxim Levitsky
+> > > 
+> > > 
+> > > > +
+> > > >         if (masked) {
+> > > >                 vcpu->arch.hflags |= HF_NMI_MASK;
+> > > >                 if (!sev_es_guest(vcpu->kvm))
 
-Fixes: 684ec215706d4 ("platform/x86/intel/ifs: Authenticate and copy to secured memory")
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/platform/x86/intel/ifs/load.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-index d056617ddc85..3edcc570f1fe 100644
---- a/drivers/platform/x86/intel/ifs/load.c
-+++ b/drivers/platform/x86/intel/ifs/load.c
-@@ -252,6 +252,7 @@ void ifs_load_firmware(struct device *dev)
- 
- 	if (!ifs_image_sanity_check(dev, (struct microcode_header_intel *)fw->data)) {
- 		dev_err(dev, "ifs header sanity check failed\n");
-+		ret = -EINVAL;
- 		goto release;
- 	}
- 
--- 
-2.35.3
 

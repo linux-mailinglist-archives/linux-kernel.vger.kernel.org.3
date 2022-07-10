@@ -2,1079 +2,607 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1E156D199
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 23:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC7356D1B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 23:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiGJV0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 17:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S229544AbiGJVyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 17:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGJV0L (ORCPT
+        with ESMTP id S229463AbiGJVyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 17:26:11 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613041571B
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:25:29 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r14so4783050wrg.1
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:25:29 -0700 (PDT)
+        Sun, 10 Jul 2022 17:54:31 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71E6625F
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:54:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id eq6so4288673edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SPJSrsryQMOk3F+5rWpra8ECe/+Fdubpa/uxGkNOCx8=;
-        b=LM5c981KtIvXAJ/zhU5uSdBH38CkG/L0oEhn+x6fnto5fCgMzmK5Y4kolGUETVJ5CQ
-         ahEKTj8Kyb/WKLxpAfAik3uNVyaUs+s1XH83BPJCX7UczF0hlmylkf4KOt6phyg+GyGl
-         D0jjHi8W5Gui38+1zrQMtFkdsBR2U0XNam/mdshcISTeZegktakqWqT3e1JkYO6xF1lG
-         BHNN+b4Sh3qygsYhw6vZLQxhmVjyJhDi+8HIxabZxUaeNVOxDHNUiUIBR5e3fc3zFb1z
-         suOfU2WvobDppxw0EzG7IZLmWeGv9lx796t06dsv/TZFQJT/3eBaJ1KTt9eZuAhOAvN4
-         TetA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mD71upxvZYt1p8WPmhWN3W3poGW+AfBNYb2hlkC/nSg=;
+        b=Z+brttWUT2igSC7IURXoDyUOnaMq5ppIf798PJxkQnaOyGMqEAZjsaNFuNuesml+N7
+         prU4WMxovXm/40HuG/2FnoOkoOb/+kunqo7Wcn3VNNXZ/fLNzbNMIzC+4smhpVbFzY16
+         ZT1kc17XOfAadSig0a4ieTEAAjeaGrz5BDePo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SPJSrsryQMOk3F+5rWpra8ECe/+Fdubpa/uxGkNOCx8=;
-        b=jyFeMxUl99iXvXwazMFLhx02udNz4dstZNm/Tf2CV0jCMxkFfxzcybWtK5cho6GmKn
-         a/esVM++c8gGaqwX2TgGYCHhYxA1gPYUOPI+7sQi85GrXKpeaG1K6QRWyZ+SOUBOq0i/
-         +ujWMOA7tR7Avq2fz6//Qx3nJFUiBvaifwXAIxCcgzBSnyjwT4Xj/SV3KX5jgYRXD3/c
-         v2rH3WKzv6C5lWWajfazXpNPwl0npxbQQlUafOnCNMEZAoxCQq+nBYO5WnHl2RteB+Tu
-         ddS5xBGlx4YoHKcHswDwJjUaQ64Ro95m5r1mCakCmA5selUQ3tHNTrTC+B1In5mD0oyF
-         FmRQ==
-X-Gm-Message-State: AJIora+udAuLjNcH9GCcH3F0O+9VXlkNT0HRTatF2mPuS43ZPHbdB9m0
-        fzLJlyDrX1tm9fAUHUtfqjzzkA==
-X-Google-Smtp-Source: AGRyM1v8gxLeI+NqAfhVPIjg08rP9QwU9sqbZowt1WoT3JMgGAhwQZ2YmSOrmENlZdaY1mhYOXl0Fg==
-X-Received: by 2002:adf:d4c4:0:b0:21d:6c8f:4da3 with SMTP id w4-20020adfd4c4000000b0021d6c8f4da3mr14087023wrk.325.1657488328802;
-        Sun, 10 Jul 2022 14:25:28 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c7c0:6823:f3ce:2447])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05600c3b1300b003a2dd0d21f0sm7142759wms.13.2022.07.10.14.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 14:25:28 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, khilman@baylibre.com, abailon@baylibre.com,
-        amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v1 33/33] thermal/of: Remove old OF code
-Date:   Sun, 10 Jul 2022 23:24:23 +0200
-Message-Id: <20220710212423.681301-34-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220710212423.681301-1-daniel.lezcano@linexp.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mD71upxvZYt1p8WPmhWN3W3poGW+AfBNYb2hlkC/nSg=;
+        b=WnZN3TaCaUVlVsqMeQivVcGeBURtW+7vvezDvjVk8k/UixNXAcgOq5Pe3nLU1gQkk2
+         UBR/CnxnJa7J2fpQ7HhhOpwMmAjCNvcP6JCvRofipcAOP2a6FcDcaGPiPppFO/6q+0Jb
+         Iu/5wmgnY8FGZMsFLDNSJWhfXcEolNVDv4+DTv94+0xQMUMTzt036uVZ2qK7msaa6Qig
+         Pt6krS78Z0wxj2l05PiM6Tb2QmGb3ceunG31GJqlKl0Yet+wYd6n03q0zeoqKlOqWR6L
+         Zak9uvC/TA2VWteslsYYunmhfFrLchmw2x2jDWMtobq1Dxplx9iZGK7H1o3/5iHg3Chj
+         warA==
+X-Gm-Message-State: AJIora82gVhqRzhUupLHkZFeER5201BOZpy0t59sqJUmsxYNt2EfrpHl
+        E74zYErKvIA0mpaM3WMVWuRpdVmqzGUAwPFl
+X-Google-Smtp-Source: AGRyM1uK1d1/fT1nIu/iqBs/0gdfqpeTp0JM9UmRJqhnGC6Ey5RQqDti3EbaRhGK/EkIA1bE1ZXBAA==
+X-Received: by 2002:a05:6402:5294:b0:43a:2b22:13f1 with SMTP id en20-20020a056402529400b0043a2b2213f1mr20499666edb.199.1657490068026;
+        Sun, 10 Jul 2022 14:54:28 -0700 (PDT)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id e23-20020a170906315700b00726c0e60940sm1938300eje.100.2022.07.10.14.54.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Jul 2022 14:54:27 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so2038153wmb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 14:54:27 -0700 (PDT)
+X-Received: by 2002:a05:600c:34c9:b0:3a0:5072:9abe with SMTP id
+ d9-20020a05600c34c900b003a050729abemr12175393wmq.8.1657490066764; Sun, 10 Jul
+ 2022 14:54:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 10 Jul 2022 14:54:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+Message-ID: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+Subject: Linux 5.19-rc6
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the drivers are converted to the new API, remove the old OF code.
+Things looking fairly normal for rc6, nothing here really stands out.
+A number of small fixes all over, with the bulk being a collection of
+sound and network driver fixes, along with some arm64 dts file
+updates.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+The rest is some selftest updates, and various (mostly) one-liners all
+over the place. The shortlog below gives a good overview, and is short
+enough to just scroll through to get a flavor of it all.
+
+Perhaps somewhat unusually, I picked up a few fixes that were pending
+in trees that haven't actually hit upstream yet.  It's already rc6,
+and I wanted to close out a few of the regression reports and not have
+to wait for another (possibly last, knock wood) rc to have them in the
+tree.
+
+             Linus
+
 ---
- drivers/thermal/thermal_core.h |   2 -
- drivers/thermal/thermal_of.c   | 810 +--------------------------------
- include/linux/thermal.h        |  75 +--
- 3 files changed, 19 insertions(+), 868 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index a4e730391cab..874effb988eb 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -145,13 +145,11 @@ thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 
- /* device tree support */
- #ifdef CONFIG_THERMAL_OF
--int of_parse_thermal_zones(void);
- int of_thermal_get_ntrips(struct thermal_zone_device *);
- bool of_thermal_is_trip_valid(struct thermal_zone_device *, int);
- const struct thermal_trip *
- of_thermal_get_trip_points(struct thermal_zone_device *);
- #else
--static inline int of_parse_thermal_zones(void) { return 0; }
- static inline int of_thermal_get_ntrips(struct thermal_zone_device *tz)
- {
- 	return 0;
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 5219d67ac045..4a457868415e 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -19,93 +19,6 @@
- 
- #include "thermal_core.h"
- 
--/***   Private data structures to represent thermal device tree data ***/
--
--/**
-- * struct __thermal_cooling_bind_param - a cooling device for a trip point
-- * @cooling_device: a pointer to identify the referred cooling device
-- * @min: minimum cooling state used at this trip point
-- * @max: maximum cooling state used at this trip point
-- */
--
--struct __thermal_cooling_bind_param {
--	struct device_node *cooling_device;
--	unsigned long min;
--	unsigned long max;
--};
--
--/**
-- * struct __thermal_bind_params - a match between trip and cooling device
-- * @tcbp: a pointer to an array of cooling devices
-- * @count: number of elements in array
-- * @trip_id: the trip point index
-- * @usage: the percentage (from 0 to 100) of cooling contribution
-- */
--
--struct __thermal_bind_params {
--	struct __thermal_cooling_bind_param *tcbp;
--	unsigned int count;
--	unsigned int trip_id;
--	unsigned int usage;
--};
--
--/**
-- * struct __thermal_zone - internal representation of a thermal zone
-- * @passive_delay: polling interval while passive cooling is activated
-- * @polling_delay: zone polling interval
-- * @slope: slope of the temperature adjustment curve
-- * @offset: offset of the temperature adjustment curve
-- * @ntrips: number of trip points
-- * @trips: an array of trip points (0..ntrips - 1)
-- * @num_tbps: number of thermal bind params
-- * @tbps: an array of thermal bind params (0..num_tbps - 1)
-- * @sensor_data: sensor private data used while reading temperature and trend
-- * @ops: set of callbacks to handle the thermal zone based on DT
-- */
--
--struct __thermal_zone {
--	int passive_delay;
--	int polling_delay;
--	int slope;
--	int offset;
--
--	/* trip data */
--	int ntrips;
--	struct thermal_trip *trips;
--
--	/* cooling binding data */
--	int num_tbps;
--	struct __thermal_bind_params *tbps;
--
--	/* sensor interface */
--	void *sensor_data;
--	const struct thermal_zone_of_device_ops *ops;
--};
--
--/***   DT thermal zone device callbacks   ***/
--
--static int of_thermal_get_temp(struct thermal_zone_device *tz,
--			       int *temp)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->get_temp)
--		return -EINVAL;
--
--	return data->ops->get_temp(data->sensor_data, temp);
--}
--
--static int of_thermal_set_trips(struct thermal_zone_device *tz,
--				int low, int high)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->set_trips)
--		return -EINVAL;
--
--	return data->ops->set_trips(data->sensor_data, low, high);
--}
--
- /**
-  * of_thermal_get_ntrips - function to export number of available trip
-  *			   points.
-@@ -158,114 +71,6 @@ of_thermal_get_trip_points(struct thermal_zone_device *tz)
- }
- EXPORT_SYMBOL_GPL(of_thermal_get_trip_points);
- 
--/**
-- * of_thermal_set_emul_temp - function to set emulated temperature
-- *
-- * @tz:	pointer to a thermal zone
-- * @temp:	temperature to set
-- *
-- * This function gives the ability to set emulated value of temperature,
-- * which is handy for debugging
-- *
-- * Return: zero on success, error code otherwise
-- */
--static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
--				    int temp)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->set_emul_temp)
--		return -EINVAL;
--
--	return data->ops->set_emul_temp(data->sensor_data, temp);
--}
--
--static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
--				enum thermal_trend *trend)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	if (!data->ops || !data->ops->get_trend)
--		return -EINVAL;
--
--	return data->ops->get_trend(data->sensor_data, trip, trend);
--}
--
--static int of_thermal_change_mode(struct thermal_zone_device *tz,
--				enum thermal_device_mode mode)
--{
--	struct __thermal_zone *data = tz->devdata;
--
--	return data->ops->change_mode(data->sensor_data, mode);
--}
--
--static int of_thermal_bind(struct thermal_zone_device *thermal,
--			   struct thermal_cooling_device *cdev)
--{
--	struct __thermal_zone *data = thermal->devdata;
--	struct __thermal_bind_params *tbp;
--	struct __thermal_cooling_bind_param *tcbp;
--	int i, j;
--
--	if (!data || IS_ERR(data))
--		return -ENODEV;
--
--	/* find where to bind */
--	for (i = 0; i < data->num_tbps; i++) {
--		tbp = data->tbps + i;
--
--		for (j = 0; j < tbp->count; j++) {
--			tcbp = tbp->tcbp + j;
--
--			if (tcbp->cooling_device == cdev->np) {
--				int ret;
--
--				ret = thermal_zone_bind_cooling_device(thermal,
--						tbp->trip_id, cdev,
--						tcbp->max,
--						tcbp->min,
--						tbp->usage);
--				if (ret)
--					return ret;
--			}
--		}
--	}
--
--	return 0;
--}
--
--static int of_thermal_unbind(struct thermal_zone_device *thermal,
--			     struct thermal_cooling_device *cdev)
--{
--	struct __thermal_zone *data = thermal->devdata;
--	struct __thermal_bind_params *tbp;
--	struct __thermal_cooling_bind_param *tcbp;
--	int i, j;
--
--	if (!data || IS_ERR(data))
--		return -ENODEV;
--
--	/* find where to unbind */
--	for (i = 0; i < data->num_tbps; i++) {
--		tbp = data->tbps + i;
--
--		for (j = 0; j < tbp->count; j++) {
--			tcbp = tbp->tcbp + j;
--
--			if (tcbp->cooling_device == cdev->np) {
--				int ret;
--
--				ret = thermal_zone_unbind_cooling_device(thermal,
--							tbp->trip_id, cdev);
--				if (ret)
--					return ret;
--			}
--		}
--	}
--
--	return 0;
--}
--
- static int of_thermal_get_trip_type(struct thermal_zone_device *tz, int trip,
- 				    enum thermal_trip_type *type)
- {
-@@ -325,61 +130,6 @@ static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- 	return -EINVAL;
- }
- 
--static struct thermal_zone_device_ops of_thermal_ops = {
--	.get_trip_type = of_thermal_get_trip_type,
--	.get_trip_temp = of_thermal_get_trip_temp,
--	.get_trip_hyst = of_thermal_get_trip_hyst,
--	.set_trip_hyst = of_thermal_set_trip_hyst,
--	.get_crit_temp = of_thermal_get_crit_temp,
--
--	.bind = of_thermal_bind,
--	.unbind = of_thermal_unbind,
--};
--
--/***   sensor API   ***/
--
--static struct thermal_zone_device *
--thermal_zone_of_add_sensor(struct device_node *zone,
--			   struct device_node *sensor, void *data,
--			   const struct thermal_zone_of_device_ops *ops)
--{
--	struct thermal_zone_device *tzd;
--	struct __thermal_zone *tz;
--
--	tzd = thermal_zone_get_zone_by_name(zone->name);
--	if (IS_ERR(tzd))
--		return ERR_PTR(-EPROBE_DEFER);
--
--	tz = tzd->devdata;
--
--	if (!ops)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&tzd->lock);
--	tz->ops = ops;
--	tz->sensor_data = data;
--
--	tzd->ops->get_temp = of_thermal_get_temp;
--	tzd->ops->get_trend = of_thermal_get_trend;
--
--	/*
--	 * The thermal zone core will calculate the window if they have set the
--	 * optional set_trips pointer.
--	 */
--	if (ops->set_trips)
--		tzd->ops->set_trips = of_thermal_set_trips;
--
--	if (ops->set_emul_temp)
--		tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
--
--	if (ops->change_mode)
--		tzd->ops->change_mode = of_thermal_change_mode;
--
--	mutex_unlock(&tzd->lock);
--
--	return tzd;
--}
--
- /**
-  * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
-  * @tz_np: a valid thermal zone device node.
-@@ -424,216 +174,6 @@ int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
- }
- EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
- 
--/**
-- * thermal_zone_of_sensor_register - registers a sensor to a DT thermal zone
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @sensor_id: a sensor identifier, in case the sensor IP has more
-- *             than one sensors
-- * @data: a private pointer (owned by the caller) that will be passed
-- *        back, when a temperature reading is needed.
-- * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-- *
-- * This function will search the list of thermal zones described in device
-- * tree and look for the zone that refer to the sensor device pointed by
-- * @dev->of_node as temperature providers. For the zone pointing to the
-- * sensor node, the sensor will be added to the DT thermal zone device.
-- *
-- * The thermal zone temperature is provided by the @get_temp function
-- * pointer. When called, it will have the private pointer @data back.
-- *
-- * The thermal zone temperature trend is provided by the @get_trend function
-- * pointer. When called, it will have the private pointer @data back.
-- *
-- * TODO:
-- * 01 - This function must enqueue the new sensor instead of using
-- * it as the only source of temperature values.
-- *
-- * 02 - There must be a way to match the sensor with all thermal zones
-- * that refer to it.
-- *
-- * Return: On success returns a valid struct thermal_zone_device,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- */
--struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
--				const struct thermal_zone_of_device_ops *ops)
--{
--	struct device_node *np, *child, *sensor_np;
--	struct thermal_zone_device *tzd = ERR_PTR(-ENODEV);
--	static int old_tz_initialized;
--	int ret;
--
--	if (!old_tz_initialized) {
--		ret = of_parse_thermal_zones();
--		if (ret)
--			return ERR_PTR(ret);
--		old_tz_initialized = 1;
--	}
--	
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np)
--		return ERR_PTR(-ENODEV);
--
--	if (!dev || !dev->of_node) {
--		of_node_put(np);
--		return ERR_PTR(-ENODEV);
--	}
--
--	sensor_np = of_node_get(dev->of_node);
--
--	for_each_available_child_of_node(np, child) {
--		int ret, id;
--
--		/* For now, thermal framework supports only 1 sensor per zone */
--		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
--		if (ret)
--			continue;
--
--		if (id == sensor_id) {
--			tzd = thermal_zone_of_add_sensor(child, sensor_np,
--							 data, ops);
--			if (!IS_ERR(tzd))
--				thermal_zone_device_enable(tzd);
--
--			of_node_put(child);
--			goto exit;
--		}
--	}
--exit:
--	of_node_put(sensor_np);
--	of_node_put(np);
--
--	return tzd;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_sensor_register);
--
--/**
-- * thermal_zone_of_sensor_unregister - unregisters a sensor from a DT thermal zone
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
-- *
-- * This function removes the sensor callbacks and private data from the
-- * thermal zone device registered with thermal_zone_of_sensor_register()
-- * API. It will also silent the zone by remove the .get_temp() and .get_trend()
-- * thermal zone device callbacks.
-- *
-- * TODO: When the support to several sensors per zone is added, this
-- * function must search the sensor list based on @dev parameter.
-- *
-- */
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tzd)
--{
--	struct __thermal_zone *tz;
--
--	if (!dev || !tzd || !tzd->devdata)
--		return;
--
--	tz = tzd->devdata;
--
--	/* no __thermal_zone, nothing to be done */
--	if (!tz)
--		return;
--
--	/* stop temperature polling */
--	thermal_zone_device_disable(tzd);
--
--	mutex_lock(&tzd->lock);
--	tzd->ops->get_temp = NULL;
--	tzd->ops->get_trend = NULL;
--	tzd->ops->set_emul_temp = NULL;
--	tzd->ops->change_mode = NULL;
--
--	tz->ops = NULL;
--	tz->sensor_data = NULL;
--	mutex_unlock(&tzd->lock);
--}
--EXPORT_SYMBOL_GPL(thermal_zone_of_sensor_unregister);
--
--static void devm_thermal_zone_of_sensor_release(struct device *dev, void *res)
--{
--	thermal_zone_of_sensor_unregister(dev,
--					  *(struct thermal_zone_device **)res);
--}
--
--static int devm_thermal_zone_of_sensor_match(struct device *dev, void *res,
--					     void *data)
--{
--	struct thermal_zone_device **r = res;
--
--	if (WARN_ON(!r || !*r))
--		return 0;
--
--	return *r == data;
--}
--
--/**
-- * devm_thermal_zone_of_sensor_register - Resource managed version of
-- *				thermal_zone_of_sensor_register()
-- * @dev: a valid struct device pointer of a sensor device. Must contain
-- *       a valid .of_node, for the sensor node.
-- * @sensor_id: a sensor identifier, in case the sensor IP has more
-- *	       than one sensors
-- * @data: a private pointer (owned by the caller) that will be passed
-- *	  back, when a temperature reading is needed.
-- * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
-- *
-- * Refer thermal_zone_of_sensor_register() for more details.
-- *
-- * Return: On success returns a valid struct thermal_zone_device,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- * Registered thermal_zone_device device will automatically be
-- * released when device is unbounded.
-- */
--struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--	struct device *dev, int sensor_id,
--	void *data, const struct thermal_zone_of_device_ops *ops)
--{
--	struct thermal_zone_device **ptr, *tzd;
--
--	ptr = devres_alloc(devm_thermal_zone_of_sensor_release, sizeof(*ptr),
--			   GFP_KERNEL);
--	if (!ptr)
--		return ERR_PTR(-ENOMEM);
--
--	tzd = thermal_zone_of_sensor_register(dev, sensor_id, data, ops);
--	if (IS_ERR(tzd)) {
--		devres_free(ptr);
--		return tzd;
--	}
--
--	*ptr = tzd;
--	devres_add(dev, ptr);
--
--	return tzd;
--}
--EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
--
--/**
-- * devm_thermal_zone_of_sensor_unregister - Resource managed version of
-- *				thermal_zone_of_sensor_unregister().
-- * @dev: Device for which which resource was allocated.
-- * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
-- *
-- * This function removes the sensor callbacks and private data from the
-- * thermal zone device registered with devm_thermal_zone_of_sensor_register()
-- * API. It will also silent the zone by remove the .get_temp() and .get_trend()
-- * thermal zone device callbacks.
-- * Normally this function will not need to be called and the resource
-- * management code will ensure that the resource is freed.
-- */
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tzd)
--{
--	WARN_ON(devres_release(dev, devm_thermal_zone_of_sensor_release,
--			       devm_thermal_zone_of_sensor_match, tzd));
--}
--EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_unregister);
--
- /***   functions parsing device tree nodes   ***/
- 
- static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-@@ -665,98 +205,6 @@ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
- 	return i;
- }
- 
--/**
-- * thermal_of_populate_bind_params - parse and fill cooling map data
-- * @np: DT node containing a cooling-map node
-- * @__tbp: data structure to be filled with cooling map info
-- * @trips: array of thermal zone trip points
-- * @ntrips: number of trip points inside trips.
-- *
-- * This function parses a cooling-map type of node represented by
-- * @np parameter and fills the read data into @__tbp data structure.
-- * It needs the already parsed array of trip points of the thermal zone
-- * in consideration.
-- *
-- * Return: 0 on success, proper error code otherwise
-- */
--static int thermal_of_populate_bind_params(struct device_node *tz_np,
--					   struct device_node *np,
--					   struct __thermal_bind_params *__tbp)
--{
--	struct of_phandle_args cooling_spec;
--	struct __thermal_cooling_bind_param *__tcbp;
--	struct device_node *trip;
--	int ret, i, count;
--	int trip_id;
--	u32 prop;
--
--	/* Default weight. Usage is optional */
--	__tbp->usage = THERMAL_WEIGHT_DEFAULT;
--	ret = of_property_read_u32(np, "contribution", &prop);
--	if (ret == 0)
--		__tbp->usage = prop;
--
--	trip = of_parse_phandle(np, "trip", 0);
--	if (!trip) {
--		pr_err("missing trip property\n");
--		return -ENODEV;
--	}
--
--	trip_id = of_find_trip_id(tz_np, trip);
--	if (trip_id < 0) {
--		ret = trip_id;
--		goto end;
--	}
--
--	__tbp->trip_id = trip_id;
--	
--	count = of_count_phandle_with_args(np, "cooling-device",
--					   "#cooling-cells");
--	if (count <= 0) {
--		pr_err("Add a cooling_device property with at least one device\n");
--		ret = -ENOENT;
--		goto end;
--	}
--
--	__tcbp = kcalloc(count, sizeof(*__tcbp), GFP_KERNEL);
--	if (!__tcbp) {
--		ret = -ENOMEM;
--		goto end;
--	}
--
--	for (i = 0; i < count; i++) {
--		ret = of_parse_phandle_with_args(np, "cooling-device",
--				"#cooling-cells", i, &cooling_spec);
--		if (ret < 0) {
--			pr_err("Invalid cooling-device entry\n");
--			goto free_tcbp;
--		}
--
--		__tcbp[i].cooling_device = cooling_spec.np;
--
--		if (cooling_spec.args_count >= 2) { /* at least min and max */
--			__tcbp[i].min = cooling_spec.args[0];
--			__tcbp[i].max = cooling_spec.args[1];
--		} else {
--			pr_err("wrong reference to cooling device, missing limits\n");
--		}
--	}
--
--	__tbp->tcbp = __tcbp;
--	__tbp->count = count;
--
--	goto end;
--
--free_tcbp:
--	for (i = i - 1; i >= 0; i--)
--		of_node_put(__tcbp[i].cooling_device);
--	kfree(__tcbp);
--end:
--	of_node_put(trip);
--
--	return ret;
--}
--
- /*
-  * It maps 'enum thermal_trip_type' found in include/linux/thermal.h
-  * into the device tree binding of 'trip', property type.
-@@ -873,174 +321,6 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
- 	return ERR_PTR(ret);
- }
- 
--/**
-- * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-- * @np: DT node containing a thermal zone node
-- *
-- * This function parses a thermal zone type of node represented by
-- * @np parameter and fills the read data into a __thermal_zone data structure
-- * and return this pointer.
-- *
-- * TODO: Missing properties to parse: thermal-sensor-names
-- *
-- * Return: On success returns a valid struct __thermal_zone,
-- * otherwise, it returns a corresponding ERR_PTR(). Caller must
-- * check the return value with help of IS_ERR() helper.
-- */
--static struct __thermal_zone
--__init *thermal_of_build_thermal_zone(struct device_node *np)
--{
--	struct device_node *child = NULL, *gchild;
--	struct __thermal_zone *tz;
--	int ret, i;
--	u32 prop, coef[2];
--
--	if (!np) {
--		pr_err("no thermal zone np\n");
--		return ERR_PTR(-EINVAL);
--	}
--
--	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
--	if (!tz)
--		return ERR_PTR(-ENOMEM);
--
--	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
--	if (ret < 0) {
--		pr_err("%pOFn: missing polling-delay-passive property\n", np);
--		goto free_tz;
--	}
--	tz->passive_delay = prop;
--
--	ret = of_property_read_u32(np, "polling-delay", &prop);
--	if (ret < 0) {
--		pr_err("%pOFn: missing polling-delay property\n", np);
--		goto free_tz;
--	}
--	tz->polling_delay = prop;
--
--	/*
--	 * REVIST: for now, the thermal framework supports only
--	 * one sensor per thermal zone. Thus, we are considering
--	 * only the first two values as slope and offset.
--	 */
--	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
--	if (ret == 0) {
--		tz->slope = coef[0];
--		tz->offset = coef[1];
--	} else {
--		tz->slope = 1;
--		tz->offset = 0;
--	}
--
--	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
--	if (IS_ERR(tz->trips)) {
--		ret = PTR_ERR(tz->trips);
--		goto finish;
--	}
--
--	/* cooling-maps */
--	child = of_get_child_by_name(np, "cooling-maps");
--
--	/* cooling-maps not provided */
--	if (!child)
--		goto finish;
--
--	tz->num_tbps = of_get_child_count(child);
--	if (tz->num_tbps == 0)
--		goto finish;
--
--	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
--	if (!tz->tbps) {
--		ret = -ENOMEM;
--		goto free_trips;
--	}
--
--	i = 0;
--	for_each_child_of_node(child, gchild) {
--		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
--		if (ret) {
--			of_node_put(gchild);
--			goto free_tbps;
--		}
--	}
--
--finish:
--	of_node_put(child);
--
--	return tz;
--
--free_tbps:
--	for (i = i - 1; i >= 0; i--) {
--		struct __thermal_bind_params *tbp = tz->tbps + i;
--		int j;
--
--		for (j = 0; j < tbp->count; j++)
--			of_node_put(tbp->tcbp[j].cooling_device);
--
--		kfree(tbp->tcbp);
--	}
--
--	kfree(tz->tbps);
--free_trips:
--	kfree(tz->trips);
--free_tz:
--	kfree(tz);
--	of_node_put(child);
--
--	return ERR_PTR(ret);
--}
--
--static void of_thermal_free_zone(struct __thermal_zone *tz)
--{
--	struct __thermal_bind_params *tbp;
--	int i, j;
--
--	for (i = 0; i < tz->num_tbps; i++) {
--		tbp = tz->tbps + i;
--
--		for (j = 0; j < tbp->count; j++)
--			of_node_put(tbp->tcbp[j].cooling_device);
--
--		kfree(tbp->tcbp);
--	}
--
--	kfree(tz->tbps);
--	kfree(tz->trips);
--	kfree(tz);
--}
--
--/**
-- * of_thermal_destroy_zones - remove all zones parsed and allocated resources
-- *
-- * Finds all zones parsed and added to the thermal framework and remove them
-- * from the system, together with their resources.
-- *
-- */
--static __init void of_thermal_destroy_zones(void)
--{
--	struct device_node *np, *child;
--
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np) {
--		pr_debug("unable to find thermal zones\n");
--		return;
--	}
--
--	for_each_available_child_of_node(np, child) {
--		struct thermal_zone_device *zone;
--
--		zone = thermal_zone_get_zone_by_name(child->name);
--		if (IS_ERR(zone))
--			continue;
--
--		thermal_zone_device_unregister(zone);
--		kfree(zone->tzp);
--		kfree(zone->ops);
--		of_thermal_free_zone(zone->devdata);
--	}
--	of_node_put(np);
--}
--
- static struct device_node *of_thermal_zone_find(struct device_node *sensor, int id)
- {
- 	struct device_node *np, *tz;
-@@ -1478,95 +758,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_of_zone_register);
-  */
- void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
- {
--	WARN_ON(devres_release(dev, devm_thermal_zone_of_sensor_release,
-+	WARN_ON(devres_release(dev, devm_thermal_of_zone_release,
- 			       devm_thermal_of_zone_match, tz));
- }
- EXPORT_SYMBOL_GPL(devm_thermal_of_zone_unregister);
--
--/**
-- * of_parse_thermal_zones - parse device tree thermal data
-- *
-- * Initialization function that can be called by machine initialization
-- * code to parse thermal data and populate the thermal framework
-- * with hardware thermal zones info. This function only parses thermal zones.
-- * Cooling devices and sensor devices nodes are supposed to be parsed
-- * by their respective drivers.
-- *
-- * Return: 0 on success, proper error code otherwise
-- *
-- */
--int of_parse_thermal_zones(void)
--{
--	struct device_node *np, *child;
--	struct __thermal_zone *tz;
--	struct thermal_zone_device_ops *ops;
--
--	np = of_find_node_by_name(NULL, "thermal-zones");
--	if (!np) {
--		pr_debug("unable to find thermal zones\n");
--		return 0; /* Run successfully on systems without thermal DT */
--	}
--
--	for_each_available_child_of_node(np, child) {
--		struct thermal_zone_device *zone;
--		struct thermal_zone_params *tzp;
--		int i, mask = 0;
--		u32 prop;
--
--		tz = thermal_of_build_thermal_zone(child);
--		if (IS_ERR(tz)) {
--			pr_err("failed to build thermal zone %pOFn: %ld\n",
--			       child,
--			       PTR_ERR(tz));
--			continue;
--		}
--
--		ops = kmemdup(&of_thermal_ops, sizeof(*ops), GFP_KERNEL);
--		if (!ops)
--			goto exit_free;
--
--		tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
--		if (!tzp) {
--			kfree(ops);
--			goto exit_free;
--		}
--
--		/* No hwmon because there might be hwmon drivers registering */
--		tzp->no_hwmon = true;
--
--		if (!of_property_read_u32(child, "sustainable-power", &prop))
--			tzp->sustainable_power = prop;
--
--		for (i = 0; i < tz->ntrips; i++)
--			mask |= 1 << i;
--
--		/* these two are left for temperature drivers to use */
--		tzp->slope = tz->slope;
--		tzp->offset = tz->offset;
--
--		zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
--							       mask, tz, ops, tzp, tz->passive_delay,
--							       tz->polling_delay);
--		if (IS_ERR(zone)) {
--			pr_err("Failed to build %pOFn zone %ld\n", child,
--			       PTR_ERR(zone));
--			kfree(tzp);
--			kfree(ops);
--			of_thermal_free_zone(tz);
--			/* attempting to build remaining zones still */
--		}
--	}
--	of_node_put(np);
--
--	return 0;
--
--exit_free:
--	of_node_put(child);
--	of_node_put(np);
--	of_thermal_free_zone(tz);
--
--	/* no memory available, so free what we have built */
--	of_thermal_destroy_zones();
--
--	return -ENOMEM;
--}
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 0335aeec56ce..76417e75c9d8 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -298,33 +298,6 @@ struct thermal_zone_params {
- 	int offset;
- };
- 
--/**
-- * struct thermal_zone_of_device_ops - callbacks for handling DT based zones
-- *
-- * Mandatory:
-- * @get_temp: a pointer to a function that reads the sensor temperature.
-- *
-- * Optional:
-- * @get_trend: a pointer to a function that reads the sensor temperature trend.
-- * @set_trips: a pointer to a function that sets a temperature window. When
-- *	       this window is left the driver must inform the thermal core via
-- *	       thermal_zone_device_update.
-- * @set_emul_temp: a pointer to a function that sets sensor emulated
-- *		   temperature.
-- * @set_trip_temp: a pointer to a function that sets the trip temperature on
-- *		   hardware.
-- * @change_mode: a pointer to a function that notifies the thermal zone
-- *		   mode change.
-- */
--struct thermal_zone_of_device_ops {
--	int (*get_temp)(void *, int *);
--	int (*get_trend)(void *, int, enum thermal_trend *);
--	int (*set_trips)(void *, int, int);
--	int (*set_emul_temp)(void *, int);
--	int (*set_trip_temp)(void *, int, int);
--	int (*change_mode) (void *, enum thermal_device_mode);
--};
--
- /* Function declarations */
- #ifdef CONFIG_THERMAL_OF
- struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-@@ -337,45 +310,28 @@ void thermal_of_zone_unregister(struct thermal_zone_device *tz);
- 	
- void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
- 
-+void thermal_of_zone_unregister(struct thermal_zone_device *tz);
-+
- int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
- 				  struct device_node *sensor_np,
- 				  u32 *id);
--struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
--				const struct thermal_zone_of_device_ops *ops);
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tz);
--struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--		struct device *dev, int id, void *data,
--		const struct thermal_zone_of_device_ops *ops);
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tz);
- #else
--
--static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
--					 struct device_node *sensor_np,
--					 u32 *id)
--{
--	return -ENOENT;
--}
--static inline struct thermal_zone_device *
--thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
--				const struct thermal_zone_of_device_ops *ops)
-+static inline
-+struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id,
-+						     void *data, struct thermal_sensor_ops *ops)
- {
--	return ERR_PTR(-ENODEV);
-+	return ERR_PTR(-ENOTSUPP);
- }
- 
- static inline
--void thermal_zone_of_sensor_unregister(struct device *dev,
--				       struct thermal_zone_device *tz)
-+struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id,
-+							  void *data, struct thermal_sensor_ops *ops)
- {
-+	return ERR_PTR(-ENOTSUPP);	
- }
- 
--static inline struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
--		struct device *dev, int id, void *data,
--		const struct thermal_zone_of_device_ops *ops)
-+static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- {
--	return ERR_PTR(-ENODEV);
- }
- 
- static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-@@ -386,12 +342,17 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev, struct th
- {
- }
- 
--static inline
--void devm_thermal_zone_of_sensor_unregister(struct device *dev,
--					    struct thermal_zone_device *tz)
-+static inline void devm_thermal_of_zone_unregister(struct device *dev,
-+						   struct thermal_zone_device *tz)
- {
- }
- 
-+static inline int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
-+					 struct device_node *sensor_np,
-+					 u32 *id)
-+{
-+	return -ENOENT;
-+}
- #endif
- 
- #ifdef CONFIG_THERMAL
--- 
-2.25.1
+Alexei Starovoitov (1):
+      bpf, docs: Better scale maintenance of BPF subsystem
 
+Alison Schofield (1):
+      cxl/mbox: Use __le32 in get,set_lsa mailbox structures
+
+Amadeusz S=C5=82awi=C5=84ski (2):
+      ASoC: Intel: avs: Fix parsing UUIDs in topology
+      ASoC: Remove unused hw_write_t type
+
+Andrei Lalaev (1):
+      pinctrl: sunxi: sunxi_pconf_set: use correct offset
+
+Andy Shevchenko (1):
+      MAINTAINERS: Update Intel pin control to Supported
+
+Ben Widawsky (2):
+      MAINTAINERS: Update Ben's email address
+      cxl/core: Use is_endpoint_decoder
+
+Bill Wendling (1):
+      soc: qcom: smem: use correct format characters
+
+Bo Liu (1):
+      firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API
+
+Borislav Petkov (1):
+      x86/boot: Fix the setup data types max limit
+
+Caleb Connolly (1):
+      dmaengine: qcom: bam_dma: fix runtime PM underflow
+
+Charles Keepax (8):
+      ASoC: wm_adsp: Fix event for preloader
+      ASoC: wm5110: Fix DRE control
+      ASoC: cs35l41: Correct some control names
+      ASoC: dapm: Initialise kcontrol data for mux/demux controls
+      ASoC: cs35l41: Add ASP TX3/4 source to register patch
+      ASoC: cs47l15: Fix event generation for low power mux control
+      ASoC: madera: Fix event generation for OUT1 demux
+      ASoC: madera: Fix event generation for rate controls
+
+Christian Marangi (1):
+      PM / devfreq: exynos-bus: Fix NULL pointer dereference
+
+Christophe JAILLET (1):
+      dmaengine: lgm: Fix an error handling path in intel_ldma_probe()
+
+Claudiu Beznea (3):
+      ARM: at91: pm: use proper compatible for sama5d2's rtc
+      ARM: at91: pm: use proper compatibles for sam9x60's rtc and rtt
+      ARM: at91: pm: use proper compatibles for sama7g5's rtc and rtt
+
+Cristian Marussi (1):
+      firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks
+
+Dan Carpenter (1):
+      ASoC: SOF: mediatek: Fix error code in probe
+
+Dan Williams (1):
+      memregion: Fix memregion_free() fallback definition
+
+Daniel Borkmann (4):
+      bpf: Fix incorrect verifier simulation around jmp32's jeq/jne
+      bpf: Fix insufficient bounds propagation from adjust_scalar_min_max_v=
+als
+      bpf, selftests: Add verifier test case for imm=3D0,umin=3D0,umax=3D1 =
+scalar
+      bpf, selftests: Add verifier test case for jmp32's jeq/jne
+
+Dave Jiang (1):
+      dmaengine: idxd: force wq context cleanup on device disable path
+
+David Howells (1):
+      fscache: Fix invalidation/lookup race
+
+Davidlohr Bueso (1):
+      staging/wlan-ng: get the correct struct hfa384x in work callback
+
+Dmitry Baryshkov (2):
+      arm64: dts: qcom: sm8450 add ITS device tree node
+      arm64: dts: qcom: sdm845: use dispcc AHB clock for mdss node
+
+Dmitry Osipenko (1):
+      dmaengine: pl330: Fix lockdep warning about non-static key
+
+Duoming Zhou (1):
+      net: rose: fix UAF bug caused by rose_t0timer_expiry
+
+Duy Nguyen (1):
+      can: rcar_canfd: Fix data transmission failed on R-Car V3U
+
+Egor Vorontsov (2):
+      ALSA: usb-audio: Add quirk for Fiero SC-01
+      ALSA: usb-audio: Add quirk for Fiero SC-01 (fw v1.0.0)
+
+Emil Renner Berthing (1):
+      dmaengine: dw-axi-dmac: Fix RMW on channel suspend register
+
+Etienne Carriere (1):
+      ARM: dts: stm32: fix pwr regulators references to use scmi
+
+Eugen Hristev (2):
+      ARM: dts: at91: sam9x60ek: fix eeprom compatible and size
+      ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
+
+Fabien Dessenne (1):
+      pinctrl: stm32: fix optional IRQ support to gpios
+
+Fabio Estevam (3):
+      ARM: dts: imx7d-smegw01: Fix the SDIO description
+      ARM: mxs_defconfig: Enable the framebuffer
+      ARM: at91: pm: Mark at91_pm_secure_init as __init
+
+Fabrice Gasnier (1):
+      ARM: dts: stm32: add missing usbh clock and fix clk order on stm32mp1=
+5
+
+Gabriel Fernandez (3):
+      ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
+      ARM: dts: stm32: DSI should use LSE SCMI clock on DK1/ED1 STM32 board
+      ARM: dts: stm32: delete fixed clock node on STM32MP15-SCMI
+
+Gal Pressman (1):
+      Revert "tls: rx: move counting TlsDecryptErrors for sync"
+
+Geert Uytterhoeven (1):
+      eeprom: at25: Rework buggy read splitting
+
+Geliang Tang (1):
+      mptcp: update MIB_RMSUBFLOW in cmd_sf_destroy
+
+Guiling Deng (1):
+      fbdev: fbmem: Fix logo center image dx issue
+
+Hangbin Liu (1):
+      selftests/net: fix section name when using xdp_dummy.o
+
+Hans de Goede (1):
+      ASoC: Intel: bytcr_wm5102: Fix GPIO related probe-ordering problem
+
+Haowen Bai (1):
+      pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_=
+mux()
+
+Heiner Kallweit (1):
+      r8169: fix accessing unset transport header
+
+Helge Deller (4):
+      fbcon: Disallow setting font bigger than screen size
+      fbcon: Prevent that screen size is smaller than font size
+      fbmem: Check virtual screen sizes in fb_set_var()
+      fbcon: Use fbcon_info_from_console() in fbcon_modechange_possible()
+
+Hsin-Yi Wang (1):
+      video: of_display_timing.h: include errno.h
+
+Huacai Chen (1):
+      LoongArch: Fix build errors for tinyconfig
+
+Ivan Malov (1):
+      xsk: Clear page contiguity bit when unmapping pool
+
+Jacky Bai (1):
+      pinctrl: imx: Add the zero base flag for imx93
+
+Jakub Kicinski (3):
+      docs: netdev: document that patch series length limit
+      docs: netdev: document reverse xmas tree
+      docs: netdev: add a cheat sheet for the rules
+
+Jamie Iles (1):
+      irqchip/xilinx: Add explicit dependency on OF_ADDRESS
+
+Jan Beulich (1):
+      xen-netfront: restore __skb_queue_tail() positioning in
+xennet_get_responses()
+
+Jason A. Donenfeld (6):
+      powerpc/powernv: delay rng platform device creation until later in bo=
+ot
+      wireguard: selftests: set fake real time in init
+      wireguard: selftests: use virt machine on m68k
+      wireguard: selftests: always call kernel makefile
+      wireguard: selftests: use microvm on x86
+      crypto: s390 - do not depend on CRYPTO_HW for SIMD implementations
+
+Jean Delvare (1):
+      i2c: piix4: Fix a memory leak in the EFCH MMIO support
+
+Jens Axboe (1):
+      io_uring: check that we have a file table when allocating update slot=
+s
+
+Jerry Snitselaar (1):
+      dmaengine: idxd: Only call idxd_enable_system_pasid() if
+succeeded in enabling SVA feature
+
+Jia Zhu (1):
+      cachefiles: narrow the scope of flushed requests when releasing fd
+
+Jimmy Assarsson (3):
+      can: kvaser_usb: replace run-time checks with struct
+kvaser_usb_driver_info
+      can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+      can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+
+Joerg Roedel (1):
+      MAINTAINERS: Remove iommu@lists.linux-foundation.org
+
+John Hubbard (1):
+      gen_compile_commands: handle multiple lines per .mod file
+
+John Veness (1):
+      ALSA: usb-audio: Add quirks for MacroSilicon MS2100/MS2106 devices
+
+Jonathan Cameron (1):
+      cxl: Fix cleanup of port devices on failure to probe driver.
+
+Judy Hsiao (1):
+      ASoC: rockchip: i2s: switch BCLK to GPIO
+
+Juergen Gross (3):
+      x86/xen: Use clear_bss() for Xen PV guests
+      x86: Clear .brk area at early boot
+      x86: Fix .brk attribute in linker script
+
+Karsten Graul (1):
+      MAINTAINERS: add Wenjia as SMC maintainer
+
+Keith Busch (2):
+      nvme-pci: phison e16 has bogus namespace ids
+      nvme: use struct group for generic command dwords
+
+Kent Gibson (1):
+      gpiolib: cdev: fix null pointer dereference in linereq_free()
+
+Kishen Maloor (2):
+      mptcp: netlink: issue MP_PRIO signals from userspace PMs
+      selftests: mptcp: userspace PM support for MP_PRIO signals
+
+Konrad Dybcio (2):
+      arm64: dts: qcom: msm8994: Fix CPU6/7 reg values
+      MAINTAINERS: Add myself as a reviewer for Qualcomm ARM/64 support
+
+Kuninori Morimoto (1):
+      ASoC: ak4613: cares Simple-Audio-Card case for TDM
+
+Leon Romanovsky (1):
+      gpio: vf610: fix compilation error
+
+Li kunyu (1):
+      net: usb: Fix typo in code
+
+Liang He (1):
+      can: grcan: grcan_probe(): remove extra of_node_get()
+
+Linus Torvalds (3):
+      signal handling: don't use BUG_ON() for debugging
+      ida: don't use BUG_ON() for debugging
+      Linux 5.19-rc6
+
+Linus Walleij (1):
+      soc: ixp4xx/npe: Fix unused match warning
+
+Lu Baolu (1):
+      iommu/vt-d: Fix RID2PASID setup/teardown failure
+
+Lukas Bulwahn (1):
+      LoongArch: Drop these obsolete selects in Kconfig
+
+Lukasz Cieplicki (1):
+      i40e: Fix dropped jumbo frames statistics
+
+Marc Kleine-Budde (5):
+      can: m_can: m_can_chip_config(): actually enable internal timestampin=
+g
+      can: m_can: m_can_{read_fifo,echo_tx_event}(): shift timestamp
+to full 32 bits
+      can: mcp251xfd: mcp251xfd_stop(): add missing hrtimer_cancel()
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): use correct
+length to read dev_id
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conve=
+rsion
+
+Mario Limonciello (2):
+      ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked
+      ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported
+
+Mark Brown (3):
+      ASoC: ops: Fix off by one in range control validation
+      ASoC: wcd9335: Fix spurious event generation
+      ASoC: wcd938x: Fix event generation for some controls
+
+Masahiro Yamada (1):
+      kbuild: remove unused cmd_none in scripts/Makefile.modinst
+
+Masami Hiramatsu (Google) (1):
+      fprobe, samples: Add module parameter descriptions
+
+Mat Martineau (2):
+      mptcp: Avoid acquiring PM lock for subflow priority changes
+      mptcp: Acquire the subflow socket lock before modifying MP_PRIO flags
+
+Miaoqian Lin (3):
+      dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+      dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+      ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
+
+Michael Roth (1):
+      x86/compressed/64: Add identity mappings for setup_data entries
+
+Michael Walle (2):
+      dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
+      net: lan966x: hardcode the number of external ports
+
+Mihai Sain (1):
+      ARM: at91: fix soc detection for SAM9X60 SiPs
+
+Norbert Zulinski (1):
+      i40e: Fix VF's MAC Address change on VM
+
+Oleksandr Tyshchenko (1):
+      xen/arm: Fix race in RB-tree based P2M accounting
+
+Oliver Hartkopp (1):
+      can: bcm: use call_rcu() instead of costly synchronize_rcu()
+
+Oliver Neukum (1):
+      usbnet: fix memory leak in error case
+
+Pablo Neira Ayuso (2):
+      netfilter: nf_tables: stricter validation of element data
+      netfilter: nft_set_pipapo: release elements in clone from abort path
+
+Paolo Abeni (2):
+      mptcp: fix locking in mptcp_nl_cmd_sf_destroy()
+      mptcp: fix local endpoint accounting
+
+Pavel Begunkov (1):
+      io_uring: explicit sqe padding for ioctl commands
+
+Peng Fan (14):
+      arm64: dts: imx8mp: correct clock of pgc_ispdwp
+      arm64: dts: imx8mp-evk: correct mmc pad settings
+      arm64: dts: imx8mp-evk: correct gpio-led pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct eqos pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct I2C5 pad settings
+      arm64: dts: imx8mp-evk: correct I2C1 pad settings
+      arm64: dts: imx8mp-evk: correct I2C3 pad settings
+      arm64: dts: imx8mp-venice-gw74xx: correct pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct uart pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct eqos pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct i2c2 & mmc settings
+      arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings
+
+Peter Robinson (1):
+      dmaengine: imx-sdma: Allow imx8m for imx7 FW revs
+
+Peter Ujfalusi (5):
+      ASoC: SOF: Intel: hda-dsp: Expose hda_dsp_core_power_up()
+      ASoC: SOF: Intel: hda-loader: Make sure that the fw load
+sequence is followed
+      ASoC: SOF: Intel: hda-loader: Clarify the cl_dsp_init() flow
+      ASoC: SOF: ipc3-topology: Move and correct size checks in
+sof_ipc3_control_load_bytes()
+      ASoC: SOF: Intel: hda: Fix compressed stream position tracking
+
+Peter Zijlstra (1):
+      x86/ibt, objtool: Don't discard text references from tracepoint secti=
+on
+
+Pierre-Louis Bossart (11):
+      ASoC: Realtek/Maxim SoundWire codecs: disable pm_runtime on remove
+      ASoC: rt711-sdca-sdw: fix calibrate mutex initialization
+      ASoC: Intel: sof_sdw: handle errors on card registration
+      ASoC: rt711: fix calibrate mutex initialization
+      ASoC: rt7*-sdw: harden jack_detect_handler
+      ASoC: codecs: rt700/rt711/rt711-sdca: initialize workqueues in probe
+      ASoC: codecs: rt700/rt711/rt711-sdca: resume bus/codec in .set_jack_d=
+etect
+      MAINTAINERS: update ASoC/Intel/SOF maintainers
+      ASoC: SOF: pm: add explicit behavior for ACPI S1 and S2
+      ASoC: SOF: pm: add definitions for S4 and S5 states
+      ASoC: SOF: Intel: disable IMR boot when resuming from ACPI S4
+and S5 states
+
+Qi Hu (1):
+      LoongArch: Remove obsolete mentions of vcsr
+
+Rafael J. Wysocki (2):
+      PM: runtime: Redefine pm_runtime_release_supplier()
+      PM: runtime: Fix supplier device management during consumer probe
+
+Rhett Aultman (1):
+      can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Rick Lindsley (1):
+      ibmvnic: Properly dispose of all skbs during a failover.
+
+Robin Murphy (1):
+      irqchip/gicv3: Handle resource request failure consistently
+
+Roger Pau Monne (4):
+      xen/blkfront: fix leaking data in shared pages
+      xen/netfront: fix leaking data in shared pages
+      xen/netfront: force data bouncing when backend is untrusted
+      xen/blkfront: force data bouncing when backend is untrusted
+
+Samuel Holland (2):
+      pinctrl: sunxi: a83t: Fix NAND function name for some pins
+      dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max typo
+
+Sascha Hauer (1):
+      dmaengine: imx-sdma: only restart cyclic channel when enabled
+
+Satish Nagireddy (1):
+      i2c: cadence: Unregister the clk notifier in error path
+
+Sherry Sun (1):
+      arm64: dts: imx8mp-evk: correct the uart2 pinctl value
+
+Shuah Khan (3):
+      misc: rtsx_usb: fix use of dma mapped buffer for usb bulk transfer
+      misc: rtsx_usb: use separate command and response buffers
+      misc: rtsx_usb: set return value in rsp_buf alloc err path
+
+Shuming Fan (1):
+      ASoC: rt711-sdca: fix kernel NULL pointer dereference when IO error
+
+Srinivas Kandagatla (2):
+      ASoC: qdsp6: q6apm-dai: unprepare stream if its already prepared
+      MAINTAINERS: update ASoC Qualcomm maintainer email-id
+
+Srinivas Neeli (1):
+      Revert "can: xilinx_can: Limit CANFD brp to 2"
+
+Stafford Horne (1):
+      irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
+
+Stephan Gerhold (1):
+      arm64: dts: qcom: msm8992-*: Fix vdd_lvs1_2-supply typo
+
+Stephen Boyd (1):
+      arm64: dts: qcom: Remove duplicate sc7180-trogdor include on
+lazor/homestar
+
+Sven Schnelle (1):
+      ptrace: fix clearing of JOBCTL_TRACED in ptrace_unfreeze_traced()
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Workarounds for Behringer UMC 204/404 HD
+      ALSA: cs46xx: Fix missing snd_card_free() call at probe error
+
+Thomas Kopp (2):
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): improve workaround
+handling for mcp2517fd
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): update workaround
+broken CRC on TBC register
+
+Thomas Zimmermann (1):
+      drm/aperture: Run fbdev removal before internal helpers
+
+Tiezhu Yang (1):
+      LoongArch: Fix section mismatch warning
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirk for Clevo L140PU
+
+Vasyl Vavrychuk (1):
+      Bluetooth: core: Fix deadlock on hci_power_on_sync.
+
+Vincent Guittot (1):
+      firmware: arm_scmi: Fix response size warning for OPTEE transport
+
+Vinod Koul (1):
+      dmaengine: Revert "dmaengine: add verification of DMA_INTERRUPT
+capability for dmatest"
+
+Vishal Verma (1):
+      cxl/mbox: Fix missing variable payload checks in cmd size validation
+
+Vlad Buslov (2):
+      net/sched: act_police: allow 'continue' action offload
+      net/mlx5e: Fix matchall police parameters validation
+
+Vladimir Oltean (3):
+      selftests: forwarding: fix flood_unicast_test when h2 supports
+IFF_UNICAST_FLT
+      selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST=
+_FLT
+      selftests: forwarding: fix error message in learning_test
+
+Vladimir Zapolskiy (1):
+      arm64: dts: qcom: sm8450: fix interconnects property of UFS node
+
+Vladis Dronov (1):
+      wireguard: Kconfig: select CRYPTO_CHACHA_S390
+
+Wei Yongjun (1):
+      irqchip/apple-aic: Make symbol 'use_fast_ipi' static
+
+Xiang wangx (1):
+      openrisc: unwinder: Fix grammar issue in comment
+
+Yassine Oudjana (1):
+      ASoC: wcd9335: Remove RX channel from old list before adding it
+to a new one
+
+Yian Chen (1):
+      iommu/vt-d: Fix PCI bus rescan device hot add
+
+Yue Hu (2):
+      fscache: Fix if condition in fscache_wait_on_volume_collision()
+      fscache: Introduce fscache_cookie_is_dropped()

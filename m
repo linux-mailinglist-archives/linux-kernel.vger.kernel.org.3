@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163B056CFE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 18:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2551656CFE8
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Jul 2022 18:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiGJQBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 12:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S229642AbiGJQDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 12:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGJQBq (ORCPT
+        with ESMTP id S229495AbiGJQDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 12:01:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF9A12A88;
-        Sun, 10 Jul 2022 09:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657468905; x=1689004905;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z/zdwQGtGZpw5TUuqOObVGsMWxYIOgqz24mXmC4bem8=;
-  b=eIFqQ3fyE7gWZ9YGW1WHiz0Z6YhJlvV5xCia7yqgeOZ8wFe1HY18sdCh
-   K49ezB4L0f/NJFvVigmRC99h1ysSzsOtGWZclh+lES1toyb6dK2i0QXJY
-   MhWxdgOfueWXm0gikMfh6bL/GjtzKXwFL1WTliZYXAHV7MUMD7ugcJIca
-   3V39WaNLJ0MjK9ib8HwxmvYALgyvGq1f3Fky6dC/EJ9y182jeydY6zV7E
-   30KBU3z7sdoCd9zg3RPpTLHs3AkuB4sL48AayaYIcKiwBJIQjRWnDXHp+
-   oRbWR2F0FtmzywugmgoOffJO/6hkenpXfnWnT4cnF9Q6vVf6GZmkt9iMr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="370832390"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="370832390"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 09:01:45 -0700
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="621798255"
-Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 09:01:39 -0700
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     ashok.raj@intel.com, tony.luck@intel.com,
-        gregkh@linuxfoundation.org, ravi.v.shankar@intel.com,
-        jithu.joseph@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH v2] platform/x86/intel/ifs: Allow non-default names for IFS image
-Date:   Sun, 10 Jul 2022 09:00:11 -0700
-Message-Id: <20220710160011.995800-1-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 10 Jul 2022 12:03:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC2FDBD;
+        Sun, 10 Jul 2022 09:03:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCA56B80B00;
+        Sun, 10 Jul 2022 16:03:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC88C3411E;
+        Sun, 10 Jul 2022 16:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657469011;
+        bh=b/Qujb1c6MLjLHevZTO2FbKGp99GynP3y6ASpPZYrA4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qNfId77tIgjTs4SP5wzX9WcPkLOpIrAag8IBmmBi2tlnRp3CR4p+0iX7IGA0HQfuE
+         yD+b6hbECLjGR1O4UsSQuN4GLx41twTTSgeXZKWs2qHbnfA37SetjsgIIB8udtr/Rc
+         VSiPxzXuhi3ZsaQesAZ5aiO6CgAcadDxqQQt50CBtVaQ1zIQ2RSZ6qDI/YkdYrkl1d
+         8uoTOQBZkbc/unqjs5YoW4BD46eYM0Owjg0NDsiYrxiLejb070RlM4M+wMfHd0SHdY
+         PoLeeaKJtxeBpkdW+DuZMp1+j6nZGwvIuEkNxlWA3YMCEvYZNuj3xctyLa0lIBg6WF
+         +bgaL5Xv0clxQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E58AF5C0399; Sun, 10 Jul 2022 09:03:30 -0700 (PDT)
+Date:   Sun, 10 Jul 2022 09:03:30 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
+Message-ID: <20220710160330.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-3-joel@joelfernandes.org>
+ <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <Yso4690g+lI/8eJS@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yso4690g+lI/8eJS@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,170 +62,410 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Existing implementation limits IFS images to be loaded only from
-a default file-name /lib/firmware/intel/ifs/ff-mm-ss.scan.
+On Sun, Jul 10, 2022 at 02:26:51AM +0000, Joel Fernandes wrote:
+> I replied some more and will reply more soon, its a really long thread and
+> thank you for the detailed review :)
+> 
+> On Sat, Jun 25, 2022 at 09:00:19PM -0700, Paul E. McKenney wrote:
+> [..]
+> > > +}
+> > > +
+> > >  /*
+> > >   * Flush the second rcu_cblist structure onto the first one, obliterating
+> > >   * any contents of the first.  If rhp is non-NULL, enqueue it as the sole
+> > > @@ -60,6 +70,15 @@ void rcu_cblist_flush_enqueue(struct rcu_cblist *drclp,
+> > >  	}
+> > >  }
+> > 
+> > Header comment, please.  It can be short, referring to that of the
+> > function rcu_cblist_flush_enqueue().
+> 
+> Done, what I ended up doing is nuking the new function and doing the same
+> IS_ENABLED() trick to the existing rcu_cblist_flush_enqueue(). diffstat is
+> also happy!
+> 
+> > > +void rcu_cblist_flush_enqueue_lazy(struct rcu_cblist *drclp,
+> > > +			      struct rcu_cblist *srclp,
+> > > +			      struct rcu_head *rhp)
+> > 
+> > Please line up the "struct" keywords.  (Picky, I know...)
+> > 
+> > > +{
+> > > +	rcu_cblist_flush_enqueue(drclp, srclp, rhp);
+> > > +	if (rhp)
+> > > +		WRITE_ONCE(srclp->lazy_len, 1);
+> > 
+> > Shouldn't this instead be a lazy argument to rcu_cblist_flush_enqueue()?
+> > Concerns about speed in the !RCU_LAZY case can be addressed using
+> > IS_ENABLED(), for example:
+> > 
+> > 	if (IS_ENABLED(CONFIG_RCU_LAZY) && rhp)
+> > 		WRITE_ONCE(srclp->lazy_len, 1);
+> 
+> Ah indeed exactly what I ended up doing.
+> 
+> > > +}
+> > > +
+> > >  /*
+> > >   * Dequeue the oldest rcu_head structure from the specified callback
+> > >   * list.
+> > > diff --git a/kernel/rcu/rcu_segcblist.h b/kernel/rcu/rcu_segcblist.h
+> > > index 431cee212467..c3d7de65b689 100644
+> > > --- a/kernel/rcu/rcu_segcblist.h
+> > > +++ b/kernel/rcu/rcu_segcblist.h
+> > > @@ -15,14 +15,28 @@ static inline long rcu_cblist_n_cbs(struct rcu_cblist *rclp)
+> > >  	return READ_ONCE(rclp->len);
+> > >  }
+> > >  
+> > > +/* Return number of callbacks in the specified callback list. */
+> > > +static inline long rcu_cblist_n_lazy_cbs(struct rcu_cblist *rclp)
+> > > +{
+> > > +#ifdef CONFIG_RCU_LAZY
+> > > +	return READ_ONCE(rclp->lazy_len);
+> > > +#else
+> > > +	return 0;
+> > > +#endif
+> > 
+> > Please use IS_ENABLED().  This saves a line (and lots of characters)
+> > but compiles just as efficienctly.
+> 
+> Sounds good, looks a lot better, thanks!
+> 
+> It ends up looking like:
+> 
+> static inline long rcu_cblist_n_lazy_cbs(struct rcu_cblist *rclp)
+> {
+>         if (IS_ENABLED(CONFIG_RCU_LAZY))
+>                 return READ_ONCE(rclp->lazy_len);
+>         return 0;
+> }
+> 
+> static inline void rcu_cblist_reset_lazy_len(struct rcu_cblist *rclp)
+> {
+>         if (IS_ENABLED(CONFIG_RCU_LAZY))
+>                 WRITE_ONCE(rclp->lazy_len, 0);
+> }
 
-But there are situations where there may be multiple scan files
-that can be run on a particular system stored in /lib/firmware/intel/ifs
+All much better, thank you!
 
-E.g.
-1. Because test contents are larger than the memory reserved for IFS by BIOS
-2. To provide increased test coverage
-3. Custom test files to debug certain specific issues in the field
+> > > +}
+> > > +
+> > >  /* Return number of callbacks in segmented callback list by summing seglen. */
+> > >  long rcu_segcblist_n_segment_cbs(struct rcu_segcblist *rsclp);
+> > >  
+> > >  void rcu_cblist_init(struct rcu_cblist *rclp);
+> > >  void rcu_cblist_enqueue(struct rcu_cblist *rclp, struct rcu_head *rhp);
+> > > +void rcu_cblist_enqueue_lazy(struct rcu_cblist *rclp, struct rcu_head *rhp);
+> > >  void rcu_cblist_flush_enqueue(struct rcu_cblist *drclp,
+> > >  			      struct rcu_cblist *srclp,
+> > >  			      struct rcu_head *rhp);
+> > > +void rcu_cblist_flush_enqueue_lazy(struct rcu_cblist *drclp,
+> > > +			      struct rcu_cblist *srclp,
+> > > +			      struct rcu_head *rhp);
+> > 
+> > Please line up the "struct" keywords.  (Still picky, I know...)
+> 
+> Nuked it due to new lazy parameter so no issue now.
+>  
+> > >  struct rcu_head *rcu_cblist_dequeue(struct rcu_cblist *rclp);
+> > >  
+> > >  /*
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index c25ba442044a..d2e3d6e176d2 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -3098,7 +3098,8 @@ static void check_cb_ovld(struct rcu_data *rdp)
+> > >   * Implementation of these memory-ordering guarantees is described here:
+> > >   * Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst.
+> > >   */
+> > 
+> > The above docbook comment needs to move to call_rcu().
+> 
+> Ok sure.
+> 
+> > > -void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> > > +static void
+> > > +__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy)
+> > >  {
+> > >  	static atomic_t doublefrees;
+> > >  	unsigned long flags;
+> > > @@ -3139,7 +3140,7 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> > >  	}
+> > >  
+> > >  	check_cb_ovld(rdp);
+> > > -	if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags))
+> > > +	if (rcu_nocb_try_bypass(rdp, head, &was_alldone, flags, lazy))
+> > >  		return; // Enqueued onto ->nocb_bypass, so just leave.
+> > >  	// If no-CBs CPU gets here, rcu_nocb_try_bypass() acquired ->nocb_lock.
+> > >  	rcu_segcblist_enqueue(&rdp->cblist, head);
+> > > @@ -3161,8 +3162,21 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> > >  		local_irq_restore(flags);
+> > >  	}
+> > >  }
+> > > -EXPORT_SYMBOL_GPL(call_rcu);
+> > 
+> > Please add a docbook comment for call_rcu_lazy().  It can be brief, for
+> > example, by referring to call_rcu()'s docbook comment for memory-ordering
+> > details.
+> 
+> I added something like the following, hope it looks OK:
+> 
+> #ifdef CONFIG_RCU_LAZY
+> /**
+>  * call_rcu_lazy() - Lazily queue RCU callback for invocation after grace period.
+>  * @head: structure to be used for queueing the RCU updates.
+>  * @func: actual callback function to be invoked after the grace period
+>  *
+>  * The callback function will be invoked some time after a full grace
+>  * period elapses, in other words after all pre-existing RCU read-side
+>  * critical sections have completed.
+>  *
+>  * Use this API instead of call_rcu() if you don't mind the callback being
+>  * invoked after very long periods of time on systems without memory pressure
+>  * and on systems which are lightly loaded or mostly idle.
+>  *
+>  * Other than the extra delay in callbacks being invoked, this function is
+>  * identical to, and reuses call_rcu()'s logic. Refer to call_rcu() for more
+>  * details about memory ordering and other functionality.
 
-Renaming each of these to ff-mm-ss.scan and then loading might be
-possible in some environments. But on systems where /lib is read-only
-this is not a practical solution.
+Much better, thank you!
 
-Modify the semantics of the driver file
-/sys/devices/virtual/misc/intel_ifs_0/reload such that,
-it interprets the input as the filename to be loaded.
+>  */
+> void call_rcu_lazy(struct rcu_head *head, rcu_callback_t func)
+> {
+>         return __call_rcu_common(head, func, true);
+> }
+> EXPORT_SYMBOL_GPL(call_rcu_lazy);
+> #endif
+> 
+> > 
+> > > +#ifdef CONFIG_RCU_LAZY
+> > > +void call_rcu_lazy(struct rcu_head *head, rcu_callback_t func)
+> > > +{
+> > > +	return __call_rcu_common(head, func, true);
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(call_rcu_lazy);
+> > > +#endif
+> > > +
+> > > +void call_rcu(struct rcu_head *head, rcu_callback_t func)
+> > > +{
+> > > +	return __call_rcu_common(head, func, false);
+> > > +
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(call_rcu);
+> > >  
+> > >  /* Maximum number of jiffies to wait before draining a batch. */
+> > >  #define KFREE_DRAIN_JIFFIES (HZ / 50)
+> > > @@ -4056,7 +4070,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+> > >  	rdp->barrier_head.func = rcu_barrier_callback;
+> > >  	debug_rcu_head_queue(&rdp->barrier_head);
+> > >  	rcu_nocb_lock(rdp);
+> > > -	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
+> > > +	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
+> > >  	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
+> > >  		atomic_inc(&rcu_state.barrier_cpu_count);
+> > >  	} else {
+> > > @@ -4476,7 +4490,7 @@ void rcutree_migrate_callbacks(int cpu)
+> > >  	my_rdp = this_cpu_ptr(&rcu_data);
+> > >  	my_rnp = my_rdp->mynode;
+> > >  	rcu_nocb_lock(my_rdp); /* irqs already disabled. */
+> > > -	WARN_ON_ONCE(!rcu_nocb_flush_bypass(my_rdp, NULL, jiffies));
+> > > +	WARN_ON_ONCE(!rcu_nocb_flush_bypass(my_rdp, NULL, jiffies, false));
+> > >  	raw_spin_lock_rcu_node(my_rnp); /* irqs already disabled. */
+> > >  	/* Leverage recent GPs and set GP for new callbacks. */
+> > >  	needwake = rcu_advance_cbs(my_rnp, rdp) ||
+> > > diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> > > index 2ccf5845957d..fec4fad6654b 100644
+> > > --- a/kernel/rcu/tree.h
+> > > +++ b/kernel/rcu/tree.h
+> > > @@ -267,8 +267,9 @@ struct rcu_data {
+> > >  /* Values for nocb_defer_wakeup field in struct rcu_data. */
+> > >  #define RCU_NOCB_WAKE_NOT	0
+> > >  #define RCU_NOCB_WAKE_BYPASS	1
+> > > -#define RCU_NOCB_WAKE		2
+> > > -#define RCU_NOCB_WAKE_FORCE	3
+> > > +#define RCU_NOCB_WAKE_LAZY	2
+> > > +#define RCU_NOCB_WAKE		3
+> > > +#define RCU_NOCB_WAKE_FORCE	4
+> > >  
+> > >  #define RCU_JIFFIES_TILL_FORCE_QS (1 + (HZ > 250) + (HZ > 500))
+> > >  					/* For jiffies_till_first_fqs and */
+> > > @@ -436,9 +437,10 @@ static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
+> > >  static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
+> > >  static void rcu_init_one_nocb(struct rcu_node *rnp);
+> > >  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > -				  unsigned long j);
+> > > +				  unsigned long j, bool lazy);
+> > >  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > -				bool *was_alldone, unsigned long flags);
+> > > +				bool *was_alldone, unsigned long flags,
+> > > +				bool lazy);
+> > >  static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_empty,
+> > >  				 unsigned long flags);
+> > >  static int rcu_nocb_need_deferred_wakeup(struct rcu_data *rdp, int level);
+> > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > > index e369efe94fda..b9244f22e102 100644
+> > > --- a/kernel/rcu/tree_nocb.h
+> > > +++ b/kernel/rcu/tree_nocb.h
+> > > @@ -256,6 +256,8 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
+> > >  	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
+> > >  }
+> > 
+> > Comment on LAZY_FLUSH_JIFFIES purpose in life, please!  (At some point
+> > more flexibility may be required, but let's not unnecessarily rush
+> > into that.)
+> 
+> I added this:
+> /*
+>  * LAZY_FLUSH_JIFFIES decides the maximum amount of time that
+>  * can elapse before lazy callbacks are flushed. Lazy callbacks
+>  * could be flushed much earlier for a number of other reasons
+>  * however, LAZY_FLUSH_JIFFIES will ensure no lazy callbacks are
+>  * left unsubmitted to RCU after those many jiffies.
+>  */
 
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
----
-Changes in v2
-- drop treating "1" specially, i.e treat everything as a file-name
+Much better, thank you!
 
- drivers/platform/x86/intel/ifs/ifs.h          | 11 ++++----
- drivers/platform/x86/intel/ifs/core.c         |  2 +-
- drivers/platform/x86/intel/ifs/load.c         | 25 +++++++++++++------
- drivers/platform/x86/intel/ifs/sysfs.c        | 13 +++-------
- .../ABI/testing/sysfs-platform-intel-ifs      |  3 +--
- 5 files changed, 29 insertions(+), 25 deletions(-)
+> > > +#define LAZY_FLUSH_JIFFIES (10 * HZ)
+> > > +
+> > >  /*
+> > >   * Arrange to wake the GP kthread for this NOCB group at some future
+> > >   * time when it is safe to do so.
+> > > @@ -272,7 +274,10 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
+> > >  	 * Bypass wakeup overrides previous deferments. In case
+> > >  	 * of callback storm, no need to wake up too early.
+> > >  	 */
+> > > -	if (waketype == RCU_NOCB_WAKE_BYPASS) {
+> > > +	if (waketype == RCU_NOCB_WAKE_LAZY) {
+> > 
+> > Presumably we get here only if all of this CPU's callbacks are lazy?
+> 
+> Yes that's right.
 
-diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-index 73c8e91cf144..577cee7db86a 100644
---- a/drivers/platform/x86/intel/ifs/ifs.h
-+++ b/drivers/platform/x86/intel/ifs/ifs.h
-@@ -34,12 +34,13 @@
-  * socket in a two step process using writes to MSRs to first load the
-  * SHA hashes for the test. Then the tests themselves. Status MSRs provide
-  * feedback on the success/failure of these steps. When a new test file
-- * is installed it can be loaded by writing to the driver reload file::
-+ * is installed it can be loaded by writing the filename to the driver reload file::
-  *
-- *   # echo 1 > /sys/devices/virtual/misc/intel_ifs_0/reload
-+ *   # echo mytest > /sys/devices/virtual/misc/intel_ifs_0/reload
-  *
-- * Similar to microcode, the current version of the scan tests is stored
-- * in a fixed location: /lib/firmware/intel/ifs.0/family-model-stepping.scan
-+ * The file will be loaded from /lib/firmware/intel/ifs/mytest
-+ * The default file /lib/firmware/intel/ifs/family-model-stepping.scan
-+ * will be loaded during module insertion.
-  *
-  * Running tests
-  * -------------
-@@ -225,7 +226,7 @@ static inline struct ifs_data *ifs_get_data(struct device *dev)
- 	return &d->data;
- }
- 
--void ifs_load_firmware(struct device *dev);
-+int ifs_load_firmware(struct device *dev, const char *file_name);
- int do_core_test(int cpu, struct device *dev);
- const struct attribute_group **ifs_get_groups(void);
- 
-diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-index 27204e3d674d..9c319ada62d8 100644
---- a/drivers/platform/x86/intel/ifs/core.c
-+++ b/drivers/platform/x86/intel/ifs/core.c
-@@ -53,7 +53,7 @@ static int __init ifs_init(void)
- 	if ((msrval & BIT(ifs_device.data.integrity_cap_bit)) &&
- 	    !misc_register(&ifs_device.misc)) {
- 		down(&ifs_sem);
--		ifs_load_firmware(ifs_device.misc.this_device);
-+		ifs_load_firmware(ifs_device.misc.this_device, NULL);
- 		up(&ifs_sem);
- 		return 0;
- 	}
-diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-index d056617ddc85..89d76bd8b40a 100644
---- a/drivers/platform/x86/intel/ifs/load.c
-+++ b/drivers/platform/x86/intel/ifs/load.c
-@@ -232,17 +232,27 @@ static bool ifs_image_sanity_check(struct device *dev, const struct microcode_he
- 
- /*
-  * Load ifs image. Before loading ifs module, the ifs image must be located
-- * in /lib/firmware/intel/ifs and named as {family/model/stepping}.{testname}.
-+ * in the folder /lib/firmware/intel/ifs/
-  */
--void ifs_load_firmware(struct device *dev)
-+int ifs_load_firmware(struct device *dev, const char *file_name)
- {
- 	struct ifs_data *ifsd = ifs_get_data(dev);
- 	const struct firmware *fw;
--	char scan_path[32];
--	int ret;
--
--	snprintf(scan_path, sizeof(scan_path), "intel/ifs/%02x-%02x-%02x.scan",
--		 boot_cpu_data.x86, boot_cpu_data.x86_model, boot_cpu_data.x86_stepping);
-+	char scan_path[64];
-+	int ret = -EINVAL;
-+	int file_name_len;
-+
-+	if (!file_name) {
-+		snprintf(scan_path, sizeof(scan_path), "intel/ifs/%02x-%02x-%02x.scan",
-+			 boot_cpu_data.x86, boot_cpu_data.x86_model, boot_cpu_data.x86_stepping);
-+	} else {
-+		if (strchr(file_name, '/'))
-+			goto done;
-+		file_name_len = strchrnul(file_name, '\n') - file_name;
-+		if (snprintf(scan_path, sizeof(scan_path), "intel/ifs/%.*s",
-+			     file_name_len, file_name) >= sizeof(scan_path))
-+			goto done;
-+	}
- 
- 	ret = request_firmware_direct(&fw, scan_path, dev);
- 	if (ret) {
-@@ -263,4 +273,5 @@ void ifs_load_firmware(struct device *dev)
- 	release_firmware(fw);
- done:
- 	ifsd->loaded = (ret == 0);
-+	return ret;
- }
-diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
-index 37d8380d6fa8..b4716b7d36aa 100644
---- a/drivers/platform/x86/intel/ifs/sysfs.c
-+++ b/drivers/platform/x86/intel/ifs/sysfs.c
-@@ -94,23 +94,16 @@ static ssize_t reload_store(struct device *dev,
- 			    struct device_attribute *attr,
- 			    const char *buf, size_t count)
- {
--	struct ifs_data *ifsd = ifs_get_data(dev);
--	bool res;
--
--
--	if (kstrtobool(buf, &res))
--		return -EINVAL;
--	if (!res)
--		return count;
-+	int ret;
- 
- 	if (down_interruptible(&ifs_sem))
- 		return -EINTR;
- 
--	ifs_load_firmware(dev);
-+	ret = ifs_load_firmware(dev, buf);
- 
- 	up(&ifs_sem);
- 
--	return ifsd->loaded ? count : -ENODEV;
-+	return ret  ? ret : count;
- }
- 
- static DEVICE_ATTR_WO(reload);
-diff --git a/Documentation/ABI/testing/sysfs-platform-intel-ifs b/Documentation/ABI/testing/sysfs-platform-intel-ifs
-index 486d6d2ff8a0..0b373f73a2b6 100644
---- a/Documentation/ABI/testing/sysfs-platform-intel-ifs
-+++ b/Documentation/ABI/testing/sysfs-platform-intel-ifs
-@@ -35,5 +35,4 @@ What:		/sys/devices/virtual/misc/intel_ifs_<N>/reload
- Date:		April 21 2022
- KernelVersion:	5.19
- Contact:	"Jithu Joseph" <jithu.joseph@intel.com>
--Description:	Write "1" (or "y" or "Y") to reload the IFS image from
--		/lib/firmware/intel/ifs/ff-mm-ss.scan.
-+Description:	Write <file_name> to reload the IFS image from /lib/firmware/intel/<file_name>.
+OK, thank yoiu for the clarification.
 
-base-commit: 88084a3df1672e131ddc1b4e39eeacfd39864acf
--- 
-2.25.1
+> > >  	rcu_segcblist_insert_pend_cbs(&rdp->cblist, &rcl);
+> > >  	WRITE_ONCE(rdp->nocb_bypass_first, j);
+> > >  	rcu_nocb_bypass_unlock(rdp);
+> > > @@ -326,13 +337,13 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > >   * Note that this function always returns true if rhp is NULL.
+> > >   */
+> > >  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > -				  unsigned long j)
+> > > +				  unsigned long j, bool lazy)
+> > >  {
+> > >  	if (!rcu_rdp_is_offloaded(rdp))
+> > >  		return true;
+> > >  	rcu_lockdep_assert_cblist_protected(rdp);
+> > >  	rcu_nocb_bypass_lock(rdp);
+> > > -	return rcu_nocb_do_flush_bypass(rdp, rhp, j);
+> > > +	return rcu_nocb_do_flush_bypass(rdp, rhp, j, lazy);
+> > >  }
+> > >  
+> > >  /*
+> > > @@ -345,7 +356,7 @@ static void rcu_nocb_try_flush_bypass(struct rcu_data *rdp, unsigned long j)
+> > >  	if (!rcu_rdp_is_offloaded(rdp) ||
+> > >  	    !rcu_nocb_bypass_trylock(rdp))
+> > >  		return;
+> > > -	WARN_ON_ONCE(!rcu_nocb_do_flush_bypass(rdp, NULL, j));
+> > > +	WARN_ON_ONCE(!rcu_nocb_do_flush_bypass(rdp, NULL, j, false));
+> > >  }
+> > >  
+> > >  /*
+> > > @@ -367,12 +378,14 @@ static void rcu_nocb_try_flush_bypass(struct rcu_data *rdp, unsigned long j)
+> > >   * there is only one CPU in operation.
+> > >   */
+> > >  static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > > -				bool *was_alldone, unsigned long flags)
+> > > +				bool *was_alldone, unsigned long flags,
+> > > +				bool lazy)
+> > >  {
+> > >  	unsigned long c;
+> > >  	unsigned long cur_gp_seq;
+> > >  	unsigned long j = jiffies;
+> > >  	long ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+> > > +	long n_lazy_cbs = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
+> > >  
+> > >  	lockdep_assert_irqs_disabled();
+> > >  
+> > > @@ -414,30 +427,37 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+> > >  	}
+> > >  	WRITE_ONCE(rdp->nocb_nobypass_count, c);
+> > >  
+> > > -	// If there hasn't yet been all that many ->cblist enqueues
+> > > -	// this jiffy, tell the caller to enqueue onto ->cblist.  But flush
+> > > -	// ->nocb_bypass first.
+> > > -	if (rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy) {
+> > > +	// If caller passed a non-lazy CB and there hasn't yet been all that
+> > > +	// many ->cblist enqueues this jiffy, tell the caller to enqueue it
+> > > +	// onto ->cblist.  But flush ->nocb_bypass first. Also do so, if total
+> > > +	// number of CBs (lazy + non-lazy) grows too much.
+> > > +	//
+> > > +	// Note that if the bypass list has lazy CBs, and the main list is
+> > > +	// empty, and rhp happens to be non-lazy, then we end up flushing all
+> > > +	// the lazy CBs to the main list as well. That's the right thing to do,
+> > > +	// since we are kick-starting RCU GP processing anyway for the non-lazy
+> > > +	// one, we can just reuse that GP for the already queued-up lazy ones.
+> > > +	if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
+> > > +	    (lazy && n_lazy_cbs >= qhimark)) {
+> > >  		rcu_nocb_lock(rdp);
+> > >  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+> > >  		if (*was_alldone)
+> > >  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+> > > -					    TPS("FirstQ"));
+> > > -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
+> > > +					    lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
+> > > +		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
+> > 
+> > The "false" here instead of "lazy" is because the caller is to do the
+> > enqueuing, correct?
+> 
+> There is no difference between using false or lazy here, because the bypass
+> flush is not also enqueuing the lazy callback, right?
+> 
+> We can also pass lazy instead of false if that's less confusing.
+> 
+> Or maybe I missed the issue you're raising?
 
+I am mostly checking up on your intended meaning of "lazy" in various
+contexts.  It could mean only that the caller requested laziness, or in
+some cases it could mean that the callback actually will be lazy.
+
+I can rationalize the "false" above as a "don't care" in this case
+because (as you say) there is not callback.  In which case this code
+is OK as is, as long as the header comment for rcu_nocb_flush_bypass()
+clearly states that this parameter has meaning only when there really
+is a callback being queued.
+
+> > >  		WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
+> > >  		return false; // Caller must enqueue the callback.
+> > >  	}
+> > >  
+> > >  	// If ->nocb_bypass has been used too long or is too full,
+> > >  	// flush ->nocb_bypass to ->cblist.
+> > > -	if ((ncbs && j != READ_ONCE(rdp->nocb_bypass_first)) ||
+> > > -	    ncbs >= qhimark) {
+> > > +	if ((ncbs && j != READ_ONCE(rdp->nocb_bypass_first)) || ncbs >= qhimark) {
+> > >  		rcu_nocb_lock(rdp);
+> > > -		if (!rcu_nocb_flush_bypass(rdp, rhp, j)) {
+> > > +		if (!rcu_nocb_flush_bypass(rdp, rhp, j, true)) {
+> > 
+> > But shouldn't this "true" be "lazy"?  I don't see how we are guaranteed
+> > that the callback is in fact lazy at this point in the code.  Also,
+> > there is not yet a guarantee that the caller will do the enqueuing.
+> > So what am I missing?
+> 
+> Sorry I screwed this part up. I think I meant 'false' here, if the list grew
+> too big- then I think I would prefer if the new lazy CB instead is treated as
+> non-lazy. But if that's too confusing, I will just pass 'lazy' instead. What
+> do you think?
+
+Good point, if we are choosing to override the laziness requested by the
+caller, then it should say "true".  It would be good to have a comment
+saying that is what we are doing, correct?
+
+> Will reply more to the rest of the comments soon, thanks!
+
+Sounds good!  (Hey, wouldn't want you to be bored!)
+
+							Thanx, Paul

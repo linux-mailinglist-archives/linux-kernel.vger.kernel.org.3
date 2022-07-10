@@ -2,143 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF3056D1DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9D556D1E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiGJXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 19:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S229535AbiGJXGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 19:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGJXFm (ORCPT
+        with ESMTP id S229510AbiGJXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 19:05:42 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A532CF597;
-        Sun, 10 Jul 2022 16:05:41 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0733C5C010F;
-        Sun, 10 Jul 2022 19:05:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 10 Jul 2022 19:05:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:message-id:mime-version:reply-to
-        :sender:subject:subject:to:to; s=fm2; t=1657494339; x=
-        1657580739; bh=f9bSjqSEnIXH1UABF2q7HoN67rLpDoOJdF+QGXn1KUY=; b=n
-        ImRps3NNA9r8Ob0rontYzLsDJVt0ZKLdUPlwsX95x6GpbRD6x7Lyn02YYRWcPfYL
-        0VB408VfRNmsr7fuMixiDSJwzLQyGX6MyZgJHVZs1/aRPXq4IQi+ToW9sgeLHC9r
-        3K4OlkDn1n9DDTGW/BcRQZFjZRxwVsJNilVdcAgTFAxSTMjlH2qCbfItNvJ5LN97
-        83Z+wBkAHz6Zh8Nn93mhQxkpY1bQHO/H1wI1+TTIM00Nf+lb6a+g3DJUbt6YtT9P
-        hI1VuWdLykvFiSBM6s+sIIYmcpm9Zg/ufniYgw50zJLNDfWxBpUc388JdyG1RHCi
-        pzlxG/mF50z8cuOY+iFjA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1657494339; x=1657580739; bh=f9bSjqSEnIXH1UABF2q7HoN67rLpDoOJdF+
-        QGXn1KUY=; b=alILd2VqdjjP7T0DMJumMBXvyb06DgdGontjC9CN3A+FDaaueyI
-        xVrkIj4AeGQOcN651bBOBMgm+ZVqCW0xNBNjdSS1aFkl30TLmV0/reDYtKe9EMvR
-        ptroAa1dMqCNnif0v6TbAJMHh9OsQrN6nxSDioemRAzFhc2rEOq2oyCD+j7Ixp3T
-        pCD2m3czGe0Yk3FHgfQn7MKYgQySVfQ5aivwMpIjaK99ZQFzooArZGBHxbp3jhf3
-        g/tzSzKRwTElGqtf9VHWQWP8thKU4Y3cFYPWCTrsFxlTCPKob8raooKgyBf6jU3c
-        lI8sXehCvrvYYAUinIl7tBTgghiQ2yTspvg==
-X-ME-Sender: <xms:QlvLYrYimvrXsyUHJI3Iq8i-pAXr9yFJ4Ov1RskGM0LfEl78Dsk9Uw>
-    <xme:QlvLYqZnjkpWuxgjAGGOz-KxJLs2fBE2DIQtn6xlUCnDU68JiTP8pqkU1APSNSs-j
-    gzzn9uMDXmtUVo>
-X-ME-Received: <xmr:QlvLYt-dKSjZ6RG-qp2MOhAhEnjnf5z2_OlK5_vqSp7XPBGMQDDmLcMkP7sTIM7WZfmMo2qY8oju>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejvddgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgvmhhiucfo
-    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
-    grsgdrtghomheqnecuggftrfgrthhtvghrnhepvdefgeekvdekgfffgeekhfeijedtffek
-    hefhleehfeejueetgfelgefgtdevieelnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
-    sgdrtghomh
-X-ME-Proxy: <xmx:QlvLYhr-Ba7EtRQht-ODUj7gNfFYD1U4pG36EVbcDrX3kWHAUI7rSw>
-    <xmx:QlvLYmpRFIPGyFast4ehq-otrzPRgX4xrmXIkzmhjEkVPtfhMciH1g>
-    <xmx:QlvLYnSCaoul2rBMKybiCc5DdWMUsyjSKZ5HevK-8z-KoB5mus73FA>
-    <xmx:Q1vLYvnWBqnYHkxAO5SDNNEWYqEkpN5YfwGc3B1WLT6XdB0hyatxZA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 10 Jul 2022 19:05:38 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v3] xen/gntdev: Ignore failure to unmap INVALID_GRANT_HANDLE
-Date:   Sun, 10 Jul 2022 19:05:22 -0400
-Message-Id: <20220710230522.1563-1-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 10 Jul 2022 19:06:07 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3394011C27
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:06 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id p4so2149091wms.0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 16:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/nPSylhn+MlXQwMJ3vmZOIwjj2PtaM6NrgjfZcN53+0=;
+        b=CWRIoXAEBDxrC9bGiRj/zi0DuboIft9UCUJ6qcWP0RVbGkX7Y5SwMT2aY+dZ0UhR1Y
+         go5ObEyQjNAMrvff2gfgj2ZrVRsxpO61Oylg+EjuHaGeyqyFBPeU2Lds0h4LE/5WyJKW
+         +V1MNAq/XY3lzTsRSTUlschbddDtj5ImuWtiEtVYeupQr1Kg3CLGQzmu8X/b/xv70QQo
+         9nQg5wr8aAkt14BvuWmEN2REp9cu8yfBTrbFu7E0VqD1eANxZ1+lZENpsSNvRkxh7WCY
+         82MTXJZ5r/hf3LK4YWCo4gfxegYLDmauOwxHlD5MWzc9Mpbs7byI3GBIYgj48vFWLH0q
+         bzxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/nPSylhn+MlXQwMJ3vmZOIwjj2PtaM6NrgjfZcN53+0=;
+        b=HJ8B8bOeZjjWyB3gZReTaBc0Q1AqZ/IqRjahEfSa6B13jHos8s3nZSCowGCdDUa6Qd
+         IzOFr2/P2aITNE9lJaQpq4icAonTNnr7tIiVMYM+e9G7wz+EZKQBmQx7DnBpBn8k8frD
+         krVhWXVXaPyYtuab7CWciH2zTmyBmz1v6oDTT8cIf0uezjAIxpSrRPJGgcha/tgZuOAl
+         t5KlBlFf96pDexjadhkrNEtDlUbcDbHcDaSD9LO8bCT1qgtPAxJLaNf8YzhabV+mDs8f
+         HVcxDi0g3PaupnvV/Uuu59JixY3BcTICZRvh0V2rPSTHXQNX36/8GDomPPvhHLFo9Xbd
+         J1hw==
+X-Gm-Message-State: AJIora8cD1xIpFENC+XgG5r4m7sEb1sUGQq6gqQ+LFu5Lobm/EpKkrBH
+        zg2t3AeYnZ3wCN/fHioxojFpfA==
+X-Google-Smtp-Source: AGRyM1srekra2VL2j8jif81CwmQn3XpY1r37W6j6+iJVlQaoKvaJeqI5+ah5MAAvaw+ScSAyLOyKdw==
+X-Received: by 2002:a05:600c:190b:b0:3a0:ac8a:7c2d with SMTP id j11-20020a05600c190b00b003a0ac8a7c2dmr12650759wmq.205.1657494364733;
+        Sun, 10 Jul 2022 16:06:04 -0700 (PDT)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id i15-20020adfefcf000000b0021d82a6095bsm4423810wrp.95.2022.07.10.16.06.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 16:06:04 -0700 (PDT)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] iommu/exynos: Add basic support for SysMMU v7
+Date:   Mon, 11 Jul 2022 02:05:56 +0300
+Message-Id: <20220710230603.13526-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error paths of gntdev_mmap() can call unmap_grant_pages() even
-though not all of the pages have been successfully mapped.  This will
-trigger the WARN_ON()s in __unmap_grant_pages_done().  The number of
-warnings can be very large; I have observed thousands of lines of
-warnings in the systemd journal.
+Add minimal viable support for SysMMU v7.x, which can be found in modern
+Exynos chips (like Exynos850 or Google's GS101). SysMMU v7.x may
+implement VM register set, and those registers should be initialized
+properly if present. Usually 8 translation domains are supported via VM
+registers (0..7), but only n=0 (default) is used for now.
 
-Avoid this problem by only warning on unmapping failure if the handle
-being unmapped is not INVALID_GRANT_HANDLE.  The handle field of any
-page that was not successfully mapped will be INVALID_GRANT_HANDLE, so
-this catches all cases where unmapping can legitimately fail.
+Existing exynos-iommu driver only supports SysMMU versions up to v5. But
+it's pretty much ready for basic usage with SysMMU v7, only small
+changes have to be done. As SysMMU version is tested dynamically (by
+reading the corresponding register), there is no need to introduce new
+compatible string.
 
-Suggested-by: Juergen Gross <jgross@suse.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
----
- drivers/xen/gntdev.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The only major change is that SysMMU v7 can have different register
+layouts:
+  - with Virtual Machine support
+  - without Virtual Machine support
 
-Changes since v2:
+That can be checked by reading the capability registers. In the case if
+SysMMU IP-core is VM-capable, the VM registers have to be used, and some
+additional initialization is needed. That is the case on E850-96 board,
+which non-secure SysMMU (v7.4) implements VM-capable register set.
 
-- Use unmap_ops instead of kunmap_ops in the first WARN_ON
+Another required change to make SysMMU v7 functional (at least the one
+that have VM registers), is to enable default VM instance. That should
+be added to the code enabling MMU itself. Insights for that change were
+taken by comparing the I/O dump (writel() / readl() operations) for the
+vendor driver and this upstream driver.
 
-Changes since v1:
+The patch series was tested on E850-96 board. Because at the moment
+there are no SysMMU users for that board, the testing was done using so
+called "Emulated Translation" registers available on SysMMU v7. That
+allows one to initiate the translation from CPU, by writing to those
+registers, and then reading the corresponding TLB registers to find out
+the translation result. The testing driver can be found in [1] tree.
 
-- Explicitly check for a status other than GNTST_okay instead of
-  implicitly checking that it is nonzero.
-- Avoid wrapping a line as within a comparison, as this makes the code
-  hard to read.
+Thanks to Marek, who did let me know it only takes a slight change of
+registers to make this driver work with v7.
 
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 4b56c39f766d4da68570d08d963f6ef40c8d9c37..84b143eef395b1585f3a8c0fdcb301ce9fbc52ec 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -396,13 +396,15 @@ static void __unmap_grant_pages_done(int result,
- 	unsigned int offset = data->unmap_ops - map->unmap_ops;
- 
- 	for (i = 0; i < data->count; i++) {
--		WARN_ON(map->unmap_ops[offset+i].status);
-+		WARN_ON(map->unmap_ops[offset + i].status != GNTST_okay &&
-+			map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
- 		pr_debug("unmap handle=%d st=%d\n",
- 			map->unmap_ops[offset+i].handle,
- 			map->unmap_ops[offset+i].status);
- 		map->unmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
- 		if (use_ptemod) {
--			WARN_ON(map->kunmap_ops[offset+i].status);
-+			WARN_ON(map->kunmap_ops[offset + i].status != GNTST_okay &&
-+				map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
- 			pr_debug("kunmap handle=%u st=%d\n",
- 				 map->kunmap_ops[offset+i].handle,
- 				 map->kunmap_ops[offset+i].status);
+[1] https://github.com/joe-skb7/linux/tree/e850-96-mainline-iommu
+
+Changes in v2:
+  - Addressed all comments on review
+  - Reworked commit messages correspondingly
+  - Added new patch: "iommu/exynos: Handle failed registration properly"
+  - Added new patch: "iommu/exynos: Add SysMMU v7 register sets"
+  - Added new patch: "iommu/exynos: Reuse SysMMU constants for page size
+    and order"
+
+Sam Protsenko (7):
+  iommu/exynos: Reuse SysMMU constants for page size and order
+  iommu/exynos: Handle failed IOMMU device registration properly
+  iommu/exynos: Set correct dma mask for SysMMU v5+
+  iommu/exynos: Use lookup based approach to access registers
+  iommu/exynos: Check if SysMMU v7 has VM registers
+  iommu/exynos: Add SysMMU v7 register sets
+  iommu/exynos: Enable default VM instance on SysMMU v7
+
+ drivers/iommu/exynos-iommu.c | 219 ++++++++++++++++++++++++++---------
+ 1 file changed, 166 insertions(+), 53 deletions(-)
+
 -- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+2.30.2
+

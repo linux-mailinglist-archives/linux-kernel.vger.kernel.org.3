@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389CD56D8D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6BF56D8D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiGKIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S230249AbiGKIvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiGKIuZ (ORCPT
+        with ESMTP id S230450AbiGKIu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:50:25 -0400
+        Mon, 11 Jul 2022 04:50:29 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C462124E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BB221E00
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657529415; x=1689065415;
+  t=1657529418; x=1689065418;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bnF/J3cdzcNa2nvmNTqNXDVKtTT8seBOtgR5lAaUQZU=;
-  b=jLm6Ro24GzWBrayzUN9EITK3HSWWeXLPsukGTlgEVC5nEpb1AH03Jr3J
-   BUepMGMU3QAp0rNo+QnZJIrK0RZU+Uec74vRWKV5O2QMu0TSzmMLb00Yf
-   ncYx1Kmi2sjZOFR8dJI+bo93XtGGnUCx0mQpAJa6jA6OOsyjfFiIaPoI3
-   X6TwdqMrCbEpLCB5/jGWtDNdXJjmCQipMRaWYAdYXrOEzvek5ZWjVyq0w
-   VrafskkyA6sh15Zy8V61+5PBttlsKA+2ijgLWCu7OZm2Ev8PA2QafpK6p
-   lL3tt4IK8gnAvrf8rK/hUfoouH1GUZF8IjKdqBtsgH5MGzDcZtZ8yNu63
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637859"
+  bh=pYmlZTWW8T052yrvDTxhlle8aydW1U/tmRbuqMhTmdg=;
+  b=U7NBQ0XAg6UAFeQvINvPB9l5hIC1GyHseVbtq69PiUL4tSDBxabGJ5yK
+   xEd59igNbDrmToEN8AKC8Lz1UMFfqYvbUJDkJNbPMwn02HNu1TvWMDavv
+   ppUOjsctli2bDoQebriLBIgb65Pbo9nYYII3BnH1+LZXyrZAgR2anWgk2
+   jrdszTYZHaPdJrlv6Eu6gLLnIHq671VN2uAWRmKi/ZZwySgIyzAkJoKXu
+   +RPT7zjioFCLKk1ZC5MhgrFctoI8TsRjain6BkbkOdMwdrvtQxz+T9bwC
+   V5eYG57mixgRFTN1ksEvAgWcNlL7+6zRNd5ndB/550JObsieS8TSKRfax
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637866"
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="284637859"
+   d="scan'208";a="284637866"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:15 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:17 -0700
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="652374174"
+   d="scan'208";a="652374188"
 Received: from yhuang6-mobl1.sh.intel.com ([10.238.5.168])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:13 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:16 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Huang Ying <ying.huang@intel.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
-Subject: [PATCH -V2 6/7] migrate_pages(): fix failure counting for THP splitting
-Date:   Mon, 11 Jul 2022 16:49:47 +0800
-Message-Id: <20220711084948.274787-7-ying.huang@intel.com>
+Subject: [PATCH -V2 7/7] migrate_pages(): fix failure counting for retry
+Date:   Mon, 11 Jul 2022 16:49:48 +0800
+Message-Id: <20220711084948.274787-8-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220711084948.274787-1-ying.huang@intel.com>
 References: <20220711084948.274787-1-ying.huang@intel.com>
@@ -61,12 +61,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If THP is failed to be migrated, it may be split and retry.  But after
-splitting, the head page will be left in "from" list, although THP
-migration failure has been counted already.  If the head page is
-failed to be migrated too, the failure will be counted twice
-incorrectly.  So this is fixed in this patch via moving the head page
-of THP after splitting to "thp_split_pages" too.
+After 10 retries, we will give up and the remaining pages will be
+counted as failure in nr_failed and nr_thp_failed.  We should count
+the failure in nr_failed_pages too.  This is done in this patch.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
@@ -74,48 +71,54 @@ Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Cc: Zi Yan <ziy@nvidia.com>
 Cc: Yang Shi <shy828301@gmail.com>
 ---
- mm/migrate.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ mm/migrate.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index 8cce73b7c046..557708ce13a1 100644
+index 557708ce13a1..cee6fc5a2d31 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1306,6 +1306,8 @@ static inline int try_split_thp(struct page *page, struct list_head *split_pages
- 	lock_page(page);
- 	rc = split_huge_page_to_list(page, split_pages);
- 	unlock_page(page);
-+	if (!rc)
-+		list_move_tail(&page->lru, split_pages);
- 
- 	return rc;
- }
-@@ -1365,7 +1367,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+@@ -1345,6 +1345,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 	int thp_retry = 1;
+ 	int nr_failed = 0;
+ 	int nr_failed_pages = 0;
++	int nr_retry_pages = 0;
+ 	int nr_succeeded = 0;
+ 	int nr_thp_succeeded = 0;
+ 	int nr_thp_failed = 0;
+@@ -1365,6 +1366,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 	for (pass = 0; pass < 10 && (retry || thp_retry); pass++) {
+ 		retry = 0;
  		thp_retry = 0;
++		nr_retry_pages = 0;
  
  		list_for_each_entry_safe(page, page2, from, lru) {
--retry:
  			/*
- 			 * THP statistics is based on the source huge page.
- 			 * Capture required information that might get lost
-@@ -1412,7 +1413,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 					nr_thp_failed++;
- 					if (!try_split_thp(page, &thp_split_pages)) {
- 						nr_thp_split++;
--						goto retry;
-+						break;
- 					}
- 				/* Hugetlb migration is unsupported */
- 				} else if (!no_subpage_counting) {
-@@ -1432,7 +1433,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 					/* THP NUMA faulting doesn't split THP to retry. */
- 					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
- 						nr_thp_split++;
--						goto retry;
-+						break;
- 					}
- 				} else if (!no_subpage_counting) {
+@@ -1439,7 +1441,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
  					nr_failed++;
+ 				}
+ 
+-				nr_failed_pages += nr_subpages;
++				nr_failed_pages += nr_subpages + nr_retry_pages;
+ 				/*
+ 				 * There might be some subpages of fail-to-migrate THPs
+ 				 * left in thp_split_pages list. Move them back to migration
+@@ -1455,6 +1457,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 					thp_retry++;
+ 				else
+ 					retry++;
++				nr_retry_pages += nr_subpages;
+ 				break;
+ 			case MIGRATEPAGE_SUCCESS:
+ 				nr_succeeded += nr_subpages;
+@@ -1481,6 +1484,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 	if (!no_subpage_counting)
+ 		nr_failed += retry;
+ 	nr_thp_failed += thp_retry;
++	nr_failed_pages += nr_retry_pages;
+ 	/*
+ 	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed
+ 	 * counting in this round, since all subpages of a THP is counted
 -- 
 2.30.2
 

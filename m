@@ -2,158 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7960D570D02
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0149570D07
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiGKVwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
+        id S231407AbiGKVxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiGKVwN (ORCPT
+        with ESMTP id S229896AbiGKVxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:52:13 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F4961139
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:52:12 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id h23so11041896ejj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:52:12 -0700 (PDT)
+        Mon, 11 Jul 2022 17:53:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42453EBF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:53:34 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id b9so5866858pfp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:53:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=esp4On95It78UY+94ldWZ+H1EyZMthkKoxOCUCFzVnU=;
-        b=obZrw5Lqskc4Y5dqaR7jt3QEsxsxFtfK7lWukJ43RxLFVf3xc931wi+gIrLdntuB/V
-         U4unyM+XOaDIFZfJeJXkhqKqKro2lhZt8+lGJ867bS2QIfrwdd/Tr68a7iCX6HPXFfAL
-         w0d/IscwKtQIeqyS6B2aKyx/lQZZMNjdcIg3dl1XKyTEeITZTqB3UePB3KTWO9JqQ/4P
-         R+WqcNtoy4bqZ+WdtPTcyP4URUoFOkzJfwvD/EOSSKeW33RsBo6LLxdtTZHXuraFLbzr
-         pOBYRiabq2poPMfeuRmOrSP3Lahh4llmWHqTEIX/DOoe9BQR5ya5LOi2ifuw314sAfSZ
-         OBIQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cYT0iastnCoWsD+kD3snbd3pWJtTmtlehUBK4uUB0hw=;
+        b=O9aedkiENZGJ3LxWvfudGprmWOSynsq5GcTjOG4o1rvGjdKIMYC6i5Mm7QXvXEhsVR
+         ZdxxmmGo8degIK8ln7hm1i3tI6S8wPxegGqfD7qTasJkTnzo9rnDugkLJksdyorWjQkt
+         LPKA72973EcEEpDQVHI/r2U234dNq57y+4xTc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=esp4On95It78UY+94ldWZ+H1EyZMthkKoxOCUCFzVnU=;
-        b=vVMs6esIe4g3X4+dpgY/tD29TK3u1XnoYj/01Aog3T2kUsHg1FjqonFeRIRd/RJcqu
-         GaRYXwHJFvLJBa5eKcN/YcVMW5wRdqbMZn9m1ID61AvGP15UGeqKi4nUaC2NW45fxdwy
-         TQytN7fCIWApRLq9pdUevDyRm8oDi43PU1mwPpaQ1n5OlPLynYjN8RJnR+OX1VFiSPTW
-         pULtYUHmccHL2Da8duZx1elu/FXtXdhEgLAgRBtItgmfvqNlA01pLQik5lU1W1fT6gI8
-         zWv2PIU8/5x2UqWBzomjLgHRQcIcfF5wrJLEosQoLYhRxjXayNzGNkaRsjPlG+tDhGZY
-         btMg==
-X-Gm-Message-State: AJIora+u9WjthgSfp5D/YjTe4ylhG48kFg08bL/P+IiZMKUaU4K18FU+
-        sI5WVCqD3CsCvDO4DQJoF4KBxhWlbDRT4IRs0is=
-X-Google-Smtp-Source: AGRyM1u59cVfgB6SirEAFalQkMDM8+sQXz1+b0lXP2xgQiKF5yRdjU5dilhpzgMjFPx8opC242eWorAoKBNcGxTprOU=
-X-Received: by 2002:a17:907:2808:b0:72b:4d49:b2e9 with SMTP id
- eb8-20020a170907280800b0072b4d49b2e9mr9693124ejc.176.1657576331202; Mon, 11
- Jul 2022 14:52:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cYT0iastnCoWsD+kD3snbd3pWJtTmtlehUBK4uUB0hw=;
+        b=YO9aPcZ7F5w8zUXz+Z1RgRj/izGZc3Q846VCuxTlzel5svdGLLkc283ZCu74kKNuil
+         8s1q3s3fkS0Auu86awhk/6zAeaOf1aKe5F/Ykz2myhoDXlPcdCarFlrqDzd0pFgE+PFu
+         0K8tNDw1zTuHSm6sK0BBcXuUpwSdQcfASHz9E7hTuiqVxN3yj261zcc62F3RLsgygemn
+         W/lHEgBUh0xHCJjSbl/EGhetfdtUU4k6rVuIpqAP9wYh/NyXQRGPdiw4N38vcWA4438C
+         AFd28iaKOz72Sc+KP0U7sncutdVPlNEy7S8k5n9o8En+xNwjWZih6qBQGskUx3GITXAE
+         2cMw==
+X-Gm-Message-State: AJIora+ksQH+JEm0Xu/KgV4NjwItHacz+HPJkC12ors4SXkUB8yr1BwF
+        sXBQ8W9rcZEVPC0glWmmuZp0rQ==
+X-Google-Smtp-Source: AGRyM1t7EENjW737+iBr5F1uFxKkI9aYOroW4ZNtffHXNu2VtayfNsSBhFywzVKUO5Oh5g8TgAEiyg==
+X-Received: by 2002:a05:6a00:b8c:b0:525:6391:1139 with SMTP id g12-20020a056a000b8c00b0052563911139mr20297882pfj.80.1657576413764;
+        Mon, 11 Jul 2022 14:53:33 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:7b75:79f4:3be2:2c65])
+        by smtp.gmail.com with UTF8SMTPSA id t8-20020a17090a2f8800b001e31fea8c85sm7116710pjd.14.2022.07.11.14.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 14:53:33 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 14:53:31 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v4 1/2] PCI: qcom: Add system PM support
+Message-ID: <Ysyb24TidwWFH0Dm@google.com>
+References: <1656684800-31278-1-git-send-email-quic_krichai@quicinc.com>
+ <1657118425-10304-1-git-send-email-quic_krichai@quicinc.com>
+ <1657118425-10304-2-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-References: <OSZP286MB1725A2361FA2EE8432C4D5F4B8879@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <OSZP286MB1725A2361FA2EE8432C4D5F4B8879@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 11 Jul 2022 14:51:59 -0700
-Message-ID: <CAEf4BzYCtsY71mCeacg4TXuVNa-K80WGHK9VEoBbi2_jVX0RUQ@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: fix the name of a reused map
-To:     "anquan.wu" <leiqi96@hotmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
-        john fastabend <john.fastabend@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1657118425-10304-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 3:25 AM anquan.wu <leiqi96@hotmail.com> wrote:
->
-> BPF map name was limited to BPF_OBJ_NAME_LEN.
-> If a map name is defined as being longer than BPF_OBJ_NAME_LEN,
-> it will be truncated to BPF_OBJ_NAME_LEN
-> when a userspace program calls libbpf to create the map.
-> A pinned map also generates a path in the /sys.
-> If the previous program wanted to reuse the map=EF=BC=8Cit can not get bp=
-f_map
-> by name, because the name of the map is only partially the same as
-> the name which get from pinned path.
->
-> The syscall information below show that map name
-> "process_pinned_map" is truncated to process_pinned_"
->
-> bpf(BPF_OBJ_GET, {pathname=3D"/sys/fs/bpf/process_pinned_map",
-> bpf_fd=3D0, file_flags=3D0}, 144) =3D -1 ENOENT (No such file or director=
-y)
->
-> bpf(BPF_MAP_CREATE, {map_type=3DBPF_MAP_TYPE_HASH, key_size=3D4, value_si=
-ze=3D4,
-> max_entries=3D1024, map_flags=3D0, inner_map_fd=3D0, map_name=3D"process_=
-pinned_",
-> map_ifindex=3D0, btf_fd=3D3, btf_key_type_id=3D6, btf_value_type_id=3D10,
-> btf_vmlinux_value_type_id=3D0}, 72) =3D 4
->
-> This patch check that if the name of pinned map are the same as the
-> actual name for the first (BPF_OBJ_NAME_LEN - 1),
-> bpf map still uses the name which is included in bpf object.
->
-> Signed-off-by: anquan.wu <leiqi96@hotmail.com>
-
-please use your complete and capitalized name in Signed-off-by
-
-Overall, looks good, I have a few stylistical nits, see below. But
-also you forgot to cc bpf@vger.kernel.org, please send v2 and don't
-forget to add mailing list. Without that our CI can't test your patch
-properly.
-
-
+On Wed, Jul 06, 2022 at 08:10:24PM +0530, Krishna chaitanya chundru wrote:
+> Add suspend and resume pm callbacks.
+> 
+> When system suspends, and if the link is in L1ss, disable the clocks
+> and power down the phy so that system enters into low power state to
+> save the maximum power. And when the system resumes, enable the clocks
+> back and power on phy if they are disabled in the suspend path.
+> 
+> we are doing this only when link is in l1ss but not in L2/L3 as
+> no where we are forcing link to L2/L3 by sending PME turn off.
+> 
+> is_suspended flag indicates if the clocks are disabled in the suspend
+> path or not. And this flag is being used to restrict the access to
+> config space, dbi etc when clock are turned-off.
+> 
+> Changes since v3:
+> 	- Powering down the phy in suspend and powering it on resume to
+> 	  acheive maximum power savings.
+> Changes since v2:
+> 	- Replaced the enable, disable clks ops with suspend and resume
+> 	- Renamed support_pm_opsi flag  with supports_system_suspend.
+> Changes since v1:
+> 	- Fixed compilation errors.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 > ---
->  tools/lib/bpf/libbpf.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index e89cc9c885b3..5ad52a8accd1 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -4328,6 +4328,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
->  {
->         struct bpf_map_info info =3D {};
->         __u32 len =3D sizeof(info);
-> +       __u32 name_len;
-
-nit: __u32 len =3D sizeof(info), name_len;
-
->         int new_fd, err;
->         char *new_name;
->
-> @@ -4337,7 +4338,12 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
->         if (err)
->                 return libbpf_err(err);
->
-> -       new_name =3D strdup(info.name);
-> +       name_len =3D strlen(info.name);
-> +       if ((BPF_OBJ_NAME_LEN - 1) =3D=3D name_len && !strncmp(map->name,=
- info.name, name_len))
-
-nit, unnecessary () around BPF_OBJ_NAME_LEN, plus the order is a bit
-weird. I also have general preference with strncmp/strcmp to compare
-against zero explicitly, so can you rewrite this as:
-
-if (name_len =3D=3D BPF_OBJ_NAME_LEN - 1 && strncmp(map->name, info.name,
-name_len) =3D=3D 0)
-
-?
-
-> +               new_name =3D strdup(map->name);
-> +       else
-> +               new_name =3D strdup(info.name);
+>  drivers/pci/controller/dwc/pcie-qcom.c | 85 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 6ab9089..0a9d1ee 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -41,6 +41,9 @@
+>  #define L23_CLK_RMV_DIS				BIT(2)
+>  #define L1_CLK_RMV_DIS				BIT(1)
+>  
+> +#define PCIE20_PARF_PM_STTS                     0x24
+> +#define PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB    BIT(8)
 > +
->         if (!new_name)
->                 return libbpf_err(-errno);
->
-> --
-> 2.32.0
->
+>  #define PCIE20_PARF_PHY_CTRL			0x40
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+> @@ -190,6 +193,8 @@ struct qcom_pcie_ops {
+>  	void (*post_deinit)(struct qcom_pcie *pcie);
+>  	void (*ltssm_enable)(struct qcom_pcie *pcie);
+>  	int (*config_sid)(struct qcom_pcie *pcie);
+> +	int (*suspend)(struct qcom_pcie *pcie);
+> +	int (*resume)(struct qcom_pcie *pcie);
+>  };
+>  
+>  struct qcom_pcie_cfg {
+> @@ -199,6 +204,7 @@ struct qcom_pcie_cfg {
+>  	unsigned int has_ddrss_sf_tbu_clk:1;
+>  	unsigned int has_aggre0_clk:1;
+>  	unsigned int has_aggre1_clk:1;
+> +	unsigned int supports_system_suspend:1;
+>  };
+>  
+>  struct qcom_pcie {
+> @@ -209,6 +215,7 @@ struct qcom_pcie {
+>  	struct phy *phy;
+>  	struct gpio_desc *reset;
+>  	const struct qcom_pcie_cfg *cfg;
+> +	unsigned int is_suspended:1;
+>  };
+>  
+>  #define to_qcom_pcie(x)		dev_get_drvdata((x)->dev)
+> @@ -1308,6 +1315,33 @@ static void qcom_pcie_post_deinit_2_7_0(struct qcom_pcie *pcie)
+>  	clk_disable_unprepare(res->pipe_clk);
+>  }
+>  
+> +static int qcom_pcie_resume_2_7_0(struct qcom_pcie *pcie)
+> +{
+> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +	int ret;
+> +
+> +	clk_prepare_enable(res->pipe_clk);
+> +
+> +	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+> +
+> +	phy_power_on(pcie->phy);
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_pcie_suspend_2_7_0(struct qcom_pcie *pcie)
+> +{
+> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +
+> +	phy_power_off(pcie->phy);
+> +
+> +	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+> +
+> +	clk_disable_unprepare(res->pipe_clk);
+> +
+> +	return 0;
+> +}
+> +
+>  static int qcom_pcie_link_up(struct dw_pcie *pci)
+>  {
+>  	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> @@ -1496,6 +1530,8 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
+>  	.post_init = qcom_pcie_post_init_2_7_0,
+>  	.post_deinit = qcom_pcie_post_deinit_2_7_0,
+>  	.config_sid = qcom_pcie_config_sid_sm8250,
+> +	.suspend = qcom_pcie_suspend_2_7_0,
+> +	.resume = qcom_pcie_resume_2_7_0,
+>  };
+>  
+>  static const struct qcom_pcie_cfg apq8084_cfg = {
+> @@ -1548,6 +1584,7 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
+>  	.ops = &ops_1_9_0,
+>  	.has_tbu_clk = true,
+>  	.pipe_clk_need_muxing = true,
+> +	.supports_system_suspend = true,
+>  };
+>  
+>  static const struct dw_pcie_ops dw_pcie_ops = {
+> @@ -1591,6 +1628,8 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  
+>  	pcie->cfg = pcie_cfg;
+>  
+> +	pcie->is_suspended = false;
+> +
+>  	pcie->reset = devm_gpiod_get_optional(dev, "perst", GPIOD_OUT_HIGH);
+>  	if (IS_ERR(pcie->reset)) {
+>  		ret = PTR_ERR(pcie->reset);
+> @@ -1645,6 +1684,51 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int __maybe_unused qcom_pcie_pm_suspend(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +	u32 val;
+> +
+> +	if (!pcie->cfg->supports_system_suspend)
+> +		return 0;
+> +
+> +	/* if the link is not in l1ss don't turn off clocks */
+> +	val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
+> +	if (!(val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
+> +		dev_warn(dev, "Link is not in L1ss\n");
+> +		return 0;
+> +	}
+> +
+> +	if (pcie->cfg->ops->suspend)
+> +		pcie->cfg->ops->suspend(pcie);
+> +
+> +	pcie->is_suspended = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused qcom_pcie_pm_resume(struct device *dev)
+> +{
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +
+> +	if (!pcie->cfg->supports_system_suspend)
+> +		return 0;
+
+The above check can be omitted, it is implied by the next one.
+'is_suspended' can only be true when system suspend is supported.
+
+> +
+> +	if (!pcie->is_suspended)
+> +		return 0;
+> +
+> +	if (pcie->cfg->ops->resume)
+> +		pcie->cfg->ops->resume(pcie);
+> +
+> +	pcie->is_suspended = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend, qcom_pcie_pm_resume)
+> +};
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> @@ -1679,6 +1763,7 @@ static struct platform_driver qcom_pcie_driver = {
+>  	.probe = qcom_pcie_probe,
+>  	.driver = {
+>  		.name = "qcom-pcie",
+> +		.pm = pm_sleep_ptr(&qcom_pcie_pm_ops),
+>  		.suppress_bind_attrs = true,
+>  		.of_match_table = qcom_pcie_match,
+>  	},
+> -- 
+> 2.7.4
+> 

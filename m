@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83ADD56D516
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B28056D511
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiGKHCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S229772AbiGKHAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGKHCK (ORCPT
+        with ESMTP id S229740AbiGKHAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:02:10 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E461D140C2;
-        Mon, 11 Jul 2022 00:02:05 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26B71ak16000661, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26B71ak16000661
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 11 Jul 2022 15:01:36 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 11 Jul 2022 15:01:38 +0800
-Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Mon, 11 Jul
- 2022 15:01:37 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net] r8152: fix accessing unset transport header
-Date:   Mon, 11 Jul 2022 15:00:04 +0800
-Message-ID: <20220711070004.28010-389-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.34.3
+        Mon, 11 Jul 2022 03:00:40 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A915D167C4;
+        Mon, 11 Jul 2022 00:00:39 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v10-20020a05600c15ca00b003a2db8aa2c4so2460781wmf.2;
+        Mon, 11 Jul 2022 00:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eZitZxeb+tFy7bckf8dOgFNmWer8aqUshovdBHHfdIU=;
+        b=KpaifXBHHWFfwHLHNxAkbRBiOfnHMoLAcyBD7kpOBqblUik8u+9ziUMnWxAWBoOxmD
+         yhefiOReWitSzELlcSxTVLnfQfftUoVNswofXINSZxZ++LMfecPsVb5yQYBd70q1L2jh
+         Ltiz1JeIPSvbRs42cSq8OGNzMgHDuT+tdxRpGSAEPG2WHh95GlsCZwPPmaeL+aZb/GqO
+         pC/g0lRB+JDRi7XBoHwSEzYroESCBQLkjjjgnD/3V6PsqmYVpEqCoQBPqX3V6Jl5ZRRr
+         iyQYc8wvCr3aUlPAA3awIcuwiZLttbFW7WJDuxlcDt3AsW0ROKhcWFqpIA3IpxIUevA0
+         xJLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eZitZxeb+tFy7bckf8dOgFNmWer8aqUshovdBHHfdIU=;
+        b=wuXlwtaNGMgZ1UFKZFTFfAxx3+PohKdKRQhUOLGKA6h1q4sLVL2WZ2mRm492K1ppr+
+         TvBxy4Xk39j1yPyNc5+3tiKrdmUW5HK6XZHvbLqiMDeGI53btdMRQtaJzexesWD5qZxj
+         m7NT9Nji/xVa4V1uyu4hljlMmtHUuqKEpDavAggjql5kV5FoymZeeV/KUTUGfcYyO9EJ
+         cplSUSCB3yNy1hVCH3fNH+X2M26mOSAFEEXLItD0ECxP2Yc8XBdh3XKrdHy80b8BrHiO
+         Mfpo4PTVO0ducbbpKaYZGuRL0fmjDzJTgnOKSKB1aGmV7zNiuPvitg4fYZcTP8kV2EZd
+         T52A==
+X-Gm-Message-State: AJIora9EFBFi+r2fmFUWNEY8TU1n6xvHiSD7k/xRuZ1CSZbxelwgNGI3
+        9e45cwgjScfwTmlSYn1cB6E=
+X-Google-Smtp-Source: AGRyM1sQbzsr1qEHwBUhuJqm0nnpYT6EBStXujczeh14dLIEx/7aGgepj/cKMynAFl8uq+S+XPYrBQ==
+X-Received: by 2002:a7b:c003:0:b0:39c:5642:e415 with SMTP id c3-20020a7bc003000000b0039c5642e415mr14077555wmb.111.1657522838108;
+        Mon, 11 Jul 2022 00:00:38 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.36.185])
+        by smtp.gmail.com with ESMTPSA id d8-20020adffbc8000000b0021d6a520ce9sm5082614wrs.47.2022.07.11.00.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 00:00:37 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] HID: uclogic: Add missing suffix for digitalizers
+Date:   Mon, 11 Jul 2022 09:00:26 +0200
+Message-Id: <20220711070026.167428-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/11/2022 06:49:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMTEgpFekyCAwNDozODowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A warning is triggered by commit 66e4c8d95008 ("net: warn if transport
-header was not set"). The warning is harmless, because the value from
-skb_transport_offset() is only used for skb_is_gso() is true or the
-skb->ip_summed is equal to CHECKSUM_PARTIAL.
+The Pen (0x02) application usage was changed to Digitalizer (0x01) in
+f7d8e387d9ae ("HID: uclogic: Switch to Digitizer usage for styluses").
+However, a suffix was not selected for the new usage.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+Handle the digitalizer application usage in uclogic_input_configured()
+and add the required suffix.
+
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/net/usb/r8152.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/hid/hid-uclogic-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 7389d6ef8569..b082819509e1 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2156,7 +2156,7 @@ static inline void rtl_rx_vlan_tag(struct rx_desc *desc, struct sk_buff *skb)
- }
- 
- static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
--			 struct sk_buff *skb, u32 len, u32 transport_offset)
-+			 struct sk_buff *skb, u32 len)
- {
- 	u32 mss = skb_shinfo(skb)->gso_size;
- 	u32 opts1, opts2 = 0;
-@@ -2167,6 +2167,8 @@ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
- 	opts1 = len | TX_FS | TX_LS;
- 
- 	if (mss) {
-+		u32 transport_offset = (u32)skb_transport_offset(skb);
-+
- 		if (transport_offset > GTTCPHO_MAX) {
- 			netif_warn(tp, tx_err, tp->netdev,
- 				   "Invalid transport offset 0x%x for TSO\n",
-@@ -2197,6 +2199,7 @@ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
- 		opts1 |= transport_offset << GTTCPHO_SHIFT;
- 		opts2 |= min(mss, MSS_MAX) << MSS_SHIFT;
- 	} else if (skb->ip_summed == CHECKSUM_PARTIAL) {
-+		u32 transport_offset = (u32)skb_transport_offset(skb);
- 		u8 ip_protocol;
- 
- 		if (transport_offset > TCPHO_MAX) {
-@@ -2260,7 +2263,6 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
- 		struct tx_desc *tx_desc;
- 		struct sk_buff *skb;
- 		unsigned int len;
--		u32 offset;
- 
- 		skb = __skb_dequeue(&skb_head);
- 		if (!skb)
-@@ -2276,9 +2278,7 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
- 		tx_data = tx_agg_align(tx_data);
- 		tx_desc = (struct tx_desc *)tx_data;
- 
--		offset = (u32)skb_transport_offset(skb);
--
--		if (r8152_tx_csum(tp, tx_desc, skb, skb->len, offset)) {
-+		if (r8152_tx_csum(tp, tx_desc, skb, skb->len)) {
- 			r8152_csum_workaround(tp, skb, &skb_head);
- 			continue;
- 		}
-@@ -2759,9 +2759,9 @@ rtl8152_features_check(struct sk_buff *skb, struct net_device *dev,
- {
- 	u32 mss = skb_shinfo(skb)->gso_size;
- 	int max_offset = mss ? GTTCPHO_MAX : TCPHO_MAX;
--	int offset = skb_transport_offset(skb);
- 
--	if ((mss || skb->ip_summed == CHECKSUM_PARTIAL) && offset > max_offset)
-+	if ((mss || skb->ip_summed == CHECKSUM_PARTIAL) &&
-+	    skb_transport_offset(skb) > max_offset)
- 		features &= ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
- 	else if ((skb->len + sizeof(struct tx_desc)) > agg_buf_sz)
- 		features &= ~NETIF_F_GSO_MASK;
+diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
+index c0fe66e50c58..cf3315a408c8 100644
+--- a/drivers/hid/hid-uclogic-core.c
++++ b/drivers/hid/hid-uclogic-core.c
+@@ -153,6 +153,7 @@ static int uclogic_input_configured(struct hid_device *hdev,
+ 			suffix = "Pad";
+ 			break;
+ 		case HID_DG_PEN:
++		case HID_DG_DIGITIZER:
+ 			suffix = "Pen";
+ 			break;
+ 		case HID_CP_CONSUMER_CONTROL:
 -- 
-2.34.3
+2.25.1
 

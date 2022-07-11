@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A98D570075
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD92157007A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiGKL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S231328AbiGKL2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiGKL1N (ORCPT
+        with ESMTP id S231319AbiGKL1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:27:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D22357C1;
-        Mon, 11 Jul 2022 04:03:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F2E472279B;
-        Mon, 11 Jul 2022 11:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657537438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsZtFmhd2wM7bnAZCCJVrbNgtem6za52WsNE9GAAo+k=;
-        b=Kk/CQuVbLGbPjt+D8aVbHl+sPhaBVqStaLvq3uIOVEsvaE3enyHn9eogvf4SaUK5CsObRA
-        +QzIlbcvMMe90UEp1pvYXBm6guLOtqV1AgP5YujBB4WoOvUVD+Zh48ZbLlXSPzXQBbeXga
-        3G9KD1p/5P5jZ+F/+AhA91duXEZGlMs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657537438;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsZtFmhd2wM7bnAZCCJVrbNgtem6za52WsNE9GAAo+k=;
-        b=bzC3oJgBJkPzVvb1HFGckyPYZVvzlZJVtzRcQKpjqn29cGb1hnDKKO9uYROjJYcnWE78b4
-        bem69BD7OQUmocBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCD3C13322;
-        Mon, 11 Jul 2022 11:03:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZBoaLZ0DzGK9aAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 11 Jul 2022 11:03:57 +0000
-Message-ID: <84c3af8a-d50c-c9be-348e-e50aad59bf5d@suse.de>
-Date:   Mon, 11 Jul 2022 13:03:57 +0200
+        Mon, 11 Jul 2022 07:27:31 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854D973586
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:04:26 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id a39so5733354ljq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=FcPD4ifirYFuSYB+4m7Neq/k9V2vE0FU8ah5Vhxzqkc=;
+        b=XPO5fyUuyaFVyokqrvz8S/Y3v1cJyoeYZnUu+pLonL/Sb9tky6Zbhr4pZwMrY+/sqF
+         5KYMJOwcE1RTP4QrqbXoOxrHHPt+BSV6sOi7niPc5gMcHN+9A+E59s08MqKcrH0xbHAS
+         DgnMHCBxNYke15GVDK9+3uHsUt2TvC2tq4MGMDMWDXMtVoxea5Tjz1+hijPjh8PnlL3Z
+         QQx3rTuUKh47xfbhHiuCNLmT91MXojLd+DEIhrbUrBGwlctJccJZdyXic70fHPFbSbJw
+         xZPt4Tv0DaIkLD4wG4BXjGb3AMxE58kjoowqqLeC84hGXaedgUYFwgGn1oh+9QAaa+f2
+         9ftA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FcPD4ifirYFuSYB+4m7Neq/k9V2vE0FU8ah5Vhxzqkc=;
+        b=ordWuDxhiOdCuAHrjoGgdYneu/Q3KuJsZ7Gk/eZw2GCO+7s4HJM/ga1gnqa93EKqgj
+         e+1N1/qldKjUSmY6SJiojx+9I7Ofo9sOyBnUoqu4DNdp/yOe3iLD7C/eHTX7l5+sjo7p
+         DQEYisBz4aaqj0SdUl+KUnro1ZyE5ZSLMzeg2yoAPypX1ojzc5MPv+MlVmcxkEafQa6n
+         nk1tHvmX0lIDmaZTOQoLzxoNAbEWfqX0WJuc/RaXZghv9e3sM8JL+toTsuQ1OwU6hjRA
+         ZaAhL2HbKki961mcUHz6cK7+UebzB5Q7z+mClJbqznHCtCnVT4hLVbU1fTU7q11E+7F3
+         GpJw==
+X-Gm-Message-State: AJIora/FZG1ZlpD1rPtfMg4mmj0DPyHr7uSSvO0k1UtzjnVQhlqIAWy8
+        85nrtxh7FO0Sc/0MNz55IrbyCw==
+X-Google-Smtp-Source: AGRyM1s+f/FraDvu9vaVd0mrJ8CWtpGy9hoN43l5cNzjkstfeo26jE67otBqly5d1l3gPmJJGFBsBg==
+X-Received: by 2002:a05:651c:11c4:b0:25d:377d:3327 with SMTP id z4-20020a05651c11c400b0025d377d3327mr9444910ljo.225.1657537464812;
+        Mon, 11 Jul 2022 04:04:24 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id i25-20020ac25239000000b004891b4a4acfsm1480762lfl.185.2022.07.11.04.04.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 04:04:24 -0700 (PDT)
+Message-ID: <8f68fa6c-172c-688b-f5ee-2a59ccf04636@linaro.org>
+Date:   Mon, 11 Jul 2022 13:04:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
- modes
+Subject: Re: [PATCH 5/6] dt-bindings: clock: qcom,a53pll: add IPQ8074
+ compatible
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux/m68k <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <cover.1657301107.git.geert@linux-m68k.org>
- <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
- <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
- <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------W3gjda6T5dPdYMTLKtvUwblT"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Robert Marko <robimarko@gmail.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220711104719.40939-1-robimarko@gmail.com>
+ <20220711104719.40939-5-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220711104719.40939-5-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,112 +79,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------W3gjda6T5dPdYMTLKtvUwblT
-Content-Type: multipart/mixed; boundary="------------fpBott6Mn2eZcUCv7VE0xyyp";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- Linux/m68k <linux-m68k@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-ID: <84c3af8a-d50c-c9be-348e-e50aad59bf5d@suse.de>
-Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
- modes
-References: <cover.1657301107.git.geert@linux-m68k.org>
- <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
- <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
- <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
+On 11/07/2022 12:47, Robert Marko wrote:
+> Add IPQ8074 compatible to A53 PLL bindings.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
---------------fpBott6Mn2eZcUCv7VE0xyyp
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGkNCg0KQW0gMTEuMDcuMjIgdW0gMTE6MzUgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
-DQo+IEhpIFRob21hcywNCj4gDQo+IE9uIE1vbiwgSnVsIDExLCAyMDIyIGF0IDExOjAzIEFN
-IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cm90ZToNCj4+IEFt
-IDA4LjA3LjIyIHVtIDIwOjIxIHNjaHJpZWIgR2VlcnQgVXl0dGVyaG9ldmVuOg0KPj4+IFRo
-ZSBtb2RlIHBhcnNpbmcgY29kZSByZWNvZ25pemVzIG5hbWVkIG1vZGVzIG9ubHkgaWYgdGhl
-eSBhcmUgZXhwbGljaXRseQ0KPj4+IGxpc3RlZCBpbiB0aGUgaW50ZXJuYWwgd2hpdGVsaXN0
-LCB3aGljaCBpcyBjdXJyZW50bHkgbGltaXRlZCB0byAiTlRTQyINCj4+PiBhbmQgIlBBTCIu
-DQo+Pj4NCj4+PiBQcm92aWRlIGEgbWVjaGFuaXNtIGZvciBkcml2ZXJzIHRvIG92ZXJyaWRl
-IHRoaXMgbGlzdCB0byBzdXBwb3J0IGN1c3RvbQ0KPj4+IG1vZGUgbmFtZXMuDQo+Pj4NCj4+
-PiBJZGVhbGx5LCB0aGlzIGxpc3Qgc2hvdWxkIGp1c3QgY29tZSBmcm9tIHRoZSBkcml2ZXIn
-cyBhY3R1YWwgbGlzdCBvZg0KPj4+IG1vZGVzLCBidXQgY29ubmVjdG9yLT5wcm9iZWRfbW9k
-ZXMgaXMgbm90IHlldCBwb3B1bGF0ZWQgYXQgdGhlIHRpbWUgb2YNCj4+PiBwYXJzaW5nLg0K
-Pj4NCj4+IEkndmUgbG9va2VkIGZvciBjb2RlIHRoYXQgdXNlcyB0aGVzZSBuYW1lcywgY291
-bGRuJ3QgZmluZCBhbnkuIEhvdyBpcw0KPj4gdGhpcyBiZWluZyB1c2VkIGluIHByYWN0aWNl
-PyBGb3IgZXhhbXBsZSwgaWYgSSBzYXkgIlBBTCIgb24gdGhlIGNvbW1hbmQNCj4+IGxpbmUs
-IGlzIHRoZXJlIERSTSBjb2RlIHRoYXQgZmlsbHMgaW4gdGhlIFBBTCBtb2RlIHBhcmFtZXRl
-cnM/DQo+IA0KPiBJIGd1ZXNzIE1heGltZSBrbm93cywgYXMgaGUgYWRkZWQgdGhlIHdoaXRl
-bGlzdD8NCg0KWWVhaCwgSSBzYXcgaGlzIHJlcGx5IGFscmVhZHkuDQoNCj4gUmVhZGluZyB0
-aGUgZGVzY3JpcHRpb24gb2YgY29tbWl0IDM3NjQxMzc5MDZhNWFjZWMgKCJkcm0vbW9kZXM6
-DQo+IEludHJvZHVjZSBhIHdoaXRlbGlzdCBmb3IgdGhlIG5hbWVkIG1vZGVzIiksIGl0IGxv
-b2tzIGxpa2UgdGhpcyBpcw0KPiBtb3JlIGFib3V0IHByZXZlbnRpbmcgdGhlIHBhcnNlciBm
-cm9tIHRha2luZyBhbnkgc3RyaW5nIGFzIGEgcmFuZG9tDQo+IG1vZGUsIHRoYW4gYWJvdXQg
-YWRkaW5nIHN1cHBvcnQgZm9yICJQQUwiIG9yICJOVFNDIj8NCj4gDQo+IE5vdGUgdGhhdCBk
-cml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNwbGF5L2ludGVsX3R2LmMgZGVmaW5lcyBhbiBhcnJh
-eSBvZg0KPiB0dl9tb2Rlc1tdLCBpbmNsdWRpbmcgIlBBTCIsIHNvIHBlcmhhcHMgdGhlc2Ug
-ZW5kIHVwIGFzIG5hbWVkIG1vZGVzPw0KPiANCj4+IEFuZCBhbm90aGVyIHF1ZXN0aW9uIEkg
-aGF2ZSBpcyB3aGV0aGVyIHRoaXMgd2hpdGVsaXN0IGJlbG9uZ3MgaW50byB0aGUNCj4+IGRy
-aXZlciBhdCBhbGwuIFN0YW5kYXJkIG1vZGVzIGV4aXN0IGluZGVwZW5kZW50IGZyb20gZHJp
-dmVycyBvcg0KPj4gaGFyZHdhcmUuIFNob3VsZG4ndCB0aGVyZSBzaW1wbHkgYmUgYSBnbG9i
-YWwgbGlzdCBvZiBhbGwgcG9zc2libGUgbW9kZQ0KPj4gbmFtZXM/IERyaXZlcnMgd291bGQg
-ZmlsdGVyIG91dCB0aGUgdW5zdXBwb3J0ZWQgbW9kZXMgYW55d2F5Lg0KPiANCj4gRm9yIHN0
-YW5kYXJkIG1vZGVzLCBJIGFncmVlLiAgQW5kIHRoZXNlIGFyZSB1c3VhbGx5IHNwZWNpZmll
-ZCBieQ0KPiByZXNvbHV0aW9uIGFuZCByZWZyZXNoIHJhdGUgKGUuZy4gIjY0MHg0ODBANjAi
-LCBpbnN0ZWFkIG9mICI0ODBwIikuDQo+IA0KPiBCdXQgbGVnYWN5IGhhcmR3YXJlIG1heSBo
-YXZlIHZlcnkgbGltaXRlZCBzdXBwb3J0IGZvciBwcm9ncmFtbWFibGUNCj4gcGl4ZWwgY2xv
-Y2tzIChlLmcuIEFtaWdhIGlzIGxpbWl0ZWQgdG8gcGl4ZWwgY2xvY2tzIG9mIDcsIDE0LCBv
-ciAyOA0KPiBNSHopLCBzbyB0aGUgc3RhbmRhcmQgbW9kZXMgYXJlIGEgYmFkIG1hdGNoLCBv
-ciBtYXkgbm90IHdvcmsgYXQgYWxsLg0KPiBIZW5jZSBkcml2ZXJzIG1heSBuZWVkIHRvIHBy
-b3ZpZGUgdGhlaXIgb3duIG1vZGVzLCBidXQgaXQgc2VlbXMgd3JvbmcNCj4gdG8gbWUgdG8g
-bWFrZSB0aGVzZSBub24tc3RhbmRhcmQgbW9kZXMgZ2xvYmFsLCBhbmQgcG9zc2libHkgcG9s
-bHV0ZQ0KPiB0aGUgZXhwZXJpZW5jZSBmb3IgZXZlcnlvbmUuDQpJIGRvbid0IHJlYWxseSBo
-YXZlIGEgc3Ryb25nIG9waW5pb24sIGJ1dCBoYXZpbmcgYWxsIG1vZGVzIGluIG9uZSBnbG9i
-YWwgDQpsaXN0IGlzIHF1aXRlIHVzZXItZnJpZW5kbHkuIEl0J3MgYWxsIHRoZXJlIGZvciBl
-dmVyeW9uZS4gT3RoZXJ3aXNlIA0KdXNlcnMgd291bGQgc29tZWhvdyBoYXZlIHRvIGtub3cg
-d2hpY2ggaGFyZHdhcmUgc3VwcG9ydHMgd2hpY2ggbW9kZXMuIA0KVGhhdCdzIGFjdHVhbGx5
-IHRoZSBqb2Igb2YgZWFjaCBkcml2ZXIncyBtb2RlX3ZhbGlkIGFuZCBhdG9taWNfY2hlY2sg
-DQpmdW5jdGlvbnMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEdye29ldGpl
-LGVldGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0K
-PiAtLQ0KPiBHZWVydCBVeXR0ZXJob2V2ZW4gLS0gVGhlcmUncyBsb3RzIG9mIExpbnV4IGJl
-eW9uZCBpYTMyIC0tIGdlZXJ0QGxpbnV4LW02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBj
-b252ZXJzYXRpb25zIHdpdGggdGVjaG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhh
-Y2tlci4gQnV0DQo+IHdoZW4gSSdtIHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNh
-eSAicHJvZ3JhbW1lciIgb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgLS0gTGludXMgVG9ydmFsZHMNCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---------------fpBott6Mn2eZcUCv7VE0xyyp--
 
---------------W3gjda6T5dPdYMTLKtvUwblT
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLMA50FAwAAAAAACgkQlh/E3EQov+CW
-sw/+IzsJWZ3vBiBVN32rSGSbKjAcR2LqgXyYu7DxmQglL6rlBhpZ/W5tevD/hl6OXnkQxkM4eSo6
-f5CYAxABHL2LlqukBr+CVW1WchEYD8b8K4I7Ptp6dW4YkIamgBtYTFtedxQ+Kqi5SWc3IU7DkL+n
-I7q+uGT7RTfmxL2KB9PqhWkOYJrY5A42KCGw3swV2GGEthXlzUU6p98zrX/UUIVatQLAQw2bRXz3
-wQfQp7M+d+iFQzRYLmwK23tFkC4Ug7aa+0RHtA1jeoCgTI3lI59ItBrqNdEHwxXkxM43ImjsUhEJ
-at1RVMUCDklu6kTQFJJDakfA9GVNlBqLAONLZmN6OdKz600D0w2qviduJEDLNWYefR5rYOoJw/z3
-yjHlH6nl2jWaDhB2CyupV+/piEz39SJwj3IwvXb/cbv3FjIbvJtgUP6IFfxoHv4hiW9K31BrH1HE
-XdSDHUgFOUOYR3sow9YgSDW8B2AL5LK4khAXiTT17JOgR/zFa9zS8RVKgWhFtnAtZnMyTkwxHZwt
-g9bUJf6GQZYa9OEGe2MQKeB+13u8QcvjUJTXZYAxsPWWTc8PslTeiOgJ0YlL0rJ8qhB780eE348d
-Chua1IiIq2M4fS2zZqpxNPuLlGsYHgtppqrcFk2cXL33SuCiHnR3BOdfZZ1MWBTqm/iwZCGQGUbj
-tns=
-=fby2
------END PGP SIGNATURE-----
-
---------------W3gjda6T5dPdYMTLKtvUwblT--
+Best regards,
+Krzysztof

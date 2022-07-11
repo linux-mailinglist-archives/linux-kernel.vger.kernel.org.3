@@ -2,142 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F8457036A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E610557036E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiGKMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S232141AbiGKM4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiGKMzX (ORCPT
+        with ESMTP id S229717AbiGKM4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:55:23 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CD127FED;
-        Mon, 11 Jul 2022 05:55:22 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id r12so273427qvm.3;
-        Mon, 11 Jul 2022 05:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lCEF/oXLtompCSo0q/JDXFQDLmqqQqZLZNzkV+0cmDI=;
-        b=UWEXMZk3VG/URLle64kq60e7GWp3vFjuL64eT4J9E5C0aDolIuUf9gz8DC9pOI1dlX
-         H3nhVV68Y0jgBOBdy7Bu46kE28Bh391JxYr/13tRHNP5hvNlCx4vczBrc+8qK+Ssj62t
-         3t6dKtSqorLhsc3/z73wJKuBs0/nOlSM+TS8Tesm9RlpRT8X0RO+6w4ndsoR6WW2Tnj3
-         q7UOaKzQXnE4W1pTQlkHrl8VL67wNsQ8aVwhogG7nPugA6M9fzsi5DNIuZO7quqecWEX
-         iqeuON/N0HD/Vy0anOB3RmClYXLNfTL+TPOjBhh2y0SxGfR9TOehhwA7rkaVnzo9PORc
-         xHGg==
+        Mon, 11 Jul 2022 08:56:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F2C02A957
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657544163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kt5/cjcKZ2gRwWekh9fqy7LIWEf6ib/V3LQ9qeWBy+M=;
+        b=DFfnaYj/0boBPfYunZHEM9dKgQ9/VW30omSNgPp3b18sHtU3FUMpBaBdsE+iqXN/KURoQ1
+        dIzy8XXQ67QnLL6Ls5oEms7ejAn1miKItPKTkm2IEqF6RnTSTA2s5tG9YEl0WJ6IlWUBL5
+        3uWbOQm4nHYBNfNOfvpQHVV5LUm5P9Q=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-irYFcxxzMiyCjhJYjh6Rog-1; Mon, 11 Jul 2022 08:55:56 -0400
+X-MC-Unique: irYFcxxzMiyCjhJYjh6Rog-1
+Received: by mail-ed1-f72.google.com with SMTP id c9-20020a05640227c900b0043ad14b1fa0so1988424ede.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:55:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lCEF/oXLtompCSo0q/JDXFQDLmqqQqZLZNzkV+0cmDI=;
-        b=yYrRhL7HJhxUXy+vDyezKyHL6F6XcwCK489YMK4o7762ADkeUsj3m3XjKoFgGdK5Mv
-         1JdVJR4Ggm/BkUlyE0Veg25SLRgT9ebgEAC/77yQACGX30MCcOgbBZzy1WWdmE3Blmk6
-         Kx5I4rlKYyDTpdgQyOe+nRtk7tzP6jn6zvl/CE+TqVnTiwynoBqgCgscqyfK79+6VW/E
-         7P2yKtN0KEQyeABf01bUIZf7Ygg1i0Nna67hoO1/TtQX0MJqg42JNLDzZWkie4VTKYuq
-         vOC1j5i7KIfoXzxjpYritIK3jsJLIuIcW78ujR1DFMkGuT6DiJSRVfnKIugv5eV8G+sH
-         wZUQ==
-X-Gm-Message-State: AJIora/A5VOhj0ogEk9p8HJSghJ4XKW+KmPVXsrUvprwrDhCgLnRXfZZ
-        zPHrk6NrPPO9MGg6Nh664zt20dZ18E2qfw6dfdM=
-X-Google-Smtp-Source: AGRyM1uiBRBw8mvvpHhebATGoygOk5tYokyzAf+y43ARJXuXHSNib5B5xEwP9RlqJTxa/ykcZoiwSncF4nZyypMwCAw=
-X-Received: by 2002:a0c:e50f:0:b0:472:faa6:98e0 with SMTP id
- l15-20020a0ce50f000000b00472faa698e0mr13043974qvm.50.1657544122173; Mon, 11
- Jul 2022 05:55:22 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kt5/cjcKZ2gRwWekh9fqy7LIWEf6ib/V3LQ9qeWBy+M=;
+        b=Mrvc2LUZBhgiMD5ivtQm6ux/02avZdBeOaJ6WX624lvg8LjrOBz3hCbc7ON9HA2m4c
+         4v4oRqid3jzwydg1VL197Oa7KR7ss2AzTo2n8nkPA7PfJKKlIp2W0dgg78UTRSFi1FZ0
+         ExSVfZZpcfkfM1eJ01uV+fKVjhUHbvqFoxpuZ00ozf8sMJq1QfXSpM1BJz4kSdyK6S9c
+         N93UQ05CUQonOOoYyGDouuHQsEFKZ/qkyyaj8xvd63/TAT99UtE1tDfiOd4DZwIqZDDu
+         7MfjDVdUGVFY6UiYLWhOOmVcsyA5KQkapl02RVhLOI1/69Rc6sUMQjbEsxAo1F9t51va
+         fM1g==
+X-Gm-Message-State: AJIora+P28FP3jKuynJtJxkwj2YCYVhURTfVMOLHUAVGRpLb9MDxvfDl
+        WrYfMWE5XnopAXfBDCm1KdVRWG1AaVgJqQuCza3hCLavM8qgMAbDkIX+EeJlrIsyNL0+BdqAvog
+        p40m3DoFleZJuH8HiytcCgqfP
+X-Received: by 2002:a05:6402:2553:b0:43a:caa2:4956 with SMTP id l19-20020a056402255300b0043acaa24956mr10907660edb.406.1657544155316;
+        Mon, 11 Jul 2022 05:55:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tNqb7ZLkvusDSgn+rhuE3nnCzlnbhFr6wBS7PtlTl+WaJMGyDfPSkmDo3kuHbEDzZ/cgVouw==
+X-Received: by 2002:a05:6402:2553:b0:43a:caa2:4956 with SMTP id l19-20020a056402255300b0043acaa24956mr10907638edb.406.1657544155092;
+        Mon, 11 Jul 2022 05:55:55 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id cb1-20020a0564020b6100b0043a6dc3c4b0sm4300219edb.41.2022.07.11.05.55.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 05:55:54 -0700 (PDT)
+Message-ID: <e84a2cb3-ea2f-6ce4-aba8-4026b3e6bedd@redhat.com>
+Date:   Mon, 11 Jul 2022 14:55:53 +0200
 MIME-Version: 1.0
-References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-6-robimarko@gmail.com>
- <CAA8EJppAdwuXQsvvy9+hT_-mzke5xOaDcTSM5ewjS_cPk3Q+oA@mail.gmail.com>
-In-Reply-To: <CAA8EJppAdwuXQsvvy9+hT_-mzke5xOaDcTSM5ewjS_cPk3Q+oA@mail.gmail.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 11 Jul 2022 14:55:11 +0200
-Message-ID: <CAOX2RU6FMyzGGpnLtzRy=szjBSE+wcvbs+6z6ChZ5Z6g4-9Baw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] clk: qcom: apss-ipq-pll: add support for IPQ8074
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk
+ tables for partial fix
+Content-Language: en-US
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        dmitry.torokhov@gmail.com, tiwai@suse.de, samuel@cavoj.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
+ <20220708161005.1251929-3-wse@tuxedocomputers.com>
+ <37a7e536-252a-c8a9-1412-37d3f2052a6d@redhat.com>
+ <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 14:51, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
-> >
-> > Add support for IPQ8074 since it uses the same PLL setup, however it does
-> > not require the Alpha PLL to be reconfigured.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  drivers/clk/qcom/apss-ipq-pll.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
-> > index bef7899ad0d6..acfb3ec4f142 100644
-> > --- a/drivers/clk/qcom/apss-ipq-pll.c
-> > +++ b/drivers/clk/qcom/apss-ipq-pll.c
-> > @@ -55,6 +55,7 @@ static const struct regmap_config ipq_pll_regmap_config = {
-> >  static int apss_ipq_pll_probe(struct platform_device *pdev)
-> >  {
-> >         struct device *dev = &pdev->dev;
-> > +       struct device_node *node = dev->of_node;
-> >         struct regmap *regmap;
-> >         void __iomem *base;
-> >         int ret;
-> > @@ -67,7 +68,8 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
-> >         if (IS_ERR(regmap))
-> >                 return PTR_ERR(regmap);
-> >
-> > -       clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
-> > +       if (of_device_is_compatible(node, "qcom,ipq6018-a53pll"))
-> > +               clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
->
-> I'd suggest having the 8074 config here too. It seems logical to me to
-> make sure that the pll is configured correctly.
-
 Hi,
 
-I have reworked the driver to use match data so it can be easily provided,
-However, I dont have it as the downstream QCA kernel does not
-reconfigure the PLL, unlike IPQ6018.
-I can probably read the registers from a running board and provide that?
+On 7/11/22 14:45, Werner Sembach wrote:
+> Hi,
+> 
+> On 7/8/22 21:39, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 7/8/22 18:10, Werner Sembach wrote:
+>>> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
+>>> suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
+>>> have an external PS/2 port so this can safely be set for all of them.
+>>>
+>>> I'm not entirely sure if every device listed really needs all four quirks,
+>>> but after testing and production use. No negative effects could be
+>>> observed when setting all four.
+>>>
+>>> Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
+>>> and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
+>>> boot and sometimes also after resume. However both are required for the
+>>> keyboard to not fail completely sometimes after boot or resume.
+>> Hmm, the very laggy bit does not sound good. Have you looked into other
+>> solutions, e.g. what happens if you use just nomux without any of the
+>> other 3 options ?
+> 
+> I tried a lot of combinations, but it was some time ago.
+> 
+> iirc: at least nomux and reset are required and both individually cause the lagging.
+> 
+> So the issue is not fixed by just using a different set of quirks.
+
+Hmm, ok. So given that this seems to be the best we can do
+the patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
-Robert
->
-> >
-> >         ret = devm_clk_register_regmap(dev, &ipq_pll.clkr);
-> >         if (ret)
-> > @@ -79,6 +81,7 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
-> >
-> >  static const struct of_device_id apss_ipq_pll_match_table[] = {
-> >         { .compatible = "qcom,ipq6018-a53pll" },
-> > +       { .compatible = "qcom,ipq8074-a53pll" },
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
-> > --
-> > 2.36.1
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+
+Hans
+
+
+
+>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+>>> Cc: stable@vger.kernel.org
+>>> ---
+>>>   drivers/input/serio/i8042-x86ia64io.h | 28 +++++++++++++++++++++++++++
+>>>   1 file changed, 28 insertions(+)
+>>>
+>>> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+>>> index 5204a7dd61d4..9dc0266e5168 100644
+>>> --- a/drivers/input/serio/i8042-x86ia64io.h
+>>> +++ b/drivers/input/serio/i8042-x86ia64io.h
+>>> @@ -1107,6 +1107,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>>>           .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>>>                       SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>>>       },
+>>> +    {
+>>> +        /*
+>>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
+>>> +         * the keyboard very laggy for ~5 seconds after boot and
+>>> +         * sometimes also after resume.
+>>> +         * However both are required for the keyboard to not fail
+>>> +         * completely sometimes after boot or resume.
+>>> +         */
+>>> +        .matches = {
+>>> +            DMI_MATCH(DMI_BOARD_NAME, "N150CU"),
+>>> +        },
+>>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>>> +    },
+>>>       {
+>>>           .matches = {
+>>>               DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
+>>> @@ -1114,6 +1128,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+>>>           .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>>>                       SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>>>       },
+>>> +    {
+>>> +        /*
+>>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
+>>> +         * the keyboard very laggy for ~5 seconds after boot and
+>>> +         * sometimes also after resume.
+>>> +         * However both are required for the keyboard to not fail
+>>> +         * completely sometimes after boot or resume.
+>>> +         */
+>>> +        .matches = {
+>>> +            DMI_MATCH(DMI_BOARD_NAME, "NHxxRZQ"),
+>>> +        },
+>>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
+>>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
+>>> +    },
+>>>       {
+>>>           .matches = {
+>>>               DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+> 
+

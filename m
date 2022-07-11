@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1911570DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75870570DD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiGKXES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
+        id S231883AbiGKXFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbiGKXEQ (ORCPT
+        with ESMTP id S229605AbiGKXFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:04:16 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392D811172;
-        Mon, 11 Jul 2022 16:04:15 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id p13so3916139ilq.0;
-        Mon, 11 Jul 2022 16:04:15 -0700 (PDT)
+        Mon, 11 Jul 2022 19:05:32 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197F18050C;
+        Mon, 11 Jul 2022 16:05:32 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id r76so6334382iod.10;
+        Mon, 11 Jul 2022 16:05:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=NbY/7Z18T3rfQ5ngeaYSTuxGg4aJvX0MObLvYqlXd7s=;
-        b=2YrFlpQfi5ozeUCo6EEGtScYkMq3//3l0UwMJj1Z1aGLLfP+p1HB997/2+bSacGfJn
-         Qpl4LrfISD+RcKpG/E9jF+ep2paJUsxM384z20eLQpR+pQ3u7tmJAtOeuNAA2k5vlRab
-         2Kju/JDe0VxpyF32TNYcRW2x7sdIRT9f21dxEd8G91oUXLbVUbgSW1u1yQw2ZyxU6Dex
-         F+oGIdyNZFUdnrwnpwvQZezGXVP7ScnMOpNygof8CgkATe/89RNSsTHJAxlnR06lAebK
-         iOFDWoHOahFxQ3INROUPnHqSCG3Tu+19gVPa4VAxzhNgmBB6LOaqlBAgXtc3RKl/HXh0
-         aplQ==
-X-Gm-Message-State: AJIora9EY9KtCEF489PW4pONJowKwkuxFLHGFKi+D3fmLycZB+5sCNR7
-        clI2qPkWOfuvh+NYDPcuzHdIp89GHA==
-X-Google-Smtp-Source: AGRyM1uMoeWR7PzsRDrBvUEqy0bblpLHVg5sWj7o26/ynW/mXtmz0uMxRbw9bbdMhZS09TsefyKoDQ==
-X-Received: by 2002:a92:cc05:0:b0:2dc:51f5:f6cd with SMTP id s5-20020a92cc05000000b002dc51f5f6cdmr11108584ilp.175.1657580654473;
-        Mon, 11 Jul 2022 16:04:14 -0700 (PDT)
+        bh=5Y2pixsUn54eay0iSkhajUR21sTD4CQfrtcGskG3AjM=;
+        b=acvR40Pi7nln+BoOjNXHkwCgTN1lM5kqBF+9+qWym/91IrzFYbnWlFfU3ZRL/EytEG
+         N23bITL2SNzEelTd2LZp17icS1QROxiKjOGPuMetuFswONlODaCt/I3lKhr9lT04uqpY
+         TuHUIFzKde6BE/0yT1tplGBquBT8UlIjLxjXbp36qr4YkTPEQP5kBEBRTH3a2+rzQ6ph
+         NRMwrm1u/lCZzk8RgGx4x91vVJ2Ni/wilflMiDYJ+d85Pf5NdpcpRBcoqrHexbGVsBUX
+         G3VQ+jyMbTzCnmCgIgR7favBEFvHnFewHPd8bNm80MLO5zzU/S77bCLTxMZgSvoFi3WL
+         6FsA==
+X-Gm-Message-State: AJIora+ni/NfrhQtbDqThI7vA9CT/QbVcRU9Kb5WGMXRtKDzl5URsbL+
+        X9D683p8MMW+ocw4CH85lA==
+X-Google-Smtp-Source: AGRyM1sh9PvCj46mftGP+Wt7IafcqqmAndX8dkCr0d8snrcsyi9Gkkrf520sbAgPz9fqYCuU0UrMkg==
+X-Received: by 2002:a05:6638:3802:b0:32e:3d9a:9817 with SMTP id i2-20020a056638380200b0032e3d9a9817mr12201962jav.206.1657580731375;
+        Mon, 11 Jul 2022 16:05:31 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id l9-20020a92d8c9000000b002dc100ab6fdsm3166725ilo.35.2022.07.11.16.04.13
+        by smtp.gmail.com with ESMTPSA id cq2-20020a056638478200b0033f5c35704esm1323848jab.54.2022.07.11.16.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 16:04:14 -0700 (PDT)
-Received: (nullmailer pid 434848 invoked by uid 1000);
-        Mon, 11 Jul 2022 23:04:12 -0000
-Date:   Mon, 11 Jul 2022 17:04:12 -0600
+        Mon, 11 Jul 2022 16:05:30 -0700 (PDT)
+Received: (nullmailer pid 436740 invoked by uid 1000);
+        Mon, 11 Jul 2022 23:05:29 -0000
+Date:   Mon, 11 Jul 2022 17:05:29 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, ulf.hansson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2] dt-bindings: mmc: Add compatible for MediaTek MT8188
-Message-ID: <20220711230412.GA434794-robh@kernel.org>
-References: <20220708114747.13878-1-johnson.wang@mediatek.com>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        claudiu.beznea@microchip.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, Kavyasree.Kotagiri@microchip.com,
+        nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 1/3] dt-bindings: mfd: Convert atmel-flexcom to
+ json-schema
+Message-ID: <20220711230529.GA436676-robh@kernel.org>
+References: <20220708115619.254073-1-kavyasree.kotagiri@microchip.com>
+ <20220708115619.254073-2-kavyasree.kotagiri@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220708114747.13878-1-johnson.wang@mediatek.com>
+In-Reply-To: <20220708115619.254073-2-kavyasree.kotagiri@microchip.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -66,14 +67,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 08 Jul 2022 19:47:47 +0800, Johnson Wang wrote:
-> This commit adds dt-binding documentation of mmc for MediaTek MT8188 SoC
-> platform.
+On Fri, 08 Jul 2022 09:56:17 -0200, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 > ---
->  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> v7 -> v8:
+>  - Added back patternProperties for child nodes.
+> 
+> v6 -> v7:
+>  - Change filename to atmel,sama5d2-flexcom.yaml
+>  - Add #address-cells, #size-cells to flexcom node - Fixed warnings.
+> 
+> v5 -> v6:
+>  - Removed spi node from example as suggested by Rob and
+>    also pattern properties(spi dt-bindings conversion to yaml patch is under review).
+>    Once that is accepted, I will add back spi example through new patch.
+> 
+> v4 -> v5:
+>  - Fixed indentations.
+> 
+> v3 -> v4:
+>  - Corrected format of enum used for compatible string.
+> 
+> v2 -> v3:
+>  - used enum for compatible string.
+>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
+>  - fixed dtschema errors.
+> 
+> v1 -> v2:
+>  - Fix title.
+> 
+>  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   | 92 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -------------
+>  2 files changed, 92 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>

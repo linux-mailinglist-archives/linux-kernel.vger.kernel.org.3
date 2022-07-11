@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4E2570347
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21847570349
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiGKMs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S231996AbiGKMst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiGKMs0 (ORCPT
+        with ESMTP id S232017AbiGKMsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:48:26 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88495D104
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:48:24 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id p14so262846qvo.9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:48:24 -0700 (PDT)
+        Mon, 11 Jul 2022 08:48:42 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C265E0AD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:48:41 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 145so4616141pga.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:48:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Aj5HYfV9IYuvXZkZCAwaX1PAJPYJ/AoOyrDvesXSwwk=;
-        b=Zb3apUha9cAq1BA9hOtWwSlz+RNHmL1UmJQtiygdDmAPGZvHHvAfE27SrmK0miiC7Q
-         andYqvbNd0aTSAN3/ET96Oa4c804ys5EVr4c52PePfihHYooV7GfN2InysP9crwfz8Ki
-         BIXIKmP+Q2PCpeBEMCmoJNMBRE8AOvEL47plrTiLTNMXI2+55rsVZI7LL93/t75iFzLi
-         CqwoA2naVYrlOY/r43BSvMzYdfzSnKKJ3OwB97YNsT2/co3QzvWaEtyRqgN4itlp2Up6
-         C9h729eiQH8BaNNliXzcOiZZkX2u7mIUWEd3uJUU2cPCFDaPDC/KNgkgCXymWO9T+M2g
-         GmDw==
+        bh=aJocOm+WQm8JeoaTDLF9QVAn6Yxo6as7VtmcJ5sIzIg=;
+        b=lVrLbWT8SKQjAOicPujVtFIM7vw3vlUdViH8lqPwlF4T6FLdTUxvkt+hJ2QNC/PSWC
+         lFdIxksoH+pGTCrg2JGNoAdDPdMbjcpl1ZCio5G1XLLvv85sGXj3NSDXj5cyl0OOmS3f
+         XIfv74LfoxC766Q7JmSsBdVSC2Pz28OzBocM4rSPt8GRbgB1gIDp5+fqGENHptIJr1sn
+         HfEZTlywqD4nPBA4Yp884WGj5ZAGCqUGpLfHuhQ0LmfPwoP+0ojb4/j9xatz6GV1KoNe
+         QBLMXiNG8ronkh8pEfwmx4fo4861OiFyURFC+4zEMnmGDbbNvPgpN+gY3WsuQSE2oHrr
+         lIXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Aj5HYfV9IYuvXZkZCAwaX1PAJPYJ/AoOyrDvesXSwwk=;
-        b=Xyrfhd6lLWFGPQ+g6iNcCeNOLjDRLffBhrJXdqTF6Bx0U9wSK0P62g7XYqpL+cBgwi
-         CuR90mzBHAQ90id3fNa/zuomlCEUnWfE/g/t10Wb52MezFTiuG3I5DewXZNb0RJ79Y35
-         Yqg0+LxuKwlLbP3Y3lhZs8t+2ChR9bfxbnOOiEim+xXW0KilTEI2LdnwGdNsVjHMpffT
-         IigOi/uWSkfj9KfKAn7+6IKj+XbHVDHGscZkw8hgvPgRpLGrbSkeAdEDIgNZSgS7MnHh
-         oSr4gy+sO1VZSQs0GN9VXrATsrFs/RkxDqk5F6ma/moqW7AahMrY5rJ6gMzVV4Gzotah
-         p5Kg==
-X-Gm-Message-State: AJIora/itWFIw4IEDC72S6gHw+HumO0SbCAioPguACtNZB6/QClp+hm0
-        aZPwGi4P467r/zkN4P+pQ4iAV9Z2jGrAVMXNbNSysg==
-X-Google-Smtp-Source: AGRyM1vp3EX05aP+CFsoAhrmsKkFCZqcqJxAjvKik9ouv5Cvl0PexmP8BE1v33MWwg0xIXzf9g6uHdWprBgVGk8l7ps=
-X-Received: by 2002:a05:6214:d03:b0:473:7764:2ab with SMTP id
- 3-20020a0562140d0300b00473776402abmr1504864qvh.119.1657543703638; Mon, 11 Jul
- 2022 05:48:23 -0700 (PDT)
+        bh=aJocOm+WQm8JeoaTDLF9QVAn6Yxo6as7VtmcJ5sIzIg=;
+        b=sEyJZFFdvYitmoIGtv2adPgt0E0eWNCbX/euHcMmEAte6rKVgIQILatpFxuOj8BDXE
+         Tr0XBVLZymldAQou3IG/+17R/HogBIPiJSxMmk1NHvOEdW0TmAb0+j4R+BxjZGquM5LD
+         6p6skenSBnruCjoLhykV359ZeML4EB6YsEtBH9Z5f9R2ojkC/1TDqn+B7DYo0YQQAB+J
+         1G5sBMZVHDBFWbpYfHc97/C5mysOWbwas0cvSE2/uhdT1GXbuM1gGhN2HAxG73SB/vy8
+         zSTgdMxxJiJCp9eXqxqF7FkmjrwV7ujcWjpLduAzCc1Xna3TlHCkHHTyBJMK4ZYYLrEr
+         ukYQ==
+X-Gm-Message-State: AJIora+z+iJtoW/qXGGvwLbPJRATnyO8y+mGXmKXdEbQ6WsQj0al3w/c
+        8DfNL/DppQYm+HMSqH/WWUXjKPzYslo1rTALaZjbsw==
+X-Google-Smtp-Source: AGRyM1tHEvkhScpSf4EDIQX5WvCWKxCPMiY/TD3iFu5r3C8Uikk8R+vTBwI73vjenBQ8dn3otzcV49NF5Y7iq6wI3II=
+X-Received: by 2002:a05:6a00:1701:b0:525:9f20:a78a with SMTP id
+ h1-20020a056a00170100b005259f20a78amr18735285pfc.2.1657543720577; Mon, 11 Jul
+ 2022 05:48:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-2-robimarko@gmail.com>
-In-Reply-To: <20220711104719.40939-2-robimarko@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 11 Jul 2022 15:48:12 +0300
-Message-ID: <CAA8EJprfAW7kFSPxs7=LEHLmAVrWhV8KRbUseg8jXyiUbyZuRQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] clk: qcom: apss-ipq6018: fix apcs_alias0_clk_src
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220511060521.465744-1-sumit.garg@linaro.org>
+ <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com> <20220708163134.GB6286@willie-the-truck>
+In-Reply-To: <20220708163134.GB6286@willie-the-truck>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 11 Jul 2022 18:18:29 +0530
+Message-ID: <CAFA6WYNu=rJ=Vbs7TFFXzOh57ezum5FqFomCV8fLvAB02dxLug@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
+To:     Will Deacon <will@kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Wei Li <liwei391@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,80 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
->
-> While working on IPQ8074 APSS driver it was discovered that IPQ6018 and
-> IPQ8074 use almost the same PLL and APSS clocks, however APSS driver is
-> currently broken.
->
-> More precisely apcs_alias0_clk_src is broken, it was added as regmap_mux
-> clock.
-> However after debugging why it was always stuck at 800Mhz, it was figured
-> out that its not regmap_mux compatible at all.
-> It is a simple mux but it uses RCG2 register layout and control bits, so
+Hi Will,
 
-To utilize control bits, you probably should also use
-
-> utilize the new clk_rcg2_mux_closest_ops to correctly drive it while not
-> having to provide a dummy frequency table.
-
-Could you please clarify this. Your new rcg2 ops seems to be literally
-equivalent to the clk_regmap_mux_closest_ops provided the shift and
-width are set correctly..
-
-> While we are here, use ARRAY_SIZE for number of parents.
+On Fri, 8 Jul 2022 at 22:01, Will Deacon <will@kernel.org> wrote:
 >
-> Tested on IPQ6018-CP01-C1 reference board and multiple IPQ8074 boards.
+> On Fri, Jul 01, 2022 at 03:14:16PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, May 10, 2022 at 11:05 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> > >
+> > > This patch-set reworks pending fixes from Wei's series [1] to make
+> > > single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> > > a prior discussion on ML [2] regarding if we should keep the interrupts
+> > > enabled during single-stepping. So patch #1 follows suggestion from Will
+> > > [3] to not disable interrupts during single stepping but rather skip
+> > > single stepping within interrupt handler.
+> > >
+> > > [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> > > [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> > > [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+> > >
+> > > Changes in v3:
+> > > - Reword commit descriptions as per Daniel's suggestions.
+> > >
+> > > Changes in v2:
+> > > - Replace patch #1 to rather follow Will's suggestion.
+> > >
+> > > Sumit Garg (2):
+> > >   arm64: entry: Skip single stepping into interrupt handlers
+> > >   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+> > >
+> > >  arch/arm64/include/asm/debug-monitors.h |  1 +
+> > >  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+> > >  arch/arm64/kernel/entry-common.c        | 18 +++++++++++++++++-
+> > >  arch/arm64/kernel/kgdb.c                |  2 ++
+> > >  4 files changed, 25 insertions(+), 1 deletion(-)
+> >
+> > Sorry it took so long for me to respond. I kept dreaming that I'd find
+> > the time to really dig deep into this to understand it fully and I'm
+> > finally giving up on it. I'm going to hope that Will and/or Catalin
+> > knows this area of the code well and can give it a good review. If not
+> > then I'll strive harder to make the time...
 >
-> Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  drivers/clk/qcom/apss-ipq6018.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-> index d78ff2f310bf..be952d417ded 100644
-> --- a/drivers/clk/qcom/apss-ipq6018.c
-> +++ b/drivers/clk/qcom/apss-ipq6018.c
-> @@ -16,7 +16,7 @@
->  #include "clk-regmap.h"
->  #include "clk-branch.h"
->  #include "clk-alpha-pll.h"
-> -#include "clk-regmap-mux.h"
-> +#include "clk-rcg.h"
->
->  enum {
->         P_XO,
-> @@ -33,16 +33,15 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
->         { P_APSS_PLL_EARLY, 5 },
->  };
->
-> -static struct clk_regmap_mux apcs_alias0_clk_src = {
-> -       .reg = 0x0050,
-> -       .width = 3,
-> -       .shift = 7,
-
-Judging from rcg2 ops, .shift should be set to 8.
-
-> +static struct clk_rcg2 apcs_alias0_clk_src = {
-> +       .cmd_rcgr = 0x0050,
-> +       .hid_width = 5,
->         .parent_map = parents_apcs_alias0_clk_src_map,
->         .clkr.hw.init = &(struct clk_init_data){
->                 .name = "apcs_alias0_clk_src",
->                 .parent_data = parents_apcs_alias0_clk_src,
-> -               .num_parents = 2,
-> -               .ops = &clk_regmap_mux_closest_ops,
-> +               .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
-> +               .ops = &clk_rcg2_mux_closest_ops,
->                 .flags = CLK_SET_RATE_PARENT,
->         },
->  };
-> --
-> 2.36.1
+> So the good news is that I spent a couple of days on this last week.
 >
 
+Thanks for spending time to review this.
 
---
-With best wishes
-Dmitry
+> The bad news is that I'm nowhere done and about to disappear on holiday
+> for a week!
+>
+> But anyway, I might be able to give this a review when I'm back. Failing
+> that, I wonder if enough of us have a little bit of time each that we
+> could hack on an agreed design together which covers the debug exception
+> behaviour beyond kgdb?
+
+Sure I will be happy to contribute to improving overall debug
+exception behaviour. I look forward to any further
+comments/suggestions.
+
+-Sumit
+
+>
+> Will

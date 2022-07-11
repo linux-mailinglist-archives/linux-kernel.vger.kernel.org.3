@@ -2,55 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FD956D71B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB5A56D72B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiGKHwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S229789AbiGKHyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiGKHwg (ORCPT
+        with ESMTP id S229552AbiGKHyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:52:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 078541C925
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657525955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0fVL/6h+ioYmSvIw9J0PUDh//b3naVw7P8qpW/RZmLE=;
-        b=bcHXY+8tP0k2MRaOw1rdiFYhCb/+VIcHkKbuq/h4C5oKxYLWdzbc0aNvEOXyvMc5AFS2pL
-        TtDXg6Ibai/6ox7d1Qh3tS+ZhGSsPV0fSjdkZ8e4bdJvpYMRqBBNi4xnHf90+yCssEdq+L
-        9M1zTnvt/cPrabrNjgYzvR4P9EiJ9BE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-70-mz4UEfffNoaNIqStyUEDOg-1; Mon, 11 Jul 2022 03:52:28 -0400
-X-MC-Unique: mz4UEfffNoaNIqStyUEDOg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 405982999B38;
-        Mon, 11 Jul 2022 07:52:28 +0000 (UTC)
-Received: from raketa.redhat.com (unknown [10.40.192.102])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C6CEF40D296D;
-        Mon, 11 Jul 2022 07:52:26 +0000 (UTC)
-From:   Maurizio Lombardi <mlombard@redhat.com>
-To:     alexander.duyck@gmail.com
-Cc:     kuba@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        chen45464546@163.com
-Subject: [PATCH] mm: prevent page_frag_alloc() from corrupting the memory
-Date:   Mon, 11 Jul 2022 09:52:25 +0200
-Message-Id: <20220711075225.15687-1-mlombard@redhat.com>
+        Mon, 11 Jul 2022 03:54:19 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AB511465;
+        Mon, 11 Jul 2022 00:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657526058; x=1689062058;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=PNX5zeWScEfvXd7e/yKULO71QZJI9wmiUGZ4xVW8XFY=;
+  b=a5cUioC4tu9KRZW5+59ucgSukb/XWLqF7LLNgqzjsKLSF5lk9qNrG7j8
+   icyBWYgybmedYicsnmrIfdu0ghhdpw3Cwji6feG8Zf+h92hGu3H72qRQi
+   ++Cj9FbjSXqVjdNu7XSq/d6Q8biso/HG897l3mhwsRZHlOUVqN9wevyzR
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 00:54:18 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 00:54:18 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Jul 2022 00:54:17 -0700
+Received: from [10.216.8.232] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Jul
+ 2022 00:54:13 -0700
+Message-ID: <32cffa34-1088-5e25-3051-192e3049908f@quicinc.com>
+Date:   Mon, 11 Jul 2022 13:24:10 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Move wcd specific pin conf
+ to common file
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <dianders@chromium.org>, <judyhsiao@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <robh+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>
+References: <1657197381-1271-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n53X8yyWr+Q+3RpciCeZcW+t+jgZs3eqNF9O8hJcw0cq0Q@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAE-0n53X8yyWr+Q+3RpciCeZcW+t+jgZs3eqNF9O8hJcw0cq0Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,47 +72,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A number of drivers call page_frag_alloc() with a
-fragment's size > PAGE_SIZE.
-In low memory conditions, __page_frag_cache_refill() may fail the order 3
-cache allocation and fall back to order 0;
-If this happens, the cache will be smaller than the fragment, causing
-memory corruptions.
 
-Prevent this from happening by checking if the newly allocated cache
-is large enough for the fragment; if not, the allocation will fail
-and page_frag_alloc() will return NULL.
+On 7/8/2022 11:29 PM, Stephen Boyd wrote:
+Thanks for your time Stephen!!!
+> Quoting Srinivasa Rao Mandadapu (2022-07-07 05:36:21)
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+>> index 32a1e78..859faaa 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi
+>> @@ -5,6 +5,70 @@
+>>    * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+>>    */
+>>
+>> +/* PINCTRL */
+>> +
+>> +&lpass_dmic01_clk {
+>> +       drive-strength = <8>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&lpass_dmic01_clk_sleep {
+>> +       drive-strength = <2>;
+>> +};
+>> +
+>> +&lpass_dmic01_data {
+>> +       bias-pull-down;
+>> +};
+>> +
+>> +&lpass_dmic23_clk {
+>> +       drive-strength = <8>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&lpass_dmic23_clk_sleep {
+>> +       drive-strength = <2>;
+>> +};
+>> +
+>> +&lpass_dmic23_data {
+>> +       bias-pull-down;
+>> +};
+>> +
+>> +&lpass_rx_swr_clk {
+>> +       drive-strength = <2>;
+>> +       slew-rate = <1>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&lpass_rx_swr_clk_sleep {
+>> +       bias-pull-down;
+>> +};
+>> +
+>> +&lpass_rx_swr_data {
+>> +       drive-strength = <2>;
+> I suspect this was discussed before, but why do we need to modify drive
+> strengths on pins that aren't in output mode? I assume either rx_swr or
+> tx_swr is unidirectional.
 
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
----
- mm/page_alloc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Actually this patch is just reorganization only. didn't do any 
+modification of already reviewed patches.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e008a3df0485..7fb000d7e90c 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5611,12 +5611,17 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
- 		/* if size can vary use size else just use PAGE_SIZE */
- 		size = nc->size;
- #endif
--		/* OK, page count is 0, we can safely set it */
--		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
--
- 		/* reset page count bias and offset to start of new frag */
- 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
- 		offset = size - fragsz;
-+		if (unlikely(offset < 0)) {
-+			free_the_page(page, compound_order(page));
-+			nc->va = NULL;
-+			return NULL;
-+		}
-+
-+		/* OK, page count is 0, we can safely set it */
-+		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
- 	}
- 
- 	nc->pagecnt_bias--;
--- 
-2.31.1
+Will test without drive strength again and post a fix patch post this 
+patch accepted if required.
 
+>
+>> +       slew-rate = <1>;
+>> +       bias-bus-hold;
+>> +};
+>> +
+>> +&lpass_rx_swr_data_sleep {
+>> +       bias-pull-down;
+>> +};
+>> +
+>> +&lpass_tx_swr_clk {
+>> +       drive-strength = <2>;
+>> +       slew-rate = <1>;
+>> +       bias-disable;
+>> +};
+>> +
+>> +&lpass_tx_swr_clk_sleep {
+>> +       bias-pull-down;
+>> +};
+>> +
+>> +&lpass_tx_swr_data {
+>> +       drive-strength = <2>;
+>> +       slew-rate = <1>;
+>> +       bias-bus-hold;
+>> +};
+>> +
+>>   &mi2s1_data0 {
+>>          drive-strength = <6>;
+>>          bias-disable;

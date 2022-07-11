@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B8D56FB64
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F7956FDC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiGKJaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S234231AbiGKKAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbiGKJ3R (ORCPT
+        with ESMTP id S231986AbiGKJ7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:29:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18FD6A9ED;
-        Mon, 11 Jul 2022 02:16:20 -0700 (PDT)
+        Mon, 11 Jul 2022 05:59:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A882BB62A2;
+        Mon, 11 Jul 2022 02:27:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B52696122D;
-        Mon, 11 Jul 2022 09:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9B4C34115;
-        Mon, 11 Jul 2022 09:16:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 62F63CE126A;
+        Mon, 11 Jul 2022 09:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75798C34115;
+        Mon, 11 Jul 2022 09:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530975;
-        bh=qyyOTkvn1nf1BGX42SoGU7wvsA00jHIfSQboi+dvWiw=;
+        s=korg; t=1657531639;
+        bh=m/KGAc9SXJsoFefchDyBa6ZxTDVjstgXbewAd/5Yeqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vx2tLZTJVL7Od09Ixm/XX57v7PgnsNS3A8dO/OmEjgud4YQo8NIBslI5pAX13yAwG
-         zAvJ7MMcXHCAQjWdMlnpe/gS2GmsUlF4bF/lRKmpxrbwk5PqBeh+mSyFDdF8uD7+yF
-         FnzN4qQxP06l4hjETXabVyK9bcRw0LU4sTrGuvOQ=
+        b=1gkL5FJescV9DPqarMa0vQTQu4x/CC0fkcNntjh7xxqsXfuUuJilCm1+ssBJZHHPT
+         Ua86/5j4V2JrNkfmkkkGNa0pdLm+URX4xjulv8eLwUQ6r4rjcMTTVbvHfDJaP05JnQ
+         x43vS01rzgK/eDTqtZv+frw32P7djUKcSgY7ns9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 5.18 034/112] fbmem: Check virtual screen sizes in fb_set_var()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 138/230] drm/amdgpu: bind to any 0x1002 PCI diplay class device
 Date:   Mon, 11 Jul 2022 11:06:34 +0200
-Message-Id: <20220711090550.537845731@linuxfoundation.org>
+Message-Id: <20220711090607.978575207@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 6c11df58fd1ac0aefcb3b227f72769272b939e56 upstream.
+[ Upstream commit eb4fd29afd4aa1c98d882800ceeee7d1f5262803 ]
 
-Verify that the fbdev or drm driver correctly adjusted the virtual
-screen sizes. On failure report the failing driver and reject the screen
-size change.
+Bind to all 0x1002 GPU devices.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stable@vger.kernel.org # v5.4+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+For now we explicitly return -ENODEV for generic bindings.
+Remove this check once IP discovery based checking is in place.
+
+v2: rebase (Alex)
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1016,6 +1016,16 @@ fb_set_var(struct fb_info *info, struct
- 	if (ret)
- 		return ret;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index f65b4b233ffb..c294081022bd 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -1952,6 +1952,16 @@ static const struct pci_device_id pciidlist[] = {
+ 	{0x1002, 0x7424, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+ 	{0x1002, 0x743F, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
  
-+	/* verify that virtual resolution >= physical resolution */
-+	if (var->xres_virtual < var->xres ||
-+	    var->yres_virtual < var->yres) {
-+		pr_warn("WARNING: fbcon: Driver '%s' missed to adjust virtual screen size (%ux%u vs. %ux%u)\n",
-+			info->fix.id,
-+			var->xres_virtual, var->yres_virtual,
-+			var->xres, var->yres);
-+		return -EINVAL;
++	{ PCI_DEVICE(0x1002, PCI_ANY_ID),
++	  .class = PCI_CLASS_DISPLAY_VGA << 8,
++	  .class_mask = 0xffffff,
++	  .driver_data = 0 },
++
++	{ PCI_DEVICE(0x1002, PCI_ANY_ID),
++	  .class = PCI_CLASS_DISPLAY_OTHER << 8,
++	  .class_mask = 0xffffff,
++	  .driver_data = 0 },
++
+ 	{0, 0, 0}
+ };
+ 
+@@ -1999,6 +2009,11 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
+ 			return -ENODEV;
+ 	}
+ 
++	if (flags == 0) {
++		DRM_INFO("Unsupported asic.  Remove me when IP discovery init is in place.\n");
++		return -ENODEV;
 +	}
 +
- 	if ((var->activate & FB_ACTIVATE_MASK) != FB_ACTIVATE_NOW)
- 		return 0;
- 
+ 	if (amdgpu_virtual_display ||
+ 	    amdgpu_device_asic_has_dc_support(flags & AMD_ASIC_MASK))
+ 		supports_atomic = true;
+-- 
+2.35.1
+
 
 

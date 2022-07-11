@@ -2,137 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFAB570ACF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F2C570AD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiGKTfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 15:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S231655AbiGKThv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 15:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGKTfe (ORCPT
+        with ESMTP id S229685AbiGKTht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 15:35:34 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7122BB36
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
-        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=z8NGkmDzUDegggn5+Y+uNCbKnEYMgN78CgR6w9hA/pU=; b=UgTwHes/dGGdf3jR2hd8U8mDZW
-        K4jw+GZFxdigzeyLsyBJ0EYRPOSoM1aGLdMJgeIb3fyzrqzCLM/62XhSgGq9LbhSc7rniqYGUk3bU
-        yhqtT3Q2mof+dTgOhynApE0DlzY6D+pzycrTrpE2o3RaMXYxF3BQNJkSOS7nspYPk6p3Y2ZERayz0
-        EFQifYY9275JapsAo8UsYKhTs2Hr/+W8V/1S61wAKOBMnDYbn5W9cbDUim++NGHvsJBimBIYhJZNm
-        KHVL8meXGl4PBaKj+wRmvrQy+TtST5vDGss5XFVMwQzSx4EpGLgiuCggWj4pydWOZODZI0QrqEQzx
-        VdMYwfdA==;
-Received: from [177.45.248.119] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oAzBn-00CKlY-Vq; Mon, 11 Jul 2022 21:35:28 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
-        'Pan Xinhui' <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v2 1/1] drm/amd/pm: Implement get GFXOFF status for vangogh
-Date:   Mon, 11 Jul 2022 16:34:58 -0300
-Message-Id: <20220711193458.158462-1-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.37.0
+        Mon, 11 Jul 2022 15:37:49 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EC04D4E8;
+        Mon, 11 Jul 2022 12:37:48 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id o7so10367205lfq.9;
+        Mon, 11 Jul 2022 12:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A4JHArgc2s+5GOoOO0PJp9b8nXcn+f7ATVJu+wNYsfs=;
+        b=NfanDx12r4uhByK5iiL46uu291qZuQ5alGkeu5IpNfs8e/gi4JYrK8qwf1dRqZsLke
+         YSyess7cxeV4ScILCMLP3WlCOa2HEmGoKfAecI8q0qfEKnG63/KWd8dfcNxltD6DuOwW
+         spFsYDxap2S4f59Kn+3+mBctYh9oG+lqgm6NVzCu5jZ2eEX6kvOPDiAQQMqDKjGZqlrs
+         A9xZV18QAQvF4dqUzoLg4K5GYyi9lJSiHFAULvUfRQeFt0l/93jBvO85N5pNH6wEKh2H
+         ktL40jfzeZjLQANyTChfh6W87/WoFnWvvKtq9m4N+kCUQGsuZrx2cxdj7tGFQZQNijx9
+         dU+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A4JHArgc2s+5GOoOO0PJp9b8nXcn+f7ATVJu+wNYsfs=;
+        b=oEeWcxaF3YxqfQ61F6vD6o+mnlR0zCa/nRlSTtwM2Ib89amyoPhoDNk73S3KP76l52
+         g/LUy8DM6J+EDyQtgH/BzGil+0JNtokq00Mt3ofpe+1NU1o5hBSOCHJNakMyCRK7zqLV
+         /+p02NhQvf7z+xnYwzlQe5RHl7K475O8RoXeGtnC29O1RCrKxTODAm4zm40CYzTXBz9u
+         dRF6ImnJHR89MLjR8D4JQIl8fc0vkvS+QLoUScsJLrQhzuHe39/OtSBCzRRlRasM6af3
+         s0Jj9To+eUD/mMBgRaNIvcUdSCt3s/2kJv69+QXSv+CDgmaKN7JPKf1PW4iG3mnr09Q3
+         EoGg==
+X-Gm-Message-State: AJIora8CpicU5B1lr6AXV9eFQCXnhLDXvQVP2cKy3EyLwaYHlfg9BXhU
+        XmzbRvRPaQ5nb5B4Vwn1IAYJBnlffhE8qNHo3rY+/SIW
+X-Google-Smtp-Source: AGRyM1sMwO67XvFDpUPQu55Ww7kgydNlRu3c4ksRjw2L2Rwm5rYXBIR26iJ5nby2ARhw7odTnRvHGp114MVUeMBQRFw=
+X-Received: by 2002:a05:6512:1312:b0:47f:7bd3:1427 with SMTP id
+ x18-20020a056512131200b0047f7bd31427mr11963717lfu.128.1657568266717; Mon, 11
+ Jul 2022 12:37:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220706164043.417780-1-jandryuk@gmail.com> <YsuRzGBss/lMG2+W@kernel.org>
+In-Reply-To: <YsuRzGBss/lMG2+W@kernel.org>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Mon, 11 Jul 2022 15:37:34 -0400
+Message-ID: <CAKf6xpvY0Tj4HGpbshWonnpJLf_08+9pARONt2uHi-m92aqJmQ@mail.gmail.com>
+Subject: Re: [PATCH] tpm_tis: Hold locality open during probe
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Chen Jun <chenjun102@huawei.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement function to get current GFXOFF status for vangogh.
+On Sun, Jul 10, 2022 at 10:58 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 12:40:43PM -0400, Jason Andryuk wrote:
+> > WEC TPMs (in 1.2 mode) and NTC (in 2.0 mode) have been observer to
+> > frequently, but intermittently, fail probe with:
+> > tpm_tis: probe of 00:09 failed with error -1
+> >
+> > Added debugging output showed that the request_locality in
+> > tpm_tis_core_init succeeds, but then the tpm_chip_start fails when its
+> > call to tpm_request_locality -> request_locality fails.
+> >
+> > The access register in check_locality would show:
+> > 0x80 TPM_ACCESS_VALID
+> > 0x82 TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_USE
+> > 0x80 TPM_ACCESS_VALID
+> > continuing until it times out. TPM_ACCESS_ACTIVE_LOCALITY (0x20) doesn't
+> > get set which would end the wait.
+> >
+> > My best guess is something racy was going on between release_locality's
+> > write and request_locality's write.  There is no wait in
+> > release_locality to ensure that the locality is released, so the
+> > subsequent request_locality could confuse the TPM?
+> >
+> > tpm_chip_start grabs locality 0, and updates chip->locality.  Call that
+> > before the TPM_INT_ENABLE write, and drop the explicit request/release
+> > calls.  tpm_chip_stop performs the release.  With this, we switch to
+> > using chip->locality instead of priv->locality.  The probe failure is
+> > not seen after this.
+> >
+> > commit 0ef333f5ba7f ("tpm: add request_locality before write
+> > TPM_INT_ENABLE") added a request_locality/release_locality pair around
+> > tpm_tis_write32 TPM_INT_ENABLE, but there is a read of
+> > TPM_INT_ENABLE for the intmask which should also have the locality
+> > grabbed.  tpm_chip_start is moved before that to have the locality open
+> > during the read.
+> >
+> > Fixes: 0ef333f5ba7f ("tpm: add request_locality before write TPM_INT_ENABLE")
+> > CC: stable@vger.kernel.org
+> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> > ---
+> > The probe failure was seen on 5.4, 5.15 and 5.17.
+> >
+> > commit e42acf104d6e ("tpm_tis: Clean up locality release") removed the
+> > release wait.  I haven't tried, but re-introducing that would probably
+> > fix this issue.  It's hard to know apriori when a synchronous wait is
+> > needed, and they don't seem to be needed typically.  Re-introducing the
+> > wait would re-introduce a wait in all cases.
+> >
+> > Surrounding the read of TPM_INT_ENABLE with grabbing the locality may
+> > not be necessary?  It looks like the code only grabs a locality for
+> > writing, but that asymmetry is surprising to me.
+> >
+> > tpm_chip and tpm_tis_data track the locality separately.  Should the
+> > tpm_tis_data one be removed so they don't get out of sync?
+> > ---
+> >  drivers/char/tpm/tpm_tis_core.c | 20 ++++++++------------
+> >  1 file changed, 8 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> > index dc56b976d816..529c241800c0 100644
+> > --- a/drivers/char/tpm/tpm_tis_core.c
+> > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > @@ -986,8 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> >               goto out_err;
+> >       }
+> >
+> > +     /* Grabs locality 0. */
+> > +     rc = tpm_chip_start(chip);
+> > +     if (rc)
+> > +             goto out_err;
+> > +
+> >       /* Take control of the TPM's interrupt hardware and shut it off */
+> > -     rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> > +     rc = tpm_tis_read32(priv, TPM_INT_ENABLE(chip->locality), &intmask);
+> >       if (rc < 0)
+> >               goto out_err;
+> >
+> > @@ -995,19 +1000,10 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> >                  TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+> >       intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> >
+> > -     rc = request_locality(chip, 0);
+> > -     if (rc < 0) {
+> > -             rc = -ENODEV;
+> > -             goto out_err;
+> > -     }
+> > -
+> > -     tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> > -     release_locality(chip, 0);
+> > +     tpm_tis_write32(priv, TPM_INT_ENABLE(chip->locality), intmask);
+> >
+> > -     rc = tpm_chip_start(chip);
+> > -     if (rc)
+> > -             goto out_err;
+> >       rc = tpm2_probe(chip);
+> > +     /* Releases locality 0. */
+> >       tpm_chip_stop(chip);
+> >       if (rc)
+> >               goto out_err;
+> > --
+> > 2.36.1
+> >
+>
+> Can you test against
+>
+> https://lore.kernel.org/linux-integrity/20220629232653.1306735-1-LinoSanfilippo@gmx.de/T/#t
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
-Changes from v1:
-- Squash commits in a single one
+I applied on top of 5.15.53, and the probe on boot still fails.
+Manually probing works intermittently.
 
- .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-index e2d8ac90cf36..89504ff8e9ed 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-@@ -46,6 +46,18 @@
- #undef pr_info
- #undef pr_debug
- 
-+// Registers related to GFXOFF
-+// addressBlock: smuio_smuio_SmuSmuioDec
-+// base address: 0x5a000
-+#define mmSMUIO_GFX_MISC_CNTL			0x00c5
-+#define mmSMUIO_GFX_MISC_CNTL_BASE_IDX		0
-+
-+//SMUIO_GFX_MISC_CNTL
-+#define SMUIO_GFX_MISC_CNTL__SMU_GFX_cold_vs_gfxoff__SHIFT	0x0
-+#define SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS__SHIFT		0x1
-+#define SMUIO_GFX_MISC_CNTL__SMU_GFX_cold_vs_gfxoff_MASK	0x00000001L
-+#define SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS_MASK		0x00000006L
-+
- #define FEATURE_MASK(feature) (1ULL << feature)
- #define SMC_DPM_FEATURE ( \
- 	FEATURE_MASK(FEATURE_CCLK_DPM_BIT) | \
-@@ -2045,6 +2057,31 @@ static int vangogh_mode2_reset(struct smu_context *smu)
- 	return vangogh_mode_reset(smu, SMU_RESET_MODE_2);
- }
- 
-+/**
-+ * vangogh_get_gfxoff_status - Get gfxoff status
-+ *
-+ * @smu: amdgpu_device pointer
-+ *
-+ * Get current gfxoff status
-+ *
-+ * Return:
-+ * * 0	- GFXOFF (default if enabled).
-+ * * 1	- Transition out of GFX State.
-+ * * 2	- Not in GFXOFF.
-+ * * 3	- Transition into GFXOFF.
-+ */
-+static u32 vangogh_get_gfxoff_status(struct smu_context *smu)
-+{
-+	struct amdgpu_device *adev = smu->adev;
-+	u32 reg, gfxoff_status;
-+
-+	reg = RREG32_SOC15(SMUIO, 0, mmSMUIO_GFX_MISC_CNTL);
-+	gfxoff_status = (reg & SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS_MASK)
-+		>> SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS__SHIFT;
-+
-+	return gfxoff_status;
-+}
-+
- static int vangogh_get_power_limit(struct smu_context *smu,
- 				   uint32_t *current_power_limit,
- 				   uint32_t *default_power_limit,
-@@ -2199,6 +2236,7 @@ static const struct pptable_funcs vangogh_ppt_funcs = {
- 	.post_init = vangogh_post_smu_init,
- 	.mode2_reset = vangogh_mode2_reset,
- 	.gfx_off_control = smu_v11_0_gfx_off_control,
-+	.get_gfx_off_status = vangogh_get_gfxoff_status,
- 	.get_ppt_limit = vangogh_get_ppt_limit,
- 	.get_power_limit = vangogh_get_power_limit,
- 	.set_power_limit = vangogh_set_power_limit,
--- 
-2.37.0
-
+Regards,
+Jason

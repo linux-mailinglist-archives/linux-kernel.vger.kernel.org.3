@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DCE570D4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4B2570D52
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiGKW30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S231667AbiGKW3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiGKW3Y (ORCPT
+        with ESMTP id S231614AbiGKW3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:29:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D728735
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:29:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 883ACB815E6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 22:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080A1C3411C;
-        Mon, 11 Jul 2022 22:29:19 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 18:29:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 11 Jul 2022 18:29:31 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326872A26D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:29:30 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so54591417b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=K0OuwQmEGasRg3T61Q5R2kuINEILQFbAvI3PiK5PAXg=;
+        b=iCBlUt6yN6MXIcKUwwY+vKNoQRLZWoF+9g7eO3Ivfunwm0Yq91Na87FlcsJIfBGw1X
+         ePEHq5loKbO/xX1ql0RR/2BeWkP17LtUU6W3zIm+Ef6RSk8hAo6+w6BEvMbtFt32Umc0
+         uhx8p0u48KzYnwnLIanRinUgFwzQtRX4QuOTjQUGTKzzMqVqyGbcuBP6R9LCO9qNZ9GQ
+         hsghzjMuAb8mHXxhOllMDH4M4te7p0DStvOpS03zD8H1PLFTcZnhPqu/PkHPt7fg2QL3
+         EdONmBMmIcis/SacevBWEZejIlGq/Zo/N0K6RJt7Mpntix+Wj821VzoKqoDCRuUFIZPi
+         enPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=K0OuwQmEGasRg3T61Q5R2kuINEILQFbAvI3PiK5PAXg=;
+        b=dVFWfTv3yymObiTAgiFMGNy6EJLWKcXN+s/v4+YT7XxrBC1gITD0TUvGFhbff9vnnD
+         SqcXZIDWEnqGnITGgu+ji52t5nPa1KB275AA9hCyqOJBtKIG+SWG5cnRTZ3Kq6a/aBU4
+         ysT4gFe3AhJ0cqBrfeRvuDePWDdjLH7xUAj6pd+gBtpBov5SkI9gdrT+/9fEwyZ5qm37
+         NpivRLg3u+0y4Ovyz7N/pe5D+QWRRimQ6MS4c460n8IjDiLSzAeamY6OOID//ftRjA5G
+         PRmyZugwlECSJttRu0Rj80h2kCF2uMi0405GnKY5q/zHUzVB5s2Mm9UrLU7ylo0Yrfoi
+         /2pQ==
+X-Gm-Message-State: AJIora9JY9YHJ9NQ4IREVKl5pk6C/vkX3p9zJudo76kmcUSLm7HOjyfL
+        hzlQ0giAWtDKHhUbhiocQ/8XVdUq2xHKyCHl1A==
+X-Google-Smtp-Source: AGRyM1vsvg94wwIvZZdwVgFQlnYbw7EZY7JeDSMXYiBiIa1tKuXOgQO5tVD+lSd+jh5j9kRDjWweEdaHsqLLSCcvBg==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
+ (user=justinstitt job=sendgmr) by 2002:a25:abc5:0:b0:66e:3983:3ca7 with SMTP
+ id v63-20020a25abc5000000b0066e39833ca7mr19375467ybi.168.1657578569477; Mon,
+ 11 Jul 2022 15:29:29 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 15:29:19 -0700
+Message-Id: <20220711222919.2043613-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] iwlwifi: mvm: fix clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
-Message-ID: <20220711182918.338f000f@gandalf.local.home>
-In-Reply-To: <20220503073844.4148944-1-elver@google.com>
-References: <20220503073844.4148944-1-elver@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Avraham Stern <avraham.stern@intel.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When building with Clang we encounter these warnings:
+| drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1108:47: error:
+| format specifies type 'unsigned char' but the argument has type 's16'
+| (aka 'short') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\tburst index:
+| %hhu\n", res->ftm.burst_index);
+-
+| drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1111:47: error:
+| format specifies type 'unsigned char' but the argument has type 's32'
+| (aka 'int') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\trssi spread:
+| %hhu\n", res->ftm.rssi_spread);
 
-I know I acked this, but I finally got a tree where it is included in my
-testing, and I hit this:
+The previous format specifier `%hhu` describes a u8 but our arguments
+are wider than this which means bits are potentially being lost.
 
-INFO: NMI handler (perf_event_nmi_handler) took too long to run: 9.860 msecs
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
-Modules linked in: ppdev parport_pc parport
-CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
-Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
-EIP: printk_sprint+0x81/0xda
-Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
-EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
-ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
-DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
-CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
-Call Trace:
- vprintk_store+0x24b/0x2ff
-perf: interrupt took too long (7980 > 7977), lowering kernel.perf_event_max_sample_rate to 25000
- vprintk+0x37/0x4d
- _printk+0x14/0x16
- nmi_handle+0x1ef/0x24e
- ? find_next_bit.part.0+0x13/0x13
- ? find_next_bit.part.0+0x13/0x13
- ? function_trace_call+0xd8/0xd9
- default_do_nmi+0x57/0x1af
- ? trace_hardirqs_off_finish+0x2a/0xd9
- ? to_kthread+0xf/0xf
- exc_nmi+0x9b/0xf4
- asm_exc_nmi+0xae/0x29c
+Variadic functions (printf-like) undergo default argument promotion.
+Documentation/core-api/printk-formats.rst specifically recommends using
+the promoted-to-type's format flag.
 
+As per C11 6.3.1.1:
+(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+can represent all values of the original type ..., the value is
+converted to an int; otherwise, it is converted to an unsigned int.
+These are called the integer promotions.` Thus it makes sense to change
+`%hhu` to `%d` for both instances of the warning.
 
-On Tue,  3 May 2022 09:38:44 +0200
-Marco Elver <elver@google.com> wrote:
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Petr points out [1] that calling trace_console_rcuidle() in
-> call_console_driver() had been the wrong thing for a while, because
-> "printk() always used console_trylock() and the message was flushed to
-> the console only when the trylock succeeded. And it was always deferred
-> in NMI or when printed via printk_deferred()."
-
-The issue is that we use "trace_console_rcuidle()" where the "_rcuidle()"
-version uses srcu, which the last I knew is not safe in NMI context.
-
-Paul, has that changed?
-
-Thus, we need to make sure that printk() is always called when "rcu is
-watching" and remove the _rcuidle() part, or we do not call it from nmi
-context. Or make srcu nmi safe.
-
-For now, I'm reverting this in my local tree.
-
--- Steve
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+index 430044bc4755..e8702184c950 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+@@ -1105,10 +1105,10 @@ static void iwl_mvm_debug_range_resp(struct iwl_mvm *mvm, u8 index,
+ 	IWL_DEBUG_INFO(mvm, "\tstatus: %d\n", res->status);
+ 	IWL_DEBUG_INFO(mvm, "\tBSSID: %pM\n", res->addr);
+ 	IWL_DEBUG_INFO(mvm, "\thost time: %llu\n", res->host_time);
+-	IWL_DEBUG_INFO(mvm, "\tburst index: %hhu\n", res->ftm.burst_index);
++	IWL_DEBUG_INFO(mvm, "\tburst index: %d\n", res->ftm.burst_index);
+ 	IWL_DEBUG_INFO(mvm, "\tsuccess num: %u\n", res->ftm.num_ftmr_successes);
+ 	IWL_DEBUG_INFO(mvm, "\trssi: %d\n", res->ftm.rssi_avg);
+-	IWL_DEBUG_INFO(mvm, "\trssi spread: %hhu\n", res->ftm.rssi_spread);
++	IWL_DEBUG_INFO(mvm, "\trssi spread: %d\n", res->ftm.rssi_spread);
+ 	IWL_DEBUG_INFO(mvm, "\trtt: %lld\n", res->ftm.rtt_avg);
+ 	IWL_DEBUG_INFO(mvm, "\trtt var: %llu\n", res->ftm.rtt_variance);
+ 	IWL_DEBUG_INFO(mvm, "\trtt spread: %llu\n", res->ftm.rtt_spread);
+-- 
+2.37.0.144.g8ac04bfd2-goog
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E3B56D4A8
+	by mail.lfdr.de (Postfix) with ESMTP id DEBE856D4A9
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiGKGY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 02:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S229874AbiGKGY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 02:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiGKGYF (ORCPT
+        with ESMTP id S229797AbiGKGYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 02:24:05 -0400
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406E426FB;
-        Sun, 10 Jul 2022 23:24:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CC7635A;
+        Sun, 10 Jul 2022 23:24:01 -0700 (PDT)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id C1BD24015A;
-        Mon, 11 Jul 2022 11:23:56 +0500 (+05)
+        by box.trvn.ru (Postfix) with ESMTPSA id 67EF841826;
+        Mon, 11 Jul 2022 11:23:58 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1657520638; bh=3cnpKi6/HBOePrysglXwD5oxzEtYdajsh9lp/kXhHHQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lFd1d6tVrkbl2rdq5V/BrS34QMmsaVOpWw/FjO7kHlUptTKmTlnNT02H5ifKbRi/h
-         dgHGlqZFznIj1/jz8yOJ9XzwHsok8yaIjqArDuKUJ2NsYxLNXAbuABy/uYtC5QYjC2
-         0fUo18m38+KbxMBjlIP1xAdp5ZUwQ3QQxAxc4TXRQTHjrwYIxaOlDd5NGgiQERrNwD
-         tMVcUN+olsusBn7mWy9XwnfwmN9jOT4/GbqUzAjCJW9w7HjA7WXo81c/Ei9WHAQtOx
-         Lf9R+927261GfYHZf/RKBuDSAli0Z+TezMGwClZiWqjfso60xAphnr6quZ59iz8FD6
-         gjF2xAKb/hp9g==
+        t=1657520638; bh=JOkJsHQ8Upb4FyLfzTx3Lu+8a51dlZfBR2yQApmu4c0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WuIXAjAMrMDQkcGFr8FbfLuRhGXwF2rdULkRvGwojXbjcAvBSwZeTg0tRk7Is3yoZ
+         LMndhbM78RX7ChaJqEds3f2WQo+Puwgk30Qd6SjZLDWYodvSMWDIBcD4BY/GG6FjVU
+         jY9ZajofpQfhEHneAGcLue099TwwdTJlmr0Gyy3GBooFR1X01p3EubtfnbN95bIezd
+         fFMXBCgAJsaK8Z3DRlLVsNt29CdfWIrPBDdEv3Udo9mIdrsx7LYSMbmVkHU3pSgNRB
+         QoX3XDUmRTk74L/Y8o1qEchBknlJixtlIXy63K4hjzLuNnb1cMYLE1Qq+bHym+RuE8
+         2SKH9JOowi2YA==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     thierry.reding@gmail.com, lee.jones@linaro.org
 Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
@@ -36,10 +36,14 @@ Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
         masneyb@onstation.org, linux-pwm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v8 0/2] Clock based PWM output driver
-Date:   Mon, 11 Jul 2022 11:23:28 +0500
-Message-Id: <20220711062330.4923-1-nikita@trvn.ru>
+        Nikita Travkin <nikita@trvn.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v8 1/2] dt-bindings: pwm: Document clk based PWM controller
+Date:   Mon, 11 Jul 2022 11:23:29 +0500
+Message-Id: <20220711062330.4923-2-nikita@trvn.ru>
+In-Reply-To: <20220711062330.4923-1-nikita@trvn.ru>
+References: <20220711062330.4923-1-nikita@trvn.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,56 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces an "adapter" driver that allows PWM consumers
-to control clock outputs with duty-cycle control.
+Add YAML devicetree binding for clk based PWM controller
 
-Some platforms (e.g. some Qualcomm chipsets) have "General Purpose"
-clocks that can be muxed to GPIO outputs and used as PWM outputs.
-Those outputs may be connected to various peripherals such as
-leds in display backlight or haptic feedback motor driver.
-
-To avoid re-implementing every single PWM consumer driver with clk
-support (like in [1]) and don't put the burden of providing the PWM
-sources on the clock drivers (as was proposed in [2]), clk based
-pwm controller driver is introduced.
-
-There is an existing driver that provides the opposite function
-in drivers/clk/clk-pwm.c with a compatible "pwm-clock" so the new
-driver uses the opposite naming scheme: drivers/pwm/pwm-clk.c
-and compatible "clk-pwm".
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+--
 Changes in v2:
- - Fix filename in the DT schema.
- - Address Uwe's review comments.
-Changes in v3:
- - Fix node pattern in the core pwm schema.
- - Address Uwe's review comments.
+ - fix the file name.
 Changes in v4:
- - Drop the (incorrect) pwm schema change.
  - Use generic node name in the dt bindings example.
 Changes in v5:
- - Correct required properties.
- - add missed returns.
-Changes in v6:
- - Add missed error cleanup
- - Adjust limitations comment
-Changes in v7:
- - Rename some variables to be in line with common naming
-Changes in v8:
- - Document the glitch that happens inbetween multiple clock operations
-
-Nikita Travkin (2):
-  dt-bindings: pwm: Document clk based PWM controller
-  pwm: Add clock based PWM output driver
-
- .../devicetree/bindings/pwm/clk-pwm.yaml      |  46 ++++++
- drivers/pwm/Kconfig                           |  10 ++
- drivers/pwm/Makefile                          |   1 +
- drivers/pwm/pwm-clk.c                         | 148 ++++++++++++++++++
- 4 files changed, 205 insertions(+)
+ - make compatible required
+---
+ .../devicetree/bindings/pwm/clk-pwm.yaml      | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
- create mode 100644 drivers/pwm/pwm-clk.c
 
+diff --git a/Documentation/devicetree/bindings/pwm/clk-pwm.yaml b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+new file mode 100644
+index 000000000000..ec1768291503
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pwm/clk-pwm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Clock based PWM controller
++
++maintainers:
++  - Nikita Travkin <nikita@trvn.ru>
++
++description: |
++  Some systems have clocks that can be exposed to external devices.
++  (e.g. by muxing them to GPIO pins)
++  It's often possible to control duty-cycle of such clocks which makes them
++  suitable for generating PWM signal.
++
++allOf:
++  - $ref: pwm.yaml#
++
++properties:
++  compatible:
++    const: clk-pwm
++
++  clocks:
++    description: Clock used to generate the signal.
++    maxItems: 1
++
++  "#pwm-cells":
++    const: 2
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - clocks
++
++examples:
++  - |
++    pwm {
++      compatible = "clk-pwm";
++      #pwm-cells = <2>;
++      clocks = <&gcc 0>;
++      pinctrl-names = "default";
++      pinctrl-0 = <&pwm_clk_flash_default>;
++    };
 -- 
 2.35.3
 

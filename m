@@ -2,86 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D81A570C3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A89570C42
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiGKU6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S231638AbiGKU6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiGKU55 (ORCPT
+        with ESMTP id S229615AbiGKU6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:57:57 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B5709B1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:57:53 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id s21so5833472pjq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:57:53 -0700 (PDT)
+        Mon, 11 Jul 2022 16:58:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD821C10;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso177642pjz.0;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B1UkBhvj0NFikLgCmbMFkYS/4oL6luTzgslsYZOD2r4=;
-        b=YBt4zXDTAJgAv1vQBZHdlpDLWydSofNoC3OFdIdThutUqCs5wN334PT944WhKyykTs
-         dipeDOzHZu3097FYka8gceDD98zU+Of49M+5FZn1KoAnqDvcHAw43a+eByH3y1mRyEY3
-         R3UC5q8QsdSqR1ZLQn8RAGePMTx7XZtydRaK1KbDDjMsp+ik6gZJAendJ+zCOb8gEJ0m
-         fqHs9KR1kuf3gyvDyMzfTcbu0n7YcGcetECj7G0I3WDpgkuGGk3UW0Wi8IaHVkWvNLse
-         h8O47vQSRiELcNQGUytfswjZdohrRm9tGDPifEIwgCiT7TfogpCjkKWzTd2pHJZuIcrp
-         3QyQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VtPW/Lt5Z1tr8gm6l2bDv7xPDRY/d3rry0OUzw7TIPc=;
+        b=Nbhhl2aSnTEudJCfY9q/OqMf3HdGS3Y67MZiTWFOOLD+oZqbG2/ONfCTHlrefHbI5G
+         jxfm72weuCLaP2wFfAB3jRN7qCQVBGKjpnwZAoPchLDeB6dP4otu5zGScji2u9K6fpKb
+         WV0lXLz1N/gPWVlD4YNqrA8Nr0NRBK/E7gf5+OkJ+4XbsC25JJ1gmA0VHFDRr226NKFn
+         1lPGsdEhX6JTW4O9SPGID4K7yV9oMYhkbEWkomOXvvLiJ6tF6hzRmBqWcwDIXNHl+f2l
+         7zzZWhS8law7H7oIcy4SbE2KOVZw/i5JJkIk641uUPgf/F1f3w/qmOHGbSFtvakk/nHd
+         XMJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B1UkBhvj0NFikLgCmbMFkYS/4oL6luTzgslsYZOD2r4=;
-        b=MesKwlxd1SGElbU8wtXZpSyA9hFQbehABgia7/75wR/OaV3ffgpTgzGU8SURRvGDpR
-         mEZwYeSk4YjtVpNGR6pUjGnZrOeifbKfd8ixD0eQHE1LJkqWNYdow46PxZ0D2Co9uV0v
-         H23J0zE+SYoRmyFIPMsov8JYlVwzkC1uuJbG0CR/hmX1pC1o2k6GqCxH/FC5z7FWZcEO
-         O/nKT7YrgML10rnkk7YFngOR01DjsDKdO75wRw+MTe+GbLToxvylL0juvnjpodTdShOe
-         1sCY3oxk5bpcLjpMt9FE4J5L7cFDaZDMxNkYXAu/3lxTjAdNkgyvLHI4FiVOXXXo8tqZ
-         W4pQ==
-X-Gm-Message-State: AJIora9holnA+INRmfso7q8RMUpb+mP4feNTNkLph67M/4ZyIPuH0gM7
-        wV5+yI0VmrukGN5CEnmagPeLsw==
-X-Google-Smtp-Source: AGRyM1vVLoOymV9ZmrioVJ7NpOaz4Vr8Fsmb2up/QullxOSxQKUOj5MLoUTmbk755nC+x+3Kr+oTbg==
-X-Received: by 2002:a17:90b:3811:b0:1ef:d704:24cf with SMTP id mq17-20020a17090b381100b001efd70424cfmr310336pjb.14.1657573072732;
-        Mon, 11 Jul 2022 13:57:52 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b00167942e0ee9sm5191835pla.61.2022.07.11.13.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 13:57:52 -0700 (PDT)
-Message-ID: <d7358d95-b187-ca7b-7337-d22dcd0ff254@kernel.dk>
-Date:   Mon, 11 Jul 2022 14:57:51 -0600
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=VtPW/Lt5Z1tr8gm6l2bDv7xPDRY/d3rry0OUzw7TIPc=;
+        b=23oPxwItCFxDzNawocvWpIxXn1b7cX3p4YpIQ9JPZgUZa6P+T6G/piT7WN/+TowzU4
+         gX8kb8ou70d6spt7zAPj5FaXImQYz7LliBgXZRtYrDCUc/uGMo6f4lqAHEC+MDU1cU/d
+         WU/fn/qRzmlr2d4uKCNlAOmdLgOgjso9nfoGIqlVwafLFQ2L/93bmJXFKA+48aV5fCSH
+         sILWJ8795iN8hBe7qecQfXsP1hUwnj+DMexYbdSg/RIGljPoCDK3wLzL3W7erH3hAEwt
+         ZpRbcMQ95hmfemAzJKbeip/Walq2u/RO+84yDneUDOHnl/rA9sagxbLO5T3jLHf8FAX/
+         5IpA==
+X-Gm-Message-State: AJIora+RCbqrwVp7XIraKfPW90qUVx4qwdiAqQj5q9ATrPTssbh/1Ut8
+        jk/CcC+Jbx4nPfvuf1WO1Ps=
+X-Google-Smtp-Source: AGRyM1vn9A15ZlwVHjPMYQdbom4DMItZ7W19yFs6V66bI0PvIZG6FMFMc0rwahiWRD0ZWoLPS2YdRQ==
+X-Received: by 2002:a17:90a:6008:b0:1ef:abc7:a740 with SMTP id y8-20020a17090a600800b001efabc7a740mr260728pji.179.1657573111142;
+        Mon, 11 Jul 2022 13:58:31 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b001678ce9080dsm5112601pla.258.2022.07.11.13.58.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 13:58:30 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 11 Jul 2022 10:58:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Message-ID: <YsyO9GM9mCydaybo@slm.duckdns.org>
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <20220711174629.uehfmqegcwn2lqzu@wubuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] trace: atomic64_read(&ioc->vtime_rate) is assigned an
- extra semicolon
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>, Li kunyu <kunyu@nfschina.com>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-References: <20220629030013.10362-1-kunyu@nfschina.com>
- <20220711165532.10476a0b@gandalf.local.home>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220711165532.10476a0b@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 2:55 PM, Steven Rostedt wrote:
-> Jens,
-> 
-> Want to take this one? Or I can if you don't.
+(cc'ing Waiman)
 
-You can just include it in the trace commits, that's fine. Thanks!
+On Mon, Jul 11, 2022 at 06:46:29PM +0100, Qais Yousef wrote:
+> Have you tried running with PROVE_LOCKDEP enabled? It'll help print a useful
+> output about the DEADLOCK. But your explanation was good and clear to me.
+
+I don't think lockdep would be able to track CPU1 -> CPU2 dependency here
+unfortunately.
+
+> AFAIU:
+> 
+> 
+> CPU0                                     CPU1                                   CPU2
+> 
+> // attach task to a different
+> // cpuset cgroup via sysfs
+> __acquire(cgroup_threadgroup_rwsem)
+> 
+>                                          // pring up CPU2 online
+>                                          __acquire(cpu_hotplug_lock)
+>                                          // wait for CPU2 to come online
+>                                                                                 // bringup cpu online
+>                                                                                 // call cpufreq_online() which tries to create sugov kthread
+> __acquire(cpu_hotplug_lock)                                                     copy_process()
+>                                                                                    cgroup_can_fork()
+>                                                                                       cgroup_css_set_fork()
+>                                                                                       __acquire(cgroup_threadgroup_rwsem)
+> // blocks forever                        // blocks forever                            // blocks forever
+> 
+> 
+> Is this a correct summary of the problem?
+> 
+> The locks are held in reverse order and we end up with a DEADLOCK.
+> 
+> I believe the same happens on offline it's just the path to hold the
+> cgroup_threadgroup_rwsem on CPU2 is different.
+> 
+> This will be a tricky one. Your proposed patch might fix it for this case, but
+> if there's anything else that creates a kthread when a cpu goes online/offline
+> then we'll hit the same problem again.
+> 
+> I haven't reviewed your patch to be honest, but I think worth seeing first if
+> there's something that can be done at the 'right level' first.
+> 
+> Needs head scratching from my side at least. This is the not the first type of
+> locking issue between hotplug and cpuset :-/
+
+Well, the only thing I can think of is always grabbing cpus_read_lock()
+before grabbing threadgroup_rwsem. Waiman, what do you think?
+
+Thanks.
 
 -- 
-Jens Axboe
-
+tejun

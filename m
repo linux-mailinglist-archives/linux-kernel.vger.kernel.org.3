@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6F6570532
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C711570533
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiGKOQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
+        id S229775AbiGKOQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiGKOQN (ORCPT
+        with ESMTP id S229654AbiGKOQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:16:13 -0400
+        Mon, 11 Jul 2022 10:16:26 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393863C8D3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:16:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7481D3343F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:16:25 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AD7E0219BF;
-        Mon, 11 Jul 2022 14:16:10 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2FB57228AA;
+        Mon, 11 Jul 2022 14:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657548970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1657548984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bhu7mMfCBKSi34I+LiabL66xPJnTcxnPoeL1wKjwWMc=;
-        b=rwOP9zAyQZoAZZo3+B2W1bDCtmnqtq15H4SwEEM5Q+bWpfbkh53xtA4tXqa/6xRKlcwuip
-        b/FXW3j5RZBJ11vxGZ7BvWnseyGYOtz5fPfeYar2etzR/UzGe70AmQlAdBaFt8rTPNrC6E
-        inxU/pUnSuMhvfVoBLqyv3WkJg2RGfM=
+        bh=LnaUwC1V778BrnOkpMfrGCk/UXjmmJC0GPZbtQq9GHc=;
+        b=lBt3mDyt3MEnbvgzE3NtldrWP0gplouoKN5pdunNHS3b6GlPnHxSmQrJXUD/sr7ElqgO/i
+        tMOXNiBXKdgFK1zElSv0iwdtDI4Ea9Gw0VJ69Jd0sNe/1mQFmazwrCmCQPuUGoOFT28GZ7
+        3jd6AoG9NXyHIahtpSnRfWasNBYBla4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657548970;
+        s=susede2_ed25519; t=1657548984;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bhu7mMfCBKSi34I+LiabL66xPJnTcxnPoeL1wKjwWMc=;
-        b=sv+CwfuBhWA3DW95no93xt4xFYAC9XVfN6rZ1H4zUwerAyGlTgVKJK51p2ZJOWIO1DWnQ/
-        ThFlhcqnNy83FjBg==
+        bh=LnaUwC1V778BrnOkpMfrGCk/UXjmmJC0GPZbtQq9GHc=;
+        b=znA+WMRQt2FhsG9RBonwJ2ylyms/TpPDM9n1jE/R2qOAZpAe9QXNxJN/E0QK4hKhHkm6cV
+        DT8jQdeZA5lUqwCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7007B13524;
-        Mon, 11 Jul 2022 14:16:10 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04A0913524;
+        Mon, 11 Jul 2022 14:16:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id q1G2GqowzGJpRAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 11 Jul 2022 14:16:10 +0000
-Date:   Mon, 11 Jul 2022 16:16:10 +0200
-Message-ID: <875yk3spjp.wl-tiwai@suse.de>
+        id ptZhO7cwzGKKRAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 11 Jul 2022 14:16:23 +0000
+Date:   Mon, 11 Jul 2022 16:16:23 +0200
+Message-ID: <874jznspjc.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, sbinding@opensource.cirrus.com,
-        kailang@realtek.com, tanureal@opensource.cirrus.com,
-        tcrawford@system76.com, wse@tuxedocomputers.com,
-        kai.heng.feng@canonical.com, andy.chi@canonical.com,
-        cam@neo-zeon.de, yong.wu@mediatek.com
-Subject: Re: [PATCH] ALSA: hda/realtek: Fix headset mic for Acer SF313-51
-In-Reply-To: <20220711081527.6254-1-tangmeng@uniontech.com>
-References: <20220711081527.6254-1-tangmeng@uniontech.com>
+Cc:     perex@perex.cz, tiwai@suse.com, bo.liu@senarytech.com,
+        huangwenhuia@uniontech.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ALSA: hda/conexant: Apply quirk for another HP ProDesk 600 G3 model
+In-Reply-To: <20220711101744.25189-1-tangmeng@uniontech.com>
+References: <20220711101744.25189-1-tangmeng@uniontech.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -73,17 +70,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 10:15:27 +0200,
+On Mon, 11 Jul 2022 12:17:44 +0200,
 Meng Tang wrote:
 > 
-> The issue on Acer SWIFT SF313-51 is that headset microphone
-> doesn't work. The following quirk fixed headset microphone issue.
-> Note that the fixup of SF314-54/55 (ALC256_FIXUP_ACER_HEADSET_MIC)
-> was not successful on my SF313-51.
+> There is another HP ProDesk 600 G3 model with the PCI SSID 103c:82b4
+> that requires the quirk HP_MIC_NO_PRESENCE. Add the corresponding
+> entry to the quirk table.
 > 
 > Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 
-Thanks, applied now.
+Applied, thanks.
 
 
 Takashi

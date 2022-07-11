@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B02B570BCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9291A570BD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiGKUbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S231512AbiGKUb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiGKUbC (ORCPT
+        with ESMTP id S232050AbiGKUbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:31:02 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97428E4C4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:28:53 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id p4so3659721wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:28:53 -0700 (PDT)
+        Mon, 11 Jul 2022 16:31:36 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92F087354;
+        Mon, 11 Jul 2022 13:29:50 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id f73so10592333yba.10;
+        Mon, 11 Jul 2022 13:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3FYWLbFVIQR/VTDlKfK3KSN2+LTj7T2uVBiUoRPvBIo=;
-        b=N/SQpLi6+icPZLn38OToJuJjCZR+Upi3JsxZ2N2fCXyc8dfg12m+8g7Ys174O5H7Jh
-         GOXRoYGxEcz0x7Ui6aOjYeilzoDYvBeoMPnX87jF/YZRVQ5bw+Qrbn3W9JLivCrej9kW
-         U1/3tInIy4og8FAU/J+Ph8UxBXkdYhnlIp+VPclte0hCgYPPlJtdE6HL+fAhg4yZwl3w
-         Eu+wvIjKo+wgRD3ouhuPrW8sQRKwqTeli1pbmoF2xVqObsbXPOYC669Wsoq+dLFGjfIv
-         czFhba+KEK61c/DyBmXZzkn6jrkp5aEMHYImO/B9N/y7klgZB9KoJID5K0bPxHgh2TWn
-         D/wg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ShzjEhLEe0k5FQ6GyMvo3z3FN/ZLOq7ZYOFzyB6kD20=;
+        b=oIo3c7K7sfGKtX+P9CqNGT20A9gc1caPNVU/ahHOcNlb7iyuOBDC7JAr8+TGCGyYgF
+         +2YWKr+UAr+2VNTEdOp0E5ijfyM0Svlzt90iUxi5A3IZReUU+VvaOKc4dZfmzWutTtXW
+         BUCJ9j/z4c6RgwfbWluszvZ0+sxeG+8KglLi/ZYVTNPxbQDgvpCisDbvQflmgKVXmKYa
+         9WKuXWr7jmVCIjbYRRyb2Vok/JDbMHK4EBPOOcm/+WBbhBXpDqqAD+tGz46P+hklk9Pk
+         GERqz9JVe1+01jjuv/hgK/sgmqPZRgZLu1mrMFMGE84OvfIbvDOcLJFL2IBEfuqA/40B
+         f7nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3FYWLbFVIQR/VTDlKfK3KSN2+LTj7T2uVBiUoRPvBIo=;
-        b=06jAlVTJpUv4Lc0r8SQ1K5wsJSUVBCoYLhGD2cds4CHuS+MOfmDhP5Yr6LdPFgXphq
-         xP92szzQOwNVeIQxKEGXYrNsnGSHmAOddZU5YXy4puqf9EmGnAKaHmMj77xYvvbobhKM
-         FYiDYlaP9403nk70d/5U+u+c7kYLldXCZZTSlf+MFVGPscp3a55ET3vASYPkJdG7URID
-         7dV6ESJaSF1GGSGAcabSZ0MjT+EioS5X3/AVfPJQkpdDz7LVJAGCIn51DTXmx5YvMnnN
-         HY7twBoIZ25hUz3IzgRn3mxZSQLCAkXbVZso73pA4u+udVk9g2xoyMHEMVHbvulHZDjJ
-         7Ubw==
-X-Gm-Message-State: AJIora8/Sa8X0Ys7ae9cCNrcXxmOBSSBZwlU7roui2uDkbsboVX816n7
-        AMPBRVMtM/Q5HJ3EcSSxml3EW3PCcY9atw==
-X-Google-Smtp-Source: AGRyM1s/eAWJhE/CU/qLO+2sCXi61cTuiVovpFhSRnn6bA2/Ysn59YVIPeib9CFMCdlaIHjnRIVhsw==
-X-Received: by 2002:a05:600c:6004:b0:3a0:41db:aae with SMTP id az4-20020a05600c600400b003a041db0aaemr123120wmb.171.1657571331361;
-        Mon, 11 Jul 2022 13:28:51 -0700 (PDT)
-Received: from C02FT09GML7L.mynet ([2a01:4b00:87fe:f600:ac48:7ee1:86bb:5471])
-        by smtp.gmail.com with ESMTPSA id u3-20020a5d6da3000000b0021d66cf9547sm8269159wrs.0.2022.07.11.13.28.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Jul 2022 13:28:50 -0700 (PDT)
-From:   William Lam <william.lam@bytedance.com>
-Cc:     William Lam <william.lam@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: compaction: include compound page count for scanning in pageblock isolation
-Date:   Mon, 11 Jul 2022 21:28:06 +0100
-Message-Id: <20220711202806.22296-1-william.lam@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ShzjEhLEe0k5FQ6GyMvo3z3FN/ZLOq7ZYOFzyB6kD20=;
+        b=UooUyLCg/Cl5vphGNNxj/XlOJUn5ScuQBj0skcVA01KvG8qWXeFficcSd5Lk5vvzqn
+         r3N7iA5MqSPxQO7YSMSRuZrOErtgMGOrwy7SMcAtVgYUCahQNxZ6qzEY7LmSznnGhaG0
+         uXQ/UJOuQTi9t5pNlCwLRBFU74d8n5VAyJGSgkUqMc+XqlsDf45XaDytJZwp+EMLpfV9
+         3C+QHop5k6ATu73ciJIi6ci1Kjwcq7mME/hjz0kLetGPHWifxozTyKLES4y8C+ccElgj
+         9swVCOekaLhNeWYkYHIRI0kHqHtW2+vSR0oq0byeRu4oQV5Gl4X1T2TFrhsreNtnuVPm
+         Aftg==
+X-Gm-Message-State: AJIora9hSiOfNNgTpKUCn2M300crCjBTDcEOoGMdnd+H+fE8TxkKka9d
+        gWNQWpjaDXF0WanlK2ZQYfjvrUvFFQGK83Uu5j4=
+X-Google-Smtp-Source: AGRyM1vWoRu/kFl3OAas1bDl0jpatlNqpbg+RlHPiqlRykpWGdO7kua3L5SZ0OFZTsKlED0D7rSpkR+VJHg9fCAKE9o=
+X-Received: by 2002:a05:6902:1143:b0:66e:eb08:4c23 with SMTP id
+ p3-20020a056902114300b0066eeb084c23mr13624745ybu.570.1657571390165; Mon, 11
+ Jul 2022 13:29:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711192113.3522664-1-horatiu.vultur@microchip.com>
+ <20220711192113.3522664-3-horatiu.vultur@microchip.com> <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
+ <20220711202646.om65vrksyifvkfkw@soft-dev3-1.localhost>
+In-Reply-To: <20220711202646.om65vrksyifvkfkw@soft-dev3-1.localhost>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Jul 2022 22:29:13 +0200
+Message-ID: <CAHp75VeJgUFdFgBpG5avmKCn-CGNOJ6wZAhc0a4f2MHfLbvXmA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] pinctrl: ocelot: Fix pincfg
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kavyasree.kotagiri@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Michael Walle <michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of scanned pages can be lower than the number of isolated
-pages when isolating mirgratable or free pageblock. The metric is being
-reported in trace event and also used in vmstat.
+On Mon, Jul 11, 2022 at 10:23 PM Horatiu Vultur
+<horatiu.vultur@microchip.com> wrote:
+>
+> The 07/11/2022 21:51, Andy Shevchenko wrote:
+> >
+> > On Mon, Jul 11, 2022 at 9:17 PM Horatiu Vultur
+> > <horatiu.vultur@microchip.com> wrote:
+> > >
+> > > The blamed commit changed to use regmaps instead of __iomem. But it
+> > > didn't update the register offsets to be at word offset, so it uses byte
+> > > offset.
+> > > Another issue with the same commit is that it has a limit of 32 registers
+> > > which is incorrect. The sparx5 has 64 while lan966x has 77.
+> >
+> > ...
+> >
+> > > -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+> > > +static struct regmap *ocelot_pinctrl_create_pincfg(struct ocelot_pinctrl *info,
+> > > +                                                  struct platform_device *pdev)
+> >
+> > const?
+> >
+> > And I would leave pdev to be the first parameter, if there are no
+> > other functions that have them like this.
+>
+> I will do that in the next version.
+> Just for my understanding/knowledge why is this desire to have const or
+> to keep the const?
 
-This behaviour is confusing since currently the count for isolated pages
-takes account of compound page but not for the case of scanned pages.
-And given that the number of isolated pages(nr_taken) reported in
-mm_compaction_isolate_template trace event is on a single-page basis,
-the ambiguity when reporting the number of scanned pages can be removed
-by also including compound page count.
+For non-POD types it's a good coding practice to reduce surface of
+attack, if any (the data will be located in the pages with RO flag
+set, and attempt to write will give you a page fault or other
+exception, it depends on architecture).
+Also a common sense, if you don't change data (which is actually
+initial configuration or so), then why shouldn't you use const?
+Note, in cases when it's not initial data, but runtime stuff (like
+really run time), const is obviously either can't or not needed to be
+used.
 
-Signed-off-by: William Lam <william.lam@bytedance.com>
----
- mm/compaction.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 1f89b969c12b..1b51cf2d32b6 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -616,6 +616,7 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
- 			break;
- 		set_page_private(page, order);
- 
-+		nr_scanned += isolated - 1;
- 		total_isolated += isolated;
- 		cc->nr_freepages += isolated;
- 		list_add_tail(&page->lru, freelist);
-@@ -1101,6 +1102,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- isolate_success_no_list:
- 		cc->nr_migratepages += compound_nr(page);
- 		nr_isolated += compound_nr(page);
-+		nr_scanned += compound_nr(page) - 1;
- 
- 		/*
- 		 * Avoid isolating too much unless this block is being
-@@ -1504,6 +1506,7 @@ fast_isolate_freepages(struct compact_control *cc)
- 			if (__isolate_free_page(page, order)) {
- 				set_page_private(page, order);
- 				nr_isolated = 1 << order;
-+				nr_scanned += nr_isolated - 1;
- 				cc->nr_freepages += nr_isolated;
- 				list_add_tail(&page->lru, &cc->freepages);
- 				count_compact_events(COMPACTISOLATED, nr_isolated);
 -- 
-2.30.1 (Apple Git-130)
-
+With Best Regards,
+Andy Shevchenko

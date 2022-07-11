@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111F4570E38
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19CF570E39
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiGKXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S231173AbiGKXY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiGKXYU (ORCPT
+        with ESMTP id S229641AbiGKXY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:24:20 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BB127170
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id h11-20020a170902f54b00b0016bfdca124fso4567385plf.9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
-        b=sCVKm48mz9thFPGiNjebj0f8Ux4GHLmdUiWrS5kfCfL7Skr7uUpfr7BCOZeTmn5G/q
-         l4q/M5QlFd9IjG111yuY+KY+3tkSuhKAMd++FE4a6dm8KwA+Xu+cDNQIqm2v7Ktc1H7X
-         cgaHSVeIKa/TrMlyRILF+DLaQhCQFDTPfjTwHGQTrD31hw5XI56K6ANsyMRI17TISxPu
-         lKy3I3qWsmop7UvoliD1b2lAxEItNWmXCgUY5mTyI2hoBVvOtBmM6WASGpGxuDcgihZB
-         OEbIY9duvztNj5VbFLdgpBm3DelWHxpS+MbfmeswjLA1Atu0KvuIiqe9jNUhtf1zfnpw
-         SV7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
-        b=2djRs5D4LCern+7w2UGftKsvDzgFqKmcBSHjAhylrs15qxvNX4Mmj/fo1UQSYdP2L3
-         TNkQsKXk04CF4O/1Ys8Sxs1JVIgk5dBybPXbx8qIngkpzr+/nhHwuWdENlR7MI1as2YY
-         y9e3Z4HKuPMdmeeFa6vmtfu+gRHWDYGpzRcJ+thx0efwJdQE479WA2DuHkrmQv+3sIzV
-         +23hqizFCEA1tF7E1YTPW7Fw01oWuyi00H/KjYiMC2ttHLFg0929gxPuzQ/4oEgubyUf
-         U6imYzP2O5DW7gsAvsbAu/vr58RhOw+urzX2fVFbFnzqFNCxgjWmyI7J988pYjXo0O66
-         1uTg==
-X-Gm-Message-State: AJIora+YWLy6vIVLowJtd/BW4YrondbfC/GazM7aREexSGItmdnzGqIm
-        t6LOqkviNyz8qpE9n1ojd2GTG8luJuU+/fcfMw==
-X-Google-Smtp-Source: AGRyM1urqIouEsnUe5KdWsxfF/hyxCnwf9BX7/8Ikk+sg+vUOJng3563UFtUsVQar7sVaOqBBGg/XKztAe8jRDsNPA==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
- (user=justinstitt job=sendgmr) by 2002:a05:6a00:1946:b0:52a:e551:2241 with
- SMTP id s6-20020a056a00194600b0052ae5512241mr1307184pfk.29.1657581859475;
- Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 16:24:04 -0700
-Message-Id: <20220711232404.2189257-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH] qlogic: qed: fix clang -Wformat warnings
-From:   Justin Stitt <justinstitt@google.com>
-To:     Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Mon, 11 Jul 2022 19:24:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF9D7AC2D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:24:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5674E6147C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E7EC34115;
+        Mon, 11 Jul 2022 23:24:53 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="d3aWGlkY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657581892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NmYicdfsseYgls9XyLsN6eO4Eqo0Fw/zWhZFBkI25sg=;
+        b=d3aWGlkYcAHifE8hBoclTSQxZA272pbu34TXoopVXe4EPC7eEnWTEMGHCUNht1vyf/F6tG
+        7NSub/jwscV5rb3FSC/qzDYmtJuBHl6JqkNHimrg1uLXhuoWWlv+ceuSDLx6cdDiCrlm88
+        tyHBH9BES32/MN9LPA02RDb5T9bLzBg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9e003974 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 11 Jul 2022 23:24:52 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        sachinp@linux.ibm.com, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v5 0/2] powerpc rng cleanups
+Date:   Tue, 12 Jul 2022 01:24:46 +0200
+Message-Id: <20220711232448.136765-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,64 +54,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter these warnings:
-| drivers/net/ethernet/qlogic/qed/qed_dev.c:416:30: error: format
-| specifies type 'char' but the argument has type 'u32' (aka 'unsigned
-| int') [-Werror,-Wformat] i);
--
-| drivers/net/ethernet/qlogic/qed/qed_dev.c:630:13: error: format
-| specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
-| p_llh_info->num_ppfid - 1);
+These are two small cleanups for -next. This v5 rebases on the latest
+git master, as some whitespace was added that made v4 no longer apply.
 
-For the first warning, `i` is a u32 which is much wider than the format
-specifier `%hhd` describes. This results in a loss of bits after 2^7.
+Jason A. Donenfeld (2):
+  powerpc/powernv: rename remaining rng powernv_ functions to pnv_
+  powerpc/kvm: don't crash on missing rng, and use darn
 
-The second warning involves implicit integer promotion as the resulting
-type of addition cannot be smaller than an int.
+ arch/powerpc/include/asm/archrandom.h |  7 +--
+ arch/powerpc/kvm/book3s_hv_builtin.c  |  7 +--
+ arch/powerpc/platforms/powernv/rng.c  | 66 ++++++++++-----------------
+ drivers/char/hw_random/powernv-rng.c  |  2 +-
+ 4 files changed, 30 insertions(+), 52 deletions(-)
 
-example:
-``
-uint8_t a = 4, b = 7;
-int size = sizeof(a + b - 1);
-printf("%d\n", size);
-// output: 4
-```
-
-See more:
-(https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
-"Integer types smaller than int are promoted when an operation is
-performed on them. If all values of the original type can be represented
-as an int, the value of the smaller type is converted to an int;
-otherwise, it is converted to an unsigned int."
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/net/ethernet/qlogic/qed/qed_dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-index 672480c9d195..d61cd32ec3b6 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-@@ -412,7 +412,7 @@ static int qed_llh_alloc(struct qed_dev *cdev)
- 			continue;
- 
- 		p_llh_info->ppfid_array[p_llh_info->num_ppfid] = i;
--		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %hhd\n",
-+		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %u\n",
- 			   p_llh_info->num_ppfid, i);
- 		p_llh_info->num_ppfid++;
- 	}
-@@ -626,7 +626,7 @@ static int qed_llh_abs_ppfid(struct qed_dev *cdev, u8 ppfid, u8 *p_abs_ppfid)
- 
- 	if (ppfid >= p_llh_info->num_ppfid) {
- 		DP_NOTICE(cdev,
--			  "ppfid %d is not valid, available indices are 0..%hhd\n",
-+			  "ppfid %d is not valid, available indices are 0..%d\n",
- 			  ppfid, p_llh_info->num_ppfid - 1);
- 		*p_abs_ppfid = 0;
- 		return -EINVAL;
 -- 
-2.37.0.144.g8ac04bfd2-goog
+2.35.1
 

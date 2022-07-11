@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96689570625
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C9A570623
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiGKOte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S231132AbiGKOtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiGKOtN (ORCPT
+        with ESMTP id S231970AbiGKOt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:49:13 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954B11A048
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:49:11 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 73so4905483pgb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:49:11 -0700 (PDT)
+        Mon, 11 Jul 2022 10:49:29 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EFBE01E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:49:27 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l23so9233319ejr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=amarulasolutions.com; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2oP3T6c8OpT+jPKMLUEc9deKD2a+lLCkI+dr67TTYwo=;
-        b=ZICQhKxTE/AbBfYgMsZz7KcdulqKDANLGdb04sKxtxz/TrCHbPpzfL/sOwT3GRXGJy
-         MAY+h4gvpEgKuf7samwmBG1GwFmvGuPoBzMrna/7VItibnWVPruMUsk0T9bR0zV18XH2
-         MBEZ3WehzP6JfXIyMFxUEwwLB7iqh4jV1Gcdd8KVVBYO5zOhNAnlAoNaoRMxf//fDj94
-         mnLbZLRdqLTu0H4v344mgsFHUOLpYsulbIZSbtIO0FMexDZ/8TB1xZqVarPuL9uw0Zw+
-         W11sIojqscGxYeaTbQoIT/FzXvd1BbAaVAD7af1V3mvWokQHEpe0v0nKw++RynAdoDi1
-         PO7g==
+         :content-disposition:in-reply-to;
+        bh=Qi/Ki/anv7OubNnIYr0XldagjTwZd4rr8bwwS58D72Q=;
+        b=i00eQXXaoGMEJ8DA0K3m+dyAuq/QN79dlLyXkKT0TIz/ZmyOiwYTt0VZcO0ewhJQhZ
+         AA/tbadaaWrfDUbVgUgJCEeQMCeW0CfcicCXOeLCeLOnHIuOwa3Oxy/BY8QziGeOIVFa
+         L/ayZc+0aJFBHRTK1hj40zCK6/20zA4tzYW8o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2oP3T6c8OpT+jPKMLUEc9deKD2a+lLCkI+dr67TTYwo=;
-        b=zdZpeczbFPJiHDuOB4sNhjtnaZMoqAdWOjUwhVGiUBAp/SBaUvh9qzSD9fPKhpruNF
-         sdr30I4f09eH3RIH6pbzokhgdX3wnPy73KNwZN36YIDGtvirvmUQUO5s7fy2dyX7tS2I
-         rq49PqZLCe49dugVHJn82rmR2Xj9gqHmoP8Vb6nzP6fGF9LFc7/RjeZB6xWMV/611CS6
-         q0sdbu3t8pojnlClov3/5xo0w3X4ABlO65ZBwXG2cF26s0W4In63dZIowjc9C71kqMlh
-         GvPgzk3V46ASDWBBqZhV75TIIGOOwOBbEJjKbeUKm1frEAr8+1t2WyDPFfY1zHLLRL9W
-         ViFw==
-X-Gm-Message-State: AJIora+YkecP5jc6mLLL7bwXaFNhf3xlH6yJLQDV0ZraCpRKWGjl9Hib
-        n1UZDepqaKUJ58rqe1d96iMK
-X-Google-Smtp-Source: AGRyM1v3TK5Vbpo67oR7pAlvIP0+PUdOk31RICXvVEiPfRHQ8XQJRRwK9MmOGkPlm1n97IUQcwingQ==
-X-Received: by 2002:a65:4501:0:b0:3fc:4895:283b with SMTP id n1-20020a654501000000b003fc4895283bmr16621998pgq.231.1657550950982;
-        Mon, 11 Jul 2022 07:49:10 -0700 (PDT)
-Received: from thinkpad ([117.207.27.92])
-        by smtp.gmail.com with ESMTPSA id y64-20020a626443000000b005289e190956sm4967534pfb.177.2022.07.11.07.49.06
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qi/Ki/anv7OubNnIYr0XldagjTwZd4rr8bwwS58D72Q=;
+        b=K35/gta0zEBaPGU7Y0cN2JPtvhq2uqTq5ktXaS9VOhp1D2oaJKAHhZi/8fR3JlJ8Et
+         Ty21D86iFbZLFa2nriwMDxD8nBOMgPf0LReTCPH2WNpOMMntkvWq5KWWCjMW7e6JJGWy
+         tyUy/BQ0im4hQ0AoLOTFnGMXEPc+VB824XyYQxrsRUWiPDEDs7Jux3KLkBxSzbOxIC7+
+         FVnqruSeXZ3AhRfPSd30Gn9nw07mArldutOEFgr+HnhauBvpkOM2wjB1QdX3dWm3P6wu
+         Z3rVTmZIyoVs8DUZuEfuouPo7m4cOKhgpaksZe0GMrmhj5OZA7eykgmGt84C6Tg42mC+
+         mOCg==
+X-Gm-Message-State: AJIora80qVHzoaTGFxTOIIMyNLzEQW9ul4ROTV5sZUjIKlyeqeWbkKbM
+        WDtMhlcIG1rdtpX6Y9en9BHyGw==
+X-Google-Smtp-Source: AGRyM1vQ+Nre/BUBHCQiULN7frVsOc55Cr98OCiFT+lp3w6feq+ZvbdqZ+CXEheBYDfwFjViIi6Iag==
+X-Received: by 2002:a17:907:2c68:b0:72b:3a2c:e5b5 with SMTP id ib8-20020a1709072c6800b0072b3a2ce5b5mr12227786ejc.619.1657550965961;
+        Mon, 11 Jul 2022 07:49:25 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-59-144.cust.vodafonedsl.it. [188.217.59.144])
+        by smtp.gmail.com with ESMTPSA id j11-20020a50ed0b000000b0043a6b86f024sm4390379eds.67.2022.07.11.07.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 07:49:10 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 20:19:03 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        Mon, 11 Jul 2022 07:49:25 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 16:49:23 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220711144903.GB3830@thinkpad>
-References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
- <20220610092133.uhsu5gphhvjhe2jm@mobilestation>
- <20220711144533.GA3830@thinkpad>
+Subject: Re: [PATCH v5 5/6] media: dt-bindings: ov5693: document YAML binding
+Message-ID: <20220711144923.GB66765@tom-ThinkPad-T14s-Gen-2i>
+References: <20220630134835.592521-1-tommaso.merciai@amarulasolutions.com>
+ <20220630134835.592521-6-tommaso.merciai@amarulasolutions.com>
+ <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
+ <20220711111108.GA66765@tom-ThinkPad-T14s-Gen-2i>
+ <20220711123629.xcknkluu3wwokoz3@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220711144533.GA3830@thinkpad>
+In-Reply-To: <20220711123629.xcknkluu3wwokoz3@uno.localdomain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,183 +78,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 08:15:41PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jun 10, 2022 at 12:21:33PM +0300, Serge Semin wrote:
-> > On Fri, Jun 10, 2022 at 12:14:35PM +0300, Serge Semin wrote:
-> > > This is a final patchset in the series created in the framework of
-> > > my Baikal-T1 PCIe/eDMA-related work:
-> > > 
-> > > [1: In-progress v4] PCI: dwc: Various fixes and cleanups
-> > > Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> > > [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> > > Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> > > [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> > > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> > > [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> > > Link: ---you are looking at it---
-> > > 
-> > > Note it is very recommended to merge the patchsets in the same order as
-> > > they are listed in the set above in order to have them applied smoothly.
-> > > Nothing prevents them from being reviewed synchronously though.
-> > > 
-> > > Please note originally this series was self content, but due to Frank
-> > > being a bit faster in his work submission I had to rebase my patchset onto
-> > > his one. So now this patchset turns to be dependent on the Frank' work:
-> > > 
-> > > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
-> > > 
-> > > So please merge Frank' series first before applying this one.
-> > > 
-> > > Here is a short summary regarding this patchset. The series starts with
-> > > fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
-> > > initializes the LL/DT base addresses for the platforms with not matching
-> > > CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> > > method to get a correct base address. After that you can find a series of
-> > > the interleaved xfers fixes. It turned out the interleaved transfers
-> > > implementation didn't work quite correctly from the very beginning for
-> > > instance missing src/dst addresses initialization, etc. In the framework
-> > > of the next two patches we suggest to add a new platform-specific
-> > > callback - pci_address() and use it to convert the CPU address to the PCIe
-> > > space address. It is at least required for the DW eDMA remote End-point
-> > > setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> > > of the DW eDMA local RP/EP setup the conversion will be done automatically
-> > > by the outbound iATU (if no DMA-bypass flag is specified for the
-> > > corresponding iATU window). Then we introduce a set of the patches to make
-> > > the DebugFS part of the code supporting the multi-eDMA controllers
-> > > platforms. It starts with several cleanup patches and is closed joining
-> > > the Read/Write channels into a single DMA-device as they originally should
-> > > have been. After that you can find the patches with adding the non-atomic
-> > > io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> > > chip IDs with the device name. In addition to that in order to have the
-> > > eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> > > dma-ranges-based memory ranges mapping since in case of the root port DT
-> > > node it's applicable for the peripheral PCIe devices only. Finally at the
-> > > series closure we introduce a generic DW eDMA controller support being
-> > > available in the DW PCIe Root Port/Endpoint driver.
-> > > 
-> > > Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> > > Changelog v2:
-> > > - Drop the patches:
-> > >   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
-> > >   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
-> > >   since they are going to be merged in in the framework of the
-> > >   Frank's patchset.
-> > > - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
-> > >   failure."
-> > > - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
-> > >   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
-> > > - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
-> > >   'dent'." (@Manivannan)
-> > > - Slightly extend the eDMA name array size. (@Manivannan)
-> > > - Change the specific DMA mapping comment a bit to being
-> > >   clearer. (@Manivannan)
-> > > - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
-> > >   method."
-> > > - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
-> > >   device. That happens if the driver is disabled. (@Manivannan)
-> > > - Add "dma" registers resource mapping procedure. (@Manivannan)
-> > > - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
-> > > - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
-> > > - Remove eDMA in the dw_pcie_ep_exit() method.
-> > > - Move the dw_pcie_edma_detect() method execution to the tail of the
-> > >   dw_pcie_ep_init() function.
-> > > 
-> > > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
-> > > Changelog v3:
-> > 
-> > > - Conditionally set dchan->dev->device.dma_coherent field since it can
-> > >   be missing on some platforms. (@Manivannan)
-> > > - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
-> > >   method". A similar modification has been done in another patchset.
-> > > - Add more comprehensive and less regression prune eDMA block detection
-> > >   procedure.
-> > > - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
-> > >   resource mapping". It will be separately reviewed.
-> > > - Remove Manivannan tb tag from the modified patches.
-> > 
-> > @Mani, several patches have been changed. Could you have a look at the
-> > series one more time?
-> > 
+On Mon, Jul 11, 2022 at 02:36:29PM +0200, Jacopo Mondi wrote:
+> Hi Tommaso
 > 
-> Reviewed all patches in this series. I believe this will still work on my
-> hardware once I test it. But even if it doesn't work, we can fix it in
-> 5.20-rc's as it supposed to be. So definitely not a show stopper.
+> On Mon, Jul 11, 2022 at 01:11:08PM +0200, Tommaso Merciai wrote:
+> > Hi Jacopo,
+> > Thanks for your review.
+> >
+> > On Mon, Jul 11, 2022 at 11:36:59AM +0200, Jacopo Mondi wrote:
+> > > Hi Tommaso, Krzysztof,
+> > >
+> > >    This has been reviewed by Krzysztof already, so I guess it's fine,
+> > > but let me ask anyway
+> > >
+> > > On Thu, Jun 30, 2022 at 03:48:34PM +0200, Tommaso Merciai wrote:
+> > > > Add documentation of device tree in YAML schema for the OV5693
+> > > > CMOS image sensor from Omnivision
+> > > >
+> > > > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > ---
+> > > > Changes since v1:
+> > > >  - Fix allOf position as suggested by Krzysztof
+> > > >  - Remove port description as suggested by Krzysztof
+> > > >  - Fix EOF as suggested by Krzysztof
+> > > >
+> > > > Changes since v2:
+> > > >  - Fix commit body as suggested by Krzysztof
+> > > >
+> > > > Changes since v3:
+> > > >  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+> > > >
+> > > > Changes since v4:
+> > > >  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
+> > > >
+> > > >  .../bindings/media/i2c/ovti,ov5693.yaml       | 106 ++++++++++++++++++
+> > > >  MAINTAINERS                                   |   1 +
+> > > >  2 files changed, 107 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..b83c9fc04023
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > > > @@ -0,0 +1,106 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +# Copyright (c) 2022 Amarulasolutions
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Omnivision OV5693 CMOS Sensor
+> > > > +
+> > > > +maintainers:
+> > > > +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > > > +
+> > > > +description: |
+> > > > +  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
+> > > > +  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
+> > > > +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
+> > > > +  Serial Camera Control Bus (SCCB) interface.
+> > > > +
+> > > > +  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (SCCB).
+> > > > +  The sensor output is available via CSI-2 serial data output (up to 2-lane).
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: ovti,ov5693
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    description:
+> > > > +      System input clock (aka XVCLK). From 6 to 27 MHz.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  dovdd-supply:
+> > > > +    description:
+> > > > +      Digital I/O voltage supply, 1.8V.
+> > > > +
+> > > > +  avdd-supply:
+> > > > +    description:
+> > > > +      Analog voltage supply, 2.8V.
+> > > > +
+> > > > +  dvdd-supply:
+> > > > +    description:
+> > > > +      Digital core voltage supply, 1.2V.
+> > > > +
+> > > > +  reset-gpios:
+> > > > +    description:
+> > > > +      The phandle and specifier for the GPIO that controls sensor reset.
+> > > > +      This corresponds to the hardware pin XSHUTDN which is physically
+> > > > +      active low.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +  - clocks
+> > > > +  - dovdd-supply
+> > > > +  - avdd-supply
+> > > > +  - dvdd-supply
+> > >
+> > > Should supplies be made mandatory ? Sensors are often powered by fixed
+> > > rails. Do we want DTS writers to create "fixed-regulators" for all of
+> > > them ? The fact the regulator framework creates dummies if there's no
+> > > entry in .dts for a regulator makes me think it's fine to have them
+> > > optional, but I understand how Linux works should not be an indication
+> > > of how a bindings should look like.
+> >
+> > You are right, this depends on hw design and yes in many cases sensors are
+> > powered by fixed rails.
+> > But let me say, I see some design in wich I have to handle these signals and
+> > in fact are mandatory.
 > 
-> Vinod: Could you please merge this one for 5.20?
+> It's fine if you have to handle them, my question is it if it should
+> be -mandatory- to specify them
 > 
+> >
+> > I check also in others binding's doc like:
+> >
+> >  - Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+> >  - Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
+> >  - Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
+> >  ...
+> >
+> > These keep this information.
+> >
+> > Anyway, You suggest to drop off:
+> >
+> >  - dovdd-supply
+> >  - avdd-supply
+> >  - dvdd-supply
+> >
+> > From required properties, right?
+> 
+> Yes, I wonder if they should be required. As usual there's a
+> bunch of different styles in media/i2c/ and it's not always easy to
+> distinguish which ones are actually intended from the ones which are
+> instead the result of copying the existing.
 
-Hmm, maybe this can go through pci tree as Bjorn merged earlier edma series as
-well. In that case Vinod's ack is sufficient.
+Got it.
+Let me know if we need v6 with your suggestion.
 
-But I'll leave it up to Bjorn and Vinod.
+Tommaso
 
-Thanks,
-Mani
-
-> Thanks,
-> Mani
 > 
-> > -Sergey
-> > 
-> > > - Rebase onto the kernel v5.18.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > > Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> > > Cc: linux-pci@vger.kernel.org
-> > > Cc: dmaengine@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > 
-> > > Serge Semin (24):
-> > >   dmaengine: Fix dma_slave_config.dst_addr description
-> > >   dmaengine: dw-edma: Release requested IRQs on failure
-> > >   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
-> > >   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
-> > >     xfers
-> > >   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
-> > >   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
-> > >   dmaengine: dw-edma: Add CPU to PCIe bus address translation
-> > >   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
-> > >     glue-driver
-> > >   dmaengine: dw-edma: Drop chancnt initialization
-> > >   dmaengine: dw-edma: Fix DebugFS reg entry type
-> > >   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
-> > >   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
-> > >   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
-> > >   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
-> > >   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
-> > >   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
-> > >   dmaengine: dw-edma: Join Write/Read channels into a single device
-> > >   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
-> > >   dmaengine: dw-edma: Use non-atomic io-64 methods
-> > >   dmaengine: dw-edma: Drop DT-region allocation
-> > >   dmaengine: dw-edma: Replace chip ID number with device name
-> > >   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
-> > >   dmaengine: dw-edma: Skip cleanup procedure if no private data found
-> > >   PCI: dwc: Add DW eDMA engine support
-> > > 
-> > >  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
-> > >  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
-> > >  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
-> > >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
-> > >  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
-> > >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
-> > >  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
-> > >  include/linux/dma/edma.h                      |  18 +-
-> > >  include/linux/dmaengine.h                     |   2 +-
-> > >  13 files changed, 589 insertions(+), 366 deletions(-)
-> > > 
-> > > -- 
-> > > 2.35.1
-> > > 
 > 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+> >
+> > Tommmaso
+> >
+> > >
+> > > > +  - port
+> > > > +
+> > > > +unevaluatedProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    #include <dt-bindings/clock/px30-cru.h>
+> > > > +    #include <dt-bindings/gpio/gpio.h>
+> > > > +    #include <dt-bindings/pinctrl/rockchip.h>
+> > > > +
+> > > > +    i2c {
+> > > > +        #address-cells = <1>;
+> > > > +        #size-cells = <0>;
+> > > > +
+> > > > +        ov5693: camera@36 {
+> > > > +            compatible = "ovti,ov5693";
+> > > > +            reg = <0x36>;
+> > > > +
+> > > > +            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
+> > > > +            pinctrl-names = "default";
+> > > > +            pinctrl-0 = <&cif_clkout_m0>;
+> > > > +
+> > > > +            clocks = <&cru SCLK_CIF_OUT>;
+> > > > +            assigned-clocks = <&cru SCLK_CIF_OUT>;
+> > > > +            assigned-clock-rates = <19200000>;
+> > > > +
+> > > > +            avdd-supply = <&vcc_1v8>;
+> > > > +            dvdd-supply = <&vcc_1v2>;
+> > > > +            dovdd-supply = <&vcc_2v8>;
+> > > > +
+> > > > +            rotation = <90>;
+> > > > +            orientation = <0>;
+> > > > +
+> > > > +            port {
+> > > > +                ucam_out: endpoint {
+> > > > +                    remote-endpoint = <&mipi_in_ucam>;
+> > > > +                    data-lanes = <1 2>;
+> > > > +                    link-frequencies = /bits/ 64 <450000000>;
+> > > > +                };
+> > > > +            };
+> > > > +        };
+> > > > +    };
+> > > > +
+> > > > +...
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index 1fc9ead83d2a..844307cb20c4 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -14719,6 +14719,7 @@ M:	Daniel Scally <djrscally@gmail.com>
+> > > >  L:	linux-media@vger.kernel.org
+> > > >  S:	Maintained
+> > > >  T:	git git://linuxtv.org/media_tree.git
+> > > > +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > > >  F:	drivers/media/i2c/ov5693.c
+> > > >
+> > > >  OMNIVISION OV5695 SENSOR DRIVER
+> > > > --
+> > > > 2.25.1
+> > > >
+> >
+> > --
+> > Tommaso Merciai
+> > Embedded Linux Engineer
+> > tommaso.merciai@amarulasolutions.com
+> > __________________________________
+> >
+> > Amarula Solutions SRL
+> > Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> > T. +39 042 243 5310
+> > info@amarulasolutions.com
+> > www.amarulasolutions.com
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

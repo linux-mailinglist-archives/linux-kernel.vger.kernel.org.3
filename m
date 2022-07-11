@@ -2,282 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC30C570282
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E45B570286
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiGKMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S230302AbiGKMjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiGKMh5 (ORCPT
+        with ESMTP id S231822AbiGKMij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:37:57 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8A61B2B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:36:33 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id r3so8463697ybr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wU3aWOEOlTUD1w2aJA6XSCUaFvlQa92cKstbtnwY51o=;
-        b=gvBj2NzJECgUn9C2NTazdvyRZR6Ik93r/8eOr+sxN52mQF4XrJjxNF0CJk7gwhE+4H
-         bSvBRrceCaoXhsgqRjbDVhR2sOq2oSIKyML51RdNpQBqGOVDyPA1L3AUc0vb9rKylk5t
-         53VXQnAERK8zp9W7TYbSbxb1zBBoh2j8gEPe/HScEJQls8wxpwo/XVdrT+4vB4WjJyAQ
-         8YS/u02zLZ0bXuISoIAbr306ysv3UJ/+72yof1hvqxKPSv1HwsIGQkjpGSyB1IVSEMvS
-         N4Sl7UMuCQ7ordgRPXJemXDphQx1vvGET92V9PnSThQxZrabPW92z+3RDSTWEZ+yX/6W
-         w2pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wU3aWOEOlTUD1w2aJA6XSCUaFvlQa92cKstbtnwY51o=;
-        b=rd2Bb+d19vWmazMJhnQsMNUnf/zR41vRQtiEjJypUBP36iO6jZ4ciwAPGDBFg3gSED
-         7lkuoO4Y9R6nkA6yb6MBnDUq9QEU/ncSShrkpwuUM3KqeGsG8sUKCPAjIhGSFBWnVIKS
-         B6zME5o1nyTJZTp9c5uw/6mZVUhsFqyphwszg7xiBrZ6Mz/DL9NcPd3+02RMqlaUyPUS
-         c7sufUla8yysToZ+MwG95oNVBRd9TkKXI0QFaX73zaQDSi458crvL1qmkQv1dXVblBDI
-         m0Dl7qyEiG+zO4X4WKBgl2lme4GWfnYEHTUjhxGNb4YtgL74imhBGKo5OnUj0idRzQ5Y
-         tnkw==
-X-Gm-Message-State: AJIora//WRm++kpIiuKoMY1mNiVhslgKzqGFbjqThIxoHzp+B4UOsDiW
-        wtLAzqv5xie+/QHYyRqyHCVI0oeUGjoO/2EKjffF7br4Eec19A==
-X-Google-Smtp-Source: AGRyM1tQUZXnnS2kxfSGaoWawbg8aAohdNumoic+qvDBX++tToZxexafAxFAcsAKBCc4II5jTvEje9rVrjAfFvFwzBE=
-X-Received: by 2002:a25:bed0:0:b0:664:b4af:5bc9 with SMTP id
- k16-20020a25bed0000000b00664b4af5bc9mr16664622ybm.424.1657542985781; Mon, 11
- Jul 2022 05:36:25 -0700 (PDT)
+        Mon, 11 Jul 2022 08:38:39 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2C5C9DD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:37:40 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A5A14440;
+        Mon, 11 Jul 2022 14:36:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1657543004;
+        bh=forFlPOHJK+lDA/Nl5ns+ktQ4jTPK54ZgHq6gk1LUG4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7LkBASzLNFybG8KVk82No9fDsPOplD9+I6LW/gzZafs3SYUw5Bo3oQaOTA9AU9jI
+         GFEOczINZ8HoTsEHpgZHYPBZ3ISCM2Avxis1U8QAjBYlboLbsv/DzCiCZgTO6eFNcJ
+         /oUSxALXQWrZEDt4m5+WhN29e4dIn1ads7hl/ejw=
+Date:   Mon, 11 Jul 2022 15:36:17 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] drm: rename CMA helpers to DMA helpers
+Message-ID: <YswZQZ4MSL/ZlJF0@pendragon.ideasonboard.com>
+References: <20220707174003.1390017-1-dakr@redhat.com>
+ <c4f4700a-acaf-2ae1-6ccb-4d388a512a5d@redhat.com>
 MIME-Version: 1.0
-References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-2-qais.yousef@arm.com>
-In-Reply-To: <20220629194632.1117723-2-qais.yousef@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 11 Jul 2022 14:36:14 +0200
-Message-ID: <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
- migration margin
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c4f4700a-acaf-2ae1-6ccb-4d388a512a5d@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 at 21:47, Qais Yousef <qais.yousef@arm.com> wrote:
->
-> fits_capacity() verifies that a util is within 20% margin of the
-> capacity of a CPU, which is an attempt to speed up upmigration.
->
-> But when uclamp is used, this 20% margin is problematic because for
-> example if a task is boosted to 1024, then it will not fit on any CPU
-> according to fits_capacity() logic.
->
-> Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
-> end up on big instead on the desired medium CPU.
->
-> Similar corner cases exist for uclamp and usage of capacity_of().
-> Slightest irq pressure on biggest CPU for example will make a 1024
-> boosted task look like it can't fit.
->
-> What we really want is for uclamp comparisons to ignore the migration
-> margin and capacity pressure, yet retain them for when checking the
-> _actual_ util signal.
+Hi Danilo,
 
-I fully agree on the migration margin but I'm a bit more skeptical
-about the capacity pressure. If uclam_min is set to ensure a minimum
-compute capacity of X for a task but the CPU can't provide such
-capacity because of some pressures (I have irq and thermal in mind),
-then we should find a better cpu otherwise uclamp_min becomes
-meaningless because it doesn't ensure a minimum compute capacity which
-usually means a time to execute the work of the thread
+On Mon, Jul 11, 2022 at 02:32:53PM +0200, Danilo Krummrich wrote:
+> On 7/7/22 19:39, Danilo Krummrich wrote:
+> > This patch series renames all CMA helpers to DMA helpers - considering the
+> > hierarchy of APIs (mm/cma -> dma -> gem/fb dma helpers) calling them DMA
+> > helpers seems to be more applicable.
+> > 
+> > Additionally, commit e57924d4ae80 ("drm/doc: Task to rename CMA helpers")
+> > requests to rename the CMA helpers and implies that people seem to be confused
+> > about the naming.
+> > 
+> > The patches are compile-time tested building a x86_64 kernel with
+> > `make allyesconfig && make drivers/gpu/drm`.
+> > 
+> > Changes in v2:
+> >    - Fixed up comments for consistent memory/address classification
+> >      (DMA-contiguous)
+> >    - Added a patch to rename struct drm_gem_dma_object.{paddr => dma_addr}
+> > 
+> > Changes in v3:
+> >    - Use a ccoccinelle script for
+> >      "drm/gem: rename struct drm_gem_dma_object.{paddr => dma_addr}" for fixing
+> >      up missing drivers and compile-test on x86_64, arm and arm64.
+> > 
+> > Danilo Krummrich (4):
+> >    drm/fb: rename FB CMA helpers to FB DMA helpers
+> >    drm/gem: rename GEM CMA helpers to GEM DMA helpers
+> >    drm/gem: rename struct drm_gem_dma_object.{paddr => dma_addr}
+> >    drm/todo: remove task to rename CMA helpers
+> 
+> Since those patches are based on Linus' tree they (unsurprisingly) don't 
+> apply on drm-next cleanly.
+> 
+> Please let me know if you want me to send a rebased version for drm-next.
 
->
-> For example, task p:
->
->         p->util_avg = 300
->         p->uclamp[UCLAMP_MIN] = 1024
->
-> Will fit a big CPU. But
->
->         p->util_avg = 900
->         p->uclamp[UCLAMP_MIN] = 1024
->
-> will not, this should trigger overutilized state because the big CPU is
-> now *actually* being saturated.
->
-> Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
->
->         p->util_avg = 1024
->         p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
->
-> Should fit the task on medium cpus without triggering overutilized
-> state.
->
-> Inlined comments expand more on desired behavior in more scenarios.
->
-> Introduce new util_fits_cpu() function which encapsulates the new logic.
-> The new function is not used anywhere yet, but will be used to update
-> various users of fits_capacity() in later patches.
->
-> Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 114 insertions(+)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index f80ae86bb404..5eecae32a0f6 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
->         trace_sched_util_est_se_tp(&p->se);
->  }
->
-> +static inline int util_fits_cpu(unsigned long util,
-> +                               unsigned long uclamp_min,
-> +                               unsigned long uclamp_max,
-> +                               int cpu)
-> +{
-> +       unsigned long capacity = capacity_of(cpu);
-> +       unsigned long capacity_orig;
-> +       bool fits, max_capacity;
-> +       bool uclamp_max_fits;
-> +
-> +       /*
-> +        * Check if the real util fits without any uclamp boost/cap applied.
-> +        */
-> +       fits = fits_capacity(util, capacity);
-> +
-> +       if (!uclamp_is_used())
-> +               return fits;
-> +
-> +       /*
-> +        * We must use capacity_orig_of() for comparing against uclamp_min and
-> +        * uclamp_max. We only care about capacity pressure (by using
-> +        * capacity_of()) for comparing against the real util.
+I would assume they will go through drm-misc, so rebasing on
+drm-misc-next would be best.
 
-I don't fully agree on this. see below
+> > 
+> >   Documentation/gpu/drm-kms-helpers.rst         |   8 +-
+> >   Documentation/gpu/drm-mm.rst                  |  16 +-
+> >   Documentation/gpu/todo.rst                    |  13 -
+> >   drivers/gpu/drm/Kconfig                       |   4 +-
+> >   drivers/gpu/drm/Makefile                      |   6 +-
+> >   drivers/gpu/drm/arm/Kconfig                   |   4 +-
+> >   drivers/gpu/drm/arm/display/Kconfig           |   2 +-
+> >   .../arm/display/komeda/komeda_framebuffer.c   |  12 +-
+> >   .../gpu/drm/arm/display/komeda/komeda_kms.c   |  10 +-
+> >   drivers/gpu/drm/arm/hdlcd_crtc.c              |   6 +-
+> >   drivers/gpu/drm/arm/hdlcd_drv.c               |   8 +-
+> >   drivers/gpu/drm/arm/malidp_drv.c              |  10 +-
+> >   drivers/gpu/drm/arm/malidp_mw.c               |   8 +-
+> >   drivers/gpu/drm/arm/malidp_planes.c           |  34 +-
+> >   drivers/gpu/drm/armada/armada_gem.c           |   6 +-
+> >   drivers/gpu/drm/aspeed/Kconfig                |   2 +-
+> >   drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c      |  10 +-
+> >   drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |   8 +-
+> >   drivers/gpu/drm/atmel-hlcdc/Kconfig           |   2 +-
+> >   drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |   6 +-
+> >   .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   |   8 +-
+> >   ...rm_fb_cma_helper.c => drm_fb_dma_helper.c} |  67 ++--
+> >   drivers/gpu/drm/drm_file.c                    |   2 +-
+> >   drivers/gpu/drm/drm_format_helper.c           |   4 +-
+> >   ..._gem_cma_helper.c => drm_gem_dma_helper.c} | 314 +++++++++---------
+> >   drivers/gpu/drm/drm_mipi_dbi.c                |   2 +-
+> >   drivers/gpu/drm/fsl-dcu/Kconfig               |   2 +-
+> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |   8 +-
+> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c     |   2 +-
+> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c   |  10 +-
+> >   drivers/gpu/drm/hisilicon/kirin/Kconfig       |   2 +-
+> >   .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  14 +-
+> >   .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |   4 +-
+> >   drivers/gpu/drm/imx/Kconfig                   |   2 +-
+> >   drivers/gpu/drm/imx/dcss/Kconfig              |   2 +-
+> >   drivers/gpu/drm/imx/dcss/dcss-kms.c           |   6 +-
+> >   drivers/gpu/drm/imx/dcss/dcss-plane.c         |  18 +-
+> >   drivers/gpu/drm/imx/imx-drm-core.c            |  10 +-
+> >   drivers/gpu/drm/imx/imx-drm.h                 |   2 +-
+> >   drivers/gpu/drm/imx/ipuv3-crtc.c              |   4 +-
+> >   drivers/gpu/drm/imx/ipuv3-plane.c             |  28 +-
+> >   drivers/gpu/drm/ingenic/Kconfig               |   2 +-
+> >   drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  14 +-
+> >   drivers/gpu/drm/ingenic/ingenic-ipu.c         |  12 +-
+> >   drivers/gpu/drm/kmb/Kconfig                   |   2 +-
+> >   drivers/gpu/drm/kmb/kmb_drv.c                 |   6 +-
+> >   drivers/gpu/drm/kmb/kmb_plane.c               |  10 +-
+> >   drivers/gpu/drm/mcde/Kconfig                  |   2 +-
+> >   drivers/gpu/drm/mcde/mcde_display.c           |   8 +-
+> >   drivers/gpu/drm/mcde/mcde_drv.c               |  10 +-
+> >   drivers/gpu/drm/mediatek/Kconfig              |   2 +-
+> >   drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   2 +-
+> >   drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   4 +-
+> >   drivers/gpu/drm/meson/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/meson/meson_drv.c             |  10 +-
+> >   drivers/gpu/drm/meson/meson_overlay.c         |  18 +-
+> >   drivers/gpu/drm/meson/meson_plane.c           |  10 +-
+> >   drivers/gpu/drm/msm/msm_drv.c                 |   2 +-
+> >   drivers/gpu/drm/mxsfb/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/mxsfb/mxsfb_drv.c             |   6 +-
+> >   drivers/gpu/drm/mxsfb/mxsfb_kms.c             |  34 +-
+> >   drivers/gpu/drm/panel/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/panel/panel-ilitek-ili9341.c  |   6 +-
+> >   drivers/gpu/drm/pl111/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/pl111/pl111_display.c         |   8 +-
+> >   drivers/gpu/drm/pl111/pl111_drv.c             |  10 +-
+> >   drivers/gpu/drm/rcar-du/Kconfig               |   2 +-
+> >   drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |   4 +-
+> >   drivers/gpu/drm/rcar-du/rcar_du_drv.c         |   6 +-
+> >   drivers/gpu/drm/rcar-du/rcar_du_kms.c         |  38 +--
+> >   drivers/gpu/drm/rcar-du/rcar_du_plane.c       |  10 +-
+> >   drivers/gpu/drm/rcar-du/rcar_du_vsp.c         |   8 +-
+> >   drivers/gpu/drm/rockchip/Kconfig              |   2 +-
+> >   drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |   2 +-
+> >   drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   4 +-
+> >   drivers/gpu/drm/shmobile/Kconfig              |   2 +-
+> >   drivers/gpu/drm/shmobile/shmob_drm_crtc.c     |  14 +-
+> >   drivers/gpu/drm/shmobile/shmob_drm_drv.c      |   6 +-
+> >   drivers/gpu/drm/shmobile/shmob_drm_kms.c      |   4 +-
+> >   drivers/gpu/drm/shmobile/shmob_drm_kms.h      |   2 +-
+> >   drivers/gpu/drm/shmobile/shmob_drm_plane.c    |  14 +-
+> >   drivers/gpu/drm/solomon/ssd130x.c             |   2 +-
+> >   drivers/gpu/drm/sprd/Kconfig                  |   2 +-
+> >   drivers/gpu/drm/sprd/sprd_dpu.c               |  10 +-
+> >   drivers/gpu/drm/sprd/sprd_drm.c               |   6 +-
+> >   drivers/gpu/drm/sti/Kconfig                   |   2 +-
+> >   drivers/gpu/drm/sti/sti_cursor.c              |  14 +-
+> >   drivers/gpu/drm/sti/sti_drv.c                 |   8 +-
+> >   drivers/gpu/drm/sti/sti_gdp.c                 |  18 +-
+> >   drivers/gpu/drm/sti/sti_hqvdp.c               |  18 +-
+> >   drivers/gpu/drm/sti/sti_plane.c               |   4 +-
+> >   drivers/gpu/drm/stm/Kconfig                   |   2 +-
+> >   drivers/gpu/drm/stm/drv.c                     |  12 +-
+> >   drivers/gpu/drm/stm/ltdc.c                    |  16 +-
+> >   drivers/gpu/drm/sun4i/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/sun4i/sun4i_backend.c         |  16 +-
+> >   drivers/gpu/drm/sun4i/sun4i_drv.c             |  10 +-
+> >   drivers/gpu/drm/sun4i/sun4i_frontend.c        |  26 +-
+> >   drivers/gpu/drm/sun4i/sun8i_mixer.c           |   4 +-
+> >   drivers/gpu/drm/sun4i/sun8i_ui_layer.c        |  22 +-
+> >   drivers/gpu/drm/sun4i/sun8i_vi_layer.c        |  22 +-
+> >   drivers/gpu/drm/tegra/fb.c                    |   2 +-
+> >   drivers/gpu/drm/tidss/Kconfig                 |   2 +-
+> >   drivers/gpu/drm/tidss/tidss_crtc.c            |   4 +-
+> >   drivers/gpu/drm/tidss/tidss_dispc.c           |  28 +-
+> >   drivers/gpu/drm/tidss/tidss_drv.c             |   6 +-
+> >   drivers/gpu/drm/tidss/tidss_kms.c             |   2 +-
+> >   drivers/gpu/drm/tidss/tidss_plane.c           |   2 +-
+> >   drivers/gpu/drm/tilcdc/Kconfig                |   2 +-
+> >   drivers/gpu/drm/tilcdc/tilcdc_crtc.c          |  10 +-
+> >   drivers/gpu/drm/tilcdc/tilcdc_drv.c           |   6 +-
+> >   drivers/gpu/drm/tiny/Kconfig                  |  22 +-
+> >   drivers/gpu/drm/tiny/arcpgu.c                 |  14 +-
+> >   drivers/gpu/drm/tiny/hx8357d.c                |   6 +-
+> >   drivers/gpu/drm/tiny/ili9163.c                |   6 +-
+> >   drivers/gpu/drm/tiny/ili9225.c                |  12 +-
+> >   drivers/gpu/drm/tiny/ili9341.c                |   6 +-
+> >   drivers/gpu/drm/tiny/ili9486.c                |   6 +-
+> >   drivers/gpu/drm/tiny/mi0283qt.c               |   6 +-
+> >   drivers/gpu/drm/tiny/panel-mipi-dbi.c         |   6 +-
+> >   drivers/gpu/drm/tiny/repaper.c                |  12 +-
+> >   drivers/gpu/drm/tiny/st7586.c                 |  12 +-
+> >   drivers/gpu/drm/tiny/st7735r.c                |   6 +-
+> >   drivers/gpu/drm/tve200/Kconfig                |   2 +-
+> >   drivers/gpu/drm/tve200/tve200_display.c       |  12 +-
+> >   drivers/gpu/drm/tve200/tve200_drv.c           |   8 +-
+> >   drivers/gpu/drm/v3d/v3d_drv.c                 |   2 +-
+> >   drivers/gpu/drm/v3d/v3d_gem.c                 |   4 +-
+> >   drivers/gpu/drm/vc4/Kconfig                   |   2 +-
+> >   drivers/gpu/drm/vc4/vc4_bo.c                  |  46 +--
+> >   drivers/gpu/drm/vc4/vc4_crtc.c                |  10 +-
+> >   drivers/gpu/drm/vc4/vc4_drv.c                 |   8 +-
+> >   drivers/gpu/drm/vc4/vc4_drv.h                 |  18 +-
+> >   drivers/gpu/drm/vc4/vc4_gem.c                 |  12 +-
+> >   drivers/gpu/drm/vc4/vc4_irq.c                 |   2 +-
+> >   drivers/gpu/drm/vc4/vc4_plane.c               |  14 +-
+> >   drivers/gpu/drm/vc4/vc4_render_cl.c           |  40 +--
+> >   drivers/gpu/drm/vc4/vc4_txp.c                 |   8 +-
+> >   drivers/gpu/drm/vc4/vc4_v3d.c                 |   8 +-
+> >   drivers/gpu/drm/vc4/vc4_validate.c            |  28 +-
+> >   drivers/gpu/drm/vc4/vc4_validate_shaders.c    |   2 +-
+> >   drivers/gpu/drm/xlnx/Kconfig                  |   2 +-
+> >   drivers/gpu/drm/xlnx/zynqmp_disp.c            |   8 +-
+> >   drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |   8 +-
+> >   ...rm_fb_cma_helper.h => drm_fb_dma_helper.h} |  10 +-
+> >   include/drm/drm_gem.h                         |   2 +-
+> >   ..._gem_cma_helper.h => drm_gem_dma_helper.h} | 158 ++++-----
+> >   147 files changed, 899 insertions(+), 899 deletions(-)
+> >   rename drivers/gpu/drm/{drm_fb_cma_helper.c => drm_fb_dma_helper.c} (60%)
+> >   rename drivers/gpu/drm/{drm_gem_cma_helper.c => drm_gem_dma_helper.c} (56%)
+> >   rename include/drm/{drm_fb_cma_helper.h => drm_fb_dma_helper.h} (56%)
+> >   rename include/drm/{drm_gem_cma_helper.h => drm_gem_dma_helper.h} (53%)
 
-> +        *
-> +        * If a task is boosted to 1024 for example, we don't want a tiny
-> +        * pressure to skew the check whether it fits a CPU or not.
+-- 
+Regards,
 
-But should we look for a CPU with less pressure  ?
-
-Another example:
-Task boosted to capacity_orig_of(medium_cpu) and there is pressure of
-this medium CPU. Shouldn't we look for another CPU either a medium
-without pressure or a big core if all mediums are under pressure ?
-Otherwise, uclamp_min can become somewhat meaningless because you will
-not have the requested min capacity when running. If you really want
-your task to never go on big core, some cpu affinity would be a better
-way to achieve this
-
-
-> +        *
-> +        * Similarly if a task is capped to capacity_orig_of(little_cpu), it
-> +        * should fit a little cpu even if there's some pressure.
-> +        *
-> +        * Known limitation is when thermal pressure is severe to the point
-> +        * where we have capacity inversion. We don't cater for that as the
-> +        * system performance will already be impacted severely.
-> +        */
-> +       capacity_orig = capacity_orig_of(cpu);
-> +
-> +       /*
-> +        * We want to force a task to fit a cpu as implied by uclamp_max.
-> +        * But we do have some corner cases to cater for..
-> +        *
-> +        *
-> +        *                                 C=z
-> +        *   |                             ___
-> +        *   |                  C=y       |   |
-> +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
-> +        *   |      C=x        |   |      |   |
-> +        *   |      ___        |   |      |   |
-> +        *   |     |   |       |   |      |   |    (util somewhere in this region)
-> +        *   |     |   |       |   |      |   |
-> +        *   |     |   |       |   |      |   |
-> +        *   +----------------------------------------
-> +        *         cpu0        cpu1       cpu2
-> +        *
-> +        *   In the above example if a task is capped to a specific performance
-> +        *   point, y, then when:
-> +        *
-> +        *   * util = 80% of x then it does not fit on cpu0 and should migrate
-> +        *     to cpu1
-> +        *   * util = 80% of y then it is forced to fit on cpu1 to honour
-> +        *     uclamp_max request.
-> +        *
-> +        *   which is what we're enforcing here. A task always fits if
-> +        *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
-> +        *   the normal upmigration rules should withhold still.
-> +        *
-> +        *   Only exception is when we are on max capacity, then we need to be
-> +        *   careful not to block overutilized state. This is so because:
-> +        *
-> +        *     1. There's no concept of capping at max_capacity! We can't go
-> +        *        beyond this performance level anyway.
-> +        *     2. The system is being saturated when we're operating near
-> +        *        max_capacity, it doesn't make sense to block overutilized.
-> +        */
-> +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
-
-Is this intermediate variable max_capacity really needed ?
-
-> +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
-> +       fits = fits || uclamp_max_fits;
-> +
-> +       /*
-> +        *
-> +        *                                 C=z
-> +        *   |                             ___       (region a, capped, util >= uclamp_max)
-> +        *   |                  C=y       |   |
-> +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
-> +        *   |      C=x        |   |      |   |
-> +        *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
-> +        *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
-> +        *   |     |   |       |   |      |   |
-> +        *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
-> +        *   +----------------------------------------
-> +        *         cpu0        cpu1       cpu2
-> +        *
-> +        * a) If util > uclamp_max, then we're capped, we don't care about
-> +        *    actual fitness value here. We only care if uclamp_max fits
-> +        *    capacity without taking margin/pressure into account.
-> +        *    See comment above.
-> +        *
-> +        * b) If uclamp_min <= util <= uclamp_max, then the normal
-> +        *    fits_capacity() rules apply. Except we need to ensure that we
-> +        *    enforce we remain within uclamp_max, see comment above.
-> +        *
-> +        * c) If util < uclamp_min, then we are boosted. Same as (b) but we
-> +        *    need to take into account the boosted value fits the CPU without
-> +        *    taking margin/pressure into account.
-> +        *
-> +        * Cases (a) and (b) are handled in the 'fits' variable already. We
-> +        * just need to consider an extra check for case (c) after ensuring we
-> +        * handle the case uclamp_min > uclamp_max.
-> +        */
-> +       uclamp_min = min(uclamp_min, uclamp_max);
-> +       if (util < uclamp_min)
-> +               fits = fits && (uclamp_min <= capacity_orig);
-> +
-> +       return fits;
-> +}
-> +
->  static inline int task_fits_capacity(struct task_struct *p,
->                                      unsigned long capacity)
->  {
-> --
-> 2.25.1
->
+Laurent Pinchart

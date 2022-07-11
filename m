@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8643570D69
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310E4570D6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiGKWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S229763AbiGKWdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiGKWcn (ORCPT
+        with ESMTP id S229572AbiGKWds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:32:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F647D7BF;
-        Mon, 11 Jul 2022 15:32:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D733B815F3;
-        Mon, 11 Jul 2022 22:32:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDEBC34115;
-        Mon, 11 Jul 2022 22:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657578756;
-        bh=ZRNcQJ+A2nAPqlfYlLU9IXnKjoNOlpRcfrMLlQ0nMC4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Du4WuOAkpAjMpBiGEzqbA6fgAo9O01pv60EaYMWk9k4PNawklP7ZgPsd3uwhuXoRh
-         D0EYBQiiXPnjjh3UxUvaXE7KiaedPGdiRVLVlGv2tvdakHWy1c/gmbLgD+HipnDItO
-         F+bnncYVrY21l41mqs+t15AKdmw+mNjbWnVDFxLmU8tlF2//aCl6lDm6d/liHm4FDe
-         THKrdKOJ1DqeN2j3l3LTuONSr05lvvlzkV0X265oyigvf0N5FEj6nTfPDKPgX0TLZ0
-         VUMqt5tAUPyhWdwtt9enrUmLvVc6fILkNn3crBilzBfyfRbLybgHbRzkUiUT6b32pv
-         T/X8J/zs4EhYA==
-Date:   Mon, 11 Jul 2022 17:32:34 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Pratyush Anand <pratyush.anand@gmail.com>,
-        Toan Le <toan@os.amperecomputing.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI: Drop of_match_ptr() to avoid unused variables
-Message-ID: <20220711223234.GA701706@bhelgaas>
+        Mon, 11 Jul 2022 18:33:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB69018390
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657578827; x=1689114827;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=exH/qYsK7YSbUU9c5cTh+qseXLrMU7BADTGmJkP0TNY=;
+  b=ScwpRoC8j3w1TE4t5Rd3GVISRUkseahsHgbGwj/Wlc2GyMy42iOZ7YIM
+   IfogStfs30IqR+X8wlvPYc+hZ2AzFabqJmGLlzIEF970coK9RBRxeEDvI
+   zQM9t8QNWXi2yi89hOHOnJBUPYOAV5YtOz0mkXRqbC6r4O/9c2hPPzfcN
+   OkILPJ5xVANiD7cuzTaywGDVY7PVG7U45flc79RsZ5dCOxeJsjV6F4LbL
+   LBEKK97d6qm9XBkgn2/1AF8v8AQfN35jfpZm+m/9tdmBZ8t+eGQgQU+6+
+   R8NpqToct1pHh+DJ9+7Dr3INa0/9EVlYq5fQxzzrlQSDmOttyLv5jbPN4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="285526511"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="285526511"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 15:33:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="622259020"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 11 Jul 2022 15:33:45 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oB1yK-0001Kp-Uu;
+        Mon, 11 Jul 2022 22:33:44 +0000
+Date:   Tue, 12 Jul 2022 06:33:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/kdump] BUILD SUCCESS
+ 68b8e9713c8ec90af93c16e1de51cca18cefdb56
+Message-ID: <62cca545.Dpd7tjFQ/0g6naPp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706195838.217054-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 02:58:38PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> We have stubs for most OF interfaces even when CONFIG_OF is not set, so we
-> allow building of most controller drivers in that case for compile testing.
-> 
-> When CONFIG_OF is not set, "of_match_ptr(<match_table>)" compiles to NULL,
-> which leaves <match_table> unused, resulting in errors like this:
-> 
->   $ make W=1
->   drivers/pci/controller/pci-xgene.c:636:34: error: ‘xgene_pcie_match_table’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Drop of_match_ptr() to avoid the unused variable warning.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/kdump
+branch HEAD: 68b8e9713c8ec90af93c16e1de51cca18cefdb56  x86/setup: Use rng seeds from setup_data
 
-I applied this on pci/misc for v5.20.  Holler if you object :)
+elapsed time: 772m
 
-> ---
->  drivers/pci/controller/dwc/pci-keystone.c   | 2 +-
->  drivers/pci/controller/dwc/pcie-armada8k.c  | 2 +-
->  drivers/pci/controller/dwc/pcie-spear13xx.c | 2 +-
->  drivers/pci/controller/pci-xgene.c          | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
-> index d10e5fd0f83c..602909f712b9 100644
-> --- a/drivers/pci/controller/dwc/pci-keystone.c
-> +++ b/drivers/pci/controller/dwc/pci-keystone.c
-> @@ -1324,7 +1324,7 @@ static struct platform_driver ks_pcie_driver __refdata = {
->  	.remove = __exit_p(ks_pcie_remove),
->  	.driver = {
->  		.name	= "keystone-pcie",
-> -		.of_match_table = of_match_ptr(ks_pcie_of_match),
-> +		.of_match_table = ks_pcie_of_match,
->  	},
->  };
->  builtin_platform_driver(ks_pcie_driver);
-> diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
-> index 4e2552dcf982..8391417fad41 100644
-> --- a/drivers/pci/controller/dwc/pcie-armada8k.c
-> +++ b/drivers/pci/controller/dwc/pcie-armada8k.c
-> @@ -343,7 +343,7 @@ static struct platform_driver armada8k_pcie_driver = {
->  	.probe		= armada8k_pcie_probe,
->  	.driver = {
->  		.name	= "armada8k-pcie",
-> -		.of_match_table = of_match_ptr(armada8k_pcie_of_match),
-> +		.of_match_table = armada8k_pcie_of_match,
->  		.suppress_bind_attrs = true,
->  	},
->  };
-> diff --git a/drivers/pci/controller/dwc/pcie-spear13xx.c b/drivers/pci/controller/dwc/pcie-spear13xx.c
-> index 1569e82b5568..48af5170a8e7 100644
-> --- a/drivers/pci/controller/dwc/pcie-spear13xx.c
-> +++ b/drivers/pci/controller/dwc/pcie-spear13xx.c
-> @@ -258,7 +258,7 @@ static struct platform_driver spear13xx_pcie_driver = {
->  	.probe		= spear13xx_pcie_probe,
->  	.driver = {
->  		.name	= "spear-pcie",
-> -		.of_match_table = of_match_ptr(spear13xx_pcie_of_match),
-> +		.of_match_table = spear13xx_pcie_of_match,
->  		.suppress_bind_attrs = true,
->  	},
->  };
-> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-> index eb6240958bb0..549d3bd6d1c2 100644
-> --- a/drivers/pci/controller/pci-xgene.c
-> +++ b/drivers/pci/controller/pci-xgene.c
-> @@ -641,7 +641,7 @@ static const struct of_device_id xgene_pcie_match_table[] = {
->  static struct platform_driver xgene_pcie_driver = {
->  	.driver = {
->  		.name = "xgene-pcie",
-> -		.of_match_table = of_match_ptr(xgene_pcie_match_table),
-> +		.of_match_table = xgene_pcie_match_table,
->  		.suppress_bind_attrs = true,
->  	},
->  	.probe = xgene_pcie_probe,
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+configs tested: 23
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+s390                       zfcpdump_defconfig
+sh                   sh7724_generic_defconfig
+arm                        mvebu_v7_defconfig
+sh                          polaris_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                 linkstation_defconfig
+sh                          rsk7201_defconfig
+arc                           tb10x_defconfig
+parisc                generic-32bit_defconfig
+mips                        vocore2_defconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

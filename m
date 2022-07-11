@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD64D56D459
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D2C56D460
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiGKFnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 01:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S229450AbiGKFsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 01:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGKFnB (ORCPT
+        with ESMTP id S229469AbiGKFss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 01:43:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17E913E25;
-        Sun, 10 Jul 2022 22:42:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhCTT4DCcz4xbn;
-        Mon, 11 Jul 2022 15:42:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657518173;
-        bh=oPmJt7JRxXnbZA8BhfPX0SGxjWfpFWHY+MxKGuWgHu0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rjlzRykBEvLkEx4njaWGqgn62SxsK/DmmLohxlfKuzQqDmWit66W9L2j0I8Ni1IWn
-         C/aoAgOfEsmZW8tPkeZ/Na2i7hy3zbhaS/ulMFtfKK1W5zaYB2zeRYtvSUNeRIpZSe
-         RffDdyGmiLQANqYP+TD4+yKEvFn0SzJeCcmA//bSQ6XbCVSBkznEGmWn4s5K3BaT7h
-         6GtdA7jDM9U+AZrILGPrDGcS2YkQqBvXguPTz3P7F1ItYstc2rkcXbpzIm07w1TQTU
-         OCmphbRpCJOR56dPLKuiBdU96VrSMeLdJ19/WVFKSHBo1JTBhOTNG6kfuynkliImHW
-         hyGfC/bEBH//Q==
-Date:   Mon, 11 Jul 2022 15:42:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the irqchip tree
-Message-ID: <20220711154252.4b88a601@canb.auug.org.au>
+        Mon, 11 Jul 2022 01:48:48 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CC415FCC;
+        Sun, 10 Jul 2022 22:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657518527; x=1689054527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nJ8PlUBoQwoeShO3ziyubBuG2AA62mhcNqL/Nkw5+kg=;
+  b=X85//BZqeOUqbF6OOFzYdQ8dJjFqifi4pNcmUDAcqFNCuZEetTNyOUT0
+   pt6imWpgfsGEpqRZ0XciucJtpZuZc+bP+wWsM6cM1YYVmfzvkkZ6ZdZN3
+   KPZExkLO7IVjU4iK44LoIG3Kkv16+CkqaFYfDn+yulZCxd84wmqy+G5Py
+   tUBvMgDMMPjplDFoDztm7CVGSF6lsLyzPXQdRw9MQZHm1Pmv9fEH29mUT
+   8lDKF0sZF7moTuUNC42ou/GWnIG93hHVuI7QRfEMXx5e9Yfs/6/z4jVKL
+   xweF1l8BghffHqcYI+f7MI8CkDO9IaH8LXtvDC2pz4RMofbzislXh+AnB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="264357379"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="264357379"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 22:48:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="598921065"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Jul 2022 22:48:45 -0700
+Date:   Mon, 11 Jul 2022 13:48:44 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 043/102] KVM: x86/mmu: Focibly use TDP MMU for TDX
+Message-ID: <20220711054844.wb34vvqf74wkb2jp@yy-desk-7060>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <c198d2be26aa9a041176826cf86b51a337427783.1656366338.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FMljXGzHqt3Nk71inhp2pJP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c198d2be26aa9a041176826cf86b51a337427783.1656366338.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/FMljXGzHqt3Nk71inhp2pJP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 27, 2022 at 02:53:35PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> In this patch series, TDX supports only TDP MMU and doesn't support legacy
+> MMU.  Forcibly use TDP MMU for TDX irrelevant of kernel parameter to
+> disable TDP MMU.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 82f1bfac7ee6..7eb41b176d1e 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -18,8 +18,13 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
+>  {
+>  	struct workqueue_struct *wq;
+>
+> -	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
+> -		return 0;
+> +	/*
+> +	 *  Because TDX supports only TDP MMU, forcibly use TDP MMU in the case
+> +	 *  of TDX.
+> +	 */
+> +	if (kvm->arch.vm_type != KVM_X86_TDX_VM &&
+> +		(!tdp_enabled || !READ_ONCE(tdp_mmu_enabled)))
+> +		return false;
 
-Hi all,
+Please return 0 here for int return value type.
 
-After merging the irqchip tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-In file included from drivers/gpio/gpio-thunderx.c:18:
-include/asm-generic/msi.h:32:3: error: conflicting types for 'msi_alloc_inf=
-o_t'; have 'struct msi_alloc_info'
-   32 | } msi_alloc_info_t;
-      |   ^~~~~~~~~~~~~~~~
-In file included from include/linux/gpio/driver.h:15,
-                 from drivers/gpio/gpio-thunderx.c:10:
-arch/x86/include/asm/msi.h:7:31: note: previous declaration of 'msi_alloc_i=
-nfo_t' with type 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
-    7 | typedef struct irq_alloc_info msi_alloc_info_t;
-      |                               ^~~~~~~~~~~~~~~~
-drivers/gpio/gpio-thunderx.c: In function 'thunderx_gpio_populate_parent_al=
-loc_info':
-drivers/gpio/gpio-thunderx.c:416:34: error: initialization of 'msi_alloc_in=
-fo_t *' {aka 'struct msi_alloc_info *'} from incompatible pointer type 'msi=
-_alloc_info_t *' {aka 'struct irq_alloc_info *'} [-Werror=3Dincompatible-po=
-inter-types]
-  416 |         msi_alloc_info_t *info =3D &gfwspec->msiinfo;
-      |                                  ^
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  91a29af413de ("gpio: Remove dynamic allocation from populate_parent_alloc=
-_arg()")
-
-I have used the irqchip tree from next-20220707 again for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/FMljXGzHqt3Nk71inhp2pJP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLuFwACgkQAVBC80lX
-0GynOwgAkR6PuOkGUZlu8LTjAecEIuhcyCZpm+Rmh/CYKq5UT0tRVrPpSG7+nEYZ
-RkOSSb/XfuzTf3nyyRHhrVkCHVptNxGQgOESBgpalC4niQY0E3YuphQ8Ca/TK2pV
-DZw+OX7WIq8ULVuG+2FmblE1IcKmBN7SXcXRbsxQjwCTcNvWyrrxD/gALATLB9bf
-0RZieTstfArr2rqWEi0KiT+Ajl63/0Fem8xfqrB5Exn7If+CVx6mTG+iWuJ9cs0c
-+hL+kM3mKlpKIbHj/NjHDvaHsz462M6sJSXm05nkjG7naxutjQZn+FWaTBd3hKFH
-vWpxpuv37I5jVXDjO9Mpi06k75NG3g==
-=7mdw
------END PGP SIGNATURE-----
-
---Sig_/FMljXGzHqt3Nk71inhp2pJP--
+>
+>  	wq = alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
+>  	if (!wq)
+> --
+> 2.25.1
+>

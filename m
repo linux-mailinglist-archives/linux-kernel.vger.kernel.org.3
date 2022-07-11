@@ -2,242 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E271570572
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC07457057A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiGKOW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S230076AbiGKOXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiGKOW2 (ORCPT
+        with ESMTP id S229602AbiGKOXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:22:28 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CA61DBB;
-        Mon, 11 Jul 2022 07:22:27 -0700 (PDT)
+        Mon, 11 Jul 2022 10:23:15 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DC732EDF;
+        Mon, 11 Jul 2022 07:23:14 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31c9b70c382so50534607b3.6;
+        Mon, 11 Jul 2022 07:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657549347; x=1689085347;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sfjIT/djBYVbzdx1PLoXfSGzu5iNZ9VhjYTlVYVGdrQ=;
-  b=DXFpkpagTuOhPFtznQ8sniDGoLT8ZAj/eY9yIFFYNvTCy6ixRlCaGwXj
-   MIgtGEjOhgjf2e31xwIJ6nFE17Pu4R1o14LkSdvfR/Xf6IoYl0C9K3TCt
-   YbnEvcEjOhn16+T/32DUNaZrgRkm0LURAB41qlhm2VJdmF+JjFmeNLfPX
-   4=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Jul 2022 07:22:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 07:22:26 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Jul 2022 07:22:25 -0700
-Received: from [10.216.22.118] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Jul
- 2022 07:22:21 -0700
-Message-ID: <c91aab06-4263-8a96-3943-948cc64cdca6@quicinc.com>
-Date:   Mon, 11 Jul 2022 19:52:18 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f193NtTpTpydXyi+JhLs+H7/IffFTZ75c2ZMxvJdUk8=;
+        b=R3QQxSi778PbDji+j6k2GI2PCd/Y+DzSUv+/DXwwkHp4+EbuKTjMLLJm+xSE7kPmQn
+         SkNieU73l5Y4R6jxJdgYqURcj5uG8slaZq71mU3SEpMDPqPfrD7Y/le5Me9GB9A9v/n4
+         G2HXPWRhJsTbfGV5dH2szryeSJuIOhPRsWCBR8LbEgauRAARDHMuCubVVW5E9yp4aswe
+         P6FVU9mJ3Pyboh/JKZVoudT037Nf/QbkM/KLcohTqdj96SH04sWW7U8XZX4KepPGX0d4
+         tvF3218o9o4nnfO5C3Hi8nUqY0DUsaKOlDIT8hjKsa0PEQQCIQrRNz6LTRnemz8WJYBJ
+         anRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f193NtTpTpydXyi+JhLs+H7/IffFTZ75c2ZMxvJdUk8=;
+        b=l5+V1AuSssAwO+Vbo8+Zo8MNnc3HU0tZd+rVgkOHYRUi3PCOpClCXKtnNdXwOB9wF+
+         pwiluubZutqFx39wYPYEDQg3jbfbbive65J6rolFYodo+9uhqNfXkNzxyMxDkdOizEAc
+         Can/3LJyQihrR3aPx2zhAlyQVr3BldDCmrenWyGIO7j/hDbwBIwHghU0zhluydFVrbYm
+         ily4pWoeM008WsugfQKs9Z++w1QMWZGKPSV3K43XtMYjhVo9T+5G23kVRaOh+28Mfhh/
+         apDHmeYt1cFHoFx7dUVWdq9H1Ok2f2vX2DUMuKBnCjj3tKdbSqfrfz5moGccjGxSnlc7
+         ZySA==
+X-Gm-Message-State: AJIora9s5DuOBZzA7q3u+uc+waBqzCXLqevnA5gaS0mhjlDGsn2LzGAQ
+        +ETz4Zk+qE2k6YGFO9b9R207cLYpb2HkXIhu8afGthPyNe4Mhg==
+X-Google-Smtp-Source: AGRyM1vyrNzKqO3Ifz5KIwIgFC5W5PBNO0pSYuxaOgPZzbIjIpiIe6KEL54iONqpjVmkmdcCsFx84sUnB4CUVc3UA9A=
+X-Received: by 2002:a81:468b:0:b0:318:4cac:6576 with SMTP id
+ t133-20020a81468b000000b003184cac6576mr19390206ywa.277.1657549393693; Mon, 11
+ Jul 2022 07:23:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [V3] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Content-Language: en-CA
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <konrad.dybcio@somainline.org>, <jirislaby@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        <dianders@chromium.org>, <mka@chromium.org>, <swboyd@chromium.org>
-References: <1657221457-32494-1-git-send-email-quic_vnivarth@quicinc.com>
- <Ysgs9MwCLyqeWgge@kroah.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <Ysgs9MwCLyqeWgge@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220711112900.61363-1-shreeya.patel@collabora.com>
+ <20220711112900.61363-3-shreeya.patel@collabora.com> <CAHp75Vf3NDsep5_819=e8yrna_AGh5cew=fs+hHe1q8LCa-PyA@mail.gmail.com>
+ <c90e7334-5921-886b-2f9c-869fb55216ca@collabora.com> <CAHp75Vf=FOt+N6azar5gifvig8FL4sS3LX1kO8CzNCh2yOk-DQ@mail.gmail.com>
+ <68de450f-da22-02e3-e863-7e17582ee03f@collabora.com>
+In-Reply-To: <68de450f-da22-02e3-e863-7e17582ee03f@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Jul 2022 16:22:37 +0200
+Message-ID: <CAHp75VcMsa+s9Lrp6fF_nzJ9RgsVnbCCDjvLW=-hdFpAs69pgA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] iio: light: Add support for ltrf216a sensor
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        alvaro.soliverez@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 11, 2022 at 4:04 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+> On 7/11/22 16:41, Andy Shevchenko wrote:
+> > On Mon, Jul 11, 2022 at 3:39 PM Shreeya Patel
+> > <shreeya.patel@collabora.com> wrote:
+> >> On 11/07/22 18:36, Andy Shevchenko wrote:
+> >>> On Mon, Jul 11, 2022 at 1:30 PM Shreeya Patel
 
-On 7/8/2022 6:41 PM, Greg KH wrote:
-> On Fri, Jul 08, 2022 at 12:47:37AM +0530, Vijaya Krishna Nivarthi wrote:
->> In the logic around call to clk_round_rate(), for some corner conditions,
->> get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
->> exact clock rate was not found lowest clock was being returned.
->>
->> Search for suitable clock rate in 2 steps
->> a) exact match or within 2% tolerance
->> b) within 5% tolerance
->> This also takes care of corner conditions.
->>
->> Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
->> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->> ---
->> v3: simplified algorithm further, fixed robot compile warnings
->> v2: removed minor optimisations to make more readable
->> v1: intial patch contained slightly complicated logic
->> ---
->>   drivers/tty/serial/qcom_geni_serial.c | 88 +++++++++++++++++++++--------------
->>   1 file changed, 53 insertions(+), 35 deletions(-)
->>
->> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->> index 2e23b65..ac2df1c 100644
->> --- a/drivers/tty/serial/qcom_geni_serial.c
->> +++ b/drivers/tty/serial/qcom_geni_serial.c
->> @@ -943,52 +943,71 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
->>   	return 0;
->>   }
->>   
->> -static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
->> -			unsigned int sampling_rate, unsigned int *clk_div)
->> +static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
->> +			unsigned int *clk_div, unsigned int percent_tol)
->>   {
->> -	unsigned long ser_clk;
->> -	unsigned long desired_clk;
->> -	unsigned long freq, prev;
->> +	unsigned long freq;
->>   	unsigned long div, maxdiv;
->> -	int64_t mult;
->> -
->> -	desired_clk = baud * sampling_rate;
->> -	if (!desired_clk) {
->> -		pr_err("%s: Invalid frequency\n", __func__);
->> -		return 0;
->> -	}
->> +	u64 mult;
->> +	unsigned long offset, abs_tol, achieved;
->>   
->> +	abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
->>   	maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
->> -	prev = 0;
->> -
->> -	for (div = 1; div <= maxdiv; div++) {
->> -		mult = div * desired_clk;
->> -		if (mult > ULONG_MAX)
->> +	div = 1;
->> +	while (div <= maxdiv) {
->> +		mult = (u64)div * desired_clk;
->> +		if (mult != (unsigned long)mult)
->>   			break;
->>   
->> -		freq = clk_round_rate(clk, (unsigned long)mult);
->> -		if (!(freq % desired_clk)) {
->> -			ser_clk = freq;
->> -			break;
->> -		}
->> +		offset = div * abs_tol;
->> +		freq = clk_round_rate(clk, mult - offset);
->>   
->> -		if (!prev)
->> -			ser_clk = freq;
->> -		else if (prev == freq)
->> +		/* Can only get lower if we're done */
->> +		if (freq < mult - offset)
->>   			break;
->>   
->> -		prev = freq;
->> +		/*
->> +		 * Re-calculate div in case rounding skipped rates but we
->> +		 * ended up at a good one, then check for a match.
->> +		 */
->> +		div = DIV_ROUND_CLOSEST(freq, desired_clk);
->> +		achieved = DIV_ROUND_CLOSEST(freq, div);
->> +		if (achieved <= desired_clk + abs_tol &&
->> +			achieved >= desired_clk - abs_tol) {
->> +			*clk_div = div;
->> +			return freq;
->> +		}
->> +
->> +		div = DIV_ROUND_UP(freq, desired_clk);
->>   	}
->>   
->> -	if (!ser_clk) {
->> -		pr_err("%s: Can't find matching DFS entry for baud %d\n",
->> -								__func__, baud);
->> -		return ser_clk;
->> +	return 0;
->> +}
->> +
->> +static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
->> +			unsigned int sampling_rate, unsigned int *clk_div)
->> +{
->> +	unsigned long ser_clk;
->> +	unsigned long desired_clk;
->> +
->> +	desired_clk = baud * sampling_rate;
->> +	if (!desired_clk) {
->> +		pr_err("%s: Invalid frequency\n", __func__);
-> Note, this is a driver, ALWAYS use dev_err() and friends instead.
+...
+
+> >>>> +static const struct regmap_config ltrf216a_regmap_config = {
+> >>>> +       .name = LTRF216A_DRV_NAME,
+> >>>> +       .reg_bits = 8,
+> >>>> +       .val_bits = 8,
+> >>>> +       .max_register = LTRF216A_MAX_REG,
+> >>> Why do you use regmap locking? What for?
+> >>
+> >> Why do we want to skip the internal locking if it doesn't bring any
+> >> benefits?
+> >
+> > Can you elaborate on the "no benefits" part, please?
 >
-> Also do not allow userspace to flood the kernel logs like this looks is
-> possible, this should just be dev_dbg().
+> Since the regmap's lock will never be contended, thus it's free to keep
+
+I'm skeptical about "free" here. My concerns are:
+1) grosser code base;
+2) slower code flow (even nop takes time to process).
+
+> using it. If later on we will need to change the driver's code such that
+> the lock will become needed, then we won't need to bother with
+> re-enabling it. The comment to the driver's mutex states clearly that
+> it's intended to protect the cached value.
 >
-> And of course, never use __func__, it's not needed anymore for
-> dev_dbg().
+> Hence what is point in disabling the regmap's lock? There are very few
+> drivers that disable the regmap's lock and most of them do that for the
+> good reason.
 
-Ok.
+Most of the drivers that have its own lock _and_ regmap lock took the
+locking scheme wrong. It is 101 when writing a driver to have a clear
+picture of what lock protects what data (or I/O).
 
->
->> +		return 0;
-> Why if you have a error, are you returning 0?
+Even if lock is _almost_ free, it's still required to provide
+understanding of how each of the locks is being used in the code.
 
-Yes, and it has been so earlier too.
+That said, the main point of my review comment is to make the author
+think about it, or just elaborate if it has been thought through
+already.
 
-0 is an invalid clock rate and will be handled accordingly by caller.
-
->>   	}
->>   
->> -	*clk_div = ser_clk / desired_clk;
->> -	if (!(*clk_div))
->> -		*clk_div = 1;
->> +	/*
->> +	 * try to find a clock rate within 2% tolerance, then within
->> +	 */
->> +	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
->> +	if (!ser_clk)
->> +		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
->> +
->> +	if (!ser_clk)
->> +		pr_err("Couldn't find suitable clock rate for %lu\n", desired_clk);
-> return an error?
->
-> dev_err().
-
-As mentioned, we didn't (and don't) return error from here but 0.
-
->
->> +	else
->> +		pr_debug("desired_clk-%lu, ser_clk-%lu, clk_div-%lu\n",
->> +			desired_clk, ser_clk, *clk_div);
-> dev_dbg()?
-Ok.
->
-> Also, as the kernel test robot says, this does not build cleanly :(
-
-change to dev_dbg should take care of these.
-
-Will do.
-
-Thank you.
-
-Vijay/
-
-
->
-> thanks,
->
-> greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko

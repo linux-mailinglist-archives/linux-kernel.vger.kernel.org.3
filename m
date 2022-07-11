@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D4856FA7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B8B56FA1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbiGKJSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S229870AbiGKJNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiGKJRl (ORCPT
+        with ESMTP id S230053AbiGKJMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:17:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167624AD4A;
-        Mon, 11 Jul 2022 02:11:31 -0700 (PDT)
+        Mon, 11 Jul 2022 05:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1242B625;
+        Mon, 11 Jul 2022 02:09:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58C6D611E4;
-        Mon, 11 Jul 2022 09:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63ADAC34115;
-        Mon, 11 Jul 2022 09:11:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D55161148;
+        Mon, 11 Jul 2022 09:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FE8C34115;
+        Mon, 11 Jul 2022 09:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530690;
-        bh=h7tt5IUgeXy7Pnwbr0Jf02OKdsi8fvuBb17cEyFIIAo=;
+        s=korg; t=1657530563;
+        bh=qCn3vJHS/C7fNnwqsIhkYVnnxDJN/QGKOxb8OfBNZ68=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpCm87ee885qlupIi3UjqKZXfzcGCCMR+pwnZCeZsUxe08AAOF4ND7H01nspgN82c
-         TPab9bzjQPxlmLIUCEDO4pv9Vn4Ii/6Cg7EeRROZsTwKW9ifBKT653Gh7BhzWbnRD7
-         VxsoIo6Pl68TVGRl3Js1K9lPjKJVv0SDg78cbcTc=
+        b=EBYHF3ETCCAqN9awRcgAavVW/wYec+fn4eex8lyP5DCvmWmULU+9uxhJsC4AJNaCG
+         JmQWENN1hIDuFgGak7O/pheQPivjPMKftORSF7yme3ZUlytNz70oabyHeYa3chjRFn
+         OROA1m0kQzFH6gJPRxMn+TPc1pM8dd5auKV8qEC0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 26/38] selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
-Date:   Mon, 11 Jul 2022 11:07:08 +0200
-Message-Id: <20220711090539.501086115@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 4.19 30/31] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+Date:   Mon, 11 Jul 2022 11:07:09 +0200
+Message-Id: <20220711090538.735930649@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1a635d3e1c80626237fdae47a5545b6655d8d81c ]
+commit c132fe78ad7b4ce8b5d49a501a15c29d08eeb23a upstream.
 
-The first host interface has by default no interest in receiving packets
-MAC DA de:ad:be:ef:13:37, so it might drop them before they hit the tc
-filter and this might confuse the selftest.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
 
-Enable promiscuous mode such that the filter properly counts received
-packets.
+Add missing of_node_put() in to fix this.
 
-Fixes: d4deb01467ec ("selftests: forwarding: Add a test for FDB learning")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220605042723.17668-2-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/dma/ti/dma-crossbar.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index be977cd4bfe3..b759f7903c06 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -894,6 +894,7 @@ learning_test()
- 	# FDB entry was installed.
- 	bridge link set dev $br_port1 flood off
- 
-+	ip link set $host1_if promisc on
- 	tc qdisc add dev $host1_if ingress
- 	tc filter add dev $host1_if ingress protocol ip pref 1 handle 101 \
- 		flower dst_mac $mac action drop
-@@ -943,6 +944,7 @@ learning_test()
- 
- 	tc filter del dev $host1_if ingress protocol ip pref 1 handle 101 flower
- 	tc qdisc del dev $host1_if ingress
-+	ip link set $host1_if promisc off
- 
- 	bridge link set dev $br_port1 flood on
- 
--- 
-2.35.1
-
+--- a/drivers/dma/ti/dma-crossbar.c
++++ b/drivers/dma/ti/dma-crossbar.c
+@@ -274,6 +274,7 @@ static void *ti_dra7_xbar_route_allocate
+ 		mutex_unlock(&xbar->mutex);
+ 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+ 		kfree(map);
++		of_node_put(dma_spec->np);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 	set_bit(map->xbar_out, xbar->dma_inuse);
 
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C619556FA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D7B56FD79
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiGKJQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S234122AbiGKJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiGKJOu (ORCPT
+        with ESMTP id S233848AbiGKJza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:14:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830DF3CBEE;
-        Mon, 11 Jul 2022 02:10:42 -0700 (PDT)
+        Mon, 11 Jul 2022 05:55:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2438C37F8D;
+        Mon, 11 Jul 2022 02:26:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C8B7611F1;
-        Mon, 11 Jul 2022 09:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D735C341CE;
-        Mon, 11 Jul 2022 09:10:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03BC3B80D2C;
+        Mon, 11 Jul 2022 09:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BFCC341C0;
+        Mon, 11 Jul 2022 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530641;
-        bh=AiqScboVoKrl9NbfUrwOqZcc0KyBFSunSKXP2EyflOA=;
+        s=korg; t=1657531576;
+        bh=iavFSzIg6J15DD6EpN1kRCljEYmVOhPE1G5qPmcCNms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qUVCBgqlo4XR0v4SXgM4Rw35J95q8PVXGVTZzrIYsPHj5mJTBK09saY8HHres9/wS
-         EgqTYIPIuqS2cqAHhttJczO+fOS93rM6Phadu27uNG2RpxdUr9Cq2lJBNOSL6G1AoG
-         9MFLH+voZ9pFQQFjVRdnNWqrXm8nFzeWPI7PtrQg=
+        b=QwREpGyifiokTqzuBKuc89quLBBdo/IfmlMtZDJ6wOPiNCUkw7PY5AX7tSKkg1GGj
+         6d6SCxnOltuiM8YH2LO0XkdlCF6Y9RIb9v7Mh8p4QINlu85CMUgAzHak9VJvIB6NRD
+         ZCIOT41NcEfOevNrctc/lORMzGwZpLU1J7c9xGe4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guiling Deng <greens9@163.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.4 09/38] fbdev: fbmem: Fix logo center image dx issue
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 155/230] dt-bindings: soc: qcom: smd-rpm: Fix missing MSM8936 compatible
 Date:   Mon, 11 Jul 2022 11:06:51 +0200
-Message-Id: <20220711090539.003201795@linuxfoundation.org>
+Message-Id: <20220711090608.458292462@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guiling Deng <greens9@163.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-commit 955f04766d4e6eb94bf3baa539e096808c74ebfb upstream.
+[ Upstream commit e930244918092d44b60a7b538cf60d737010ceef ]
 
-Image.dx gets wrong value because of missing '()'.
+Add compatible msm8936. msm8936 covers both msm8936 and msm8939.
+The relevant driver already has the compat string but, we haven't
+documented it.
 
-If xres == logo->width and n == 1, image.dx = -16.
-
-Signed-off-by: Guiling Deng <greens9@163.com>
-Fixes: 3d8b1933eb1c ("fbdev: fbmem: add config option to center the bootup logo")
-Cc: stable@vger.kernel.org # v5.0+
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d6e52482f5ab ("drivers: soc: Add MSM8936 SMD RPM compatible")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220418231857.3061053-1-bryan.odonoghue@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -512,7 +512,7 @@ static int fb_show_logo_line(struct fb_i
- 
- 		while (n && (n * (logo->width + 8) - 8 > xres))
- 			--n;
--		image.dx = (xres - n * (logo->width + 8) - 8) / 2;
-+		image.dx = (xres - (n * (logo->width + 8) - 8)) / 2;
- 		image.dy = y ?: (yres - logo->height) / 2;
- 	} else {
- 		image.dx = 0;
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index 77963b86b714..1b0062e3c1a4 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -34,6 +34,7 @@ properties:
+       - qcom,rpm-ipq6018
+       - qcom,rpm-msm8226
+       - qcom,rpm-msm8916
++      - qcom,rpm-msm8936
+       - qcom,rpm-msm8953
+       - qcom,rpm-msm8974
+       - qcom,rpm-msm8976
+-- 
+2.35.1
+
 
 

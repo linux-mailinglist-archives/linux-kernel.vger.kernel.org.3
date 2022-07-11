@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48BF570069
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0408857006B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiGKL00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S231421AbiGKL0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiGKLZ4 (ORCPT
+        with ESMTP id S229930AbiGKLZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:25:56 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081932DCB;
-        Mon, 11 Jul 2022 03:59:38 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c131-20020a1c3589000000b003a2cc290135so3244161wma.2;
-        Mon, 11 Jul 2022 03:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
-        b=Ro7RqaQin9erMkTrlFHkFXcSaUltN4ETlxyV4BqD/wNP25lWGF0IBaUYLkgB7BYNCa
-         e3LLKRpx7dZpRaX5VyTTGkBxu7sV0gabuv6VFisV8Ju30NdNcGhfNETkIv1UrDiq+Wh9
-         Wbskb4MIk9FyCEP4YSHcO5j+gkGWYxfqEm7WRlwi38kTKw8+H/BYFP1NvGsC0yLI7Mkl
-         tc/ZpPnrVqtSnT1D+dnMNEvbCR6FNDV6Kg6sWca5otq9qXAaQBCfxnjkhXhLpgr6fjDO
-         I4UsZ0K/XdIpBI3HicO0mxeBXlNQPFyDIhrQ/JLxOi5HwzHGmEppta9tuoPbb9Y1JgyP
-         p2tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
-        b=FqWXDZxebu30vRhPKryoYouMx8wv4W/us6LqyxVqkE5K9VHlOiNzjW66y7COgueRmE
-         dk+2IzUUVSEAbeUNNmTytOQt8ub/wUdTC8OgWJEZnMWTmD5z1q+DgoXxvvrPZ4FBNUgm
-         rqkbPZCo0Bl6vC4sLHH/s3GzGpRjawoI8x3Ve9K10OFcoZEgiYh4LCLKSPLjUEspCzKc
-         Z+uoa02wqRt8RrOq/C9qY9ltpJI+ko9Htbp0iBnMdaQANAplMt7hCROURqFeDomhyMy0
-         1ZkmR1pokaTI07Q50NqDp4ID/YaHt0k59zHxhqJkWncmGwOi3N/AwQ8kxMZEldh/yHdB
-         jeRg==
-X-Gm-Message-State: AJIora9pI64emmCZIoTgEIAa3ZAXmw0VSero/YTdMpwEIBjqe2mUWq2x
-        gML8H325o6eh5NXiV+smrSY=
-X-Google-Smtp-Source: AGRyM1tqi7ZNUAz3GiW76AK0ZmwpLEYyrHT1GYYadfaK18P+/cwlZvRqhX15B9CUnjHxExHXhea2Kg==
-X-Received: by 2002:a05:600c:34d0:b0:3a1:a05c:b523 with SMTP id d16-20020a05600c34d000b003a1a05cb523mr14829216wmq.94.1657537176580;
-        Mon, 11 Jul 2022 03:59:36 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpezg-94-253-144-242-cbl.xnet.hr. [94.253.144.242])
-        by smtp.googlemail.com with ESMTPSA id w15-20020a1cf60f000000b003a2c7bf0497sm6504617wmc.16.2022.07.11.03.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 03:59:36 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v7 4/4] arm64: dts: ipq8074: add APCS support
-Date:   Mon, 11 Jul 2022 12:59:31 +0200
-Message-Id: <20220711105931.43164-4-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220711105931.43164-1-robimarko@gmail.com>
-References: <20220711105931.43164-1-robimarko@gmail.com>
+        Mon, 11 Jul 2022 07:25:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C9C111A22
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:01:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BD6516A3;
+        Mon, 11 Jul 2022 04:01:06 -0700 (PDT)
+Received: from [10.57.85.194] (unknown [10.57.85.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C23353F792;
+        Mon, 11 Jul 2022 04:01:04 -0700 (PDT)
+Message-ID: <ac4944b8-5d15-4761-6315-7dba6eaee0e7@arm.com>
+Date:   Mon, 11 Jul 2022 12:01:00 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] swiotlb: ensure io_tlb_default_mem spinlock always
+ initialised
+Content-Language: en-GB
+To:     Ben Dooks <ben.dooks@sifive.com>, Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        iommu@lists.linux-foundation.org,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <20220708170811.270589-1-ben.dooks@sifive.com>
+ <fdf5d34e-7668-c05c-9098-30e34939c88a@arm.com>
+ <683344bd-dc9b-0bb5-9377-b3e9ab410a74@sifive.com>
+ <e6c43ef0-870b-5fe6-141e-0a3d566b030e@arm.com> <20220711102134.GB4639@lst.de>
+ <4fa8b709-c883-54dc-c302-20c9e55ae93a@sifive.com>
+ <20220711103921.GA6542@lst.de>
+ <43426798-44df-c2c7-1f46-0b79201cb620@sifive.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <43426798-44df-c2c7-1f46-0b79201cb620@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APCS now has support for providing the APSS clocks as the child device
-for IPQ8074.
+On 2022-07-11 11:42, Ben Dooks wrote:
+> On 11/07/2022 11:39, Christoph Hellwig wrote:
+>> On Mon, Jul 11, 2022 at 11:24:51AM +0100, Ben Dooks wrote:
+>>> On 11/07/2022 11:21, Christoph Hellwig wrote:
+>>>> On Mon, Jul 11, 2022 at 11:07:17AM +0100, Robin Murphy wrote:
+>>>>> If none of your peripherals should need SWIOTLB, then the fact that
+>>>>> you're ending up in swiotlb_map() at all is a clear sign that
+>>>>> something's wrong. Most likely someone's forgotten to set their DMA
+>>>>> masks correctly.
+>>>>
+>>>> Yes.
+>>>
+>>> Possibly, we had at least one driver which attempted to set a 32 bit
+>>> DMA mask which had to be removed as the DMA layer accepts this but
+>>> since there is no DMA32 memory the allocator then just fails.
+>>>
+>>> I expect the above may need to be a separate discussion(s) of how to
+>>> default the DMA mask and how to stop the implicit acceptance of setting
+>>> a 32-bit DMA mask.
+>>
+>> No.  Linux simply assumes you can do 32-bit DMA and this won't
+>> change.  So we'll need to fix your platform to support swiotlb
+>> eventually.
+> 
+> Ok, is there any examples currently in the kernel that have no memory
+> in the DMA32 zone that do use swiotlb?
 
-So, add the required DT node for APCS and A53PLL which feeds it the PLL
-clock for APSS, since APSS will be used for CPU frequency scaling.
+The arm64 code originally made an assumption that a system with that 
+kind of memory layout would use a DMA offset in the interconnect, and so 
+placed ZONE_DMA32 in the first 4GB of available RAM rather than actual 
+physical address space. The only relatively mainstream platform we 
+subsequently saw with all RAM above 32 bits was AMD Seattle, which also 
+*didn't* use a DMA offset, so it "worked" by virtue of this bodge in the 
+sense that allocations didn't fail, but DMA transactions would then 
+disappear off into nowhere when the device truncated the MSBs of 
+whatever too-big DMA address it was given.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes in v7:
-* Drop review tag due to significant changes
-* Add A53PLL node
-* Add clocks to APCS node
+I think that stuff's long gone by now, and if any of handful of 
+remaining Seattle users plug in a 32-bit PCIe device and try to use it 
+with the IOMMU disabled, they'll probably see the fireworks as intended.
 
-Changes in v3:
-* Node does not currently exist in the upstream kernel, so add it instead
-of modifying.
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Much as we'd like to make DMA an explicit opt-in for all drivers, that's 
+something which can only really be solved 30 years ago.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 080796555809..6a13bd3ead55 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -879,6 +879,23 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
- 				      "axi_m_sticky";
- 			status = "disabled";
- 		};
-+
-+		apcs_glb: mailbox@b111000 {
-+			compatible = "qcom,ipq8074-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&a53pll>, <&xo>;
-+			clock-names = "pll", "xo";
-+			#mbox-cells = <1>;
-+		};
-+
-+		a53pll: clock@b116000 {
-+			compatible = "qcom,ipq8074-a53pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
- 	};
- 
- 	timer {
--- 
-2.36.1
-
+Robin.

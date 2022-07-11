@@ -2,70 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628F556D840
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1DC56D875
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiGKIhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S229579AbiGKIl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiGKIhX (ORCPT
+        with ESMTP id S230240AbiGKIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:37:23 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA62D12AA5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:37:21 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so2584424wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=94m8TF5uNBFXjkXvh+ACggXcrcKwic4qJ4j/3RHPNXI=;
-        b=A5inJLmsx9iHAehJspCw7BdQNh+iDgVrd+wq0H/Vg4k8fO2ti4SYBhSj9/WR/Egm00
-         LRoObReOI1QMjKo6los6Zsp3ugy7tjOB/Ym3rcnEuOifBli+fPNflnbxWAuRbkb3S8y4
-         FivFF/UaLQANTbTmdTwKhDzmuTGpZhQMhtankBpE88dI5QofspotOfakxdSjcWEqKy93
-         4ohPhqnJ5bSX4N8yGVsqBY0JPl5gqgawRpUEBeqahBzFkohmeLJW1B04Gz+sDwRrOoYm
-         Cq35zm0q4pxbd08hXhoafzzSoFksHGNDGisB1cwBdn7sVTtoPsTtf3UGGETex6zTv7x4
-         0u8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=94m8TF5uNBFXjkXvh+ACggXcrcKwic4qJ4j/3RHPNXI=;
-        b=7l9jrDknhB7fF8BTApZrPfmkKARgJ6cusccokUYVwVEp/QiXP59P+R4MNt+V0aVuFo
-         2PMliNvTVtuxBDdiNd4ppH1CtAhdxAUEZpDlWHGN59+0GTroL9cXgeMEMOJkfOAoOf65
-         7ZYfXe9Eh3rYszMoCcv6amuH0McWujytJXCDMR/0Y+mSZm9cdd64ZM1f7tErLBOBl1PK
-         VaSoYpRlCIabc+IPewtdjOPLRmEK/kMjYy1xiamtM8Ud2D0tCieFjfxEVN7yqHBtRkz6
-         7IzgiqXOXdhkLQyrYD9AqwML5LB5wjVvhQjpQZoNDce288BKmoa8dZlkajOZCZrOE1cz
-         JrnQ==
-X-Gm-Message-State: AJIora8OvL65ETu2gKiS6tLspvHDZ1CpmIIeCt0o4nOhXSjhYkVzJeqH
-        sCYeRc1FttaAx3k/eeAsUOdzQMcpKWjQoA==
-X-Google-Smtp-Source: AGRyM1tapMCGO0RgY4KH3VWlA0us7vKVJLBhzzKt4QIh+LuOYoeXAb7FOKox/zrNOoB2f91cHcqb/A==
-X-Received: by 2002:a05:600c:41c7:b0:3a2:e8fd:fe52 with SMTP id t7-20020a05600c41c700b003a2e8fdfe52mr2501028wmh.123.1657528640293;
-        Mon, 11 Jul 2022 01:37:20 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id u3-20020a5d6da3000000b0021d66cf9547sm6504699wrs.0.2022.07.11.01.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 01:37:19 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 09:37:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v2 07/11] mfd: intel_soc_pmic_bxtwc: Drop redundant
- ACPI_PTR()
-Message-ID: <YsvhPkclriH6MCur@google.com>
-References: <20220628221747.33956-1-andriy.shevchenko@linux.intel.com>
- <20220628221747.33956-7-andriy.shevchenko@linux.intel.com>
+        Mon, 11 Jul 2022 04:40:47 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D401B21E2E;
+        Mon, 11 Jul 2022 01:40:07 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oAoxa-0006eA-00; Mon, 11 Jul 2022 10:40:06 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 95B8DC0344; Mon, 11 Jul 2022 10:37:35 +0200 (CEST)
+Date:   Mon, 11 Jul 2022 10:37:35 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: math-emu: Use the bitmap API to allocate bitmaps
+Message-ID: <20220711083735.GA6084@alpha.franken.de>
+References: <dd954ccb2472019c64da0dd3a90d7b39a2fadc98.1656960999.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628221747.33956-7-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <dd954ccb2472019c64da0dd3a90d7b39a2fadc98.1656960999.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,26 +42,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022, Andy Shevchenko wrote:
-
-> The driver depends on ACPI (via MFD_INTEL_PMC_BXT), ACPI_PTR() resolution
-> is always the same. Otherwise a compiler may produce a warning.
+On Mon, Jul 04, 2022 at 08:56:52PM +0200, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
 > 
-> That said, the rule of thumb either ugly ifdeffery with ACPI_PTR or
-> none should be used in a driver.
+> It is less verbose and it improves the semantic.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> v2: added tag (Lee)
+>  arch/mips/math-emu/dsemul.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/arch/mips/math-emu/dsemul.c b/arch/mips/math-emu/dsemul.c
+> index e2d46cb93ca9..e02bd20b60a6 100644
+> --- a/arch/mips/math-emu/dsemul.c
+> +++ b/arch/mips/math-emu/dsemul.c
+> @@ -82,11 +82,8 @@ static int alloc_emuframe(void)
+>  
+>  	/* Ensure we have an allocation bitmap */
+>  	if (!mm_ctx->bd_emupage_allocmap) {
+> -		mm_ctx->bd_emupage_allocmap =
+> -			kcalloc(BITS_TO_LONGS(emupage_frame_count),
+> -					      sizeof(unsigned long),
+> -				GFP_ATOMIC);
+> -
+> +		mm_ctx->bd_emupage_allocmap = bitmap_zalloc(emupage_frame_count,
+> +							    GFP_ATOMIC);
+>  		if (!mm_ctx->bd_emupage_allocmap) {
+>  			idx = BD_EMUFRAME_NONE;
+>  			goto out_unlock;
+> @@ -206,7 +203,7 @@ void dsemul_mm_cleanup(struct mm_struct *mm)
+>  {
+>  	mm_context_t *mm_ctx = &mm->context;
+>  
+> -	kfree(mm_ctx->bd_emupage_allocmap);
+> +	bitmap_free(mm_ctx->bd_emupage_allocmap);
+>  }
+>  
+>  int mips_dsemul(struct pt_regs *regs, mips_instruction ir,
+> -- 
+> 2.34.1
 
-Applied, thanks.
+applied to mips-next.
+
+Thomas.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

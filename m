@@ -2,174 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978B456D734
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD7556D738
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiGKH6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S229948AbiGKH7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiGKH6Y (ORCPT
+        with ESMTP id S229899AbiGKH66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:58:24 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44741CB1B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:58:21 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id e1-20020a05660222c100b0067b95ec5046so826694ioe.18
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:58:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=nuHzyqLwrYS9F/FU+kIVaEf3pJI2402Zo0uvkKPVm5s=;
-        b=CnnTrL0bPhefBb2+R/ERxbwvIWefNGtYbF6NaFqwGkBebopUzANUqDtEB7UxNM1iVe
-         tSUxCds5D6dYi6mBbPQmvJ5l5BpVWpRVrWxA2jYXIHYqV+VuWSagmAaTdg+8y70biJ5G
-         ICTYwBqRM6OnOXahK1TWLLsMd1UC9sv7JrM7ldBLR1Y/hxfC1ttv/rxruiAvE7zJ13LM
-         58igi3G+G+7A/3cnvMDdlXByD4r5ncqMIgKRRL48DWaydLZEZRRYUz3LxnFAaG9XSHJx
-         Yk1nAKRSNxE3oPoS7wpAf6i9BC6g5gbaKMPhTyJjQq/Gw3qC9G7Emw8H0CixrqTQ1NYL
-         0B7g==
-X-Gm-Message-State: AJIora9xWBN0IK3O7nT8R6HckaUF3JUN0ru/4wJH/1yMX8ayAkjvfedn
-        FYSKcgRqvoQrD2kMMz8mVEFmQbaGsZFZ2vRBUKxhnKiZvEy+
-X-Google-Smtp-Source: AGRyM1s7CkxoTRl5Wp9nmfqTaY4zp6kzTPL3lHEK3TTtDdNBrzYqrhU/hN3ro/yX21y1laE+hcJKuNUpq4kkvXXgW9gvYETNiJsB
+        Mon, 11 Jul 2022 03:58:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC71E8E;
+        Mon, 11 Jul 2022 00:58:57 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26B5jD63013747;
+        Mon, 11 Jul 2022 07:58:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=hBtEgTDSy970CDUjQiXsNtCZEwvTYiPxJpYa9RGS2+Q=;
+ b=ATijTIayX0y31EL/pW+GXMihdg7d59K5QZxiLHjd7XpV7i6YOHfHuMNlJLzygP5EB7ba
+ zX4ROfONlM3+sBNTQRo36LgKFutkwvIqYS8k69td0l2i4ySCCvftODgBDgrDM/0fOceP
+ KGTRhd50yxv5LvZeq8oZMZ9hk9eFUm2jGPfk1DpneST3W3CQdjVxswUgm/cK6tM/65/s
+ y4tmI30VMoqNGr6BCfwxISi2aBdx0Ta5idM4dnoBtpdfPu2LngFGV4skRVPBT8db97Nz
+ RR/mgASROb14PKADWaU9lyCs2hF/J0xmU7KFlkg+DgJN7zvyqQKL7DGAaFHPiZxMe63l Ow== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h84sab5ma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 07:58:44 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26B7oHqY016532;
+        Mon, 11 Jul 2022 07:58:42 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h71a8jd15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 07:58:42 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26B7weno17236326
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Jul 2022 07:58:40 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E22204C046;
+        Mon, 11 Jul 2022 07:58:39 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6DD84C04E;
+        Mon, 11 Jul 2022 07:58:39 +0000 (GMT)
+Received: from [9.171.15.135] (unknown [9.171.15.135])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 11 Jul 2022 07:58:39 +0000 (GMT)
+Message-ID: <17777079-d671-2596-4371-511a182f3a4a@de.ibm.com>
+Date:   Mon, 11 Jul 2022 09:58:39 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1522:b0:2dc:457d:4094 with SMTP id
- i2-20020a056e02152200b002dc457d4094mr9164954ilu.198.1657526301166; Mon, 11
- Jul 2022 00:58:21 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 00:58:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000063154a05e382eae9@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in
- bitfill_aligned (3)
-From:   syzbot <syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com>
-To:     daniel@ffwll.ch, deller@gmx.de, dri-devel@lists.freedesktop.org,
-        javierm@redhat.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sam@ravnborg.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the kvms390 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220711084725.26b9ed99@canb.auug.org.au>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+In-Reply-To: <20220711084725.26b9ed99@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bJ-2webVAActu5jlEAA-askpXPZ4KgH7
+X-Proofpoint-ORIG-GUID: bJ-2webVAActu5jlEAA-askpXPZ4KgH7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_13,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1011
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207110031
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    e35e5b6f695d Merge tag 'xsa-5.19-tag' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f49bbc080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f3bf7765b1ebd721
-dashboard link: https://syzkaller.appspot.com/bug?extid=a168dbeaaa7778273c1b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: ffffc90004331000
-#PF: supervisor write access in kernel mode
-#PF: error_code(0x0002) - not-present page
-PGD 11c00067 P4D 11c00067 PUD 11dc5067 PMD 1cffd067 PTE 0
-Oops: 0002 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 11483 Comm: syz-executor.4 Not tainted 5.19.0-rc5-syzkaller-00056-ge35e5b6f695d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:memset64 arch/x86/include/asm/string_64.h:49 [inline]
-RIP: 0010:memset_l include/linux/string.h:128 [inline]
-RIP: 0010:bitfill_aligned+0x1ad/0x270 drivers/video/fbdev/core/sysfillrect.c:53
-Code: 08 49 31 ef eb 66 e8 32 9c 05 fd 45 89 e6 4c 8b 64 24 10 44 89 f0 31 d2 f7 f3 89 c3 48 8b 6c 24 08 48 89 e8 4c 89 e7 48 89 d9 <f3> 48 ab 31 ff 44 89 ee e8 26 a0 05 fd 4d 85 ed 74 5f 4d 8d 24 dc
-RSP: 0018:ffffc9000ae3f7e8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000001800 RCX: 0000000000001200
-RDX: 0000000000000000 RSI: 0000000000000bca RDI: ffffc90004331000
-RBP: 0000000000000000 R08: ffffffff8481e07e R09: 0000000000000040
-R10: 0000000000000002 R11: ffff88803938d880 R12: ffffc9000432e000
-R13: 0000000000000000 R14: 0000000000060000 R15: ffffffffffffffff
-FS:  00007f8c16811700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc90004331000 CR3: 000000006dd66000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- sys_fillrect+0x5ce/0x7f0 drivers/video/fbdev/core/sysfillrect.c:281
- drm_fb_helper_sys_fillrect drivers/gpu/drm/drm_fb_helper.c:795 [inline]
- drm_fbdev_fb_fillrect+0x163/0x300 drivers/gpu/drm/drm_fb_helper.c:2310
- bit_clear_margins+0x3f1/0x6e0 drivers/video/fbdev/core/bitblit.c:232
- fbcon_clear_margins drivers/video/fbdev/core/fbcon.c:1304 [inline]
- fbcon_do_set_font+0xd7c/0x1330 drivers/video/fbdev/core/fbcon.c:2434
- fbcon_set_font+0xa9c/0xd80 drivers/video/fbdev/core/fbcon.c:2517
- con_font_set drivers/tty/vt/vt.c:4666 [inline]
- con_font_op+0xbe8/0x1070 drivers/tty/vt/vt.c:4710
- vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
- vt_ioctl+0x172e/0x1d00 drivers/tty/vt/vt_ioctl.c:752
- tty_ioctl+0x874/0xc60 drivers/tty/tty_io.c:2778
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f8c15689109
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8c16811168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f8c1579bf60 RCX: 00007f8c15689109
-RDX: 0000000020000040 RSI: 0000000000004b72 RDI: 0000000000000003
-RBP: 00007f8c156e305d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdfe77e39f R14: 00007f8c16811300 R15: 0000000000022000
- </TASK>
-Modules linked in:
-CR2: ffffc90004331000
----[ end trace 0000000000000000 ]---
-RIP: 0010:memset64 arch/x86/include/asm/string_64.h:49 [inline]
-RIP: 0010:memset_l include/linux/string.h:128 [inline]
-RIP: 0010:bitfill_aligned+0x1ad/0x270 drivers/video/fbdev/core/sysfillrect.c:53
-Code: 08 49 31 ef eb 66 e8 32 9c 05 fd 45 89 e6 4c 8b 64 24 10 44 89 f0 31 d2 f7 f3 89 c3 48 8b 6c 24 08 48 89 e8 4c 89 e7 48 89 d9 <f3> 48 ab 31 ff 44 89 ee e8 26 a0 05 fd 4d 85 ed 74 5f 4d 8d 24 dc
-RSP: 0018:ffffc9000ae3f7e8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000001800 RCX: 0000000000001200
-RDX: 0000000000000000 RSI: 0000000000000bca RDI: ffffc90004331000
-RBP: 0000000000000000 R08: ffffffff8481e07e R09: 0000000000000040
-R10: 0000000000000002 R11: ffff88803938d880 R12: ffffc9000432e000
-R13: 0000000000000000 R14: 0000000000060000 R15: ffffffffffffffff
-FS:  00007f8c16811700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc90004331000 CR3: 000000006dd66000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	08 49 31             	or     %cl,0x31(%rcx)
-   3:	ef                   	out    %eax,(%dx)
-   4:	eb 66                	jmp    0x6c
-   6:	e8 32 9c 05 fd       	callq  0xfd059c3d
-   b:	45 89 e6             	mov    %r12d,%r14d
-   e:	4c 8b 64 24 10       	mov    0x10(%rsp),%r12
-  13:	44 89 f0             	mov    %r14d,%eax
-  16:	31 d2                	xor    %edx,%edx
-  18:	f7 f3                	div    %ebx
-  1a:	89 c3                	mov    %eax,%ebx
-  1c:	48 8b 6c 24 08       	mov    0x8(%rsp),%rbp
-  21:	48 89 e8             	mov    %rbp,%rax
-  24:	4c 89 e7             	mov    %r12,%rdi
-  27:	48 89 d9             	mov    %rbx,%rcx
-* 2a:	f3 48 ab             	rep stos %rax,%es:(%rdi) <-- trapping instruction
-  2d:	31 ff                	xor    %edi,%edi
-  2f:	44 89 ee             	mov    %r13d,%esi
-  32:	e8 26 a0 05 fd       	callq  0xfd05a05d
-  37:	4d 85 ed             	test   %r13,%r13
-  3a:	74 5f                	je     0x9b
-  3c:	4d 8d 24 dc          	lea    (%r12,%rbx,8),%r12
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Am 11.07.22 um 00:47 schrieb Stephen Rothwell:
+> Hi all,
+> 
+> Commits
+> 
+>    a25db9e809ec ("MAINTAINERS: additional files related kvm s390 pci passthrough")
+>    a0c4d1109d6c ("KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devices")
+>    a4ae95559e77 ("vfio-pci/zdev: different maxstbl for interpreted devices")
+>    0a8107de8091 ("vfio-pci/zdev: add function handle to clp base capability")
+>    6518ebc68c72 ("vfio-pci/zdev: add open/close device hooks")
+>    b8d6db486fae ("KVM: s390: pci: add routines to start/stop interpretive execution")
+>    d53ad189a06d ("KVM: s390: pci: provide routines for enabling/disabling interrupt forwarding")
+>    1779cffa5bf9 ("KVM: s390: mechanism to enable guest zPCI Interpretation")
+>    834c4bfa5b5c ("KVM: s390: pci: enable host forwarding of Adapter Event Notifications")
+>    394f70328769 ("KVM: s390: pci: do initial setup for AEN interpretation")
+>    7713b9894b2a ("KVM: s390: pci: add basic kvm_zdev structure")
+>    b6a7066f4e9b ("vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM")
+>    59370746253b ("s390/pci: stash dtsm and maxstbl")
+>    729c8d1d957a ("s390/pci: stash associated GISA designation")
+>    59f42dba7d24 ("s390/pci: externalize the SIC operation controls and routine")
+>    db29efaf10d4 ("s390/airq: allow for airq structure that uses an input vector")
+>    7a7bdc5f142a ("s390/airq: pass more TPI info to airq handlers")
+>    5857c6577bdc ("s390/sclp: detect the AISI facility")
+>    1e41bd8fd172 ("s390/sclp: detect the AENI facility")
+>    2f3a5d8de328 ("s390/sclp: detect the AISII facility")
+>    263007d2d10b ("s390/sclp: detect the zPCI load/store interpretation facility")
+> 
+> are missing a Signed-off-by from their committer.
+> 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Fixed, thanks.

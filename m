@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081B556FA86
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F269556FA28
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiGKJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S231460AbiGKJNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiGKJSO (ORCPT
+        with ESMTP id S231434AbiGKJNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:18:14 -0400
+        Mon, 11 Jul 2022 05:13:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F454C62E;
-        Mon, 11 Jul 2022 02:11:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6030553;
+        Mon, 11 Jul 2022 02:09:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF326115B;
-        Mon, 11 Jul 2022 09:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC57FC34115;
-        Mon, 11 Jul 2022 09:11:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E60D611CB;
+        Mon, 11 Jul 2022 09:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5732FC34115;
+        Mon, 11 Jul 2022 09:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530704;
-        bh=i7dAol9ZDOUeNm+rfcVvLNLqnTH8aWKLgfXt6KaI0Z0=;
+        s=korg; t=1657530580;
+        bh=Hu5XHNuadzhnfV07s7lGbtakx0/CBfLfMKsQhHeJ2v4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Il/vJWrMwFp2TYnujb1yukVlIQAoUKeD0RsM6Q5OIDDkoP6tx/6BVy+H2qshYxPfu
-         9Zo5j2e+tumVZxI/35FaXHN28EmaSUle2VWzkp7+/b1pngbLEa1SPWh1yuMLKvbEaG
-         Y3z9tBWgDEd46+OGEojUqtTGp96jMCZ00so3/8yI=
+        b=Aj7VhqrIRsvBxQA6dAR9zZED07dZSCDjv/ZRj/TcRfpNJW6+f6qTNFUDAPu+cQUug
+         0tCSk1dngjIipkZ/DnjkRKm6Jb9h7IJG3eimao7ZrIUZomxjSv3pdgNQsxIXrROOka
+         x15GzwU4BndkGOTK4UFK7Y2rZbdI1j+FqAjdInwk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefano Brivio <sbrivio@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.10 10/55] netfilter: nft_set_pipapo: release elements in clone from abort path
-Date:   Mon, 11 Jul 2022 11:06:58 +0200
-Message-Id: <20220711090542.066014417@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 20/31] selftests: forwarding: fix flood_unicast_test when h2 supports IFF_UNICAST_FLT
+Date:   Mon, 11 Jul 2022 11:06:59 +0200
+Message-Id: <20220711090538.444068869@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,123 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 9827a0e6e23bf43003cd3d5b7fb11baf59a35e1e upstream.
+[ Upstream commit b8e629b05f5d23f9649c901bef09fab8b0c2e4b9 ]
 
-New elements that reside in the clone are not released in case that the
-transaction is aborted.
+As mentioned in the blamed commit, flood_unicast_test() works by
+checking the match count on a tc filter placed on the receiving
+interface.
 
-[16302.231754] ------------[ cut here ]------------
-[16302.231756] WARNING: CPU: 0 PID: 100509 at net/netfilter/nf_tables_api.c:1864 nf_tables_chain_destroy+0x26/0x127 [nf_tables]
-[...]
-[16302.231882] CPU: 0 PID: 100509 Comm: nft Tainted: G        W         5.19.0-rc3+ #155
-[...]
-[16302.231887] RIP: 0010:nf_tables_chain_destroy+0x26/0x127 [nf_tables]
-[16302.231899] Code: f3 fe ff ff 41 55 41 54 55 53 48 8b 6f 10 48 89 fb 48 c7 c7 82 96 d9 a0 8b 55 50 48 8b 75 58 e8 de f5 92 e0 83 7d 50 00 74 09 <0f> 0b 5b 5d 41 5c 41 5d c3 4c 8b 65 00 48 8b 7d 08 49 39 fc 74 05
-[...]
-[16302.231917] Call Trace:
-[16302.231919]  <TASK>
-[16302.231921]  __nf_tables_abort.cold+0x23/0x28 [nf_tables]
-[16302.231934]  nf_tables_abort+0x30/0x50 [nf_tables]
-[16302.231946]  nfnetlink_rcv_batch+0x41a/0x840 [nfnetlink]
-[16302.231952]  ? __nla_validate_parse+0x48/0x190
-[16302.231959]  nfnetlink_rcv+0x110/0x129 [nfnetlink]
-[16302.231963]  netlink_unicast+0x211/0x340
-[16302.231969]  netlink_sendmsg+0x21e/0x460
+But the second host interface (host2_if) has no interest in receiving a
+packet with MAC DA de:ad:be:ef:13:37, so its RX filter drops it even
+before the ingress tc filter gets to be executed. So we will incorrectly
+get the message "Packet was not flooded when should", when in fact, the
+packet was flooded as expected but dropped due to an unrelated reason,
+at some other layer on the receiving side.
 
-Add nft_set_pipapo_match_destroy() helper function to release the
-elements in the lookup tables.
+Force h2 to accept this packet by temporarily placing it in promiscuous
+mode. Alternatively we could either deliver to its MAC address or use
+tcpdump_start, but this has the fewest complications.
 
-Stefano Brivio says: "We additionally look for elements pointers in the
-cloned matching data if priv->dirty is set, because that means that
-cloned data might point to additional elements we did not commit to the
-working copy yet (such as the abort path case, but perhaps not limited
-to it)."
+This fixes the "flooding" test from bridge_vlan_aware.sh and
+bridge_vlan_unaware.sh, which calls flood_test from the lib.
 
-Fixes: 3c4287f62044 ("nf_tables: Add set type for arbitrary concatenation of ranges")
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 236dd50bf67a ("selftests: forwarding: Add a test for flooded traffic")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_set_pipapo.c |   48 ++++++++++++++++++++++++++++-------------
- 1 file changed, 33 insertions(+), 15 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/netfilter/nft_set_pipapo.c
-+++ b/net/netfilter/nft_set_pipapo.c
-@@ -2121,6 +2121,32 @@ out_scratch:
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 08bac6cf1bb3..4d98e8940095 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -885,6 +885,7 @@ flood_test_do()
+ 
+ 	# Add an ACL on `host2_if` which will tell us whether the packet
+ 	# was flooded to it or not.
++	ip link set $host2_if promisc on
+ 	tc qdisc add dev $host2_if ingress
+ 	tc filter add dev $host2_if ingress protocol ip pref 1 handle 101 \
+ 		flower dst_mac $mac action drop
+@@ -902,6 +903,7 @@ flood_test_do()
+ 
+ 	tc filter del dev $host2_if ingress protocol ip pref 1 handle 101 flower
+ 	tc qdisc del dev $host2_if ingress
++	ip link set $host2_if promisc off
+ 
+ 	return $err
  }
- 
- /**
-+ * nft_set_pipapo_match_destroy() - Destroy elements from key mapping array
-+ * @set:	nftables API set representation
-+ * @m:		matching data pointing to key mapping array
-+ */
-+static void nft_set_pipapo_match_destroy(const struct nft_set *set,
-+					 struct nft_pipapo_match *m)
-+{
-+	struct nft_pipapo_field *f;
-+	int i, r;
-+
-+	for (i = 0, f = m->f; i < m->field_count - 1; i++, f++)
-+		;
-+
-+	for (r = 0; r < f->rules; r++) {
-+		struct nft_pipapo_elem *e;
-+
-+		if (r < f->rules - 1 && f->mt[r + 1].e == f->mt[r].e)
-+			continue;
-+
-+		e = f->mt[r].e;
-+
-+		nft_set_elem_destroy(set, e, true);
-+	}
-+}
-+
-+/**
-  * nft_pipapo_destroy() - Free private data for set and all committed elements
-  * @set:	nftables API set representation
-  */
-@@ -2128,26 +2154,13 @@ static void nft_pipapo_destroy(const str
- {
- 	struct nft_pipapo *priv = nft_set_priv(set);
- 	struct nft_pipapo_match *m;
--	struct nft_pipapo_field *f;
--	int i, r, cpu;
-+	int cpu;
- 
- 	m = rcu_dereference_protected(priv->match, true);
- 	if (m) {
- 		rcu_barrier();
- 
--		for (i = 0, f = m->f; i < m->field_count - 1; i++, f++)
--			;
--
--		for (r = 0; r < f->rules; r++) {
--			struct nft_pipapo_elem *e;
--
--			if (r < f->rules - 1 && f->mt[r + 1].e == f->mt[r].e)
--				continue;
--
--			e = f->mt[r].e;
--
--			nft_set_elem_destroy(set, e, true);
--		}
-+		nft_set_pipapo_match_destroy(set, m);
- 
- #ifdef NFT_PIPAPO_ALIGN
- 		free_percpu(m->scratch_aligned);
-@@ -2161,6 +2174,11 @@ static void nft_pipapo_destroy(const str
- 	}
- 
- 	if (priv->clone) {
-+		m = priv->clone;
-+
-+		if (priv->dirty)
-+			nft_set_pipapo_match_destroy(set, m);
-+
- #ifdef NFT_PIPAPO_ALIGN
- 		free_percpu(priv->clone->scratch_aligned);
- #endif
+-- 
+2.35.1
+
 
 

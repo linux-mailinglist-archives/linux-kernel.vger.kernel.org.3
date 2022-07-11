@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC93157038D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8225703A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiGKM5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        id S232206AbiGKM5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiGKM5e (ORCPT
+        with ESMTP id S232187AbiGKM5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:57:34 -0400
+        Mon, 11 Jul 2022 08:57:38 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC872A957;
-        Mon, 11 Jul 2022 05:57:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F5E5508E;
+        Mon, 11 Jul 2022 05:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657544253; x=1689080253;
+  t=1657544257; x=1689080257;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Kr0TfdyUrLeQLzT7iw1OK58CqnVvhb7gtQzXDXQFHjY=;
-  b=BZCmFlY0dBKLlTJJUy2TQ1yXNnJtjOzr8fH1nnB2IvfyD2KUZejaK2gE
-   HFA3l9cyg9kL0h+DUPYDyGOLrjQ61xTHUQB4Q8dvo461Xq8JqoYwPRWVT
-   tkfIuRj5T+R5fcf175sTMM7b4B3t7Tgfl5qXLS7RiQ47RrMLUDUUJynco
-   4=;
+  bh=eluVtVV6YxZiX9IA4reDOwHLCow6fgP8gJauEX5eTDs=;
+  b=aJt3Q60GorfD3CFTpNRXzxgbwczWhg0fcKklGoZjRQ9xQaaFmv28do/I
+   X0Vt4YNynQIZauviNxeZ62Lp8QSN/9EXAPH3fwLk44/TgspFGpLZvGZFy
+   4eScd5Tn7uPqRdnI3OmLJSF52gNeCCQ89Bsw+EfnyxofD6DzxdScXI6Uk
+   Y=;
 Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 05:57:33 -0700
+  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 05:57:36 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 05:57:31 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 05:57:35 -0700
 X-QCInternal: smtphost
 Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
   by ironmsg02-blr.qualcomm.com with ESMTP; 11 Jul 2022 18:27:11 +0530
 Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id 82AF03E4E; Mon, 11 Jul 2022 18:27:07 +0530 (IST)
+        id 8E15A3E51; Mon, 11 Jul 2022 18:27:07 +0530 (IST)
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
         bjorn.andersson@linaro.org, quic_aravindh@quicinc.com,
         quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-Subject: [PATCH v6 09/10] drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
-Date:   Mon, 11 Jul 2022 18:27:03 +0530
-Message-Id: <1657544224-10680-10-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v6 10/10] drm/msm/disp/dpu: check for crtc enable rather than crtc active to release shared resources
+Date:   Mon, 11 Jul 2022 18:27:04 +0530
+Message-Id: <1657544224-10680-11-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -61,113 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PSR on eDP interface using drm self-refresh librabry.
-This patch uses a trigger from self-refresh library to enter/exit
-into PSR, when there are no updates from framework.
+According to KMS documentation, The driver must not release any shared
+resources if active is set to false but enable still true.
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Fixes: ccc862b957c6 ("drm/msm/dpu: Fix reservation failures in modeset")
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 13 ++++++++++++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
- 3 files changed, 27 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index f91e3d1..eb3915a 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -18,6 +18,7 @@
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_rect.h>
- #include <drm/drm_vblank.h>
-+#include <drm/drm_self_refresh_helper.h>
- 
- #include "dpu_kms.h"
- #include "dpu_hw_lm.h"
-@@ -961,6 +962,9 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
- 
- 	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
- 
-+	if (old_crtc_state->self_refresh_active)
-+		return;
-+
- 	/* Disable/save vblank irq handling */
- 	drm_crtc_vblank_off(crtc);
- 
-@@ -1521,7 +1525,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- {
- 	struct drm_crtc *crtc = NULL;
- 	struct dpu_crtc *dpu_crtc = NULL;
--	int i;
-+	int i, ret;
- 
- 	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
- 	if (!dpu_crtc)
-@@ -1558,6 +1562,13 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 	/* initialize event handling */
- 	spin_lock_init(&dpu_crtc->event_lock);
- 
-+	ret = drm_self_refresh_helper_init(crtc);
-+	if (ret) {
-+		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
-+			crtc->name, ret);
-+		return ERR_PTR(ret);
-+	}
-+
- 	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
- 	return crtc;
- }
 diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 3156efb..5dfb56a 100644
+index 5dfb56a..02a71d1 100644
 --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
 +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -12,6 +12,7 @@
- #include <linux/kthread.h>
- #include <linux/seq_file.h>
+@@ -592,7 +592,7 @@ static int dpu_encoder_virt_atomic_check(
+ 		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
+ 			dpu_rm_release(global_state, drm_enc);
  
-+#include <drm/drm_atomic.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_file.h>
- #include <drm/drm_probe_helper.h>
-@@ -1170,11 +1171,24 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
- 					struct drm_atomic_state *state)
- {
- 	struct dpu_encoder_virt *dpu_enc = NULL;
-+	struct drm_crtc *crtc;
-+	struct drm_crtc_state *old_state = NULL;
- 	int i = 0;
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
- 	DPU_DEBUG_ENC(dpu_enc, "\n");
- 
-+	crtc = drm_atomic_get_old_crtc_for_encoder(state, drm_enc);
-+	if (crtc)
-+		old_state = drm_atomic_get_old_crtc_state(state, crtc);
-+
-+	/*
-+	 * The encoder is already disabled if self refresh mode was set earlier,
-+	 * in the old_state for the corresponding crtc.
-+	 */
-+	if (old_state && old_state->self_refresh_active)
-+		return;
-+
- 	mutex_lock(&dpu_enc->enc_lock);
- 	dpu_enc->enabled = false;
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index bce4764..cc0a674 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -507,7 +507,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
- 		return;
- 	}
- 
--	if (!crtc->state->active) {
-+	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
- 		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
- 		return;
- 	}
+-			if (!crtc_state->active_changed || crtc_state->active)
++			if (!crtc_state->active_changed || crtc_state->enable)
+ 				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
+ 						drm_enc, crtc_state, topology);
+ 		}
 -- 
 2.7.4
 

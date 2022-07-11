@@ -2,128 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A4556D6D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862CF56D6EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiGKHbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S230177AbiGKHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGKHbN (ORCPT
+        with ESMTP id S229478AbiGKHg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:31:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9471A39F;
-        Mon, 11 Jul 2022 00:31:12 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LhFsN4xVVzFpyY;
-        Mon, 11 Jul 2022 15:30:16 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Jul
- 2022 15:31:09 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH] net: change the type of ip_route_input_rcu to static
-Date:   Mon, 11 Jul 2022 15:35:49 +0800
-Message-ID: <20220711073549.8947-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 11 Jul 2022 03:36:58 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7671B787;
+        Mon, 11 Jul 2022 00:36:57 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LhFw362hPz686pl;
+        Mon, 11 Jul 2022 15:32:35 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Jul 2022 09:36:55 +0200
+Received: from [10.195.33.182] (10.195.33.182) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Jul 2022 08:36:53 +0100
+Message-ID: <a415e4a1-72ce-53e1-437a-fc7e56e4b913@huawei.com>
+Date:   Mon, 11 Jul 2022 08:36:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 0/5] DMA mapping changes for SCSI core
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <jejb@linux.ibm.com>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <iommu@lists.linux.dev>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>
+References: <1656590892-42307-1-git-send-email-john.garry@huawei.com>
+ <b5f80062-e8ef-9597-1b0c-393140950dfb@huawei.com>
+ <20220706134447.GA23753@lst.de> <yq1y1x47jgn.fsf@ca-mkp.ca.oracle.com>
+ <5fd4814a-81b1-0e71-58e0-57a747eb684e@huawei.com>
+ <6367a264-a3d3-8857-9b5a-2afcd25580cb@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <6367a264-a3d3-8857-9b5a-2afcd25580cb@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.33.182]
+X-ClientProxiedBy: lhreml726-chm.china.huawei.com (10.201.108.77) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type of ip_route_input_rcu should be static.
+On 11/07/2022 00:08, Damien Le Moal wrote:
+>> Ah, I think that I misunderstood Damien's question. I thought he was
+>> asking why not keep shost max_sectors at dma_max_mapping_size() and then
+>> init each sdev request queue max hw sectors at dma_opt_mapping_size().
+> I was suggesting the reverse:)  Keep the device hard limit
+> (max_hw_sectors) to the max dma mapping and set the soft limit
+> (max_sectors) to the optimal dma mapping size.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- include/net/route.h |  4 ----
- net/ipv4/route.c    | 34 +++++++++++++++++-----------------
- 2 files changed, 17 insertions(+), 21 deletions(-)
+Sure, but as I mentioned below, I only see a small % of requests whose 
+mapping size exceeds max_sectors but that still causes a big performance 
+hit. So that is why I want to set the hard limit as the optimal dma 
+mapping size.
 
-diff --git a/include/net/route.h b/include/net/route.h
-index b6743ff88e30..4929a710c24b 100644
---- a/include/net/route.h
-+++ b/include/net/route.h
-@@ -201,10 +201,6 @@ int ip_mc_validate_source(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- 			  struct in_device *in_dev, u32 *itag);
- int ip_route_input_noref(struct sk_buff *skb, __be32 dst, __be32 src,
- 			 u8 tos, struct net_device *devin);
--int ip_route_input_rcu(struct sk_buff *skb, __be32 dst, __be32 src,
--		       u8 tos, struct net_device *devin,
--		       struct fib_result *res);
--
- int ip_route_use_hint(struct sk_buff *skb, __be32 dst, __be32 src,
- 		      u8 tos, struct net_device *devin,
- 		      const struct sk_buff *hint);
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index bd351fab46e6..328beff85a1e 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2432,24 +2432,9 @@ out:	return err;
- 	goto out;
- }
- 
--int ip_route_input_noref(struct sk_buff *skb, __be32 daddr, __be32 saddr,
--			 u8 tos, struct net_device *dev)
--{
--	struct fib_result res;
--	int err;
--
--	tos &= IPTOS_RT_MASK;
--	rcu_read_lock();
--	err = ip_route_input_rcu(skb, daddr, saddr, tos, dev, &res);
--	rcu_read_unlock();
--
--	return err;
--}
--EXPORT_SYMBOL(ip_route_input_noref);
--
- /* called with rcu_read_lock held */
--int ip_route_input_rcu(struct sk_buff *skb, __be32 daddr, __be32 saddr,
--		       u8 tos, struct net_device *dev, struct fib_result *res)
-+static int ip_route_input_rcu(struct sk_buff *skb, __be32 daddr, __be32 saddr,
-+			      u8 tos, struct net_device *dev, struct fib_result *res)
- {
- 	/* Multicast recognition logic is moved from route cache to here.
- 	 * The problem was that too many Ethernet cards have broken/missing
-@@ -2498,6 +2483,21 @@ int ip_route_input_rcu(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- 	return ip_route_input_slow(skb, daddr, saddr, tos, dev, res);
- }
- 
-+int ip_route_input_noref(struct sk_buff *skb, __be32 daddr, __be32 saddr,
-+			 u8 tos, struct net_device *dev)
-+{
-+	struct fib_result res;
-+	int err;
-+
-+	tos &= IPTOS_RT_MASK;
-+	rcu_read_lock();
-+	err = ip_route_input_rcu(skb, daddr, saddr, tos, dev, &res);
-+	rcu_read_unlock();
-+
-+	return err;
-+}
-+EXPORT_SYMBOL(ip_route_input_noref);
-+
- /* called with rcu_read_lock() */
- static struct rtable *__mkroute_output(const struct fib_result *res,
- 				       const struct flowi4 *fl4, int orig_oif,
--- 
-2.17.1
+Indeed, the IOMMU IOVA caching limit is already the same as default 
+max_sectors for the disks in my system - 128Kb for 4k page size.
 
+> 
+>> But he seems that you want to know why not have the request queue max
+>> sectors at dma_opt_mapping_size(). The answer is related to meaning of
+>> dma_opt_mapping_size(). If we get any mappings which exceed this size
+>> then it can have a big dma mapping performance hit. So I set max hw
+>> sectors at this ‘opt’ mapping size to ensure that we get no mappings
+>> which exceed this size. Indeed, I think max sectors is 128Kb today for
+>> my host, which would be same as dma_opt_mapping_size() value with an
+>> IOMMU enabled. And I find that only a small % of request size may exceed
+>> this 128kb size, but it still has a big performance impact.
+>>
+
+Thanks,
+John

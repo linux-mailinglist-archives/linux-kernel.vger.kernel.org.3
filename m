@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63F856FB2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686F256FD05
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbiGKJ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S233738AbiGKJuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiGKJYe (ORCPT
+        with ESMTP id S233795AbiGKJtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BFD24955;
-        Mon, 11 Jul 2022 02:14:49 -0700 (PDT)
+        Mon, 11 Jul 2022 05:49:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99FACEC5;
+        Mon, 11 Jul 2022 02:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19868B80CEF;
-        Mon, 11 Jul 2022 09:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65760C341C0;
-        Mon, 11 Jul 2022 09:14:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E63F261356;
+        Mon, 11 Jul 2022 09:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC88CC34115;
+        Mon, 11 Jul 2022 09:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530886;
-        bh=gn6z5xNUSkjtagaL4BSFt6iLReVorGh4Ro3OTLFfa/w=;
+        s=korg; t=1657531438;
+        bh=tOrTmnkvypOInQwBGOplI6UmHax23uF7QhIN1+eDHZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I54qc7h19xyYQLj6t9sV0J94Jr4Ypq+te4QZt0dmI0gUPYCxG2Qj9O1KJ/eCMM/bb
-         o8g1thZIPLNEOnJVB5B8Ltzsy46U/OySSuW/zxJGxu96VpmYirPDbbOVD5EdaE66P6
-         W3vXzmAqLEn2MLZPNeiFCePqBjIMbelNRkKw+VyI=
+        b=GkrkpNa3Wm9rpwDRuqOHZRfUgVAI00rvMT2ZTzmVhewUDTQAK/5+VhOAaj+mksWnU
+         q70nvGMnO0sWeT9t6frL5VPh2p7PgHfO66QSvaRxFD6tPFBVDyO923rPnjHiPA1wy1
+         /N3YyFyzhhS+hujb37vTvoX8qV3tf1lfN/zCkeQI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.18 002/112] ALSA: usb-audio: Workarounds for Behringer UMC 204/404 HD
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 106/230] powerpc/32: Dont use lmw/stmw for saving/restoring non volatile regs
 Date:   Mon, 11 Jul 2022 11:06:02 +0200
-Message-Id: <20220711090549.617382071@linuxfoundation.org>
+Message-Id: <20220711090607.074732684@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-commit ae8b1631561a3634cc09d0c62bbdd938eade05ec upstream.
+[ Upstream commit a85c728cb5e12216c19ae5878980c2cbbbf8616d ]
 
-Both Behringer UMC 202 HD and 404 HD need explicit quirks to enable
-the implicit feedback mode and start the playback stream primarily.
-The former seems fixing the stuttering and the latter is required for
-a playback-only case.
+Instructions lmw/stmw are interesting for functions that are rarely
+used and not in the cache, because only one instruction is to be
+copied into the instruction cache instead of 19. However those
+instruction are less performant than 19x raw lwz/stw as they require
+synchronisation plus one additional cycle.
 
-Note that the "clock source 41 is not valid" error message still
-appears even after this fix, but it should be only once at probe.
-The reason of the error is still unknown, but this seems to be mostly
-harmless as it's a one-off error and the driver retires the clock
-setup and it succeeds afterwards.
+SAVE_NVGPRS / REST_NVGPRS are used in only a few places which are
+mostly in interrupts entries/exits and in task switch so they are
+likely already in the cache.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215934
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220624101132.14528-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Using standard lwz improves null_syscall selftest by:
+- 10 cycles on mpc832x.
+- 2 cycles on mpc8xx.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/316c543b8906712c108985c8463eec09c8db577b.1629732542.git.christophe.leroy@csgroup.eu
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/quirks.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/powerpc/include/asm/ppc_asm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1842,6 +1842,10 @@ static const struct usb_audio_quirk_flag
- 		   QUIRK_FLAG_SHARE_MEDIA_DEVICE | QUIRK_FLAG_ALIGN_TRANSFER),
- 	DEVICE_FLG(0x1395, 0x740a, /* Sennheiser DECT */
- 		   QUIRK_FLAG_GET_SAMPLE_RATE),
-+	DEVICE_FLG(0x1397, 0x0508, /* Behringer UMC204HD */
-+		   QUIRK_FLAG_PLAYBACK_FIRST | QUIRK_FLAG_GENERIC_IMPLICIT_FB),
-+	DEVICE_FLG(0x1397, 0x0509, /* Behringer UMC404HD */
-+		   QUIRK_FLAG_PLAYBACK_FIRST | QUIRK_FLAG_GENERIC_IMPLICIT_FB),
- 	DEVICE_FLG(0x13e5, 0x0001, /* Serato Phono */
- 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
- 	DEVICE_FLG(0x154e, 0x1002, /* Denon DCD-1500RE */
+diff --git a/arch/powerpc/include/asm/ppc_asm.h b/arch/powerpc/include/asm/ppc_asm.h
+index 1c538a9a11e0..7be24048b8d1 100644
+--- a/arch/powerpc/include/asm/ppc_asm.h
++++ b/arch/powerpc/include/asm/ppc_asm.h
+@@ -28,8 +28,8 @@
+ #else
+ #define SAVE_GPR(n, base)	stw	n,GPR0+4*(n)(base)
+ #define REST_GPR(n, base)	lwz	n,GPR0+4*(n)(base)
+-#define SAVE_NVGPRS(base)	stmw	13, GPR0+4*13(base)
+-#define REST_NVGPRS(base)	lmw	13, GPR0+4*13(base)
++#define SAVE_NVGPRS(base)	SAVE_GPR(13, base); SAVE_8GPRS(14, base); SAVE_10GPRS(22, base)
++#define REST_NVGPRS(base)	REST_GPR(13, base); REST_8GPRS(14, base); REST_10GPRS(22, base)
+ #endif
+ 
+ #define SAVE_2GPRS(n, base)	SAVE_GPR(n, base); SAVE_GPR(n+1, base)
+-- 
+2.35.1
+
 
 

@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C38A56FB44
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDB556FD13
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbiGKJ1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S233822AbiGKJun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiGKJ05 (ORCPT
+        with ESMTP id S233901AbiGKJt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:26:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FE13CBCD;
-        Mon, 11 Jul 2022 02:15:34 -0700 (PDT)
+        Mon, 11 Jul 2022 05:49:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733A330F45;
+        Mon, 11 Jul 2022 02:24:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8CE361226;
-        Mon, 11 Jul 2022 09:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0255C34115;
-        Mon, 11 Jul 2022 09:15:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21E32B80E7E;
+        Mon, 11 Jul 2022 09:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B98C34115;
+        Mon, 11 Jul 2022 09:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530933;
-        bh=h767cPWK/Kt31VwAfBA7A8Ipg4z0NEJbLUloznUSy0w=;
+        s=korg; t=1657531454;
+        bh=sVckVqzBuaFdEfw03NQFhajl30hVv6q9ySlGu3DcHQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ctNR4FrM202FkqyIQt0j869LKNWO8cH/9BjccU0kDT3sFnvZssTyMcdMFiEyf3+OQ
-         3/VOsED3zZ0riV7GNwWNXaz4gOjuDs8RKdSHO2+FMxEslA948qUyz+ICOJuKZW0IoE
-         ER1yAzTSAiDqVUx7wBeYYtorPUWguVRjwtD1ZiVI=
+        b=v2ssL892MUqOLY3UBgcUdW1bQQcepcSb3e5AFsB8XLtO9Zw1UifrSrLQecFWmL4SU
+         uVMwPoH2lfG2IvtpUVorkCiNSmuyUw6Y/wXsDx8zJTBMNknkvyeBa19UocvpOes8Pm
+         9Lx+T61U3tJtgQGvc+Soaq32JJWPgebxhOAJE1CQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rhett Aultman <rhett.aultman@samsara.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.18 007/112] can: gs_usb: gs_usb_open/close(): fix memory leak
+        stable@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+        Hemant Kumar <hemantk@codeaurora.org>,
+        Alex Elder <elder@linaro.org>,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 111/230] bus: mhi: Fix pm_state conversion to string
 Date:   Mon, 11 Jul 2022 11:06:07 +0200
-Message-Id: <20220711090549.760440897@linuxfoundation.org>
+Message-Id: <20220711090607.215407115@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,113 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rhett Aultman <rhett.aultman@samsara.com>
+From: Paul Davey <paul.davey@alliedtelesis.co.nz>
 
-commit 2bda24ef95c0311ab93bda00db40486acf30bd0a upstream.
+[ Upstream commit 64f93a9a27c1970fa8ee5ffc5a6ae2bda477ec5b ]
 
-The gs_usb driver appears to suffer from a malady common to many USB
-CAN adapter drivers in that it performs usb_alloc_coherent() to
-allocate a number of USB request blocks (URBs) for RX, and then later
-relies on usb_kill_anchored_urbs() to free them, but this doesn't
-actually free them. As a result, this may be leaking DMA memory that's
-been used by the driver.
+On big endian architectures the mhi debugfs files which report pm state
+give "Invalid State" for all states.  This is caused by using
+find_last_bit which takes an unsigned long* while the state is passed in
+as an enum mhi_pm_state which will be of int size.
 
-This commit is an adaptation of the techniques found in the esd_usb2
-driver where a similar design pattern led to a memory leak. It
-explicitly frees the RX URBs and their DMA memory via a call to
-usb_free_coherent(). Since the RX URBs were allocated in the
-gs_can_open(), we remove them in gs_can_close() rather than in the
-disconnect function as was done in esd_usb2.
+Fix by using __fls to pass the value of state instead of find_last_bit.
 
-For more information, see the 928150fad41b ("can: esd_usb2: fix memory
-leak").
+Also the current API expects "mhi_pm_state" enumerator as the function
+argument but the function only works with bitmasks. So as Alex suggested,
+let's change the argument to u32 to avoid confusion.
 
-Link: https://lore.kernel.org/all/alpine.DEB.2.22.394.2206031547001.1630869@thelappy
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
 Cc: stable@vger.kernel.org
-Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+[mani: changed the function argument to u32]
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+Reviewed-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Link: https://lore.kernel.org/r/20220301160308.107452-3-manivannan.sadhasivam@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/gs_usb.c |   23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ drivers/bus/mhi/core/init.c     | 10 ++++++----
+ drivers/bus/mhi/core/internal.h |  2 +-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -268,6 +268,8 @@ struct gs_can {
- 
- 	struct usb_anchor tx_submitted;
- 	atomic_t active_tx_urbs;
-+	void *rxbuf[GS_MAX_RX_URBS];
-+	dma_addr_t rxbuf_dma[GS_MAX_RX_URBS];
+diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+index c0187367ae75..d8787aaa176b 100644
+--- a/drivers/bus/mhi/core/init.c
++++ b/drivers/bus/mhi/core/init.c
+@@ -77,12 +77,14 @@ static const char * const mhi_pm_state_str[] = {
+ 	[MHI_PM_STATE_LD_ERR_FATAL_DETECT] = "Linkdown or Error Fatal Detect",
  };
  
- /* usb interface struct */
-@@ -742,6 +744,7 @@ static int gs_can_open(struct net_device
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-+			dma_addr_t buf_dma;
+-const char *to_mhi_pm_state_str(enum mhi_pm_state state)
++const char *to_mhi_pm_state_str(u32 state)
+ {
+-	unsigned long pm_state = state;
+-	int index = find_last_bit(&pm_state, 32);
++	int index;
  
- 			/* alloc rx urb */
- 			urb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -752,7 +755,7 @@ static int gs_can_open(struct net_device
- 			buf = usb_alloc_coherent(dev->udev,
- 						 dev->parent->hf_size_rx,
- 						 GFP_KERNEL,
--						 &urb->transfer_dma);
-+						 &buf_dma);
- 			if (!buf) {
- 				netdev_err(netdev,
- 					   "No memory left for USB buffer\n");
-@@ -760,6 +763,8 @@ static int gs_can_open(struct net_device
- 				return -ENOMEM;
- 			}
- 
-+			urb->transfer_dma = buf_dma;
+-	if (index >= ARRAY_SIZE(mhi_pm_state_str))
++	if (state)
++		index = __fls(state);
 +
- 			/* fill, anchor, and submit rx urb */
- 			usb_fill_bulk_urb(urb,
- 					  dev->udev,
-@@ -781,10 +786,17 @@ static int gs_can_open(struct net_device
- 					   "usb_submit failed (err=%d)\n", rc);
++	if (!state || index >= ARRAY_SIZE(mhi_pm_state_str))
+ 		return "Invalid State";
  
- 				usb_unanchor_urb(urb);
-+				usb_free_coherent(dev->udev,
-+						  sizeof(struct gs_host_frame),
-+						  buf,
-+						  buf_dma);
- 				usb_free_urb(urb);
- 				break;
- 			}
- 
-+			dev->rxbuf[i] = buf;
-+			dev->rxbuf_dma[i] = buf_dma;
-+
- 			/* Drop reference,
- 			 * USB core will take care of freeing it
- 			 */
-@@ -842,13 +854,20 @@ static int gs_can_close(struct net_devic
- 	int rc;
- 	struct gs_can *dev = netdev_priv(netdev);
- 	struct gs_usb *parent = dev->parent;
-+	unsigned int i;
- 
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
- 	parent->active_channels--;
--	if (!parent->active_channels)
-+	if (!parent->active_channels) {
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
-+		for (i = 0; i < GS_MAX_RX_URBS; i++)
-+			usb_free_coherent(dev->udev,
-+					  sizeof(struct gs_host_frame),
-+					  dev->rxbuf[i],
-+					  dev->rxbuf_dma[i]);
-+	}
- 
- 	/* Stop sending URBs */
- 	usb_kill_anchored_urbs(&dev->tx_submitted);
+ 	return mhi_pm_state_str[index];
+diff --git a/drivers/bus/mhi/core/internal.h b/drivers/bus/mhi/core/internal.h
+index c02c4d48b744..71f181402be9 100644
+--- a/drivers/bus/mhi/core/internal.h
++++ b/drivers/bus/mhi/core/internal.h
+@@ -622,7 +622,7 @@ void mhi_free_bhie_table(struct mhi_controller *mhi_cntrl,
+ enum mhi_pm_state __must_check mhi_tryset_pm_state(
+ 					struct mhi_controller *mhi_cntrl,
+ 					enum mhi_pm_state state);
+-const char *to_mhi_pm_state_str(enum mhi_pm_state state);
++const char *to_mhi_pm_state_str(u32 state);
+ int mhi_queue_state_transition(struct mhi_controller *mhi_cntrl,
+ 			       enum dev_st_transition state);
+ void mhi_pm_st_worker(struct work_struct *work);
+-- 
+2.35.1
+
 
 

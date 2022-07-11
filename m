@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517BB56D47D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B784F56D47E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiGKGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 02:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
+        id S229667AbiGKGHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 02:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiGKGFi (ORCPT
+        with ESMTP id S229536AbiGKGHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 02:05:38 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934B313EA6
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:05:37 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id j12so3592086plj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:05:37 -0700 (PDT)
+        Mon, 11 Jul 2022 02:07:05 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620C213EA6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:07:04 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so4001834pjf.2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:07:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KV+YGTfcaFLgrFYJ1SemBRBbLthrj0mXGJqzwOHsfoI=;
-        b=So+l0JwhQ0bAC8G9LVigdRBuXXRbCLGbMLeyzAO1SPS7rHB7BzWCEvYWMPHBD3lb6y
-         tfWQN1VhoiMtwVU1lL0H0f81lNwIERA8aNXNziqNi1Gcrg895q38BiB7p10le4F5AieI
-         EZrDlXM61JnFyLo6V34q8mTV79QWbcE8IRiK48fJzB03o6upvNu1RwAgOTH1n2SSoc/5
-         ZGLFKU3GCzzvRdluhKI4JVIoPBbruLKTeMMkZ76684hCmb9aq5+eYx4E0IlY7f6FxEda
-         XUcBQW0ULEzKh4jr6EivzCuzw0upuurDhyazuTO0mglqdIzUj1dNHWvvm01yA+YoS+MO
-         zBLg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XpzsPidAPfjCOoLLidMBXIMpImKGY8yfEDKssc9VWVY=;
+        b=VzmGKkQZlrxKSxJz9/mG0qS8kVYg047CltSY/fdE594YI4Hc79D+GBi4UI14LLs2+a
+         P3PJ31ZLRXYFBtm4r7WPqPVC40Q7j7yFlb2mqdQzs38V9yQtpjb8cQCEjeEpcQj65YNw
+         0ke/+HvnHr+yaOJvrxoRNWfkirxoEGrWIbAcBGrM12/XHoUZ2DEpcRV+88m9mT2cCSqt
+         FfyTESXioihsbu3wF6fItt/WLKZr3SgquHL8X2k0ukQLugurvXcmctwpmyoMYNUAOxfv
+         6QsYKMrnuXMb5gZoa6/RkM8ETPJpE1FWPYPd8qfC5K7GU+Y2UCFaeEF7bJJvZ6MBauUU
+         sEBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KV+YGTfcaFLgrFYJ1SemBRBbLthrj0mXGJqzwOHsfoI=;
-        b=wgvKZ/EIe2dRXFCaanrxN6JIc1HbIC6pLl219fiXAb0zpR8cGzpzcqBTZKmUKrnpJi
-         EwW/OVoC+yJiGQeOZ4VBenhooCp024cdDN95gnQHIs/DMmuibosN0ctJmway8KvPmhA9
-         VgtLTsekVkCj/9G5ns3ETpv5Pgea67c92WksQCRWdIZMGxVOqUBKN7yBtrmZIhiAQ1T2
-         c3jQVqRp4xapoA87Wz1wir/Nh4xAoxj6eBzGd+DEGcmkP6bp/2n4sGH5CtRszKFFGHVn
-         e1NdPuz67DOdS1NG0rRUxaEMbJl/3vzmWkEyHfTGtsCcPN157AP1SUjUOYxNruONKUMI
-         yOlA==
-X-Gm-Message-State: AJIora+hplKDxOCk3xZFEIvkmCjjMGqVw7HurFg1rBSCcliJRytPobvd
-        4aQzZ2K1G+QEZfFiCXX03cL9Lg==
-X-Google-Smtp-Source: AGRyM1sqECluJp113NGdE2ankO4ay0QN5oroR2gvM10IiaTzw4+F0IVqlYbAV0HY9pW9BeKEW8pBpw==
-X-Received: by 2002:a17:90b:3811:b0:1ef:e647:ff34 with SMTP id mq17-20020a17090b381100b001efe647ff34mr16275535pjb.171.1657519537139;
-        Sun, 10 Jul 2022 23:05:37 -0700 (PDT)
-Received: from localhost ([61.120.150.77])
-        by smtp.gmail.com with ESMTPSA id i1-20020a170902c28100b0016c08addb4csm3762144pld.127.2022.07.10.23.05.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 23:05:36 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 14:05:32 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Wu XiangCheng <bobwxc@email.cn>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3 03/21] docs: update vmemmap_dedup.rst reference
-Message-ID: <Ysu9rAoRU19PB2D0@FVFYT0MHHV2J>
-References: <cover.1657360984.git.mchehab@kernel.org>
- <a3a132957ac8cc6b423303f4f4491753714b89b2.1657360984.git.mchehab@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XpzsPidAPfjCOoLLidMBXIMpImKGY8yfEDKssc9VWVY=;
+        b=sGfdbyuLVsYLEA3xy95C4Z1z7xy+bPJUG/blHn47pVY97d4CeaKyo0RE113+XRezSL
+         KolSpV8zPnhZazJSIqtz550GwBdlEumsvzwNzNqFHRJw0NLMo3bSai82DsL/TNpDEcF6
+         dd/ciS+J5px1vvdWmaSDM/xrwGsyuNg/O2U3Fmup/CrWzCcpVdYIvNbkkDSFALMP5ait
+         W7SR4M8YgbUlLk6krWgb5GAf7UBrPzD1BnjxBzo0YuQStbIxVEAhXVkKd/laVgF5iOI6
+         518kFdNWJVWpSZ1hVqkSK7j8eYs0CNsAx4d7WGU0s4hEMQPt1EZRXjKEyiLVYWk8NzEl
+         SAkA==
+X-Gm-Message-State: AJIora/BZg3qnD0+YHCbf+zzLk5S2EKeuS/ess2isV6dGxtUnzxp16mo
+        t+eSXT3Q6bqRdkWZAC2U8jFhrtZD9hMA+fPdRxwTVUtQTAM=
+X-Google-Smtp-Source: AGRyM1sPMrfsvE+twajHmWeIWpS5RkrGh3B/z7EZ87iUrCOqgDQJlfYKyYC17mpDJ/sDE3P3CWB8jnWtVHZaArtxtb4=
+X-Received: by 2002:a17:90a:4b89:b0:1ee:e6b0:ee80 with SMTP id
+ i9-20020a17090a4b8900b001eee6b0ee80mr15712917pjh.16.1657519623895; Sun, 10
+ Jul 2022 23:07:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3a132957ac8cc6b423303f4f4491753714b89b2.1657360984.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220621161648.20117-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220621161648.20117-1-jiangjian@cdjrlc.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Mon, 11 Jul 2022 08:06:53 +0200
+Message-ID: <CAHUa44GLAJttfW+6m5O8ds=FRXAmOEWK5=rqe8+QOoLMskC=5g@mail.gmail.com>
+Subject: Re: [PATCH] optee: Remove duplicate 'of' in two places.
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     sumit.garg@linaro.org, op-tee@lists.trustedfirmware.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 09, 2022 at 11:07:16AM +0100, Mauro Carvalho Chehab wrote:
-> Changeset ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
-> renamed: Documentation/vm/vmemmap_dedup.rst
-> to: Documentation/mm/vmemmap_dedup.rst.
-> 
-> Update its cross-reference accordingly.
-> 
-> Fixes: ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+On Tue, Jun 21, 2022 at 6:18 PM Jiang Jian <jiangjian@cdjrlc.com> wrote:
+>
+> file: ./drivers/tee/optee/optee_smc.h
+> line: 192
+>  * a2   Size of of SHM
+> chanegd to
+>  * a2   Size of SHM
+>
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> ---
+>  drivers/tee/optee/optee_smc.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+I'm picking up this.
 
-Thanks.
+Thanks,
+Jens
+
+>
+> diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+> index c60896cf71cb..73b5e7760d10 100644
+> --- a/drivers/tee/optee/optee_smc.h
+> +++ b/drivers/tee/optee/optee_smc.h
+> @@ -189,7 +189,7 @@ struct optee_smc_call_get_os_revision_result {
+>   * Have config return register usage:
+>   * a0  OPTEE_SMC_RETURN_OK
+>   * a1  Physical address of start of SHM
+> - * a2  Size of of SHM
+> + * a2  Size of SHM
+>   * a3  Cache settings of memory, as defined by the
+>   *     OPTEE_SMC_SHM_* values above
+>   * a4-7        Preserved
+> --
+> 2.17.1
+>

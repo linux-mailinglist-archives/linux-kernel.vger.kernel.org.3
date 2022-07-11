@@ -2,165 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FE156D8C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C34656D8D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiGKIuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S231129AbiGKIvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiGKIuC (ORCPT
+        with ESMTP id S230414AbiGKIu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:50:02 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190D129B;
-        Mon, 11 Jul 2022 01:50:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C835321F54;
-        Mon, 11 Jul 2022 08:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657529400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qvPFqfKyiFIdK1AaFm8I5SaQdT4uELrcI/tqDk8uoEQ=;
-        b=naZydrjLQmyMTvqCOZ6jvyglCish5w/UNgZOV2Kw+vY1znRyflwQ+AL4gaHEzRoH7ROHsG
-        sOQiaYvWf4BduSa+iaKvlWtjdIbnmY6mfVZoJW3KycIg7zI+/b/pS9t4DmfItaNckEkpNh
-        TMJ8j9hDC+AlyJEMMIB0VyKPE6iDpNI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657529400;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qvPFqfKyiFIdK1AaFm8I5SaQdT4uELrcI/tqDk8uoEQ=;
-        b=09rLuyvVHGQaSpTdsLMUK46nPsVqUnPxKrGTvD4plgYYsEsOCuh8gCTTBEeAzfGkZ5qfDi
-        VYwiK4+40xM5KkDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93CF713322;
-        Mon, 11 Jul 2022 08:50:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id w78qIzjky2IhLwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 11 Jul 2022 08:50:00 +0000
-Message-ID: <d6e5204e-5bbb-fe51-fd29-5452198bf368@suse.de>
-Date:   Mon, 11 Jul 2022 10:50:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/10] drm: Add support for low-color frame buffer
- formats
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657294931.git.geert@linux-m68k.org>
- <YsmE1D8lGp4XKs99@ravnborg.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <YsmE1D8lGp4XKs99@ravnborg.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Ct62SAFYiBl9No95sn0kEftp"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 04:50:59 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C03113CE5;
+        Mon, 11 Jul 2022 01:50:29 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id l124so4212810pfl.8;
+        Mon, 11 Jul 2022 01:50:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=5g/2NksbO4TUZ12uNSjT5a+ira1ltuOc9HP/0hIVc7w=;
+        b=KLLHc9drTZpul79nRihIyI5PAyxXRTmdJkXV8pzA8J0w53gdZiHv+aCEKAOoj5htXN
+         WukzwCYDOFLeN9WMRfuWgHNfFY3WTACBv3kpUvoltkku6OyB0kfynjWHVWqCWgGxymlO
+         eARtdYfOu6/d+ODhfp+g+RM5KlvTXdN6fQI5IhyYHO22XNZtH0s/N+G2KS2uTcRPl2/R
+         92Wq/IBaQjOpleIN3NsSVRoGqaYsFbLCogPpYOWc3A7G7eQgfVjOSFDzxZwKO2hwgmsy
+         n2AT2E+M/PFLrO0q9yRstAXHsI3rmIju8eUFoKv0mMzTEhMbUudGiOCOA7/qgfET06ZK
+         XkZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5g/2NksbO4TUZ12uNSjT5a+ira1ltuOc9HP/0hIVc7w=;
+        b=z4pmQ+Exc/i1vwmLI0Iro4sGiSqyeXF0/7FQNV4OVvuR+TBd0Iy0Tkr+2305acc/XM
+         5+sy3HPNBrNb+JtY+tgRoaLie2lHspcEMNEKlL3cp7aJ6Dn6pM38wYn4pNiHL25uaBjN
+         +T1wQi1oMyUktIp0pTySK5GDQQH8uyGdeyuI6fldo9g1YUC85g2jxprvUckSzBagzQ+E
+         gefhleNPT3St7PkJn1SdVCZ1H5IUQeGEzYo3BK4HJCSQcMvm3Na++iYvx4Hf9tJto1qc
+         39JPzefIzzRp5WKRcVEpWcLdmXUKnae27+4bVvwUxvl9mwlseMoBRX8D6RgS3y4QazTS
+         qzAA==
+X-Gm-Message-State: AJIora9Y/3ynX9679eiQibiljo/eCLKYRHKiRXfj458UO8+sRQRZai60
+        QDMv8Upd1k2CJ7lgQXqfd/8=
+X-Google-Smtp-Source: AGRyM1skthwwca9xztYJduWQLAXrcwAXdYzCophm5dltSeq/9zR0kDVYVJguSnQHST3WWGzv/qygdw==
+X-Received: by 2002:a63:ff66:0:b0:412:6f4c:1e11 with SMTP id s38-20020a63ff66000000b004126f4c1e11mr15162809pgk.396.1657529428611;
+        Mon, 11 Jul 2022 01:50:28 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id b21-20020aa79515000000b0052ac5e304ccsm2489388pfp.194.2022.07.11.01.50.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 11 Jul 2022 01:50:28 -0700 (PDT)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v3 0/2] Add USB2.0 phy driver for Sunplus SP7021
+Date:   Mon, 11 Jul 2022 16:50:01 +0800
+Message-Id: <1657529403-18084-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Ct62SAFYiBl9No95sn0kEftp
-Content-Type: multipart/mixed; boundary="------------bwmKnOaXzIJOCqFUF8X28tun";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sam Ravnborg <sam@ravnborg.org>, Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, linux-fbdev@vger.kernel.org,
- linux-m68k@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-ID: <d6e5204e-5bbb-fe51-fd29-5452198bf368@suse.de>
-Subject: Re: [PATCH v3 00/10] drm: Add support for low-color frame buffer
- formats
-References: <cover.1657294931.git.geert@linux-m68k.org>
- <YsmE1D8lGp4XKs99@ravnborg.org>
-In-Reply-To: <YsmE1D8lGp4XKs99@ravnborg.org>
+This is a patch series for USB2.0 phy driver for Sunplus SP7021 SoC.
 
---------------bwmKnOaXzIJOCqFUF8X28tun
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-SGkNCg0KQW0gMDkuMDcuMjIgdW0gMTU6Mzggc2NocmllYiBTYW0gUmF2bmJvcmc6DQo+IEhp
-IEdlZXJ0LA0KPiANCj4gT24gRnJpLCBKdWwgMDgsIDIwMjIgYXQgMDg6MjA6NDVQTSArMDIw
-MCwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0KPj4gCUhpIGFsbCwNCj4+DQo+PiBBIGxv
-bmcgb3V0c3RhbmRpbmcgaXNzdWUgd2l0aCB0aGUgRFJNIHN1YnN5c3RlbSBoYXMgYmVlbiB0
-aGUgbGFjayBvZg0KPj4gc3VwcG9ydCBmb3IgbG93LWNvbG9yIGRpc3BsYXlzLCBhcyB1c2Vk
-IHR5cGljYWxseSBvbiBvbGRlciBkZXNrdG9wDQo+PiBzeXN0ZW1zLCBhbmQgb24gc21hbGwg
-ZW1iZWRkZWQgZGlzcGxheXMuDQoNCkZvciB0aGUgcGF0Y2hzZXQNCg0KQWNrZWQtYnk6IFRo
-b21hcyBaaW1lbXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IA0KPiBJVCBpcyBz
-dXBlciB0byBoYXZlIHRoaXMgYWRkcmVzc2VkIC0gdGhhbmtzIQ0KPiANCj4+DQo+PiBUaGlz
-IHBhdGNoIHNlcmllcyBhZGRzIHN1cHBvcnQgZm9yIGNvbG9yLWluZGV4ZWQgZnJhbWUgYnVm
-ZmVyIGZvcm1hdHMNCj4+IHdpdGggMiwgNCwgYW5kIDE2IGNvbG9ycy4gIEl0IGhhcyBiZWVu
-IHRlc3RlZCBvbiBBUkFueU0gdXNpbmcgYQ0KPj4gd29yay1pbi1wcm9ncmVzcyBBdGFyaSBE
-Uk0gZHJpdmVyIHN1cHBvcnRpbmcgMiwgNCwgMTYsIDI1NiwgYW5kIDY1NTM2DQo+PiBjb2xv
-cnMsIHdpdGggdGV4dCBjb25zb2xlIG9wZXJhdGlvbiwgZmJ0ZXN0LCBhbmQgbW9kZXRlc3Qu
-DQo+Pg0KPj4gT3ZlcnZpZXc6DQo+PiAgICAtIFBhdGNoIDEgaW50cm9kdWNlcyBhIGhlbHBl
-ciwgdG8gYmUgdXNlZCBieSBsYXRlciBwYXRjaGVzIGluIHRoZQ0KPj4gICAgICBzZXJpZXMs
-DQo+PiAgICAtIFBhdGNoIDIgaW50cm9kdWNlcyBhIGZsYWcgdG8gaW5kaWNhdGUgY29sb3It
-aW5kZXhlZCBmb3JtYXRzLA0KPj4gICAgLSBQYXRjaGVzIDMgYW5kIDQgY29ycmVjdCBjYWxj
-dWxhdGlvbnMgb2YgYml0cyBwZXIgcGl4ZWwgZm9yIHN1Yi1ieXRlDQo+PiAgICAgIHBpeGVs
-IGZvcm1hdHMsDQo+PiAgICAtIFBhdGNoZXMgNSBhbmQgNiBpbnRyb2R1Y2UgdGhlIG5ldyBD
-WzEyNF0gZm9ybWF0cywNCj4+ICAgIC0gUGF0Y2ggNyBmaXhlcyBhbiB1bnRlc3RlZCBjb2Rl
-IHBhdGgsDQo+PiAgICAtIFBhdGNoIDggZG9jdW1lbnRzIHRoZSB1c2Ugb2YgInJlZCIgZm9y
-IGxpZ2h0LW9uLWRhcmsgZGlzcGxheXMsDQo+PiAgICAtIFBhdGNoZXMgOSBhbmQgMTAgYWRk
-IG1vcmUgZm91cmNjIGNvZGVzIGZvciBsaWdodC1vbi1kYXJrIGFuZA0KPj4gICAgICBkYXJr
-LW9uLWxpZ2h0IGZyYW1lIGJ1ZmZlciBmb3JtYXRzLCB3aGljaCBtYXkgYmUgdXNlZnVsIGZv
-ciBlLmcuIHRoZQ0KPj4gICAgICBzc2QxMzB4IGFuZCByZXBhcGVyIGRyaXZlcnMuDQo+IA0K
-PiBBcHBsaWVkIGFsbCBwYXRjaGVzIHRvIGRybS1taXNjIChkcm0tbWlzYy1uZXh0KSwgaW5j
-bHVkaW5nIHRoZSBsYXN0IHR3bw0KPiBSRkMgcGF0Y2hlcyBhcyB3ZSB0aGVuIGhhdmUgdGhl
-IGZvcm1hdHMgcmVhZHkgd2hlbiBhIHVzZXIgcG9wcyB1cC4NCg0KSSBrbm93IGl0J3MgdjMg
-YWxyZWFkeSwgYnV0IGdpdmUgcGVvcGxlIGF0IGxlYXN0IGEgd29ya2RheSBmb3IgcmV2aWV3
-aW5nIA0KYmVmb3JlIG1lcmdpbmcgcGF0Y2hlcyBvZiB0aGlzIHNpemUgYW5kIGltcGFjdC4g
-RnJpZGF5LWV2ZW5pbmcgcGF0Y2hlcyANCmFyZSBub3Qgc3VwcG9zZWQgdG8gYmUgbWVyZ2Vk
-IG9uIFNhdHVyZGF5IGFmdGVybm9vbnMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4g
-DQo+IAlTYW0NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
-c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
-YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
---------------bwmKnOaXzIJOCqFUF8X28tun--
+Vincent Shih (2):
+  phy: usb: Add USB2.0 phy driver for Sunplus SP7021
+  dt-bindings: phy: Add bindings doc for Sunplus USB2 PHY driver
 
---------------Ct62SAFYiBl9No95sn0kEftp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      |  73 +++++
+ MAINTAINERS                                        |   9 +
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/sunplus/Kconfig                        |  13 +
+ drivers/phy/sunplus/Makefile                       |   2 +
+ drivers/phy/sunplus/phy-sunplus-usb2.c             | 297 +++++++++++++++++++++
+ 7 files changed, 396 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ create mode 100644 drivers/phy/sunplus/Kconfig
+ create mode 100644 drivers/phy/sunplus/Makefile
+ create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.7.4
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLL5DgFAwAAAAAACgkQlh/E3EQov+Ag
-/hAAmfLI4ietyVtlvjaCUPNsT3uQiSNAvA0tw2rXP3RilWRGWaNy6anrpgo5MXFj0xgDLc4kNpBi
-htfyzvhVQtdZn7MuY6fXbAMbMU8J8eQx809swJTydQtJ6puziZRA/hVaiR67kerbxSRh1ecnYjcV
-2Ywl6pd7KzWM2gl93pjyAq4JB7ydymb4M1wS1vVFSTGGrMe/D4qX2ZS/4cURh5gwzpwNeGDV5nU1
-/sLpk8V0sCDWxRqK/nU5Tmga60ns+ebboQjoulzZQTSh4SgVBhINgJ9ZdHG+Hq7zZOTqyXyzmJdC
-3tHAIOZh88OjEiP7c/Y3uXsrPSjJWCIKOV2qcTrNQtG+484alIn+3ImoXnMndg6OBZ7USdy641YB
-tMU7HRZk8mEZDHvE4tT5ZJhLEqqiMfHlgeI4ISh3uvBHBGVEVlqgUOnb26jkmIrzJrB3dVguvR/4
-ElNApWGtJoFuqiXehuY/37ogOQrMLJFioSU/tQ2IEa12me9bcKULIx9CJIjOn74rt6gA1Hx//4TY
-AzrH1LnXj6C7v4ryR1+YcRuw/Pkliz8VxYN5oGZi96L1/LZ7I21yiIYA72YFsjrdtUNmzbmZlPGc
-wJuPSfDseGyvwcK8SmJ3x5cXn6JB4NaseBu8lLYwJ6qzcMdOO9cbyQspNbzofCBRnLGuUFx4UqN+
-cbw=
-=Q8GO
------END PGP SIGNATURE-----
-
---------------Ct62SAFYiBl9No95sn0kEftp--

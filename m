@@ -2,205 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0B056FF7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C933356FF83
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiGKKvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S229991AbiGKKwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiGKKvQ (ORCPT
+        with ESMTP id S229605AbiGKKwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:51:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BDCEB41BC
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657533455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4705b3O605hQms9a0r/rRAuyFE62gnfa/SJiHrJ15tU=;
-        b=ejlKOh0sGEMW4JnAk7+XDa9nz9czr2+srWdTPIYT17WaUqnIYI/Aexy1C6UyayadmSduxp
-        EN3GAEJTk6NJGAQvr3/wBSo87Mx5TC3ze5bWnFgCgAZG3l5qEEay+53dGPE2f93eXIFfY+
-        bvg2w2JQjrTm7YzrLXH8ErDfqAtA6OA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-V-cREPW3Nguxdxphd5LsrQ-1; Mon, 11 Jul 2022 05:57:30 -0400
-X-MC-Unique: V-cREPW3Nguxdxphd5LsrQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C048985A581;
-        Mon, 11 Jul 2022 09:57:29 +0000 (UTC)
-Received: from localhost (ovpn-12-204.pek2.redhat.com [10.72.12.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2D4C0492CA4;
-        Mon, 11 Jul 2022 09:57:28 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 17:57:24 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     Sourabh Jain <sourabhjain@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v9 7/7] x86/crash: Add x86 crash hotplug support
-Message-ID: <Ysv0BEMOmN/WnhVg@MiWiFi-R3L-srv>
-References: <20220613224240.79400-1-eric.devolder@oracle.com>
- <20220613224240.79400-8-eric.devolder@oracle.com>
- <94f5e036-770d-4ca5-c386-9a43e7333b43@linux.ibm.com>
- <e96c42ee-7a14-3565-16cd-dbf7cf163c21@oracle.com>
+        Mon, 11 Jul 2022 06:52:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027693C8E8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657533526; x=1689069526;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LjdX+LF/NKbHZWtN8A0s6n7Sww3GeGIsI297RxDs2QQ=;
+  b=Hzq9HKFT2J7mM0eNZnNluB9nPyUMlczlvPGEW+A3DVHVgmP8LXIKTiJ4
+   VDsbpB9sOk0qv72wnTK/kMyNshvGVuuGegVeB2xiYQCU7Gooldmw/fTkt
+   kLvvUaF3WUsXQF+A7jpEtdpwpGMylkxQvY6XXBRA6YJSUs3Yfv1WHNFBM
+   rKNC886GEXdNMh03BpTQ0KNrlOCjjqtEkgiB0iyHoA2r6yRbCQsXyccU5
+   oM/WJdImusb/krm2mi6HG/5MPB3YJwy6zOxi9Xix219KPFlR6atF/Xbgd
+   daQ3HMrb+z63eWmDYgUWTYqQYNDoVrr1j8jdmFKUUerj/yWCKGJw9zjnY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="283375544"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="283375544"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 02:58:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="544952023"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 02:58:23 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAqBK-0000ez-TP;
+        Mon, 11 Jul 2022 09:58:22 +0000
+Date:   Mon, 11 Jul 2022 17:58:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in
+ 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal
+ fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways,
+ cache_mode, probe_target_ways, fixed_si...
+Message-ID: <202207111703.pE1rkAYv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e96c42ee-7a14-3565-16cd-dbf7cf163c21@oracle.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/22 at 07:55am, Eric DeVolder wrote:
-> 
-> 
-> On 6/20/22 00:06, Sourabh Jain wrote:
-> > Hello Eric,
-> > 
-> > On 14/06/22 04:12, Eric DeVolder wrote:
-> > > For x86_64, when CPU or memory is hot un/plugged, the crash
-> > > elfcorehdr, which describes the CPUs and memory in the system,
-> > > must also be updated.
-> > > 
-> > > When loading the crash kernel via kexec_load or kexec_file_load,
-> > > the elfcorehdr is identified at run time in
-> > > crash_core:handle_hotplug_event().
-> > > 
-> > > To update the elfcorehdr for x86_64, a new elfcorehdr must be
-> > > generated from the available CPUs and memory. The new elfcorehdr
-> > > is prepared into a buffer, and then installed over the top of
-> > > the existing elfcorehdr.
-> > > 
-> > > In the patch 'kexec: exclude elfcorehdr from the segment digest'
-> > > the need to update purgatory due to the change in elfcorehdr was
-> > > eliminated.  As a result, no changes to purgatory or boot_params
-> > > (as the elfcorehdr= kernel command line parameter pointer
-> > > remains unchanged and correct) are needed, just elfcorehdr.
-> > > 
-> > > To accommodate a growing number of resources via hotplug, the
-> > > elfcorehdr segment must be sufficiently large enough to accommodate
-> > > changes, see the CRASH_MAX_MEMORY_RANGES configure item.
-> > > 
-> > > With this change, crash hotplug for kexec_file_load syscall
-> > > is supported. The kexec_load is also supported, but also
-> > > requires a corresponding change to userspace kexec-tools.
-> > > 
-> > > Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> > > ---
-> > >   arch/x86/Kconfig        |  11 ++++
-> > >   arch/x86/kernel/crash.c | 116 ++++++++++++++++++++++++++++++++++++++++
-> > >   2 files changed, 127 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > > index 762a0b6ab8b6..e9eecff3b97d 100644
-> > > --- a/arch/x86/Kconfig
-> > > +++ b/arch/x86/Kconfig
-> > > @@ -2082,6 +2082,17 @@ config CRASH_DUMP
-> > >         (CONFIG_RELOCATABLE=y).
-> > >         For more details see Documentation/admin-guide/kdump/kdump.rst
-> > > +config CRASH_MAX_MEMORY_RANGES
-> > > +    depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> > > +    int
-> > > +    default 32768
-> > > +    help
-> > > +      For the kexec_file_load path, specify the maximum number of
-> > > +      memory regions, eg. as represented by the 'System RAM' entries
-> > > +      in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
-> > > +      This value is combined with NR_CPUS and multiplied by Elf64_Phdr
-> > > +      size to determine the final buffer size.
-> > > +
-> > >   config KEXEC_JUMP
-> > >       bool "kexec jump"
-> > >       depends on KEXEC && HIBERNATION
-> > > diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> > > index 9db41cce8d97..b9cdf7a0d868 100644
-> > > --- a/arch/x86/kernel/crash.c
-> > > +++ b/arch/x86/kernel/crash.c
-> > > @@ -25,6 +25,7 @@
-> > >   #include <linux/slab.h>
-> > >   #include <linux/vmalloc.h>
-> > >   #include <linux/memblock.h>
-> > > +#include <linux/highmem.h>
-> > >   #include <asm/processor.h>
-> > >   #include <asm/hardirq.h>
-> > > @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
-> > >       image->elf_headers = kbuf.buffer;
-> > >       image->elf_headers_sz = kbuf.bufsz;
-> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> > > +    /* Ensure elfcorehdr segment large enough for hotplug changes */
-> > > +    kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
-> > > +    /* For marking as usable to crash kernel */
-> > > +    image->elf_headers_sz = kbuf.memsz;
-> > > +    /* Record the index of the elfcorehdr segment */
-> > > +    image->elfcorehdr_index = image->nr_segments;
-> > > +    image->elfcorehdr_index_valid = true;
-> > > +#else
-> > >       kbuf.memsz = kbuf.bufsz;
-> > > +#endif
-> > >       kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
-> > >       kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-> > >       ret = kexec_add_buffer(&kbuf);
-> > > @@ -413,3 +424,108 @@ int crash_load_segments(struct kimage *image)
-> > >       return ret;
-> > >   }
-> > >   #endif /* CONFIG_KEXEC_FILE */
-> > > +
-> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> > > +int crash_hotplug_support(void) { return 1; }
-> > > +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
-> > > +{
-> > > +    /*
-> > > +     * NOTE: The addresses and sizes passed to this routine have
-> > > +     * already been fully aligned on page boundaries. There is no
-> > > +     * need for massaging the address or size.
-> > > +     */
-> > > +    void *ptr = NULL;
-> > > +
-> > > +    /* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
-> > > +    if (size > 0) {
-> > > +        struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> > > +
-> > > +        ptr = kmap(page);
-> > > +    }
-> > > +
-> > > +    return ptr;
-> > > +}
-> > > +
-> > > +void arch_unmap_crash_pages(void **ptr)
-> > > +{
-> > > +    if (ptr) {
-> > > +        if (*ptr)
-> > > +            kunmap(*ptr);
-> > > +        *ptr = NULL;
-> > > +    }
-> > > +}
-> > 
-> > Aren't arch will have build issue if arch_[un]map_crash_pages methods are not defined?
-> Sourabh,
-> Yes, you are correct. I'll add __weak versions of each in crash_core.c in the next patch.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   32346491ddf24599decca06190ebca03ff9de7f8
+commit: 2b8175a1f108361c2c1a11b27415631994efbfce soc: qcom: llcc: Add write-cache cacheable support
+date:   5 months ago
+config: riscv-randconfig-c006-20220707 (https://download.01.org/0day-ci/archive/20220711/202207111703.pE1rkAYv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b8175a1f108361c2c1a11b27415631994efbfce
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2b8175a1f108361c2c1a11b27415631994efbfce
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
 
-Just a reminder, __weak is deprecated and has been cleaned up in
-kernel/kexec*.c in below patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[PATCH 0/2] kexec: Drop __weak attributes from functions
 
+clang-analyzer warnings: (new ones prefixed by >>)
+                                                      ^~~~
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   8 warnings generated.
+   drivers/gpio/gpio-virtio.c:24:8: warning: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:24:8: note: Excessive padding in 'struct virtio_gpio_line' (158 padding bytes, where 30 is optimal). Optimal fields order: res, rxlen, completion, req, lock, consider reordering the fields or adding explicit padding members
+   struct virtio_gpio_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:32:8: warning: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct vgpio_irq_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-virtio.c:32:8: note: Excessive padding in 'struct vgpio_irq_line' (183 padding bytes, where 119 is optimal). Optimal fields order: ires, type, disabled, masked, queued, update_pending, queue_pending, ireq, consider reordering the fields or adding explicit padding members
+   struct vgpio_irq_line {
+   ~~~~~~~^~~~~~~~~~~~~~~~
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   12 warnings generated.
+   drivers/bus/mhi/core/pm.c:320:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:320:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:377:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:377:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:720:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:720:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:739:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:739:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:1201:17: warning: Value stored to 'dev' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/core/pm.c:1201:17: note: Value stored to 'dev' during its initialization is never read
+           struct device *dev = &mhi_cntrl->mhi_dev->dev;
+                          ^~~   ~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 7 warnings (7 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   7 warnings generated.
+   drivers/usb/cdns3/cdns3-ti.c:160:2: warning: Value stored to 'reg' is never read [clang-analyzer-deadcode.DeadStores]
+           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/cdns3/cdns3-ti.c:160:2: note: Value stored to 'reg' is never read
+           reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   10 warnings generated.
+   Suppressed 10 warnings (10 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+>> drivers/soc/qcom/llcc-qcom.c:88:8: warning: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct llcc_slice_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~~
+   drivers/soc/qcom/llcc-qcom.c:88:8: note: Excessive padding in 'struct llcc_slice_config' (6 padding bytes, where 2 is optimal). Optimal fields order: usecase_id, slice_id, max_cap, priority, bonus_ways, res_ways, cache_mode, probe_target_ways, fixed_size, dis_cap_alloc, retain_on_pc, activate_on_init, write_scid_en, write_scid_cacheable_en, consider reordering the fields or adding explicit padding members
+   struct llcc_slice_config {
+   ~~~~~~~^~~~~~~~~~~~~~~~~~~
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   5 warnings generated.
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   5 warnings generated.
+   Suppressed 5 warnings (5 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   2 warnings generated.
+   Suppressed 2 warnings (2 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   6 warnings generated.
+   Suppressed 6 warnings (6 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   10 warnings generated.
+   drivers/firewire/core-cdev.c:611:2: warning: 7th function call argument is an uninitialized value [clang-analyzer-core.CallAndMessage]
+           fw_send_request(client->device->card, &e->r.transaction,
+           ^
+   drivers/firewire/core-cdev.c:1481:6: note: Assuming field 'speed' is <= field 'link_speed'
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   drivers/firewire/core-cdev.c:1482:6: note: Assuming the condition is false
+               a->length > 1024 << a->speed)
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^
+   include/linux/compiler.h:58:31: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                 ^
+   drivers/firewire/core-cdev.c:1481:9: note: Field 'speed' is <= field 'link_speed'
+           if (a->speed > client->device->card->link_speed ||
+                  ^
+   drivers/firewire/core-cdev.c:1481:6: note: Left side of '||' is false
+           if (a->speed > client->device->card->link_speed ||
+               ^
+   drivers/firewire/core-cdev.c:1481:2: note: '?' condition is false
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^
+   include/linux/compiler.h:58:69: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                       ^
+   include/linux/compiler.h:69:2: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+           ^
+   drivers/firewire/core-cdev.c:1481:2: note: Taking false branch
+           if (a->speed > client->device->card->link_speed ||
+           ^
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/firewire/core-cdev.c:1485:6: note: Assuming field 'tag' is <= 3
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+               ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/firewire/core-cdev.c:1485:6: note: Left side of '||' is false
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+               ^
+   drivers/firewire/core-cdev.c:1485:20: note: Assuming field 'channel' is <= 63
+           if (a->tag > 3 || a->channel > 63 || a->sy > 15)
+                             ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+
+vim +88 drivers/soc/qcom/llcc-qcom.c
+
+8008e7902f28eb Sai Prakash Ranjan    2022-01-28   60  
+99356b03b431f9 Vivek Gautam          2019-07-18   61  /**
+171c03171a4cdf Lee Jones             2020-11-03   62   * struct llcc_slice_config - Data associated with the llcc slice
+99356b03b431f9 Vivek Gautam          2019-07-18   63   * @usecase_id: Unique id for the client's use case
+99356b03b431f9 Vivek Gautam          2019-07-18   64   * @slice_id: llcc slice id for each client
+99356b03b431f9 Vivek Gautam          2019-07-18   65   * @max_cap: The maximum capacity of the cache slice provided in KB
+99356b03b431f9 Vivek Gautam          2019-07-18   66   * @priority: Priority of the client used to select victim line for replacement
+99356b03b431f9 Vivek Gautam          2019-07-18   67   * @fixed_size: Boolean indicating if the slice has a fixed capacity
+99356b03b431f9 Vivek Gautam          2019-07-18   68   * @bonus_ways: Bonus ways are additional ways to be used for any slice,
+99356b03b431f9 Vivek Gautam          2019-07-18   69   *		if client ends up using more than reserved cache ways. Bonus
+99356b03b431f9 Vivek Gautam          2019-07-18   70   *		ways are allocated only if they are not reserved for some
+99356b03b431f9 Vivek Gautam          2019-07-18   71   *		other client.
+99356b03b431f9 Vivek Gautam          2019-07-18   72   * @res_ways: Reserved ways for the cache slice, the reserved ways cannot
+99356b03b431f9 Vivek Gautam          2019-07-18   73   *		be used by any other client than the one its assigned to.
+99356b03b431f9 Vivek Gautam          2019-07-18   74   * @cache_mode: Each slice operates as a cache, this controls the mode of the
+99356b03b431f9 Vivek Gautam          2019-07-18   75   *             slice: normal or TCM(Tightly Coupled Memory)
+99356b03b431f9 Vivek Gautam          2019-07-18   76   * @probe_target_ways: Determines what ways to probe for access hit. When
+99356b03b431f9 Vivek Gautam          2019-07-18   77   *                    configured to 1 only bonus and reserved ways are probed.
+99356b03b431f9 Vivek Gautam          2019-07-18   78   *                    When configured to 0 all ways in llcc are probed.
+99356b03b431f9 Vivek Gautam          2019-07-18   79   * @dis_cap_alloc: Disable capacity based allocation for a client
+99356b03b431f9 Vivek Gautam          2019-07-18   80   * @retain_on_pc: If this bit is set and client has maintained active vote
+99356b03b431f9 Vivek Gautam          2019-07-18   81   *               then the ways assigned to this client are not flushed on power
+99356b03b431f9 Vivek Gautam          2019-07-18   82   *               collapse.
+99356b03b431f9 Vivek Gautam          2019-07-18   83   * @activate_on_init: Activate the slice immediately after it is programmed
+c4df37fe186de4 Manivannan Sadhasivam 2020-11-30   84   * @write_scid_en: Bit enables write cache support for a given scid.
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   85   * @write_scid_cacheable_en: Enables write cache cacheable support for a
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28   86   *			     given scid (not supported on v2 or older hardware).
+99356b03b431f9 Vivek Gautam          2019-07-18   87   */
+99356b03b431f9 Vivek Gautam          2019-07-18  @88  struct llcc_slice_config {
+99356b03b431f9 Vivek Gautam          2019-07-18   89  	u32 usecase_id;
+99356b03b431f9 Vivek Gautam          2019-07-18   90  	u32 slice_id;
+99356b03b431f9 Vivek Gautam          2019-07-18   91  	u32 max_cap;
+99356b03b431f9 Vivek Gautam          2019-07-18   92  	u32 priority;
+99356b03b431f9 Vivek Gautam          2019-07-18   93  	bool fixed_size;
+99356b03b431f9 Vivek Gautam          2019-07-18   94  	u32 bonus_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   95  	u32 res_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   96  	u32 cache_mode;
+99356b03b431f9 Vivek Gautam          2019-07-18   97  	u32 probe_target_ways;
+99356b03b431f9 Vivek Gautam          2019-07-18   98  	bool dis_cap_alloc;
+99356b03b431f9 Vivek Gautam          2019-07-18   99  	bool retain_on_pc;
+99356b03b431f9 Vivek Gautam          2019-07-18  100  	bool activate_on_init;
+c4df37fe186de4 Manivannan Sadhasivam 2020-11-30  101  	bool write_scid_en;
+2b8175a1f10836 Sai Prakash Ranjan    2022-01-28  102  	bool write_scid_cacheable_en;
+99356b03b431f9 Vivek Gautam          2019-07-18  103  };
+99356b03b431f9 Vivek Gautam          2019-07-18  104  
+
+:::::: The code at line 88 was first introduced by commit
+:::::: 99356b03b431f9589bbaec2bc5bacceccb3dd99a soc: qcom: Make llcc-qcom a generic driver
+
+:::::: TO: Vivek Gautam <vivek.gautam@codeaurora.org>
+:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

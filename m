@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7AA56D774
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FF356D777
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiGKIM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S229751AbiGKIM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiGKIM1 (ORCPT
+        with ESMTP id S229688AbiGKIM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:12:27 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C211CFC9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:12:25 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id h17so5986650wrx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MPFKY/bHlsQhtgUJcy9UK+LhK0GjolHXo8PsK9MTO74=;
-        b=3dWItNH/NrG2UXqFVsxOXWN+q2qqBj4vzooK3M0fqc0NW7nFtkiqcvWaIp93vV4X5t
-         cvuXswhlr6y8zqUrdIAnLYVuT0/bBNWWTBvXhoMuA9ghuCH4JYnL2Co6bcDvoOC4NyNL
-         9bCZmbb8jxOvLj1zTcOoMyjoZjIdOAHWBXpO4ssyke6GlXpC73oLnxfit7nnRfO6iB7i
-         256ylzPv5rvMS0FCWr1MXcdyFEWc5plJLs5nVT7L83L2EGX4IHqfxBkkHMgW6NlmQk7h
-         zCrXXf4WDBzabyhGC8I3ECzVLJqbg7Zl72pFR5tKA6tbrSzAQECZD2fYwxRbLLd9YFX/
-         FFbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MPFKY/bHlsQhtgUJcy9UK+LhK0GjolHXo8PsK9MTO74=;
-        b=3itZYh+n2M6dT+vca67CUR3AtkozgHxY63upHt4IJOdSKKizi6/KF6oU2na1e5ww3d
-         2NRKumkUPzeVA/s7SlxWVu4az1kO88RKvSooUzPyBSLXSEDvlRxoeUMj0FM6TWsji5IZ
-         z2pwZg+YgGzlDdoI4iD9haj2vvQpXTdB4FTV0vp6cjFHm6nxmHqilHdO9t2H225Z8CfQ
-         txuI0RPSQhvkE5U//4n9OMIq1SRETyf7rcTbCXtQL9l2XrUYgUoRv+rKuvw+qqjyTWoM
-         hZyM7zb6s4FtnPB6e2KYaQT0iFL8nUm81sZJqRAhrGxBXzep08OcjeZrBTmDrPFumVF+
-         Hmfg==
-X-Gm-Message-State: AJIora/mIUL12iBQ23qc6NkNvztRLmAKheB6oezdKYi0Jj2ejLPhtxXu
-        BRC8brmqlgD+9rMNyMwj+jJ41Q==
-X-Google-Smtp-Source: AGRyM1tyUmKFNUbH8YgWNHHNsuw6XFvycdzRT3nCgIcwAJdtGiyuk4Xct3kq4NBg+aexVIJb1PXCpg==
-X-Received: by 2002:adf:e111:0:b0:21d:665e:2fa5 with SMTP id t17-20020adfe111000000b0021d665e2fa5mr16086610wrz.652.1657527144170;
-        Mon, 11 Jul 2022 01:12:24 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d6604000000b0021d650e4df4sm5159809wru.87.2022.07.11.01.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 01:12:23 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>
-Cc:     mptcp@lists.linux.dev,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf: Fix 'dubious one-bit signed bitfield' warnings
-Date:   Mon, 11 Jul 2022 10:12:00 +0200
-Message-Id: <20220711081200.2081262-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.36.1
+        Mon, 11 Jul 2022 04:12:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BE61D0F1;
+        Mon, 11 Jul 2022 01:12:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FE77B80D2C;
+        Mon, 11 Jul 2022 08:12:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C37C34115;
+        Mon, 11 Jul 2022 08:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657527173;
+        bh=RNj9CZK5cpF5ZjNkjFaKPoyMaIhsxqEiL+xWNUOIwJg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XKgdxs9KRWX5EuTpRnPEN6UN+zGVw/mJBXAC3wsf5E/fPv4AkiV8kZI4TNC5P311K
+         I9owfj+2I14KpJCxmzmxa6kcS0Dt/snP4uFrfah+AzdzxPHCX17VhFQL/URkF99myR
+         aIwJVhZLuKaWxIMRXoImY/xEIfvABsOGJjqrAQrI=
+Date:   Mon, 11 Jul 2022 10:12:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        "Rafael J. Wysocki" <rjw@sisk.pl>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] PM: hibernate: allow wait_for_device_probe() to
+ timeout when resuming from hibernation
+Message-ID: <YsvbgxJ80kMP5juv@kroah.com>
+References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
+ <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
+ <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,47 +59,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our CI[1] reported these warnings when using Sparse:
+On Sun, Jul 10, 2022 at 11:25:08AM +0900, Tetsuo Handa wrote:
+> syzbot is reporting hung task at misc_open() [1], for there is a race
+> window of AB-BA deadlock which involves probe_count variable.
+> 
+> Even with "char: misc: allow calling open() callback without misc_mtx
+> held" and "PM: hibernate: call wait_for_device_probe() without
+> system_transition_mutex held", wait_for_device_probe() from snapshot_open()
+> can sleep forever if probe_count cannot become 0.
+> 
+> Since snapshot_open() is a userland-driven hibernation/resume request,
+> it should be acceptable to fail if something is wrong. Users would not
+> want to wait for hours if device stopped responding. Therefore, introduce
+> killable version of wait_for_device_probe() with timeout.
+> 
+> According to Oliver Neukum, there are SCSI commands that can run for more
+> than 60 seconds. Therefore, this patch choose 5 minutes for timeout.
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
+> Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Cc: Greg KH <gregkh@linuxfoundation.org>
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Cc: Wedson Almeida Filho <wedsonaf@google.com>
+> Cc: Rafael J. Wysocki <rjw@sisk.pl>
+> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> ---
+>  drivers/base/dd.c             | 14 ++++++++++++++
+>  include/linux/device/driver.h |  1 +
+>  kernel/power/user.c           |  9 +++++++--
+>  3 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 70f79fc71539..3136b8403bb0 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -724,6 +724,20 @@ void wait_for_device_probe(void)
+>  }
+>  EXPORT_SYMBOL_GPL(wait_for_device_probe);
+>  
+> +void wait_for_device_probe_killable_timeout(unsigned long timeout)
+> +{
+> +	/* wait for probe timeout */
+> +	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
+> +
+> +	/* wait for the deferred probe workqueue to finish */
+> +	flush_work(&deferred_probe_work);
+> +
+> +	/* wait for the known devices to complete their probing */
+> +	wait_event_killable_timeout(probe_waitqueue,
+> +				    atomic_read(&probe_count) == 0, timeout);
+> +	async_synchronize_full();
+> +}
+> +
+>  static int __driver_probe_device(struct device_driver *drv, struct device *dev)
+>  {
+>  	int ret = 0;
+> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+> index 7acaabde5396..4ee909144470 100644
+> --- a/include/linux/device/driver.h
+> +++ b/include/linux/device/driver.h
+> @@ -129,6 +129,7 @@ extern struct device_driver *driver_find(const char *name,
+>  					 struct bus_type *bus);
+>  extern int driver_probe_done(void);
+>  extern void wait_for_device_probe(void);
+> +extern void wait_for_device_probe_killable_timeout(unsigned long timeout);
+>  void __init wait_for_init_devices_probe(void);
+>  
+>  /* sysfs interface for exporting driver attributes */
+> diff --git a/kernel/power/user.c b/kernel/power/user.c
+> index db98a028dfdd..32dd5a855e8c 100644
+> --- a/kernel/power/user.c
+> +++ b/kernel/power/user.c
+> @@ -58,8 +58,13 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+>  		/* The image device should be already ready. */
+>  		break;
+>  	default: /* Resuming */
+> -		/* We may need to wait for the image device to appear. */
+> -		wait_for_device_probe();
+> +		/*
+> +		 * Since the image device might not be ready, try to wait up to
+> +		 * 5 minutes. We should not wait forever, for we might get stuck
+> +		 * due to unresponsive devices and/or new probe events which
+> +		 * are irrelevant to the image device keep coming in.
+> +		 */
+> +		wait_for_device_probe_killable_timeout(300 * HZ);
 
-  $ touch net/mptcp/bpf.c
-  $ make C=1 net/mptcp/bpf.o
-  net/mptcp/bpf.c: note: in included file:
-  include/linux/bpf_verifier.h:348:26: error: dubious one-bit signed bitfield
-  include/linux/bpf_verifier.h:349:29: error: dubious one-bit signed bitfield
+5 minutes is a total random choice.  anything that calls
+wait_for_device_probe() feels wrong for other reasons, creating a
+locking loop like this should be resolved first, not just papering over
+it by allowing 5 minutes to pass before it resolves itself.  5 minutes
+is forever and any sane watchdog detector would have rebooted the
+machine by then.
 
-Set them as 'unsigned' to avoid warnings.
+thanks,
 
-[1] https://github.com/multipath-tcp/mptcp_net-next/actions/runs/2643588487
-
-Fixes: 1ade23711971 ("bpf: Inline calls to bpf_loop when callback is known")
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
-
-Notes:
-    v2: switch from 'bool' to 'unsigned int' (Yonghong Song)
-
- include/linux/bpf_verifier.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 81b19669efba..2e3bad8640dc 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -345,10 +345,10 @@ struct bpf_verifier_state_list {
- };
- 
- struct bpf_loop_inline_state {
--	int initialized:1; /* set to true upon first entry */
--	int fit_for_inline:1; /* true if callback function is the same
--			       * at each call and flags are always zero
--			       */
-+	unsigned int initialized:1; /* set to true upon first entry */
-+	unsigned int fit_for_inline:1; /* true if callback function is the same
-+					* at each call and flags are always zero
-+					*/
- 	u32 callback_subprogno; /* valid when fit_for_inline is true */
- };
- 
--- 
-2.36.1
-
+greg k-h

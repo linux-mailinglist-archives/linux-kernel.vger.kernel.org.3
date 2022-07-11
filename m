@@ -2,166 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216B1570400
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACFD57040D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiGKNQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S230153AbiGKNRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiGKNQY (ORCPT
+        with ESMTP id S229555AbiGKNRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:16:24 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25953F335;
-        Mon, 11 Jul 2022 06:16:21 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10c0119dd16so6631543fac.6;
-        Mon, 11 Jul 2022 06:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d3w648xSE+rcJKTvNdyXERDjQNCJb3jaHtEQzPygYFY=;
-        b=iX4ZaqHu72v0xD/rGJLs5RBCMorkup6Zpug1ld/RhBeeDwfdDOCfSAx1pqWGit6Pw0
-         1NSiKv14MkaDc/07mOyOkc52bTekpdbzZjsUp0+aTTADL/NXO/mRXtuymP0l6iJDSQP4
-         fdaEqFQAQAGMBpUus7TqrV+DjIfzYjK/0ckyFONHPI44EuwvgTfD/x74fveRRbauW+Ts
-         dK63F0Fy4xh5lbmLcsUWqAgV7Scdfq4B28UNu1no6KQEgq3n5ul80Ce090W9rrOHzpcH
-         69YwITAaobSKbZDKcMO6QXqQY0biuv0y2Gu/1eyT/ZzugX9BAiH4eEcuGfW+IImSwfR0
-         Q8ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d3w648xSE+rcJKTvNdyXERDjQNCJb3jaHtEQzPygYFY=;
-        b=Xj5iq8ecbotCgfceFakb9lPhQSDZ+YBb0542OtjD/Fcwf3UFgIzkjAc6l+eU0Y8Jlz
-         ismxOSh9h+K+gCgu0Id13IhYufZt3iVzxhN0AIBIxeUIQbhG9FKExHvJSZe5IzpYvTox
-         tNuajjtSUVy6XKSfF2vLWxw4+3wkid4aLNT3ZV1I4rad2Fk4uYkx6pI4A07u+2wtew8q
-         AltnBCrL0rsvf8QvQNZRuj+Y1Kl7PUCxo4SHhS6AxgTwT8Fx0I2rMXgq5aPFn+93ny06
-         +eBqJwS1PWihmMIw4cjrNZ7OmYER5GgYOzweH7Df9tm6LD+ttPYu+zYWlmxxxwRx836L
-         Tnhg==
-X-Gm-Message-State: AJIora+rMxLN1P5ufetwazgw3DeKfknZzWZPYsCs+HtzDPBu0YEHNdgU
-        RUOU7IFVwG/Rd108l8er1p7A9mcP/LK5odLtyUU=
-X-Google-Smtp-Source: AGRyM1vHUwMfzsAuyFfGAtwXj66YEBhPY1/EKrt5hIUCsTBDWoEbm6tCw4w8T9poyEk0kDAxCe/USrdGcFWqXAfF4Cs=
-X-Received: by 2002:a05:6870:c093:b0:10c:4f6f:d0ab with SMTP id
- c19-20020a056870c09300b0010c4f6fd0abmr7254468oad.194.1657545380424; Mon, 11
- Jul 2022 06:16:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220711005319.2619-1-liubo03@inspur.com>
-In-Reply-To: <20220711005319.2619-1-liubo03@inspur.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Mon, 11 Jul 2022 16:16:08 +0300
-Message-ID: <CAHNKnsSoBMDC4P1nFXT+FGDyGYKSinLyhPDCNZ3RdQgkNA9f3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] net: wwan: call ida_free when device_register fails
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
+        Mon, 11 Jul 2022 09:17:43 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556EC3E77F;
+        Mon, 11 Jul 2022 06:17:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id B686FDF80B;
+        Mon, 11 Jul 2022 06:17:41 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id x4jnSWMSPkx2; Mon, 11 Jul 2022 06:17:41 -0700 (PDT)
+Message-ID: <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1657545461; bh=loLzIztXpcWDKjqrW/8JqeDWdPr8OtVlFcuH9XDPBk0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=fJ0TxsveR+F9NhDnytauCSPpatACOvucztQhqLVUtHlGQPbjTdDaTHiRwGtyHj7ic
+         t19gojZKSOBt7HZORmXcGnNJOsO/WbO6a6Tj1OOcKvo/Jf7Q/1CZBIhH+HOtb1wCmt
+         PtmtR8jdjlke4eJoz1bzKotfEPBpfjQptGBxF9Atr4A1ESEfOaB8ATwyDDeA3Slibh
+         NXApcSt3ZKUREZSkSIIh6tmMN4nriCrdioxxMDxxALyI8lQA61OaA8Cer5EvuCi9J3
+         XYkbTTHNIYj4kXF9HzR0c1g9o8VkkxnD/dKFKfu7dIJxOnyNQss7sd2Vnkd87VjvKm
+         M9f0mDZrD1rDg==
+Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
+ power-supply-needs-irq
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
+        robh@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Mon, 11 Jul 2022 15:17:33 +0200
+In-Reply-To: <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
+References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
+         <20220711094549.3445566-2-martin.kepplinger@puri.sm>
+         <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bo,
+Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof Kozlowski:
+> On 11/07/2022 11:45, Martin Kepplinger wrote:
+> > Add the power-supply-needs-irq board description property for power
+> > domains.
+> 
+> Where is a board description here? I think you just meant
+> "power-supply-needs-irq property"?
+> > 
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > ---
+> >  .../devicetree/bindings/power/power-domain.yaml        | 10
+> > ++++++++++
+> >  1 file changed, 10 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/power/power-
+> > domain.yaml b/Documentation/devicetree/bindings/power/power-
+> > domain.yaml
+> > index 889091b9814f..e82c2f7ccb97 100644
+> > --- a/Documentation/devicetree/bindings/power/power-domain.yaml
+> > +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+> > @@ -70,6 +70,16 @@ properties:
+> >        by the given provider should be subdomains of the domain
+> > specified
+> >        by this binding.
+> >  
+> > +  power-supply: true
+> 
+> This is a new property not described in the commit msg.
 
-generally the patch looks good to me, but it needs improvement in the
-wwan_create_dev() part. Sorry that I missed this part in the previous
-review. See details below.
+true, I think it's missing and could be added as a separate patch.
 
-On Mon, Jul 11, 2022 at 3:54 AM Bo Liu <liubo03@inspur.com> wrote:
->
-> when device_register() fails, we should call ida_free().
->
-> Fixes: 9a44c1cc6388 ("net: Add a WWAN subsystem")
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  Changes from v1:
->  -Add a Fixes tag pointing to the commit
->
->  drivers/net/wwan/wwan_core.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-> index b8c7843730ed..0f653e320b2b 100644
-> --- a/drivers/net/wwan/wwan_core.c
-> +++ b/drivers/net/wwan/wwan_core.c
-> @@ -228,8 +228,7 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
->         wwandev = kzalloc(sizeof(*wwandev), GFP_KERNEL);
->         if (!wwandev) {
->                 wwandev = ERR_PTR(-ENOMEM);
-> -               ida_free(&wwan_dev_ids, id);
-> -               goto done_unlock;
-> +               goto error_free_ida;
->         }
->
->         wwandev->dev.parent = parent;
-> @@ -242,7 +241,7 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
->         if (err) {
->                 put_device(&wwandev->dev);
->                 wwandev = ERR_PTR(err);
-> -               goto done_unlock;
-> +               goto error_free_ida;
->         }
->
->  #ifdef CONFIG_WWAN_DEBUGFS
-> @@ -251,6 +250,8 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
->                                            wwan_debugfs_dir);
->  #endif
->
-> +error_free_ida:
-> +       ida_free(&wwan_dev_ids, id);
->  done_unlock:
->         mutex_unlock(&wwan_register_lock);
->
+> 
+> > +
+> > +  power-supply-needs-irq:
+> > +    type: boolean
+> > +    description:
+> > +      A power-supply can link for example to a regulator
+> > controlled via
+> > +      i2c or otherwise needing interrupts enabled to be able to
+> > enable and
+> > +      disable. 
+> 
+> Not really a property of power domain. How the regulator supply works
+> is
+> entirely up to regulator. Otherwise such property should appear for
+> every device.
 
-This hunk misses the case of a successful device registration. After
-patching, the code will look like this:
+you're right. The power-domain driver could read the power-supply
+regulator node directly. Still, I think then a new regulator property
+is needed instead, or is it?
 
-    err = device_register(&wwandev->dev);
-    if (err) {
-        put_device(&wwandev->dev);
-        wwandev = ERR_PTR(err);
-        goto error_free_ida;
-    }
+> 
+> > This property makes various callbacks usually run in the
+> > +      noirq phase, being run when interrupts are available.
+> 
+> Last sentence does not fit - you embed Linux implementation into DT
+> bindings. noirq phase is Linux specific.
 
-    wwandev->debugfs_dir =
-debugfs_create_dir(kobject_name(&wwandev->dev.kobj),
-wwan_debugfs_dir);
+oh I keep making this mistake. thanks for the fast review!
 
-error_free_ida:
-    ida_free(&wwan_dev_ids, id);
-done_unlock:
-    mutex_unlock(&wwan_register_lock);
+> 
+> > +
+> >  required:
+> >    - "#power-domain-cells"
+> >  
+> 
+> 
+> Best regards,
+> Krzysztof
 
-As you can see, even if the device will be registered successfully,
-the allocated id will be unconditionally freed.
 
-The easiest way to fix this is to add "goto done_unlock" right after
-the debugfs directory creation call. So the hunk should become
-something like this:
-
-@@ -249,8 +248,12 @@ static struct wwan_device *wwan_create_dev(struct
-device *parent)
-        wwandev->debugfs_dir =
-                     debugfs_create_dir(kobject_name(&wwandev->dev.kobj),
-                                           wwan_debugfs_dir);
- #endif
-
-+      goto done_unlock;
-+
-+error_free_ida:
-+       ida_free(&wwan_dev_ids, id);
- done_unlock:
-        mutex_unlock(&wwan_register_lock);
-
--- 
-Sergey

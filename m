@@ -2,56 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B366570071
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A98D570075
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiGKL1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S231395AbiGKL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiGKL0g (ORCPT
+        with ESMTP id S229838AbiGKL1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:26:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F326C112;
-        Mon, 11 Jul 2022 04:02:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 11 Jul 2022 07:27:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D22357C1;
+        Mon, 11 Jul 2022 04:03:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54E216146B;
-        Mon, 11 Jul 2022 11:02:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 979AEC34115;
-        Mon, 11 Jul 2022 11:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657537369;
-        bh=nRNWLW8OQIEFwIoD+M6iF1eixxA3yYEYZT/DiaBf2RU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lJpaqWKHRhoCrmfiFiPEGJkh/lHscsEPsTDLKnRsPmdQo1u7Ki1e78Potjb1PgeK9
-         OUMAzRLzu1viE0kdloTZqZQWyvCSzzLJMvIpbk5Qe218RepvMbmvkyIBgzdssl5uaN
-         DqP5FgWdiCPOyeqYswNcvzVRHIG58G6e1Fd8uAOKgzju+fLKwU1v8snylz8Z+/9nQt
-         MiLVTq+i4LXYNlVwNltLc9dl2OE0l1g9wNM7j45j+PNZPM481AzJd9Mq69ejk5E/wH
-         SYKku9muhEyiogd42+w1GCAaAvWliIoHTLLVmCrGtcR3HqQCI2e+YVQGW3SOPxBr5V
-         13SM66KrXApaA==
-Date:   Mon, 11 Jul 2022 12:02:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v1 29/33] regulator/drivers/max8976: Switch to new of
- thermal API
-Message-ID: <YswDVLI+xQJGfYHF@sirena.org.uk>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-30-daniel.lezcano@linexp.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F2E472279B;
+        Mon, 11 Jul 2022 11:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657537438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsZtFmhd2wM7bnAZCCJVrbNgtem6za52WsNE9GAAo+k=;
+        b=Kk/CQuVbLGbPjt+D8aVbHl+sPhaBVqStaLvq3uIOVEsvaE3enyHn9eogvf4SaUK5CsObRA
+        +QzIlbcvMMe90UEp1pvYXBm6guLOtqV1AgP5YujBB4WoOvUVD+Zh48ZbLlXSPzXQBbeXga
+        3G9KD1p/5P5jZ+F/+AhA91duXEZGlMs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657537438;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qsZtFmhd2wM7bnAZCCJVrbNgtem6za52WsNE9GAAo+k=;
+        b=bzC3oJgBJkPzVvb1HFGckyPYZVvzlZJVtzRcQKpjqn29cGb1hnDKKO9uYROjJYcnWE78b4
+        bem69BD7OQUmocBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCD3C13322;
+        Mon, 11 Jul 2022 11:03:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZBoaLZ0DzGK9aAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 11 Jul 2022 11:03:57 +0000
+Message-ID: <84c3af8a-d50c-c9be-348e-e50aad59bf5d@suse.de>
+Date:   Mon, 11 Jul 2022 13:03:57 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8sgAUUax1IxvX064"
-Content-Disposition: inline
-In-Reply-To: <20220710212423.681301-30-daniel.lezcano@linexp.org>
-X-Cookie: I am NOMAD!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------W3gjda6T5dPdYMTLKtvUwblT"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,43 +84,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------W3gjda6T5dPdYMTLKtvUwblT
+Content-Type: multipart/mixed; boundary="------------fpBott6Mn2eZcUCv7VE0xyyp";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Linux/m68k <linux-m68k@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-ID: <84c3af8a-d50c-c9be-348e-e50aad59bf5d@suse.de>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUqo-_5tyhmx_QqPJhqQdoRDE6_Q7b1AJWeBZc67RsBSA@mail.gmail.com>
 
---8sgAUUax1IxvX064
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--------------fpBott6Mn2eZcUCv7VE0xyyp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Sun, Jul 10, 2022 at 11:24:19PM +0200, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach.
+SGkNCg0KQW0gMTEuMDcuMjIgdW0gMTE6MzUgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IEhpIFRob21hcywNCj4gDQo+IE9uIE1vbiwgSnVsIDExLCAyMDIyIGF0IDExOjAzIEFN
+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cm90ZToNCj4+IEFt
+IDA4LjA3LjIyIHVtIDIwOjIxIHNjaHJpZWIgR2VlcnQgVXl0dGVyaG9ldmVuOg0KPj4+IFRo
+ZSBtb2RlIHBhcnNpbmcgY29kZSByZWNvZ25pemVzIG5hbWVkIG1vZGVzIG9ubHkgaWYgdGhl
+eSBhcmUgZXhwbGljaXRseQ0KPj4+IGxpc3RlZCBpbiB0aGUgaW50ZXJuYWwgd2hpdGVsaXN0
+LCB3aGljaCBpcyBjdXJyZW50bHkgbGltaXRlZCB0byAiTlRTQyINCj4+PiBhbmQgIlBBTCIu
+DQo+Pj4NCj4+PiBQcm92aWRlIGEgbWVjaGFuaXNtIGZvciBkcml2ZXJzIHRvIG92ZXJyaWRl
+IHRoaXMgbGlzdCB0byBzdXBwb3J0IGN1c3RvbQ0KPj4+IG1vZGUgbmFtZXMuDQo+Pj4NCj4+
+PiBJZGVhbGx5LCB0aGlzIGxpc3Qgc2hvdWxkIGp1c3QgY29tZSBmcm9tIHRoZSBkcml2ZXIn
+cyBhY3R1YWwgbGlzdCBvZg0KPj4+IG1vZGVzLCBidXQgY29ubmVjdG9yLT5wcm9iZWRfbW9k
+ZXMgaXMgbm90IHlldCBwb3B1bGF0ZWQgYXQgdGhlIHRpbWUgb2YNCj4+PiBwYXJzaW5nLg0K
+Pj4NCj4+IEkndmUgbG9va2VkIGZvciBjb2RlIHRoYXQgdXNlcyB0aGVzZSBuYW1lcywgY291
+bGRuJ3QgZmluZCBhbnkuIEhvdyBpcw0KPj4gdGhpcyBiZWluZyB1c2VkIGluIHByYWN0aWNl
+PyBGb3IgZXhhbXBsZSwgaWYgSSBzYXkgIlBBTCIgb24gdGhlIGNvbW1hbmQNCj4+IGxpbmUs
+IGlzIHRoZXJlIERSTSBjb2RlIHRoYXQgZmlsbHMgaW4gdGhlIFBBTCBtb2RlIHBhcmFtZXRl
+cnM/DQo+IA0KPiBJIGd1ZXNzIE1heGltZSBrbm93cywgYXMgaGUgYWRkZWQgdGhlIHdoaXRl
+bGlzdD8NCg0KWWVhaCwgSSBzYXcgaGlzIHJlcGx5IGFscmVhZHkuDQoNCj4gUmVhZGluZyB0
+aGUgZGVzY3JpcHRpb24gb2YgY29tbWl0IDM3NjQxMzc5MDZhNWFjZWMgKCJkcm0vbW9kZXM6
+DQo+IEludHJvZHVjZSBhIHdoaXRlbGlzdCBmb3IgdGhlIG5hbWVkIG1vZGVzIiksIGl0IGxv
+b2tzIGxpa2UgdGhpcyBpcw0KPiBtb3JlIGFib3V0IHByZXZlbnRpbmcgdGhlIHBhcnNlciBm
+cm9tIHRha2luZyBhbnkgc3RyaW5nIGFzIGEgcmFuZG9tDQo+IG1vZGUsIHRoYW4gYWJvdXQg
+YWRkaW5nIHN1cHBvcnQgZm9yICJQQUwiIG9yICJOVFNDIj8NCj4gDQo+IE5vdGUgdGhhdCBk
+cml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNwbGF5L2ludGVsX3R2LmMgZGVmaW5lcyBhbiBhcnJh
+eSBvZg0KPiB0dl9tb2Rlc1tdLCBpbmNsdWRpbmcgIlBBTCIsIHNvIHBlcmhhcHMgdGhlc2Ug
+ZW5kIHVwIGFzIG5hbWVkIG1vZGVzPw0KPiANCj4+IEFuZCBhbm90aGVyIHF1ZXN0aW9uIEkg
+aGF2ZSBpcyB3aGV0aGVyIHRoaXMgd2hpdGVsaXN0IGJlbG9uZ3MgaW50byB0aGUNCj4+IGRy
+aXZlciBhdCBhbGwuIFN0YW5kYXJkIG1vZGVzIGV4aXN0IGluZGVwZW5kZW50IGZyb20gZHJp
+dmVycyBvcg0KPj4gaGFyZHdhcmUuIFNob3VsZG4ndCB0aGVyZSBzaW1wbHkgYmUgYSBnbG9i
+YWwgbGlzdCBvZiBhbGwgcG9zc2libGUgbW9kZQ0KPj4gbmFtZXM/IERyaXZlcnMgd291bGQg
+ZmlsdGVyIG91dCB0aGUgdW5zdXBwb3J0ZWQgbW9kZXMgYW55d2F5Lg0KPiANCj4gRm9yIHN0
+YW5kYXJkIG1vZGVzLCBJIGFncmVlLiAgQW5kIHRoZXNlIGFyZSB1c3VhbGx5IHNwZWNpZmll
+ZCBieQ0KPiByZXNvbHV0aW9uIGFuZCByZWZyZXNoIHJhdGUgKGUuZy4gIjY0MHg0ODBANjAi
+LCBpbnN0ZWFkIG9mICI0ODBwIikuDQo+IA0KPiBCdXQgbGVnYWN5IGhhcmR3YXJlIG1heSBo
+YXZlIHZlcnkgbGltaXRlZCBzdXBwb3J0IGZvciBwcm9ncmFtbWFibGUNCj4gcGl4ZWwgY2xv
+Y2tzIChlLmcuIEFtaWdhIGlzIGxpbWl0ZWQgdG8gcGl4ZWwgY2xvY2tzIG9mIDcsIDE0LCBv
+ciAyOA0KPiBNSHopLCBzbyB0aGUgc3RhbmRhcmQgbW9kZXMgYXJlIGEgYmFkIG1hdGNoLCBv
+ciBtYXkgbm90IHdvcmsgYXQgYWxsLg0KPiBIZW5jZSBkcml2ZXJzIG1heSBuZWVkIHRvIHBy
+b3ZpZGUgdGhlaXIgb3duIG1vZGVzLCBidXQgaXQgc2VlbXMgd3JvbmcNCj4gdG8gbWUgdG8g
+bWFrZSB0aGVzZSBub24tc3RhbmRhcmQgbW9kZXMgZ2xvYmFsLCBhbmQgcG9zc2libHkgcG9s
+bHV0ZQ0KPiB0aGUgZXhwZXJpZW5jZSBmb3IgZXZlcnlvbmUuDQpJIGRvbid0IHJlYWxseSBo
+YXZlIGEgc3Ryb25nIG9waW5pb24sIGJ1dCBoYXZpbmcgYWxsIG1vZGVzIGluIG9uZSBnbG9i
+YWwgDQpsaXN0IGlzIHF1aXRlIHVzZXItZnJpZW5kbHkuIEl0J3MgYWxsIHRoZXJlIGZvciBl
+dmVyeW9uZS4gT3RoZXJ3aXNlIA0KdXNlcnMgd291bGQgc29tZWhvdyBoYXZlIHRvIGtub3cg
+d2hpY2ggaGFyZHdhcmUgc3VwcG9ydHMgd2hpY2ggbW9kZXMuIA0KVGhhdCdzIGFjdHVhbGx5
+IHRoZSBqb2Igb2YgZWFjaCBkcml2ZXIncyBtb2RlX3ZhbGlkIGFuZCBhdG9taWNfY2hlY2sg
+DQpmdW5jdGlvbnMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEdye29ldGpl
+LGVldGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0K
+PiAtLQ0KPiBHZWVydCBVeXR0ZXJob2V2ZW4gLS0gVGhlcmUncyBsb3RzIG9mIExpbnV4IGJl
+eW9uZCBpYTMyIC0tIGdlZXJ0QGxpbnV4LW02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBj
+b252ZXJzYXRpb25zIHdpdGggdGVjaG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhh
+Y2tlci4gQnV0DQo+IHdoZW4gSSdtIHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNh
+eSAicHJvZ3JhbW1lciIgb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgLS0gTGludXMgVG9ydmFsZHMNCg0KLS0gDQpUaG9tYXMg
+WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
+b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
+IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
+OiBJdm8gVG90ZXYNCg==
 
-You've not copied me on the rest of the series so I've no idea what's
-going on with dependencies.  When sending a patch series it is important
-to ensure that all the various maintainers understand what the
-relationship between the patches as the expecation is that there will be
-interdependencies.  Either copy everyone on the whole series or at least
-copy them on the cover letter and explain what's going on.  If there are
-no strong interdependencies then it's generally simplest to just send
-the patches separately to avoid any possible confusion.
+--------------fpBott6Mn2eZcUCv7VE0xyyp--
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---8sgAUUax1IxvX064
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------W3gjda6T5dPdYMTLKtvUwblT
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLMA1MACgkQJNaLcl1U
-h9B9mwf/ZF6F+Eu87eb/iJexuzXFuMw1OHmqcA0Kz42wBRqDHtyM48dA2NbwRf2g
-HIR5qa+JhSdULEAm8x73YjqENHPF4c6HcebJ3v64OAVcPwKIh+01InrFhRiiswdB
-uY5FQNLw7vYXBBoqt+cEi0+AQS7nrWKjV0o7LKoHpECeCAFeZ7Hw5r3VNYn4iJYq
-T8IMlrnBBrN6wR/aCu/PCwNILOQV9FgVOEeiLNDqfUOCngf41xBd3k89B0qgIjY/
-mRcHLspG1164lo3i9g5nhwrfA3z8Rc7qwplo5AMPxf9JFmHu/26rYiKO9P/47frx
-l9Zw2ZgKH8Dh308THwmRCfVvI+ZSWA==
-=D1On
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLMA50FAwAAAAAACgkQlh/E3EQov+CW
+sw/+IzsJWZ3vBiBVN32rSGSbKjAcR2LqgXyYu7DxmQglL6rlBhpZ/W5tevD/hl6OXnkQxkM4eSo6
+f5CYAxABHL2LlqukBr+CVW1WchEYD8b8K4I7Ptp6dW4YkIamgBtYTFtedxQ+Kqi5SWc3IU7DkL+n
+I7q+uGT7RTfmxL2KB9PqhWkOYJrY5A42KCGw3swV2GGEthXlzUU6p98zrX/UUIVatQLAQw2bRXz3
+wQfQp7M+d+iFQzRYLmwK23tFkC4Ug7aa+0RHtA1jeoCgTI3lI59ItBrqNdEHwxXkxM43ImjsUhEJ
+at1RVMUCDklu6kTQFJJDakfA9GVNlBqLAONLZmN6OdKz600D0w2qviduJEDLNWYefR5rYOoJw/z3
+yjHlH6nl2jWaDhB2CyupV+/piEz39SJwj3IwvXb/cbv3FjIbvJtgUP6IFfxoHv4hiW9K31BrH1HE
+XdSDHUgFOUOYR3sow9YgSDW8B2AL5LK4khAXiTT17JOgR/zFa9zS8RVKgWhFtnAtZnMyTkwxHZwt
+g9bUJf6GQZYa9OEGe2MQKeB+13u8QcvjUJTXZYAxsPWWTc8PslTeiOgJ0YlL0rJ8qhB780eE348d
+Chua1IiIq2M4fS2zZqpxNPuLlGsYHgtppqrcFk2cXL33SuCiHnR3BOdfZZ1MWBTqm/iwZCGQGUbj
+tns=
+=fby2
 -----END PGP SIGNATURE-----
 
---8sgAUUax1IxvX064--
+--------------W3gjda6T5dPdYMTLKtvUwblT--

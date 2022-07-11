@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151EA570B5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D010570B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiGKUZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        id S231478AbiGKU0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiGKUZ0 (ORCPT
+        with ESMTP id S230316AbiGKUZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:25:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE55A3C8C7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:25:25 -0700 (PDT)
+        Mon, 11 Jul 2022 16:25:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACF64E630
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:25:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71863B81208
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B18AC341C0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C312B81215
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AB6C341D3;
         Mon, 11 Jul 2022 20:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657571123;
-        bh=OjD8Yz9UzTzgG3RG67dsf3NiVnBD+9tO+AINCZ654a0=;
+        bh=3lAjOtZKG1Fsuzuu547FeZgxDGSHEVrd4ycZakefxQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bwbwfTsWqSl9CjGQhFHIyg7zWeQ2QO57aLRlgOpmPe7iOX4Z8SF5yv8pVhFtVyNbu
-         Pr1IZ/lhEbkwwVC1JecuODFe2LSSPM/zcsMTSo3WVi8NMm59JCkiHNQ5Fes9EvUPYh
-         6AUoQvzDvSz6CFwduOfMIEEq6+ZlBIP9vk6bBUjv2zBgdj5+iV5qu5srSCmrTm3iLI
-         H/9sJUUnBiqySZHwA6sYjLfL9aGdPl2TV4HWPUEPV0fBr2BlEX8VZdmxGdOzmHyqQ5
-         dCGum0NxThwvAULWVj8vgXshfF4eUn+ZLhV+hFjz6Vn6NkaSZLpDTXvZgAHLZyugnO
-         89qni2QCs9oTA==
+        b=OhYuzbhYp9t7p0QqTKMcJi4FdczRgYqUlbfQ1ZD6YzlQPXXHOtXAvu3UxRYlyG9Ez
+         /Lff//0mZmams33pJGRj+yD0Ic85dV6R7dQPWUt7gb9flyr5X3+KDcDnbnLbfpqsgg
+         CrqkW3OxeAbSEMNY3ug/ddNnmoZRIHrpxTQ2soCN2vcfiZZ1+A0E9aeMO/7iX5ID7e
+         sLwgaxCfJJRb8UKVe54OsPsDJG7x1NAhbYfk1H4pHbReTmaEv/G4Y1cyJQs1FssZid
+         K1WVMTX/E1dY2/VYO9qZqoHc9HZlvXL/bp38voRWC1F2QfoEIqT/cNJO5qaPnrMHJd
+         F7LUU/L2Eg5GA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oAzy3-004e84-Ie;
+        id 1oAzy3-004e87-JL;
         Mon, 11 Jul 2022 21:25:19 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Jani Nikula" <jani.nikula@linux.intel.com>,
-        =?UTF-8?q?Juha-Pekka=20Heikkil=C3=A4?= 
-        <juha-pekka.heikkila@intel.com>,
         "Lucas De Marchi" <lucas.demarchi@intel.com>,
         "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         Imre Deak <imre.deak@intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
         Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 13/32] drm/i915: intel_fb: fix a kernel-doc issue with Sphinx
-Date:   Mon, 11 Jul 2022 21:24:58 +0100
-Message-Id: <715c9d4674cdcbc07da5b63221f41319f1d2acfd.1657565224.git.mchehab@kernel.org>
+Subject: [PATCH 14/32] drm/i915: skl_scaler: fix return value kernel-doc markup
+Date:   Mon, 11 Jul 2022 21:24:59 +0100
+Message-Id: <7d22a4d16d7b3670ce090d6040f3bdc9a524f2a0.1657565224.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657565224.git.mchehab@kernel.org>
 References: <cover.1657565224.git.mchehab@kernel.org>
@@ -71,11 +71,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can't use %foo[<something>] as this produces a bad markup.
-Use instead, the emphasis markup directly.
+The way it is, it produces this warning:
 
-Fix this issue:
-	Documentation/gpu/i915:136: ./drivers/gpu/drm/i915/display/intel_fb.c:280: WARNING: Inline strong start-string without end-string.
+	Documentation/gpu/i915:150: ./drivers/gpu/drm/i915/display/skl_scaler.c:213: WARNING: Block quote ends without a blank line; unexpected unindent.
+
+Use list markups to suppress the warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -83,22 +83,26 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/32] at: https://lore.kernel.org/all/cover.1657565224.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/display/intel_fb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/display/skl_scaler.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_fb.c b/drivers/gpu/drm/i915/display/intel_fb.c
-index b191915ab351..fe72c75a9c79 100644
---- a/drivers/gpu/drm/i915/display/intel_fb.c
-+++ b/drivers/gpu/drm/i915/display/intel_fb.c
-@@ -276,7 +276,7 @@ lookup_format_info(const struct drm_format_info formats[],
-  * @cmd: FB add command structure
+diff --git a/drivers/gpu/drm/i915/display/skl_scaler.c b/drivers/gpu/drm/i915/display/skl_scaler.c
+index 4092679be21e..59099f793d3e 100644
+--- a/drivers/gpu/drm/i915/display/skl_scaler.c
++++ b/drivers/gpu/drm/i915/display/skl_scaler.c
+@@ -208,9 +208,9 @@ int skl_update_scaler_crtc(struct intel_crtc_state *crtc_state)
+  * @crtc_state: crtc's scaler state
+  * @plane_state: atomic plane state to update
   *
-  * Returns:
-- * Returns the format information for @cmd->pixel_format specific to @cmd->modifier[0],
-+ * Returns the format information for @cmd->pixel_format specific to **cmd->modifier[0]**,
-  * or %NULL if the modifier doesn't override the format.
+- * Return
+- *     0 - scaler_usage updated successfully
+- *    error - requested scaling cannot be supported or other error condition
++ * Return:
++ * * 0 - scaler_usage updated successfully
++ * * error - requested scaling cannot be supported or other error condition
   */
- const struct drm_format_info *
+ int skl_update_scaler_plane(struct intel_crtc_state *crtc_state,
+ 			    struct intel_plane_state *plane_state)
 -- 
 2.36.1
 

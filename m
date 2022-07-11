@@ -2,103 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54B156D20E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 01:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C560856D211
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 02:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiGJXz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 19:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S229567AbiGKABh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 20:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGJXz0 (ORCPT
+        with ESMTP id S229502AbiGKABf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 19:55:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7776A6386;
-        Sun, 10 Jul 2022 16:55:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 10 Jul 2022 20:01:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8376CE07;
+        Sun, 10 Jul 2022 17:01:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh3mT3Dvdz4xbn;
-        Mon, 11 Jul 2022 09:55:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657497322;
-        bh=cKdhqPjL663aReE7J0Akh1OlDsvIBphzF9qwxMYLS4g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F9LAfyXOnokWcsxgIt+Cjh2qY+jTiZELrrOma+kLfwWC28AAdtlQicSoMyp43Uvou
-         9Bi44zItPqauGkluLLItxsPJTI2aZ/6JSDKfDPMorT8rXuWYUoGsGk0SNNPJPn6sMZ
-         cD8wS5zfnW9bnPhpcy2mi6NoxdKWR8MhTbqMvW2Zy34Q3SXIj/VWxQj2EGaNBOkdTw
-         oETuJovRsWZ7YJ9SRcj9Jxf4O6tQ1lb+XN1od9RvcAsymmHKCwSBFIkKOf8Ku6WeKD
-         gVYFAMH9nipkAntZIRHayR9+dlACk8CVCLPLeR8UFVqQ6DFAEm4DGH7ZOVOFJ2sWOZ
-         Sbb/jFyL+mHfA==
-Date:   Mon, 11 Jul 2022 09:55:20 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Florian Fainelli <f.fainelli@gmail.com>, Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        William Zhang <william.zhang@broadcom.com>
-Subject: linux-next: manual merge of the broadcom tree with the spdx tree
-Message-ID: <20220711095520.4fad4c97@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA33F60FE6;
+        Mon, 11 Jul 2022 00:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C12FC3411E;
+        Mon, 11 Jul 2022 00:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657497691;
+        bh=TlKLPcBbz3RbDuAHDfDGZpSXrFAFDL26YjdPaucaCzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TM0tqX+WVO1YhtmTQj6f3/iwtJ9vXQmF/+f23nkkdRjQm/qtjCTQE5K0/ykfIyDWz
+         m462R4ubh/OY87QYnG0uWBV/1gTLLlqsQtRg2gd+80nU5nyvYYGMc1dFoahy1XtsDv
+         GomSv43YdZTK/luiQlUzKeAYIC14VaQGNT14BMhNDwDSM6dVEIFBxbXhqsZhcDFXJW
+         d+LWMuuPK7ZvTaUwyYREKLvPsN93GRqjaLwJ0q622KKFzCMTVJNHyBLc2ZpH2Sns0J
+         QGe4GQeA3z6pVIBMoavuGt9IG2lvU9YKLXCYa82ESk3AsXkbPyH87XFvs6wYXWU5yK
+         VEw30aJNXttSQ==
+Date:   Mon, 11 Jul 2022 03:01:25 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v4 3/5] tpm: of: Make of-tree specific function commonly
+ available
+Message-ID: <YstoVXqxE8IguTpT@kernel.org>
+References: <20220701022603.31076-1-stefanb@linux.ibm.com>
+ <20220701022603.31076-4-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QZfOo4.E+tZm9BtI5+68FML";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701022603.31076-4-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QZfOo4.E+tZm9BtI5+68FML
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 30, 2022 at 10:26:01PM -0400, Stefan Berger wrote:
+> Simplify tpm_read_log_of() by moving reusable parts of the code into
+> an inline function that makes it commonly available so it can be
+> used also for kexec support. Call the new of_tpm_get_sml_parameters()
+> function from the TPM Open Firmware driver.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> 
+> ---
+> v4:
+>  - converted to inline function
+> ---
+>  drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
+>  include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
+>  2 files changed, 32 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index a9ce66d09a75..f9462d19632e 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -12,6 +12,7 @@
+>  
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+> +#include <linux/tpm.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+>  #include "../tpm.h"
+> @@ -20,11 +21,10 @@
+>  int tpm_read_log_of(struct tpm_chip *chip)
+>  {
+>  	struct device_node *np;
+> -	const u32 *sizep;
+> -	const u64 *basep;
+>  	struct tpm_bios_log *log;
+>  	u32 size;
+>  	u64 base;
+> +	int ret;
+>  
+>  	log = &chip->log;
+>  	if (chip->dev.parent && chip->dev.parent->of_node)
+> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	if (of_property_read_bool(np, "powered-while-suspended"))
+>  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
+>  
+> -	sizep = of_get_property(np, "linux,sml-size", NULL);
+> -	basep = of_get_property(np, "linux,sml-base", NULL);
+> -	if (sizep == NULL && basep == NULL)
+> -		return -ENODEV;
+> -	if (sizep == NULL || basep == NULL)
+> -		return -EIO;
+> -
+> -	/*
+> -	 * For both vtpm/tpm, firmware has log addr and log size in big
+> -	 * endian format. But in case of vtpm, there is a method called
+> -	 * sml-handover which is run during kernel init even before
+> -	 * device tree is setup. This sml-handover function takes care
+> -	 * of endianness and writes to sml-base and sml-size in little
+> -	 * endian format. For this reason, vtpm doesn't need conversion
+> -	 * but physical tpm needs the conversion.
+> -	 */
+> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> -		size = be32_to_cpup((__force __be32 *)sizep);
+> -		base = be64_to_cpup((__force __be64 *)basep);
+> -	} else {
+> -		size = *sizep;
+> -		base = *basep;
+> -	}
+> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	if (size == 0) {
+>  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362d..b3dff255bc58 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -460,4 +460,31 @@ static inline struct tpm_chip *tpm_default_chip(void)
+>  	return NULL;
+>  }
+>  #endif
+> +
+> +#ifdef CONFIG_OF
+> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
+> +					    u64 *base, u32 *size)
+> +{
+> +	const u32 *sizep;
+> +	const u64 *basep;
+> +
+> +	sizep = of_get_property(np, "linux,sml-size", NULL);
+> +	basep = of_get_property(np, "linux,sml-base", NULL);
+> +	if (sizep == NULL && basep == NULL)
+> +		return -ENODEV;
+> +	if (sizep == NULL || basep == NULL)
+> +		return -EIO;
+> +
+> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> +		*size = be32_to_cpup((__force __be32 *)sizep);
+> +		*base = be64_to_cpup((__force __be64 *)basep);
+> +	} else {
+> +		*size = *sizep;
+> +		*base = *basep;
+> +	}
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #endif
+> -- 
+> 2.35.1
+> 
 
-Hi all,
 
-Today's linux-next merge of the broadcom tree got a conflict in:
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-  arch/arm/mach-bcm/bcm63xx.c
-
-between commit:
-
-  52e6676ef56f ("treewide: Replace GPLv2 boilerplate/reference with SPDX - =
-gpl-2.0_30.RULE (part 1)")
-
-from the spdx tree and commit:
-
-  889390f83d4e ("arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA")
-
-from the broadcom tree.
-
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QZfOo4.E+tZm9BtI5+68FML
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLZugACgkQAVBC80lX
-0Gx/VwgAnlmSEjd0JRZwT6D4uf3sQYuy+nWRDm6cf3STHRSMqdcbRDfKrTQcbJa8
-C67VTf3GH8oddBu8X1I4/aFvjHiFof7mUGt0DwWFnp8Jhs8g7RiKpzi5x0X/heqK
-BdsuIYmW4zq2jtJCnx8UEkMj+MlJCLvyOjibEUv2xF4b5QKpFVMBTLnagEQVy3MP
-pkr758q1O5y4Bm3HjFqwWRrBDNs8fN/QdBbkVS5Q2/d5wnhm+Ak7pzhpiPM6DcmI
-L0Fvnvo4UpaveFk3EUMCM8CfbRR/h8NnnzlObKv2uPUoYIFBg/f6VSAS1/cJ0Bm4
-fd24y4m+xXtQnS6O+zH2E8SeCEDt2Q==
-=yEwP
------END PGP SIGNATURE-----
-
---Sig_/QZfOo4.E+tZm9BtI5+68FML--
+BR, Jarkko

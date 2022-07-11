@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2268570895
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F0057088F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiGKQzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S230071AbiGKQxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiGKQzN (ORCPT
+        with ESMTP id S229563AbiGKQxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:55:13 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78D8D3E762
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:55:10 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 26BGorGZ007522;
-        Mon, 11 Jul 2022 11:50:54 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 26BGort6007521;
-        Mon, 11 Jul 2022 11:50:53 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 11 Jul 2022 11:50:53 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 2/5] powerpc/32: Don't always pass -mcpu=powerpc to the compiler
-Message-ID: <20220711165053.GF25951@gate.crashing.org>
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu> <d4df724691351531bf46d685d654689e5dfa0d74.1657549153.git.christophe.leroy@csgroup.eu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d4df724691351531bf46d685d654689e5dfa0d74.1657549153.git.christophe.leroy@csgroup.eu>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 11 Jul 2022 12:53:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A13A2A735
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:47 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r6so6996129edd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EvYW5GaG8Gx/hKniNuu2v226hGiRtWNUFfOGKwFgOac=;
+        b=aarLedeVOS0wuKcbUerMkVPKpJ3wM6fdhFFWFrG/pkDecFuAYKrWzlgPcW2FE19ruF
+         zVeQvPCEI71QlqYuYynt3AOoxXO+3CqUCfzmpcNM8cCb/2hrTyThxmVH45m71sQ/PRSX
+         e51w0bGdqnkkgeaSkix9Cot/+hcpVZgc/hd44=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EvYW5GaG8Gx/hKniNuu2v226hGiRtWNUFfOGKwFgOac=;
+        b=TOxT4Jme97Zdlnmnda/JONNQj4l8E4QDL4X5Jecj69UwSTWUKMYCf4BP1JpmrZzMBK
+         L4GYL9xK2S5DBmfDMkEfNtE+ntDfymhpMETPJISv8Jd6CKEJUNIw4Zo96hsdGgIFLtpl
+         c/yyxdWAijSqGDJPFn9RWlq9CHg45xW/s9qN8Rv7D7xD6lkTrMgIjn/Tqh2fXeApBo+t
+         9x5uS8SLoad472tGzTKHcMpcM5a4XlrZilkOnzdWjqmZ7T2+mh8Q4WwXvLDIMwX8UCkk
+         BNC0wAPbs9W7ld1npQIMI9mcnX/LmT1mCxSUPZ9RacsVfrjb5BxKr8HR1hJATdLI509C
+         Pppw==
+X-Gm-Message-State: AJIora9EiVEHWT797GRzFREUOxa/HhZei9XrCi+veblc2oCvgxzF0jnH
+        iyvmSIsd6pJMSUDgP8jTq9bNYymsxG3Lukpu
+X-Google-Smtp-Source: AGRyM1ssQlG9ngI1H19Mc866prGR5/2jyz1ILg8WAEUwbo3K27szT2F0DugFOQQRyF9suSS9PrchGQ==
+X-Received: by 2002:a05:6402:2b8b:b0:43a:5475:f1ae with SMTP id fj11-20020a0564022b8b00b0043a5475f1aemr6667701edb.363.1657558425738;
+        Mon, 11 Jul 2022 09:53:45 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id f15-20020a17090631cf00b0072af3deb944sm2831351ejf.223.2022.07.11.09.53.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 09:53:43 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id d13-20020a05600c34cd00b003a2dc1cf0b4so3386331wmq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:43 -0700 (PDT)
+X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id
+ i14-20020a05600c354e00b003a19ddf468dmr16648474wmq.145.1657558422860; Mon, 11
+ Jul 2022 09:53:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <7tBrxiXIS8yrkSQC04SW-R8BK2xeKgirCEAeh2XB3EVkZSsJjVPJ3_tTXNwC0Ued3a3e8xYztaYvRGYyWApDAgKEUl9IC_xwvVqUpo0BpaI=@accessvector.net>
+ <20220708085713.GA6144@redhat.com> <R1W_P-BmV6F1JDyltK8tqX5q7DGQOcg0jkuq6XI36cXJBD1UZKMy5HjParo0Y2jehd6nA7mHEJzrMOGUsefDoyz7502IemibJyY-UFxdumM=@accessvector.net>
+ <20220708150215.GA11062@redhat.com> <CAHk-=wjDfxvACHaU5PGS5XgetAp5oQQOCTXVqBG+e4_hsM2DeA@mail.gmail.com>
+ <20220708175133.GB11062@redhat.com> <20220711161624.GA7683@redhat.com>
+In-Reply-To: <20220711161624.GA7683@redhat.com>
+From:   Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Mon, 11 Jul 2022 09:53:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiiqOsnqHmC+wiYNA0RvKJQJLZKaGqxfWn_VasuEYVwXA@mail.gmail.com>
+Message-ID: <CAHk-=wiiqOsnqHmC+wiYNA0RvKJQJLZKaGqxfWn_VasuEYVwXA@mail.gmail.com>
+Subject: Re: [PATCH] fix race between exit_itimers() and /proc/pid/timers
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     chris@accessvector.net,
+        "security@kernel.org" <security@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 04:19:30PM +0200, Christophe Leroy wrote:
-> Since commit 4bf4f42a2feb ("powerpc/kbuild: Set default generic
-> machine type for 32-bit compile"), when building a 32 bits kernel
-> with a bi-arch version of GCC, or when building a book3s/32 kernel,
-> the option -mcpu=powerpc is passed to GCC at all time, relying on it
-> being eventually overriden by a subsequent -mcpu=xxxx.
-> 
-> But when building the same kernel with a 32 bits only version of GCC,
-> that is not done, relying on gcc being built with the expected default
-> CPU.
-> 
-> This logic has two problems. First, it is a bit fragile to rely on
-> whether the GCC version is bi-arch or not, because today we can have
-> bi-arch versions of GCC configured with a 32 bits default. Second,
-> there are some versions of GCC which don't support -mcpu=powerpc,
-> for instance for e500 SPE-only versions.
+On Mon, Jul 11, 2022 at 9:16 AM Oleg Nesterov <oleg@redhat.com> wrote:
+>
+> As Chris explains, the comment above exit_itimers() is not correct,
+> we can race with proc_timers_seq_ops. Change exit_itimers() to clear
+> signal->posix_timers with ->siglock held.
 
-More fundamentally, the *only* thing you should check biarch for is
-for determining if you can use both -m32 and -m64 with the same
-compiler.  Everything behaves identically in a biarch and a non-biarch
-compiler, other than the latter screams bloody murder if you try to
-change the architecture from 32 to 64 bit or vice versa.
+Thanks. Applied,
 
-> So, stop relying on this approximative logic and allow the user to
-> decide whether he/she wants to use the toolchain's default CPU or if
-> he/she wants to set one, and allow only possible CPUs based on the
-> selected target.
-> 
-> Reported-by: Pali Rohár <pali@kernel.org>
-> Tested-by: Pali Rohár <pali@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Cc: Segher Boessenkool <segher@kernel.crashing.org>
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
-
-Looks good to me.  This untangles/demystifies quite some code :-)
-
-
-Segher
+                  Linus

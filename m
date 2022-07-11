@@ -2,93 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6AE56D808
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB0256D80E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiGKIbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+        id S230117AbiGKIby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiGKIbF (ORCPT
+        with ESMTP id S230095AbiGKIbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:31:05 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD91F600
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f2so5991373wrr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:56 -0700 (PDT)
+        Mon, 11 Jul 2022 04:31:49 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A51F2C0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:31:47 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c9b70c382so41525287b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:31:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=c0ELfD4hIzwtzcZRc0K6SYG7uHfnXiZ3SBpLMfAV6G4=;
-        b=ZIgGjm4iQDXNkq4QqQIvx7RYgS24mMT6IxOF2+AVzdCcKduTPf/ckYxP0jhwgi8a+8
-         bgKBhkdpntCFl0wlt+N+VfVs0yDxaTpALGK5xC8jGDmN0YVnd6YE3LqHkC0h1mxKvP2T
-         IJUeNz7nMhMTXpRJZ31CIt2Oz9gHVxS3peNxOuHv0ea4cgol4ibKqyudVcoEzbElS5x+
-         Zo+5o2xUPW+YB8RzcyW0Il3jRunExhDM6iXHqtHoCyVepcb/6C8RL1i2SrwXLxCK5y3V
-         26CC9WTEHq0SeTQzTZ5k9kGPK3fv3FG5qiAVVJibDux8+lKDZFkAZK0UULczx3KlR2hF
-         2Enw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3J9IyHuNdf4RzUYhyAwrvjFLRiRYfpINA65MRt4kKgM=;
+        b=WxLDiTDJ/cGeyxc13LPwdMBwqy9mf7NUwb8pTiIlyxslwk4PbnCJ5wM4ZxQ35hQTGW
+         6TdMU9/dafniNVuenzFjx8a4yzjl2UN+41lCphU9wQ862bHH/avz5vqbTBj9jqQaFTop
+         t8HZ+LNAl5fhEr5lPMGTw8emV50wpE1Z0y/D+PtanoEug9S0I/UR/GQ0bIkGpXqWChXT
+         CkuPZLS4pRGNHOkZbqcNlOGOWC5EV6GRURwUkV01gXNwuLub3EVxobjhfETIqSQVT9b+
+         wP0ObIClelaK0DwNKkMyl6qbPjhB/sHo2bzFrYhWWiwB5gnKjXI2bQ5PXWtp/oubc5um
+         +6Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c0ELfD4hIzwtzcZRc0K6SYG7uHfnXiZ3SBpLMfAV6G4=;
-        b=WrjgB+GCdRsQt/mvJlhay/a31eGzzDLrzbmCJoWOY3ccJIYjKjfF4C5222Kbhb0VQt
-         UIJK8tcFf3YiH7po3mJYgDPtW4iNxcF84ITUaDJUyHvInSfpCW8waOteCiAOcSaTtRJL
-         lBSt+1B59e+mNtQrbOSPaR30nj4OzzpkeVDzCl1HvMnN+Yjv7Pf9G8z4vqYyCRV3IGOb
-         JKWSHHNGF1jll5cYHEJEVKZgTlpzn1Azcy6HAwfCx+SMZx4WlrbwjWJmGZIN98kBqtLa
-         GXft8Cl6yfhJP8ILC4fdkZ9RykBUPCjLYwHsu0/IsMGCAzVjQufGscrNkD7OwR3XpiIH
-         HC1g==
-X-Gm-Message-State: AJIora+ay9qhIExFK2Ea7nYFhZGSTZlGsq3AxJiUIOPqLbb8hrdtRzm/
-        IUcLXR5w0PLZB91IlMqsPVf4TW5K9F7YsMu4
-X-Google-Smtp-Source: AGRyM1suCBcWYAdoGZFZPFlBAmvLgRU17t2insa64IziNZ41eGi5Zc2UvXDdkQtm9wSxPGQTS5y42w==
-X-Received: by 2002:a5d:4a09:0:b0:21d:a9ad:3b1b with SMTP id m9-20020a5d4a09000000b0021da9ad3b1bmr1919543wrq.3.1657528255568;
-        Mon, 11 Jul 2022 01:30:55 -0700 (PDT)
-Received: from [192.168.1.69] (211.31.102.84.rev.sfr.net. [84.102.31.211])
-        by smtp.gmail.com with ESMTPSA id p12-20020a7bcc8c000000b0039749b01ea7sm7756281wma.32.2022.07.11.01.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 01:30:54 -0700 (PDT)
-Message-ID: <9d79cdf8-16ff-2976-a923-79374de349a1@baylibre.com>
-Date:   Mon, 11 Jul 2022 10:30:52 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3J9IyHuNdf4RzUYhyAwrvjFLRiRYfpINA65MRt4kKgM=;
+        b=jyMCkDVbJJPOQDqUsHJyKFj214HerBAKB7hXaYU67N2AumejU0cTIf0eACTOzEAhEJ
+         JGuz34i58CC2zLk5/im4+QCooZRHYnYeoKheK/l3tpO8RoMJhZLjPa+my6LmLE+mfwpy
+         ttKNZjMlEmY/0AZuIL/FFjI7uIcblapevEh08TH0XT9/8PAsG9QPFsgtoMSRlLUbN1C8
+         qOirCq9LJmtJ6PaQE4XDc6Ex9G8NvD60hn32egiuZgE+InLEba4DElz7D/Vs1qJPb/Ef
+         ePW5QliMcAHg0rv/3nJKgsKf1gEbgI9sRZz6B98klxuK9L3fFX/Qg5sjd+9lXyqXutFJ
+         Ra8Q==
+X-Gm-Message-State: AJIora91WzvqYltIwfXG+dBVUd0uo04dDIF66bPJzEMCSnlEN7H3EMrV
+        s7WkfyMJABblLgo9pnApdQKd1afc4q+GkBMFGKN1lA==
+X-Google-Smtp-Source: AGRyM1u/2OXTB+9LffDEL+06zw4GuQSG0hG72hUyRzuw00qzHcEs9iDFO58dE3J4U/ALR03h0POcpnK5re78d+8pfSI=
+X-Received: by 2002:a81:6cf:0:b0:31c:913c:144c with SMTP id
+ 198-20020a8106cf000000b0031c913c144cmr18316528ywg.437.1657528307206; Mon, 11
+ Jul 2022 01:31:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62: add watchdog nodes
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-Cc:     vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220630070826.11074-1-jpanis@baylibre.com>
- <20220706234954.7r2qdm5ebuboby6x@deceptive>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <20220706234954.7r2qdm5ebuboby6x@deceptive>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1656583541.git.hakan.jansson@infineon.com> <e3f949c067ad07a1dd34247efc49f3d913c4f7c6.1656583541.git.hakan.jansson@infineon.com>
+In-Reply-To: <e3f949c067ad07a1dd34247efc49f3d913c4f7c6.1656583541.git.hakan.jansson@infineon.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 11 Jul 2022 10:31:36 +0200
+Message-ID: <CACRpkdYoe1-kCepz2J3h7H15rcG-a2o6y-GHOwaC6f+ipLTQhg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: net: broadcom-bluetooth: Add CYW55572
+ DT binding
+To:     Hakan Jansson <hakan.jansson@infineon.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 30, 2022 at 2:46 PM Hakan Jansson
+<hakan.jansson@infineon.com> wrote:
 
-On 07/07/2022 01:49, Nishanth Menon wrote:
-> On 09:08-20220630, Julien Panis wrote:
->> Add nodes for watchdogs :
->> - 5 in main domain
->> - 1 in MCU domain
->> - 1 in wakeup domain
-> True, but note: MCU wdt is typically used by M4F and wakeup WDT is
-> typically used by DM (R5) firmware. Is'nt it better we mark them
-> reserved (with device tree comments) to indicate the same?
+> CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
+> Extend the binding with its DT compatible.
 >
-> This can allow the kernel device tree to be used by zephyr on M4 for example..
-Nishanth, I will submit a new version of this patch that will take your 
-suggestion into account.
-> [...]
->
+> Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij

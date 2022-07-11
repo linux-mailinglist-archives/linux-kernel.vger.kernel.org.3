@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBDF5707DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D775707E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiGKQFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S231355AbiGKQF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGKQFO (ORCPT
+        with ESMTP id S229616AbiGKQF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:05:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2D252E4B;
-        Mon, 11 Jul 2022 09:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657555513; x=1689091513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tFeOnXMKVHMBMYuxU1nhFxhl70jRU9J1wY/OcsOGdUw=;
-  b=b3sEiSDYtyMA3S9P5phK216FZ16yKhibIdvjqMWNy/a7E9q/5+n+nrdU
-   9i3Cet6DEs07xoht4OYTqnAh7uLegMClVhKZZofAkvMUx4V8XikV7nQCk
-   dYKHX1t8snypXaPs9ZHdR/HXgowSkJrJ9hfZE3bfFLje4dao0iAp193zV
-   mg195P0o8pj4VKYBTM3hMa0GiLJUW45nGJDxC5r8kEq+JCai09RtCa9fT
-   BGkENWQFGrA6EbLJfmtpWkAM4G/VvtTn88M+oVWTePKs+9LdxYSf4PifF
-   TWxV8bC8Kv0cwkVmAz4KfeOTR+gSCTNQDws2FNVpHdKOl9b55CtfY4CbE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="371008022"
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="371008022"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 09:05:13 -0700
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="592301209"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 09:05:09 -0700
-Date:   Mon, 11 Jul 2022 17:05:01 +0100
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     lkp@intel.com, Vlad Dronov <vdronov@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH] crypto: qat - fix indentation in ABI documentation
-Message-ID: <YsxJnq32lAJIRSET@silpixa00400314>
-References: <202207090803.TEGI95qw-lkp@intel.com>
- <YsvuJsjxEjp/LHZa@silpixa00400314>
- <CAMusb+QfUZwq+JRkUrOLGO7mQLZbg_ueFVo2_PTSiSRiq7BoEA@mail.gmail.com>
+        Mon, 11 Jul 2022 12:05:26 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50F963917;
+        Mon, 11 Jul 2022 09:05:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1657555508; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=fi/+0YUi0Z1XGGnmtEao17Apcl4A+D+M7Eydzr4zaECKEJpQisd0+9aIOOqN7QU9cgZ+4JJnonhLQ1uWoUA24kHLwvbAYRisRW913fRC0ILnPkyxiI/f1OS9Vv1pcOp7AXAZscu/2OKxI91+xIDx1oLRk0c1g9O1UrK+yjHspNo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1657555508; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=CKrQS05Osf0cYASc3hvSa3UVP4bEQHmeALMpF7CZxQQ=; 
+        b=VxOl3mihwIOWQFhQgGR1N14Wbdji7wa8FeJH688fxsDk4bgVbjDXfLoi9QOKA07EgiYioaMOlYTQNWDVDhN/ILDfvBVu/55Q+bnAzUSSVtjSLEBAwtkpWOaJw5Z9qWEykZkQPXj3r8cpYSMx1JTzvTmcxomPa+Ly6FWs2U1DiwE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657555508;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=CKrQS05Osf0cYASc3hvSa3UVP4bEQHmeALMpF7CZxQQ=;
+        b=cmkffHp2Jh79+rcjxrfdlnvQjipTWcShDP8ygrMzX5Y5vmgS0aKnnVbgEN4OUHEP
+        TYOm3RmqiBT4bTZGNLuOnh+zxR5rdt8uEQcNiZOsx53X3qwHPq2hRXtMwK88SKK37ta
+        ZTK2YCVpDjf29+laj3cRJsILx51wi7HmFZgELlRg=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1657555506079247.95644078579937; Mon, 11 Jul 2022 09:05:06 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 00:05:06 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "Christoph Hellwig" <hch@infradead.org>
+Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "devicetree" <devicetree@vger.kernel.org>,
+        "linux-mm" <linux-mm@kvack.org>
+Message-ID: <181ee01d384.b809bd01412268.496620746959082770@linux.beauty>
+In-Reply-To: <Ysw7TMFO8Mw0nq8x@infradead.org>
+References: <20220711122459.13773-1-me@linux.beauty> <Ysw7TMFO8Mw0nq8x@infradead.org>
+Subject: Re: [PATCH 0/4] add struct page and Direct I/O support to reserved
+ memory
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMusb+QfUZwq+JRkUrOLGO7mQLZbg_ueFVo2_PTSiSRiq7BoEA@mail.gmail.com>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,110 +68,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 02:35:07PM +0200, Vlad Dronov wrote:
-> Hi,
-> 
-> On Mon, Jul 11, 2022 at 11:32 AM Giovanni Cabiddu
-> <giovanni.cabiddu@intel.com> wrote:
-> >
-> > On Sat, Jul 09, 2022 at 08:23:35AM +0800, kernel test robot wrote:
-> ...skip...
-> > > >> Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentation.
-> > >
-> > > vim +24 Documentation/ABI/testing/sysfs-driver-qat
-> > >
-> > >   > 24        Date:           June 2022
-> > I'm not able to spot what the issue is. Any suggestions?
-> 
-> Same here. I do not see what issue the test robot is reporting.
-I found what the issue is. It seems Sphinx doesn't like the extra
-indentation in the sections.
+Hi Christoph,
+ ---- On Mon, 11 Jul 2022 23:01:32 +0800  Christoph Hellwig <hch@infradead.org> wrote --- 
+ > Who is going to use it and how?  Because normally the reserved memory
+ > is used through the DMA allocator, and you can't just do direct I/O
+ > to that.
+ > 
 
-----8<----
+My use case has been stated in the cover letter, but our driver is not ready for upstream yet.
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Date: Mon, 11 Jul 2022 16:18:43 +0100
-Subject: [PATCH] crypto: qat - fix indentation in ABI documentation
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 - Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+With DMA allocator, we can access buffer in kernel space, not userspace, however, this patch
+series servers for userspace direct I/O, so that you can mmap device file as src buffer from userspace,
+and dio to file on disk.
 
-Change the indentation in the file sysfs-driver-qat to resolve the
-following warning when generating documentation with `make htmldocs`:
 
-    Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentation.
+There are some mmap + rmem cases in the kernel source tree which don't use the DMA allocator already.
 
-Fixes: d4cfb144f605 ("crypto: qat - expose device config through sysfs for 4xxx")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
----
- Documentation/ABI/testing/sysfs-driver-qat | 38 ++++++++++------------
- 1 file changed, 17 insertions(+), 21 deletions(-)
+I also found some users have asked for a solution of supporting direct I/O on file_operation->mmap like:
+https://stackoverflow.com/questions/44820740/using-o-direct-with-io-memory
+https://www.mail-archive.com/support-list@support.elphel.com/msg02314.html
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-qat b/Documentation/ABI/testing/sysfs-driver-qat
-index a600531e9562..741d97fa5ae1 100644
---- a/Documentation/ABI/testing/sysfs-driver-qat
-+++ b/Documentation/ABI/testing/sysfs-driver-qat
-@@ -8,12 +8,12 @@ Description:	Reports the current state of the QAT device and allows to
- 		This attribute is RW.
- 
- 		Returned values:
--			up: the device is up and running
--			down: the device is down
-+		up: the device is up and running
-+		down: the device is down
- 
- 		Allowed values:
--			up: initialize and start the device
--			down: stop the device and bring it down
-+		up: initialize and start the device
-+		down: stop the device and bring it down
- 
- 		It is possible to transition the device from up to down only
- 		if the device is up and vice versa.
-@@ -30,16 +30,12 @@ Description:	Reports the current configuration of the QAT device and allows
- 		This attribute is RW.
- 
- 		Returned values:
--			sym;asym:	the device is configured for running
--					crypto services
--			dc:		the device is configured for running
--					compression services
-+		sym;asym:  the device is configured for running crypto services
-+		dc:        the device is configured for running compression services
- 
- 		Allowed values:
--			sym;asym:	configure the device for running
--					crypto services
--			dc:		configure the device for running
--					compression services
-+		sym;asym:  configure the device for running crypto services
-+		dc:        configure the device for running compression services
- 
- 		It is possible to set the configuration only if the device
- 		is in the `down` state (see /sys/bus/pci/devices/<BDF>/qat/state)
-@@ -47,14 +43,14 @@ Description:	Reports the current configuration of the QAT device and allows
- 		The following example shows how to change the configuration of
- 		a device configured for running crypto services in order to
- 		run data compression:
--			# cat /sys/bus/pci/devices/<BDF>/qat/state
--			up
--			# cat /sys/bus/pci/devices/<BDF>/qat/cfg_services
--			sym;asym
--			# echo down > /sys/bus/pci/devices/<BDF>/qat/state
--			# echo dc > /sys/bus/pci/devices/<BDF>/qat/cfg_services
--			# echo up > /sys/bus/pci/devices/<BDF>/qat/state
--			# cat /sys/bus/pci/devices/<BDF>/qat/cfg_services
--			dc
-+		# cat /sys/bus/pci/devices/<BDF>/qat/state
-+		up
-+		# cat /sys/bus/pci/devices/<BDF>/qat/cfg_services
-+		sym;asym
-+		# echo down > /sys/bus/pci/devices/<BDF>/qat/state
-+		# echo dc > /sys/bus/pci/devices/<BDF>/qat/cfg_services
-+		# echo up > /sys/bus/pci/devices/<BDF>/qat/state
-+		# cat /sys/bus/pci/devices/<BDF>/qat/cfg_services
-+		dc
- 
- 		This attribute is only available for qat_4xxx devices.
--- 
-2.36.1
+I believe there are some other potential users who didn't post questions on the internet.
 
+If the upstream kernel has this feature, these users can mmap their
+reserved memory to userspace and get direct i/o support.
+
+Regards,
+Li

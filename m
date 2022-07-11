@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C2C56FB7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341DA56FDAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiGKJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        id S234210AbiGKJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiGKJan (ORCPT
+        with ESMTP id S234194AbiGKJ63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:30:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63972EC5;
-        Mon, 11 Jul 2022 02:16:51 -0700 (PDT)
+        Mon, 11 Jul 2022 05:58:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E8360536;
+        Mon, 11 Jul 2022 02:27:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABC4AB80833;
-        Mon, 11 Jul 2022 09:16:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0462DC34115;
-        Mon, 11 Jul 2022 09:16:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2370A61370;
+        Mon, 11 Jul 2022 09:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B06C34115;
+        Mon, 11 Jul 2022 09:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531005;
-        bh=S9mbCzU3aDaS30PbSuhcVdHDJcVEx5OvHyDJ8pSdBd8=;
+        s=korg; t=1657531642;
+        bh=QV3wDxkxr74z3UkBITYTHGpxhZq8sdSdwFhGqaxO/UQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mrlZ43oiuVekCcvXSQfabDatNg3NNH4Dsx62mbkt/R5chPm7eYGIgvZOYi3vnz9r0
-         vi05qwZKND26Rx/VsByklS6x/r+8u4+ipsQ3ZgTdbtqbs6ti6AhZbimf54IzitQtkJ
-         YhmAuVHmAy6VIcAbDhUxmxi/bUMzumdy8ibkEKtg=
+        b=UNPWStETgrcR/E25nSh3n52DhzKVQiNsDzEwYXEgnZC0VKlDWVhh0xjPL2NFVI2ku
+         JU+wfxRJKfhPhqOiuBaYpfL3uiY/SfSDZdSURK7X+0Rg10m2CCuJswcUc66ziv6bNv
+         e7ZOejkkCl9a0EStUaLwqHyVmJa1PlxhljUXdhDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 5.18 035/112] fbcon: Disallow setting font bigger than screen size
+        stable@vger.kernel.org, Lukas Fink <lukas.fink1@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 139/230] drm/amdgpu: Fix rejecting Tahiti GPUs
 Date:   Mon, 11 Jul 2022 11:06:35 +0200
-Message-Id: <20220711090550.566480384@linuxfoundation.org>
+Message-Id: <20220711090608.007049812@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Lukas Fink <lukas.fink1@gmail.com>
 
-commit 65a01e601dbba8b7a51a2677811f70f783766682 upstream.
+[ Upstream commit 3993a799fc971bc9b918bd969aa55864447b5dde ]
+[ Upstream commit 5f0754ab2751d1935818459e8e71a8fe26f6403c ]
 
-Prevent that users set a font size which is bigger than the physical screen.
-It's unlikely this may happen (because screens are usually much larger than the
-fonts and each font char is limited to 32x32 pixels), but it may happen on
-smaller screens/LCD displays.
+eb4fd29afd4a ("drm/amdgpu: bind to any 0x1002 PCI diplay class device") added
+generic bindings to amdgpu so that that it binds to all display class devices
+with VID 0x1002 and then rejects those in amdgpu_pci_probe.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stable@vger.kernel.org # v4.14+
+Unfortunately it reuses a driver_data value of 0 to detect those new bindings,
+which is already used to denote CHIP_TAHITI ASICs.
+
+The driver_data value given to those new bindings was changed in
+dd0761fd24ea1 ("drm/amdgpu: set CHIP_IP_DISCOVERY as the asic type by default")
+to CHIP_IP_DISCOVERY (=36), but it seems that the check in amdgpu_pci_probe
+was forgotten to be changed. Therefore, it still rejects Tahiti GPUs.
+
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1860
+Fixes: eb4fd29afd4a ("drm/amdgpu: bind to any 0x1002 PCI diplay class device")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lukas Fink <lukas.fink1@gmail.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbcon.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2480,6 +2480,11 @@ static int fbcon_set_font(struct vc_data
- 	if (charcount != 256 && charcount != 512)
- 		return -EINVAL;
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -2009,7 +2009,7 @@ static int amdgpu_pci_probe(struct pci_d
+ 			return -ENODEV;
+ 	}
  
-+	/* font bigger than screen resolution ? */
-+	if (w > FBCON_SWAP(info->var.rotate, info->var.xres, info->var.yres) ||
-+	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
-+		return -EINVAL;
-+
- 	/* Make sure drawing engine can handle the font */
- 	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
- 	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
+-	if (flags == 0) {
++	if (flags == CHIP_IP_DISCOVERY) {
+ 		DRM_INFO("Unsupported asic.  Remove me when IP discovery init is in place.\n");
+ 		return -ENODEV;
+ 	}
 
 

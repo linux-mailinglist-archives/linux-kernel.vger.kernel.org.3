@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE0D570B4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E4A570B8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiGKUY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S231923AbiGKU0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiGKUY6 (ORCPT
+        with ESMTP id S230306AbiGKUZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:24:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D47E2717E;
-        Mon, 11 Jul 2022 13:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GpUxC4xM2q0YHyxeurm32X0RDwIgOBVOHXbx9JCax3s=; b=qoM8VEm+ykd3JseVkxElopsHN0
-        HDA+4r27tlPXq4X28R6Ly4e45e7EhW1MCqP3iepZXuYstAXEyCpFmQ80OhUVx0khdSKSTcB9jaCi1
-        aB7U0Ona0i28+mZ5YEofqmzJoWURRdJ9WBhRcWuBs/LkTWFCmyiZXuRn72ghKOxGM4iPULOXnaF0k
-        ACpyM168x8fsS2MFOOMPa37HgV48OQYc87dGxGwPcSG6rBeUaTrvn+eXYvQfxdoEiy6Uq/ETa6Rvg
-        Cxwd5csG7Exks19VF1zGH68oOZB9Wr8vFp89PCKjioyC+Ueju4NRG62HlfoKZzL9bFi2n/f4lJDdQ
-        rQyd9/PA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oAzxd-006G6r-1S; Mon, 11 Jul 2022 20:24:53 +0000
-Date:   Mon, 11 Jul 2022 21:24:53 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ikent@redhat.com, onestero@redhat.com
-Subject: Re: [PATCH 1/3] radix-tree: propagate all tags in idr tree
-Message-ID: <YsyHFe9wph7pmpWS@casper.infradead.org>
-References: <20220614180949.102914-1-bfoster@redhat.com>
- <20220614180949.102914-2-bfoster@redhat.com>
- <Yqm+jmkDA+um2+hd@infradead.org>
- <YqnXVMtBkS2nbx70@bfoster>
- <YqnhW2CI1kbJ3NqR@casper.infradead.org>
- <YqnwFZxmiekL5ZOC@bfoster>
- <YqoJ+p83dLOcGfwX@casper.infradead.org>
- <20220628125511.s2frv6lw7zgyzou5@wittgenstein>
- <YrsV/uT2MDgNPMvR@bfoster>
+        Mon, 11 Jul 2022 16:25:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB84E84C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:25:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B10AA61658
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B085C341CB;
+        Mon, 11 Jul 2022 20:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657571125;
+        bh=qqwuJnqcAEdVd2CKNcxW9SumulDWlgp+jNo8Uu8ukCo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dudh5KShRdhtmj9kmnfRQLO5r2UXwq4EfzbrNZ5xWNf/7HO2S77pnu5fsffV4aP53
+         csjxGFrYEApiMyBpm5nSLK+JsOZWDt1yeSx8OAz0wpsb/vYJuZQYxEV+dpEoZLCN9q
+         +q1sxxg+aeaMW7DHrd1Lw6pjjEnDI3555IKmEjGptKpbbaJW0503vyXSGCtbOUNG2A
+         8+CVRvA3KzIxS96Pssq0QPIsx2aKrDpyUn4wVaGpWFmYD8yw0lP7CY/X34tnOnBytr
+         P8v99KKZFL7Qb779EFvphfr+AFXn4/PKU/+Rq/KvliedET9G4eoRNRpGO00bQPIY3L
+         3jttgW+ivoo4Q==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1oAzy3-004e7s-Fm;
+        Mon, 11 Jul 2022 21:25:19 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Jani Nikula" <jani.nikula@linux.intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jasmine Newsome <jasmine.newsome@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 09/32] drm/i915: gem: add missing trivial function parameters
+Date:   Mon, 11 Jul 2022 21:24:54 +0100
+Message-Id: <6dabb8b59db64492e0d6bbb710fa8ace45b2e77b.1657565224.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1657565224.git.mchehab@kernel.org>
+References: <cover.1657565224.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrsV/uT2MDgNPMvR@bfoster>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:53:50AM -0400, Brian Foster wrote:
-> On Tue, Jun 28, 2022 at 02:55:11PM +0200, Christian Brauner wrote:
-> > On Wed, Jun 15, 2022 at 05:34:02PM +0100, Matthew Wilcox wrote:
-> > > On Wed, Jun 15, 2022 at 10:43:33AM -0400, Brian Foster wrote:
-> > > > Interesting, thanks. I'll have to dig more into this to grok the current
-> > > > state of the radix-tree interface vs. the underlying data structure. If
-> > > > I follow correctly, you're saying the radix-tree api is essentially
-> > > > already a translation layer to the xarray these days, and we just need
-> > > > to move legacy users off the radix-tree api so we can eventually kill it
-> > > > off...
-> > > 
-> > > If only it were that easy ... the XArray has a whole bunch of debugging
-> > > asserts to make sure the users are actually using it correctly, and a
-> > > lot of radix tree users don't (they're probably not buggy, but they
-> > > don't use the XArray's embedded lock).
-> > > 
-> > > Anyway, here's a first cut at converting the PID allocator from the IDR
-> > > to the XArray API.  It boots, but I haven't tried to do anything tricky
-> > > with PID namespaces or CRIU.
-> > 
-> > It'd be great to see that conversion done.
-> > Fwiw, there's test cases for e.g. nested pid namespace creation with
-> > specifically requested PIDs in
-> > 
-> 
-> Ok, but I'm a little confused. Why open code the xarray usage as opposed
-> to work the idr bits closer to being able to use the xarray api (and/or
-> work the xarray to better support the idr use case)? I see 150+ callers
-> of idr_init(). Is the goal to eventually open code them all? That seems
-> a lot of potential api churn for something that is presumably a generic
-> interface (and perhaps inconsistent with ida, which looks like it uses
-> xarray directly?), but I'm probably missing details.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-It's not "open coding".  It's "using the XArray API instead of the
-IDR API".  The IDR API is inferior in a number of ways, and yes, I
-do want to be rid of it entirely.
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/32] at: https://lore.kernel.org/all/cover.1657565224.git.mchehab@kernel.org/
+
+ drivers/gpu/drm/i915/gem/i915_gem_object.c   | 2 ++
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.h      | 1 +
+ drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 2 ++
+ 3 files changed, 5 insertions(+)
+
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.c b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+index ccec4055fde3..b5dd43405355 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_object.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+@@ -820,6 +820,8 @@ int i915_gem_object_wait_moving_fence(struct drm_i915_gem_object *obj,
+  * in an unknown_state. This means that userspace must NEVER be allowed to touch
+  * the pages, with either the GPU or CPU.
+  *
++ * @obj: The object to check its state.
++ *
+  * ONLY valid to be called after ensuring that all kernel fences have signalled
+  * (in particular the fence for moving/clearing the object).
+  */
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.h b/drivers/gpu/drm/i915/gem/i915_gem_ttm.h
+index e4842b4296fc..64151f40098f 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.h
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.h
+@@ -30,6 +30,7 @@ void i915_ttm_bo_destroy(struct ttm_buffer_object *bo);
+ /**
+  * i915_ttm_to_gem - Convert a struct ttm_buffer_object to an embedding
+  * struct drm_i915_gem_object.
++ * @bo: The ttm buffer object.
+  *
+  * Return: Pointer to the embedding struct ttm_buffer_object, or NULL
+  * if the object was not an i915 ttm object.
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+index 9a7e50534b84..56217d324a9b 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+@@ -237,6 +237,7 @@ static struct dma_fence *i915_ttm_accel_move(struct ttm_buffer_object *bo,
+  * @_src_iter: Storage space for the source kmap iterator.
+  * @dst_iter: Pointer to the destination kmap iterator.
+  * @src_iter: Pointer to the source kmap iterator.
++ * @num_pages: Number of pages to copy or to be cleared.
+  * @clear: Whether to clear instead of copy.
+  * @src_rsgt: Refcounted scatter-gather list of source memory.
+  * @dst_rsgt: Refcounted scatter-gather list of destination memory.
+@@ -541,6 +542,7 @@ __i915_ttm_move(struct ttm_buffer_object *bo,
+  * i915_ttm_move - The TTM move callback used by i915.
+  * @bo: The buffer object.
+  * @evict: Whether this is an eviction.
++ * @ctx: Pointer to a struct ttm_operation_ctx
+  * @dst_mem: The destination ttm resource.
+  * @hop: If we need multihop, what temporary memory type to move to.
+  *
+-- 
+2.36.1
+

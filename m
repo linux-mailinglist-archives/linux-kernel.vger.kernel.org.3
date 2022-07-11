@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B28056D511
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2C156D519
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiGKHAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S229676AbiGKHCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGKHAk (ORCPT
+        with ESMTP id S229463AbiGKHCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:00:40 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A915D167C4;
-        Mon, 11 Jul 2022 00:00:39 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id v10-20020a05600c15ca00b003a2db8aa2c4so2460781wmf.2;
-        Mon, 11 Jul 2022 00:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eZitZxeb+tFy7bckf8dOgFNmWer8aqUshovdBHHfdIU=;
-        b=KpaifXBHHWFfwHLHNxAkbRBiOfnHMoLAcyBD7kpOBqblUik8u+9ziUMnWxAWBoOxmD
-         yhefiOReWitSzELlcSxTVLnfQfftUoVNswofXINSZxZ++LMfecPsVb5yQYBd70q1L2jh
-         Ltiz1JeIPSvbRs42cSq8OGNzMgHDuT+tdxRpGSAEPG2WHh95GlsCZwPPmaeL+aZb/GqO
-         pC/g0lRB+JDRi7XBoHwSEzYroESCBQLkjjjgnD/3V6PsqmYVpEqCoQBPqX3V6Jl5ZRRr
-         iyQYc8wvCr3aUlPAA3awIcuwiZLttbFW7WJDuxlcDt3AsW0ROKhcWFqpIA3IpxIUevA0
-         xJLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eZitZxeb+tFy7bckf8dOgFNmWer8aqUshovdBHHfdIU=;
-        b=wuXlwtaNGMgZ1UFKZFTFfAxx3+PohKdKRQhUOLGKA6h1q4sLVL2WZ2mRm492K1ppr+
-         TvBxy4Xk39j1yPyNc5+3tiKrdmUW5HK6XZHvbLqiMDeGI53btdMRQtaJzexesWD5qZxj
-         m7NT9Nji/xVa4V1uyu4hljlMmtHUuqKEpDavAggjql5kV5FoymZeeV/KUTUGfcYyO9EJ
-         cplSUSCB3yNy1hVCH3fNH+X2M26mOSAFEEXLItD0ECxP2Yc8XBdh3XKrdHy80b8BrHiO
-         Mfpo4PTVO0ducbbpKaYZGuRL0fmjDzJTgnOKSKB1aGmV7zNiuPvitg4fYZcTP8kV2EZd
-         T52A==
-X-Gm-Message-State: AJIora9EFBFi+r2fmFUWNEY8TU1n6xvHiSD7k/xRuZ1CSZbxelwgNGI3
-        9e45cwgjScfwTmlSYn1cB6E=
-X-Google-Smtp-Source: AGRyM1sQbzsr1qEHwBUhuJqm0nnpYT6EBStXujczeh14dLIEx/7aGgepj/cKMynAFl8uq+S+XPYrBQ==
-X-Received: by 2002:a7b:c003:0:b0:39c:5642:e415 with SMTP id c3-20020a7bc003000000b0039c5642e415mr14077555wmb.111.1657522838108;
-        Mon, 11 Jul 2022 00:00:38 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.36.185])
-        by smtp.gmail.com with ESMTPSA id d8-20020adffbc8000000b0021d6a520ce9sm5082614wrs.47.2022.07.11.00.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 00:00:37 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] HID: uclogic: Add missing suffix for digitalizers
-Date:   Mon, 11 Jul 2022 09:00:26 +0200
-Message-Id: <20220711070026.167428-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 03:02:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAB8140C2;
+        Mon, 11 Jul 2022 00:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=e5DygZRkVsdgAVoVvUkLTk0a4j5tMEqZ72vV1XOoua4=; b=utA/8RhRmV4mRCGCKW1HNDroUa
+        u+TNvmexxd+4YbsUz4aSv0LNfg0B/Fpc0V7Vp3OnKoqEV+qZb/Yr1ujFl/mmmNFBD66gWXCBEPCyQ
+        QwkE9TVlZb1DjwZpqetPFEATyPP0U+uiG9tVhryUiV9KzO4gAqKlnh6Ox3eqJ+c5HTWk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oAnQt-009vSy-PO; Mon, 11 Jul 2022 09:02:15 +0200
+Date:   Mon, 11 Jul 2022 09:02:15 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Wei Fang <wei.fang@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
+Subject: Re: [PATCH V2 3/3] arm64: dts: imx8ulp-evk: Add the fec support
+Message-ID: <YsvK99Gb0JL3YbQB@lunn.ch>
+References: <20220711094434.369377-1-wei.fang@nxp.com>
+ <20220711094434.369377-4-wei.fang@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711094434.369377-4-wei.fang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Pen (0x02) application usage was changed to Digitalizer (0x01) in
-f7d8e387d9ae ("HID: uclogic: Switch to Digitizer usage for styluses").
-However, a suffix was not selected for the new usage.
+On Mon, Jul 11, 2022 at 07:44:34PM +1000, Wei Fang wrote:
+> Enable the fec on i.MX8ULP EVK board.
+> 
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> ---
+> V2 change:
+> Add clock_ext_rmii and clock_ext_ts. They are both related to EVK board.
+> ---
+>  arch/arm64/boot/dts/freescale/imx8ulp-evk.dts | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts b/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> index 33e84c4e9ed8..ebce716b10e6 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> @@ -19,6 +19,21 @@ memory@80000000 {
+>  		device_type = "memory";
+>  		reg = <0x0 0x80000000 0 0x80000000>;
+>  	};
+> +
+> +	clock_ext_rmii: clock-ext-rmii {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <50000000>;
+> +		clock-output-names = "ext_rmii_clk";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	clock_ext_ts: clock-ext-ts {
+> +		compatible = "fixed-clock";
+> +		/* External ts clock is 50MHZ from PHY on EVK board. */
+> +		clock-frequency = <50000000>;
+> +		clock-output-names = "ext_ts_clk";
+> +		#clock-cells = <0>;
+> +	};
 
-Handle the digitalizer application usage in uclogic_input_configured()
-and add the required suffix.
+Do you need any PHY properties to turn this clock on? Or is it
+strapped to be always on?
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-uclogic-core.c | 1 +
- 1 file changed, 1 insertion(+)
+I'm surprised it is limited to Fast Ethernet. I know the Vybrid and
+some of the older SoCs are Fast Ethernet only, but i thought all the
+newer supported 1G?
 
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index c0fe66e50c58..cf3315a408c8 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -153,6 +153,7 @@ static int uclogic_input_configured(struct hid_device *hdev,
- 			suffix = "Pad";
- 			break;
- 		case HID_DG_PEN:
-+		case HID_DG_DIGITIZER:
- 			suffix = "Pen";
- 			break;
- 		case HID_CP_CONSUMER_CONTROL:
--- 
-2.25.1
+	 Andrew
 

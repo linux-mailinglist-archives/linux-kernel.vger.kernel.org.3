@@ -2,155 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0FE56D450
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB31956D451
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiGKF3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 01:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S229604AbiGKFba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 01:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGKF3s (ORCPT
+        with ESMTP id S229450AbiGKFb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 01:29:48 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5AFE0CE;
-        Sun, 10 Jul 2022 22:29:47 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id j3so3889891pfb.6;
-        Sun, 10 Jul 2022 22:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A4Cswd7DArEFc7LfzC/OUTw9Eqd3H62gPLq/FvPkU0w=;
-        b=Qv1A47KGLOsSt9vm2LukHohQTBWZRnOfR+4712jyc1Oslwqqy2YlIRLfvzV55YUH87
-         fd+VmwO3/E/WhZGjpaJ38wRt/ZjUz6DQ3xRwgLG6o28zoktHkJzOW9MF5b891UW/zWYO
-         d6Bdfprh8eC+15Yx8wV24OiXKmNQIkyKZyZ5FFgi0WTXD559yFBMF/DJaJaJhGLuq+kh
-         vye+LP/N4qAsSPjWlZ2RAMB8sgsTFPBQQPLFjap7lxe7OvFe5QZVdyorteymzlR2StMC
-         fIlE0zfW4QZXuqC13+Q+vRJ8e7GGHvMIF/JXAlXsOCfzR/c95G1ZM6ppTSr/X9JIy4/6
-         MPLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A4Cswd7DArEFc7LfzC/OUTw9Eqd3H62gPLq/FvPkU0w=;
-        b=EplTTJnHQVaFu/ZCKKit0P3msa7qtcOGPZf/Q8oGBbbgnwcbg4fc9n6Pm1LPzh7iU6
-         5O8fPoFKC7pwqR3y6P+s/tDgEQNBSUnZj1ramFGrP+KX48Jj+qhAdbx8ngHvbRfkzxAr
-         EUVvBY6mtl6QYmVqY/EjUvdnjkhTz4oMBsGTP0pQQAx/cWKE7g0jQgK5IkkHTDEK2VMB
-         tv0OHWBW9iL1FsH6FDQWaV8OewPMMWKrjSHLXKVB6DEcr4CqZAbIvIy7kE+yQkKui18W
-         u/1pbYiBRWBqdAiBiLDHcfyY8f1LgItt7O/3UYUvmduOu2/Jugszwn2TVJ4Mh4tNKHbw
-         RP0Q==
-X-Gm-Message-State: AJIora+GuIY0HRsrIWzZR1T9KOhAHNpyWd2b9RBuTTFLGYeQpYY2ZDg0
-        KurdcIvW2NvaJAiCSyQZgVEac+VqgJJSyQ==
-X-Google-Smtp-Source: AGRyM1tsMXyH05YNuvPTabbte6Ar0TGoyi1YgbXXhXBTgqjzk0MEu/IIY4f2LYooa13NsguRihejKQ==
-X-Received: by 2002:a63:da0d:0:b0:412:6f69:8e67 with SMTP id c13-20020a63da0d000000b004126f698e67mr14270386pgh.424.1657517386773;
-        Sun, 10 Jul 2022 22:29:46 -0700 (PDT)
-Received: from ArtixLinux.localdomain ([116.193.141.74])
-        by smtp.gmail.com with ESMTPSA id a5-20020a170902710500b0016a522915e5sm3667744pll.83.2022.07.10.22.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 22:29:46 -0700 (PDT)
-From:   Shinyzenith <aakashsensharma@gmail.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shinyzenith <aakashsensharma@gmail.com>
-Subject: [PATCH] gpio/gpio-lp3943: unsigned to unsigned int cleanup
-Date:   Mon, 11 Jul 2022 10:59:35 +0530
-Message-Id: <20220711052935.2322-1-aakashsensharma@gmail.com>
-X-Mailer: git-send-email 2.37.0
+        Mon, 11 Jul 2022 01:31:28 -0400
+Received: from mail-m11874.qiye.163.com (mail-m11874.qiye.163.com [115.236.118.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357E718E11
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 22:31:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:36a:145f:6500:b54:140f:b5d9:b486])
+        by mail-m11874.qiye.163.com (Hmail) with ESMTPA id EA3953C0465;
+        Mon, 11 Jul 2022 13:31:22 +0800 (CST)
+From:   Yupeng Li <liyupeng@zbhlos.com>
+To:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yupeng Li <liyupeng@zbhlos.com>, Caicai <caizp2008@163.com>
+Subject: [PATCH 1/1]     Loongson: Fix section mismatch warning
+Date:   Mon, 11 Jul 2022 13:31:08 +0800
+Message-Id: <20220711053108.328029-1-liyupeng@zbhlos.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDTk9IVk9NHk5KSEweGRkZTlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSE0aQUpPTh1BTU5LS0EZTk9BSk9LHUEZTh9CQRlPQ01ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hOT1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OiI6Eyo6Dz06KBM1IiowEiFM
+        FxBPFDJVSlVKTU5MTkpMT0NIT0pJVTMWGhIXVRcSAg4LHhUcOwEZExcUCFUYFBZFWVdZEgtZQVlJ
+        T0seQUhNGkFKT04dQU1OS0tBGU5PQUpPSx1BGU4fQkEZT0NNWVdZCAFZQUlIT003Bg++
+X-HM-Tid: 0a81ebbda4562eb0kusnea3953c0465
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Getting rid of checkpatch findings. No functional changes.
+    init_numa_memory() is annotated __init and not used by any module,
+    thus don't export it.
 
-Signed-off-by: Shinyzenith <aakashsensharma@gmail.com>
+    Remove not needed EXPORT_SYMBOL for init_numa_memory() to fix the
+    following section mismatch warning:
+
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
+The symbol prom_init_numa_memory is exported and annotated __init
+Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
+
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+
+    This is build on Linux 5.19-rc5.
+
+Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+Reviewed-by: Caicai <caizp2008@163.com>
 ---
- drivers/gpio/gpio-lp3943.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/mips/loongson64/numa.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-lp3943.c b/drivers/gpio/gpio-lp3943.c
-index 8a30fb185aab..79edd5db49d2 100644
---- a/drivers/gpio/gpio-lp3943.c
-+++ b/drivers/gpio/gpio-lp3943.c
-@@ -42,7 +42,7 @@ struct lp3943_gpio {
- 	u16 input_mask;		/* 1 = GPIO is input direction, 0 = output */
- };
- 
--static int lp3943_gpio_request(struct gpio_chip *chip, unsigned offset)
-+static int lp3943_gpio_request(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
- 	struct lp3943 *lp3943 = lp3943_gpio->lp3943;
-@@ -54,7 +54,7 @@ static int lp3943_gpio_request(struct gpio_chip *chip, unsigned offset)
- 	return 0;
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index 69a533148efd..8f61e93c0c5b 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -196,7 +196,6 @@ void __init prom_init_numa_memory(void)
+ 	pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
+ 	prom_meminit();
  }
+-EXPORT_SYMBOL(prom_init_numa_memory);
  
--static void lp3943_gpio_free(struct gpio_chip *chip, unsigned offset)
-+static void lp3943_gpio_free(struct gpio_chip *chip, unsigned int offset)
+ pg_data_t * __init arch_alloc_nodedata(int nid)
  {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
- 	struct lp3943 *lp3943 = lp3943_gpio->lp3943;
-@@ -72,7 +72,7 @@ static int lp3943_gpio_set_mode(struct lp3943_gpio *lp3943_gpio, u8 offset,
- 				  val << mux[offset].shift);
- }
- 
--static int lp3943_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
-+static int lp3943_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
- 
-@@ -82,7 +82,7 @@ static int lp3943_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
- }
- 
- static int lp3943_get_gpio_in_status(struct lp3943_gpio *lp3943_gpio,
--				     struct gpio_chip *chip, unsigned offset)
-+				     struct gpio_chip *chip, unsigned int offset)
- {
- 	u8 addr, read;
- 	int err;
-@@ -107,7 +107,7 @@ static int lp3943_get_gpio_in_status(struct lp3943_gpio *lp3943_gpio,
- }
- 
- static int lp3943_get_gpio_out_status(struct lp3943_gpio *lp3943_gpio,
--				      struct gpio_chip *chip, unsigned offset)
-+				      struct gpio_chip *chip, unsigned int offset)
- {
- 	struct lp3943 *lp3943 = lp3943_gpio->lp3943;
- 	const struct lp3943_reg_cfg *mux = lp3943->mux_cfg;
-@@ -128,7 +128,7 @@ static int lp3943_get_gpio_out_status(struct lp3943_gpio *lp3943_gpio,
- 		return -EINVAL;
- }
- 
--static int lp3943_gpio_get(struct gpio_chip *chip, unsigned offset)
-+static int lp3943_gpio_get(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
- 
-@@ -147,7 +147,7 @@ static int lp3943_gpio_get(struct gpio_chip *chip, unsigned offset)
- 		return lp3943_get_gpio_out_status(lp3943_gpio, chip, offset);
- }
- 
--static void lp3943_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
-+static void lp3943_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
- {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
- 	u8 data;
-@@ -160,7 +160,7 @@ static void lp3943_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
- 	lp3943_gpio_set_mode(lp3943_gpio, offset, data);
- }
- 
--static int lp3943_gpio_direction_output(struct gpio_chip *chip, unsigned offset,
-+static int lp3943_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
- 					int value)
- {
- 	struct lp3943_gpio *lp3943_gpio = gpiochip_get_data(chip);
 -- 
-2.37.0
+2.34.1
 

@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410C95707CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753AA5707CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGKP6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S231277AbiGKP7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGKP6y (ORCPT
+        with ESMTP id S230332AbiGKP67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:58:54 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2701BE004;
-        Mon, 11 Jul 2022 08:58:53 -0700 (PDT)
+        Mon, 11 Jul 2022 11:58:59 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB5112ADD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:58:59 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10c0d96953fso7282648fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657555133; x=1689091133;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=S0aVjTXj2Le1bMsppCv/J/CSeM8z/oxYGI4UYRM8yvU=;
-  b=Y7mSmvnNAfwUjvUJFa3/wzTRCfg025ONwacqD2tdtzKyH4jX/SmbUouS
-   YxCl84f31tV7ELdDlpCEbnBE0FTXM/mZQFqe3O9fP4h+vDpe5KJZWC2Vz
-   qqqkAm+z9SkZnuSYnKV5ImqeD1jWMuZuQ8aUfpQbNpFgLot7xwaLMMD3t
-   s=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Jul 2022 08:58:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 08:58:51 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Jul 2022 08:58:51 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Jul 2022 08:58:50 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <quic_mkrishn@quicinc.com>, <quic_kalyant@quicinc.coml>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dta: qcom: sc7280: delete vdda-1p2 and vdda-0p9 from mdss_edp
-Date:   Mon, 11 Jul 2022 08:58:42 -0700
-Message-ID: <1657555122-18605-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=04kPzm+dTSSl4SG8BXwCn0g0fqoY39UfUl62Mk1/W48=;
+        b=G5uAovkfQRQvMGRz7yVMf49sDpTuWCydJ3Ay7OJ2EJxXrPdjYB/45Wm0Z4z5LObaFd
+         6JhshSoi5wn9x7w7/jK+ZPX1WjQawtiRiz46291jqgxMAkaHZlDSZ0FgLDYNL8POi0t1
+         bmJSgel52kST5DtiwNCA2swn+6f6AWAl1wviA5h+b1/n97aAaeLG2TeyNDVliKxSqf4p
+         S8qiQjLbsaYAIGV1u+6kEbEsLGMMmQgLAB01lIrDp5N3ic25vO6N7xq/ibv1Psj13KL2
+         ajnItWnSu3jXBCvrji833X8ycCiPx6nhNELpO5n3lQIBY9ChEVlmgh0JenkTzbaCvHEv
+         fjgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to:content-transfer-encoding;
+        bh=04kPzm+dTSSl4SG8BXwCn0g0fqoY39UfUl62Mk1/W48=;
+        b=qJs6bXsUU8JHhJdoM0xc+gZ2NZcMaGrDv+e7fqvAhpM8CZhbm87x4MEy4cU9qY1EYO
+         ORamvxuW8N1KdTxYXspF9GHErmoOkdMd1Z7GanpTlekWPKRPTaWt4rGFXqo78lv5/+g7
+         v7vDxp6WQUiJWlwW2xMTFchc7Yqafu+ejnjGnLeSETjOMD911crz5MnHMNkufmhpTCPe
+         o5eYTu9g1tMdi6855kDF6odw2ayNRZbxZshGHkZyVdGUVyeJZeCfdxl54qc+5NVPtzw2
+         6aweFboK6Uc9fcEg7Kqt8lCAxz3JdS8jHS6zilyuCTuR6sfOAQDNazuho/553cszZ572
+         b3/w==
+X-Gm-Message-State: AJIora8vdkIfiH5IqGpkBLyX4ROX7FqSHDx0sZFGrJRV/vXXRnND0vdJ
+        +NzGL0GN/o6Mc+aOE4aL0dvs/D9HSuEi0oTToMo=
+X-Google-Smtp-Source: AGRyM1thrg3tyRGsNZc60/8e8FvXawnNclPrLClfyJ6ypVuRwlET5LvtrsLg+jlgr8Du5YfaLwMd55x602LTx+F7m4M=
+X-Received: by 2002:a05:6870:460d:b0:10c:27e2:1de with SMTP id
+ z13-20020a056870460d00b0010c27e201demr8070683oao.7.1657555137940; Mon, 11 Jul
+ 2022 08:58:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a05:6358:4907:b0:af:b0dd:b14 with HTTP; Mon, 11 Jul 2022
+ 08:58:57 -0700 (PDT)
+Reply-To: mrs.mutanda.wilson14@gmail.com
+In-Reply-To: <CAFiiNEVNfxgEPxcJOeb+CjL9m5v4G1hid2SK7U+yHH6JzOi6MQ@mail.gmail.com>
+References: <CAFiiNEVDLXbLRh8N9FV_f7Gai44zLXy4uESBQ3kP22Z3EgxYaA@mail.gmail.com>
+ <CAFiiNEWU9BY4YM7cdu4j=KVV1e9xtkQXy_Hq35yjPf66m=ZrXQ@mail.gmail.com>
+ <CAFiiNEUx9861rGaGkLXWASUSAj+PY8Y8xRZwU9ZKFxc6JKuUOQ@mail.gmail.com>
+ <CAFiiNEWQM2hr=Od9pv7vRn4izLOv-mbJHTTgAUbwN_SO85R00A@mail.gmail.com>
+ <CAFiiNEXm-AUWFwc+cQoQKZrVjN4AydAG=Bhdevg8TBQunRSK0A@mail.gmail.com>
+ <CAFiiNEVTw_bJ+eWZL5vQweYM5SB3pDzEnCoYpGvMH0DgWzU+vg@mail.gmail.com>
+ <CAFiiNEXkb=Pbv8fqvDPV5oXeu2iySA0hAGqDzC=Ubcs+=MiYqw@mail.gmail.com>
+ <CAFiiNEVhh_Gz12h2nR8AEqSUPanr=-zyH6hmw1Jzoh-1Wa1awQ@mail.gmail.com>
+ <CAFiiNEW1S23MB+Pa+A=id9fpeK5pwxO9=qFu_+MqwTzF+7+ZRQ@mail.gmail.com>
+ <CAFiiNEWsYNTw0FW4Dq-OTreXf-qLaZaUVk5p8wbBx=V+ken7-w@mail.gmail.com>
+ <CAFiiNEXddJ7tzfnpgNPrfnYgjd-JFZ3DwBSgE-xbuix+qHaWWQ@mail.gmail.com> <CAFiiNEVNfxgEPxcJOeb+CjL9m5v4G1hid2SK7U+yHH6JzOi6MQ@mail.gmail.com>
+From:   "Mrs. Mutanda Wilson" <prosperetina12@gmail.com>
+Date:   Mon, 11 Jul 2022 08:58:57 -0700
+Message-ID: <CAFiiNEWoGcRTj_qdAUe8OFgxK-kRxXP8AmFygs59FecOr3Rzyw@mail.gmail.com>
+Subject: =?UTF-8?B?Qm9ubmUgam91cm7DqWUs?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [prosperetina12[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [prosperetina12[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.mutanda.wilson14[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both vdda-1p2-supply and vdda-0p9-supply regulators are controlled
-by dp combo phy. Therefore remove them from dp controller.
+Bom dia,
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 3 ---
- 1 file changed, 3 deletions(-)
+Estou em estado terminal e prestes a morrer.
+Sua resposta positiva ser=C3=A1 apreciada.
+(mrs.mutanda.wilson14@gmail.com)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index d59002d..f7a4b6b6 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -305,9 +305,6 @@
- 
- /* NOTE: Not all Qcards have eDP connector stuffed */
- &mdss_edp {
--	vdda-0p9-supply = <&vdd_a_edp_0_0p9>;
--	vdda-1p2-supply = <&vdd_a_edp_0_1p2>;
--
- 	aux-bus {
- 		edp_panel: panel {
- 			compatible = "edp-panel";
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Sua irm=C3=A3,
+Sra Mutanda Wilson,

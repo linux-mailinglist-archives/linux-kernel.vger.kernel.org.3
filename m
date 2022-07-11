@@ -2,144 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F1457083C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9743B57083F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiGKQYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S230466AbiGKQZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiGKQYj (ORCPT
+        with ESMTP id S229664AbiGKQZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:24:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15B21835;
-        Mon, 11 Jul 2022 09:24:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6D6542298F;
-        Mon, 11 Jul 2022 16:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657556676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M+ZIKuMBKYf6iILzZp439lcSa19VN5bgrLR+ASf2Bx0=;
-        b=TnIjaLMox+kOMiA7MSs9PGijGwpUTPR1Gp3apVzCIokhbYQ/jpXYrxi56aGQM93pgcazcV
-        /fXxuL0Y8zRKuKpKzJVNuCn2/hUNZ3eSeR1pVnORgSH48LLn8wR6r1zBEi2S8rOeQAe8yr
-        +9TNNW9znECSwf3bVawntAU3+i4U8l0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DE6482C141;
-        Mon, 11 Jul 2022 16:24:35 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 18:24:32 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cgroups <cgroups@vger.kernel.org>
-Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
- mkdir, cgroup
-Message-ID: <YsxOwEI7HOqdkRpz@dhcp22.suse.cz>
-References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
- <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
- <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
- <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
- <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
- <YrXDV7uPpmDigh3G@dhcp22.suse.cz>
- <CALvZod6U8DvMUcuUNfpQRwfkevQB7=nP4ZLA2gWGNf_JGdyARQ@mail.gmail.com>
- <Yr7Ukyy0vhBjebo4@dhcp22.suse.cz>
- <1a64fc6a-a33d-03f4-ec12-980e42148061@openvz.org>
+        Mon, 11 Jul 2022 12:25:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7695E300
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:25:14 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so8857746pjn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=BPhJH0MLoINdfm+rNmFxczEpiCfv79Umthkksu8H/nE=;
+        b=4E1vSjWhn3rCJNEAcf8j8dtnRVVsX9kiNmn8NL7YezF4+w1raZiDkMAm2jb2M9uzLu
+         p8yCWXX0rnYf1L2J2WjAZqGa69ckfC+tOMRLcKZN+qyAKOKN42zqqGsisXopPj3qD6jN
+         Qt2BBHJyUAfVeJIK/KqhVFNFbmR9DABCsEYYDrYFnV4xYSIT8e5xiZfJGbhjDz4kW4aW
+         mWZCj+M0dGdFHL5xIMcKcz3RSapEyD+FddCo1p4IuykVlI660ixvQU0ZO+UiI/fX0In1
+         Tu1uO1YB3Hb0gRki8oVUYw3ldePac4hBI/ZDtAnp1mPpjc88dEKmCby6M2LWkRlq+ksV
+         8hsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=BPhJH0MLoINdfm+rNmFxczEpiCfv79Umthkksu8H/nE=;
+        b=Ue66s58zjrpr1PrwS4gs+/PwNPCrHbhNiC38LkjqTSVRc8/Z4YRYYkMtHMAoLY4Q96
+         zR4bRLjUj6eWJojukUV+Lc7rgaqznyJo3XSKJF+SfsHhfaitXGZWhVNzM704LdWCLsNS
+         xeXyYAZ3lN83ZnQkln77V/TgWt+o69XcT+2H6S/vPZhWp3Qef3C1n5NcLs29Vv63lpyQ
+         HRuZuBfucDBA+n14TBaJGdYvR6bjG2EmFhxLiXwDii1WX71NPXvsIN6Az7dZAN4VKJw8
+         yID2BkZJuTv7iuQPemD0QY/Wcb8YrlDxBdC5ObNCAV1D0HGxNgumip4VbwtsrKkj25vN
+         DiSQ==
+X-Gm-Message-State: AJIora8JrG0PYR1SidqqzT8DLTFBhF1BdmkA/u4IPSgIicAg9xAe4Ptd
+        e0JTFf0TT+eZWts/Li4zW5sIkw==
+X-Google-Smtp-Source: AGRyM1slVwI0IPIfQ0RoRe6poKikBoXu8NPgJZ9WmMXOqJuONkVoZsnCsPWKqFc+uMzf47XF7zJ4bA==
+X-Received: by 2002:a17:902:ef46:b0:168:bac3:2fd4 with SMTP id e6-20020a170902ef4600b00168bac32fd4mr19360903plx.132.1657556713303;
+        Mon, 11 Jul 2022 09:25:13 -0700 (PDT)
+Received: from [10.255.242.206] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa79409000000b005284e98304csm4928155pfo.205.2022.07.11.09.25.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 09:25:12 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+X-Google-Original-From: Chengming Zhou <chengming.zhou@linux.dev>
+Message-ID: <e93b5c38-0291-d6e4-811a-9aed3d6e0f87@linux.dev>
+Date:   Tue, 12 Jul 2022 00:25:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a64fc6a-a33d-03f4-ec12-980e42148061@openvz.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.1
+Subject: Re: [External] Re: [PATCH 3/8] sched/fair: remove redundant
+ cpu_cgrp_subsys->fork()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220709151353.32883-1-zhouchengming@bytedance.com>
+ <20220709151353.32883-4-zhouchengming@bytedance.com>
+ <YsvSpyrJxNv7jsQz@hirez.programming.kicks-ass.net>
+ <a41b3436-6875-d3aa-a110-6c438c97126e@bytedance.com>
+ <YswrSi46s+XLD18R@hirez.programming.kicks-ass.net>
+In-Reply-To: <YswrSi46s+XLD18R@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 10-07-22 21:53:34, Vasily Averin wrote:
-> On 7/1/22 14:03, Michal Hocko wrote:
-> > On Mon 27-06-22 09:37:14, Shakeel Butt wrote:
-> >> On Fri, Jun 24, 2022 at 6:59 AM Michal Hocko <mhocko@suse.com> wrote:
-> > [...]
-> >>> Is it even possible to prevent from id
-> >>> depletion by the memory consumption? Any medium sized memcg can easily
-> >>> consume all the ids AFAICS.
-> >>
-> >> Though the patch series is pitched as protection against OOMs, I think
-> >> it is beneficial irrespective. Protection against an adversarial actor
-> >> should not be the aim here. IMO this patch series improves the memory
-> >> association to the actual user which is better than unattributed
-> >> memory treated as system overhead.
-> > 
-> > Considering the amount of memory and "normal" cgroup usage (I guess we
-> > can agree that delegated subtrees do not count their cgroups in
-> > thousands) is this really something that is worth bothering with?
-> > 
-> > I mean, these patches are really small and not really disruptive so I do
-> > not really see any problem with them. Except that they clearly add a
-> > maintenance overhead. Not directly with the memory they track but any
-> > future cgroup/memcg metadata related objects would need to be tracked as
-> > well and I am worried this will get quickly out of sync. So we will have
-> > a half assed solution in place that doesn't really help any containment
-> > nor it provides a good and robust consumption tracking.
-> > 
-> > All that being said I find these changes rather without a great value or
-> > use.
+On 2022/7/11 21:53, Peter Zijlstra wrote:
+> On Mon, Jul 11, 2022 at 09:02:07PM +0800, Chengming Zhou wrote:
+>> On 2022/7/11 15:35, Peter Zijlstra wrote:
+>>> On Sat, Jul 09, 2022 at 11:13:48PM +0800, Chengming Zhou wrote:
+>>>> We use cpu_cgrp_subsys->fork() to set task group for the new fair task
+>>>> in cgroup_post_fork().
+>>>>
+>>>> Since commit b1e8206582f9 ("sched: Fix yet more sched_fork() races")
+>>>> has already set task group for the new fair task in sched_cgroup_fork(),
+>>>> so cpu_cgrp_subsys->fork() can be removed.
+>>>>
+>>>>   cgroup_can_fork()	--> pin parent's sched_task_group
+>>>>   sched_cgroup_fork()
+>>>>     __set_task_cpu	--> set task group
+>>>>   cgroup_post_fork()
+>>>>     ss->fork() := cpu_cgroup_fork()	--> set again
+>>>>
+>>>> After this patch's change, task_change_group_fair() only need to
+>>>> care about task cgroup migration, make the code much simplier.
+>>>
+>>> This:
+>>>
+>>>> This patch also move the task se depth setting to set_task_rq(), which
+>>>> will set correct depth for the new task se in sched_cgroup_fork().
+>>>>
+>>>> The se depth setting in attach_entity_cfs_rq() is removed since
+>>>> set_task_rq() is a better place to do this when task moves across
+>>>> CPUs/groups.
+>>>
+>>> really should have been it's own patch. And this actually scares me. Did
+>>> you test with priority inheritance bumping the task to FIFO while things
+>>> change?
+>>>
+>>> This has nothing to do with fork().
+>>
+>> Ok, will put this in another patch, so this patch still need this line:
+>>
+>>   p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
+>>
+>> in set_task_rq() to set depth for new forked task.
 > 
-> Dear Michal,
-> I sill have 2 questions:
-> 1) if you do not want to account any memory allocated for cgroup objects,
-> should you perhaps revert commit 3e38e0aaca9e "mm: memcg: charge memcg percpu
-> memory to the parent cgroup". Is it an exception perhaps?
-> (in fact I hope you will not revert this patch, I just would like to know 
-> your explanations about this accounting)
+> That would suggest you ordered your patches wrong.
 
-Well, I have to say I was not a great fan of this patch when it was
-proposed but I didn't really have strong arguments against it to nack
-it. It was simple enough, rather self contained in few places. Just to
-give you an insight into my thinking here. Your patchseries is also not
-something I would nack (nor I have done that). I am not super fan of it
-either. I voiced against it because it just hit my internal thrashold of
-how many different places are patched without any systemic approach. If
-we consider that it doesn't really help with the initial intention to
-protect against adversaries then what is the point of all the churn?
+Yeah, I understand now, should put this se depth change before..
 
-Others might think differently and if you can get acks by other
-maintainers then I won't stand in the way. I have voiced my concerns and
-I hope my thinking is clear now.
-
-> 2) my patch set includes kernfs accounting required for proper netdevices accounting
 > 
-> Allocs  Alloc   Allocation
-> number  size
-> --------------------------------------------
-> 1   +  128      (__kernfs_new_node+0x4d)	kernfs node
-> 1   +   88      (__kernfs_iattrs+0x57)		kernfs iattrs
-> 1   +   96      (simple_xattr_alloc+0x28)	simple_xattr, can grow over 4Kb
-> 1       32      (simple_xattr_set+0x59)
-> 1       8       (__kernfs_new_node+0x30)
+>> I didn't test with "priority inheritance bumping the task to FIFO" case,
+>> do you mean the rt_mutex_setprio() bump a fair task to FIFO?
+>>
+>> Sorry, I don't get how removing depth setting in attach_entity_cfs_rq()
+>> affect that. Could you explain more so I can test it?
 > 
->  2/9] memcg: enable accounting for kernfs nodes
->  3/9] memcg: enable accounting for kernfs iattrs
->  4/9] memcg: enable accounting for struct simple_xattr
+> Well, if you look at the commit that introduced that code:
 > 
-> What do you think about them? Should I resend them as a new separate patch set?
+>   eb7a59b2c888 ("sched/fair: Reset se-depth when task switched to FAIR")
+> 
+> then it's clear that the original problem was the task temporarily not
+> being in the fair class. The most common way for that to be so is
+> through PI.
 
-kernfs is not really my area so I cannot really comment on those.
+Thanks for the hint, I read that commit, should be no problem if we have
+se depth setting in set_task_rq().
 
--- 
-Michal Hocko
-SUSE Labs
+That problem was we only maintain task se depth in task_move_group_fair(),
+if a !fair task move task group, its se depth will not be updated, so
+that commit fix the problem by update se depth in switched_to_fair().
+
+In this patch we maintain se depth setting in set_task_rq(), which will be
+called when CPU/cgroup change, so its depth will always be correct. So it's
+ok to remove task se depth setting in attach_entity_cfs_rq().
+
+Thanks.
+
+
+> 

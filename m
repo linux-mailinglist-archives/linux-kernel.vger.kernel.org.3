@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194B4570DB8
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4B5570DB9
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiGKW6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S231842AbiGKW6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiGKW56 (ORCPT
+        with ESMTP id S231148AbiGKW57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:57:58 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D67E81E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:57 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q8-20020a17090a304800b001ef82a71a9eso4069964pjl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:57 -0700 (PDT)
+        Mon, 11 Jul 2022 18:57:59 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CED680514
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:59 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id k21-20020aa78215000000b005283ff3d0c3so1409373pfi.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=DAD9AJ7hVwjGPDz75YLlVxSBr8Hz85c/OPljz7ZiLcc=;
-        b=Hq1sJ5nd7x3bSwdQ4k+YM00ufbIfu5r8ZXXNo6rc+iJW2lsKeDvt3zMzP2w6W5mbQr
-         JK6bM7r4G+IhGmOlpDcOCShmWyzfyFmBv9j5lQ/zY0lE8uzHz2B8+DPxkekPsQURrJUK
-         EJ/EurtISNpmOtxo89M6ar3ZNNaUhClkwbAs7/Ndyocl1hVsj2Yune79ZZ6kZekmic/i
-         XgR1Xl19alHsb6kSRfnDBA9bGpbIoqhan9I4y0H54mbBrxoHO6KtyafC0fFSb6/f2nEk
-         xV05QXJJ58vaGHhaEtVlq+KYLAYiuonU87Es2LIN6JnBrJrhOpv4x83Xh7wfqi2IfYqo
-         QKTw==
+        bh=NI191zpZ15P9h09/ueg1sIeWgoPkCYp08nvGyArfGco=;
+        b=GQ0ndjo72A8Ia1b/67wS9QnGvQn7ar/J3TPY1hn0q/aOslGNnJUPK0P8kpKCzLAaxp
+         nzG0AVN5Zs4FwYakth25DRiFXcluhbfSTSDPUl4ZjTdGFYd6KyAHakZ7bw5XDsUbTXGL
+         7gLuN6EBq1SwdNwcBj1PpYUNUsdP2OAfnY/b0hQyuFaZhEiFXLP1buT2+e/4bWJRh1ZI
+         z/Kh9Q7Vb+Fep1k/rEqi1Xv+vmyuA+d+PjTCsYWgJvdI2QDpqi3zaZFx28PNXv5gt7yb
+         O3/GFJzUuNFlkoCkYjfVXiWX882LsDgAPqDJr/Z9q7RN2SGpYkXPu/jW71cvknPuhRlw
+         fPfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=DAD9AJ7hVwjGPDz75YLlVxSBr8Hz85c/OPljz7ZiLcc=;
-        b=ry92tVE7TDu1v2487OuE9CvxsH21vJU7x7ttgwsO9xJJwUQxUXvqX0hlIldgj3TN69
-         oMx2wvwI+DoRA+i/ekg90yW+GSDcKUmfJvZCk9M8VsNJRjPfbXHK6lLaKEJw/0k4PKqa
-         JyQ+jFuVuCmRkPdTCwAiIZZPlrFkF9LlWULNBDP2Uljvyv4m4FVWuvKOfyiJoKGGWDSp
-         fqSxlUbi+jAXGCx4OQHWTatFpr8pQgwhodPXKwHA3ekbVysDlIiWXwcAjEB88yiGuhu6
-         XpopmWU0o5txWK/Mwk1fJ7aGnyJQPfS5b49H5NvbxAHj76JrbX5ku2Wgv1M0dKC2oKr0
-         eCuw==
-X-Gm-Message-State: AJIora8xF726WmwIx4tlsXA9bkJBZU42MbfCVEBow76Qcdoco3BC8mmq
-        5C92RFjr0vnsyZP+pkCUJfC0+FpbWuo=
-X-Google-Smtp-Source: AGRyM1srANk6OAlyQWS9Ezd7mhOg4d2we2G/mu8rFmQ0BGwOZGI75xAmbIW5VKBLR0DO9gq6iWlZwjUHJXU=
+        bh=NI191zpZ15P9h09/ueg1sIeWgoPkCYp08nvGyArfGco=;
+        b=giRPhD0JQO2j5N7/cRYT8DIDjJA5dSt4l2fKSwrzA+aidPTxUBqR8tDJ7nz/tjKFtK
+         pv7Yvnxcne3JKvPKKgAjps//oVX0zlC+GCYl3bv1EM5f95M6HV8O9/bfYqy/Z/si6T96
+         dmJ/BnfZtCeKTk5XTmLdRf+sxecLmr2Q1SOVh3vFiHicD7iNLXsbw/z1/GIfuLfMQUf8
+         X9IO9IRKh9VTBPEe701X+SAAAxcXuAaI8Bz12dN0Hft5WYFI1BaYKKS3hB0JPB/o3acY
+         MWUmvkwMTzk090e65RnpFOCDtbOxioTSg5tJ6fiwApiKt193I0/63xS+NIUMDWB/lUmx
+         d+cg==
+X-Gm-Message-State: AJIora8wPzqMUvvV4aTi4gs4ZCAtyQDxtTwH/ble75xgpUJCKJyVvIbX
+        Lqm0l+qh/6rhtIg6frcF54+LoZDcwPc=
+X-Google-Smtp-Source: AGRyM1uFU8Jn8jGDdf820D6EVQK+nemvu4HswGOWuMQxzURAFMH+88teTf4FufFegpoRz58bAS4cTTVMJ1o=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1a8b:b0:525:9c4f:ade5 with SMTP id
- e11-20020a056a001a8b00b005259c4fade5mr21124511pfv.74.1657580276910; Mon, 11
- Jul 2022 15:57:56 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:2481:b0:52a:d50e:e75e with SMTP id
+ c1-20020a056a00248100b0052ad50ee75emr5880165pfv.43.1657580278580; Mon, 11 Jul
+ 2022 15:57:58 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon, 11 Jul 2022 22:57:51 +0000
+Date:   Mon, 11 Jul 2022 22:57:52 +0000
 In-Reply-To: <20220711225753.1073989-1-seanjc@google.com>
-Message-Id: <20220711225753.1073989-2-seanjc@google.com>
+Message-Id: <20220711225753.1073989-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220711225753.1073989-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH 1/3] KVM: selftests: Test MONITOR and MWAIT, not just MONITOR
- for quirk
+Subject: [PATCH 2/3] KVM: selftests: Provide valid inputs for MONITOR/MWAIT regs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,27 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a copy+paste error in monitor_mwait_test by switching one of the two
-"monitor" instructions to  an "mwait".  The intent of the test is very
-much to verify the quirk handles both MONITOR and MWAIT.
+Provide valid inputs for RAX, RCX, and RDX when testing whether or not
+KVM injects a #UD on MONITOR/MWAIT.  SVM has a virtualization hole and
+checks for _all_ faults before checking for intercepts, e.g. MONITOR with
+an unsupported RCX will #GP before KVM gets a chance to intercept and
+emulate.
 
 Fixes: 2325d4dd7321 ("KVM: selftests: Add MONITOR/MWAIT quirk test")
-Reported-by: Yuan Yao <yuan.yao@linux.intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c b/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
-index 49f2ed1c53fe..f5c09cb528ae 100644
+index f5c09cb528ae..6a4ebcdfa374 100644
 --- a/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
-@@ -34,7 +34,7 @@ static void guest_monitor_wait(int testcase)
+@@ -28,13 +28,17 @@ static void guest_monitor_wait(int testcase)
+ 
+ 	GUEST_SYNC(testcase);
+ 
+-	vector = kvm_asm_safe("monitor");
++	/*
++	 * Arbitrarily MONITOR this function, SVM performs fault checks before
++	 * intercept checks, so the inputs for MONITOR and MWAIT must be valid.
++	 */
++	vector = kvm_asm_safe("monitor", "a"(guest_monitor_wait), "c"(0), "d"(0));
+ 	if (fault_wanted)
+ 		GUEST_ASSERT_2(vector == UD_VECTOR, testcase, vector);
  	else
  		GUEST_ASSERT_2(!vector, testcase, vector);
  
--	vector = kvm_asm_safe("monitor");
-+	vector = kvm_asm_safe("mwait");
+-	vector = kvm_asm_safe("mwait");
++	vector = kvm_asm_safe("mwait", "a"(guest_monitor_wait), "c"(0), "d"(0));
  	if (fault_wanted)
  		GUEST_ASSERT_2(vector == UD_VECTOR, testcase, vector);
  	else

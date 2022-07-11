@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2636570C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF26B570C53
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiGKVE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S231673AbiGKVGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKVEy (ORCPT
+        with ESMTP id S229476AbiGKVGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:04:54 -0400
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E05552DC0;
-        Mon, 11 Jul 2022 14:04:54 -0700 (PDT)
-Received: by mail-pl1-f181.google.com with SMTP id b2so5492161plx.7;
-        Mon, 11 Jul 2022 14:04:54 -0700 (PDT)
+        Mon, 11 Jul 2022 17:06:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746365A451;
+        Mon, 11 Jul 2022 14:06:38 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m16so7744897edb.11;
+        Mon, 11 Jul 2022 14:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xfp89QyK0/p/8PmDaqGqGqPNT0fmeAkB/Wk4K0Cj4hI=;
+        b=h7qJwRXjuIF5/hRpUwuhAUXZrPIT36RfWFWRQzyE53G2dK1gl40u+X3NukQI/xyISR
+         TB5FLI6Y2DQwU1bC0aGmsgyhkgqKQUcdptIIxDyi//HjQjwZD1QIkvunHqWg7CbUoN9X
+         qe+Er0GIK2fL5fhM288QM6MoaPc9a/XcuS6kDo1tyUynTJVp+wrIFk+CoCOuNb8B0UAi
+         mzbXV5+3Q+nXGjeDoQpxQtp6T06ETs+eD3olHpfAVT9NGi9M1KfGERP0gtEd5V37uVtN
+         gGh7xWhxbHAfrbRxfUkNTX8fklN/dlqGikQQR6kygNdcgQsb3FdwCntgkJF5yK0n5kgC
+         sFCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zmWcLVgHn2c2LDFYN2xm/2mc8MyVE1o/XyuPBL+yHj8=;
-        b=XhU2wkn6PHuTcxjIB4bMhNxWGM81eapeK38p0JsxRfTpHp+HTnQgLXKU54eBbZ+468
-         uhqzVj31wNdGvTlA8NTAOe+3SVvt6+e4wtuXo3D9ga2AOWsCvsAa/iYDH79OeskdnNmC
-         4yzb2Az6vdvD68fd1z2+MnkwNJis3mtmWMGb4EHuC4h+Xfmk9Q9RuqkKT+2nF1KICple
-         b4RqHo9WUyFk/KpfCYKUE6YSbDFfdqJsUH+BcDnYnYPSMhr7EU4mHderZOfPeuHeaXH7
-         SQvcPjUZXnjwFmMF4+6ZKsb8kLaQXjXEkIPv4HayCuXCL5wjIaZBIIuisZUwQh+3kTDm
-         2kDA==
-X-Gm-Message-State: AJIora/cbWFL6sneDMcIk8BBdDVpFpEupNz9CsJPccfH4c+0OyjVL0DW
-        nAXE6LU+3Sd++Tp2LWqs96Q=
-X-Google-Smtp-Source: AGRyM1uIvxYh+CSLv9wcMjfaFUJWfxyv9q7+4nCF5+kgjM2LxtJmqbJ7dx5OFKSO3nyLvGrtgvMakw==
-X-Received: by 2002:a17:903:1108:b0:16a:a0ab:8f89 with SMTP id n8-20020a170903110800b0016aa0ab8f89mr20384827plh.12.1657573493573;
-        Mon, 11 Jul 2022 14:04:53 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902b68100b0016bd62bc003sm5168339pls.141.2022.07.11.14.04.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 14:04:52 -0700 (PDT)
-Message-ID: <58eec756-0932-cc43-8702-1c6e23d89ea4@acm.org>
-Date:   Mon, 11 Jul 2022 14:04:51 -0700
+        bh=Xfp89QyK0/p/8PmDaqGqGqPNT0fmeAkB/Wk4K0Cj4hI=;
+        b=ISqe3pF3K62J5nsawVpeNfx+2WtVNcSaDLeI21oTATcQOjTWA9QwO/GzRJuUODg+1/
+         0pgk8JCHXx2/so7goTKWxmzV4y1R5qacei5J/+zPe4ly2BJP3xueYKOOLdv7Jy67Cf1A
+         4hKthTb+gFdX858saU1H3IGo1+DXq3eoAosEwm0UGKCSZ0nKkD+LLV6i9xom95ZkpXa+
+         rL8bYu8kWvRBC6ny9wpxVMRcmRjZEMZ0XOk1AJQhQsm0at2cmkNFYGCvrCyVT+z69qug
+         9Q+/tLMlAxeWsfXqCR2jABGNI/TVteAhgqDE7AyGOw4cUBTCdMQVoWoD+8WClK0/EuQu
+         CayA==
+X-Gm-Message-State: AJIora8lqE5tkt6y+slEtI7CH9bXR0FhONGUN1Pyx2Qt2Vm1GVR8dy/C
+        9f/GUS8GoB943nxI1fMqevg=
+X-Google-Smtp-Source: AGRyM1sH60y9Q8ZWrBVFITITOeGCiSlaWCsvQmhRaNGjeHqGABOg3dklQHXFKaOC0FNlCC6krenczg==
+X-Received: by 2002:a05:6402:5205:b0:43a:b520:c7de with SMTP id s5-20020a056402520500b0043ab520c7demr23403794edd.22.1657573597018;
+        Mon, 11 Jul 2022 14:06:37 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-94-253-165-104.zg.cable.xnet.hr. [94.253.165.104])
+        by smtp.googlemail.com with ESMTPSA id lb17-20020a170907785100b0072a430d2abdsm3052562ejc.91.2022.07.11.14.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 14:06:36 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     bjorn.andersson@linaro.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Robert Marko <robimarko@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 1/7] clk: qcom: clk-rcg2: add rcg2 mux ops
+Date:   Mon, 11 Jul 2022 23:06:28 +0200
+Message-Id: <20220711210634.3042092-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH v3] scsi: ufs: exclude UECxx from SFR dump list
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com
-References: <CGME20220315095716epcas2p2ec52c66863b71180a6c2c45856058683@epcas2p2.samsung.com>
- <1647338162-75639-1-git-send-email-kwmad.kim@samsung.com>
- <1ad26d79-9f5c-9b53-6904-7d7fd53fac2f@acm.org>
- <000001d894ca$45da51f0$d18ef5d0$@samsung.com>
- <213634d7-a796-8509-9612-56fe7c61ef01@acm.org>
- <002e01d894da$e2021bc0$a6065340$@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <002e01d894da$e2021bc0$a6065340$@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/10/22 21:01, Kiwoong Kim wrote:
-> It's definitely not Exynos specific
-> because the fact that those SFRs are ROC type is written in UFSHCI.
-> I don't know more things to explain why this patch is needed.
-> 
-> You just want to know whether any additional descriptions about ROC is written ?
+From: Christian Marangi <ansuelsmth@gmail.com>
 
-Hi Kiwoong,
+An RCG may act as a mux that switch between 2 parents.
+This is the case on IPQ6018 and IPQ8074 where the APCS core clk that feeds
+the CPU cluster clock just switches between XO and the PLL that feeds it.
 
-I had overlooked the "ROC" text in the "Type" column in the UFSHCI 
-specification. Thank you for having taken the time to answer my questions.
+Add the required ops to add support for this special configuration and use
+the generic mux function to determine the rate.
 
-Bart.
+This way we dont have to keep a essentially dummy frequency table to use
+RCG2 as a mux.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/clk/qcom/clk-rcg.h  | 1 +
+ drivers/clk/qcom/clk-rcg2.c | 7 +++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+index 012e745794fd..01581f4d2c39 100644
+--- a/drivers/clk/qcom/clk-rcg.h
++++ b/drivers/clk/qcom/clk-rcg.h
+@@ -167,6 +167,7 @@ struct clk_rcg2_gfx3d {
+ 
+ extern const struct clk_ops clk_rcg2_ops;
+ extern const struct clk_ops clk_rcg2_floor_ops;
++extern const struct clk_ops clk_rcg2_mux_closest_ops;
+ extern const struct clk_ops clk_edp_pixel_ops;
+ extern const struct clk_ops clk_byte_ops;
+ extern const struct clk_ops clk_byte2_ops;
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 28019edd2a50..609c10f8d0d9 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -509,6 +509,13 @@ const struct clk_ops clk_rcg2_floor_ops = {
+ };
+ EXPORT_SYMBOL_GPL(clk_rcg2_floor_ops);
+ 
++const struct clk_ops clk_rcg2_mux_closest_ops = {
++	.determine_rate = __clk_mux_determine_rate_closest,
++	.get_parent = clk_rcg2_get_parent,
++	.set_parent = clk_rcg2_set_parent,
++};
++EXPORT_SYMBOL_GPL(clk_rcg2_mux_closest_ops);
++
+ struct frac_entry {
+ 	int num;
+ 	int den;
+-- 
+2.36.1
+

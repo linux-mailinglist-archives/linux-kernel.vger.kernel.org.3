@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D9A56FA1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DC256FA80
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiGKJNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S231755AbiGKJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiGKJMo (ORCPT
+        with ESMTP id S231712AbiGKJSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:12:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F472C11F;
-        Mon, 11 Jul 2022 02:09:27 -0700 (PDT)
+        Mon, 11 Jul 2022 05:18:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3C511C2C;
+        Mon, 11 Jul 2022 02:11:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A008611CD;
-        Mon, 11 Jul 2022 09:09:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37ADAC34115;
-        Mon, 11 Jul 2022 09:09:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 774DFB80D2C;
+        Mon, 11 Jul 2022 09:11:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE929C34115;
+        Mon, 11 Jul 2022 09:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530566;
-        bh=Pzmd/zN1nIln9o0WDMVsAXhhz3zAUCufCzsOSJga0K8=;
+        s=korg; t=1657530696;
+        bh=ZG3Rwy9JP7agOxmwR8S1bH1vQXy48ESdKQsRF6M9y7c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jw0oS8WU511GRW3LlC++u8fWHpKeOAypOnAM8WphvwIrfDYQ+ajSVg/oyI+kmbtf2
-         sQs87o9wlaGTVaVYRfh+k28ACK7CQuSyBX4ly4CT3b7jfTKKcmjiZFSUDBx6CiPo/+
-         L8uxPRRnxYl1q2FCbQ3y6yxcQmVfNUbLmj8Z8YMQ=
+        b=Vqeyddb/008She3tovImfeaz7cjO8Cp0fH6UbsDJnGmKhEmdBiPeIeHCjU1gEN212
+         4fa7NjQa4WZEynegkXHbdQWG0NPBKP9M+ZEceNMh0a7crofylRseWwIy094hDWYuuC
+         sZfo4htBXrCYXkCV6SbnzXH0TeE+8VhFyi40HXNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.19 31/31] dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+        stable@vger.kernel.org,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@amd.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 28/38] i2c: cadence: Unregister the clk notifier in error path
 Date:   Mon, 11 Jul 2022 11:07:10 +0200
-Message-Id: <20220711090538.765377355@linuxfoundation.org>
+Message-Id: <20220711090539.558704008@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Satish Nagireddy <satish.nagireddy@getcruise.com>
 
-commit 615a4bfc426e11dba05c2cf343f9ac752fb381d2 upstream.
+[ Upstream commit 3501f0c663063513ad604fb1b3f06af637d3396d ]
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
+This patch ensures that the clock notifier is unregistered
+when driver probe is returning error.
 
-Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Link: https://lore.kernel.org/r/20220605042723.17668-1-linmq006@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
+Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
+Tested-by: Lars-Peter Clausen <lars@metafoo.de>
+Reviewed-by: Michal Simek <michal.simek@amd.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/ti/dma-crossbar.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/i2c/busses/i2c-cadence.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/dma/ti/dma-crossbar.c
-+++ b/drivers/dma/ti/dma-crossbar.c
-@@ -251,6 +251,7 @@ static void *ti_dra7_xbar_route_allocate
- 	if (dma_spec->args[0] >= xbar->xbar_requests) {
- 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
- 			dma_spec->args[0]);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 8a3a0991bc1c..3a1bdc75275f 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -985,6 +985,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	return 0;
  
-@@ -258,12 +259,14 @@ static void *ti_dra7_xbar_route_allocate
- 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
- 	if (!dma_spec->np) {
- 		dev_err(&pdev->dev, "Can't get DMA master\n");
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
- 	map = kzalloc(sizeof(*map), GFP_KERNEL);
- 	if (!map) {
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-@@ -275,6 +278,7 @@ static void *ti_dra7_xbar_route_allocate
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
+ err_clk_dis:
++	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
+ 	clk_disable_unprepare(id->clk);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.35.1
+
 
 

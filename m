@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBD856FFB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E7956FFBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiGKLLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
+        id S230191AbiGKLLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiGKLK6 (ORCPT
+        with ESMTP id S229456AbiGKLLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:10:58 -0400
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D1936B6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:18:02 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1657534671tjvi0gr2
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 11 Jul 2022 18:17:45 +0800 (CST)
-X-QQ-SSF: 01400000002000G0T000B00A0000000
-X-QQ-FEAT: DoD8xN2rKozpUoCo03BPpM4/2WoWjL6JHpDuORV4rxEjn87CIA++YiOSKp7cc
-        8BeJeI+Y1uI/awUrWsEX+zCaJk/CPkeHtZJDghdfdRSIqjMyZ+Kr2WaIleI8Vj7X2kCRswo
-        wm6aPCACE8dbi+TvXndVRwqv9uo+yjqmFD8XbknuMK/5FAjGyg+8IcKlqmQxyivAcHD8GvM
-        KQ2+A6/0pRZlHdXGisNp2bgLhI/1GTho75Vy6lNTdLTVPxaEUmzDqetsBIkgGMW6av3dn9H
-        g+bHhaRO5HtDoqULjMm4MiOhc4rCdlFhs2lWpP2pRl7Jq4w0oZjZtm9UOdXGDGGunT9tilX
-        NzbroDWf2zU25Muz8yPUNVPsLApejolJdwhWKmiIVj8RBKVAIUav+BAQm5M8GPhSFVK0qaA
-        Xcxzq2ma3z0dHUlHtcH7HTll5lvFLeeQ
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     perex@perex.cz, tiwai@suse.com, bo.liu@senarytech.com,
-        huangwenhuia@uniontech.com, tangmeng@uniontech.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ALSA: hda/conexant: Apply quirk for another HP ProDesk 600 G3 model
-Date:   Mon, 11 Jul 2022 18:17:44 +0800
-Message-Id: <20220711101744.25189-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 11 Jul 2022 07:11:06 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696A3C1FEC
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:18:22 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id s21so4429427pjq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OEP5c1Ts3y3jjcZd/vxo+DFJNaZAkcnY9wcB9rKwQk0=;
+        b=8XMkm5VW53KdDaQvf+q37G9BYrf6ehTATfsf9ZgZosxgK5egvreQu1XDJoLFzGoxrY
+         Spx4dIrYlGbHhKpGEAcH5SzpGOAVzKW0A/dn/krSdYeqGQoe5Sok0fUzEw74itmR57FW
+         G8icen7/bsNrDOQqcQAy1CAUZHxDT3MyQLnFq0auLHAN1gCb808h7M1YXNy+iKHSZdUh
+         QrkiA4RJfYEvDm7KtWKvEEuFML8KJBUfdV/5rhTe2Q6tHj0+o8ywPyFv3/0dCQ/Xrp8r
+         hv6IlainqJPCGq+AN++UdANZFlv0xPCR6W+DIh/6wI4wQ7EIElt95OaP5psBkJ15one+
+         7lAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OEP5c1Ts3y3jjcZd/vxo+DFJNaZAkcnY9wcB9rKwQk0=;
+        b=Npj3mpTdGwjvmufaPiC0myY7hSjcqPj+XCWo1zL1UjxpE1q4ezodYiktyXo/Py7UVW
+         kH9LbfyiTZeYKDa/YbbeWsFKk0zeevwVsETswFj+1B53vExChPrF+OuionWEyrvO2bVS
+         1/OFvUS5Sejvgfcax4U2KFLtXPUP+wmR4GR1CXpHqg0NO+0XQKqOZ3BUlG70SVhzI9w7
+         EeNen8OjtRyl7JMucHSf2q/kV2nTOk9plDUw9ipLIo6CglONQ4/GkoY24Mrp+BjYPxRT
+         nNignxQkZGKuTDnYr1KoAiicd5dGEy4g+8oSofEK3b04P6SrXeFCng6KSv7Y9Fi4My7M
+         n0uA==
+X-Gm-Message-State: AJIora9NakFKsaGkFiEv/zNuxbBLIlQBT8WZ/splHGr1m4MzNg4wH+By
+        55cl/nl0RzNmNhz5LzkFgQjC+A==
+X-Google-Smtp-Source: AGRyM1sIYzLIe4/E3L+3duTvdoRwBoXV+BsrpUmKJRMQpAv5GS6y4B0utoiHVD2sU7/U5uNCjty5uQ==
+X-Received: by 2002:a17:902:aa82:b0:16c:4bee:1f90 with SMTP id d2-20020a170902aa8200b0016c4bee1f90mr4181686plr.69.1657534701800;
+        Mon, 11 Jul 2022 03:18:21 -0700 (PDT)
+Received: from localhost ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id k22-20020aa79736000000b00528f9597fb3sm4383091pfg.197.2022.07.11.03.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 03:18:21 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 18:18:18 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hugetlb: fix memoryleak in hugetlb_mcopy_atomic_pte
+Message-ID: <Ysv46rUQDluYICn7@FVFYT0MHHV2J>
+References: <20220709092629.54291-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220709092629.54291-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is another HP ProDesk 600 G3 model with the PCI SSID 103c:82b4
-that requires the quirk HP_MIC_NO_PRESENCE. Add the corresponding
-entry to the quirk table.
+On Sat, Jul 09, 2022 at 05:26:29PM +0800, Miaohe Lin wrote:
+> When alloc_huge_page fails, *pagep is set to NULL without put_page first.
+> So the hugepage indicated by *pagep is leaked.
+> 
+> Fixes: 8cc5fcbb5be8 ("mm, hugetlb: fix racy resv_huge_pages underflow on UFFDIO_COPY")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- sound/pci/hda/patch_conexant.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-diff --git a/sound/pci/hda/patch_conexant.c b/sound/pci/hda/patch_conexant.c
-index 3e541a4c0423..83ae21a01bbf 100644
---- a/sound/pci/hda/patch_conexant.c
-+++ b/sound/pci/hda/patch_conexant.c
-@@ -944,6 +944,7 @@ static const struct snd_pci_quirk cxt5066_fixups[] = {
- 	SND_PCI_QUIRK(0x103c, 0x828c, "HP EliteBook 840 G4", CXT_FIXUP_HP_DOCK),
- 	SND_PCI_QUIRK(0x103c, 0x8299, "HP 800 G3 SFF", CXT_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x829a, "HP 800 G3 DM", CXT_FIXUP_HP_MIC_NO_PRESENCE),
-+	SND_PCI_QUIRK(0x103c, 0x82b4, "HP ProDesk 600 G3", CXT_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x836e, "HP ProBook 455 G5", CXT_FIXUP_MUTE_LED_GPIO),
- 	SND_PCI_QUIRK(0x103c, 0x837f, "HP ProBook 470 G5", CXT_FIXUP_MUTE_LED_GPIO),
- 	SND_PCI_QUIRK(0x103c, 0x83b2, "HP EliteBook 840 G5", CXT_FIXUP_HP_DOCK),
--- 
-2.20.1
-
-
-
+Thanks.

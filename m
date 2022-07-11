@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3951156FB95
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA67956FD56
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiGKJc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S234242AbiGKJyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiGKJbi (ORCPT
+        with ESMTP id S233276AbiGKJx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:31:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AF741997;
-        Mon, 11 Jul 2022 02:17:16 -0700 (PDT)
+        Mon, 11 Jul 2022 05:53:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9C4AE554;
+        Mon, 11 Jul 2022 02:25:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4865B61211;
-        Mon, 11 Jul 2022 09:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5023EC34115;
-        Mon, 11 Jul 2022 09:17:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56FA46135F;
+        Mon, 11 Jul 2022 09:25:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68446C341C8;
+        Mon, 11 Jul 2022 09:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531035;
-        bh=ODv6FVyFqJypdHeESRIAoKeDqcRVtLTyAlBMhN7uHHo=;
+        s=korg; t=1657531532;
+        bh=QlBAKrIYnrUzq35r1sV7UTU7z78mc0/i7wzKFGjNtb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZpmQyCLe7rl12N7Qen/3pOrxYqsh9rhW2J1Mi/wfFPSUIUuqpJ4fowMAeFyioZWI1
-         2D2v8DOYuxVtWDUB0SSxY2nF6OxXCnZoo1rjOshQ6h8hYfvS4DPjeaHHq18HVjNC8o
-         a8Iz2od29SKdOQ8++0925gfHqm43IzVOL5RJN+oo=
+        b=fEnyzci8d3U3hQWfTmj5Po21FYUIVSEA/FdO6ZoSeXz7o/X7mNGd5nV7i0hVfqQFK
+         qG97vFLZxoMbc29FeuYo9jUiY9GGiIgakSlD7gNQZ8a7cXrkEJb+GKxsX9BC2AgV0n
+         /iuziwxrLlfg+o7w0Y4OTHVt1+IiZ7vI1BditnPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 5.18 036/112] fbcon: Prevent that screen size is smaller than font size
+        stable@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 140/230] drm/amdgpu: drop flags check for CHIP_IP_DISCOVERY
 Date:   Mon, 11 Jul 2022 11:06:36 +0200
-Message-Id: <20220711090550.595447764@linuxfoundation.org>
+Message-Id: <20220711090608.035066118@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,99 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit e64242caef18b4a5840b0e7a9bff37abd4f4f933 upstream.
+[ Upstream commit d82ce3cd30aa28db3e94ffc36ebf0af2ff12801d ]
 
-We need to prevent that users configure a screen size which is smaller than the
-currently selected font size. Otherwise rendering chars on the screen will
-access memory outside the graphics memory region.
+Support for IP based discovery is in place now so this
+check is no longer required.
 
-This patch adds a new function fbcon_modechange_possible() which
-implements this check and which later may be extended with other checks
-if necessary.  The new function is called from the FBIOPUT_VSCREENINFO
-ioctl handler in fbmem.c, which will return -EINVAL if userspace asked
-for a too small screen size.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stable@vger.kernel.org # v5.4+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbcon.c |   28 ++++++++++++++++++++++++++++
- drivers/video/fbdev/core/fbmem.c |    4 +++-
- include/linux/fbcon.h            |    4 ++++
- 3 files changed, 35 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2747,6 +2747,34 @@ void fbcon_update_vcs(struct fb_info *in
- }
- EXPORT_SYMBOL(fbcon_update_vcs);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index cb0b5972e7fd..a0dd4b41ba4a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -2009,11 +2009,6 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
+ 			return -ENODEV;
+ 	}
  
-+/* let fbcon check if it supports a new screen resolution */
-+int fbcon_modechange_possible(struct fb_info *info, struct fb_var_screeninfo *var)
-+{
-+	struct fbcon_ops *ops = info->fbcon_par;
-+	struct vc_data *vc;
-+	unsigned int i;
-+
-+	WARN_CONSOLE_UNLOCKED();
-+
-+	if (!ops)
-+		return 0;
-+
-+	/* prevent setting a screen size which is smaller than font size */
-+	for (i = first_fb_vc; i <= last_fb_vc; i++) {
-+		vc = vc_cons[i].d;
-+		if (!vc || vc->vc_mode != KD_TEXT ||
-+			   registered_fb[con2fb_map[i]] != info)
-+			continue;
-+
-+		if (vc->vc_font.width  > FBCON_SWAP(var->rotate, var->xres, var->yres) ||
-+		    vc->vc_font.height > FBCON_SWAP(var->rotate, var->yres, var->xres))
-+			return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(fbcon_modechange_possible);
-+
- int fbcon_mode_deleted(struct fb_info *info,
- 		       struct fb_videomode *mode)
- {
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1116,7 +1116,9 @@ static long do_fb_ioctl(struct fb_info *
- 			return -EFAULT;
- 		console_lock();
- 		lock_fb_info(info);
--		ret = fb_set_var(info, &var);
-+		ret = fbcon_modechange_possible(info, &var);
-+		if (!ret)
-+			ret = fb_set_var(info, &var);
- 		if (!ret)
- 			fbcon_update_vcs(info, var.activate & FB_ACTIVATE_ALL);
- 		unlock_fb_info(info);
---- a/include/linux/fbcon.h
-+++ b/include/linux/fbcon.h
-@@ -15,6 +15,8 @@ void fbcon_new_modelist(struct fb_info *
- void fbcon_get_requirement(struct fb_info *info,
- 			   struct fb_blit_caps *caps);
- void fbcon_fb_blanked(struct fb_info *info, int blank);
-+int  fbcon_modechange_possible(struct fb_info *info,
-+			       struct fb_var_screeninfo *var);
- void fbcon_update_vcs(struct fb_info *info, bool all);
- void fbcon_remap_all(struct fb_info *info);
- int fbcon_set_con2fb_map_ioctl(void __user *argp);
-@@ -33,6 +35,8 @@ static inline void fbcon_new_modelist(st
- static inline void fbcon_get_requirement(struct fb_info *info,
- 					 struct fb_blit_caps *caps) {}
- static inline void fbcon_fb_blanked(struct fb_info *info, int blank) {}
-+static inline int  fbcon_modechange_possible(struct fb_info *info,
-+				struct fb_var_screeninfo *var) { return 0; }
- static inline void fbcon_update_vcs(struct fb_info *info, bool all) {}
- static inline void fbcon_remap_all(struct fb_info *info) {}
- static inline int fbcon_set_con2fb_map_ioctl(void __user *argp) { return 0; }
+-	if (flags == CHIP_IP_DISCOVERY) {
+-		DRM_INFO("Unsupported asic.  Remove me when IP discovery init is in place.\n");
+-		return -ENODEV;
+-	}
+-
+ 	if (amdgpu_virtual_display ||
+ 	    amdgpu_device_asic_has_dc_support(flags & AMD_ASIC_MASK))
+ 		supports_atomic = true;
+-- 
+2.35.1
+
 
 

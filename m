@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E98156D8C9
+	by mail.lfdr.de (Postfix) with ESMTP id 87BBB56D8CA
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiGKIuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S230377AbiGKIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiGKIuF (ORCPT
+        with ESMTP id S230173AbiGKIuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:50:05 -0400
+        Mon, 11 Jul 2022 04:50:06 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AEB29B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E823102C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657529403; x=1689065403;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1e+xGPIhxvMvpq200nX++mzDTD6BRkGQgKdN81HYoWs=;
-  b=m5mN4mNRKldcVAmGkdGVpSJbsWRuZElsUVRw7+fs1SjqEKQGtmIMU1lr
-   qXCpyBqhqL8CwPTO4O0TAqQFkzqUcjpcvxQ6ApMmnc3kfcPWZofyMSdqm
-   loTWIhyc3Xs/P8o0XoBIoOE9e7JLxLaZ/MqAT8GcHRiQXGQ1tIR11Rh+v
-   2F55zdGrdSsHa1Wx0W2jiRwjb3zMuB0B8vIq7kADAfplV27HqtQT92X76
-   Ecg6kN/xJZBtnq+e/kua85hfcEd1jyovfvsZIiRPBIvu9IbL6O35gwL/Y
-   8I6Uw9pPE84K9RTMomCOylXr+41svKZEQVMRXQLHIRaY0Br2o+0jPgPO2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637827"
+  t=1657529405; x=1689065405;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=k6KsRMZKO7LW82txBmvjqn++nQe1Xz6fEXzoYPfl0xs=;
+  b=C9gY1eSJsNZxiI0Dff6IIZwVLEqiynLVocIX3xcrvOhQTX7jpc+Xzanp
+   z59FAoB4hIZaQGDERaJeTwAsrND2UDZN4rQCayC8WW73TSsan1oICuMFN
+   9M08TrhCnCSmdeRSwzucDKEBXgm48vR9vno7fsmHgiy3jCpShV+hWV1T9
+   kz61WQD44fhch3lwJ1DLY4rdjhv5Wc/Vat50+RCf9D6sFCBxzZuLKhyrv
+   y+/p+T+uIXKKrFnSxxfbASIZ2dktmdMHmWxY7S0KN+P13SklwGCS3Uc5r
+   QiNcW/k3qrHFtw5HDJVdwZifNeqxqTAqOIsR5Cjh+VVfPJUf9ZQP/EkUQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637831"
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="284637827"
+   d="scan'208";a="284637831"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:03 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:05 -0700
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="652374085"
+   d="scan'208";a="652374103"
 Received: from yhuang6-mobl1.sh.intel.com ([10.238.5.168])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:01 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:03 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Huang, Ying" <ying.huang@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
-Subject: [PATCH -V2 0/7] migrate_pages(): fix several bugs in error path
-Date:   Mon, 11 Jul 2022 16:49:41 +0800
-Message-Id: <20220711084948.274787-1-ying.huang@intel.com>
+Subject: [PATCH -V2 1/7] migrate: fix syscall move_pages() return value for failure
+Date:   Mon, 11 Jul 2022 16:49:42 +0800
+Message-Id: <20220711084948.274787-2-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220711084948.274787-1-ying.huang@intel.com>
+References: <20220711084948.274787-1-ying.huang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,167 +61,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Huang, Ying" <ying.huang@intel.com>
+The return value of move_pages() syscall is incorrect when counting
+the remaining pages to be migrated.  For example, for the following
+test program,
 
-During review the code of migrate_pages() and build a test program for
-it.  Several bugs in error path are identified and fixed in this
-series.
-
-Most patches are tested via
-
-- Apply error-inject.patch in Linux kernel
-- Compile test-migrate.c (with -lnuma)
-- Test with test-migrate.sh
-
-error-inject.patch, test-migrate.c, and test-migrate.sh are as below.
-It turns out that error injection is an important tool to fix bugs in
-error path.
-
-Changes:
-
-v2:
-
-- Rebased on v5.19-rc5
-
-- Addressed some comments from Baolin, Thanks!
-
-- Added reviewed-by tags
-
-Best Regards,
-Huang, Ying
-
-------------------------- error-inject.patch -------------------------
-From 295ea21204f3f025a041fe39c68a2eaec8313c68 Mon Sep 17 00:00:00 2001
-From: Huang Ying <ying.huang@intel.com>
-Date: Tue, 21 Jun 2022 11:08:30 +0800
-Subject: [PATCH] migrate_pages: error inject
-
----
- mm/migrate.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 55 insertions(+), 3 deletions(-)
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 399904015d23..87d47064ec6c 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -337,6 +337,42 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
- }
- #endif
- 
-+#define EI_MP_ENOSYS		0x0001
-+#define EI_MP_THP_ENOMEM	0x0002
-+#define EI_MP_NP_ENOMEM		0x0004
-+#define EI_MP_EAGAIN		0x0008
-+#define EI_MP_EOTHER		0x0010
-+#define EI_MP_NOSPLIT		0x0020
-+#define EI_MP_SPLIT_FAIL	0x0040
-+#define EI_MP_EAGAIN_PERM	0x0080
-+#define EI_MP_EBUSY		0x0100
-+
-+static unsigned int ei_migrate_pages;
-+
-+module_param(ei_migrate_pages, uint, 0644);
-+
-+static bool ei_thp_migration_supported(void)
-+{
-+	if (ei_migrate_pages & EI_MP_ENOSYS)
-+		return false;
-+	else
-+		return thp_migration_supported();
-+}
-+
-+static int ei_trylock_page(struct page *page)
-+{
-+	if (ei_migrate_pages & EI_MP_EAGAIN)
-+		return 0;
-+	return trylock_page(page);
-+}
-+
-+static int ei_split_huge_page_to_list(struct page *page, struct list_head *list)
-+{
-+	if (ei_migrate_pages & EI_MP_SPLIT_FAIL)
-+		return -EBUSY;
-+	return split_huge_page_to_list(page, list);
-+}
-+
- static int expected_page_refs(struct address_space *mapping, struct page *page)
- {
- 	int expected_count = 1;
-@@ -368,6 +404,9 @@ int folio_migrate_mapping(struct address_space *mapping,
- 		if (folio_ref_count(folio) != expected_count)
- 			return -EAGAIN;
- 
-+		if (ei_migrate_pages & EI_MP_EAGAIN_PERM)
-+			return -EAGAIN;
-+
- 		/* No turning back from here */
- 		newfolio->index = folio->index;
- 		newfolio->mapping = folio->mapping;
-@@ -929,7 +968,7 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
- 	struct anon_vma *anon_vma = NULL;
- 	bool is_lru = !__PageMovable(page);
- 
--	if (!trylock_page(page)) {
-+	if (!ei_trylock_page(page)) {
- 		if (!force || mode == MIGRATE_ASYNC)
- 			goto out;
- 
-@@ -952,6 +991,11 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
- 		lock_page(page);
- 	}
- 
-+	if (ei_migrate_pages & EI_MP_EBUSY) {
-+		rc = -EBUSY;
-+		goto out_unlock;
-+	}
-+
- 	if (PageWriteback(page)) {
- 		/*
- 		 * Only in the case of a full synchronous migration is it
-@@ -1086,7 +1130,7 @@ static int unmap_and_move(new_page_t get_new_page,
- 	int rc = MIGRATEPAGE_SUCCESS;
- 	struct page *newpage = NULL;
- 
--	if (!thp_migration_supported() && PageTransHuge(page))
-+	if (!ei_thp_migration_supported() && PageTransHuge(page))
- 		return -ENOSYS;
- 
- 	if (page_count(page) == 1) {
-@@ -1102,6 +1146,11 @@ static int unmap_and_move(new_page_t get_new_page,
- 		goto out;
- 	}
- 
-+	if ((ei_migrate_pages & EI_MP_THP_ENOMEM) && PageTransHuge(page))
-+		return -ENOMEM;
-+	if ((ei_migrate_pages & EI_MP_NP_ENOMEM) && !PageTransHuge(page))
-+		return -ENOMEM;
-+
- 	newpage = get_new_page(page, private);
- 	if (!newpage)
- 		return -ENOMEM;
-@@ -1305,7 +1354,7 @@ static inline int try_split_thp(struct page *page, struct list_head *split_pages
- 	int rc;
- 
- 	lock_page(page);
--	rc = split_huge_page_to_list(page, split_pages);
-+	rc = ei_split_huge_page_to_list(page, split_pages);
- 	unlock_page(page);
- 
- 	return rc;
-@@ -1358,6 +1407,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 	bool nosplit = (reason == MR_NUMA_MISPLACED);
- 	bool no_subpage_counting = false;
- 
-+	if (ei_migrate_pages & EI_MP_NOSPLIT)
-+		nosplit = true;
-+
- 	trace_mm_migrate_pages_start(mode, reason);
- 
- thp_subpage_migration:
--- 
-2.30.2
-
-------------------------- test-migrate.c -------------------------------------
+"
  #define _GNU_SOURCE
 
  #include <stdbool.h>
@@ -273,31 +119,17 @@ index 399904015d23..87d47064ec6c 100644
 	 exit(1);
  }
 
- void *addr_thp;
+ int page_size;
+
+ bool do_vmsplice;
+ bool do_thp;
+
+ static int pipe_fds[2];
  void *addr;
  char *pn;
  char *pn1;
- char *pn2;
- char *pn3;
- void *pages[4];
- int status[4];
-
- void create_map(bool thp)
- {
-	 int ret;
-	 void *p;
-
-	 p = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
-		  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	 ERR_EXIT_ON(p == MAP_FAILED, "mmap");
-	 if (thp) {
-		 ret = madvise(p, MAP_SIZE, MADV_HUGEPAGE);
-		 ERR_EXIT_ON(ret, "advise hugepage");
-		 addr_thp = p;
-	 } else {
-		 addr = p;
-	 }
- }
+ void *pages[2];
+ int status[2];
 
  void prepare()
  {
@@ -305,80 +137,173 @@ index 399904015d23..87d47064ec6c 100644
 	 struct iovec iov;
 
 	 if (addr) {
-		 munmap(addr_thp, MAP_SIZE);
 		 munmap(addr, MAP_SIZE);
+		 close(pipe_fds[0]);
+		 close(pipe_fds[1]);
 	 }
 
-	 create_map(true);
-	 create_map(false);
+	 ret = pipe(pipe_fds);
+	 ERR_EXIT_ON(ret, "pipe");
 
-	 pn = (char *)(((unsigned long)addr_thp + THP_SIZE) & ~THP_MASK);
+	 addr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
+		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	 ERR_EXIT_ON(addr == MAP_FAILED, "mmap");
+	 if (do_thp) {
+		 ret = madvise(addr, MAP_SIZE, MADV_HUGEPAGE);
+		 ERR_EXIT_ON(ret, "advise hugepage");
+	 }
+
+	 pn = (char *)(((unsigned long)addr + THP_SIZE) & ~THP_MASK);
 	 pn1 = pn + THP_SIZE;
 	 pages[0] = pn;
 	 pages[1] = pn1;
 	 *pn = 1;
 
-	 pn2 = (char *)(((unsigned long)addr + THP_SIZE) & ~THP_MASK);
-	 pn3 = pn2 + THP_SIZE;
-	 pages[2] = pn2;
-	 pages[3] = pn3;
+	 if (do_vmsplice) {
+		 iov.iov_base = pn;
+		 iov.iov_len = page_size;
+		 ret = vmsplice(pipe_fds[1], &iov, 1, 0);
+		 ERR_EXIT_ON(ret < 0, "vmsplice");
+	 }
 
-	 status[0] = status[1] = status[2] = status[3] = 1024;
+	 status[0] = status[1] = 1024;
  }
 
  void test_migrate()
  {
 	 int ret;
-	 int nodes[4] = { 1, 1, 1, 1 };
+	 int nodes[2] = { 1, 1 };
 	 pid_t pid = getpid();
 
 	 prepare();
+	 ret = move_pages(pid, 1, pages, nodes, status, MPOL_MF_MOVE_ALL);
+	 error_msg(ret, 1, status, "move 1 page");
+
+	 prepare();
+	 ret = move_pages(pid, 2, pages, nodes, status, MPOL_MF_MOVE_ALL);
+	 error_msg(ret, 2, status, "move 2 pages, page 1 not mapped");
+
+	 prepare();
 	 *pn1 = 1;
-	 *pn2 = 1;
-	 *pn3 = 1;
-	 ret = move_pages(pid, 4, pages, nodes, status, MPOL_MF_MOVE_ALL);
-	 error_msg(ret, 4, status, "move 4 pages");
+	 ret = move_pages(pid, 2, pages, nodes, status, MPOL_MF_MOVE_ALL);
+	 error_msg(ret, 2, status, "move 2 pages");
+
+	 prepare();
+	 *pn1 = 1;
+	 nodes[1] = 0;
+	 ret = move_pages(pid, 2, pages, nodes, status, MPOL_MF_MOVE_ALL);
+	 error_msg(ret, 2, status, "move 2 pages, page 1 to node 0");
  }
 
  int main(int argc, char *argv[])
  {
 	 numa_run_on_node(0);
+	 page_size = getpagesize();
 
+	 test_migrate();
+
+	 fprintf(stderr, "\nMake page 0 cannot be migrated:\n");
+	 do_vmsplice = true;
+	 test_migrate();
+
+	 fprintf(stderr, "\nTest THP:\n");
+	 do_thp = true;
+	 do_vmsplice = false;
+	 test_migrate();
+
+	 fprintf(stderr, "\nTHP: make page 0 cannot be migrated:\n");
+	 do_vmsplice = true;
 	 test_migrate();
 
 	 return 0;
  }
---------------------- test-migrate.sh ----------------------------
- #!/bin/bash
+"
 
- PARAM=/sys/module/migrate/parameters/ei_migrate_pages
+The output of the current kernel is,
 
- get_vmstat()
- {
-	 echo ================= $* ================
-	 cat /proc/vmstat | grep -e '\(pgmigrate\|thp_migration\)'
- }
+"
+Error: move 1 page, ret : 0, error: Success
+status: 1
+Error: move 2 pages, page 1 not mapped, ret : 0, error: Success
+status: 1 -14
+Error: move 2 pages, ret : 0, error: Success
+status: 1 1
+Error: move 2 pages, page 1 to node 0, ret : 0, error: Success
+status: 1 0
 
- simple_test()
- {
-	 echo $1 > $PARAM
-	 shift
-	 get_vmstat before $*
-	 ./test-migrate
-	 get_vmstat after $*
- }
+Make page 0 cannot be migrated:
+Error: move 1 page, ret : 0, error: Success
+status: 1024
+Error: move 2 pages, page 1 not mapped, ret : 1, error: Success
+status: 1024 -14
+Error: move 2 pages, ret : 0, error: Success
+status: 1024 1024
+Error: move 2 pages, page 1 to node 0, ret : 1, error: Success
+status: 1024 1024
+"
 
- #define EI_MP_ENOSYS		0x0001
- #define EI_MP_THP_ENOMEM	0x0002
- #define EI_MP_NP_ENOMEM		0x0004
- #define EI_MP_EAGAIN		0x0008
- #define EI_MP_EOTHER		0x0010
- #define EI_MP_NOSPLIT		0x0020
- #define EI_MP_SPLIT_FAIL	0x0040
- #define EI_MP_EAGAIN_PERM	0x0080
- #define EI_MP_EBUSY		0x0100
+While the expected output is,
 
- simple_test 0x26 ENOMEM
- simple_test 0x81 retry THP subpages
- simple_test 0xc1 ENOSYS
- simple_test 0x101 ENOSYS
+"
+Error: move 1 page, ret : 0, error: Success
+status: 1
+Error: move 2 pages, page 1 not mapped, ret : 0, error: Success
+status: 1 -14
+Error: move 2 pages, ret : 0, error: Success
+status: 1 1
+Error: move 2 pages, page 1 to node 0, ret : 0, error: Success
+status: 1 0
+
+Make page 0 cannot be migrated:
+Error: move 1 page, ret : 1, error: Success
+status: 1024
+Error: move 2 pages, page 1 not mapped, ret : 1, error: Success
+status: 1024 -14
+Error: move 2 pages, ret : 1, error: Success
+status: 1024 1024
+Error: move 2 pages, page 1 to node 0, ret : 2, error: Success
+status: 1024 1024
+"
+
+Fix this via correcting the remaining pages counting.  With the fix,
+the output for the test program as above is expected.
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Yang Shi <shy828301@gmail.com>
+---
+ mm/migrate.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 6c1ea61f39d8..472335f0aaa3 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1682,7 +1682,7 @@ static int move_pages_and_store_status(struct mm_struct *mm, int node,
+ 		 * well.
+ 		 */
+ 		if (err > 0)
+-			err += nr_pages - i - 1;
++			err += nr_pages - i;
+ 		return err;
+ 	}
+ 	return store_status(status, start, node, i - start);
+@@ -1768,8 +1768,12 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
+ 
+ 		err = move_pages_and_store_status(mm, current_node, &pagelist,
+ 				status, start, i, nr_pages);
+-		if (err)
++		if (err) {
++			/* We have stored status of page i */
++			if (err > 0)
++				err--;
+ 			goto out;
++		}
+ 		current_node = NUMA_NO_NODE;
+ 	}
+ out_flush:
+-- 
+2.30.2
+

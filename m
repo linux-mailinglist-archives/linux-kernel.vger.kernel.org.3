@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAE856FD97
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689CA56FA0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234190AbiGKJ5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S231378AbiGKJMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233999AbiGKJ5M (ORCPT
+        with ESMTP id S231327AbiGKJLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:57:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A618AB418F;
-        Mon, 11 Jul 2022 02:26:51 -0700 (PDT)
+        Mon, 11 Jul 2022 05:11:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D313F8D;
+        Mon, 11 Jul 2022 02:09:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 327A06112E;
-        Mon, 11 Jul 2022 09:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C78C341C0;
-        Mon, 11 Jul 2022 09:26:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C0CCB80E79;
+        Mon, 11 Jul 2022 09:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE04C34115;
+        Mon, 11 Jul 2022 09:09:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531609;
-        bh=K6jNGp2dUuNiWhAggovJ4j01QWBZArB13C35cE1qd8I=;
+        s=korg; t=1657530547;
+        bh=ZhQFFpqOzrp5tNcwgIlKbIO90e6rRqoCkAD4zr6R61A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ITfnJHzMeBvGuDvRVmUq3jRukw7SF7bjaxLUwHPgM84djZO0vonrSASIMGsvQDJ3H
-         lQp8f4p1jqhzmpyZgBFvTj7YkQfnmvVwcBoz79XyxXuvneov/0MS0MwyNuEIP4MjOs
-         +RB7B29lNhewzdG1ZXj2Br5Ih2yIFhIXOVspel/w=
+        b=ZPSqjJtZSIOWb+0ws2C69OEWKSvgM3sPVcXnhaYhxiP0nActrMbGInmQ0JIKjLH99
+         z7Gq/fZKOzNMk9kWPUEjX/mbxc64moi8qtdmMiUVKbeE0jWuisy29q8pCSR2u9Ryxn
+         Z8ktsERFS4n8SylmohL1KVWHHUFm0yKKGt0fdeI8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 166/230] powerpc/powernv: delay rng platform device creation until later in boot
-Date:   Mon, 11 Jul 2022 11:07:02 +0200
-Message-Id: <20220711090608.769497319@linuxfoundation.org>
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        stable <stable@kernel.org>
+Subject: [PATCH 4.19 24/31] misc: rtsx_usb: fix use of dma mapped buffer for usb bulk transfer
+Date:   Mon, 11 Jul 2022 11:07:03 +0200
+Message-Id: <20220711090538.561194382@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,73 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-commit 887502826549caa7e4215fd9e628f48f14c0825a upstream.
+commit eb7f8e28420372787933eec079735c35034bda7d upstream.
 
-The platform device for the rng must be created much later in boot.
-Otherwise it tries to connect to a parent that doesn't yet exist,
-resulting in this splat:
+rtsx_usb driver allocates coherent dma buffer for urb transfers.
+This buffer is passed to usb_bulk_msg() and usb core tries to
+map already mapped buffer running into a dma mapping error.
 
-  [    0.000478] kobject: '(null)' ((____ptrval____)): is not initialized, yet kobject_get() is being called.
-  [    0.002925] [c000000002a0fb30] [c00000000073b0bc] kobject_get+0x8c/0x100 (unreliable)
-  [    0.003071] [c000000002a0fba0] [c00000000087e464] device_add+0xf4/0xb00
-  [    0.003194] [c000000002a0fc80] [c000000000a7f6e4] of_device_add+0x64/0x80
-  [    0.003321] [c000000002a0fcb0] [c000000000a800d0] of_platform_device_create_pdata+0xd0/0x1b0
-  [    0.003476] [c000000002a0fd00] [c00000000201fa44] pnv_get_random_long_early+0x240/0x2e4
-  [    0.003623] [c000000002a0fe20] [c000000002060c38] random_init+0xc0/0x214
+xhci_hcd 0000:01:00.0: rejecting DMA map of vmalloc memory
+WARNING: CPU: 1 PID: 279 at include/linux/dma-mapping.h:326 usb_ hcd_map_urb_for_dma+0x7d6/0x820
 
-This patch fixes the issue by doing the platform device creation inside
-of machine_subsys_initcall.
+...
 
-Fixes: f3eac426657d ("powerpc/powernv: wire up rng during setup_arch")
-Cc: stable@vger.kernel.org
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-[mpe: Change "of node" to "platform device" in change log]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220630121654.1939181-1-Jason@zx2c4.com
+xhci_map_urb_for_dma+0x291/0x4e0
+usb_hcd_submit_urb+0x199/0x12b0
+...
+usb_submit_urb+0x3b8/0x9e0
+usb_start_wait_urb+0xe3/0x2d0
+usb_bulk_msg+0x115/0x240
+rtsx_usb_transfer_data+0x185/0x1a8 [rtsx_usb]
+rtsx_usb_send_cmd+0xbb/0x123 [rtsx_usb]
+rtsx_usb_write_register+0x12c/0x143 [rtsx_usb]
+rtsx_usb_probe+0x226/0x4b2 [rtsx_usb]
+
+Fix it to use kmalloc() to get DMA-able memory region instead.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/667d627d502e1ba9ff4f9b94966df3299d2d3c0d.1656642167.git.skhan@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/powernv/rng.c |   16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/misc/cardreader/rtsx_usb.c |   13 +++++++------
+ include/linux/rtsx_usb.h           |    1 -
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/arch/powerpc/platforms/powernv/rng.c
-+++ b/arch/powerpc/platforms/powernv/rng.c
-@@ -176,12 +176,8 @@ static int __init pnv_get_random_long_ea
- 		    NULL) != pnv_get_random_long_early)
- 		return 0;
+--- a/drivers/misc/cardreader/rtsx_usb.c
++++ b/drivers/misc/cardreader/rtsx_usb.c
+@@ -642,8 +642,7 @@ static int rtsx_usb_probe(struct usb_int
  
--	for_each_compatible_node(dn, NULL, "ibm,power-rng") {
--		if (rng_create(dn))
--			continue;
--		/* Create devices for hwrng driver */
--		of_platform_device_create(dn, NULL, NULL);
--	}
-+	for_each_compatible_node(dn, NULL, "ibm,power-rng")
-+		rng_create(dn);
+ 	ucr->pusb_dev = usb_dev;
  
- 	if (!ppc_md.get_random_seed)
- 		return 0;
-@@ -205,10 +201,18 @@ void __init pnv_rng_init(void)
+-	ucr->iobuf = usb_alloc_coherent(ucr->pusb_dev, IOBUF_SIZE,
+-			GFP_KERNEL, &ucr->iobuf_dma);
++	ucr->iobuf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
+ 	if (!ucr->iobuf)
+ 		return -ENOMEM;
  
- static int __init pnv_rng_late_init(void)
- {
-+	struct device_node *dn;
- 	unsigned long v;
-+
- 	/* In case it wasn't called during init for some other reason. */
- 	if (ppc_md.get_random_seed == pnv_get_random_long_early)
- 		pnv_get_random_long_early(&v);
-+
-+	if (ppc_md.get_random_seed == powernv_get_random_long) {
-+		for_each_compatible_node(dn, NULL, "ibm,power-rng")
-+			of_platform_device_create(dn, NULL, NULL);
-+	}
-+
- 	return 0;
+@@ -679,8 +678,9 @@ static int rtsx_usb_probe(struct usb_int
+ 
+ out_init_fail:
+ 	usb_set_intfdata(ucr->pusb_intf, NULL);
+-	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
+-			ucr->iobuf_dma);
++	kfree(ucr->iobuf);
++	ucr->iobuf = NULL;
++	ucr->cmd_buf = ucr->rsp_buf = NULL;
+ 	return ret;
  }
- machine_subsys_initcall(powernv, pnv_rng_late_init);
+ 
+@@ -693,8 +693,9 @@ static void rtsx_usb_disconnect(struct u
+ 	mfd_remove_devices(&intf->dev);
+ 
+ 	usb_set_intfdata(ucr->pusb_intf, NULL);
+-	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
+-			ucr->iobuf_dma);
++	kfree(ucr->iobuf);
++	ucr->iobuf = NULL;
++	ucr->cmd_buf = ucr->rsp_buf = NULL;
+ }
+ 
+ #ifdef CONFIG_PM
+--- a/include/linux/rtsx_usb.h
++++ b/include/linux/rtsx_usb.h
+@@ -66,7 +66,6 @@ struct rtsx_ucr {
+ 	struct usb_interface	*pusb_intf;
+ 	struct usb_sg_request	current_sg;
+ 	unsigned char		*iobuf;
+-	dma_addr_t		iobuf_dma;
+ 
+ 	struct timer_list	sg_timer;
+ 	struct mutex		dev_mutex;
 
 

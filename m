@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57255570690
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3C5570697
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiGKPF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S232040AbiGKPHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGKPFZ (ORCPT
+        with ESMTP id S229670AbiGKPHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:05:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A5F57264
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:05:23 -0700 (PDT)
+        Mon, 11 Jul 2022 11:07:12 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186D059269;
+        Mon, 11 Jul 2022 08:07:10 -0700 (PDT)
 Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNtGq-1nvYug0Do8-00OCKL for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022
- 17:05:22 +0200
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31d7db3e6e5so21394087b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:05:21 -0700 (PDT)
-X-Gm-Message-State: AJIora/bupNDVOcYUW3XvHZ/nNzjLo71B+a0GbVamxMo4PLAU3l+kVAX
-        N6W+UJyXViK2IK8xT16hUD32NsE+kRhtujIDGLU=
-X-Google-Smtp-Source: AGRyM1uuR/3jowLZkJ4wNlbdpbRAfi5CN2W88/co9aQy/bRsGm6Pe6SDOiUAMoudRqc3oLXRF/2zn2EYg7LCb5Ma+f4=
-X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
- i15-20020a0ddf0f000000b0031be0007942mr19298786ywe.320.1657551920821; Mon, 11
- Jul 2022 08:05:20 -0700 (PDT)
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MkYHO-1nhrW717Ak-00m1Cw; Mon, 11 Jul 2022 17:07:09 +0200
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c8bb90d09so51972277b3.8;
+        Mon, 11 Jul 2022 08:07:08 -0700 (PDT)
+X-Gm-Message-State: AJIora9eToO4KDIPYYTbpilbP7rgm/wNbT8EvFVhUlH5oRfDAhw7LlwX
+        SIZDOZblIGawLjfp8Ug9ydbF5x8y9SlheY98FP0=
+X-Google-Smtp-Source: AGRyM1vaXhfOl3QItNRfQ000H5cqHKSlSfBsuKTqQoYqjnPl3VeC8AEpjwD+LvECxEubJyHF3u5xH42jRbNIDk4Ku7Y=
+X-Received: by 2002:a81:f82:0:b0:31c:f1ae:1ed6 with SMTP id
+ 124-20020a810f82000000b0031cf1ae1ed6mr19994128ywp.249.1657552027874; Mon, 11
+ Jul 2022 08:07:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu>
- <b0d982e223314ed82ab959f5d4ad2c4c00bedb99.1657549153.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <b0d982e223314ed82ab959f5d4ad2c4c00bedb99.1657549153.git.christophe.leroy@csgroup.eu>
+References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-2-me@linux.beauty>
+ <CAK8P3a1WbJSWHsfegTtLhzSRwAoN8WfdezTTedRk9-FCiM8+GA@mail.gmail.com> <181edbe0f3d.e1336ef3387914.4730240512950880256@linux.beauty>
+In-Reply-To: <181edbe0f3d.e1336ef3387914.4730240512950880256@linux.beauty>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Jul 2022 17:05:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-Message-ID: <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] powerpc/44x: Fix build failure with GCC 12
- (unrecognized opcode: `wrteei')
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 11 Jul 2022 17:06:50 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Qo=xexUDs=XA2gRe4p-FPoXUpuxWrnqWrr43FTViA3w@mail.gmail.com>
+Message-ID: <CAK8P3a0Qo=xexUDs=XA2gRe4p-FPoXUpuxWrnqWrr43FTViA3w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] of: add struct page support to rmem
+To:     Li Chen <me@linux.beauty>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Li Chen <lchen@ambarella.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9pyF81zv4Lav/kgvY4gFtT9dHnr9vn1MUdQ/5bDFFAV2Vev7bMX
- akMTWkrMLiRBOnH7qJ8eOzru/IFUFflT9woT3XcDwM8RfLpkA/gFDfiFPyYVtEvIwGdOwen
- QoXbyoA3Ql2Soi8bq7K1JvyikolsDYfCgUt8mtIufZpt2zvxtRG14vec86GEl6hKuW3lRYp
- 7obloZ+3cH+AenpCcE40g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:obUCBNVaeZQ=:TNJaDxiZTUqYH3eL4bM9Qq
- iHHThrxjU2Jv8uBEHDO7DPj/ot1yxztphcWATF/0spYTNCcEfW+OWfYC0zf+clbRcecC06fkA
- dCBpBwQvwtkFjbMFHpwnqNX2zrFBkFsUMdEfoWauJLHM3OwzF33xfNrp3zQegD3KaHZutDW8f
- +lziqZgeH+ekS9HMVqD0ShoucHmN3+Jn7sktKr+pPgD1KjuChDcJDpC1JxE53QPn6HNYBfBYH
- sGIomlUx5Uy4C4gWlJVCzKMopHSn8xhpXEr9qX6n2IUdkrduiiLFKmnNXLKfL3AtcwroduOEH
- C63nTruWT2faR1GVaY90hmeE709q9nBdQrhHza/pbdZmT0moymxxy4VOxgiTQovdS9JnZqHBj
- lGcV6n3u7q+YfykuWDO1olwIw14/ysdmKGrqgPVhMBN1zwkKeJkq2bJDz0U6fzCRQeeEp5dmG
- ZnCrlWVXytblq3bZM4lSIa8CM1tPVI4yffO1Z6fCDAbPI6OVVKysKPnmh4VwWfnD8ZuOJ7oIl
- 0+Vt39atPN6ll1blObHTygi/e+UfaDYrAioWhM8p9huNOJFs2ycD1wMMN8JmH0qt0ocgJJh9C
- 5muXBZq8c4tiAhigblY8b+jzF7483JWaOeWThTosGnY92/khLPZ9Y39MWvs4+zHcTTGo1SeY7
- ju26XNVy+KdInoyWdSTX6CzPmPSuok+KTwyhnFn01wZD9bxJGa6+9FkumrRzIiOVZ0NabWQrs
- UVFsSfbNKzrJI1aN+t3XKnb7EQpY2+dcfYAc3nw1XK9NZ9VLGzyz1zL6WPYKM97lzk2UlfODx
- AH6oL3R8fXu66jKaBnQ8wDZoSKGii9IzC9qN3tF3K7HkkYn8x9YyoIkWl6rcD50wHV3WsLU7e
- R3Qlq4ttj5ShCOKUIqCQ==
+X-Provags-ID: V03:K1:soLT3rJcjNSjCdFsvjKYBqi9Zwd2f8kyPgdtb4mJkM3zwMPQ8VG
+ j3DVwbHaQn/YZwSQ0gfQimssLV94zL56FOwVOtGCtxpSem5l57Ut08XbboHXSBbySOb6rDd
+ UL4Mz+kshMFzpxl/22XvZ6OypVlZ70ckXeQ8XeDRdq0bYvGfeDgT0oM/pDR52niGVFiCHkm
+ U7ja9KvAs8OIiKtOUyvyw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IKaYoq9n/Ec=:IbWAFkbCNbVkEijXVqShvj
+ ffHJsxNQrvMxUCHq0n0NwAwDzqdxtHz1Qwp1jF+eUX4zqiM9gqPsekuZcqjJYxs6Ch/iBm43t
+ M8MOyFCHBWAnYWhulo+cvhIfZlpfC4Nhu607TUDRPt2Gzed5lkJmFMQzXW3aZe7UbImKRGd+Q
+ oBL+hR8czYyDlPddcfvNs8/4NlB0TIXGkvLhw+VrK+vigbd06ssuMrFrlA28u0kra5ZyjJHO0
+ cyDs2Z0srGNS4EfSwTQojGqj9fBXpWzf81pJwKfwOp5jAT2mrEX7JvaHws0LnGPTMcgUIjvN0
+ OCZZPRDjLMh0ewRz4Z2GrmvZSdX30n2sQJt5jzfEiaWifmJzvmx1J6BwNgSwZmd02mdDYWOZE
+ TiBDFjJfXqVZFAyV65PhJdTWtwfSUJAK/2TDKe8bw2ilpqQdauxI+VFzl5Ccopu3CNnkLX+ty
+ POzWtP50M364CQBj+adwup8kKPkcOAp2WlpPsEtT81jWPA3Xh201mWqQsXpYHVfskmmlj6U9c
+ 1p3KDTSbM27LMIQWeMrJHApcQMzFlB58gh3jp10eTsnLzhCFCukqPTLFCWUd9hE5PZD7TKsCN
+ 85ZiNqubavwbKrHIKqGb1DmIqdUdBZlLeMQ297mwriHCiyjYak6l1ARq8QCoUGxDzXazU+AZG
+ Yb4yFk/0UXYKpWdRv44Rnw1qW7Zy80xT83iixFBF4eXo4Y5GEfqzWSP+qHUJW+ldVLKWkHowM
+ XfWqjNbg38QKCsvvOCnlrXiCiJGgGjVPEBxnxjv9WM5VaYzLkScC/R14Y8GsrZHOFufoghNL7
+ uN9BEefdcIxF5oPAdCsOLVC1ZjgIvvCAYGml2bwhJyO/BBntLLXNhKKz0CPcTBCd6QemmSqS1
+ 7SWE1rsdagnQpMIsEk7Y2nuCZo4o1zIrMplFMWd40=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -70,31 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 4:19 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> @@ -183,6 +183,18 @@ config 405_CPU
->         bool "40x family"
->         depends on 40x
+On Mon, Jul 11, 2022 at 4:51 PM Li Chen <me@linux.beauty> wrote:
+>  ---- On Mon, 11 Jul 2022 21:36:12 +0800  Arnd Bergmann <arnd@arndb.de> wrote ---
+>  > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
+>  >
+>  > > +config OF_RESERVED_MEM_DIO_SUPPORT
+>  > > +       bool "add Direct I/O support to reserved_mem"
+>  > > +       depends on ZONE_DEVICE && ARCH_KEEP_MEMBLOCK
+>  > > +       help
+>  > > +          By default, reserved memory don't get struct page support, which
+>  > > +                means you cannot do Direct I/O from this region. This config takes
+>  > > +                uses of ZONE_DEVICE and treats rmem as hotplug mem to get struct
+>  > > +                page and DIO support.
+>  >
+>  > This probably does not need to be user visible, it's enough to select it from
+>  > the drivers that need it.
 >
-> +config 440_CPU
-> +       bool "440 (44x family)"
-> +       depends on 44x
-> +
-> +config 464_CPU
-> +       bool "464 (44x family)"
-> +       depends on 44x
-> +
-> +config 476_CPU
-> +       bool "476 (47x family)"
-> +       depends on PPC_47x
+> When you say "user visible", do you mean the config can be dropped or something else like Kconfig type other than bool?
 
-Is there any value in building for -mcpu=440 or -mcpu=464 when targeting a 476?
-Maybe add another !PPC_47x dependency for the first two. Ideally we would also
-enforce that 440/464 based boards cannot be selected together with 476, though
-I guess that is a separate issue.
+I mean this can be a hidden option, which you can do by leaving out the
+one-line description after the 'bool' keyword. The option will still
+be selectable
+in Kconfig files from other options, but not shown in 'make menuconfig'.
 
-Is there a practical difference between 440 and 464 when building kernels?
-gcc seems to treat them the same way, so maybe one option for both is enough
-here.
-
-     Arnd
+        Arnd

@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7CE5700A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542CC5700AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiGKL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S231470AbiGKL3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiGKL3L (ORCPT
+        with ESMTP id S231549AbiGKL3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:29:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAE025F6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:11:12 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y8so5794537eda.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D5nVikuoA6wfNZyYZEzQvKz72M0/Hoh1lF2/51VFzaU=;
-        b=PFmjS82N1zfBDFvFZoBsJI+jFwyxeYBX5qh9A7cpI5hKkKjCY1Gx5O5Yl97JlpktZ6
-         wBJvkLJwAxx3ts1Id/RA13sqev1y7yO8i+AvP4P3SafTI2D+vencAZDY7eJd10xTqbZ+
-         m8zAQaadWg7AsqbYWqP0IcncCwdDfgxVJP1Zk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D5nVikuoA6wfNZyYZEzQvKz72M0/Hoh1lF2/51VFzaU=;
-        b=DTxlYwajYawPuP3Ddlw5Bql5232yEo1fOAwbEwmi7XiFD8cOIcyVOdb2hYP5ISelqu
-         hOJ9ZOw2mITIIR7Se6mLBqMEDzZ3xid39KPKgHPfDUrVPnyPH41+tsF7+mrSIsrnmGRx
-         dAzWNUdC1Z6wm0LDraHjMm2EQVo6bGd7DorJ+OAZ6LuxJlg2mx5gs58NMFvskxIIoj7o
-         ITKZg6O8uc6EdSmDhrqn8aLipimmv9IcBvDNB18Delv5QbCUM6l76HJ56UhqnpAP7oUO
-         5FFLbeFiLAwZ6E/4BFR0tUopB+FQ3KxrmxWjSonMIJPdzYMh8Hjgk0mej23nvq6s1woj
-         Uang==
-X-Gm-Message-State: AJIora9Fk4cqSeA3uQBAmyRJsx9TLLaBumxyDBItRm+b00IXJwXyi7B1
-        IGatE/GpzoJszibpg338YCY5Ng==
-X-Google-Smtp-Source: AGRyM1vOpri2JWJlhoTxQIZUiDN+X2lDVKiMEo7HvoZbkDdspCf79QwoJomwds9oGsdoOeNFlfaybQ==
-X-Received: by 2002:a05:6402:cba:b0:43a:6b17:f6b5 with SMTP id cn26-20020a0564020cba00b0043a6b17f6b5mr24260662edb.330.1657537871095;
-        Mon, 11 Jul 2022 04:11:11 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-59-144.cust.vodafonedsl.it. [188.217.59.144])
-        by smtp.gmail.com with ESMTPSA id ku24-20020a170907789800b0072af102e65csm2571629ejc.152.2022.07.11.04.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 04:11:10 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 13:11:08 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <20220711111108.GA66765@tom-ThinkPad-T14s-Gen-2i>
-References: <20220630134835.592521-1-tommaso.merciai@amarulasolutions.com>
- <20220630134835.592521-6-tommaso.merciai@amarulasolutions.com>
- <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
+        Mon, 11 Jul 2022 07:29:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F94831931;
+        Mon, 11 Jul 2022 04:11:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E6B9D22100;
+        Mon, 11 Jul 2022 11:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657537874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Eg9VvSyO87wZPs1qkZ8b/C0Ac9yQ3/4PAshHpiUcDA=;
+        b=lVJB6KWFAAHNodIxGAw1AeZ/+BEhUPjnjCBTz6Lgpasfu+ZRfzeph8AuuVMEUtmmpOOnGa
+        vzzEaDLw/QOsPO/6BAA6S62FVfHi1OEIkiZXOqD/SXByy9HOUbb5WXX0aFOPoXXkLWaqQI
+        bBeiuC5Z9+i6K+snZRT19EZDSclrk5c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657537874;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Eg9VvSyO87wZPs1qkZ8b/C0Ac9yQ3/4PAshHpiUcDA=;
+        b=fBRkxFTpHXdJWHBMzkRC9GhGsjozzJpFzvkqoeuaHX7J2GXB7FUr8D3GxtnjPTGWd4una+
+        Rs6ZFacKUuLhCsCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A72F713322;
+        Mon, 11 Jul 2022 11:11:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KQfIJ1IFzGIdbAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 11 Jul 2022 11:11:14 +0000
+Message-ID: <43d75dce-988a-0a95-cb0a-0d0a7c81ca63@suse.de>
+Date:   Mon, 11 Jul 2022 13:11:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <20220711093513.wilv6e6aqcuyg52w@houat>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220711093513.wilv6e6aqcuyg52w@houat>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fZLfiuohfoRNFbm4jbfVP1DO"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,210 +82,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
-Thanks for your review.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fZLfiuohfoRNFbm4jbfVP1DO
+Content-Type: multipart/mixed; boundary="------------z0gLTlSOVm5fZzU01TQrIgZw";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Maxime Ripard <maxime@cerno.tech>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Hans de Goede <hdegoede@redhat.com>, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <43d75dce-988a-0a95-cb0a-0d0a7c81ca63@suse.de>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <20220711093513.wilv6e6aqcuyg52w@houat>
+In-Reply-To: <20220711093513.wilv6e6aqcuyg52w@houat>
 
-On Mon, Jul 11, 2022 at 11:36:59AM +0200, Jacopo Mondi wrote:
-> Hi Tommaso, Krzysztof,
-> 
->    This has been reviewed by Krzysztof already, so I guess it's fine,
-> but let me ask anyway
-> 
-> On Thu, Jun 30, 2022 at 03:48:34PM +0200, Tommaso Merciai wrote:
-> > Add documentation of device tree in YAML schema for the OV5693
-> > CMOS image sensor from Omnivision
-> >
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> > Changes since v1:
-> >  - Fix allOf position as suggested by Krzysztof
-> >  - Remove port description as suggested by Krzysztof
-> >  - Fix EOF as suggested by Krzysztof
-> >
-> > Changes since v2:
-> >  - Fix commit body as suggested by Krzysztof
-> >
-> > Changes since v3:
-> >  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
-> >
-> > Changes since v4:
-> >  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
-> >
-> >  .../bindings/media/i2c/ovti,ov5693.yaml       | 106 ++++++++++++++++++
-> >  MAINTAINERS                                   |   1 +
-> >  2 files changed, 107 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > new file mode 100644
-> > index 000000000000..b83c9fc04023
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > @@ -0,0 +1,106 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (c) 2022 Amarulasolutions
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Omnivision OV5693 CMOS Sensor
-> > +
-> > +maintainers:
-> > +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > +
-> > +description: |
-> > +  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
-> > +  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
-> > +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-> > +  Serial Camera Control Bus (SCCB) interface.
-> > +
-> > +  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (SCCB).
-> > +  The sensor output is available via CSI-2 serial data output (up to 2-lane).
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ovti,ov5693
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      System input clock (aka XVCLK). From 6 to 27 MHz.
-> > +    maxItems: 1
-> > +
-> > +  dovdd-supply:
-> > +    description:
-> > +      Digital I/O voltage supply, 1.8V.
-> > +
-> > +  avdd-supply:
-> > +    description:
-> > +      Analog voltage supply, 2.8V.
-> > +
-> > +  dvdd-supply:
-> > +    description:
-> > +      Digital core voltage supply, 1.2V.
-> > +
-> > +  reset-gpios:
-> > +    description:
-> > +      The phandle and specifier for the GPIO that controls sensor reset.
-> > +      This corresponds to the hardware pin XSHUTDN which is physically
-> > +      active low.
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - dovdd-supply
-> > +  - avdd-supply
-> > +  - dvdd-supply
-> 
-> Should supplies be made mandatory ? Sensors are often powered by fixed
-> rails. Do we want DTS writers to create "fixed-regulators" for all of
-> them ? The fact the regulator framework creates dummies if there's no
-> entry in .dts for a regulator makes me think it's fine to have them
-> optional, but I understand how Linux works should not be an indication
-> of how a bindings should look like.
+--------------z0gLTlSOVm5fZzU01TQrIgZw
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-You are right, this depends on hw design and yes in many cases sensors are
-powered by fixed rails.
-But let me say, I see some design in wich I have to handle these signals and
-in fact are mandatory.
+SGkgTWF4aW1lDQoNCkFtIDExLjA3LjIyIHVtIDExOjM1IHNjaHJpZWIgTWF4aW1lIFJpcGFy
+ZDoNCj4gSGkgVGhvbWFzLA0KPiANCj4gT24gTW9uLCBKdWwgMTEsIDIwMjIgYXQgMTE6MDM6
+MzhBTSArMDIwMCwgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+PiBBbSAwOC4wNy4yMiB1
+bSAyMDoyMSBzY2hyaWViIEdlZXJ0IFV5dHRlcmhvZXZlbjoNCj4+PiBUaGUgbW9kZSBwYXJz
+aW5nIGNvZGUgcmVjb2duaXplcyBuYW1lZCBtb2RlcyBvbmx5IGlmIHRoZXkgYXJlIGV4cGxp
+Y2l0bHkNCj4+PiBsaXN0ZWQgaW4gdGhlIGludGVybmFsIHdoaXRlbGlzdCwgd2hpY2ggaXMg
+Y3VycmVudGx5IGxpbWl0ZWQgdG8gIk5UU0MiDQo+Pj4gYW5kICJQQUwiLg0KPj4+DQo+Pj4g
+UHJvdmlkZSBhIG1lY2hhbmlzbSBmb3IgZHJpdmVycyB0byBvdmVycmlkZSB0aGlzIGxpc3Qg
+dG8gc3VwcG9ydCBjdXN0b20NCj4+PiBtb2RlIG5hbWVzLg0KPj4+DQo+Pj4gSWRlYWxseSwg
+dGhpcyBsaXN0IHNob3VsZCBqdXN0IGNvbWUgZnJvbSB0aGUgZHJpdmVyJ3MgYWN0dWFsIGxp
+c3Qgb2YNCj4+PiBtb2RlcywgYnV0IGNvbm5lY3Rvci0+cHJvYmVkX21vZGVzIGlzIG5vdCB5
+ZXQgcG9wdWxhdGVkIGF0IHRoZSB0aW1lIG9mDQo+Pj4gcGFyc2luZy4NCj4+DQo+PiBJJ3Zl
+IGxvb2tlZCBmb3IgY29kZSB0aGF0IHVzZXMgdGhlc2UgbmFtZXMsIGNvdWxkbid0IGZpbmQg
+YW55LiBIb3cgaXMgdGhpcw0KPj4gYmVpbmcgdXNlZCBpbiBwcmFjdGljZT8gRm9yIGV4YW1w
+bGUsIGlmIEkgc2F5ICJQQUwiIG9uIHRoZSBjb21tYW5kIGxpbmUsIGlzDQo+PiB0aGVyZSBE
+Uk0gY29kZSB0aGF0IGZpbGxzIGluIHRoZSBQQUwgbW9kZSBwYXJhbWV0ZXJzPw0KPiANCj4g
+V2UgaGF2ZSBzb21lIGNvZGUgdG8gZGVhbCB3aXRoIHRoaXMgaW4gc3VuNGk6DQo+IGh0dHBz
+Oi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvZHJpdmVycy9ncHUv
+ZHJtL3N1bjRpL3N1bjRpX3R2LmMjTDI5Mg0KPiANCj4gSXQncyBhIGJpdCBvZmYgdG9waWMs
+IGJ1dCBmb3IgVFYgc3RhbmRhcmRzLCBJJ20gc3RpbGwgbm90IHN1cmUgd2hhdCB0aGUNCj4g
+YmVzdCBjb3Vyc2Ugb2YgYWN0aW9uIGlzLiBUaGVyZSdzIHNldmVyYWwgaW50ZXJhY3Rpb25z
+IHRoYXQgbWFrZSB0aGlzIGENCj4gYml0IHRyb3VibGVzb21lOg0KPiANCj4gICAgKiBTb21l
+IFRWIHN0YW5kYXJkcyBkaWZmZXIgYnkgdGhlaXIgbW9kZSAoaWUsIFBBTCB2cyBOU1RDKSwg
+YnV0IHNvbWUNCj4gICAgICBvdGhlciBkaWZmZXIgYnkgcGFyYW1ldGVycyB0aGF0IGFyZSBu
+b3QgcGFydCBvZiBkcm1fZGlzcGxheV9tb2RlDQo+ICAgICAgKE5UU0MgdnMgTlNUQy1KIHdo
+ZXJlIHRoZSBvbmx5IGRpZmZlcmVuY2UgaXMgdGhlIGJsYWNrIGFuZCBibGFua2luZw0KPiAg
+ICAgIHNpZ25hbCBsZXZlbHMgZm9yIGV4YW1wbGUpLg0KPiANCj4gICAgKiBUaGUgbW9kZSBu
+YW1lcyBhbGxvdyB0byBwcm92aWRlIGEgZmFpcmx5IGNvbnZlbmllbnQgd2F5IHRvIGFkZCB0
+aGF0DQo+ICAgICAgZXh0cmEgaW5mb3JtYXRpb24sIGJ1dCB0aGUgdXNlcnNwYWNlIGlzIGZy
+ZWUgdG8gY3JlYXRlIGl0cyBvd24gbW9kZQ0KPiAgICAgIGFuZCBtaWdodCBvbWl0IHRoZSBt
+b2RlIG5hbWUgZW50aXJlbHkuDQo+IA0KPiBTbyBpbiB0aGUgY29kZSBhYm92ZSwgaWYgdGhl
+IG5hbWUgaGFzIGJlZW4gcHJlc2VydmVkIHdlIG1hdGNoIGJ5IG5hbWUsDQo+IGJ1dCB3ZSBm
+YWxsIGJhY2sgdG8gbWF0Y2hpbmcgYnkgbW9kZSBpZiBpdCBoYXNuJ3QgYmVlbiwgd2hpY2gg
+aW4gdGhpcw0KPiBjYXNlIG1lYW5zIHRoYXQgd2UgaGF2ZSBubyB3YXkgdG8gZGlmZmVyZW50
+aWF0ZSBiZXR3ZWVuIE5UU0MsIE5UU0MtSiwNCj4gUEFMLU0gaW4gdGhpcyBjYXNlLg0KPiAN
+Cj4gV2UgaGF2ZSBzb21lIHBhdGNoZXMgZG93bnN0cmVhbSBmb3IgdGhlIFJhc3BiZXJyeVBp
+IHRoYXQgaGFzIHRoZSBUVg0KPiBzdGFuZGFyZCBhcyBhIHByb3BlcnR5LiBUaGVyZSdzIGEg
+ZmV3IGV4dHJhIGxvZ2ljIHJlcXVpcmVkIGZvciB0aGUNCj4gdXNlcnNwYWNlIChsaWtlIHNl
+dHRpbmcgdGhlIFBBTCBwcm9wZXJ0eSwgd2l0aCB0aGUgTlRTQyBtb2RlKSBzbyBJJ20gbm90
+DQo+IHN1cmUgaXQncyBwcmVmZXJhYmxlLg0KPiANCj4gT3Igd2UgY291bGQgZG8gc29tZXRo
+aW5nIGxpa2UgYSBwcm9wZXJ0eSB0byB0cnkgdGhhdCBzdGFuZGFyZCwgYW5kDQo+IGFub3Ro
+ZXIgdGhhdCByZXBvcnRzIHRoZSBvbmUgd2UgYWN0dWFsbHkgY2hvc2UuDQo+IA0KPj4gQW5k
+IGFub3RoZXIgcXVlc3Rpb24gSSBoYXZlIGlzIHdoZXRoZXIgdGhpcyB3aGl0ZWxpc3QgYmVs
+b25ncyBpbnRvIHRoZQ0KPj4gZHJpdmVyIGF0IGFsbC4gU3RhbmRhcmQgbW9kZXMgZXhpc3Qg
+aW5kZXBlbmRlbnQgZnJvbSBkcml2ZXJzIG9yIGhhcmR3YXJlLg0KPj4gU2hvdWxkbid0IHRo
+ZXJlIHNpbXBseSBiZSBhIGdsb2JhbCBsaXN0IG9mIGFsbCBwb3NzaWJsZSBtb2RlIG5hbWVz
+PyBEcml2ZXJzDQo+PiB3b3VsZCBmaWx0ZXIgb3V0IHRoZSB1bnN1cHBvcnRlZCBtb2RlcyBh
+bnl3YXkuDQo+IA0KPiBXZSBzaG91bGQgdG90YWxseSBkbyBzb21ldGhpbmcgbGlrZSB0aGF0
+LCB5ZWFoDQoNClRoYXQgc3VuIGNvZGUgYWxyZWFkeSBsb29rcyBsaWtlIHNvbWV0aWhuZyB0
+aGUgRFJNIGNvcmUvaGVscGVycyBzaG91bGQgDQpiZSBkb2luZy4gQW5kIGlmIHdlIHdhbnQg
+dG8gc3VwcG9ydCBuYW1lZCBtb2RlcyB3ZWxsLCB0aGVyZSdzIGEgbG9uZyANCmxpc3Qgb2Yg
+bW9kZXMgaW4gV2lraXBlZGlhLg0KDQogDQpodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lr
+aS9WaWRlb19HcmFwaGljc19BcnJheSMvbWVkaWEvRmlsZTpWZWN0b3JfVmlkZW9fU3RhbmRh
+cmRzMi5zdmcNCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gTWF4aW1lDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-I check also in others binding's doc like:
+--------------z0gLTlSOVm5fZzU01TQrIgZw--
 
- - Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
- - Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
- - Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml
- ...
+--------------fZLfiuohfoRNFbm4jbfVP1DO
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-These keep this information. 
+-----BEGIN PGP SIGNATURE-----
 
-Anyway, You suggest to drop off:
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLMBVIFAwAAAAAACgkQlh/E3EQov+Bq
+mBAAz1d3IjNc8P8JDQAgAZE+ZRfqW1vHZ8fjlrS0Qbgw//N14aTNAIIn/5vCFcSKLxyfZwJDkFft
+WjH6nsqwTr5wx04At3JVALuhgpl0VnKSYUnQDQMsjV4MXb8pB8jK/B/rJt1YnpsreqmMdw7xNZlH
+RIRyShuQMwCUfTdoLVArNg95Kg78aWbaOekpcS959EW0V6jL2cQr0bH4Zoik57Coptt004IxF0Vo
+0OPHjf/If1fTHMnY+Ex735QILJEPw+Ns2EdMINSFJZFIMJAoAnqZxqMrjypR8jPusvvifDS9E++D
+Jtkdgl3UPivH9R1WFQhSzCf/nkrReAUrVuJDTqiz5wWc+g+gIJi12LNR8EeiQ2lQG/zamKDc4Nug
+jJRkVpxKC0v9F78rNQv8BugU3sbMiE3jKOIbIVt38r9S9IFOUwHiVDA3Ii5yVp38l7p5oZ/NmodW
+k6u02K9LktxqI3WkRgO70JaQNtVJt0ArhPFBEuoolU+s7do37YcBu1jk1MUmC/9FWcQ1b8zXaIYS
+LKY8K5vYpRGO4zgAA83efTnAnFt6cEwCQXEBf6yE7TQTJzHVf0Ojx2iaTCvFHAUTQb5bpr2R3W3c
+WKLWGuGI0AjDNT2Nm5r1zLiFz6F/yKpJXd2QWVWpaz64LaWnlLlmSXDxlxZFNeUcbIk04ShfmCkn
+48c=
+=jIZf
+-----END PGP SIGNATURE-----
 
- - dovdd-supply
- - avdd-supply
- - dvdd-supply
-
-From required properties, right?
-
-Tommmaso
-
-> 
-> > +  - port
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/px30-cru.h>
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/pinctrl/rockchip.h>
-> > +
-> > +    i2c {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        ov5693: camera@36 {
-> > +            compatible = "ovti,ov5693";
-> > +            reg = <0x36>;
-> > +
-> > +            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-> > +            pinctrl-names = "default";
-> > +            pinctrl-0 = <&cif_clkout_m0>;
-> > +
-> > +            clocks = <&cru SCLK_CIF_OUT>;
-> > +            assigned-clocks = <&cru SCLK_CIF_OUT>;
-> > +            assigned-clock-rates = <19200000>;
-> > +
-> > +            avdd-supply = <&vcc_1v8>;
-> > +            dvdd-supply = <&vcc_1v2>;
-> > +            dovdd-supply = <&vcc_2v8>;
-> > +
-> > +            rotation = <90>;
-> > +            orientation = <0>;
-> > +
-> > +            port {
-> > +                ucam_out: endpoint {
-> > +                    remote-endpoint = <&mipi_in_ucam>;
-> > +                    data-lanes = <1 2>;
-> > +                    link-frequencies = /bits/ 64 <450000000>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +...
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 1fc9ead83d2a..844307cb20c4 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -14719,6 +14719,7 @@ M:	Daniel Scally <djrscally@gmail.com>
-> >  L:	linux-media@vger.kernel.org
-> >  S:	Maintained
-> >  T:	git git://linuxtv.org/media_tree.git
-> > +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> >  F:	drivers/media/i2c/ov5693.c
-> >
-> >  OMNIVISION OV5695 SENSOR DRIVER
-> > --
-> > 2.25.1
-> >
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+--------------fZLfiuohfoRNFbm4jbfVP1DO--

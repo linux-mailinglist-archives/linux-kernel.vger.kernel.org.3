@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAF856D36A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 05:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688CA56D36E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 05:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiGKDjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 23:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S229607AbiGKDkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 23:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiGKDi5 (ORCPT
+        with ESMTP id S229463AbiGKDk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 23:38:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00431055F;
-        Sun, 10 Jul 2022 20:38:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh8kP0vzLz4xbn;
-        Mon, 11 Jul 2022 13:38:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657510734;
-        bh=Z3BrvvwqC1jnPWAkXXv/cP0tDkLg/U7euC2/t+CJSPo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GMZlwQv1U1xOiIfUZ82FEZiUaHtbDk3qA3YWUY89Rf9km0/mTfpPIHZbQwVHqw6lk
-         S3WwXU1uIq3jDVLLorgZmL+3ythZ2uaTEHQyidw06S4zSKE+OfnSYA6ALPwZllC6vX
-         P6moF67TFpJtspOmnS/KqsThkuC7fIMxLdh6l7M8K5TNBfAV9FivmSOOF3L7aoSc0W
-         03WYTzecmTzyTJUSJDs0LTrnViRSFhk7Gfwxuv5Axcdmy5AtKaJuhFFvjYKxMqTLQi
-         ENn1GhfDbgDVl/XBj7+5WLRPUx4MoiEQw92fPm5h/WLJ9Xr+REIqt2tS5vgiupoHA/
-         OQDRrRdv81dpg==
-Date:   Mon, 11 Jul 2022 13:38:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <20220711133851.0ad00263@canb.auug.org.au>
+        Sun, 10 Jul 2022 23:40:29 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34B12631
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 20:40:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VIuPjwN_1657510822;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VIuPjwN_1657510822)
+          by smtp.aliyun-inc.com;
+          Mon, 11 Jul 2022 11:40:24 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] regulator: max597x: Remove unused including <linux/version.h>
+Date:   Mon, 11 Jul 2022 11:40:11 +0800
+Message-Id: <20220711034011.46096-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eIJOVq/9U8I65WnT5aGlrMP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/eIJOVq/9U8I65WnT5aGlrMP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The patch makes sense but these are not compile warnings.
+They come from scripts/checkversion.pl, which can be called
+by 'make versioncheck', so I suppose that something in your
+build system is running 'make versioncheck'.
 
-Hi all,
+Eliminate the follow versioncheck warning:
 
-Today's linux-next merge of the block tree got a conflict in:
+./drivers/regulator/max597x-regulator.c: 21 linux/version.h not needed.
 
-  drivers/block/mtip32xx/mtip32xx.c
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/regulator/max597x-regulator.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-between commit:
+diff --git a/drivers/regulator/max597x-regulator.c b/drivers/regulator/max597x-regulator.c
+index f95acd1c5e3a..5e09aa4213be 100644
+--- a/drivers/regulator/max597x-regulator.c
++++ b/drivers/regulator/max597x-regulator.c
+@@ -18,7 +18,6 @@
+ #include <linux/regulator/driver.h>
+ #include <linux/regulator/machine.h>
+ #include <linux/regulator/of_regulator.h>
+-#include <linux/version.h>
+ #include <linux/platform_device.h>
+ 
+ #include <linux/mfd/max597x.h>
+-- 
+2.20.1.7.g153144c
 
-  c9d86760342f ("fs: do not set no_llseek in fops")
-
-from the vfs tree and commit:
-
-  ec5263f422a3 ("mtip32xx: remove the device_status debugfs file")
-
-from the block tree.
-
-I fixed it up (the former removed a line that was also removed by the
-latter) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/eIJOVq/9U8I65WnT5aGlrMP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLm0sACgkQAVBC80lX
-0GwCBAf/Y0302YBdLlx8HLZBOApztFXwTgQxamcqenYGTjrsXIHVGfgZQHwaqK2F
-QH0jf8Ez7F1gkve/y3titQo04D/Yug3uEPiEIGQ4HwoszGOdojA8yCaanrmmtBWG
-jRNzKr6AIQmoWwsfT2D1WnGr6jqi02JUf3YRdT7tfsn0UABvXUWEKK1foswyLmJx
-hf9WkkN/28e63nJK8QohfNd/TqTkxWYl3teG8+yVAMz6cqfa7DV1q4eAzmkWkLt9
-r7y2aZqzT7SbC/40Ii3BOZa0LO3838taXTCsyyIH7FSAR6TZkKw99jkP20yT/Xsa
-LZs00UXod9nVLhJF81+eDs/vzPlcyQ==
-=g58d
------END PGP SIGNATURE-----
-
---Sig_/eIJOVq/9U8I65WnT5aGlrMP--

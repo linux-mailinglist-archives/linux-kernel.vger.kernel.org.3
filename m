@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3C9570CEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311D0570CED
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiGKVlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S231310AbiGKVmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbiGKVlq (ORCPT
+        with ESMTP id S230503AbiGKVmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:41:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7067585D70
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:41:45 -0700 (PDT)
+        Mon, 11 Jul 2022 17:42:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4441A82476
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657575705; x=1689111705;
+  t=1657575764; x=1689111764;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cWX/ZUAISR+x5BqgIfmM1cUxMRrjQdq2KdLbWcjGPGA=;
-  b=juTP4TXS1JaM4/3pvDrMskBYAIXDFKO8HEwP7c+/UPMvGCX2cIOXhWyL
-   fbnwsX7nXdvL3jIXGWq6aVWSdI97pPsnYMfqxEK9tadKV8duFUuQtAFH+
-   46S+p5eEr9WuE6I26uUeCnkqEDYdtb4Kw/z3Ei0YFYVrD7fYGaTUvJLjm
-   9+jhEJULzz2WlcnBPLkY7kz8DFRSoCsyCudEKORjuXnhNv1bYOAZSX0TV
-   XMQ2IXADXHHivSPYX/t7j3ZiA4aAyBSiJQennYkEXUicWOdmNHal0Q4FS
-   xomsZLaDsROMga2HvIwIajvc5xvFBPVdFCxmctJ48qIm5QcD4KhAJs8He
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="310384956"
+  bh=iaO0MGwN2iH5KPNILjDnJ16mGNe5ztpOBLPSvB47zeg=;
+  b=gJM6H8ng71FIasxhsyfq55e/wzlXfPCDWI3DF1wpx/ysDzSzzI8ZPjfl
+   po2m+m1i5jHdngmjqKIPsLqN+V7ab5QiaEC0jE86sT4T8K0W8epFJ47BF
+   syrw+IYMQZoaNDPfJ75jKzZ34fhuQ3vvFg37UcpaaJLXs8FMOtu61X6+7
+   XUihbr3ohveX1NnzPa5r/IEyM33L0uRzf6R6Ng7xcm4bBA3TV9SFO5kcs
+   k2asyT0ofc0wphbOjxNe4V5JMgclUW81wUWXlztCLC6Ez5YFiNKweS0oX
+   DJhc53qyg80kzwpA8fsJg23g6qVOUaOxN7Ejd/omPHL7f/79b//TFjhwn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="285517899"
 X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="310384956"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 14:41:44 -0700
+   d="scan'208";a="285517899"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 14:42:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="545174753"
+   d="scan'208";a="627655042"
 Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 14:41:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 11 Jul 2022 14:42:42 -0700
 Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oB19x-0001FN-Ut;
-        Mon, 11 Jul 2022 21:41:41 +0000
-Date:   Tue, 12 Jul 2022 05:41:39 +0800
+        id 1oB1Av-0001FZ-WD;
+        Mon, 11 Jul 2022 21:42:41 +0000
+Date:   Tue, 12 Jul 2022 05:41:49 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tramp_29 25/32] kernel/bpf/trampoline.c:948:9:
- error: call to undeclared function 'ftrace_hash_alloc'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202207120555.rWXO6yao-lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tramp_29 25/32] kernel/bpf/trampoline.c:948:16:
+ error: implicit declaration of function 'ftrace_hash_alloc'
+Message-ID: <202207120532.8OjZqfrT-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,43 +64,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_29
 head:   ec522c20e55e48f561146afbb81513e20870ee12
 commit: f8f16c805972e534643c5a5d23709766f7af22e4 [25/32] bpf: Add support to attach multi trampolines
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220712/202207120555.rWXO6yao-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220712/202207120532.8OjZqfrT-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=f8f16c805972e534643c5a5d23709766f7af22e4
         git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
         git fetch --no-tags jolsa-perf bpf/tramp_29
         git checkout f8f16c805972e534643c5a5d23709766f7af22e4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/bpf/trampoline.c:948:9: error: call to undeclared function 'ftrace_hash_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
-                  ^
->> kernel/bpf/trampoline.c:948:27: error: use of undeclared identifier 'FTRACE_HASH_MAX_BITS'
-           hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
-                                    ^
->> kernel/bpf/trampoline.c:975:5: error: call to undeclared function 'ftrace_hash_add_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   ftrace_hash_add_entry(hash, entry);
-                                   ^
-   kernel/bpf/trampoline.c:985:4: error: call to undeclared function 'ftrace_hash_add_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           ftrace_hash_add_entry(hash, entry);
-                           ^
->> kernel/bpf/trampoline.c:989:8: error: call to undeclared function 'set_ftrace_direct'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = set_ftrace_direct(hash);
-                 ^
->> kernel/bpf/trampoline.c:991:2: error: call to undeclared function 'ftrace_hash_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ftrace_hash_free(hash);
-           ^
-   6 errors generated.
+   kernel/bpf/trampoline.c: In function 'bpf_tramp_update_set':
+>> kernel/bpf/trampoline.c:948:16: error: implicit declaration of function 'ftrace_hash_alloc' [-Werror=implicit-function-declaration]
+     948 |         hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
+         |                ^~~~~~~~~~~~~~~~~
+>> kernel/bpf/trampoline.c:948:34: error: 'FTRACE_HASH_MAX_BITS' undeclared (first use in this function)
+     948 |         hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
+         |                                  ^~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/trampoline.c:948:34: note: each undeclared identifier is reported only once for each function it appears in
+>> kernel/bpf/trampoline.c:975:33: error: implicit declaration of function 'ftrace_hash_add_entry' [-Werror=implicit-function-declaration]
+     975 |                                 ftrace_hash_add_entry(hash, entry);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/trampoline.c:989:15: error: implicit declaration of function 'set_ftrace_direct'; did you mean 'modify_ftrace_direct'? [-Werror=implicit-function-declaration]
+     989 |         err = set_ftrace_direct(hash);
+         |               ^~~~~~~~~~~~~~~~~
+         |               modify_ftrace_direct
+>> kernel/bpf/trampoline.c:991:9: error: implicit declaration of function 'ftrace_hash_free' [-Werror=implicit-function-declaration]
+     991 |         ftrace_hash_free(hash);
+         |         ^~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
 vim +/ftrace_hash_alloc +948 kernel/bpf/trampoline.c

@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07D756D78B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124D556D78E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiGKIPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S229838AbiGKIPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiGKIPS (ORCPT
+        with ESMTP id S229837AbiGKIP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:15:18 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D3013F46
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:15:06 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id ay25so2588964wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0ohNaZr3lv1nqXX2GzcOrF9fPgAdvp4Pa47LXBtmeYg=;
-        b=Q+NSo0SPyqwA0GSEAUCgVvRtpAObd6hq/ZxEIj1aKML/rztjUPjvr2gYXxY5zilTq3
-         ZTBjAvniWx57HNJR8UhYCrelLbU68ZD+wQ79Qlqs726JXTXBl6Kj09Hi+V9GqDCFGz0D
-         3Fus09xbLlqGiJfNgCCjjrCgvPNq9NhTSL6zD1eKGbjCrkEpvbIpnLIeUNj835NJBqSz
-         HDMsRNaQKBDlm+KQb7yejO97KalyFmJeFc5inI3Cb6DsSQgkhOGGNJowceUEwtf4XMys
-         rYTth8pRLwc393E5bEmx94aXslbCu58lWrdZMyouVYs+tBFPiJGMjEMnnqF7OSnmkVuq
-         ru7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0ohNaZr3lv1nqXX2GzcOrF9fPgAdvp4Pa47LXBtmeYg=;
-        b=DBswvCzmxHvxPVfah8Pd8ctB5NZ8N+uGfl0Gf5Y00AIOKl/Zq7U2EaEa9zillxqkju
-         x5GFxYMmWPYIWKqFd0PRv3BNFM9n7XRHARThRlVzy9ZEtx0zrzrOQn7tLNAbyBGEa5fk
-         oE0m19HFd9ExZ4QSowhJSj3m6TeavTOAFk0hgG5QVOfRvO0oVfv3N6k4lKEN+13TevBF
-         B+Tyl16uVQrGV3Ar4P5IbgASt3EZl9kV4DAtawWfFaQnj2xozTI8hANiE5FJ9IIDSzje
-         3uHaQcPLjU2hsc2MZfMQYnvk9T4z0bIU3BASW2lZoipL9EaIXwIqwgPlc0WxL15aAvbV
-         MXQA==
-X-Gm-Message-State: AJIora9CfePqs4GgNr78+f1kNSfwKWLU4RNqBjytd0LSXYwd2gsZHtrk
-        RE5GaosbZB7JDf4TnlqhZahmVoiTLvTtyQ==
-X-Google-Smtp-Source: AGRyM1tX4ohXQX0IfA8L3XFk0w6PySpb3441711DWgGskfBGusVEEq2GWfRtaPNz2r9cQ+Z+Ekx95g==
-X-Received: by 2002:a05:600c:3845:b0:3a2:daf6:89c5 with SMTP id s5-20020a05600c384500b003a2daf689c5mr14623843wmr.120.1657527304774;
-        Mon, 11 Jul 2022 01:15:04 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003a2da6b2cbesm5947791wme.33.2022.07.11.01.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 01:15:04 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 09:15:02 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Orlando Chamberlain <redecorating@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Add Intel Meteor Lake-P PCI IDs
-Message-ID: <YsvcBroosqD/wN9n@google.com>
-References: <20220628223047.34301-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628223047.34301-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 11 Jul 2022 04:15:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7B1DA5F;
+        Mon, 11 Jul 2022 01:15:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEE7BB80E41;
+        Mon, 11 Jul 2022 08:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F614C34115;
+        Mon, 11 Jul 2022 08:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657527321;
+        bh=bHT6yX754bDNr+YlySEm4rQB15/WYr8mKVfdle6pm9c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nM9gmnfPlCOHIBGv6E//DWjkYWhBo2srCG3m5iQ2CyVDPW2GPbmqov9snxszAo6wf
+         SxyfAvqmfGeeYCHc/K9GSyaoxmYRQ2wp3n7XhhhP+duEEs6kPgINr3Bd7r+Wj6B2H2
+         in0gCtSiG071XUtbEddFv6G7nzzqVrTFX8sdxigHkHV1uZrvE4az+tk+l2G4y9aRLY
+         tRMS+F9z60e1nM7kPGDk6qrhFsLNskQJDFIQFDuvR4Xr4J9SI629iwTFbPGCVgaYNS
+         6NobdIb6yRNX7rqSjVFtuQpjJQJ5WrnVFJBulpAYDP+M+NrPEMQJAm9K0fi1fFZPZx
+         53KZp4jOO/CpQ==
+Received: from [213.208.244.172] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oAoZb-006aag-JT;
+        Mon, 11 Jul 2022 09:15:19 +0100
+Date:   Mon, 11 Jul 2022 09:15:19 +0100
+Message-ID: <87mtdgkqug.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the irqchip tree
+In-Reply-To: <20220711154252.4b88a601@canb.auug.org.au>
+References: <20220711154252.4b88a601@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 213.208.244.172
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,19 +66,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022, Andy Shevchenko wrote:
-
-> Add Intel Meteor Lake-P LPSS PCI IDs.
+On Mon, 11 Jul 2022 06:42:52 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/mfd/intel-lpss-pci.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+> Hi all,
+> 
+> After merging the irqchip tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> In file included from drivers/gpio/gpio-thunderx.c:18:
+> include/asm-generic/msi.h:32:3: error: conflicting types for 'msi_alloc_info_t'; have 'struct msi_alloc_info'
+>    32 | } msi_alloc_info_t;
+>       |   ^~~~~~~~~~~~~~~~
+> In file included from include/linux/gpio/driver.h:15,
+>                  from drivers/gpio/gpio-thunderx.c:10:
+> arch/x86/include/asm/msi.h:7:31: note: previous declaration of 'msi_alloc_info_t' with type 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
+>     7 | typedef struct irq_alloc_info msi_alloc_info_t;
+>       |                               ^~~~~~~~~~~~~~~~
+> drivers/gpio/gpio-thunderx.c: In function 'thunderx_gpio_populate_parent_alloc_info':
+> drivers/gpio/gpio-thunderx.c:416:34: error: initialization of 'msi_alloc_info_t *' {aka 'struct msi_alloc_info *'} from incompatible pointer type 'msi_alloc_info_t *' {aka 'struct irq_alloc_info *'} [-Werror=incompatible-pointer-types]
+>   416 |         msi_alloc_info_t *info = &gfwspec->msiinfo;
+>       |                                  ^
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   91a29af413de ("gpio: Remove dynamic allocation from populate_parent_alloc_arg()")
+> 
+> I have used the irqchip tree from next-20220707 again for today.
 
-Applied, thanks.
+Huh. Twice sorry about that one. Patch sent to fix the breakage, and
+will push this into irqchip-next shortly.
+
+Thanks,
+
+	M.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Without deviation from the norm, progress is not possible.

@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D6B56FEAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387F856FEB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiGKKPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S231332AbiGKKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbiGKKON (ORCPT
+        with ESMTP id S229770AbiGKKRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:14:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C584AD5F;
-        Mon, 11 Jul 2022 02:34:23 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Mon, 11 Jul 2022 06:17:33 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8102DD1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5niTOBa4euUKXSYVbbIy1iFQyx/tclGje0FJLckNlNo=; b=M5ksDxEnXbh+GvS/azSzCqewCT
+        j2FC9BhwrcSe4qadQSNab3wIKzMJUXK4WLFy2Ka/NfSG9sAGCRc3CbtUcyo3KgNgMxOA725Ia+68B
+        pfk3S41mFZs1A/9lu5jTOPD8Y8x3kTirfq11MYJbXc7IPv/wQN9Li6SYbuMlPGdC+OOPpMIcyY2lH
+        32e8S3l5E+LamWT6oTEL0mFQ0nGMPKzbecjJzKXrp1Umk+hdHs8OWm59qS2c+zUWAwjfG/OQs+9WV
+        wI1f2u7ZCrhsIOJ3jt2l2x+UpOZ9XL58NncqOoac2vzOa30xc4JbSeD6ZPYEtGaJDuAg9GdgpCUzV
+        JRFoyGIQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oApoi-002y68-23; Mon, 11 Jul 2022 09:35:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2123466017A6;
-        Mon, 11 Jul 2022 10:34:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657532061;
-        bh=Q8aXS7UAPdgDFOD5KMy8Y+lPX5el8z3AKk3/QrPYySU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AtWudmr9LZIkFa+8leH6uC+sN6AJCdvs4MfWhRxTqrlvkN3Mb4bldFyF6Qjg38G+Z
-         o8nmVmTlnQuEOehEi4YiB/5ysQvxGoDkZLKs+3l8k7WpM4qks1F8T1EikTiRkFE792
-         Y+AfNo0YyPSqHlGjfxd5CSBstPbJTEJTD99EDL9ZW2lKs/ik+L9JAL0BnIZp9mNLR8
-         SxmQgsOZPKw7Pio+BNIqEkxngpq6ayihUpW0ZuxBo0fQ+0kXb2Mh0VNJkiauwlegHZ
-         YVVoQ/dWpTSrqL75a6Zy3F9nseIjfaZzBpnb44O+c7Hx2hI10z89jM8YZDDd5WHL9x
-         m+7x/+70DCqVA==
-Message-ID: <5a4e0bfe-e332-42af-5888-b59b3afff24d@collabora.com>
-Date:   Mon, 11 Jul 2022 11:34:18 +0200
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0C0C3010ED;
+        Mon, 11 Jul 2022 11:34:57 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A57CA2025D0C3; Mon, 11 Jul 2022 11:34:57 +0200 (CEST)
+Date:   Mon, 11 Jul 2022 11:34:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mike Stowell <mstowell@redhat.com>
+Subject: Re: [PATCH v3] locking/rtmutex: Limit # of lock stealing for non-RT
+ waiters
+Message-ID: <YsvuwfeY/dSngl8c@hirez.programming.kicks-ass.net>
+References: <20220706135916.980580-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: mediatek: Add missing xHCI clocks for mt8192
- and mt8195
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220708194314.56922-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220708194314.56922-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706135916.980580-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,30 +63,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/07/22 21:43, Nícolas F. R. A. Prado ha scritto:
-> The MediaTek xHCI dt-binding expects a specific order for the clocks,
-> but the mt8192 and mt8195 devicetrees were skipping some of the middle
-> clocks. These clocks are wired to the controller hardware but aren't
-> controllable.
+On Wed, Jul 06, 2022 at 09:59:16AM -0400, Waiman Long wrote:
+> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
+> stealing") allows unlimited number of lock stealing's for non-RT
+> tasks. That can lead to lock starvation of non-RT top waiter tasks if
+> there is a constant incoming stream of non-RT lockers. This can cause
+> rcu_preempt self-detected stall or even task lockup in PREEMPT_RT kernel.
+> For example,
 > 
-> Add the missing clocks as handles to fixed clocks, so that the clock
-> order is respected and the dtbs_check warnings are gone.
+> [77107.424943] rcu: INFO: rcu_preempt self-detected stall on CPU
+> [ 1249.921363] INFO: task systemd:2178 blocked for more than 622 seconds.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Avoiding this problem and ensuring forward progress by limiting the
+> number of times that a lock can be stolen from each waiter. This patch
+> sets a threshold of 32. That number is arbitrary and can be changed
+> if needed.
+> 
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> ---
-> A previous attempt to solve this also made all clocks required and
-> updated all MediaTek DTs using the xhci binding [1].
-> 
-> To avoid the DT change noise, the binding change is now being reverted
-> [2] and only mt8192 and mt8195 DTs are updated in this commit to get rid
-> of the warnings.
-> 
-> [1] https://lore.kernel.org/all/20220623193702.817996-4-nfraprado@collabora.com/
-> [2] https://lore.kernel.org/all/20220708192605.43351-1-nfraprado@collabora.com
-> 
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi |  9 ++++++---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 18 ++++++++++++++----
->   2 files changed, 20 insertions(+), 7 deletions(-)
+Why not do the same thing we do for regular mutexes?

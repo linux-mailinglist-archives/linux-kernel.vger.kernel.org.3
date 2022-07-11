@@ -2,67 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C4956D327
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5946456D32C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 05:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiGKC7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 22:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S229651AbiGKDDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 23:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGKC7u (ORCPT
+        with ESMTP id S229463AbiGKDDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 22:59:50 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5256445
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 19:59:50 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so7033292pjr.4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 19:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2WqbsqnJBgBtP7DjnnhraykI1JIFLr/Z5s9tS9xDIA8=;
-        b=YV0saGWc86Dr0nLb97pd2N+sjGpt7P84y62z7L/fx7FhOr67Aidp66vasyVaFWstou
-         1sf5hspntxeheOTlauMVYz9fUaAO9R8te5hc8OdqcPv3U2+OrYkNFbwjlUVchNpjv5jz
-         PYtziagU5jSqpiRvryMD0DoW8T8r7Afv47ZpJsFhwgag8WdRsdac8shwhzTnVXPD/gu2
-         q61/IokaBBQV4swk7VAEuIkWydju5kDpcS+nUpd9xdKCsOAGF4rHgoS6rmcRQO+My9aZ
-         eAy2A5YNTSA7s8DsBWi6jezZe2CxYOXp3sCWRvF7qG/qGUzvHtzLeOk74HeHcLVWDRKQ
-         CM7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=2WqbsqnJBgBtP7DjnnhraykI1JIFLr/Z5s9tS9xDIA8=;
-        b=cMv2l0GQylIjWaX22j4PU5LqhuyBTT1UEMxyvy3IXG6BaTD5zLhlgThaCZadL2JpYF
-         B/Sm9nuy0c9DskcwteD7BWsKCAUXCN5J0woX4P92AxSeeJfK0As+TUsU7uxuPY5FeDHu
-         xO8T3ffyIbO4BGkCTBre0yWnALE/Ad4Dmjl5m0V8/itnjjAxZT5W0VlBIfGlDSjiji7k
-         oNnaaG4nfiXYSYdKCZEDERggrhJ94mtKVTEaA3t5J90UUAM7jj8cXG8z4ImfGSmD+HW/
-         MEhPpUs35JWE6uNS8vecOdbeY+iPD8GgKv+wWI8tapZ7uykqYjWP3X8b+UWTpuFvcS9Z
-         o+QQ==
-X-Gm-Message-State: AJIora/Qs72We535Pj4ED4n0BN6SG8/51DUGy6p3/vrMEQgvc/tqOhQB
-        sWN2gHYm8jdWWtSmVzlfkio=
-X-Google-Smtp-Source: AGRyM1vFxY03KrBrNYv9cLq5Q8Vjt9qgJF235uzEVGiyWYj2Cxe7tws80vt3Ka3OCRoCfBVcZOglBw==
-X-Received: by 2002:a17:902:da82:b0:16a:7ca5:36c0 with SMTP id j2-20020a170902da8200b0016a7ca536c0mr16226830plx.27.1657508389812;
-        Sun, 10 Jul 2022 19:59:49 -0700 (PDT)
-Received: from localhost.localdomain ([116.232.54.164])
-        by smtp.gmail.com with ESMTPSA id m6-20020a17090a3f8600b001efd4dbcf13sm5744087pjc.39.2022.07.10.19.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 19:59:49 -0700 (PDT)
-From:   Zhu Ning <zhuning0077@gmail.com>
-To:     vijendar.mukunda@amd.com
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        alsa-devel@alsa-project.org, amadeuszx.slawinski@linux.intel.com,
-        broonie@kernel.org, christophe.jaillet@wanadoo.fr,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org, lkp@intel.com,
-        tiwai@suse.com, zhuning@everest-semi.com
-Subject: Re: [PATCH 3/3] ASoC: amd: fix for variable set but not used warning
-Date:   Mon, 11 Jul 2022 10:59:33 +0800
-Message-Id: <20220711025933.3445-1-zhuning0077@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <d2828d36-275e-60d7-782e-2bff265bae0b@amd.com>
-References: <d2828d36-275e-60d7-782e-2bff265bae0b@amd.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Sun, 10 Jul 2022 23:03:47 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C035AE60
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 20:03:45 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220711030342epoutp0371d4709fd29293e7b88223b436967073~Ap098w6wo0708107081epoutp03O
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:03:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220711030342epoutp0371d4709fd29293e7b88223b436967073~Ap098w6wo0708107081epoutp03O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1657508622;
+        bh=PNUfvCy84e9Zz5Ld9SjN2TCbZtJ0xMlSlgGfnADVN8g=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=RZW3Bb7buM/OpH18Irc5d+uSlEkX1ZGH/+TnHq4XzmMFn1VEpjx3/uWXjKDFFJ5HR
+         TJI/qCTqnNS6NZfPyIDahv8qHdE4kqmjRRqka0jOm2/up4VgbN/QAI877lL+YFMdxJ
+         cp7VJRLfvl1ExR5ddwuP/9TyLQeU6Wwb9S//zi9M=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220711030342epcas5p3fda6d270c80a177a7c43ea2f7190ab37~Ap09cfris1855918559epcas5p3V;
+        Mon, 11 Jul 2022 03:03:42 +0000 (GMT)
+X-AuditID: b6c32a4b-e83ff700000025a7-36-62cb930e7df4
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E1.44.09639.E039BC26; Mon, 11 Jul 2022 12:03:42 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] sched,debug: fix dentry leak in update_sched_domain_debugfs
+Reply-To: major.chen@samsung.com
+Sender: Major Chen <major.chen@samsung.com>
+From:   Major Chen <major.chen@samsung.com>
+To:     "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "bristot@redhat.com" <bristot@redhat.com>
+CC:     Hongfei Tang <hongfei.tang@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a@epcms5p1>
+Date:   Mon, 11 Jul 2022 11:03:41 +0800
+X-CMS-MailID: 20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsWy7bCmpi7f5NNJBv9fsVpcenyVzWL6y0YW
+        i6cTtjJbbOpvZLS42z+VxeLyrjlsFpPfPWO0uHRgAZPF8d4DTBb7Oh4wWXQc+cbswO2xZt4a
+        Ro+WfbfYPRZsKvXYvELL4861PWwe7/ddZfPo27KK0WPz6WqPz5vkAjijuGxSUnMyy1KL9O0S
+        uDLm9XxkL7grXnH7wHTGBsZe8S5GTg4JAROJnff2s3QxcnEICexmlOh4f5Wxi5GDg1dAUOLv
+        DmGQGmEBH4nm9k52EFtIQEFiwqkuNoi4tsSfTc9ZQMrZBDQlzm6qBBkjIrCeWeL8keNMIDXM
+        AjkSfefXsELs4pWY0f6UBcKWlti+fCsjhC0qcXP1W3YY+/2x+VBxEYnWe2eZIWxBiQc/d0PF
+        pSSuH//NBGEXS9x8fBdqZgOjRP8ZGQjbXOLrph6wel4BX4lfL6eBzWERUJVovLgGapeLxMJZ
+        F5kh7tSWWLbwNTPIL8xAv6zfpQ8R5pPo/f2ECeb8HfNgbBWJ1t1T2GDOub1+IytIq4SAh8SC
+        RbqQkAqUuDF7BcsERrlZiPCchWTXLIRdCxiZVzFKphYU56anFpsWGOellusVJ+YWl+al6yXn
+        525iBCcfLe8djI8efNA7xMjEwXiIUYKDWUmE98/ZU0lCvCmJlVWpRfnxRaU5qcWHGKU5WJTE
+        eb2ubkoSEkhPLEnNTk0tSC2CyTJxcEo1MG17nyQw173494+vl2eKvW+dxxa4ruTghshz06Qs
+        WW+GnM/YeDKvX81nzuTIzy2H9vKzTl5zc6G/36eqyG1vz7eumsDGt1x1a8AUzbV3xJOnxz0t
+        7/9xfgf/tYcJHVoXxXcJ5YclB3+9ZlQTVuBcYpN8N3b1jtuabv8m7HgT7j1XavUijbT447Yp
+        cnIrr3zdtbZDMcGTRdDeRPLaFTFu/1s7D+y7ePd9U6v5g/+CtjOWhGhXtZmxX/NmDT0U+O+N
+        6ba4ev9oyy+zr1zsZJpq/fE9/63G2m3MBYkbPRNnKjAvn7bdc6fwm1xfuYUP3swsSbKI3Z8l
+        M2PxfeYTZgYOyrxS92UdmrSXbS+S2lFz/o0SS3FGoqEWc1FxIgDAi6yyrQMAAA==
+X-CMS-RootMailID: 20220711025311epcms5p874ccee18b6dd4e6a62759d0749936e61
+References: <CGME20220711025311epcms5p874ccee18b6dd4e6a62759d0749936e61@epcms5p1>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This code is ok. The machine driver should still function well without gpio.
-
-if (IS_ERR(gpio_pa)) {
-        gpiod_put(gpio_pa);
-        put_device(codec_dev);
-        return dev_err_probe(card->dev, PTR_ERR(gpio_pa),
-                                            "could not get pa-enable GPIO\n");
-
-}
-
-You donnot need to handle null gpio_pa gpio.
-
-if (!(IS_ERR_OR_NULL(gpio_pa))) 
-	gpiod_set_value_cansleep(gpio_pa, true);
+=C2=A0=0D=0Aupdate_sched_domain_debugfs()=C2=A0uses=C2=A0debugfs_lookup()=
+=C2=A0to=C2=A0find=C2=A0wanted=C2=A0dentry(which=C2=A0has=0D=0Abeen=C2=A0cr=
+eated=C2=A0by=C2=A0debugfs_create_dir()=C2=A0before),=C2=A0but=C2=A0not=C2=
+=A0call=C2=A0dput()=C2=A0to=C2=A0return=C2=A0this=C2=A0dentry=0D=0Aback.=C2=
+=A0This=C2=A0result=C2=A0in=C2=A0dentry=C2=A0leak=C2=A0even=C2=A0debugfs_re=
+move()=C2=A0is=C2=A0called.=0D=0A=C2=A0=0D=0ASigned-off-by:=C2=A0major.chen=
+=C2=A0<major.chen=40samsung.com>=0D=0A---=0D=0A=C2=A0kernel/sched/debug.c=
+=C2=A0=7C=C2=A07=C2=A0+++++--=0D=0A=C2=A01=C2=A0file=C2=A0changed,=C2=A05=
+=C2=A0insertions(+),=C2=A02=C2=A0deletions(-)=0D=0A=C2=A0=0D=0Adiff=C2=A0--=
+git=C2=A0a/kernel/sched/debug.c=C2=A0b/kernel/sched/debug.c=0D=0Aindex=C2=
+=A0bb3d63b..4ffea2d=C2=A0100644=0D=0A---=C2=A0a/kernel/sched/debug.c=0D=0A+=
+++=C2=A0b/kernel/sched/debug.c=0D=0A=40=40=C2=A0-412,11=C2=A0+412,14=C2=A0=
+=40=40=C2=A0void=C2=A0update_sched_domain_debugfs(void)=0D=0A=C2=A0=0D=0A=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for_each_cpu(cpu,=C2=
+=A0sd_sysctl_cpus)=C2=A0=7B=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0sch=
+ed_domain=C2=A0*sd;=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dentry=C2=A0*d_=
+cpu;=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dentry=C2=A0*d_cpu,=C2=A0*d_lo=
+okup;=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char=C2=A0buf=5B32=5D;=0D=0A=C2=A0=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0snprintf(buf,=C2=A0sizeof(buf),=C2=A0=22cp=
+u%d=22,=C2=A0cpu);=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0debugfs_remove(debugfs_look=
+up(buf,=C2=A0sd_dentry));=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0d_lookup=C2=A0=3D=C2=
+=A0debugfs_lookup(buf,=C2=A0sd_dentry);=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0debugf=
+s_remove(d_lookup);=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21IS_ERR_OR_NULL(=
+d_lookup))=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0dput(d_lookup);=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0d_cpu=C2=A0=3D=
+=C2=A0debugfs_create_dir(buf,=C2=A0sd_dentry);=0D=0A=C2=A0=0D=0A=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0i=C2=A0=3D=C2=A00;=0D=0A--=C2=A0=0D=0A2.7.4=0D=0A=C2=A0=
+=0D=0A=C2=A0=0D=0A=0D=0A

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BC356FA0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5941256FD86
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiGKJMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S234049AbiGKJ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbiGKJLZ (ORCPT
+        with ESMTP id S234034AbiGKJ4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:11:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A9C21E1D;
-        Mon, 11 Jul 2022 02:09:07 -0700 (PDT)
+        Mon, 11 Jul 2022 05:56:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F997B31D9;
+        Mon, 11 Jul 2022 02:26:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A15D9B80D2C;
-        Mon, 11 Jul 2022 09:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02313C34115;
-        Mon, 11 Jul 2022 09:09:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E140612E8;
+        Mon, 11 Jul 2022 09:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29020C34115;
+        Mon, 11 Jul 2022 09:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530544;
-        bh=v5eUeA18m15U5X6LLB4bwYaPJNJlHiDo3j5eQplBYEQ=;
+        s=korg; t=1657531587;
+        bh=FEfMHg6hOiOU9NuBqymi/4Nkwi5QgLNr/8rryIS5iF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=08xTpOiIXW9jW+BihsBRLPk50v86gLXtQzdVaKgViRR51eDTO4GvzS6KsvwwZPi/1
-         3vuYBa9r1e1MpDJmmsuqbQjeanEn+6XmVTok5J0KA58vXVbWEdEc1QCjw8RsE+E4Wy
-         QTNcQHlMyuGHtKUrH/P8M/cmzlOxaNiHPd1tL+Vc=
+        b=UdZo5tNev8AoZKuPpoxcwH9G1yj34OkDVn07hFuAnYoAcuvzJ4nH3i9ZVj64jzIGT
+         /KVpXZ32sYG2Ndjyw9wP8RE6UUlibo0AnzpCYzFapDGeJbpIpZqGhEruwg16wPbV06
+         HM4dXMZuegBlS0hvGoFKRG6TCmsk3BLDIWH7dyGQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH 4.19 15/31] xfs: remove incorrect ASSERT in xfs_rename
-Date:   Mon, 11 Jul 2022 11:06:54 +0200
-Message-Id: <20220711090538.299004397@linuxfoundation.org>
+        stable@vger.kernel.org, Guiling Deng <greens9@163.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 159/230] fbdev: fbmem: Fix logo center image dx issue
+Date:   Mon, 11 Jul 2022 11:06:55 +0200
+Message-Id: <20220711090608.570810128@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Sandeen <sandeen@redhat.com>
+From: Guiling Deng <greens9@163.com>
 
-commit e445976537ad139162980bee015b7364e5b64fff upstream.
+commit 955f04766d4e6eb94bf3baa539e096808c74ebfb upstream.
 
-This ASSERT in xfs_rename is a) incorrect, because
-(RENAME_WHITEOUT|RENAME_NOREPLACE) is a valid combination, and
-b) unnecessary, because actual invalid flag combinations are already
-handled at the vfs level in do_renameat2() before we get called.
-So, remove it.
+Image.dx gets wrong value because of missing '()'.
 
-Reported-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Eric Sandeen <sandeen@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Fixes: 7dcf5c3e4527 ("xfs: add RENAME_WHITEOUT support")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+If xres == logo->width and n == 1, image.dx = -16.
+
+Signed-off-by: Guiling Deng <greens9@163.com>
+Fixes: 3d8b1933eb1c ("fbdev: fbmem: add config option to center the bootup logo")
+Cc: stable@vger.kernel.org # v5.0+
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_inode.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/video/fbdev/core/fbmem.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -2899,7 +2899,6 @@ xfs_rename(
- 	 * appropriately.
- 	 */
- 	if (flags & RENAME_WHITEOUT) {
--		ASSERT(!(flags & (RENAME_NOREPLACE | RENAME_EXCHANGE)));
- 		error = xfs_rename_alloc_whiteout(target_dp, &wip);
- 		if (error)
- 			return error;
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -514,7 +514,7 @@ static int fb_show_logo_line(struct fb_i
+ 
+ 		while (n && (n * (logo->width + 8) - 8 > xres))
+ 			--n;
+-		image.dx = (xres - n * (logo->width + 8) - 8) / 2;
++		image.dx = (xres - (n * (logo->width + 8) - 8)) / 2;
+ 		image.dy = y ?: (yres - logo->height) / 2;
+ 	} else {
+ 		image.dx = 0;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5529656FA6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301FA56FAB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiGKJR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S231828AbiGKJVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiGKJQv (ORCPT
+        with ESMTP id S231899AbiGKJUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:16:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00BC419A5;
-        Mon, 11 Jul 2022 02:11:06 -0700 (PDT)
+        Mon, 11 Jul 2022 05:20:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E91E545C5;
+        Mon, 11 Jul 2022 02:12:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A9DB80E7D;
-        Mon, 11 Jul 2022 09:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC60C34115;
-        Mon, 11 Jul 2022 09:11:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BED10611EA;
+        Mon, 11 Jul 2022 09:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80C4C341C0;
+        Mon, 11 Jul 2022 09:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530663;
-        bh=pnH5lEehIUM44wvMDE6bRQXu7DvPpP9hGwDhZSSbevE=;
+        s=korg; t=1657530754;
+        bh=Yw6CvDlaFnh/HUoADg5MBXYUAT5+p+xm/ldRU9fTv6c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=juunUKx2n5OJvqAf1p5OKk8yukskIn44ogTOoRfHZcedjGjWX6JhhXsEJQZ8Vh082
-         I+8jJ+qtjDKlsawwJJ/e8LWwMe3fU/hPui9Rg45jkW9T97hvsHlk2ldh41KMfM6TCI
-         KefGzScCEX6CiaBMM29fmY2dBayBzFppf8JiDe9k=
+        b=TfFzf+08JQPY7FlOTw67wuP6tK7FUqUc8EwKgmM2ULzXwXwQ4o6VaoP+UjSxE5soV
+         kgGkK/WeAGP0ZeRYyCIfOGW3XD0JEQkPKDtRGq/Se9y/OIiOMsC611RmCna0kBhc6x
+         2jvJNw84ai9IXqYeL9+Tfn1RIpGcApL0aVXJ+RgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Itay Iellin <ieitayie@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 34/38] ida: dont use BUG_ON() for debugging
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 28/55] arm64: dts: imx8mp-evk: correct mmc pad settings
 Date:   Mon, 11 Jul 2022 11:07:16 +0200
-Message-Id: <20220711090539.731118592@linuxfoundation.org>
+Message-Id: <20220711090542.595260718@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Peng Fan <peng.fan@nxp.com>
 
-commit fc82bbf4dede758007763867d0282353c06d1121 upstream.
+[ Upstream commit 01785f1f156511c4f285786b4192245d4f476bf1 ]
 
-This is another old BUG_ON() that just shouldn't exist (see also commit
-a382f8fee42c: "signal handling: don't use BUG_ON() for debugging").
+According to RM bit layout, BIT3 and BIT0 are reserved.
+  8  7   6   5   4   3  2 1  0
+ PE HYS PUE ODE FSEL X  DSE  X
 
-In fact, as Matthew Wilcox points out, this condition shouldn't really
-even result in a warning, since a negative id allocation result is just
-a normal allocation failure:
+Not set reserved bit.
 
-  "I wonder if we should even warn here -- sure, the caller is trying to
-   free something that wasn't allocated, but we don't warn for
-   kfree(NULL)"
-
-and goes on to point out how that current error check is only causing
-people to unnecessarily do their own index range checking before freeing
-it.
-
-This was noted by Itay Iellin, because the bluetooth HCI socket cookie
-code does *not* do that range checking, and ends up just freeing the
-error case too, triggering the BUG_ON().
-
-The HCI code requires CAP_NET_RAW, and seems to just result in an ugly
-splat, but there really is no reason to BUG_ON() here, and we have
-generally striven for allocation models where it's always ok to just do
-
-    free(alloc());
-
-even if the allocation were to fail for some random reason (usually
-obviously that "random" reason being some resource limit).
-
-Fixes: 88eca0207cf1 ("ida: simplified functions for id allocation")
-Reported-by: Itay Iellin <ieitayie@gmail.com>
-Suggested-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9e847693c6f3 ("arm64: dts: freescale: Add i.MX8MP EVK board support")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/idr.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/lib/idr.c
-+++ b/lib/idr.c
-@@ -489,7 +489,8 @@ void ida_free(struct ida *ida, unsigned
- 	struct ida_bitmap *bitmap;
- 	unsigned long flags;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index c13b4a02d12f..64f0455e14f8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -161,7 +161,7 @@
  
--	BUG_ON((int)id < 0);
-+	if ((int)id < 0)
-+		return;
+ 	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
++			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x40
+ 		>;
+ 	};
  
- 	xas_lock_irqsave(&xas, flags);
- 	bitmap = xas_load(&xas);
+@@ -180,7 +180,7 @@
+ 			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
+ 			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
+ 			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
+-			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc0
+ 		>;
+ 	};
+ 
+@@ -192,7 +192,7 @@
+ 			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d4
+ 			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d4
+ 			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d4
+-			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc1
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc0
+ 		>;
+ 	};
+ 
+@@ -204,7 +204,7 @@
+ 			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d6
+ 			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d6
+ 			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d6
+-			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc1
++			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT 0xc0
+ 		>;
+ 	};
+ 
+-- 
+2.35.1
+
 
 

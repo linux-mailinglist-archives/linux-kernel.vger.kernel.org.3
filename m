@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03D556F9C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2B856F9D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiGKJIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S229863AbiGKJJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiGKJH5 (ORCPT
+        with ESMTP id S231154AbiGKJI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:07:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6DC2497E;
-        Mon, 11 Jul 2022 02:07:34 -0700 (PDT)
+        Mon, 11 Jul 2022 05:08:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA11B22BD7;
+        Mon, 11 Jul 2022 02:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0163CB80D2C;
-        Mon, 11 Jul 2022 09:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1AAC341CA;
-        Mon, 11 Jul 2022 09:07:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6747E6118F;
+        Mon, 11 Jul 2022 09:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7F7C34115;
+        Mon, 11 Jul 2022 09:07:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530451;
-        bh=41osInqy4wOa4+2t1XImaRvNj+PBf+rtJFHd/tCOres=;
+        s=korg; t=1657530476;
+        bh=ZG6w6HKvEceL0MQx2SuxvYp351/gMcj+5D29fCM8eL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lmb0JZlxpwT+seIibXmkiL2t6lrOZ5T/uqRPfsiXfsE5ObdCDQmzBON3FDvD0/D1t
-         A3d27dOIN/pBWsacsKuSoEmLSli7raawFDOevUvOE1j2aNpQCOzSdnz1BPPUHDMj+m
-         wdPwEMLg5z4vMOHvUcBZGGeVQPlfEg52atXpuS6U=
+        b=dtrRazPmNc/O/L9LfUxzlVDtjcHf6VyHhqXWdfm7qqpqxi85f2cCIBv5v3pcofKPa
+         sDEug1kIWP0Y13IHMy4XoB4GzOWQMaaevQRVuHNqmk5mBpJwiQ4iYWmrTZq2yZJ8Is
+         E4Hie5WxxHCVipTTsTi1wuTkyFaEaf/0jfUm1XOs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sabrina Dubroca <sd@queasysnail.net>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 4.14 01/17] esp: limit skb_page_frag_refill use to a single page
-Date:   Mon, 11 Jul 2022 11:06:26 +0200
-Message-Id: <20220711090536.292670494@linuxfoundation.org>
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 4.14 02/17] mm/slub: add missing TID updates on slab deactivation
+Date:   Mon, 11 Jul 2022 11:06:27 +0200
+Message-Id: <20220711090536.325380578@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090536.245939953@linuxfoundation.org>
 References: <20220711090536.245939953@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,79 +58,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sabrina Dubroca <sd@queasysnail.net>
+From: Jann Horn <jannh@google.com>
 
-commit 5bd8baab087dff657e05387aee802e70304cc813 upstream.
+commit eeaa345e128515135ccb864c04482180c08e3259 upstream.
 
-Commit ebe48d368e97 ("esp: Fix possible buffer overflow in ESP
-transformation") tried to fix skb_page_frag_refill usage in ESP by
-capping allocsize to 32k, but that doesn't completely solve the issue,
-as skb_page_frag_refill may return a single page. If that happens, we
-will write out of bounds, despite the check introduced in the previous
-patch.
+The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
+the TID stays the same. However, two places in __slab_alloc() currently
+don't update the TID when deactivating the CPU slab.
 
-This patch forces COW in cases where we would end up calling
-skb_page_frag_refill with a size larger than a page (first in
-esp_output_head with tailen, then in esp_output_tail with
-skb->data_len).
+If multiple operations race the right way, this could lead to an object
+getting lost; or, in an even more unlikely situation, it could even lead to
+an object being freed onto the wrong slab's freelist, messing up the
+`inuse` counter and eventually causing a page to be freed to the page
+allocator while it still contains slab objects.
 
-Fixes: cac2661c53f3 ("esp4: Avoid skb_cow_data whenever possible")
-Fixes: 03e2a30f6a27 ("esp6: Avoid skb_cow_data whenever possible")
-Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+(I haven't actually tested these cases though, this is just based on
+looking at the code. Writing testcases for this stuff seems like it'd be
+a pain...)
+
+The race leading to state inconsistency is (all operations on the same CPU
+and kmem_cache):
+
+ - task A: begin do_slab_free():
+    - read TID
+    - read pcpu freelist (==NULL)
+    - check `slab == c->slab` (true)
+ - [PREEMPT A->B]
+ - task B: begin slab_alloc_node():
+    - fastpath fails (`c->freelist` is NULL)
+    - enter __slab_alloc()
+    - slub_get_cpu_ptr() (disables preemption)
+    - enter ___slab_alloc()
+    - take local_lock_irqsave()
+    - read c->freelist as NULL
+    - get_freelist() returns NULL
+    - write `c->slab = NULL`
+    - drop local_unlock_irqrestore()
+    - goto new_slab
+    - slub_percpu_partial() is NULL
+    - get_partial() returns NULL
+    - slub_put_cpu_ptr() (enables preemption)
+ - [PREEMPT B->A]
+ - task A: finish do_slab_free():
+    - this_cpu_cmpxchg_double() succeeds()
+    - [CORRUPT STATE: c->slab==NULL, c->freelist!=NULL]
+
+>From there, the object on c->freelist will get lost if task B is allowed to
+continue from here: It will proceed to the retry_load_slab label,
+set c->slab, then jump to load_freelist, which clobbers c->freelist.
+
+But if we instead continue as follows, we get worse corruption:
+
+ - task A: run __slab_free() on object from other struct slab:
+    - CPU_PARTIAL_FREE case (slab was on no list, is now on pcpu partial)
+ - task A: run slab_alloc_node() with NUMA node constraint:
+    - fastpath fails (c->slab is NULL)
+    - call __slab_alloc()
+    - slub_get_cpu_ptr() (disables preemption)
+    - enter ___slab_alloc()
+    - c->slab is NULL: goto new_slab
+    - slub_percpu_partial() is non-NULL
+    - set c->slab to slub_percpu_partial(c)
+    - [CORRUPT STATE: c->slab points to slab-1, c->freelist has objects
+      from slab-2]
+    - goto redo
+    - node_match() fails
+    - goto deactivate_slab
+    - existing c->freelist is passed into deactivate_slab()
+    - inuse count of slab-1 is decremented to account for object from
+      slab-2
+
+At this point, the inuse count of slab-1 is 1 lower than it should be.
+This means that if we free all allocated objects in slab-1 except for one,
+SLUB will think that slab-1 is completely unused, and may free its page,
+leading to use-after-free.
+
+Fixes: c17dda40a6a4e ("slub: Separate out kmem_cache_cpu processing from deactivate_slab")
+Fixes: 03e404af26dc2 ("slub: fast release on full slab")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+Acked-by: Christoph Lameter <cl@linux.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Link: https://lore.kernel.org/r/20220608182205.2945720-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/esp.h |    2 --
- net/ipv4/esp4.c   |    5 ++---
- net/ipv6/esp6.c   |    5 ++---
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ mm/slub.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/net/esp.h
-+++ b/include/net/esp.h
-@@ -4,8 +4,6 @@
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2171,6 +2171,7 @@ redo:
  
- #include <linux/skbuff.h>
+ 	c->page = NULL;
+ 	c->freelist = NULL;
++	c->tid = next_tid(c->tid);
+ }
  
--#define ESP_SKB_FRAG_MAXSIZE (PAGE_SIZE << SKB_FRAG_PAGE_ORDER)
+ /*
+@@ -2306,8 +2307,6 @@ static inline void flush_slab(struct kme
+ {
+ 	stat(s, CPUSLAB_FLUSH);
+ 	deactivate_slab(s, c->page, c->freelist, c);
 -
- struct ip_esp_hdr;
+-	c->tid = next_tid(c->tid);
+ }
  
- static inline struct ip_esp_hdr *ip_esp_hdr(const struct sk_buff *skb)
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -257,7 +257,6 @@ int esp_output_head(struct xfrm_state *x
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
--	unsigned int allocsz;
+ /*
+@@ -2592,6 +2591,7 @@ redo:
  
- 	/* this is non-NULL only with UDP Encapsulation */
- 	if (x->encap) {
-@@ -267,8 +266,8 @@ int esp_output_head(struct xfrm_state *x
- 			return err;
+ 	if (!freelist) {
+ 		c->page = NULL;
++		c->tid = next_tid(c->tid);
+ 		stat(s, DEACTIVATE_BYPASS);
+ 		goto new_slab;
  	}
- 
--	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
--	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
-+	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
- 		goto cow;
- 
- 	if (!skb_cloned(skb)) {
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -223,10 +223,9 @@ int esp6_output_head(struct xfrm_state *
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
--	unsigned int allocsz;
- 
--	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
--	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
-+	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
- 		goto cow;
- 
- 	if (!skb_cloned(skb)) {
 
 

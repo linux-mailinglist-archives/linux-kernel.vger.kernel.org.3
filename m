@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB59C570E4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2644E570E4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiGKX2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S230283AbiGKX21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbiGKX2P (ORCPT
+        with ESMTP id S231608AbiGKX2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:28:15 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56B78AB0F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:28:14 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id n2-20020a170902e54200b0016c16832828so4541729plf.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:28:14 -0700 (PDT)
+        Mon, 11 Jul 2022 19:28:24 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662C78AB1F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:28:16 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c18-20020a170903235200b0016c37f6d48cso4016487plh.19
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=gAFaZ4/4ERuw4bK9sHa39BcoOgob+bDhWwNvsNxoB+8=;
-        b=auqC5Y/AOEJHYvT5qPXMTMJnka6P9ktH4abdMSWOrllMxo07I/fHOR1Euj69qajyqk
-         sP4Rohst6VN5iI+6MzhVNTy9z93BaPKq0CCbbBID26OQ3N5W7at8LwMLp9r98UUMMU08
-         HSc1qtPQzk3lU6FnTI8MIkVef4+Ejj99QnhfJwaXxkYGdYxhoj3ap6hIox+Gs2WFa3zG
-         hX2J1+srtP360eA/tgM09C1kWgrN5bhiB09PEpTOEelJbkm/5OFtZmNh4JAaP0XSDHb2
-         HpRlt2km/ZI/PR4pCjqN+iu+R36j5/ycovomW3LabExMuoXATs4jAZVTwVwq0gXACRDW
-         tP/w==
+        bh=l1YVI1jymWKPwtQYaErfNq6OCrckplvwfXfah/8A/rc=;
+        b=SVmaSc+lEZoy1vyMnxQkmZX7Wb3FG6N+CBqp55C3XwrUZ33I51/VK8pLmMruirVuhl
+         z+Mxx1RY+uXt8Nj17/lLRC/NMw6LZlLUmrjDVupkRHj52stwdyergUPLjOnoeiM1Bhw1
+         JyUdkak654zIqYhT1QsApidufgOzzlNHcW9pGtbuQKv6mU5pWGmx+dFYm19CXpOpZt9B
+         wLFC4Ykc9rohW/Q4YHFEpyMN/CencJi4JOKSdSQkLa5C688mjx8lTKrwZSTGM3FSgAl6
+         1+Ppb7K6Dx4e2fPDH3isw/w9weHrROniS6nUzTv8XOEPRLqIXEZf7ES5nhlyAeckGmES
+         BMZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=gAFaZ4/4ERuw4bK9sHa39BcoOgob+bDhWwNvsNxoB+8=;
-        b=rrw0V0MZ3Hx/iHzAuPy9YT0EQPuKDUegChbDHdsOfB1Zw+afGSGLuZtL8tOv7XxUzW
-         zhbzfDFv94WlwJ664d+/oqvEEbYb5jsJ54ULYGhJG4QxQQyOugzi1p09LZb/TeuYUifr
-         9yM1B2p6HKcn9d04DVXTWCsk/xOo5qCnenZRio13HV1FHMVn4pyXUs9Et/OOZm292frz
-         XQSlih2h4gQsNE/4FjgTpHwuUucEzqhLmnV4+pzMr/WXviUmo8Y8RO7Sg6av5+i0kn11
-         unTfN7SlI64/BBAyV0szR2Fe4qDKhOXRTiG4CPvO5h7kuGNewfpGevPRdIwOKn57Mb7b
-         bKfg==
-X-Gm-Message-State: AJIora/WZjfHFPO8JF1iwXNGi3jfWe5nHWXHhDkEMWZxYPC/Et0K4AFb
-        gvUDpQHGVTH26SK9PmCse+wj0oqHjDg=
-X-Google-Smtp-Source: AGRyM1toxOQ6GZOX5C9iAC0TrcQrd+ZMPqz1VJ8qL2n+DNOsQyRGlX/ZARQ1rznHLWeOI9jnqRNUyzbhHDg=
+        bh=l1YVI1jymWKPwtQYaErfNq6OCrckplvwfXfah/8A/rc=;
+        b=UBlMu8kNHx+Px4VqDdWdY/+IZIFdSxRqh1S4HlEWTK4zZF7227Wp8p9NPbP5DMNIHF
+         92GOsLPp4zz5m9PywosczkF0YyzsCahhrncwLHVxjVHOeKRTzmO0qn5SxAeOExVuqQf1
+         AHsULWU707NJ9T35ZzVX53TomdxIuhIGdxloBFm7HosSYhCJZEzncdZG9//Jp9HaTZOA
+         +8iJY6BpV13gRM+LuREhVc4wVg15KOOg/6SC9CF9V6pwcHD402LftC2RNZevqxMpe7OK
+         Ztlb85cAKWidWtr91X+LaLi6gxZAkqAZuUGPKuUX+RJ5X191HhLIP+lOjtpUCcd9SAIc
+         sfuw==
+X-Gm-Message-State: AJIora+EcXn6okF5rKCay4pN9+z0QgHCLTDc/hI/eA1QvanbcfBHaU/r
+        MEmrAhWLhnsxfOIdod/8h6f+eieBYvw=
+X-Google-Smtp-Source: AGRyM1v0IgBIRDYDSdN+eimreeKt668f69l4v8Y/nJf+NT6IYH6M7hCBXRbqo0rXXs5/PS7XjbVfSNZUSjU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:aa4b:b0:15f:b2c:73c7 with SMTP id
- c11-20020a170902aa4b00b0015f0b2c73c7mr21113989plr.164.1657582094045; Mon, 11
- Jul 2022 16:28:14 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:474c:b0:1ec:f898:d85b with SMTP id
+ y12-20020a17090a474c00b001ecf898d85bmr895865pjg.11.1657582095847; Mon, 11 Jul
+ 2022 16:28:15 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon, 11 Jul 2022 23:27:49 +0000
+Date:   Mon, 11 Jul 2022 23:27:50 +0000
 In-Reply-To: <20220711232750.1092012-1-seanjc@google.com>
-Message-Id: <20220711232750.1092012-3-seanjc@google.com>
+Message-Id: <20220711232750.1092012-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220711232750.1092012-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH 2/3] KVM: x86: Set error code to segment selector on LLDT/LTR
- non-canonical #GP
+Subject: [PATCH 3/3] KVM: x86: WARN only once if KVM leaves a dangling
+ userspace I/O request
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -73,36 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When injecting a #GP on LLDT/LTR due to a non-canonical LDT/TSS base, set
-the error code to the selector.  Intel SDM's says nothing about the #GP,
-but AMD's APM explicitly states that both LLDT and LTR set the error code
-to the selector, not zero.
+Change a WARN_ON() to separate WARN_ON_ONCE() if KVM has an outstanding
+PIO or MMIO request without an associated callback, i.e. if KVM queued a
+userspace I/O exit but didn't actually exit to userspace before moving
+on to something else.  Warning on every KVM_RUN risks spamming the kernel
+if KVM gets into a bad state.  Opportunistically split the WARNs so that
+it's easier to triage failures when a WARN fires.
 
-Note, a non-canonical memory operand on LLDT/LTR does generate a #GP(0),
-but the KVM code in question is specific to the base from the descriptor.
+Deliberately do not use KVM_BUG_ON(), i.e. don't kill the VM.  While the
+WARN is all but guaranteed to fire if and only if there's a KVM bug, a
+dangling I/O request does not present a danger to KVM (that flag is truly
+truly consumed only in a single emulator path), and any such bug is
+unlikely to be fatal to the VM (KVM essentially failed to do something it
+shouldn't have tried to do in the first place).  In other words, note the
+bug, but let the VM keep running.
 
-Fixes: e37a75a13cda ("KVM: x86: Emulator ignores LDTR/TR extended base on LLDT/LTR")
-Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/emulate.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/x86.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 09e4b67b881f..bd9e9c5627d0 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1736,8 +1736,8 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
- 		if (ret != X86EMUL_CONTINUE)
- 			return ret;
- 		if (emul_is_noncanonical_address(get_desc_base(&seg_desc) |
--				((u64)base3 << 32), ctxt))
--			return emulate_gp(ctxt, 0);
-+						 ((u64)base3 << 32), ctxt))
-+			return emulate_gp(ctxt, err_code);
- 	}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 567d13405445..50dc55996416 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10847,8 +10847,10 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 		r = cui(vcpu);
+ 		if (r <= 0)
+ 			goto out;
+-	} else
+-		WARN_ON(vcpu->arch.pio.count || vcpu->mmio_needed);
++	} else {
++		WARN_ON_ONCE(vcpu->arch.pio.count);
++		WARN_ON_ONCE(vcpu->mmio_needed);
++	}
  
- 	if (seg == VCPU_SREG_TR) {
+ 	if (kvm_run->immediate_exit) {
+ 		r = -EINTR;
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

@@ -2,299 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27198570422
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD8E57042A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiGKNXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S229987AbiGKNX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiGKNXV (ORCPT
+        with ESMTP id S229665AbiGKNX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:23:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714BB3DF0A
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:23:20 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oAtNW-0006xY-HM; Mon, 11 Jul 2022 15:23:10 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oAtNT-0001Ww-Vt; Mon, 11 Jul 2022 15:23:07 +0200
-Date:   Mon, 11 Jul 2022 15:23:07 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 5/7] clk: baikal-t1: Move reset-controls code into a
- dedicated module
-Message-ID: <20220711132307.GA3771@pengutronix.de>
-References: <20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru>
- <20220708192725.9501-6-Sergey.Semin@baikalelectronics.ru>
+        Mon, 11 Jul 2022 09:23:57 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CA71A068;
+        Mon, 11 Jul 2022 06:23:56 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id l11so330352qvu.13;
+        Mon, 11 Jul 2022 06:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i7Y2STqU+qPlVyZe6RfsFqCzhGI06GzC5rAA/iBUOWY=;
+        b=e5rAxazlawNtbiIO5WOHZvYj3ODCoNnXNI/CGx1QwXFKZHCvk94FMooIKlKn5ABcZK
+         NMOtMS6Jp1fxw76/WA7pSd0C9F1v1+bDWTLyvmoI2sktl9aQUkOJxg/XOTfTngv1nDNk
+         JSRwmyU5xdWco7YJOQf5FjgoCU0DrKPA8VYGfMFt+GUL9sc6NoZU90DscIynluitoyIg
+         nfMSBaAr55XOT0k2S+tug+xupxBUYF8XUVB5l0FaMkjeyf45e4P3lbgqWjeig7lHIqqi
+         h5w8Wb4pfKCMUpOa06XJuIds+9k3noSe8GFJzEwADSTKlb8599p7mcQBH2ZdOaq54Xob
+         AzzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i7Y2STqU+qPlVyZe6RfsFqCzhGI06GzC5rAA/iBUOWY=;
+        b=id9Abzm/IfVcZTGuCokhgbQVzAYK8/lubbVT6JDEjO7++vSHd4DMG4uKkm97Q8cTnU
+         pEKZfSbKo3sjsAfIDeJ8XjNXe3Y0KX/MQLRtgeShbeOAkeJkoFbKLOJbO+q2Nm7z2Z9K
+         8G2jY1wK0eNUqfnFe1aeuR+/DvyZI67M2DunPVNe7spjFxOfPlNnXqCpp7U56Eq2b1R4
+         nshlPPe3t0Z4hqid41fkrk8oYLjxH4k63B55hOerTZPTrnonZDt1pCyIWBVv0C+01kje
+         Bqn93/mrsIhrcrM9rfGx8jc/sITYudfW/Er+t03yw1A6muEyjjWf20q0sZID79eYU3wH
+         Tbfg==
+X-Gm-Message-State: AJIora9dMG8XvVhqlmiaXKaq5TxH13e0X+lhP0sJ5Ch9/o5bAyUVYWrx
+        tqrChqyxcevxH6Utyc037a2luubEjV9lVbNLBRs=
+X-Google-Smtp-Source: AGRyM1vj/kgRu4xxPgaaHRW2F0Oc1OIRrL8u09YahVoyaLnsKOCWC39eJg6XS1bsdvW+S6fAMb8tzy1/a172gcMGfX0=
+X-Received: by 2002:a0c:8c89:0:b0:470:9ab6:bb27 with SMTP id
+ p9-20020a0c8c89000000b004709ab6bb27mr13500635qvb.118.1657545835511; Mon, 11
+ Jul 2022 06:23:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708192725.9501-6-Sergey.Semin@baikalelectronics.ru>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-2-robimarko@gmail.com>
+ <CAA8EJprfAW7kFSPxs7=LEHLmAVrWhV8KRbUseg8jXyiUbyZuRQ@mail.gmail.com>
+In-Reply-To: <CAA8EJprfAW7kFSPxs7=LEHLmAVrWhV8KRbUseg8jXyiUbyZuRQ@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 11 Jul 2022 15:23:44 +0200
+Message-ID: <CAOX2RU7+f3vXdOmMNi6Dt=9jadrgVFhrU56vm=6dYKkhnPUJwQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] clk: qcom: apss-ipq6018: fix apcs_alias0_clk_src
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 10:27:23PM +0300, Serge Semin wrote:
-> Before adding the directly controlled resets support it's reasonable to
-> move the existing resets control functionality into a dedicated object for
-> the sake of the CCU dividers clock driver simplification. After the new
-> functionality was added clk-ccu-div.c would have got to a mixture of the
-> weakly dependent clocks and resets methods. Splitting the methods up into
-> the two objects will make the code easier to read and maintain. It shall
-> also improve the code scalability (though hopefully we won't need this
-> part that much in the future).
-> 
-> The reset control functionality is now implemented in the framework of a
-> single unit since splitting it up doesn't make much sense due to
-> relatively simple reset operations. The ccu-rst.c has been designed to be
-> looking like ccu-div.c or ccu-pll.c with two globally available methods
-> for the sake of the code unification and better code readability.
-> 
-> This commit doesn't provide any change in the CCU reset implementation
-> semantics. As before the driver will support the trigger-like CCU resets
-> only, which are responsible for the AXI-bus, APB-bus and SATA-ref blocks
-> reset. The assert/de-assert-capable reset controls support will be added
-> in the next commit.
-> 
-> Note the CCU Clock dividers and resets functionality split up was possible
-> due to not having any side-effects (at least we didn't found ones) of the
-> regmap-based concurrent access of the common CCU dividers/reset CSRs.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On Mon, 11 Jul 2022 at 14:48, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > While working on IPQ8074 APSS driver it was discovered that IPQ6018 and
+> > IPQ8074 use almost the same PLL and APSS clocks, however APSS driver is
+> > currently broken.
+> >
+> > More precisely apcs_alias0_clk_src is broken, it was added as regmap_mux
+> > clock.
+> > However after debugging why it was always stuck at 800Mhz, it was figured
+> > out that its not regmap_mux compatible at all.
+> > It is a simple mux but it uses RCG2 register layout and control bits, so
+>
+> To utilize control bits, you probably should also use
 
-Nothing left I'd insist to be changed, so:
+Hi,
+I am not really sure what you mean here?
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+>
+> > utilize the new clk_rcg2_mux_closest_ops to correctly drive it while not
+> > having to provide a dummy frequency table.
+>
+> Could you please clarify this. Your new rcg2 ops seems to be literally
+> equivalent to the clk_regmap_mux_closest_ops provided the shift and
+> width are set correctly..
 
-Just a few nitpicks below:
+Well, I have tried playing with the clk_regmap_mux_closest_ops but I
+just cannot get it
+to work.
 
-> 
-> ---
-> 
-> Changelog v4:
-> - Completely split CCU Dividers and Resets functionality. (@Stephen)
-> 
-> Changelog v6:
-> - Combine the reset-related code into a single file. (@Philipp)
-> - Refactor the code to support the linear reset IDs only. (@Philipp)
-> - Drop CCU_DIV_RST_MAP() macro. It's no longer used.
-> ---
->  drivers/clk/baikal-t1/Kconfig       |  12 ++-
->  drivers/clk/baikal-t1/Makefile      |   1 +
->  drivers/clk/baikal-t1/ccu-div.c     |  19 ----
->  drivers/clk/baikal-t1/ccu-div.h     |   4 +-
->  drivers/clk/baikal-t1/ccu-rst.c     | 151 ++++++++++++++++++++++++++++
->  drivers/clk/baikal-t1/ccu-rst.h     |  57 +++++++++++
->  drivers/clk/baikal-t1/clk-ccu-div.c |  92 ++---------------
->  7 files changed, 231 insertions(+), 105 deletions(-)
->  create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
->  create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
-> 
-[...]
-> diff --git a/drivers/clk/baikal-t1/ccu-rst.c b/drivers/clk/baikal-t1/ccu-rst.c
-> new file mode 100644
-> index 000000000000..8fd40810d24e
-> --- /dev/null
-> +++ b/drivers/clk/baikal-t1/ccu-rst.c
-> @@ -0,0 +1,151 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
-> + *
-> + * Authors:
-> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> + *
-> + * Baikal-T1 CCU Resets interface driver
-> + */
-> +
-> +#define pr_fmt(fmt) "bt1-ccu-rst: " fmt
-> +
-> +#include <linux/bits.h>
-> +#include <linux/delay.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of.h>
-> +#include <linux/printk.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/slab.h>
-> +
-> +#include <dt-bindings/reset/bt1-ccu.h>
-> +
-> +#include "ccu-rst.h"
-> +
-> +#define CCU_AXI_MAIN_BASE		0x030
-> +#define CCU_AXI_DDR_BASE		0x034
-> +#define CCU_AXI_SATA_BASE		0x038
-> +#define CCU_AXI_GMAC0_BASE		0x03C
-> +#define CCU_AXI_GMAC1_BASE		0x040
-> +#define CCU_AXI_XGMAC_BASE		0x044
-> +#define CCU_AXI_PCIE_M_BASE		0x048
-> +#define CCU_AXI_PCIE_S_BASE		0x04C
-> +#define CCU_AXI_USB_BASE		0x050
-> +#define CCU_AXI_HWA_BASE		0x054
-> +#define CCU_AXI_SRAM_BASE		0x058
-> +
-> +#define CCU_SYS_SATA_REF_BASE		0x060
-> +#define CCU_SYS_APB_BASE		0x064
-> +
-> +#define CCU_RST_DELAY_US		1
-> +
-> +#define CCU_RST_TRIG(_base, _ofs)		\
-> +	{					\
-> +		.base = _base,			\
-> +		.mask = BIT(_ofs),		\
-> +	}
-> +
-> +struct ccu_rst_info {
-> +	unsigned int base;
-> +	unsigned int mask;
-> +};
-[...]
+The width like you pointed out should be 8, register offset is
+currently pointing at the RCG control
+register and not the CFG one, so it obviously does not work.
 
-This could be compacted by making the base offset u16 and - if there are
-no resets that require toggling two bits at once - by storing an u8 bit
-offset instead of the mask.
+Setting the register to 0x54 and shift to 8 will just fail silently,
+leaving the shift at 7 and correcting
+the register won't work as RCG control bits are not utilized at all
+with regmap_mux and DIRTY_CFG
+is active when I manually look at the register.
 
-> diff --git a/drivers/clk/baikal-t1/ccu-rst.h b/drivers/clk/baikal-t1/ccu-rst.h
-> new file mode 100644
-> index 000000000000..68214d777465
-> --- /dev/null
-> +++ b/drivers/clk/baikal-t1/ccu-rst.h
-> @@ -0,0 +1,57 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
-> + *
-> + * Baikal-T1 CCU Resets interface driver
-> + */
-> +#ifndef __CLK_BT1_CCU_RST_H__
-> +#define __CLK_BT1_CCU_RST_H__
-> +
-> +#include <linux/of.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
-> +
-> +struct ccu_rst_info;
-> +
-> +/*
-> + * struct ccu_rst_init_data - CCU Resets initialization data
-> + * @sys_regs: Baikal-T1 System Controller registers map.
-> + * @np: Pointer to the node with the System CCU block.
-> + */
-> +struct ccu_rst_init_data {
-> +	struct regmap *sys_regs;
-> +	struct device_node *np;
-> +};
-> +
-> +/*
-> + * struct ccu_rst - CCU Reset descriptor
-> + * @rcdev: Reset controller descriptor.
-> + * @sys_regs: Baikal-T1 System Controller registers map.
-> + * @rsts_info: Reset flag info (base address and mask).
-> + */
-> +struct ccu_rst {
-> +	struct reset_controller_dev rcdev;
-> +	struct regmap *sys_regs;
-> +	const struct ccu_rst_info *rsts_info;
-> +};
-> +#define to_ccu_rst(_rcdev) container_of(_rcdev, struct ccu_rst, rcdev)
+So, I am really not sure how clk_regmap_mux_closest_ops are supposed
+to work here at all.
 
-I'd make this a static inline function.
-
-> diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
-> index 90f4fda406ee..278aa38d767e 100644
-> --- a/drivers/clk/baikal-t1/clk-ccu-div.c
-> +++ b/drivers/clk/baikal-t1/clk-ccu-div.c
-[...]
-> @@ -274,42 +241,6 @@ static struct ccu_div *ccu_div_find_desc(struct ccu_div_data *data,
->  	return ERR_PTR(-EINVAL);
->  }
->  
-> -static int ccu_div_reset(struct reset_controller_dev *rcdev,
-> -			 unsigned long rst_id)
-> -{
-> -	struct ccu_div_data *data = to_ccu_div_data(rcdev);
-> -	const struct ccu_div_rst_map *map;
-> -	struct ccu_div *div;
-> -	int idx, ret;
-> -
-> -	for (idx = 0, map = data->rst_map; idx < data->rst_num; ++idx, ++map) {
-> -		if (map->rst_id == rst_id)
-> -			break;
-> -	}
-> -	if (idx == data->rst_num) {
-> -		pr_err("Invalid reset ID %lu specified\n", rst_id);
-> -		return -EINVAL;
-> -	}
-> -
-> -	div = ccu_div_find_desc(data, map->clk_id);
-> -	if (IS_ERR(div)) {
-> -		pr_err("Invalid clock ID %d in mapping\n", map->clk_id);
-> -		return PTR_ERR(div);
-> -	}
-> -
-> -	ret = ccu_div_reset_domain(div);
-> -	if (ret) {
-> -		pr_err("Reset isn't supported by divider %s\n",
-> -			clk_hw_get_name(ccu_div_get_clk_hw(div)));
-                       ^
-This should be aligned to the parenthesis, see checkpatch.pl --strict.
-
-> -	}
-> -
-> -	return ret;
-> -}
-> -
-> -static const struct reset_control_ops ccu_div_rst_ops = {
-> -	.reset = ccu_div_reset,
-> -};
-> -
->  static struct ccu_div_data *ccu_div_create_data(struct device_node *np)
->  {
->  	struct ccu_div_data *data;
-> @@ -323,13 +254,9 @@ static struct ccu_div_data *ccu_div_create_data(struct device_node *np)
->  	if (of_device_is_compatible(np, "baikal,bt1-ccu-axi")) {
->  		data->divs_num = ARRAY_SIZE(axi_info);
->  		data->divs_info = axi_info;
-> -		data->rst_num = ARRAY_SIZE(axi_rst_map);
-> -		data->rst_map = axi_rst_map;
->  	} else if (of_device_is_compatible(np, "baikal,bt1-ccu-sys")) {
->  		data->divs_num = ARRAY_SIZE(sys_info);
->  		data->divs_info = sys_info;
-> -		data->rst_num = ARRAY_SIZE(sys_rst_map);
-> -		data->rst_map = sys_rst_map;
->  	} else {
->  		pr_err("Incompatible DT node '%s' specified\n",
->  			of_node_full_name(np));
-                       ^
-Same as above.
-
-regards
-Philipp
+Regards,
+Robert
+>
+> > While we are here, use ARRAY_SIZE for number of parents.
+> >
+> > Tested on IPQ6018-CP01-C1 reference board and multiple IPQ8074 boards.
+> >
+> > Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> >  drivers/clk/qcom/apss-ipq6018.c | 13 ++++++-------
+> >  1 file changed, 6 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
+> > index d78ff2f310bf..be952d417ded 100644
+> > --- a/drivers/clk/qcom/apss-ipq6018.c
+> > +++ b/drivers/clk/qcom/apss-ipq6018.c
+> > @@ -16,7 +16,7 @@
+> >  #include "clk-regmap.h"
+> >  #include "clk-branch.h"
+> >  #include "clk-alpha-pll.h"
+> > -#include "clk-regmap-mux.h"
+> > +#include "clk-rcg.h"
+> >
+> >  enum {
+> >         P_XO,
+> > @@ -33,16 +33,15 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
+> >         { P_APSS_PLL_EARLY, 5 },
+> >  };
+> >
+> > -static struct clk_regmap_mux apcs_alias0_clk_src = {
+> > -       .reg = 0x0050,
+> > -       .width = 3,
+> > -       .shift = 7,
+>
+> Judging from rcg2 ops, .shift should be set to 8.
+>
+> > +static struct clk_rcg2 apcs_alias0_clk_src = {
+> > +       .cmd_rcgr = 0x0050,
+> > +       .hid_width = 5,
+> >         .parent_map = parents_apcs_alias0_clk_src_map,
+> >         .clkr.hw.init = &(struct clk_init_data){
+> >                 .name = "apcs_alias0_clk_src",
+> >                 .parent_data = parents_apcs_alias0_clk_src,
+> > -               .num_parents = 2,
+> > -               .ops = &clk_regmap_mux_closest_ops,
+> > +               .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
+> > +               .ops = &clk_rcg2_mux_closest_ops,
+> >                 .flags = CLK_SET_RATE_PARENT,
+> >         },
+> >  };
+> > --
+> > 2.36.1
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry

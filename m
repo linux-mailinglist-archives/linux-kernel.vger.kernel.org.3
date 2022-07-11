@@ -2,138 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8241E56D6F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3C356D6FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiGKHkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S230141AbiGKHnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGKHkI (ORCPT
+        with ESMTP id S229668AbiGKHnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:40:08 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1266577;
-        Mon, 11 Jul 2022 00:40:07 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 3DF6FC009; Mon, 11 Jul 2022 09:40:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657525205; bh=4znMRb8yNMIL2ImNXJHHakTw5e86CC6v8rfhTcy+ZYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0Hp+pjZdW6nvsDpQMwtbcZJsXG4UaF+GS8rGC4AeCNlM/agyHrpB3s+OyC4XivVD+
-         zCrblT85F8a97htBCZ7V6w6XacakGklghoTZqzqUc7ZNuiy+y1Bu0yd5JHSwgtdpBy
-         TXrWkJlk89SEWozd0l91LgwGLBfPlNMVy1PeQk6TzJWzpR60QMBDqqQWPgRsiMOPsb
-         3QC5RbGHhn9f4fe1pIkWBD7JCV4pBjHqRKfoBiPgYYY/uEtJSMwMw8U02LuZiHsWgn
-         vaGV70wkJZT2xLQba66jPV/BE/CCG4KWnTFH8AxdsDykNzB70URPLFpJSQyvwuHyId
-         jUUwEAkXOMwtw==
+        Mon, 11 Jul 2022 03:43:32 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D116568;
+        Mon, 11 Jul 2022 00:43:29 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id o12so2608935ljc.3;
+        Mon, 11 Jul 2022 00:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6+Eje+BI4mgYWYNE16gkK8LI+X4SswO3LLw9Mljelro=;
+        b=jcaIQZW81P74s1CpNAYO8N8l0GZfj7ayncDoX4MF8kXAAWbl4HvPSxXIfhr6A+3/nx
+         O2ZTotadCJTDen2eFsibLo3TqpPkBw+NUjgBTB7Af8Mw7S5UftVGJMQSon7jl6ecbkgZ
+         EQSw+JHmykzIY8For3YASqO7XzibR5TeF/gb8MClV4iPy86bXdZ9BFx+PW/7Z9s42sqT
+         UZWwv9GJ8JC6+k1rOzTvSKIo2c52vAxnyYaRDOEmm+T7z48Lu9aSKMxmcz+TioEzGAN7
+         UghtWSk4Ct41GfxY16+1v6eaTagFAp/21tzaJUNRtO4it+xNy+BXVBlybJynr583Msin
+         pw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6+Eje+BI4mgYWYNE16gkK8LI+X4SswO3LLw9Mljelro=;
+        b=c9mx3EgKZYvSVlSRIondbxnBTLWzH0gRlp9W12cCwVyOwQsW3BmIb+mlRPscujToyw
+         VgOWzQ2OQoJORBT3JFuVrjBjt3AK1OHcZ1EZWTrKYfcLA2Crxu87ZOhqm1ZEC8rjHRKY
+         2bTHHrkibChZsefr63sq5C4E04raXfz54L0u4yky58S7ShnCl8wec1rndk+X84QGimDD
+         ip94TNBVUWpUMfcE9im/aXKLM8HEkJ8onu/laCPi+jIpk3JIIFIC+rwBUie2VSgtPyG5
+         Mw2ecPJKFdXPz8NB7M6SiK+6PR8FpLcetQer/XNhBmATqevX97flQsGh228dDM4aHgmG
+         XHHA==
+X-Gm-Message-State: AJIora+BwqHYyKVhlKzCli7XQT46LNKebWAX/fd6K8OE4NEcQqUAHcbU
+        E1omtcw9u2kc9IrWNrfmHx4BZQ4D9vw46XTatpQ=
+X-Google-Smtp-Source: AGRyM1sWvpjgSJFW19NE3gcXq3cbOwxFZbvPtLSl2rdJY2M8qgy5upBrRLJTDyNwcyAnlw4QRDKk67ablDHOMGZeV7c=
+X-Received: by 2002:a2e:bf20:0:b0:25a:45a6:7587 with SMTP id
+ c32-20020a2ebf20000000b0025a45a67587mr9504164ljr.377.1657525408206; Mon, 11
+ Jul 2022 00:43:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220705123705.764-1-xuewen.yan@unisoc.com> <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
+ <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
+In-Reply-To: <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Mon, 11 Jul 2022 15:43:17 +0800
+Message-ID: <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id A6C79C009;
-        Mon, 11 Jul 2022 09:40:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657525204; bh=4znMRb8yNMIL2ImNXJHHakTw5e86CC6v8rfhTcy+ZYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=APOSJV0WYbmBOmerpJvPFt0U+eh10sL0i+zdv7vzmc+EW0jRxUGJacQN7/3Rr/9iW
-         Qt6ZNPhVMYkoXX0VXV2Om/asntBOqpgLoTH2CRKEQdF6VjL3qog2JLbGasmTzZ5l85
-         tNG45gtzUEjVx6pBM6wrryisuqFJXXZSFA4p/ZTuO2pg7T/Szs6JjCnWaY7Oqtyna7
-         fZhNEKYR4J764OWtaHk3wHhCk5Ze5s3ct67tfhdvX5hLxAkUKUFQ77OqDssV+EQK49
-         yPohvHCZ4xhb9Pw3F0DQY5DyZ9+zfK53vJ4WsFSRv91L1hgyRtamHOPYB4bjcgpCnr
-         Rnylswyj3je0Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id d9434db7;
-        Mon, 11 Jul 2022 07:39:56 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 16:39:41 +0900
-From:   asmadeus@codewreck.org
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, tomasbortoli@gmail.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: 9p: fix possible refcount leak in p9_read_work()
- and recv_done()
-Message-ID: <YsvTvalrwd4bxO75@codewreck.org>
-References: <20220711065907.23105-1-hbh25y@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220711065907.23105-1-hbh25y@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hangyu Hua wrote on Mon, Jul 11, 2022 at 02:59:07PM +0800:
-> A ref got in p9_tag_lookup needs to be put when functions enter the
-> error path.
-> 
-> Fix this by adding p9_req_put in error path.
+On Mon, Jul 11, 2022 at 3:32 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Xuewen,
+>
+> On 7/11/22 08:21, Xuewen Yan wrote:
+> > Hi all
+> >
+> > This deadlock is inevitable, any comment?
+>
+> Could you tell me how to reproduce this?
+> Is there a need of special cgroup setup?
 
-I wish it was that simple.
+This deadlock occurs when we run the monkey test on an Android phone,
+at the same time, randomly put online or offline a cpu core.
+Indeed the thread-A which get the cgroup_threadgroup_rwsem and waiting
+for the cpu_hotplug_lock is the thread whose name is "OomAdjuster" in
+android.
 
-Did you actually observe a leak?
+And I see the cpu_hotplug_lock is added by the patch:
+https://lore.kernel.org/all/20220121101210.84926-1-zhangqiao22@huawei.com/
 
-> diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
-> index 8f8f95e39b03..c4ccb7b9e1bf 100644
-> --- a/net/9p/trans_fd.c
-> +++ b/net/9p/trans_fd.c
-> @@ -343,6 +343,7 @@ static void p9_read_work(struct work_struct *work)
->  			p9_debug(P9_DEBUG_ERROR,
->  				 "No recv fcall for tag %d (req %p), disconnecting!\n",
->  				 m->rc.tag, m->rreq);
-> +			p9_req_put(m->rreq);
->  			m->rreq = NULL;
->  			err = -EIO;
->  			goto error;
-> @@ -372,6 +373,8 @@ static void p9_read_work(struct work_struct *work)
->  				 "Request tag %d errored out while we were reading the reply\n",
->  				 m->rc.tag);
->  			err = -EIO;
-> +			p9_req_put(m->rreq);
-> +			m->rreq = NULL;
->  			goto error;
->  		}
->  		spin_unlock(&m->client->lock);
+Thanks!
 
-
-for tcp, we still have that request in m->req_list, so we should be
-calling p9_client_cb which will do the p9_req_put in p9_conn_cancel.
-
-If you do it here, you'll get a refcount overflow and use after free.
-
-> diff --git a/net/9p/trans_rdma.c b/net/9p/trans_rdma.c
-> index 88e563826674..82b5d6894ee2 100644
-> --- a/net/9p/trans_rdma.c
-> +++ b/net/9p/trans_rdma.c
-> @@ -317,6 +317,7 @@ recv_done(struct ib_cq *cq, struct ib_wc *wc)
->  	/* Check that we have not yet received a reply for this request.
->  	 */
->  	if (unlikely(req->rc.sdata)) {
-> +		p9_req_put(req);
->  		pr_err("Duplicate reply for request %d", tag);
->  		goto err_out;
->  	}
-
-This one isn't as clear cut, I see that they put the client in a
-FLUSHING state but nothing seems to acton on it... But if this happens
-we're already in the use after free realm -- it means rc.sdata was
-already set so the other thread could be calling p9_client_cb anytime if
-it already hasn't, and yet another thread will then do the final ref put
-and free this.
-We shouldn't free this here as that would also be an overflow. The best
-possible thing to do at this point is just to stop using that pointer.
-
-
-If you actually run into a problem with these refcounts (should get a
-warning on umount that something didn't get freed) then by all mean
-let's look further into it, but please don't send such patches without
-testing the error paths you're "fixing" -- I'm pretty sure a reproducer
-to hit these paths would bark errors in dmesg as refcount has an
-overflow check.
-
---
-Dominique
+>
+> Regards,
+> Lukasz

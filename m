@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B63356FAA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD13256FB98
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiGKJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        id S232518AbiGKJcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiGKJUN (ORCPT
+        with ESMTP id S232465AbiGKJcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:20:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD2352FC8;
-        Mon, 11 Jul 2022 02:12:26 -0700 (PDT)
+        Mon, 11 Jul 2022 05:32:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFA3419A8;
+        Mon, 11 Jul 2022 02:17:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45E32B80E76;
-        Mon, 11 Jul 2022 09:12:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C26C341C0;
-        Mon, 11 Jul 2022 09:12:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AD561257;
+        Mon, 11 Jul 2022 09:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63E2C341C0;
+        Mon, 11 Jul 2022 09:17:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530743;
-        bh=WupakI2RpoIXjYqEa31FSAGvYP6KTiAF4owg9wrvApk=;
+        s=korg; t=1657531041;
+        bh=ettJJAGG6+QCxqGnRfN2A097HPuayip3gBx+rD7C5SU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fIkytrQI95nrHjYU8aZTUfzGHapftrTvOkBCdwzp5w9YFdwWY4eSPO8vAEDkeh1bc
-         dzCu2oEHJ/mRRU1wPb5nmqkITklyrZVUmLdPjzz3mnaLIqV7n1Lx7VDxf6XMeQAAUt
-         9Z2BRFQXur8fsHvIgwlk4hLYTrNF78hcQ98i+Anw=
+        b=Kn1GrgSTPERNG/GiDxQ4ZKewRqgH+uXxXakpQmsy2oDb5oOr0FZFv+vQ7X4AtJ8xI
+         UbwA7nbtU7rzSvKXPhfY6EGHxIGO4pW3X4d9HxDVWL8rsqAVNG+4/H2crHO4Fk00Gd
+         0TeGf33T2lJ8y4uA5qLjxcv6T4GKrdLL+K9/Do/Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Sandeen <sandeen@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH 5.10 24/55] xfs: remove incorrect ASSERT in xfs_rename
-Date:   Mon, 11 Jul 2022 11:07:12 +0200
-Message-Id: <20220711090542.478899270@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 073/112] ARM: dts: at91: sam9x60ek: fix eeprom compatible and size
+Date:   Mon, 11 Jul 2022 11:07:13 +0200
+Message-Id: <20220711090551.644673592@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Sandeen <sandeen@redhat.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-commit e445976537ad139162980bee015b7364e5b64fff upstream.
+[ Upstream commit f2cbbc3f926316ccf8ef9363d8a60c1110afc1c7 ]
 
-This ASSERT in xfs_rename is a) incorrect, because
-(RENAME_WHITEOUT|RENAME_NOREPLACE) is a valid combination, and
-b) unnecessary, because actual invalid flag combinations are already
-handled at the vfs level in do_renameat2() before we get called.
-So, remove it.
+The board has a microchip 24aa025e48 eeprom, which is a 2 Kbits memory,
+so it's compatible with at24c02 not at24c32.
+Also the size property is wrong, it's not 128 bytes, but 256 bytes.
+Thus removing and leaving it to the default (256).
 
-Reported-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Eric Sandeen <sandeen@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Fixes: 7dcf5c3e4527 ("xfs: add RENAME_WHITEOUT support")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1e5f532c27371 ("ARM: dts: at91: sam9x60: add device tree for soc and board")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220607090455.80433-1-eugen.hristev@microchip.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/xfs/xfs_inode.c |    1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -3170,7 +3170,6 @@ xfs_rename(
- 	 * appropriately.
- 	 */
- 	if (flags & RENAME_WHITEOUT) {
--		ASSERT(!(flags & (RENAME_NOREPLACE | RENAME_EXCHANGE)));
- 		error = xfs_rename_alloc_whiteout(target_dp, &wip);
- 		if (error)
- 			return error;
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7719ea3d4933..81ccb0636a00 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -233,10 +233,9 @@
+ 		status = "okay";
+ 
+ 		eeprom@53 {
+-			compatible = "atmel,24c32";
++			compatible = "atmel,24c02";
+ 			reg = <0x53>;
+ 			pagesize = <16>;
+-			size = <128>;
+ 			status = "okay";
+ 		};
+ 	};
+-- 
+2.35.1
+
 
 

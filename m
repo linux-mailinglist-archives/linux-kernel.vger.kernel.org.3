@@ -2,230 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1416556D895
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB52E56D8BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiGKIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S230084AbiGKIrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiGKInv (ORCPT
+        with ESMTP id S229621AbiGKIrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:43:51 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41641E5;
-        Mon, 11 Jul 2022 01:43:30 -0700 (PDT)
-Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 107EA1F53F;
-        Mon, 11 Jul 2022 10:43:28 +0200 (CEST)
-Message-ID: <0004504d-d009-1eb7-d544-5f8a28aa565a@somainline.org>
-Date:   Mon, 11 Jul 2022 10:43:27 +0200
+        Mon, 11 Jul 2022 04:47:48 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00435E1;
+        Mon, 11 Jul 2022 01:47:46 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26B8FshS003448;
+        Mon, 11 Jul 2022 10:47:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=HV0ANHZFRy9GO7TFGDc5FELdAQU34TvOwuvKCtvBo8U=;
+ b=Wif42qjpsDkLpOTcJNleWPGy5KsyXTzAJIInsYsSk1Jr5wciVs1VzM0Rn4gZeFnoAwxT
+ ZvtSYcl/3kYVB5sAYP0UpSAMswLDRQ1YRDkvjc/MBClMlwsWccVFkx15bK1NUg/9wmK4
+ Q4MKW+OQfT7VGaQdp/K1r2eEkt5kpYpYEQ5F5SVpK5VT1yUIKKK5+5pEdUfOeoS0WuZV
+ +6UFVRSmKLQrzpsTFXenJgkGe1hZx5DKTOUT+LrgMjspFurSijUBhywqQXCsZOaSCVoY
+ eIUDFEthWCTSvclOwEBLmd5TI97voQ1yi0I+MlsXRjROHDV4EF44ClO/DdCHOlxi28Ru Yw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h71121pg5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 10:47:22 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B66A810002A;
+        Mon, 11 Jul 2022 10:47:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C979F21513F;
+        Mon, 11 Jul 2022 10:47:20 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 11 Jul
+ 2022 10:47:19 +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH 0/4] STM32 DMA-MDMA chaining feature
+Date:   Mon, 11 Jul 2022 10:46:59 +0200
+Message-ID: <20220711084703.268481-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 5/5] ARM: dts: qcom: align SDHCI clocks with DT schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Douglas Anderson <dianders@chromium.org>
-References: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org>
- <20220711082940.39539-6-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220711082940.39539-6-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_14,2022-07-08_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset (re)introduces STM32 DMA-MDMA chaining feature.
 
+As the DMA is not able to generate convenient burst transfer on the DDR,
+it penalises the AXI bus when accessing the DDR. While it accesses
+optimally the SRAM. The DMA-MDMA chaining then consists in having an SRAM
+buffer between DMA and MDMA, so the DMA deals with peripheral and SRAM,
+and the MDMA with SRAM and DDR.
 
-On 11.07.2022 10:29, Krzysztof Kozlowski wrote:
-> The DT schema expects clocks iface-core order.  No functional change.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+The feature relies on the fact that DMA channel Transfer Complete signal
+can trigger a MDMA channel transfer and MDMA can clear the DMA request by
+writing to DMA Interrupt Clear register.
 
-Konrad
->  arch/arm/boot/dts/qcom-apq8084.dtsi    | 12 ++++++------
->  arch/arm/boot/dts/qcom-ipq4019.dtsi    |  4 ++--
->  arch/arm/boot/dts/qcom-msm8226.dtsi    | 18 +++++++++---------
->  arch/arm/boot/dts/qcom-msm8974.dtsi    | 18 +++++++++---------
->  arch/arm/boot/dts/qcom-msm8974pro.dtsi |  6 +++---
->  5 files changed, 29 insertions(+), 29 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-> index 45f3cbcf6238..c887ac5cdd7d 100644
-> --- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-> +++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-> @@ -425,10 +425,10 @@ mmc@f9824900 {
->  			reg-names = "hc", "core";
->  			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
-> -				 <&gcc GCC_SDCC1_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-> +				 <&gcc GCC_SDCC1_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			status = "disabled";
->  		};
->  
-> @@ -438,10 +438,10 @@ mmc@f98a4900 {
->  			reg-names = "hc", "core";
->  			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
-> -				 <&gcc GCC_SDCC2_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			status = "disabled";
->  		};
->  
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> index 1b98764bab7a..a8a32a5e7e5d 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> @@ -228,9 +228,9 @@ sdhci: mmc@7824900 {
->  			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
->  			bus-width = <8>;
-> -			clocks = <&gcc GCC_SDCC1_APPS_CLK>, <&gcc GCC_SDCC1_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>, <&gcc GCC_SDCC1_APPS_CLK>,
->  				 <&gcc GCC_DCD_XO_CLK>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			status = "disabled";
->  		};
->  
-> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> index f711463d22dc..9d4223bf8fc1 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> @@ -141,10 +141,10 @@ sdhc_1: mmc@f9824900 {
->  			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
-> -				 <&gcc GCC_SDCC1_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-> +				 <&gcc GCC_SDCC1_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&sdhc1_default_state>;
->  			status = "disabled";
-> @@ -157,10 +157,10 @@ sdhc_2: mmc@f98a4900 {
->  			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
-> -				 <&gcc GCC_SDCC2_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&sdhc2_default_state>;
->  			status = "disabled";
-> @@ -173,10 +173,10 @@ sdhc_3: mmc@f9864900 {
->  			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC3_APPS_CLK>,
-> -				 <&gcc GCC_SDCC3_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
-> +				 <&gcc GCC_SDCC3_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&sdhc3_default_state>;
->  			status = "disabled";
-> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> index 971eceaef3d1..1f4baa6ac64d 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> @@ -443,10 +443,10 @@ sdhc_1: mmc@f9824900 {
->  			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
-> -				 <&gcc GCC_SDCC1_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-> +				 <&gcc GCC_SDCC1_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			bus-width = <8>;
->  			non-removable;
->  
-> @@ -460,10 +460,10 @@ sdhc_3: mmc@f9864900 {
->  			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC3_APPS_CLK>,
-> -				 <&gcc GCC_SDCC3_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
-> +				 <&gcc GCC_SDCC3_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			bus-width = <4>;
->  
->  			#address-cells = <1>;
-> @@ -479,10 +479,10 @@ sdhc_2: mmc@f98a4900 {
->  			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
->  				     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "hc_irq", "pwr_irq";
-> -			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
-> -				 <&gcc GCC_SDCC2_AHB_CLK>,
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
->  				 <&xo_board>;
-> -			clock-names = "core", "iface", "xo";
-> +			clock-names = "iface", "core", "xo";
->  			bus-width = <4>;
->  
->  			#address-cells = <1>;
-> diff --git a/arch/arm/boot/dts/qcom-msm8974pro.dtsi b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-> index 1e882e16a221..58df6e75ab6d 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-> @@ -10,10 +10,10 @@ &gpu {
->  };
->  
->  &sdhc_1 {
-> -	clocks = <&gcc GCC_SDCC1_APPS_CLK>,
-> -		 <&gcc GCC_SDCC1_AHB_CLK>,
-> +	clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-> +		 <&gcc GCC_SDCC1_APPS_CLK>,
->  		 <&xo_board>,
->  		 <&gcc GCC_SDCC1_CDCCAL_FF_CLK>,
->  		 <&gcc GCC_SDCC1_CDCCAL_SLEEP_CLK>;
-> -	clock-names = "core", "iface", "xo", "cal", "sleep";
-> +	clock-names = "iface", "core", "xo", "cal", "sleep";
->  };
+A deeper introduction can be found in patch 1.
+
+Previous implementation [1] has been dropped as nacked.
+Unlike this previous implementation (where all the stuff was embedded in
+stm32-dma driver), the user (in peripheral drivers using dma) has now to
+configure the MDMA channel.
+
+[1] https://lore.kernel.org/lkml/1538139715-24406-1-git-send-email-pierre-yves.mordret@st.com/
+
+Amelie Delaunay (4):
+  docs: arm: stm32: introduce STM32 DMA-MDMA chaining feature
+  dmaengine: stm32-dmamux: set dmamux channel id in dma features
+    bitfield
+  dmaengine: stm32-dma: add support to trigger STM32 MDMA
+  dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
+
+ .../arm/stm32/stm32-dma-mdma-chaining.rst     | 365 ++++++++++++++++++
+ drivers/dma/stm32-dma.c                       |  56 ++-
+ drivers/dma/stm32-dmamux.c                    |   2 +-
+ drivers/dma/stm32-mdma.c                      |  70 +++-
+ 4 files changed, 490 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+
+-- 
+2.25.1
+

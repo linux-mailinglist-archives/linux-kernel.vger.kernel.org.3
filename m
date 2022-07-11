@@ -2,223 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CA4570B74
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0EA570BBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiGKU0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S232082AbiGKU1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGKUZa (ORCPT
+        with ESMTP id S229979AbiGKUZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:25:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C614B0E9;
-        Mon, 11 Jul 2022 13:25:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FECF6163D;
-        Mon, 11 Jul 2022 20:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE72EC341ED;
-        Mon, 11 Jul 2022 20:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657571123;
-        bh=Fo89D3DwUo2r9d3JU5/iQMjVQfwJrqQdTu5vKaQ+2BU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LEYH1A936lTmyZNiyj0MT0WiP10O4qEgvudZoJdBYqRU6NF/sL3LiCVKN2cGE+M9H
-         zfsWTBxN8D469E8xGm+kLNGWRb4ibpIhJkqWwq9l5YzGayp+LMczoexjgAhC5+5Njt
-         BNgeU3eL66hmGE+r2hHW3z14WmVa2zHD1pwsbQCbgYx/EvAGjbCiXLTrtkQHw5XCPM
-         KJ3H7hZxNg4Q4BM6rL8JNAAx5jR0Cq7gXxZ2CZo+S6vQ3oDLoxNe9wSiq2JnzxBhqk
-         u/ScZpHQDgRp3GLf6SB+0pjhLuGfVN2P63s6yonHV8wWosGI43hgPhQ7utyHkMk4z4
-         XKPvE8He+A/1g==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oAzy3-004e9O-Vt;
-        Mon, 11 Jul 2022 21:25:19 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Jani Nikula" <jani.nikula@linux.intel.com>,
-        "Lucas De Marchi" <lucas.demarchi@intel.com>,
-        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 32/32] docs: gpu: i915.rst: add the remaining kernel-doc markup files
-Date:   Mon, 11 Jul 2022 21:25:17 +0100
-Message-Id: <3936b74484d0125147158f137edb8c4f162a462d.1657565224.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657565224.git.mchehab@kernel.org>
-References: <cover.1657565224.git.mchehab@kernel.org>
+        Mon, 11 Jul 2022 16:25:40 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A974D812;
+        Mon, 11 Jul 2022 13:25:27 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0771B5C0130;
+        Mon, 11 Jul 2022 16:25:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 11 Jul 2022 16:25:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1657571125; x=1657657525; bh=kNzIp30Qm/
+        z7d269z2/7uprxKlfk1b3Xh9kIgnDKL3w=; b=jdSmgR3nMHSEZedXM5Yb9S/a66
+        VWyn4EdjuZc6tTPaLqq1KzPMJQt9mT7jXaIPKzyuDBHBY6lHP3385uKfUG3eRZsA
+        7qIELLk4Y5sJE87O8iuD9v1dTyPAuUSHkBvorFw63UzEYHCv7HAkvciUKq4c6tKa
+        6SfOVYVEHu9uCOAMmxkqjJcDMkSQqmnZ7qLMsH2Flrw1ssXzzjjG6tzm4wrBc4p8
+        PzlFxlxCztZjot7Qnv3Fpxyc6IizHrp7RX6GuBEl/nMvp63pJaby8lN6JAKITDYY
+        kPt7nhnjsOvdL9COeX9wqq08xW+JB1f9J3qfQxfj7EtsRMLJoblB8gCJ2e2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657571125; x=1657657525; bh=kNzIp30Qm/z7d269z2/7uprxKlfk
+        1b3Xh9kIgnDKL3w=; b=k5rCBC2IsD779cvf/It1Nxc+98YUYsRPuKokoHQXcS+h
+        119XRyia2VNbLP+m6impbKEn7Y20/n52qOwE3vYr3ZEoA3kGJRH24QDNbV6Miylt
+        QTDKd9meOrUNyGchCPM4pZEBlJ6L7hS88+ou5zO0bH1AQEsbsQ9BpXE97WCddBpF
+        qu5tCMZWuyvQQxqrnUY/k8urkbZxdv/295w61YNmUTlA1n13JqIdxMUIlIrpVNHd
+        rnWYqBzWT9ZoJOSGaqnKCrn6OQuTlcbgskf9G0MXoumnpgIpwMozDdC3IoX+CWBN
+        dZXJ/o1Evg65WevBCatMrVtpgIMDfWCM415S+Lf3fw==
+X-ME-Sender: <xms:NIfMYsr3CJXdzuXI0q7WglfUM3zszE9cKM5ehjBkHNQ5xrGtoqSvkw>
+    <xme:NIfMYioZn2W1EMkm0PDjOPFb_SoFp1CSC4rzSfSn1Ptxj5YxI_Yxiivnf29tWaiEw
+    Y1au1oj16yyecHiGKU>
+X-ME-Received: <xmr:NIfMYhPLccsl49jduEzW5uowsbGtEU2rOQg5KC_KvIMH2lMLWjeBWPTW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejfedgudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigt
+    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
+    frrghtthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteek
+    lefhleelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:NIfMYj71TdBzJ5iwFd9PaWaNtD3KVzbpVZUwnoPKHEmcY4EeDdCA7g>
+    <xmx:NIfMYr7j8tC0EctlhFIX00r8-x3VqnbqPt1d8UEGIZopCvnGILkG9A>
+    <xmx:NIfMYjhIFmj4HoQr7wWuP9-xQebg0SQQNekhGMvmuUmRXtxN4hgL0A>
+    <xmx:NYfMYu298dFgWEiyHHgz4RnXZlQqtVPNXhXdaY1Azc4fq4xTPvpdrg>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Jul 2022 16:25:23 -0400 (EDT)
+Date:   Mon, 11 Jul 2022 14:25:21 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: strange interaction between fuse + pidns
+Message-ID: <YsyHMVLuT5U6mm+I@netflix>
+References: <YrShFXRLtRt6T/j+@risky>
+ <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
+ <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are other files with kernel-doc markups:
+Hi all,
 
-	$ git grep -l "/\*\*" $(git ls-files|grep drivers/gpu/drm/i915/) >kernel-doc-files
-	$ for i in $(cat kernel-doc-files); do if [ "$(git grep $i Documentation/)" == "" ]; then echo "$i"; fi; done >aaa
+On Mon, Jul 11, 2022 at 03:59:15PM +0200, Miklos Szeredi wrote:
+> On Mon, 11 Jul 2022 at 12:35, Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > Can you try the attached untested patch?
+> 
+> Updated patch to avoid use after free on req->args.
+> 
+> Still mostly untested.
 
-Add them to i915.rst as well.
+Thanks, when I applied your patch, I still ended up with tasks stuck
+waiting with a SIGKILL pending. So I looked into that and came up with
+the patch below. With both your patch and mine, my testcase exits
+cleanly.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Eric (or Christian, or anyone), can you comment on the patch below? I
+have no idea what this will break. Maybe instead a better approach is
+some additional special case in __send_signal_locked()?
+
+Tycho
+
+From b7ea26adcf3546be5745063cc86658acb5ed37e9 Mon Sep 17 00:00:00 2001
+From: Tycho Andersen <tycho@tycho.pizza>
+Date: Mon, 11 Jul 2022 11:26:58 -0600
+Subject: [PATCH] sched: __fatal_signal_pending() should also check shared
+ signals
+
+The wait_* code uses signal_pending_state() to test whether a thread has
+been interrupted, which ultimately uses __fatal_signal_pending() to detect
+if there is a fatal signal.
+
+When a pid ns dies, in zap_pid_ns_processes() it does:
+
+    group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
+
+for all the tasks in the pid ns. That calls through:
+
+    group_send_sig_info() ->
+      do_send_sig_info() ->
+        send_signal_locked() ->
+          __send_signal_locked()
+
+which does:
+
+    pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+
+which puts sigkill in the set of shared signals, but not the individual
+pending ones. If tasks are stuck in a killable wait (e.g. a fuse flush
+operation), they won't see this shared signal, and will hang forever, since
+TIF_SIGPENDING is set, but the fatal signal can't be detected.
+
+Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
 ---
+ include/linux/sched/signal.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/32] at: https://lore.kernel.org/all/cover.1657565224.git.mchehab@kernel.org/
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index cafbe03eed01..a033ccb0a729 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
+ 
+ static inline int __fatal_signal_pending(struct task_struct *p)
+ {
+-	return unlikely(sigismember(&p->pending.signal, SIGKILL));
++	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
++			sigismember(&p->signal->shared_pending.signal, SIGKILL));
+ }
+ 
+ static inline int fatal_signal_pending(struct task_struct *p)
 
- Documentation/gpu/i915.rst | 87 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
-
-diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
-index 974754586be8..6bb50edc6d79 100644
---- a/Documentation/gpu/i915.rst
-+++ b/Documentation/gpu/i915.rst
-@@ -13,6 +13,11 @@ Core Driver Infrastructure
- This section covers core driver infrastructure used by both the display
- and the GEM parts of the driver.
- 
-+Core driver
-+-----------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_driver.c
-+
- Runtime Power Management
- ------------------------
- 
-@@ -29,6 +34,10 @@ Runtime Power Management
- 
- .. kernel-doc:: drivers/gpu/drm/i915/intel_pm.c
- 
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_wakeref.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_active.h
-+
- Interrupt Handling
- ------------------
- 
-@@ -44,6 +53,28 @@ Interrupt Handling
- .. kernel-doc:: drivers/gpu/drm/i915/i915_irq.c
-    :functions: intel_runtime_pm_enable_interrupts
- 
-+Error handling
-+--------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_gpu_error.c
-+
-+Memory Handling
-+---------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_vma_resource.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_vma_resource.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_vma.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_vma.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_mm.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_memory_region.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_memcpy.c
-+
- Intel GVT-g Guest Support(vGPU)
- -------------------------------
- 
-@@ -109,6 +140,54 @@ Workarounds
- .. kernel-doc:: drivers/gpu/drm/i915/gt/intel_workarounds.c
-    :doc: Hardware workarounds
- 
-+32-bits compatible ioctl Logic
-+------------------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_ioc32.c
-+
-+Scatterlist handling
-+--------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_scatterlist.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_scatterlist.c
-+
-+i915 request
-+------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_request.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_request.c
-+
-+Ancillary routines
-+------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_deps.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_deps.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_device_info.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_params.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_sw_fence_work.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_syncmap.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_pcode.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_reg_defs.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_wopcm.h
-+
-+
-+PXP
-+---
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/pxp/intel_pxp_irq.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/pxp/intel_pxp_tee.c
-+
- Display Hardware Handling
- =========================
- 
-@@ -618,6 +697,12 @@ Protected Objects
- Table Manager (TTM)
- -------------------
- 
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_ttm_buddy_manager.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_ttm_buddy_manager.c
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/intel_region_ttm.c
-+
- .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_ttm.c
- 
- .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_ttm.h
-@@ -627,6 +712,8 @@ Table Manager (TTM)
- Graphics Execution Manager (GEM)
- --------------------------------
- 
-+.. kernel-doc:: drivers/gpu/drm/i915/i915_gem.c
-+
- .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_create.c
- 
- .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_domain.c
+base-commit: 32346491ddf24599decca06190ebca03ff9de7f8
 -- 
-2.36.1
+2.34.1
 

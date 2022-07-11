@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8970E56F9DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67ACC56F9B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiGKJKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        id S230503AbiGKJH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiGKJJV (ORCPT
+        with ESMTP id S231203AbiGKJHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:09:21 -0400
+        Mon, 11 Jul 2022 05:07:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE71286E3;
-        Mon, 11 Jul 2022 02:08:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE5022BD6;
+        Mon, 11 Jul 2022 02:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DF9FB80E5E;
-        Mon, 11 Jul 2022 09:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E82DC34115;
-        Mon, 11 Jul 2022 09:08:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5D18B80E7A;
+        Mon, 11 Jul 2022 09:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C47C34115;
+        Mon, 11 Jul 2022 09:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530485;
-        bh=vb+0lighot6AX9XY2AUdCpU/s0sy+Et1zMwoqyMhtNA=;
+        s=korg; t=1657530437;
+        bh=KSymXjj4QPiT2gWlZFuuKcVfxqVOeaPiwz4VNrrU54M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2TDjDtVdqXUK38/2rhiXngxCuZcrpHp7Ed8OYCEYAsAron6Gmp3Fb0isFqoghFbPM
-         VnUxwQLW0l9TlZsC8mp+Hzq03fWelB3RvZo/ChjMn+qPzxwVKUh855hl2VR8EmVJ5y
-         MC/q6MjCx4ZbcjbdgXQfMNN4wb1QoQz0lmgOdKUA=
+        b=WR/jHOAV6yyEp+Ou9Zh9637DZjRUNbapxwEPFhFaCzS0ghUjJT9n1LnAVo0FkcbF/
+         z2WJjlYxuimqNOYuifyhEYRf+atQAtbdVYH7b2zuqF/l9QdCnNfh3Sdh987dMUx/R3
+         lNzMizQqNZw810vmMvaUR5gHDKWRnrybNGYXHM9E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 05/17] usbnet: fix memory leak in error case
+        stable@vger.kernel.org, Itay Iellin <ieitayie@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.9 11/14] ida: dont use BUG_ON() for debugging
 Date:   Mon, 11 Jul 2022 11:06:30 +0200
-Message-Id: <20220711090536.416927837@linuxfoundation.org>
+Message-Id: <20220711090535.855946471@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090536.245939953@linuxfoundation.org>
-References: <20220711090536.245939953@linuxfoundation.org>
+In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
+References: <20220711090535.517697227@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit b55a21b764c1e182014630fa5486d717484ac58f upstream.
+commit fc82bbf4dede758007763867d0282353c06d1121 upstream.
 
-usbnet_write_cmd_async() mixed up which buffers
-need to be freed in which error case.
+This is another old BUG_ON() that just shouldn't exist (see also commit
+a382f8fee42c: "signal handling: don't use BUG_ON() for debugging").
 
-v2: add Fixes tag
-v3: fix uninitialized buf pointer
+In fact, as Matthew Wilcox points out, this condition shouldn't really
+even result in a warning, since a negative id allocation result is just
+a normal allocation failure:
 
-Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220705125351.17309-1-oneukum@suse.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+  "I wonder if we should even warn here -- sure, the caller is trying to
+   free something that wasn't allocated, but we don't warn for
+   kfree(NULL)"
+
+and goes on to point out how that current error check is only causing
+people to unnecessarily do their own index range checking before freeing
+it.
+
+This was noted by Itay Iellin, because the bluetooth HCI socket cookie
+code does *not* do that range checking, and ends up just freeing the
+error case too, triggering the BUG_ON().
+
+The HCI code requires CAP_NET_RAW, and seems to just result in an ugly
+splat, but there really is no reason to BUG_ON() here, and we have
+generally striven for allocation models where it's always ok to just do
+
+    free(alloc());
+
+even if the allocation were to fail for some random reason (usually
+obviously that "random" reason being some resource limit).
+
+Fixes: 88eca0207cf1 ("ida: simplified functions for id allocation")
+Reported-by: Itay Iellin <ieitayie@gmail.com>
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/usbnet.c |   17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ lib/idr.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -2135,7 +2135,7 @@ static void usbnet_async_cmd_cb(struct u
- int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			   u16 value, u16 index, const void *data, u16 size)
+--- a/lib/idr.c
++++ b/lib/idr.c
+@@ -1124,7 +1124,9 @@ void ida_simple_remove(struct ida *ida,
  {
--	struct usb_ctrlrequest *req = NULL;
-+	struct usb_ctrlrequest *req;
- 	struct urb *urb;
- 	int err = -ENOMEM;
- 	void *buf = NULL;
-@@ -2153,7 +2153,7 @@ int usbnet_write_cmd_async(struct usbnet
- 		if (!buf) {
- 			netdev_err(dev->net, "Error allocating buffer"
- 				   " in %s!\n", __func__);
--			goto fail_free;
-+			goto fail_free_urb;
- 		}
- 	}
+ 	unsigned long flags;
  
-@@ -2177,14 +2177,21 @@ int usbnet_write_cmd_async(struct usbnet
- 	if (err < 0) {
- 		netdev_err(dev->net, "Error submitting the control"
- 			   " message: status=%d\n", err);
--		goto fail_free;
-+		goto fail_free_all;
- 	}
- 	return 0;
- 
-+fail_free_all:
-+	kfree(req);
- fail_free_buf:
- 	kfree(buf);
--fail_free:
--	kfree(req);
-+	/*
-+	 * avoid a double free
-+	 * needed because the flag can be set only
-+	 * after filling the URB
-+	 */
-+	urb->transfer_flags = 0;
-+fail_free_urb:
- 	usb_free_urb(urb);
- fail:
- 	return err;
+-	BUG_ON((int)id < 0);
++	if ((int)id < 0)
++		return;
++
+ 	spin_lock_irqsave(&simple_ida_lock, flags);
+ 	ida_remove(ida, id);
+ 	spin_unlock_irqrestore(&simple_ida_lock, flags);
 
 

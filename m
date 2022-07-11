@@ -2,277 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A951356D466
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648F356D46C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiGKFvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 01:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S229605AbiGKFzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 01:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGKFvL (ORCPT
+        with ESMTP id S229469AbiGKFzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 01:51:11 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2050.outbound.protection.outlook.com [40.107.113.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F73215A16
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 22:51:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DjlK6M0K6WtTts4XI6SERJepgjObiwQweaWPwkssWttgitMY3bU36W6j2XXwIjTQCr9YhDKGYJToGhMzOSEXFwvts8F2Sv6xfvxwIYGuYnCAzpYbNTH335lMLHrFHhhhnzGsjmZ6EYgBXWtmBW3S1AW71rHwIwgO0VhLWWRUefQO8P9L6XrkDuzInm4jr19NCgUn/sDoJNmtzWDq2LHmAfc+VPLmW5F4+aRoOELGs4RJv7I2pOJu7TbHTIZrtPRI3vU7hVZ0JNLPfKOkP697dfoj5bhPfKM9d0oHhs/3DNgqpeHSs5zratEFwOj5XePd61MZAB2SvTweo0HWzir8Rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zfty1dnmKopXdYnd7F2TISIb77Rrr3SBvuX/c1Q8XV8=;
- b=R4ebtqCCTgQr3Kc/6aE2FoW5AB/MFvHcWB07h2zC7D2ik7I5OIZFw5TFr22gnnxUNpHdIEFfOmylk5j2rjp/Hj+LOO7Twfv19nXXVCVqSKroAwLVnBdKJH20Odf/WghNwXfSaqz02A6KKllQSr9A110ll3VEWHE/qsO2PBMrb2E3438CoZmNFHQwSlNSY4jT119/0hLPhZvc/uIlHWGgG/OgYmYvQPJvQg3JjSwEhGovzSgRLib8bABBQfT7o11eB9YHnAZlbRF4rl6Vy5JO9ngbpkBzXYW/nkXQ+EhI47mwlNZkoa+jhQh0sso4sZCWTG7TEgDhmSDFWf2bH7ehaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zfty1dnmKopXdYnd7F2TISIb77Rrr3SBvuX/c1Q8XV8=;
- b=HbUd7NqufBnxQ+gue2D30dERIOC63c3L6+TW81z9NSXpIybKapN31UBE8x+6k4P2wgcLyWGk5kW4qWWVYg1pxIAKEC9Nj3Q/ztRbWFR/J0kqPk8bK+8MjSkUrAPdNNfy+axzt6J22wDYkkCfgWQDQPIK7WPB4g8diJJCAQBbt6w=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYYPR01MB6990.jpnprd01.prod.outlook.com (2603:1096:400:d7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Mon, 11 Jul
- 2022 05:51:07 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d07:3dbc:2b8c:d836]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d07:3dbc:2b8c:d836%7]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 05:51:07 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [mm-unstable PATCH v5 3/8] mm, hwpoison, hugetlb: support saving
- mechanism of raw error pages
-Thread-Topic: [mm-unstable PATCH v5 3/8] mm, hwpoison, hugetlb: support saving
- mechanism of raw error pages
-Thread-Index: AQHYlNYLTPFPnYdyM0CUaEZr6JPgN614qqmA
-Date:   Mon, 11 Jul 2022 05:51:07 +0000
-Message-ID: <20220711055047.GA2731632@hori.linux.bs1.fc.nec.co.jp>
-References: <20220708053653.964464-1-naoya.horiguchi@linux.dev>
- <20220708053653.964464-4-naoya.horiguchi@linux.dev>
- <b8f3f0a5-7a3b-1afb-ca1e-73ab384797b7@huawei.com>
-In-Reply-To: <b8f3f0a5-7a3b-1afb-ca1e-73ab384797b7@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 48c6ab2a-a78f-4ee2-c19d-08da6301595f
-x-ms-traffictypediagnostic: TYYPR01MB6990:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LjuNIOtRsU1LUpJj7w0lpfQFnMaMVGv6kUG/7OgCakhg9ZwkZeaf52V7d2W4jOaKsskm/6pBp8XlAogRuozv3ELlvUHrFj/+eJOBthV15B4Yw449+34iERC0UBphjDFgbfmy4qTbzFEj9I7t6HgHCBOTjJ65BngLyuHGctg7ZrcMq6JRFJOlC7sDH2uLN5VPyiliPx814yGOM1L/m3esZoljGaX4WKbhxsW2dmzfUj3IJOQ4UvRVcGs3YfzRCabVhwUD1TKvzv/hwiqrDW6W2VDl/ejglpmZdOpm/St3E6eYAbQNQBt6LtIyYY2/QlH1srOyT6zSasDM8ymvlq5hjSbu6a4yzOIInHo6k4j/c0umBwzB1y6LInfiuo06DmPow5rYtnelieJbqiWMduesVgYsAhQfwYymTsVwTpeYVtrkxLxwbt23RKHrVWcnT+xnSfKJEvN81iebnpi2QxU7ym8jFIvz4tOz/KAzfHLLddRSLNHd4OOfQXz8YrjQeP9Gi5NvOZzQYChdRnLzjcyiP6S0anZptWIJ3GY+c+5+FGrtcxDBjHOJGoSbo85KJSfO/w4U7PE1KPd76KWcCNvNpXyVnEzLLU4qqMHBHPHjSx8bNrp0pIhD6t+YF8MCuSr00yZmuKFZnK4PMJ35Z9Ze4jzv90UdzWcVBiuci2NCqFYLnlzxEX/MeSX3D8VjwLo+isPp7gbFSMY3fyad5L+S8whAyYtZ56FSoZM1oppqBTeDzlsZTqSVHrGZRLgbCpgSI26TqqIt/dmco6fb6Wdam1dK4EZe4hEQWcakkm3UDxtkmMbR7C1Is45qHxLT6gRW
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(39860400002)(136003)(376002)(366004)(6916009)(122000001)(8676002)(4326008)(76116006)(66556008)(54906003)(38100700002)(316002)(66476007)(82960400001)(64756008)(66946007)(66446008)(71200400001)(38070700005)(53546011)(55236004)(85182001)(478600001)(1076003)(6486002)(86362001)(8936002)(5660300002)(9686003)(186003)(7416002)(41300700001)(26005)(6512007)(2906002)(6506007)(33656002)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SE9XRmNSazByaXpBT0M1YlFrcGp1elN3dkJmdWZ0YWpWakpTSGI2dHFMNUo4?=
- =?utf-8?B?ajdSbWRDU1h4WjJvZUhJUWs1S2g3TE5heEFVVmVxajhmaGx1aDhJZnROcTZl?=
- =?utf-8?B?V3VnRWZaQ3FyRmgyNWErdmRFeVFRanJ0aGxrWFFOLzhHY0dsNEplaWhQbC9x?=
- =?utf-8?B?d3VvMUtYTXMvbDdiQS8xQXRUZ0pLVll2ZG1HanM1MU5QYmlMUXVHTHNNVEI2?=
- =?utf-8?B?cE5jOFI5K0w4SG5Gbk4xRjRpazUyblFEVXhBeVdUMDJhKzQxRklTWDNkanhv?=
- =?utf-8?B?dFFpbTIyQ3UrdnFMQzZiK3dqV0pTRjh5b2hjT1MrVGpSM0pNdHh2bWF3aEFB?=
- =?utf-8?B?bmVYelpjVGUyWHZaWThrYlJTR3lnRXRsTzVnaFhidTJMeVJ5WWFpVE4wV2pR?=
- =?utf-8?B?WVU3YUFYVi9oajRJNTU3cDRCVTNSaENZSklzR0ZDY3RZcWdzQWsrVlZaWkxL?=
- =?utf-8?B?ZXNlUVV5MFBGdFFDWk95NTdLdGJubCs3bXZ4dHVLb0tEQWRRNTBTZGFXNXFi?=
- =?utf-8?B?cCtFcERxUzIwZWZvR3N5bjR0Zk9XTUdpd01UQS8xSVRETXFRMllsVklCcWNW?=
- =?utf-8?B?UHkvbWEwQldUTVZwMFYzbEhhbzBsejhONW1rT2NSdzM1eGMxYzIvTlZQM3E1?=
- =?utf-8?B?N3JlT2RIWS9BUDVtdS9MUWNSbDFEMXBHdGlPbjVXSncvdUZLK3ZSUVBHWW5F?=
- =?utf-8?B?SHNkalNBd3krekpaN3BVdXE5SXhkVmJETHl6eTFweUUvS251dmdxbDNZMVlo?=
- =?utf-8?B?VUdhdWYyUUI4MDRiQkVUaEZrTWdWVk1zVnBhbFJPZ1gySjE5ekJsZEZEcm0y?=
- =?utf-8?B?cEZVSnNjY2F5bnNaUnBabTR0VUgxRUVIckVqdmtGWHJIVUJjWnZWc2hiQnVn?=
- =?utf-8?B?SWpWSmhxSzJidk8xV2dxL2JGdklhQjByamc1MnFGdVpaUU42ODN0ZWp0aGxV?=
- =?utf-8?B?TnUyTVNaNmF2T1dTMU5JM0dSZVdzTU5DekdNWE1JMnRMdmR6eGVkS2NtY283?=
- =?utf-8?B?RmdoYW0yS0JhSVkySXY3amUwQVhkZzNOT0M0NmVPMVczbC9RNDNNLzdpeENq?=
- =?utf-8?B?aWZIYWNucGhTQ3NMajBMSE1ESE43WXp5ZER1TkZtNGhIeERKOWdMUFhGd3Bx?=
- =?utf-8?B?eS9qampiR0xEdHNDT1hjNGo4OTJYUk9Lb0VWWlN5a09qU1BoeEVBRTZyS3Z1?=
- =?utf-8?B?Q2tqcnk2dDk3b3RMRXhjMjc3Y3FhV2RKd3FyUzVwZitQOU03VE83VkswbVk2?=
- =?utf-8?B?MksydUVoYXB5M2FHUE9ZN0doMzFKQ3UwR2ZpaFBaT29KZmhFTHZiVjduRDNq?=
- =?utf-8?B?WVlidmVpc2p4MWF2UVFpYkxXcjdkYjFvUjZoZGN0NjhGTXZKY3QxbFcrdEFG?=
- =?utf-8?B?Y3lYZy9sYjRHT05PVFp4ZDRLeXV6bGt3cUU1aHp1cGpuYzRramIrczVMb2x0?=
- =?utf-8?B?dDhwb2tqZ2ViblRqYmd2UEtOaGE3OTFOeUJ5WFhuQ0w1VWFoSmRiaytjSEMx?=
- =?utf-8?B?bGZ4Nk4xRUVRTi82MlEwWFBQNHp2aXI3V2Erd0dJOEkwSTlaYlVwZXdaK0NT?=
- =?utf-8?B?cXY1cUE1Q3A0anJ5RnZWVWRIM3VIS3VBelAvZ2kveDlFN2FNYnBDb3l2YmJE?=
- =?utf-8?B?SDlkUjJrbzlsM2l0SkhIZ1hsaklqRnMvbGo2c1VGWWc5Sm5DY0VxT3hEZGpu?=
- =?utf-8?B?UHBPR011Q3ErSXRrN2tyZktrRXJsMWVIR015UEJ6WGdqalNNUVJYMldIcjNr?=
- =?utf-8?B?NWY2VjFDVlBXRHBTRW5UWjJWNDZ0UHl3VTNXeHl4c2Q3Q0RvbDU1OTB0cnBw?=
- =?utf-8?B?dHAyZDA2RmIxek4rZTQyN25Hc2oya3N4WERsWmlIQzdDelN2YUJZVXMrQ0JW?=
- =?utf-8?B?VzdvS2xpaksyVVNSVXhrV215L1lTT1NraUpCRndZQi9yZHkrdU1GSDJUN2I0?=
- =?utf-8?B?RFdGTlh2RlFtaEpHd1VUWU5kbTZjcENWNXNTQ0F4MkhKa2tKR0NFTG95VHJS?=
- =?utf-8?B?RHZLVFQ2ZWtYU0VJdGI0aElmdHVoMUpGd3FncWtPR20xeHlxRUJuRmEyc1Fh?=
- =?utf-8?B?Z0l4Y1hydldyMUN4ZVJ1YlE3NG56Nkc1OUJBcWNuTWpHNXJ5UzdYK3AxaDZD?=
- =?utf-8?B?a2thV3ozeUtuOWp5VkdlTW1Hd2RWSnhKM2V6elV3OHN1Rkw1MnZpcW95dG52?=
- =?utf-8?B?ZHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2FDB8AAD8BE4C14BB54BF3C034B313F8@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 11 Jul 2022 01:55:22 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EB862E6;
+        Sun, 10 Jul 2022 22:55:21 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id B479B41826;
+        Mon, 11 Jul 2022 10:55:09 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1657518912; bh=gi+a8d7S6/BF9wa0GyUnbD5+5L/9hm6lGxW970IdA4I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=1jvB1DNcBvUBhpWeI8Xev84OUofuhiboMVy+zffnksLO8S17JWgXswAGuyFNUKxX+
+         6uUQrFIXE9Cs1kbZFgFMI9+sIERRzJUKF/RYCcHYX84xJHN03YDK/MZBj8Q0BZAyKQ
+         YBwKeEBY3gDqOAdGSOhU33LFeRR1KWflI4VTWdtbMs7YKW+aP68tXG5z1AWmmbqV5T
+         8E1ZPeJi533V6VUNW0LUNxCucGP+yDm0xoMygrl8COK1avHCBYrJCR+VG8YcVjebBs
+         8LaD8pEJsX2rM6eEg1tuxIZ4OMvDt5L5Y0eFrwGnrsaM9smo5/AcgMJsT0t5ZC4+jS
+         00nZ+WtnjEKCg==
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48c6ab2a-a78f-4ee2-c19d-08da6301595f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 05:51:07.1286
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y285NBzy+eZv9sOrDAJ+8nG1lX5bJNYilWWI7tuajzSKfTx5dEDOln/o4a9Eq7zVCvluwC5Z3PijLsStuPsahw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB6990
+Date:   Mon, 11 Jul 2022 10:55:09 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
+        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
+        masneyb@onstation.org, sean.anderson@seco.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.or,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v7 2/2] pwm: Add clock based PWM output driver
+In-Reply-To: <20220701075012.xpkcd5xk42frevyq@pengutronix.de>
+References: <20220612132203.290726-1-nikita@trvn.ru>
+ <20220612132203.290726-3-nikita@trvn.ru>
+ <20220701075012.xpkcd5xk42frevyq@pengutronix.de>
+Message-ID: <ef73636abfc6df26c249863e0288dc48@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBKdWwgMTEsIDIwMjIgYXQgMTE6MjY6MzRBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gT24gMjAyMi83LzggMTM6MzYsIE5hb3lhIEhvcmlndWNoaSB3cm90ZToNCj4gPiBGcm9t
-OiBOYW95YSBIb3JpZ3VjaGkgPG5hb3lhLmhvcmlndWNoaUBuZWMuY29tPg0KPiA+IA0KPiA+IFdo
-ZW4gaGFuZGxpbmcgbWVtb3J5IGVycm9yIG9uIGEgaHVnZXRsYiBwYWdlLCB0aGUgZXJyb3IgaGFu
-ZGxlciB0cmllcyB0bw0KPiA+IGRpc3NvbHZlIGFuZCB0dXJuIGl0IGludG8gNGtCIHBhZ2VzLiAg
-SWYgaXQncyBzdWNjZXNzZnVsbHkgZGlzc29sdmVkLA0KPiA+IFBhZ2VIV1BvaXNvbiBmbGFnIGlz
-IG1vdmVkIHRvIHRoZSByYXcgZXJyb3IgcGFnZSwgc28gdGhhdCdzIGFsbCByaWdodC4NCj4gPiBI
-b3dldmVyLCBkaXNzb2x2ZSBzb21ldGltZXMgZmFpbHMsIHRoZW4gdGhlIGVycm9yIHBhZ2UgaXMg
-bGVmdCBhcw0KPiA+IGh3cG9pc29uZWQgaHVnZXBhZ2UuIEl0J3MgdXNlZnVsIGlmIHdlIGNhbiBy
-ZXRyeSB0byBkaXNzb2x2ZSBpdCB0byBzYXZlDQo+ID4gaGVhbHRoeSBwYWdlcywgYnV0IHRoYXQn
-cyBub3QgcG9zc2libGUgbm93IGJlY2F1c2UgdGhlIGluZm9ybWF0aW9uIGFib3V0DQo+ID4gd2hl
-cmUgdGhlIHJhdyBlcnJvciBwYWdlcyBpcyBsb3N0Lg0KPiA+IA0KPiA+IFVzZSB0aGUgcHJpdmF0
-ZSBmaWVsZCBvZiBhIGZldyB0YWlsIHBhZ2VzIHRvIGtlZXAgdGhhdCBpbmZvcm1hdGlvbi4gIFRo
-ZQ0KPiA+IGNvZGUgcGF0aCBvZiBzaHJpbmtpbmcgaHVnZXBhZ2UgcG9vbCB1c2VzIHRoaXMgaW5m
-byB0byB0cnkgZGVsYXllZCBkaXNzb2x2ZS4NCj4gPiBJbiBvcmRlciB0byByZW1lbWJlciBtdWx0
-aXBsZSBlcnJvcnMgaW4gYSBodWdlcGFnZSwgYSBzaW5nbHktbGlua2VkIGxpc3QNCj4gPiBvcmln
-aW5hdGVkIGZyb20gU1VCUEFHRV9JTkRFWF9IV1BPSVNPTi10aCB0YWlsIHBhZ2UgaXMgY29uc3Ry
-dWN0ZWQuICBPbmx5DQo+ID4gc2ltcGxlIG9wZXJhdGlvbnMgKGFkZGluZyBhbiBlbnRyeSBvciBj
-bGVhcmluZyBhbGwpIGFyZSByZXF1aXJlZCBhbmQgdGhlDQo+ID4gbGlzdCBpcyBhc3N1bWVkIG5v
-dCB0byBiZSB2ZXJ5IGxvbmcsIHNvIHRoaXMgc2ltcGxlIGRhdGEgc3RydWN0dXJlIHNob3VsZA0K
-PiA+IGJlIGVub3VnaC4NCj4gPiANCj4gPiBJZiB3ZSBmYWlsZWQgdG8gc2F2ZSByYXcgZXJyb3Ig
-aW5mbywgdGhlIGh3cG9pc29uIGh1Z2VwYWdlIGhhcyBlcnJvcnMgb24NCj4gPiB1bmtub3duIHN1
-YnBhZ2UsIHRoZW4gdGhpcyBuZXcgc2F2aW5nIG1lY2hhbmlzbSBkb2VzIG5vdCB3b3JrIGFueSBt
-b3JlLA0KPiA+IHNvIGRpc2FibGUgc2F2aW5nIG5ldyByYXcgZXJyb3IgaW5mbyBhbmQgZnJlZWlu
-ZyBod3BvaXNvbiBodWdlcGFnZXMuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTmFveWEgSG9y
-aWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4NCj4gPiBSZXBvcnRlZC1ieToga2VybmVs
-IHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+ID4gLS0tDQo+ID4gdjQgLT4gdjU6DQo+ID4g
-LSBmaXhlZCBidWlsZCBlcnJvciAocmVwb3J0ZWQgYnkga2VybmVsIHRlc3Qgcm9ib3QpLg0KPiA+
-IC0gZG8gbm90IHRyeSB0byB1bmRvIHJlbW92ZV9odWdldGxiX3BhZ2UoKSB3aGVuIEhQYWdlUmF3
-SHdwVW5yZWxpYWJsZSBpcyB0cnVlLA0KPiA+IC0gY2hlY2sgSFBhZ2VSYXdId3BVbnJlbGlhYmxl
-KCkgYmVmb3JlIGh1Z2V0bGJfdm1lbW1hcF9yZXN0b3JlKCksDQo+ID4gLSBjYWxsIG51bV9wb2lz
-b25lZF9wYWdlc19pbmMoKSBpbiBodWdldGxiX3NldF9wYWdlX2h3cG9pc29uKCkgd2hlbiBrYWxs
-b2MNCj4gPiAgIHN1Y2NlZWRzLA0KPiA+IC0gcmVtb3ZlICJpbmxpbmUiIGluIHRoZSBkZWZpbml0
-aW9uIG9mIGh1Z2V0bGJfY2xlYXJfcGFnZV9od3BvaXNvbigpLg0KPiA+IA0KPiA+IHYzIC0+IHY0
-Og0KPiA+IC0gcmVzb2x2ZSBjb25mbGljdCB3aXRoICJtbTogaHVnZXRsYl92bWVtbWFwOiBpbXBy
-b3ZlIGh1Z2V0bGJfdm1lbW1hcA0KPiA+ICAgY29kZSByZWFkYWJpbGl0eSIsIHVzZSBodWdldGxi
-X3ZtZW1tYXBfcmVzdG9yZSgpIGluc3RlYWQgb2YNCj4gPiAgIGh1Z2V0bGJfdm1lbW1hcF9hbGxv
-YygpLg0KPiA+IA0KPiA+IHYyIC0+IHYzOg0KPiA+IC0gcmVtb3ZlIGR1cGxpY2F0ZSAicmV0dXJu
-IHJldCIgbGluZXMsDQo+ID4gLSB1c2UgR0ZQX0FUT01JQyBpbnN0ZWFkIG9mIEdGUF9LRVJORUws
-DQo+ID4gLSBpbnRyb2R1Y2UgSFBhZ2VSYXdId3BVbnJlbGlhYmxlIHBzZXVkbyBmbGFnIChzdWdn
-ZXN0ZWQgYnkgTXVjaHVuKSwNCj4gPiAtIGh1Z2V0bGJfY2xlYXJfcGFnZV9od3BvaXNvbiByZW1v
-dmVzIHJhd19od3BfcGFnZSBsaXN0IGV2ZW4gaWYNCj4gPiAgIEhQYWdlUmF3SHdwVW5yZWxpYWJs
-ZSBpcyB0cnVlLCAoYnkgTWlhb2hlKQ0KPiA+IA0KPiA+IHYxIC0+IHYyOg0KPiA+IC0gc3VwcG9y
-dCBod3BvaXNvbiBodWdlcGFnZSB3aXRoIG11bHRpcGxlIGVycm9ycywNCj4gPiAtIG1vdmVkIHRo
-ZSBuZXcgaW50ZXJmYWNlIGZ1bmN0aW9ucyB0byBtbS9tZW1vcnktZmFpbHVyZS5jLA0KPiA+IC0g
-ZGVmaW5lIGFkZGl0aW9uYWwgc3VicGFnZSBpbmRleCBTVUJQQUdFX0lOREVYX0hXUE9JU09OX1VO
-UkVMSUFCTEUsDQo+ID4gLSBzdG9wIGZyZWVpbmcvZGlzc29sdmluZyBod3BvaXNvbiBodWdlcGFn
-ZXMgd2l0aCB1bnJlbGlhYmxlIHJhdyBlcnJvciBpbmZvLA0KPiA+IC0gZHJvcCBodWdldGxiX2Ns
-ZWFyX3BhZ2VfaHdwb2lzb24oKSBpbiBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZSgpIGJlY2F1c2UN
-Cj4gPiAgIHRoYXQncyBkb25lIGluIHVwZGF0ZV9hbmRfZnJlZV9wYWdlKCksDQo+ID4gLSBtb3Zl
-IHNldHRpbmcvY2xlYXJpbmcgUEdfaHdwb2lzb24gZmxhZyB0byB0aGUgbmV3IGludGVyZmFjZXMs
-DQo+ID4gLSBjaGVja2luZyBhbHJlYWR5IGh3cG9pc29uZWQgb3Igbm90IG9uIGEgc3VicGFnZSBi
-YXNpcy4NCj4gPiANCj4gPiBDaGFuZ2VMb2cgc2luY2UgcHJldmlvdXMgcG9zdCBvbiA0LzI3Og0K
-PiA+IC0gZml4ZWQgdHlwbyBpbiBwYXRjaCBkZXNjcmlwdGlvbiAoYnkgTWlhb2hlKQ0KPiA+IC0g
-Zml4ZWQgY29uZmlnIHZhbHVlIGluICNpZmRlZiBzdGF0ZW1lbnQgKGJ5IE1pYW9oZSkNCj4gPiAt
-IGFkZGVkIHNlbnRlbmNlcyBhYm91dCAibXVsdGlwbGUgaHdwb2lzb24gcGFnZXMiIHNjZW5hcmlv
-IGluIHBhdGNoDQo+ID4gICBkZXNjcmlwdGlvbg0KPiA+IC0tLQ0KPiA+ICBpbmNsdWRlL2xpbnV4
-L2h1Z2V0bGIuaCB8IDE4ICsrKysrKysrKy0NCj4gPiAgbW0vaHVnZXRsYi5jICAgICAgICAgICAg
-fCAzMiArKysrKysrKysrKystLS0tLQ0KPiA+ICBtbS9tZW1vcnktZmFpbHVyZS5jICAgICB8IDc5
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+ID4gIDMgZmlsZXMg
-Y2hhbmdlZCwgMTE2IGluc2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQ0KPiA+IA0KPiA+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2h1Z2V0bGIuaCBiL2luY2x1ZGUvbGludXgvaHVnZXRs
-Yi5oDQo+ID4gaW5kZXggNmQwNjIwZWRmMGE2Li42ZmQxMjhiODBkNTcgMTAwNjQ0DQo+ID4gLS0t
-IGEvaW5jbHVkZS9saW51eC9odWdldGxiLmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2h1Z2V0
-bGIuaA0KPiA+IEBAIC00Miw2ICs0Miw5IEBAIGVudW0gew0KPiA+ICAJU1VCUEFHRV9JTkRFWF9D
-R1JPVVAsCQkvKiByZXVzZSBwYWdlLT5wcml2YXRlICovDQo+ID4gIAlTVUJQQUdFX0lOREVYX0NH
-Uk9VUF9SU1ZELAkvKiByZXVzZSBwYWdlLT5wcml2YXRlICovDQo+ID4gIAlfX01BWF9DR1JPVVBf
-U1VCUEFHRV9JTkRFWCA9IFNVQlBBR0VfSU5ERVhfQ0dST1VQX1JTVkQsDQo+ID4gKyNlbmRpZg0K
-PiA+ICsjaWZkZWYgQ09ORklHX01FTU9SWV9GQUlMVVJFDQo+ID4gKwlTVUJQQUdFX0lOREVYX0hX
-UE9JU09OLA0KPiA+ICAjZW5kaWYNCj4gPiAgCV9fTlJfVVNFRF9TVUJQQUdFLA0KPiA+ICB9Ow0K
-PiA+IEBAIC01NTEsNyArNTU0LDcgQEAgZ2VuZXJpY19odWdldGxiX2dldF91bm1hcHBlZF9hcmVh
-KHN0cnVjdCBmaWxlICpmaWxlLCB1bnNpZ25lZCBsb25nIGFkZHIsDQo+ID4gICAqCVN5bmNocm9u
-aXphdGlvbjogIEluaXRpYWxseSBzZXQgYWZ0ZXIgbmV3IHBhZ2UgYWxsb2NhdGlvbiB3aXRoIG5v
-DQo+ID4gICAqCWxvY2tpbmcuICBXaGVuIGV4YW1pbmVkIGFuZCBtb2RpZmllZCBkdXJpbmcgbWln
-cmF0aW9uIHByb2Nlc3NpbmcNCj4gPiAgICoJKGlzb2xhdGUsIG1pZ3JhdGUsIHB1dGJhY2spIHRo
-ZSBodWdldGxiX2xvY2sgaXMgaGVsZC4NCj4gPiAtICogSFBHX3RlbXBvcmFyeSAtIC0gU2V0IG9u
-IGEgcGFnZSB0aGF0IGlzIHRlbXBvcmFyaWx5IGFsbG9jYXRlZCBmcm9tIHRoZSBidWRkeQ0KPiA+
-ICsgKiBIUEdfdGVtcG9yYXJ5IC0gU2V0IG9uIGEgcGFnZSB0aGF0IGlzIHRlbXBvcmFyaWx5IGFs
-bG9jYXRlZCBmcm9tIHRoZSBidWRkeQ0KPiA+ICAgKglhbGxvY2F0b3IuICBUeXBpY2FsbHkgdXNl
-ZCBmb3IgbWlncmF0aW9uIHRhcmdldCBwYWdlcyB3aGVuIG5vIHBhZ2VzDQo+ID4gICAqCWFyZSBh
-dmFpbGFibGUgaW4gdGhlIHBvb2wuICBUaGUgaHVnZXRsYiBmcmVlIHBhZ2UgcGF0aCB3aWxsDQo+
-ID4gICAqCWltbWVkaWF0ZWx5IGZyZWUgcGFnZXMgd2l0aCB0aGlzIGZsYWcgc2V0IHRvIHRoZSBi
-dWRkeSBhbGxvY2F0b3IuDQo+ID4gQEAgLTU2MSw2ICs1NjQsOCBAQCBnZW5lcmljX2h1Z2V0bGJf
-Z2V0X3VubWFwcGVkX2FyZWEoc3RydWN0IGZpbGUgKmZpbGUsIHVuc2lnbmVkIGxvbmcgYWRkciwN
-Cj4gPiAgICogSFBHX2ZyZWVkIC0gU2V0IHdoZW4gcGFnZSBpcyBvbiB0aGUgZnJlZSBsaXN0cy4N
-Cj4gPiAgICoJU3luY2hyb25pemF0aW9uOiBodWdldGxiX2xvY2sgaGVsZCBmb3IgZXhhbWluYXRp
-b24gYW5kIG1vZGlmaWNhdGlvbi4NCj4gPiAgICogSFBHX3ZtZW1tYXBfb3B0aW1pemVkIC0gU2V0
-IHdoZW4gdGhlIHZtZW1tYXAgcGFnZXMgb2YgdGhlIHBhZ2UgYXJlIGZyZWVkLg0KPiA+ICsgKiBI
-UEdfcmF3X2h3cF91bnJlbGlhYmxlIC0gU2V0IHdoZW4gdGhlIGh1Z2V0bGIgcGFnZSBoYXMgYSBo
-d3BvaXNvbiBzdWItcGFnZQ0KPiA+ICsgKiAgICAgdGhhdCBpcyBub3QgdHJhY2tlZCBieSByYXdf
-aHdwX3BhZ2UgbGlzdC4NCj4gPiAgICovDQo+ID4gIGVudW0gaHVnZXRsYl9wYWdlX2ZsYWdzIHsN
-Cj4gPiAgCUhQR19yZXN0b3JlX3Jlc2VydmUgPSAwLA0KPiA+IEBAIC01NjgsNiArNTczLDcgQEAg
-ZW51bSBodWdldGxiX3BhZ2VfZmxhZ3Mgew0KPiA+ICAJSFBHX3RlbXBvcmFyeSwNCj4gPiAgCUhQ
-R19mcmVlZCwNCj4gPiAgCUhQR192bWVtbWFwX29wdGltaXplZCwNCj4gPiArCUhQR19yYXdfaHdw
-X3VucmVsaWFibGUsDQo+ID4gIAlfX05SX0hQQUdFRkxBR1MsDQo+ID4gIH07DQo+ID4gIA0KPiA+
-IEBAIC02MTQsNiArNjIwLDcgQEAgSFBBR0VGTEFHKE1pZ3JhdGFibGUsIG1pZ3JhdGFibGUpDQo+
-ID4gIEhQQUdFRkxBRyhUZW1wb3JhcnksIHRlbXBvcmFyeSkNCj4gPiAgSFBBR0VGTEFHKEZyZWVk
-LCBmcmVlZCkNCj4gPiAgSFBBR0VGTEFHKFZtZW1tYXBPcHRpbWl6ZWQsIHZtZW1tYXBfb3B0aW1p
-emVkKQ0KPiA+ICtIUEFHRUZMQUcoUmF3SHdwVW5yZWxpYWJsZSwgcmF3X2h3cF91bnJlbGlhYmxl
-KQ0KPiA+ICANCj4gPiAgI2lmZGVmIENPTkZJR19IVUdFVExCX1BBR0UNCj4gPiAgDQo+ID4gQEAg
-LTc5Niw2ICs4MDMsMTUgQEAgZXh0ZXJuIGludCBkaXNzb2x2ZV9mcmVlX2h1Z2VfcGFnZShzdHJ1
-Y3QgcGFnZSAqcGFnZSk7DQo+ID4gIGV4dGVybiBpbnQgZGlzc29sdmVfZnJlZV9odWdlX3BhZ2Vz
-KHVuc2lnbmVkIGxvbmcgc3RhcnRfcGZuLA0KPiA+ICAJCQkJICAgIHVuc2lnbmVkIGxvbmcgZW5k
-X3Bmbik7DQo+ID4gIA0KPiA+ICsjaWZkZWYgQ09ORklHX01FTU9SWV9GQUlMVVJFDQo+ID4gK2V4
-dGVybiBpbnQgaHVnZXRsYl9jbGVhcl9wYWdlX2h3cG9pc29uKHN0cnVjdCBwYWdlICpocGFnZSk7
-DQo+ID4gKyNlbHNlDQo+ID4gK3N0YXRpYyBpbmxpbmUgaW50IGh1Z2V0bGJfY2xlYXJfcGFnZV9o
-d3BvaXNvbihzdHJ1Y3QgcGFnZSAqaHBhZ2UpDQo+ID4gK3sNCj4gPiArCXJldHVybiAwOw0KPiA+
-ICt9DQo+ID4gKyNlbmRpZg0KPiA+ICsNCj4gPiAgI2lmZGVmIENPTkZJR19BUkNIX0VOQUJMRV9I
-VUdFUEFHRV9NSUdSQVRJT04NCj4gPiAgI2lmbmRlZiBhcmNoX2h1Z2V0bGJfbWlncmF0aW9uX3N1
-cHBvcnRlZA0KPiA+ICBzdGF0aWMgaW5saW5lIGJvb2wgYXJjaF9odWdldGxiX21pZ3JhdGlvbl9z
-dXBwb3J0ZWQoc3RydWN0IGhzdGF0ZSAqaCkNCj4gPiBkaWZmIC0tZ2l0IGEvbW0vaHVnZXRsYi5j
-IGIvbW0vaHVnZXRsYi5jDQo+ID4gaW5kZXggNzcxMTlkOTNhMGY5Li4zOTU2NDk0Y2M1ZmIgMTAw
-NjQ0DQo+ID4gLS0tIGEvbW0vaHVnZXRsYi5jDQo+ID4gKysrIGIvbW0vaHVnZXRsYi5jDQo+ID4g
-QEAgLTE0NDIsNiArMTQ0MiwxNSBAQCBzdGF0aWMgdm9pZCBfX3JlbW92ZV9odWdldGxiX3BhZ2Uo
-c3RydWN0IGhzdGF0ZSAqaCwgc3RydWN0IHBhZ2UgKnBhZ2UsDQo+ID4gIAkJaC0+c3VycGx1c19o
-dWdlX3BhZ2VzX25vZGVbbmlkXS0tOw0KPiA+ICAJfQ0KPiA+ICANCj4gPiArCS8qDQo+ID4gKwkg
-KiBUaGlzIGxlYXZlcyBIUGFnZVJhd0h3cFVucmVsaWFibGUgcGFnZXMgYXMgbGVha2VkIGh1Z2Vw
-YWdlcywgbm90DQo+ID4gKwkgKiBhcyBsZWFrZWQgZ2VuZXJpYy1jb21wb3VuZCBwYWdlcy4gIE90
-aGVyd2lzZSBwYWdlX21hcHBlZCgpIG9yDQo+ID4gKwkgKiBmb2xpb19tYXBwZWQoKSBnZXRzIHNs
-b3cgYmVjYXVzZSBmb3ItbG9vcCBmb3IgZWFjaCBzdWJwYWdlIGlzDQo+ID4gKwkgKiBjYWxsZWQu
-DQo+ID4gKwkgKi8NCj4gPiArCWlmIChIUGFnZVJhd0h3cFVucmVsaWFibGUocGFnZSkpDQo+ID4g
-KwkJcmV0dXJuOw0KPiA+ICsNCj4gDQo+IFRoaXMgcGF0Y2ggbG9va3MgZ29vZCB0byBtZSB3aXRo
-IGJlbG93IHNldmVyYWwgcG9zc2libGUgcHJvYmxlbXM6DQo+IA0KPiBTaG91bGQgIm5yX2h1Z2Vf
-cGFnZXMiIGFuZCAibnJfaHVnZV9wYWdlc19ub2RlIiBiZSBhZGp1c3RlZCB0b28/IElmIGl0J3Mg
-Y2FsbGVkIGZyb20gZGlzc29sdmVfZnJlZV9odWdlX3BhZ2UNCj4gYW5kIGh1Z2V0bGJfdm1lbW1h
-cF9yZXN0b3JlIGZhaWxzLCBhZGRfaHVnZXRsYl9wYWdlIHdpbGwgYmUgY2FsbGVkOg0KPiANCj4g
-YWRkX2h1Z2V0bGJfcGFnZToNCj4gCS4uLg0KPiAJaC0+bnJfaHVnZV9wYWdlcysrOw0KPiAJaC0+
-bnJfaHVnZV9wYWdlc19ub2RlW25pZF0rKzsNCj4gCSAgIF5eXl5eXl5eMS4gdGhlICJucl9odWdl
-X3BhZ2VzIiBhbmQgIm5yX2h1Z2VfcGFnZXNfbm9kZSIgbWlnaHQgYmUgaW5jb3JyZWN0Pw0KPiAJ
-Li4uDQo+IAl6ZXJvZWQgPSBwdXRfcGFnZV90ZXN0emVybyhwYWdlKTsNCj4gCQkgXl5eXl5eXl4y
-LiBWTV9CVUdfT05fUEFHRShwYWdlX3JlZl9jb3VudChwYWdlKSA9PSAwLCBwYWdlKTsgd2lsbCBi
-ZSB0cmlnZ2VyZWQ/DQo+IA0KPiBPciBhbSBJIG1pc3Mgc29tZXRoaW5nPw0KDQpObywgdGhpcyBj
-b2RlIGJyZWFrcyB0aGUgc3BlY2lmaWMgY2FzZSwgc28gSSdkIGxpa2UgdG8gc2ltcGx5IGRyb3Ag
-dGhpcyBpZi4NCkhQYWdlUmF3SHdwVW5yZWxpYWJsZSBodWdlcGFnZSBzaG91bGQgYmUgdmVyeSBy
-YXJlLCBhbmQgY2FsbGluZyBwYWdlX21hcHBlZCgpDQpmb3Igc3VjaCBhIGxlYWtlZCBwYWdlIHNo
-b3VsZCBiZSBsZXNzIGNvbW1vbiwgc28gdGhlIGltcGFjdCBvZiB0aGUgc2xvd2Rvd24NCnNob3Vs
-ZCBiZSBtaW5pbWFsLg0KDQpUaGFua3MsDQpOYW95YSBIb3JpZ3VjaGk=
+Hi,
+
+Uwe Kleine-König писал(а) 01.07.2022 12:50:
+> Hello,
+> 
+> On Sun, Jun 12, 2022 at 06:22:03PM +0500, Nikita Travkin wrote:
+>> Some systems have clocks exposed to external devices. If the clock
+>> controller supports duty-cycle configuration, such clocks can be used as
+>> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
+>> similar way and an "opposite" driver already exists (clk-pwm). Add a
+>> driver that would enable pwm devices to be used via clk subsystem.
+>>
+>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> --
+>>
+>> Changes in v2:
+>>  - Address Uwe's review comments:
+>>    - Round set clk rate up
+>>    - Add a description with limitations of the driver
+>>    - Disable and unprepare clock before removing pwmchip
+>> Changes in v3:
+>>  - Use 64bit version of div round up
+>>  - Address Uwe's review comments:
+>>    - Reword the limitations to avoid incorrect claims
+>>    - Move the clk_enabled flag assignment
+>>    - Drop unnecessary statements
+>> Changes in v5:
+>>  - add missed returns
+>> Changes in v6:
+>>  - Unprepare the clock on error
+>>  - Drop redundant limitations points
+>> Changes in v7:
+>>  - Rename some variables to be in line with common naming
+>>
+>> --
+>> It seems like my mailserver wasn't able to send the last review
+>> response to Uwe's so I'll repeat here that afaict clk.h has all the
+>> methods stubbed out so compiling without HAVE_CLK is possible.
+>> Sorry for a long delay with sending this since v6.
+>>
+>> ---
+>>  drivers/pwm/Kconfig   |  10 +++
+>>  drivers/pwm/Makefile  |   1 +
+>>  drivers/pwm/pwm-clk.c | 141 ++++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 152 insertions(+)
+>>  create mode 100644 drivers/pwm/pwm-clk.c
+>>
+>> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+>> index 904de8d61828..60d13a949bc5 100644
+>> --- a/drivers/pwm/Kconfig
+>> +++ b/drivers/pwm/Kconfig
+>> @@ -140,6 +140,16 @@ config PWM_BRCMSTB
+>>  	  To compile this driver as a module, choose M Here: the module
+>>  	  will be called pwm-brcmstb.c.
+>>
+>> +config PWM_CLK
+>> +	tristate "Clock based PWM support"
+>> +	depends on HAVE_CLK || COMPILE_TEST
+>> +	help
+>> +	  Generic PWM framework driver for outputs that can be
+>> +	  muxed to clocks.
+>> +
+>> +	  To compile this driver as a module, choose M here: the module
+>> +	  will be called pwm-clk.
+>> +
+>>  config PWM_CLPS711X
+>>  	tristate "CLPS711X PWM support"
+>>  	depends on ARCH_CLPS711X || COMPILE_TEST
+>> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+>> index 5c08bdb817b4..7bf1a29f02b8 100644
+>> --- a/drivers/pwm/Makefile
+>> +++ b/drivers/pwm/Makefile
+>> @@ -10,6 +10,7 @@ obj-$(CONFIG_PWM_BCM_KONA)	+= pwm-bcm-kona.o
+>>  obj-$(CONFIG_PWM_BCM2835)	+= pwm-bcm2835.o
+>>  obj-$(CONFIG_PWM_BERLIN)	+= pwm-berlin.o
+>>  obj-$(CONFIG_PWM_BRCMSTB)	+= pwm-brcmstb.o
+>> +obj-$(CONFIG_PWM_CLK)		+= pwm-clk.o
+>>  obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
+>>  obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
+>>  obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
+>> diff --git a/drivers/pwm/pwm-clk.c b/drivers/pwm/pwm-clk.c
+>> new file mode 100644
+>> index 000000000000..357d0c50dedd
+>> --- /dev/null
+>> +++ b/drivers/pwm/pwm-clk.c
+>> @@ -0,0 +1,141 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Clock based PWM controller
+>> + *
+>> + * Copyright (c) 2021 Nikita Travkin <nikita@trvn.ru>
+>> + *
+>> + * This is an "adapter" driver that allows PWM consumers to use
+>> + * system clocks with duty cycle control as PWM outputs.
+>> + *
+>> + * Limitations:
+>> + * - Due to the fact that exact behavior depends on the underlying
+>> + *   clock driver, various limitations are possible.
+>> + * - Underlying clock may not be able to give 0% or 100% duty cycle
+>> + *   (constant off or on), exact behavior will depend on the clock.
+>> + * - When the PWM is disabled, the clock will be disabled as well,
+>> + *   line state will depend on the clock.
+>> + * - The clk API doesn't expose the necessary calls to implement
+>> + *   .get_state().
+>> + */
+>> +
+>> +#include <linux/kernel.h>
+>> +#include <linux/math64.h>
+>> +#include <linux/err.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/pwm.h>
+>> +
+>> +struct pwm_clk_chip {
+>> +	struct pwm_chip chip;
+>> +	struct clk *clk;
+>> +	bool clk_enabled;
+>> +};
+>> +
+>> +#define to_pwm_clk_chip(_chip) container_of(_chip, struct pwm_clk_chip, chip)
+>> +
+>> +static int pwm_clk_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>> +			 const struct pwm_state *state)
+>> +{
+>> +	struct pwm_clk_chip *pcchip = to_pwm_clk_chip(chip);
+>> +	int ret;
+>> +	u32 rate;
+>> +	u64 period = state->period;
+>> +	u64 duty_cycle = state->duty_cycle;
+>> +
+>> +	if (!state->enabled) {
+>> +		if (pwm->state.enabled) {
+>> +			clk_disable(pcchip->clk);
+>> +			pcchip->clk_enabled = false;
+>> +		}
+>> +		return 0;
+>> +	} else if (!pwm->state.enabled) {
+>> +		ret = clk_enable(pcchip->clk);
+>> +		if (ret)
+>> +			return ret;
+>> +		pcchip->clk_enabled = true;
+>> +	}
+> 
+> Maybe point out here that this introduces a glitch that cannot be
+> prevented. Something like:
+> 
+> 	/*
+> 	 * We have to enable the clk before setting the rate and
+> 	 * duty_cycle, that however results in a window where the clk is
+> 	 * on with a (potentially) different setting. Also setting
+> 	 * period and duty_cycle are two separate calls, so that
+> 	 * probably isn't atomic either.
+> 	 */
+> 
+
+Thanks for the suggestion! Will add.
+
+>> +	rate = DIV64_U64_ROUND_UP(NSEC_PER_SEC, period);
+>> +	ret = clk_set_rate(pcchip->clk, rate);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (state->polarity == PWM_POLARITY_INVERSED)
+>> +		duty_cycle = period - duty_cycle;
+>> +
+>> +	return clk_set_duty_cycle(pcchip->clk, duty_cycle, period);
+>> +}
+>> +
+>> +static const struct pwm_ops pwm_clk_ops = {
+>> +	.apply = pwm_clk_apply,
+>> +	.owner = THIS_MODULE,
+>> +};
+>> +
+>> +static int pwm_clk_probe(struct platform_device *pdev)
+>> +{
+>> +	struct pwm_clk_chip *pcchip;
+>> +	int ret;
+>> +
+>> +	pcchip = devm_kzalloc(&pdev->dev, sizeof(*pcchip), GFP_KERNEL);
+>> +	if (!pcchip)
+>> +		return -ENOMEM;
+>> +
+>> +	pcchip->clk = devm_clk_get(&pdev->dev, NULL);
+> 
+> You can use devm_clk_get_prepared() here and drop the clk_prepare()
+> below and the clk_unprepare in .remove().
+> 
+
+Here I spent a bit of time trying to remember why I thought
+I've already looked at this, but after figuring out that this
+devm helper didn't even exist earlier (I only see it in clk-next)
+I remembered considering a totally different thing (being
+clk_disable_unprepare in the _remove, which doesn't play well)
+
+Given that this seems to be absent from 5.19-rc6, I'm afraid adding
+it here will upset the 0day as well as possibly cause issues in case
+both are taken for the same merge window...
+
+On the other hand it takes me quite a while to provide replies for
+this series (the trend I'm not happy with) so maybe 3-4 weeks
+will indeed pass for 5.20-rc1 to have it...
+
+I think I will try to send a new version with just the comment
+added shortly in case it's still not too late for the next merge
+window and you can feel free to nack it if you think it already is :)
+
+Thanks for your review,
+Nikita
+
+>> +	if (IS_ERR(pcchip->clk))
+>> +		return dev_err_probe(&pdev->dev, PTR_ERR(pcchip->clk),
+>> +				     "Failed to get clock\n");
+>> +
+>> +	pcchip->chip.dev = &pdev->dev;
+>> +	pcchip->chip.ops = &pwm_clk_ops;
+>> +	pcchip->chip.npwm = 1;
+>> +
+>> +	ret = clk_prepare(pcchip->clk);
+>> +	if (ret < 0)
+>> +		return dev_err_probe(&pdev->dev, ret, "Failed to prepare clock\n");
+>> +
+>> +	ret = pwmchip_add(&pcchip->chip);
+>> +	if (ret < 0) {
+>> +		clk_unprepare(pcchip->clk);
+>> +		return dev_err_probe(&pdev->dev, ret, "Failed to add pwm chip\n");
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, pcchip);
+>> +	return 0;
+>> +}
+>> +
+>> +static int pwm_clk_remove(struct platform_device *pdev)
+>> +{
+>> +	struct pwm_clk_chip *pcchip = platform_get_drvdata(pdev);
+>> +
+>> +	pwmchip_remove(&pcchip->chip);
+>> +
+>> +	if (pcchip->clk_enabled)
+>> +		clk_disable(pcchip->clk);
+>> +
+>> +	clk_unprepare(pcchip->clk);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id pwm_clk_dt_ids[] = {
+>> +	{ .compatible = "clk-pwm", },
+>> +	{ /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, pwm_clk_dt_ids);
+>> +
+>> +static struct platform_driver pwm_clk_driver = {
+>> +	.driver = {
+>> +		.name = "pwm-clk",
+>> +		.of_match_table = pwm_clk_dt_ids,
+>> +	},
+>> +	.probe = pwm_clk_probe,
+>> +	.remove = pwm_clk_remove,
+>> +};
+>> +module_platform_driver(pwm_clk_driver);
+>> +
+>> +MODULE_ALIAS("platform:pwm-clk");
+>> +MODULE_AUTHOR("Nikita Travkin <nikita@trvn.ru>");
+>> +MODULE_DESCRIPTION("Clock based PWM driver");
+>> +MODULE_LICENSE("GPL");
+> 
+> Best regards
+> Uwe

@@ -2,68 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3295708B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10AE5708CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiGKRPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 13:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S230147AbiGKRXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 13:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGKRPk (ORCPT
+        with ESMTP id S229515AbiGKRXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 13:15:40 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E58935140F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:15:38 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 26BHCQwP008080;
-        Mon, 11 Jul 2022 12:12:27 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 26BHCQ80008079;
-        Mon, 11 Jul 2022 12:12:26 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 11 Jul 2022 12:12:26 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v1 4/5] powerpc/44x: Fix build failure with GCC 12 (unrecognized opcode: `wrteei')
-Message-ID: <20220711171226.GG25951@gate.crashing.org>
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu> <b0d982e223314ed82ab959f5d4ad2c4c00bedb99.1657549153.git.christophe.leroy@csgroup.eu> <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 11 Jul 2022 13:23:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88815A467;
+        Mon, 11 Jul 2022 10:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657560185; x=1689096185;
+  h=from:to:cc:subject:date:message-id;
+  bh=MBfyWaApA3oEnyU9PXhbhtT3dHmqFz/Pcy3bSsty3TY=;
+  b=mKJ1gEsjLCQmBONOq82imcvic/sKx+VxVrgAgr+jCQN8s0AYdCzOp6Ia
+   TZwPs14Bq8vpJvK6Tq50yI1QUrUms4J8S1OQFc7oOSW5oSdMItW3qxlXi
+   cs+ZRt6Fqa/PSG6yVjDsp8NWg/a+s1f61sPeGusImUr7rZAI1REFYB6n8
+   3Ti6F5lxfKxHJWPZtYpH0/WDAn/lEf9+jwvaC2EPb01VcttjmxH+JXA03
+   tCZb+IbHzZChRf1q5ptRFquJOjiym5GcH3w+M/QFG60eMnbtzIEbaNOM6
+   kbcxn9ckBh6IvcPH9LgSr76zo6s9e4HpbAzwN54wbE7RfrpmKJdTu/5hM
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="267760976"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="267760976"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 10:23:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="921869730"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Jul 2022 10:23:05 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com
+Cc:     bagasdotme@gmail.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH v3 0/2] x86: AMX enabling example with new constants
+Date:   Mon, 11 Jul 2022 10:13:45 -0700
+Message-Id: <20220711171347.27309-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=0.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:05:04PM +0200, Arnd Bergmann wrote:
-> Is there any value in building for -mcpu=440 or -mcpu=464 when targeting a 476?
+Hi all,
 
-The original 440 had a very short pipeline.  Later IBM 4xx have a longer
-pipeline.  Getting this right (with -mtune=, or just with -mcpu=) is
-important for performance.  So, no?
+Here are the changes from the last version [1]:
+* Add AMX feature numbers as ABI constants (Tony Luck).
+* Revise sentences in the documentation (Bagas Sanjaya).
+* Adjust the code example.
 
-> Maybe add another !PPC_47x dependency for the first two. Ideally we would also
-> enforce that 440/464 based boards cannot be selected together with 476, though
-> I guess that is a separate issue.
-> 
-> Is there a practical difference between 440 and 464 when building kernels?
-> gcc seems to treat them the same way, so maybe one option for both is enough
-> here.
+Thank you Tony and Bagas for the feedback.
 
--mcpu= is used as the default for -mtune=, so that is always a
-consideration.  PPC464 is treated the same as PPC440 in binutils as
-well, so I don't think there is any issue there.
+=== Cover Letter ===
+
+With the AMX support in the mainline, recently I heard some folks had a
+hard time understanding the AMX enabling process. A code example is
+expected to clarify the steps. Along with that, add a couple of ABI
+constants useful for the feature enabling.
+
+The arch_prctl(2) manual page [2] is missing these new options. Perhaps,
+the man-page update follows up along with this.
+
+These changes can be found in the repo:
+  git://github.com/intel/amx-linux.git doc
+
+And the compiled preview is available here:
+  https://htmlpreview.github.io/?https://github.com/intel/amx-linux/doc-web/x86/xstate.html
+
+Thanks,
+Chang
+
+[1] https://lore.kernel.org/lkml/20220629224235.20589-1-chang.seok.bae@intel.com/
+[2] arch_prctl(2): https://man7.org/linux/man-pages/man2/arch_prctl.2.html
+
+Chang S. Bae (2):
+  x86/arch_prctl: Add AMX feature numbers as ABI constants
+  Documentation/x86: Add the AMX enabling example
+
+ Documentation/x86/xstate.rst      | 55 +++++++++++++++++++++++++++++++
+ arch/x86/include/uapi/asm/prctl.h |  3 ++
+ 2 files changed, 58 insertions(+)
 
 
-Segher
+base-commit: 32346491ddf24599decca06190ebca03ff9de7f8
+-- 
+2.17.1
+

@@ -2,85 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35F6570C15
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A564570C18
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiGKUkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S231635AbiGKUmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGKUkP (ORCPT
+        with ESMTP id S229934AbiGKUmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:40:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A812F6716C;
-        Mon, 11 Jul 2022 13:40:14 -0700 (PDT)
+        Mon, 11 Jul 2022 16:42:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD00774B0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:42:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40A9E615F9;
-        Mon, 11 Jul 2022 20:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95BACC341CB;
-        Mon, 11 Jul 2022 20:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657572013;
-        bh=93mOM3cxrzM0+NvlClplt2QWuvIOUfwNWYuZS72n8sA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MbZPx+roPZKB3A4Voxqm5sfu/kXmzWS6ehjNDhg0nnBUC4nS3ucXoaJVXdwwK0qX4
-         5J5l8xAfdRV6Y19HN0/emLiaV03G1+6FqKl6Ba6mIxoEYHyXP5BpO7FG0jnKRJQIoX
-         vM3DCYg3C7tuKvx9xYoQBVMeReWkSkvGdyVo/aiFq7y2ga7wwxbLNdouYqmasDiBjh
-         qdYjm7vaBdoqf8f2UbyFwCFoJEQIfBsj6OVpCWxC7FnQFDWqcXNMRfd0N4QjKY3MX+
-         941ji6CrD9LyttRu3Lc10sMT1NHiGrR1rIxU5L4OgjVNcFc4nVM92RvPOiSLXL2V7K
-         fgmHQTl9DqYpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72099E45225;
-        Mon, 11 Jul 2022 20:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48C23B81203
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58CFAC34115;
+        Mon, 11 Jul 2022 20:42:45 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 16:42:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Julia Lawall <Julia.Lawall@lip6.fr>,
+        Michal Marek <mmarek@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] coccinelle: Remove script that checks replacing 0/1 with
+ false/true in functions returning bool
+Message-ID: <20220711164243.092eec75@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bcm63xx: fix Tx cleanup when NAPI poll budget is zero
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165757201346.9109.10275172511072121523.git-patchwork-notify@kernel.org>
-Date:   Mon, 11 Jul 2022 20:40:13 +0000
-References: <20220708080303.298-1-liew.s.piaw@gmail.com>
-In-Reply-To: <20220708080303.298-1-liew.s.piaw@gmail.com>
-To:     Sieng-Piaw Liew <liew.s.piaw@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+There is nothing wrong with current code that returns 0 or 1 for a
+function returning bool. It is perfectly acceptable by the C standard.
 
-On Fri,  8 Jul 2022 16:03:03 +0800 you wrote:
-> NAPI poll() function may be passed a budget value of zero, i.e. during
-> netpoll, which isn't NAPI context.
-> Therefore, napi_consume_skb() must be given budget value instead of
-> !force to truly discern netpoll-like scenarios.
-> 
-> Fixes: c63c615e22eb ("bcm63xx_enet: switch to napi_build_skb() to reuse skbuff_heads")
-> Signed-off-by: Sieng-Piaw Liew <liew.s.piaw@gmail.com>
-> 
-> [...]
+To avoid churn of unwanted patches that are constantly sent to maintainers
+who do not care about this change, remove the script that flags it as an
+issue. This issue is not worth the burden on maintainers to accept
+useless patches.
 
-Here is the summary with links:
-  - bcm63xx: fix Tx cleanup when NAPI poll budget is zero
-    https://git.kernel.org/netdev/net-next/c/10c8fd2f7a40
+Link: https://lore.kernel.org/all/20220705073822.7276-1-jiapeng.chong@linux.alibaba.com/
+Link: https://lore.kernel.org/all/20220429075201.68581-1-jiapeng.chong@linux.alibaba.com/
+Link: https://lore.kernel.org/all/1649236467-29390-1-git-send-email-baihaowen@meizu.com/
+Link: https://lore.kernel.org/all/20220317014740.3138-1-jiapeng.chong@linux.alibaba.com/
+Link: https://lore.kernel.org/all/190b5c2f2f2fb9cc775fce8daed72bf893be48a4.1642065293.git.davidcomponentone@gmail.com/
+Link: https://lore.kernel.org/all/20211214113845.439392-1-deng.changcheng@zte.com.cn/
+Link: https://lore.kernel.org/all/20210824065735.60660-1-deng.changcheng@zte.com.cn/
+Link: https://lore.kernel.org/all/20210824064305.60081-1-deng.changcheng@zte.com.cn/
+Link: https://lore.kernel.org/all/20210824062359.59474-1-deng.changcheng@zte.com.cn/
 
-You are awesome, thank you!
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Julia Lawall <Julia.Lawall@lip6.fr>
+Cc: Michal Marek <mmarek@suse.cz>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ scripts/coccinelle/misc/boolreturn.cocci | 59 ------------------------
+ 1 file changed, 59 deletions(-)
+ delete mode 100644 scripts/coccinelle/misc/boolreturn.cocci
+
+diff --git a/scripts/coccinelle/misc/boolreturn.cocci b/scripts/coccinelle/misc/boolreturn.cocci
+deleted file mode 100644
+index 29d2bf41e95d..000000000000
+--- a/scripts/coccinelle/misc/boolreturn.cocci
++++ /dev/null
+@@ -1,59 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/// Return statements in functions returning bool should use
+-/// true/false instead of 1/0.
+-//
+-// Confidence: High
+-// Options: --no-includes --include-headers
+-
+-virtual patch
+-virtual report
+-virtual context
+-
+-@r1 depends on patch@
+-identifier fn;
+-typedef bool;
+-symbol false;
+-symbol true;
+-@@
+-
+-bool fn ( ... )
+-{
+-<...
+-return
+-(
+-- 0
+-+ false
+-|
+-- 1
+-+ true
+-)
+-  ;
+-...>
+-}
+-
+-@r2 depends on report || context@
+-identifier fn;
+-position p;
+-@@
+-
+-bool fn ( ... )
+-{
+-<...
+-return
+-(
+-* 0@p
+-|
+-* 1@p
+-)
+-  ;
+-...>
+-}
+-
+-
+-@script:python depends on report@
+-p << r2.p;
+-fn << r2.fn;
+-@@
+-
+-msg = "WARNING: return of 0/1 in function '%s' with return type bool" % fn
+-coccilib.report.print_report(p[0], msg)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 

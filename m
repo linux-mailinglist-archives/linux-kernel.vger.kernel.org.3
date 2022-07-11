@@ -2,73 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE37570008
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15ADD570009
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiGKLSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S231190AbiGKLSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiGKLSZ (ORCPT
+        with ESMTP id S230405AbiGKLSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:18:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA04A190;
-        Mon, 11 Jul 2022 03:41:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhL5T4Hkrz4xD9;
-        Mon, 11 Jul 2022 20:41:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
-        s=201707; t=1657536062;
-        bh=WkUBTudz6dG+TVvLeDvu9O1AhkbCdb5uNCCAictTr2g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=w0cOffT/9tTiRHg2BhqZIQK+XKZC7zeFHiPlYdJZqgVyy7K78aV7UI7HRpX++qhYD
-         QCUmrsSj+cT54B0rgOiDWhQpwVOazT00+CiEao10e/LWnLcBq4sWfvKSHfP1BNK8iA
-         oP1QL8jt9Kd+j9O1KPOxbUH853N/SSKATmj/dvecsxmnV8NiaRFBWjWSOE2KItF6SK
-         Er3xAimALb3TlI/Om51KOhk5c+fYLvDgs73m87RbtF+OxpT+BNmAr7WXV7mAAmYPmx
-         6KagakpccinWRER1Zl4ce/KscfrLXugFFwKrgN0ZwzzNjp+ks2eApMeM0I4wKTBEfY
-         n+5T8EocAu9Wg==
-Message-ID: <74b98265ff9638ad7a06a58ef0dea1758396744f.camel@ozlabs.org>
-Subject: Re: [PATCH] serial: 8250: SERIAL_8250_ASPEED_VUART should depend on
- ARCH_ASPEED
-From:   Jeremy Kerr <jk@ozlabs.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 11 Jul 2022 18:40:38 +0800
-In-Reply-To: <259138c372d433005b4871789ef9ee8d15320307.1657528861.git.geert+renesas@glider.be>
-References: <259138c372d433005b4871789ef9ee8d15320307.1657528861.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-2 
+        Mon, 11 Jul 2022 07:18:22 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995EF273B;
+        Mon, 11 Jul 2022 03:40:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bf9so7946610lfb.13;
+        Mon, 11 Jul 2022 03:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tKUP88tFfL4ob57kLuQtLQDMBfz35DAQY6r3VlU1mf0=;
+        b=a9PmZb1xGozPn2iBGEJ+GaeXt02e0hsZkWJj7XS4kv2H1XgVVprv2HeDALTTfu+Z6r
+         umWMgZnd8unLH1HrkEgbSIvx7bvu2gl6DDtu9TQrlQIiwsMXvmbzAbSrhBSUD9yUgnl/
+         iY/nhDDf5ZpsBjxfRhsOl7P/N1k2vyVUfJAQjkJ/eWnffLuaDeuJ6K6ELIj9fvDtQLaN
+         jflsV5WgBROyRRc6wYdOev/rHUsDtr75eGW/tWjkuliyLgstVsDPei1c8ZCGqeOf2SpY
+         lJL4EDfOxknhQpv0U2XpwS+6FmeHcnXh1xZLTQKfIegNMnJL0dJb3Y6EVMiyaeE65Fk6
+         XUhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tKUP88tFfL4ob57kLuQtLQDMBfz35DAQY6r3VlU1mf0=;
+        b=PywIo/h/e8AKLuXMAPuFq5O2Wzo7E8UXFpl8976460TAdlqdTdUqD18d+ePEsIs9t7
+         jprgXFpdmdAehCONn3ihahbb/tSqRIxI20R1YribyKn5rSQIaNkeQmhciuTsVJsBoUCG
+         xWEwiWT/3YALVPDkvtNlgx9ik7inmdxlIY8csJYzhZgrmSzR0VMoYfOwVi3unpvoJFxl
+         Z/77xJdEqPtBiKy0OEbyDz36KlpNgELd3oMRFyKujDiBYE5itF8wr2zzPLCtwltdV4dc
+         M435HBxZUbfpdXzui4/DFLekM1P0ht9vfhA3H0rIl3sXFvhXP/wqQYhigNVqlo0U1Edz
+         Cwcw==
+X-Gm-Message-State: AJIora9GJw1pUCmwwjq+utKD9vUjGslQRUIN8BAcFufrnimfczcD8mQF
+        wr95PvF33OIpnWHSV3963W4=
+X-Google-Smtp-Source: AGRyM1vVW9WXDcKATAA7avv9aPKQVo3u32IId2Oc4FUeeoT0beEGc9ikNKwuWa5D7Eq8T/yf801bvQ==
+X-Received: by 2002:a05:6512:1698:b0:47f:b5a6:6870 with SMTP id bu24-20020a056512169800b0047fb5a66870mr11063346lfb.578.1657536054874;
+        Mon, 11 Jul 2022 03:40:54 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id m5-20020a2ea885000000b0025a7338317esm1625353ljq.64.2022.07.11.03.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 03:40:54 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 13:40:52 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@vger.kernel.org, gerg@kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
+Message-ID: <20220711104052.ddefbgd34xbbjykg@mobilestation>
+References: <20220707215237.1730283-1-f.fainelli@gmail.com>
+ <20220711083848.GE6084@alpha.franken.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711083848.GE6084@alpha.franken.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Mon, Jul 11, 2022 at 10:38:48AM +0200, Thomas Bogendoerfer wrote:
+> On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
+> > It is permissible for kernel code to call virt_to_phys() against virtual
+> > addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
+> > types. Add a final condition that ensures that the virtual address is
+> > below KSEG2.
+> > 
+> > Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
+> > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > ---
+> >  arch/mips/mm/physaddr.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
+> > index a1ced5e44951..a82f8f57a652 100644
+> > --- a/arch/mips/mm/physaddr.c
+> > +++ b/arch/mips/mm/physaddr.c
+> > @@ -5,6 +5,7 @@
+> >  #include <linux/mmdebug.h>
+> >  #include <linux/mm.h>
+> >  
+> > +#include <asm/addrspace.h>
+> >  #include <asm/sections.h>
+> >  #include <asm/io.h>
+> >  #include <asm/page.h>
+> > @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
+> >  	if (x == MAX_DMA_ADDRESS)
+> >  		return true;
+> >  
+> > -	return false;
+> > +	return KSEGX(x) < KSEG2;
+> >  }
+> >  
+> >  phys_addr_t __virt_to_phys(volatile const void *x)
+> > -- 
+> > 2.25.1
+> 
 
-> The Aspeed Virtual UART is only present on Aspeed BMC platforms.=C2=A0
-> Hence add a dependency on ARCH_ASPEED, to prevent asking the user
-> about this driver when configuring a kernel without Aspeed BMC
-> support.
+> applied to mips-next.
 
-All fine by me. It'd be super weird if this hardware appeared on a
-non-ASPEED platform.
+Are you sure it was ready to be applied?
+Link: https://lore.kernel.org/linux-mips/20220708115851.ejsooiilxcopkoei@mobilestation/
 
-Reviewed-by: Jeremy Kerr <jk@ozlabs.org>
+-Sergey
 
-Cheers,
-
-
-Jeremy
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]

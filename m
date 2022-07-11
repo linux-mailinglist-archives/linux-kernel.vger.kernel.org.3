@@ -2,212 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B2956D6D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF3D56D6B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiGKHaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S230110AbiGKHYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiGKHaD (ORCPT
+        with ESMTP id S230105AbiGKHY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:30:03 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268D315FFB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:30:02 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id l124so4070367pfl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=80XNm89Tlt+6cCcVIZ3c8q5hP69CK6UTNK8HJz+yZjI=;
-        b=hcEXaCBHEunsLe3ab3lDb25v/u8v3zX6C6JnggBTUWLH9s+edsQbb6mU556vl/TgWc
-         /UyZ6HA3UB7rNR3v0rYyx3FFSfIw5qf3IqNDrYHprWd1AXZEwFoZoDO6A/4FI2gWoZIt
-         Sux3ev2g4+ZZAxs6e72sjn4Lq7TAx1uosJ+xQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=80XNm89Tlt+6cCcVIZ3c8q5hP69CK6UTNK8HJz+yZjI=;
-        b=zLJv2LU/i9kIvx2kxSlPHB5C6EBK0qT90a7M/aHDE9EVnVzSbe9f5e4azB27DVqJ9V
-         kK+MgHX1uSvzpiWGo59At2x8/pO+1cV45MF8CDkr2zWGgVSll9BK6ZVNNwxPwDUnIpUr
-         Kf7Yy844Kwk0njRN+1QoY+mJJeYzHpRipR0vaVDhnwy5D3qw/+qqPA7+VY1B9reMSHIx
-         oXe8Ce3TedDd/h5TsVD9c82Ge6n7VsxWs8Wwzky14bl4e8leRoKo+DJwmA/ddJXGZ87m
-         AHUSDR4AVzG5wLmYEwk9yaVJx7EQzA4HEDsCewT5yipbl5QItf8WebFC64lUNFceEh7k
-         j8Gg==
-X-Gm-Message-State: AJIora/MhsKAWgX0zM3MfYAcsKiwwmXrcQtcKfmvOT3QqBHqzstkbN+P
-        h/Sk3MyydePR4f+0cpnGlt55+XsWyi8CPQ==
-X-Google-Smtp-Source: AGRyM1sTzes0KAkaSVhjtzQQAGDlpm33fvxw2hCg0l6U6bI9+jLQe4RpwDaYiOpgzSV2+06xSvSQbA==
-X-Received: by 2002:a63:d711:0:b0:415:c581:2aff with SMTP id d17-20020a63d711000000b00415c5812affmr11912006pgg.278.1657524601493;
-        Mon, 11 Jul 2022 00:30:01 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z8-20020aa79e48000000b0051bc5f4df1csm4012839pfq.154.2022.07.11.00.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 00:30:01 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v4 9/9] platform/chrome: cros_ec_typec: Get retimer handle
-Date:   Mon, 11 Jul 2022 07:23:03 +0000
-Message-Id: <20220711072333.2064341-10-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-In-Reply-To: <20220711072333.2064341-1-pmalani@chromium.org>
-References: <20220711072333.2064341-1-pmalani@chromium.org>
+        Mon, 11 Jul 2022 03:24:28 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE013FB6;
+        Mon, 11 Jul 2022 00:24:26 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id BADC24015A;
+        Mon, 11 Jul 2022 12:24:21 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1657524262; bh=TM9PHjFhwqnCKFfKFeJ/O4AXSs6yiSWKFZdtW4tUdSI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HleYzFOM5qHYA1KyvH8h3iXhrHKMkIrWWvwkKOj5EJ1hYE49Oq2CFe8t0FhtdT0ve
+         IzblL86zDpzuKrVnynCiidcH+PwpwlzNuHaDB7j1Xdjl+y0KEwTgwT/mZdRl512nyb
+         PTXhcShdrHOn85yBKqgX0mFAjrk7ztJ3dJsBmfRAfzlH3fIMwQeW3HTU8Ln/WCMbbL
+         8J1opkiS289BTmOB0uxZjj8q29mPyAh/x2rdT+yrHZ8CLpr88VWYnnF3baiq/H6xha
+         Uk2C5lvbycdnDU4YhCPBexo2yBrNCOCmhLcE0fzoUFSGMZVXBJTSyCpOXafJjTXHhJ
+         TWluiD7W6VuRg==
 MIME-Version: 1.0
+Date:   Mon, 11 Jul 2022 12:24:19 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
+        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
+        masneyb@onstation.org, sean.anderson@seco.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v7 2/2] pwm: Add clock based PWM output driver
+In-Reply-To: <20220711070349.udyej2qxj2hqyowz@pengutronix.de>
+References: <20220612132203.290726-1-nikita@trvn.ru>
+ <20220612132203.290726-3-nikita@trvn.ru>
+ <20220701075012.xpkcd5xk42frevyq@pengutronix.de>
+ <ef73636abfc6df26c249863e0288dc48@trvn.ru>
+ <20220711070349.udyej2qxj2hqyowz@pengutronix.de>
+Message-ID: <5b2c8ae074ede3263c67381758311398@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Where available, obtain the handle to retimer switch specified via
-firmware, and update the mux configuration callsites to add retimer
-support for supported modes.
+Uwe Kleine-König писал(а) 11.07.2022 12:03:
+> On Mon, Jul 11, 2022 at 10:55:09AM +0500, Nikita Travkin wrote:
+>> Uwe Kleine-König писал(а) 01.07.2022 12:50:
+>> > On Sun, Jun 12, 2022 at 06:22:03PM +0500, Nikita Travkin wrote:
+>> >> Some systems have clocks exposed to external devices. If the clock
+>> >> controller supports duty-cycle configuration, such clocks can be used as
+>> >> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
+>> >> similar way and an "opposite" driver already exists (clk-pwm). Add a
+>> >> driver that would enable pwm devices to be used via clk subsystem.
+>> >>
+>> >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> >> --
+>> >>
+>> >> Changes in v2:
+>> >>  - Address Uwe's review comments:
+>> >>    - Round set clk rate up
+>> >>    - Add a description with limitations of the driver
+>> >>    - Disable and unprepare clock before removing pwmchip
+>> >> Changes in v3:
+>> >>  - Use 64bit version of div round up
+>> >>  - Address Uwe's review comments:
+>> >>    - Reword the limitations to avoid incorrect claims
+>> >>    - Move the clk_enabled flag assignment
+>> >>    - Drop unnecessary statements
+>> >> Changes in v5:
+>> >>  - add missed returns
+>> >> Changes in v6:
+>> >>  - Unprepare the clock on error
+>> >>  - Drop redundant limitations points
+>> >> Changes in v7:
+>> >>  - Rename some variables to be in line with common naming
+>> >>
+>> >> --
+>> >> It seems like my mailserver wasn't able to send the last review
+>> >> response to Uwe's so I'll repeat here that afaict clk.h has all the
+>> >> methods stubbed out so compiling without HAVE_CLK is possible.
+>> >> Sorry for a long delay with sending this since v6.
+> 
+> FTR: The only problems I have with mail sending in this thread is to
+> "devicetree@vger.kernel.or", I added a 'g' for this mail to that address
+> :-) Otherwise if you diagnose to have problems with the pengutronix
+> server accepting your mail, I'd like to hear about that.
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+I think the problem for me was that my server, for some reason,
+insisted on using ipv6 which it has no access to. I think it might
+just be some (very) temporary problem on my end as now the mails go
+fine again.
 
-Changes since v3:
-- No changes.
+And the missing "g" is just the artifact of me preferring to manually
+build the git send-email command every time, then forgetting I made
+this typo when replying...
 
-Changes since v2:
-- No changes.
+> 
+>> >> +	pcchip = devm_kzalloc(&pdev->dev, sizeof(*pcchip), GFP_KERNEL);
+>> >> +	if (!pcchip)
+>> >> +		return -ENOMEM;
+>> >> +
+>> >> +	pcchip->clk = devm_clk_get(&pdev->dev, NULL);
+>> >
+>> > You can use devm_clk_get_prepared() here and drop the clk_prepare()
+>> > below and the clk_unprepare in .remove().
+>>
+>> Here I spent a bit of time trying to remember why I thought
+>> I've already looked at this, but after figuring out that this
+>> devm helper didn't even exist earlier (I only see it in clk-next)
+>> I remembered considering a totally different thing (being
+>> clk_disable_unprepare in the _remove, which doesn't play well)
+>>
+>> Given that this seems to be absent from 5.19-rc6, I'm afraid adding
+>> it here will upset the 0day as well as possibly cause issues in case
+>> both are taken for the same merge window...
+> 
+> Pass --base with a sensible parameter to git-format-patch (or
+> git-send-email) to make the 0day bots happy.
 
-Changes since v1:
-- No changes.
+Thanks for the suggestion!
 
- drivers/platform/chrome/cros_ec_typec.c | 44 +++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
+> 
+>> On the other hand it takes me quite a while to provide replies for
+>> this series (the trend I'm not happy with) so maybe 3-4 weeks
+>> will indeed pass for 5.20-rc1 to have it...
+> 
+> It's not me who merges PWM patches but Thierry. I don't know his plans
+> and if he would be willing to pick up a new driver for the next cycle.
+> You might still get lucky with a fast next iteration.
+> 
+> If you want ignore the devm_clk_get_prepared() suggestion, we can still
+> convert to that once both patches hit Linus Torvald's tree.
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 39e6fd4491a9..38c4ac754ea9 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
- #include <linux/usb/typec_tbt.h>
- #include <linux/usb/role.h>
- 
-@@ -53,6 +54,7 @@ struct cros_typec_port {
- 	struct usb_pd_identity c_identity;
- 	struct typec_switch *ori_sw;
- 	struct typec_mux *mux;
-+	struct typec_retimer *retimer;
- 	struct usb_role_switch *role_sw;
- 
- 	/* Variables keeping track of switch state. */
-@@ -142,6 +144,12 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 		goto mux_err;
- 	}
- 
-+	port->retimer = fwnode_typec_retimer_get(fwnode);
-+	if (IS_ERR(port->retimer)) {
-+		dev_dbg(dev, "Retimer handle not found.\n");
-+		goto retimer_sw_err;
-+	}
-+
- 	port->ori_sw = fwnode_typec_switch_get(fwnode);
- 	if (IS_ERR(port->ori_sw)) {
- 		dev_dbg(dev, "Orientation switch handle not found.\n");
-@@ -159,6 +167,8 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- role_sw_err:
- 	typec_switch_put(port->ori_sw);
- ori_sw_err:
-+	typec_retimer_put(port->retimer);
-+retimer_sw_err:
- 	typec_mux_put(port->mux);
- mux_err:
- 	return -ENODEV;
-@@ -203,6 +213,21 @@ static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int po
- 	}
- }
- 
-+/*
-+ * Map the Type-C Mux state to retimer state and call the retimer set function. We need this
-+ * because we re-use the Type-C mux state for retimers.
-+ */
-+static int cros_typec_retimer_set(struct typec_retimer  *retimer, struct typec_mux_state state)
-+{
-+	struct typec_retimer_state rstate = {
-+		.alt = state.alt,
-+		.mode = state.mode,
-+		.data = state.data,
-+	};
-+
-+	return typec_retimer_set(retimer, &rstate);
-+}
-+
- static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- {
- 	port->state.alt = NULL;
-@@ -211,6 +236,7 @@ static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- 
- 	usb_role_switch_set_role(port->role_sw, USB_ROLE_NONE);
- 	typec_switch_set(port->ori_sw, TYPEC_ORIENTATION_NONE);
-+	cros_typec_retimer_set(port->retimer, port->state);
- 
- 	return typec_mux_set(port->mux, &port->state);
- }
-@@ -381,9 +407,14 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 
- static int cros_typec_usb_safe_state(struct cros_typec_port *port)
- {
-+	int ret;
- 	port->state.mode = TYPEC_STATE_SAFE;
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- /*
-@@ -480,7 +511,11 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
- 	port->state.data = &dp_data;
- 	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-@@ -569,7 +604,10 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
- 	} else if (port->mux_flags & USB_PD_MUX_USB_ENABLED) {
- 		port->state.alt = NULL;
- 		port->state.mode = TYPEC_STATE_USB;
--		ret = typec_mux_set(port->mux, &port->state);
-+
-+		ret = cros_typec_retimer_set(port->retimer, port->state);
-+		if (!ret)
-+			ret = typec_mux_set(port->mux, &port->state);
- 	} else {
- 		dev_dbg(typec->dev,
- 			"Unrecognized mode requested, mux flags: %x\n",
--- 
-2.37.0.144.g8ac04bfd2-goog
+Yes, I decided to immediately send a v8 instead of giving a bit
+of time for the discussion to settle (which seem to often end up
+too long) as there was no functional change otherwise.
 
+Thanks,
+Nikita
+
+> 
+>> I think I will try to send a new version with just the comment
+>> added shortly in case it's still not too late for the next merge
+>> window and you can feel free to nack it if you think it already is :)
+> 
+> I think the driver looks good otherwise, so I don't expect to have more
+> feedback in the next round.
+> 
+> Best regards
+> Uwe

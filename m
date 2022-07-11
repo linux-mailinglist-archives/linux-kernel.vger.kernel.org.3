@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1225056D790
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA2F56D78F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiGKIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S229555AbiGKIPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiGKIPu (ORCPT
+        with ESMTP id S229820AbiGKIPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:15:50 -0400
-Received: from smtpbg516.qq.com (smtpbg516.qq.com [203.205.250.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1151DA56
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:15:46 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1657527335tdmplea0
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 11 Jul 2022 16:15:29 +0800 (CST)
-X-QQ-SSF: 01400000002000G0T000B00A0000000
-X-QQ-FEAT: 357G+HpUJafKVCqO/P4HU43U4zyZg+9kBNp/Le0Dv+PEfu7zWOm9YZ67+06Vh
-        Twrfj/SaTivXtg17N7qgT0Yok17vf9Fud70QEt2IXdYGeCFqnz8G3fVs3vRZH5C1KWLyUsK
-        oRlalOjDdVi1Q90PqFM7MVIAkklbqxxjAuNjDqnU+pz7BSpQm7xkewzGVSEn6AIYWEOx9A2
-        cMZ6P6o3GGBXm+rhSB3I4uso9Usk3yL54nd5LLY6xcO9I/Lcd8ZKu3L6NUujd/T3HkZdrN8
-        sew5zpffE7kj9FJ6DM6Bv1NRnGasGgr+P8p2/PDC2t7kPUiMTG65eFsCCKJLVVEbbINW86/
-        wNeObm9K9uLiAf8AxE5OjJJlgDX7w+Ytx8g1gPCsFHinP6TjqwA4j4M82dxo7ENegHHA/zp
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     tcrawford@system76.com, kai.heng.feng@canonical.com,
-        wse@tuxedocomputers.com, tanureal@opensource.cirrus.com,
-        cam@neo-zeon.de, kailang@realtek.com,
-        sbinding@opensource.cirrus.com, yong.wu@mediatek.com,
-        andy.chi@canonical.com, Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] ALSA: hda/realtek: Fix headset mic for Acer SF313-51
-Date:   Mon, 11 Jul 2022 16:15:27 +0800
-Message-Id: <20220711081527.6254-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 11 Jul 2022 04:15:43 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B495A1DA73
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:15:42 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o4so5961062wrh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6DWq1wMF9fY90AzBasovu62zTzhHtDKOLQCRNv0ZlKo=;
+        b=b0YBrpH+jAFbo9NMcnOyJkponKHXE1UAlDOhxKgGfWY9dtxjGM1Z1vlfXDW9wdPiQQ
+         5HFDrWzqRl0Vkqa/gVrVCyn/rwWg6pBi/DGOSVDsbRWCXESyc9iOtqh/G4iWD9RfoIRC
+         ba2/r0t655DXphFYP6VbJAf/uGlJ8VxJgPzL0KCJ49cmvFmxIj5KoRCnB8aIPqS2824J
+         7p1ENR6vakoUl81JKE81TC/tq0iQy5U4XpcWYMma+xeslIPKIpizcvHcwuu1bMxLIlT1
+         9smjkXX28ZvdvYxcBJuwvy5JR9LxujjSfSukxXkW/yZsxbKqJ/QZn5uzB+/d0r7vV/+0
+         a7/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6DWq1wMF9fY90AzBasovu62zTzhHtDKOLQCRNv0ZlKo=;
+        b=xf0ScUGFKx/18XaKvKdmmcaz7p4DBb7FNrKCz8bDrxFW1Pj/OtfuW8vcjkCSdwDw/q
+         CH364M4/oh50E/elisPzsIP3aNN+dRAH2xe+IW8UJjcXF4GoRXnm63ZqC3raO41ayWna
+         ouYruzSKqmA04YBbLpWMAUuGR/k4nbZ244QcheYVzVUvmIzkVyHOCVQdvK19ddly+DwD
+         17GWTfc/Ukffbp3WNdwDFbDLxosg2QO60HzzZ4PMEjj4g+RzYWagLtE/pA/Tr+PRC+4j
+         Z1yvXTyVE3Up317g6LGmATW0Rf4xbFo4u21SXmXupFh40Zo9p3PDgkH0YiK2lJ6Tf86w
+         Ph9Q==
+X-Gm-Message-State: AJIora/oWWkBMr6OPAQUp5k0alAvGhkyYgBjEtW0jiDiF8gknaUDc1c1
+        9Ml1jF2myi0h0lIktL+qYx5GyVapznvGlA==
+X-Google-Smtp-Source: AGRyM1u4cExAFLILTw1IcqnT14nWcrV8iR0sCp/R3lJU6ktzDppmN5og0YxCTwwaGjbi/2S43aZXRw==
+X-Received: by 2002:a5d:64c7:0:b0:21d:a743:394 with SMTP id f7-20020a5d64c7000000b0021da7430394mr2905094wri.628.1657527341239;
+        Mon, 11 Jul 2022 01:15:41 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b0039ee51fda45sm6209835wmq.2.2022.07.11.01.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 01:15:40 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 09:15:39 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v2 01/11] mfd: intel_soc_pmic_bxtwc: Don't shadow error
+ codes in show()/store()
+Message-ID: <YsvcK3ihQXbr1m/l@google.com>
+References: <20220628221747.33956-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220628221747.33956-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The issue on Acer SWIFT SF313-51 is that headset microphone
-doesn't work. The following quirk fixed headset microphone issue.
-Note that the fixup of SF314-54/55 (ALC256_FIXUP_ACER_HEADSET_MIC)
-was not successful on my SF313-51.
+On Wed, 29 Jun 2022, Andy Shevchenko wrote:
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+> kstrtox() along with regmap API can return different error codes based on
+> circumstances.
+> 
+> Don't shadow them when returning to the caller.
+> 
+> While at it, remove rather confusing message from addr_store().
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: dropped a confusing message as well (Lee)
+>  drivers/mfd/intel_soc_pmic_bxtwc.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 007dd8b5e1f2..fe7c1194d052 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8886,6 +8886,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1025, 0x1290, "Acer Veriton Z4860G", ALC286_FIXUP_ACER_AIO_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1025, 0x1291, "Acer Veriton Z4660G", ALC286_FIXUP_ACER_AIO_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1025, 0x129c, "Acer SWIFT SF314-55", ALC256_FIXUP_ACER_HEADSET_MIC),
-+	SND_PCI_QUIRK(0x1025, 0x129d, "Acer SWIFT SF313-51", ALC256_FIXUP_ACER_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1025, 0x1300, "Acer SWIFT SF314-56", ALC256_FIXUP_ACER_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1025, 0x1308, "Acer Aspire Z24-890", ALC286_FIXUP_ACER_AIO_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1025, 0x132a, "Acer TravelMate B114-21", ALC233_FIXUP_ACER_HEADSET_MIC),
+Applied, thanks.
+
 -- 
-2.20.1
-
-
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,131 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5946456D32C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 05:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0E256D32F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 05:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiGKDDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 23:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S229661AbiGKDEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 23:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGKDDr (ORCPT
+        with ESMTP id S229450AbiGKDEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 23:03:47 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C035AE60
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 20:03:45 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220711030342epoutp0371d4709fd29293e7b88223b436967073~Ap098w6wo0708107081epoutp03O
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:03:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220711030342epoutp0371d4709fd29293e7b88223b436967073~Ap098w6wo0708107081epoutp03O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657508622;
-        bh=PNUfvCy84e9Zz5Ld9SjN2TCbZtJ0xMlSlgGfnADVN8g=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=RZW3Bb7buM/OpH18Irc5d+uSlEkX1ZGH/+TnHq4XzmMFn1VEpjx3/uWXjKDFFJ5HR
-         TJI/qCTqnNS6NZfPyIDahv8qHdE4kqmjRRqka0jOm2/up4VgbN/QAI877lL+YFMdxJ
-         cp7VJRLfvl1ExR5ddwuP/9TyLQeU6Wwb9S//zi9M=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220711030342epcas5p3fda6d270c80a177a7c43ea2f7190ab37~Ap09cfris1855918559epcas5p3V;
-        Mon, 11 Jul 2022 03:03:42 +0000 (GMT)
-X-AuditID: b6c32a4b-e83ff700000025a7-36-62cb930e7df4
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E1.44.09639.E039BC26; Mon, 11 Jul 2022 12:03:42 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] sched,debug: fix dentry leak in update_sched_domain_debugfs
-Reply-To: major.chen@samsung.com
-Sender: Major Chen <major.chen@samsung.com>
-From:   Major Chen <major.chen@samsung.com>
-To:     "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>
-CC:     Hongfei Tang <hongfei.tang@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a@epcms5p1>
-Date:   Mon, 11 Jul 2022 11:03:41 +0800
-X-CMS-MailID: 20220711030341epcms5p173848e98b13c09eb2fcdf2fd7287526a
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsWy7bCmpi7f5NNJBv9fsVpcenyVzWL6y0YW
-        i6cTtjJbbOpvZLS42z+VxeLyrjlsFpPfPWO0uHRgAZPF8d4DTBb7Oh4wWXQc+cbswO2xZt4a
-        Ro+WfbfYPRZsKvXYvELL4861PWwe7/ddZfPo27KK0WPz6WqPz5vkAjijuGxSUnMyy1KL9O0S
-        uDLm9XxkL7grXnH7wHTGBsZe8S5GTg4JAROJnff2s3QxcnEICexmlOh4f5Wxi5GDg1dAUOLv
-        DmGQGmEBH4nm9k52EFtIQEFiwqkuNoi4tsSfTc9ZQMrZBDQlzm6qBBkjIrCeWeL8keNMIDXM
-        AjkSfefXsELs4pWY0f6UBcKWlti+fCsjhC0qcXP1W3YY+/2x+VBxEYnWe2eZIWxBiQc/d0PF
-        pSSuH//NBGEXS9x8fBdqZgOjRP8ZGQjbXOLrph6wel4BX4lfL6eBzWERUJVovLgGapeLxMJZ
-        F5kh7tSWWLbwNTPIL8xAv6zfpQ8R5pPo/f2ECeb8HfNgbBWJ1t1T2GDOub1+IytIq4SAh8SC
-        RbqQkAqUuDF7BcsERrlZiPCchWTXLIRdCxiZVzFKphYU56anFpsWGOellusVJ+YWl+al6yXn
-        525iBCcfLe8djI8efNA7xMjEwXiIUYKDWUmE98/ZU0lCvCmJlVWpRfnxRaU5qcWHGKU5WJTE
-        eb2ubkoSEkhPLEnNTk0tSC2CyTJxcEo1MG17nyQw173494+vl2eKvW+dxxa4ruTghshz06Qs
-        WW+GnM/YeDKvX81nzuTIzy2H9vKzTl5zc6G/36eqyG1vz7eumsDGt1x1a8AUzbV3xJOnxz0t
-        7/9xfgf/tYcJHVoXxXcJ5YclB3+9ZlQTVuBcYpN8N3b1jtuabv8m7HgT7j1XavUijbT447Yp
-        cnIrr3zdtbZDMcGTRdDeRPLaFTFu/1s7D+y7ePd9U6v5g/+CtjOWhGhXtZmxX/NmDT0U+O+N
-        6ba4ev9oyy+zr1zsZJpq/fE9/63G2m3MBYkbPRNnKjAvn7bdc6fwm1xfuYUP3swsSbKI3Z8l
-        M2PxfeYTZgYOyrxS92UdmrSXbS+S2lFz/o0SS3FGoqEWc1FxIgDAi6yyrQMAAA==
-X-CMS-RootMailID: 20220711025311epcms5p874ccee18b6dd4e6a62759d0749936e61
-References: <CGME20220711025311epcms5p874ccee18b6dd4e6a62759d0749936e61@epcms5p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 10 Jul 2022 23:04:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9BE186D7;
+        Sun, 10 Jul 2022 20:04:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06ECA6111B;
+        Mon, 11 Jul 2022 03:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D022CC3411E;
+        Mon, 11 Jul 2022 03:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657508683;
+        bh=2qgfVdj8tvTCH2jYcKrpZ5Snk3LhfgSEv3T6kIahGWI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mbkI4rxEMLL92W1bpiBd/cttlQzNlLGKIfErZJYzed5mizc3O4JeX3w7OwxR0Hi3g
+         vYKvR32OoSTzsZOBqt2zxcyULxu1tX0SlEAKBloPJP/8PUaTbKZQcqwQTAtEZLXaRj
+         7xdUWBHYfOXyUCf2JWtVh3QK+fRvCgvzpiwgoMfDHV8/HtPhwIzuBes3xTJZmjLCb3
+         qx6Ni85gFvI1A0C4PS1kgqnp2EhXEvRhWRn4Xjm+/PBMo5YRq5eAOFIzXA5u88iziA
+         MevgLPsvMtTO3Ii6wg+K+fA1zj1lEibb837/esD2mtKfyuvFr0IUIsft5bGNXBma3c
+         LuTG/JPhAFoGQ==
+Date:   Mon, 11 Jul 2022 06:04:38 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
+ available
+Message-ID: <YsuTRny45aBxGjm5@kernel.org>
+References: <20220706152329.665636-1-stefanb@linux.ibm.com>
+ <20220706152329.665636-5-stefanb@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706152329.665636-5-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C2=A0=0D=0Aupdate_sched_domain_debugfs()=C2=A0uses=C2=A0debugfs_lookup()=
-=C2=A0to=C2=A0find=C2=A0wanted=C2=A0dentry(which=C2=A0has=0D=0Abeen=C2=A0cr=
-eated=C2=A0by=C2=A0debugfs_create_dir()=C2=A0before),=C2=A0but=C2=A0not=C2=
-=A0call=C2=A0dput()=C2=A0to=C2=A0return=C2=A0this=C2=A0dentry=0D=0Aback.=C2=
-=A0This=C2=A0result=C2=A0in=C2=A0dentry=C2=A0leak=C2=A0even=C2=A0debugfs_re=
-move()=C2=A0is=C2=A0called.=0D=0A=C2=A0=0D=0ASigned-off-by:=C2=A0major.chen=
-=C2=A0<major.chen=40samsung.com>=0D=0A---=0D=0A=C2=A0kernel/sched/debug.c=
-=C2=A0=7C=C2=A07=C2=A0+++++--=0D=0A=C2=A01=C2=A0file=C2=A0changed,=C2=A05=
-=C2=A0insertions(+),=C2=A02=C2=A0deletions(-)=0D=0A=C2=A0=0D=0Adiff=C2=A0--=
-git=C2=A0a/kernel/sched/debug.c=C2=A0b/kernel/sched/debug.c=0D=0Aindex=C2=
-=A0bb3d63b..4ffea2d=C2=A0100644=0D=0A---=C2=A0a/kernel/sched/debug.c=0D=0A+=
-++=C2=A0b/kernel/sched/debug.c=0D=0A=40=40=C2=A0-412,11=C2=A0+412,14=C2=A0=
-=40=40=C2=A0void=C2=A0update_sched_domain_debugfs(void)=0D=0A=C2=A0=0D=0A=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for_each_cpu(cpu,=C2=
-=A0sd_sysctl_cpus)=C2=A0=7B=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0sch=
-ed_domain=C2=A0*sd;=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dentry=C2=A0*d_=
-cpu;=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct=C2=A0dentry=C2=A0*d_cpu,=C2=A0*d_lo=
-okup;=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char=C2=A0buf=5B32=5D;=0D=0A=C2=A0=
-=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0snprintf(buf,=C2=A0sizeof(buf),=C2=A0=22cp=
-u%d=22,=C2=A0cpu);=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0debugfs_remove(debugfs_look=
-up(buf,=C2=A0sd_dentry));=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0d_lookup=C2=A0=3D=C2=
-=A0debugfs_lookup(buf,=C2=A0sd_dentry);=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0debugf=
-s_remove(d_lookup);=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21IS_ERR_OR_NULL(=
-d_lookup))=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0dput(d_lookup);=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0d_cpu=C2=A0=3D=
-=C2=A0debugfs_create_dir(buf,=C2=A0sd_dentry);=0D=0A=C2=A0=0D=0A=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0i=C2=A0=3D=C2=A00;=0D=0A--=C2=A0=0D=0A2.7.4=0D=0A=C2=A0=
-=0D=0A=C2=A0=0D=0A=0D=0A
+On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
+> Simplify tpm_read_log_of() by moving reusable parts of the code into
+> an inline function that makes it commonly available so it can be
+> used also for kexec support. Call the new of_tpm_get_sml_parameters()
+> function from the TPM Open Firmware driver.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> 
+> ---
+> v4:
+>  - converted to inline function
+> ---
+>  drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
+>  include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
+>  2 files changed, 32 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> index a9ce66d09a75..f9462d19632e 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -12,6 +12,7 @@
+>  
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+> +#include <linux/tpm.h>
+>  #include <linux/tpm_eventlog.h>
+>  
+>  #include "../tpm.h"
+> @@ -20,11 +21,10 @@
+>  int tpm_read_log_of(struct tpm_chip *chip)
+>  {
+>  	struct device_node *np;
+> -	const u32 *sizep;
+> -	const u64 *basep;
+>  	struct tpm_bios_log *log;
+>  	u32 size;
+>  	u64 base;
+> +	int ret;
+>  
+>  	log = &chip->log;
+>  	if (chip->dev.parent && chip->dev.parent->of_node)
+> @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	if (of_property_read_bool(np, "powered-while-suspended"))
+>  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
+>  
+> -	sizep = of_get_property(np, "linux,sml-size", NULL);
+> -	basep = of_get_property(np, "linux,sml-base", NULL);
+> -	if (sizep == NULL && basep == NULL)
+> -		return -ENODEV;
+> -	if (sizep == NULL || basep == NULL)
+> -		return -EIO;
+> -
+> -	/*
+> -	 * For both vtpm/tpm, firmware has log addr and log size in big
+> -	 * endian format. But in case of vtpm, there is a method called
+> -	 * sml-handover which is run during kernel init even before
+> -	 * device tree is setup. This sml-handover function takes care
+> -	 * of endianness and writes to sml-base and sml-size in little
+> -	 * endian format. For this reason, vtpm doesn't need conversion
+> -	 * but physical tpm needs the conversion.
+> -	 */
+> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> -		size = be32_to_cpup((__force __be32 *)sizep);
+> -		base = be64_to_cpup((__force __be64 *)basep);
+> -	} else {
+> -		size = *sizep;
+> -		base = *basep;
+> -	}
+> +	ret = of_tpm_get_sml_parameters(np, &base, &size);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	if (size == 0) {
+>  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362d..b3dff255bc58 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -460,4 +460,31 @@ static inline struct tpm_chip *tpm_default_chip(void)
+>  	return NULL;
+>  }
+>  #endif
+> +
+> +#ifdef CONFIG_OF
+> +static inline int of_tpm_get_sml_parameters(struct device_node *np,
+> +					    u64 *base, u32 *size)
+> +{
+> +	const u32 *sizep;
+> +	const u64 *basep;
+> +
+> +	sizep = of_get_property(np, "linux,sml-size", NULL);
+> +	basep = of_get_property(np, "linux,sml-base", NULL);
+> +	if (sizep == NULL && basep == NULL)
+> +		return -ENODEV;
+> +	if (sizep == NULL || basep == NULL)
+> +		return -EIO;
+> +
+> +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> +		*size = be32_to_cpup((__force __be32 *)sizep);
+> +		*base = be64_to_cpup((__force __be64 *)basep);
+> +	} else {
+> +		*size = *sizep;
+> +		*base = *basep;
+> +	}
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #endif
+> -- 
+> 2.35.1
+> 
+
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko

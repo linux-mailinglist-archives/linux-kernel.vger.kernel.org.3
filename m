@@ -2,113 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8254570E2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0E2570E31
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbiGKXVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S231244AbiGKXWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGKXVh (ORCPT
+        with ESMTP id S229702AbiGKXWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:21:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA1A59266
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:21:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D01D5B8161D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E564C34115;
-        Mon, 11 Jul 2022 23:21:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h7RauwaQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657581691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/avvaukbqL1mfs9TCGxMHEdTty78hgHUU7Vwzj84cWM=;
-        b=h7RauwaQEyHEOwvIgh8eT6KX1wWY3yVZdtza8fROASL+/E8TzI6UoWAse+JujtHJVx9Gt1
-        jcQi/vG41cq/VN8eOBSZbD2/0+RAO6sFMRoap3+CPYn4LV1LEcs7i/uAcQplV6SABc6V6R
-        /qANYJyhsNYhDpIq9N6nzke9g37nsVw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f507e058 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 11 Jul 2022 23:21:31 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v5] signal: break out of wait loops on kthread_stop()
-Date:   Tue, 12 Jul 2022 01:21:23 +0200
-Message-Id: <20220711232123.136330-1-Jason@zx2c4.com>
-In-Reply-To: <87h73n9ufn.fsf@email.froward.int.ebiederm.org>
-References: <87h73n9ufn.fsf@email.froward.int.ebiederm.org>
+        Mon, 11 Jul 2022 19:22:42 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4962820C1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:40 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l23so11382493ejr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2g/SRedCTGa3FW1fDb+EmyQOw6AOS/KFbwj3cy8GxXM=;
+        b=fAXlbz7CXR4/Kg6TafHz6Jq1ObQFjoGNWKETyL5sK1ogIAZ7eh86yG8EZsMgg7dLi9
+         i4WwRk7mJjU5ORPXarDHnJ6nA7DhMcGY5zkpAGZAjIj2sF0ZoSiyOfhWy3cqaB77JJH2
+         dTkyj2oPvErEYbjlvTsVHSPFBKhF6aamfznp4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2g/SRedCTGa3FW1fDb+EmyQOw6AOS/KFbwj3cy8GxXM=;
+        b=T2mMubpvKZoWTrXWfrXy9VY+gPZvTc7bvmQEJg1c7uYSFl1BXk+VPWB2PdvUttyxt0
+         m2Dg/yoXEVcmZoeoMoSumExqiV375OXMd/K4iTQ/WwuMmdNzHp2kg8v4Svet6wsOn2CX
+         dPX72U3i0+4N4/Y82vuTF4O+QrRvnVrs2YSeKOrmZKaPGGD9EvIJDbhQeiGzwz+wZxyn
+         BtoEF5PyF7ud3YU5Dbf5AQxE/2K7+J6NK3kgsKMfpRM7ElrQ+UHZ5pVBjiJGNJFvG+dQ
+         ND7M+5UB8hdgQkz2kWW0iJ3jneaXqS6X605DkAkAieTTZsraZB3hCSpUpaWs9PqeB16v
+         VU/A==
+X-Gm-Message-State: AJIora95takOGkmjyN6bpAywo64LMvVTHNZ3JzYZxgu98tA+CbUWjYIs
+        vBe4BQtroH7cS6wbvexU542DqC6wX63rLFnEwg8=
+X-Google-Smtp-Source: AGRyM1ur0iCl+jsIDoIacyfBtICju/6mjJiZEWKOfHipN/D/0Uht3c/HTnIC1bGA2K7GNKhVfeCgcw==
+X-Received: by 2002:a17:907:8a28:b0:726:a02a:5bea with SMTP id sc40-20020a1709078a2800b00726a02a5beamr21718411ejc.175.1657581759281;
+        Mon, 11 Jul 2022 16:22:39 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id s10-20020a1709064d8a00b0072b33e91f96sm3130082eju.190.2022.07.11.16.22.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 16:22:37 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id z12so8899371wrq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:37 -0700 (PDT)
+X-Received: by 2002:adf:d1e9:0:b0:21b:c8f8:3c16 with SMTP id
+ g9-20020adfd1e9000000b0021bc8f83c16mr18888013wrd.659.1657581756957; Mon, 11
+ Jul 2022 16:22:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com> <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
+In-Reply-To: <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 11 Jul 2022 16:22:25 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com>
+Message-ID: <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] drm/msm: Fix cx collapse issue during recovery
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Sean Paul <sean@poorly.run>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I was recently surprised to learn that msleep_interruptible(),
-wait_for_completion_interruptible_timeout(), and related functions
-simply hung when I called kthread_stop() on kthreads using them. The
-solution to fixing the case with msleep_interruptible() was more simply
-to move to schedule_timeout_interruptible(). Why?
+Hi,
 
-The reason is that msleep_interruptible(), and many functions just like
-it, has a loop like this:
+On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> There are some hardware logic under CX domain. For a successful
+> recovery, we should ensure cx headswitch collapses to ensure all the
+> stale states are cleard out. This is especially true to for a6xx family
+> where we can GMU co-processor.
+>
+> Currently, cx doesn't collapse due to a devlink between gpu and its
+> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
+> that the iommu driver removes its vote on cx gdsc.
+>
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+>
+> (no changes since v1)
+>
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 16 ++++++++++++++--
+>  drivers/gpu/drm/msm/msm_gpu.c         |  2 --
+>  2 files changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 4d50110..7ed347c 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -1278,8 +1278,20 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>          */
+>         gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+>
+> -       gpu->funcs->pm_suspend(gpu);
+> -       gpu->funcs->pm_resume(gpu);
+> +       /*
+> +        * Now drop all the pm_runtime usage count to allow cx gdsc to collapse.
+> +        * First drop the usage count from all active submits
+> +        */
+> +       for (i = gpu->active_submits; i > 0; i--)
+> +               pm_runtime_put(&gpu->pdev->dev);
+> +
+> +       /* And the final one from recover worker */
+> +       pm_runtime_put_sync(&gpu->pdev->dev);
+> +
+> +       for (i = gpu->active_submits; i > 0; i--)
+> +               pm_runtime_get(&gpu->pdev->dev);
+> +
+> +       pm_runtime_get_sync(&gpu->pdev->dev);
 
-        while (timeout && !signal_pending(current))
-                timeout = schedule_timeout_interruptible(timeout);
-
-The call to kthread_stop() woke up the thread, so schedule_timeout_
-interruptible() returned early, but because signal_pending() returned
-true, it went back into another timeout, which was never woken up.
-
-This wait loop pattern is common to various pieces of code, and I
-suspect that the subtle misuse in a kthread that caused a deadlock in
-the code I looked at last week is also found elsewhere.
-
-So this commit causes signal_pending() to return true when
-kthread_stop() is called, by setting TIF_NOTIFY_SIGNAL.
-
-The same also probably applies to the similar kthread_park()
-functionality, but that can be addressed later, as its semantics are
-slightly different.
-
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v4->v5:
-- Use set_tsk_thread_flag instead of test_and_set_tsk_thread_flag. Must
-  have been a copy and paste mistarget.
-Changes v3->v4:
-- Don't address park() for now.
-- Don't bother clearing the flag, since the task is about to be freed
-  anyway.
-
- kernel/kthread.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 3c677918d8f2..7243a010f433 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -704,6 +704,7 @@ int kthread_stop(struct task_struct *k)
- 	kthread = to_kthread(k);
- 	set_bit(KTHREAD_SHOULD_STOP, &kthread->flags);
- 	kthread_unpark(k);
-+	set_tsk_thread_flag(k, TIF_NOTIFY_SIGNAL);
- 	wake_up_process(k);
- 	wait_for_completion(&kthread->exited);
- 	ret = kthread->result;
--- 
-2.35.1
-
+In response to v1, Rob suggested pm_runtime_force_suspend/resume().
+Those seem like they would work to me, too. Why not use them?

@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E211570A5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AECD570A62
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiGKTJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 15:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S231580AbiGKTKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 15:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGKTJa (ORCPT
+        with ESMTP id S229518AbiGKTKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 15:09:30 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA542A738
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:09:29 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u13so10269939lfn.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NNCQrtnWgXhweJyHBzmUMAvNZjug28FIArGHTvNylrU=;
-        b=LytjKyLMp2QvtPgcfXhehbLH0cHqmVC7tGT5N0b9lPbyskD0GSK2so9hz7mo+MvsFP
-         wkTXigM/IowhrRJf7f50XTXEUdLp6ySvTTCdzRnvuJuXfonICikuRbFCX1FPA2eI2pPZ
-         9N2Eg0ZtNX3lY1bhP++ULq4ewWzt8Tz0XFq7R4CxIKPFbrq92mQKpgSKaUahI76/lePt
-         9GT3RosG28W4H7Uuo8Ws4cdNm2fWkCIzqfihnaG27chA9tH4BiguWEf6u73qqS6lnu+8
-         z25nBEiYU5nZr6oU82Tb2WzdM7suqOLwpWTTETig3PbHIXJVgtHkSopEERyjfFLGlgGU
-         8FPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NNCQrtnWgXhweJyHBzmUMAvNZjug28FIArGHTvNylrU=;
-        b=RVflLz/PTbh6JZmWxu4p+3iK4NB2PTozGcJWckffYQTAfFwOUnxBCoGJVGREZEKllt
-         S9CqWS8mnBYb3dl1GNJqmmwseTRS39FC1X6PomMpYvVp87gXdvCuF+vrSo9BjlgEBCLD
-         iONEGdnzV5w/Z5IDSVGWjj4gAnXL2jWPO1yqzUCT3t9hNjO28PQ9p+nStYLQAM7gnHNv
-         i+MgOhvrAaHGcLQ8c2FjGbx8zm7O9hbKUripRhkT9nQ45KCkCPArFqED7nXrSdbW+xBH
-         GzdqWt1QDpF8NvHnQ7UBJWekVO47/5Dg2TU+vBBsJvNzXrJIp+8UwfmENgWSJB/4ChxQ
-         CWOA==
-X-Gm-Message-State: AJIora+/zByEyIzY3NDMsugARfLSFnR30XPBJ2eUeOTqTkaNVOeBs8rK
-        jhxw1KSo4TtlgPit1UUnKFw=
-X-Google-Smtp-Source: AGRyM1vXa70epjhbuq8PxAzpww+wC+BQvclHtmuk7j1QBF+G+OQIMszM+RebFISkxQOoXfG9CGOQ6A==
-X-Received: by 2002:a05:6512:3e08:b0:489:d3c3:e901 with SMTP id i8-20020a0565123e0800b00489d3c3e901mr6142805lfv.125.1657566567925;
-        Mon, 11 Jul 2022 12:09:27 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id w6-20020a05651204c600b0047f9cfa914csm1706987lfq.18.2022.07.11.12.09.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 12:09:27 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 22:09:25 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        SoC Team <soc@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND v4 1/2] bus: bt1-apb: Don't print error on
- -EPROBE_DEFER
-Message-ID: <20220711190925.pk4pt3kh5tgxd3mv@mobilestation>
-References: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru>
- <20220711155335.ltctlk66vylwcpcj@mobilestation>
- <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
+        Mon, 11 Jul 2022 15:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FD82AE02;
+        Mon, 11 Jul 2022 12:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8092761557;
+        Mon, 11 Jul 2022 19:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C589BC341CA;
+        Mon, 11 Jul 2022 19:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657566614;
+        bh=6D+2DpXoaKcspcgzrN+pNsncRNJULDzNOzPp8Ld7hoM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NFUmoYBnhmrc9WJYfGgXQmVg60YJU8zfdxGmpXVS8BAyhzXqV52AsUhq6dKG4E75o
+         qBC5wDnfluq+3lR1PgH8SiKwFSa2ZnikoFXLeKDvAoeaWavJzUWfGgUyjP3ukAbhF0
+         P+ZAa780luJ/AkeByfYJoZl3H/GqP59x7T9HDUibeQrTYLbHMIwFYYuM94LtK7tT0s
+         BIfbjogxVwrH5NoizVwPCWDh406pi+TnNze9ybkBLZIaeXUGRU2Ih8TQsJhUmGk3JY
+         oPrg88vcBcQNsi4Gb32JbOvqt6rVE8vN9d3gqAJzDkPIlaUHhB4W2s37jGymotWD0j
+         aBWVHeZ31iSIg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B3C7E45223;
+        Mon, 11 Jul 2022 19:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v9 0/4] bpf trampoline for arm64
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165756661463.27404.16087446828795658696.git-patchwork-notify@kernel.org>
+Date:   Mon, 11 Jul 2022 19:10:14 +0000
+References: <20220711150823.2128542-1-xukuohai@huawei.com>
+In-Reply-To: <20220711150823.2128542-1-xukuohai@huawei.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        jean-philippe@linaro.org, will@kernel.org, kpsingh@kernel.org,
+        mark.rutland@arm.com, catalin.marinas@arm.com,
+        daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
+        zlim.lnx@gmail.com, kafai@fb.com, songliubraving@fb.com,
+        yhs@fb.com, john.fastabend@gmail.com, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kuba@kernel.org, hawk@kernel.org,
+        rmk+kernel@armlinux.org.uk, james.morse@arm.com,
+        houtao1@huawei.com, wangborong@cdjrlc.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 08:54:26PM +0200, Arnd Bergmann wrote:
-> On Mon, Jul 11, 2022 at 5:53 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > Hi Arnd, Philipp
-> >
-> > Since no comments have been posted for the patches lately and the @Philipp
-> > notes have been fixed way on v2, could you please consider merge the
-> > patchset in through any of your repos?
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Mon, 11 Jul 2022 11:08:19 -0400 you wrote:
+> This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+> native calling convention to bpf calling convention and is used to implement
+> various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
 > 
+> The trampoline introduced does essentially the same thing as the bpf
+> trampoline does on x86.
 > 
+> [...]
 
-> Hi Sergey,
-> 
-> I already merged these into the arm/drivers tree on June 10,
+Here is the summary with links:
+  - [bpf-next,v9,1/4] bpf: Remove is_valid_bpf_tramp_flags()
+    https://git.kernel.org/bpf/bpf-next/c/535a57a7ffc0
+  - [bpf-next,v9,2/4] arm64: Add LDR (literal) instruction
+    https://git.kernel.org/bpf/bpf-next/c/f1e8a24ed2ca
+  - [bpf-next,v9,3/4] bpf, arm64: Implement bpf_arch_text_poke() for arm64
+    https://git.kernel.org/bpf/bpf-next/c/b2ad54e1533e
+  - [bpf-next,v9,4/4] bpf, arm64: bpf trampoline for arm64
+    https://git.kernel.org/bpf/bpf-next/c/efc9909fdce0
 
-Hi Arnd. Great! Thanks for accepting the patches.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> I suppose
-> something went wrong with the notification email.
 
-Alas I haven't got any notification. Spam folder has nothing too.
-
--Sergey
-
-> 
->       Arnd

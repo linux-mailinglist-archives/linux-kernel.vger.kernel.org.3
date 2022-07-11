@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A1756FB7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F47456FA55
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiGKJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
+        id S231592AbiGKJQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiGKJ2o (ORCPT
+        with ESMTP id S231736AbiGKJOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:28:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ABC67597;
-        Mon, 11 Jul 2022 02:16:07 -0700 (PDT)
+        Mon, 11 Jul 2022 05:14:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145F92A414;
+        Mon, 11 Jul 2022 02:10:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2956FB80DB7;
-        Mon, 11 Jul 2022 09:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFF4C34115;
-        Mon, 11 Jul 2022 09:16:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B896B80E5E;
+        Mon, 11 Jul 2022 09:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 967A4C34115;
+        Mon, 11 Jul 2022 09:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530963;
-        bh=ZF+WrzFbhV5KX1eMz2BAXCroj3WkNOc6oPxo40Y+VAo=;
+        s=korg; t=1657530633;
+        bh=dChCWsb+4khBPPsnfWD9LiN8uRlrpm1uvS/5ig3Xag0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sIS3VmYr7gUUNAwu8jDugOEVZzI8KuzQ6Qush6t78GnzDMYUUlyxgbJz+ddbeAcfH
-         gMTiJwtJ4hi8TVE2EKERxwofuzI303Aboh0hAvtA6G0oxUby3Hzj5GqhomQjKm0/Pm
-         uOgOm8DWX3r/a7TfSr5WkbKcg3Xtq1tphW6dZBiA=
+        b=EdMtt6zrQZUWo6vieh+38fmd/fbGSELQ5CWWO6S5c1his4JO59urTa79/GSd/nPoi
+         F+132Zeq5hZ8Rnbnfa80Q75AvRwo+kWkEB1hsBDXyySDnW4k7XfDFEmpId0NQCbZaZ
+         +ETFWu0kdDlZD7gKyKUx6Qvr0oCyF+s5OWMwfod4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 048/112] ASoC: rt711: Add endianness flag in snd_soc_component_driver
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 06/38] usbnet: fix memory leak in error case
 Date:   Mon, 11 Jul 2022 11:06:48 +0200
-Message-Id: <20220711090550.935510604@linuxfoundation.org>
+Message-Id: <20220711090538.916851659@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 33f06beac3ade10834a82ad4105dcd91d4b00d61 ]
+commit b55a21b764c1e182014630fa5486d717484ac58f upstream.
 
-The endianness flag is used on the CODEC side to specify an
-ambivalence to endian, typically because it is lost over the hardware
-link. This device receives audio over a SoundWire DAI and as such
-should have endianness applied.
+usbnet_write_cmd_async() mixed up which buffers
+need to be freed in which error case.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220504170905.332415-31-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+v2: add Fixes tag
+v3: fix uninitialized buf pointer
+
+Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220705125351.17309-1-oneukum@suse.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/rt711.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/usbnet.c |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/rt711.c b/sound/soc/codecs/rt711.c
-index ea25fd58d43a..9838fb4d5b9c 100644
---- a/sound/soc/codecs/rt711.c
-+++ b/sound/soc/codecs/rt711.c
-@@ -950,6 +950,7 @@ static const struct snd_soc_component_driver soc_codec_dev_rt711 = {
- 	.num_dapm_routes = ARRAY_SIZE(rt711_audio_map),
- 	.set_jack = rt711_set_jack_detect,
- 	.remove = rt711_remove,
-+	.endianness = 1,
- };
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -2120,7 +2120,7 @@ static void usbnet_async_cmd_cb(struct u
+ int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
+ 			   u16 value, u16 index, const void *data, u16 size)
+ {
+-	struct usb_ctrlrequest *req = NULL;
++	struct usb_ctrlrequest *req;
+ 	struct urb *urb;
+ 	int err = -ENOMEM;
+ 	void *buf = NULL;
+@@ -2138,7 +2138,7 @@ int usbnet_write_cmd_async(struct usbnet
+ 		if (!buf) {
+ 			netdev_err(dev->net, "Error allocating buffer"
+ 				   " in %s!\n", __func__);
+-			goto fail_free;
++			goto fail_free_urb;
+ 		}
+ 	}
  
- static int rt711_set_sdw_stream(struct snd_soc_dai *dai, void *sdw_stream,
--- 
-2.35.1
-
+@@ -2162,14 +2162,21 @@ int usbnet_write_cmd_async(struct usbnet
+ 	if (err < 0) {
+ 		netdev_err(dev->net, "Error submitting the control"
+ 			   " message: status=%d\n", err);
+-		goto fail_free;
++		goto fail_free_all;
+ 	}
+ 	return 0;
+ 
++fail_free_all:
++	kfree(req);
+ fail_free_buf:
+ 	kfree(buf);
+-fail_free:
+-	kfree(req);
++	/*
++	 * avoid a double free
++	 * needed because the flag can be set only
++	 * after filling the URB
++	 */
++	urb->transfer_flags = 0;
++fail_free_urb:
+ 	usb_free_urb(urb);
+ fail:
+ 	return err;
 
 

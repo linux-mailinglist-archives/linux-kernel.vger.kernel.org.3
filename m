@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C8256FA1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4191256FA49
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiGKJNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S231463AbiGKJPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiGKJMu (ORCPT
+        with ESMTP id S231504AbiGKJOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:12:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A962C64E;
-        Mon, 11 Jul 2022 02:09:30 -0700 (PDT)
+        Mon, 11 Jul 2022 05:14:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE80326E0;
+        Mon, 11 Jul 2022 02:10:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2063C61148;
-        Mon, 11 Jul 2022 09:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A30C34115;
-        Mon, 11 Jul 2022 09:09:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AAE69CE1178;
+        Mon, 11 Jul 2022 09:10:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82DCC34115;
+        Mon, 11 Jul 2022 09:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530569;
-        bh=y6X5oj2du+G17bRly/PCr2Z1anJaJ8LV5xkD5Zj3fhg=;
+        s=korg; t=1657530608;
+        bh=K6jNGp2dUuNiWhAggovJ4j01QWBZArB13C35cE1qd8I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5sJ0Og32y7HHfyHfIFi1gwZ8efYLh5pnxBZzm0j9D338qQ9kD9UZEPyVDoRhQ63F
-         P33WyS5FbCIC43FkcQgviogdU+VafhPCudGJ/DERHNIDMC3ihYG7kcSytGJ4ovb+jV
-         u3BPd9khRYQM1MpSHZEhBtAb8LkdYJTMPiuFW+Qw=
+        b=Lxj8b5UlxBgIaTxTDGYvYZd5gwW1REwOfKxxlrN4cED3u8rTfoLBx8NSYno3Vbf/2
+         F92ewx1stECF1xputwu8kusYrKt885kSE1D7T7yLsebARjmL6+XEm98/EwRQorHoSO
+         y/AGxlPGQseE2glU7Mm8FMuqfX0NEcrpN5lJyhJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/31] ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
-Date:   Mon, 11 Jul 2022 11:06:55 +0200
-Message-Id: <20220711090538.328749213@linuxfoundation.org>
+        stable@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.4 14/38] powerpc/powernv: delay rng platform device creation until later in boot
+Date:   Mon, 11 Jul 2022 11:06:56 +0200
+Message-Id: <20220711090539.150343511@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 34d2cd3fccced12b958b8848e3eff0ee4296764c ]
+commit 887502826549caa7e4215fd9e628f48f14c0825a upstream.
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+The platform device for the rng must be created much later in boot.
+Otherwise it tries to connect to a parent that doesn't yet exist,
+resulting in this splat:
 
-Fixes: d850f3e5d296 ("ARM: meson: Add SMP bringup code for Meson8 and Meson8b")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220512021611.47921-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  [    0.000478] kobject: '(null)' ((____ptrval____)): is not initialized, yet kobject_get() is being called.
+  [    0.002925] [c000000002a0fb30] [c00000000073b0bc] kobject_get+0x8c/0x100 (unreliable)
+  [    0.003071] [c000000002a0fba0] [c00000000087e464] device_add+0xf4/0xb00
+  [    0.003194] [c000000002a0fc80] [c000000000a7f6e4] of_device_add+0x64/0x80
+  [    0.003321] [c000000002a0fcb0] [c000000000a800d0] of_platform_device_create_pdata+0xd0/0x1b0
+  [    0.003476] [c000000002a0fd00] [c00000000201fa44] pnv_get_random_long_early+0x240/0x2e4
+  [    0.003623] [c000000002a0fe20] [c000000002060c38] random_init+0xc0/0x214
+
+This patch fixes the issue by doing the platform device creation inside
+of machine_subsys_initcall.
+
+Fixes: f3eac426657d ("powerpc/powernv: wire up rng during setup_arch")
+Cc: stable@vger.kernel.org
+Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+[mpe: Change "of node" to "platform device" in change log]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220630121654.1939181-1-Jason@zx2c4.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-meson/platsmp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/powerpc/platforms/powernv/rng.c |   16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/mach-meson/platsmp.c b/arch/arm/mach-meson/platsmp.c
-index cad7ee8f0d6b..75e16a2c3c81 100644
---- a/arch/arm/mach-meson/platsmp.c
-+++ b/arch/arm/mach-meson/platsmp.c
-@@ -81,6 +81,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
- 	}
+--- a/arch/powerpc/platforms/powernv/rng.c
++++ b/arch/powerpc/platforms/powernv/rng.c
+@@ -176,12 +176,8 @@ static int __init pnv_get_random_long_ea
+ 		    NULL) != pnv_get_random_long_early)
+ 		return 0;
  
- 	sram_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!sram_base) {
- 		pr_err("Couldn't map SRAM registers\n");
- 		return;
-@@ -101,6 +102,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
- 	}
+-	for_each_compatible_node(dn, NULL, "ibm,power-rng") {
+-		if (rng_create(dn))
+-			continue;
+-		/* Create devices for hwrng driver */
+-		of_platform_device_create(dn, NULL, NULL);
+-	}
++	for_each_compatible_node(dn, NULL, "ibm,power-rng")
++		rng_create(dn);
  
- 	scu_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!scu_base) {
- 		pr_err("Couldn't map SCU registers\n");
- 		return;
--- 
-2.35.1
-
+ 	if (!ppc_md.get_random_seed)
+ 		return 0;
+@@ -205,10 +201,18 @@ void __init pnv_rng_init(void)
+ 
+ static int __init pnv_rng_late_init(void)
+ {
++	struct device_node *dn;
+ 	unsigned long v;
++
+ 	/* In case it wasn't called during init for some other reason. */
+ 	if (ppc_md.get_random_seed == pnv_get_random_long_early)
+ 		pnv_get_random_long_early(&v);
++
++	if (ppc_md.get_random_seed == powernv_get_random_long) {
++		for_each_compatible_node(dn, NULL, "ibm,power-rng")
++			of_platform_device_create(dn, NULL, NULL);
++	}
++
+ 	return 0;
+ }
+ machine_subsys_initcall(powernv, pnv_rng_late_init);
 
 

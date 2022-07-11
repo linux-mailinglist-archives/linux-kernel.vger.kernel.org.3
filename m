@@ -2,154 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0940C5706E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0905706E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiGKPXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S232243AbiGKPXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGKPW6 (ORCPT
+        with ESMTP id S231718AbiGKPXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:22:58 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0875FAC9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:22:57 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id j3so5051315pfb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rIXkilLQfgOtYP5k9HiwJCc9d8sCaA9fTRl5ayd2YSU=;
-        b=oeRT2pv5AEhh1wGL8y0oDKKzorx5yHv43t0Sgjd9q8R/C7iaG9Y19Jj1kcyIz6Uc87
-         7zWboOGTmnx4k6fgHqwUheXR12fXtVNHmZQJe4P/zf2hlUgHvu8Y0WbhEBpnO5RBcnp/
-         CezdnHbdBvVV+A5ZKTnyKUInqz03eCw8xtgfopQOpiYxWFNrl0E2Eh8wYhFLWEEhJba9
-         jI4dqMNm2jUAZGFM7/Dng++crAgg1uvMRUmmkuEUGAuFiuOk9uk5UxDUB2TNpJSfyyRd
-         YXZyivdkHGCKWvUOWyW/tUrPXMc7uHjrJO39KWSLaJ4BH1Lr0iGHnN1nTaZvfb3CAi+L
-         z2ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rIXkilLQfgOtYP5k9HiwJCc9d8sCaA9fTRl5ayd2YSU=;
-        b=QFFtb+HEO8BIWDPec3yjWl506jKAmTaY5pN7w7VA62+JajDGgJvRcqqs6T7cWMmRFP
-         Wj0FgDoNQHYUc/ag0fVbIcCliyYllHQ/QwdCJgz5ISVgNF0l3WRtzb+eWkf624LFjnU0
-         bC236HDSbeqcGfzLEbPDfcE9nrdxFkZ5/xCfoQeV6A9WwmOVL599CdZk9sElfL6wrPx6
-         GtV0zm3zhH1gTdWLo70CwYZ0jfVXNRVEEmG7tc8fZKgs+bn+c2AOiGSF6wPCP8y8U9wy
-         AM/mvOh9aP6+3im6fuqJEIimJBW6OiIiU93YBxLmdGpKCDhaUvXMW7LP+PpR+untkpJK
-         Ovhw==
-X-Gm-Message-State: AJIora9Cp/EZi5EurTSzVU9yNm4RGncoEOK5OH4oWlGd5PChLYhfAYVN
-        zB6y3P38/e2LgJ66f5VX1OlNhg==
-X-Google-Smtp-Source: AGRyM1uE4KGa7kyqDXzFm8D0UcGEJEKZug+68fWnZi8mRNj5u1umxmG99NPR4HdgrlHuYs+5fQTfXw==
-X-Received: by 2002:a05:6a00:1501:b0:525:79a7:aa4 with SMTP id q1-20020a056a00150100b0052579a70aa4mr19083236pfu.44.1657552976720;
-        Mon, 11 Jul 2022 08:22:56 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id 129-20020a630787000000b00415e89dd738sm3189922pgh.77.2022.07.11.08.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 08:22:56 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 15:22:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Subject: Re: [PATCH v2 17/21] KVM: x86: Morph pending exceptions to pending
- VM-Exits at queue time
-Message-ID: <YsxATIxJjYrrg7nc@google.com>
-References: <20220614204730.3359543-1-seanjc@google.com>
- <20220614204730.3359543-18-seanjc@google.com>
- <5eaf496d71b2c8fd321c013c9d1787d4c34d1100.camel@redhat.com>
- <YsY1ud2ZaZq9wvfI@google.com>
- <6fad40967afa4a7ed74c0f4158c8e841b1384318.camel@redhat.com>
+        Mon, 11 Jul 2022 11:23:03 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F861115
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:23:00 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4LhSLn0wMSz9sRL;
+        Mon, 11 Jul 2022 17:22:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1657552977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q9hE3HnYhAeCIgj3jLBbqvqbhLR0TkB/Owq0iN72XDA=;
+        b=ct7gyZRio9taxrgSLPGBH+A6BcG8r6RQvKbzFxjvK8ksp2xTH4Q2GcfBzFAUWOwS7LXS2U
+        ivhkO9UoMcfxE2piw6CRrLLq7u/eRyY84GWV/35CEqpV5yQA1o9G0sUIoA9Iogx9AiHr+0
+        11v/ALkHU8/Ln77AuZAJIrZT18KoJQuQi+QxSghVoyvawY0P+0H+09pROxFHlyWe3+2GIR
+        kZDEoX2mlN8Khixbcn9P0GoMTLpbm3Apont7BUVKI/Uj//uPFfxX4oI+BJQR4RALsFS0Bd
+        K5YkJyxyf6fs9oVtFF4vuSboj6dUxUiJwiwHq++FflHtZcWcsv2EjRTohwVr2g==
+Message-ID: <96a87833-d878-dde9-e335-9ea51a4ba406@mailbox.org>
+Date:   Mon, 11 Jul 2022 17:22:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6fad40967afa4a7ed74c0f4158c8e841b1384318.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/3] drm/fourcc: Add missing big-endian XRGB1555 and
+ RGB565 formats
+Content-Language: en-CA
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <cover.1657300532.git.geert@linux-m68k.org>
+ <0744671ac096a12f0d538906bd324efa71b11400.1657300532.git.geert@linux-m68k.org>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <0744671ac096a12f0d538906bd324efa71b11400.1657300532.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: ux7rkbi3t3o5yq3q4t1npq168ctqzdf5
+X-MBO-RS-ID: 86e332ecdac076a1b65
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-07-07 at 01:24 +0000, Sean Christopherson wrote:
-> > On Wed, Jul 06, 2022, Maxim Levitsky wrote:
-> > > Other than that, this is a _very_ good idea to add it to KVM, although
-> > > maybe we should put it in Documentation folder instead?
-> > > (but I don't have a strong preference on this)
-> > 
-> > I definitely want a comment in KVM that's relatively close to the code.  I'm not
-> > opposed to also adding something in Documentation, but I'd want that to be an "and"
-> > not an "or".
+On 2022-07-08 20:21, Geert Uytterhoeven wrote:
+> As of commit eae06120f1974e1a ("drm: refuse ADDFB2 ioctl for broken
+> bigendian drivers"), drivers must set the
+> quirk_addfb_prefer_host_byte_order quirk to make the drm_mode_addfb()
+> compat code work correctly on big-endian machines.
 > 
-> Also makes sense. 
+> While that works fine for big-endian XRGB8888 and ARGB8888, which are
+> mapped to the existing little-endian BGRX8888 and BGRA8888 formats, it
+> does not work for big-endian XRGB1555 and RGB565, as the latter are not
+> listed in the format database.
 > 
-> I do think that it is worthwhile to also add a comment about the way KVM
-> handles exceptions, which means that inject_pending_event is not always called on instruction
-> boundary. When we have a pending/injected exception we have first to get rid of it,
-> and only then we will be on instruction boundary.
+> Fix this by adding the missing formats.  Limit this to big-endian
+> platforms, as there is currently no need to support these formats on
+> little-endian platforms.
+> 
+> Fixes: 6960e6da9cec3f66 ("drm: fix drm_mode_addfb() on big endian machines.")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> Cirrus is the only driver setting quirk_addfb_prefer_host_byte_order
+> and supporting RGB565 or XRGB1555, but no one tried that on big-endian?
+> Cirrus does not support DRM_FORMAT_RGB565 | DRM_FORMAT_BIG_ENDIAN
+> in cirrus_fb_create, so you cannot get a graphical text console.
+> 
+> Do we need these definitions on little-endian platforms, too?
+> Would it be better to use "DRM_FORMAT_{XRGB1555,RGB565} |
+> DRM_FORMAT_BIG_ENDIAN" instead of "DRM_FORMAT_HOST_{XRGB1555,RGB565}" in
+> formats[]?
 
-Yeah, though it's not like KVM has much of a choice, e.g. intercepted=>reflected
-exceptions must be injected during instruction execution.  I wouldn't be opposed
-to renaming inject_pending_event() if someone can come up with a decent alternative
-that's sufficiently descriptive but not comically verbose.
+The intention of DRM_FORMAT_HOST_* is that they are macros in include/drm/drm_fourcc.h which just map to little endian formats defined in drivers/gpu/drm/drm_fourcc.c. Since this is not possible for big endian hosts for XRGB1555 or RGB565 (or any other format with non-8-bit components), this isn't applicable here.
 
-kvm_check_events() to pair with kvm_check_nested_events()?  kvm_check_and_inject_events()?  
+It's also doubtful that Cirrus hardware would access these formats as big endian (drivers/gpu/drm/tiny/cirrus.c has no endianness references at all, and the hardware was surely designed for x86 first and foremost).
 
-> And to be sure that we will inject pending interrupts on the closest instruction
-> boundary, we actually open an interrupt/smi/nmi window there.
-> > This is calling out something slightly different.  What it's saying is that if
-> > there was a pending exception, then KVM should _not_ have injected said pending
-> > exception and instead should have requested an immediate exit.  That "immediate
-> > exit" should have forced a VM-Exit before the CPU could fetch a new instruction,
-> > and thus before the guest could trigger an exception that would require reinjection.
-> > 
-> > The "immediate exit" trick works because all events with higher priority than the
-> > VMX preeemption timer (or IRQ) are guaranteed to exit, e.g. a hardware SMI can't
-> > cause a fault in the guest.
-> 
-> Yes it all makes sense now. It really helps thinking in terms of instruction boundary.
-> 
-> However, that makes me think: Can that actually happen?
+Instead, fbcon (and user space) needs to convert to little endian when using DRM_FORMAT_HOST_{XRGB1555,RGB565} with the cirrus driver on big endian hosts.
 
-I don't think KVM can get itself in that state, but I believe userspace could force
-it by using KVM_SET_VCPU_EVENTS + KVM_SET_NESTED_STATE.
 
-> A pending exception can only be generated by KVM itself (nested hypervisor,
-> and CPU reflected exceptions/interrupts are all injected).
-> 
-> If VMRUN/VMRESUME has a pending exception, it means that it itself generated it,
-> in which case we won't be entering the guest, but rather jump to the
-> exception handler, and thus nested run will not be pending.
-
-Notably, SVM handles single-step #DBs on VMRUN in the nested VM-Exit path.  That's
-the only exception that I can think of off the top of my head that can be coincident
-with a successful VM-Entry (ignoring things like NMI=>#PF).
-
-> We can though have pending NMI/SMI/interrupts.
-> 
-> Also just a note about injected exceptions/interrupts during VMRUN/VMRESUME.
-> 
-> If nested_run_pending is true, then the injected exception due to the same
-> reasoning can not come from VMRUN/VMRESUME. It can come from nested hypevisor's EVENTINJ,
-> but in this case we currently just copy it from vmcb12/vmcs12 to vmcb02/vmcs02,
-> without touching vcpu->arch.interrupt.
-> 
-> Luckily this doesn't cause issues because when the nested run is pending
-> we don't inject anything to the guest.
-> 
-> If nested_run_pending is false however, the opposite is true. The EVENTINJ
-> will be already delivered, and we can only have injected exception/interrupt
-> that come from the cpu itself via exit_int_info/IDT_VECTORING_INFO_FIELD which
-> we will copy back as injected interrupt/exception to 'vcpu->arch.exception/interrupt'.
-> and later re-inject, next time we run the same VMRUN instruction.
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer

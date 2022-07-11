@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D6E56F986
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E45156F993
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiGKJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S230390AbiGKJEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiGKJCs (ORCPT
+        with ESMTP id S229501AbiGKJEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:02:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA8E21E31
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657530166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KahG8dPujyuQmr3vS7XPH97ViH9jTIKR8+ux8kd1QT8=;
-        b=W3sTrSuhCr6HC+/MmWLSGXz4MACtGvnM4IBuMXA21UG8ANLcESZgYdVrRVrdd0YLb1s4K7
-        9mTwDw/7uvDXcKLqjAjWZH7oCKoiGe0Q81GtvsqvGZ/f2gXHnyWXE63JTHz8T2MoCMmlUA
-        ngiNCaWI0zHiqZWg9EHgyOQ8nTXKOyE=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-EGLab0c2NcqI8CLq9OEUJA-1; Mon, 11 Jul 2022 05:02:45 -0400
-X-MC-Unique: EGLab0c2NcqI8CLq9OEUJA-1
-Received: by mail-ua1-f71.google.com with SMTP id o5-20020ab01505000000b00382efb8efabso898477uae.12
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:02:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KahG8dPujyuQmr3vS7XPH97ViH9jTIKR8+ux8kd1QT8=;
-        b=eIRCRXn/bonukV7C0vdIqGLg9TkRGrq+7FvNYb4hmsIfzUkmyp7r+QzngglP3gmyxZ
-         FHStY3YcoU5IC4qaXoVvrvnlkVdBg7IfX6igctOPJwJ613Lyp9ITl2Aebk74wpb8VhB3
-         CQLeYu53hg5C4aXoLvhEAqnMMgRK2P5QM+4X29mRUeXK0BQnyE/aaeH1YfRr8Rw8EsRm
-         LSLFivdjiI05Xx4irBMkt9Y0b70+R7KTQQxCcbD67PGk72G3Au1Yqn0b/4ZH/bUvc1oU
-         BB1mhAAv5czDy9QFAMutWlf9hTlDtddlSVB6R5unOzn4qanjGefm/puU9LZ+/76k5xHU
-         XgDQ==
-X-Gm-Message-State: AJIora8RORzcRluzqFcwq/gBNMIefsIzxM7FsCMw/5bIxS+w2FmMGOMM
-        pNVPMUdmbA+d7OwhgokQy+uEZXKTYrCc4OBoOPZW4hpYxXj3zQBjSO4pyWipQl0cJ/nZttP2stb
-        FOT8YL7JH45kOZ28OlAi23Y7/HX0nuV3AERCBpCBg
-X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id v20-20020a67c894000000b00324c5daa9b5mr5669763vsk.33.1657530164718;
-        Mon, 11 Jul 2022 02:02:44 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1teULKkvMHQJT95HO1uc0BNaAWznMll/Eik667wlaxMwKBx5Q4HHSX6ytTJUr0wN8GaaKbk1p8dwuemfZtwOG4=
-X-Received: by 2002:a67:c894:0:b0:324:c5da:a9b5 with SMTP id
- v20-20020a67c894000000b00324c5daa9b5mr5669757vsk.33.1657530164473; Mon, 11
- Jul 2022 02:02:44 -0700 (PDT)
+        Mon, 11 Jul 2022 05:04:47 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D01C36;
+        Mon, 11 Jul 2022 02:04:46 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LhHvQ09VNz1L926;
+        Mon, 11 Jul 2022 17:02:10 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Jul 2022 17:04:41 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Jul 2022 17:04:41 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: [PATCH v3 0/2] arm64: kdump: Function supplement and performance optimization
+Date:   Mon, 11 Jul 2022 17:03:17 +0800
+Message-ID: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-References: <20220711075225.15687-1-mlombard@redhat.com>
-In-Reply-To: <20220711075225.15687-1-mlombard@redhat.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Mon, 11 Jul 2022 11:02:33 +0200
-Message-ID: <CAFL455nFxcrpezZENBHhMe_D7mE9N_v9mN9YjYQr1Z=-E3inug@mail.gmail.com>
-Subject: Re: [PATCH] mm: prevent page_frag_alloc() from corrupting the memory
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        =?UTF-8?B?5oSa5qCR?= <chen45464546@163.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,84 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tested with this kernel module:
+v2 --> v3:
+1. Discard patch 3 in v2, a cleanup patch.
 
-http://bsdbackstore.eu/misc/oomk/
-
-It requires 2 parameters: the first one is the amount of memory you
-want to allocate with page_frag_alloc(), the second one is the size of
-the fragment
-I tested it on a machine with ~7Gb of free memory.
-
-Without the patch:
--------------------------------------------------
-3Gb of memory will be used with frag size = 1024 byte. No issue:
-
-#insmod oomk.ko memory_size_gb=3 fragsize=1024
-
-[  177.875107] Test begins, memory size = 3 fragsize = 1024
-[  177.974538] Test completed!
-
-10 Gb of memory, 1024 byte frag. page allocation failure but the
-kernel handles it and doesn't crash:
-
-#insmod oomk.ko memory_size_gb=10 fragsize=1024
-
-[  215.104801] Test begins, memory size = 10 fragsize = 1024
-[  215.227854] insmod: page allocation failure: order:0,
-mode:0xa20(GFP_ATOMIC), nodemask=(null),cpuset=/,mems_allowed=0
-[  215.230231] CPU: 1 PID: 1738 Comm: insmod Kdump: loaded Tainted: G
-         OE    --------- ---  5.14.0-124.kpq0.el9.x86_64 #1
-[  215.232344] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[  215.233523] Call Trace:
-[  215.234001]  dump_stack_lvl+0x34/0x44
-[  215.234894]  warn_alloc+0x134/0x160
-[  215.235592]  __alloc_pages_slowpath.constprop.0+0x809/0x840
-[  215.236687]  ? get_page_from_freelist+0xc6/0x500
-[  215.237569]  __alloc_pages+0x1fa/0x230
-[  215.238381]  page_frag_alloc_align+0x16c/0x1a0
-[...]
-[  215.315722] allocation number 7379888 failed!
-[  215.426227] Test completed!
-
-10Gb, 4097 byte frag. Kernel crashes:
-
-#insmod oomk.ko memory_size_gb=10 fragsize=4097
-[  623.461505] BUG: Bad page state in process insmod  pfn:10a80c
-[  623.462634] page:000000000654dc14 refcount:0 mapcount:0
-mapping:000000007a56d6cd index:0x0 pfn:0x10a80c
-[  623.464401] memcg:ffff900343a5b501
-[  623.465058] aops:0xffff9003409e5d38 with invalid host inode 00003524480055f0
-[  623.466394] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-[  623.467632] raw: 0017ffffc0000000 dead000000000100 dead000000000122
-ffff900346cf2900
-[  623.469069] raw: 0000000000000000 0000000000100010 00000000ffffffff
-ffff900343a5b501
-[  623.470521] page dumped because: page still charged to cgroup
-[...]
-[  626.632838] general protection fault, probably for non-canonical
-address 0xdead000000000108: 0000 [#1] PREEMPT SMP PTI
-[  626.633913] ------------[ cut here ]------------
-[  626.639981] CPU: 0 PID: 722 Comm: agetty Kdump: loaded Tainted: G
- B      OE    --------- ---  5.14.0-124.kpq0.el9.x86_64 #1
-[  626.640923] WARNING: CPU: 1 PID: 22 at mm/slub.c:4566 __ksize+0xc4/0xe0
-[  626.645018] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[  626.645021] RIP: 0010:___slab_alloc+0x1b7/0x5c0
+v1 --> v2:
+1. Update the commit message of Patch 1, explicitly indicates that "crashkernel=X,high"
+   is specified but "crashkernel=Y,low" is not specified.
+2. Drop Patch 4-5. Currently, focus on function integrity, performance optimization
+   will be considered in later versions.
+3. Patch 3 is not mandatory, it's just a cleanup now, although it is a must for patch 4-5.
+   But to avoid subsequent duplication of effort, I'm glad it was accepted.
 
 
-------------------------------------------
+v1:
+After the basic functions of "support reserving crashkernel above 4G on arm64
+kdump"(see https://lkml.org/lkml/2022/5/6/428) are implemented, we still have
+three features to be improved.
+1. When crashkernel=X,high is specified but crashkernel=Y,low is not specified,
+   the default crash low memory size is provided.
+2. For crashkernel=X without '@offset', if the low memory fails to be allocated,
+   fall back to reserve region from high memory(above DMA zones).
+3. If crashkernel=X,high is used, page mapping is performed only for the crash
+   high memory, and block mapping is still used for other linear address spaces.
+   Compared to the previous version:
+   (1) For crashkernel=X[@offset], the memory above 4G is not changed to block
+       mapping, leave it to the next time.
+   (2) The implementation method is modified. Now the implementation is simpler
+       and clearer.
 
-With the patch the kernel doesn't crash:
+Zhen Lei (2):
+  arm64: kdump: Provide default size when crashkernel=Y,low is not
+    specified
+  arm64: kdump: Support crashkernel=X fall back to reserve region above
+    DMA zones
 
-#insmod oomk.ko memory_size_gb=10 fragsize=4097
-[ 4859.358496] Test begins, memory size = 10 fragsize = 4097
-[ 4859.459674] allocation number 607754 failed!
-[ 4859.495489] Test completed!
+ .../admin-guide/kernel-parameters.txt         | 10 ++-----
+ arch/arm64/mm/init.c                          | 28 +++++++++++++++++--
+ 2 files changed, 28 insertions(+), 10 deletions(-)
 
-#insmod oomk.ko memory_size_gb=10 fragsize=40000
-[ 8428.021491] Test begins, memory size = 10 fragsize = 40000
-[ 8428.024308] allocation number 0 failed!
-[ 8428.025709] Test completed!
-
-Maurizio
+-- 
+2.25.1
 

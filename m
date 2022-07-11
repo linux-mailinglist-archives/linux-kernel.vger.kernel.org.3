@@ -2,138 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1A9570191
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F415D570193
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiGKMCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S231262AbiGKMC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiGKMCn (ORCPT
+        with ESMTP id S230162AbiGKMCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:02:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE01A3DBF9;
-        Mon, 11 Jul 2022 05:02:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id e15so5951848edj.2;
-        Mon, 11 Jul 2022 05:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=BWPy1/wLCTu6ilQ4qUtHXwXwf7Z3gLlHQb6cz3/Ocik=;
-        b=Km4YSWpymZHkGx1rK7YmaWp5bO7T4ldo5feo4/eotjCLPx0cA4uhJ7EFb+nHLoMc0z
-         n8a8f6Sd0JTo4jq+fK7He9B0gtwTn0AfeNcEpUHCkdozbEmU1gSBLDGkrZzehRLd4XSR
-         HaM1NjnsXectLRiGhKY1Wd2EZOJznd3w2/v2zSlwUgtUZ3/ODINZUOi9XUpQxWUPgGIO
-         YUxQH4CI6H/cSxO7DydgPsEVvvf6UN1B/8mh2tfxWuS+3XJFIJHdmoRLyYwSRL8HZ3Hc
-         3A4KhZpWMItX33PeoMcCpKDbJjw7vONygOQag9qg7V91/nwFbdBJnNgqxqJ9yqAycdlF
-         SQbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=BWPy1/wLCTu6ilQ4qUtHXwXwf7Z3gLlHQb6cz3/Ocik=;
-        b=wvjTTMri/Tqc4SAE2Syn50ivvlPP+hQLZbIXoZKZKT1Q8BZ6Soe5aDhRLtpN7rbDYq
-         lYheLCH57qJJrfSJvIEs/WZYrn/adnEZ3mMYJrrVdhCJ/G8tWsrxqO9hC101n+6rOjvo
-         0Gk7uTT0iis+nmCFX0oClvhLeHW4AP3JXcXqrABDz/TSyAHePAQMeOPrR5DU2+/gh6y+
-         GRotX+bTqzmAtRHXPbaPl4ibHn1TNyWI8HqqtlQB/i1C575+kqzxQbzK5+9Jb93jeg5p
-         LDXwg1C+N+xIMPXs72sHChE7Wktw6QQcLR9Wg5hJHwOzCRBVEP34GbYRLTzeRHArOIoX
-         49Yg==
-X-Gm-Message-State: AJIora9LktsDEG3UeJHwq6Swrrip5+1chIeNvps1ycC9vfmZbUYNLjhS
-        olvN/ik+y68/i0mBKU/o+yM=
-X-Google-Smtp-Source: AGRyM1ve4fGvpX//Ha5C48qcrSCWGYrkCUCqWsQMWsnGm5i1oa0340q2eUVYe7/+FksBdB/Z3Ta2eQ==
-X-Received: by 2002:a05:6402:84f:b0:437:6293:d264 with SMTP id b15-20020a056402084f00b004376293d264mr23916942edz.317.1657540960468;
-        Mon, 11 Jul 2022 05:02:40 -0700 (PDT)
-Received: from felia.fritz.box (200116b8266e42009c70ae84c5cabc2b.dip.versatel-1u1.de. [2001:16b8:266e:4200:9c70:ae84:c5ca:bc2b])
-        by smtp.gmail.com with ESMTPSA id hx24-20020a170906847800b00722fadc4279sm2608036ejc.124.2022.07.11.05.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 05:02:39 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel-janitors@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH SECOND RESEND] arm: davinci: remove reference to obsolete BLK_DEV_PALMCHIP_BK3710
-Date:   Mon, 11 Jul 2022 14:02:29 +0200
-Message-Id: <20220711120229.30806-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 08:02:48 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C733AB39;
+        Mon, 11 Jul 2022 05:02:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 672965C011B;
+        Mon, 11 Jul 2022 08:02:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 11 Jul 2022 08:02:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1657540966; x=1657627366; bh=SNJeB4/Dhx
+        l49TyIs9UIYt5Da1GYDJCoWXl/+bNAjSg=; b=d2zQM0TT+dVDBVoO9zhQd5acBb
+        lV4fTkkCb28HElRT+KGK2pLBIVLxOi0QsQY5xxT71YneRVlAOsFjRXHSsMiuXcmQ
+        c1OwSHReUuZQT3QfyyHS1DqVf54kwb/UJfw7jDSkw9p1Y94RUAu8Xs+1pfPgmTg+
+        2PCAWqyRrYbGepm2u4dpz0vi950hXhtYlhnroZRXydd3Kmep/tPvnfSUt0hbe08T
+        LmsWD4B4p1OH/ULW8cbln3QdFAeYRJ8+RGz7vNs0txGQSqsz9RVyZzFtmrQsx792
+        UrJYWW1yi082WuhQvzKnLurg4bA8N+frEbubTvTcN9tiCjS0L6jfwr9MFIvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1657540966; x=1657627366; bh=SNJeB4/Dhxl49TyIs9UIYt5Da1GY
+        DJCoWXl/+bNAjSg=; b=ZYyBOd45wTxQq8HnbyQvvMyDUdp1d4uBVDXUdw7wFbPS
+        NNsFd5LREx0AcBhzv67bZ5RJF/uxNWPwFlVyGrp1q2dkNuIiI922TIf9+aDNwIAR
+        J0VnS8e/xNmmeTgNnEzxfLt1J5s1DHgObR3ckiarHARw/VQ/0NK9qxVCBXdA3LoL
+        b6vFr4KPuRnUtPDtCh3Uk/Mv2FeXlc1BKQglZlV9FiUUo+isUPcpfNoXbNPyxz48
+        q7lpTpn0G7plK9HoJic0XHjamTsSNXqgllJaXc+8FEVTzlKhBKUXUN+JS9qRWSgR
+        J/BQH6OjxocBl1dtecYTwxBFxFg4XHKmHScJvLBAmg==
+X-ME-Sender: <xms:ZRHMYoK3i3JaIHiWcavScYKBKebkZiqyZgDFi3MbK1fuDKp482Y1Zw>
+    <xme:ZRHMYoIKKnwY0SiSRuUjMrDa6byX4vVnikPglRQKHnMhpVG0qsv8OCH5GNBreJr0g
+    AKn1ZmmZG12FKLmKKY>
+X-ME-Received: <xmr:ZRHMYoudjwYKusiFf99YTicZpKpsuKHnKtkkqYwUJpP3RUK_1DO9G-DMbbbVIEx4T8fwZoBYkWyGV0S-cQVcmGycpnhGeRgKhn1Xn88>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejfedggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefgkeevueetgffhueeujefhgeejiefgiedtveefgfdugefhteejgedufedv
+    geeukeenucffohhmrghinhepsghoohhtlhhinhdrtghomhdpfihikhhiphgvughirgdroh
+    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehm
+    rgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:ZRHMYlZiuN1vDzy1npuRR7J7UOyphH-4r-QMdQFoT52v0OOSSv8EuA>
+    <xmx:ZRHMYvbmZoee_JF7nAXHttP09yGmw6waEqA4seoTCp7Q0ULB3hS_JA>
+    <xmx:ZRHMYhD3_9mvc9hYACv6NXeZigxW4aRAFZg52P9ZIj59OOFmKENArQ>
+    <xmx:ZhHMYtP-XIR7VJ_8KK74t2nzs_cmwdM_1qmqfQWFJBXT2gnk6hpYQQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Jul 2022 08:02:45 -0400 (EDT)
+Date:   Mon, 11 Jul 2022 14:02:43 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+Message-ID: <20220711120243.v6lwoynqigle2aot@houat>
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+ <20220711093513.wilv6e6aqcuyg52w@houat>
+ <43d75dce-988a-0a95-cb0a-0d0a7c81ca63@suse.de>
+ <20220711114206.sawqdl54ibuxsxp4@houat>
+ <CAMuHMdXbFHWWQoryXihVsSrC5ZzHEV-YYR_eLvNmSAw8Y61TQg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x3skiy3qyum7i2u6"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXbFHWWQoryXihVsSrC5ZzHEV-YYR_eLvNmSAw8Y61TQg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b7fb14d3ac63 ("ide: remove the legacy ide driver") removes the
-definition of the config BLK_DEV_PALMCHIP_BK3710.
 
-So, remove the obsolete references in the mach-davinci architecture.
+--x3skiy3qyum7i2u6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
----
-first send:
-  https://lore.kernel.org/linux-arm-kernel/20210804123426.16947-3-lukas.bulwahn@gmail.com/
+On Mon, Jul 11, 2022 at 01:59:28PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Mon, Jul 11, 2022 at 1:42 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Mon, Jul 11, 2022 at 01:11:14PM +0200, Thomas Zimmermann wrote:
+> > > Am 11.07.22 um 11:35 schrieb Maxime Ripard:
+> > > > On Mon, Jul 11, 2022 at 11:03:38AM +0200, Thomas Zimmermann wrote:
+> > > > > Am 08.07.22 um 20:21 schrieb Geert Uytterhoeven:
+> > > > > > The mode parsing code recognizes named modes only if they are e=
+xplicitly
+> > > > > > listed in the internal whitelist, which is currently limited to=
+ "NTSC"
+> > > > > > and "PAL".
+> > > > > >
+> > > > > > Provide a mechanism for drivers to override this list to suppor=
+t custom
+> > > > > > mode names.
+> > > > > >
+> > > > > > Ideally, this list should just come from the driver's actual li=
+st of
+> > > > > > modes, but connector->probed_modes is not yet populated at the =
+time of
+> > > > > > parsing.
+> > > > >
+> > > > > I've looked for code that uses these names, couldn't find any. Ho=
+w is this
+> > > > > being used in practice? For example, if I say "PAL" on the comman=
+d line, is
+> > > > > there DRM code that fills in the PAL mode parameters?
+> > > >
+> > > > We have some code to deal with this in sun4i:
+> > > > https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/sun4=
+i/sun4i_tv.c#L292
+> > > >
+> > > > It's a bit off topic, but for TV standards, I'm still not sure what=
+ the
+> > > > best course of action is. There's several interactions that make th=
+is a
+> > > > bit troublesome:
+> > > >
+> > > >    * Some TV standards differ by their mode (ie, PAL vs NSTC), but =
+some
+> > > >      other differ by parameters that are not part of drm_display_mo=
+de
+> > > >      (NTSC vs NSTC-J where the only difference is the black and bla=
+nking
+> > > >      signal levels for example).
+> > > >
+> > > >    * The mode names allow to provide a fairly convenient way to add=
+ that
+> > > >      extra information, but the userspace is free to create its own=
+ mode
+> > > >      and might omit the mode name entirely.
+> > > >
+> > > > So in the code above, if the name has been preserved we match by na=
+me,
+> > > > but we fall back to matching by mode if it hasn't been, which in th=
+is
+> > > > case means that we have no way to differentiate between NTSC, NTSC-=
+J,
+> > > > PAL-M in this case.
+> > > >
+> > > > We have some patches downstream for the RaspberryPi that has the TV
+> > > > standard as a property. There's a few extra logic required for the
+> > > > userspace (like setting the PAL property, with the NTSC mode) so I'=
+m not
+> > > > sure it's preferable.
+> > > >
+> > > > Or we could do something like a property to try that standard, and
+> > > > another that reports the one we actually chose.
+> > > >
+> > > > > And another question I have is whether this whitelist belongs int=
+o the
+> > > > > driver at all. Standard modes exist independent from drivers or h=
+ardware.
+> > > > > Shouldn't there simply be a global list of all possible mode name=
+s? Drivers
+> > > > > would filter out the unsupported modes anyway.
+> > > >
+> > > > We should totally do something like that, yeah
+> > >
+> > > That sun code already looks like sometihng the DRM core/helpers shoul=
+d be
+> > > doing. And if we want to support named modes well, there's a long lis=
+t of
+> > > modes in Wikipedia.
+> > >
+> > > https://en.wikipedia.org/wiki/Video_Graphics_Array#/media/File:Vector=
+_Video_Standards2.svg
+> >
+> > Yeah, and NTSC is missing :)
+>=20
+> And that diagram is about the "digital" variant of PAL.
+> If you go the analog route, the only fixed parts are vfreq/hfreq,
+> number of lines, and synchronization. Other parameters like overscan
+> can vary.  The actual dot clock can vary wildly: while there is an
+> upper limit due to bandwidth limitations, you can come up with an
+> almost infinite number of video modes that can be called PAL, which
+> is one of the reasons why I don't want hardware-specific variants to
+> end up in a global video mode database.
 
-first resend:
-  https://lore.kernel.org/linux-arm-kernel/20211011063624.12269-2-lukas.bulwahn@gmail.com/
+Do you have an example of what that would look like?
 
-another resend (as part of a larger series):
-  https://lore.kernel.org/linux-arm-kernel/20211028141938.3530-6-lukas.bulwahn@gmail.com/
-  
-addition now in second resend:
-  - added Arnd's Reviewed-by tag from
-    https://lore.kernel.org/linux-arm-kernel/CAK8P3a2GGbik3r5BCKE2ZCkpFyzv8Q54z_iV84ZJ+kNXYUTMzw@mail.gmail.com/
+Maxime
 
- arch/arm/mach-davinci/board-dm644x-evm.c  | 3 +--
- arch/arm/mach-davinci/board-dm646x-evm.c  | 3 +--
- arch/arm/mach-davinci/board-neuros-osd2.c | 3 +--
- 3 files changed, 3 insertions(+), 6 deletions(-)
+--x3skiy3qyum7i2u6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
-index ebdd5c334ac1..4cde283f7f03 100644
---- a/arch/arm/mach-davinci/board-dm644x-evm.c
-+++ b/arch/arm/mach-davinci/board-dm644x-evm.c
-@@ -828,8 +828,7 @@ static int davinci_phy_fixup(struct phy_device *phydev)
- 	return 0;
- }
- 
--#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
--			 IS_ENABLED(CONFIG_PATA_BK3710))
-+#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
- 
- #define HAS_NOR		IS_ENABLED(CONFIG_MTD_PHYSMAP)
- 
-diff --git a/arch/arm/mach-davinci/board-dm646x-evm.c b/arch/arm/mach-davinci/board-dm646x-evm.c
-index 28861fee493b..151e246c99b8 100644
---- a/arch/arm/mach-davinci/board-dm646x-evm.c
-+++ b/arch/arm/mach-davinci/board-dm646x-evm.c
-@@ -146,8 +146,7 @@ static struct platform_device davinci_aemif_device = {
- 	.num_resources	= ARRAY_SIZE(davinci_aemif_resources),
- };
- 
--#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
--			 IS_ENABLED(CONFIG_PATA_BK3710))
-+#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
- 
- #ifdef CONFIG_I2C
- /* CPLD Register 0 bits to control ATA */
-diff --git a/arch/arm/mach-davinci/board-neuros-osd2.c b/arch/arm/mach-davinci/board-neuros-osd2.c
-index 9748a2c12cc4..3b2298d686d5 100644
---- a/arch/arm/mach-davinci/board-neuros-osd2.c
-+++ b/arch/arm/mach-davinci/board-neuros-osd2.c
-@@ -160,8 +160,7 @@ static struct davinci_mmc_config davinci_ntosd2_mmc_config = {
- 	.wires		= 4,
- };
- 
--#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
--			 IS_ENABLED(CONFIG_PATA_BK3710))
-+#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
- 
- #define HAS_NAND	IS_ENABLED(CONFIG_MTD_NAND_DAVINCI)
- 
--- 
-2.17.1
+-----BEGIN PGP SIGNATURE-----
 
+iHQEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYswRYwAKCRDj7w1vZxhR
+xZyoAQCvlU6ptYDqlD+5OSnBEW8SlJn/EIzhjLez9dXEBiIMzAD4+ipmQOM8LYFe
+Zmp1HcwEg3Jc/z7O6MErAiPEQdITAA==
+=pcXa
+-----END PGP SIGNATURE-----
+
+--x3skiy3qyum7i2u6--

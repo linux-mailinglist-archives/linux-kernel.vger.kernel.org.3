@@ -2,121 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1DA570CEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3C9570CEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiGKVlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S231194AbiGKVlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKVl3 (ORCPT
+        with ESMTP id S231614AbiGKVlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:41:29 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997F381499;
-        Mon, 11 Jul 2022 14:41:28 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31cac89d8d6so62959787b3.2;
-        Mon, 11 Jul 2022 14:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MGQCeiIJ9AkmyNDZxDCtYHiqmGwukNQ4DHAac7Z7dc4=;
-        b=Gzf8ZoxNXFao+pfJzNKD/BL7s8RFfEPS4e4a2ewPMQcDpkmcBRIXf3rZ3mDJlZY0N+
-         2AJ92hmYwpdWt17ZJaw7UMDluNKW716g5ZeqTdMR/Dx/cHAyx5O1FdsleAAWA/el1guQ
-         OOYq+1jknAI/bSZyOst3ZKGyvZAab/U05/n16v9ja147pP0pfCzo7slrztjP0TFbCJSF
-         LpWxVp/IIQKZJAerSj4txJMPjq9Zv7kX7SAJ+fjNPt4Y3aik7wXJArELI0HYJiNeNBBf
-         9OlRPAWYtDBKW+ogf742khp9G2FzQbLDf5EjW3SEm66NdSS8yyVz8UVncDyTLOwicFAW
-         mwkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MGQCeiIJ9AkmyNDZxDCtYHiqmGwukNQ4DHAac7Z7dc4=;
-        b=hmmGULRnjeeRnqqZoqGMHrvtIf6JoIaI76Nrs5Q+ZbPVW1Wc3RtBLN/g3/voWsyG9u
-         bQa5XPCIcU/H3tm1hAyk7uoHSiQ/KhE4CUz5vTDLH9Uc9yksHNQRAj72jQUTFWIVGGl+
-         +n4n2Wf/B0XQnLyXIs+e+Fk4Ux69TQHIsai+1Tce67gb3jBE9kPhH/5ZM3XvWTJeqmFE
-         rNtQDLza5mf0nabnuJI5u73XEoIMEDLcXXQ5qrJHFDL/zv5ANELT6qsEW97Jd0q6JjYa
-         rHt8sk+qj+C6ZgtWUJtJbvDBy1ogzwsNFE4m/usg+EAsKNEKUq73uHtNO62u2+yyIXTL
-         P9HQ==
-X-Gm-Message-State: AJIora/ITsoqmrkxDiiLaoMgKooC3peKzqQl7FK8iBjxfjTsk56/VGGh
-        2PPy5HRZMVKc0y7fl/G2UOieGhWKCH5tQcHyDV8=
-X-Google-Smtp-Source: AGRyM1sVCVwsBnMatLyX5AazmHesbMbDuTsAbayrrc0I/ovjc4BUKGYM1zNyjREDPwwKBO2sKj6a5J6SynN049zYr6k=
-X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
- w128-20020a814986000000b0031d388bd08dmr16920977ywa.185.1657575687825; Mon, 11
- Jul 2022 14:41:27 -0700 (PDT)
+        Mon, 11 Jul 2022 17:41:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7067585D70
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657575705; x=1689111705;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cWX/ZUAISR+x5BqgIfmM1cUxMRrjQdq2KdLbWcjGPGA=;
+  b=juTP4TXS1JaM4/3pvDrMskBYAIXDFKO8HEwP7c+/UPMvGCX2cIOXhWyL
+   fbnwsX7nXdvL3jIXGWq6aVWSdI97pPsnYMfqxEK9tadKV8duFUuQtAFH+
+   46S+p5eEr9WuE6I26uUeCnkqEDYdtb4Kw/z3Ei0YFYVrD7fYGaTUvJLjm
+   9+jhEJULzz2WlcnBPLkY7kz8DFRSoCsyCudEKORjuXnhNv1bYOAZSX0TV
+   XMQ2IXADXHHivSPYX/t7j3ZiA4aAyBSiJQennYkEXUicWOdmNHal0Q4FS
+   xomsZLaDsROMga2HvIwIajvc5xvFBPVdFCxmctJ48qIm5QcD4KhAJs8He
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="310384956"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="310384956"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 14:41:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="545174753"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 14:41:42 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oB19x-0001FN-Ut;
+        Mon, 11 Jul 2022 21:41:41 +0000
+Date:   Tue, 12 Jul 2022 05:41:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tramp_29 25/32] kernel/bpf/trampoline.c:948:9:
+ error: call to undeclared function 'ftrace_hash_alloc'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202207120555.rWXO6yao-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220705163136.2278662-1-vincent.knecht@mailoo.org>
- <CAHp75VfwoSqLZVbsN3DduP=SEKvr=tSfmxF1MTnYma0zh-JsXQ@mail.gmail.com>
- <e17913649e255d91bc357d3ab3e70957d05493e6.camel@mailoo.org> <CAHp75VdcT4TRZU_w-cntTt3jYTnwADcUo055vWLM8xrkWTXChg@mail.gmail.com>
-In-Reply-To: <CAHp75VdcT4TRZU_w-cntTt3jYTnwADcUo055vWLM8xrkWTXChg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Jul 2022 23:40:50 +0200
-Message-ID: <CAHp75VdNW0v2G=6HSQMkQp7iPNT3Fh8mqT4iuJg44FZmzxAdVg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] leds: Fix/Add is31fl319{0,1,3} support
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 11:39 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sat, Jul 9, 2022 at 11:51 AM Vincent Knecht
-> <vincent.knecht@mailoo.org> wrote:
-> > Le mardi 05 juillet 2022 =C3=A0 20:57 +0200, Andy Shevchenko a =C3=A9cr=
-it :
-> > > On Tue, Jul 5, 2022 at 6:32 PM Vincent Knecht <vincent.knecht@mailoo.=
-org> wrote:
-> > > >
-> > > > v3:
-> > > > - pick up Rob's R-b for patches 1 and 2
-> > > > - reinstate bindings docs license and maintainer
-> > > >   changes with Nikolaus agreement
-> > > > - took Andy's comments on patch 4 into account
-> > >
-> > > Thanks for the update. Nothing serious, but a few comments.
-> > >
-> > > Also a question here. Do you have plans to convert it to use device p=
-roperties?
-> >
-> > Hi Andy, and thank you for the reviews.
-> > Just sent a v4:
-> > https://lore.kernel.org/linux-leds/20220709094642.4078222-1-vincent.kne=
-cht@mailoo.org/
-> >
-> > As for converting to device properties, it will take me some more time
-> > since I'm not too familiar with the concepts and how to do it exactly.
->
-> I just sent a series [1] which is based on the top of yours. You can
-> rebase it (it fixes a couple of subtle bugs: 1) GPIO error messaging
-> during error probe, and 2) mutex destruction is out of order) or
-> handle it together with yours. It seems you possess hardware, so I
-> assume you at least can test it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tramp_29
+head:   ec522c20e55e48f561146afbb81513e20870ee12
+commit: f8f16c805972e534643c5a5d23709766f7af22e4 [25/32] bpf: Add support to attach multi trampolines
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220712/202207120555.rWXO6yao-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=f8f16c805972e534643c5a5d23709766f7af22e4
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tramp_29
+        git checkout f8f16c805972e534643c5a5d23709766f7af22e4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-...missed link...
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1]: https://lore.kernel.org/linux-leds/20220711213524.3587-1-andriy.shevch=
-enko@linux.intel.com/
+All errors (new ones prefixed by >>):
 
-> > Got some hints from git history, will look into that.
-> > Also I'd like to add blink support...
+>> kernel/bpf/trampoline.c:948:9: error: call to undeclared function 'ftrace_hash_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
+                  ^
+>> kernel/bpf/trampoline.c:948:27: error: use of undeclared identifier 'FTRACE_HASH_MAX_BITS'
+           hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
+                                    ^
+>> kernel/bpf/trampoline.c:975:5: error: call to undeclared function 'ftrace_hash_add_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   ftrace_hash_add_entry(hash, entry);
+                                   ^
+   kernel/bpf/trampoline.c:985:4: error: call to undeclared function 'ftrace_hash_add_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ftrace_hash_add_entry(hash, entry);
+                           ^
+>> kernel/bpf/trampoline.c:989:8: error: call to undeclared function 'set_ftrace_direct'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = set_ftrace_direct(hash);
+                 ^
+>> kernel/bpf/trampoline.c:991:2: error: call to undeclared function 'ftrace_hash_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ftrace_hash_free(hash);
+           ^
+   6 errors generated.
 
---=20
-With Best Regards,
-Andy Shevchenko
+
+vim +/ftrace_hash_alloc +948 kernel/bpf/trampoline.c
+
+   941	
+   942	static int bpf_tramp_update_set(struct list_head *upd)
+   943	{
+   944		struct bpf_trampoline *tr;
+   945		struct ftrace_hash *hash;
+   946		int i, err;
+   947	
+ > 948		hash = ftrace_hash_alloc(FTRACE_HASH_MAX_BITS);
+   949		if (!hash)
+   950			return -ENOMEM;
+   951	
+   952		list_for_each_entry(tr, upd, update.list) {
+   953			struct ftrace_func_entry *entry;
+   954			unsigned long direct;
+   955	
+   956			switch (tr->update.action) {
+   957			case BPF_TRAMP_UPDATE_REG:
+   958			case BPF_TRAMP_UPDATE_MODIFY:
+   959				direct = (unsigned long) tr->update.im->image;
+   960				break;
+   961			case BPF_TRAMP_UPDATE_UNREG:
+   962				direct = 0;
+   963				break;
+   964			}
+   965	
+   966			if (tr->multi.id_multi) {
+   967				for (i = 0; i < tr->multi.id_multi->cnt; i++) {
+   968					entry = kmalloc(sizeof(*entry), GFP_KERNEL);
+   969					if (!entry) {
+   970						err = -ENOMEM;
+   971						goto out_free;
+   972					}
+   973					entry->ip = (unsigned long) tr->multi.id_multi->addr[i];
+   974					entry->direct = direct;
+ > 975					ftrace_hash_add_entry(hash, entry);
+   976				}
+   977			} else {
+   978				entry = kmalloc(sizeof(*entry), GFP_KERNEL);
+   979				if (!entry) {
+   980					err = -ENOMEM;
+   981					goto out_free;
+   982				}
+   983				entry->ip = (unsigned long) tr->func.addr;
+   984				entry->direct = direct;
+   985				ftrace_hash_add_entry(hash, entry);
+   986			}
+   987		}
+   988	
+ > 989		err = set_ftrace_direct(hash);
+   990	out_free:
+ > 991		ftrace_hash_free(hash);
+   992		return err;
+   993	}
+   994	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

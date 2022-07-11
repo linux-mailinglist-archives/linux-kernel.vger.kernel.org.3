@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B39456FBD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B40456FDEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiGKJfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S234444AbiGKKCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbiGKJeW (ORCPT
+        with ESMTP id S234366AbiGKKB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:34:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7801C7CB54;
-        Mon, 11 Jul 2022 02:18:24 -0700 (PDT)
+        Mon, 11 Jul 2022 06:01:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94EEB8E93;
+        Mon, 11 Jul 2022 02:28:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA92361211;
-        Mon, 11 Jul 2022 09:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9164C34115;
-        Mon, 11 Jul 2022 09:18:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70161B80E87;
+        Mon, 11 Jul 2022 09:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39FBC34115;
+        Mon, 11 Jul 2022 09:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531103;
-        bh=1lxe/7MLB2qdkeeIApXg0/WsPxJWzm5Ya/YAReb80k0=;
+        s=korg; t=1657531704;
+        bh=D0dFsVUx046MH+rBA7BhQb8BfgSRDc1hnJB8uhlMA2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=coIVzrDMx69FDwXWD/YASJrD8ocM8y8nTo5/vlACsOfz148s0Gy+KkVQxz3X5/M3h
-         iaEmjcESYLWIAUxObmFAv8VUzU7KNonDd2+prUBuPbZyGHuNQ/0aFApI7RGa2RIxIq
-         QnOpInmHskrZcao3FIKgEflqg3bG54krbZqYYqaI=
+        b=gXMPf3yxFRi5PDyisCfHj+nFWajPHs86ymgiXzTARdriAYEMngfUhzd2OiTMcolko
+         j9AHdMEXI8Xl4MaUxbPFaIIHR0gZuiassMoggaLTldbYyBZCRSD9ScgCQgw+A6vxYV
+         V/OXNPNNQk7qwDtPQhvKZrleF2ZtRNfVqeiqTjMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 097/112] net/sched: act_police: allow continue action offload
+Subject: [PATCH 5.15 201/230] ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
 Date:   Mon, 11 Jul 2022 11:07:37 +0200
-Message-Id: <20220711090552.323023513@linuxfoundation.org>
+Message-Id: <20220711090609.807367021@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vlad Buslov <vladbu@nvidia.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 052f744f44462cc49b88a125b0f7b93a9e47a9dd ]
+[ Upstream commit 416ce193d73a734ded6d09fe141017b38af1c567 ]
 
-Offloading police with action TC_ACT_UNSPEC was erroneously disabled even
-though it was supported by mlx5 matchall offload implementation, which
-didn't verify the action type but instead assumed that any single police
-action attached to matchall classifier is a 'continue' action. Lack of
-action type check made it non-obvious what mlx5 matchall implementation
-actually supports and caused implementers and reviewers of referenced
-commits to disallow it as a part of improved validation code.
+The eeprom memories on the board are microchip 24aa025e48, which are 2 Kbits
+and are compatible with at24c02 not at24c32.
 
-Fixes: b8cd5831c61c ("net: flow_offload: add tc police action parameters")
-Fixes: b50e462bc22d ("net/sched: act_police: Add extack messages for offload failure")
-Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 68a95ef72cefe ("ARM: dts: at91: sama5d2-icp: add SAMA5D2-ICP")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220607090455.80433-2-eugen.hristev@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/flow_offload.h | 1 +
- net/sched/act_police.c     | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/at91-sama5d2_icp.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
-index 6484095a8c01..7ac313858037 100644
---- a/include/net/flow_offload.h
-+++ b/include/net/flow_offload.h
-@@ -152,6 +152,7 @@ enum flow_action_id {
- 	FLOW_ACTION_PIPE,
- 	FLOW_ACTION_VLAN_PUSH_ETH,
- 	FLOW_ACTION_VLAN_POP_ETH,
-+	FLOW_ACTION_CONTINUE,
- 	NUM_FLOW_ACTIONS,
- };
+diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+index e06b58724ca8..fd1a288f686b 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+@@ -323,21 +323,21 @@
+ 	status = "okay";
  
-diff --git a/net/sched/act_police.c b/net/sched/act_police.c
-index 79c8901f66ab..b759628a47c2 100644
---- a/net/sched/act_police.c
-+++ b/net/sched/act_police.c
-@@ -442,7 +442,7 @@ static int tcf_police_act_to_flow_act(int tc_act, u32 *extval,
- 		act_id = FLOW_ACTION_JUMP;
- 		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
- 	} else if (tc_act == TC_ACT_UNSPEC) {
--		NL_SET_ERR_MSG_MOD(extack, "Offload not supported when conform/exceed action is \"continue\"");
-+		act_id = FLOW_ACTION_CONTINUE;
- 	} else {
- 		NL_SET_ERR_MSG_MOD(extack, "Unsupported conform/exceed action offload");
- 	}
+ 	eeprom@50 {
+-		compatible = "atmel,24c32";
++		compatible = "atmel,24c02";
+ 		reg = <0x50>;
+ 		pagesize = <16>;
+ 		status = "okay";
+ 	};
+ 
+ 	eeprom@52 {
+-		compatible = "atmel,24c32";
++		compatible = "atmel,24c02";
+ 		reg = <0x52>;
+ 		pagesize = <16>;
+ 		status = "disabled";
+ 	};
+ 
+ 	eeprom@53 {
+-		compatible = "atmel,24c32";
++		compatible = "atmel,24c02";
+ 		reg = <0x53>;
+ 		pagesize = <16>;
+ 		status = "disabled";
 -- 
 2.35.1
 

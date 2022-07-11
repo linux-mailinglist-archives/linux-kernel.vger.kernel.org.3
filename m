@@ -2,134 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E8D56D423
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2151156D401
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiGKExX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
+        id S229698AbiGKErT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGKExU (ORCPT
+        with ESMTP id S229536AbiGKErQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:53:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA2DF26
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657515199; x=1689051199;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=d6/ngeTVNk998Ig8RGaNDRrOoPTixlzEU/yTANqW8Fk=;
-  b=L97GUPW9t5M3SCSI7rRi3hOEInFtoPdx+wTZjdTviXRc6rCeCI8NfooP
-   5V2NFGuz0CjlUNU4gerEFik+DdCjzcxwc8dFOAqVOnWD7Kob1ksROIqnd
-   9f9P4WHeH+5RvYU83uKo2NAD6yicM1QIqQSYKPYJ7XkG4dOTcg0F5XW7y
-   k/n1Y0F7HkywCh7gYjZU8omFk87eTWuSW6vYuq4qOUmkdgfEw3HW9rJNV
-   oHAFtzuwKQqN920Lh/ND1BP3gYnr8rvJE/VfJSiaWzSRonVhCX+FQHxqN
-   tY8SJy87pfH/zXeMhHQCuDxi0KNUbU1GQVyQMnFihrwXx0dw2793/cNPh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285702708"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="asc'?scan'208";a="285702708"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 21:53:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="asc'?scan'208";a="598911385"
-Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jul 2022 21:53:16 -0700
-Date:   Mon, 11 Jul 2022 12:29:51 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
-        intel-gfx@lists.freedesktop.org, joonas.lahtinen@linux.intel.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, jani.nikula@linux.intel.com,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
-        rodrigo.vivi@intel.com, intel-gvt-dev@lists.freedesktop.org,
-        zhi.a.wang@intel.com
-Subject: Re: [PATCH] drm/i915/gvt: Fix kernel-doc
-Message-ID: <20220711042951.GU1089@zhen-hp.sh.intel.com>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20220602073519.22363-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 11 Jul 2022 00:47:16 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107E05FB6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:15 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id r17so3462576qtx.6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qKpfneDSj3EsL4GYiXg/kJBemuTg2dYhQqGiF/Pp+Pg=;
+        b=BQB468npOuu044E47CPGZ3iNMI1f3KiVwHA+oWQ9vd4PlAumQqjGCTUvQ6lWw2DtHu
+         er44+nShLZArTF1kTIaGvBs7xRxjyOxTqa8LXjv/3PDZDZOMLNbeYdGZdbNdeq6spFp6
+         qG81g0Cl0NVkFYupBB9lfWXZZFNIXnUcMCMitwv8bV2ovvBGCpcX+/oOaizCd6LLuIGo
+         7ZIfR56aFkXWepC19H7UqFbwJl4xizdiZEnpRPR+JcgQxXXrrz497/Xk5lQkNxdvVHND
+         Z0f4MA6gahDts/HJiXlg48/IcL2WWDFRjz3lMuwJjoX85XI8d2mK4q8oAB+7Hc7OpmV3
+         jp+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qKpfneDSj3EsL4GYiXg/kJBemuTg2dYhQqGiF/Pp+Pg=;
+        b=yU/E1Pr1SbKLdq8PTkoeYgnh6gczrV62033ZlKlbEbaxSPVy6WdJMK7cXk7VNFdvvN
+         mxDCTm0Odrufl4PRmMoniOdYisqBDP+qE9mDpmD5bb1dwriLpChBvyNtz9+IsyQVXqpU
+         l4NTWE6dV+t0FesKNI4XbNkmJEAfvZiwrw2cAPXB7gP4y+Lxa1XaStt6vDpnLJGWJhJd
+         t8H0bMgAduA8HPsxlu4Fz5D71DNfGoJLs58y9Y9s8QtWmVDUyUG4erlEb9MLnnPNKgR5
+         /KfHegW/oODCeLlooApObBZ9O9L2HI3i7UfPica7wMI4sF439hRAL0E2skR3rH+0Q38x
+         QEog==
+X-Gm-Message-State: AJIora8LLfX8+fldQh0pfoJhSvC+3RNLLahJq3uBUyi8rbK3bWZZJ/QQ
+        DSQoGT5//CaJqc6XjvQ4SkiFzC0yYciv/g==
+X-Google-Smtp-Source: AGRyM1sYxidI+3BbtFCWuTDkRoh/Du2xJIO0FdrBGGFSm05CJh/3eqOK9ARxdpTogo2CKA3Kp9DV8A==
+X-Received: by 2002:ac8:5b85:0:b0:31c:b896:fb7d with SMTP id a5-20020ac85b85000000b0031cb896fb7dmr12444872qta.188.1657514833796;
+        Sun, 10 Jul 2022 21:47:13 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:a22e:180:f963:1eff])
+        by smtp.gmail.com with ESMTPSA id cd13-20020a05622a418d00b0031bf5677d96sm4810873qtb.84.2022.07.10.21.47.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 21:47:13 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH v2 0/5] lib/find: add find_nth_bit()
+Date:   Sun, 10 Jul 2022 21:47:06 -0700
+Message-Id: <20220711044711.466822-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="NqXz6hVRMdSFrLFa"
-Content-Disposition: inline
-In-Reply-To: <20220602073519.22363-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kernel lacks for a function that searches for Nth bit in a bitmap.
+Usually people do it like this:
+        for_each_set_bit(bit, mask, size)
+                if (--n == 0)
+                        return bit;
 
---NqXz6hVRMdSFrLFa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Which is not so elegant, and very slow.
 
-On 2022.06.02 15:35:19 +0800, Jiapeng Chong wrote:
-> Fix the following W=3D1 kernel warnings:
->=20
-> drivers/gpu/drm/i915/gvt/aperture_gm.c:308: warning: expecting prototype
-> for inte_gvt_free_vgpu_resource(). Prototype was for
-> intel_vgpu_free_resource() instead.
->=20
-> drivers/gpu/drm/i915/gvt/aperture_gm.c:344: warning: expecting prototype
-> for intel_alloc_vgpu_resource(). Prototype was for
-> intel_vgpu_alloc_resource() instead.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/i915/gvt/aperture_gm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/i915/gvt/aperture_gm.c b/drivers/gpu/drm/i91=
-5/gvt/aperture_gm.c
-> index 557f3314291a..3b81a6d35a7b 100644
-> --- a/drivers/gpu/drm/i915/gvt/aperture_gm.c
-> +++ b/drivers/gpu/drm/i915/gvt/aperture_gm.c
-> @@ -298,7 +298,7 @@ static int alloc_resource(struct intel_vgpu *vgpu,
->  }
-> =20
->  /**
-> - * inte_gvt_free_vgpu_resource - free HW resource owned by a vGPU
-> + * intel_vgpu_free_resource() - free HW resource owned by a vGPU
->   * @vgpu: a vGPU
->   *
->   * This function is used to free the HW resource owned by a vGPU.
-> @@ -328,7 +328,7 @@ void intel_vgpu_reset_resource(struct intel_vgpu *vgp=
-u)
->  }
-> =20
->  /**
-> - * intel_alloc_vgpu_resource - allocate HW resource for a vGPU
-> + * intel_vgpu_alloc_resource() - allocate HW resource for a vGPU
->   * @vgpu: vGPU
->   * @param: vGPU creation params
->   *
-> --=20
-> 2.20.1.7.g153144c
->=20
+This series adds fast routines for this task, and applies them where
+appropriate.
 
-Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+While here, move thin wrappers around find_bit() in nodemask.c to a
+corresponding header, and because nodemask.c is empty after that,
+remove it.
 
-Thanks!
+v1: https://lore.kernel.org/lkml/20220706182300.70862-4-yury.norov@gmail.com/T/
+v2: - count Nth bit from 0 (was 1);
+    - use 'invert' trick in _find_nth_bit(), as in _find_next_bit();
+    - cleanup comments;
+    - fns() is kept inline - looking at __ffs() generic implementation,
+      I decided to keep it untouched.
 
---NqXz6hVRMdSFrLFa
-Content-Type: application/pgp-signature; name="signature.asc"
+Yury Norov (5):
+  lib: add find_nth(,and,andnot)_bit()
+  lib/bitmap: add tests for find_nth_bit()
+  lib/bitmap: remove bitmap_ord_to_pos
+  cpumask: add cpumask_nth_{,and,andnot}
+  lib/nodemask: inline next_node_in() and node_random()
 
------BEGIN PGP SIGNATURE-----
+ MAINTAINERS              |  1 -
+ include/linux/bitmap.h   |  1 -
+ include/linux/bitops.h   | 19 +++++++++
+ include/linux/cpumask.h  | 44 +++++++++++++++++++++
+ include/linux/find.h     | 83 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/nodemask.h | 27 ++++++++++---
+ lib/Makefile             |  2 +-
+ lib/bitmap.c             | 36 ++---------------
+ lib/cpumask.c            | 26 ++++++-------
+ lib/find_bit.c           | 20 ++++++++++
+ lib/find_bit_benchmark.c | 17 ++++++++
+ lib/nodemask.c           | 31 ---------------
+ lib/test_bitmap.c        | 36 ++++++++++++++++-
+ 13 files changed, 254 insertions(+), 89 deletions(-)
+ delete mode 100644 lib/nodemask.c
 
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCYsunPwAKCRCxBBozTXgY
-JxhDAJ4k/6vczxEcG5rUQ4LYbrk0JcAieQCbBmYAN+bZ+WtisN1xVouxnZnQ4RY=
-=Fs2v
------END PGP SIGNATURE-----
+-- 
+2.34.1
 
---NqXz6hVRMdSFrLFa--

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243DD570D48
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A4F570D47
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiGKWXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S232109AbiGKWXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiGKWXd (ORCPT
+        with ESMTP id S231879AbiGKWXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:23:33 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC8821B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:23:31 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso9661734pjc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:23:31 -0700 (PDT)
+        Mon, 11 Jul 2022 18:23:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE035B21
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:23:33 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m14so5644545plg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OZFhWlnda4SXoJnWWqvMvV3sR5/zMUvEmc+r8suqDxc=;
-        b=NXIoVtBZLRNtdnYNk75WJuKEh1EQthMAB+vTJbMlnGkk4+c/yHwI7iNBVcQuFg/mZw
-         IcVeDUQpShLeYI5rYsbB3dlj4AaXLFgUMMaPxgPoIqqPKgDF1DJZ6P9xDLSlv6719gE1
-         YtsszF04M/z4BCg+8wVvBAn91Y7QWdFbyvpiM6/5233n4Y8lD1soPMBKdKTpJCk4oe57
-         5fe+2y1ErOgVDb946coFo9YipcNoUgMBX/A8DBUtWF8q5NxF/9LWXHdMVi++qyQYgGgM
-         sRS2nUTPaSrzrrClOYo2X1a5cmMbQ51QkJFdGfGmb0ggyBAQgnNET29g1AU+0Cm1yiqY
-         0Qjw==
+        bh=bwoWAKJGLd9SSlXMcBweio9xAZcHotQKiELuk/jadhs=;
+        b=cUDerjFW+ZfJ27rSAVACN/ymG+8oibDmVlh1CXTofv1OvUiQkDQQEXaYyiJUxuudvF
+         tbqhn+XNzlCTseO+hGlruLk1otnFXW4rLKNcbOT56qh2Qf6fwq6Vi6HqCm52N9aq6yxI
+         HsOOh90lQYPL2mEK+tSIjE+UwhlPErUEid8yv4cpTgBgFRPWmvhSnuSnESs6/4nhq8t4
+         MNMgOd3b+jJYTG8i3e7D0mhwNVVwYVgU881iXoblK3kOwlHDJs7yyFGBWD4QetEx3ytX
+         atBtbUyt55Bz4EwcC+fH3TNPQzBa5SA3vmGtTpRrq2UmGIEZc6Nv6b3E3FLJbF69++vh
+         9wRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OZFhWlnda4SXoJnWWqvMvV3sR5/zMUvEmc+r8suqDxc=;
-        b=OSdiM2V3LqDchxD9ugYX2PeftTLKbwfloq9lIK94nME9HRrM+rvX5uhNZZrmFTWHNG
-         aIZwAzU7yRDiWfKidcZ7J21rcdRL3kFf2FEGVWfSgfXqQmI9+zRvjjydVD+jRBMJ+oJf
-         fDilRrXafxH5bhKFp8SKgKVu+0FVT0v7nWQK1Mopjav/nPj4B+XjcxxnVfbeBnzGXmRe
-         68xJxnzbMIhsx/HG6J3XnX7A6KoIthVoHI5il+1HIt5okV8ZABQHluQ3wG7Ur09wnbHo
-         ZbIEA8eQ5hXIsYv2RfsvAmAJ9XVJCVmzoeiaY/4Jd6vtHayDBke4ss8aNydLLPVtSTc8
-         c0nA==
-X-Gm-Message-State: AJIora+o/Lh54Q8zaTzjFOiStXeRYG44gDslL035D5/Fo0d+AfLyYX5h
-        9GcdB/ZMvbfAF6bJBPNBdsA3qBrcyb4=
-X-Google-Smtp-Source: AGRyM1uFWCGpl6fspxtDr/tVPfV/5GWUPsNkGgcDYOLqbaCfklQ8MldUdsHxQLL4YKQjdAQ26rOK1A==
-X-Received: by 2002:a17:90a:9f8d:b0:1f0:253e:3ecf with SMTP id o13-20020a17090a9f8d00b001f0253e3ecfmr647419pjp.33.1657578211109;
-        Mon, 11 Jul 2022 15:23:31 -0700 (PDT)
+        bh=bwoWAKJGLd9SSlXMcBweio9xAZcHotQKiELuk/jadhs=;
+        b=yRoOnqsUTnVQmQG28DJICrNu7Q+RNVCYEPvJAhbGT+idIRVVtjvJAOsDmH5OqOV6ms
+         GvJp4ffkoLeJ7OXPYZiJV4BOIz+o3rXERHnW/J14FmR9dnqi2Gem3ghQAZS1AMSEPa64
+         Wc/ER7/tavoAZy4agtXOGkgF8LnfBTEeS4Tsyxyy0CxX9CkK8GRU2AP/yoj18Dg3Paqd
+         AcbRhpK6tA2b9X4dBwNY7W73Z3YmsP3AxsI1cFFSu1MORcZGEukov3+MfqnqExQX6+rh
+         M4jCRNP19E92R0/XU2vcr02OJ0scxFZr3MrccroQ3JxQy472Ty1jhRLZj0nuO/xzd87x
+         q5Vw==
+X-Gm-Message-State: AJIora9+aVnSVV71GymGpLX0ujmVPmMoy7nYnfSst21XGXYR1noK/baE
+        0MH245wR+X0ZvkzwfwEhIIY=
+X-Google-Smtp-Source: AGRyM1tfnPqPWAZx7h3NfTzcNn4bH4ejXLJRMterUSsiEbLQQlGDh3YmCTxE0k8e6QeBLZOcvMN8bA==
+X-Received: by 2002:a17:90a:710a:b0:1ef:991c:dc67 with SMTP id h10-20020a17090a710a00b001ef991cdc67mr655749pjk.110.1657578212878;
+        Mon, 11 Jul 2022 15:23:32 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b0016be5f24aaesm5274774plg.163.2022.07.11.15.23.29
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b0016be5f24aaesm5274774plg.163.2022.07.11.15.23.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 15:23:30 -0700 (PDT)
+        Mon, 11 Jul 2022 15:23:32 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mtd@lists.infradead.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Colin Ian King <colin.king@intel.com>,
         linux-kernel@vger.kernel.org (open list),
         William Zhang <william.zhang@broadcom.com>
-Subject: [PATCH 1/2] mtd: rawnand: brcmnand: Move Kconfig to driver folder
-Date:   Mon, 11 Jul 2022 15:23:22 -0700
-Message-Id: <20220711222323.4048197-2-f.fainelli@gmail.com>
+Subject: [PATCH 2/2] mtd: rawnand: brcmnand: Add individual glue driver selection
+Date:   Mon, 11 Jul 2022 15:23:23 -0700
+Message-Id: <20220711222323.4048197-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711222323.4048197-1-f.fainelli@gmail.com>
 References: <20220711222323.4048197-1-f.fainelli@gmail.com>
@@ -83,76 +83,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for allowing each of the brcmnand stub to be built
-separately, move the Kconfig entry to the driver folder.
+Allow each platform to define a dedicated Kconfig entry for its glue
+driver such that we can decide on a per-platfomr basis whether to build
+it or not. This allows for a finer grained control over the resulting
+kernel image or set of modules.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/mtd/nand/raw/Kconfig          | 22 +---------------------
- drivers/mtd/nand/raw/brcmnand/Kconfig | 21 +++++++++++++++++++++
- 2 files changed, 22 insertions(+), 21 deletions(-)
- create mode 100644 drivers/mtd/nand/raw/brcmnand/Kconfig
+ drivers/mtd/nand/raw/brcmnand/Kconfig  | 28 ++++++++++++++++++++++++++
+ drivers/mtd/nand/raw/brcmnand/Makefile |  8 ++++----
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 8b6d7a515445..43a151b4c8fc 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -200,27 +200,7 @@ config MTD_NAND_TMIO
- 	  Support for NAND flash connected to a Toshiba Mobile IO
- 	  Controller in some PDAs, including the Sharp SL6000x.
- 
--config MTD_NAND_BRCMNAND
--	tristate "Broadcom STB NAND controller"
--	depends on ARM || ARM64 || MIPS || COMPILE_TEST
--	depends on HAS_IOMEM
--	help
--	  Enables the Broadcom NAND controller driver. The controller was
--	  originally designed for Set-Top Box but is used on various BCM7xxx,
--	  BCM3xxx, BCM63xxx, iProc/Cygnus and more.
--
--if MTD_NAND_BRCMNAND
--
--config MTD_NAND_BRCMNAND_BCMA
--	tristate "Broadcom BCMA NAND controller"
--	depends on BCMA_NFLASH
--	depends on BCMA
--	help
--	  Enables the BRCMNAND controller over BCMA on BCM47186/BCM5358 SoCs.
--	  The glue driver will take care of performing the low-level I/O
--	  operations to interface the BRCMNAND controller over the BCMA bus.
--
--endif # MTD_NAND_BRCMNAND
-+source "drivers/mtd/nand/raw/brcmnand/Kconfig"
- 
- config MTD_NAND_BCM47XXNFLASH
- 	tristate "BCM4706 BCMA NAND controller"
 diff --git a/drivers/mtd/nand/raw/brcmnand/Kconfig b/drivers/mtd/nand/raw/brcmnand/Kconfig
-new file mode 100644
-index 000000000000..d5a0265525ca
---- /dev/null
+index d5a0265525ca..4bc51bf60aca 100644
+--- a/drivers/mtd/nand/raw/brcmnand/Kconfig
 +++ b/drivers/mtd/nand/raw/brcmnand/Kconfig
-@@ -0,0 +1,21 @@
-+config MTD_NAND_BRCMNAND
-+	tristate "Broadcom STB NAND controller"
-+	depends on ARM || ARM64 || MIPS || COMPILE_TEST
-+	depends on HAS_IOMEM
+@@ -9,6 +9,13 @@ config MTD_NAND_BRCMNAND
+ 
+ if MTD_NAND_BRCMNAND
+ 
++config MTD_NAND_BRCMNAND_BCM63XX
++	tristate "Broadcom BCM63xx NAND controller glue"
++	default BCM63XX
 +	help
-+	  Enables the Broadcom NAND controller driver. The controller was
-+	  originally designed for Set-Top Box but is used on various BCM7xxx,
-+	  BCM3xxx, BCM63xxx, iProc/Cygnus and more.
++	  Enables the BRCMNAND glue driver to register the NAND controller
++	  on Broadcom BCM63xx MIPS-based DSL platforms.
 +
-+if MTD_NAND_BRCMNAND
-+
-+config MTD_NAND_BRCMNAND_BCMA
-+	tristate "Broadcom BCMA NAND controller"
-+	depends on BCMA_NFLASH
-+	depends on BCMA
+ config MTD_NAND_BRCMNAND_BCMA
+ 	tristate "Broadcom BCMA NAND controller"
+ 	depends on BCMA_NFLASH
+@@ -18,4 +25,25 @@ config MTD_NAND_BRCMNAND_BCMA
+ 	  The glue driver will take care of performing the low-level I/O
+ 	  operations to interface the BRCMNAND controller over the BCMA bus.
+ 
++config MTD_NAND_BRCMNAND_BCMBCA
++	tristate "Broadcom BCMBCA NAND controller glue"
++	default ARCH_BCMBCA
 +	help
-+	  Enables the BRCMNAND controller over BCMA on BCM47186/BCM5358 SoCs.
-+	  The glue driver will take care of performing the low-level I/O
-+	  operations to interface the BRCMNAND controller over the BCMA bus.
++	  Enables the BRCMNAND glue driver to register the NAND controller
++	  on Broadcom BCA platforms.
 +
-+endif # MTD_NAND_BRCMNAND
++config MTD_NAND_BRCMNAND_BRCMSTB
++	tristate "Broadcom STB Nand controller glue"
++	default ARCH_BRCMSTB
++	help
++	  Enables the BRCMNAND glue driver to register the NAND controller
++	  on Broadcom STB platforms.
++
++config MTD_NAND_BRCMNAND_IPROC
++	tristate "Broadcom iProc NAND controller glue"
++	default ARCH_BCM_IPROC
++	help
++	  Enables the BRCMNAND controller glue driver to register the NAND
++	  controller on Broadcom iProc platforms.
++
+ endif # MTD_NAND_BRCMNAND
+diff --git a/drivers/mtd/nand/raw/brcmnand/Makefile b/drivers/mtd/nand/raw/brcmnand/Makefile
+index 16dc7254200e..9907e3ec4bb2 100644
+--- a/drivers/mtd/nand/raw/brcmnand/Makefile
++++ b/drivers/mtd/nand/raw/brcmnand/Makefile
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # link order matters; don't link the more generic brcmstb_nand.o before the
+ # more specific iproc_nand.o, for instance
+-obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= iproc_nand.o
+-obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= bcm63138_nand.o
+-obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= bcm6368_nand.o
+-obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= brcmstb_nand.o
++obj-$(CONFIG_MTD_NAND_BRCMNAND_IPROC)	+= iproc_nand.o
++obj-$(CONFIG_MTD_NAND_BRCMNAND_BCMBCA)	+= bcm63138_nand.o
++obj-$(CONFIG_MTD_NAND_BRCMNAND_BCM63XX)	+= bcm6368_nand.o
++obj-$(CONFIG_MTD_NAND_BRCMNAND_BRCMSTB)	+= brcmstb_nand.o
+ obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= brcmnand.o
+ 
+ obj-$(CONFIG_MTD_NAND_BRCMNAND_BCMA)	+= bcma_nand.o
 -- 
 2.25.1
 

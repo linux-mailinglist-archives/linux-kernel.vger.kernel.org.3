@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A8056FF3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC4C56FF21
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiGKKkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S229919AbiGKKjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiGKKi5 (ORCPT
+        with ESMTP id S230098AbiGKKip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:38:57 -0400
+        Mon, 11 Jul 2022 06:38:45 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D035117D;
-        Mon, 11 Jul 2022 02:48:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC939D516C;
+        Mon, 11 Jul 2022 02:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657532919; x=1689068919;
+  t=1657532912; x=1689068912;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=KJEqjiyJCjcTLZ25oWrA2VIRC1Sd75b2tLdI9i17zxI=;
-  b=B8O+7qKJd87DoHhWvixLI5JGo4H/id/gx0hJzGdT+unCUqYB+JZQZaIf
-   XZ5bYsFekZPODxxTY6IQjQw0dSuGXf0bDW0yWRbZWITYv4FXK3s043KZn
-   +DToKPgFlRFCJFQZUoF+Swi8VRwKOHn0gpLsg9BzPg+oRkQ1jbMkG5s8m
-   U=;
+  bh=QqSZUWmfilHMHP4Yj179aJwceeQUx/oJvSsXM245WDw=;
+  b=Ih9oSEeL34/0yM6vVKItpo5DY4dP1wX4M9OIVBQ07i40bADGYqCOkt9Q
+   x//teqsfZYBfLd+IHAhqKAQifwU693DOLG4fu/ISnud7qKko+G1RNnJFv
+   u/SKExVeXvY0lnohKLmI9tzNv0YEcctiazBR4kPPPtBCnTW3qkolLwHuo
+   M=;
 Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 02:48:37 -0700
+  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 02:48:32 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 02:48:35 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 02:48:30 -0700
 X-QCInternal: smtphost
 Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
   by ironmsg02-blr.qualcomm.com with ESMTP; 11 Jul 2022 15:18:05 +0530
 Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id 3F3F03E46; Mon, 11 Jul 2022 15:18:04 +0530 (IST)
+        id 592873E48; Mon, 11 Jul 2022 15:18:04 +0530 (IST)
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
         bjorn.andersson@linaro.org, quic_aravindh@quicinc.com,
         quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-Subject: [PATCH v5 02/10] drm: add helper functions to retrieve old and new crtc
-Date:   Mon, 11 Jul 2022 15:17:51 +0530
-Message-Id: <1657532880-12897-3-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v5 03/10] drm/msm/dp: use atomic callbacks for DP bridge ops
+Date:   Mon, 11 Jul 2022 15:17:52 +0530
+Message-Id: <1657532880-12897-4-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1657532880-12897-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1657532880-12897-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -61,106 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new helper functions, drm_atomic_get_old_crtc_for_encoder
-and drm_atomic_get_new_crtc_for_encoder to retrieve the
-corresponding crtc for the encoder.
+Use atomic variants for DP bridge callback functions so that
+the atomic state can be accessed in the interface drivers.
+The atomic state will help the driver find out if the display
+is in self refresh state.
 
 Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 ---
- drivers/gpu/drm/drm_atomic.c | 60 ++++++++++++++++++++++++++++++++++++++++++++
- include/drm/drm_atomic.h     |  7 ++++++
- 2 files changed, 67 insertions(+)
+ drivers/gpu/drm/msm/dp/dp_display.c |  9 ++++++---
+ drivers/gpu/drm/msm/dp/dp_drm.c     | 18 +++++++++++-------
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index 58c0283..87fcb55 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -983,6 +983,66 @@ drm_atomic_get_new_connector_for_encoder(struct drm_atomic_state *state,
- EXPORT_SYMBOL(drm_atomic_get_new_connector_for_encoder);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index bce7793..5bd6677 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1652,7 +1652,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	return 0;
+ }
  
- /**
-+ * drm_atomic_get_old_crtc_for_encoder - Get old crtc for an encoder
-+ * @state: Atomic state
-+ * @encoder: The encoder to fetch the crtc state for
-+ *
-+ * This function finds and returns the crtc that was connected to @encoder
-+ * as specified by the @state.
-+ *
-+ * Returns: The old crtc connected to @encoder, or NULL if the encoder is
-+ * not connected.
-+ */
-+struct drm_crtc *
-+drm_atomic_get_old_crtc_for_encoder(struct drm_atomic_state *state,
-+				    struct drm_encoder *encoder)
-+{
-+	struct drm_connector *connector;
-+	struct drm_connector_state *conn_state;
-+
-+	connector = drm_atomic_get_old_connector_for_encoder(state, encoder);
-+	if (!connector)
-+		return NULL;
-+
-+	conn_state = drm_atomic_get_old_connector_state(state, connector);
-+	if (!conn_state)
-+		return NULL;
-+
-+	return conn_state->crtc;
-+}
-+EXPORT_SYMBOL(drm_atomic_get_old_crtc_for_encoder);
-+
-+/**
-+ * drm_atomic_get_new_crtc_for_encoder - Get new crtc for an encoder
-+ * @state: Atomic state
-+ * @encoder: The encoder to fetch the crtc state for
-+ *
-+ * This function finds and returns the crtc that will be connected to @encoder
-+ * as specified by the @state.
-+ *
-+ * Returns: The new crtc connected to @encoder, or NULL if the encoder is
-+ * not connected.
-+ */
-+struct drm_crtc *
-+drm_atomic_get_new_crtc_for_encoder(struct drm_atomic_state *state,
-+				    struct drm_encoder *encoder)
-+{
-+	struct drm_connector *connector;
-+	struct drm_connector_state *conn_state;
-+
-+	connector = drm_atomic_get_new_connector_for_encoder(state, encoder);
-+	if (!connector)
-+		return NULL;
-+
-+	conn_state = drm_atomic_get_new_connector_state(state, connector);
-+	if (!conn_state)
-+		return NULL;
-+
-+	return conn_state->crtc;
-+}
-+EXPORT_SYMBOL(drm_atomic_get_new_crtc_for_encoder);
-+
-+/**
-  * drm_atomic_get_connector_state - get connector state
-  * @state: global atomic state object
-  * @connector: connector to get state object for
-diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
-index 0777725..7001f12 100644
---- a/include/drm/drm_atomic.h
-+++ b/include/drm/drm_atomic.h
-@@ -528,6 +528,13 @@ struct drm_connector *
- drm_atomic_get_new_connector_for_encoder(struct drm_atomic_state *state,
- 					 struct drm_encoder *encoder);
+-void dp_bridge_enable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_enable(struct drm_bridge *drm_bridge,
++			     struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+@@ -1716,7 +1717,8 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 	mutex_unlock(&dp_display->event_mutex);
+ }
  
-+struct drm_crtc *
-+drm_atomic_get_old_crtc_for_encoder(struct drm_atomic_state *state,
-+					 struct drm_encoder *encoder);
-+struct drm_crtc *
-+drm_atomic_get_new_crtc_for_encoder(struct drm_atomic_state *state,
-+					 struct drm_encoder *encoder);
-+
- /**
-  * drm_atomic_get_existing_crtc_state - get CRTC state, if it exists
-  * @state: global atomic state object
+-void dp_bridge_disable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_disable(struct drm_bridge *drm_bridge,
++			      struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+@@ -1727,7 +1729,8 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+ 	dp_ctrl_push_idle(dp_display->ctrl);
+ }
+ 
+-void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
++void dp_bridge_atomic_post_disable(struct drm_bridge *drm_bridge,
++				   struct drm_bridge_state *old_bridge_state)
+ {
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index 62d58b9..9d0fc74 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -61,13 +61,17 @@ static int dp_bridge_get_modes(struct drm_bridge *bridge, struct drm_connector *
+ }
+ 
+ static const struct drm_bridge_funcs dp_bridge_ops = {
+-	.enable       = dp_bridge_enable,
+-	.disable      = dp_bridge_disable,
+-	.post_disable = dp_bridge_post_disable,
+-	.mode_set     = dp_bridge_mode_set,
+-	.mode_valid   = dp_bridge_mode_valid,
+-	.get_modes    = dp_bridge_get_modes,
+-	.detect       = dp_bridge_detect,
++	.atomic_enable = dp_bridge_atomic_enable,
++	.atomic_disable = dp_bridge_atomic_disable,
++	.atomic_post_disable = dp_bridge_atomic_post_disable,
++	.mode_set = dp_bridge_mode_set,
++	.mode_valid = dp_bridge_mode_valid,
++	.get_modes = dp_bridge_get_modes,
++	.detect = dp_bridge_detect,
++	.atomic_reset = drm_atomic_helper_bridge_reset,
++	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
++	.atomic_check = edp_bridge_atomic_check,
+ };
+ 
+ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
 -- 
 2.7.4
 

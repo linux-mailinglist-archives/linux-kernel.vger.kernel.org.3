@@ -2,683 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FEC570831
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A046B570834
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiGKQU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S230118AbiGKQWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGKQUz (ORCPT
+        with ESMTP id S229437AbiGKQWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:20:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744F723BEB;
-        Mon, 11 Jul 2022 09:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=+AKYIlBgnPuUdFvvHHgA+1qVITkc7eo/eR5PksQjENw=; b=nGma/0ENUcYygDvmW2iaxMuiV/
-        ghwltMP4QCWjGbeAuKXmLlL6MwY3jU45/X9sOEw4a8AV3PYkysy2AvjD6+T2OYWCgrxOeT9bKcn4S
-        dUVvOI1mWKvVOw5UIiay+eQEgUL5XHOdJaN0L2yn/BiAMTBZU4TYF03GFs60PJBxmEC+kvJ/8rhnr
-        B8JrIx4X08bC56A+GC/d9wK6Yl0RjVRbRrfSR+R9t16ulm/QfSMt17xgY0KBM2CkgStlBY8FFnKNz
-        OWYIegO8zuhIgWAuewjAq7aK/HtFLIC2L3/JwFg4maYVpklWWMQCobeVTaezia+4QR+R/EprbnDnV
-        irv0WIUA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oAw9U-003C4o-VK; Mon, 11 Jul 2022 16:20:53 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     atomlin@redhat.com, christophe.leroy@csgroup.eu,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH] modules: move module symbols from init/Kconfig
-Date:   Mon, 11 Jul 2022 09:20:49 -0700
-Message-Id: <20220711162049.761342-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.35.3
+        Mon, 11 Jul 2022 12:22:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEB27358F;
+        Mon, 11 Jul 2022 09:22:17 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BG63u4012347;
+        Mon, 11 Jul 2022 16:21:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=j9JTDiGwsTl97toLAz+edbxtTyo9IzXXWKB7leCSXwY=;
+ b=a7KvD+ZmnwL7u/IjjqemDtaAAOhgiX5QUM6udQnmAVvDyVSV434Exr3OJHnz/MmQ/7Rt
+ 0k9dq4HS1XW0g6YvOViqWwecnNOjm0IHHu3XGWHzbqREm45T13Y7ORC1360K1XeHsqiz
+ OiRpaAlYJjVpE2Kn3jeJy9auvJQ8tfBDO+mpb5DGN33HilF8zzTHxcLDfl6BM0UwJKSV
+ hi5AyTj/iiYyNgTDyJ5k2ZKL+fHRJ9/pVtGJ4kRJaYEuZDKRJ7P9w8QmwV+5d2DQfZeV
+ 5+TlYz15T3YDquIh/0dIYW6o7nYZAeYiyQC1Tquyqz5mw1uPrcY3kAjg6+sGPgAkAQCY +Q== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8q3agk66-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 16:21:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M7c6m758kH3tQQDl0WihD8j+hQ/Sx8d5p2ef3bHWWbZfqbGvEpRDXtXSgcfOuw4DeiGZ8CirfIAdge72oTO+BNDTlU8da2C3O6zz/ELckVKc9VFoRd0bW9+Gg/wGrj0+KURS3CmhEP/HHvWP+uN/nVQhbYxcRH/I8xBwlBkO9DTgbOKI5H2ek3YFRoDcOQFZT6IwKgq5ySZTar6DbY92lOUsFSbZmRNpTHaOb4JnqwniIerW9RBbfferNGeBP0zT6fczeYj5kPcwNSU8LF7ldOWvXNBzLLsqWqm5r5OKlOQ2uNTWf4jDXnjxnd25fJLHUSZZD+AOoESA+jIIWDF6ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j9JTDiGwsTl97toLAz+edbxtTyo9IzXXWKB7leCSXwY=;
+ b=THN3e1H4U1wytsgCPR3xn1SI6yxBCRU8Jsj3wel3lwECCVEFPhXbtDb/UqCOr7wR+gfCoa/oCC3vNezMahDXsSn9UdRJh+gaI6fGr+ejt1U1BmV2drSF6VnUwkhMdiyA3nuneweeYJfKe4koPgixqdvpTp1va6Amusqpp2jJ4MOozSQInlzKJwbKx6MVI+p+RiB+DHmmx33ZLs+UrTWVCQ1CYb3WK2J72fav8F5SmKHUMGMD4UICUuJWf0GaKHUgjjBfj5XNLiBFSB3HbVEEQfzjM7CU7E6jVUndR1UK8V7s4+hIOsXg3Cdwm+TNI6ZpeaKSZxitpgwxqSqwP4Oz0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zurich.ibm.com; dmarc=pass action=none
+ header.from=zurich.ibm.com; dkim=pass header.d=zurich.ibm.com; arc=none
+Received: from BYAPR15MB2631.namprd15.prod.outlook.com (2603:10b6:a03:150::19)
+ by MN2PR15MB4798.namprd15.prod.outlook.com (2603:10b6:208:1b6::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
+ 2022 16:21:42 +0000
+Received: from BYAPR15MB2631.namprd15.prod.outlook.com
+ ([fe80::8953:534b:e375:a945]) by BYAPR15MB2631.namprd15.prod.outlook.com
+ ([fe80::8953:534b:e375:a945%6]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
+ 16:21:42 +0000
+From:   Bernard Metzler <BMT@zurich.ibm.com>
+To:     Andrey Strachuk <strochuk@ispras.ru>
+CC:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ldv-project@linuxtesting.org" <ldv-project@linuxtesting.org>
+Subject: RE: [PATCH] RDMA: remove useless condition in siw_create_cq()
+Thread-Topic: [PATCH] RDMA: remove useless condition in siw_create_cq()
+Thread-Index: AdiVQk1t02BM0jHFTcyUzrPxmXQryg==
+Date:   Mon, 11 Jul 2022 16:21:41 +0000
+Message-ID: <BYAPR15MB263181A19484772A18872C8D99879@BYAPR15MB2631.namprd15.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f282a3eb-84f1-40eb-ff1c-08da635970a8
+x-ms-traffictypediagnostic: MN2PR15MB4798:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fNFeQnELZd+KZu+QvkmVWKW0xBevEAZ6svc9rltsxfOLFrWmiKmEIJQM5Yj6/KsQMg42FscZ8NRIX3jL7IWJX661J/j7aC9qZcePqOPO6mw68OZ+jOJrZ23s6Nn96MpIaiq4ZR4oEknkC7NiY3xWx6SilDWBVSSeSHda4+8F0HdfNVDB1kgSZZX8KFQw7MYrQUvCaACSqGKSeTOF36hRjGrDQBDBIg8XaPV76OPlZLL5eRW1mdKvE+OBK2utrfva5Y94OGyLNX6gnLZQ0WOb1BvVDg0YvO/aQqqqFF+rEdrL5PZe73/6LR0TYvjYw3BGHNSXDm3t/X+4IiWdJJ7mRuAqmHKJuQH82YYc+a0pknrpO6MUAbwarlRuYQjNRkG9i1WktCjSxXzbbICj2WF5JdrUUXKHMFZPmEeq61TCpzc/RUPa2s9VqAi/tV2MCpA/f0ifk5kwU+cB9zld4uIAwcNdShi5/FkMoBbZwVtRtCGTcH78JVZ5dKEu13R1BH8uWG0sZMJR165bQIUPa1Kt6UgoZyaYsxcL1Emm7PF97Dql0VYBGHrcWFP67cVseci8zyeXhjrfn4ouamA+rbSqMEQ/mxRUaXw0NkRDLbBKp96nNYGumWfIwGAg0GX6glkyfq+6Ed3VQpBLJSkoVWSfiM9AnafJrXGgOdr9bXNiA7PjBlHUnefS6cSzbHbJmIoQPXkR1hpzTg3WrTRoupOUeAPyKMvOvAj2+VTtwx0f6l9kUe9d6JpE3mPh7Mon1r3DPc91GxYELVPRtxTqf95bU1XKdD+2daJ+XDOGvpTzXZe6yc+tucvssHZKzD4AqAY8
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2631.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(136003)(39860400002)(366004)(376002)(86362001)(53546011)(5660300002)(38070700005)(9686003)(33656002)(71200400001)(2906002)(122000001)(54906003)(55016003)(316002)(6506007)(7696005)(6916009)(8936002)(4326008)(186003)(76116006)(52536014)(38100700002)(478600001)(41300700001)(66556008)(8676002)(66476007)(64756008)(66446008)(83380400001)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akNDaVRYbjAzaDNWM3pLRzFCNVgwdEVhUUROYThhUGxqOE91WERzRjN1cHJx?=
+ =?utf-8?B?cjYyOHVibTFOd0FJT3VkZFNMeWtXZ3VtdGo5SXIyQXAvMEdJQTlzYjhoWVQ0?=
+ =?utf-8?B?VFUrUGRHV0FpZTN4U3ptSFh1RHdGNGFaWnAvazNieCtNME13T2puc1VBcUow?=
+ =?utf-8?B?NWw5VTJ5S1N4Y2hFcGF3RE5DWXg3WXlMd29xaUxQU211LytabG1Vb2lEZmth?=
+ =?utf-8?B?Zm9qUmVjUVE2T04zVEs1bUhGNXBER2dlVlpEZmlpNGlpU0VqOEhielpUU0Vm?=
+ =?utf-8?B?QjNWRXo4Y0g3YS9mZWlIcnMrYVAvaDVsVDFid0RBbmljdGR1VS9UQ3RtQm1v?=
+ =?utf-8?B?dkNtRTB4MU1EYU1IVytmUGdkMmhWSlhDOXlUN2VxcWZEZU9GcTJWd3RSK1F3?=
+ =?utf-8?B?cC9uUW1GU2xvS2hnc1pnaStCb3dzU0VHd0xldCt6S1VWSTNUTUFRSER5cU1a?=
+ =?utf-8?B?a2tYQlFlRkF4aUl2QmI4ZFFNYWd5eDZOSjNMTXNuTmdOb0VuWHdXeWQxMDZI?=
+ =?utf-8?B?RXd1VlFhUFkzUkZ4TlFzbWNBSzdMdzJJRnRsUUhFaWtDdUdLUk5MRlVLaXcz?=
+ =?utf-8?B?bHpyLzNYTVM3UDJidWdGbTJ2RUgvRFRtMzBadG8rWXFZZUJRZHQxTFNzY0Va?=
+ =?utf-8?B?Wi9kaFBGcFEyWng2THV0cE5lOWc4akI3dmdZdlRqVW40OW1ROTZoT1NlSEVn?=
+ =?utf-8?B?SzBXbmNyelZ3UmFxWWhxR2F5VlJLelFocGRaSVNta3lKd3FjMGRPL1RRZ3NY?=
+ =?utf-8?B?dDVtWVliM3NZV0lqVndFbFlkUHc1VXJhTjRxdHI2Z1RKYXpKeWNZMEk3UXhI?=
+ =?utf-8?B?WXpNbDMzQkc4Qi9ENCtsbElrd2FSSE8xS01TNk4zMlU0Z1EvMkNzMkdvdnVY?=
+ =?utf-8?B?ckFjeHpNTzJTVVRmdHFLQWREbHBKdDNqYzJlOUY2MkdNc1o3SUltNG8yckU0?=
+ =?utf-8?B?MmNPTmtGSU5hb1FEcHVwVUR1cnNzTVljWldNTllXenhnRjRlM2JJb250UHRa?=
+ =?utf-8?B?VWJpSW01ZjhKR2FzRUNUNGVnZ1MrL1FORytKRUorNE9zdVNFbDNuYXdxcXFE?=
+ =?utf-8?B?dGVpWmFOTkEzV3Jhek5wQWNaZFZlaUg1dHVvRE4xR0l3TCt3SWRFR3creXB0?=
+ =?utf-8?B?NEJRUnJ6ejI5cCtDVzl3RXdvT0J0OStkcUN4d1NoZjVORHhzU1A2S2NLbG5C?=
+ =?utf-8?B?aGZzQ2QwWWpMTFZCcWxjUXU0U0cyb1cvbEFZQkx4d2tHZ0pHN1R1NFRGYkZP?=
+ =?utf-8?B?SkdUeUdMVlNPa0JwVXhnUXZXblgvQjFiZGYwNG1TcHpwUzF6MXJTcFRCZDNZ?=
+ =?utf-8?B?aGxNVmc5UW94TWN5L1NXbHlUQmpkbUFHL2dPbTh6Yk9QL2lCMnRjQ1BLdTM2?=
+ =?utf-8?B?bXJ4ODNYL1dkZ1lEMkFsQUh5YUg3UWR6b1RlV0toc1dhUlVZZEhENncrVWcr?=
+ =?utf-8?B?eml5Y2p5a0lramR2cWVpdHNibjJiSlFIc0NzYlF6UUpNNkVsazlsWnJIT0lQ?=
+ =?utf-8?B?bDFUc2h5eEs4NWFFNHI3anFxWklrcDdSanlBWnM1T1FTaFpQMUpOM3JlUnRF?=
+ =?utf-8?B?VG5qdTZ2Q2pYMjc1WDRJY2l1VXdOWmdkcll1a1pQS29TTldhcGxKTnJmYkpP?=
+ =?utf-8?B?aXBxeVFKRzc2NWNiNk94WWJ1K0N5cnZ2SlpZMmVFL3VhMEtLbk15cTJ5aXNC?=
+ =?utf-8?B?NUpMOGZtMmFOc2VXTklZNDQ5NmQ4U01BMURhR0VFelFTdWFTZEJ4WkhxczlK?=
+ =?utf-8?B?Mys3MWVxRzFZazM4UzluVXA5YXMvZ0k0SzNmQ1RRalZBVkc3R0lXbkZ0THBx?=
+ =?utf-8?B?dG5VYVh6eTgzT0M0WXF4MStoK2N6dmU5WjNjZzNmbnlqZUlPVTl0SVQwUDZY?=
+ =?utf-8?B?TWx1VGhVWGZraVVJVk1YTm1oUWp5TS81dkx6UkxoWDVkZGZqMm1NN0dRd3Bp?=
+ =?utf-8?B?ZWVldkdtUkN3THViWThheDFPWVRRbmJndjVRWENScTRLbHdTN2lXdjZaZ3ZE?=
+ =?utf-8?B?bVNvaDNMOWNidVo0a080aXVReGd6SUMrM1M5WmFLL2szUHhGOEVEZFE2Q25q?=
+ =?utf-8?B?U1N4Z1d1cWhnWDlIK3VCWWw0S3MxdGUrK2ZjSkpjb2xDYnUyS29EVVJHUGVW?=
+ =?utf-8?B?MFVQUHZTeUhFWmRxZktuaWR4VWs2QzZtWTcxTWVmdG9qeEV5QmRZbktKUFJT?=
+ =?utf-8?Q?dJTbXz6nhf9cdIGtZ5BOMzJPoSQg1MPnXt6m8mlcdH2c?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Zurich.ibm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2631.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f282a3eb-84f1-40eb-ff1c-08da635970a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 16:21:41.9552
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QrffWfiwCCrmpOH9Gza+/fKAIcdVrFX12OLw9yfZRctP2YWjbWxHZaT7WzokMbFw7jYTB2He+rErwjm5606g3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB4798
+X-Proofpoint-ORIG-GUID: vFnbNsaVp-vWL00E9bQPDvqmIIbhOUEg
+X-Proofpoint-GUID: vFnbNsaVp-vWL00E9bQPDvqmIIbhOUEg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_21,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=950 mlxscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 clxscore=1011 malwarescore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207110068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves all the module symbols from init/Kconfig to its
-own dedicated file now that we have all of the module code in
-its own directory.
-
-This does not introduce any functional changes.
-
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- init/Kconfig          | 298 +-----------------------------------------
- kernel/module/Kconfig | 296 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 297 insertions(+), 297 deletions(-)
- create mode 100644 kernel/module/Kconfig
-
-diff --git a/init/Kconfig b/init/Kconfig
-index c7900e8975f1..afb45347b775 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1918,303 +1918,6 @@ config BASE_SMALL
- 	default 0 if BASE_FULL
- 	default 1 if !BASE_FULL
- 
--config MODULE_SIG_FORMAT
--	def_bool n
--	select SYSTEM_DATA_VERIFICATION
--
--menuconfig MODULES
--	bool "Enable loadable module support"
--	modules
--	help
--	  Kernel modules are small pieces of compiled code which can
--	  be inserted in the running kernel, rather than being
--	  permanently built into the kernel.  You use the "modprobe"
--	  tool to add (and sometimes remove) them.  If you say Y here,
--	  many parts of the kernel can be built as modules (by
--	  answering M instead of Y where indicated): this is most
--	  useful for infrequently used options which are not required
--	  for booting.  For more information, see the man pages for
--	  modprobe, lsmod, modinfo, insmod and rmmod.
--
--	  If you say Y here, you will need to run "make
--	  modules_install" to put the modules under /lib/modules/
--	  where modprobe can find them (you may need to be root to do
--	  this).
--
--	  If unsure, say Y.
--
--if MODULES
--
--config MODULE_FORCE_LOAD
--	bool "Forced module loading"
--	default n
--	help
--	  Allow loading of modules without version information (ie. modprobe
--	  --force).  Forced module loading sets the 'F' (forced) taint flag and
--	  is usually a really bad idea.
--
--config MODULE_UNLOAD
--	bool "Module unloading"
--	help
--	  Without this option you will not be able to unload any
--	  modules (note that some modules may not be unloadable
--	  anyway), which makes your kernel smaller, faster
--	  and simpler.  If unsure, say Y.
--
--config MODULE_FORCE_UNLOAD
--	bool "Forced module unloading"
--	depends on MODULE_UNLOAD
--	help
--	  This option allows you to force a module to unload, even if the
--	  kernel believes it is unsafe: the kernel will remove the module
--	  without waiting for anyone to stop using it (using the -f option to
--	  rmmod).  This is mainly for kernel developers and desperate users.
--	  If unsure, say N.
--
--config MODULE_UNLOAD_TAINT_TRACKING
--	bool "Tainted module unload tracking"
--	depends on MODULE_UNLOAD
--	default n
--	help
--	  This option allows you to maintain a record of each unloaded
--	  module that tainted the kernel. In addition to displaying a
--	  list of linked (or loaded) modules e.g. on detection of a bad
--	  page (see bad_page()), the aforementioned details are also
--	  shown. If unsure, say N.
--
--config MODVERSIONS
--	bool "Module versioning support"
--	help
--	  Usually, you have to use modules compiled with your kernel.
--	  Saying Y here makes it sometimes possible to use modules
--	  compiled for different kernels, by adding enough information
--	  to the modules to (hopefully) spot any changes which would
--	  make them incompatible with the kernel you are running.  If
--	  unsure, say N.
--
--config ASM_MODVERSIONS
--	bool
--	default HAVE_ASM_MODVERSIONS && MODVERSIONS
--	help
--	  This enables module versioning for exported symbols also from
--	  assembly. This can be enabled only when the target architecture
--	  supports it.
--
--config MODULE_SRCVERSION_ALL
--	bool "Source checksum for all modules"
--	help
--	  Modules which contain a MODULE_VERSION get an extra "srcversion"
--	  field inserted into their modinfo section, which contains a
--    	  sum of the source files which made it.  This helps maintainers
--	  see exactly which source was used to build a module (since
--	  others sometimes change the module source without updating
--	  the version).  With this option, such a "srcversion" field
--	  will be created for all modules.  If unsure, say N.
--
--config MODULE_SIG
--	bool "Module signature verification"
--	select MODULE_SIG_FORMAT
--	help
--	  Check modules for valid signatures upon load: the signature
--	  is simply appended to the module. For more information see
--	  <file:Documentation/admin-guide/module-signing.rst>.
--
--	  Note that this option adds the OpenSSL development packages as a
--	  kernel build dependency so that the signing tool can use its crypto
--	  library.
--
--	  You should enable this option if you wish to use either
--	  CONFIG_SECURITY_LOCKDOWN_LSM or lockdown functionality imposed via
--	  another LSM - otherwise unsigned modules will be loadable regardless
--	  of the lockdown policy.
--
--	  !!!WARNING!!!  If you enable this option, you MUST make sure that the
--	  module DOES NOT get stripped after being signed.  This includes the
--	  debuginfo strip done by some packagers (such as rpmbuild) and
--	  inclusion into an initramfs that wants the module size reduced.
--
--config MODULE_SIG_FORCE
--	bool "Require modules to be validly signed"
--	depends on MODULE_SIG
--	help
--	  Reject unsigned modules or signed modules for which we don't have a
--	  key.  Without this, such modules will simply taint the kernel.
--
--config MODULE_SIG_ALL
--	bool "Automatically sign all modules"
--	default y
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	help
--	  Sign all modules during make modules_install. Without this option,
--	  modules must be signed manually, using the scripts/sign-file tool.
--
--comment "Do not forget to sign required modules with scripts/sign-file"
--	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
--
--choice
--	prompt "Which hash algorithm should modules be signed with?"
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	help
--	  This determines which sort of hashing algorithm will be used during
--	  signature generation.  This algorithm _must_ be built into the kernel
--	  directly so that signature verification can take place.  It is not
--	  possible to load a signed module containing the algorithm to check
--	  the signature on that module.
--
--config MODULE_SIG_SHA1
--	bool "Sign modules with SHA-1"
--	select CRYPTO_SHA1
--
--config MODULE_SIG_SHA224
--	bool "Sign modules with SHA-224"
--	select CRYPTO_SHA256
--
--config MODULE_SIG_SHA256
--	bool "Sign modules with SHA-256"
--	select CRYPTO_SHA256
--
--config MODULE_SIG_SHA384
--	bool "Sign modules with SHA-384"
--	select CRYPTO_SHA512
--
--config MODULE_SIG_SHA512
--	bool "Sign modules with SHA-512"
--	select CRYPTO_SHA512
--
--endchoice
--
--config MODULE_SIG_HASH
--	string
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	default "sha1" if MODULE_SIG_SHA1
--	default "sha224" if MODULE_SIG_SHA224
--	default "sha256" if MODULE_SIG_SHA256
--	default "sha384" if MODULE_SIG_SHA384
--	default "sha512" if MODULE_SIG_SHA512
--
--choice
--	prompt "Module compression mode"
--	help
--	  This option allows you to choose the algorithm which will be used to
--	  compress modules when 'make modules_install' is run. (or, you can
--	  choose to not compress modules at all.)
--
--	  External modules will also be compressed in the same way during the
--	  installation.
--
--	  For modules inside an initrd or initramfs, it's more efficient to
--	  compress the whole initrd or initramfs instead.
--
--	  This is fully compatible with signed modules.
--
--	  Please note that the tool used to load modules needs to support the
--	  corresponding algorithm. module-init-tools MAY support gzip, and kmod
--	  MAY support gzip, xz and zstd.
--
--	  Your build system needs to provide the appropriate compression tool
--	  to compress the modules.
--
--	  If in doubt, select 'None'.
--
--config MODULE_COMPRESS_NONE
--	bool "None"
--	help
--	  Do not compress modules. The installed modules are suffixed
--	  with .ko.
--
--config MODULE_COMPRESS_GZIP
--	bool "GZIP"
--	help
--	  Compress modules with GZIP. The installed modules are suffixed
--	  with .ko.gz.
--
--config MODULE_COMPRESS_XZ
--	bool "XZ"
--	help
--	  Compress modules with XZ. The installed modules are suffixed
--	  with .ko.xz.
--
--config MODULE_COMPRESS_ZSTD
--	bool "ZSTD"
--	help
--	  Compress modules with ZSTD. The installed modules are suffixed
--	  with .ko.zst.
--
--endchoice
--
--config MODULE_DECOMPRESS
--	bool "Support in-kernel module decompression"
--	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
--	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
--	select XZ_DEC if MODULE_COMPRESS_XZ
--	help
--
--	  Support for decompressing kernel modules by the kernel itself
--	  instead of relying on userspace to perform this task. Useful when
--	  load pinning security policy is enabled.
--
--	  If unsure, say N.
--
--config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
--	bool "Allow loading of modules with missing namespace imports"
--	help
--	  Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
--	  a namespace. A module that makes use of a symbol exported with such a
--	  namespace is required to import the namespace via MODULE_IMPORT_NS().
--	  There is no technical reason to enforce correct namespace imports,
--	  but it creates consistency between symbols defining namespaces and
--	  users importing namespaces they make use of. This option relaxes this
--	  requirement and lifts the enforcement when loading a module.
--
--	  If unsure, say N.
--
--config MODPROBE_PATH
--	string "Path to modprobe binary"
--	default "/sbin/modprobe"
--	help
--	  When kernel code requests a module, it does so by calling
--	  the "modprobe" userspace utility. This option allows you to
--	  set the path where that binary is found. This can be changed
--	  at runtime via the sysctl file
--	  /proc/sys/kernel/modprobe. Setting this to the empty string
--	  removes the kernel's ability to request modules (but
--	  userspace can still load modules explicitly).
--
--config TRIM_UNUSED_KSYMS
--	bool "Trim unused exported kernel symbols" if EXPERT
--	depends on !COMPILE_TEST
--	help
--	  The kernel and some modules make many symbols available for
--	  other modules to use via EXPORT_SYMBOL() and variants. Depending
--	  on the set of modules being selected in your kernel configuration,
--	  many of those exported symbols might never be used.
--
--	  This option allows for unused exported symbols to be dropped from
--	  the build. In turn, this provides the compiler more opportunities
--	  (especially when using LTO) for optimizing the code and reducing
--	  binary size.  This might have some security advantages as well.
--
--	  If unsure, or if you need to build out-of-tree modules, say N.
--
--config UNUSED_KSYMS_WHITELIST
--	string "Whitelist of symbols to keep in ksymtab"
--	depends on TRIM_UNUSED_KSYMS
--	help
--	  By default, all unused exported symbols will be un-exported from the
--	  build when TRIM_UNUSED_KSYMS is selected.
--
--	  UNUSED_KSYMS_WHITELIST allows to whitelist symbols that must be kept
--	  exported at all times, even in absence of in-tree users. The value to
--	  set here is the path to a text file containing the list of symbols,
--	  one per line. The path can be absolute, or relative to the kernel
--	  source tree.
--
--endif # MODULES
--
--config MODULES_TREE_LOOKUP
--	def_bool y
--	depends on PERF_EVENTS || TRACING || CFI_CLANG
--
- config INIT_ALL_POSSIBLE
- 	bool
- 	help
-@@ -2224,6 +1927,7 @@ config INIT_ALL_POSSIBLE
- 	  it was better to provide this option than to break all the archs
- 	  and have several arch maintainers pursuing me down dark alleys.
- 
-+source "kernel/module/Kconfig"
- source "block/Kconfig"
- 
- config PREEMPT_NOTIFIERS
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-new file mode 100644
-index 000000000000..5aff8a40c58e
---- /dev/null
-+++ b/kernel/module/Kconfig
-@@ -0,0 +1,296 @@
-+config MODULE_SIG_FORMAT
-+	def_bool n
-+	select SYSTEM_DATA_VERIFICATION
-+
-+menuconfig MODULES
-+	bool "Enable loadable module support"
-+	modules
-+	help
-+	  Kernel modules are small pieces of compiled code which can
-+	  be inserted in the running kernel, rather than being
-+	  permanently built into the kernel.  You use the "modprobe"
-+	  tool to add (and sometimes remove) them.  If you say Y here,
-+	  many parts of the kernel can be built as modules (by
-+	  answering M instead of Y where indicated): this is most
-+	  useful for infrequently used options which are not required
-+	  for booting.  For more information, see the man pages for
-+	  modprobe, lsmod, modinfo, insmod and rmmod.
-+
-+	  If you say Y here, you will need to run "make
-+	  modules_install" to put the modules under /lib/modules/
-+	  where modprobe can find them (you may need to be root to do
-+	  this).
-+
-+	  If unsure, say Y.
-+
-+if MODULES
-+
-+config MODULE_FORCE_LOAD
-+	bool "Forced module loading"
-+	default n
-+	help
-+	  Allow loading of modules without version information (ie. modprobe
-+	  --force).  Forced module loading sets the 'F' (forced) taint flag and
-+	  is usually a really bad idea.
-+
-+config MODULE_UNLOAD
-+	bool "Module unloading"
-+	help
-+	  Without this option you will not be able to unload any
-+	  modules (note that some modules may not be unloadable
-+	  anyway), which makes your kernel smaller, faster
-+	  and simpler.  If unsure, say Y.
-+
-+config MODULE_FORCE_UNLOAD
-+	bool "Forced module unloading"
-+	depends on MODULE_UNLOAD
-+	help
-+	  This option allows you to force a module to unload, even if the
-+	  kernel believes it is unsafe: the kernel will remove the module
-+	  without waiting for anyone to stop using it (using the -f option to
-+	  rmmod).  This is mainly for kernel developers and desperate users.
-+	  If unsure, say N.
-+
-+config MODULE_UNLOAD_TAINT_TRACKING
-+	bool "Tainted module unload tracking"
-+	depends on MODULE_UNLOAD
-+	default n
-+	help
-+	  This option allows you to maintain a record of each unloaded
-+	  module that tainted the kernel. In addition to displaying a
-+	  list of linked (or loaded) modules e.g. on detection of a bad
-+	  page (see bad_page()), the aforementioned details are also
-+	  shown. If unsure, say N.
-+
-+config MODVERSIONS
-+	bool "Module versioning support"
-+	help
-+	  Usually, you have to use modules compiled with your kernel.
-+	  Saying Y here makes it sometimes possible to use modules
-+	  compiled for different kernels, by adding enough information
-+	  to the modules to (hopefully) spot any changes which would
-+	  make them incompatible with the kernel you are running.  If
-+	  unsure, say N.
-+
-+config ASM_MODVERSIONS
-+	bool
-+	default HAVE_ASM_MODVERSIONS && MODVERSIONS
-+	help
-+	  This enables module versioning for exported symbols also from
-+	  assembly. This can be enabled only when the target architecture
-+	  supports it.
-+
-+config MODULE_SRCVERSION_ALL
-+	bool "Source checksum for all modules"
-+	help
-+	  Modules which contain a MODULE_VERSION get an extra "srcversion"
-+	  field inserted into their modinfo section, which contains a
-+    	  sum of the source files which made it.  This helps maintainers
-+	  see exactly which source was used to build a module (since
-+	  others sometimes change the module source without updating
-+	  the version).  With this option, such a "srcversion" field
-+	  will be created for all modules.  If unsure, say N.
-+
-+config MODULE_SIG
-+	bool "Module signature verification"
-+	select MODULE_SIG_FORMAT
-+	help
-+	  Check modules for valid signatures upon load: the signature
-+	  is simply appended to the module. For more information see
-+	  <file:Documentation/admin-guide/module-signing.rst>.
-+
-+	  Note that this option adds the OpenSSL development packages as a
-+	  kernel build dependency so that the signing tool can use its crypto
-+	  library.
-+
-+	  You should enable this option if you wish to use either
-+	  CONFIG_SECURITY_LOCKDOWN_LSM or lockdown functionality imposed via
-+	  another LSM - otherwise unsigned modules will be loadable regardless
-+	  of the lockdown policy.
-+
-+	  !!!WARNING!!!  If you enable this option, you MUST make sure that the
-+	  module DOES NOT get stripped after being signed.  This includes the
-+	  debuginfo strip done by some packagers (such as rpmbuild) and
-+	  inclusion into an initramfs that wants the module size reduced.
-+
-+config MODULE_SIG_FORCE
-+	bool "Require modules to be validly signed"
-+	depends on MODULE_SIG
-+	help
-+	  Reject unsigned modules or signed modules for which we don't have a
-+	  key.  Without this, such modules will simply taint the kernel.
-+
-+config MODULE_SIG_ALL
-+	bool "Automatically sign all modules"
-+	default y
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	help
-+	  Sign all modules during make modules_install. Without this option,
-+	  modules must be signed manually, using the scripts/sign-file tool.
-+
-+comment "Do not forget to sign required modules with scripts/sign-file"
-+	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
-+
-+choice
-+	prompt "Which hash algorithm should modules be signed with?"
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	help
-+	  This determines which sort of hashing algorithm will be used during
-+	  signature generation.  This algorithm _must_ be built into the kernel
-+	  directly so that signature verification can take place.  It is not
-+	  possible to load a signed module containing the algorithm to check
-+	  the signature on that module.
-+
-+config MODULE_SIG_SHA1
-+	bool "Sign modules with SHA-1"
-+	select CRYPTO_SHA1
-+
-+config MODULE_SIG_SHA224
-+	bool "Sign modules with SHA-224"
-+	select CRYPTO_SHA256
-+
-+config MODULE_SIG_SHA256
-+	bool "Sign modules with SHA-256"
-+	select CRYPTO_SHA256
-+
-+config MODULE_SIG_SHA384
-+	bool "Sign modules with SHA-384"
-+	select CRYPTO_SHA512
-+
-+config MODULE_SIG_SHA512
-+	bool "Sign modules with SHA-512"
-+	select CRYPTO_SHA512
-+
-+endchoice
-+
-+config MODULE_SIG_HASH
-+	string
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	default "sha1" if MODULE_SIG_SHA1
-+	default "sha224" if MODULE_SIG_SHA224
-+	default "sha256" if MODULE_SIG_SHA256
-+	default "sha384" if MODULE_SIG_SHA384
-+	default "sha512" if MODULE_SIG_SHA512
-+
-+choice
-+	prompt "Module compression mode"
-+	help
-+	  This option allows you to choose the algorithm which will be used to
-+	  compress modules when 'make modules_install' is run. (or, you can
-+	  choose to not compress modules at all.)
-+
-+	  External modules will also be compressed in the same way during the
-+	  installation.
-+
-+	  For modules inside an initrd or initramfs, it's more efficient to
-+	  compress the whole initrd or initramfs instead.
-+
-+	  This is fully compatible with signed modules.
-+
-+	  Please note that the tool used to load modules needs to support the
-+	  corresponding algorithm. module-init-tools MAY support gzip, and kmod
-+	  MAY support gzip, xz and zstd.
-+
-+	  Your build system needs to provide the appropriate compression tool
-+	  to compress the modules.
-+
-+	  If in doubt, select 'None'.
-+
-+config MODULE_COMPRESS_NONE
-+	bool "None"
-+	help
-+	  Do not compress modules. The installed modules are suffixed
-+	  with .ko.
-+
-+config MODULE_COMPRESS_GZIP
-+	bool "GZIP"
-+	help
-+	  Compress modules with GZIP. The installed modules are suffixed
-+	  with .ko.gz.
-+
-+config MODULE_COMPRESS_XZ
-+	bool "XZ"
-+	help
-+	  Compress modules with XZ. The installed modules are suffixed
-+	  with .ko.xz.
-+
-+config MODULE_COMPRESS_ZSTD
-+	bool "ZSTD"
-+	help
-+	  Compress modules with ZSTD. The installed modules are suffixed
-+	  with .ko.zst.
-+
-+endchoice
-+
-+config MODULE_DECOMPRESS
-+	bool "Support in-kernel module decompression"
-+	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-+	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-+	select XZ_DEC if MODULE_COMPRESS_XZ
-+	help
-+
-+	  Support for decompressing kernel modules by the kernel itself
-+	  instead of relying on userspace to perform this task. Useful when
-+	  load pinning security policy is enabled.
-+
-+	  If unsure, say N.
-+
-+config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-+	bool "Allow loading of modules with missing namespace imports"
-+	help
-+	  Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
-+	  a namespace. A module that makes use of a symbol exported with such a
-+	  namespace is required to import the namespace via MODULE_IMPORT_NS().
-+	  There is no technical reason to enforce correct namespace imports,
-+	  but it creates consistency between symbols defining namespaces and
-+	  users importing namespaces they make use of. This option relaxes this
-+	  requirement and lifts the enforcement when loading a module.
-+
-+	  If unsure, say N.
-+
-+config MODPROBE_PATH
-+	string "Path to modprobe binary"
-+	default "/sbin/modprobe"
-+	help
-+	  When kernel code requests a module, it does so by calling
-+	  the "modprobe" userspace utility. This option allows you to
-+	  set the path where that binary is found. This can be changed
-+	  at runtime via the sysctl file
-+	  /proc/sys/kernel/modprobe. Setting this to the empty string
-+	  removes the kernel's ability to request modules (but
-+	  userspace can still load modules explicitly).
-+
-+config TRIM_UNUSED_KSYMS
-+	bool "Trim unused exported kernel symbols" if EXPERT
-+	depends on !COMPILE_TEST
-+	help
-+	  The kernel and some modules make many symbols available for
-+	  other modules to use via EXPORT_SYMBOL() and variants. Depending
-+	  on the set of modules being selected in your kernel configuration,
-+	  many of those exported symbols might never be used.
-+
-+	  This option allows for unused exported symbols to be dropped from
-+	  the build. In turn, this provides the compiler more opportunities
-+	  (especially when using LTO) for optimizing the code and reducing
-+	  binary size.  This might have some security advantages as well.
-+
-+	  If unsure, or if you need to build out-of-tree modules, say N.
-+
-+config UNUSED_KSYMS_WHITELIST
-+	string "Whitelist of symbols to keep in ksymtab"
-+	depends on TRIM_UNUSED_KSYMS
-+	help
-+	  By default, all unused exported symbols will be un-exported from the
-+	  build when TRIM_UNUSED_KSYMS is selected.
-+
-+	  UNUSED_KSYMS_WHITELIST allows to whitelist symbols that must be kept
-+	  exported at all times, even in absence of in-tree users. The value to
-+	  set here is the path to a text file containing the list of symbols,
-+	  one per line. The path can be absolute, or relative to the kernel
-+	  source tree.
-+
-+endif # MODULES
-+
-+config MODULES_TREE_LOOKUP
-+	def_bool y
-+	depends on PERF_EVENTS || TRACING || CFI_CLANG
--- 
-2.35.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbmRyZXkgU3RyYWNodWsgPHN0
+cm9jaHVrQGlzcHJhcy5ydT4NCj4gU2VudDogTW9uZGF5LCAxMSBKdWx5IDIwMjIgMTc6MTMNCj4g
+VG86IEJlcm5hcmQgTWV0emxlciA8Qk1UQHp1cmljaC5pYm0uY29tPg0KPiBDYzogQW5kcmV5IFN0
+cmFjaHVrIDxzdHJvY2h1a0Bpc3ByYXMucnU+OyBKYXNvbiBHdW50aG9ycGUgPGpnZ0B6aWVwZS5j
+YT47DQo+IExlb24gUm9tYW5vdnNreSA8bGVvbkBrZXJuZWwub3JnPjsgbGludXgtcmRtYUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsZHYtcHJvamVj
+dEBsaW51eHRlc3Rpbmcub3JnDQo+IFN1YmplY3Q6IFtFWFRFUk5BTF0gW1BBVENIXSBSRE1BOiBy
+ZW1vdmUgdXNlbGVzcyBjb25kaXRpb24gaW4NCj4gc2l3X2NyZWF0ZV9jcSgpDQo+IA0KPiBDb21w
+YXJpc29uIG9mICdjcScgd2l0aCBOVUxMIGlzIHVzZWxlc3Mgc2luY2UNCj4gJ2NxJyBpcyBhIHJl
+c3VsdCBvZiBjb250YWluZXJfb2YgYW5kIGNhbm5vdCBiZSBOVUxMDQo+IGluIGFueSByZWFzb25h
+YmxlIHNjZW5hcmlvLg0KPiANCj4gRm91bmQgYnkgTGludXggVmVyaWZpY2F0aW9uIENlbnRlciAo
+bGludXh0ZXN0aW5nLm9yZykgd2l0aCBTVkFDRS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFuZHJl
+eSBTdHJhY2h1ayA8c3Ryb2NodWtAaXNwcmFzLnJ1Pg0KPiBGaXhlczogMzAzYWUxY2RmZGY3ICgi
+cmRtYS9zaXc6IGFwcGxpY2F0aW9uIGludGVyZmFjZSIpDQo+IC0tLQ0KPiAgZHJpdmVycy9pbmZp
+bmliYW5kL3N3L3Npdy9zaXdfdmVyYnMuYyB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaW5m
+aW5pYmFuZC9zdy9zaXcvc2l3X3ZlcmJzLmMNCj4gYi9kcml2ZXJzL2luZmluaWJhbmQvc3cvc2l3
+L3Npd192ZXJicy5jDQo+IGluZGV4IDA5MzE2MDcyYjc4OS4uOGRlZGFlN2FlNzllIDEwMDY0NA0K
+PiAtLS0gYS9kcml2ZXJzL2luZmluaWJhbmQvc3cvc2l3L3Npd192ZXJicy5jDQo+ICsrKyBiL2Ry
+aXZlcnMvaW5maW5pYmFuZC9zdy9zaXcvc2l3X3ZlcmJzLmMNCj4gQEAgLTExNjcsNyArMTE2Nyw3
+IEBAIGludCBzaXdfY3JlYXRlX2NxKHN0cnVjdCBpYl9jcSAqYmFzZV9jcSwgY29uc3Qgc3RydWN0
+DQo+IGliX2NxX2luaXRfYXR0ciAqYXR0ciwNCj4gIGVycl9vdXQ6DQo+ICAJc2l3X2RiZyhiYXNl
+X2NxLT5kZXZpY2UsICJDUSBjcmVhdGlvbiBmYWlsZWQ6ICVkIiwgcnYpOw0KPiANCj4gLQlpZiAo
+Y3EgJiYgY3EtPnF1ZXVlKSB7DQo+ICsJaWYgKGNxLT5xdWV1ZSkgew0KPiAgCQlzdHJ1Y3Qgc2l3
+X3Vjb250ZXh0ICpjdHggPQ0KPiAgCQkJcmRtYV91ZGF0YV90b19kcnZfY29udGV4dCh1ZGF0YSwg
+c3RydWN0IHNpd191Y29udGV4dCwNCj4gIAkJCQkJCSAgYmFzZV91Y29udGV4dCk7DQo+IC0tDQo+
+IDIuMjUuMQ0KDQpBY2tlZC1ieTogQmVybmFyZCBNZXR6bGVyIDxibXRAenVyaWNoLmlibS5jb20+
+DQoNClRoYW5rcyBBbmRyZXkhDQo=

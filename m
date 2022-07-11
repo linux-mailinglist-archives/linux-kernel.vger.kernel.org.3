@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB04356FB34
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA6B56FB32
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiGKJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S230012AbiGKJ0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbiGKJYj (ORCPT
+        with ESMTP id S232427AbiGKJYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798AA2A427;
-        Mon, 11 Jul 2022 02:15:04 -0700 (PDT)
+        Mon, 11 Jul 2022 05:24:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ED82A42E;
+        Mon, 11 Jul 2022 02:15:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D532F6123B;
-        Mon, 11 Jul 2022 09:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FFEC341C0;
-        Mon, 11 Jul 2022 09:15:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A87D46125D;
+        Mon, 11 Jul 2022 09:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F58C34115;
+        Mon, 11 Jul 2022 09:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530903;
-        bh=Thsqa8+oXxSlU5z5RVlpc5ANmuoUcNe2Gohr70520l0=;
+        s=korg; t=1657530906;
+        bh=OLnwXVKD707ZZ+mGhuVMLJQBSfiNvdmdll5ulhhZKEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izkg/dP0IREvJoxSbtbPLGhy3rgx9JI0VU11q4eTPwd684LYCfOwtH8BvND2ZCIXW
-         gZU/Zh97egZvz7LAFjqtkBi0QpTtQrfgO5XgmF6smUJXAWAe1K+lmh2MWzV1AOOsiN
-         Ja8zqFl+wAT5USu0fiaGhg9rjMCo3lacbIllgKiY=
+        b=MSLGebucLkhOlmKH+KekzFkdwBbo7xt08Fss2snbkyafpyZGa/U4f4EC5jKVPLEsJ
+         6MBaGGizjuSJf4r+KwBRkgive8ye6uSBGX//6D1Ry4abLuUzuGjgc5K9GToDBXaVvk
+         f2KphAPTOnofuSiHsGBPbnFbqCWlsr3xzVmiYVMg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Duy Nguyen <duy.nguyen.rh@renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.18 025/112] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
-Date:   Mon, 11 Jul 2022 11:06:25 +0200
-Message-Id: <20220711090550.274324178@linuxfoundation.org>
+Subject: [PATCH 5.18 026/112] can: rcar_canfd: Fix data transmission failed on R-Car V3U
+Date:   Mon, 11 Jul 2022 11:06:26 +0200
+Message-Id: <20220711090550.302308045@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
 References: <20220711090549.543317027@linuxfoundation.org>
@@ -56,51 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Duy Nguyen <duy.nguyen.rh@renesas.com>
 
-commit 1c0e78a287e3493e22bde8553d02f3b89177eaf7 upstream.
+commit 374e11f1bde91545674233459e5a0416ba842b69 upstream.
 
-In mcp251xfd_register_get_dev_id() the device ID register is read with
-handcrafted SPI transfers. As all registers, this register is in
-little endian. Further it is not naturally aligned in struct
-mcp251xfd_map_buf_nocrc::data. However after the transfer the register
-content is converted from big endian to CPU endianness not taking care
-of being unaligned.
+On R-Car V3U, this driver should use suitable register offset instead of
+other SoCs' one. Otherwise, data transmission failed on R-Car V3U.
 
-Fix the conversion by converting from little endian to CPU endianness
-taking the unaligned source into account.
-
-Side note: So far the register content is 0x0 on all mcp251xfd
-compatible chips, and is only used for an informative printk.
-
-Link: https://lore.kernel.org/all/20220627092859.809042-1-mkl@pengutronix.de
-Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
-Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Fixes: 45721c406dcf ("can: rcar_canfd: Add support for r8a779a0 SoC")
+Link: https://lore.kernel.org/all/20220704074611.957191-1-yoshihiro.shimoda.uh@renesas.com
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/can/rcar/rcar_canfd.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -12,6 +12,7 @@
- // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
- //
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1334,7 +1334,10 @@ static void rcar_canfd_set_bittiming(str
+ 		cfg = (RCANFD_DCFG_DTSEG1(gpriv, tseg1) | RCANFD_DCFG_DBRP(brp) |
+ 		       RCANFD_DCFG_DSJW(sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
  
-+#include <asm/unaligned.h>
- #include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/device.h>
-@@ -1778,7 +1779,7 @@ mcp251xfd_register_get_dev_id(const stru
- 	if (err)
- 		goto out_kfree_buf_tx;
- 
--	*dev_id = be32_to_cpup((__be32 *)buf_rx->data);
-+	*dev_id = get_unaligned_le32(buf_rx->data);
- 	*effective_speed_hz_slow = xfer[0].effective_speed_hz;
- 	*effective_speed_hz_fast = xfer[1].effective_speed_hz;
- 
+-		rcar_canfd_write(priv->base, RCANFD_F_DCFG(ch), cfg);
++		if (is_v3u(gpriv))
++			rcar_canfd_write(priv->base, RCANFD_V3U_DCFG(ch), cfg);
++		else
++			rcar_canfd_write(priv->base, RCANFD_F_DCFG(ch), cfg);
+ 		netdev_dbg(priv->ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
+ 			   brp, sjw, tseg1, tseg2);
+ 	} else {
 
 

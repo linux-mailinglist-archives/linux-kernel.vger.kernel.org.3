@@ -2,164 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1515700FD
+	by mail.lfdr.de (Postfix) with ESMTP id 813995700FC
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiGKLpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S230185AbiGKLpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiGKLox (ORCPT
+        with ESMTP id S231138AbiGKLox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 07:44:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 561971D7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657539675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gHZTeBa+zo6V5aGVigu7pGUwqHAZBzzfDHWLTO9INzI=;
-        b=VnME6Q7nQgsS30ursDvkPyRslJgOQr0nbpJ0wrgV7GYn0ryV7GTKcRewRXhwLpiQdxoUmV
-        7zKQfHzB/yj9wy1rDgsNWLiF4sARvsZJpK4e6QJ9Krzk6V0+j3IPQq3VlnrUxueHmO2Yha
-        NUImyKaBKh8gmd1o+YoVn2DtHKTcurE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-FKQKtNkQPUSZgoLKc59SHw-1; Mon, 11 Jul 2022 07:41:14 -0400
-X-MC-Unique: FKQKtNkQPUSZgoLKc59SHw-1
-Received: by mail-wm1-f69.google.com with SMTP id r186-20020a1c44c3000000b003a2daf644f9so4813196wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:41:14 -0700 (PDT)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166AC1A1;
+        Mon, 11 Jul 2022 04:41:33 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id v21so1684902plo.0;
+        Mon, 11 Jul 2022 04:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XFN3Kyiudf896LabgETt2hdX1v48HrkVIcYMpIGJ6GU=;
+        b=LLnwtfTzrW5Jxiby1mAMYGY6pje0/utXz7cGptyMG7FNOB7GPN0OXr1le5yB99IQgS
+         jCWU/5f7iyBrEcrXRnhYllHkgwNGMV+MuAuFJNjj+CBwDhcl3Cs2AKPFCEFTPhIAvKXY
+         XCKn36WHJFgSkr+Con5OEoj5DKA53TwHdEqPynJAtJz+TJ0/CeV81aqHPGtvdIgUjP2o
+         hE3WvW/kDOrY0pDdoL3rJihXga6vswzbRj5uDHRho1M1pWAU8Ea0m1RsCasWU5NDfZx/
+         cBSjr3HpOU8GBMMNSEJ2hESOPXES2qWR/OH9syYVMjprKBjVBgtJke2hcS1CvFPome8N
+         BQjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=gHZTeBa+zo6V5aGVigu7pGUwqHAZBzzfDHWLTO9INzI=;
-        b=j5hRt06afRNgLEmvwAFQdE5/XFfvaRWQojmETtTFRO4F6lQd0HY7wq3tdrH6H8GfLC
-         YrfruILEUf+q8BEoMTDbXHfWjteXjIqqJ3V1PThk5w2+eRLZWtfy1leXxumG9E3CPNFI
-         wpLT/RJbLHi6VYKIYkf1DTTDHRGWNMavZVhgJeTdBh6ZujmTjTKQ5ZYfO6kQnEOfRHbq
-         MuPyzPBBdkVnK2ke9/IWYosZRD6/p4KlvaEcXVvCwp8fEQsS7goRk+VXuK6+FZsYkeW0
-         2A1YsLSCsXbxxOdXfBihESY2S6tdwCXoOvpANZCxtego+6JeN9FPVw7q7mVQtflQ3kVl
-         oT3A==
-X-Gm-Message-State: AJIora/esBF5vm9CFIj6GHeefrMhk9voB96C2gIjm6Jj+tYmoQWySQaG
-        aquwPXojDc+gcYI5jbvyeq6ZYCdi7R2OJU0fVrZB4T/Sv1xG7isnIDwa9yA8a+zFZZHISz3fmT0
-        FleUNlvj/Q3U8qef/q5/szI22
-X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr16603227wrs.550.1657539673360;
-        Mon, 11 Jul 2022 04:41:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tqCQTI5mdoLJYyLC9KKsKSmRT9hOYxAFOVKHCeTy+01po4lrgNtzb/0y31cJeV8TLUEzjpoQ==
-X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr16603219wrs.550.1657539673173;
-        Mon, 11 Jul 2022 04:41:13 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id u20-20020adfa194000000b0021da61caa10sm2434566wru.56.2022.07.11.04.41.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XFN3Kyiudf896LabgETt2hdX1v48HrkVIcYMpIGJ6GU=;
+        b=QcpVIEV/63WsuHmoFfZF8oAILMFeUH1OYCc2RLc87UoVHIo3c/NSTAmNAMPDsieCOg
+         92DuRtalupajLGsy4c2D235joZq2QpTO/9uGSfte7ENCcQNV3CkWnQIf3m54yNZHK7sA
+         XgICM/+bCBUACFAlf5SEqHs02u3Ew3TjLpm/C0VjJKZL9R9cY8E3UGXoLyuvvLlFQxsY
+         JTCH7RwGZQwKJ6XN3aaV7/MzdOm2l5JXAbsY4kq6/WZTvpFNPxDSx+MyxFehqt/9RT91
+         clk8wMcE6J3eiYewG0dYKScQv0qHppYzP6JNuFiiaTX7lZoQdyM18LrgaqPK/uCB6iBW
+         afRQ==
+X-Gm-Message-State: AJIora/P1ay6cs41zuxgK2Qfy6JcHddq1YyecyrDPfkgK9ElD8lCzJec
+        LtPGId1DDcWYEubnv0NQdqA=
+X-Google-Smtp-Source: AGRyM1uFuNYMi8HbuR1ZPtyNiT+jzToYC5Qgwr1xGtqjrfJys4b0Zij24tlW9WkQBYXQtjfIBkEtAg==
+X-Received: by 2002:a17:90b:4c0f:b0:1f0:3dba:bdb0 with SMTP id na15-20020a17090b4c0f00b001f03dbabdb0mr5209790pjb.6.1657539692273;
+        Mon, 11 Jul 2022 04:41:32 -0700 (PDT)
+Received: from paddy-ASUS-EXPERTBOOK-B1400CBA (61-216-65-192.hinet-ip.hinet.net. [61.216.65.192])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016c4f006603sm1463359plh.54.2022.07.11.04.41.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 04:41:12 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Gregory Erwin <gregerwin256@gmail.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering
- hwrng
-In-Reply-To: <87v8s8ubws.fsf@kernel.org>
-References: <Yrw5f8GN2fh2orid@zx2c4.com>
- <20220629114240.946411-1-Jason@zx2c4.com> <87v8s8ubws.fsf@kernel.org>
-Date:   Mon, 11 Jul 2022 12:41:12 +0100
-Message-ID: <xhsmho7xv512f.mognet@vschneid.remote.csb>
+        Mon, 11 Jul 2022 04:41:31 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 19:41:27 +0800
+From:   PaddyKP Yao <ispaddy@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     PaddyKP_Yao@asus.com, Hans de Goede <hdegoede@redhat.com>,
+        acpi4asus-user <acpi4asus-user@lists.sourceforge.net>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Luke Jones <luke@ljones.dev>,
+        Mark Gross <mgross@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: Add mic-mute LED classdev
+ support
+Message-ID: <YswMZ5Il+5yde3+f@paddy-ASUS-EXPERTBOOK-B1400CBA>
+References: <HK0PR04MB33636680A6DC47211560BB43FA879@HK0PR04MB3363.apcprd04.prod.outlook.com>
+ <20220711024718.1700067-1-PaddyKP_Yao@asus.com>
+ <CAHp75Vfnt0DX9wnx0pKhit4JWCjBST+4caTjY6x6VYNdGjqn9Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vfnt0DX9wnx0pKhit4JWCjBST+4caTjY6x6VYNdGjqn9Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/22 19:26, Kalle Valo wrote:
-> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
->
->> There are two deadlock scenarios that need addressing, which cause
->> problems when the computer goes to sleep, the interface is set down, and
->> hwrng_unregister() is called. When the deadlock is hit, sleep is delayed
->> for tens of seconds, causing it to fail. These scenarios are:
->>
->> 1) The hwrng kthread can't be stopped while it's sleeping, because it
->>    uses msleep_interruptible() instead of schedule_timeout_interruptible=
-().
->>    The fix is a simple moving to the correct function. At the same time,
->>    we should cleanup a common and useless dmesg splat in the same area.
->>
->> 2) A normal user thread can't be interrupted by hwrng_unregister() while
->>    it's sleeping, because hwrng_unregister() is called from elsewhere.
->>    The solution here is to keep track of which thread is currently
->>    reading, and asleep, and signal that thread when it's time to
->>    unregister. There's a bit of book keeping required to prevent
->>    lifetime issues on current.
->>
->> Reported-by: Gregory Erwin <gregerwin256@gmail.com>
->> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> Cc: Kalle Valo <kvalo@kernel.org>
->> Cc: Rui Salvaterra <rsalvaterra@gmail.com>
->> Cc: Herbert Xu <herbert@gondor.apana.org.au>
->> Cc: stable@vger.kernel.org
->> Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly dumpi=
-ng into random.c")
->> Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgDs=
-FGTEjs0c00giw@mail.gmail.com/
->> Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8=
-Hys_DVXtent3HA@mail.gmail.com/
->> Link: https://bugs.archlinux.org/task/75138
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> ---
->> Changes v7->v8:
->> - Add a missing export_symbol.
->>
->>  drivers/char/hw_random/core.c        | 30 ++++++++++++++++++++++++----
->>  drivers/net/wireless/ath/ath9k/rng.c | 19 +++++++-----------
->>  kernel/sched/core.c                  |  1 +
->>  3 files changed, 34 insertions(+), 16 deletions(-)
->
-> I don't see any acks for the hw_random and the scheduler change, adding m=
-ore
-> people to CC. Full patch here:
->
-> https://patchwork.kernel.org/project/linux-wireless/patch/20220629114240.=
-946411-1-Jason@zx2c4.com/
->
-> Are everyone ok if I take this patch via wireless-next?
->
+<accidentally hit send to soon, trying again>
 
-Thanks for the Cc.
+Hi,
 
-I'm not hot on the export of wake_up_state(), IMO any wakeup with
-!(state & TASK_NORMAL) should be reserved to kernel internals. Now, here
-IIUC the problem is that the patch uses an inline invoking
+Sorry for mistake about send two patch mail again...
+After some try, I cannot remove legal message from asus mail.
+I will use my gmail and send patch again.
+And may I use author PaddyKP_Yao@asus.com instead of my gmail account?
 
-  wake_up_state(p, TASK_INTERRUPTIBLE)
+Many thanks for your kind feedback.
 
-so this isn't playing with any 'exotic' task state, thus it shouldn't
-actually need the export.
-
-I've been trying to figure out if this could work with just a
-wake_up_process(), but the sleeping pattern here is not very conforming
-(cf. 'wait loop' pattern in sched/core.c), AFAICT the signal is used to
-circumvent that :/
-
+On Mon, Jul 11, 2022 at 10:50:29AM +0200, Andy Shevchenko wrote:
+> On Mon, Jul 11, 2022 at 4:47 AM <PaddyKP_Yao@asus.com> wrote:
+> >
+> > From: PaddyKP_Yao <PaddyKP_Yao@asus.com>
+> 
+> Besides we got two emails again of the same version...
+> 
+> > ===================================================================================================================================
+> > This email and any attachments to it contain confidential information and are intended solely for the use of the individual to whom it is addressed.If you are not the intended recipient or receive it accidentally, please immediately notify the sender by e-mail and delete the message and any attachments from your computer system, and destroy all hard copies. If any, please be advised that any unauthorized disclosure, copying, distribution or any action taken or omitted in reliance on this, is illegal and prohibited. Furthermore, any views or opinions expressed are solely those of the author and do not represent those of ASUSTeK. Thank you for your cooperation.
+> > ===================================================================================================================================
+> 
+> ...this is problematic and can't be used in open source projects. Ask
+> your legal team how to deal with it.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

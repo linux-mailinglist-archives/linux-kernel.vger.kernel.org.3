@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FCF56FBA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E600956FA0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiGKJdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S231279AbiGKJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiGKJcp (ORCPT
+        with ESMTP id S231255AbiGKJLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDA978216;
-        Mon, 11 Jul 2022 02:17:34 -0700 (PDT)
+        Mon, 11 Jul 2022 05:11:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C653013DFD;
+        Mon, 11 Jul 2022 02:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E5861227;
-        Mon, 11 Jul 2022 09:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AB1C34115;
-        Mon, 11 Jul 2022 09:17:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 279886118F;
+        Mon, 11 Jul 2022 09:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10951C34115;
+        Mon, 11 Jul 2022 09:09:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531053;
-        bh=SKoJobLuXWL5FRX92QKZJyelch0U0Zzj/8c/a3u1sTk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XT3B5120QJweKUh2APK5Kw4i1qYi5ETHd85UOdUFIYW6mOCHhi/UFyzxdKfmcKBu2
-         RkWhLhNhKFlRvKf5xHL4f3CaJd906T/26tzxjqKaX7n1TE5i587pJH7U2dKnWZpns7
-         Irw+Lrn3HGM0JEbE0ZG+VUBHv2NiDabfrwCeV2DQ=
+        s=korg; t=1657530541;
+        bh=0RXYdwt376sukjr2PWNAEhLfEHpY9azy0Bv3d1jQ95o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iDfLqZoNCeUgcOKxRqs3vik0DyfSQ1Ve3ycdVxzpB52BBUni67Yd4ZWRA/T4GAOV6
+         2eDvFceqBfAkNTyVKZWL0WVp+W5ZWTMTHPM753twnfdVZCc+otyE5SQ3t3T2dcH1cf
+         2CV52BRhpFtcO45qlGGgQiA5lMeouO/dQxym0y1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH 5.18 039/112] memregion: Fix memregion_free() fallback definition
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 4.19 00/31] 4.19.252-rc1 review
 Date:   Mon, 11 Jul 2022 11:06:39 +0200
-Message-Id: <20220711090550.682502815@linuxfoundation.org>
+Message-Id: <20220711090537.841305347@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.252-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 4.19.252-rc1
+X-KernelTest-Deadline: 2022-07-13T09:05+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,39 +62,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+This is the start of the stable review cycle for the 4.19.252 release.
+There are 31 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit f50974eee5c4a5de1e4f1a3d873099f170df25f8 upstream.
+Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
+Anything received after that time might be too late.
 
-In the CONFIG_MEMREGION=n case, memregion_free() is meant to be a static
-inline. 0day reports:
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.252-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+and the diffstat can be found below.
 
-    In file included from drivers/cxl/core/port.c:4:
-    include/linux/memregion.h:19:6: warning: no previous prototype for
-    function 'memregion_free' [-Wmissing-prototypes]
+thanks,
 
-Mark memregion_free() static.
+greg k-h
 
-Fixes: 33dd70752cd7 ("lib: Uplevel the pmem "region" ida to a global allocator")
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Alison Schofield <alison.schofield@intel.com>
-Link: https://lore.kernel.org/r/165601455171.4042645.3350844271068713515.stgit@dwillia2-xfh
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/linux/memregion.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-------------
+Pseudo-Shortlog of commits:
 
---- a/include/linux/memregion.h
-+++ b/include/linux/memregion.h
-@@ -16,7 +16,7 @@ static inline int memregion_alloc(gfp_t
- {
- 	return -ENOMEM;
- }
--void memregion_free(int id)
-+static inline void memregion_free(int id)
- {
- }
- #endif
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 4.19.252-rc1
+
+Miaoqian Lin <linmq006@gmail.com>
+    dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+
+Miaoqian Lin <linmq006@gmail.com>
+    dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+
+Michael Walle <michael@walle.cc>
+    dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
+
+Dmitry Osipenko <dmitry.osipenko@collabora.com>
+    dmaengine: pl330: Fix lockdep warning about non-static key
+
+Linus Torvalds <torvalds@linux-foundation.org>
+    ida: don't use BUG_ON() for debugging
+
+Shuah Khan <skhan@linuxfoundation.org>
+    misc: rtsx_usb: set return value in rsp_buf alloc err path
+
+Shuah Khan <skhan@linuxfoundation.org>
+    misc: rtsx_usb: use separate command and response buffers
+
+Shuah Khan <skhan@linuxfoundation.org>
+    misc: rtsx_usb: fix use of dma mapped buffer for usb bulk transfer
+
+Satish Nagireddy <satish.nagireddy@getcruise.com>
+    i2c: cadence: Unregister the clk notifier in error path
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    selftests: forwarding: fix error message in learning_test
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    selftests: forwarding: fix flood_unicast_test when h2 supports IFF_UNICAST_FLT
+
+Rick Lindsley <ricklind@us.ibm.com>
+    ibmvnic: Properly dispose of all skbs during a failover.
+
+Claudiu Beznea <claudiu.beznea@microchip.com>
+    ARM: at91: pm: use proper compatible for sama5d2's rtc
+
+Samuel Holland <samuel@sholland.org>
+    pinctrl: sunxi: a83t: Fix NAND function name for some pins
+
+Miaoqian Lin <linmq006@gmail.com>
+    ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
+
+Eric Sandeen <sandeen@redhat.com>
+    xfs: remove incorrect ASSERT in xfs_rename
+
+Jimmy Assarsson <extja@kvaser.com>
+    can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+
+Jimmy Assarsson <extja@kvaser.com>
+    can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+
+Jimmy Assarsson <extja@kvaser.com>
+    can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc/powernv: delay rng platform device creation until later in boot
+
+Hsin-Yi Wang <hsinyi@chromium.org>
+    video: of_display_timing.h: include errno.h
+
+Helge Deller <deller@gmx.de>
+    fbcon: Disallow setting font bigger than screen size
+
+Yian Chen <yian.chen@intel.com>
+    iommu/vt-d: Fix PCI bus rescan device hot add
+
+Duoming Zhou <duoming@zju.edu.cn>
+    net: rose: fix UAF bug caused by rose_t0timer_expiry
+
+Oliver Neukum <oneukum@suse.com>
+    usbnet: fix memory leak in error case
+
+Rhett Aultman <rhett.aultman@samsara.com>
+    can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Liang He <windhl@126.com>
+    can: grcan: grcan_probe(): remove extra of_node_get()
+
+Oliver Hartkopp <socketcan@hartkopp.net>
+    can: bcm: use call_rcu() instead of costly synchronize_rcu()
+
+Jann Horn <jannh@google.com>
+    mm/slub: add missing TID updates on slab deactivation
+
+Sabrina Dubroca <sd@queasysnail.net>
+    esp: limit skb_page_frag_refill use to a single page
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                          |   4 +-
+ arch/arm/mach-at91/pm.c                           |   2 +-
+ arch/arm/mach-meson/platsmp.c                     |   2 +
+ arch/powerpc/platforms/powernv/rng.c              |  16 +-
+ drivers/dma/at_xdmac.c                            |   5 +
+ drivers/dma/pl330.c                               |   2 +-
+ drivers/dma/ti/dma-crossbar.c                     |   5 +
+ drivers/i2c/busses/i2c-cadence.c                  |   1 +
+ drivers/iommu/dmar.c                              |   2 +-
+ drivers/misc/cardreader/rtsx_usb.c                |  27 ++-
+ drivers/net/can/grcan.c                           |   1 -
+ drivers/net/can/usb/gs_usb.c                      |  23 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |  25 ++-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  | 255 ++++++++++++----------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |   4 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 119 +++++-----
+ drivers/net/ethernet/ibm/ibmvnic.c                |   9 +
+ drivers/net/usb/usbnet.c                          |  17 +-
+ drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c        |  10 +-
+ drivers/video/fbdev/core/fbcon.c                  |   5 +
+ fs/xfs/xfs_inode.c                                |   1 -
+ include/linux/rtsx_usb.h                          |   2 -
+ include/net/esp.h                                 |   2 -
+ include/video/of_display_timing.h                 |   2 +
+ lib/idr.c                                         |   4 +-
+ mm/slub.c                                         |   4 +-
+ net/can/bcm.c                                     |  18 +-
+ net/ipv4/esp4.c                                   |   5 +-
+ net/ipv6/esp6.c                                   |   5 +-
+ net/rose/rose_route.c                             |   4 +-
+ tools/testing/selftests/net/forwarding/lib.sh     |   6 +-
+ 31 files changed, 357 insertions(+), 230 deletions(-)
 
 

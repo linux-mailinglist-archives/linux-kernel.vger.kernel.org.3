@@ -2,122 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AE457068F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CF957068E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiGKPEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S231940AbiGKPEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGKPEl (ORCPT
+        with ESMTP id S229670AbiGKPE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:04:41 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E117025595
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:04:40 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bu42so9234503lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RgUS82K2zhP325p8wjy8l4MlvN11hbzE1cFNOBCQxvk=;
-        b=GdTS2TUW+MKBGeytBsDh+01B8SSagYtpNa8iZEYMVgtRkJXiVtGKG/Sn6L5ulw8VZj
-         USog3UCmjJyVfyYP4CazkBpndDGdLflG5tl8u+wgZCDolfKCyP2ImFnZKFQAv9N9Gv/p
-         8Y/enTeqUR01OOvMjLRme6G7rwT7cxL4FTfKviVk8xEEzEfRyAvRfFJcTF8DVUHf6do9
-         zY60LXSuWxJPQXKyauTzwiqNm9ayDmYh5YRxwV9s/jEiDKgIk0G6M/fZfABsSksWwWGh
-         ahxN9jgXWZPpmmyxkO/ozmGhIlPfacXrl6v9AHHIlS2S2T6heTMNhQWPqsgSt3T8gvgi
-         Tslw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RgUS82K2zhP325p8wjy8l4MlvN11hbzE1cFNOBCQxvk=;
-        b=7mB0v0GSm0a1gn11RJ6muMnHx1OIpil1uV4+b7xLC4Blpon0PKqbTZ77ZVfQwkVt42
-         PaIMFOvhhxZ+VnXLym3XiXqBl2MnsiCPq5kcy4c8sZCiksS9SS1w28gyqpRSAMWAoRPv
-         6+nYCGgFXMcqT+AW1Py8f9ynRURntPR+/7G68Dyjno9wRuZuftM00dkvXrUf98yFq9Xw
-         0IySDLDMz0kQ9l4Rbx3k0iedu/Sfj+7RfveaTD1FSrITGslFysLw8nZA5iIWsWjOT91j
-         XBwkom06lvxiWInuOwo2KN/9OvhpRKg8/sveiZhoFkokXmffeaZcsXzHFuVFaxkds59M
-         ddrA==
-X-Gm-Message-State: AJIora/N5/Ex2B5rA+64ohnQZTKM+YBk/hRWsOM5rAc3s9fpPmMbjliL
-        LYAhC8hpH6n9ZUPAcB1IDd9Gxo0RPxlbP5G8D/qMdPIeL7A=
-X-Google-Smtp-Source: AGRyM1t+zU3BMjodTIBb1odDySeQMaK1DpIwSRMsOXG7y3vqRH+ot5y07mqKhFJNT1tfn6xpW3t0PAbm6Dio/ktMQOg=
-X-Received: by 2002:a05:6512:33c4:b0:489:da1c:76cc with SMTP id
- d4-20020a05651233c400b00489da1c76ccmr5240202lfg.237.1657551879124; Mon, 11
- Jul 2022 08:04:39 -0700 (PDT)
+        Mon, 11 Jul 2022 11:04:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135EC1F2F7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:04:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F1B66158E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:04:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F079FC34115;
+        Mon, 11 Jul 2022 15:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657551867;
+        bh=j4qQMw/sM7y7phwzdA4CGQKgj7hvSPMR5J++DJHhS50=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=uJ9N1fi9KuP1iYsVzBh7WnT0RLUUbPFPrfzfoDvK3Sfibm97PW72Xb5Tcygz55W4p
+         6aWJ/GpYyjxQxuci4KiNcP1mVfAM17FX7EPeAjLEEB9yfsPDUWy51ASeEPI3o7GwH+
+         wLWCNg0lCRvQsxFDIY8vH+EtxxsvJ6zDkhjupBOXV+QCnRlBqMhLRqVmQWUSzO/uUo
+         oPlqTLRf80pX0n3bTdGsnu8FdNoCvK7tlTvkeNzImadWhAU0bL5wme0VhADtBw0830
+         QemRIoRJ2Xm6sS/s2a9U0exX4kkk8uE0trq7R2s0677ywIzVoFi0kV9KvVdod3voe7
+         JucoFp5BAUjYA==
+From:   Mark Brown <broonie@kernel.org>
+To:     alexandru.elisei@arm.com, linux-rockchip@lists.infradead.org,
+        lgirdwood@gmail.com, tiwai@suse.com, alsa-devel@alsa-project.org,
+        judyhsiao@chromium.org, heiko@sntech.de,
+        linux-kernel@vger.kernel.org, perex@perex.cz,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220711130522.401551-1-alexandru.elisei@arm.com>
+References: <20220711130522.401551-1-alexandru.elisei@arm.com>
+Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix NULL pointer dereference when pinctrl is not found
+Message-Id: <165755186571.461155.936395477737950981.b4-ty@kernel.org>
+Date:   Mon, 11 Jul 2022 16:04:25 +0100
 MIME-Version: 1.0
-References: <20220708071802.751003711@infradead.org> <20220708071834.149930530@infradead.org>
- <CAG48ez1eFwoDYnuyqp3FSDCaEOFsQEbBzsT4pGS7Xw0eLVf+nQ@mail.gmail.com> <Ysk+aUdA+3olVRtT@worktop.programming.kicks-ass.net>
-In-Reply-To: <Ysk+aUdA+3olVRtT@worktop.programming.kicks-ass.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 11 Jul 2022 17:04:02 +0200
-Message-ID: <CAG48ez0XK-js7h3Aes=W7cpctkuQ0_aAjFb2SmOdFfszZgoZOQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] mmu_gather: Force tlb-flush VM_PFNMAP vmas
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>, David Miller <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 9, 2022 at 10:38 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> On Fri, Jul 08, 2022 at 04:04:38PM +0200, Jann Horn wrote:
-> > On Fri, Jul 8, 2022 at 9:19 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > @@ -507,16 +502,22 @@ static inline void tlb_start_vma(struct
-> > >
-> > >  static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
-> > >  {
-> > > -       if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
-> > > +       if (tlb->fullmm)
-> > >                 return;
-> >
-> > Is this correct, or would there still be a race between MM teardown
-> > (which sets ->fullmm, see exit_mmap()->tlb_gather_mmu_fullmm()) and
-> > unmap_mapping_range()? My understanding is that ->fullmm only
-> > guarantees a flush at tlb_finish_mmu(), but here we're trying to
-> > ensure a flush before unlink_file_vma().
->
-> fullmm is when the last user of the mm goes away, there should not be
+On Mon, 11 Jul 2022 14:05:22 +0100, Alexandru Elisei wrote:
+> Commit a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO") switched
+> BCLK to GPIO functions when probing the i2s bus interface, but missed
+> adding a check for when devm_pinctrl_get() returns an error.  This can lead
+> to the following NULL pointer dereference on a rockpro64-v2 if there are no
+> "pinctrl" properties in the i2s device tree node:
+> 
+> [    0.658381] rockchip-i2s ff880000.i2s: failed to find i2s default state
+> [    0.658993] rockchip-i2s ff880000.i2s: failed to find i2s gpio state
+> [    0.660072] rockchip-i2s ff890000.i2s: failed to find i2s default state
+> [    0.660670] rockchip-i2s ff890000.i2s: failed to find i2s gpio state
+> [    0.661716] rockchip-i2s ff8a0000.i2s: failed to find i2s pinctrl
+> [    0.662276] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000005
+> [    0.663061] Mem abort info:
+> [    0.663317]   ESR = 0x0000000096000004
+> [    0.663658]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    0.664136]   SET = 0, FnV = 0
+> [    0.664171] mmc2: SDHCI controller on fe330000.mmc [fe330000.mmc] using ADMA
+> [    0.664409]   EA = 0, S1PTW = 0
+> [    0.664415]   FSC = 0x04: level 0 translation fault
+> [    0.664421] Data abort info:
+> [    0.666050]   ISV = 0, ISS = 0x00000004
+> [    0.666399]   CM = 0, WnR = 0
+> [    0.666671] [0000000000000005] user address but active_mm is swapper
+> [    0.667240] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [    0.667742] Modules linked in:
+> [    0.668028] CPU: 5 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc6 #300
+> [    0.668608] Hardware name: Pine64 RockPro64 v2.0 (DT)
+> [    0.669062] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.669689] pc : pinctrl_lookup_state+0x20/0xc0
+> [    0.670110] lr : rockchip_i2s_probe+0x1a8/0x54c
+> [    0.670527] sp : ffff80000a17bb30
+> [    0.670829] x29: ffff80000a17bb30 x28: 0000000000000000 x27: ffff8000097c04c8
+> [    0.671480] x26: ffff800009871060 x25: ffff800009871078 x24: ffff000001c11368
+> [    0.672129] x23: ffff8000092dc850 x22: ffffffffffffffed x21: ffff8000096f7e98
+> [    0.672776] x20: ffffffffffffffed x19: ffff000001d92480 x18: ffffffffffffffff
+> [    0.673423] x17: 000000040044ffff x16: ffff0000f77db2d0 x15: 0764076e07690766
+> [    0.674070] x14: 0720076f07740720 x13: ffff800009e129f0 x12: 000000000000038d
+> [    0.674717] x11: 000000000000012f x10: ffff800009e6a9f0 x9 : ffff800009e129f0
+> [    0.675364] x8 : 00000000ffffefff x7 : ffff800009e6a9f0 x6 : 80000000fffff000
+> [    0.676011] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> [    0.676657] x2 : 0000000000000000 x1 : ffff8000096f7e98 x0 : ffffffffffffffed
+> [    0.677304] Call trace:
+> [    0.677531]  pinctrl_lookup_state+0x20/0xc0
+> [    0.677914]  rockchip_i2s_probe+0x1a8/0x54c
+> [    0.678297]  platform_probe+0x68/0xc0
+> [    0.678638]  really_probe.part.0+0x9c/0x2ac
+> [    0.679027]  __driver_probe_device+0x98/0x144
+> [    0.679429]  driver_probe_device+0xac/0x140
+> [    0.679814]  __driver_attach+0xf8/0x184
+> [    0.680169]  bus_for_each_dev+0x70/0xd0
+> [    0.680524]  driver_attach+0x24/0x30
+> [    0.680856]  bus_add_driver+0x150/0x200
+> [    0.681210]  driver_register+0x78/0x130
+> [    0.681560]  __platform_driver_register+0x28/0x34
+> [    0.681988]  rockchip_i2s_driver_init+0x1c/0x28
+> [    0.682407]  do_one_initcall+0x50/0x1c0
+> [    0.682760]  kernel_init_freeable+0x204/0x288
+> [    0.683160]  kernel_init+0x28/0x13c
+> [    0.683482]  ret_from_fork+0x10/0x20
+> [    0.683816] Code: aa0003f4 a9025bf5 aa0003f6 aa0103f5 (f8418e93)
+> [    0.684365] ---[ end trace 0000000000000000 ]---
+> [    0.684813] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> [    0.685500] SMP: stopping secondary CPUs
+> [    0.685995] Kernel Offset: disabled
+> [    0.686310] CPU features: 0x800,00105811,00001086
+> [    0.686736] Memory Limit: none
+> [    0.687021] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> 
+> [...]
 
-(FWIW, there also seems to be an error path in write_ldt ->
-free_ldt_pgtables -> tlb_gather_mmu_fullmm where ->fullmm can be set
-for a TLB shootdown in a live process, but that's irrelevant for this
-patch.)
+Applied to
 
-> any races on the address space at that time. Also see the comment with
-> tlb_gather_mmu_fullmm() and its users.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Ah, right, aside from the LDT weirdness, fullmm is only used in
-exit_mmap, and at that point there can be no more parallel access to
-the MM except for remote memory reaping (which is synchronized against
-using mmap_write_lock()) and rmap walks...
+Thanks!
 
-> Subject: mmu_gather: Force TLB-flush VM_PFNMAP|VM_MIXEDMAP vmas
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Thu Jul 7 11:51:16 CEST 2022
->
-> Jann reported a race between munmap() and unmap_mapping_range(), where
-> unmap_mapping_range() will no-op once unmap_vmas() has unlinked the
-> VMA; however munmap() will not yet have invalidated the TLBs.
->
-> Therefore unmap_mapping_range() will complete while there are still
-> (stale) TLB entries for the specified range.
->
-> Mitigate this by force flushing TLBs for VM_PFNMAP ranges.
->
-> Reported-by: Jann Horn <jannh@google.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+[1/1] ASoC: rockchip: i2s: Fix NULL pointer dereference when pinctrl is not found
+      commit: 26b9f2fa7b1c6aba6fa9b83274a3e54868f69562
 
-Looks good to me.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

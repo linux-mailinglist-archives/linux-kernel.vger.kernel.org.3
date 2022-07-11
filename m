@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BF35706B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFAC5706B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiGKPKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S232174AbiGKPLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiGKPKt (ORCPT
+        with ESMTP id S232077AbiGKPLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:10:49 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFE7747B8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:10:48 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id 190so5184647iou.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kKpFWpGY0hXoQIb5wD82pXS413+2Z65GNbTveQzCW18=;
-        b=MRk9+HbRvfJ+4gcEttrxCskOj0BK2Cmbb1YFoaYKliW3IGq/Hs3LzP3/0MXew7UWL+
-         VMc9mfyIm8XdcJMDFwVljpTXUGN8vX/0CDFLhD077U3qgRxYZfI9qE5L2ZY8AHZ1tsdX
-         a7lJuohMg43lxOXjYgkUdRaxzihAQM2V4K4DCG6faS1Db/JM5sL/UM772OpiwDpsvcaT
-         f76P2OWkydPIY5iuZCcyZud8fAsRcJsaaCF7zZ83iKxOP3weRJGLV1zSx0rpTv+F97Oy
-         HYOn6LQRv3VIZB8rPG2bEtURRjAD4wJInyRDl9/1H9brKWQky7DUVT6/kVnHsep08U4J
-         Tk5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kKpFWpGY0hXoQIb5wD82pXS413+2Z65GNbTveQzCW18=;
-        b=lCUfbih57PKuxQAFAkyptrzH7VAsk2/I8m62WrrnsClVNZWhbNr/yUeQxXNMD3oq/O
-         xX4FDciNPxO4k68g07TzE0jxJaa+miqs0VU7NS0XNWBuaGJPegN7V7dyjigKcsG0IYXa
-         v6bxftYClm0IruTjDvD6x5KzbgXisPmHViUeV9AZiLtzPQnOjSNZBjMQ1exfgDhYwcVm
-         x4pVPv+KIAzSo5zeTVIXlENImhVxWKyC/+P+dcRvSnPcvpkMEKSwmq8rLAKnRa6vcas1
-         /1Q+gxQE0HZLSnj8Tu78OgWOWa7OxCYGCLDqT4QYfYZkWeTK1ZTqgD/H0srcUkg92QPf
-         lmGQ==
-X-Gm-Message-State: AJIora9Ga1GhMKq5AaqFWsItkFQy0CGW8pR7xOShi1/3Mxcwf8Xdy18z
-        1G6MXahfBEo/wQMoOhbVsOtsQ73Cf8CmxvodYaiVRg==
-X-Google-Smtp-Source: AGRyM1u9fCra3XN36tzejTX5ACgKM/FySKUP1jrWJwaXmYXu0WfZ3ZjlZ11EZ4uX7jFNpiSTHKHVKuAM/yGVSvCp8kU=
-X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id
- m13-20020a0566022e8d00b0064fb683c70dmr9382841iow.62.1657552247691; Mon, 11
- Jul 2022 08:10:47 -0700 (PDT)
+        Mon, 11 Jul 2022 11:11:30 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF05A2E2;
+        Mon, 11 Jul 2022 08:11:28 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0D5272DC;
+        Mon, 11 Jul 2022 15:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0D5272DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1657552288; bh=hSeU9FXMoITez72aytKTs7KEhJYRCmp8Bx8U2+pCzbI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=V2AmnJYfF9ZWxEnWfd1sgkIJ6uzTaV240/uLdk1LNrvHOg1VW/nRW+QrYVkBW0GHe
+         8V6u8tijpGygd+4R1Gf8gFTjKAQH2AnRUdG/ON/NTwlOOFp6EtH/QafxT+E3Rho+Py
+         SAYJjO/yo8WbiwkIScQfSkNOSMuSwv1Vs84YPwlDs/W8y1s7o1njjQBTNS1TycmSTQ
+         HQ9l+ZTIgtFiDpzzEsD+2qSxDyQzOqD+62hl3oaMryaPjFc34gnDtYoK0NmpIVlDCo
+         pmPbEDLDULYENcpDQ9e7mvjLyQscjNb3FOjPg/cG2B+ExDkCfGmf1ts2lAjr6yWPyB
+         cm93bj6KL4Npg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-doc@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Marek Vasut <marex@denx.de>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH 1/4] docs: arm: stm32: introduce STM32 DMA-MDMA chaining
+ feature
+In-Reply-To: <20220711084703.268481-2-amelie.delaunay@foss.st.com>
+References: <20220711084703.268481-1-amelie.delaunay@foss.st.com>
+ <20220711084703.268481-2-amelie.delaunay@foss.st.com>
+Date:   Mon, 11 Jul 2022 09:11:27 -0600
+Message-ID: <87a69ffzvk.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220708162711.1309633-1-dlatypov@google.com> <20220711144651.yekrivauz3phkuvm@houat>
-In-Reply-To: <20220711144651.yekrivauz3phkuvm@houat>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 11 Jul 2022 08:10:36 -0700
-Message-ID: <CAGS_qxp=UAJ19zQOZKP8ywPiNAj4wT80ubH2YW060mmADoqBcw@mail.gmail.com>
-Subject: Re: [PATCH v3] kunit: tool: Enable virtio/PCI by default on UML
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 7:46 AM Maxime Ripard <maxime@cerno.tech> wrote:
+Amelie Delaunay <amelie.delaunay@foss.st.com> writes:
+
+> STM32 DMA-MDMA chaining feature is available on STM32 SoCs which embed
+> STM32 DMAMUX, DMA and MDMA controllers. It is the case on STM32MP1 SoCs but
+> also on STM32H7 SoCs. But focus is on STM32MP1 SoCs, using DDR.
+> This documentation aims to explain how to use STM32 DMA-MDMA chaining
+> feature in drivers of STM32 peripheral having request lines on STM32 DMA.
 >
-> Unfortunately, this breaks the clock tests in next-20220711:
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/clk/.kunitconfig  --raw_output
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> ---
+>  .../arm/stm32/stm32-dma-mdma-chaining.rst     | 365 ++++++++++++++++++
+>  1 file changed, 365 insertions(+)
+>  create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
 
-Thanks, this is indeed an issue.
+When you add a new RST file you also need to add it to index.rst
+somewhere so that it becomes part of the docs build.
 
-I remember noticing this in early April.
-I incorrectly remembered that a fix had been sent.
+> diff --git a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+> new file mode 100644
+> index 000000000000..bfbbadc45aa7
+> --- /dev/null
+> +++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+> @@ -0,0 +1,365 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=======================
+> +STM32 DMA-MDMA chaining
+> +=======================
+> +
+> +
+> +Introduction
+> +------------
+> +
+> +  This document describes the STM32 DMA-MDMA chaining feature. But before going further, let's
+> +  introduce the peripherals involved.
 
-A more minimal reproducer:
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/clk
-'clk-gate-test.clk_gate_test_enable'
+Please keep to the 80-column limit for documentation, it makes it easier
+to read.
 
-The part of the test that becomes problematic with this patch (i.e.
-enabling logic iomem) is the cast on line 143.
+> +  To offload data transfers from the CPU, STM32 microprocessors (MPUs) embed direct memory access
+> +  controllers (DMA).
+> +
+> +  STM32MP1 SoCs embed both STM32 DMA and STM32 MDMA controllers. STM32 DMA request routing
+> +  capabilities are enhanced by a DMA request multiplexer (STM32 DMAMUX).
+> +
+> +  **STM32 DMAMUX**
+> +
+> +  STM32 DMAMUX routes any DMA request from a given peripheral to any STM32 DMA controller (STM32MP1
+> +  counts two STM32 DMA controllers) channels.
+> +
+> +  **STM32 DMA**
+> +
+> +  STM32 DMA is mainly used to implement central data buffer storage (usually in the system SRAM) for
+> +  different peripheral. It can access external RAMs but without the ability to generate convenient
+> +  burst transfer ensuring the best load of the AXI.
+> +
+> +  **STM32 MDMA**
+> +
+> +  STM32 MDMA (Master DMA) is mainly used to manage direct data transfers between RAM data buffers
+> +  without CPU intervention. It can also be used in a hierarchical structure that uses STM32 DMA as
+> +  first level data buffer interfaces for AHB peripherals, while the STM32 MDMA acts as a second
+> +  level DMA with better performance. As a AXI/AHB master, STM32 MDMA can take control of the AXI/AHB
+> +  bus.
+> +
+> +
+> +Principles
+> +----------
+> +
+> +  STM32 DMA-MDMA chaining feature relies on the strengths of STM32 DMA and STM32 MDMA controllers.
+> +
+> +  STM32 DMA has a circular Double Buffer Mode (DBM). At each end of transaction (when DMA data
+> +  counter - DMA_SxNDTR - reaches 0), the memory pointers (configured with DMA_SxSM0AR and
+> +  DMA_SxM1AR) are swapped and the DMA data counter is automatically reloaded. This allows the SW or
+> +  the STM32 MDMA to process one memory area while the second memory area is being filled/used by the
+> +  STM32 DMA transfer.
+> +
+> +  With STM32 MDMA linked-list mode, a single request initiates the data array (collection of nodes)
+> +  to be transferred until the linked-list pointer for the channel is null. The channel transfer
+> +  complete of the last node is the end of transfer, unless first and last nodes are linked to each
+> +  other, in such a case, the linked-list loops on to create a circular MDMA transfer.
+> +
+> +  STM32 MDMA has direct connections with STM32 DMA. This enables autonomous communication and
+> +  synchronization between peripherals, thus saving CPU resources and bus congestion. Transfer
+> +  Complete signal of STM32 DMA channel can triggers STM32 MDMA transfer. STM32 MDMA can clear the
+> +  request generated by the STM32 DMA by writing to its Interrupt Clear register (whose address is
+> +  stored in MDMA_CxMAR, and bit mask in MDMA_CxMDR).
+> +
+> +  .. csv-table:: STM32 MDMA interconnect table with STM32 DMA
+> +        :header: "STM32 DMAMUX channels", "STM32 DMA controllers channels",
+> +                 "STM32 DMA Transfer Complete signal", "STM32 MDMA request"
 
-   130  struct clk_gate_test_context {
-   131          void __iomem *fake_mem;
-   132          struct clk_hw *hw;
-   133          struct clk_hw *parent;
-   134          u32 fake_reg; /* Keep at end, KASAN can detect out of bounds */
-   135  };
-   136
-   137  static struct clk_gate_test_context
-*clk_gate_test_alloc_ctx(struct kunit *test)
-   138  {
-   139          struct clk_gate_test_context *ctx;
-   140
-   141          test->priv = ctx = kunit_kzalloc(test, sizeof(*ctx),
-GFP_KERNEL);
-   142          KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-   143          ctx->fake_mem = (void __force __iomem *)&ctx->fake_reg;
-   144
-   145          return ctx;
-   146  }
+If at all possible, please use simple tables; that makes the plain text
+documentation much easier to read.
 
-A simple fix we could carry in the KUnit branch is this:
+[...]
 
-diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
-index cdbc7d7deba9..2fbeb71316f8 100644
---- a/drivers/clk/.kunitconfig
-+++ b/drivers/clk/.kunitconfig
-@@ -2,3 +2,4 @@ CONFIG_KUNIT=y
- CONFIG_COMMON_CLK=y
- CONFIG_CLK_KUNIT_TEST=y
- CONFIG_CLK_GATE_KUNIT_TEST=y
-+CONFIG_UML_PCI_OVER_VIRTIO=n
+Thanks,
 
-The new ability to disable it comes from
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=8a7c6f859a20ca36a9e3ce71662de697898c9ef5
-
-Thoughts?
-
-Daniel
+jon

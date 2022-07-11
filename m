@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6028756FB03
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1737156FBE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiGKJZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S232822AbiGKJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiGKJXp (ORCPT
+        with ESMTP id S232787AbiGKJfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:23:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366575C9CE;
-        Mon, 11 Jul 2022 02:13:59 -0700 (PDT)
+        Mon, 11 Jul 2022 05:35:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7E52FCC;
+        Mon, 11 Jul 2022 02:18:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 839F7B80D2C;
-        Mon, 11 Jul 2022 09:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68C2C34115;
-        Mon, 11 Jul 2022 09:13:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9EA39CE1257;
+        Mon, 11 Jul 2022 09:18:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8D0C34115;
+        Mon, 11 Jul 2022 09:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530837;
-        bh=VEDEAuGYpp7Jizzi0f+s+J5j7QxYR9ToluTbgD9NrJM=;
+        s=korg; t=1657531122;
+        bh=Rt/Sio1pJh64bojAYm8X1d6JRxSAP0jT01fXLbbdLhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2resyBbw/OlUMOerXn65pVwMikk/Ti9GnUpjFMWBrLxmihmYIGIUXee8/ZT3fw/cX
-         j8oL+FeV9ExSYkQw0p5s1cE26mK6HUZNFuN/qQklYaL2uqQuTcqMpzj9PCgaJYDQK5
-         vHIz8RR1m72dZqBybkoAe9Doj36LdokxQdLfLkZk=
+        b=VDTrIBbAKh4MvlxlQSuJhmM+7YgnDPP1f3RshffKqVDWqnyRaojs7oCibEOqVCItb
+         0DuHZrBVJjd22ZW+TpfhlsOpUXvgUPZ6A/LsPcWKzpqpWSgvySF+L1FLus0Lg3OfC6
+         T80/GGcaSNz4TLIhfXv31yj4EafvUStQb/VeijRA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.10 55/55] dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
-Date:   Mon, 11 Jul 2022 11:07:43 +0200
-Message-Id: <20220711090543.372118490@linuxfoundation.org>
+        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.18 104/112] dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max typo
+Date:   Mon, 11 Jul 2022 11:07:44 +0200
+Message-Id: <20220711090552.522591209@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Samuel Holland <samuel@sholland.org>
 
-commit 615a4bfc426e11dba05c2cf343f9ac752fb381d2 upstream.
+commit 607a48c78e6b427b0b684d24e61c19e846ad65d6 upstream.
 
-of_find_device_by_node() takes reference, we should use put_device()
-to release it when not need anymore.
+The conditional block for variants with a second clock should have set
+minItems, not maxItems, which was already 2. Since clock-names requires
+two items, this typo should not have caused any problems.
 
-Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Link: https://lore.kernel.org/r/20220605042723.17668-1-linmq006@gmail.com
+Fixes: edd14218bd66 ("dt-bindings: dmaengine: Convert Allwinner A31 and A64 DMA to a schema")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220702031903.21703-1-samuel@sholland.org
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/ti/dma-crossbar.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/dma/ti/dma-crossbar.c
-+++ b/drivers/dma/ti/dma-crossbar.c
-@@ -245,6 +245,7 @@ static void *ti_dra7_xbar_route_allocate
- 	if (dma_spec->args[0] >= xbar->xbar_requests) {
- 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
- 			dma_spec->args[0]);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
+--- a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
+@@ -64,7 +64,7 @@ if:
+ then:
+   properties:
+     clocks:
+-      maxItems: 2
++      minItems: 2
  
-@@ -252,12 +253,14 @@ static void *ti_dra7_xbar_route_allocate
- 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
- 	if (!dma_spec->np) {
- 		dev_err(&pdev->dev, "Can't get DMA master\n");
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
- 	map = kzalloc(sizeof(*map), GFP_KERNEL);
- 	if (!map) {
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-@@ -269,6 +272,7 @@ static void *ti_dra7_xbar_route_allocate
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
+   required:
+     - clock-names
 
 

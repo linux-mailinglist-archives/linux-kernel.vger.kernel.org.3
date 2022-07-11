@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AFD56F9AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03D556F9C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiGKJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S229530AbiGKJIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiGKJHO (ORCPT
+        with ESMTP id S231195AbiGKJH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:07:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B7522BD6;
-        Mon, 11 Jul 2022 02:07:07 -0700 (PDT)
+        Mon, 11 Jul 2022 05:07:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6DC2497E;
+        Mon, 11 Jul 2022 02:07:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1AF06115B;
-        Mon, 11 Jul 2022 09:07:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4A1C34115;
-        Mon, 11 Jul 2022 09:07:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0163CB80D2C;
+        Mon, 11 Jul 2022 09:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1AAC341CA;
+        Mon, 11 Jul 2022 09:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530426;
-        bh=3Rmk8qZWpW2yMzZ5SsMzHiMd/7zR1ly06CyIaurBVtM=;
+        s=korg; t=1657530451;
+        bh=41osInqy4wOa4+2t1XImaRvNj+PBf+rtJFHd/tCOres=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9LlgR20keYs0zimBSBBjgZ/Zn9LbHAx8ptUTcfGmUCcn+ky8hGMjP3Dvnoc4D29v
-         pNcV7PqnUNc6Fj93TTDWuMzIg9Z32jHbkT3dway5dSqd6WxSXZcZetNa7jmuSNPKcz
-         UuKh4gLfL8wbxOD+QWEJBtJqgc3uegZN650uo5Q8=
+        b=Lmb0JZlxpwT+seIibXmkiL2t6lrOZ5T/uqRPfsiXfsE5ObdCDQmzBON3FDvD0/D1t
+         A3d27dOIN/pBWsacsKuSoEmLSli7raawFDOevUvOE1j2aNpQCOzSdnz1BPPUHDMj+m
+         wdPwEMLg5z4vMOHvUcBZGGeVQPlfEg52atXpuS6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.9 07/14] video: of_display_timing.h: include errno.h
+        stable@vger.kernel.org, Sabrina Dubroca <sd@queasysnail.net>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 4.14 01/17] esp: limit skb_page_frag_refill use to a single page
 Date:   Mon, 11 Jul 2022 11:06:26 +0200
-Message-Id: <20220711090535.736124488@linuxfoundation.org>
+Message-Id: <20220711090536.292670494@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
-References: <20220711090535.517697227@linuxfoundation.org>
+In-Reply-To: <20220711090536.245939953@linuxfoundation.org>
+References: <20220711090536.245939953@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,33 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hsin-Yi Wang <hsinyi@chromium.org>
+From: Sabrina Dubroca <sd@queasysnail.net>
 
-commit 3663a2fb325b8782524f3edb0ae32d6faa615109 upstream.
+commit 5bd8baab087dff657e05387aee802e70304cc813 upstream.
 
-If CONFIG_OF is not enabled, default of_get_display_timing() returns an
-errno, so include the header.
+Commit ebe48d368e97 ("esp: Fix possible buffer overflow in ESP
+transformation") tried to fix skb_page_frag_refill usage in ESP by
+capping allocsize to 32k, but that doesn't completely solve the issue,
+as skb_page_frag_refill may return a single page. If that happens, we
+will write out of bounds, despite the check introduced in the previous
+patch.
 
-Fixes: 422b67e0b31a ("videomode: provide dummy inline functions for !CONFIG_OF")
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Helge Deller <deller@gmx.de>
+This patch forces COW in cases where we would end up calling
+skb_page_frag_refill with a size larger than a page (first in
+esp_output_head with tailen, then in esp_output_tail with
+skb->data_len).
+
+Fixes: cac2661c53f3 ("esp4: Avoid skb_cow_data whenever possible")
+Fixes: 03e2a30f6a27 ("esp6: Avoid skb_cow_data whenever possible")
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/video/of_display_timing.h |    2 ++
- 1 file changed, 2 insertions(+)
+ include/net/esp.h |    2 --
+ net/ipv4/esp4.c   |    5 ++---
+ net/ipv6/esp6.c   |    5 ++---
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
---- a/include/video/of_display_timing.h
-+++ b/include/video/of_display_timing.h
-@@ -9,6 +9,8 @@
- #ifndef __LINUX_OF_DISPLAY_TIMING_H
- #define __LINUX_OF_DISPLAY_TIMING_H
+--- a/include/net/esp.h
++++ b/include/net/esp.h
+@@ -4,8 +4,6 @@
  
-+#include <linux/errno.h>
-+
- struct device_node;
- struct display_timing;
- struct display_timings;
+ #include <linux/skbuff.h>
+ 
+-#define ESP_SKB_FRAG_MAXSIZE (PAGE_SIZE << SKB_FRAG_PAGE_ORDER)
+-
+ struct ip_esp_hdr;
+ 
+ static inline struct ip_esp_hdr *ip_esp_hdr(const struct sk_buff *skb)
+--- a/net/ipv4/esp4.c
++++ b/net/ipv4/esp4.c
+@@ -257,7 +257,6 @@ int esp_output_head(struct xfrm_state *x
+ 	struct page *page;
+ 	struct sk_buff *trailer;
+ 	int tailen = esp->tailen;
+-	unsigned int allocsz;
+ 
+ 	/* this is non-NULL only with UDP Encapsulation */
+ 	if (x->encap) {
+@@ -267,8 +266,8 @@ int esp_output_head(struct xfrm_state *x
+ 			return err;
+ 	}
+ 
+-	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
+-	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
++	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
++	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
+ 		goto cow;
+ 
+ 	if (!skb_cloned(skb)) {
+--- a/net/ipv6/esp6.c
++++ b/net/ipv6/esp6.c
+@@ -223,10 +223,9 @@ int esp6_output_head(struct xfrm_state *
+ 	struct page *page;
+ 	struct sk_buff *trailer;
+ 	int tailen = esp->tailen;
+-	unsigned int allocsz;
+ 
+-	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
+-	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
++	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
++	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
+ 		goto cow;
+ 
+ 	if (!skb_cloned(skb)) {
 
 

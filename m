@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCB856FDCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B4B56FAC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiGKKAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S231809AbiGKJVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiGKJ7L (ORCPT
+        with ESMTP id S231792AbiGKJVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:59:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15FD624A7;
-        Mon, 11 Jul 2022 02:27:44 -0700 (PDT)
+        Mon, 11 Jul 2022 05:21:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6752317D;
+        Mon, 11 Jul 2022 02:12:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69D4B613F8;
-        Mon, 11 Jul 2022 09:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD29C34115;
-        Mon, 11 Jul 2022 09:27:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EC1FB80E5E;
+        Mon, 11 Jul 2022 09:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4C5C341CB;
+        Mon, 11 Jul 2022 09:12:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531653;
-        bh=wpauSRjKkxczRqOFAKR0G9QBSNrt+x6DlEL/bNnxU/o=;
+        s=korg; t=1657530768;
+        bh=yY6ZmKGIUYpCOYL2TPYJ91ORRoU2do9IDRh0Y6n6gm8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h/rL3QdQpqogNpHlkVkeJr9A22NpOL9+wytUBTQGbFNWi+j3x96wcYLQWrLGp8AeP
-         bgTeRwbFxUxX63XmE2CQL67Vy13NY6e0HRAe7pevomPemKwtP5bpHY5NOVY2f5snUx
-         qfYs4GvXIkYs6FetiSLFZNuw4Fpb2auRtBZ2BxHQ=
+        b=VRnows2rf8PgORzojutjk8ffDlG7eFfltSmMbmi3eIl9QqV0pN6UEEJSPXtbswGX9
+         Xd/N5HaV37c4MTPGWAkeFbouLdvY3VViZdjbRUKUQ5tcxO+O0dD14Vlshw85JMNuwy
+         NM2jS9itgDnuSwSF4xEYep9FUHZfKruWThzYI670=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 184/230] ARM: mxs_defconfig: Enable the framebuffer
-Date:   Mon, 11 Jul 2022 11:07:20 +0200
-Message-Id: <20220711090609.329087746@linuxfoundation.org>
+Subject: [PATCH 5.10 33/55] arm64: dts: qcom: msm8992-*: Fix vdd_lvs1_2-supply typo
+Date:   Mon, 11 Jul 2022 11:07:21 +0200
+Message-Id: <20220711090542.738739670@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 
-[ Upstream commit b10ef5f2ddb3a5a22ac0936c8d91a50ac5e55e77 ]
+[ Upstream commit 5fb779558f1c97e2bf2794cb59553e569c38e2f9 ]
 
-Currently, when booting Linux on a imx28-evk board there is
-no display activity.
+"make dtbs_check" complains about the missing "-supply" suffix for
+vdd_lvs1_2 which is clearly a typo, originally introduced in the
+msm8994-smd-rpm.dtsi file and apparently later copied to
+msm8992-xiaomi-libra.dts:
 
-Enable CONFIG_FB which is nowadays required for CONFIG_DRM_PANEL_LVDS,
-CONFIG_DRM_PANEL_SIMPLE, CONFIG_DRM_PANEL_SEIKO_43WVF1G,
-CONFIG_FB_MODE_HELPERS, CONFIG_BACKLIGHT_PWM, CONFIG_BACKLIGHT_GPIO,
-CONFIG_FRAMEBUFFER_CONSOLE, CONFIG_LOGO, CONFIG_FONTS, CONFIG_FONT_8x8
-and CONFIG_FONT_8x16.
+msm8992-lg-bullhead-rev-10/101.dtb: pm8994-regulators: 'vdd_lvs1_2'
+does not match any of the regexes:
+  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
+>From schema: regulator/qcom,smd-rpm-regulator.yaml
 
-Based on commit c54467482ffd ("ARM: imx_v6_v7_defconfig: enable fb").
+msm8992-xiaomi-libra.dtb: pm8994-regulators: 'vdd_lvs1_2'
+does not match any of the regexes:
+  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
+>From schema: regulator/qcom,smd-rpm-regulator.yaml
 
-Fixes: f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Reported-by: Rob Herring <robh@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+Fixes: f3b2c99e73be ("arm64: dts: Enable onboard SDHCI on msm8992")
+Fixes: 0f5cdb31e850 ("arm64: dts: qcom: Add Xiaomi Libra (Mi 4C) device tree")
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220627135938.2901871-1-stephan.gerhold@kernkonzept.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/configs/mxs_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts | 2 +-
+ arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
-index ca32446b187f..f53086ddc48b 100644
---- a/arch/arm/configs/mxs_defconfig
-+++ b/arch/arm/configs/mxs_defconfig
-@@ -93,6 +93,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_DRM=y
- CONFIG_DRM_PANEL_SEIKO_43WVF1G=y
- CONFIG_DRM_MXSFB=y
-+CONFIG_FB=y
- CONFIG_FB_MODE_HELPERS=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
+diff --git a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
+index cb82864a90ef..42f2b235011f 100644
+--- a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
++++ b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
+@@ -64,7 +64,7 @@
+ 		vdd_l17_29-supply = <&vreg_vph_pwr>;
+ 		vdd_l20_21-supply = <&vreg_vph_pwr>;
+ 		vdd_l25-supply = <&pm8994_s5>;
+-		vdd_lvs1_2 = <&pm8994_s4>;
++		vdd_lvs1_2-supply = <&pm8994_s4>;
+ 
+ 		pm8994_s1: s1 {
+ 			regulator-min-microvolt = <800000>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+index 4f64ca3ea1ef..6ed2a9c01e8c 100644
+--- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
++++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+@@ -151,7 +151,7 @@
+ 		vdd_l17_29-supply = <&vreg_vph_pwr>;
+ 		vdd_l20_21-supply = <&vreg_vph_pwr>;
+ 		vdd_l25-supply = <&pm8994_s5>;
+-		vdd_lvs1_2 = <&pm8994_s4>;
++		vdd_lvs1_2-supply = <&pm8994_s4>;
+ 
+ 		pm8994_s1: s1 {
+ 			/* unused */
 -- 
 2.35.1
 

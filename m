@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23288570DBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD6F570DC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiGKW7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S231271AbiGKXCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiGKW7s (ORCPT
+        with ESMTP id S229476AbiGKXCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:59:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EA3509EB;
-        Mon, 11 Jul 2022 15:59:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E2B9B81611;
-        Mon, 11 Jul 2022 22:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6878C34115;
-        Mon, 11 Jul 2022 22:59:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657580384;
-        bh=pbckF8CQeGBYncZRbq1u1LrG1FBJr8f03PbBYkrf4UA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O93hKy3KCgZUlHegyC/RvwcSQJLVyXIbYrv2glU0Gw4+WHqB+BBoMlrJ3/UFD+MCo
-         /eLtLLV8iwEMp3dLqF2jjbOlrZ9UpWg9XnVimoy4bs6uV9gT5z/k74lif1lhbrZwdE
-         knyQO97OnjxtIHz5hwPXlUCFGsy3wYG+8NTFadq7usulIdOsUvGwrJaaKWrNXeZWpX
-         ev6Zlk43bzWQxe/QUBoGH/4AEFWVjzieesCS54sreRsfOrOTdtMM7K+VUvx1fhbLga
-         MF66FgbtqNvrXG9a0LLbuRA1jWloxsKt9E3dRbhLdqmOB4lxJNDEjvOpLMAQB/HFLP
-         wZqN/Z+f3W2vQ==
-Received: by pali.im (Postfix)
-        id 9AE529D7; Tue, 12 Jul 2022 00:59:41 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: aardvark: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
-Date:   Tue, 12 Jul 2022 00:59:15 +0200
-Message-Id: <20220711225915.13896-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220711221823.12154-1-pali@kernel.org>
-References: <20220711221823.12154-1-pali@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 19:02:03 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EC65FAE4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:02:02 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id c18-20020a17090a8d1200b001ef85196fb4so6561260pjo.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6HZTXRLqo/8phSSGx4LtiryFoKC4QXTfVKLTgEMjAPM=;
+        b=o3liI5oKlmf3CRZ3JudkUyA+S45s1xuUjQgg4qUAgzbUSSujxg49gSp0NnUZkgYNbR
+         rHpUSfdNJjROD77RNYHlkBV5fo8d1/p8YdE1na4Ny48l+efsyWXQBNtnscRZExG1oYRb
+         qEZ4Sf/+/R9glUdZqMpAImdqO9UMG2fyRv1SCg5Fk5v7dPr5D9GPf0ghw9lOpDQ0Ft48
+         +fEFM56q6B9ddNI9k8LzGZGsf1q3f7tZHqkeGZZ1UICHTPTvG69YFHVOp8QKJz4PEn0W
+         Ta/uaowo7hlglqqOdTBFbdM70PUUhgFgKc1Vy6+Ddgl24GW5avbvTKjdiPgPGHYxTM2W
+         BkGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6HZTXRLqo/8phSSGx4LtiryFoKC4QXTfVKLTgEMjAPM=;
+        b=lbj0S3Mt/xpIjjPNMgnuUmnk4Z/lKSyr7Vs3mt2djH6NYiTmwnWw7MdWJAdLLHfLfk
+         ShkRwTpnpcRF+n6SLJTGU6BaFdQ9dAYvBTNQ9xCbVKAs1Eab2d+OY1iiqC2AkBCbBFV+
+         iy9tkZfhetzQyLpIz1g3GS4oqnQ+tjNshntVsoi5Ha+gN9gfmkNjqyvyooY6EpJP7Xpp
+         J5UOy8vbV4Olo1tiTibrpNDkTk+rr4NaZ/Xstxj51eBG6tWEO89crDx6IcjqdoKlIl/z
+         s77tqumszIoSpUGjDaFUfYjLZ0qyNVypqX3IhwLTTP17Ddo0yp/nMCNNZ8CXFxX9nGVF
+         Je2g==
+X-Gm-Message-State: AJIora/zXf8ArI4TGFbGGtn5sD9JKpYIEo9kTWQ/SCQkz+2IVLiaWkLY
+        EzIM/6JApFUUreulc0WCTW2vMgyWOFwxBEv0oQ==
+X-Google-Smtp-Source: AGRyM1s8GAUw6oJb4kdKctccEL9cc/33sTeAzDqLpBI9KS5As9yYb495GOej4rAX/0fCqnwT+cLLAWkWWXzBrvAh8w==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
+ (user=justinstitt job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP
+ id t9-20020a17090a024900b001e0a8a33c6cmr31669pje.0.1657580522068; Mon, 11 Jul
+ 2022 16:02:02 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 16:01:48 -0700
+Message-Id: <20220711230148.2130871-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] ntb: idt: fix clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, ntb@lists.linux.dev,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register with Subsystem Device/Vendor ID is at offset 0x2c. Export is via
-emulated bridge.
+When building with Clang we encounter these warnings:
+| drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type
+| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+| "\t%hhu-%hhu.\t", idx + cnt - 1);
+-
+| drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type
+| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+| "\t%hhu-%hhu.\t", idx + cnt - 1);
+-
+| drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type
+| 'unsigned char' but the argument has type 'int' [-Werror,-Wformat], src);
 
-After this change Subsystem ID is visible in lspci output at line:
+For the first two warnings the format specifier used is `%hhu` which
+describes a u8. Both `idx` and `cnt` are u8 as well. However, the
+expression as a whole is promoted to an int as you cannot get
+smaller-than-int from addition. Therefore, to fix the warning, use the
+promoted-to-type's format specifier -- in this case `%d`.
 
-  Capabilities: [40] Subsystem
+example:
+``
+uint8_t a = 4, b = 7;
+int size = sizeof(a + b - 1);
+printf("%d\n", size);
+// output: 4
+```
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
+For the last warning, src is of type `int` while the format specifier
+describes a u8. The fix here is just to use the proper specifier `%d`.
 
+See more:
+(https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
+"Integer types smaller than int are promoted when an operation is
+performed on them. If all values of the original type can be represented
+as an int, the value of the smaller type is converted to an int;
+otherwise, it is converted to an unsigned int."
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
-Changes in v2:
-* Fix wrong rebase, do not add PCIE_CORE_EXP_ROM_BAR_REG
----
- drivers/pci/controller/pci-aardvark.c | 3 +++
- 1 file changed, 3 insertions(+)
+Note: This patch silences the -Wformat warnings for this file (which is
+the goal) but in reality all instances of `%hh[dux]` should be converted
+to `%[dux]` for this file and probably every file. That's a bit larger
+scope than the goal of enabling -Wformat for Clang builds, though.
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index 74511f015168..060936ef01fe 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -32,6 +32,7 @@
- #define PCIE_CORE_DEV_ID_REG					0x0
- #define PCIE_CORE_CMD_STATUS_REG				0x4
- #define PCIE_CORE_DEV_REV_REG					0x8
-+#define PCIE_CORE_SSDEV_ID_REG					0x2c
- #define PCIE_CORE_PCIEXP_CAP					0xc0
- #define PCIE_CORE_ERR_CAPCTL_REG				0x118
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX			BIT(5)
-@@ -982,6 +983,8 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
- 	/* Indicates supports for Completion Retry Status */
- 	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
+ drivers/ntb/hw/idt/ntb_hw_idt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+index 733557231ed0..0ed6f809ff2e 100644
+--- a/drivers/ntb/hw/idt/ntb_hw_idt.c
++++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+@@ -2406,7 +2406,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
+ 				"\t%hhu.\t", idx);
+ 		else
+ 			off += scnprintf(strbuf + off, size - off,
+-				"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
++				"\t%hhu-%d.\t", idx, idx + cnt - 1);
  
-+	bridge->subsystem_vendor_id = advk_readl(pcie, PCIE_CORE_SSDEV_ID_REG) & 0xffff;
-+	bridge->subsystem_id = advk_readl(pcie, PCIE_CORE_SSDEV_ID_REG) >> 16;
- 	bridge->has_pcie = true;
- 	bridge->data = pcie;
- 	bridge->ops = &advk_pci_bridge_emul_ops;
+ 		off += scnprintf(strbuf + off, size - off, "%s BAR%hhu, ",
+ 			idt_get_mw_name(data), ndev->mws[idx].bar);
+@@ -2435,7 +2435,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
+ 					"\t%hhu.\t", idx);
+ 			else
+ 				off += scnprintf(strbuf + off, size - off,
+-					"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
++					"\t%hhu-%d.\t", idx, idx + cnt - 1);
+ 
+ 			off += scnprintf(strbuf + off, size - off,
+ 				"%s BAR%hhu, ", idt_get_mw_name(data),
+@@ -2480,7 +2480,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
+ 		int src;
+ 		data = idt_ntb_msg_read(&ndev->ntb, &src, idx);
+ 		off += scnprintf(strbuf + off, size - off,
+-			"\t%hhu. 0x%08x from peer %hhu (Port %hhu)\n",
++			"\t%hhu. 0x%08x from peer %d (Port %hhu)\n",
+ 			idx, data, src, ndev->peers[src].port);
+ 	}
+ 	off += scnprintf(strbuf + off, size - off, "\n");
 -- 
-2.20.1
+2.37.0.144.g8ac04bfd2-goog
 

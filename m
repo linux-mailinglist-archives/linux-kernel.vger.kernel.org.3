@@ -2,276 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D5A5709CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415375709CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiGKSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S229607AbiGKSUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiGKSTL (ORCPT
+        with ESMTP id S230498AbiGKSUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:19:11 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9E5DFD5;
-        Mon, 11 Jul 2022 11:19:09 -0700 (PDT)
-Received: from [192.168.16.236] (helo=vzdev.sw.ru)
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1oAxzO-009oVU-VU;
-        Mon, 11 Jul 2022 20:18:46 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] Create debugfs file with hyper-v balloon usage information
-Date:   Mon, 11 Jul 2022 18:18:22 +0000
-Message-Id: <20220711181825.52318-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Mon, 11 Jul 2022 14:20:08 -0400
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4D92B253;
+        Mon, 11 Jul 2022 11:19:57 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 26BIIgkM2907643
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 11 Jul 2022 11:18:42 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 26BIIgkM2907643
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022070501; t=1657563523;
+        bh=rYKyoAm9NejlFDvavPBi1oFgoBtFXul3PFuCTQGr00o=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=XVu0jzhzb3sa1+Tk1eSDhp1f9Ih+66yhKoEMGdbiomtlRtc2H2bXTCHF+NbJmwLtv
+         Dc5/eQ5woSW8F/g976bAom6bW17uz64dD3EZ912zm45VBwOG/ARzcpJBJgyJb5BShm
+         yPgkJ436+n7uucNCRW6bt3f2sElS9Uyrq9wrwTBpdeJ4kZxVIE3hBFcpJTK42UvogE
+         q9l8w4bMDrYJJHXcgnjs2lbCGo796/G/NvKXjFO1Ru7zoBbSRJVPy9Z2ceCfU7WrJQ
+         F2b5Gb1bhrWLkCP74M1aDWpaAyXSQQZF7b1mCeuvevgyPfoVcMFmhsaJn1SbtB3yh8
+         9SHeIY2tDDxDw==
+Date:   Mon, 11 Jul 2022 11:18:40 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Ajay Kaher <akaher@vmware.com>, Nadav Amit <namit@vmware.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Anish Swaminathan <anishs@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH] MMIO should have more priority then IO
+User-Agent: K-9 Mail for Android
+In-Reply-To: <F9E62470-71EA-40DD-875C-6B2B1831F3ED@vmware.com>
+References: <1656433761-9163-1-git-send-email-akaher@vmware.com> <20220628180919.GA1850423@bhelgaas> <25F843ED-7EB4-4D00-96CB-7DE1AC886460@vmware.com> <YsgplrrJnk5Ly19z@casper.infradead.org> <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com> <YshvnodeqmJV6uIJ@casper.infradead.org> <1A0FA5B7-39E8-4CAE-90DD-E260937F14E1@vmware.com> <Ysh63kRVGMFJMNfG@casper.infradead.org> <85071FE5-E37A-44CF-9EF7-CB80C116A876@vmware.com> <4E0E503E-64E1-4B0A-B96A-0CD554A67107@vmware.com> <83C436BD-E12E-420C-B651-B3788F1C4683@vmware.com> <F9E62470-71EA-40DD-875C-6B2B1831F3ED@vmware.com>
+Message-ID: <058DA908-87F7-438E-9850-9CD9DCCFD928@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the guest to know how much it is ballooned by the host.
-It is useful when debugging out of memory conditions.
+On July 11, 2022 10:53:54 AM PDT, Ajay Kaher <akaher@vmware=2Ecom> wrote:
+>
+>=EF=BB=BFOn 11/07/22, 10:34 PM, "Nadav Amit" <namit@vmware=2Ecom> wrote:
+>
+>> On Jul 10, 2022, at 11:31 PM, Ajay Kaher <akaher@vmware=2Ecom> wrote:
+>>
+>> During boot-time there are many PCI reads=2E Currently, when these read=
+s are
+>> performed by a virtual machine, they all cause a VM-exit, and therefore=
+ each
+>> one of them induces a considerable overhead=2E
+>>
+>> When using MMIO (but not PIO), it is possible to map the PCI BARs of th=
+e
+>> virtual machine to some memory area that holds the values that the =E2=
+=80=9Cemulated
+>> hardware=E2=80=9D is supposed to return=2E The memory region is mapped =
+as "read-only=E2=80=9D
+>> in the NPT/EPT, so reads from these BAR regions would be treated as reg=
+ular
+>> memory reads=2E Writes would still be trapped and emulated by the hyper=
+visor=2E
+>
+>I guess some typo mistake in above paragraph, it's per-device PCI config =
+space
+>i=2Ee=2E 4KB ECAM not PCI BARs=2E Please read above paragraph as:
+>
+>When using MMIO (but not PIO), it is possible to map the PCI config space=
+ of the
+>virtual machine to some memory area that holds the values that the =E2=80=
+=9Cemulated
+>hardware=E2=80=9D is supposed to return=2E The memory region is mapped as=
+ "read-only=E2=80=9D
+>in the NPT/EPT, so reads from these PCI config space would be treated as =
+regular
+>memory reads=2E Writes would still be trapped and emulated by the hypervi=
+sor=2E
+>
+>We will send v2 or new patch which will be VMware specific=2E
+>
+>> I have a vague recollection from some similar project that I had 10 yea=
+rs
+>> ago that this might not work for certain emulated device registers=2E F=
+or
+>> instance some hardware registers, specifically those the report hardwar=
+e
+>> events, are =E2=80=9Cclear-on-read=E2=80=9D=2E Apparently, Ajay took th=
+at into consideration=2E
+>>
+>> That is the reason for this quite amazing difference - several orders o=
+f
+>> magnitude - between the overhead that is caused by raw_pci_read(): 120u=
+s for
+>> PIO and 100ns for MMIO=2E Admittedly, I do not understand why PIO acces=
+s would
+>> take 120us (I would have expected it to be 10 times faster, at least), =
+but
+>> the benefit is quite clear=2E
+>
+>
+>
 
-When host gets back memory from the guest it is accounted
-as used memory in the guest but the guest have no way to know
-how much it is actually ballooned.
+For one thing, please correct the explanation=2E
 
-Expose current state, flags and max possible memory to the guest.
-While at it - fix a 10+ years old typo.
+It does not take "more PCI cycles" to use PIO =E2=80=93 they are exactly t=
+he same, in fact=2E  The source of improvements are all in the CPU and VMM =
+interfaces; on the PCI bus, they are (mostly) just address spaces=2E
 
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- drivers/hv/hv_balloon.c | 135 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 129 insertions(+), 6 deletions(-)
+"Using MMIO may allow a VMM to map a shadow memory area readonly, so read =
+transactions can be executed without needing any VMEXIT at all=2E In contra=
+st, PIO transactions to PCI configuration space are done through an indirec=
+t address-data interface, requiring two VMEXITs per transaction regardless =
+of the properties of the underlying register=2E"
 
-V1->V2:
- - Fix C&P errors
-V2->V3:
- - Move computation to a separate funcion
- - Remove ifdefs to reduce code clutter
-
-This patch addresses your suggestions. Once again, sorry i have missed
-your email reply last time.
-
-
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index 91e8a72eee14..ba52d3a3e3e3 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -11,6 +11,7 @@
- #include <linux/kernel.h>
- #include <linux/jiffies.h>
- #include <linux/mman.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -248,7 +249,7 @@ struct dm_capabilities_resp_msg {
-  * num_committed: Committed memory in pages.
-  * page_file_size: The accumulated size of all page files
-  *		   in the system in pages.
-- * zero_free: The nunber of zero and free pages.
-+ * zero_free: The number of zero and free pages.
-  * page_file_writes: The writes to the page file in pages.
-  * io_diff: An indicator of file cache efficiency or page file activity,
-  *	    calculated as File Cache Page Fault Count - Page Read Count.
-@@ -567,6 +568,11 @@ struct hv_dynmem_device {
- 	__u32 version;
- 
- 	struct page_reporting_dev_info pr_dev_info;
-+
-+	/*
-+	 * Maximum number of pages that can be hot_add-ed
-+	 */
-+	__u64 max_dynamic_page_count;
- };
- 
- static struct hv_dynmem_device dm_device;
-@@ -1078,6 +1084,7 @@ static void process_info(struct hv_dynmem_device *dm, struct dm_info_msg *msg)
- 
- 			pr_info("Max. dynamic memory size: %llu MB\n",
- 				(*max_page_count) >> (20 - HV_HYP_PAGE_SHIFT));
-+			dm->max_dynamic_page_count = *max_page_count;
- 		}
- 
- 		break;
-@@ -1116,6 +1123,19 @@ static unsigned long compute_balloon_floor(void)
- 	return min_pages;
- }
- 
-+/*
-+ * Compute total committed memory pages
-+ */
-+
-+static unsigned long get_pages_committed(struct hv_dynmem_device *dm)
-+{
-+	return vm_memory_committed() +
-+		dm->num_pages_ballooned +
-+		(dm->num_pages_added > dm->num_pages_onlined ?
-+		 dm->num_pages_added - dm->num_pages_onlined : 0) +
-+		compute_balloon_floor();
-+}
-+
- /*
-  * Post our status as it relates memory pressure to the
-  * host. Host expects the guests to post this status
-@@ -1157,11 +1177,7 @@ static void post_status(struct hv_dynmem_device *dm)
- 	 * asking us to balloon them out.
- 	 */
- 	num_pages_avail = si_mem_available();
--	num_pages_committed = vm_memory_committed() +
--		dm->num_pages_ballooned +
--		(dm->num_pages_added > dm->num_pages_onlined ?
--		 dm->num_pages_added - dm->num_pages_onlined : 0) +
--		compute_balloon_floor();
-+	num_pages_committed = get_pages_committed(dm);
- 
- 	trace_balloon_status(num_pages_avail, num_pages_committed,
- 			     vm_memory_committed(), dm->num_pages_ballooned,
-@@ -1807,6 +1823,109 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	return ret;
- }
- 
-+/*
-+ * DEBUGFS Interface
-+ */
-+#ifdef CONFIG_DEBUG_FS
-+
-+/**
-+ * hv_balloon_debug_show - shows statistics of balloon operations.
-+ * @f: pointer to the &struct seq_file.
-+ * @offset: ignored.
-+ *
-+ * Provides the statistics that can be accessed in hv-balloon in the debugfs.
-+ *
-+ * Return: zero on success or an error code.
-+ */
-+static int hv_balloon_debug_show(struct seq_file *f, void *offset)
-+{
-+	struct hv_dynmem_device *dm = f->private;
-+	char *sname;
-+
-+	seq_printf(f, "%-22s: %u.%u\n", "host_version",
-+				DYNMEM_MAJOR_VERSION(dm->version),
-+				DYNMEM_MINOR_VERSION(dm->version));
-+
-+	seq_printf(f, "%-22s:", "capabilities");
-+	if (ballooning_enabled())
-+		seq_puts(f, " enabled");
-+
-+	if (hot_add_enabled())
-+		seq_puts(f, " hot_add");
-+
-+	seq_puts(f, "\n");
-+
-+	seq_printf(f, "%-22s: %u", "state", dm->state);
-+	switch (dm->state) {
-+	case DM_INITIALIZING:
-+			sname = "Initializing";
-+			break;
-+	case DM_INITIALIZED:
-+			sname = "Initialized";
-+			break;
-+	case DM_BALLOON_UP:
-+			sname = "Balloon Up";
-+			break;
-+	case DM_BALLOON_DOWN:
-+			sname = "Balloon Down";
-+			break;
-+	case DM_HOT_ADD:
-+			sname = "Hot Add";
-+			break;
-+	case DM_INIT_ERROR:
-+			sname = "Error";
-+			break;
-+	default:
-+			sname = "Unknown";
-+	}
-+	seq_printf(f, " (%s)\n", sname);
-+
-+	/* HV Page Size */
-+	seq_printf(f, "%-22s: %ld\n", "page_size", HV_HYP_PAGE_SIZE);
-+
-+	/* Pages added with hot_add */
-+	seq_printf(f, "%-22s: %u\n", "pages_added", dm->num_pages_added);
-+
-+	/* pages that are "onlined"/used from pages_added */
-+	seq_printf(f, "%-22s: %u\n", "pages_onlined", dm->num_pages_onlined);
-+
-+	/* pages we have given back to host */
-+	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
-+
-+	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
-+				get_pages_committed(dm));
-+
-+	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
-+				dm->max_dynamic_page_count);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(hv_balloon_debug);
-+
-+static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
-+{
-+	debugfs_create_file("hv-balloon", 0444, NULL, b,
-+			&hv_balloon_debug_fops);
-+}
-+
-+static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
-+}
-+
-+#else
-+
-+static inline void hv_balloon_debugfs_init(struct hv_dynmem_device  *b)
-+{
-+}
-+
-+static inline void hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
-+{
-+}
-+
-+#endif	/* CONFIG_DEBUG_FS */
-+
- static int balloon_probe(struct hv_device *dev,
- 			 const struct hv_vmbus_device_id *dev_id)
- {
-@@ -1854,6 +1973,8 @@ static int balloon_probe(struct hv_device *dev,
- 		goto probe_error;
- 	}
- 
-+	hv_balloon_debugfs_init(&dm_device);
-+
- 	return 0;
- 
- probe_error:
-@@ -1879,6 +2000,8 @@ static int balloon_remove(struct hv_device *dev)
- 	if (dm->num_pages_ballooned != 0)
- 		pr_warn("Ballooned pages: %d\n", dm->num_pages_ballooned);
- 
-+	hv_balloon_debugfs_exit(dm);
-+
- 	cancel_work_sync(&dm->balloon_wrk.wrk);
- 	cancel_work_sync(&dm->ha_wrk.wrk);
- 
--- 
-2.25.1
-
+You should call out exactly what is being done to prevent incorrect handli=
+ng of registers with read side effects (I believe that would be all on the =
+VMM side; unfortunately the presence of a register with read side effects p=
+robably would mean losing this optimization for the entire 4K page =3D this=
+ entire function, but read side effects have always been discouraged althou=
+gh not prohibited in config space=2E)

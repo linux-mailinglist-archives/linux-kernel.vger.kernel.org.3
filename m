@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B765700F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1515700FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiGKLns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S230181AbiGKLpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiGKLnE (ORCPT
+        with ESMTP id S231167AbiGKLox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:43:04 -0400
-Received: from sonic312-23.consmr.mail.gq1.yahoo.com (sonic312-23.consmr.mail.gq1.yahoo.com [98.137.69.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FCECE00
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:38:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1657539521; bh=w/ukMm5iwQWAeG3BAhYL3RaptUVhXqOYbZbqYfz4OBM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=sigCv5NtbCmuRMFy8E9TL10fWV6Mh6L/vwwQTQzX/S4+tju4GRDtGa5QKcHjQ6efV82JsKcLjJqsKtIU/oOZv7nURu2iW7ehYTlG12JSSZCmCQwA8UD4oOxvEJK59LW9w3erLeZ3sxBOFgHkNyat4pNRCrsORwMafAMgG0TCBsYaAV8EM2sJTYbJfIpmsxu6bNOpWHjagHX4j1sySB8Rife2POZjuVAiLVVcONsdJfoxZXs93yNP5JaE73yyrf+XxlAUn/6/CQKi1mcqE+LcYtOlg34L8qsW0cA2WrsbG7T72q4d10Q7d+s4GX/fttnnzJv26l65jk2obmkuEPpaag==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657539521; bh=mGozHT5h7zDYiUQg4KfZcbWrKhfFoSRR5f34X62/Xhn=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=kWCMBTqGUo34tUjsJTDbrjJxNVoKXiTyjOejeuiioasfOcRPe6QUoXITih8zqmrb2at9+lEg2TAQmtCGgARANfvA+h4R6gKmRCXmq2KA8hl8sRxTxPzPgGq1M73RVqMAAFN08gz1zXcNHXA1D9oBGgHi50mYjuDpwNjyglHjZ4OeCFcJiomxeb0I79TFOdfaqVHLi9gz0etLsk/ZO7VbDSH2D08O29kjz9H4cbP/NeP2m+fvBCm/zHIR4jyuV8QpQn1gE/6XPMIUiOYMxmmwNpbbQ3nSllqUYX4QcHKEQUiXoYu7ZmR1hyNXlHlEhO50OZS4JT1GZI7GpzB5EEgdKw==
-X-YMail-OSG: Ynrj1a0VM1kbZ5mDA11QppCioN22lv89ZLTgz652Y2gBXOBdaO2Ji8sovCmqZbY
- 6imIkVY.eDlrBXJAE_1uEP6r2gqGKo1tDMyhcdY4G6QAn99sg50AdupHfuIPmAMxaFtGhIeXoEvJ
- 7AzWY58U527WHrLDwGeW5iL2orK.mj2s4Z4OvRpqgEUd458LWFoRRYmtd9fZDF5eOZCoI8khhy18
- ZPUXun.g.1cu8guQe13v9Au0.KfL88tskR8YQM4OLs3iV8cWi6_vz8ROAKre_D14Xq5JfGb6.OlZ
- FapNeA9h.Fy8stJa3i5lY9C5b7PXPKBPPIhbTfI9SgzMsEiucFl0gejFBRpkUJzu.queVDIemSFT
- aHbSbSZL5PDuiSu5mrgbHhAtTbxbjZV_FUMWY_nJjC0JU.p3EQxIlAQSEB4TnHcYDnpAiGWfZ3o8
- Aq2GtUq.x4qh0_qbj9iamuh2ZJp7J7W9Yl2PbHhtnaWE09vjhHJld47UPzFiPu6KsWIdWcOy17rN
- uspch7iGYEzRA_u1xZ8c39SZ03j3hSUV3hFeJvNPVd91cwvxNYq3QpYf7Klavfst4eZ3.yoJ71Xj
- VCNmM1eZ5InzpZpJcmBrT1PXa7cFV1p8wV8_Ud7HT.5sblvmwceogARlmik69EBSlhLmgJL0_ulv
- PyD44AgyM8Aus2mWIcddCiaBsBoanuvs7_t_VS4xtcc6bCITtvY.hdjB5Kdp6YVS8kvM_DUfrSYN
- k5jPuqRymFZSnuV0.wac5o8TxLBHLSX9jOntUB2O1QNy7ix4cHwVylcqWB7NOtQ8CwV8QM0dqYbb
- Fb3V50c7Z7HX3X1trBm4AX9vOuIDaOBk78KlDVwvqvrDvATLrUE70pOdH0mwVtvM66XLhph6orOY
- XEs.KlO7jI3oqIReZu8ir5t3o.ZhggtnPPl01U_3XVXK03gW6scacUra4kTWpXWqMsUWH7YMMT1U
- Cw2jIyvsdcNcPABDcz77rrCC8wZjqtDVDwjWYn5qKNEfY6uXG7Vp9B9DM5ppTeGr9wmFY86q0mP2
- D07IRDzL2e4ugzD8o6wsqQ03ur8YYA2FZiNeULlfPuNlAcQRh2iNtbTHUbiPFtKxQgf34K_UQkgp
- FyteWIYPN44G5N7_70Wci4n1P_RpA1mERVyQDHkuljrWo8rusonC8jQ3WiImXKa00MnVV0t4skS7
- Z4b_4O3tJTClfYtEos2FFKBBwPQklkK5UK7xbZiwclKuNKqAigj8i3EQeaiI.0ZY3hCFkK9lB8y7
- 1pln1UVuL8M5iBGYWZAayOdW6uyc7nA.b8_VNPpIW2VBoWSTfgnvT91ttorEfjCUHWHnEGQhtvSj
- NDy4NJB0hAi1LGJW3MQ8OeoElrZVAe9KjOoLzfBem4_7.7MTQnybyzSLEJhE.Dv0MWn2alNF9hPq
- IBV.pOoO5nd3ogRJ04L2J_I6FuIBV.9T_t2CyG45VZS3H6QbkXCgnX2VLr5AjE.DpOtwqDh_JYLw
- eL15IHGVVM0zEA3f89.VIk3RcMIPCU.yIQfxIPykQjU1G1JplkNL7dkx4vG2bN63UJ0VfutodKZ9
- k_zIgLxkTr.ZKhzZ_qeYIYy.n6N_zrlYmVZgeKIt9JL74zgjR2hwNVtJxqNI47u4NNbNx6w3DvZj
- .OaWBZ7R74GZDy5PJKBVJnn6_0ndGjhxFgItWqVS2XZJ5dkgfB_0twyAB58i4VNgTeC03OKsMtBs
- 2i0P5xK1ErezWMXO1EwaTsA6n6IIeLEvlVk8j8OeSqBM21iBluQkE1f.XEu4lz0ZkSKSQ17pwTrx
- hvR0HG84kt9k5e8FfUKOFv0lWuoG_ccW6aBxbTff.tgjHKOb4tlOhmMgSlfUtPry90dqMPs5GPWc
- XjXJZyX5WQKa4_VEKxDSsHKwkUS81E3XVJq7HdSbMN9omI2v_3huY2jpZv9Snh4P0915qCqmoYpT
- MWMF7m.PAwEELGpC1pOTVsCzQ3TWNs_.OvL0ijcglGE9wD0BFfHQ9uH_1F57RqbpDS6lfJMhund3
- 2uZ2gFYCb5WQmw19wTRptXJeW9_2s0Ew7_thqFEe1hpgoqRjuSijXd9qvTUMkRS5c_FkRMUJN7ab
- cGxXBz_nQIj81552ETlipWpITEa5cDZqtvauaN7j0zZAIaUeKcbDmWRY7pkQGmvyPFjFYhzl62JC
- aCeB4zgV9wlA7J7juEFGmxDyXvmkOCOv19_y5O_JWlrDqUa.irJZG_A4trI2auXipXRVwts6zlj1
- VfcVfk6de4Q--
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.gq1.yahoo.com with HTTP; Mon, 11 Jul 2022 11:38:41 +0000
-Received: by hermes--production-bf1-58957fb66f-dd4hs (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8f307d8659d7a819d3d711f175c166e1;
-          Mon, 11 Jul 2022 11:38:37 +0000 (UTC)
-Message-ID: <e818a621-dfeb-cde2-332c-ba1e4a632192@netscape.net>
-Date:   Mon, 11 Jul 2022 07:38:35 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/PAT: have pat_enabled() properly reflect state when
- running on e.g. Xen
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, Jan Beulich <jbeulich@suse.com>
-Cc:     Andrew Lutomirski <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Mon, 11 Jul 2022 07:44:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 561971D7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657539675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gHZTeBa+zo6V5aGVigu7pGUwqHAZBzzfDHWLTO9INzI=;
+        b=VnME6Q7nQgsS30ursDvkPyRslJgOQr0nbpJ0wrgV7GYn0ryV7GTKcRewRXhwLpiQdxoUmV
+        7zKQfHzB/yj9wy1rDgsNWLiF4sARvsZJpK4e6QJ9Krzk6V0+j3IPQq3VlnrUxueHmO2Yha
+        NUImyKaBKh8gmd1o+YoVn2DtHKTcurE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-FKQKtNkQPUSZgoLKc59SHw-1; Mon, 11 Jul 2022 07:41:14 -0400
+X-MC-Unique: FKQKtNkQPUSZgoLKc59SHw-1
+Received: by mail-wm1-f69.google.com with SMTP id r186-20020a1c44c3000000b003a2daf644f9so4813196wma.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:41:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=gHZTeBa+zo6V5aGVigu7pGUwqHAZBzzfDHWLTO9INzI=;
+        b=j5hRt06afRNgLEmvwAFQdE5/XFfvaRWQojmETtTFRO4F6lQd0HY7wq3tdrH6H8GfLC
+         YrfruILEUf+q8BEoMTDbXHfWjteXjIqqJ3V1PThk5w2+eRLZWtfy1leXxumG9E3CPNFI
+         wpLT/RJbLHi6VYKIYkf1DTTDHRGWNMavZVhgJeTdBh6ZujmTjTKQ5ZYfO6kQnEOfRHbq
+         MuPyzPBBdkVnK2ke9/IWYosZRD6/p4KlvaEcXVvCwp8fEQsS7goRk+VXuK6+FZsYkeW0
+         2A1YsLSCsXbxxOdXfBihESY2S6tdwCXoOvpANZCxtego+6JeN9FPVw7q7mVQtflQ3kVl
+         oT3A==
+X-Gm-Message-State: AJIora/esBF5vm9CFIj6GHeefrMhk9voB96C2gIjm6Jj+tYmoQWySQaG
+        aquwPXojDc+gcYI5jbvyeq6ZYCdi7R2OJU0fVrZB4T/Sv1xG7isnIDwa9yA8a+zFZZHISz3fmT0
+        FleUNlvj/Q3U8qef/q5/szI22
+X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr16603227wrs.550.1657539673360;
+        Mon, 11 Jul 2022 04:41:13 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tqCQTI5mdoLJYyLC9KKsKSmRT9hOYxAFOVKHCeTy+01po4lrgNtzb/0y31cJeV8TLUEzjpoQ==
+X-Received: by 2002:adf:fbc6:0:b0:21d:3fc3:99e with SMTP id d6-20020adffbc6000000b0021d3fc3099emr16603219wrs.550.1657539673173;
+        Mon, 11 Jul 2022 04:41:13 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id u20-20020adfa194000000b0021da61caa10sm2434566wru.56.2022.07.11.04.41.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 04:41:12 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Gregory Erwin <gregerwin256@gmail.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
- <YsRTAGI2PhfZ5V7M@zn.tnic> <016d281b-7e40-f1bd-66ee-c19c3cc56efe@suse.com>
- <YsRjX/U1XN8rq+8u@zn.tnic>
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-In-Reply-To: <YsRjX/U1XN8rq+8u@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20381 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering
+ hwrng
+In-Reply-To: <87v8s8ubws.fsf@kernel.org>
+References: <Yrw5f8GN2fh2orid@zx2c4.com>
+ <20220629114240.946411-1-Jason@zx2c4.com> <87v8s8ubws.fsf@kernel.org>
+Date:   Mon, 11 Jul 2022 12:41:12 +0100
+Message-ID: <xhsmho7xv512f.mognet@vschneid.remote.csb>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,108 +93,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/5/22 12:14 PM, Borislav Petkov wrote:
-> On Tue, Jul 05, 2022 at 05:56:36PM +0200, Jan Beulich wrote:
-> > Re-using pat_disabled like you do in your suggestion below won't
-> > work, because mtrr_bp_init() calls pat_disable() when MTRRs
-> > appear to be disabled (from the kernel's view). The goal is to
-> > honor "nopat" without honoring any other calls to pat_disable().
-
-I think Jan is speaking of the narrow goal of the patch
-that is causing the regression at hand:
-
-Commit bdd8b6c98239cad3a976d6f197afc2c794d3cef8
-("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")
-
-
-The author of that commit expressed the desire to
-more readily handle the nopat option in Linux in an
-architecture-independent way. in the commit message.
-The patch was not intended to cause a functional
-change, but it did - it caused a regression in Xen
-Dom0s running certain Intel graphics devices.
-
+On 07/07/22 19:26, Kalle Valo wrote:
+> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 >
-> Actually, the current goal is to adjust Xen dom0 because:
+>> There are two deadlock scenarios that need addressing, which cause
+>> problems when the computer goes to sleep, the interface is set down, and
+>> hwrng_unregister() is called. When the deadlock is hit, sleep is delayed
+>> for tens of seconds, causing it to fail. These scenarios are:
+>>
+>> 1) The hwrng kthread can't be stopped while it's sleeping, because it
+>>    uses msleep_interruptible() instead of schedule_timeout_interruptible=
+().
+>>    The fix is a simple moving to the correct function. At the same time,
+>>    we should cleanup a common and useless dmesg splat in the same area.
+>>
+>> 2) A normal user thread can't be interrupted by hwrng_unregister() while
+>>    it's sleeping, because hwrng_unregister() is called from elsewhere.
+>>    The solution here is to keep track of which thread is currently
+>>    reading, and asleep, and signal that thread when it's time to
+>>    unregister. There's a bit of book keeping required to prevent
+>>    lifetime issues on current.
+>>
+>> Reported-by: Gregory Erwin <gregerwin256@gmail.com>
+>> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> Cc: Kalle Valo <kvalo@kernel.org>
+>> Cc: Rui Salvaterra <rsalvaterra@gmail.com>
+>> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>> Cc: stable@vger.kernel.org
+>> Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly dumpi=
+ng into random.c")
+>> Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgDs=
+FGTEjs0c00giw@mail.gmail.com/
+>> Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8=
+Hys_DVXtent3HA@mail.gmail.com/
+>> Link: https://bugs.archlinux.org/task/75138
+>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>> ---
+>> Changes v7->v8:
+>> - Add a missing export_symbol.
+>>
+>>  drivers/char/hw_random/core.c        | 30 ++++++++++++++++++++++++----
+>>  drivers/net/wireless/ath/ath9k/rng.c | 19 +++++++-----------
+>>  kernel/sched/core.c                  |  1 +
+>>  3 files changed, 34 insertions(+), 16 deletions(-)
 >
-> 1. it uses the PAT code
+> I don't see any acks for the hw_random and the scheduler change, adding m=
+ore
+> people to CC. Full patch here:
 >
-> 2. but then it does something special and hides the MTRRs
+> https://patchwork.kernel.org/project/linux-wireless/patch/20220629114240.=
+946411-1-Jason@zx2c4.com/
 >
-> which is not something real hardware does.
+> Are everyone ok if I take this patch via wireless-next?
 >
-> So this one-off thing should be prominent, visible and not get in the
-> way.
 
-Actually, this is probably the most insightful comment in all
-the words that have been written about this regression. This
-is a one-off thing, peculiar to Xen PV, but it is not visible
-enough and gets overlooked when changes are made. I guess
-I agree it should not get in the way either, and it doesn't,
-except when the lack of visibility of this one-off thing causes
-the author of a patch to overlook it and cause unforeseen
-problems for users of Xen on Linux. That is precisely what
-happened five years ago with commit 99c13b8c8896d7bcb92753bf
-("x86/mm/pat: Don't report PAT on CPUs that don't support it")
+Thanks for the Cc.
 
-Have you looked at that patch? That is the one that introduced
-the regression that causes pat_enabled() to return a false negative
-on Xen Dom0 today, and it hid in the code for four and a half years
-and was only exposed as a regression with commit
-bdd8b6c98239cad3a9 last December, which again was written in
-a way that caused the regression on Xen because this one-off
-thing that Xen does was not visible enough to the author of the
-recent patch from last December that exposed this problem as a
-regression with Xen PV domains and certain Intel graphics adpapters.
+I'm not hot on the export of wake_up_state(), IMO any wakeup with
+!(state & TASK_NORMAL) should be reserved to kernel internals. Now, here
+IIUC the problem is that the patch uses an inline invoking
 
-That patch did not take into account this not-visible-enough Xen
-case when MTRR is disabled but PAT is still supported by the
-CPU in Xen PV domains. So the proper way to fix this regression
-is by fixing that commit from five years ago. It is very simple.
-After some code re-factoring and other changes, today that
-commit can be fixed by something like:
+  wake_up_state(p, TASK_INTERRUPTIBLE)
 
---- a/arch/x86/mm/pat/memtype.c    2022-06-16 07:32:05.000000000 -0400
-+++ b/arch/x86/mm/pat/memtype.c    2022-07-09 17:51:56.783050765 -0400
-@@ -315,6 +315,20 @@
-               PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
-     }
- 
-+    else if (!pat_bp_enabled) {
-+        /*
-+         * In some environments, specifically Xen PV, PAT
-+         * initialization is skipped because MTRRs are
-+         * disabled even though PAT is available. In such
-+         * environments, set PAT to enabled to correctly
-+         * indicate to callers of pat_enabled() that CPU
-+         * support for PAT is available.
-+         */
-+        pat_bp_enabled = true;
-+        pr_info("x86/PAT: PAT enabled by init_cache_modes\n");
-+    }
-+
-     __init_cache_modes(pat);
- }
- 
-Like Jan's approach, it implements the fix in init_cache_modes(),
-but unlike Jan's approach, it only sets pat_bp_enabled and
-pat_bp_initialized to true if boot_cpu_has(X86_FEATURE_PAT)
-is true and rdmsrl(MSR_IA32_CR_PAT, pat) returns a valid
-value. No need to check for a hypervisor, just check if
-the CPU supports PAT here and that PAT MSR returns something
-valid here. If both are true, then set pat_bp_enabled to true.
-Regression solved.
+so this isn't playing with any 'exotic' task state, thus it shouldn't
+actually need the export.
 
-And that leaves the bigger goal of dealing with this one-off
-thing that Xen does in a more sane way for another day. I
-am working on a patch series that attempts to start the process
-by first re-factoring the currently confusing pat_disable functions
-and variables that will hopefully make this one-off Xen thing
-more visible and easier to understand so when someone wants
-to play around with the current way of deciding whether or
-not PAT is enabled on X86, no regression will occur on Xen
-or in any other environment.
+I've been trying to figure out if this could work with just a
+wake_up_process(), but the sleeping pattern here is not very conforming
+(cf. 'wait loop' pattern in sched/core.c), AFAICT the signal is used to
+circumvent that :/
 
-Best Regards,
-
-Chuck

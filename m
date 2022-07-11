@@ -2,54 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EDF57046A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A574570472
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiGKNgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S230077AbiGKNiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGKNgt (ORCPT
+        with ESMTP id S229712AbiGKNiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:36:49 -0400
+        Mon, 11 Jul 2022 09:38:19 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD2F73DF08
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:36:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C9B23DF09
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657546607;
+        s=mimecast20190719; t=1657546696;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=RyQr2XtUjaVXF3HOvn9hwgYpa3kaUN7VZup2EdcZGH0=;
-        b=edAxIqyIepbgyoATVA/pUqUnIEd0IYGO2/8+H2ry0d+LOWqyHYvSkJjZRq/lCgJimC9gRt
-        2tbcf57dmrwHw8+Xzr4OiS9b6RvuQK0AOiHABx2heiivxUs7Zm3dH+BhvvebVOGHbbPtMh
-        3yLvaqqMyHlxg+RqcdS6OHO/hpJim/Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lHiL2oAl6jhF+7DkvWPJ3P9qRNjPPTKgP/FgDh3LiIw=;
+        b=IlSSFshM630P0kVtm/pv4JdI/Iil50ybzCLRGt4HnyMKDYXieHj8Uq7YoEQKMFyjIw0DNq
+        BnMCeNhXZ3JDB1bTQulzs7fwEwZ/PZS5dD66zIXRXQOwPh5d7GCkf1Dlqxqj7Z1KAA6ErY
+        OHCaHyW4yE17xBLlPgkfF+0xFTlhHhk=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-360-1Keaw8EeN-27uI4bphW5vA-1; Mon, 11 Jul 2022 09:36:46 -0400
-X-MC-Unique: 1Keaw8EeN-27uI4bphW5vA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58C8E1C06EC4;
-        Mon, 11 Jul 2022 13:36:46 +0000 (UTC)
-Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 331AF2166B26;
-        Mon, 11 Jul 2022 13:36:46 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 08:36:44 -0500
-From:   David Teigland <teigland@redhat.com>
+ us-mta-436-DYQUylliPtGf5PPc4Hu2ng-1; Mon, 11 Jul 2022 09:38:15 -0400
+X-MC-Unique: DYQUylliPtGf5PPc4Hu2ng-1
+Received: by mail-il1-f199.google.com with SMTP id u9-20020a056e021a4900b002dc685a1c13so3226048ilv.19
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:38:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:organization
+         :mime-version:content-transfer-encoding;
+        bh=lHiL2oAl6jhF+7DkvWPJ3P9qRNjPPTKgP/FgDh3LiIw=;
+        b=HpedhYg1vRg40J3scr45813dTYtrdemx1+H749ETnqxxLH2Y/4GRNYEgPcGHRGGYpe
+         xbS4J59FmuNfiG0DqZZtIpL8WOxonzOSCkiigF3u/eJKOkeagYZthffLo3DuIpCpo2Kg
+         e6FrRb6PkxDQ9GmVzrEH5dB46itOifmHCH/S14KptkE8kiQzRaDFaq1ItyfuirCe0w8B
+         1nj18TYTomRaoIeIizQDgpM3ZdcrkFswmIdrjp+TfJAow/WhAGr+GCH62BbKp2IrrltO
+         bycKsZKIW3b4ENhJodSfMGSGOwxLZTcu2yIkoDQDNOWkClnKkOYBWNleOUYBE2lvYOnI
+         nNnQ==
+X-Gm-Message-State: AJIora+bBnS4FKOYlm+KX0EH+NWOTDxu+kQCEzbAd0tashXE8k5r26U0
+        SiI8ZqDOlrldvJs3ZIxBF8nVnDsi3n6/eUT7kzCSDa7pMNVguscCLHOhZUyi6zd/zXgRxX+egbJ
+        cldA+jvdT6qwlf3kg0Htg9apt
+X-Received: by 2002:a02:c8c9:0:b0:33f:3647:e751 with SMTP id q9-20020a02c8c9000000b0033f3647e751mr8361449jao.225.1657546695059;
+        Mon, 11 Jul 2022 06:38:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sWOVGhWZEuFrc4S9IWJ1JTJ8QZona3S7/lpBX9gdQIWMIUeEeqj6Pygc3nCxq0BcHOUzmF1w==
+X-Received: by 2002:a02:c8c9:0:b0:33f:3647:e751 with SMTP id q9-20020a02c8c9000000b0033f3647e751mr8361441jao.225.1657546694790;
+        Mon, 11 Jul 2022 06:38:14 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id o15-20020a92dacf000000b002dc366ae7easm2714674ilq.74.2022.07.11.06.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 06:38:14 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 07:38:13 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] dlm updates for 5.20
-Message-ID: <20220711133644.GA27727@redhat.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [GIT PULL] VFIO fix for v5.19-rc7
+Message-ID: <20220711073813.3134a64f.alex.williamson@redhat.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,69 +78,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-Please pull dlm updates from tag:
+The following changes since commit 88084a3df1672e131ddc1b4e39eeacfd39864acf:
 
-git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-5.20
+  Linux 5.19-rc5 (2022-07-03 15:39:28 -0700)
 
-Changes in this set of commits:
+are available in the Git repository at:
 
-. Delay the cleanup of interrupted posix lock requests until the
-  user space result arrives. Previously, the immediate cleanup
-  would lead to extraneous warnings when the result arrived.
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v5.19-rc7
 
-. Tracepoint improvements, e.g. adding the lock resource name.
+for you to fetch changes up to afe4e376ac5d568367b447ca90c12858d0935b86:
 
-. Delay the completion of lockspace creation until one full recove
-  cycle has completed. This allows more error cases to be returned
-  the caller.
+  vfio: Move IOMMU_CAP_CACHE_COHERENCY test to after we know we have a group (2022-07-05 16:06:50 -0600)
 
-. Remove warnings from the locking layer about delayed network rep
-  The recently added midcomms warnings are much more useful.
+----------------------------------------------------------------
+VFIO fix for v5.19-rc7
 
-. Begin the process of deprecating two unused lock-timeout-related
-  features. These features now require enabling via a Kconfig opti
-  and enabling them triggers deprecation warnings. We expect to
-  remove the code in v5.22.
+ - Move IOMMU test to unbreak no-iommu support (Jason Gunthorpe)
 
-Thanks,
-Dave
+----------------------------------------------------------------
+Jason Gunthorpe (1):
+      vfio: Move IOMMU_CAP_CACHE_COHERENCY test to after we know we have a group
 
-Alexander Aring (19):
-      fs: dlm: plock use list_first_entry
-      fs: dlm: add pid to debug log
-      fs: dlm: change plock interrupted message to debug again
-      fs: dlm: use dlm_plock_info for do_unlock_close
-      fs: dlm: change posix lock sigint handling
-      fs: dlm: change ast and bast trace order
-      fs: dlm: remove additional dereference of lksb
-      fs: dlm: add resource name to tracepoints
-      fs: dlm: update comments about recovery and membership handling
-      fs: dlm: call dlm_lsop_recover_prep once
-      fs: dlm: make new_lockspace() wait until recovery completes
-      fs: dlm: handle recovery result outside of ls_recover
-      fs: dlm: add comment about lkb IFL flags
-      fs: dlm: fix grammar in lowcomms output
-      fs: dlm: remove waiter warnings
-      fs: dlm: remove timeout from dlm_user_adopt_orphan
-      fs: dlm: add deprecation Kconfig and warnings for timeouts
-      fs: dlm: don't use deprecated timeout features by default
-      fs: dlm: move kref_put assert for lkb structs
-
-
- fs/dlm/Kconfig             |   9 +++
- fs/dlm/Makefile            |   2 +-
- fs/dlm/ast.c               |   4 +-
- fs/dlm/config.c            |  21 ++++---
- fs/dlm/config.h            |   3 +-
- fs/dlm/dlm_internal.h      |  32 ++++++++--
- fs/dlm/lock.c              | 143 ++++++++++++++++++---------------------------
- fs/dlm/lock.h              |  17 +++++-
- fs/dlm/lockspace.c         |  31 +++++++---
- fs/dlm/lowcomms.c          |   4 +-
- fs/dlm/member.c            |  30 +++++-----
- fs/dlm/plock.c             |  51 +++++++++++-----
- fs/dlm/recoverd.c          |  35 +++++++++--
- fs/dlm/user.c              |  21 ++++++-
- include/trace/events/dlm.h | 118 ++++++++++++++++++++++++++++++-------
- 15 files changed, 351 insertions(+), 170 deletions(-)
+ drivers/vfio/vfio.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 

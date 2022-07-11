@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C655701C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587325701CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiGKMKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S231462AbiGKMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbiGKMKN (ORCPT
+        with ESMTP id S229615AbiGKMNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:10:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E05F491FD;
-        Mon, 11 Jul 2022 05:10:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 11 Jul 2022 08:13:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CF44A833
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:13:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D2ACB80ED5;
-        Mon, 11 Jul 2022 12:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F91C34115;
-        Mon, 11 Jul 2022 12:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657541409;
-        bh=JidRq+aIP/KXPZW1wchQTZoyRdoLEIqVo+G5vnBfgzs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YdURxBL8s5KFA6/l+0muCip0f35rftbIwYV0+0cXJyNPljhWxBFJodKI+qv0Ip2DP
-         KnsNSGxgoyvXa0Z6OHPAAqi7MbGLi6hr9hF2p2YTpNGA+SKLNrgf51rEP6AbMDIvel
-         KoFNezaykyWMe6GTNuirFEfxbG0uFeDE2zAI1Sy2r+h/pnQhaRYZoq2mefu0D/ZPYO
-         Pl04YVa+t0NUIYHBpz0ZOPpwT25EhIQdCtzV9xOaDtH1VA6gCtOsgOuFZUAZaAyjN0
-         /1zXZUznzNCnhMlveAB0wg7vkwV/6R9eMNK0e+LKMe94djge8UJtsDMwVThMWe/CIz
-         B/JGmm3FNTjXQ==
-Received: by pali.im (Postfix)
-        id 9500D9D7; Mon, 11 Jul 2022 14:10:06 +0200 (CEST)
-Date:   Mon, 11 Jul 2022 14:10:06 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: leds: register-bit-led: Add value
- property
-Message-ID: <20220711121006.kjk44rubi5gpqycj@pali>
-References: <20220706112828.27278-1-pali@kernel.org>
- <20220706162111.GA145516-robh@kernel.org>
- <20220706162335.2eewgf7l3xghdjtr@pali>
- <CACRpkdYncdsVW8LysQ3--rOF-KUF6dkkPyX4tg4e10vn2K+8FQ@mail.gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A1A6A202F3;
+        Mon, 11 Jul 2022 12:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657541585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJTrqX4wTRC4bsbLa+oGGurpnRSIqFoGGm8rRNepF1U=;
+        b=zWV2YtKM8u0yyeLAWJTZzMxHn40zWPKElXCwuTkoPuYgiCoFhPwZhsyCItkYFa7N/4Cwgb
+        eorXLQtF4Vfng6IZvAGrd7zPPaxKUbLsRbnoT4m0SCJ8AYWFhBT8DYSBEwI+D5n6Qlb4s6
+        VY2tORPRBMXnduLHG9SGzQXTwh4ic8Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657541585;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJTrqX4wTRC4bsbLa+oGGurpnRSIqFoGGm8rRNepF1U=;
+        b=2VOaoIIwZYq3AABcC05h0mvfyzwswoQ1gsj93jIqbTHuPSZhO+OaM4FCIhJKU/5NyaGqcV
+        yR1PRBzv5MpRXxDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 747B613524;
+        Mon, 11 Jul 2022 12:13:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BOhMG9ETzGIOCwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 11 Jul 2022 12:13:05 +0000
+Date:   Mon, 11 Jul 2022 14:13:04 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH -V2 4/7] migrate_pages(): fix failure counting for THP
+ subpages retrying
+Message-ID: <YswT0OoJFRGP065E@localhost.localdomain>
+References: <20220711084948.274787-1-ying.huang@intel.com>
+ <20220711084948.274787-5-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYncdsVW8LysQ3--rOF-KUF6dkkPyX4tg4e10vn2K+8FQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220711084948.274787-5-ying.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 11 July 2022 14:06:50 Linus Walleij wrote:
-> On Wed, Jul 6, 2022 at 6:23 PM Pali Rohár <pali@kernel.org> wrote:
-> > On Wednesday 06 July 2022 10:21:11 Rob Herring wrote:
-> > > On Wed, Jul 06, 2022 at 01:28:27PM +0200, Pali Rohár wrote:
-> > > > Allow to define inverted logic (0 - enable LED, 1 - disable LED) via value
-> > > > property. This property name is already used by other syscon drivers, e.g.
-> > > > syscon-reboot.
-> > >
-> > > Yes, but those are potentially multi-bit values. This is a single bit
-> > > value, and the only value that's ever needed is 0. Why not just use
-> > > 'active-low' here?
-> >
-> > Just because to have uniform definitions across more syscon nodes.
+On Mon, Jul 11, 2022 at 04:49:45PM +0800, Huang Ying wrote:
+> If THP is failed to be migrated for -ENOSYS and -ENOMEM, the THP will
+> be split into thp_split_pages, and after other pages are migrated,
+> pages in thp_split_pages will be migrated with no_subpage_counting ==
+> true, because its failure have been counted already.  If some pages in
+> thp_split_pages are retried during migration, we should not count
+> their failure if no_subpage_counting == true too.  This is done this
+> patch to fix the failure counting for THP subpages retrying.
 > 
-> But what happens if he mask and value don't line up?
-> 
-> mask = 0x10;
-> value = 0x08;
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
 
-Same what would happen in other drivers, no?
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-Only those value bits are take into account which are also sets in the mask.
 
-> If you just state active-low; this kind of mistake is not possible to make.
-> 
-> So I'd rather go for active-low;
-> 
-> Yours,
-> Linus Walleij
+-- 
+Oscar Salvador
+SUSE Labs

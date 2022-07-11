@@ -2,165 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBBA56D763
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B0D56D759
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiGKIGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S229618AbiGKIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiGKIF7 (ORCPT
+        with ESMTP id S229500AbiGKIEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:05:59 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9F51D0E2;
-        Mon, 11 Jul 2022 01:05:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O+2qG/y+L5Plnf4pA7z2x6ILKUfWDJlGRofwU9SXKk7BuXgdttDesUO3951AF+4WTOE3VIrBubHku1XT18Z9Qen1cR+8qXvgsSQXYkJ/b5hdWWlqezrKFdIZvQ+gM0xdxRrB775Wz3tgW5JyOhmDW/6/PoWMKUchZwuk6LASwQEmmeY3ZWOiSbDY32BBkhXuEAIr8klsGNJDO0TvZopnjWzy3U4LKwpXIZuKneMhuMT8e8cVjwyeVIeq9nkyzjm8VAlDMpMR3z9GoP5tupPCZaJQXt/LAjHRW+NOkRZ+Ds59137thM7rsxyYPwm/BCUKlwUh1tMC0roeuIuVpszhgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AShQGiUOJkL+QN9HjFT1tpZk9/MlPWUgTxspdXuYH5s=;
- b=ZLoUkTlXP0/wf8JxexTEq3MR0HF4HNh4uKmCwPKlIFIb58RCGqJ+YvhgS2EmRXLRLAcTicyfEWJXYskftoNOhb97j3g2mYPm9VXvvhGDMy001g8v/RanxVZHfBQMYqL9A0xOaP/k2BSWqsNphzfI9C14jw/brds54BALPptUNNWZ1VIWVtzg01/NV27UwaqL9lbNkKsmMahzvattXC5tZ0zHus4IQCknPf4oAs5QO8GOLbgHRwiQcsUiFk514jHxcQ6JqWSd/YOtmy8G0hm2d3EF4zOh5bS6gjQCOevDbhuriGTwYcs/0DziWyblLxpZE4gOfLmY+46FoJktdrIvgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AShQGiUOJkL+QN9HjFT1tpZk9/MlPWUgTxspdXuYH5s=;
- b=yCOOrw5niXStAu9qd8YcEIgs6HAGG8CFRIh5DA57HUmMVKLFJvQpUjRV0IRFlYGjcp++j3O1COjC02aDNFzalITPLXrvFjxfiI7B4OAb+0W9du09BouDcVFu/ImSLX0VlmIqaHa2MubF6Lf4wmVBfyXsLpwDZto/+LrdBehlSFs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SN6PR12MB4751.namprd12.prod.outlook.com (2603:10b6:805:df::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
- 2022 08:05:51 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5417.025; Mon, 11 Jul 2022
- 08:05:51 +0000
-Message-ID: <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
-Date:   Mon, 11 Jul 2022 10:05:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220711124742.3b151992@canb.auug.org.au>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220711124742.3b151992@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0015.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::20) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 11 Jul 2022 04:04:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F089613E36;
+        Mon, 11 Jul 2022 01:04:33 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LhGb63MC7zlVyf;
+        Mon, 11 Jul 2022 16:02:58 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Jul
+ 2022 16:04:29 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH v2,net-next] net/sched: remove return value of unregister_tcf_proto_ops
+Date:   Mon, 11 Jul 2022 16:09:10 +0800
+Message-ID: <20220711080910.40270-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 68869396-f461-4a1c-6c19-08da63142bea
-X-MS-TrafficTypeDiagnostic: SN6PR12MB4751:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yAgGBG4jTpFjRyimtq6wPO13YrRC9Iy/7xY6UpHOAHJPKwKxiElQGavgIkC+sUkkWvecGwXSwazM+26naIea6eZxWej67/S9timzD+rD74w2TZlcc38zKBMFcfwcByxngRhcAUb8aY9DC4/hdbmU6NOoNp96tcQTPWwWBdqs/dJv66hDlezYIXUeYGF+hKEXAEpwOrT2TmTcUqUiM19kd+PtPTrTiVMbDyq0cVdqxMnTri6JPym1RkvzzTiWIehfEXZRX7hKjzjJ3uFST0JDhV2TIlSh72+vNJN/nNGAB/Pv1d/IhlgT+7NWwK7qOkhO3kPFOS0kuPt+CH2oCUr3V2h5+ef9J/3YdNW6HTLja9kGernerVGjXQAFeI8E42UR1Zskr5qn/4e9XuMZ6sTCcwdqGOLIJHRHSsrqB2ZV2orWe8ByxdoHM2pcFZAeHbl0qrmJ9muhViy39XV0C78Nsb7iU88SorO4gLgaktTrpT1w0H3FPD2kz9yb5APramo5vJgdaAz6S4utD7lCD+8t29Lo3vc+vi0XPjqcYBCHjzvDO3+ia4lDsc5KNPnZC2EPiceovcnUv8B7eFQgFj2rbcsJO+ASJ1dWPL0jncEMdFXUfwlDG3qVIll0uOWJQ/LhdGTBND6sZkI8d2MmD9TFfvnyKRLcXOx0cov4eOOUlHv3Nt0/j5LUYj+hvOwvgxRZNeKmeGEpCQxsGS1l4oGYLr0/SHU+2kfRPtnddeYK/zHeuuvcSmp6MCSergUoDNWYG5YQ5RiaKDpljBq1gc/xq3DOQGP4VHciXaKzlImhTLqvfbFWkPIxE5IaMBI7jIRONE49Nj5/Q0Wjxq+dhFtbWhwffkQiba4Xixn73j66+C4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(36756003)(8936002)(4326008)(4744005)(31686004)(110136005)(6506007)(6666004)(38100700002)(54906003)(41300700001)(26005)(2616005)(6512007)(66476007)(2906002)(66556008)(8676002)(66946007)(316002)(6486002)(478600001)(5660300002)(186003)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUxoYVlMN2VBWEJTQWpPK1V1eU9BdGVYeWl4K0EyK3pacU5abitNb2RobW5W?=
- =?utf-8?B?UWcza290Z204amxJcWZvNHFuZXJpSGxMTTAzWUwvSFk1Sk9idHl5VFB0M3ZB?=
- =?utf-8?B?Y2o3YXpJTEVlbSs1bkY5c3lXYUMwMmhYc2FDTHlLNHE1S24ycERJajhMbmw4?=
- =?utf-8?B?ZTQ2Yys5ZW5tN2tpMzVmOUlMdWxvYnlYNGRQYldVUEQ5OEI1VlQ1ZlVucVNN?=
- =?utf-8?B?Tnc3MWdSWkVJWWhldzAxN1pKNVlJdUgyQzhhcXZ3QnBsNzZXY2RtN2plTFU2?=
- =?utf-8?B?S3FlQnRlREFpSDlHQm5lb0pQVkpuRWtSTUNPUW1BUE9XMUZKVVRuem1FNzBj?=
- =?utf-8?B?NEtod3BxWmRLMUZhSFozYXdySlJ6a2Qvak83WmZDcXRWMjVSU1Boa1Zra2hr?=
- =?utf-8?B?YkNQUjh1RUFQM1dZTGczdTFlYzNHWEtuZTJOb0ZYOTRISS9ra21NSlI0SVBx?=
- =?utf-8?B?VFpWSTY1Q0dJcU9neWN5WjVTbnFsZS9iWnB1S3hRWGpaeVRsbS9qWkhhQU5s?=
- =?utf-8?B?alJoTG1lTGd4QVQ3WXpNanJNWUJpY0VzeHl5RFFMRVpseEVuN2ZqRmRIejlz?=
- =?utf-8?B?d1hRSVAwU0pJQWpYdDBndjdtSkxxS2hMMkIzc0JvR2FSSThsY080OVZ6YUlj?=
- =?utf-8?B?QnNjUGhabzIwbXptdjgraGhJcG9uRlFEV3BRRjIzV0I2VTZZWXVEUnhHN3Bw?=
- =?utf-8?B?Vm1yK0FIaUJZK0ZaRzJ6eDRLUWx0em9BZXJtVS9xWUwrb0ZTeDlVMHJ0eHhq?=
- =?utf-8?B?OVoxWkxjTWJCOHozSFVQazZOUzFUZDlleG01bCs1RFAxRSsvQnRlRWxjcGtl?=
- =?utf-8?B?TFhkM24wcktjaEhVcnZPUEFidkloZHk5cHVKd2p4WjFuTDVQcHdBdnFYSHJz?=
- =?utf-8?B?Y09NQUVPWFVSMU1wampSOFZHZUF3TG1tRkY0NUJTcEp0aW5WRU5LbFpYVnNJ?=
- =?utf-8?B?ZDF2VmV6aGZOL1JZQ256WkhTYjh2UGc1Qi9yYUhHUjI0cVF2VjZZbGR5V0hh?=
- =?utf-8?B?bDNYbFJhMDlwN29ZUjBHajZaSDdjWDlpMGZWcklOYktYMU9OMi9RYThMUE5z?=
- =?utf-8?B?b1V6U1hINExReEs0SnpzWE5abUdzR3AwOEFGZi9TbSt5OUtSSEVzQXYyS2s2?=
- =?utf-8?B?RDZheFVnYVhFai9aWFptM0lVaktKc0VGaC9hS2dhUi85U2pHWlhKVlZWb0hB?=
- =?utf-8?B?NllIOVhnZS95RS9qVkpuZXhUOC9lWTRuSzAwVnE5cE1VQWZDRGZTS2hROVJh?=
- =?utf-8?B?NVNZNVZndmpZUEoyNXh3SU1NaU1yR2ZEWkY2dTdDd3lVc3pwNlpzeHhwdnc3?=
- =?utf-8?B?VllLbVRSMjlsaERTNU5kb2tRcWFXRkxDUEhURFVYTk5meThlRWFxQ2M1MnRR?=
- =?utf-8?B?SjlPVVBielQrWGl2dTlMOSt4UUt3TlB3a3FhZFRLcTdaREJ5TFVqZ29EMzBL?=
- =?utf-8?B?NmJUUVBlRHlpNUJFTmRvUmJSUE9ydEdFWE5SbFFsSDh4K0kyNklVTVlubWRG?=
- =?utf-8?B?YjBxb3dhRDR6TUZNZTRvenpQaE9oREx6TWpxL2NjWldIZEJDZ0czZGVKNmlG?=
- =?utf-8?B?cFdEbFNpWHYraDRsMkhZRUkrQVgwd1Y2Z1pxTjNTSmdBUGlJWGR5MWxzdUNB?=
- =?utf-8?B?bU9JMjdBRnhVWHVpOGpDangxR2JtVWtJTXFLRCtPVWgyallERmE0UVNKanpR?=
- =?utf-8?B?TTc4S3ZHTHlGeEhpTUxnaWh1aUc5bnBtUXIvTmx5ZEhzSGp5a0g5S1VtYTUz?=
- =?utf-8?B?ZHFBQ2RnT1JvWWdCT0FjMkZiZkdqZzlNeDRsWExmTkVvRkhqcmhhUlN6b3hF?=
- =?utf-8?B?NXM3ZUFFVGVKRmsxdjg3QmJML2tleGVaUXhmUlArSTY0UDdscUFnVHQySlFS?=
- =?utf-8?B?K1JCSllYK0hUbVRTb05pOUcybWZ1SVVuTVJKK0J3QjNtTll1YzVhT0wycXVz?=
- =?utf-8?B?VzQvSFppRllaZWNHdU1JMWFocWIvcElBZzBQS0s4eThDcFhHL05aZUd3MS96?=
- =?utf-8?B?LzV3YlRET1dwa0tYblBvSHE1TVpWQXI1ZXhwMFFhUkR2RkhGWUttYVJXVmVG?=
- =?utf-8?B?R1B0UU05NHR4TmJTWVI0VGltcXNYdFNlbVp0RWtqeUFFUHErbTY1NzVZUS9X?=
- =?utf-8?Q?8VRlMpfTqvyApm13yp7Gf/KIY?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68869396-f461-4a1c-6c19-08da63142bea
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 08:05:51.7219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vN/qXaRD+K/YwjRqNHL+z8Oi+FndnW3v+i+eXIrizxITrSFMdOCUpEfVTYvopshC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4751
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Return value of unregister_tcf_proto_ops is unused, remove it.
 
-Am 11.07.22 um 04:47 schrieb Stephen Rothwell:
-> Hi all,
->
-> Today's linux-next merge of the drm tree got a conflict in:
->
->    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
->
-> between commit:
->
->    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu"")
->
-> from the drm-misc-fixes tree and commit:
->
->    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mgr_new")
->
-> from the drm tree.
->
-> This is a mess :-(  I have just reverted the above revert before mergin
-> the drm tree for today, please fix it up.
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+v1: need to warn if unregister failed. 
 
-Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start 
-calculation in amdgpu_vram_mgr_new")" and another one is going to be 
-reverted from the drm tree as well.
+ include/net/pkt_cls.h | 2 +-
+ net/sched/cls_api.c   | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-It's just that -fixes patches where faster than -next patches.
-
-Regards,
-Christian.
-
-
->
+diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+index 8cf001aed858..d9d90e6925e1 100644
+--- a/include/net/pkt_cls.h
++++ b/include/net/pkt_cls.h
+@@ -23,7 +23,7 @@ struct tcf_walker {
+ };
+ 
+ int register_tcf_proto_ops(struct tcf_proto_ops *ops);
+-int unregister_tcf_proto_ops(struct tcf_proto_ops *ops);
++void unregister_tcf_proto_ops(struct tcf_proto_ops *ops);
+ 
+ struct tcf_block_ext_info {
+ 	enum flow_block_binder_type binder_type;
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 9bb4d3dcc994..d20dd1532b48 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -194,7 +194,7 @@ EXPORT_SYMBOL(register_tcf_proto_ops);
+ 
+ static struct workqueue_struct *tc_filter_wq;
+ 
+-int unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
++void unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
+ {
+ 	struct tcf_proto_ops *t;
+ 	int rc = -ENOENT;
+@@ -214,7 +214,10 @@ int unregister_tcf_proto_ops(struct tcf_proto_ops *ops)
+ 		}
+ 	}
+ 	write_unlock(&cls_mod_lock);
+-	return rc;
++
++	if (rc)
++		pr_warn("unregister tc filter kind(%s) failed\n", ops->kind);
++
+ }
+ EXPORT_SYMBOL(unregister_tcf_proto_ops);
+ 
+-- 
+2.17.1
 

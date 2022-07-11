@@ -2,132 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7C95701AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A277B5701B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiGKMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S231468AbiGKMI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiGKMIF (ORCPT
+        with ESMTP id S231473AbiGKMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:08:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04D3F45041
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657541283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=C1Fa11yvH3zHSAbXYwOqWzVpwYwysHK4A0l1MnClKws=;
-        b=e32OZg+LKWrApw4OygQEkkaOiPrjKQFBrXUd8nwEImCbQmnhrsTWBMoUczVUUHjClraYhe
-        6rRn7+RpVZLJsFPUNUbr8K+5OW0v8m3eDXv+FYcilwJkCufPzWp/TakPNunjFSxRXWnave
-        xae9mx8psCdGt3KnoHHgQ78LxJ6iWwE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-145-vzmEMl2SPo6Wz8OJbqaV8Q-1; Mon, 11 Jul 2022 08:07:59 -0400
-X-MC-Unique: vzmEMl2SPo6Wz8OJbqaV8Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80DF3811E83;
-        Mon, 11 Jul 2022 12:07:58 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.9.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30E28492C3B;
-        Mon, 11 Jul 2022 12:07:58 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     jtoppins@redhat.com, razor@blackwall.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH iproute2 next v4] bond: add mac_filter option
-Date:   Mon, 11 Jul 2022 08:07:52 -0400
-Message-Id: <3c7a89f9a92c41847a1b643c9db5c0a601e95d66.1657303056.git.jtoppins@redhat.com>
+        Mon, 11 Jul 2022 08:08:23 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E72A422DA;
+        Mon, 11 Jul 2022 05:08:20 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id l2so195822qvt.2;
+        Mon, 11 Jul 2022 05:08:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=autvjFUd9BwlA5CMi8F4/VEnOxd5KyEX6z2vFI+rQes=;
+        b=oqI0iuaF2H2wGh4NeYKOXQJur/+z7Kurz6FeQt10e7AzhB6y5YDkhTdH5Pq6jqFp8z
+         DjB/2Gue8X4XPKi0mY1cLspXoQhrCQScUynXJ67mrJ5Hl0qWsBbXQyJVXvyrDhy4jQza
+         Jzhs31nCeQZBSPDn1t4GyiesWVUapN9/5gkcCsTxs2sTWwdqL03IhfDTe90wjAMoixId
+         WXnOnKfk+eHnacx8ikS7WyJOLcoBGhf62HVLMc9ok2yVHG6FxAvaNhGPrprGgEfj7Tdq
+         wLfRCDs6kgM0hebuUCZ1j22XeofETq62UXQDBJkFmi4NrJP65ViCD7dcd6YZR+oxTa0w
+         r7/g==
+X-Gm-Message-State: AJIora8wcDxzAS2UmthzPHMu9+b0ky6Rfrl4l+gBdHKqRDUoGOExDXbS
+        cRCCAKpCJ+o5ULPWdT0w8xrDlIUF05H7EA==
+X-Google-Smtp-Source: AGRyM1vnORJM/tw2Zoj0iuIU/ZNQnkpGgvGguYGN/eEUpUKb38yF55p1zcQBUWdZLnFzo7s1yM3bPw==
+X-Received: by 2002:a05:6214:e87:b0:473:129e:224a with SMTP id hf7-20020a0562140e8700b00473129e224amr13093540qvb.29.1657541298877;
+        Mon, 11 Jul 2022 05:08:18 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id h129-20020a379e87000000b006b55df40976sm5911999qke.27.2022.07.11.05.08.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 05:08:18 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31bf3656517so46180487b3.12;
+        Mon, 11 Jul 2022 05:08:18 -0700 (PDT)
+X-Received: by 2002:a81:9209:0:b0:31c:b1b7:b063 with SMTP id
+ j9-20020a819209000000b0031cb1b7b063mr19178774ywg.383.1657541298151; Mon, 11
+ Jul 2022 05:08:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <cover.1657301107.git.geert@linux-m68k.org> <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+ <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de> <20220711093513.wilv6e6aqcuyg52w@houat>
+ <43d75dce-988a-0a95-cb0a-0d0a7c81ca63@suse.de> <20220711114206.sawqdl54ibuxsxp4@houat>
+ <CAMuHMdXbFHWWQoryXihVsSrC5ZzHEV-YYR_eLvNmSAw8Y61TQg@mail.gmail.com> <20220711120243.v6lwoynqigle2aot@houat>
+In-Reply-To: <20220711120243.v6lwoynqigle2aot@houat>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Jul 2022 14:08:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXhmf5TudQ6a1PUVV8KXff6JjgMmZOmOWVb2qW6eXF7Ow@mail.gmail.com>
+Message-ID: <CAMuHMdXhmf5TudQ6a1PUVV8KXff6JjgMmZOmOWVb2qW6eXF7Ow@mail.gmail.com>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named modes
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ability to set bonding option `mac_filter`. Values greater than zero
-represent the maximum hashtable size the mac filter is allowed to grow
-to, zero disables the filter.
+Hi Maxime,
 
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
+On Mon, Jul 11, 2022 at 2:02 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> On Mon, Jul 11, 2022 at 01:59:28PM +0200, Geert Uytterhoeven wrote:
+> > On Mon, Jul 11, 2022 at 1:42 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > On Mon, Jul 11, 2022 at 01:11:14PM +0200, Thomas Zimmermann wrote:
+> > > > Am 11.07.22 um 11:35 schrieb Maxime Ripard:
+> > > > > On Mon, Jul 11, 2022 at 11:03:38AM +0200, Thomas Zimmermann wrote:
+> > > > > > Am 08.07.22 um 20:21 schrieb Geert Uytterhoeven:
+> > > > > > > The mode parsing code recognizes named modes only if they are explicitly
+> > > > > > > listed in the internal whitelist, which is currently limited to "NTSC"
+> > > > > > > and "PAL".
+> > > > > > >
+> > > > > > > Provide a mechanism for drivers to override this list to support custom
+> > > > > > > mode names.
+> > > > > > >
+> > > > > > > Ideally, this list should just come from the driver's actual list of
+> > > > > > > modes, but connector->probed_modes is not yet populated at the time of
+> > > > > > > parsing.
+> > > > > >
+> > > > > > I've looked for code that uses these names, couldn't find any. How is this
+> > > > > > being used in practice? For example, if I say "PAL" on the command line, is
+> > > > > > there DRM code that fills in the PAL mode parameters?
+> > > > >
+> > > > > We have some code to deal with this in sun4i:
+> > > > > https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/sun4i/sun4i_tv.c#L292
+> > > > >
+> > > > > It's a bit off topic, but for TV standards, I'm still not sure what the
+> > > > > best course of action is. There's several interactions that make this a
+> > > > > bit troublesome:
+> > > > >
+> > > > >    * Some TV standards differ by their mode (ie, PAL vs NSTC), but some
+> > > > >      other differ by parameters that are not part of drm_display_mode
+> > > > >      (NTSC vs NSTC-J where the only difference is the black and blanking
+> > > > >      signal levels for example).
+> > > > >
+> > > > >    * The mode names allow to provide a fairly convenient way to add that
+> > > > >      extra information, but the userspace is free to create its own mode
+> > > > >      and might omit the mode name entirely.
+> > > > >
+> > > > > So in the code above, if the name has been preserved we match by name,
+> > > > > but we fall back to matching by mode if it hasn't been, which in this
+> > > > > case means that we have no way to differentiate between NTSC, NTSC-J,
+> > > > > PAL-M in this case.
+> > > > >
+> > > > > We have some patches downstream for the RaspberryPi that has the TV
+> > > > > standard as a property. There's a few extra logic required for the
+> > > > > userspace (like setting the PAL property, with the NTSC mode) so I'm not
+> > > > > sure it's preferable.
+> > > > >
+> > > > > Or we could do something like a property to try that standard, and
+> > > > > another that reports the one we actually chose.
+> > > > >
+> > > > > > And another question I have is whether this whitelist belongs into the
+> > > > > > driver at all. Standard modes exist independent from drivers or hardware.
+> > > > > > Shouldn't there simply be a global list of all possible mode names? Drivers
+> > > > > > would filter out the unsupported modes anyway.
+> > > > >
+> > > > > We should totally do something like that, yeah
+> > > >
+> > > > That sun code already looks like sometihng the DRM core/helpers should be
+> > > > doing. And if we want to support named modes well, there's a long list of
+> > > > modes in Wikipedia.
+> > > >
+> > > > https://en.wikipedia.org/wiki/Video_Graphics_Array#/media/File:Vector_Video_Standards2.svg
+> > >
+> > > Yeah, and NTSC is missing :)
+> >
+> > And that diagram is about the "digital" variant of PAL.
+> > If you go the analog route, the only fixed parts are vfreq/hfreq,
+> > number of lines, and synchronization. Other parameters like overscan
+> > can vary.  The actual dot clock can vary wildly: while there is an
+> > upper limit due to bandwidth limitations, you can come up with an
+> > almost infinite number of video modes that can be called PAL, which
+> > is one of the reasons why I don't want hardware-specific variants to
+> > end up in a global video mode database.
+>
+> Do you have an example of what that would look like?
 
-Notes:
-    v4:
-     * rebase onto latest next branch
+You mean a PAL mode that does not use 768x576?
 
- include/uapi/linux/if_link.h |  1 +
- ip/iplink_bond.c             | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/video/fbdev/amifb.c#n834
+(TAG_HIRES is replaced by the actual dot clock at runtime, as it
+ depends on the crystal present on the mainboard).
+Amifb also supports 320x256, by doubling the dot clock, but that mode
+is not part of the database.
 
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index e0fbbfeeb3a1..529ae4faa7e2 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -934,6 +934,7 @@ enum {
- 	IFLA_BOND_AD_LACP_ACTIVE,
- 	IFLA_BOND_MISSED_MAX,
- 	IFLA_BOND_NS_IP6_TARGET,
-+	IFLA_BOND_MAC_FILTER,
- 	__IFLA_BOND_MAX,
- };
- 
-diff --git a/ip/iplink_bond.c b/ip/iplink_bond.c
-index 7943499e0adf..fb7236c58253 100644
---- a/ip/iplink_bond.c
-+++ b/ip/iplink_bond.c
-@@ -157,6 +157,7 @@ static void print_explain(FILE *f)
- 		"                [ ad_actor_sys_prio SYSPRIO ]\n"
- 		"                [ ad_actor_system LLADDR ]\n"
- 		"                [ arp_missed_max MISSED_MAX ]\n"
-+		"                [ mac_filter HASH_SIZE ]\n"
- 		"\n"
- 		"BONDMODE := balance-rr|active-backup|balance-xor|broadcast|802.3ad|balance-tlb|balance-alb\n"
- 		"ARP_VALIDATE := none|active|backup|all|filter|filter_active|filter_backup\n"
-@@ -410,6 +411,14 @@ static int bond_parse_opt(struct link_util *lu, int argc, char **argv,
- 			}
- 			addattr8(n, 1024, IFLA_BOND_TLB_DYNAMIC_LB,
- 				 tlb_dynamic_lb);
-+		} else if (matches(*argv, "mac_filter") == 0) {
-+			__u8 mac_filter;
-+			NEXT_ARG();
-+			if (get_u8(&mac_filter, *argv, 0)) {
-+				invarg("invalid mac_filter", *argv);
-+				return -1;
-+			}
-+			addattr8(n, 1024, IFLA_BOND_MAC_FILTER, mac_filter);
- 		} else if (matches(*argv, "help") == 0) {
- 			explain();
- 			return -1;
-@@ -491,6 +500,12 @@ static void bond_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
- 			   "arp_missed_max %u ",
- 			   rta_getattr_u8(tb[IFLA_BOND_MISSED_MAX]));
- 
-+	if (tb[IFLA_BOND_MAC_FILTER])
-+		print_uint(PRINT_ANY,
-+			   "mac_filter",
-+			   "mac_filter %u ",
-+			   rta_getattr_u8(tb[IFLA_BOND_MAC_FILTER]));
-+
- 	if (tb[IFLA_BOND_ARP_IP_TARGET]) {
- 		struct rtattr *iptb[BOND_MAX_ARP_TARGETS + 1];
- 
--- 
-2.31.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

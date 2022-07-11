@@ -2,239 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D7D56D524
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4815B56D531
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiGKHFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S229835AbiGKHGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiGKHFO (ORCPT
+        with ESMTP id S229518AbiGKHGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:05:14 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818AD1836A;
-        Mon, 11 Jul 2022 00:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657523113; x=1689059113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M3DEFxgy5d/neRqAV7gBWI9NQ0OGc01lrpGq6dCFm0M=;
-  b=TzJqySTy85pYgWZE1XBfnKJRg37x9ItwaNj5HZXuSFWI/fc9BRbqnvha
-   UOw0SlAG+8sRqsg8/Xz5X4m8ZSVdYhxp8wOSmaXk61gvJ93I7WGReki+L
-   CFVct/SEjDXa5umuWFWE4etg31K+76Fcv41UlA2vIJF10s86adl/+uxN6
-   Tt9qYkaqKx8RJkNYveohKe8kRtowY9KrRg4eyFYxRw8jeFOJ5W7Tlj5K9
-   /QYO2GRoGwfv2rvAMjR+2nN1JX7Xca0QgWoVL2tYrcFRuyk1y2lIUredJ
-   6DtPjtVyuIUbyzuzs83RYe/4CZ8eMAsoXb/nLKmJWhNC1NZoVVK9rH8RA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282143199"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="282143199"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 00:05:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="598936860"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Jul 2022 00:05:11 -0700
-Date:   Mon, 11 Jul 2022 15:05:10 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v7 036/102] KVM: x86/mmu: Allow non-zero value for
- non-present SPTE
-Message-ID: <20220711070510.dm4am2miy5lcwlzq@yy-desk-7060>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <f74b05eca8815744ce1ad672c66033101be7369c.1656366338.git.isaku.yamahata@intel.com>
- <20220708051847.prn254ukwvgkdl3c@yy-desk-7060>
- <YshNjy5RsxYuFxOo@google.com>
+        Mon, 11 Jul 2022 03:06:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E991836A;
+        Mon, 11 Jul 2022 00:06:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0B5223A;
+        Mon, 11 Jul 2022 00:06:19 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.45.183])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B2CF33F70D;
+        Mon, 11 Jul 2022 00:06:11 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V7 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
+Date:   Mon, 11 Jul 2022 12:35:34 +0530
+Message-Id: <20220711070600.2378316-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YshNjy5RsxYuFxOo@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 03:30:23PM +0000, Sean Christopherson wrote:
-> Please trim replies.
->
-> On Fri, Jul 08, 2022, Yuan Yao wrote:
-> > On Mon, Jun 27, 2022 at 02:53:28PM -0700, isaku.yamahata@intel.com wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 51306b80f47c..f239b6cb5d53 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -668,6 +668,44 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
-> > >  	}
-> > >  }
-> > >
-> > > +static inline void kvm_init_shadow_page(void *page)
-> > > +{
-> > > +#ifdef CONFIG_X86_64
-> > > +	int ign;
-> > > +
-> > > +	WARN_ON_ONCE(shadow_nonpresent_value != SHADOW_NONPRESENT_VALUE);
-> > > +	asm volatile (
-> > > +		"rep stosq\n\t"
->
-> I have a slight preference for:
->
-> 	asm volatile ("rep stosq\n\t"
-> 		      <align here>
-> 	);
->
-> so that searching for "asm" or "asm volatile" shows the "rep stosq" in the
-> result without needed to capture the next line.
->
-> > > +		: "=c"(ign), "=D"(page)
-> > > +		: "a"(SHADOW_NONPRESENT_VALUE), "c"(4096/8), "D"(page)
-> > > +		: "memory"
-> > > +	);
-> > > +#else
-> > > +	BUG();
-> > > +#endif
->
-> Rather than put the #ifdef here, split mmu_topup_shadow_page_cache() on 64-bit
-> versus 32-bit.  Then this BUG() goes away and we don't get slapped on the wrist
-> by Linus :-)
->
-> > > +}
-> > > +
-> > > +static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
-> > > +	int start, end, i, r;
-> > > +	bool is_tdp_mmu = is_tdp_mmu_enabled(vcpu->kvm);
-> > > +
-> > > +	if (is_tdp_mmu && shadow_nonpresent_value)
-> > > +		start = kvm_mmu_memory_cache_nr_free_objects(mc);
-> > > +
-> > > +	r = kvm_mmu_topup_memory_cache(mc, PT64_ROOT_MAX_LEVEL);
-> > > +	if (r)
-> > > +		return r;
->
-> Bailing immediately is wrong.  If kvm_mmu_topup_memory_cache() fails after allocating
-> at least one page, then KVM needs to initialize those pages, otherwise it will leave
-> uninitialized pages in the cache.  If userspace frees up memory in response to the
-> -ENOMEM and resumes the vCPU, KVM will consume uninitialized data.
->
-> > > +
-> > > +	if (is_tdp_mmu && shadow_nonpresent_value) {
->
-> So I'm pretty sure I effectively suggested keeping shadow_nonpresent_value, but
-> seeing it in code, I really don't like it.  It's an unnecessary check on every
-> SPT allocation, and it's misleading because it suggests shadow_nonpresent_value
-> might be zero when the TDP MMU is enabled.
->
-> My vote is to drop shadow_nonpresent_value and then rename kvm_init_shadow_page()
-> to make it clear that it's specific to the TDP MMU.
->
-> So this?  Completely untested.
->
-> #ifdef CONFIG_X86_64
-> static void kvm_init_tdp_mmu_shadow_page(void *page)
-> {
-> 	int ign;
->
-> 	asm volatile ("rep stosq\n\t"
-> 		      : "=c"(ign), "=D"(page)
-> 		      : "a"(SHADOW_NONPRESENT_VALUE), "c"(4096/8), "D"(page)
-> 		      : "memory"
-> 	);
-> }
->
-> static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
-> {
-> 	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
-> 	bool is_tdp_mmu = is_tdp_mmu_enabled(vcpu->kvm);
-> 	int start, end, i, r;
->
-> 	if (is_tdp_mmu)
-> 		start = kvm_mmu_memory_cache_nr_free_objects(mc);
->
-> 	r = kvm_mmu_topup_memory_cache(mc, PT64_ROOT_MAX_LEVEL);
->
-> 	/*
-> 	 * Note, topup may have allocated objects even if it failed to allocate
-> 	 * the minimum number of objects required to make forward progress _at
-> 	 * this time_.  Initialize newly allocated objects even on failure, as
-> 	 * userspace can free memory and rerun the vCPU in response to -ENOMEM.
-> 	 */
-> 	if (is_tdp_mmu) {
-> 		end = kvm_mmu_memory_cache_nr_free_objects(mc);
-> 		for (i = start; i < end; i++)
-> 			kvm_init_tdp_mmu_shadow_page(mc->objects[i]);
-> 	}
-> 	return r;
-> }
-> #else
-> static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
-> {
-> 	return kvm_mmu_topup_memory_cache(vcpu->arch.mmu_shadow_page_cache,
-> 					  PT64_ROOT_MAX_LEVEL);
-> }
-> #endif /* CONFIG_X86_64 */
->
-> > > +		end = kvm_mmu_memory_cache_nr_free_objects(mc);
-> > > +		for (i = start; i < end; i++)
-> > > +			kvm_init_shadow_page(mc->objects[i]);
-> > > +	}
-> > > +	return 0;
-> > > +}
-> > > +
->
-> ...
->
-> > > @@ -5654,7 +5698,8 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
-> > >  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
-> > >  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
-> > >
-> > > -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> > > +	if (!(is_tdp_mmu_enabled(vcpu->kvm) && shadow_nonpresent_value))
-> > > +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> >
-> > I'm not sure why skip this for TDX, arch.mmu_shadow_page_cache is
-> > still used for allocating sp->spt which used to track the S-EPT in kvm
-> > for tdx guest.  Anything I missed for this ?
->
-> Shared EPTEs need to be initialized with SUPPRESS_VE=1, otherwise not-present
-> EPT violations would be reflected into the guest by hardware as #VE exceptions.
-> This is handled by initializing page allocations via kvm_init_shadow_page() during
-> cache topup if shadow_nonpresent_value is non-zero.  In that case, telling the
-> page allocation to zero-initialize the page would be wasted effort.
->
-> The initialization is harmless for S-EPT entries because KVM's copy of the S-EPT
-> isn't consumed by hardware, and because under the hood S-EPT entries should never
-> #VE (I forget if this is enforced by hardware or if the TDX module sets SUPPRESS_VE).
+__SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
+generic protection_map[] array which is used for vm_get_page_prot(). This
+abstraction layer can be avoided, if the platforms just define the array
+protection_map[] for all possible vm_flags access permission combinations
+and also export vm_get_page_prot() implementation.
 
-Ah I see, you're right, thanks for the explanation! I think with
-changes you suggested above the __GFP_ZERO can be removed from
-mmu_shadow_page_cache for VMs which is_tdp_mmu_enabled() is true:
+This series drops __SXXX/__PXXX macros from across platforms in the tree.
+First it build protects generic protection_map[] array with '#ifdef __P000'
+and moves it inside platforms which enable ARCH_HAS_VM_GET_PAGE_PROT. Later
+this build protects same array with '#ifdef ARCH_HAS_VM_GET_PAGE_PROT' and
+moves inside remaining platforms while enabling ARCH_HAS_VM_GET_PAGE_PROT.
+This adds a new macro DECLARE_VM_GET_PAGE_PROT defining the current generic
+vm_get_page_prot(), in order for it to be reused on platforms that do not
+require custom implementation. Finally, ARCH_HAS_VM_GET_PAGE_PROT can just
+be dropped, as all platforms now define and export vm_get_page_prot(), via
+looking up a private and static protection_map[] array. protection_map[]
+data type has been changed as 'static const' on all platforms that do not
+change it during boot.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 8de26cbde295..0b412f3eb0c5 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6483,8 +6483,8 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
- 	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
- 	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+This series applies on v5.19-rc6 and has been build tested for multiple
+platforms. While here it has dropped off all previous tags from folks after
+the current restructuring. Series common CC list has been expanded to cover
+all impacted platforms for wider reach.
 
--	if (!(tdp_enabled && shadow_nonpresent_value))
--		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-+	if (!(is_tdp_mmu_enabled(vcpu->kvm))
-+	    vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+- Anshuman
 
- 	vcpu->arch.mmu = &vcpu->arch.root_mmu;
- 	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+Changes in V7:
+
+- Dropped comments from arch/m68k/include/asm/mcf_pgtable.h per Geert
+- Dropped comments from arch/m68k/include/asm/sun3_pgtable.h per Geert
+- Moved the *_C definitions above into arch/m68k/mm/motorola.c per Geert
+- Folded in following build failure fix patches on linux-next
+
+https://lore.kernel.org/all/20220705221411.3381797-1-jcmvbkbc@gmail.com/
+https://lore.kernel.org/all/20220706054002.1936820-1-anshuman.khandual@arm.com/
+https://lore.kernel.org/all/20220708230646.CA9B7C341C0@smtp.kernel.org/	
+
+- Collected tags from Geert
+- Rebased on v5.19-rc6
+
+Changes in V6:
+
+https://lore.kernel.org/all/20220630051630.1718927-1-anshuman.khandual@arm.com/
+
+- Converted protection_map[] array as 'static const' on sparc32 platform
+- Rebased on v5.19-rc4
+- Collected tags
+
+Changes in V5:
+
+https://lore.kernel.org/all/20220627045833.1590055-1-anshuman.khandual@arm.com/
+
+- Converted most platfomr protection_map[] array as 'static const'
+- Moved DECLARE_VM_GET_PAGE_PROT inside <include/linux/pgtable.h>
+- Moved generic protection_map[] comment near DECLARE_VM_GET_PAGE_PROT
+- Updated some commit messages
+
+Changes in V4:
+
+https://lore.kernel.org/all/20220624044339.1533882-1-anshuman.khandual@arm.com/
+
+- Both protection_map[] and vm_get_page_prot() moves inside all platforms
+- Split patches to create modular changes for individual platforms
+- Add macro DECLARE_VM_GET_PAGE_PROT defining generic vm_get_page_prot()
+- Drop ARCH_HAS_VM_GET_PAGE_PROT
+
+Changes in V3:
+
+https://lore.kernel.org/all/20220616040924.1022607-1-anshuman.khandual@arm.com/
+
+- Fix build issues on powerpc and riscv
+
+Changes in V2:
+
+https://lore.kernel.org/all/20220613053354.553579-1-anshuman.khandual@arm.com/
+
+- Add 'const' identifier to protection_map[] on powerpc
+- Dropped #ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT check from sparc 32
+- Dropped protection_map[] init from sparc 64
+- Dropped all new platform changes subscribing ARCH_HAS_VM_GET_PAGE_PROT
+- Added a second patch which moves generic protection_map[] array into
+  all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT)
+
+Changes in V1:
+
+https://lore.kernel.org/all/20220603101411.488970-1-anshuman.khandual@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: sparclinux@vger.kernel.org
+Cc: x86@kernel.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+
+
+Anshuman Khandual (26):
+  mm/mmap: Build protect protection_map[] with __P000
+  mm/mmap: Define DECLARE_VM_GET_PAGE_PROT
+  powerpc/mm: Move protection_map[] inside the platform
+  sparc/mm: Move protection_map[] inside the platform
+  arm64/mm: Move protection_map[] inside the platform
+  x86/mm: Move protection_map[] inside the platform
+  mm/mmap: Build protect protection_map[] with ARCH_HAS_VM_GET_PAGE_PROT
+  microblaze/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  loongarch/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  xtensa/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  alpha/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  riscv/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  ia64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  um/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sh/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
+
+ arch/alpha/include/asm/pgtable.h          | 17 -------
+ arch/alpha/mm/init.c                      | 22 +++++++++
+ arch/arc/include/asm/pgtable-bits-arcv2.h | 18 -------
+ arch/arc/mm/mmap.c                        | 20 ++++++++
+ arch/arm/include/asm/pgtable.h            | 17 -------
+ arch/arm/lib/uaccess_with_memcpy.c        |  2 +-
+ arch/arm/mm/mmu.c                         | 20 ++++++++
+ arch/arm64/Kconfig                        |  1 -
+ arch/arm64/include/asm/pgtable-prot.h     | 18 -------
+ arch/arm64/mm/mmap.c                      | 21 ++++++++
+ arch/csky/include/asm/pgtable.h           | 18 -------
+ arch/csky/mm/init.c                       | 20 ++++++++
+ arch/hexagon/include/asm/pgtable.h        | 27 -----------
+ arch/hexagon/mm/init.c                    | 42 ++++++++++++++++
+ arch/ia64/include/asm/pgtable.h           | 18 -------
+ arch/ia64/mm/init.c                       | 28 ++++++++++-
+ arch/loongarch/include/asm/pgtable-bits.h | 19 --------
+ arch/loongarch/mm/cache.c                 | 46 ++++++++++++++++++
+ arch/m68k/include/asm/mcf_pgtable.h       | 59 -----------------------
+ arch/m68k/include/asm/motorola_pgtable.h  | 29 -----------
+ arch/m68k/include/asm/sun3_pgtable.h      | 23 ---------
+ arch/m68k/mm/mcfmmu.c                     | 55 +++++++++++++++++++++
+ arch/m68k/mm/motorola.c                   | 29 +++++++++++
+ arch/m68k/mm/sun3mmu.c                    | 20 ++++++++
+ arch/microblaze/include/asm/pgtable.h     | 17 -------
+ arch/microblaze/mm/init.c                 | 20 ++++++++
+ arch/mips/include/asm/pgtable.h           | 22 ---------
+ arch/mips/mm/cache.c                      |  3 ++
+ arch/nios2/include/asm/pgtable.h          | 16 ------
+ arch/nios2/mm/init.c                      | 20 ++++++++
+ arch/openrisc/include/asm/pgtable.h       | 18 -------
+ arch/openrisc/mm/init.c                   | 20 ++++++++
+ arch/parisc/include/asm/pgtable.h         | 18 -------
+ arch/parisc/mm/init.c                     | 20 ++++++++
+ arch/powerpc/Kconfig                      |  1 -
+ arch/powerpc/include/asm/pgtable.h        | 20 +-------
+ arch/powerpc/mm/pgtable.c                 | 24 +++++++++
+ arch/riscv/include/asm/pgtable.h          | 20 --------
+ arch/riscv/mm/init.c                      | 20 ++++++++
+ arch/s390/include/asm/pgtable.h           | 17 -------
+ arch/s390/mm/mmap.c                       | 20 ++++++++
+ arch/sh/include/asm/pgtable.h             | 17 -------
+ arch/sh/mm/mmap.c                         | 20 ++++++++
+ arch/sparc/Kconfig                        |  1 -
+ arch/sparc/include/asm/pgtable_32.h       | 19 --------
+ arch/sparc/include/asm/pgtable_64.h       | 19 --------
+ arch/sparc/mm/init_32.c                   | 20 ++++++++
+ arch/sparc/mm/init_64.c                   |  3 ++
+ arch/um/include/asm/pgtable.h             | 17 -------
+ arch/um/kernel/mem.c                      | 20 ++++++++
+ arch/x86/Kconfig                          |  1 -
+ arch/x86/include/asm/mem_encrypt.h        |  2 +
+ arch/x86/include/asm/pgtable_types.h      | 19 --------
+ arch/x86/mm/mem_encrypt_amd.c             |  6 +--
+ arch/x86/mm/pgprot.c                      | 28 +++++++++++
+ arch/x86/um/mem_32.c                      |  2 +-
+ arch/xtensa/include/asm/pgtable.h         | 18 -------
+ arch/xtensa/mm/init.c                     | 22 +++++++++
+ include/linux/mm.h                        |  1 -
+ include/linux/pgtable.h                   | 28 +++++++++++
+ mm/Kconfig                                |  3 --
+ mm/mmap.c                                 | 47 ------------------
+ 62 files changed, 617 insertions(+), 581 deletions(-)
+
+-- 
+2.25.1
+

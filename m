@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AE856FB69
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E926B56F9F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiGKJaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S229933AbiGKJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbiGKJ3T (ORCPT
+        with ESMTP id S231249AbiGKJK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:29:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3E110EF;
-        Mon, 11 Jul 2022 02:16:21 -0700 (PDT)
+        Mon, 11 Jul 2022 05:10:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743D4AE45;
+        Mon, 11 Jul 2022 02:08:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C3061278;
-        Mon, 11 Jul 2022 09:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E96C34115;
-        Mon, 11 Jul 2022 09:16:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68C09B80D2C;
+        Mon, 11 Jul 2022 09:08:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4257C34115;
+        Mon, 11 Jul 2022 09:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530977;
-        bh=45YfZqTeBaddWVj5ELAXw0HVwdPptdajeRd/ErUVfHs=;
+        s=korg; t=1657530517;
+        bh=8ByYXWQzNMjeFdoOBr8COFdLU/JmjppBk3DjxuG6qrE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FqpQHRqHfUCDdwFZIaxZACgQjp+XkAl84aJP+Tt9HtwBrF0wq7KywZbDZZRfJ7Hdm
-         ecz0pdRSkVAZ846FPGhTAGYkD8ERm2xzSoEWLAh4NuCb+OeViBPfmd+FoK4fA7wK35
-         QmEbEUbjaiNvJkJPFTn+DYXl2Xr3FzQMiZ7X/qyM=
+        b=GybGeZylj8M6tOlCqAd7ZgoX5R6WOLNLDNZ2sOFhhZDasxAa5uvjcuba8OjO/Z46x
+         Sdn4vTKoufTOP9LDj0ABv0i0yykPe02CPDIY9U6HNMbNWV3X6FrgfUDLchEDDlGIUV
+         rwZsP5SgIhbxdkEN788Zk/fIVFl/9jhwWWXF6nEQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org,
+        "stable@vger.kernel.org, linux-can@vger.kernel.org, Marc Kleine-Budde" 
+        <mkl@pengutronix.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 052/112] ASoC: SOF: Intel: hda: Fix compressed stream position tracking
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH 4.19 13/31] can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
 Date:   Mon, 11 Jul 2022 11:06:52 +0200
-Message-Id: <20220711090551.048463206@linuxfoundation.org>
+Message-Id: <20220711090538.239132541@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,250 +55,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Jimmy Assarsson <extja@kvaser.com>
 
-[ Upstream commit ca7ab1dcf58dfce5bc851bf7e50fd94822c24665 ]
+commit e6c80e601053ffdac5709f11ff3ec1e19ed05f7b upstream.
 
-Commit 288fad2f71fa ("ASoC: SOF: Intel: hda: add quirks for HDAudio DMA position information")
-modified the PCM path only, but left the compressed data patch using an
-obsolete option.
-Move the functionality in a helper that can be called for both PCM and
-compressed data.
+The firmware of M32C based Leaf devices expects bittiming parameters
+calculated for 16MHz clock. Since we use the actual clock frequency of
+the device, the device may end up with wrong bittiming parameters,
+depending on user requested parameters.
 
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Fixes: 288fad2f71fa ("ASoC: SOF: Intel: hda: add quirks for HDAudio DMA position information")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220616201953.130876-1-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This regression affects M32C based Leaf devices with non-16MHz clock.
+
+Fixes: 7a09ebf00238 ("can: kvaser_usb: get CAN clock frequency from device")
+Link: https://lore.kernel.org/all/20220603083820.800246-3-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/intel/hda-pcm.c    | 74 +------------------------
- sound/soc/sof/intel/hda-stream.c | 94 ++++++++++++++++++++++++++++++--
- sound/soc/sof/intel/hda.h        |  3 +
- 3 files changed, 94 insertions(+), 77 deletions(-)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h      |    1 
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c |   29 +++++++++++++++--------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c |   25 ++++++++++++-------
+ 3 files changed, 36 insertions(+), 19 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda-pcm.c b/sound/soc/sof/intel/hda-pcm.c
-index dc1f743730c0..6888e0a4665d 100644
---- a/sound/soc/sof/intel/hda-pcm.c
-+++ b/sound/soc/sof/intel/hda-pcm.c
-@@ -192,79 +192,7 @@ snd_pcm_uframes_t hda_dsp_pcm_pointer(struct snd_sof_dev *sdev,
- 		goto found;
- 	}
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+@@ -38,6 +38,7 @@
+ /* Kvaser USB device quirks */
+ #define KVASER_USB_QUIRK_HAS_SILENT_MODE	BIT(0)
+ #define KVASER_USB_QUIRK_HAS_TXRX_ERRORS	BIT(1)
++#define KVASER_USB_QUIRK_IGNORE_CLK_FREQ	BIT(2)
  
--	switch (sof_hda_position_quirk) {
--	case SOF_HDA_POSITION_QUIRK_USE_SKYLAKE_LEGACY:
--		/*
--		 * This legacy code, inherited from the Skylake driver,
--		 * mixes DPIB registers and DPIB DDR updates and
--		 * does not seem to follow any known hardware recommendations.
--		 * It's not clear e.g. why there is a different flow
--		 * for capture and playback, the only information that matters is
--		 * what traffic class is used, and on all SOF-enabled platforms
--		 * only VC0 is supported so the work-around was likely not necessary
--		 * and quite possibly wrong.
--		 */
--
--		/* DPIB/posbuf position mode:
--		 * For Playback, Use DPIB register from HDA space which
--		 * reflects the actual data transferred.
--		 * For Capture, Use the position buffer for pointer, as DPIB
--		 * is not accurate enough, its update may be completed
--		 * earlier than the data written to DDR.
--		 */
--		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
--			pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
--					       AZX_REG_VS_SDXDPIB_XBASE +
--					       (AZX_REG_VS_SDXDPIB_XINTERVAL *
--						hstream->index));
--		} else {
--			/*
--			 * For capture stream, we need more workaround to fix the
--			 * position incorrect issue:
--			 *
--			 * 1. Wait at least 20us before reading position buffer after
--			 * the interrupt generated(IOC), to make sure position update
--			 * happens on frame boundary i.e. 20.833uSec for 48KHz.
--			 * 2. Perform a dummy Read to DPIB register to flush DMA
--			 * position value.
--			 * 3. Read the DMA Position from posbuf. Now the readback
--			 * value should be >= period boundary.
--			 */
--			usleep_range(20, 21);
--			snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
--					 AZX_REG_VS_SDXDPIB_XBASE +
--					 (AZX_REG_VS_SDXDPIB_XINTERVAL *
--					  hstream->index));
--			pos = snd_hdac_stream_get_pos_posbuf(hstream);
--		}
--		break;
--	case SOF_HDA_POSITION_QUIRK_USE_DPIB_REGISTERS:
--		/*
--		 * In case VC1 traffic is disabled this is the recommended option
--		 */
--		pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
--				       AZX_REG_VS_SDXDPIB_XBASE +
--				       (AZX_REG_VS_SDXDPIB_XINTERVAL *
--					hstream->index));
--		break;
--	case SOF_HDA_POSITION_QUIRK_USE_DPIB_DDR_UPDATE:
--		/*
--		 * This is the recommended option when VC1 is enabled.
--		 * While this isn't needed for SOF platforms it's added for
--		 * consistency and debug.
--		 */
--		pos = snd_hdac_stream_get_pos_posbuf(hstream);
--		break;
--	default:
--		dev_err_once(sdev->dev, "hda_position_quirk value %d not supported\n",
--			     sof_hda_position_quirk);
--		pos = 0;
--		break;
--	}
--
--	if (pos >= hstream->bufsize)
--		pos = 0;
--
-+	pos = hda_dsp_stream_get_position(hstream, substream->stream, true);
- found:
- 	pos = bytes_to_frames(substream->runtime, pos);
+ /* Device capabilities */
+ #define KVASER_USB_CAP_BERR_CAP			0x01
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -92,26 +92,33 @@ static const struct kvaser_usb_driver_in
+ };
  
-diff --git a/sound/soc/sof/intel/hda-stream.c b/sound/soc/sof/intel/hda-stream.c
-index daeb64c495e4..d95ae17e81cc 100644
---- a/sound/soc/sof/intel/hda-stream.c
-+++ b/sound/soc/sof/intel/hda-stream.c
-@@ -707,12 +707,13 @@ bool hda_dsp_check_stream_irq(struct snd_sof_dev *sdev)
- }
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf = {
+-	.quirks = 0,
++	.quirks = KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
  
- static void
--hda_dsp_set_bytes_transferred(struct hdac_stream *hstream, u64 buffer_size)
-+hda_dsp_compr_bytes_transferred(struct hdac_stream *hstream, int direction)
- {
-+	u64 buffer_size = hstream->bufsize;
- 	u64 prev_pos, pos, num_bytes;
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err = {
+-	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS,
++	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
++		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
  
- 	div64_u64_rem(hstream->curr_pos, buffer_size, &prev_pos);
--	pos = snd_hdac_stream_get_pos_posbuf(hstream);
-+	pos = hda_dsp_stream_get_position(hstream, direction, false);
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err_listen = {
+ 	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
+-		  KVASER_USB_QUIRK_HAS_SILENT_MODE,
++		  KVASER_USB_QUIRK_HAS_SILENT_MODE |
++		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
  
- 	if (pos < prev_pos)
- 		num_bytes = (buffer_size - prev_pos) +  pos;
-@@ -748,8 +749,7 @@ static bool hda_dsp_stream_check(struct hdac_bus *bus, u32 status)
- 			if (s->substream && sof_hda->no_ipc_position) {
- 				snd_sof_pcm_period_elapsed(s->substream);
- 			} else if (s->cstream) {
--				hda_dsp_set_bytes_transferred(s,
--					s->cstream->runtime->buffer_size);
-+				hda_dsp_compr_bytes_transferred(s, s->cstream->direction);
- 				snd_compr_fragment_elapsed(s->cstream);
- 			}
- 		}
-@@ -1009,3 +1009,89 @@ void hda_dsp_stream_free(struct snd_sof_dev *sdev)
- 		devm_kfree(sdev->dev, hda_stream);
- 	}
- }
++static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leafimx = {
++	.quirks = 0,
++	.ops = &kvaser_usb_leaf_dev_ops,
++};
 +
-+snd_pcm_uframes_t hda_dsp_stream_get_position(struct hdac_stream *hstream,
-+					      int direction, bool can_sleep)
-+{
-+	struct hdac_ext_stream *hext_stream = stream_to_hdac_ext_stream(hstream);
-+	struct sof_intel_hda_stream *hda_stream = hstream_to_sof_hda_stream(hext_stream);
-+	struct snd_sof_dev *sdev = hda_stream->sdev;
-+	snd_pcm_uframes_t pos;
+ static const struct usb_device_id kvaser_usb_table[] = {
+-	/* Leaf USB product IDs */
++	/* Leaf M32C USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_DEVEL_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_PRODUCT_ID),
+@@ -152,16 +159,18 @@ static const struct usb_device_id kvaser
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_CAN_R_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
 +
-+	switch (sof_hda_position_quirk) {
-+	case SOF_HDA_POSITION_QUIRK_USE_SKYLAKE_LEGACY:
-+		/*
-+		 * This legacy code, inherited from the Skylake driver,
-+		 * mixes DPIB registers and DPIB DDR updates and
-+		 * does not seem to follow any known hardware recommendations.
-+		 * It's not clear e.g. why there is a different flow
-+		 * for capture and playback, the only information that matters is
-+		 * what traffic class is used, and on all SOF-enabled platforms
-+		 * only VC0 is supported so the work-around was likely not necessary
-+		 * and quite possibly wrong.
++	/* Leaf i.MX28 USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_V2_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_LIGHT_2HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_2HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 
+ 	/* USBCANII USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN2_PRODUCT_ID),
+@@ -190,7 +199,7 @@ static const struct usb_device_id kvaser
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MEMO_PRO_2HS_V2_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+-	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_2CANLIN_PRODUCT_ID),
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_CANLIN_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -525,16 +525,23 @@ static void kvaser_usb_leaf_get_software
+ 	dev->fw_version = le32_to_cpu(softinfo->fw_version);
+ 	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
+ 
+-	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++	if (dev->driver_info->quirks & KVASER_USB_QUIRK_IGNORE_CLK_FREQ) {
++		/* Firmware expects bittiming parameters calculated for 16MHz
++		 * clock, regardless of the actual clock
 +		 */
-+
-+		/* DPIB/posbuf position mode:
-+		 * For Playback, Use DPIB register from HDA space which
-+		 * reflects the actual data transferred.
-+		 * For Capture, Use the position buffer for pointer, as DPIB
-+		 * is not accurate enough, its update may be completed
-+		 * earlier than the data written to DDR.
-+		 */
-+		if (direction == SNDRV_PCM_STREAM_PLAYBACK) {
-+			pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
-+					       AZX_REG_VS_SDXDPIB_XBASE +
-+					       (AZX_REG_VS_SDXDPIB_XINTERVAL *
-+						hstream->index));
-+		} else {
-+			/*
-+			 * For capture stream, we need more workaround to fix the
-+			 * position incorrect issue:
-+			 *
-+			 * 1. Wait at least 20us before reading position buffer after
-+			 * the interrupt generated(IOC), to make sure position update
-+			 * happens on frame boundary i.e. 20.833uSec for 48KHz.
-+			 * 2. Perform a dummy Read to DPIB register to flush DMA
-+			 * position value.
-+			 * 3. Read the DMA Position from posbuf. Now the readback
-+			 * value should be >= period boundary.
-+			 */
-+			if (can_sleep)
-+				usleep_range(20, 21);
-+
-+			snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
-+					 AZX_REG_VS_SDXDPIB_XBASE +
-+					 (AZX_REG_VS_SDXDPIB_XINTERVAL *
-+					  hstream->index));
-+			pos = snd_hdac_stream_get_pos_posbuf(hstream);
+ 		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
+-		break;
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
+-		dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
+-		break;
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
+-		dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
+-		break;
++	} else {
++		switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
++		case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
++			break;
++		case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
++			break;
++		case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
++			break;
 +		}
-+		break;
-+	case SOF_HDA_POSITION_QUIRK_USE_DPIB_REGISTERS:
-+		/*
-+		 * In case VC1 traffic is disabled this is the recommended option
-+		 */
-+		pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
-+				       AZX_REG_VS_SDXDPIB_XBASE +
-+				       (AZX_REG_VS_SDXDPIB_XINTERVAL *
-+					hstream->index));
-+		break;
-+	case SOF_HDA_POSITION_QUIRK_USE_DPIB_DDR_UPDATE:
-+		/*
-+		 * This is the recommended option when VC1 is enabled.
-+		 * While this isn't needed for SOF platforms it's added for
-+		 * consistency and debug.
-+		 */
-+		pos = snd_hdac_stream_get_pos_posbuf(hstream);
-+		break;
-+	default:
-+		dev_err_once(sdev->dev, "hda_position_quirk value %d not supported\n",
-+			     sof_hda_position_quirk);
-+		pos = 0;
-+		break;
-+	}
-+
-+	if (pos >= hstream->bufsize)
-+		pos = 0;
-+
-+	return pos;
-+}
-diff --git a/sound/soc/sof/intel/hda.h b/sound/soc/sof/intel/hda.h
-index 05e5e158614a..196494ba1245 100644
---- a/sound/soc/sof/intel/hda.h
-+++ b/sound/soc/sof/intel/hda.h
-@@ -557,6 +557,9 @@ int hda_dsp_stream_setup_bdl(struct snd_sof_dev *sdev,
- bool hda_dsp_check_ipc_irq(struct snd_sof_dev *sdev);
- bool hda_dsp_check_stream_irq(struct snd_sof_dev *sdev);
+ 	}
+ }
  
-+snd_pcm_uframes_t hda_dsp_stream_get_position(struct hdac_stream *hstream,
-+					      int direction, bool can_sleep);
-+
- struct hdac_ext_stream *
- 	hda_dsp_stream_get(struct snd_sof_dev *sdev, int direction, u32 flags);
- int hda_dsp_stream_put(struct snd_sof_dev *sdev, int direction, int stream_tag);
--- 
-2.35.1
-
 
 

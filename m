@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5248570688
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C6F57068C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiGKPCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S231488AbiGKPDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiGKPCS (ORCPT
+        with ESMTP id S229670AbiGKPDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:02:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C340D5D582;
-        Mon, 11 Jul 2022 08:02:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F6CD6159C;
-        Mon, 11 Jul 2022 15:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542C2C34115;
-        Mon, 11 Jul 2022 15:02:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M5QahTht"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657551734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yEJrOrmLun4FqXV/vXKX3u/LT3WQApq9kkZ/uQvyyrs=;
-        b=M5QahThtjnVZ7zpGpsc/+U9NToQMuGLMgzk8IIhCrwfrLJq1770lkCFLsYeuiK3Ofbl+fK
-        ONQgwDvkxIe3lqVijbWtQvDElxSjcTA/WceXSuZ2Cr8gUzsqRkPPjRiywv2dOIDcKljeSX
-        EHSEEg7Gg2ljUpzr/yZYgFLpO172Ox0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 62d5336a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 11 Jul 2022 15:02:14 +0000 (UTC)
-Date:   Mon, 11 Jul 2022 17:02:09 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: xor - move __crypto_xor into lib/
-Message-ID: <Ysw7cewDUYp1mgEU@zx2c4.com>
-References: <20220709215453.262237-1-ebiggers@kernel.org>
+        Mon, 11 Jul 2022 11:03:47 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CDC13F6D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:03:46 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 6so9166544ybc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YErQAJTNBsroUwBWXYZSk0t8HBKJD/pgmYdR3arRfh0=;
+        b=qO08D9a7Ul7Z5pIUVipX8dvxICNRcJuNNXaX1wo2nbgYlSzbFEzRmKDZ4suiQmK5QE
+         5O79C7VcQ4c1jAxkV+3LXFwCi7gdMd5yVzCrtB6FA8FKeflTC6ZxyNbgU3MrGUZvvaMQ
+         uOeqcFGWeKUfWB0H5vNUdXkamNdMSfx9kTcmTnMMDupUr3wEfmS03f5C01EYjMMjF182
+         RdH2CeywyRnTbfmCvQFwnratwesgRsH/pohx8RjZQQqPArZw8+o96ZLtXYtlxw8QQMth
+         1xqtItUDFMbBfNREqfFtChLx+Hv8S4zoee203d/yqQi9NCAZZijzI+X8VEn5MkiG5MRu
+         3RbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YErQAJTNBsroUwBWXYZSk0t8HBKJD/pgmYdR3arRfh0=;
+        b=r52Hg3TziRCaU4kOq2sl6z67PnNwhlSvubLZkPll0nWwkjwushsetPeqOGNFqI7mrj
+         uDbgAleVi5ooBES/MYaWSDO0SDzf1JD0ljPhgHMC3kz6oMa7/+tvPkWwf5T20f6AUfYX
+         YFErhs259OyBKO+PBiXfPpo+FRdmfEjYivbGQmYvhsc6V1+rkokFmPhAzHYtpBFSmty3
+         xQVLihTJIDI+Kfxi+xiOTciHF8UqKemRLVUTHLSaGkmfLnH53hYvlRNm7CMloJMtFeVk
+         dLBLhijd15UWJI1sKuqoTcsZjc0tSdOsIVOjaevxdrv0P6BZUMCiWu47MF7FdX+gMBMz
+         kyyA==
+X-Gm-Message-State: AJIora9kiUKXTyt0soKlTdugTpIjcyqcDRo1E+ZtXLld9uWltE/BHGGq
+        nPT+Hy/3VrMsBsbhdkV9yl2GdvhRP4PIhAmYZUlp8MtFR4ehQw==
+X-Google-Smtp-Source: AGRyM1tiFJtNJ7jK15XJtd5QoDyl9COVIoiZfo4OvbRUHjZkDRT+mHd4SC/hjB5hwMZl/g/faSWOphXDZp6BaQsUJ4E=
+X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
+ w9-20020a05690210c900b00668e27c08f7mr17544509ybu.128.1657551825513; Mon, 11
+ Jul 2022 08:03:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220709215453.262237-1-ebiggers@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220710142822.52539-1-arthurchang09@gmail.com>
+ <20220710142822.52539-3-arthurchang09@gmail.com> <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
+ <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com> <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
+In-Reply-To: <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Jul 2022 17:03:09 +0200
+Message-ID: <CAHp75VfH9M=h7UZPrWLwSmUXXPJFrO+zwAbf_g1k2_HPBM4HKw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
+To:     Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     Yu-Jen Chang <arthurchang09@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,25 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On Mon, Jul 11, 2022 at 5:00 PM Andrey Semashev
+<andrey.semashev@gmail.com> wrote:
+> On 7/11/22 17:52, Yu-Jen Chang wrote:
 
-On Sat, Jul 09, 2022 at 02:54:53PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> CRYPTO_LIB_CHACHA depends on CRYPTO for __crypto_xor, defined in
-> crypto/algapi.c.  This is a layering violation because the dependencies
-> should only go in the other direction (crypto/ => lib/crypto/).  Also
-> the correct dependency would be CRYPTO_ALGAPI, not CRYPTO.  Fix this by
-> moving __crypto_xor into lib/xor.c, alongside lib/memneq.c where
-> __crypto_memneq was recently moved.
-> 
-> Note that CRYPTO_LIB_CHACHA_GENERIC selected XOR_BLOCKS, which is
-> unrelated and unnecessary.  It was perhaps thought that XOR_BLOCKS was
-> needed for __crypto_xor, but that's not the case.
+...
 
-Oh thank goodness. Excellent! Indeed untangling this knot will be a
-large improvement.
+> I think you're missing the point. Loads at unaligned addresses may not
+> be allowed by hardware using conventional load instructions or may be
+> inefficient. Given that this memchr implementation is used as a fallback
+> when no hardware-specific version is available, you should be
+> conservative wrt. hardware capabilities and behavior. You should
+> probably have a pre-alignment loop.
 
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Exactly!
+The initial code is broken, NAK.
 
-Jason
+P.S. At least you may look into strscpy() implementation to get a clue.
+
+-- 
+With Best Regards,
+Andy Shevchenko

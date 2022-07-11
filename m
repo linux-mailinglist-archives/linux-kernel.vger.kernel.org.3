@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B56056FA72
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE7F56FD9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiGKJRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S234182AbiGKJ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiGKJRR (ORCPT
+        with ESMTP id S234179AbiGKJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:17:17 -0400
+        Mon, 11 Jul 2022 05:57:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E57BDF1A;
-        Mon, 11 Jul 2022 02:11:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5467FB4BF8;
+        Mon, 11 Jul 2022 02:27:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A54C2B80E5E;
-        Mon, 11 Jul 2022 09:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11DDEC34115;
-        Mon, 11 Jul 2022 09:11:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98159B80E93;
+        Mon, 11 Jul 2022 09:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D78C341C0;
+        Mon, 11 Jul 2022 09:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530677;
-        bh=TQ1o81IdEGrKyEmd0iBY/iyi7Ilq6/KNstQRS2Mu2Ds=;
+        s=korg; t=1657531612;
+        bh=YqtQP35jXWYBrQLN/cToll7pQXBag6WgH9ZCEqVLZqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LY++gFRGpr8ehvo+oGaeAF/OSGU63hL3BjMiH7BHVFD+zR3qiSIiyUVvP2ZXUE0ps
-         5gnjJa39X2v5vKxtuMc42woafxjoE79EhugXsNDizC0JrUqWMN3/dHYpAIOxNMsht2
-         x7PfRy9ujolqMpx6YChb8LhlKzBLI3MHVXh1+efM=
+        b=sDcPASoI4017RjWKxApzpGY3hszY4O4+P8FioF3BeXNI0FhfYbUkMxXDI3ZUACiHM
+         UwUegjZly1P9Hat7yhFFu/AzrfxWez9JLC+hwpTWSYedgRCf+oI8RDIOCPWVH6vMN2
+         l097QVscXcCwDwN3s/SVfoxtBSoDsf8ZcuzE/+Ig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrei Lalaev <andrey.lalaev@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 21/38] pinctrl: sunxi: sunxi_pconf_set: use correct offset
+        stable@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 167/230] net: dsa: qca8k: reset cpu port on MTU change
 Date:   Mon, 11 Jul 2022 11:07:03 +0200
-Message-Id: <20220711090539.357246146@linuxfoundation.org>
+Message-Id: <20220711090608.797548765@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrei Lalaev <andrey.lalaev@gmail.com>
+From: Christian Marangi <ansuelsmth@gmail.com>
 
-[ Upstream commit cd4c1e65a32afd003b08ad4aafe1e4d3e4e8e61b ]
+commit 386228c694bf1e7a7688e44412cb33500b0ac585 upstream.
 
-Some Allwinner SoCs have 2 pinctrls (PIO and R_PIO).
-Previous implementation used absolute pin numbering and it was incorrect
-for R_PIO pinctrl.
-It's necessary to take into account the base pin number.
+It was discovered that the Documentation lacks of a fundamental detail
+on how to correctly change the MAX_FRAME_SIZE of the switch.
 
-Fixes: 90be64e27621 ("pinctrl: sunxi: implement pin_config_set")
-Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Link: https://lore.kernel.org/r/20220525190423.410609-1-andrey.lalaev@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
+switch panics and cease to send any packet. This cause the mgmt ethernet
+system to not receive any packet (the slow fallback still works) and
+makes the device not reachable. To recover from this a switch reset is
+required.
+
+To correctly handle this, turn off the cpu ports before changing the
+MAX_FRAME_SIZE and turn on again after the value is applied.
+
+Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Link: https://lore.kernel.org/r/20220621151122.10220-1-ansuelsmth@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sunxi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/dsa/qca8k.c |   23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-index 77783582080c..c4052eab6bfc 100644
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -536,6 +536,8 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
- 	struct sunxi_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
- 	int i;
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -1599,7 +1599,7 @@ static int
+ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
+ {
+ 	struct qca8k_priv *priv = ds->priv;
+-	int i, mtu = 0;
++	int ret, i, mtu = 0;
  
-+	pin -= pctl->desc->pin_base;
+ 	priv->port_mtu[port] = new_mtu;
+ 
+@@ -1607,8 +1607,27 @@ qca8k_port_change_mtu(struct dsa_switch
+ 		if (priv->port_mtu[i] > mtu)
+ 			mtu = priv->port_mtu[i];
+ 
++	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
++	 * the switch panics.
++	 * Turn off both cpu ports before applying the new value to prevent
++	 * this.
++	 */
++	if (priv->port_sts[0].enabled)
++		qca8k_port_set_status(priv, 0, 0);
 +
- 	for (i = 0; i < num_configs; i++) {
- 		enum pin_config_param param;
- 		unsigned long flags;
--- 
-2.35.1
-
++	if (priv->port_sts[6].enabled)
++		qca8k_port_set_status(priv, 6, 0);
++
+ 	/* Include L2 header / FCS length */
+-	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
++	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
++
++	if (priv->port_sts[0].enabled)
++		qca8k_port_set_status(priv, 0, 1);
++
++	if (priv->port_sts[6].enabled)
++		qca8k_port_set_status(priv, 6, 1);
++
++	return ret;
+ }
+ 
+ static int
 
 

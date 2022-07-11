@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D7256FF82
+	by mail.lfdr.de (Postfix) with ESMTP id 10BF356FF81
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiGKKvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S229970AbiGKKvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiGKKvV (ORCPT
+        with ESMTP id S229676AbiGKKvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 06:51:21 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E42B5209
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:43 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id w185so4348877pfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:43 -0700 (PDT)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E73B521E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:47 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f11so4011091plr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9fY/cD5RyDbPMC16zL/4fjstRGOrtcZDiECJwfvZbXo=;
-        b=m/z4oAXPcVCiAj03EYjCD7HgTnrAcQcfMT5Tu7oYB1Lb0CyjF/1GzJDYCblblGRIvs
-         XrRZpCLRkefOfXzdhNdJ9mnOdl5U5jdc4HAHi3uMzTj9WOE2dBztlGDe9Pa9NFx9OojJ
-         cLo7jbARrZH5/SJjoSWZRpZo54LuEX8oagi8Q=
+        bh=/dH5AuNv3/3xu+UZsaeD0vwZDTjCSjjCkh8LEd+YI1o=;
+        b=psYo5QDqDg0MR1r4CavqDmkceWxQGNJNibEvsvR5kJpqNj7b1teQL6n+IdxX3DBD6l
+         Zx9nIf22sHdpSiVjzCPW1IFm4M726NzNpzqFFdlKpIbP0aKOGZDpjv/DunvAJflSCoSr
+         YIgh0k8bCSYIVSLmTFds8IhI0cuzFqyu70I38=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9fY/cD5RyDbPMC16zL/4fjstRGOrtcZDiECJwfvZbXo=;
-        b=GH9WFRg6V/j40V7VB4cxChzTq1Xk3580OBlbrTpUgXdK5vHGAvKfOUEPnpA0juREAp
-         y5M+7OQ1BrZcko35JoST4aXqCyGgxWwh5qpY3PrWogJPM9beezZcFnDU1GlXCKFCdyo4
-         +ZrnbjCmGWOiWGy8JMVp3izynESQiTGvjxr5s2N+qkdLGG+zfH7x8oCJ2WNqUAOqd++x
-         kqbKemdpqvvt6jpWfSVfHiscl2AejEE/C/+NDN6rJj+Iqbc/m/jbftgR8DlggOpgcl2C
-         vL8vGUNIvQr/qJn/g2yy3IZhLG2wVLX2+U8/rFUN8R587ngtTwfsObqTq4aFCpPxDDi7
-         dcqA==
-X-Gm-Message-State: AJIora8C9X88xyn+uICLnwqAwo9wnT32kBl4k/i5dWMO1GfYlTkzcfOw
-        SCQz8lS7Z7DabJpMa7i+gf1K0g==
-X-Google-Smtp-Source: AGRyM1u7q92IK+OSS1YolOtVcQvJjMLfup+akgRA/a14mGGcYqsDkd4e5+gLPuID5zltApnZq7LgYg==
-X-Received: by 2002:a63:b443:0:b0:40c:fbf9:8366 with SMTP id n3-20020a63b443000000b0040cfbf98366mr15206295pgu.308.1657533461057;
-        Mon, 11 Jul 2022 02:57:41 -0700 (PDT)
+        bh=/dH5AuNv3/3xu+UZsaeD0vwZDTjCSjjCkh8LEd+YI1o=;
+        b=HdX0hvCErvILvXALtOsGNTnb4YZZ6X/EOafKGwxR8TmK7dxcCh0/g/imt8dsWoehSb
+         AkAFCHdoQNVrbaEmRi46GsFIYdvVn50WTDYR7G2qzdGN/orH6rkZn6Yv/8svxnkhdEqO
+         J0Ukh1ESWYdx4qosla0FBMcr9V4yd8kI6IxaKaYDJ5AVbC3GFBAA9fQjMT4AXCj96IbB
+         mPia81AbQc7eCMr0HngHDWaIew3jes2BMjC61mZ2yZ4TYpuHw/OtBqZgMFKihi4Xd3UW
+         wmBjg7VnhbNa5SfKM3h6Hh1hAPJsz41XWzQF/0Am6ST1WPHvFvkR6x3YCFqwE4Jiljvc
+         WHrA==
+X-Gm-Message-State: AJIora8oUjWNU+1T9RS9lwEICmTJmU6zsfr8eOGua+RWtIfgMFmmy+bl
+        xfrhBLgmLoBscBbaJwBMBilj2A==
+X-Google-Smtp-Source: AGRyM1u71WxKsvtMvsMoeCRY1aLWWAcnNsU10Js1zwhm6QaCtzgBnurLthcyu6WuASW8T98+0p74Gw==
+X-Received: by 2002:a17:902:cf03:b0:16b:a91d:aff4 with SMTP id i3-20020a170902cf0300b0016ba91daff4mr17868029plg.66.1657533466584;
+        Mon, 11 Jul 2022 02:57:46 -0700 (PDT)
 Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090a390300b001ef81bac701sm6560814pjb.42.2022.07.11.02.57.35
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a390300b001ef81bac701sm6560814pjb.42.2022.07.11.02.57.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 02:57:40 -0700 (PDT)
+        Mon, 11 Jul 2022 02:57:45 -0700 (PDT)
 From:   Suniel Mahesh <sunil@amarulasolutions.com>
 To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Maxime Ripard <maxime.ripard@free-electrons.com>,
@@ -56,10 +56,10 @@ Cc:     dri-devel@lists.freedesktop.org,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        linux-amarula@amarulasolutions.com, Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 1/2] dt-bindings: arm: sunxi: Add binding for RenewWorldOutReach R16-Vista-E board
-Date:   Mon, 11 Jul 2022 15:27:20 +0530
-Message-Id: <20220711095721.1935377-2-sunil@amarulasolutions.com>
+        linux-amarula@amarulasolutions.com
+Subject: [PATCH v3 2/2] ARM: dts: sun8i: Add R16 Vista E board from RenewWorldOutreach
+Date:   Mon, 11 Jul 2022 15:27:21 +0530
+Message-Id: <20220711095721.1935377-3-sunil@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711095721.1935377-1-sunil@amarulasolutions.com>
 References: <20220711095721.1935377-1-sunil@amarulasolutions.com>
@@ -75,57 +75,422 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a binding for the RenewWorldOutReach R16-Vista-E board based on
-allwinner R16.
+The R16-Vista-E board from RenewWorldOutreach based on allwinner
+R16(A33).
+
+General features:
+- 1GB RAM
+- microSD slot
+- Realtek Wifi
+- 1 x USB 2.0
+- HDMI IN
+- HDMI OUT
+- Audio out
+- MIPI DSI
+- TI DLPC3433
+
+It has also connectors to connect an external mini keypad.
 
 Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Christopher Vollo <chris@renewoutreach.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
-Changes for v3:
-- As suggested by Samuel Holland:
-- vendor prefix documented
-- primary author of the commit should be the first signer
+ ---
+    Changes for v3:
+    - As suggested by Samuel Holland:
+    - changed binding to gpio-fan
+    - changed widgets to DACL and DACR to describe audio routing
+    - fixed indentation
+    - primary author of the commit should be the first signer
 
-Changes for v2:
-- Add missing compatible string
-- insert missing signatures of contributors
+    Changes for v2:
+    - Add missing compatible string
+    - insert missing signatures of contributors
 ---
- Documentation/devicetree/bindings/arm/sunxi.yaml       | 6 ++++++
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 2 files changed, 8 insertions(+)
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts | 362 ++++++++++++++++++
+ 2 files changed, 363 insertions(+)
+ create mode 100644 arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-index 95278a6a9a8e..52b8c9aba6f3 100644
---- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-+++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-@@ -787,6 +787,12 @@ properties:
-           - const: allwinner,r7-tv-dongle
-           - const: allwinner,sun5i-a10s
- 
-+      - description: RenewWorldOutreach R16-Vista-E
-+        items:
-+          - const: renewworldoutreach,r16-vista-e
-+          - const: allwinner,sun8i-r16
-+          - const: allwinner,sun8i-a33
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 184899808ee7..b5966c0742e1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1353,6 +1353,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
+ 	sun8i-r16-nintendo-nes-classic.dtb \
+ 	sun8i-r16-nintendo-super-nes-classic.dtb \
+ 	sun8i-r16-parrot.dtb \
++	sun8i-r16-renew-vista-e.dtb \
+ 	sun8i-r40-bananapi-m2-ultra.dtb \
+ 	sun8i-r40-oka40i-c.dtb \
+ 	sun8i-s3-elimo-initium.dtb \
+diff --git a/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
+new file mode 100644
+index 000000000000..ff72914eb110
+--- /dev/null
++++ b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
+@@ -0,0 +1,362 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2022 RenewWorldOutreach
++ * Copyright (C) 2022 Amarula Solutions(India)
++ */
 +
-       - description: RerVision H3-DVK
-         items:
-           - const: rervision,h3-dvk
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 6bb20b4554d7..f5cd0acb1036 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1030,6 +1030,8 @@ patternProperties:
-     description: reMarkable AS
-   "^renesas,.*":
-     description: Renesas Electronics Corporation
-+  "^renewworldoutreach,.*":
-+    description: RENEW WORLD OUTREACH
-   "^rex,.*":
-     description: iMX6 Rex Project
-   "^rervision,.*":
++/dts-v1/;
++#include "sun8i-a33.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	model = "RenewWorldOutreach R16-Vista-E";
++	compatible = "renewworldoutreach,r16-vista-e", "allwinner,sun8i-r16", "allwinner,sun8i-a33";
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	gpio-keys-polled {
++		compatible = "gpio-keys-polled";
++		poll-interval = <100>;
++
++		ok {
++			label = "ok";
++			linux,code = <KEY_ENTER>;
++			gpios = <&pio 4 0 GPIO_ACTIVE_LOW>;
++		};
++
++		left {
++			label = "left";
++			linux,code = <KEY_LEFT>;
++			gpios = <&pio 4 1 GPIO_ACTIVE_LOW>;
++		};
++
++		right {
++			label = "right";
++			linux,code = <KEY_RIGHT>;
++			gpios = <&pio 4 2 GPIO_ACTIVE_LOW>;
++		};
++
++		up {
++			label = "up";
++			linux,code = <KEY_UP>;
++			gpios = <&pio 4 3 GPIO_ACTIVE_LOW>;
++		};
++
++		down {
++			label = "down";
++			linux,code = <KEY_DOWN>;
++			gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
++		};
++
++		back {
++			label = "back";
++			linux,code = <KEY_BACK>;
++			gpios = <&pio 4 5 GPIO_ACTIVE_LOW>;
++		};
++
++		power {
++			label = "power";
++			linux,code = <KEY_POWER>;
++			gpios = <&pio 4 6 GPIO_ACTIVE_LOW>;
++		};
++
++		vol-down {
++			label = "vol-down";
++			linux,code = <KEY_VOLUMEDOWN>;
++			gpios = <&pio 7 3 GPIO_ACTIVE_LOW>;
++		};
++
++		vol-up {
++			label = "vol-up";
++			linux,code = <KEY_VOLUMEUP>;
++			gpios = <&pio 7 9 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		battery-led0 {
++			label = "renew-e:battery-led0";
++			gpios = <&r_pio 0 2 GPIO_ACTIVE_HIGH>;
++		};
++
++		battery-led1 {
++			label = "renew-e:battery-led1";
++			gpios = <&r_pio 0 3 GPIO_ACTIVE_HIGH>;
++		};
++
++		battery-led2 {
++			label = "renew-e:battery-led2";
++			gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>;
++		};
++
++		battery-led3 {
++			label = "renew-e:battery-led3";
++			gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;
++		};
++
++		battery-led4 {
++			label = "renew-e:battery-led4";
++			gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>;
++		};
++
++		volume-led0 {
++			label = "renew-e:volume-led0";
++			gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>;
++		};
++
++		volume-led1 {
++			label = "renew-e:volume-led1";
++			gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>;
++		};
++
++		volume-led2 {
++			label = "renew-e:volume-led2";
++			gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>;
++		};
++
++		volume-led3 {
++			label = "renew-e:volume-led3";
++			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>;
++		};
++
++		volume-led4 {
++			label = "renew-e:volume-led4";
++			gpios = <&pio 6 10 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-pad-intz {
++			label = "renew-e:led-pad-intz";
++			gpios = <&pio 4 16 GPIO_ACTIVE_HIGH>;
++			default-state = "on";
++		};
++	};
++
++	gpio-fan {
++		compatible = "gpio-fan";
++		gpios = <&pio 4 14 GPIO_ACTIVE_HIGH>; /* FAN_ON/OFF: PE14 */
++		gpio-fan,speed-map = <0 0 6000 1>;
++	};
++
++	reg_vcc5v0: vcc5v0 {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++};
++
++&codec {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&reg_dcdc3>;
++};
++
++&cpu0_opp_table {
++	opp-1104000000 {
++		opp-hz = /bits/ 64 <1104000000>;
++		opp-microvolt = <1320000>;
++		clock-latency-ns = <244144>; /* 8 32k periods */
++	};
++
++	opp-1200000000 {
++		opp-hz = /bits/ 64 <1200000000>;
++		opp-microvolt = <1320000>;
++		clock-latency-ns = <244144>; /* 8 32k periods */
++	};
++};
++
++&dai {
++	status = "okay";
++};
++
++&de {
++	status = "okay";
++};
++
++&dphy {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&mmc0 {
++	vmmc-supply = <&reg_dcdc1>;
++	bus-width = <4>;
++	non-removable;
++	status = "okay";
++};
++
++&mmc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mmc1_pg_pins>;
++	vmmc-supply = <&reg_dcdc1>;
++	bus-width = <4>;
++	broken-cd;
++	status = "okay";
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&r_rsb {
++	status = "okay";
++
++	axp22x: pmic@3a3 {
++		compatible = "x-powers,axp223";
++		reg = <0x3a3>;
++		interrupt-parent = <&r_intc>;
++		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
++		eldoin-supply = <&reg_dcdc1>;
++		x-powers,drive-vbus-en;
++	};
++};
++
++#include "axp223.dtsi"
++
++&ac_power_supply {
++	status = "okay";
++};
++
++&reg_aldo1 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "vcc-io";
++};
++
++&reg_aldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <2500000>;
++	regulator-max-microvolt = <2500000>;
++	regulator-name = "vdd-dll";
++};
++
++&reg_aldo3 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "avcc";
++};
++
++&reg_dc1sw {
++	regulator-name = "vcc-lcd";
++};
++
++&reg_dc5ldo {
++	regulator-always-on;
++	regulator-min-microvolt = <900000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-cpus";
++};
++
++&reg_dcdc1 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "vcc-3v0";
++};
++
++&reg_dcdc2 {
++	regulator-always-on;
++	regulator-min-microvolt = <900000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-sys";
++};
++
++&reg_dcdc3 {
++	regulator-always-on;
++	regulator-min-microvolt = <900000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-cpu";
++};
++
++&reg_dcdc5 {
++	regulator-always-on;
++	regulator-min-microvolt = <1500000>;
++	regulator-max-microvolt = <1500000>;
++	regulator-name = "vcc-dram";
++};
++
++&reg_dldo1 {
++	regulator-always-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++	regulator-name = "vcc-3v3-main1";
++};
++
++&reg_dldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++	regulator-name = "vcc-3v3-main2";
++};
++
++&reg_dldo3 {
++	regulator-always-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++	regulator-name = "vcc-3v3-main3";
++};
++
++&reg_dldo4 {
++	regulator-always-on;
++	regulator-min-microvolt = <3300000>;
++	regulator-max-microvolt = <3300000>;
++	regulator-name = "vcc-3v3-main4";
++};
++
++&reg_eldo1 {
++	regulator-always-on;
++	regulator-min-microvolt = <1200000>;
++	regulator-max-microvolt = <1200000>;
++	regulator-name = "vcc-1v2-hdmi";
++};
++
++&reg_drivevbus {
++	regulator-name = "usb0-vbus";
++	status = "okay";
++};
++
++&reg_rtc_ldo {
++	regulator-name = "vcc-rtc";
++};
++
++&sound {
++	status = "okay";
++	simple-audio-card,routing =
++		"Left DAC", "DACL",
++		"Right DAC", "DACR";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pb_pins>;
++	status = "okay";
++};
++
++&usb_otg {
++	dr_mode = "host";
++	status = "okay";
++};
++
++&usbphy {
++	/* VBUS is always on because it is wired to the power supply */
++	usb0_vbus-supply = <&reg_vcc5v0>;
++	status = "okay";
++};
 -- 
 2.25.1
 

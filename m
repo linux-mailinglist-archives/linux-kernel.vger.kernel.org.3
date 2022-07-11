@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E196570A3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2638570A38
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiGKS6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229978AbiGKS6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiGKS6r (ORCPT
+        with ESMTP id S231499AbiGKS6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:58:47 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D4EF598;
-        Mon, 11 Jul 2022 11:58:45 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id a5so8196470wrx.12;
-        Mon, 11 Jul 2022 11:58:45 -0700 (PDT)
+        Mon, 11 Jul 2022 14:58:39 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66115F74;
+        Mon, 11 Jul 2022 11:58:37 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id s27so5474223pga.13;
+        Mon, 11 Jul 2022 11:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pXX16zqMZ21Xtym4SCeJoGfTd6FvLAtGuHb0Wc+2xVA=;
+        b=fXSVFS76kQzdYPhlEkz2WR8jl9DRkR6qf/KO+SiMyHvhKDQ7FH1dw5pcJRCsGnw42M
+         SgOvIX1R8gaX218xibtzBGu4D6mbx+zCQ9ubus7FN0sAFJwC9RBTO8uv2SQbbgwKy4vU
+         vdbJ4UGoHo1YrNyLIJBdJ92/mQkAeuOEtWkhVyBJFNph62a2S7JU77/qCYbpo095Mh+h
+         KvBbUS1F5iWKBhiOWwdCmkF2snuYAh8jN59m71fUmZiZLz5mDObVnM3rh9ZhHxOogVtA
+         g9PlIdDbghhSssAt4IJyjtlL5yZMyA4ng4rWQy8Vz/p/JCo9XUFmocC6AnA4BA21m10Y
+         6XOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c8aRKqV7/1xC7hiRH6BGwULwW18RGfbUUhEFlYZkd8k=;
-        b=oM++rokBCa3gh/LpCpxQiQI0VknR/L627AvVPCFBC6uaytjC+CEwZPJYfABsIiLHUb
-         XzFZQGH9WM2x4jPF46Y/RoW3szLRscV7D/bW5vvMT6FnQJAss2y8pcWIP+YFzrKoxiMw
-         Lini+fO+bh6YmtYwyR7IKehy6rj1RbOlFJUkc4Q6jPcVT5akGUcMJWHe/kmT0lev8D+H
-         gnq1xwRi63FQ2zCYAgaa6GP61xggPYhKmmuDMc9pqJJf2JabjqjU+WSKUnKOhSsuNIqS
-         vA3VUReDbTtFbu9rzGcZg3kIw/D5jdOeoQycFixtCh3lMT4v4kW0XUZI1k5e+bnwYggY
-         gaOQ==
-X-Gm-Message-State: AJIora+7ikO8x4nhdQbhWEJ3ZZBWcwHLScn0vJ4rXKgfAyQtArghDhzy
-        DbxpHeHsn/oPI9hXcUNA5a0=
-X-Google-Smtp-Source: AGRyM1u8JZUvh67LqNH0C3GL1Syul56zrenyoWa01uzSz9BXljEDN7L8xU3d7WUfpZ2GndAMCI11hA==
-X-Received: by 2002:a5d:4407:0:b0:21d:7a1d:67ec with SMTP id z7-20020a5d4407000000b0021d7a1d67ecmr17557512wrq.465.1657565923629;
-        Mon, 11 Jul 2022 11:58:43 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n16-20020a05600c465000b003a2d92ab521sm7256187wmo.26.2022.07.11.11.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 11:58:43 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:58:31 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Marc Zyngier <maz@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] PCI: hv: Take a const cpumask in
- hv_compose_msi_req_get_cpu()
-Message-ID: <20220711185831.rjjy3h7qbqa72g5c@liuwe-devbox-debian-v2>
-References: <20220708004931.1672-1-samuel@sholland.org>
- <PH0PR21MB3025E51C68B0F77F54299768D7829@PH0PR21MB3025.namprd21.prod.outlook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pXX16zqMZ21Xtym4SCeJoGfTd6FvLAtGuHb0Wc+2xVA=;
+        b=PzWHv1SdXgCbOuPu4F2LNuH6XgEdmqjYsFL24aMsAKptIcFkfzBpHF1+2WqdmeFlcP
+         hqvm+cruFh0X4tAwXGfCQR4JR2GUemyqycIqIX52GAaT8yAIZAq6jdKEpSrKA2qKaTa8
+         Uj9yaf7r2DbAap4BnoCYORLsgkAqOOAHf4gaBhl9buI4DpKgVEBipdmyV5zSro+0xOwx
+         yz5Sabm0/tJDiPfrdDsy46BA/Wq0ZlJhZZ6sf6XKDFvgAopHIYED/4pItRbEY0LnS+hI
+         8Yo/CFfvKtgSABBBJHLNQKOAAI54+tP5YAQwhsI5RrhE2ivf+8WOIK788vhArcP0x/Sk
+         AnKg==
+X-Gm-Message-State: AJIora8Ma8xr+R0eWwqp4WNtvsBJCUAYMuajcRlUDPGKveCxhIv91dE9
+        2fpEwm3Gv41Sqr2YPXtdQ/IYSggivJc=
+X-Google-Smtp-Source: AGRyM1vVAWYdcExpXi1U9BZQmsySr0inBXLH+XNCJcF2zpBepQ2/FY7pF/tHIQyC/CV16/XMr/TxnQ==
+X-Received: by 2002:a63:eb03:0:b0:412:b1d6:94ca with SMTP id t3-20020a63eb03000000b00412b1d694camr17095871pgh.468.1657565916971;
+        Mon, 11 Jul 2022 11:58:36 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m12-20020a63710c000000b0040d287f1378sm4547570pgc.7.2022.07.11.11.58.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 11:58:36 -0700 (PDT)
+Message-ID: <98186d7f-42e6-2f85-29eb-a0a37b639e58@gmail.com>
+Date:   Mon, 11 Jul 2022 11:58:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025E51C68B0F77F54299768D7829@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.18 000/112] 5.18.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220711090549.543317027@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 04:27:00AM +0000, Michael Kelley (LINUX) wrote:
-> From: Samuel Holland <samuel@sholland.org> Sent: Thursday, July 7, 2022 5:50 PM
-> > 
-> > The cpumask that is passed to this function ultimately comes from
-> > irq_data_get_effective_affinity_mask(), which was recently changed to
-> > return a const cpumask pointer. The first level of functions handling
-> > the affinity mask were updated, but not this helper function.
-> > 
-> > Fixes: 4d0b8298818b ("genirq: Return a const cpumask from irq_data_get_affinity_mask")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > ---
-> > 
-> >  drivers/pci/controller/pci-hyperv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> > index aebada45569b..e7c6f6629e7c 100644
-> > --- a/drivers/pci/controller/pci-hyperv.c
-> > +++ b/drivers/pci/controller/pci-hyperv.c
-> > @@ -1635,7 +1635,7 @@ static u32 hv_compose_msi_req_v1(
-> >   * Create MSI w/ dummy vCPU set targeting just one vCPU, overwritten
-> >   * by subsequent retarget in hv_irq_unmask().
-> >   */
-> > -static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
-> > +static int hv_compose_msi_req_get_cpu(const struct cpumask *affinity)
-> >  {
-> >  	return cpumask_first_and(affinity, cpu_online_mask);
-> >  }
-> > --
-> > 2.35.1
+On 7/11/22 02:06, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.11 release.
+> There are 112 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Applied to hyperv-next. Thanks.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

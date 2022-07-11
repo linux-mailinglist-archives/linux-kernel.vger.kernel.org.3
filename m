@@ -2,164 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0EA570BBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFDA570B47
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiGKU1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S230063AbiGKUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiGKUZk (ORCPT
+        with ESMTP id S229977AbiGKUXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:25:40 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A974D812;
-        Mon, 11 Jul 2022 13:25:27 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0771B5C0130;
-        Mon, 11 Jul 2022 16:25:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 11 Jul 2022 16:25:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1657571125; x=1657657525; bh=kNzIp30Qm/
-        z7d269z2/7uprxKlfk1b3Xh9kIgnDKL3w=; b=jdSmgR3nMHSEZedXM5Yb9S/a66
-        VWyn4EdjuZc6tTPaLqq1KzPMJQt9mT7jXaIPKzyuDBHBY6lHP3385uKfUG3eRZsA
-        7qIELLk4Y5sJE87O8iuD9v1dTyPAuUSHkBvorFw63UzEYHCv7HAkvciUKq4c6tKa
-        6SfOVYVEHu9uCOAMmxkqjJcDMkSQqmnZ7qLMsH2Flrw1ssXzzjjG6tzm4wrBc4p8
-        PzlFxlxCztZjot7Qnv3Fpxyc6IizHrp7RX6GuBEl/nMvp63pJaby8lN6JAKITDYY
-        kPt7nhnjsOvdL9COeX9wqq08xW+JB1f9J3qfQxfj7EtsRMLJoblB8gCJ2e2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1657571125; x=1657657525; bh=kNzIp30Qm/z7d269z2/7uprxKlfk
-        1b3Xh9kIgnDKL3w=; b=k5rCBC2IsD779cvf/It1Nxc+98YUYsRPuKokoHQXcS+h
-        119XRyia2VNbLP+m6impbKEn7Y20/n52qOwE3vYr3ZEoA3kGJRH24QDNbV6Miylt
-        QTDKd9meOrUNyGchCPM4pZEBlJ6L7hS88+ou5zO0bH1AQEsbsQ9BpXE97WCddBpF
-        qu5tCMZWuyvQQxqrnUY/k8urkbZxdv/295w61YNmUTlA1n13JqIdxMUIlIrpVNHd
-        rnWYqBzWT9ZoJOSGaqnKCrn6OQuTlcbgskf9G0MXoumnpgIpwMozDdC3IoX+CWBN
-        dZXJ/o1Evg65WevBCatMrVtpgIMDfWCM415S+Lf3fw==
-X-ME-Sender: <xms:NIfMYsr3CJXdzuXI0q7WglfUM3zszE9cKM5ehjBkHNQ5xrGtoqSvkw>
-    <xme:NIfMYioZn2W1EMkm0PDjOPFb_SoFp1CSC4rzSfSn1Ptxj5YxI_Yxiivnf29tWaiEw
-    Y1au1oj16yyecHiGKU>
-X-ME-Received: <xmr:NIfMYhPLccsl49jduEzW5uowsbGtEU2rOQg5KC_KvIMH2lMLWjeBWPTW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejfedgudeglecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigt
-    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
-    frrghtthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteek
-    lefhleelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehthigthhhosehthigthhhordhpihiiiigr
-X-ME-Proxy: <xmx:NIfMYj71TdBzJ5iwFd9PaWaNtD3KVzbpVZUwnoPKHEmcY4EeDdCA7g>
-    <xmx:NIfMYr7j8tC0EctlhFIX00r8-x3VqnbqPt1d8UEGIZopCvnGILkG9A>
-    <xmx:NIfMYjhIFmj4HoQr7wWuP9-xQebg0SQQNekhGMvmuUmRXtxN4hgL0A>
-    <xmx:NYfMYu298dFgWEiyHHgz4RnXZlQqtVPNXhXdaY1Azc4fq4xTPvpdrg>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 11 Jul 2022 16:25:23 -0400 (EDT)
-Date:   Mon, 11 Jul 2022 14:25:21 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Eric Biederman <ebiederm@xmission.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: strange interaction between fuse + pidns
-Message-ID: <YsyHMVLuT5U6mm+I@netflix>
-References: <YrShFXRLtRt6T/j+@risky>
- <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
- <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
+        Mon, 11 Jul 2022 16:23:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904ED357FF;
+        Mon, 11 Jul 2022 13:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657570984; x=1689106984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sNVS+KcPsWhAjJnadCcEhTGBjML0xg+WgJRGyIyOaj0=;
+  b=WQGwEcncRO4y/T69LEi9bW8XTw18l6X3GxZwokcoR2Zq+OQZYMYrQHly
+   1DmYdhDHFpa0/aX8clq345PjFQOf5Q1rgaR+DDke7+Vv3HKiCSkicRqTg
+   bt435hT7Ym53uaukaCVCAAxGhN+aVQAWRzzWSEIYmYBbnCeTWPdGTK2ZP
+   L5spoxeq03cZoYYiqJDBTC2nJbSqaFvN1ePBvtT2UIKh+vRvDvRsHVz3Y
+   U3buYyjlaZKX82qKzIygL21FIt/J08X1LRpa4bWO4E+7lKnteeqqQqkJV
+   zMAYYcrQMi+qLihaaruGyEhsX0X7CGIgP7OEscdsfwU1qxrtKei/uRErB
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="103985574"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2022 13:22:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 11 Jul 2022 13:22:45 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 11 Jul 2022 13:22:45 -0700
+Date:   Mon, 11 Jul 2022 22:26:46 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <kavyasree.kotagiri@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v3 2/2] pinctrl: ocelot: Fix pincfg
+Message-ID: <20220711202646.om65vrksyifvkfkw@soft-dev3-1.localhost>
+References: <20220711192113.3522664-1-horatiu.vultur@microchip.com>
+ <20220711192113.3522664-3-horatiu.vultur@microchip.com>
+ <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-On Mon, Jul 11, 2022 at 03:59:15PM +0200, Miklos Szeredi wrote:
-> On Mon, 11 Jul 2022 at 12:35, Miklos Szeredi <miklos@szeredi.hu> wrote:
+The 07/11/2022 21:51, Andy Shevchenko wrote:
+> 
+> On Mon, Jul 11, 2022 at 9:17 PM Horatiu Vultur
+> <horatiu.vultur@microchip.com> wrote:
 > >
-> > Can you try the attached untested patch?
+> > The blamed commit changed to use regmaps instead of __iomem. But it
+> > didn't update the register offsets to be at word offset, so it uses byte
+> > offset.
+> > Another issue with the same commit is that it has a limit of 32 registers
+> > which is incorrect. The sparx5 has 64 while lan966x has 77.
 > 
-> Updated patch to avoid use after free on req->args.
+> ...
 > 
-> Still mostly untested.
+> > -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+> > +static struct regmap *ocelot_pinctrl_create_pincfg(struct ocelot_pinctrl *info,
+> > +                                                  struct platform_device *pdev)
+> 
+> const?
+> 
+> And I would leave pdev to be the first parameter, if there are no
+> other functions that have them like this.
 
-Thanks, when I applied your patch, I still ended up with tasks stuck
-waiting with a SIGKILL pending. So I looked into that and came up with
-the patch below. With both your patch and mine, my testcase exits
-cleanly.
+I will do that in the next version.
+Just for my understanding/knowledge why is this desire to have const or
+to keep the const?
 
-Eric (or Christian, or anyone), can you comment on the patch below? I
-have no idea what this will break. Maybe instead a better approach is
-some additional special case in __send_signal_locked()?
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-Tycho
-
-From b7ea26adcf3546be5745063cc86658acb5ed37e9 Mon Sep 17 00:00:00 2001
-From: Tycho Andersen <tycho@tycho.pizza>
-Date: Mon, 11 Jul 2022 11:26:58 -0600
-Subject: [PATCH] sched: __fatal_signal_pending() should also check shared
- signals
-
-The wait_* code uses signal_pending_state() to test whether a thread has
-been interrupted, which ultimately uses __fatal_signal_pending() to detect
-if there is a fatal signal.
-
-When a pid ns dies, in zap_pid_ns_processes() it does:
-
-    group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
-
-for all the tasks in the pid ns. That calls through:
-
-    group_send_sig_info() ->
-      do_send_sig_info() ->
-        send_signal_locked() ->
-          __send_signal_locked()
-
-which does:
-
-    pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
-
-which puts sigkill in the set of shared signals, but not the individual
-pending ones. If tasks are stuck in a killable wait (e.g. a fuse flush
-operation), they won't see this shared signal, and will hang forever, since
-TIF_SIGPENDING is set, but the fatal signal can't be detected.
-
-Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
----
- include/linux/sched/signal.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index cafbe03eed01..a033ccb0a729 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
- 
- static inline int __fatal_signal_pending(struct task_struct *p)
- {
--	return unlikely(sigismember(&p->pending.signal, SIGKILL));
-+	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
-+			sigismember(&p->signal->shared_pending.signal, SIGKILL));
- }
- 
- static inline int fatal_signal_pending(struct task_struct *p)
-
-base-commit: 32346491ddf24599decca06190ebca03ff9de7f8
 -- 
-2.34.1
-
+/Horatiu

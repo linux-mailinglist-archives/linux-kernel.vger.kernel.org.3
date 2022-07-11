@@ -2,82 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEF25709CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED47C5709D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiGKSTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S231517AbiGKSVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiGKSTq (ORCPT
+        with ESMTP id S229635AbiGKSVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:19:46 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5128F2A72A;
-        Mon, 11 Jul 2022 11:19:42 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id A37A0612F; Mon, 11 Jul 2022 14:19:41 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org A37A0612F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1657563581;
-        bh=yTN1iMuS7W4RZG3D9DAoI8ysBN7jOP71+Dr669dLx6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=whT6OMpOCB9/xvdcePS2enz3qvMMzSekD13C49qtEy9SLe9loGnS6Sxd4xRhU6kQE
-         zI2YUiYDZjBXQWZsJdjgV/ppATgx8ZFV1f5+PMRJPAJEjP/P9wxwZNEo14lDlUHqR5
-         cieZNu8Zyls4rCyVgLhl3pPNWGancK8jibGMNWOo=
-Date:   Mon, 11 Jul 2022 14:19:41 -0400
-From:   Bruce Fields <bfields@fieldses.org>
-To:     Jeff Layton <jlayton@redhat.com>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-Message-ID: <20220711181941.GC14184@fieldses.org>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
- <20220710124344.36dfd857@redhat.com>
- <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
- <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
+        Mon, 11 Jul 2022 14:21:47 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969FB5D0E0;
+        Mon, 11 Jul 2022 11:21:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id r6so2696026plg.3;
+        Mon, 11 Jul 2022 11:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IEhXinuEzpmvFUBM70vs9k4IkheO/2JqCVe0yT+x34U=;
+        b=nGL8giCRxgSDzuQiJApnh6wMNBfkjFf/yaAc5m94gkgTmzetH3npWlRzLtBLctkykS
+         Ywl0GTFZzQ30dzZYOklyG+wyJfjvL3TLsfMYy8kshNQd0gv9yHZctkAkWQuNAurVk8Lw
+         nvoK4VjsLJIfbZmZ0l5yoG3XtFXzmkBiBEYcUoIiZIG/XONd6piuiLmcj4oCJm1/SkRX
+         eCQpoZGFat3/iyVgNptOR4q55v6dKpF8sCfzrK5stROjTRgsblgPmclTrIC2AqmhcDY2
+         4zApFR89tjyexR4tmGCJnu3DErxRXMau0Sy0BOCuonLyVGCV+oPWEpao2mgT2MTy6e+n
+         0/PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IEhXinuEzpmvFUBM70vs9k4IkheO/2JqCVe0yT+x34U=;
+        b=oDMLbZyeQYrdd0BrOkhqGhyNmyELle7HKcqchhWXvDVmSA7WCtuMmLlGunjWcjHEnI
+         Hb37Zk4EIfIzbCCCi9+uwKFAfWS5V0/cffGXULNoNIlTRdTLbwgId1WvptgJ1hOg1J8B
+         Ov/mmEaZRQ/S6j+oSecibwE3dqxUo1GIflhshiobUppd9hvPWnrJaab7PDX3RHvUV9XF
+         ARumBL6jw0YBCAuywbjvSnJ4KvIuXDZHMjQXrIHuyjwK1EKeUspA3QojUdY1qtVtWsEP
+         f+Y3EpcmegqrnadhkSRXHv4qmAtnwbIkX42/t1gsW/IOa/1duqFWtz/EGW2DtB9kQvkz
+         4mlQ==
+X-Gm-Message-State: AJIora+37VqMp9VU90Q18YeaT27RuknV36wjT1bEodLgJsJBm8nkLlve
+        E5a/rvSoAlB9gK9yfgxcpHY=
+X-Google-Smtp-Source: AGRyM1tHheKKocOba0CKrsfbDYdVbHNdbz+fAkJ+drBAZKLIcv2sc+rsi3UwpNQosftErrwi51ZRJg==
+X-Received: by 2002:a17:903:244d:b0:16c:52f1:d12 with SMTP id l13-20020a170903244d00b0016c52f10d12mr2909632pls.44.1657563702085;
+        Mon, 11 Jul 2022 11:21:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o13-20020a170902d4cd00b0016c438b233bsm2953403plg.277.2022.07.11.11.20.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 11:21:41 -0700 (PDT)
+Message-ID: <9152b47b-a75c-57b9-d56d-2cfda3502f05@gmail.com>
+Date:   Mon, 11 Jul 2022 11:20:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 00/55] 5.10.130-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220711090541.764895984@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:
-> On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:
-> > > This patch regressed clients that support TIME_CREATE attribute.
-> > > Starting with this patch client might think that server supports
-> > > TIME_CREATE and start sending this attribute in its requests.
-> > 
-> > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> > attribute") does not include a change to nfsd4_decode_fattr4()
-> > that decodes the birth time attribute.
-> > 
-> > I don't immediately see another storage protocol stack in our
-> > kernel that supports a client setting the birth time, so NFSD
-> > might have to ignore the client-provided value.
-> > 
+On 7/11/22 02:06, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.130 release.
+> There are 55 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Cephfs allows this. My thinking at the time that I implemented it was
-> that it should be settable for backup purposes, but this was possibly a
-> mistake. On most filesystems, the btime seems to be equivalent to inode
-> creation time and is read-only.
+> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.130-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-So supporting it as read-only seems reasonable.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Clearly, failing to decode the setattr attempt isn't the right way to do
-that.  I'm not sure what exactly it should be doing--some kind of
-permission error on any setattr containing TIME_CREATE?
-
---b.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

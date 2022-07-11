@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C9F5703B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199885703BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiGKNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        id S229648AbiGKNBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiGKM77 (ORCPT
+        with ESMTP id S229561AbiGKNBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:59:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F30AD70;
-        Mon, 11 Jul 2022 05:59:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75B5F1576;
-        Mon, 11 Jul 2022 05:59:36 -0700 (PDT)
-Received: from [10.57.85.194] (unknown [10.57.85.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 049213F70D;
-        Mon, 11 Jul 2022 05:59:33 -0700 (PDT)
-Message-ID: <638d1d19-dc8a-c5f0-4c91-8ed95de8fe27@arm.com>
-Date:   Mon, 11 Jul 2022 13:59:29 +0100
+        Mon, 11 Jul 2022 09:01:34 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68CA301
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657544492; x=1689080492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PrVmYeCmbTkAjP1yiVX7XN2Kn0xfGm7eXMW+G51ItXQ=;
+  b=EML7G+D2q4NLpmBhBQHE2LQD2y1eyBJ+mi1dxlG8jcKzJXUXwqkj8ncq
+   QRierpBv/Y1qtDwkg4QEBoVBvR3Sk6j4EDJnmm00pIVFCrWvFX/8nhuM3
+   dzavPgIPfjV/IBZaYk9HKIiZjD2eibWzr0d8gE65Y5vsb0KVhOLLI0Fs7
+   fjvRf/78cJYJ6/Q/drsSyhWt0vSWUwiCIXLQGOR45h3Rbhoc8llFPZaFt
+   wXVEzNSuectdLJKNlz5vSaBQdTyomkBKtEBfjXy5S9NdQBaD+GLAwPsS3
+   k3lX7yYXqItNRSBLI4JhEe+bMPvLhX4KMvAJxKGSWmMNrTPKiW0ZaeCWy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="264431826"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="264431826"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 06:01:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="scan'208";a="921771631"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Jul 2022 06:01:28 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAt2V-0000pZ-VJ;
+        Mon, 11 Jul 2022 13:01:27 +0000
+Date:   Mon, 11 Jul 2022 21:01:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org, Xiang Gao <xiang@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [xiang:erofs/advancedpcl 16/16] fs/erofs/zdata.c:901:36: error:
+ 'mappednr' undeclared
+Message-ID: <202207112048.J46LPGXw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] iommu/exynos: Set correct dma mask for SysMMU v5+
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220702213724.3949-1-semen.protsenko@linaro.org>
- <20220702213724.3949-2-semen.protsenko@linaro.org>
- <9afb1e98-706f-ed61-892c-e3cc321364b4@linaro.org>
- <CAPLW+4kfrHOb8utzynhB=2KLDQu-NC08UYpAVjpg__NQSeSQyg@mail.gmail.com>
- <c2c3c37e-0f63-9b89-ed49-78193c46d7bd@linaro.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c2c3c37e-0f63-9b89-ed49-78193c46d7bd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-11 13:27, Krzysztof Kozlowski wrote:
-> On 08/07/2022 15:18, Sam Protsenko wrote:
->> On Sun, 3 Jul 2022 at 21:50, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 02/07/2022 23:37, Sam Protsenko wrote:
->>>> SysMMU v5+ supports 36 bit physical address space. Set corresponding DMA
->>>> mask to avoid falling back to SWTLBIO usage in dma_map_single() because
->>>> of failed dma_capable() check.
->>>>
->>>> The original code for this fix was suggested by Marek.
->>>>
->>>> Originally-by: Marek Szyprowski <m.szyprowski@samsung.com>
->>>
->>> This is some tip specific tag, I don't think checkpatch allows it.
->>> Either use suggesgted-by or co-developed-by + SoB.
->>>
->>
->> Yes, checkpatch is swearing at that line, though I encountered that
->> tag mentioning somewhere in Documentation. Will rework it in v2.
-> 
-> Yes, in tip. It did not go outside of tip.
-> 
->>
->>>> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
->>>> ---
->>>>   drivers/iommu/exynos-iommu.c | 8 ++++++++
->>>>   1 file changed, 8 insertions(+)
->>>>
->>>> diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
->>>> index 71f2018e23fe..28f8c8d93aa3 100644
->>>> --- a/drivers/iommu/exynos-iommu.c
->>>> +++ b/drivers/iommu/exynos-iommu.c
->>>> @@ -647,6 +647,14 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
->>>>                }
->>>>        }
->>>>
->>>> +     if (MMU_MAJ_VER(data->version) >= 5) {
->>>> +             ret = dma_set_mask(dev, DMA_BIT_MASK(36));
->>>> +             if (ret) {
->>>> +                     dev_err(dev, "Unable to set DMA mask: %d\n", ret);
->>>
->>> Missing cleanup: iommu_device_unregister
->>> and probably also: iommu_device_sysfs_remove
->>>
->>
->> Right. Also the correct cleanup should be added for failing
->> iommu_device_register() case, above of the quoted code. Will do that
->> in v2, thanks.
->>
->> Another thing is that "remove" method is missing. But guess I'll get
->> to it later, when adding modularization support for this driver.
-> 
-> remove is independent of modules, so it should be here already.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git erofs/advancedpcl
+head:   2c199ac6fc3c0d5499babde5b7586d99e4bc7aae
+commit: 2c199ac6fc3c0d5499babde5b7586d99e4bc7aae [16/16] erofs: introduce multi-reference pclusters
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220711/202207112048.J46LPGXw-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git/commit/?id=2c199ac6fc3c0d5499babde5b7586d99e4bc7aae
+        git remote add xiang https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git
+        git fetch --no-tags xiang erofs/advancedpcl
+        git checkout 2c199ac6fc3c0d5499babde5b7586d99e4bc7aae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash fs/erofs/
 
-.suppress_bind_attrs is set in the driver, so a .remove method on its 
-own would be dead code, since there's no way for it to be called. We can 
-permit module unloading since the module itself can be reference counted 
-(which in practice usually means that unloading will be denied). However 
-that's not the case for driver binding itself, so it's better not to 
-even pretend that removing an IOMMU's driver while other drivers are 
-using it (usually via DMA ops without even realising) is going to have 
-anything other than catastrophic results.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Robin.
+All errors (new ones prefixed by >>):
+
+   fs/erofs/zdata.c: In function 'z_erofs_fill_duplicated_copy':
+>> fs/erofs/zdata.c:901:36: error: 'mappednr' undeclared (first use in this function)
+     901 |                         if (src && mappednr != pgnr) {
+         |                                    ^~~~~~~~
+   fs/erofs/zdata.c:901:36: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/mappednr +901 fs/erofs/zdata.c
+
+   877	
+   878	static void z_erofs_fill_duplicated_copy(struct z_erofs_decompress_backend *be)
+   879	{
+   880		unsigned char *src = NULL;
+   881		struct list_head *p, *n;
+   882	
+   883		list_for_each_safe(p, n, &be->decompressed_secondary_bvecs) {
+   884			struct z_erofs_bvec_item *bvi;
+   885			unsigned int end, cur = 0;
+   886			int off0;
+   887			void *dst;
+   888	
+   889			bvi = container_of(p, struct z_erofs_bvec_item, list);
+   890			dst = kmap_local_page(bvi->bvec.page);
+   891	
+   892			if (bvi->bvec.offset < 0)
+   893				cur = -bvi->bvec.offset;
+   894			off0 = bvi->bvec.offset + (bvi->bvec.offset & ~PAGE_MASK);
+   895			end = min_t(unsigned int, be->pcl->length - off0, PAGE_SIZE);
+   896			off0 -= be->pcl->pageofs_out;
+   897			while (cur < end) {
+   898				unsigned int pgnr, scur;
+   899	
+   900				pgnr = (off0 + cur + PAGE_SIZE - 1) >> PAGE_SHIFT;
+ > 901				if (src && mappednr != pgnr) {
+   902					kunmap_local(src);
+   903					src = NULL;
+   904				}
+   905				scur = (pgnr << PAGE_SHIFT) - (off0 + cur);
+   906	
+   907				if (!src)
+   908					src = kmap_local_page(
+   909							be->decompressed_pages[pgnr]);
+   910				memcpy(dst + cur, src + scur, end - max(cur, scur));
+   911			}
+   912			kunmap_local(dst);
+   913			z_erofs_onlinepage_endio(bvi->bvec.page);
+   914		}
+   915	
+   916		if (src)
+   917			kunmap_local(src);
+   918	}
+   919	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

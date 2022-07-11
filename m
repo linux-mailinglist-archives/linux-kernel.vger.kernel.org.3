@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E926B56F9F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF07D56FD78
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiGKJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S233499AbiGKJz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiGKJK2 (ORCPT
+        with ESMTP id S233668AbiGKJzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:10:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743D4AE45;
-        Mon, 11 Jul 2022 02:08:39 -0700 (PDT)
+        Mon, 11 Jul 2022 05:55:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8AC33341;
+        Mon, 11 Jul 2022 02:26:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68C09B80D2C;
-        Mon, 11 Jul 2022 09:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4257C34115;
-        Mon, 11 Jul 2022 09:08:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0506C61376;
+        Mon, 11 Jul 2022 09:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC29C34115;
+        Mon, 11 Jul 2022 09:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530517;
-        bh=8ByYXWQzNMjeFdoOBr8COFdLU/JmjppBk3DjxuG6qrE=;
+        s=korg; t=1657531579;
+        bh=w7ayt6OeqqIe/QS+tSiV48KClRgPaOXmOyVXYHm6Q08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GybGeZylj8M6tOlCqAd7ZgoX5R6WOLNLDNZ2sOFhhZDasxAa5uvjcuba8OjO/Z46x
-         Sdn4vTKoufTOP9LDj0ABv0i0yykPe02CPDIY9U6HNMbNWV3X6FrgfUDLchEDDlGIUV
-         rwZsP5SgIhbxdkEN788Zk/fIVFl/9jhwWWXF6nEQ=
+        b=EF1tLtFB9O1+ezCuxJOFcK9ZVJNaYK5qURPFeWWD3PGXsKzJH6ftSdIwkzY9volwi
+         SScOqzepS8Q1NhilkxaRZDva2y2SHbPWA5B4qg3ri/wdk+W8TF07UL4xjAFgTS48Kw
+         Wwfb1aAUwaO9BHOkdldueRmmYZ2l2rkqU9tIAdw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org, linux-can@vger.kernel.org, Marc Kleine-Budde" 
-        <mkl@pengutronix.de>
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH 4.19 13/31] can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 156/230] module: change to print useful messages from elf_validity_check()
 Date:   Mon, 11 Jul 2022 11:06:52 +0200
-Message-Id: <20220711090538.239132541@linuxfoundation.org>
+Message-Id: <20220711090608.486184291@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,146 +56,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-commit e6c80e601053ffdac5709f11ff3ec1e19ed05f7b upstream.
+[ Upstream commit 7fd982f394c42f25a73fe9dfbf1e6b11fa26b40a ]
 
-The firmware of M32C based Leaf devices expects bittiming parameters
-calculated for 16MHz clock. Since we use the actual clock frequency of
-the device, the device may end up with wrong bittiming parameters,
-depending on user requested parameters.
+elf_validity_check() checks ELF headers for errors and ELF Spec.
+compliance and if any of them fail it returns -ENOEXEC from all of
+these error paths. Almost all of them don't print any messages.
 
-This regression affects M32C based Leaf devices with non-16MHz clock.
+When elf_validity_check() returns an error, load_module() prints an
+error message without error code. It is hard to determine why the
+module ELF structure is invalid, even if load_module() prints the
+error code which is -ENOEXEC in all of these cases.
 
-Fixes: 7a09ebf00238 ("can: kvaser_usb: get CAN clock frequency from device")
-Link: https://lore.kernel.org/all/20220603083820.800246-3-extja@kvaser.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Change to print useful error messages from elf_validity_check() to
+clearly say what went wrong and why the ELF validity checks failed.
+
+Remove the load_module() error message which is no longer needed.
+This patch includes changes to fix build warns on 32-bit platforms:
+
+warning: format '%llu' expects argument of type 'long long unsigned int',
+but argument 3 has type 'Elf32_Off' {aka 'unsigned int'}
+Reported-by: kernel test robot <lkp@intel.com>
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb.h      |    1 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c |   29 +++++++++++++++--------
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c |   25 ++++++++++++-------
- 3 files changed, 36 insertions(+), 19 deletions(-)
+ kernel/module.c | 75 +++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 54 insertions(+), 21 deletions(-)
 
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-@@ -38,6 +38,7 @@
- /* Kvaser USB device quirks */
- #define KVASER_USB_QUIRK_HAS_SILENT_MODE	BIT(0)
- #define KVASER_USB_QUIRK_HAS_TXRX_ERRORS	BIT(1)
-+#define KVASER_USB_QUIRK_IGNORE_CLK_FREQ	BIT(2)
+diff --git a/kernel/module.c b/kernel/module.c
+index 83991c2d5af9..256b3c80a771 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2967,14 +2967,29 @@ static int elf_validity_check(struct load_info *info)
+ 	Elf_Shdr *shdr, *strhdr;
+ 	int err;
  
- /* Device capabilities */
- #define KVASER_USB_CAP_BERR_CAP			0x01
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -92,26 +92,33 @@ static const struct kvaser_usb_driver_in
- };
+-	if (info->len < sizeof(*(info->hdr)))
+-		return -ENOEXEC;
++	if (info->len < sizeof(*(info->hdr))) {
++		pr_err("Invalid ELF header len %lu\n", info->len);
++		goto no_exec;
++	}
  
- static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf = {
--	.quirks = 0,
-+	.quirks = KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
- 	.family = KVASER_LEAF,
- 	.ops = &kvaser_usb_leaf_dev_ops,
- };
+-	if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) != 0
+-	    || info->hdr->e_type != ET_REL
+-	    || !elf_check_arch(info->hdr)
+-	    || info->hdr->e_shentsize != sizeof(Elf_Shdr))
+-		return -ENOEXEC;
++	if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) != 0) {
++		pr_err("Invalid ELF header magic: != %s\n", ELFMAG);
++		goto no_exec;
++	}
++	if (info->hdr->e_type != ET_REL) {
++		pr_err("Invalid ELF header type: %u != %u\n",
++		       info->hdr->e_type, ET_REL);
++		goto no_exec;
++	}
++	if (!elf_check_arch(info->hdr)) {
++		pr_err("Invalid architecture in ELF header: %u\n",
++		       info->hdr->e_machine);
++		goto no_exec;
++	}
++	if (info->hdr->e_shentsize != sizeof(Elf_Shdr)) {
++		pr_err("Invalid ELF section header size\n");
++		goto no_exec;
++	}
  
- static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err = {
--	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS,
-+	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
-+		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
- 	.family = KVASER_LEAF,
- 	.ops = &kvaser_usb_leaf_dev_ops,
- };
+ 	/*
+ 	 * e_shnum is 16 bits, and sizeof(Elf_Shdr) is
+@@ -2983,8 +2998,10 @@ static int elf_validity_check(struct load_info *info)
+ 	 */
+ 	if (info->hdr->e_shoff >= info->len
+ 	    || (info->hdr->e_shnum * sizeof(Elf_Shdr) >
+-		info->len - info->hdr->e_shoff))
+-		return -ENOEXEC;
++		info->len - info->hdr->e_shoff)) {
++		pr_err("Invalid ELF section header overflow\n");
++		goto no_exec;
++	}
  
- static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err_listen = {
- 	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
--		  KVASER_USB_QUIRK_HAS_SILENT_MODE,
-+		  KVASER_USB_QUIRK_HAS_SILENT_MODE |
-+		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
- 	.family = KVASER_LEAF,
- 	.ops = &kvaser_usb_leaf_dev_ops,
- };
+ 	info->sechdrs = (void *)info->hdr + info->hdr->e_shoff;
  
-+static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leafimx = {
-+	.quirks = 0,
-+	.ops = &kvaser_usb_leaf_dev_ops,
-+};
-+
- static const struct usb_device_id kvaser_usb_table[] = {
--	/* Leaf USB product IDs */
-+	/* Leaf M32C USB product IDs */
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_DEVEL_PRODUCT_ID),
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_PRODUCT_ID),
-@@ -152,16 +159,18 @@ static const struct usb_device_id kvaser
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_CAN_R_PRODUCT_ID),
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
-+
-+	/* Leaf i.MX28 USB product IDs */
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_V2_PRODUCT_ID),
--		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
-+		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_HS_PRODUCT_ID),
--		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
-+		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID),
--		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
-+		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_LIGHT_2HS_PRODUCT_ID),
--		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
-+		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_2HS_PRODUCT_ID),
--		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
-+		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+@@ -2992,13 +3009,19 @@ static int elf_validity_check(struct load_info *info)
+ 	 * Verify if the section name table index is valid.
+ 	 */
+ 	if (info->hdr->e_shstrndx == SHN_UNDEF
+-	    || info->hdr->e_shstrndx >= info->hdr->e_shnum)
+-		return -ENOEXEC;
++	    || info->hdr->e_shstrndx >= info->hdr->e_shnum) {
++		pr_err("Invalid ELF section name index: %d || e_shstrndx (%d) >= e_shnum (%d)\n",
++		       info->hdr->e_shstrndx, info->hdr->e_shstrndx,
++		       info->hdr->e_shnum);
++		goto no_exec;
++	}
  
- 	/* USBCANII USB product IDs */
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN2_PRODUCT_ID),
-@@ -190,7 +199,7 @@ static const struct usb_device_id kvaser
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MEMO_PRO_2HS_V2_PRODUCT_ID),
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
--	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_2CANLIN_PRODUCT_ID),
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_CANLIN_PRODUCT_ID),
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID),
- 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -525,16 +525,23 @@ static void kvaser_usb_leaf_get_software
- 	dev->fw_version = le32_to_cpu(softinfo->fw_version);
- 	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
+ 	strhdr = &info->sechdrs[info->hdr->e_shstrndx];
+ 	err = validate_section_offset(info, strhdr);
+-	if (err < 0)
++	if (err < 0) {
++		pr_err("Invalid ELF section hdr(type %u)\n", strhdr->sh_type);
+ 		return err;
++	}
  
--	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
--	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
-+	if (dev->driver_info->quirks & KVASER_USB_QUIRK_IGNORE_CLK_FREQ) {
-+		/* Firmware expects bittiming parameters calculated for 16MHz
-+		 * clock, regardless of the actual clock
-+		 */
- 		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
--		break;
--	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
--		dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
--		break;
--	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
--		dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
--		break;
-+	} else {
-+		switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
-+		case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
-+			dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
-+			break;
-+		case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
-+			dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
-+			break;
-+		case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
-+			dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
-+			break;
-+		}
+ 	/*
+ 	 * The section name table must be NUL-terminated, as required
+@@ -3006,8 +3029,10 @@ static int elf_validity_check(struct load_info *info)
+ 	 * strings in the section safe.
+ 	 */
+ 	info->secstrings = (void *)info->hdr + strhdr->sh_offset;
+-	if (info->secstrings[strhdr->sh_size - 1] != '\0')
+-		return -ENOEXEC;
++	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
++		pr_err("ELF Spec violation: section name table isn't null terminated\n");
++		goto no_exec;
++	}
+ 
+ 	/*
+ 	 * The code assumes that section 0 has a length of zero and
+@@ -3015,8 +3040,11 @@ static int elf_validity_check(struct load_info *info)
+ 	 */
+ 	if (info->sechdrs[0].sh_type != SHT_NULL
+ 	    || info->sechdrs[0].sh_size != 0
+-	    || info->sechdrs[0].sh_addr != 0)
+-		return -ENOEXEC;
++	    || info->sechdrs[0].sh_addr != 0) {
++		pr_err("ELF Spec violation: section 0 type(%d)!=SH_NULL or non-zero len or addr\n",
++		       info->sechdrs[0].sh_type);
++		goto no_exec;
++	}
+ 
+ 	for (i = 1; i < info->hdr->e_shnum; i++) {
+ 		shdr = &info->sechdrs[i];
+@@ -3026,8 +3054,12 @@ static int elf_validity_check(struct load_info *info)
+ 			continue;
+ 		case SHT_SYMTAB:
+ 			if (shdr->sh_link == SHN_UNDEF
+-			    || shdr->sh_link >= info->hdr->e_shnum)
+-				return -ENOEXEC;
++			    || shdr->sh_link >= info->hdr->e_shnum) {
++				pr_err("Invalid ELF sh_link!=SHN_UNDEF(%d) or (sh_link(%d) >= hdr->e_shnum(%d)\n",
++				       shdr->sh_link, shdr->sh_link,
++				       info->hdr->e_shnum);
++				goto no_exec;
++			}
+ 			fallthrough;
+ 		default:
+ 			err = validate_section_offset(info, shdr);
+@@ -3049,6 +3081,9 @@ static int elf_validity_check(struct load_info *info)
  	}
+ 
+ 	return 0;
++
++no_exec:
++	return -ENOEXEC;
  }
  
+ #define COPY_CHUNK_SIZE (16*PAGE_SIZE)
+@@ -3925,10 +3960,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	 * sections.
+ 	 */
+ 	err = elf_validity_check(info);
+-	if (err) {
+-		pr_err("Module has invalid ELF structures\n");
++	if (err)
+ 		goto free_copy;
+-	}
+ 
+ 	/*
+ 	 * Everything checks out, so set up the section info
+-- 
+2.35.1
+
 
 

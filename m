@@ -2,158 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFAC5706B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A97B5706B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiGKPLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S232195AbiGKPLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiGKPLa (ORCPT
+        with ESMTP id S232178AbiGKPLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:11:30 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF05A2E2;
-        Mon, 11 Jul 2022 08:11:28 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0D5272DC;
-        Mon, 11 Jul 2022 15:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0D5272DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1657552288; bh=hSeU9FXMoITez72aytKTs7KEhJYRCmp8Bx8U2+pCzbI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=V2AmnJYfF9ZWxEnWfd1sgkIJ6uzTaV240/uLdk1LNrvHOg1VW/nRW+QrYVkBW0GHe
-         8V6u8tijpGygd+4R1Gf8gFTjKAQH2AnRUdG/ON/NTwlOOFp6EtH/QafxT+E3Rho+Py
-         SAYJjO/yo8WbiwkIScQfSkNOSMuSwv1Vs84YPwlDs/W8y1s7o1njjQBTNS1TycmSTQ
-         HQ9l+ZTIgtFiDpzzEsD+2qSxDyQzOqD+62hl3oaMryaPjFc34gnDtYoK0NmpIVlDCo
-         pmPbEDLDULYENcpDQ9e7mvjLyQscjNb3FOjPg/cG2B+ExDkCfGmf1ts2lAjr6yWPyB
-         cm93bj6KL4Npg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-doc@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Marek Vasut <marex@denx.de>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: Re: [PATCH 1/4] docs: arm: stm32: introduce STM32 DMA-MDMA chaining
- feature
-In-Reply-To: <20220711084703.268481-2-amelie.delaunay@foss.st.com>
-References: <20220711084703.268481-1-amelie.delaunay@foss.st.com>
- <20220711084703.268481-2-amelie.delaunay@foss.st.com>
-Date:   Mon, 11 Jul 2022 09:11:27 -0600
-Message-ID: <87a69ffzvk.fsf@meer.lwn.net>
+        Mon, 11 Jul 2022 11:11:47 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F1374E04
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:11:46 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id l24so5157793ion.13
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xninKA70EtexcdYCbdfuTinCaP7pxcUur1I8bK0NPTw=;
+        b=OKNN2Re5+g4wHUiVyzepFDVWZOXbvcZGQio3rTb0i4xibe7JSuEzbHrs4S05ZN6i78
+         sgkq6ZFhZVQQkc5t3f0VvdAB31FviPnkCYj3b5bH0gdYLrYCm00hqvh4HCRUj2dy9Ap5
+         Q02/02O/jxHXt17YhY2tvweobdiXpz005KJ8w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xninKA70EtexcdYCbdfuTinCaP7pxcUur1I8bK0NPTw=;
+        b=1IY4izakVpuuO3To9lNZuLVYtgWRIhlM30HtNoBMIfmPIrVhDO+za9TqKgYp8pf23z
+         8BMuUuV7TEG0BFuduvroqztkhkyuBOBHD8jXYXyqQjqDydlhC7Ygch+kHNCbDvhANNkL
+         jW+Zd0QVKlLSwNf7M5mXdN6oDf4DG5DFA/uD85GierZIf1YLPw2tY2EacDfr7epCSZH5
+         w7XqZghh9gqZqb8aGZLgU1HRKMsGf8vZ3kUMVtC9atAnpNwJxQMMK2nEvBuxr/VNhjcD
+         8mmhCKKIKEMrYkFQ77Xw8VsrMywoqW2snulezzrHh2cXzBzopzqHj2Yepxf2LQStOyMN
+         LkDA==
+X-Gm-Message-State: AJIora9SDlXXK5FNp8wusBwFU4d1PPfUsJlbg3cfhIlfJ+suIBiWx+QB
+        9QA3HquXxhbb+wPmAZ0MW0BexZ2utFBNd4JgWWY=
+X-Google-Smtp-Source: AGRyM1uLGf+/mRay4LBcWjJVLcIwCPCbcdCy1D4pBhFzJCkq4R7+EOLnxnbyOpCE+VIgrlWIFFPC3A==
+X-Received: by 2002:a05:6638:35a4:b0:33c:8f1d:5835 with SMTP id v36-20020a05663835a400b0033c8f1d5835mr10424211jal.37.1657552305425;
+        Mon, 11 Jul 2022 08:11:45 -0700 (PDT)
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com. [209.85.166.51])
+        by smtp.gmail.com with ESMTPSA id o22-20020a02a1d6000000b0032e2996cadesm3023654jah.66.2022.07.11.08.11.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 08:11:44 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id y2so5159945ior.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:11:43 -0700 (PDT)
+X-Received: by 2002:a05:6602:2d48:b0:67b:73f5:7e74 with SMTP id
+ d8-20020a0566022d4800b0067b73f57e74mr8746907iow.154.1657552303271; Mon, 11
+ Jul 2022 08:11:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org>
+ <20220711082940.39539-3-krzysztof.kozlowski@linaro.org> <CAD=FV=WUCPzzZHAPqoz-vhmcVxzYDxkKQs=+1tLZvsQjWe4q3Q@mail.gmail.com>
+ <f8744ff8-15a0-bf31-c49f-b1bb35ba5cdd@linaro.org>
+In-Reply-To: <f8744ff8-15a0-bf31-c49f-b1bb35ba5cdd@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 11 Jul 2022 08:11:29 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X2ZfwwDO_hSSN35ObfvBbBbPjMoSB4GvS7m0yJieNg3Q@mail.gmail.com>
+Message-ID: <CAD=FV=X2ZfwwDO_hSSN35ObfvBbBbPjMoSB4GvS7m0yJieNg3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] dt-bindings: mmc: sdhci-msm: constrain reg-names
+ perp variants
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amelie Delaunay <amelie.delaunay@foss.st.com> writes:
+Hi,
 
-> STM32 DMA-MDMA chaining feature is available on STM32 SoCs which embed
-> STM32 DMAMUX, DMA and MDMA controllers. It is the case on STM32MP1 SoCs but
-> also on STM32H7 SoCs. But focus is on STM32MP1 SoCs, using DDR.
-> This documentation aims to explain how to use STM32 DMA-MDMA chaining
-> feature in drivers of STM32 peripheral having request lines on STM32 DMA.
+On Mon, Jul 11, 2022 at 7:53 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> ---
->  .../arm/stm32/stm32-dma-mdma-chaining.rst     | 365 ++++++++++++++++++
->  1 file changed, 365 insertions(+)
->  create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+> On 11/07/2022 16:52, Doug Anderson wrote:
+> > Hi
+> >
+> > On Mon, Jul 11, 2022 at 1:29 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> The entries in arrays must have fixed order, so the bindings and Linux
+> >> driver expecting various combinations of 'reg' addresses was never
+> >> actually conforming to guidelines.
+> >>
+> >> The 'core' reg entry is valid only for SDCC v4 and lower, so disallow it
+> >> in SDCC v5.  SDCC v4 supports CQE and ICE, so allow them, even though
+> >> the qcom,sdhci-msm-v4 compatible is used also for earlier SoCs with SDCC
+> >> v2 or v3, so it is not entirely accurate.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >>
+> >> Changes since v1:
+> >> 1. Rework the patch based on Doug's feedback.
+> >> ---
+> >>  .../devicetree/bindings/mmc/sdhci-msm.yaml    | 61 ++++++++++++-------
+> >>  1 file changed, 38 insertions(+), 23 deletions(-)
+> >
+> > In the ${SUBJECT} I'm not sure what a "perp variant" is. Is that a
+> > typo or just a phrase I'm not aware of?
+>
+> Should be:
+> "per variants"
+>
+> >
+> >
+> >> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >> index fc6e5221985a..2f0fdd65e908 100644
+> >> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >> @@ -49,33 +49,11 @@ properties:
+> >>
+> >>    reg:
+> >>      minItems: 1
+> >> -    items:
+> >> -      - description: Host controller register map
+> >> -      - description: SD Core register map
+> >> -      - description: CQE register map
+> >> -      - description: Inline Crypto Engine register map
+> >> +    maxItems: 4
+> >>
+> >>    reg-names:
+> >>      minItems: 1
+> >>      maxItems: 4
+> >> -    oneOf:
+> >> -      - items:
+> >> -          - const: hc
+> >> -      - items:
+> >> -          - const: hc
+> >> -          - const: core
+> >> -      - items:
+> >> -          - const: hc
+> >> -          - const: cqhci
+> >> -      - items:
+> >> -          - const: hc
+> >> -          - const: cqhci
+> >> -          - const: ice
+> >> -      - items:
+> >> -          - const: hc
+> >> -          - const: core
+> >> -          - const: cqhci
+> >> -          - const: ice
+> >>
+> >>    clocks:
+> >>      minItems: 3
+> >> @@ -177,6 +155,43 @@ required:
+> >>  allOf:
+> >>    - $ref: mmc-controller.yaml#
+> >>
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          contains:
+> >> +            enum:
+> >> +              - qcom,sdhci-msm-v4
+> >> +    then:
+> >> +      properties:
+> >> +        reg:
+> >> +          minItems: 2
+> >> +          items:
+> >> +            - description: Host controller register map
+> >> +            - description: SD Core register map
+> >> +            - description: CQE register map
+> >> +            - description: Inline Crypto Engine register map
+> >> +        reg-names:
+> >> +          minItems: 2
+> >> +          items:
+> >> +            - const: hc
+> >> +            - const: core
+> >> +            - const: cqhci
+> >> +            - const: ice
+> >> +    else:
+> >> +      properties:
+> >> +        reg:
+> >> +          minItems: 1
+> >> +          items:
+> >> +            - description: Host controller register map
+> >> +            - description: CQE register map
+> >> +            - description: Inline Crypto Engine register map
+> >> +        reg-names:
+> >> +          minItems: 1
+> >> +          items:
+> >> +            - const: hc
+> >> +            - const: cqhci
+> >> +            - const: ice
+> >
+> > Do you need to set "maxItems" here? If you don't then will it inherit
+> > the maxItems of 4 from above?
+>
+> No, items determine the size instead.
 
-When you add a new RST file you also need to add it to index.rst
-somewhere so that it becomes part of the docs build.
+Can you just remove the "maxItems" from above then? Does it buy us anything?
 
-> diff --git a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> new file mode 100644
-> index 000000000000..bfbbadc45aa7
-> --- /dev/null
-> +++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> @@ -0,0 +1,365 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=======================
-> +STM32 DMA-MDMA chaining
-> +=======================
-> +
-> +
-> +Introduction
-> +------------
-> +
-> +  This document describes the STM32 DMA-MDMA chaining feature. But before going further, let's
-> +  introduce the peripherals involved.
+In any case, with the ${SUBJECT} fixed:
 
-Please keep to the 80-column limit for documentation, it makes it easier
-to read.
-
-> +  To offload data transfers from the CPU, STM32 microprocessors (MPUs) embed direct memory access
-> +  controllers (DMA).
-> +
-> +  STM32MP1 SoCs embed both STM32 DMA and STM32 MDMA controllers. STM32 DMA request routing
-> +  capabilities are enhanced by a DMA request multiplexer (STM32 DMAMUX).
-> +
-> +  **STM32 DMAMUX**
-> +
-> +  STM32 DMAMUX routes any DMA request from a given peripheral to any STM32 DMA controller (STM32MP1
-> +  counts two STM32 DMA controllers) channels.
-> +
-> +  **STM32 DMA**
-> +
-> +  STM32 DMA is mainly used to implement central data buffer storage (usually in the system SRAM) for
-> +  different peripheral. It can access external RAMs but without the ability to generate convenient
-> +  burst transfer ensuring the best load of the AXI.
-> +
-> +  **STM32 MDMA**
-> +
-> +  STM32 MDMA (Master DMA) is mainly used to manage direct data transfers between RAM data buffers
-> +  without CPU intervention. It can also be used in a hierarchical structure that uses STM32 DMA as
-> +  first level data buffer interfaces for AHB peripherals, while the STM32 MDMA acts as a second
-> +  level DMA with better performance. As a AXI/AHB master, STM32 MDMA can take control of the AXI/AHB
-> +  bus.
-> +
-> +
-> +Principles
-> +----------
-> +
-> +  STM32 DMA-MDMA chaining feature relies on the strengths of STM32 DMA and STM32 MDMA controllers.
-> +
-> +  STM32 DMA has a circular Double Buffer Mode (DBM). At each end of transaction (when DMA data
-> +  counter - DMA_SxNDTR - reaches 0), the memory pointers (configured with DMA_SxSM0AR and
-> +  DMA_SxM1AR) are swapped and the DMA data counter is automatically reloaded. This allows the SW or
-> +  the STM32 MDMA to process one memory area while the second memory area is being filled/used by the
-> +  STM32 DMA transfer.
-> +
-> +  With STM32 MDMA linked-list mode, a single request initiates the data array (collection of nodes)
-> +  to be transferred until the linked-list pointer for the channel is null. The channel transfer
-> +  complete of the last node is the end of transfer, unless first and last nodes are linked to each
-> +  other, in such a case, the linked-list loops on to create a circular MDMA transfer.
-> +
-> +  STM32 MDMA has direct connections with STM32 DMA. This enables autonomous communication and
-> +  synchronization between peripherals, thus saving CPU resources and bus congestion. Transfer
-> +  Complete signal of STM32 DMA channel can triggers STM32 MDMA transfer. STM32 MDMA can clear the
-> +  request generated by the STM32 DMA by writing to its Interrupt Clear register (whose address is
-> +  stored in MDMA_CxMAR, and bit mask in MDMA_CxMDR).
-> +
-> +  .. csv-table:: STM32 MDMA interconnect table with STM32 DMA
-> +        :header: "STM32 DMAMUX channels", "STM32 DMA controllers channels",
-> +                 "STM32 DMA Transfer Complete signal", "STM32 MDMA request"
-
-If at all possible, please use simple tables; that makes the plain text
-documentation much easier to read.
-
-[...]
-
-Thanks,
-
-jon
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5DF56D31B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20C756D323
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiGKCxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 22:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S229638AbiGKC62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 22:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGKCxF (ORCPT
+        with ESMTP id S229463AbiGKC61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 22:53:05 -0400
+        Sun, 10 Jul 2022 22:58:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696A9183A8;
-        Sun, 10 Jul 2022 19:53:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EED183B2;
+        Sun, 10 Jul 2022 19:58:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F36E8610A5;
-        Mon, 11 Jul 2022 02:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07264C3411E;
-        Mon, 11 Jul 2022 02:53:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A41CE610A5;
+        Mon, 11 Jul 2022 02:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52FEC3411E;
+        Mon, 11 Jul 2022 02:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657507983;
-        bh=PCWoXAlR4NxLTHXg0LrKWX+ks7as6mmpDn6fX/LsNHU=;
+        s=k20201202; t=1657508305;
+        bh=mmzu+3RIbbjsvsQseQSuOMNS9081b8ihQtLBFtiaV1g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hywFkzoAIkBPJDBfXVkvAObcMXd2FqviNCH/dD4P34ClqDPjfWp2U3b4k6HdRaw3P
-         Xbc/i/wrzaYBnlKavv9BCRAnZ1NganrvYxGA+mkgP3Ewy6L096MKjQWhO/QLEK8jxn
-         4Z/p3VldcMJSjcXWd3LrTbpyop020gD5uIlSSXXnr91QQeU11Y0BIZqIjDEmtcrDKO
-         8j9ule6Umk3yel3Le4oYzW6IRgEMq5PZB8NtR9uW8wOyacVgXD4lykuis40gHbaQ6+
-         Yb8vX0SzNMhb71rn5VTD3UQsnx5XcexEbDSefXz4DwKe5FYa3l0UT7cYpO6c1m9m4R
-         wCokhaeSl4Mgg==
-Date:   Mon, 11 Jul 2022 05:52:58 +0300
+        b=TzZ6hq/CRotSlIG+f0arkyNzb7WiXnBJzvAMHuWRRWmOGNXfQlY7pwpiHfKeuf5Z8
+         Teu6DUIpqLMMNseMOQE06CmlLm2U8FLkLV7eZcW7k3bsy7cWQJ8Unfp98rwFTJGZEk
+         vqtgUC4WuakddfS83+qbHBpvuN04Y0sag2UzK6WLkzxYZEjtmarOwbCwfOpuiFDCbU
+         P7yrgahApOBw0pIU1Ts59pns2O+YXyeqLremrQNz4za5Omuz/X0HhoSDeHEy+q81Rn
+         ASk+hOP9LkCncwlJWhXN2zGzzs+GYa8xOuoP+UJYttruqYneXXTSOePYZ9ydSuC4dm
+         1BUtvysP2ylKA==
+Date:   Mon, 11 Jul 2022 05:58:20 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Li zeming <zeming@nfschina.com>
-Cc:     dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@nfschina.com
-Subject: Re: [PATCH] keys/keyring: Fix typo in string
-Message-ID: <YsuQihEKR8DC+Pnm@kernel.org>
-References: <20220704025610.3834-1-zeming@nfschina.com>
+To:     Jason Andryuk <jandryuk@gmail.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Chen Jun <chenjun102@huawei.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis: Hold locality open during probe
+Message-ID: <YsuRzGBss/lMG2+W@kernel.org>
+References: <20220706164043.417780-1-jandryuk@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704025610.3834-1-zeming@nfschina.com>
+In-Reply-To: <20220706164043.417780-1-jandryuk@gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,40 +57,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 10:56:10AM +0800, Li zeming wrote:
-> Remove the repeated ',' from string
+On Wed, Jul 06, 2022 at 12:40:43PM -0400, Jason Andryuk wrote:
+> WEC TPMs (in 1.2 mode) and NTC (in 2.0 mode) have been observer to
+> frequently, but intermittently, fail probe with:
+> tpm_tis: probe of 00:09 failed with error -1
 > 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
+> Added debugging output showed that the request_locality in
+> tpm_tis_core_init succeeds, but then the tpm_chip_start fails when its
+> call to tpm_request_locality -> request_locality fails.
+> 
+> The access register in check_locality would show:
+> 0x80 TPM_ACCESS_VALID
+> 0x82 TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_USE
+> 0x80 TPM_ACCESS_VALID
+> continuing until it times out. TPM_ACCESS_ACTIVE_LOCALITY (0x20) doesn't
+> get set which would end the wait.
+> 
+> My best guess is something racy was going on between release_locality's
+> write and request_locality's write.  There is no wait in
+> release_locality to ensure that the locality is released, so the
+> subsequent request_locality could confuse the TPM?
+> 
+> tpm_chip_start grabs locality 0, and updates chip->locality.  Call that
+> before the TPM_INT_ENABLE write, and drop the explicit request/release
+> calls.  tpm_chip_stop performs the release.  With this, we switch to
+> using chip->locality instead of priv->locality.  The probe failure is
+> not seen after this.
+> 
+> commit 0ef333f5ba7f ("tpm: add request_locality before write
+> TPM_INT_ENABLE") added a request_locality/release_locality pair around
+> tpm_tis_write32 TPM_INT_ENABLE, but there is a read of
+> TPM_INT_ENABLE for the intmask which should also have the locality
+> grabbed.  tpm_chip_start is moved before that to have the locality open
+> during the read.
+> 
+> Fixes: 0ef333f5ba7f ("tpm: add request_locality before write TPM_INT_ENABLE")
+> CC: stable@vger.kernel.org
+> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
 > ---
->  security/keys/keyring.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> The probe failure was seen on 5.4, 5.15 and 5.17.
 > 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index 5e6a90760753..c6c47ca9b57d 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -460,7 +460,7 @@ static int keyring_read_iterator(const void *object, void *data)
->  	struct keyring_read_iterator_context *ctx = data;
->  	const struct key *key = keyring_ptr_to_key(object);
+> commit e42acf104d6e ("tpm_tis: Clean up locality release") removed the
+> release wait.  I haven't tried, but re-introducing that would probably
+> fix this issue.  It's hard to know apriori when a synchronous wait is
+> needed, and they don't seem to be needed typically.  Re-introducing the
+> wait would re-introduce a wait in all cases.
+> 
+> Surrounding the read of TPM_INT_ENABLE with grabbing the locality may
+> not be necessary?  It looks like the code only grabs a locality for
+> writing, but that asymmetry is surprising to me.
+> 
+> tpm_chip and tpm_tis_data track the locality separately.  Should the
+> tpm_tis_data one be removed so they don't get out of sync?
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 20 ++++++++------------
+>  1 file changed, 8 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index dc56b976d816..529c241800c0 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -986,8 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		goto out_err;
+>  	}
 >  
-> -	kenter("{%s,%d},,{%zu/%zu}",
-> +	kenter("{%s,%d},{%zu/%zu}",
->  	       key->type->name, key->serial, ctx->count, ctx->buflen);
+> +	/* Grabs locality 0. */
+> +	rc = tpm_chip_start(chip);
+> +	if (rc)
+> +		goto out_err;
+> +
+>  	/* Take control of the TPM's interrupt hardware and shut it off */
+> -	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> +	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(chip->locality), &intmask);
+>  	if (rc < 0)
+>  		goto out_err;
 >  
->  	if (ctx->count >= ctx->buflen)
-> @@ -484,7 +484,7 @@ static long keyring_read(const struct key *keyring,
->  	struct keyring_read_iterator_context ctx;
->  	long ret;
+> @@ -995,19 +1000,10 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+>  	intmask &= ~TPM_GLOBAL_INT_ENABLE;
 >  
-> -	kenter("{%d},,%zu", key_serial(keyring), buflen);
-> +	kenter("{%d},%zu", key_serial(keyring), buflen);
+> -	rc = request_locality(chip, 0);
+> -	if (rc < 0) {
+> -		rc = -ENODEV;
+> -		goto out_err;
+> -	}
+> -
+> -	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> -	release_locality(chip, 0);
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(chip->locality), intmask);
 >  
->  	if (buflen & (sizeof(key_serial_t) - 1))
->  		return -EINVAL;
+> -	rc = tpm_chip_start(chip);
+> -	if (rc)
+> -		goto out_err;
+>  	rc = tpm2_probe(chip);
+> +	/* Releases locality 0. */
+>  	tpm_chip_stop(chip);
+>  	if (rc)
+>  		goto out_err;
 > -- 
-> 2.18.2
+> 2.36.1
 > 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Can you test against
+
+https://lore.kernel.org/linux-integrity/20220629232653.1306735-1-LinoSanfilippo@gmx.de/T/#t
 
 BR, Jarkko

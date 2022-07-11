@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF4156FB2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC1556FD39
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiGKJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S233910AbiGKJwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiGKJYi (ORCPT
+        with ESMTP id S233889AbiGKJvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9753D29CA4;
-        Mon, 11 Jul 2022 02:15:00 -0700 (PDT)
+        Mon, 11 Jul 2022 05:51:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B605D0E4;
+        Mon, 11 Jul 2022 02:25:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E89AB80CEF;
-        Mon, 11 Jul 2022 09:14:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E78C34115;
-        Mon, 11 Jul 2022 09:14:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FCFC61137;
+        Mon, 11 Jul 2022 09:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DD1C34115;
+        Mon, 11 Jul 2022 09:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530898;
-        bh=5m+h39eZ7eMqr/vCdn8mmEWEdo/XefaS2iIxrXuVj1k=;
+        s=korg; t=1657531507;
+        bh=Hrn73FUsc2y0i6Zvxmud28An4gKYs2EWMshHcsib3q8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XjIrqSK4pBb5qS4kivrBSDFxEO2HWffD1PRwM6fngC1LnQ0SmHaHwJEHAqwX6y9nR
-         xI3UsB5kvUHQR+0a/RXkuq4E4M0rs/0c02CHHXwyBem+42GIXogYdWohvQnIB1aNAL
-         V9RBpXNhI0OdVkiQNzrEoOZY/A9tLOkv2w8rp+48=
+        b=AQ8dCdjeZEzhmWBWn/gYY9Bk9o3GukbzEe0apHGeOwUUV2NTDg0Z9bFfm+byUMslE
+         1GXgeKSd0ECVetJIy1om5KTWICh1xmGAhb62TacuIzzxLYzqItnpdO8N7N9To4E2Rm
+         mdX0tNIOIGD0DY64w+5FNdW2Rdc+nzyfORXsPhIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 023/112] selftests/net: fix section name when using xdp_dummy.o
-Date:   Mon, 11 Jul 2022 11:06:23 +0200
-Message-Id: <20220711090550.218320773@linuxfoundation.org>
+        stable@vger.kernel.org, luofei <luofei@unicloud.com>,
+        Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 128/230] mm/hwpoison: avoid the impact of hwpoison_filter() return value on mce handler
+Date:   Mon, 11 Jul 2022 11:06:24 +0200
+Message-Id: <20220711090607.696575480@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +63,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: luofei <luofei@unicloud.com>
 
-commit d28b25a62a47a8c8aa19bd543863aab6717e68c9 upstream.
+[ Upstream commit d1fe111fb62a1cf0446a2919f5effbb33ad0702c ]
 
-Since commit 8fffa0e3451a ("selftests/bpf: Normalize XDP section names in
-selftests") the xdp_dummy.o's section name has changed to xdp. But some
-tests are still using "section xdp_dummy", which make the tests failed.
-Fix them by updating to the new section name.
+When the hwpoison page meets the filter conditions, it should not be
+regarded as successful memory_failure() processing for mce handler, but
+should return a distinct value, otherwise mce handler regards the error
+page has been identified and isolated, which may lead to calling
+set_mce_nospec() to change page attribute, etc.
 
-Fixes: 8fffa0e3451a ("selftests/bpf: Normalize XDP section names in selftests")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/r/20220630062228.3453016-1-liuhangbin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Here memory_failure() return -EOPNOTSUPP to indicate that the error
+event is filtered, mce handler should not take any action for this
+situation and hwpoison injector should treat as correct.
+
+Link: https://lkml.kernel.org/r/20220223082135.2769649-1-luofei@unicloud.com
+Signed-off-by: luofei <luofei@unicloud.com>
+Acked-by: Borislav Petkov <bp@suse.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/udpgro.sh         |    2 +-
- tools/testing/selftests/net/udpgro_bench.sh   |    2 +-
- tools/testing/selftests/net/udpgro_frglist.sh |    2 +-
- tools/testing/selftests/net/udpgro_fwd.sh     |    2 +-
- tools/testing/selftests/net/veth.sh           |    6 +++---
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 8 +++++---
+ drivers/base/memory.c          | 2 ++
+ mm/hwpoison-inject.c           | 3 ++-
+ mm/madvise.c                   | 2 ++
+ mm/memory-failure.c            | 9 +++++++--
+ 5 files changed, 18 insertions(+), 6 deletions(-)
 
---- a/tools/testing/selftests/net/udpgro.sh
-+++ b/tools/testing/selftests/net/udpgro.sh
-@@ -34,7 +34,7 @@ cfg_veth() {
- 	ip -netns "${PEER_NS}" addr add dev veth1 192.168.1.1/24
- 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
- 	ip -netns "${PEER_NS}" link set dev veth1 up
--	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
-+	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index e23e74e2f928..848cfb013f58 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1297,10 +1297,12 @@ static void kill_me_maybe(struct callback_head *cb)
+ 
+ 	/*
+ 	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
+-	 * to the current process with the proper error info, so no need to
+-	 * send SIGBUS here again.
++	 * to the current process with the proper error info,
++	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
++	 *
++	 * In both cases, no further processing is required.
+ 	 */
+-	if (ret == -EHWPOISON)
++	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+ 		return;
+ 
+ 	if (p->mce_vaddr != (void __user *)-1l) {
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index c0d501a3a714..c778d1df7455 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -555,6 +555,8 @@ static ssize_t hard_offline_page_store(struct device *dev,
+ 		return -EINVAL;
+ 	pfn >>= PAGE_SHIFT;
+ 	ret = memory_failure(pfn, 0);
++	if (ret == -EOPNOTSUPP)
++		ret = 0;
+ 	return ret ? ret : count;
  }
  
- run_one() {
---- a/tools/testing/selftests/net/udpgro_bench.sh
-+++ b/tools/testing/selftests/net/udpgro_bench.sh
-@@ -34,7 +34,7 @@ run_one() {
- 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
- 	ip -netns "${PEER_NS}" link set dev veth1 up
+diff --git a/mm/hwpoison-inject.c b/mm/hwpoison-inject.c
+index aff4d27ec235..a1d6fc3c78b9 100644
+--- a/mm/hwpoison-inject.c
++++ b/mm/hwpoison-inject.c
+@@ -48,7 +48,8 @@ static int hwpoison_inject(void *data, u64 val)
  
--	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
-+	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
- 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
- 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -t ${rx_args} -r &
- 
---- a/tools/testing/selftests/net/udpgro_frglist.sh
-+++ b/tools/testing/selftests/net/udpgro_frglist.sh
-@@ -36,7 +36,7 @@ run_one() {
- 	ip netns exec "${PEER_NS}" ethtool -K veth1 rx-gro-list on
- 
- 
--	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
-+	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
- 	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
- 	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
- 	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
---- a/tools/testing/selftests/net/udpgro_fwd.sh
-+++ b/tools/testing/selftests/net/udpgro_fwd.sh
-@@ -46,7 +46,7 @@ create_ns() {
- 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
- 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
- 	done
--	ip -n $NS_DST link set veth$DST xdp object ../bpf/xdp_dummy.o section xdp_dummy 2>/dev/null
-+	ip -n $NS_DST link set veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
+ inject:
+ 	pr_info("Injecting memory failure at pfn %#lx\n", pfn);
+-	return memory_failure(pfn, 0);
++	err = memory_failure(pfn, 0);
++	return (err == -EOPNOTSUPP) ? 0 : err;
  }
  
- create_vxlan_endpoint() {
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -289,14 +289,14 @@ if [ $CPUS -gt 1 ]; then
- 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
- 	printf "%-60s" "bad setting: XDP with RX nr less than TX"
- 	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
--		section xdp_dummy 2>/dev/null &&\
-+		section xdp 2>/dev/null &&\
- 		echo "fail - set operation successful ?!?" || echo " ok "
+ static int hwpoison_unpoison(void *data, u64 val)
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 8e5ca01a6cc0..882767d58c27 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -968,6 +968,8 @@ static int madvise_inject_error(int behavior,
+ 			pr_info("Injecting memory failure for pfn %#lx at process virtual address %#lx\n",
+ 				 pfn, start);
+ 			ret = memory_failure(pfn, MF_COUNT_INCREASED);
++			if (ret == -EOPNOTSUPP)
++				ret = 0;
+ 		}
  
- 	# the following tests will run with multiple channels active
- 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
- 	ip netns exec $NS_DST ethtool -L veth$DST rx 2
- 	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
--		section xdp_dummy 2>/dev/null
-+		section xdp 2>/dev/null
- 	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
- 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
- 		echo "fail - set operation successful ?!?" || echo " ok "
-@@ -311,7 +311,7 @@ if [ $CPUS -gt 2 ]; then
- 	chk_channels "setting invalid channels nr" $DST 2 2
- fi
+ 		if (ret)
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index e6425d959fa9..5664bafd5e77 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1444,7 +1444,7 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+ 				if (TestClearPageHWPoison(head))
+ 					num_poisoned_pages_dec();
+ 				unlock_page(head);
+-				return 0;
++				return -EOPNOTSUPP;
+ 			}
+ 			unlock_page(head);
+ 			res = MF_FAILED;
+@@ -1525,7 +1525,7 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+ 		goto out;
  
--ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o section xdp_dummy 2>/dev/null
-+ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
- chk_gro_flag "with xdp attached - gro flag" $DST on
- chk_gro_flag "        - peer gro flag" $SRC off
- chk_tso_flag "        - tso flag" $SRC off
+ 	if (hwpoison_filter(page)) {
+-		rc = 0;
++		rc = -EOPNOTSUPP;
+ 		goto unlock;
+ 	}
+ 
+@@ -1594,6 +1594,10 @@ static DEFINE_MUTEX(mf_mutex);
+  *
+  * Must run in process context (e.g. a work queue) with interrupts
+  * enabled and no spinlocks hold.
++ *
++ * Return: 0 for successfully handled the memory error,
++ *         -EOPNOTSUPP for memory_filter() filtered the error event,
++ *         < 0(except -EOPNOTSUPP) on failure.
+  */
+ int memory_failure(unsigned long pfn, int flags)
+ {
+@@ -1742,6 +1746,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 			num_poisoned_pages_dec();
+ 		unlock_page(p);
+ 		put_page(p);
++		res = -EOPNOTSUPP;
+ 		goto unlock_mutex;
+ 	}
+ 
+-- 
+2.35.1
+
 
 

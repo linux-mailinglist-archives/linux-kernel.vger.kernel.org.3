@@ -2,270 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A09956D232
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 02:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176AF56D233
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 02:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiGKAay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 20:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S229664AbiGKAa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 20:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGKAaw (ORCPT
+        with ESMTP id S229628AbiGKAax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 20:30:52 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF265EA;
+        Sun, 10 Jul 2022 20:30:53 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B27662;
+        Sun, 10 Jul 2022 17:30:52 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id m14so3144251plg.5;
+        Sun, 10 Jul 2022 17:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=m4SI/cpdnIFnD5cNCv6yLmE3xJclWoDJfmD/84NFECg=;
+        b=QQmGKbrWIGCgbC990jRLFIhBANNyWD62aPqRrC3txmoayUQVt7oYPUZj6QISfQ/LEC
+         50kHaKa6+2g+qMkZ9iWmuynFGoJQBcIE7knuCv9nkCSnaGMrdbe9FjC/bEWoqqsYsOiY
+         DWhX3aMUNV29w/eidIxH0kxjMmVbjAUqORPEmLjs8xFzemaJHVGIUm4CMg5YBxK8TLcn
+         TnaDgAy13co3Z4x2dd6sAThR13ZstkZRd6h7l2YlxNyHBwReq66XjoK7GDOBPbCIcGZ3
+         giRRyBw2rPvZ9uaAGJ17xc4YjqePQ2YPclWzNWDxVy7VWACoRoxSvD15hL5b5vPBqGLH
+         USVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=m4SI/cpdnIFnD5cNCv6yLmE3xJclWoDJfmD/84NFECg=;
+        b=fyjTY0hcrsyHLCfEbP0aI/8/vZql6pO2q74B1MmnsNp88VyF1wpq3Q39yx0SVgbdBt
+         kf2DTxF7S+0HMiGjBV232wweo0WOoFG7WraAc0vgFI6O67Fijp4VemisU+4OtyQ+IekB
+         zdiZSTJ2MjOEbx1N1iIuBkxI3wZ5mdwKJAxsdgcyrlnYx5j3jpiwmWCx1kb7oHZr6lkn
+         ysFz01A7ZSc9jJeHeBRBj08KdTZ7WeSMLCNJzimIIM44T4+sOj6pGOOUw4UTECRVQ8yk
+         UlWKK96mn4idXQiIf90PagqX7TIew3+u0GChzQ98cmRnsCyKmEjdLOfbStgSC4TEFJH1
+         NKwA==
+X-Gm-Message-State: AJIora+1D69BSY9VRrrI10vkiTkWTYZWALqG7JXsNyuP5VbUpdupmnB9
+        MKbeLvQ5G6BLEg+knIzVDHE=
+X-Google-Smtp-Source: AGRyM1tctGCGbnQcs4zYfIUKncEUZ3/P3GwlsTm7lgCGQXSarpJy4IsjYWHdt4xd+XqBUbhWJ5dvZw==
+X-Received: by 2002:a17:90b:3d84:b0:1ef:9049:9f43 with SMTP id pq4-20020a17090b3d8400b001ef90499f43mr14712779pjb.45.1657499452148;
+        Sun, 10 Jul 2022 17:30:52 -0700 (PDT)
+Received: from localhost.localdomain (47-72-206-164.dsl.dyn.ihug.co.nz. [47.72.206.164])
+        by smtp.gmail.com with ESMTPSA id d78-20020a621d51000000b00528c149fe97sm3408686pfd.89.2022.07.10.17.30.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 10 Jul 2022 17:30:51 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26AIjAO0012568;
-        Sun, 10 Jul 2022 17:30:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=tS61yjxlRmPd/JoVbyD1apTHpxea1CE8idAxU5JAJ18=;
- b=FksO+6tHoyJojaC2BT+XGIUu8oTi0XlGEyLAsX+p0aYpwuCtv8aH6xM1dvHdkbsPYQOT
- Bu2JLO6U8jCW+vjtr7Xs9KeEUwuNg76yhQyDa9GSVva9s8OFJDLm/qXd3cvA6kXnDPsU
- q9F42xMXHuoTBQ4WUmLOFb8E+2MgXCbMOQk= 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h7903wx2n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 10 Jul 2022 17:30:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ExLIUqu1hFngdxXrs7NWfocXqzO6IWALbm6Im9BD73BjKZe6AnfJDr4TAzHsu5mPEr2Eo/Pig8oOy5ot6jD66/E42n8o4TqaOMguVfvyapG4tVYXWQuqQAD2NhTeA/1g2Y+wGyOHaaLdPZKV9JWXVFHWT7pDU/m5vavid95kItYXH4S5af4KbBswB5HpW4GwNPLJ2z/3Xm1PBBUzhNCRnl1hPHUbLMJdzvu63RGqSQ6C/NvJru8NSJgZrvuBmZMjy1a1IZO1+ioLqkSu0HKWgqeNpANLIbModoSQ9nkQAzjL5OHyN1j9phb8Upew+R/2Cfsk7ero6t9jsjTyeDlmpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tS61yjxlRmPd/JoVbyD1apTHpxea1CE8idAxU5JAJ18=;
- b=BHvbZHpP4XYIr8pNkUycDWiS8i9rtq+rQq0Lh0xzAsAceApuYAt0tLFP5+tcG7uu9FPd3Y/UdX8o3CHwo9YUi2Dddsy/6hY/+9QFF0yIkYnjScNpj0PEy2un0cs/flYSKpkR3UorgGxIT1vzLR6EEV9dYipqhC6I5zWGMevxGgBuES3rN4fibK5lytOaRNiDzhLdnkySTOh++BF1p6dM0kB1KWORUwORrdB7Hszp5JSYKsBt6mQIF6n9UeihDC8giaK1OK2ivAiFAOSJDn66DJDlE+2QZ0glYr1GN/kTqHDyUs41MveC3IQaKFa4ebiAv/0jK2oYOcs0m5hg0H4CLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BN6PR15MB1395.namprd15.prod.outlook.com (2603:10b6:404:c3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
- 2022 00:30:23 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::9568:e5d9:b8ab:bb23%6]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 00:30:23 +0000
-Message-ID: <186a5b4b-f73e-a6fa-8502-7472ea058c28@fb.com>
-Date:   Sun, 10 Jul 2022 17:30:20 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v5 bpf-next 2/2] selftests/bpf: add a ksym iter subtest
-Content-Language: en-US
-To:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, haoluo@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        mhiramat@kernel.org, akpm@linux-foundation.org, void@manifault.com,
-        swboyd@chromium.org, ndesaulniers@google.com,
-        9erthalion6@gmail.com, kennyyu@fb.com, geliang.tang@suse.com,
-        kuniyu@amazon.co.jp, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1657490998-31468-1-git-send-email-alan.maguire@oracle.com>
- <1657490998-31468-3-git-send-email-alan.maguire@oracle.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <1657490998-31468-3-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0196.namprd05.prod.outlook.com
- (2603:10b6:a03:330::21) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+From:   Barry Song <21cnbao@gmail.com>
+To:     peterz@infradead.org
+Cc:     21cnbao@gmail.com, akpm@linux-foundation.org, arnd@arndb.de,
+        catalin.marinas@arm.com, corbet@lwn.net,
+        darren@os.amperecomputing.com, guojian@oppo.com,
+        huzhanyuan@oppo.com, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, lipeifeng@oppo.com, mgorman@suse.de,
+        namit@vmware.com, realmz6@gmail.com, v-songbaohua@oppo.com,
+        will@kernel.org, x86@kernel.org, yangyicong@hisilicon.com,
+        zhangshiming@oppo.com
+Subject: Re: [PATCH 2/4] mm: rmap: Allow platforms without mm_cpumask to defer TLB flush
+Date:   Mon, 11 Jul 2022 12:30:28 +1200
+Message-Id: <20220711003028.3042-1-21cnbao@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YsfqjsntneiX0xYE@hirez.programming.kicks-ass.net>
+References: <YsfqjsntneiX0xYE@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 75914c42-ad5b-4309-b674-08da62d48b35
-X-MS-TrafficTypeDiagnostic: BN6PR15MB1395:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o8GQL9li3U+bt6AY5VYBsM3V67ojBsA+3ZJ9Y7vW3gU9PERj2QzA2mcRMAbvA4kwgYSZn8/LfXb0htGa6WfWAioE+BrgMh7jcmhDuSgFOshMFgdnjRL4oQ9Uq8rzhTjJq7WOx1xgnWYmFAJEOXu46o5gPXf43shSMgKOb/OMrluj7VebpUBNEMNNIUQc/ziG0NuHnRiv6GFjlIkWIri7fWS7GiAf2xPY3hKDd2r3mWEAqy1BFPChm6xI2flJEs3+YgR322QStiotAWkma9rAklwAq0Fh9cc5v+VN33HsFaP//eFKby4Xh9OZUk7uPe/33V3sQ81Qs8Ky8YT/wmJYTYkrk9iyzD8N451Y0Zc7yZ+UTq4FYdL2UQHVbvDu1H65KAuGQgpkucXEPAIWjnPBN/WXMILMzkcd/nqaIQNPl2HhtPRqYyeZimrpKsoVGmVtCfC8uFrU3btZXlZ795rlro1URJn4NhGcj+x92dVKH4JQu7zTkD82vc+UUsHKDTbdAJHHFR37ookJCmWS1b8pg1/HMj3w8TB9LV6PMIxZ7VqIwcAph1TNhiOc4Zs1sw8bJTHyjPMMkGW/uaQybtVw4+qG7Q3XHRi9AVOoXzVdVIZnzUt+O1cnlUoq9Sex0oyrzRTHuvk/+E9CVOV9xdK/IqBMwEplP8XrWpVYUlwsIvpUBzIqqM9p8Sal6kubpaokPAOrP4Zs8mR0Vk1+JyXvSBACiiKgb3gEHzKZloqNmVm0KFUTrWl+f7F8Rp/r3Jh+K18eQXqBIq/4Knz6FzczFVx3NhIP7gIUpYttxvDXRH4cFUynSf7VuTsy63Ka8oMnWn3y4pKxlxKWQbnOXTfVEg3S+cGebo9qbcQtmJ3FHzk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(376002)(136003)(366004)(38100700002)(86362001)(7416002)(5660300002)(31696002)(8936002)(4326008)(66476007)(66556008)(66946007)(8676002)(83380400001)(2906002)(186003)(2616005)(478600001)(53546011)(6506007)(36756003)(6486002)(41300700001)(31686004)(6512007)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ym1tbXhGL29mVzZ4SktZNTIzQ1BiMzRJb2RxZWluc1JoaEdqcmZqOUZiUi9r?=
- =?utf-8?B?bllpYmlCdjExZFh5T3JjSU1YR0c1RS91UGRYeEkrdXh4OGVvMTJDNU9wb2Zj?=
- =?utf-8?B?UE5NYXYzQ0JXaWVLbnpxNjNQWWM3aDc5Z0FMMlgxQTVmNmtMTWNVaks5Szhj?=
- =?utf-8?B?b3ZZbWtSNytjNGFraVplTW5zV1RNZmVXbEdDV2NQNHVadUZudUV6UXIzRWkr?=
- =?utf-8?B?MW45cWQxdTJnT2Rna1JZSFN3Y1Y1d2dkaG5Ua0dZanBjeGN4emppZy9pTzU4?=
- =?utf-8?B?VklYSnlqR2hRY2RsN3NHQWdSbHgrSTJxTDBIUEhCalZWL2dCNHFuS2FDbCsz?=
- =?utf-8?B?VzlsaWJoMVR3T0JSaDRRakx0a1hpTHJaRldOZU1Tc2dzUEdKcVN5OGdGbjds?=
- =?utf-8?B?MlNoMmpmN3J6aUFVOHF3TjBNRUhKYkMxd20rd2tTcCs0Uk92RDRKOW1kWUJo?=
- =?utf-8?B?b29Za25uSTE4UTBHMkdEZGdqalRocmhKWmQ3anlYSk90Mmk5ODA5Y1NtRDBo?=
- =?utf-8?B?YmZRb3ZjdnVQclNKcmFXdmlCSTkzdHBlMmFTTFpZUTM2clEyVFpVNkxveFIy?=
- =?utf-8?B?U2F5RW9weFY5WHFPc3lXc1lCdXBKaEtRRGlUR3czc20wSXNoR0RWYlRTZ01l?=
- =?utf-8?B?OTV3Q0Nsb3F5VDQvcWVxejV6NGtiV2JjUzV1Y2ZrclF5MWR0S3VRejZQSUpI?=
- =?utf-8?B?T3M0a3UzbSs1eStqc20wZ2RmdlJUeHJpUDhYSGNkOWZRVnc1Wng4OGdSa0h6?=
- =?utf-8?B?TktRUFZYenJTNUYxVDNWaS9jZDhJSzRVY2gwNko4dFVIRjh0U1dRSUtvMEJv?=
- =?utf-8?B?WmtWMng5TVJYTEtsLzhiWGM5bGJwcEFXTTAwSDhiOEpuMXFMQVkyMmRkM3Rz?=
- =?utf-8?B?alQwUDQrTjdhNkJRVFRvZDlhUnBNeHZGcTNxS1k4L1hMYVdjVHlFcVNaRHJ0?=
- =?utf-8?B?TDRBRnZGQzM2TlNpSlduYlJVQ2E2SkJEQmFwc0hvZHlOVy9pWmttZEhHMkd6?=
- =?utf-8?B?bDdvVmI2dkFGOCtFUmtaTGtuZHhUcFpReHBWekQ2TDFUZVNLT3R5eS9WWVpV?=
- =?utf-8?B?VzlNNndVZE9JdEJyeEFuSnY3UzNjektJdWo5T0gvMWdSTFZsNFNVeWJsTHh4?=
- =?utf-8?B?RVpiQ1kySDh0Vi9Wd2xHQ25qcGNFMnFYclNDdDRxcnB3N2xRK0YyVll4WFg5?=
- =?utf-8?B?U3FQbnd3dlN3V2l1clZyM0g2K0g3bkR1Y2VxaUYySXJ5b1U1YUhzVkNNa1NF?=
- =?utf-8?B?RDBleGF2MExPOVdxL09hMVZycitBaEZsYWZERDdtYUxyUjUrZ3BZQkFsMk1H?=
- =?utf-8?B?OC9qdUUxZkc4VzRYRS9oZUE5U2VKYUxxb1RVQ0pzWkY3cE9sUDg5YU8yUFFm?=
- =?utf-8?B?ZHJyM29jTjhHcWVlVVlUTytFYUdQbXpzWG0yZE90dVUxbnp1UmNtOUxOdGg0?=
- =?utf-8?B?ZUtQSWIwWXFrWm1CWkc1UkVKZHBNVWovdmw5T0RzNzE3QnRTTlBXVlg0L1pI?=
- =?utf-8?B?Tk1sNUYvcHp5c1J4M1VVbDc4OUEzRjVlZFdQQVZsZ3NudWVMVDh6cEpXSU5U?=
- =?utf-8?B?ZFpLZ3M3Qno4Nzh4U0I5ekJPckpmV2dqUndpdVY1cmQwOUMzRGFIdUwwNGZx?=
- =?utf-8?B?UzIxMUE1bG1zelRXVHhXWWYrUGpsTmswSVhqeHg4RjBuY2VRVTRCYXZxZzFP?=
- =?utf-8?B?MzhrMGorVEFUZFdMeHhmaVN2YTFaT2oyS2hjYTBWZEJ3NXo3VHlBVGR3UDMy?=
- =?utf-8?B?ei9mQkpnUU1ZWHk4N1QxdnhHOTRTSGpSYlF0Ynl2UDVIZ2o1akt4azBPSmdE?=
- =?utf-8?B?cXVJMXQ4Q3N3VnJ4SUVCdUk3TXo5N0J3YVljdjB0Y24vTlZZaGFwSUIva090?=
- =?utf-8?B?K2FKVSt3UUJNQW5Hbm5SMVJ2K0pYaGJrT3VhZHlsWEhodWgzYUIwZ1k5OUs5?=
- =?utf-8?B?OFI4WVFiak8xNXlva0hSQk9XVEVWT1QwcytVbjJvdU5OWVpXWVltVVRYYWRm?=
- =?utf-8?B?K2krcFlUTVRyK1QrTzIxd2E4YTA2TWxla0F6ZGFUZnFwZjNVOWRGanl4NVNX?=
- =?utf-8?B?djNNS1pDeXNYbEI3VFAyYWlOUVFUWEw2Y1I4bzVhQWZUZUs4eGVEaHJ5eWx3?=
- =?utf-8?B?V0IrNW11cEV1NEs3eGVXa0l1ZFFsaGROeGFZNTJQd0xISElMNXV5bGtKN0Q3?=
- =?utf-8?B?dmc9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75914c42-ad5b-4309-b674-08da62d48b35
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 00:30:23.5894
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nlEyyMnbXonyHWL79UKM+LnqSWJqlEp1CBIvq6TTa4uUt8PwKJgKg3gAHOu3sP5Y
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1395
-X-Proofpoint-ORIG-GUID: lqSa-yi3rlZPyrkjE8SIkFC8R0eNsedp
-X-Proofpoint-GUID: lqSa-yi3rlZPyrkjE8SIkFC8R0eNsedp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-10_18,2022-07-08_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 8, 2022 at 8:28 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Jul 08, 2022 at 08:08:45AM +0000, Nadav Amit wrote:
+>
+> > Is it really only x86 that has mm_cpumask()?
+>
+> Unlikely, everybody who needs to IPI (eg. doesn't have broadcast
+> invalidate) has benefit to track this mask more accurately.
+>
+> The below greps for clearing CPUs in the mask and ought to be a fair
+> indicator:
+>
+> $ git grep -l "cpumask_clear_cpu.*mm_cpumask" arch/
+> arch/arm/include/asm/mmu_context.h
+> arch/loongarch/include/asm/mmu_context.h
+> arch/loongarch/mm/tlb.c
+> arch/mips/include/asm/mmu_context.h
+> arch/openrisc/mm/tlb.c
+> arch/powerpc/include/asm/book3s/64/mmu.h
+> arch/powerpc/mm/book3s64/radix_tlb.c
+> arch/riscv/mm/context.c
+> arch/s390/kernel/smp.c
+> arch/um/include/asm/mmu_context.h
+> arch/x86/mm/tlb.c
 
+so i suppose we need the below at this moment. i am not able to
+test all of them. but since only x86 has already got tlbbatch
+and arm64 is the second one to have tlbbatch now, i suppose the
+below changes won't break those archs without tlbbatch. i would
+expect people bringing up tlbbatch in those platforms to test
+them later,
 
-On 7/10/22 3:09 PM, Alan Maguire wrote:
-> add subtest verifying BPF ksym iter behaviour.  The BPF ksym
-> iter program shows an example of dumping a format different to
-> /proc/kallsyms.  It adds KIND and MAX_SIZE fields which represent the
-> kind of symbol (core kernel, module, ftrace, bpf, or kprobe) and
-> the maximum size the symbol can be.  The latter is calculated from
-> the difference between current symbol value and the next symbol
-> value.
-> 
-> The key benefit for this iterator will likely be supporting in-kernel
-> data-gathering rather than dumping symbol details to userspace and
-> parsing the results.
-> 
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> ---
->   tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 16 +++++
->   tools/testing/selftests/bpf/progs/bpf_iter.h      | 32 ++++++++++
->   tools/testing/selftests/bpf/progs/bpf_iter_ksym.c | 74 +++++++++++++++++++++++
->   3 files changed, 122 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> index 7ff5fa9..a33874b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> @@ -27,6 +27,7 @@
->   #include "bpf_iter_test_kern5.skel.h"
->   #include "bpf_iter_test_kern6.skel.h"
->   #include "bpf_iter_bpf_link.skel.h"
-> +#include "bpf_iter_ksym.skel.h"
->   
->   static int duration;
->   
-> @@ -1120,6 +1121,19 @@ static void test_link_iter(void)
->   	bpf_iter_bpf_link__destroy(skel);
->   }
->   
-> +static void test_ksym_iter(void)
-> +{
-> +	struct bpf_iter_ksym *skel;
-> +
-> +	skel = bpf_iter_ksym__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "bpf_iter_ksym__open_and_load"))
-> +		return;
-> +
-> +	do_dummy_read(skel->progs.dump_ksym);
-> +
-> +	bpf_iter_ksym__destroy(skel);
-> +}
-> +
->   #define CMP_BUFFER_SIZE 1024
->   static char task_vma_output[CMP_BUFFER_SIZE];
->   static char proc_maps_output[CMP_BUFFER_SIZE];
-> @@ -1267,4 +1281,6 @@ void test_bpf_iter(void)
->   		test_buf_neg_offset();
->   	if (test__start_subtest("link-iter"))
->   		test_link_iter();
-> +	if (test__start_subtest("ksym"))
-> +		test_ksym_iter();
->   }
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter.h b/tools/testing/selftests/bpf/progs/bpf_iter.h
-> index 97ec8bc..4b23a08 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter.h
-> @@ -22,6 +22,8 @@
->   #define BTF_F_NONAME BTF_F_NONAME___not_used
->   #define BTF_F_PTR_RAW BTF_F_PTR_RAW___not_used
->   #define BTF_F_ZERO BTF_F_ZERO___not_used
-> +#define bpf_iter__ksym bpf_iter__ksym___not_used
-> +#define kallsym_iter kallsym_iter___not_used
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 7630ba9cb6cc..25c42747f488 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -13,6 +13,7 @@ config ARM
+ 	select ARCH_HAS_KEEPINITRD
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
+ 	select ARCH_HAS_PHYS_TO_DMA
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 1920d52653b4..4b737c0d17a2 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -7,6 +7,7 @@ config LOONGARCH
+ 	select ARCH_ENABLE_MEMORY_HOTPLUG
+ 	select ARCH_ENABLE_MEMORY_HOTREMOVE
+ 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_PHYS_TO_DMA
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index db09d45d59ec..1b196acdeca3 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -9,6 +9,7 @@ config MIPS
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+index e814df4c483c..82483b192f4a 100644
+--- a/arch/openrisc/Kconfig
++++ b/arch/openrisc/Kconfig
+@@ -9,6 +9,7 @@ config OPENRISC
+ 	select ARCH_32BIT_OFF_T
+ 	select ARCH_HAS_DMA_SET_UNCACHED
+ 	select ARCH_HAS_DMA_CLEAR_UNCACHED
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select COMMON_CLK
+ 	select OF
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index c2ce2e60c8f0..19061ffe73a0 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -127,6 +127,7 @@ config PPC
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_MEMREMAP_COMPAT_ALIGN	if PPC_64S_HASH_MMU
+ 	select ARCH_HAS_MMIOWB			if PPC64
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PHYS_TO_DMA
+ 	select ARCH_HAS_PMEM_API
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c22f58155948..7570c95a9cc8 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -25,6 +25,7 @@ config RISCV
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MMIOWB
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_SET_DIRECT_MAP if MMU
+ 	select ARCH_HAS_SET_MEMORY if MMU
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 91c0b80a8bf0..48d91fa05bab 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -73,6 +73,7 @@ config S390
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEM_ENCRYPT
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_SCALED_CPUTIME
+ 	select ARCH_HAS_SET_MEMORY
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 4ec22e156a2e..df29c729267b 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -8,6 +8,7 @@ config UML
+ 	select ARCH_EPHEMERAL_INODES
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_KCOV
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+ 	select ARCH_NO_PREEMPT
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index be0b95e51df6..a91d73866238 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -81,6 +81,7 @@ config X86
+ 	select ARCH_HAS_KCOV			if X86_64
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
++	select ARCH_HAS_MM_CPUMASK
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 169e64192e48..7bf54f57ca01 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -951,6 +951,9 @@ config ARCH_HAS_CURRENT_STACK_POINTER
+ 	  register alias named "current_stack_pointer", this config can be
+ 	  selected.
 
-There is no need to do kallsym_iter. This structure
-should appear in vmlinux.h for all supporting bpf kernels.
++config ARCH_HAS_MM_CPUMASK
++	bool
++
+ config ARCH_HAS_VM_GET_PAGE_PROT
+ 	bool
 
->   #include "vmlinux.h"
->   #undef bpf_iter_meta
->   #undef bpf_iter__bpf_map
-> @@ -44,6 +46,8 @@
->   #undef BTF_F_NONAME
->   #undef BTF_F_PTR_RAW
->   #undef BTF_F_ZERO
-> +#undef bpf_iter__ksym
-> +#undef kallsym_iter
->   
->   struct bpf_iter_meta {
->   	struct seq_file *seq;
-> @@ -151,3 +155,31 @@ enum {
->   	BTF_F_PTR_RAW	=	(1ULL << 2),
->   	BTF_F_ZERO	=	(1ULL << 3),
->   };
-> +
-> +#ifndef KSYM_NAME_LEN
-> +#define KSYM_NAME_LEN 128
-> +#endif
-> +
-> +#ifndef MODULE_NAME_LEN
-> +#define MODULE_NAME_LEN (64 - sizeof(unsigned long))
-> +#endif
-> +
-> +struct kallsym_iter {
-> +	loff_t pos;
-> +	loff_t pos_arch_end;
-> +	loff_t pos_mod_end;
-> +	loff_t pos_ftrace_mod_end;
-> +	loff_t pos_bpf_end;
-> +	unsigned long value;
-> +	unsigned int nameoff; /* If iterating in core kernel symbols. */
-> +	char type;
-> +	char name[KSYM_NAME_LEN];
-> +	char module_name[MODULE_NAME_LEN];
-> +	int exported;
-> +	int show_value;
-> +};
-> +
-> +struct bpf_iter__ksym {
-> +	struct bpf_iter_meta *meta;
-> +	struct kallsym_iter *ksym;
-> +};
-[...]
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 5bcb334cd6f2..13d4f9a1d4f1 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -692,6 +692,10 @@ static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+ 	if (!(flags & TTU_BATCH_FLUSH))
+ 		return false;
+
++#ifndef CONFIG_ARCH_HAS_MM_CPUMASK
++	return true;
++#endif
++
+ 	/* If remote CPUs need to be flushed then defer batch the flush */
+ 	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+ 		should_defer = true;
+
+Thanks
+Barry
+

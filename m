@@ -2,202 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA9E56D3B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAAC56D3B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiGKESG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S229664AbiGKETr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGKESE (ORCPT
+        with ESMTP id S229510AbiGKETp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:18:04 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A837418E11
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:18:03 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id e28so3144140lfj.4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:18:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BXMvZ5KKLKE+nh0OYbWGNjBxoJw8VkWFj1ZZS1mY0SI=;
-        b=ej7GRO+QKUJQH443sPYaA4gOJkZCo7IxmJpeWGl0AHhMCNInxVZNLwcZLElsVyptjU
-         HhylwHvV+PAQSFFof10iJ3Tutb31VJYYIei1/pB0iuKwvu9hN5fNbOhaYDOajU/fN5+x
-         dS+2r69qPtHMvstkwMGqSe80+dbmc+YQRJG/qRtXFtiEEDz3lbFXLdScVNoRLZevtRiU
-         KZ0uCx/FGRKgdkwysWBbSVgc18Ibey3GaT5en28gRMQRXbfes9HT6YTTEeFwVzCmPusl
-         W3cU8H8oiBBjedFYSna5ze/37MrNAuWwy+jkuhtT6NBzeeDeP8Ss8M3sBIntsGoDGe27
-         CX0g==
+        Mon, 11 Jul 2022 00:19:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A311F17A96
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657513183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iYSp6HlI0dDBIV/HDsecc6eKbJCd3YWkca9HdFglgEg=;
+        b=LZM117yxang7gt+VslSpKs3tOfpvseM5MwRBI+HwZ7qPzH2Gd2NeOvQ1yTK9wBXIvghiW7
+        zMDAYsxgbD4uDHSFoyuQVw7Aag9SFVlOEF+4lSda1ekj2Rrb9dKtgoNMmJ5tOTF0sPKZf+
+        T4GXoYjBVZufAJzq196Yp4LqPR0K7fk=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-27-PUND9Je_OJaFQxYac_N1XA-1; Mon, 11 Jul 2022 00:19:39 -0400
+X-MC-Unique: PUND9Je_OJaFQxYac_N1XA-1
+Received: by mail-pg1-f200.google.com with SMTP id g34-20020a635662000000b0040d1da6ada4so1361315pgm.1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:19:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BXMvZ5KKLKE+nh0OYbWGNjBxoJw8VkWFj1ZZS1mY0SI=;
-        b=OJY2YHGEYQ6F3oLxuhUbdcn/hJIlwVr+qIEO0nyVhpMpmqvEItIYZderXK2L+BGp+R
-         I/lChIlqzPnqMqneFOdxaEWqKTNme9gnshx4wnfMIUNuuzW6qtC8AgtSu0LTksw+ybXH
-         /S6bAYEija9JMrs85q8PHck4+8T+QMo5QwMh1BqhpsVkz2VoTFnyMvn3df3cEGoRppwc
-         eiZXsZiVV7opXel9SyaHO8ZAnXVeql1SkbBHiU0uX89KoTUPYdzjZB1I7QBpuwnHE7r/
-         e4TN+CmMNxiTfK2pS8x21X/9F1UbO6HF5a3Dgwj8SoLzAayB1mfIHfv7KGoNZxPc6sJF
-         yDrw==
-X-Gm-Message-State: AJIora9/y2M5dutu8FU96L5G92nP78Wj8PgcEmxY+tmzf6T8DHsXr0Sk
-        cGim+hwB6yVi1ltBsUnC8Or0I6xVtLx7S6VzZB1NoQ==
-X-Google-Smtp-Source: AGRyM1uLPA/b/bMbbC5qfsVLjsr93id3RByQNKW8mBzZDyUntxtEJGIfmJ6aXXnyNhDo5y4BGMCTWvJhjWZ8nKtpZuk=
-X-Received: by 2002:a19:5f46:0:b0:488:4e69:2da2 with SMTP id
- a6-20020a195f46000000b004884e692da2mr10794220lfj.130.1657513081932; Sun, 10
- Jul 2022 21:18:01 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=iYSp6HlI0dDBIV/HDsecc6eKbJCd3YWkca9HdFglgEg=;
+        b=74yd5g5Mnx0pAmu25qr5LjG1lbHIC4KqILivydbVvWc7nxADPqHHp3JJCTyotdegZZ
+         DH2F7se+EpimVNfiTDw5Dia2F8+CP39GE76BoCa2TGQjHcTd7tmVgVlsYmzOvNjt9wxx
+         TrgYFUBrVEr6xwE2Ng1F2XGRueXVOGVLNYfg0CrVxfk2XMzaSP3ZLGE5oqCWwJyOScu1
+         Hy+h+NAN/Na46cJV2SMc7ekpMHVlSngVWmKx/H8RLESi6y3kL/1wCU86aBQXXGIzl4GT
+         7ONZEf/ZOkeX3U5+ZiM09k85thrX2SoIbsUTQYhZWHTE7kZFRcdQxTXjzD43eEsQWE9I
+         nhWw==
+X-Gm-Message-State: AJIora+LZHZwQGllzan99DO71QAMw1uoouzdzXKnauhhG+tzrndg8JqY
+        ibvzDXO2AktRB0uyvv/ME1VILeu/9k7lvysOGUnzVuhdBV4p4sFwbZuqUa+14fd9R3GLe7JEQZE
+        7+AQA8IFUXADDjK6b3RZWD6kT
+X-Received: by 2002:a63:2c47:0:b0:411:54ab:97b6 with SMTP id s68-20020a632c47000000b0041154ab97b6mr14206429pgs.173.1657513178582;
+        Sun, 10 Jul 2022 21:19:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sdLoGKlY/5zCNt7vw/gv0lyzTZM8Mh6bsyCtyMbXMA0uNpORIFIeDfE5UALrqX7MSFep4+Rw==
+X-Received: by 2002:a63:2c47:0:b0:411:54ab:97b6 with SMTP id s68-20020a632c47000000b0041154ab97b6mr14206416pgs.173.1657513178370;
+        Sun, 10 Jul 2022 21:19:38 -0700 (PDT)
+Received: from [10.72.14.22] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902f54700b0016be4d310b2sm3543056plf.80.2022.07.10.21.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Jul 2022 21:19:37 -0700 (PDT)
+Subject: Re: [PATCH v4] netfs: do not unlock and put the folio twice
+To:     Matthew Wilcox <willy@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     idryomov@gmail.com, jlayton@kernel.org, marc.dionne@auristor.com,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        william.kucharski@oracle.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cachefs@redhat.com, vshankar@redhat.com
+References: <20220707045112.10177-1-xiubli@redhat.com>
+ <2520851.1657200105@warthog.procyon.org.uk>
+ <YsbfCcNvjMVcT2yx@casper.infradead.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <cf169f43-8ee7-8697-25da-0204d1b4343e@redhat.com>
+Date:   Mon, 11 Jul 2022 12:19:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220707145248.458771-1-apatel@ventanamicro.com> <20220707145248.458771-3-apatel@ventanamicro.com>
-In-Reply-To: <20220707145248.458771-3-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Mon, 11 Jul 2022 09:47:46 +0530
-Message-ID: <CAK9=C2U9jmbgE7FDzBqGChd+HffBdod7+8b_n45HzqYY1amd_Q@mail.gmail.com>
-Subject: Re: [PATCH 2/5] riscv: Fix missing PAGE_PFN_MASK
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YsbfCcNvjMVcT2yx@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 8:23 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
->
-> There are a bunch of functions that use the PFN from a page table entry
-> that end up with the svpbmt upper-bits because they are missing the newly
-> introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
-> then crash: fix this by adding this mask.
->
-> Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> Reviewed-by: Anup Patel <anup@brainfault.org>
 
-I have queued this patch for 5.19-rcX fixes which I will send-out this week.
+On 7/7/22 9:26 PM, Matthew Wilcox wrote:
+> On Thu, Jul 07, 2022 at 02:21:45PM +0100, David Howells wrote:
+>> -					 struct folio *folio, void **_fsdata);
+>> +					 struct folio **_folio, void **_fsdata);
+> The usual convention is that _foo means "Don't touch".  This should
+> probably be named "foliop" (ie pointer to a thing that would normally
+> be called folio).
+>
+This looks good to me.
 
-Thanks,
-Anup
+I will send out the V5 by fixing this and will merge this patch via the 
+ceph tree as discussed with David in the IRC and will cc the stable at 
+the same time.
 
-> ---
->  arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
->  arch/riscv/include/asm/pgtable.h    |  6 +++---
->  arch/riscv/kvm/mmu.c                |  2 +-
->  3 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> index 5c2aba5efbd0..dc42375c2357 100644
-> --- a/arch/riscv/include/asm/pgtable-64.h
-> +++ b/arch/riscv/include/asm/pgtable-64.h
-> @@ -175,7 +175,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
->
->  static inline unsigned long _pud_pfn(pud_t pud)
->  {
-> -       return pud_val(pud) >> _PAGE_PFN_SHIFT;
-> +       return __page_val_to_pfn(pud_val(pud));
->  }
->
->  static inline pmd_t *pud_pgtable(pud_t pud)
-> @@ -278,13 +278,13 @@ static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
->
->  static inline unsigned long _p4d_pfn(p4d_t p4d)
->  {
-> -       return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
-> +       return __page_val_to_pfn(p4d_val(p4d));
->  }
->
->  static inline pud_t *p4d_pgtable(p4d_t p4d)
->  {
->         if (pgtable_l4_enabled)
-> -               return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-> +               return (pud_t *)pfn_to_virt(__page_val_to_pfn(p4d_val(p4d)));
->
->         return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
->  }
-> @@ -292,7 +292,7 @@ static inline pud_t *p4d_pgtable(p4d_t p4d)
->
->  static inline struct page *p4d_page(p4d_t p4d)
->  {
-> -       return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-> +       return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
->  }
->
->  #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-> @@ -347,7 +347,7 @@ static inline void pgd_clear(pgd_t *pgd)
->  static inline p4d_t *pgd_pgtable(pgd_t pgd)
->  {
->         if (pgtable_l5_enabled)
-> -               return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
-> +               return (p4d_t *)pfn_to_virt(__page_val_to_pfn(pgd_val(pgd)));
->
->         return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
->  }
-> @@ -355,7 +355,7 @@ static inline p4d_t *pgd_pgtable(pgd_t pgd)
->
->  static inline struct page *pgd_page(pgd_t pgd)
->  {
-> -       return pfn_to_page(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
-> +       return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
->  }
->  #define pgd_page(pgd)  pgd_page(pgd)
->
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 1d1be9d9419c..5dbd6610729b 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -261,7 +261,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
->
->  static inline unsigned long _pgd_pfn(pgd_t pgd)
->  {
-> -       return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
-> +       return __page_val_to_pfn(pgd_val(pgd));
->  }
->
->  static inline struct page *pmd_page(pmd_t pmd)
-> @@ -590,14 +590,14 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
->         return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
->  }
->
-> -#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-> +#define __pmd_to_phys(pmd)  (__page_val_to_pfn(pmd_val(pmd)) << PAGE_SHIFT)
->
->  static inline unsigned long pmd_pfn(pmd_t pmd)
->  {
->         return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
->  }
->
-> -#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-> +#define __pud_to_phys(pud)  (__page_val_to_pfn(pud_val(pud)) << PAGE_SHIFT)
->
->  static inline unsigned long pud_pfn(pud_t pud)
->  {
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 2965284a490d..b75d4e200064 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -54,7 +54,7 @@ static inline unsigned long gstage_pte_index(gpa_t addr, u32 level)
->
->  static inline unsigned long gstage_pte_page_vaddr(pte_t pte)
->  {
-> -       return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
-> +       return (unsigned long)pfn_to_virt(__page_val_to_pfn(pte_val(pte)));
->  }
->
->  static int gstage_page_size_to_level(unsigned long page_size, u32 *out_level)
-> --
-> 2.34.1
->
+Thanks!
+
+-- Xiubo
+
+
+

@@ -2,167 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562CB570CCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCA8570CD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiGKVhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S231409AbiGKVit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiGKVhs (ORCPT
+        with ESMTP id S229934AbiGKVis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:37:48 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E810032BB2;
-        Mon, 11 Jul 2022 14:37:46 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:56004)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oB169-00Fyyi-KE; Mon, 11 Jul 2022 15:37:45 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:45020 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oB168-00GwFM-AH; Mon, 11 Jul 2022 15:37:45 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Christian Brauner <brauner@kernel.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YrShFXRLtRt6T/j+@risky>
-        <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
-        <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
-        <YsyHMVLuT5U6mm+I@netflix>
-Date:   Mon, 11 Jul 2022 16:37:12 -0500
-In-Reply-To: <YsyHMVLuT5U6mm+I@netflix> (Tycho Andersen's message of "Mon, 11
-        Jul 2022 14:25:21 -0600")
-Message-ID: <877d4jbabb.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 11 Jul 2022 17:38:48 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E4D32DBA;
+        Mon, 11 Jul 2022 14:38:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PbQvZmnVwKN/aC8PLFz7/baO5U1JazoMNfBYATPgzvxzfFFHzcYJ/jr/p+hRyvlNhPiSSavR+3hVumeuM1VPgoJmXJu76cVI70T5f1aHq3Mw1SUdf4Q7AzQ+VkSmDdhmgIaCGBbt5jvqhGYY9iqFNgbqqRMxNE1YpLBH+dhaBIut1oShGewV40VjH/kGjOj6xCkQPzMOtG5guJdkypVitKCLxej/+S+1oJLEaGQUBXkIuqMqEu3BHfsYV8xHSTeRdQ54HV1gHA44xlZfKxj+pT9cKAWxB0jutxIIqCeALrtWVN3W3c4QIBKA2xVi+y1OQSzsRuEtvyzs9CoKocb0BQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QCDQSz77ns8uLD/q1JRBPNQ/X+74FPskGJxPBcmtr0Y=;
+ b=dRcrIAeBK2MHi3wQFtQCvX8hd7/id9Kdty7XfdlGhXWmtcicJAQu4Z0Q4Yu33N8QVHL3HazPY9kTmM2TmQPCSmmbF6xjcBSyQRGP1AWQjo/zrI+bXcxmkTL2UAHudtftPQ7sYPGsRWbxkbQt+XvOY4OJaGqpf+ZZXgHMkjX9/R4dqtj9XlJQOexyyURIWnAkAYDHYXa5DUVhX63WBIHpfIgeMNFjzWmBE2PQxrU/82yn5T8Jc+26+ACXkj8IWYb7mTC6xjGL8P4oWa5dw6n0W//2UBlf3e8k8jR8hPoorRUP38kBgIAsTUYwkRciEMSBYrZZG91q26d0DxA91mzglg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QCDQSz77ns8uLD/q1JRBPNQ/X+74FPskGJxPBcmtr0Y=;
+ b=gBa1OnBSPg7Oo5+j204XRYVvOdvDSe/2WAlzcV18dUJ1zqHVQcch2qJ/UbmgREjOeXGT99V/u5Dc9NN8JLl9awxwBkDCfe/y4cRAODn4ZMjugOxpqHp1eX7P192/nMBnLu5SkA1FXe6313uoO7DW23vrIPy8EGLX+qUorjcizTw=
+Received: from BN8PR12CA0003.namprd12.prod.outlook.com (2603:10b6:408:60::16)
+ by MN2PR12MB4653.namprd12.prod.outlook.com (2603:10b6:208:1b8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Mon, 11 Jul
+ 2022 21:38:44 +0000
+Received: from BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::c7) by BN8PR12CA0003.outlook.office365.com
+ (2603:10b6:408:60::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.19 via Frontend
+ Transport; Mon, 11 Jul 2022 21:38:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT026.mail.protection.outlook.com (10.13.177.51) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5417.15 via Frontend Transport; Mon, 11 Jul 2022 21:38:44 +0000
+Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 11 Jul
+ 2022 16:38:42 -0500
+Subject: [PATCH 0/9] x86/resctrl: Add the support for AMD QoS new features
+From:   Babu Moger <babu.moger@amd.com>
+To:     <fenghua.yu@intel.com>, <reinette.chatre@intel.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
+CC:     <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <corbet@lwn.net>, <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+Date:   Mon, 11 Jul 2022 16:38:42 -0500
+Message-ID: <165757543252.416408.13547339307237713464.stgit@bmoger-ubuntu>
+User-Agent: StGit/1.1.dev103+g5369f4c
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oB168-00GwFM-AH;;;mid=<877d4jbabb.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+BNhhz/q5rz9OSWYm2QD2VMDoDaU2rMNc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: df446ab4-ce4b-4db7-f558-08da6385bacb
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4653:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rzH1f4haVNEnSvjhlFxvAYYVVDMJze8VWy3qozJsRJIaU89zaenI3MJWuSCpnjgErbPpcdvso9kMyJkO0zL5pX8HByPPqg2kmSN7ZCbcy8WqPSfxRATo7QJ7gIm2S70+4UN590ues5wPXNMimFNbRJhyEct2b6UpJXQw3REKzhLtLgFXuWrD+O0pMst+uzjsKX7tDbqKNP4Xxyv8aVq6w1L/L7AhAX/AM5pl/lOQ7qKIta7t1J8xqhmcFcZvph8su5jeCcjXojO7MWLtXBt4z8VPkeAa8MXTPfC8sl2HM5RGGlKvXJd0wyLfFnK5RA6k1oRaYON4qLDPzwcvsoLlO02V82KEloT9TtV42WyUVJSMsRITagVIuxIPbfhJQqf2vp3aXz2hKwxKvRViKyBtTG9Gh9adqzXV4PFGXTx8331cbIXffBLfbqsTcnQRYGjeTmDAfCTRp4cAqem4mjN/F7WCKba4isOK0XWSZjBzowdWzcR8/j9h1Gz6Up6/dipOg3X0BpxFK8VGXGhep8CIr+stjew2GV3Kc4eXg8paLmzRQKnoWmfcvlvfw+2ys5NFrC3u1RmsDKGRZEiqR6rpIy033ftaHSYKoa3hQJHKHMphdeBfaV+tKiVsDjN6ATbbl/5BCyD6CRKdUoOCT4yt1xjrV9qFxLaX3HeT2SMD7zukJwa6oT4I+F/i1LAketgOOLn1NFzd1TCBALeLTvNFsBLkx48nHR6OmghyaMLcgfWFQ//ZU5yeTRW3b0PgM924n4PcR4EtIuJIESxXz1t9Wxy57uFGRo5f2eHl4sbFcs+xC2GvqipbQdFcps3ob34UIGg3GiJqe4j/eVdmLquuOF4tGmKHhAud3SIMORNpNi80peRG7Z4yazdVLt18vh+cBWPOnNrYORMepxHTROj9NnzaOhp7ipa4IxzxDXMnzeHs3ENSKDbvd5P0KFiB0Yyx
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(7916004)(4636009)(376002)(39860400002)(346002)(396003)(136003)(46966006)(40470700004)(36840700001)(966005)(103116003)(40480700001)(478600001)(54906003)(2906002)(44832011)(7416002)(33716001)(81166007)(5660300002)(83380400001)(36860700001)(40460700003)(8936002)(336012)(66574015)(426003)(186003)(26005)(9686003)(8676002)(4326008)(47076005)(70586007)(82740400003)(316002)(110136005)(70206006)(41300700001)(16526019)(82310400005)(16576012)(86362001)(356005)(71626007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 21:38:44.1450
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: df446ab4-ce4b-4db7-f558-08da6385bacb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT026.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4653
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Tycho Andersen <tycho@tycho.pizza>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 745 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 14 (1.8%), b_tie_ro: 12 (1.6%), parse: 1.03
-        (0.1%), extract_message_metadata: 16 (2.2%), get_uri_detail_list: 2.3
-        (0.3%), tests_pri_-1000: 14 (1.9%), tests_pri_-950: 1.32 (0.2%),
-        tests_pri_-900: 1.17 (0.2%), tests_pri_-90: 335 (44.9%), check_bayes:
-        326 (43.8%), b_tokenize: 9 (1.2%), b_tok_get_all: 184 (24.7%),
-        b_comp_prob: 2.9 (0.4%), b_tok_touch_all: 126 (17.0%), b_finish: 0.85
-        (0.1%), tests_pri_0: 343 (46.1%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 3.0 (0.4%), poll_dns_idle: 1.10 (0.1%), tests_pri_10:
-        2.7 (0.4%), tests_pri_500: 13 (1.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: strange interaction between fuse + pidns
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tycho Andersen <tycho@tycho.pizza> writes:
+New AMD processors can now support following QoS features.=0A=
+1. Slow Memory Bandwidth Con=EF=AC=81guration=0A=
+   With this feature, the QOS enforcement policies can be applied=0A=
+   to the external slow memory connected to the host. QOS enforcement=0A=
+   is accomplished by assigning a Class Of Service (COS) to a processor=0A=
+   and specifying allocations or limits for that COS for each resource=0A=
+   to be allocated.=0A=
+=0A=
+2. Bandwidth Monitoring Event Configuration (BMEC)=0A=
+   The bandwidth monitoring events mbm_total_event and mbm_local_event =0A=
+   are set to count all the total and local reads/writes respectively.=0A=
+   With the introduction of slow memory, the two counters are not enough=0A=
+   to count all the different types are memory events. With the feature=0A=
+   BMEC, the users have the option to configure mbm_total_event and=0A=
+   mbm_local_event to count the specific type of events.=0A=
+=0A=
+   Following are the bitmaps of events supported.=0A=
+   Bits    Description=0A=
+      6       Dirty Victims from the QOS domain to all types of memory=0A=
+      5       Reads to slow memory in the non-local NUMA domain=0A=
+      4       Reads to slow memory in the local NUMA domain=0A=
+      3       Non-temporal writes to non-local NUMA domain=0A=
+      2       Non-temporal writes to local NUMA domain=0A=
+      1       Reads to memory in the non-local NUMA domain=0A=
+      0       Reads to memory in the local NUMA domain=0A=
+=0A=
+This series adds support for these features.=0A=
+=0A=
+Feature description is available in the specification, "AMD64 Technology Pl=
+atform Quality=0A=
+of Service Extensions, Revision: 1.03 Publication # 56375 Revision: 1.03 Is=
+sue Date: February 2022".=0A=
+=0A=
+Link: https://www.amd.com/en/support/tech-docs/amd64-technology-platform-qu=
+ality-service-extensions=0A=
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D206537=0A=
+---=0A=
+=0A=
+Babu Moger (9):=0A=
+      x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag=0A=
+      x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA=0A=
+      x86/resctrl: Detect and configure Slow Memory Bandwidth allocation=0A=
+      x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature=
+ flag=0A=
+      x86/resctrl: Introduce mon_configurable to detect Bandwidth Monitorin=
+g Event Configuration=0A=
+      x86/resctrl: Add sysfs interface files to read/write event configurat=
+ion=0A=
+      x86/resctrl: Add the sysfs interface to read the event configuration=
+=0A=
+      x86/resctrl: Add sysfs interface to write the event configuration=0A=
+      Documentation/x86: Update resctrl_ui.rst for new features=0A=
+=0A=
+=0A=
+ Documentation/x86/resctrl.rst             | 123 +++++++++++=0A=
+ arch/x86/include/asm/cpufeatures.h        |   2 +=0A=
+ arch/x86/kernel/cpu/resctrl/core.c        |  62 ++++++=0A=
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c |   2 +-=0A=
+ arch/x86/kernel/cpu/resctrl/internal.h    |  26 +++=0A=
+ arch/x86/kernel/cpu/resctrl/monitor.c     |  16 ++=0A=
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 237 +++++++++++++++++++++-=0A=
+ arch/x86/kernel/cpu/scattered.c           |   2 +=0A=
+ include/linux/resctrl.h                   |   1 +=0A=
+ 9 files changed, 467 insertions(+), 4 deletions(-)=0A=
+=0A=
+--=0A=
+Signature=0A=
 
-> Hi all,
->
-> On Mon, Jul 11, 2022 at 03:59:15PM +0200, Miklos Szeredi wrote:
->> On Mon, 11 Jul 2022 at 12:35, Miklos Szeredi <miklos@szeredi.hu> wrote:
->> >
->> > Can you try the attached untested patch?
->> 
->> Updated patch to avoid use after free on req->args.
->> 
->> Still mostly untested.
->
-> Thanks, when I applied your patch, I still ended up with tasks stuck
-> waiting with a SIGKILL pending. So I looked into that and came up with
-> the patch below. With both your patch and mine, my testcase exits
-> cleanly.
->
-> Eric (or Christian, or anyone), can you comment on the patch below? I
-> have no idea what this will break. Maybe instead a better approach is
-> some additional special case in __send_signal_locked()?
->
-> Tycho
->
-> From b7ea26adcf3546be5745063cc86658acb5ed37e9 Mon Sep 17 00:00:00 2001
-> From: Tycho Andersen <tycho@tycho.pizza>
-> Date: Mon, 11 Jul 2022 11:26:58 -0600
-> Subject: [PATCH] sched: __fatal_signal_pending() should also check shared
->  signals
->
-> The wait_* code uses signal_pending_state() to test whether a thread has
-> been interrupted, which ultimately uses __fatal_signal_pending() to detect
-> if there is a fatal signal.
->
-> When a pid ns dies, in zap_pid_ns_processes() it does:
->
->     group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
->
-> for all the tasks in the pid ns. That calls through:
->
->     group_send_sig_info() ->
->       do_send_sig_info() ->
->         send_signal_locked() ->
->           __send_signal_locked()
->
-> which does:
->
->     pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
->
-> which puts sigkill in the set of shared signals, but not the individual
-> pending ones. If tasks are stuck in a killable wait (e.g. a fuse flush
-> operation), they won't see this shared signal, and will hang forever, since
-> TIF_SIGPENDING is set, but the fatal signal can't be detected.
-
-Hmm.
-
-That is perplexing.
-
-__send_signal_locked calls complete_signal.  Then if any of the tasks of
-the process can receive the signal, complete_signal will loop through
-all of the tasks of the process and set the per thread SIGKILL.  Pretty
-much by definition tasks can always receive SIGKILL.
-
-Is complete_signal not being able to do that?
-
-The patch below really should not be necessary, and I have pending work
-that if I can push over the finish line won't even make sense.
-
-As it is currently an abuse to use the per thread SIGKILL to indicate
-that a fatal signal has been short circuit delivered.  That abuse as
-well as being unclean tends to confuse people reading the code.
-
-Eric
-
-> Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
-> ---
->  include/linux/sched/signal.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-> index cafbe03eed01..a033ccb0a729 100644
-> --- a/include/linux/sched/signal.h
-> +++ b/include/linux/sched/signal.h
-> @@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
->  
->  static inline int __fatal_signal_pending(struct task_struct *p)
->  {
-> -	return unlikely(sigismember(&p->pending.signal, SIGKILL));
-> +	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
-> +			sigismember(&p->signal->shared_pending.signal, SIGKILL));
->  }
->  
->  static inline int fatal_signal_pending(struct task_struct *p)
->
-> base-commit: 32346491ddf24599decca06190ebca03ff9de7f8

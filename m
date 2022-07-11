@@ -2,78 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F50A56D6AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158DD56D6B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiGKHWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S229984AbiGKHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiGKHWv (ORCPT
+        with ESMTP id S229606AbiGKHXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:22:51 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DCB41055F;
-        Mon, 11 Jul 2022 00:22:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=AH2Ez
-        WZfnJV6fIlvat5MXanKCwJ4URf7qbM1gSDXMpI=; b=G4RNUrAD7r0CRtlLAAib5
-        sRtXfps0BpUR+wIHr92y0A5J5zsfltOS2VKQQGYk9gTvfR2I3zmInh+PokMhzJqK
-        I+4InpAN1vrUyHIi2hIg6hKRQG1j8AAPJNZdU6yxdyJl9y2eacwJB8ez1bNf2Fc3
-        BhxNPLKsTa2yzSn66+MtZA=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp1 (Coremail) with SMTP id GdxpCgBnpeabz8tisz21Ng--.19861S4;
-        Mon, 11 Jul 2022 15:22:16 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] ima/evm: Fix potential memory leak in ima_init_crypto()
-Date:   Mon, 11 Jul 2022 15:22:02 +0800
-Message-Id: <20220711072202.2319030-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 03:23:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C5627B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:23:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 5so3717672plk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MEJ/hqMimN4a6BWdX8wrAtk4YGGTAOomy2QG8zFa0Sk=;
+        b=JsBNDLxSiQKyWMztSLBCTECeA3K1onS/X+Stsxf7Hb//MaIFXVG2xcGNGgWHsbkwR8
+         DcTU2AyCw7pBv1WZapTZq9nDE4n5r33uwAui5FNB7yGgBxD/rcjMot+dAN35rIl15hJT
+         oO0f28H1G2AZyql3cE4wKDCUrGiyxPjRwErpA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MEJ/hqMimN4a6BWdX8wrAtk4YGGTAOomy2QG8zFa0Sk=;
+        b=o9PIfAkGYnVGPQXpW2n+yyv87hEhT+nOPkTZeR0pCQ0345mgw9UyoFJxLVlZFAhfKr
+         /KdK1BHkjKJb3r7WhsChDApKOD/L2wwRoC+ubYOBgrz9594suaeACpA78PDw0kEk/TCK
+         vrbWCNQe/W2zYuVTyCCeZjMuhzwhM57ege0DFaq2lKzd9U6rLqhN3Wo1B6zuHNIeRphM
+         w/bWs6GCa5imMdte+n5I38ild2r5RxhtOF4p9+2xB7Zo/YfgPPOSbiQAz9wMWmOfgwne
+         lgP5YhLa86aDtUyzJkYmDE8j9q9n2EGPLpAk8fiNkP6LpzD9tsnF6B1S9THR38g8wJ1p
+         xKPg==
+X-Gm-Message-State: AJIora9hNntQXkVbDIyGj810EoTkJOqNB1A6tlRalJNqrrB+PaEyt3mq
+        E0sZslcr3oceLRvjyJ5JRQ/wMssj2EFUDA==
+X-Google-Smtp-Source: AGRyM1u1WXLZ9QcxqwlVQlitWLXmlWLZbo7OYjJCN2WotXPOMB3vzYDRgczBBfFtt6CC997VjU8CVA==
+X-Received: by 2002:a17:90b:1c12:b0:1f0:2836:7799 with SMTP id oc18-20020a17090b1c1200b001f028367799mr9190065pjb.139.1657524217972;
+        Mon, 11 Jul 2022 00:23:37 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z8-20020aa79e48000000b0051bc5f4df1csm4012839pfq.154.2022.07.11.00.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 00:23:37 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH v4 0/9] Type-C switch driver and Type-C framework updates
+Date:   Mon, 11 Jul 2022 07:22:54 +0000
+Message-Id: <20220711072333.2064341-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgBnpeabz8tisz21Ng--.19861S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWfKFy8ZF1fCw48CFWxJFb_yoWxuFgE9a
-        s0934xW3W7Zan3ZayjvFZ7ZF4vgrZ5XFyFgr9IywnruFy3Cr45Xa47Xrs3Jry8AryUAF4q
-        ga98JFW2kwnFgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREs2-3UUUUU==
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBOQg7jF-PObrQ9QAAsw
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the missing kfree() for ima_algo_array allocated by
-kcalloc() to avoid potential memory leak.
+This series introduces a retimer class to the USB Type-C framework,
+It also introduces a Chrome EC (Embedded Controller) switch driver which
+registers the aforementioned retimer switches as well as mode-switches.
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- security/integrity/ima/ima_crypto.c | 1 +
- 1 file changed, 1 insertion(+)
+Patch 1 and 2 introduce the retimer class and associated functions to
+the Type-C common code.
 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index a7206cc1d7d1..64499056648a 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -205,6 +205,7 @@ int __init ima_init_crypto(void)
- 
- 		crypto_free_shash(ima_algo_array[i].tfm);
- 	}
-+	kfree(ima_algo_array);
- out:
- 	crypto_free_shash(ima_shash_tfm);
- 	return rc;
+Patches 3-7 add the cros-typec-switch driver.
+
+Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
+
+Submission suggestion (as always, open to better suggestions):
+- Patch 1 and 2 can go through the USB repo.
+- Patch 3-9 can go through the chrome-platform repo. Since they depend
+  on patches 1 and 2, we can create an "topic branch" off of usb-next
+  once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
+  of that "topic branch" before merging it back into chrome-platform's
+  for-next branch
+
+v3: https://lore.kernel.org/linux-usb/20220707222045.1415417-1-pmalani@chromium.org/
+
+Changes since v3:
+- Updated Commit message of Patch 1 to mention that no new
+  class-specific sysfs files are being created.
+
+Changes since v2:
+- Fixed missing "static" declarations, and removed newlines from
+  function signatures.
+
+Changes since v1:
+- Changed class name and retimer device type name, and fixed
+  retimer reference release issue.
+
+Prashant Malani (9):
+  usb: typec: Add support for retimers
+  usb: typec: Add retimer handle to port
+  platform/chrome: Add Type-C mux set command definitions
+  platform/chrome: cros_typec_switch: Add switch driver
+  platform/chrome: cros_typec_switch: Set EC retimer
+  platform/chrome: cros_typec_switch: Add event check
+  platform/chrome: cros_typec_switch: Register mode switches
+  platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+  platform/chrome: cros_ec_typec: Get retimer handle
+
+ MAINTAINERS                                   |   1 +
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ drivers/platform/chrome/cros_ec_typec.c       |  50 ++-
+ drivers/platform/chrome/cros_typec_switch.c   | 332 ++++++++++++++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     |  18 +-
+ drivers/usb/typec/class.h                     |   2 +
+ drivers/usb/typec/retimer.c                   | 168 +++++++++
+ drivers/usb/typec/retimer.h                   |  15 +
+ .../linux/platform_data/cros_ec_commands.h    |  18 +
+ include/linux/usb/typec_retimer.h             |  45 +++
+ 12 files changed, 654 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_switch.c
+ create mode 100644 drivers/usb/typec/retimer.c
+ create mode 100644 drivers/usb/typec/retimer.h
+ create mode 100644 include/linux/usb/typec_retimer.h
+
 -- 
-2.25.1
+2.37.0.144.g8ac04bfd2-goog
 

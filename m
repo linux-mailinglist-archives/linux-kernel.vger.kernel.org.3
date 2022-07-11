@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE8E570C98
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C215570CA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiGKVQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S230162AbiGKVVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbiGKVQY (ORCPT
+        with ESMTP id S229717AbiGKVVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:16:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C45F80511
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657574182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B17g9wAT+9shoXVHnJnHIlRvD72JVpKr/HdI9ugSZ80=;
-        b=eVoBr/yoiV9Q9RvfxupDNxu9tGbVFK6wzolPkTCfKWcS8u1I1wfzOqshhdoHedHONfGwmZ
-        +R/MHvphbzSwosyV0tiN+Kib+c3E75h8IsbYIw1e07/PcN1R67v5ant4upXYX/GziZHNo9
-        YFfOy58XCzkBlY+auV5YSRZpcA4Hnk0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-BymDG5gsMMiVt8p7M54asw-1; Mon, 11 Jul 2022 17:16:21 -0400
-X-MC-Unique: BymDG5gsMMiVt8p7M54asw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 11 Jul 2022 17:21:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63142A716;
+        Mon, 11 Jul 2022 14:21:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D6F8032EA;
-        Mon, 11 Jul 2022 21:16:20 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F5212166B26;
-        Mon, 11 Jul 2022 21:16:20 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH v3 1/2] cpuhp: make target_store() a nop when target == state
-Date:   Mon, 11 Jul 2022 17:16:18 -0400
-Message-Id: <20220711211619.112854-2-pauld@redhat.com>
-In-Reply-To: <20220711211619.112854-1-pauld@redhat.com>
-References: <20220711211619.112854-1-pauld@redhat.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 696A422AB2;
+        Mon, 11 Jul 2022 21:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657574468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=BrBDvl4qC4LTS72QHk/hrHRE5XNXQVEeAobhMNDASnU=;
+        b=r/ycO6YwLIT/Nm+rYaY6umt8Vo7zdVhhQpFUG2p3wZgGrxdkjTAkivKMwSnVz3sXw3RZuI
+        JGfCozr6mDWu+p83F5s/4bF0fc7sSbEBs99y9M3KcMcIb45hd9SAJcH1PsjM1ucP9nfdlu
+        InPp3N3vz/+6x5SDWbyDqMDpH0IHEb0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 383EA13524;
+        Mon, 11 Jul 2022 21:21:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id q/6RDESUzGIuWwAAMHmgww
+        (envelope-from <dsterba@suse.com>); Mon, 11 Jul 2022 21:21:08 +0000
+Date:   Mon, 11 Jul 2022 23:16:19 +0200
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.19-rc7
+Message-ID: <cover.1657571742.git.dsterba@suse.com>
+Mail-Followup-To: David Sterba <dsterba@suse.com>,
+        torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-writing the current state back in hotplug/target calls cpu_down()
-which will set cpu dying even when it isn't and then nothing will
-ever clear it. A stress test that reads values and writes them back
-for all cpu device files in sysfs will trigger the BUG() in
-select_fallback_rq once all cpus are marked as dying.
+Hi,
 
-kernel/cpu.c::target_store()
-	...
-        if (st->state < target)
-                ret = cpu_up(dev->id, target);
-        else
-                ret = cpu_down(dev->id, target);
+a few more fixes that seem to me to be important enough to get merged
+before release, described below. Please pull, thanks.
 
-cpu_down() -> cpu_set_state()
-	 bool bringup = st->state < target;
-	 ...
-	 if (cpu_dying(cpu) != !bringup)
-		set_cpu_dying(cpu, !bringup);
+- in zoned mode, fix leak of a structure when reading zone info, this
+  happens on normal path so this can be significant
 
-Fix this by letting state==target fall through in the target_store()
-conditional. Also make sure st->target == target in that case.
+- in zoned mode, revert an optimization added in 5.19-rc1 to finish a
+  zone when the capacity is full, but this is not reliable in all cases
 
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
- kernel/cpu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+- try to avoid short reads for compressed data or inline files when it's
+  a NOWAIT read, applications should handle that but there are two,
+  qemu and mariadb, that are affected
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..305694a2ca26 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
- 
- 	if (st->state < target)
- 		ret = cpu_up(dev->id, target);
--	else
-+	else if (st->state > target)
- 		ret = cpu_down(dev->id, target);
-+	else if (st->target != target)
-+		st->target = target;
- out:
- 	unlock_device_hotplug();
- 	return ret ? ret : count;
--- 
-2.31.1
+----------------------------------------------------------------
+The following changes since commit 037e127452b973f45b34c1e88a1af183e652e657:
 
+  Documentation: update btrfs list of features and link to readthedocs.io (2022-06-21 14:47:19 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.19-rc6-tag
+
+for you to fetch changes up to b3a3b0255797e1d395253366ba24a4cc6c8bdf9c:
+
+  btrfs: zoned: drop optimization of zone finish (2022-07-08 19:18:00 +0200)
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      btrfs: zoned: fix a leaked bioc in read_zone_info
+
+Filipe Manana (1):
+      btrfs: return -EAGAIN for NOWAIT dio reads/writes on compressed and inline extents
+
+Naohiro Aota (1):
+      btrfs: zoned: drop optimization of zone finish
+
+ fs/btrfs/inode.c | 14 +++++++++++++-
+ fs/btrfs/zoned.c | 34 ++++++++++++++--------------------
+ 2 files changed, 27 insertions(+), 21 deletions(-)

@@ -2,130 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEF156D2D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338ED56D2D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiGKCC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 22:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S229657AbiGKCCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 22:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGKCCZ (ORCPT
+        with ESMTP id S229642AbiGKCCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 22:02:25 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61918340;
-        Sun, 10 Jul 2022 19:02:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh6Zz2RM1z4xbn;
-        Mon, 11 Jul 2022 12:02:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657504939;
-        bh=xqBFKK6qf7Ib3HJxYp7IZT2SldM0zLDbqM3KeFXB0c8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hJANgGzYNQxpuf2k1CO5wvyhRVINxJUSUsRe+Q0zUzlGUAKWhjov/1pF8TntFIgYK
-         QHrPAgHHYeFrPb5ghk3m0o3qv+pepVmgt4k7ImQ9Y1QD87MR3rtgqLbHwFJ13ke+Q6
-         BHqI2ZEX6PikvBv1B9yiz5TSX0NYEfyANWtwbKfxUst5RAIAtOevNH6znaVB7C2HRW
-         fT9O+zoydA5KuFmTBc6CrXju78F6YZsdzn4TYxHTr4ftfGvNJvMfl0gzfm6hjfUcMt
-         Aml33ogJ70PNakO57Sq3HqIGDfBnHyv8li17viOkXF7b3YMycAbzZ+xRJwTupFCa8F
-         D/m9cAywSXBpQ==
-Date:   Mon, 11 Jul 2022 12:02:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220711120211.7c8b7cba@canb.auug.org.au>
+        Sun, 10 Jul 2022 22:02:35 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8972C18382
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 19:02:32 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220711020230epoutp02ceb9a7229f7f9eed5846a57f84a29b7e~Ao-iJBijM2647126471epoutp02W
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:02:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220711020230epoutp02ceb9a7229f7f9eed5846a57f84a29b7e~Ao-iJBijM2647126471epoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1657504950;
+        bh=OaVvEzoz+dUwkrKkOUVH6QN1SGIMfcwu3STE4rsyWTA=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=MXMlYKwXsgTIcRKSLECL9tDMjna5Kwz8UZ+VcjmiiuE1NaFyi5st8xeHSf7sTePUA
+         0IG/T25Zr6Lianl7euRdf4Oir5PuLXCBaaELa3jdHxNhVTnQ8Q2tQqKZgbemrNkqEF
+         +6VfcCltJpAIBMovnnl4napR3Dy5VdbY0zX1Q2/o=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220711020229epcas2p370731e68d2446812d3cca2936b04680d~Ao-hYX1t42145921459epcas2p31;
+        Mon, 11 Jul 2022 02:02:29 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lh6b90m20z4x9Q9; Mon, 11 Jul
+        2022 02:02:29 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8E.E3.09666.4B48BC26; Mon, 11 Jul 2022 11:02:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220711020228epcas2p2a39fa7b7dcccf8213743586e00b2275d~Ao-gHtsCb3107531075epcas2p2x;
+        Mon, 11 Jul 2022 02:02:28 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220711020228epsmtrp2bd61d62048947af032046e93f3a517f8~Ao-gGrmpN2830728307epsmtrp2p;
+        Mon, 11 Jul 2022 02:02:28 +0000 (GMT)
+X-AuditID: b6c32a45-471ff700000025c2-0f-62cb84b4312f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CE.90.08802.4B48BC26; Mon, 11 Jul 2022 11:02:28 +0900 (KST)
+Received: from KORCO011456 (unknown [10.229.18.123]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220711020228epsmtip211c507dcc9626e03849b42af62a68faf~Ao-f4FZVc0425604256epsmtip2P;
+        Mon, 11 Jul 2022 02:02:28 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Bart Van Assche'" <bvanassche@acm.org>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <beanhuo@micron.com>, <adrian.hunter@intel.com>,
+        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
+        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>
+In-Reply-To: <1ad26d79-9f5c-9b53-6904-7d7fd53fac2f@acm.org>
+Subject: RE: [RESEND PATCH v3] scsi: ufs: exclude UECxx from SFR dump list
+Date:   Mon, 11 Jul 2022 11:02:28 +0900
+Message-ID: <000001d894ca$45da51f0$d18ef5d0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2REdDITgtcduHSgUid.oAVa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQE7NzaYSR5yQWCLH5OMCMWgQFvAMQDlQII7Am+PYo6umH9tAA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmue7WltNJBk8PMFmcfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Xi69JnrBbTPvxktli9+AGLxaIb25gsLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
+        WPrvLYsDr8flK94ei/e8ZPKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwBHFHZNhmp
+        iSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAJysplCXmlAKF
+        AhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoTsjOa9y9l
+        LZjKWvHxr3cDYw9LFyMHh4SAicShXtYuRi4OIYEdjBJ966exQDifGCWa298wQzifGSUapzcA
+        lXGCdTT172eDSOxilFi4cAGU85JR4si9u0wgVWwC2hLTHu4GGywi8JpJonXTeXaQBKeAtcTe
+        /SvZQZYLC3hJfF+mDRJmEVCVmL1+FyNImFfAUuLIggiQMK+AoMTJmU9YQGxmoJHLFr5mhjhC
+        QeLn02VgB4kIOEm8PbmdEaJGRGJ2ZxvY1RICJzgkZj/8xwLR4CLx98Z3JghbWOLV8S3sELaU
+        xOd3e9kgYVEssWmfPERvA6PEkk+boXqNJWY9awe7jVlAU2L9Ln2IcmWJI7egTuOT6Dj8lx0i
+        zCvR0SYE0ags8WvSZEYIW1Ji5s07UEs9JN7t+c08gVFxFpInZyF5chaSZ2Yh7F3AyLKKUSy1
+        oDg3PbXYqMAQHtPJ+bmbGMFJWct1B+Pktx/0DjEycTAeYpTgYFYS4f1z9lSSEG9KYmVValF+
+        fFFpTmrxIUZTYKhPZJYSTc4H5oW8knhDE0sDEzMzQ3MjUwNzJXFer5QNiUIC6YklqdmpqQWp
+        RTB9TBycUg1MTdGHH0xw0zFT6zbe6n3t58GXT7tNRR48ZH87JcRe68vDR1fXJAb940n5cNPa
+        0qz3/W6vtpuzTEWqf0cZZTrNK3lSf6jTQDRWcf3JaW80VuQwn/KVulxRU1a6QyPw+cPEepf/
+        qYZdv6cUlz6f8myp3X1ByR86LE8Yu+4Hu9nfeSS5J0ququz5xYdXTA4bF55b81FxVWhvyd5d
+        h1149TJqD7+YuXDC1JhVNgl/X2y1tg+0PpG3PnTpv6PBF10e689vuWOof1tgwW+2U0vzz8hN
+        vaV39Un2zUVa4Qf470498fY5e8ii/GdyOplb9/mflLx4+1uH77/Vnnf2KrscdKqYwKCgtlv3
+        0h512ePvU2Ll85RYijMSDbWYi4oTAXc4cVdTBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsWy7bCSvO6WltNJBpuOSlucfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Xi69JnrBbTPvxktli9+AGLxaIb25gsLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
+        WPrvLYsDr8flK94ei/e8ZPKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwBHFFcNimp
+        OZllqUX6dglcGT/acgpms1ZcWdnI0sDYx9LFyMkhIWAi0dS/n62LkYtDSGAHo8S+t52MEAlJ
+        iRM7n0PZwhL3W46wQhQ9Z5SYf3M5WIJNQFti2sPdYAkRgd9MEvvezWKGqDrGKDF3fhvYDk4B
+        a4m9+1eydzFycAgLeEl8X6YNEmYRUJWYvX4XI0iYV8BS4siCCJAwr4CgxMmZT8A6mYHmP735
+        FM5etvA1M8RBChI/ny5jBbFFBJwk3p7czghRIyIxu7ONeQKj0Cwko2YhGTULyahZSFoWMLKs
+        YpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQIjkYtrR2Me1Z90DvEyMTBeIhRgoNZSYT3
+        z9lTSUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwhX08
+        WXot3INZUEHsmboF43OZtKlyfZzTUndf2ilVyfpg6qHodxeSJ3ud9Pq7YJV+Brfd3/Mb+mb8
+        j3ZXN0zlmCaZEPr21r7YYhWL3+03uBocba2iVm/jiXxXwn5PZP2J3YnK76Jypq7NWmht8eEk
+        c5Pdbj4OdtObtffvFKZYf5M3ZL+dE6d3Xuu45E2/PS8UavrrBRhuXHtbamBmN1mIw7E+IFQq
+        R91u9qqGLw5VLbzTZ3M0Sxu4t+QtF5z+/ZhDyZFDcmwe670PxFm959n4ve3RepXy9LAfq7bP
+        aT2e/+GypjHXrjK/lq1ntc9O/r7Jcd+2S8Idt3MmzuCdpnfvoOUpWdadb47/bepy/3xJiaU4
+        I9FQi7moOBEA1DL8ZTUDAAA=
+X-CMS-MailID: 20220711020228epcas2p2a39fa7b7dcccf8213743586e00b2275d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220315095716epcas2p2ec52c66863b71180a6c2c45856058683
+References: <CGME20220315095716epcas2p2ec52c66863b71180a6c2c45856058683@epcas2p2.samsung.com>
+        <1647338162-75639-1-git-send-email-kwmad.kim@samsung.com>
+        <1ad26d79-9f5c-9b53-6904-7d7fd53fac2f@acm.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2REdDITgtcduHSgUid.oAVa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+> Is this behavior specific to the Exynos controller or is this behavior
+> required by the UFSHCI specification? In the latter case, can you tell me
+> where to find this requirement in the UFSHCI specification? I haven't
+> found that requirement yet. Maybe this means that I overlooked something?
+>=20
+> Thanks,
+>=20
+> Bart.
 
-Hi all,
+This is needed because those SFRs are ROC (Read to Clear) type.
+That means reading causes clearing contexts.
+The SFRs are mainly read in interrupt context but the reading is also done =
+in dump.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Besides, I think reading them in dump is not proper because reading them is=
+ not just 'reading'
 
-  include/net/sock.h
+Thanks.
+Kiwoong Kim
 
-between commit:
-
-  310731e2f161 ("net: Fix data-races around sysctl_mem.")
-
-from the net tree and commit:
-
-  e70f3c701276 ("Revert "net: set SK_MEM_QUANTUM to 4096"")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/net/sock.h
-index 9fa54762e077,0dd43c3df49b..000000000000
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@@ -1521,22 -1541,10 +1541,10 @@@ void __sk_mem_reclaim(struct sock *sk,=20
-  #define SK_MEM_SEND	0
-  #define SK_MEM_RECV	1
- =20
-- /* sysctl_mem values are in pages, we convert them in SK_MEM_QUANTUM unit=
-s */
-+ /* sysctl_mem values are in pages */
-  static inline long sk_prot_mem_limits(const struct sock *sk, int index)
-  {
-- 	long val =3D READ_ONCE(sk->sk_prot->sysctl_mem[index]);
--=20
-- #if PAGE_SIZE > SK_MEM_QUANTUM
-- 	val <<=3D PAGE_SHIFT - SK_MEM_QUANTUM_SHIFT;
-- #elif PAGE_SIZE < SK_MEM_QUANTUM
-- 	val >>=3D SK_MEM_QUANTUM_SHIFT - PAGE_SHIFT;
-- #endif
-- 	return val;
- -	return sk->sk_prot->sysctl_mem[index];
-++	return READ_ONCE(sk->sk_prot->sysctl_mem[index]);
-  }
- =20
-  static inline int sk_mem_pages(int amt)
-
---Sig_/2REdDITgtcduHSgUid.oAVa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLhKMACgkQAVBC80lX
-0GzuqQf/XT2dktWH13klD45XChcgFkdIidFCA/v3Uql4IiVzIJjmHtwKGhsuhbbw
-QptsNRGPrRV5wsOszqL2yWUTZO9MQdayubx0O7m1jKBdO62wzvC/jRJ2dHm2zwrS
-94IHUVsAPxi+8DLxTP5asgAImeRbkvcXML9alP42O2vqw3HQaGCoByZvGtfF92+C
-WXYH1pM4Fzf8lpO5o2NWJ3HLACTl0Pn29maGuezLcSoAtQVUh0ly0eKrrHQdn09E
-H+0d0j4Ue6mHuCmF6SCJ2ZKl6o9X4s90N0RdQLlCtHFkG2TpPiBmJT+jFtOvTEyQ
-2Gd7VSJlolF3g3q9AnVOggEpFV3prQ==
-=/tyl
------END PGP SIGNATURE-----
-
---Sig_/2REdDITgtcduHSgUid.oAVa--

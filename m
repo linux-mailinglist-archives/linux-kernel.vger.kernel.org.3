@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0495556FA68
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79D656FAB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiGKJRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S231899AbiGKJVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiGKJQb (ORCPT
+        with ESMTP id S231820AbiGKJUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:16:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22015419AE;
-        Mon, 11 Jul 2022 02:11:08 -0700 (PDT)
+        Mon, 11 Jul 2022 05:20:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE59E545CC;
+        Mon, 11 Jul 2022 02:12:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A156111F;
-        Mon, 11 Jul 2022 09:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35116C34115;
-        Mon, 11 Jul 2022 09:11:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E4A61211;
+        Mon, 11 Jul 2022 09:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880AEC34115;
+        Mon, 11 Jul 2022 09:12:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530666;
-        bh=ge0wnp6fSGz7SqrbQkCUtV3muHF6FHU9WwT/7CW4CLY=;
+        s=korg; t=1657530756;
+        bh=PNtt8IrrhHwFI2vCNiPGwIL0Po0CGM0ckqTOPfuMi8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZnehRTMOH10fZf1Dh0RC1ecsg4ej3+KZskl16O3FoIhZXE9ClrISFYixo8VwCs6N
-         u9/Wg0+dh7JD48+y8K6ac8c1QsjareWpbaodeeTEaU5UZSzCCofyX2fTDg+C2Hk66O
-         avp1nhj+GP/V7U9x0Lji5s+/7FuQmaoL+UmGml5s=
+        b=Lzh+KyQA9lFTf45u2ml7cPggtd/EYL7x+BRXV5yP8c78MjwT5SWsNg/cBD+kJSxMC
+         HKc9baOoeM/m7ZIpEARytPZ/wDyNdOiTcgOanRIP/nl42wy4cwciu0IZgUuNfJXnE3
+         UHuHx+IHKmq4QQXlmXsLE1IxLyw1Qh8Il9FLBUh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.4 35/38] dmaengine: pl330: Fix lockdep warning about non-static key
+        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 29/55] arm64: dts: imx8mp-evk: correct the uart2 pinctl value
 Date:   Mon, 11 Jul 2022 11:07:17 +0200
-Message-Id: <20220711090539.759915114@linuxfoundation.org>
+Message-Id: <20220711090542.623335975@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+From: Sherry Sun <sherry.sun@nxp.com>
 
-commit b64b3b2f1d81f83519582e1feee87d77f51f5f17 upstream.
+[ Upstream commit 2d4fb72b681205eed4553d8802632bd3270be3ba ]
 
-The DEFINE_SPINLOCK() macro shouldn't be used for dynamically allocated
-spinlocks. The lockdep warns about this and disables locking validator.
-Fix the warning by making lock static.
+According to the IOMUXC_SW_PAD_CTL_PAD_UART2_RXD/TXD register define in
+imx8mp RM, bit0 and bit3 are reserved, and the uart2 rx/tx pin should
+enable the pull up, so need to set bit8 to 1. The original pinctl value
+0x49 is incorrect and needs to be changed to 0x140, same as uart1 and
+uart3.
 
- INFO: trying to register non-static key.
- The code is fine but needs lockdep annotation, or maybe
- you didn't initialize this object before use?
- turning off the locking correctness validator.
- Hardware name: Radxa ROCK Pi 4C (DT)
- Call trace:
-  dump_backtrace.part.0+0xcc/0xe0
-  show_stack+0x18/0x6c
-  dump_stack_lvl+0x8c/0xb8
-  dump_stack+0x18/0x34
-  register_lock_class+0x4a8/0x4cc
-  __lock_acquire+0x78/0x20cc
-  lock_acquire.part.0+0xe0/0x230
-  lock_acquire+0x68/0x84
-  _raw_spin_lock_irqsave+0x84/0xc4
-  add_desc+0x44/0xc0
-  pl330_get_desc+0x15c/0x1d0
-  pl330_prep_dma_cyclic+0x100/0x270
-  snd_dmaengine_pcm_trigger+0xec/0x1c0
-  dmaengine_pcm_trigger+0x18/0x24
-  ...
-
-Fixes: e588710311ee ("dmaengine: pl330: fix descriptor allocation fail")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Link: https://lore.kernel.org/r/20220520181432.149904-1-dmitry.osipenko@collabora.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9e847693c6f3 ("arm64: dts: freescale: Add i.MX8MP EVK board support")
+Reviewed-by: Haibo Chen <haibo.chen@nxp.com>
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/pl330.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -2585,7 +2585,7 @@ static struct dma_pl330_desc *pl330_get_
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 64f0455e14f8..5011adb5ff1f 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -167,8 +167,8 @@
  
- 	/* If the DMAC pool is empty, alloc new */
- 	if (!desc) {
--		DEFINE_SPINLOCK(lock);
-+		static DEFINE_SPINLOCK(lock);
- 		LIST_HEAD(pool);
+ 	pinctrl_uart2: uart2grp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x49
+-			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x49
++			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x140
++			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x140
+ 		>;
+ 	};
  
- 		if (!add_desc(&pool, &lock, GFP_ATOMIC, 1))
+-- 
+2.35.1
+
 
 

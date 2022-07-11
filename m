@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCC0570D5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2198570D63
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiGKWby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
+        id S229602AbiGKWcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiGKWbv (ORCPT
+        with ESMTP id S230073AbiGKWby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:31:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF7852E7D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:31:50 -0700 (PDT)
+        Mon, 11 Jul 2022 18:31:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC5952E72
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:31:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C95C611F6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 22:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B942C34115;
-        Mon, 11 Jul 2022 22:31:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9D7AB815F3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 22:31:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD4BC341C8;
+        Mon, 11 Jul 2022 22:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657578709;
-        bh=hnPirb/Cj9dkurnAnavzWRfntXOHgedcvCNBeLS/u7I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gif6OrSIsoeBx4hgHOp62r6YMWDTXAIyxQQ7of8EfaCJD7z8pYPQKTZEaMx24uChh
-         HKwcUEqBwkKsDDMgDteqZs5R/pCUq/ptMLHnjAeYFh42FePGRP9LMN8lH1GvuG/cTu
-         fuuIpQoQ4OPLfTonkVYgLtZYTd0UtCkDGQULbtfX9Bw5qQmFY3kM2ZNb3dHVEJpi0g
-         qCoEvdx8mv+DFvymMuR5ao5tHaH44WuCDbffKDtF167xZh+eTPUvZmZuJd2xodY6L3
-         aivwDtqxdmlW4qtDWbM9o5dsGfLOJBEgtSshVcPIu2cgydH2yKXxFAWLPnUVBXboxG
-         ey7rjrKAXjuUA==
+        s=k20201202; t=1657578710;
+        bh=cLXTxU2gelvkFF4Gn5e4UC2mcdZnC0WgJshS0cSrKsE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=l1qgkruvSFck6qHRfln1S79eLbzhhAebqNKHHqDmbR32MddPCGMcjhEycZ18dxneF
+         LzG6ik8TVTSKSczxJHVrc2B0RQmYy2fLahRt0WslDKWbCORvoDS6rFDrURNtOb+dV+
+         Wqu3kOcdp6fuDI16v0yzyDkH5l0lvhJ3dpKZyHUudwnulw6X/T8D74tpkoWMs0iGhB
+         SGG6Aq9m745D7wDYDdZYARGmg80sPc7SeDknoGCzFGo/p0FK3IoCSQqYK+0olD4wf0
+         8lNXwRnIqmLWz/7ohbq1FTIl6p9PUMCssCRNJ8CLmiNV+/OuZ5ghpOz4bonfMsv8tc
+         AqUpr3JAezYcA==
 From:   Dinh Nguyen <dinguyen@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     dinguyen@kernel.org, linux-kernel@vger.kernel.org,
         Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH 1/6] firmware: stratix10-svc: Add support for FCS
-Date:   Mon, 11 Jul 2022 17:31:35 -0500
-Message-Id: <20220711223140.2307945-1-dinguyen@kernel.org>
+Subject: [PATCH 2/6] firmware: stratix10-svc: add FCS polling command
+Date:   Mon, 11 Jul 2022 17:31:36 -0500
+Message-Id: <20220711223140.2307945-2-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220711223140.2307945-1-dinguyen@kernel.org>
+References: <20220711223140.2307945-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -54,113 +56,175 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-Extend Intel service layer driver to support FPGA Crypto service(FCS)
-features on Intel Soc platforms. Adding an additional channel and FCS
-platform driver ("intel_fcs") as part of the probe method.
-FCS driver uses the driver to send crypto operations' commands to
-the secure device manager(SDM) on Intel Soc platforms Stratix10 and
-Agilex.
+Introduce a new SMC command INTEL_SIP_SMC_FUNCID_SERVICE_COMPLETED
+that polls if a previous asynchronous command was completed. This
+SMC command is used by the new FPGA Crypto Service (FCS).
+A basic example is that the FCS sends an AES data encryption
+call to the secure device manager(SDM) and waits for the completion
+of the operation by continuously polling the results with the new
+command.
 
 Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
 Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- drivers/firmware/stratix10-svc.c              | 30 +++++++++++++++----
- .../firmware/intel/stratix10-svc-client.h     |  1 +
- 2 files changed, 26 insertions(+), 5 deletions(-)
+ drivers/firmware/stratix10-svc.c              | 42 ++++++++++++++++---
+ include/linux/firmware/intel/stratix10-smc.h  | 25 +++++++++++
+ .../firmware/intel/stratix10-svc-client.h     |  5 +++
+ 3 files changed, 67 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 14663f671323..1fe748c047df 100644
+index 1fe748c047df..439a4bdf8207 100644
 --- a/drivers/firmware/stratix10-svc.c
 +++ b/drivers/firmware/stratix10-svc.c
-@@ -34,12 +34,13 @@
-  * timeout is set to 30 seconds (30 * 1000) at Intel Stratix10 SoC.
-  */
- #define SVC_NUM_DATA_IN_FIFO			32
--#define SVC_NUM_CHANNEL				2
-+#define SVC_NUM_CHANNEL				3
- #define FPGA_CONFIG_DATA_CLAIM_TIMEOUT_MS	200
- #define FPGA_CONFIG_STATUS_TIMEOUT_SEC		30
+@@ -248,6 +248,7 @@ static void svc_thread_cmd_config_status(struct stratix10_svc_controller *ctrl,
+ {
+ 	struct arm_smccc_res res;
+ 	int count_in_sec;
++	unsigned long a0, a1, a2;
  
- /* stratix10 service layer clients */
- #define STRATIX10_RSU				"stratix10-rsu"
-+#define INTEL_FCS				"intel-fcs"
+ 	cb_data->kaddr1 = NULL;
+ 	cb_data->kaddr2 = NULL;
+@@ -256,24 +257,45 @@ static void svc_thread_cmd_config_status(struct stratix10_svc_controller *ctrl,
  
- typedef void (svc_invoke_fn)(unsigned long, unsigned long, unsigned long,
- 			     unsigned long, unsigned long, unsigned long,
-@@ -53,6 +54,7 @@ struct stratix10_svc_chan;
+ 	pr_debug("%s: polling config status\n", __func__);
+ 
++	a0 = INTEL_SIP_SMC_FPGA_CONFIG_ISDONE;
++	a1 = (unsigned long)p_data->paddr;
++	a2 = (unsigned long)p_data->size;
++
++	if (p_data->command == COMMAND_POLL_SERVICE_STATUS)
++		a0 = INTEL_SIP_SMC_SERVICE_COMPLETED;
++
+ 	count_in_sec = FPGA_CONFIG_STATUS_TIMEOUT_SEC;
+ 	while (count_in_sec) {
+-		ctrl->invoke_fn(INTEL_SIP_SMC_FPGA_CONFIG_ISDONE,
+-				0, 0, 0, 0, 0, 0, 0, &res);
++		ctrl->invoke_fn(a0, a1, a2, 0, 0, 0, 0, 0, &res);
+ 		if ((res.a0 == INTEL_SIP_SMC_STATUS_OK) ||
+-		    (res.a0 == INTEL_SIP_SMC_STATUS_ERROR))
++		    (res.a0 == INTEL_SIP_SMC_STATUS_ERROR) ||
++		    (res.a0 == INTEL_SIP_SMC_STATUS_REJECTED))
+ 			break;
+ 
+ 		/*
+-		 * configuration is still in progress, wait one second then
++		 * request is still in progress, wait one second then
+ 		 * poll again
+ 		 */
+ 		msleep(1000);
+ 		count_in_sec--;
+ 	}
+ 
+-	if (res.a0 == INTEL_SIP_SMC_STATUS_OK && count_in_sec)
++	if (!count_in_sec) {
++		pr_err("%s: poll status timeout\n", __func__);
++		cb_data->status = BIT(SVC_STATUS_BUSY);
++	} else if (res.a0 == INTEL_SIP_SMC_STATUS_OK) {
+ 		cb_data->status = BIT(SVC_STATUS_COMPLETED);
++		cb_data->kaddr2 = (res.a2) ?
++				  svc_pa_to_va(res.a2) : NULL;
++		cb_data->kaddr3 = (res.a3) ? &res.a3 : NULL;
++	} else {
++		pr_err("%s: poll status error\n", __func__);
++		cb_data->kaddr1 = &res.a1;
++		cb_data->kaddr2 = (res.a2) ?
++				  svc_pa_to_va(res.a2) : NULL;
++		cb_data->kaddr3 = (res.a3) ? &res.a3 : NULL;
++		cb_data->status = BIT(SVC_STATUS_ERROR);
++	}
+ 
+ 	p_data->chan->scl->receive_cb(p_data->chan->scl, cb_data);
+ }
+@@ -298,6 +320,7 @@ static void svc_thread_recv_status_ok(struct stratix10_svc_data *p_data,
+ 	case COMMAND_RECONFIG:
+ 	case COMMAND_RSU_UPDATE:
+ 	case COMMAND_RSU_NOTIFY:
++	case COMMAND_POLL_SERVICE_STATUS:
+ 		cb_data->status = BIT(SVC_STATUS_OK);
+ 		break;
+ 	case COMMAND_RECONFIG_DATA_SUBMIT:
+@@ -430,6 +453,14 @@ static int svc_normal_to_secure_thread(void *data)
+ 			a1 = 0;
+ 			a2 = 0;
+ 			break;
++		/* for polling */
++		case COMMAND_POLL_SERVICE_STATUS:
++			a0 = INTEL_SIP_SMC_SERVICE_COMPLETED;
++			a1 = (unsigned long)pdata->paddr;
++			a2 = (unsigned long)pdata->size;
++
++			break;
++
+ 		default:
+ 			pr_warn("it shouldn't happen\n");
+ 			break;
+@@ -470,6 +501,7 @@ static int svc_normal_to_secure_thread(void *data)
+ 							  pdata, cbdata);
+ 				break;
+ 			case COMMAND_RECONFIG_STATUS:
++			case COMMAND_POLL_SERVICE_STATUS:
+ 				svc_thread_cmd_config_status(ctrl,
+ 							     pdata, cbdata);
+ 				break;
+diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
+index aad497a9ad8b..0de104009566 100644
+--- a/include/linux/firmware/intel/stratix10-smc.h
++++ b/include/linux/firmware/intel/stratix10-smc.h
+@@ -403,6 +403,31 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
+ #define INTEL_SIP_SMC_RSU_MAX_RETRY \
+ 	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_RSU_MAX_RETRY)
+ 
++/**
++ * Request INTEL_SIP_SMC_SERVICE_COMPLETED
++ * Sync call to check if the secure world have completed service request
++ * or not.
++ *
++ * Call register usage:
++ * a0: INTEL_SIP_SMC_SERVICE_COMPLETED
++ * a1: this register is optional. If used, it is the physical address for
++ *     secure firmware to put output data
++ * a2: this register is optional. If used, it is the size of output data
++ * a3-a7: not used
++ *
++ * Return status:
++ * a0: INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_ERROR,
++ *     INTEL_SIP_SMC_REJECTED or INTEL_SIP_SMC_STATUS_BUSY
++ * a1: mailbox error if a0 is INTEL_SIP_SMC_STATUS_ERROR
++ * a2: physical address containing the process info
++ *     for FCS certificate -- the data contains the certificate status
++ *     for FCS cryption -- the data contains the actual data size FW processes
++ * a3: output data size
++ */
++#define INTEL_SIP_SMC_FUNCID_SERVICE_COMPLETED 30
++#define INTEL_SIP_SMC_SERVICE_COMPLETED \
++	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SERVICE_COMPLETED)
++
+ /**
+  * Request INTEL_SIP_SMC_FIRMWARE_VERSION
+  *
+diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
+index 24121f8e0d7c..5d0e814e0c41 100644
+--- a/include/linux/firmware/intel/stratix10-svc-client.h
++++ b/include/linux/firmware/intel/stratix10-svc-client.h
+@@ -106,6 +106,9 @@ struct stratix10_svc_chan;
+  * @COMMAND_RSU_DCMF_VERSION: query firmware for the DCMF version, return status
+  * is SVC_STATUS_OK or SVC_STATUS_ERROR
+  *
++ * @COMMAND_POLL_SERVICE_STATUS: poll if the service request is complete,
++ * return statis is SVC_STATUS_OK, SVC_STATUS_ERROR or SVC_STATUS_BUSY
++ *
+  * @COMMAND_FIRMWARE_VERSION: query running firmware version, return status
+  * is SVC_STATUS_OK or SVC_STATUS_ERROR
   */
- struct stratix10_svc {
- 	struct platform_device *stratix10_svc_rsu;
-+	struct platform_device *intel_svc_fcs;
+@@ -122,6 +125,8 @@ enum stratix10_svc_command_code {
+ 	COMMAND_RSU_MAX_RETRY,
+ 	COMMAND_RSU_DCMF_VERSION,
+ 	COMMAND_FIRMWARE_VERSION,
++	/* for general status poll */
++	COMMAND_POLL_SERVICE_STATUS = 40,
  };
  
  /**
-@@ -1036,6 +1038,11 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 	chans[1].name = SVC_CLIENT_RSU;
- 	spin_lock_init(&chans[1].lock);
- 
-+	chans[2].scl = NULL;
-+	chans[2].ctrl = controller;
-+	chans[2].name = SVC_CLIENT_FCS;
-+	spin_lock_init(&chans[2].lock);
-+
- 	list_add_tail(&controller->node, &svc_ctrl);
- 	platform_set_drvdata(pdev, controller);
- 
-@@ -1054,8 +1061,22 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = platform_device_add(svc->stratix10_svc_rsu);
--	if (ret)
--		goto err_put_device;
-+	if (ret) {
-+		platform_device_put(svc->stratix10_svc_rsu);
-+		return ret;
-+	}
-+
-+	svc->intel_svc_fcs = platform_device_alloc(INTEL_FCS, 1);
-+	if (!svc->intel_svc_fcs) {
-+		dev_err(dev, "failed to allocate %s device\n", INTEL_FCS);
-+		return -ENOMEM;
-+	}
-+
-+	ret = platform_device_add(svc->intel_svc_fcs);
-+	if (ret) {
-+		platform_device_put(svc->intel_svc_fcs);
-+		return ret;
-+	}
- 
- 	dev_set_drvdata(dev, svc);
- 
-@@ -1063,8 +1084,6 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
--err_put_device:
--	platform_device_put(svc->stratix10_svc_rsu);
- err_free_kfifo:
- 	kfifo_free(&controller->svc_fifo);
- 	return ret;
-@@ -1075,6 +1094,7 @@ static int stratix10_svc_drv_remove(struct platform_device *pdev)
- 	struct stratix10_svc *svc = dev_get_drvdata(&pdev->dev);
- 	struct stratix10_svc_controller *ctrl = platform_get_drvdata(pdev);
- 
-+	platform_device_unregister(svc->intel_svc_fcs);
- 	platform_device_unregister(svc->stratix10_svc_rsu);
- 
- 	kfifo_free(&ctrl->svc_fifo);
-diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
-index 18c1841fdb1f..24121f8e0d7c 100644
---- a/include/linux/firmware/intel/stratix10-svc-client.h
-+++ b/include/linux/firmware/intel/stratix10-svc-client.h
-@@ -14,6 +14,7 @@
-  */
- #define SVC_CLIENT_FPGA			"fpga"
- #define SVC_CLIENT_RSU			"rsu"
-+#define SVC_CLIENT_FCS			"fcs"
- 
- /*
-  * Status of the sent command, in bit number
 -- 
 2.25.1
 

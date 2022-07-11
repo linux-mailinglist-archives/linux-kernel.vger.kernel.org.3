@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81B4570045
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B8557004C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiGKLW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S229749AbiGKLXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiGKLWN (ORCPT
+        with ESMTP id S229518AbiGKLWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:22:13 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA96C63;
-        Mon, 11 Jul 2022 03:47:32 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i128-20020a1c3b86000000b003a2ce31b4f8so4766550wma.1;
-        Mon, 11 Jul 2022 03:47:32 -0700 (PDT)
+        Mon, 11 Jul 2022 07:22:51 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD3533A27;
+        Mon, 11 Jul 2022 03:50:06 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t3so5475049edd.0;
+        Mon, 11 Jul 2022 03:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p9Xxii6Uq6u9N4X9oYLMMJTBOBPZ/anZfpBCj5Ubmss=;
-        b=LTujsVZix7h6BZ9Fu6GkqRc7KU/djhhG8DEQFwsjI8G0et0Su0qzUI4NqppjrL7mbR
-         +xQCdUcK+OVS4g6k/Xy2OKnbFEIsWppVfcxpe/Ych5OrE1QIP7Zjm6Z5zN4G35mh0c3L
-         aI7FImD7Q4BkCX4FiXUXiMwlAgs9sqi6kVStPj1bA+oTKsMQqLpK0/AtEBTYHn+1fpjG
-         TF9ioYH/k7jM9EQGX2Xnwh5j9fwBHgwgDCHtADDoANb+eyBTu7mIeubNxRjtNMSoUht0
-         f4x1Z5LDmSm9NPcboilp8YIlhHl64Di1pnGjuV+Q4+86nAJvLiIUFl6RHGyV47urNpH+
-         6TGw==
+        h=from:to:cc:subject:date:message-id;
+        bh=zfyolTFID8xhViXE+u1/8e+Wzla73AuvDzsmwKE1sQ4=;
+        b=GXF1fwSaKTgvV8DBW/wKTIAjMbvQyia0ceCdUfz+jo+fA40QBzTk3GOxKUq2d4UXPp
+         Lki7csV6vSyLyT5HidpiSbOooGJR/VkF3W6Tc/bRvH2x9ijmeGfWM+cYgjQKbLZBdGvU
+         mBzTnWgZh9WCR6Xtjwzm4SagzynWkaOvdMr2eqnRcpZ+8coEmdpsT6MqS6R1V1bYytbn
+         +hmHJ3oUJDO04HFMiT40M1GesGL57FQzDqEVQ6IMqdlJFiEoVJrd5SKtvpATVBe8NHWp
+         Srt0kfuhPXBZbKU4OSHPEJ94HUWwSPrPQtHLKXxhHmJQxYADN1lt6nadP1f2ha3/41OL
+         R15g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p9Xxii6Uq6u9N4X9oYLMMJTBOBPZ/anZfpBCj5Ubmss=;
-        b=jJhw7OGslzRHvh7hcpz3WaGK3tterWWOTuWNjlVhpkgpk+uzCU6BbyY4EldF3NCPdG
-         InyUQcwo31uXjsNKHSvYx3mqmQiO265R4OwgIrSStXZQRj/KVTvSozV5lad1/Tb6vHuA
-         APMCFomQRSKycYMTmTWC5bSOX/9qWcCRxEzjkMaOmBX9/j51tP8ACzSnQ6BgAFpWiXLq
-         ZVD/XerdYR84nlNl4e29Il53Xaaj5r1BA2QrioHHhWHVObvZSy9LtVVL9pjzen1xR9aj
-         tlCB4IMTwliC277pNet+Kf8YQs6kKdkIGaKTPCKuFl29M3GaJ/iKjS5MND7Q3coTpoIW
-         QXCA==
-X-Gm-Message-State: AJIora9I1/kYx4JHc9/rLZNWZghQqoyurjc2TeivT4r4IGV2OBMjTBLp
-        jp1kaq8b9IDwCFmvkZzKm04=
-X-Google-Smtp-Source: AGRyM1ubXzhdRxrqkXB7Mv+HHP19cm7y/4ukC8Ipx3ZqQ2G/C9rnnt24ptNZa1snJ2I+jVys8wY2AA==
-X-Received: by 2002:a05:600c:19cd:b0:3a1:77b6:cf1d with SMTP id u13-20020a05600c19cd00b003a177b6cf1dmr14765791wmq.141.1657536450823;
-        Mon, 11 Jul 2022 03:47:30 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpezg-94-253-144-242-cbl.xnet.hr. [94.253.144.242])
-        by smtp.googlemail.com with ESMTPSA id n3-20020a7bcbc3000000b003a05621dc53sm6338716wmi.29.2022.07.11.03.47.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zfyolTFID8xhViXE+u1/8e+Wzla73AuvDzsmwKE1sQ4=;
+        b=EaNPbcdjwewbtpNBneUDdiVSeMOvuNuEXEtGZKdQ4tK/rtP4ke3t77pXpd0Rf2VL4y
+         casVNotEnkHYjdAjRF/j7XvcaxvPCWbMo+CVzZArfypM5nJg5srZCcWzQWdnHo1vwU8C
+         q2SalOtzKSw+u8Ta/0kahxsw608J3LiFW3LTpZvr78MP+2fsq0kxqiNfpkuM3fxDL8nE
+         J8Jr9aV5vjlw0ikqvtPzqvumxw9Ib5aMmnvDTE0EVWbN9TyTyJXE+29r5uqBSBYHyXU+
+         za30vt0XuUt9G7dDojV8zxZalTc0vDRf1ToQvy0lERW+Xs2lQLjYWJDr2usXg4qi3fOi
+         p6gg==
+X-Gm-Message-State: AJIora8kvoXrtxOpWgeT0Bl6hJS0DqEMeLS03dGP7QIegMwVWdfxPohj
+        K71HJhehkhculeeBo/Mm86U=
+X-Google-Smtp-Source: AGRyM1uImai7zOCOj1ESgSTujQz6aYcaSMlx0EZle9YmsPYF5MVaqsF03Ttpz6jXBOxKqNUtQuljpw==
+X-Received: by 2002:a05:6402:22b5:b0:43a:8e9f:f495 with SMTP id cx21-20020a05640222b500b0043a8e9ff495mr23119816edb.324.1657536604557;
+        Mon, 11 Jul 2022 03:50:04 -0700 (PDT)
+Received: from felia.fritz.box (200116b8266e42009c70ae84c5cabc2b.dip.versatel-1u1.de. [2001:16b8:266e:4200:9c70:ae84:c5ca:bc2b])
+        by smtp.gmail.com with ESMTPSA id q21-20020a17090676d500b006fe8a4ec62fsm2541775ejn.4.2022.07.11.03.50.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 03:47:30 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     bjorn.andersson@linaro.org, agross@kernel.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 6/6] clk: qcom: apss-ipq-pll: add support for IPQ8074
-Date:   Mon, 11 Jul 2022 12:47:19 +0200
-Message-Id: <20220711104719.40939-6-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220711104719.40939-1-robimarko@gmail.com>
-References: <20220711104719.40939-1-robimarko@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 11 Jul 2022 03:50:03 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] mfd: ab8500: clean up definitions in header after debugfs removal
+Date:   Mon, 11 Jul 2022 12:48:29 +0200
+Message-Id: <20220711104829.17940-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,44 +66,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for IPQ8074 since it uses the same PLL setup, however it does
-not require the Alpha PLL to be reconfigured.
+Commit 3d4d1266597c ("mfd: ab8500: Drop debugfs module") removes the config
+AB8500_DEBUG in drivers/mfd/Kconfig, but missed a reference to this config
+in include/linux/mfd/abx500/ab8500.h.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+The functions ab8500_dump_all_banks() and ab8500_debug_register_interrupt()
+in the ab8500 header, previously with definitions conditioned on
+AB8500_DEBUG, are now completely needless to define and handle at all.
+
+The function ab8500_debug_register_interrupt() is not used at all and can
+just be removed.
+
+The function ab8500_dump_all_banks() is just registered in the abx500_ops
+struct in the dump_all_banks field, but this is then not further referenced
+anywhere else at all. So, safely drop the dump_all_banks field from
+abx500_ops and delete the ab8500_dump_all_banks() definition.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/clk/qcom/apss-ipq-pll.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Lee, please pick this minor clean-up patch.
 
-diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
-index bef7899ad0d6..acfb3ec4f142 100644
---- a/drivers/clk/qcom/apss-ipq-pll.c
-+++ b/drivers/clk/qcom/apss-ipq-pll.c
-@@ -55,6 +55,7 @@ static const struct regmap_config ipq_pll_regmap_config = {
- static int apss_ipq_pll_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->of_node;
- 	struct regmap *regmap;
- 	void __iomem *base;
- 	int ret;
-@@ -67,7 +68,8 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
- 
--	clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
-+	if (of_device_is_compatible(node, "qcom,ipq6018-a53pll"))
-+		clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
- 
- 	ret = devm_clk_register_regmap(dev, &ipq_pll.clkr);
- 	if (ret)
-@@ -79,6 +81,7 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
- 
- static const struct of_device_id apss_ipq_pll_match_table[] = {
- 	{ .compatible = "qcom,ipq6018-a53pll" },
-+	{ .compatible = "qcom,ipq8074-a53pll" },
- 	{ }
+v1:
+  https://lore.kernel.org/all/20220311145209.17346-1-lukas.bulwahn@gmail.com/
+
+v1 -> v2:
+  - leave "," in as requested in https://lore.kernel.org/all/Yi8BtWlhWjiUOADk@google.com/
+  - add Reviewed-by tag from Linus W. from 
+    https://lore.kernel.org/all/CACRpkdbjy2Cpzs7j6=iWw+wnJxBHkaxgcO2SOx6DeTLeF4ogPw@mail.gmail.com/ 
+
+ drivers/mfd/ab8500-core.c         | 1 -
+ include/linux/mfd/abx500.h        | 1 -
+ include/linux/mfd/abx500/ab8500.h | 9 ---------
+ 3 files changed, 11 deletions(-)
+
+diff --git a/drivers/mfd/ab8500-core.c b/drivers/mfd/ab8500-core.c
+index 9d9e9787d5e8..eb11caadb801 100644
+--- a/drivers/mfd/ab8500-core.c
++++ b/drivers/mfd/ab8500-core.c
+@@ -329,7 +329,6 @@ static struct abx500_ops ab8500_ops = {
+ 	.mask_and_set_register = ab8500_mask_and_set_register,
+ 	.event_registers_startup_state_get = NULL,
+ 	.startup_irq_enabled = NULL,
+-	.dump_all_banks = ab8500_dump_all_banks,
  };
- MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
+ 
+ static void ab8500_irq_lock(struct irq_data *data)
+diff --git a/include/linux/mfd/abx500.h b/include/linux/mfd/abx500.h
+index 7f07cfe44753..507e3d2f062f 100644
+--- a/include/linux/mfd/abx500.h
++++ b/include/linux/mfd/abx500.h
+@@ -63,7 +63,6 @@ struct abx500_ops {
+ 	int (*mask_and_set_register) (struct device *, u8, u8, u8, u8);
+ 	int (*event_registers_startup_state_get) (struct device *, u8 *);
+ 	int (*startup_irq_enabled) (struct device *, unsigned int);
+-	void (*dump_all_banks) (struct device *);
+ };
+ 
+ int abx500_register_ops(struct device *core_dev, struct abx500_ops *ops);
+diff --git a/include/linux/mfd/abx500/ab8500.h b/include/linux/mfd/abx500/ab8500.h
+index 302a330c5c84..42fd5da7d8a7 100644
+--- a/include/linux/mfd/abx500/ab8500.h
++++ b/include/linux/mfd/abx500/ab8500.h
+@@ -503,13 +503,4 @@ static inline int is_ab9540_2p0_or_earlier(struct ab8500 *ab)
+ 
+ void ab8500_override_turn_on_stat(u8 mask, u8 set);
+ 
+-#ifdef CONFIG_AB8500_DEBUG
+-extern int prcmu_abb_read(u8 slave, u8 reg, u8 *value, u8 size);
+-void ab8500_dump_all_banks(struct device *dev);
+-void ab8500_debug_register_interrupt(int line);
+-#else
+-static inline void ab8500_dump_all_banks(struct device *dev) {}
+-static inline void ab8500_debug_register_interrupt(int line) {}
+-#endif
+-
+ #endif /* MFD_AB8500_H */
 -- 
-2.36.1
+2.17.1
 

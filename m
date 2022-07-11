@@ -2,256 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2582056FFF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E8656FFF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiGKLPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S230462AbiGKLPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiGKLOj (ORCPT
+        with ESMTP id S230268AbiGKLPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:14:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C284725C73
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657535587;
+        Mon, 11 Jul 2022 07:15:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE21301;
+        Mon, 11 Jul 2022 03:33:33 -0700 (PDT)
+Received: from zn.tnic (p200300ea970ff601329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:f601:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 317821EC0567;
+        Mon, 11 Jul 2022 12:33:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1657535606;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7SouKYlMkWzuBqZN4rXZnGRyOzkCR8tKbjyAs7q8HvU=;
-        b=YSOhjSUUsfQf4RZJ9KhA4xJFNPrpZchme5VaNhCX3QntJyTvLnOzuLHCqHUt+8I4Mg1HMQ
-        yLywTyost7vWKQfXXNnUJ93aXAntJGxgvHAN8de3ivsZP5tM+pt4ShNzcpHVuezofbaaDs
-        a6tAKRs41F97li3IhI5pJj9Gp5WJtwo=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-25-0TTnxUPUPxaUzSJk2g7nOA-1; Mon, 11 Jul 2022 06:33:06 -0400
-X-MC-Unique: 0TTnxUPUPxaUzSJk2g7nOA-1
-Received: by mail-qv1-f69.google.com with SMTP id e1-20020ad44181000000b00472f8ad6e71so36037qvp.20
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:33:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=7SouKYlMkWzuBqZN4rXZnGRyOzkCR8tKbjyAs7q8HvU=;
-        b=kEzmrCTh7VrWD/M1ITVlqbPoiLWqtogZ9mmbj7CcRrAzuStkbz82IQaqRJWmTjTZH5
-         4PzsZkZ5LCs3zsmZlU60x4GJ7K1B1jlxt/VKg5uJSqsmDdK/wiXi68atFcSH1m5ZsY1S
-         PdI/sVtrtSp1ayLeJMvAEXBdWml/H9PouNeKPTqE+Y7xykiPykc0dRnYVbQmQTqN3UIz
-         4kegtjoAv1dLbQIIZl+i9kumCJK+r+qGo3StENfyZ15gSNS+BPvk8OPz5hPyxVKs50H4
-         S1PtACrMB7nuIqQuts3jOaSjv6EFdRd0oGDnHCzWrrQX3oG6l/z5OJmerfUbQL8AB4fS
-         Poww==
-X-Gm-Message-State: AJIora9RcxunPIQzm//G+aexLim34xdTTQpTpdbwQiLgQDIqojZockaj
-        236xwONc8jb8NbragJT4Od8tSdlUgliLgCuo6EeTp1frDc7HpxRillWd3+C+F2KFXRpOXZc3TpU
-        pSFV1fJVT70b0stdIHlZ0ZpHd
-X-Received: by 2002:a05:620a:248b:b0:6af:4f9b:b0b3 with SMTP id i11-20020a05620a248b00b006af4f9bb0b3mr10744904qkn.408.1657535586047;
-        Mon, 11 Jul 2022 03:33:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sVs/FGj4fU/SHmbL6FO7aKqyMJktULJSdpAV9Q8sEhXC5/1g0kdZI7wuRnJVLLrBO2Fvn7aw==
-X-Received: by 2002:a05:620a:248b:b0:6af:4f9b:b0b3 with SMTP id i11-20020a05620a248b00b006af4f9bb0b3mr10744892qkn.408.1657535585813;
-        Mon, 11 Jul 2022 03:33:05 -0700 (PDT)
-Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
-        by smtp.gmail.com with ESMTPSA id w22-20020ac87e96000000b0031eb5648b86sm2016792qtj.41.2022.07.11.03.33.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 03:33:05 -0700 (PDT)
-Message-ID: <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-From:   Jeff Layton <jlayton@redhat.com>
-To:     Chuck Lever III <chuck.lever@oracle.com>,
-        Igor Mammedov <imammedo@redhat.com>
-Cc:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bruce Fields <bfields@fieldses.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 11 Jul 2022 06:33:04 -0400
-In-Reply-To: <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
-         <20220710124344.36dfd857@redhat.com>
-         <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=mtjDsDO71nPhY5TZ9r2wPpSA0kUObkSTB+i8h+NQfsw=;
+        b=M+c3B7xVKSjX18CkA4XSZarUwA9h9PAxou8AWmpppYs69p36vamcy9Gj467He+fOihRu+n
+        mDIGn/qZQZ5HIj3wI4ly3WwM17zZIk/Lz8K51d0lEjqHmtgwL6cLfbyQ+/R7odH5VQvrO+
+        7Zn8arslSwSwEqL0cbIpNTaPSAhJRaA=
+Date:   Mon, 11 Jul 2022 12:33:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Hemment <markhemm@googlemail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        patrice.chotard@foss.st.com, Mikulas Patocka <mpatocka@redhat.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Hugh Dickins <hughd@google.com>, patches@lists.linux.dev,
+        Linux-MM <linux-mm@kvack.org>, mm-commits@vger.kernel.org,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH -final] x86/clear_user: Make it faster
+Message-ID: <Ysv8cAa7wcDmQlpm@zn.tnic>
+References: <YnqqhmYv75p+xl73@zn.tnic>
+ <Ynq1nVpu1xCpjnXm@zn.tnic>
+ <YozQZMyQ0NDdD8cH@zn.tnic>
+ <YrMlVBoDxB21l/kD@zn.tnic>
+ <CAHk-=wgmOfipHDvshwooTV81hMh6FHieSvhgGVWZMX8w+E-2DQ@mail.gmail.com>
+ <YrN4DdR9HN0srNWe@zn.tnic>
+ <CAHk-=wj_MeMUnKyRDuQTiU1OmQ=gfZVZhcD=G7Uma=1gkKkzxg@mail.gmail.com>
+ <YrQ1PPB77PBWyaHs@zn.tnic>
+ <YsRuUl24zkhpE3s/@zn.tnic>
+ <YsVUvK/zQaIW749P@localhost.localdomain>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YsVUvK/zQaIW749P@localhost.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:
->=20
-> > On Jul 10, 2022, at 6:43 AM, Igor Mammedov <imammedo@redhat.com> wrote:
-> >=20
-> > On Mon, 21 Mar 2022 14:12:31 +0000
-> > Chuck Lever III <chuck.lever@oracle.com> wrote:
-> >=20
-> > couldn't find offender patch on ML so replying here
->=20
-> Probably:
->=20
-> https://lore.kernel.org/linux-nfs/AEC24099-5BC9-49C8-B759-920824F23F3C@or=
-acle.com/
->=20
->=20
-> > > Hi Linus-
-> > >=20
-> > > The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671d=
-ec1ef3:
-> > >=20
-> > > Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
-> > >=20
-> > > are available in the Git repository at:
-> > >=20
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd=
--5.18
-> > >=20
-> > > for you to fetch changes up to 4fc5f5346592cdc91689455d83885b0af65d71=
-b8:
-> > >=20
-> > > nfsd: fix using the correct variable for sizeof() (2022-03-20 12:49:3=
-8 -0400)
-> > >=20
-> > > ----------------------------------------------------------------
-> > > New features:
-> > > - NFSv3 support in NFSD is now always built
-> > > - Added NFSD support for the NFSv4 birth-time file attribute
-> > [...]
-> >=20
-> > > Ondrej Valousek (1):
-> > > nfsd: Add support for the birth time attribute
->=20
-> Thank you for the report, Igor.
->=20
->=20
-> > This patch regressed clients that support TIME_CREATE attribute.
-> > Starting with this patch client might think that server supports
-> > TIME_CREATE and start sending this attribute in its requests.
->=20
-> Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> attribute") does not include a change to nfsd4_decode_fattr4()
-> that decodes the birth time attribute.
->=20
-> I don't immediately see another storage protocol stack in our
-> kernel that supports a client setting the birth time, so NFSD
-> might have to ignore the client-provided value.
->=20
+On Wed, Jul 06, 2022 at 12:24:12PM +0300, Alexey Dobriyan wrote:
+> On Tue, Jul 05, 2022 at 07:01:06PM +0200, Borislav Petkov wrote:
+> 
+> > +	asm volatile(
+> > +		"1:\n\t"
+> > +		ALTERNATIVE_3("rep stosb",
+> > +			      "call clear_user_erms",	  ALT_NOT(X86_FEATURE_FSRM),
+> > +			      "call clear_user_rep_good", ALT_NOT(X86_FEATURE_ERMS),
+> > +			      "call clear_user_original", ALT_NOT(X86_FEATURE_REP_GOOD))
+> > +		"2:\n"
+> > +	       _ASM_EXTABLE_UA(1b, 2b)
+> > +	       : "+&c" (size), "+&D" (addr), ASM_CALL_CONSTRAINT
+> > +	       : "a" (0)
+> > +		/* rep_good clobbers %rdx */
+> > +	       : "rdx");
+> 
+> "+c" and "+D" should be enough for 1 instruction assembly?
 
-Cephfs allows this. My thinking at the time that I implemented it was
-that it should be settable for backup purposes, but this was possibly a
-mistake. On most filesystems, the btime seems to be equivalent to inode
-creation time and is read-only.
+I'm looking at
 
->=20
-> > However kernel on server side (since this patch and to
-> > current master) upon getting such request will return EINVAL.
-> > (my guess is that TIME_CREATE not being decoded properly and
-> > that messes up request parsing).
->=20
-> I'll send a quick-and-dirty fix your way as we explore the
-> question of whether NFSD needs to ignore the birth time value
-> in this case.
->=20
->=20
-> > End result is unusable mount (unless it's treated as readonly).
->=20
-> That seems odd, and not clear whether that's a client or server
-> problem. I hope that will clear up once the server deals with
-> the time_create attribute appropriately.
->=20
->=20
-> > Reproduces with current master (HEAD at e5524c2a1fc40) and MacOS
-> > client (Big Sur or newest Monterey).
-> >=20
-> > server is typical setup exporting files from XFS (Fedora36)
-> >=20
-> > #  rpcdebug -m nfsd -s all
-> >=20
-> > on client:
-> >=20
-> > % mount -t nfs -o vers=3D4,rw,nfc,sec=3Dsys testnas:/mnt  ~/test
-> > % touch ~/test/fff
-> >     touch: test/fff: Invalid argument
-> >=20
-> > server logs:
-> >=20
-> > nfsd: fh_compose(exp fd:00/128 fff, ino=3D0)
-> > NFSD: nfsd4_open filename  op_openowner 0000000000000000
-> >=20
-> > Here is a request the touch generates:
-> >        Network File System, Ops(6): PUTFH, SAVEFH, OPEN, GETATTR, RESTO=
-REFH, GETATTR
-> >            [Program Version: 4]
-> >            [V4 Procedure: COMPOUND (1)]
-> >            Tag: create
-> >            minorversion: 0
-> >            Operations (count: 6): PUTFH, SAVEFH, OPEN, GETATTR, RESTORE=
-FH, GETATTR
-> >                Opcode: PUTFH (22)
-> >                Opcode: SAVEFH (32)
-> >                Opcode: OPEN (18)
-> >                    seqid: 0x00000004
-> >                    share_access: OPEN4_SHARE_ACCESS_BOTH (3)
-> >                    share_deny: OPEN4_SHARE_DENY_NONE (0)
-> >                    clientid: 0xba93c9620aec46ea
-> >                    owner: <DATA>
-> >                    Open Type: OPEN4_CREATE (1)
-> >                        Create Mode: UNCHECKED4 (0)
-> >                        Attr mask: 0x00040002 (Mode, Time_Create)
-> >                            reco_attr: Mode (33)
-> >                            reco_attr: Time_Create (50)
-> >                    Claim Type: CLAIM_NULL (0)
-> >                        Name: fff
-> >=20
-> >        [...]
-> >=20
-> > when trying to copy file via GUI (Finder) it goes a different route
-> > but ends up with error anyway and with leftover 0-length file on server
-> > with messed up permissions, i.e.
->=20
-> The current NFSv4 OPEN(CREATE) code path is still not right. Fixing
-> the TIME_CREATE problem should make this symptom go away for now,
-> but eventually that path will need to be restructured so that it
-> cannot leave a turd if the whole create process was not able to
-> complete.
->=20
->=20
-> > open/create without Time_Create succeeds but followup
-> > setattr with Time_Create fails EINVAL.
-> >=20
-> >        Network File System, Ops(3): PUTFH, SETATTR, GETATTR
-> >            [Program Version: 4]
-> >            [V4 Procedure: COMPOUND (1)]
-> >            Tag: setattr
-> >            minorversion: 0
-> >            Operations (count: 3): PUTFH, SETATTR, GETATTR
-> >                Opcode: PUTFH (22)
-> >                Opcode: SETATTR (34)
-> >                    StateID
-> >                    Attr mask: 0x00450002 (Mode, Time_Access_Set, Time_C=
-reate, Time_Modify_Set)
-> >                        reco_attr: Mode (33)
-> >                        reco_attr: Time_Access_Set (48)
-> >                        reco_attr: Time_Create (50)
-> >                        reco_attr: Time_Modify_Set (54)
-> >                Opcode: GETATTR (9)
-> >            [Main Opcode: SETATTR (34)]
-> >=20
-> > [...]
-> > > --
-> > > Chuck Lever
->=20
-> --
-> Chuck Lever
->=20
->=20
->=20
+  e0a96129db57 ("x86: use early clobbers in usercopy*.c")
 
---=20
-Jeff Layton <jlayton@redhat.com>
+which introduced the early clobbers and I'm thinking we want them
+because "this operand is an earlyclobber operand, which is written
+before the instruction is finished using the input operands" and we have
+exception handling.
 
+But maybe you need to be more verbose as to what you mean exactly...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

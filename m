@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DE8570CB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC47570CBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiGKVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S229742AbiGKVep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiGKVbp (ORCPT
+        with ESMTP id S229617AbiGKVeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:31:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A571228E3F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657575104; x=1689111104;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eTJe6TGm1wlUsvFnmKRHIcBxhcTdjUMjqpmUdR/JPrk=;
-  b=l3tJ+QOnBfQ3XXpuMkPboVBOKk3le+2Wx7aM2gT526Vc702ceAHj5E/h
-   D4LLx+FTFX2NLE4aFUVqtDkZht13T/h6VhDgwl+VoDDcRgmoQ+KuQtTi1
-   x0MuaAXuU74y28uwS4qpY3iByOlGann1+TTIq6lApsP/3yFlE2O5guGqF
-   AAIf0IzyIznHGEaCEKvWA1c9OIr/nZHJej9Y+CV4jp6euEmP8f9ZnstSH
-   trFAu7x11lKDmKULfPqwH8/AU4ZNXI4bKYLQUIN4bVI3tkd1lygu73dum
-   JCcxHxxmZevG6Gm9iElxpFR7UIIhEQ16MsvOnOl2SRtB1qSQZljOZfN6H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="285516359"
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="285516359"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 14:31:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="545172273"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jul 2022 14:31:42 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oB10H-0001F1-O1;
-        Mon, 11 Jul 2022 21:31:41 +0000
-Date:   Tue, 12 Jul 2022 05:31:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Moshe Tal <moshet@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: [saeed:net-next 1/52]
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3466:12: warning: stack
- frame size (1068) exceeds limit (1024) in 'mlx5e_setup_tc'
-Message-ID: <202207120503.gFGvtnc8-lkp@intel.com>
+        Mon, 11 Jul 2022 17:34:44 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E52626AD5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:34:43 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id s128so8250644oie.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M0jwb/p2RAjR9mwxwcrAtJW8BXE8d9G9r+svEfZ26d8=;
+        b=4WsKIAa/37niWt1aZb9gLoOfQ1A+lUfSrOoHC05lYfsW9GliaMN4d+mTYivHcHvs0j
+         68NkopX5mQg7OP69uU5R1pZhozixQ9BikiS/2shm7IRreIyNwEt9zK3d3aO9gyh3ti+Q
+         xzxt6S2V3RN/1xhCHVtfQw0lMuY1VIZPCZLTR6kwiKEGYE2lj+qa+a6UOjq2T6aToydz
+         3ezr3N+gBzZgLPbBcq15hd5lrQQ+KLY+CWKldhlFnUJDvAjeNfTaLvA78EIOPLqmKRm4
+         zRb8GrAuEvsFnZ0Xivs2/hdk0df3+GfvV+OlxXPYTHkVkzYn/GIDTOIKXH4RrL5oLs6Y
+         5V/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M0jwb/p2RAjR9mwxwcrAtJW8BXE8d9G9r+svEfZ26d8=;
+        b=8PlSl+eggAxu+d5cVk44wEcaOG29CME6pjZZ/WXri4LyRorrYFIsVMFTro8MEAOMCM
+         pMTdb8L6KMcD0wgOK36L+q63mk2IIbxQnNmICReWpvThgwRpDqBsg9T4+IhW7hR9mPXl
+         cjoJgndozGysqsdloV/M5Q0Umnqk/x7gB0xLn1NqgE1iWOPeKcDAXY5VMe331vnQwpRX
+         9HQN53uK093mG7k+SXlzfApQTpQvHivbFQ5YxHwmHw8VOT1nQOgmvfeev3cTvjLOYf2J
+         KuZR+TCbFC3NKYTqEqKKKYSbZ565VatII+WH++ZqxBMPYVrry3D558lwM1usdYm+MuEU
+         SjFA==
+X-Gm-Message-State: AJIora/PsUs870WrDj6GTfGcMsQGoBBvjSpmMBIZcArKt3L/NOkbZn6R
+        nC5B7XAgyukdmde3EFQB8Sjdw9DZ0yCnqSv8Xvw=
+X-Google-Smtp-Source: AGRyM1tg0bd8EcGx54PRUcM8qcljgq6tyj9FLRsThf2aZZtqrEDQy56Sc8YRFmF/OfaUFai4N7ZMDQ==
+X-Received: by 2002:a05:6808:23d4:b0:337:e764:90eb with SMTP id bq20-20020a05680823d400b00337e76490ebmr237596oib.205.1657575282626;
+        Mon, 11 Jul 2022 14:34:42 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id d1-20020a0568301b6100b0061c4b17c0b7sm1760490ote.43.2022.07.11.14.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 14:34:41 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 18:34:36 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        samuel@sholland.org, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] media: cedrus: h265: Implement support for tiles
+Message-ID: <YsyXbPEk+uawvaPu@eze-laptop>
+References: <20220620175517.648767-1-jernej.skrabec@gmail.com>
+ <20220620175517.648767-8-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20220620175517.648767-8-jernej.skrabec@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,82 +74,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git net-next
-head:   f42c9d1eb0a1e2c7f986e0c2f6b362fddd0cdae7
-commit: b229566876d91a99322a682e98beaa68dc38f9c9 [1/52] net/mlx5e: Fix mqprio_rl handling on devlink reload
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220712/202207120503.gFGvtnc8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=b229566876d91a99322a682e98beaa68dc38f9c9
-        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
-        git fetch --no-tags saeed net-next
-        git checkout b229566876d91a99322a682e98beaa68dc38f9c9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/ drivers/md/ drivers/net/ethernet/mellanox/mlx5/core/ drivers/vfio/pci/mlx5/
+On Mon, Jun 20, 2022 at 07:55:17PM +0200, Jernej Skrabec wrote:
+> Tiles are last remaining unimplemented functionality for HEVC. Implement
+> it.
+> 
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Looks good.
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3466:12: warning: stack frame size (1068) exceeds limit (1024) in 'mlx5e_setup_tc' [-Wframe-larger-than]
-   static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
-              ^
-   1 warning generated.
-
-
-vim +/mlx5e_setup_tc +3466 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-
-955bcb6ea0df0d Pablo Neira Ayuso  2019-07-09  3465  
-9afe9a53537789 Or Gerlitz         2018-01-01 @3466  static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
-de4784ca030fed Jiri Pirko         2017-08-07  3467  			  void *type_data)
-0cf0f6d3d39672 Jiri Pirko         2017-08-07  3468  {
-4e95bc268b915c Pablo Neira Ayuso  2019-07-09  3469  	struct mlx5e_priv *priv = netdev_priv(dev);
-2ff349c5edfe3e Roi Dayan          2020-09-16  3470  	bool tc_unbind = false;
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3471  	int err;
-4e95bc268b915c Pablo Neira Ayuso  2019-07-09  3472  
-2ff349c5edfe3e Roi Dayan          2020-09-16  3473  	if (type == TC_SETUP_BLOCK &&
-2ff349c5edfe3e Roi Dayan          2020-09-16  3474  	    ((struct flow_block_offload *)type_data)->command == FLOW_BLOCK_UNBIND)
-2ff349c5edfe3e Roi Dayan          2020-09-16  3475  		tc_unbind = true;
-2ff349c5edfe3e Roi Dayan          2020-09-16  3476  
-2ff349c5edfe3e Roi Dayan          2020-09-16  3477  	if (!netif_device_present(dev) && !tc_unbind)
-2ff349c5edfe3e Roi Dayan          2020-09-16  3478  		return -ENODEV;
-2ff349c5edfe3e Roi Dayan          2020-09-16  3479  
-0cf0f6d3d39672 Jiri Pirko         2017-08-07  3480  	switch (type) {
-daa664a5cdd599 Vlad Buslov        2019-08-29  3481  	case TC_SETUP_BLOCK: {
-daa664a5cdd599 Vlad Buslov        2019-08-29  3482  		struct flow_block_offload *f = type_data;
-daa664a5cdd599 Vlad Buslov        2019-08-29  3483  
-c9f14470d04830 Vlad Buslov        2019-08-26  3484  		f->unlocked_driver_cb = true;
-955bcb6ea0df0d Pablo Neira Ayuso  2019-07-09  3485  		return flow_block_cb_setup_simple(type_data,
-955bcb6ea0df0d Pablo Neira Ayuso  2019-07-09  3486  						  &mlx5e_block_cb_list,
-4e95bc268b915c Pablo Neira Ayuso  2019-07-09  3487  						  mlx5e_setup_tc_block_cb,
-4e95bc268b915c Pablo Neira Ayuso  2019-07-09  3488  						  priv, priv, true);
-daa664a5cdd599 Vlad Buslov        2019-08-29  3489  	}
-575ed7d39e2fbe Nogah Frankel      2017-11-06  3490  	case TC_SETUP_QDISC_MQPRIO:
-e2aeac448f06ac Tariq Toukan       2021-07-06  3491  		mutex_lock(&priv->state_lock);
-e2aeac448f06ac Tariq Toukan       2021-07-06  3492  		err = mlx5e_setup_tc_mqprio(priv, type_data);
-e2aeac448f06ac Tariq Toukan       2021-07-06  3493  		mutex_unlock(&priv->state_lock);
-e2aeac448f06ac Tariq Toukan       2021-07-06  3494  		return err;
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3495  	case TC_SETUP_QDISC_HTB:
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3496  		mutex_lock(&priv->state_lock);
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3497  		err = mlx5e_setup_tc_htb(priv, type_data);
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3498  		mutex_unlock(&priv->state_lock);
-214baf22870cfa Maxim Mikityanskiy 2021-01-19  3499  		return err;
-0cf0f6d3d39672 Jiri Pirko         2017-08-07  3500  	default:
-0cf0f6d3d39672 Jiri Pirko         2017-08-07  3501  		return -EOPNOTSUPP;
-0cf0f6d3d39672 Jiri Pirko         2017-08-07  3502  	}
-08fb1dacdd7634 Saeed Mahameed     2016-02-22  3503  }
-08fb1dacdd7634 Saeed Mahameed     2016-02-22  3504  
-
-:::::: The code at line 3466 was first introduced by commit
-:::::: 9afe9a5353778994d4396f3d5ff639221bfa5cc9 net/mlx5e: Eliminate build warnings on no previous prototype
-
-:::::: TO: Or Gerlitz <ogerlitz@mellanox.com>
-:::::: CC: Saeed Mahameed <saeedm@mellanox.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  10 ++
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |   4 +
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |   4 +
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  | 108 +++++++++++++++++-
+>  4 files changed, 120 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> index b855e608885c..960a0130cd62 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@ -189,6 +189,16 @@ static const struct cedrus_control cedrus_controls[] = {
+>  		},
+>  		.codec		= CEDRUS_CODEC_H265,
+>  	},
+> +	{
+> +		.cfg = {
+> +			.id	= V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS,
+> +			/* maximum 256 entry point offsets per slice */
+> +			.dims	= { 256 },
+> +			.max = 0xffffffff,
+> +			.step = 1,
+> +		},
+> +		.codec		= CEDRUS_CODEC_H265,
+> +	},
+>  	{
+>  		.cfg = {
+>  			.id	= V4L2_CID_STATELESS_HEVC_DECODE_MODE,
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> index 15a1bdbf6a1f..084193019350 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> @@ -81,6 +81,8 @@ struct cedrus_h265_run {
+>  	const struct v4l2_ctrl_hevc_slice_params	*slice_params;
+>  	const struct v4l2_ctrl_hevc_decode_params	*decode_params;
+>  	const struct v4l2_ctrl_hevc_scaling_matrix	*scaling_matrix;
+> +	const u32					*entry_points;
+> +	u32						entry_points_count;
+>  };
+>  
+>  struct cedrus_vp8_run {
+> @@ -146,6 +148,8 @@ struct cedrus_ctx {
+>  			ssize_t		mv_col_buf_unit_size;
+>  			void		*neighbor_info_buf;
+>  			dma_addr_t	neighbor_info_buf_addr;
+> +			void		*entry_points_buf;
+> +			dma_addr_t	entry_points_buf_addr;
+>  		} h265;
+>  		struct {
+>  			unsigned int	last_frame_p_type;
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> index b0944abaacbd..3b6aa78a2985 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> @@ -75,6 +75,10 @@ void cedrus_device_run(void *priv)
+>  			V4L2_CID_STATELESS_HEVC_DECODE_PARAMS);
+>  		run.h265.scaling_matrix = cedrus_find_control_data(ctx,
+>  			V4L2_CID_STATELESS_HEVC_SCALING_MATRIX);
+> +		run.h265.entry_points = cedrus_find_control_data(ctx,
+> +			V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS);
+> +		run.h265.entry_points_count = cedrus_get_num_of_controls(ctx,
+> +			V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS);
+>  		break;
+>  
+>  	case V4L2_PIX_FMT_VP8_FRAME:
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> index 99020b9f9ff8..275fff1ab3a4 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> @@ -326,6 +326,65 @@ static int cedrus_h265_is_low_delay(struct cedrus_run *run)
+>  	return 0;
+>  }
+>  
+> +static void cedrus_h265_write_tiles(struct cedrus_ctx *ctx,
+> +				    struct cedrus_run *run,
+> +				    unsigned int ctb_addr_x,
+> +				    unsigned int ctb_addr_y)
+> +{
+> +	const struct v4l2_ctrl_hevc_slice_params *slice_params;
+> +	const struct v4l2_ctrl_hevc_pps *pps;
+> +	struct cedrus_dev *dev = ctx->dev;
+> +	const u32 *entry_points;
+> +	u32 *entry_points_buf;
+> +	int i, x, tx, y, ty;
+> +
+> +	pps = run->h265.pps;
+> +	slice_params = run->h265.slice_params;
+> +	entry_points = run->h265.entry_points;
+> +	entry_points_buf = ctx->codec.h265.entry_points_buf;
+> +
+> +	for (x = 0, tx = 0; tx < pps->num_tile_columns_minus1 + 1; tx++) {
+> +		if (x + pps->column_width_minus1[tx] + 1 > ctb_addr_x)
+> +			break;
+> +
+> +		x += pps->column_width_minus1[tx] + 1;
+> +	}
+> +
+> +	for (y = 0, ty = 0; ty < pps->num_tile_rows_minus1 + 1; ty++) {
+> +		if (y + pps->row_height_minus1[ty] + 1 > ctb_addr_y)
+> +			break;
+> +
+> +		y += pps->row_height_minus1[ty] + 1;
+> +	}
+> +
+> +	cedrus_write(dev, VE_DEC_H265_TILE_START_CTB, (y << 16) | (x << 0));
+> +	cedrus_write(dev, VE_DEC_H265_TILE_END_CTB,
+> +		     ((y + pps->row_height_minus1[ty]) << 16) |
+> +		     ((x + pps->column_width_minus1[tx]) << 0));
+> +
+> +	if (pps->flags & V4L2_HEVC_PPS_FLAG_ENTROPY_CODING_SYNC_ENABLED) {
+> +		for (i = 0; i < slice_params->num_entry_point_offsets; i++)
+> +			entry_points_buf[i] = entry_points[i];
+> +	} else {
+> +		for (i = 0; i < slice_params->num_entry_point_offsets; i++) {
+> +			if (tx + 1 >= pps->num_tile_columns_minus1 + 1) {
+> +				x = 0;
+> +				tx = 0;
+> +				y += pps->row_height_minus1[ty++] + 1;
+> +			} else {
+> +				x += pps->column_width_minus1[tx++] + 1;
+> +			}
+> +
+> +			entry_points_buf[i * 4 + 0] = entry_points[i];
+> +			entry_points_buf[i * 4 + 1] = 0x0;
+> +			entry_points_buf[i * 4 + 2] = (y << 16) | (x << 0);
+> +			entry_points_buf[i * 4 + 3] =
+> +				((y + pps->row_height_minus1[ty]) << 16) |
+> +				((x + pps->column_width_minus1[tx]) << 0);
+> +		}
+> +	}
+> +}
+> +
+>  static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  {
+>  	struct cedrus_dev *dev = ctx->dev;
+> @@ -336,9 +395,11 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  	const struct v4l2_hevc_pred_weight_table *pred_weight_table;
+>  	unsigned int width_in_ctb_luma, ctb_size_luma;
+>  	unsigned int log2_max_luma_coding_block_size;
+> +	unsigned int ctb_addr_x, ctb_addr_y;
+>  	dma_addr_t src_buf_addr;
+>  	dma_addr_t src_buf_end_addr;
+>  	u32 chroma_log2_weight_denom;
+> +	u32 num_entry_point_offsets;
+>  	u32 output_pic_list_index;
+>  	u32 pic_order_cnt[2];
+>  	u8 *padding;
+> @@ -350,6 +411,15 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  	slice_params = run->h265.slice_params;
+>  	decode_params = run->h265.decode_params;
+>  	pred_weight_table = &slice_params->pred_weight_table;
+> +	num_entry_point_offsets = slice_params->num_entry_point_offsets;
+> +
+> +	/*
+> +	 * If entry points offsets are present, we should get them
+> +	 * exactly the right amount.
+> +	 */
+> +	if (num_entry_point_offsets &&
+> +	    num_entry_point_offsets != run->h265.entry_points_count)
+> +		return -ERANGE;
+>  
+>  	log2_max_luma_coding_block_size =
+>  		sps->log2_min_luma_coding_block_size_minus3 + 3 +
+> @@ -416,12 +486,19 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  	cedrus_write(dev, VE_DEC_H265_BITS_END_ADDR, reg);
+>  
+>  	/* Coding tree block address */
+> -	reg = VE_DEC_H265_DEC_CTB_ADDR_X(slice_params->slice_segment_addr % width_in_ctb_luma);
+> -	reg |= VE_DEC_H265_DEC_CTB_ADDR_Y(slice_params->slice_segment_addr / width_in_ctb_luma);
+> +	ctb_addr_x = slice_params->slice_segment_addr % width_in_ctb_luma;
+> +	ctb_addr_y = slice_params->slice_segment_addr / width_in_ctb_luma;
+> +	reg = VE_DEC_H265_DEC_CTB_ADDR_X(ctb_addr_x);
+> +	reg |= VE_DEC_H265_DEC_CTB_ADDR_Y(ctb_addr_y);
+>  	cedrus_write(dev, VE_DEC_H265_DEC_CTB_ADDR, reg);
+>  
+> -	cedrus_write(dev, VE_DEC_H265_TILE_START_CTB, 0);
+> -	cedrus_write(dev, VE_DEC_H265_TILE_END_CTB, 0);
+> +	if ((pps->flags & V4L2_HEVC_PPS_FLAG_TILES_ENABLED) ||
+> +	    (pps->flags & V4L2_HEVC_PPS_FLAG_ENTROPY_CODING_SYNC_ENABLED)) {
+> +		cedrus_h265_write_tiles(ctx, run, ctb_addr_x, ctb_addr_y);
+> +	} else {
+> +		cedrus_write(dev, VE_DEC_H265_TILE_START_CTB, 0);
+> +		cedrus_write(dev, VE_DEC_H265_TILE_END_CTB, 0);
+> +	}
+>  
+>  	/* Clear the number of correctly-decoded coding tree blocks. */
+>  	if (ctx->fh.m2m_ctx->new_frame)
+> @@ -548,7 +625,9 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  				V4L2_HEVC_PPS_FLAG_ENTROPY_CODING_SYNC_ENABLED,
+>  				pps->flags);
+>  
+> -	/* TODO: VE_DEC_H265_DEC_PPS_CTRL1_FLAG_TILES_ENABLED */
+> +	reg |= VE_DEC_H265_FLAG(VE_DEC_H265_DEC_PPS_CTRL1_FLAG_TILES_ENABLED,
+> +				V4L2_HEVC_PPS_FLAG_TILES_ENABLED,
+> +				pps->flags);
+>  
+>  	reg |= VE_DEC_H265_FLAG(VE_DEC_H265_DEC_PPS_CTRL1_FLAG_TRANSQUANT_BYPASS_ENABLED,
+>  				V4L2_HEVC_PPS_FLAG_TRANSQUANT_BYPASS_ENABLED,
+> @@ -626,12 +705,14 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  
+>  	chroma_log2_weight_denom = pred_weight_table->luma_log2_weight_denom +
+>  				   pred_weight_table->delta_chroma_log2_weight_denom;
+> -	reg = VE_DEC_H265_DEC_SLICE_HDR_INFO2_NUM_ENTRY_POINT_OFFSETS(0) |
+> +	reg = VE_DEC_H265_DEC_SLICE_HDR_INFO2_NUM_ENTRY_POINT_OFFSETS(num_entry_point_offsets) |
+>  	      VE_DEC_H265_DEC_SLICE_HDR_INFO2_CHROMA_LOG2_WEIGHT_DENOM(chroma_log2_weight_denom) |
+>  	      VE_DEC_H265_DEC_SLICE_HDR_INFO2_LUMA_LOG2_WEIGHT_DENOM(pred_weight_table->luma_log2_weight_denom);
+>  
+>  	cedrus_write(dev, VE_DEC_H265_DEC_SLICE_HDR_INFO2, reg);
+>  
+> +	cedrus_write(dev, VE_DEC_H265_ENTRY_POINT_OFFSET_ADDR, ctx->codec.h265.entry_points_buf_addr >> 8);
+> +
+>  	/* Decoded picture size. */
+>  
+>  	reg = VE_DEC_H265_DEC_PIC_SIZE_WIDTH(ctx->src_fmt.width) |
+> @@ -728,6 +809,18 @@ static int cedrus_h265_start(struct cedrus_ctx *ctx)
+>  	if (!ctx->codec.h265.neighbor_info_buf)
+>  		return -ENOMEM;
+>  
+> +	ctx->codec.h265.entry_points_buf =
+> +		dma_alloc_coherent(dev->dev, CEDRUS_H265_ENTRY_POINTS_BUF_SIZE,
+> +				   &ctx->codec.h265.entry_points_buf_addr,
+> +				   GFP_KERNEL);
+> +	if (!ctx->codec.h265.entry_points_buf) {
+> +		dma_free_attrs(dev->dev, CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE,
+> +			       ctx->codec.h265.neighbor_info_buf,
+> +			       ctx->codec.h265.neighbor_info_buf_addr,
+> +			       DMA_ATTR_NO_KERNEL_MAPPING);
+> +		return -ENOMEM;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -748,6 +841,9 @@ static void cedrus_h265_stop(struct cedrus_ctx *ctx)
+>  		       ctx->codec.h265.neighbor_info_buf,
+>  		       ctx->codec.h265.neighbor_info_buf_addr,
+>  		       DMA_ATTR_NO_KERNEL_MAPPING);
+> +	dma_free_coherent(dev->dev, CEDRUS_H265_ENTRY_POINTS_BUF_SIZE,
+> +			  ctx->codec.h265.entry_points_buf,
+> +			  ctx->codec.h265.entry_points_buf_addr);
+>  }
+>  
+>  static void cedrus_h265_trigger(struct cedrus_ctx *ctx)
+> -- 
+> 2.36.1
+> 

@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D747E56D6D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5096456D6DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiGKH3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S230151AbiGKHco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiGKH3d (ORCPT
+        with ESMTP id S229697AbiGKHcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:29:33 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 333031572D;
-        Mon, 11 Jul 2022 00:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=I8+m1
-        YAsVZ4gl1y1umKlRTUNyEHJgsOKvTyV1H7WmOY=; b=FwmkrMFXFr/vChhjh8X1r
-        cR26ZV6bNosnkAScnaDfPrNOlBwTSAywa+4kczhfrktr3AdUiLX/JQznsYpPFxNz
-        xIxK4fPjJ7hz7e+3+KfJFlG0svk8pOL0OMZoDMWQB+zwdz3y9VAXOEDpqUNiDiAe
-        UhQLcHNcJTn77xcWjTWCeg=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp2 (Coremail) with SMTP id GtxpCgBX5vg00ctiUDjsOQ--.9309S4;
-        Mon, 11 Jul 2022 15:29:06 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH v2] net: macsec: fix potential resource leak in macsec_add_rxsa() and macsec_add_txsa()
-Date:   Mon, 11 Jul 2022 15:28:51 +0800
-Message-Id: <20220711072851.2319308-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 03:32:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E464B1A39F;
+        Mon, 11 Jul 2022 00:32:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10DEA176B;
+        Mon, 11 Jul 2022 00:32:43 -0700 (PDT)
+Received: from [10.57.12.169] (unknown [10.57.12.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD26F3F70D;
+        Mon, 11 Jul 2022 00:32:39 -0700 (PDT)
+Message-ID: <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
+Date:   Mon, 11 Jul 2022 08:32:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgBX5vg00ctiUDjsOQ--.9309S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4rWF4fCF17Zw1xZr43ZFb_yoW8Jw4Dpa
-        15ZwsrCF1qqrWI93ZrCw4UWF1rXayUtryagry7C3yfua4kJw1rWFy0kFyI9Fy5AryxGF48
-        ZrWvyr47AFn8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRha9hUUUUU=
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbB0Qg7jFzIB3B7eAABsP
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Content-Language: en-US
+To:     Xuewen Yan <xuewen.yan94@gmail.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-init_rx_sa() allocates relevant resource for rx_sa->stats and rx_sa->
-key.tfm with alloc_percpu() and macsec_alloc_tfm(). When some error
-occurs after init_rx_sa() is called in macsec_add_rxsa(), the function
-released rx_sa with kfree() without releasing rx_sa->stats and rx_sa->
-key.tfm, which will lead to a resource leak.
+Hi Xuewen,
 
-We should call macsec_rxsa_put() instead of kfree() to decrease the ref
-count of rx_sa and release the relevant resource if the refcount is 0.
-The same bug exists in macsec_add_txsa() for tx_sa as well. This patch
-fixes the above two bugs.
+On 7/11/22 08:21, Xuewen Yan wrote:
+> Hi all
+> 
+> This deadlock is inevitable, any comment?
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/net/macsec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Could you tell me how to reproduce this?
+Is there a need of special cgroup setup?
 
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index 817577e713d7..ac3ff624a8dd 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -1842,7 +1842,7 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
- 	return 0;
- 
- cleanup:
--	kfree(rx_sa);
-+	macsec_rxsa_put(rx_sa);
- 	rtnl_unlock();
- 	return err;
- }
-@@ -2085,7 +2085,7 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
- 
- cleanup:
- 	secy->operational = was_operational;
--	kfree(tx_sa);
-+	macsec_txsa_put(tx_sa);
- 	rtnl_unlock();
- 	return err;
- }
--- 
-2.25.1
-
+Regards,
+Lukasz

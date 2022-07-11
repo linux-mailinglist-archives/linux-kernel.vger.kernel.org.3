@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA6257047C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615FD570485
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiGKNjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S230259AbiGKNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiGKNji (ORCPT
+        with ESMTP id S229456AbiGKNlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:39:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D1C8419AE
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:39:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3857C1596;
-        Mon, 11 Jul 2022 06:39:37 -0700 (PDT)
-Received: from monolith.localdoman (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22E803F70D;
-        Mon, 11 Jul 2022 06:39:35 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 14:40:08 +0100
-From:   Alexandru Elisei <alexandru.elisei@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, judyhsiao@chromium.org
-Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix NULL pointer dereference when
- pinctrl is not found
-Message-ID: <YswoOE/sP088lius@monolith.localdoman>
-References: <20220711130522.401551-1-alexandru.elisei@arm.com>
- <Yswkb6mvwUywOTLg@sirena.org.uk>
+        Mon, 11 Jul 2022 09:41:46 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E67A4D4CB;
+        Mon, 11 Jul 2022 06:41:46 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31bf3656517so48914067b3.12;
+        Mon, 11 Jul 2022 06:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sdwpzHws2jwe9e9bTdjMo364Spj9w7i0w60w+KBGqzo=;
+        b=fr4fWushiyeFwkSE3Elj1GJcVBKEkH9TYQXwt6wz4kbsYFKBJI//8iBtjTkvh5m1td
+         lY7TfolHcZmJ1dz6rDPtdUYujjlmqX8ciG2fNQFd6hLW4eyu6FDKmhH2pkRUHFKE2cyb
+         VcpAzYU5hrNR9Se+wAlsoJT68cGW/HkJfwHyRGy4EyXLKfDxzpAviP/RMPn3mk8PQHkJ
+         fzYAho6X6h0SaNwiRPu1MB7smEYPPCAQj+9wCvOJG2yKAW4hOVeubiw84h25f62ViSY3
+         jX8Sblb4eOdlN4bvdVBGvcccQVyr96nWK5fH5xIEcqkV28GBuVvCEnGA17epZDLIdr5I
+         vZuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sdwpzHws2jwe9e9bTdjMo364Spj9w7i0w60w+KBGqzo=;
+        b=wWZW+V7Zsh/7lRYxYwu8gokQbVT7gpvg9wMWskr24Si1LRGkCKi3/p+VOW8pF2oiMs
+         LGVvYiIjIHg99c8HSYGaYtsaO6DvKdEte1al/C+bYX86JBxgfOq91P3MQXLijr7G7iZG
+         aeehT8S8ZT4bHnxzPFLvBh1fNk7QO8H6gsBWmkIyDQ4Hz1ZtyTIgbmWuhzkGfdnI8+X6
+         sZQLEDkKKfRapJG/trv4FrtVtx0Tam4bkTwQuDq68YLecpuVZnbC9JeaqJJOghMY+TfJ
+         D43TlAh6SRWb8rmomoGav/1F/Uv01ZhrudkM3tAIMGdjQTKz7cRBNLprBNxBq4SrECpj
+         tByA==
+X-Gm-Message-State: AJIora/TSI0NGsWPf6tO2Uwt5LJEx4gv7w2R91DVabJDPfdenJc4aC9r
+        is0A7APo3Oo4kB1lGHPVQTKkcUkwrMZFUrmmVbE=
+X-Google-Smtp-Source: AGRyM1tI/w/ZyWN7kdnWCxqnewu9nCeJj2Kvs5+rlCAMnMcXkfOmVTzc/oG13/3jVJYvAQaO4QiD90BliyiLgVIU1gw=
+X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
+ w128-20020a814986000000b0031d388bd08dmr14590130ywa.185.1657546905261; Mon, 11
+ Jul 2022 06:41:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yswkb6mvwUywOTLg@sirena.org.uk>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220711112900.61363-1-shreeya.patel@collabora.com>
+ <20220711112900.61363-3-shreeya.patel@collabora.com> <CAHp75Vf3NDsep5_819=e8yrna_AGh5cew=fs+hHe1q8LCa-PyA@mail.gmail.com>
+ <c90e7334-5921-886b-2f9c-869fb55216ca@collabora.com>
+In-Reply-To: <c90e7334-5921-886b-2f9c-869fb55216ca@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Jul 2022 15:41:08 +0200
+Message-ID: <CAHp75Vf=FOt+N6azar5gifvig8FL4sS3LX1kO8CzNCh2yOk-DQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] iio: light: Add support for ltrf216a sensor
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, Zhigang.Shi@liteon.com,
+        krisman@collabora.com, linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        alvaro.soliverez@collabora.com, dmitry.osipenko@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Mon, Jul 11, 2022 at 3:39 PM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
+> On 11/07/22 18:36, Andy Shevchenko wrote:
+> > On Mon, Jul 11, 2022 at 1:30 PM Shreeya Patel
 
-On Mon, Jul 11, 2022 at 02:23:59PM +0100, Mark Brown wrote:
-> On Mon, Jul 11, 2022 at 02:05:22PM +0100, Alexandru Elisei wrote:
-> > Commit a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO") switched
-> > BCLK to GPIO functions when probing the i2s bus interface, but missed
-> > adding a check for when devm_pinctrl_get() returns an error.  This can lead
-> > to the following NULL pointer dereference on a rockpro64-v2 if there are no
-> > "pinctrl" properties in the i2s device tree node:
-> > 
-> > [    0.658381] rockchip-i2s ff880000.i2s: failed to find i2s default state
-> > [    0.658993] rockchip-i2s ff880000.i2s: failed to find i2s gpio state
-> > [    0.660072] rockchip-i2s ff890000.i2s: failed to find i2s default state
-> > [    0.660670] rockchip-i2s ff890000.i2s: failed to find i2s gpio state
-> 
-> Please think hard before including complete backtraces in upstream
-> reports, they are very large and contain almost no useful information
+Please, remove unneeded context when replying!
 
-I'm at a loss here. Are you saying that those 4 lines represent a complete
-backtrace and they are very large? Or are you talking about the panic log
-that I've included in the commit message?
+...
 
-> relative to their size so often obscure the relevant content in your
-> message. If part of the backtrace is usefully illustrative (it often is
-> for search engines if nothing else) then it's usually better to pull out
-> the relevant sections.
+> >> +static const struct regmap_config ltrf216a_regmap_config = {
+> >> +       .name = LTRF216A_DRV_NAME,
+> >> +       .reg_bits = 8,
+> >> +       .val_bits = 8,
+> >> +       .max_register = LTRF216A_MAX_REG,
+> > Why do you use regmap locking? What for?
+>
+> Why do we want to skip the internal locking if it doesn't bring any
+> benefits?
 
-Would you mind pointing out what you think the relevant sections are? I
-would also find it very useful (for future patches) if you can explain why
-they are relevant, and why those parts you've left out aren't.  It's not
-very easy to figure out what is relevant when you're not familiar with a
-subsystem.
+Can you elaborate on the "no benefits" part, please?
 
-Thanks,
-Alex
+-- 
+With Best Regards,
+Andy Shevchenko

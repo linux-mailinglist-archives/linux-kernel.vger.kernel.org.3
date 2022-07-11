@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BF356FF81
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0B056FF7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiGKKvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S229463AbiGKKvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiGKKvV (ORCPT
+        with ESMTP id S229537AbiGKKvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:51:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E73B521E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:47 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f11so4011091plr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/dH5AuNv3/3xu+UZsaeD0vwZDTjCSjjCkh8LEd+YI1o=;
-        b=psYo5QDqDg0MR1r4CavqDmkceWxQGNJNibEvsvR5kJpqNj7b1teQL6n+IdxX3DBD6l
-         Zx9nIf22sHdpSiVjzCPW1IFm4M726NzNpzqFFdlKpIbP0aKOGZDpjv/DunvAJflSCoSr
-         YIgh0k8bCSYIVSLmTFds8IhI0cuzFqyu70I38=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/dH5AuNv3/3xu+UZsaeD0vwZDTjCSjjCkh8LEd+YI1o=;
-        b=HdX0hvCErvILvXALtOsGNTnb4YZZ6X/EOafKGwxR8TmK7dxcCh0/g/imt8dsWoehSb
-         AkAFCHdoQNVrbaEmRi46GsFIYdvVn50WTDYR7G2qzdGN/orH6rkZn6Yv/8svxnkhdEqO
-         J0Ukh1ESWYdx4qosla0FBMcr9V4yd8kI6IxaKaYDJ5AVbC3GFBAA9fQjMT4AXCj96IbB
-         mPia81AbQc7eCMr0HngHDWaIew3jes2BMjC61mZ2yZ4TYpuHw/OtBqZgMFKihi4Xd3UW
-         wmBjg7VnhbNa5SfKM3h6Hh1hAPJsz41XWzQF/0Am6ST1WPHvFvkR6x3YCFqwE4Jiljvc
-         WHrA==
-X-Gm-Message-State: AJIora8oUjWNU+1T9RS9lwEICmTJmU6zsfr8eOGua+RWtIfgMFmmy+bl
-        xfrhBLgmLoBscBbaJwBMBilj2A==
-X-Google-Smtp-Source: AGRyM1u71WxKsvtMvsMoeCRY1aLWWAcnNsU10Js1zwhm6QaCtzgBnurLthcyu6WuASW8T98+0p74Gw==
-X-Received: by 2002:a17:902:cf03:b0:16b:a91d:aff4 with SMTP id i3-20020a170902cf0300b0016ba91daff4mr17868029plg.66.1657533466584;
-        Mon, 11 Jul 2022 02:57:46 -0700 (PDT)
-Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090a390300b001ef81bac701sm6560814pjb.42.2022.07.11.02.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 02:57:45 -0700 (PDT)
-From:   Suniel Mahesh <sunil@amarulasolutions.com>
-To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@free-electrons.com>,
-        Christopher Vollo <chris@renewoutreach.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        linux-amarula@amarulasolutions.com
-Subject: [PATCH v3 2/2] ARM: dts: sun8i: Add R16 Vista E board from RenewWorldOutreach
-Date:   Mon, 11 Jul 2022 15:27:21 +0530
-Message-Id: <20220711095721.1935377-3-sunil@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711095721.1935377-1-sunil@amarulasolutions.com>
-References: <20220711095721.1935377-1-sunil@amarulasolutions.com>
+        Mon, 11 Jul 2022 06:51:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BDCEB41BC
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657533455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4705b3O605hQms9a0r/rRAuyFE62gnfa/SJiHrJ15tU=;
+        b=ejlKOh0sGEMW4JnAk7+XDa9nz9czr2+srWdTPIYT17WaUqnIYI/Aexy1C6UyayadmSduxp
+        EN3GAEJTk6NJGAQvr3/wBSo87Mx5TC3ze5bWnFgCgAZG3l5qEEay+53dGPE2f93eXIFfY+
+        bvg2w2JQjrTm7YzrLXH8ErDfqAtA6OA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-V-cREPW3Nguxdxphd5LsrQ-1; Mon, 11 Jul 2022 05:57:30 -0400
+X-MC-Unique: V-cREPW3Nguxdxphd5LsrQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C048985A581;
+        Mon, 11 Jul 2022 09:57:29 +0000 (UTC)
+Received: from localhost (ovpn-12-204.pek2.redhat.com [10.72.12.204])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2D4C0492CA4;
+        Mon, 11 Jul 2022 09:57:28 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 17:57:24 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v9 7/7] x86/crash: Add x86 crash hotplug support
+Message-ID: <Ysv0BEMOmN/WnhVg@MiWiFi-R3L-srv>
+References: <20220613224240.79400-1-eric.devolder@oracle.com>
+ <20220613224240.79400-8-eric.devolder@oracle.com>
+ <94f5e036-770d-4ca5-c386-9a43e7333b43@linux.ibm.com>
+ <e96c42ee-7a14-3565-16cd-dbf7cf163c21@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <e96c42ee-7a14-3565-16cd-dbf7cf163c21@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,422 +71,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The R16-Vista-E board from RenewWorldOutreach based on allwinner
-R16(A33).
+On 07/07/22 at 07:55am, Eric DeVolder wrote:
+> 
+> 
+> On 6/20/22 00:06, Sourabh Jain wrote:
+> > Hello Eric,
+> > 
+> > On 14/06/22 04:12, Eric DeVolder wrote:
+> > > For x86_64, when CPU or memory is hot un/plugged, the crash
+> > > elfcorehdr, which describes the CPUs and memory in the system,
+> > > must also be updated.
+> > > 
+> > > When loading the crash kernel via kexec_load or kexec_file_load,
+> > > the elfcorehdr is identified at run time in
+> > > crash_core:handle_hotplug_event().
+> > > 
+> > > To update the elfcorehdr for x86_64, a new elfcorehdr must be
+> > > generated from the available CPUs and memory. The new elfcorehdr
+> > > is prepared into a buffer, and then installed over the top of
+> > > the existing elfcorehdr.
+> > > 
+> > > In the patch 'kexec: exclude elfcorehdr from the segment digest'
+> > > the need to update purgatory due to the change in elfcorehdr was
+> > > eliminated.  As a result, no changes to purgatory or boot_params
+> > > (as the elfcorehdr= kernel command line parameter pointer
+> > > remains unchanged and correct) are needed, just elfcorehdr.
+> > > 
+> > > To accommodate a growing number of resources via hotplug, the
+> > > elfcorehdr segment must be sufficiently large enough to accommodate
+> > > changes, see the CRASH_MAX_MEMORY_RANGES configure item.
+> > > 
+> > > With this change, crash hotplug for kexec_file_load syscall
+> > > is supported. The kexec_load is also supported, but also
+> > > requires a corresponding change to userspace kexec-tools.
+> > > 
+> > > Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> > > ---
+> > >   arch/x86/Kconfig        |  11 ++++
+> > >   arch/x86/kernel/crash.c | 116 ++++++++++++++++++++++++++++++++++++++++
+> > >   2 files changed, 127 insertions(+)
+> > > 
+> > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > > index 762a0b6ab8b6..e9eecff3b97d 100644
+> > > --- a/arch/x86/Kconfig
+> > > +++ b/arch/x86/Kconfig
+> > > @@ -2082,6 +2082,17 @@ config CRASH_DUMP
+> > >         (CONFIG_RELOCATABLE=y).
+> > >         For more details see Documentation/admin-guide/kdump/kdump.rst
+> > > +config CRASH_MAX_MEMORY_RANGES
+> > > +    depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+> > > +    int
+> > > +    default 32768
+> > > +    help
+> > > +      For the kexec_file_load path, specify the maximum number of
+> > > +      memory regions, eg. as represented by the 'System RAM' entries
+> > > +      in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
+> > > +      This value is combined with NR_CPUS and multiplied by Elf64_Phdr
+> > > +      size to determine the final buffer size.
+> > > +
+> > >   config KEXEC_JUMP
+> > >       bool "kexec jump"
+> > >       depends on KEXEC && HIBERNATION
+> > > diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+> > > index 9db41cce8d97..b9cdf7a0d868 100644
+> > > --- a/arch/x86/kernel/crash.c
+> > > +++ b/arch/x86/kernel/crash.c
+> > > @@ -25,6 +25,7 @@
+> > >   #include <linux/slab.h>
+> > >   #include <linux/vmalloc.h>
+> > >   #include <linux/memblock.h>
+> > > +#include <linux/highmem.h>
+> > >   #include <asm/processor.h>
+> > >   #include <asm/hardirq.h>
+> > > @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
+> > >       image->elf_headers = kbuf.buffer;
+> > >       image->elf_headers_sz = kbuf.bufsz;
+> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> > > +    /* Ensure elfcorehdr segment large enough for hotplug changes */
+> > > +    kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
+> > > +    /* For marking as usable to crash kernel */
+> > > +    image->elf_headers_sz = kbuf.memsz;
+> > > +    /* Record the index of the elfcorehdr segment */
+> > > +    image->elfcorehdr_index = image->nr_segments;
+> > > +    image->elfcorehdr_index_valid = true;
+> > > +#else
+> > >       kbuf.memsz = kbuf.bufsz;
+> > > +#endif
+> > >       kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+> > >       kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+> > >       ret = kexec_add_buffer(&kbuf);
+> > > @@ -413,3 +424,108 @@ int crash_load_segments(struct kimage *image)
+> > >       return ret;
+> > >   }
+> > >   #endif /* CONFIG_KEXEC_FILE */
+> > > +
+> > > +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> > > +int crash_hotplug_support(void) { return 1; }
+> > > +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
+> > > +{
+> > > +    /*
+> > > +     * NOTE: The addresses and sizes passed to this routine have
+> > > +     * already been fully aligned on page boundaries. There is no
+> > > +     * need for massaging the address or size.
+> > > +     */
+> > > +    void *ptr = NULL;
+> > > +
+> > > +    /* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
+> > > +    if (size > 0) {
+> > > +        struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+> > > +
+> > > +        ptr = kmap(page);
+> > > +    }
+> > > +
+> > > +    return ptr;
+> > > +}
+> > > +
+> > > +void arch_unmap_crash_pages(void **ptr)
+> > > +{
+> > > +    if (ptr) {
+> > > +        if (*ptr)
+> > > +            kunmap(*ptr);
+> > > +        *ptr = NULL;
+> > > +    }
+> > > +}
+> > 
+> > Aren't arch will have build issue if arch_[un]map_crash_pages methods are not defined?
+> Sourabh,
+> Yes, you are correct. I'll add __weak versions of each in crash_core.c in the next patch.
 
-General features:
-- 1GB RAM
-- microSD slot
-- Realtek Wifi
-- 1 x USB 2.0
-- HDMI IN
-- HDMI OUT
-- Audio out
-- MIPI DSI
-- TI DLPC3433
+Just a reminder, __weak is deprecated and has been cleaned up in
+kernel/kexec*.c in below patch.
 
-It has also connectors to connect an external mini keypad.
-
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Christopher Vollo <chris@renewoutreach.org>
- ---
-    Changes for v3:
-    - As suggested by Samuel Holland:
-    - changed binding to gpio-fan
-    - changed widgets to DACL and DACR to describe audio routing
-    - fixed indentation
-    - primary author of the commit should be the first signer
-
-    Changes for v2:
-    - Add missing compatible string
-    - insert missing signatures of contributors
----
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts | 362 ++++++++++++++++++
- 2 files changed, 363 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 184899808ee7..b5966c0742e1 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1353,6 +1353,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
- 	sun8i-r16-nintendo-nes-classic.dtb \
- 	sun8i-r16-nintendo-super-nes-classic.dtb \
- 	sun8i-r16-parrot.dtb \
-+	sun8i-r16-renew-vista-e.dtb \
- 	sun8i-r40-bananapi-m2-ultra.dtb \
- 	sun8i-r40-oka40i-c.dtb \
- 	sun8i-s3-elimo-initium.dtb \
-diff --git a/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-new file mode 100644
-index 000000000000..ff72914eb110
---- /dev/null
-+++ b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (C) 2022 RenewWorldOutreach
-+ * Copyright (C) 2022 Amarula Solutions(India)
-+ */
-+
-+/dts-v1/;
-+#include "sun8i-a33.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "RenewWorldOutreach R16-Vista-E";
-+	compatible = "renewworldoutreach,r16-vista-e", "allwinner,sun8i-r16", "allwinner,sun8i-a33";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <100>;
-+
-+		ok {
-+			label = "ok";
-+			linux,code = <KEY_ENTER>;
-+			gpios = <&pio 4 0 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		left {
-+			label = "left";
-+			linux,code = <KEY_LEFT>;
-+			gpios = <&pio 4 1 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		right {
-+			label = "right";
-+			linux,code = <KEY_RIGHT>;
-+			gpios = <&pio 4 2 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		up {
-+			label = "up";
-+			linux,code = <KEY_UP>;
-+			gpios = <&pio 4 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		down {
-+			label = "down";
-+			linux,code = <KEY_DOWN>;
-+			gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		back {
-+			label = "back";
-+			linux,code = <KEY_BACK>;
-+			gpios = <&pio 4 5 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		power {
-+			label = "power";
-+			linux,code = <KEY_POWER>;
-+			gpios = <&pio 4 6 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		vol-down {
-+			label = "vol-down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&pio 7 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		vol-up {
-+			label = "vol-up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&pio 7 9 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		battery-led0 {
-+			label = "renew-e:battery-led0";
-+			gpios = <&r_pio 0 2 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led1 {
-+			label = "renew-e:battery-led1";
-+			gpios = <&r_pio 0 3 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led2 {
-+			label = "renew-e:battery-led2";
-+			gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led3 {
-+			label = "renew-e:battery-led3";
-+			gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led4 {
-+			label = "renew-e:battery-led4";
-+			gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led0 {
-+			label = "renew-e:volume-led0";
-+			gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led1 {
-+			label = "renew-e:volume-led1";
-+			gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led2 {
-+			label = "renew-e:volume-led2";
-+			gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led3 {
-+			label = "renew-e:volume-led3";
-+			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led4 {
-+			label = "renew-e:volume-led4";
-+			gpios = <&pio 6 10 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-pad-intz {
-+			label = "renew-e:led-pad-intz";
-+			gpios = <&pio 4 16 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+		};
-+	};
-+
-+	gpio-fan {
-+		compatible = "gpio-fan";
-+		gpios = <&pio 4 14 GPIO_ACTIVE_HIGH>; /* FAN_ON/OFF: PE14 */
-+		gpio-fan,speed-map = <0 0 6000 1>;
-+	};
-+
-+	reg_vcc5v0: vcc5v0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+};
-+
-+&codec {
-+	status = "okay";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&reg_dcdc3>;
-+};
-+
-+&cpu0_opp_table {
-+	opp-1104000000 {
-+		opp-hz = /bits/ 64 <1104000000>;
-+		opp-microvolt = <1320000>;
-+		clock-latency-ns = <244144>; /* 8 32k periods */
-+	};
-+
-+	opp-1200000000 {
-+		opp-hz = /bits/ 64 <1200000000>;
-+		opp-microvolt = <1320000>;
-+		clock-latency-ns = <244144>; /* 8 32k periods */
-+	};
-+};
-+
-+&dai {
-+	status = "okay";
-+};
-+
-+&de {
-+	status = "okay";
-+};
-+
-+&dphy {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_dcdc1>;
-+	bus-width = <4>;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&mmc1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mmc1_pg_pins>;
-+	vmmc-supply = <&reg_dcdc1>;
-+	bus-width = <4>;
-+	broken-cd;
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&r_rsb {
-+	status = "okay";
-+
-+	axp22x: pmic@3a3 {
-+		compatible = "x-powers,axp223";
-+		reg = <0x3a3>;
-+		interrupt-parent = <&r_intc>;
-+		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-+		eldoin-supply = <&reg_dcdc1>;
-+		x-powers,drive-vbus-en;
-+	};
-+};
-+
-+#include "axp223.dtsi"
-+
-+&ac_power_supply {
-+	status = "okay";
-+};
-+
-+&reg_aldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "vcc-io";
-+};
-+
-+&reg_aldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <2500000>;
-+	regulator-max-microvolt = <2500000>;
-+	regulator-name = "vdd-dll";
-+};
-+
-+&reg_aldo3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "avcc";
-+};
-+
-+&reg_dc1sw {
-+	regulator-name = "vcc-lcd";
-+};
-+
-+&reg_dc5ldo {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpus";
-+};
-+
-+&reg_dcdc1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "vcc-3v0";
-+};
-+
-+&reg_dcdc2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-sys";
-+};
-+
-+&reg_dcdc3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpu";
-+};
-+
-+&reg_dcdc5 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1500000>;
-+	regulator-max-microvolt = <1500000>;
-+	regulator-name = "vcc-dram";
-+};
-+
-+&reg_dldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main1";
-+};
-+
-+&reg_dldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main2";
-+};
-+
-+&reg_dldo3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main3";
-+};
-+
-+&reg_dldo4 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main4";
-+};
-+
-+&reg_eldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1200000>;
-+	regulator-max-microvolt = <1200000>;
-+	regulator-name = "vcc-1v2-hdmi";
-+};
-+
-+&reg_drivevbus {
-+	regulator-name = "usb0-vbus";
-+	status = "okay";
-+};
-+
-+&reg_rtc_ldo {
-+	regulator-name = "vcc-rtc";
-+};
-+
-+&sound {
-+	status = "okay";
-+	simple-audio-card,routing =
-+		"Left DAC", "DACL",
-+		"Right DAC", "DACR";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	/* VBUS is always on because it is wired to the power supply */
-+	usb0_vbus-supply = <&reg_vcc5v0>;
-+	status = "okay";
-+};
--- 
-2.25.1
+[PATCH 0/2] kexec: Drop __weak attributes from functions
 

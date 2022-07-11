@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F0057088F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74845570890
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiGKQxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S230448AbiGKQyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiGKQxs (ORCPT
+        with ESMTP id S229563AbiGKQx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:53:48 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A13A2A735
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id r6so6996129edd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:47 -0700 (PDT)
+        Mon, 11 Jul 2022 12:53:59 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3652AE1E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:53 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 70so5272452pfx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EvYW5GaG8Gx/hKniNuu2v226hGiRtWNUFfOGKwFgOac=;
-        b=aarLedeVOS0wuKcbUerMkVPKpJ3wM6fdhFFWFrG/pkDecFuAYKrWzlgPcW2FE19ruF
-         zVeQvPCEI71QlqYuYynt3AOoxXO+3CqUCfzmpcNM8cCb/2hrTyThxmVH45m71sQ/PRSX
-         e51w0bGdqnkkgeaSkix9Cot/+hcpVZgc/hd44=
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=9fS4GuB/o/7tK1gz6r3u6pQBSQYPt6xFQaJkkm7ODCg=;
+        b=L39vvqqx0/Gr+A1p8R6ue+DEMAUSln+Wo275L04X3efhDoLhsEwvUXs3VGKJDGOuzo
+         xqsPFuHaH5IcFaYlDPP2KjNWNKIsb1qthUJeh3DEYTV/6w8R7ZIVCn9+7nv26rGuou7/
+         4nq848cXkbfZlfeBLG/fHUSj9h6wmBuI0SaJedOAuWAlqadgwaWBI7EQicYR0ChipXGi
+         WrQkeAjjT9ahxADd6kfCCUDdU63ReeRdO2w/grEX6pelqTLXTXwLcZcRDIRqL1Uw+7NV
+         Qg3tkVuaKqnTHq65ulzMTrd9GIsxKueyGK/CVOHIO5rf5iToF3eQxsYUU3DLyM/6FReB
+         c/5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EvYW5GaG8Gx/hKniNuu2v226hGiRtWNUFfOGKwFgOac=;
-        b=TOxT4Jme97Zdlnmnda/JONNQj4l8E4QDL4X5Jecj69UwSTWUKMYCf4BP1JpmrZzMBK
-         L4GYL9xK2S5DBmfDMkEfNtE+ntDfymhpMETPJISv8Jd6CKEJUNIw4Zo96hsdGgIFLtpl
-         c/yyxdWAijSqGDJPFn9RWlq9CHg45xW/s9qN8Rv7D7xD6lkTrMgIjn/Tqh2fXeApBo+t
-         9x5uS8SLoad472tGzTKHcMpcM5a4XlrZilkOnzdWjqmZ7T2+mh8Q4WwXvLDIMwX8UCkk
-         BNC0wAPbs9W7ld1npQIMI9mcnX/LmT1mCxSUPZ9RacsVfrjb5BxKr8HR1hJATdLI509C
-         Pppw==
-X-Gm-Message-State: AJIora9EiVEHWT797GRzFREUOxa/HhZei9XrCi+veblc2oCvgxzF0jnH
-        iyvmSIsd6pJMSUDgP8jTq9bNYymsxG3Lukpu
-X-Google-Smtp-Source: AGRyM1ssQlG9ngI1H19Mc866prGR5/2jyz1ILg8WAEUwbo3K27szT2F0DugFOQQRyF9suSS9PrchGQ==
-X-Received: by 2002:a05:6402:2b8b:b0:43a:5475:f1ae with SMTP id fj11-20020a0564022b8b00b0043a5475f1aemr6667701edb.363.1657558425738;
-        Mon, 11 Jul 2022 09:53:45 -0700 (PDT)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
-        by smtp.gmail.com with ESMTPSA id f15-20020a17090631cf00b0072af3deb944sm2831351ejf.223.2022.07.11.09.53.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 09:53:43 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id d13-20020a05600c34cd00b003a2dc1cf0b4so3386331wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:53:43 -0700 (PDT)
-X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id
- i14-20020a05600c354e00b003a19ddf468dmr16648474wmq.145.1657558422860; Mon, 11
- Jul 2022 09:53:42 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=9fS4GuB/o/7tK1gz6r3u6pQBSQYPt6xFQaJkkm7ODCg=;
+        b=Y9JD3FMBgaawk9gVZuBfEWUr5Nhm+L+krobWnjld58vBFxpl5LYdJe7vRu2dkiLy/r
+         rbaW7g5THF4zeDz2qnsXjJNqr4T+pB9r9UjkBBX2D4SkyJdZ6+I9KUERSsw0CSD47h96
+         WZ8dhpJnwYkvCqcRfE6Z7yX4tgzk76rIr+PamniNnp4PAB3FrGc5UCX2HLGMHU8aXxZV
+         +auZW5gZY9vucqL//hqrOjjaRZRBIieZRqaXOyNXv7e5Xuv9YuFK+xZfusnJq3oXE3gB
+         1BoVzAefB3gc6k3sBAnmObdYLfuocmwnlzl5q5v11mhCnzSuU/Xzemae1DcneqLQaSTa
+         M36g==
+X-Gm-Message-State: AJIora8Z+9YVDff11xlbbORJj9Ogs6ABGwNEtbbLg5XOjLIqxF7+DcSe
+        vNuoIimHj4mGlVLRLA99srq7PYApJ3bMnTwhbBQ=
+X-Google-Smtp-Source: AGRyM1tLkWhQBRYlslgOJbFlmSZzcNTigxathSS+8Kvf2YYHamuMSIjkK/ajtTPdnGxTG91OdKPh9VyE5Tter7rdJCI=
+X-Received: by 2002:a65:5845:0:b0:411:9797:cb21 with SMTP id
+ s5-20020a655845000000b004119797cb21mr15803600pgr.503.1657558433067; Mon, 11
+ Jul 2022 09:53:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <7tBrxiXIS8yrkSQC04SW-R8BK2xeKgirCEAeh2XB3EVkZSsJjVPJ3_tTXNwC0Ued3a3e8xYztaYvRGYyWApDAgKEUl9IC_xwvVqUpo0BpaI=@accessvector.net>
- <20220708085713.GA6144@redhat.com> <R1W_P-BmV6F1JDyltK8tqX5q7DGQOcg0jkuq6XI36cXJBD1UZKMy5HjParo0Y2jehd6nA7mHEJzrMOGUsefDoyz7502IemibJyY-UFxdumM=@accessvector.net>
- <20220708150215.GA11062@redhat.com> <CAHk-=wjDfxvACHaU5PGS5XgetAp5oQQOCTXVqBG+e4_hsM2DeA@mail.gmail.com>
- <20220708175133.GB11062@redhat.com> <20220711161624.GA7683@redhat.com>
-In-Reply-To: <20220711161624.GA7683@redhat.com>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Mon, 11 Jul 2022 09:53:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiiqOsnqHmC+wiYNA0RvKJQJLZKaGqxfWn_VasuEYVwXA@mail.gmail.com>
-Message-ID: <CAHk-=wiiqOsnqHmC+wiYNA0RvKJQJLZKaGqxfWn_VasuEYVwXA@mail.gmail.com>
-Subject: Re: [PATCH] fix race between exit_itimers() and /proc/pid/timers
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     chris@accessvector.net,
-        "security@kernel.org" <security@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Sender: christyora7@gmail.com
+Received: by 2002:a05:6a11:5625:b0:2b8:95e2:4904 with HTTP; Mon, 11 Jul 2022
+ 09:53:52 -0700 (PDT)
+From:   "John N. Hendrick" <barr.johnhendrick@gmail.com>
+Date:   Mon, 11 Jul 2022 04:53:52 -1200
+X-Google-Sender-Auth: gEd59hcbYElbtjtP7e3VXU0u85U
+Message-ID: <CA+riN51RA1TtyUeEMYWut2mcKm3cu9U_jNQ-QCRiwZ5SFwVqdg@mail.gmail.com>
+Subject: Urgent Reply.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:42a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4586]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [christyora7[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [christyora7[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 9:16 AM Oleg Nesterov <oleg@redhat.com> wrote:
->
-> As Chris explains, the comment above exit_itimers() is not correct,
-> we can race with proc_timers_seq_ops. Change exit_itimers() to clear
-> signal->posix_timers with ->siglock held.
+-- 
+Greetings,
 
-Thanks. Applied,
+I'm john N. Hendrick
 
-                  Linus
+i have a business proposal for you
+
+thanks for your time and attention,
+
+From
+
+John,

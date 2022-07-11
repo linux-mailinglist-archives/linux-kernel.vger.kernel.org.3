@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DC256FA80
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD18F56FB16
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiGKJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S232053AbiGKJZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiGKJSB (ORCPT
+        with ESMTP id S232186AbiGKJYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:18:01 -0400
+        Mon, 11 Jul 2022 05:24:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3C511C2C;
-        Mon, 11 Jul 2022 02:11:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5199A5E306;
+        Mon, 11 Jul 2022 02:14:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 774DFB80D2C;
-        Mon, 11 Jul 2022 09:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE929C34115;
-        Mon, 11 Jul 2022 09:11:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B889BB80DB7;
+        Mon, 11 Jul 2022 09:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A7AC34115;
+        Mon, 11 Jul 2022 09:14:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530696;
-        bh=ZG3Rwy9JP7agOxmwR8S1bH1vQXy48ESdKQsRF6M9y7c=;
+        s=korg; t=1657530848;
+        bh=lAzmiCfDz21u/EMLBqNkRVAYC/L0KRl8sG9JE/xdBdA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vqeyddb/008She3tovImfeaz7cjO8Cp0fH6UbsDJnGmKhEmdBiPeIeHCjU1gEN212
-         4fa7NjQa4WZEynegkXHbdQWG0NPBKP9M+ZEceNMh0a7crofylRseWwIy094hDWYuuC
-         sZfo4htBXrCYXkCV6SbnzXH0TeE+8VhFyi40HXNc=
+        b=MDo0ykGCDS1Qk5Q/ZOEjTIoqTPU6GMasrWnH3f39xYMuV8cJ68uLyBALbFBKEEgOm
+         zaA7hTETE3E6CTDfNbOhpsChcuCYU2VW3qY4OdLlBz+vuv7HwhQRqbiaGO8VbJf3It
+         NQHzwkq2ljUrzrb/2YJ/iN4/FYNIRZgazFO+reao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org,
+        "stable@vger.kernel.org, linux-can@vger.kernel.org, Marc Kleine-Budde" 
+        <mkl@pengutronix.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@amd.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 28/38] i2c: cadence: Unregister the clk notifier in error path
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH 5.10 22/55] can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
 Date:   Mon, 11 Jul 2022 11:07:10 +0200
-Message-Id: <20220711090539.558704008@linuxfoundation.org>
+Message-Id: <20220711090542.421001049@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +55,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Satish Nagireddy <satish.nagireddy@getcruise.com>
+From: Jimmy Assarsson <extja@kvaser.com>
 
-[ Upstream commit 3501f0c663063513ad604fb1b3f06af637d3396d ]
+commit e6c80e601053ffdac5709f11ff3ec1e19ed05f7b upstream.
 
-This patch ensures that the clock notifier is unregistered
-when driver probe is returning error.
+The firmware of M32C based Leaf devices expects bittiming parameters
+calculated for 16MHz clock. Since we use the actual clock frequency of
+the device, the device may end up with wrong bittiming parameters,
+depending on user requested parameters.
 
-Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
-Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
-Tested-by: Lars-Peter Clausen <lars@metafoo.de>
-Reviewed-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This regression affects M32C based Leaf devices with non-16MHz clock.
+
+Fixes: 854a2bede1f0 ("can: kvaser_usb: get CAN clock frequency from device")
+Link: https://lore.kernel.org/all/20220603083820.800246-3-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h      |    1 
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c |   29 +++++++++++++++--------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c |   25 ++++++++++++-------
+ 3 files changed, 36 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 8a3a0991bc1c..3a1bdc75275f 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -985,6 +985,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 	return 0;
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+@@ -38,6 +38,7 @@
+ /* Kvaser USB device quirks */
+ #define KVASER_USB_QUIRK_HAS_SILENT_MODE	BIT(0)
+ #define KVASER_USB_QUIRK_HAS_TXRX_ERRORS	BIT(1)
++#define KVASER_USB_QUIRK_IGNORE_CLK_FREQ	BIT(2)
  
- err_clk_dis:
-+	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
- 	clk_disable_unprepare(id->clk);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--- 
-2.35.1
-
+ /* Device capabilities */
+ #define KVASER_USB_CAP_BERR_CAP			0x01
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -92,26 +92,33 @@ static const struct kvaser_usb_driver_in
+ };
+ 
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf = {
+-	.quirks = 0,
++	.quirks = KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
+ 
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err = {
+-	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS,
++	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
++		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
+ 
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leaf_err_listen = {
+ 	.quirks = KVASER_USB_QUIRK_HAS_TXRX_ERRORS |
+-		  KVASER_USB_QUIRK_HAS_SILENT_MODE,
++		  KVASER_USB_QUIRK_HAS_SILENT_MODE |
++		  KVASER_USB_QUIRK_IGNORE_CLK_FREQ,
+ 	.family = KVASER_LEAF,
+ 	.ops = &kvaser_usb_leaf_dev_ops,
+ };
+ 
++static const struct kvaser_usb_driver_info kvaser_usb_driver_info_leafimx = {
++	.quirks = 0,
++	.ops = &kvaser_usb_leaf_dev_ops,
++};
++
+ static const struct usb_device_id kvaser_usb_table[] = {
+-	/* Leaf USB product IDs */
++	/* Leaf M32C USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_DEVEL_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_PRODUCT_ID),
+@@ -152,16 +159,18 @@ static const struct usb_device_id kvaser
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_CAN_R_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf_err },
++
++	/* Leaf i.MX28 USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LITE_V2_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_LIGHT_2HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MINI_PCIE_2HS_PRODUCT_ID),
+-		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leaf },
++		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_leafimx },
+ 
+ 	/* USBCANII USB product IDs */
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN2_PRODUCT_ID),
+@@ -190,7 +199,7 @@ static const struct usb_device_id kvaser
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MEMO_PRO_2HS_V2_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+-	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_2CANLIN_PRODUCT_ID),
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_CANLIN_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID),
+ 		.driver_info = (kernel_ulong_t)&kvaser_usb_driver_info_hydra },
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -525,16 +525,23 @@ static void kvaser_usb_leaf_get_software
+ 	dev->fw_version = le32_to_cpu(softinfo->fw_version);
+ 	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
+ 
+-	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++	if (dev->driver_info->quirks & KVASER_USB_QUIRK_IGNORE_CLK_FREQ) {
++		/* Firmware expects bittiming parameters calculated for 16MHz
++		 * clock, regardless of the actual clock
++		 */
+ 		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
+-		break;
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
+-		dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
+-		break;
+-	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
+-		dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
+-		break;
++	} else {
++		switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
++		case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
++			break;
++		case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
++			break;
++		case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
++			dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
++			break;
++		}
+ 	}
+ }
+ 
 
 

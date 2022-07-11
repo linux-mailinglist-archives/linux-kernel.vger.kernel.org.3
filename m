@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA89F56FB22
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63F856FB2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbiGKJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S232329AbiGKJ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiGKJYX (ORCPT
+        with ESMTP id S232360AbiGKJYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86B222BF8;
-        Mon, 11 Jul 2022 02:14:17 -0700 (PDT)
+        Mon, 11 Jul 2022 05:24:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BFD24955;
+        Mon, 11 Jul 2022 02:14:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 162A761140;
-        Mon, 11 Jul 2022 09:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20870C34115;
-        Mon, 11 Jul 2022 09:14:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19868B80CEF;
+        Mon, 11 Jul 2022 09:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65760C341C0;
+        Mon, 11 Jul 2022 09:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530856;
-        bh=uGlEy0o9eAIMJ4xj6ANHll0AzmvXaid4kNNsamvBGuA=;
+        s=korg; t=1657530886;
+        bh=gn6z5xNUSkjtagaL4BSFt6iLReVorGh4Ro3OTLFfa/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m3KQpf0o26h5LxgTWSuOy3Wl/fEsvM7tBGOBCEniyqmrEOf6CPF0HqlFQqBaYaBcA
-         6JwjFpCNNQT//SZbgFtwQDOefzZ9zdCiS138ojFKM3o6GoUbvJ6Ax6M7o0KsGOjILN
-         SDT0IgzOteA5zWMcOqt85TWRv5JnomILLD35Bw3w=
+        b=I54qc7h19xyYQLj6t9sV0J94Jr4Ypq+te4QZt0dmI0gUPYCxG2Qj9O1KJ/eCMM/bb
+         o8g1thZIPLNEOnJVB5B8Ltzsy46U/OySSuW/zxJGxu96VpmYirPDbbOVD5EdaE66P6
+         W3vXzmAqLEn2MLZPNeiFCePqBjIMbelNRkKw+VyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dylan Yudaken <dylany@fb.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 001/112] io_uring: fix provided buffer import
-Date:   Mon, 11 Jul 2022 11:06:01 +0200
-Message-Id: <20220711090549.589060946@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.18 002/112] ALSA: usb-audio: Workarounds for Behringer UMC 204/404 HD
+Date:   Mon, 11 Jul 2022 11:06:02 +0200
+Message-Id: <20220711090549.617382071@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
 References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,64 +53,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dylan Yudaken <dylany@fb.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 09007af2b627f0f195c6c53c4829b285cc3990ec upstream.
+commit ae8b1631561a3634cc09d0c62bbdd938eade05ec upstream.
 
-io_import_iovec uses the s pointer, but this was changed immediately
-after the iovec was re-imported and so it was imported into the wrong
-place.
+Both Behringer UMC 202 HD and 404 HD need explicit quirks to enable
+the implicit feedback mode and start the playback stream primarily.
+The former seems fixing the stuttering and the latter is required for
+a playback-only case.
 
-Change the ordering.
+Note that the "clock source 41 is not valid" error message still
+appears even after this fix, but it should be only once at probe.
+The reason of the error is still unknown, but this seems to be mostly
+harmless as it's a one-off error and the driver retires the clock
+setup and it succeeds afterwards.
 
-Fixes: 2be2eb02e2f5 ("io_uring: ensure reads re-import for selected buffers")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
-Link: https://lore.kernel.org/r/20220630132006.2825668-1-dylany@fb.com
-[axboe: ensure we don't half-import as well]
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215934
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220624101132.14528-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ sound/usb/quirks.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3495,6 +3495,13 @@ static ssize_t io_iov_buffer_select(stru
- 	return __io_iov_buffer_select(req, iov, issue_flags);
- }
- 
-+static inline bool io_do_buffer_select(struct io_kiocb *req)
-+{
-+	if (!(req->flags & REQ_F_BUFFER_SELECT))
-+		return false;
-+	return !(req->flags & REQ_F_BUFFER_SELECTED);
-+}
-+
- static struct iovec *__io_import_iovec(int rw, struct io_kiocb *req,
- 				       struct io_rw_state *s,
- 				       unsigned int issue_flags)
-@@ -3854,18 +3861,19 @@ static int io_read(struct io_kiocb *req,
- 		if (unlikely(ret < 0))
- 			return ret;
- 	} else {
-+		rw = req->async_data;
-+		s = &rw->s;
-+
- 		/*
- 		 * Safe and required to re-import if we're using provided
- 		 * buffers, as we dropped the selected one before retry.
- 		 */
--		if (req->flags & REQ_F_BUFFER_SELECT) {
-+		if (io_do_buffer_select(req)) {
- 			ret = io_import_iovec(READ, req, &iovec, s, issue_flags);
- 			if (unlikely(ret < 0))
- 				return ret;
- 		}
- 
--		rw = req->async_data;
--		s = &rw->s;
- 		/*
- 		 * We come here from an earlier attempt, restore our state to
- 		 * match in case it doesn't. It's cheap enough that we don't
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1842,6 +1842,10 @@ static const struct usb_audio_quirk_flag
+ 		   QUIRK_FLAG_SHARE_MEDIA_DEVICE | QUIRK_FLAG_ALIGN_TRANSFER),
+ 	DEVICE_FLG(0x1395, 0x740a, /* Sennheiser DECT */
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
++	DEVICE_FLG(0x1397, 0x0508, /* Behringer UMC204HD */
++		   QUIRK_FLAG_PLAYBACK_FIRST | QUIRK_FLAG_GENERIC_IMPLICIT_FB),
++	DEVICE_FLG(0x1397, 0x0509, /* Behringer UMC404HD */
++		   QUIRK_FLAG_PLAYBACK_FIRST | QUIRK_FLAG_GENERIC_IMPLICIT_FB),
+ 	DEVICE_FLG(0x13e5, 0x0001, /* Serato Phono */
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x154e, 0x1002, /* Denon DCD-1500RE */
 
 

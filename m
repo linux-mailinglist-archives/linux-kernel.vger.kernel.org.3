@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99979570C6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8C2570C6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiGKVHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S232144AbiGKVHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiGKVGp (ORCPT
+        with ESMTP id S229476AbiGKVGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:06:45 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322DD76EAB;
-        Mon, 11 Jul 2022 14:06:44 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eq6so7776191edb.6;
-        Mon, 11 Jul 2022 14:06:44 -0700 (PDT)
+        Mon, 11 Jul 2022 17:06:46 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6FE72ED3;
+        Mon, 11 Jul 2022 14:06:45 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id mf4so9723158ejc.3;
+        Mon, 11 Jul 2022 14:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oLBfjcLmD6YsbkjIodLWwt28j3M7ElYSLrVTRWGG6T4=;
-        b=P4O30aAsE0qULmewnkHhs/ve4U4Oc/1NiXNPJ0EdoJdniA+vFSnPsUXf5BQWw11bEf
-         nizX+v3wwbbMNW5qf3v3ADmPyci2GrTEajFpqfhqIslLDRRYZwmcK0e5nRcgrn34fUrZ
-         7z0xQzbDWMJ9erpFluUQ72tbvzQHWNW9YAckuBQ0pjBI6Y5QC/IrRY8MJyM3/lvObtyr
-         6A3ioa77Urqr5qmEXdqs/TZOZLJTYjE1Sl6N4ZXpTcl4dZgcgGUBSR17tjgJdQdGROXF
-         mwXslj+On9YSnMKSFoJatEwpLkccra1SZwzXoNC9zVy6NSdgIF2uZgdWgOsvt2JChYtl
-         a3og==
+        bh=NvqH53z3vfF6U45ZTWaGu0TE308tKtxhxwmMlElMdBE=;
+        b=qYvIvMcpLeWDoKMI/RLevejKWOs/kEIkWr8bMRdXO4c5POuhJGQf1bga7kZ75FfUFI
+         QsaNnlLx4Xbbw+R6EZbrgn7IrHbK+MCHxAN41CgqdYCx0R3Zs6SkSNNGW4Biav6AvQBB
+         xEg36YoY6VTY1gVaelNJUR/Ft+AhOn4PpV2aLANEIs7urxD5OODsJ3BlFsSzyIKXyyyA
+         5VUtOTgZKHOCIUWWwxmcErrIY06BG/7cpNQfEugh/BNGRcfTwKRb+upgZqgU+iQppHmv
+         rCHQ/jdGJeBuyiQLbjmj962Y0auQcpmyYhgalIvXAP4sSyDpvlWYr9xLH+UYaNnuFiVH
+         fJHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oLBfjcLmD6YsbkjIodLWwt28j3M7ElYSLrVTRWGG6T4=;
-        b=QHv9fVJz8IQ6R0UjW622ibeQCan+rXu322kYEc9yodS3gJJoZ9u5NDXi6r1jGQy12O
-         8Z+DWIYxlC+m5TIzRFk4Fsoy6KVaIPzvWWxZIXpq8frH7jYzRrffEDJqPWchRlRrUsHM
-         o/zGV7trXGGG4L52Hhh7iBBZs5lb2ygDKONCJnn5zkkM6BT2JGKPe/EShie+/Kd4CkYX
-         PntM1kdWRxVUqDLeFk9LOODoN63P3BYqnf9tdA8nOC8E+fAi+GIa8amCvh7/PB5Bb4mX
-         zYfpjt65bERwK9AU37QVL+6oi1sCWqMUibnaOMrvn9cS3LlWwVE7qxmz6aSJLrMzdN+t
-         ynEg==
-X-Gm-Message-State: AJIora8eLKYDLb9zseCnF/ArL7deVd1qAEkke+hxzFt+vjthuYqWQDQ1
-        4Ayh8EShyME0xTvfuRf+sWE=
-X-Google-Smtp-Source: AGRyM1u2WyDYgjKJPz3dB8Wpohf70WV87DHt2v9c88x/RFHihxzbbyPFGOGbBSezs1UcDFmpRAxsqA==
-X-Received: by 2002:a05:6402:5cb:b0:434:eb48:754f with SMTP id n11-20020a05640205cb00b00434eb48754fmr27774202edx.421.1657573602805;
-        Mon, 11 Jul 2022 14:06:42 -0700 (PDT)
+        bh=NvqH53z3vfF6U45ZTWaGu0TE308tKtxhxwmMlElMdBE=;
+        b=ukytmXfYKCwzPgSh68O/p9XiTdtZPzcZxbimEElvfJHbMqVRaG55PDC8nRvdzZTqae
+         8lJfAo4Ovn13f/oOyr4DV398+oGB7VVW8zq2X+7/sjxZrL5tWoVzOq8ZRMkzhF4iSZ6Y
+         0jRf9RFTF1+g3Pyc0TTHQKt3F6ZTLAL8/ifksrIQRDYrzjUYawisFeuwZ3U6oKPwKD2z
+         ETwCWH6oMWlnqzPRfgLckiqXcSVXetl2V+t6H4jLZNnt+XBF3mD+fnZhBzEW+z+108F+
+         5MAUg73lNy8ntwBN5qGdjhmQ4n9gT+iBJvWRItbkugP9cgCmK12l7l4wFMxQ611Y4jPZ
+         Uv/A==
+X-Gm-Message-State: AJIora8M9Mx7p7cB6JLbElhcfFuSLIO2zGzVidIEyLMtM99ShUm+cFEB
+        UN/ej46a0Gvxn36a0cmnZSc=
+X-Google-Smtp-Source: AGRyM1s937WdgEeYwZkVmEzHdo1tCO78QyCuWBMwTdXsFbD93r+Moi+/aQECuJSlpc5HRaOOy9Esqg==
+X-Received: by 2002:a17:907:a042:b0:72b:4fac:1ddf with SMTP id gz2-20020a170907a04200b0072b4fac1ddfmr8602337ejc.285.1657573603837;
+        Mon, 11 Jul 2022 14:06:43 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-104.zg.cable.xnet.hr. [94.253.165.104])
-        by smtp.googlemail.com with ESMTPSA id lb17-20020a170907785100b0072a430d2abdsm3052562ejc.91.2022.07.11.14.06.41
+        by smtp.googlemail.com with ESMTPSA id lb17-20020a170907785100b0072a430d2abdsm3052562ejc.91.2022.07.11.14.06.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 14:06:42 -0700 (PDT)
+        Mon, 11 Jul 2022 14:06:43 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -56,9 +56,9 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v2 6/7] clk: qcom: apss-ipq-pll: update IPQ6018 Alpha PLL config
-Date:   Mon, 11 Jul 2022 23:06:33 +0200
-Message-Id: <20220711210634.3042092-6-robimarko@gmail.com>
+Subject: [PATCH v2 7/7] clk: qcom: apss-ipq-pll: add support for IPQ8074
+Date:   Mon, 11 Jul 2022 23:06:34 +0200
+Message-Id: <20220711210634.3042092-7-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220711210634.3042092-1-robimarko@gmail.com>
 References: <20220711210634.3042092-1-robimarko@gmail.com>
@@ -74,40 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the IPQ6018 Alpha PLL config to the latest one from the downstream
-5.4 kernel[1].
+Add support for IPQ8074 since it uses the same PLL setup, however it uses
+slightly different Alpha PLL config.
 
-This one should match the production SoC-s.
+Alpha PLL config was obtained by dumping PLL registers from a running
+device.
 
-Tested on IPQ6018 CP01-C1 reference board.
-
-[1] https://git.codelinaro.org/clo/qsdk/oss/kernel/linux-ipq-5.4/-/blob/NHSS.QSDK.12.1.r4/drivers/clk/qcom/apss-ipq-pll.c#L41
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/apss-ipq-pll.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changes in v2:
+* Drop hardcoded compatible check for IPQ6018 to do the PLL config and
+utilize match data provided by previous commit
+* Add IPQ8074 Alpha PLL config using match data
+* Update commit description to reflect changes
+---
+ drivers/clk/qcom/apss-ipq-pll.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
-index ba77749b16c4..a4016f3854c2 100644
+index a4016f3854c2..a5aea27eb867 100644
 --- a/drivers/clk/qcom/apss-ipq-pll.c
 +++ b/drivers/clk/qcom/apss-ipq-pll.c
-@@ -39,10 +39,14 @@ static struct clk_alpha_pll ipq_pll = {
- 
- static const struct alpha_pll_config ipq6018_pll_config = {
- 	.l = 0x37,
--	.config_ctl_val = 0x04141200,
--	.config_ctl_hi_val = 0x0,
-+	.config_ctl_val = 0x240d4828,
-+	.config_ctl_hi_val = 0x6,
- 	.early_output_mask = BIT(3),
-+	.aux2_output_mask = BIT(2),
-+	.aux_output_mask = BIT(1),
- 	.main_output_mask = BIT(0),
-+	.test_ctl_val = 0x1c0000C0,
-+	.test_ctl_hi_val = 0x4000,
+@@ -49,6 +49,18 @@ static const struct alpha_pll_config ipq6018_pll_config = {
+ 	.test_ctl_hi_val = 0x4000,
  };
  
++static const struct alpha_pll_config ipq8074_pll_config = {
++	.l = 0x48,
++	.config_ctl_val = 0x200d4828,
++	.config_ctl_hi_val = 0x6,
++	.early_output_mask = BIT(3),
++	.aux2_output_mask = BIT(2),
++	.aux_output_mask = BIT(1),
++	.main_output_mask = BIT(0),
++	.test_ctl_val = 0x1c000000,
++	.test_ctl_hi_val = 0x4000,
++};
++
  static const struct regmap_config ipq_pll_regmap_config = {
+ 	.reg_bits		= 32,
+ 	.reg_stride		= 4,
+@@ -89,6 +101,7 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id apss_ipq_pll_match_table[] = {
+ 	{ .compatible = "qcom,ipq6018-a53pll", .data = &ipq6018_pll_config },
++	{ .compatible = "qcom,ipq8074-a53pll", .data = &ipq8074_pll_config },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
 -- 
 2.36.1
 

@@ -2,170 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC3D570D7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C09570D7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiGKWll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S231752AbiGKWnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiGKWlj (ORCPT
+        with ESMTP id S231268AbiGKWni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:41:39 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AD052DCD;
-        Mon, 11 Jul 2022 15:41:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aKE+FMMZKVL6SfmObCAWf3IgnXA7AMhM4dBNtwsoGc2jNExn8xRmzWoAIxYfiMpGZK8hcxV4ZVpQHkfNpsu7zIjP9UUxJaia1afn7IdqticO/MCMvCaE2Vg8v5WfUJaNwvdZHULbb2p/7QG4gbppi5NJVtDjMC+qrQATcAMYl8NqpdJ2COZDuoRzXCkuMpknCeg18o8diY1qssQA4bDHn+5eRea+BSYtQ//pC2bIj3cTS8hUDsFlnE3QA1uoNOhk9AL7GBfrAcBC/p/cwjXArs7qWsWcTO+qokl8OUnDS0tBgmmfXlYoV60TgPJiKjTQk5VlNST/CyOW+B1yzfmzPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OtVpm/MxpE14sKaaNhhD1KQzVZFTzeDA+mZMpl/ND3k=;
- b=DB0Fz3iWszSMc2umwhzyw2XUaDXvy5hL+E+4XWhfi0gGYr+bIHzg59RdOH27FElSiUb5efH36zx3f4Pnlw6hZqz8OJqOy+NT8YTw7gsWgqLYEzVPKWAv7wU7iP5GCUs231Kzk1+dGMP33RIPY9ReLJjeNUvBe6sw1w+u3Mgmd6Gf+mLEBHP1yuacIcY8ecVFVf9mn8txQ2N1PBdW0o8N8okVUegt35rP81BuWW/tuKZkWvlPfddNfolJ3EpBEg1bR8q13H0jvCuJahdN7KOpRf+IoMt5+6jndEfwdSIcIzRT3/9iVpucSrbVQVcGCy7SHzM41Ong7mGk6k8EzW3m6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OtVpm/MxpE14sKaaNhhD1KQzVZFTzeDA+mZMpl/ND3k=;
- b=YyRaEKwW1unGr279ht9YRif3X3R7FQF9xYbU6XvMgR2C5IojZQKzHh2XLRc44nlQn6vFIJ4uyY6jEI0oTSI2g8oj+6jU/vWT8pQgSOYJ0SUIwExBKQhCp2i6S7HM9573oy4Y/e4OWD8MC5VzI9P4V2w6hGfiOZK/Ddo/2bsGYvk=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by BN9PR12MB5209.namprd12.prod.outlook.com (2603:10b6:408:11a::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Mon, 11 Jul
- 2022 22:41:35 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5417.016; Mon, 11 Jul 2022
- 22:41:35 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Peter Gonda <pgonda@google.com>
-CC:     the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 28/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH
- command
-Thread-Topic: [PATCH Part2 v6 28/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH
- command
-Thread-Index: AQHYlS9F8Lv7wrs5NE6SmQ1dqRz5cK15oJ+w
-Date:   Mon, 11 Jul 2022 22:41:35 +0000
-Message-ID: <SN6PR12MB27672AA31E96179256235C338E879@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
- <CAMkAt6obGwyiJh7J34Vt8tC+XXMNm8YPrv4gV=TVoF2Xga5GjQ@mail.gmail.com>
-In-Reply-To: <CAMkAt6obGwyiJh7J34Vt8tC+XXMNm8YPrv4gV=TVoF2Xga5GjQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-07-11T20:33:37Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=c4c7b04a-7635-4db7-927f-1c57d5cc5f3a;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-07-11T22:41:33Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 2d22016b-3d85-4fea-9347-ae5b8e6bb5f8
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 70541fe2-f9bf-44e9-ac3b-08da638e8278
-x-ms-traffictypediagnostic: BN9PR12MB5209:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HMmjAVTGVvXuJviqe0bzYQvwG9wg5hcKNnVYVDuc3kpXbAOUVHe7fScTeQM2lhUeCUe/jVnjJIIw+ghVONuR/cv0pRfbqxtQR/6/jfpIsFKhIf4B4+yjgbbts/zI5EkAZVrVybsoFlc+hewuSZmvo7pwyvZDNfTqbEtLh6ulMq/UlOqbid2Lf1G1ga40n2iyYmnG5bQnHdpa8TXAsvUahvCSzvbOiGjcT1wbpsbSb2sg/93WKGqyoLVprm0E9yvTGtACxANaKdpJukL6OqVfLeVGMhiLLDduu+7v3F/xSdt4IJR0vyCHs4e2IaYWGWGHxYBMTQg23tLUkEJJz4AZWYF4oV29HSrnfPzLf29gXFEP17kato+JTmUbuZwiXPiotQhf4n7YU9n24hQxs4WSUyT+RUN8wvEzNQ+pmcbozKKS4zgoEKKdI1Ovr56ah2Xw6dmaxH8Sz/G3haD0sCwaKZU3xIvTnU8alTqGnKeI+LWz+RpCplm/+Q3A6DPiwcPBwqqQJSMrgRLte0xE7FkKR0ZGnAJUYIf37kwOT/B59sIDSHkVnhOERGmMOXeH1omqCX0Kf84196by74kG5iYm+OFz4CEhIeXUZIdqv0NDibczzO51y7BfKM1lKo/jJ9Top1pThXYM7wTNzUT7C7lMLMptbnsIWYOjhIo9AA+11FWRnNfUHRrViNl5qhxb+LDDYpb4BMDwphaOGESoJryf+D2jBCnfpXhgKZjHLxgUqOasYkY33MUxfbCd2LN6x6qNa8BcQiECUJTIRUXNXv2Ui8u68EW35Ye0u4OaCQjWz94wchqsdYVAvgxlGmMaYz4q
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(366004)(136003)(396003)(6506007)(7696005)(54906003)(9686003)(8936002)(26005)(41300700001)(76116006)(83380400001)(5660300002)(71200400001)(7416002)(64756008)(66476007)(316002)(66946007)(66556008)(186003)(2906002)(52536014)(7406005)(6916009)(4326008)(38070700005)(55016003)(8676002)(66446008)(86362001)(38100700002)(478600001)(33656002)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXJOYkltbUhUUmprMXBvbnJZaWRnOHJ5S21RSXltRnVDdkN2TFNVSDlwL01O?=
- =?utf-8?B?cWZxMVgvV0N5Nk1BUEY3OEtoakxXU0ltVmRGQkcrd1BRVjc5cE9kbUNOdjJZ?=
- =?utf-8?B?N0hDc3R5SXRvUlhoTmhDbXM0N09ETEpZWGExeTVIOFExQnFuNHdTL3VuWCtU?=
- =?utf-8?B?aUdyemk2QTFKZENjcHZtUVhnL2dxS01NYWFQcms5S1pRYUIvUUpQakZ5d3dQ?=
- =?utf-8?B?TmVKeU1EUjhocko0TU15YkFDSll0OHFyU2dsU0d5cTBodXFwdi9JL1AwMnZ6?=
- =?utf-8?B?aEcyUEV2cU82cDRFd3B1TUVEZi95S2FCdW9rN0s2eVpFUTU2RVYxNFNjRFlZ?=
- =?utf-8?B?UGp0aEhKRWNPRjlOSkREcVJLZ043MDJ2TTN2VkM3azBRZ0g2emMrMUR5UWFM?=
- =?utf-8?B?TTZlL3pmbDg5ZTdvcENZY1pVVEtlZUt1dFNGSVRpVjBDWVZLYnNxNUU3ejF2?=
- =?utf-8?B?MWlvNzVrc3lRbzhwdEhrYlNZaldsYnZsandpUVhPaUwvOW8wK2xmWDZaOHFy?=
- =?utf-8?B?aGZuNFJlOGFCeWQwbDIrMXNZOVoweEdkellsV2d5aTN5MlJqb0VGR3BVU2hN?=
- =?utf-8?B?V1RWcVVwSDJnVG9WSDJjTzNVVFRxZGhhdDVuVUF5eWVqRHhmanNqblBobG1m?=
- =?utf-8?B?S2JyS3E3YlE0L3FnRlp1S0NYVFd3MjlCWXliNWxpandnUzhyeXgzRS8vR1lu?=
- =?utf-8?B?RW5CS25pVzlZNWEvS0hEcWZscmdHQndzTytDbURHdTh0TVRDcG03Umg4NWFk?=
- =?utf-8?B?bUNJajljb21ub2hFYm1IUFdqZytZVlYwZ0RhYUFrOVRRS0dOUHdkdWxaOGdp?=
- =?utf-8?B?b1dlZndUN2Nhd0xiMWF6T3YvWmUvd3hKY2x6eFBPU3NYWGVuRkk1ZHRvQy9h?=
- =?utf-8?B?ZG9JTkJWRitmYVBKTEdwMENsNXZ1aGVaMWxiZVEyVFpzRWVpeHR2Q1lGTEwr?=
- =?utf-8?B?ZldQZlM0eTZFYnExbXhmWkJFREFQN3NKV3VZc2hFelVIU0FLbDRNV2tvek9a?=
- =?utf-8?B?N2FLNG9XQWNJR1ZyMXNpNXQ4VTZCVHNDSWE5eVRoU0VuTnF6M2hFZnJtRVIv?=
- =?utf-8?B?eWZhYXNNR1kvRkdmb28vWWRiRlh0U1B0Q0FYNEJPOEVNTTNsWDgycVRWWC9S?=
- =?utf-8?B?Zm45Vk1KcmZrZ3BsV3RhR3dMUy8veVZlc0hEMFBRSDg2ajVFdU1DYjhDQTVW?=
- =?utf-8?B?UU5Zb0VUQmJ1ZjlodjhQN0FjMkhlQXVpWDlTRE5CaU9VMnQzUVMxQnU5Y3NQ?=
- =?utf-8?B?L3UvM09zVkFTVnNTYzlBZ20rVlEzOW9wWjl4UWR5RzJRUXlPN3ZneDlKM0h4?=
- =?utf-8?B?L3FCU1hkT0ZqbDVjNk1DT2Q4dWNrNGhaSEt0Zm1UYUxnT0dHYnVBVGtKY2tF?=
- =?utf-8?B?MW13UFRvdHBaREhLdFhBNkJvUmtZZWZyNmFvRWR1R3VUanM0RGU3dmpsdzFy?=
- =?utf-8?B?d3dZV2JuYzJ3dmZyTUwxNmtpd0hJM0NDZ2lFWFdPb1BIVlF5QWtOSHhHcWI5?=
- =?utf-8?B?TWQ2czNSQjdXd0xHNnhEYUQ0UTBsWW54a2FLMXkxS3gzcHlySDlwNTRGNGwy?=
- =?utf-8?B?TDZaa0laUFJkSmxPSFF3U3cvRFF0aWJQamZBemxpenlTVmtTVUtDbFh3WWdS?=
- =?utf-8?B?dGNWTGsyaUZkSFBFZStHTVFyOW45VE5JNXdjRUVvajhKOSs1TDVjL1ZCdzBk?=
- =?utf-8?B?dGoyWVMyYW9PZGJDQlNaWkRDdEtiMmFlQjN4Q01kVmtFS1l6dGZsNzlld2RS?=
- =?utf-8?B?QjdVSnQ5aXBoTFNWOWR5S0NIOWY1dnFZbTUvYVVQU3pac0Ruc0RSRTlFaTF1?=
- =?utf-8?B?bDhjTlhMcnVsRjZrTVVaSnl3eEVSK0lGVTBtd05hczlkOGt3UUlaZjk5Sk5T?=
- =?utf-8?B?bWEzOWh2NjUyd2FzelpLQXJuUmtaSk1iMVVVakl2c242a05JTldhOHJrZW9p?=
- =?utf-8?B?Nnk3eldoWlZEMlBmVlg0eWJTTmgzdit5d0R1RXVmVndxQmZqc3dHOWhEdEo3?=
- =?utf-8?B?K3IyTVhWRlJ1M2FvUGdTMThTajAwVVRiMGhjOXRoa0ViS3EvWTE0NWlncWhj?=
- =?utf-8?B?d1MwSWNWWnIvY3lRZitlMk0xR1B1WUFNOVpnT2ZIcytVVWVGRlRoTmluRHhK?=
- =?utf-8?Q?fSLw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 11 Jul 2022 18:43:38 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AF63F7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:43:35 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id os14so11267941ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kCxXr7faPOAeZ+53A7qFX+1uE18Nt0X/UdGIdErEIq4=;
+        b=kDaHkQyBJ9eKohu5OAywIaJ7fdoc+bGEDPqEkf0vJtbHPxhiLRLfnMWzvygx/It+em
+         XkX0KmJ78amFb8yhEEqfSUiO8tXZf0HnJIPsRQi0Oh2DSt5CPxFUvR1xJf31tzeeEaXG
+         Rp9S9rQQUyv2BFxreUPQbsR2PMOyzcga8JBcWWJhHoO0M1Kny7Gq8zJq6i6I/5ATNjc6
+         hCTZWACoBi3e3JS5qd7PboKWVNAr68vWEWlqSopLy1jpj8lkJSymR6cTRrCklTJ/5+Bd
+         7YNDfGTfysifndyKyNUDUHdXhUKotsTjtNjZA+jCcQnh6WjelPzvSb4MOIk3NrmqrLaC
+         ZPHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kCxXr7faPOAeZ+53A7qFX+1uE18Nt0X/UdGIdErEIq4=;
+        b=aW+sXY6DKATCEYgF9Dz6cm753U594NOR5ocEkQHgOoOzaxb4iDhiITCb8EhHqtYRgL
+         ZK5z+0yfdIuYmeWAtfSl2AwhgiEhPtuMFIQgFS1PtdHWv6RRANDkOfU+qeSjv/ktwoPw
+         lnsWZdA1gcYH5OLhLc8lgI6HQlZZ64kjpHkJEMD59dPKxi4n09hw25mGzt+niHafGCKs
+         EdYAMR4OLdaMiadkchy+VmPTf1Wgl9IbQ/rt7kAU3PXXkY7MaTZ5wZpbFJkz10kNX3sB
+         BEGu31ZLPq1g4UPyjKMFXvAJ5MCnBoHi5vm/5CEdfI7UBDJ8MghL2GXKpNsdV3YJFPyO
+         HRjA==
+X-Gm-Message-State: AJIora+kgElA9rAogrdY2arzh9DcMngHDwHoejrtMO6ldMGgqSJ7TUFw
+        hUubGBDSQrXk3Pco6NmD7LQ=
+X-Google-Smtp-Source: AGRyM1ulSYCkyOGRc+/QJltXmnEtRMTM9mJDwoqWPRtr4wFUalAhf0LV4hMgTLvrzver5Y5anOnWMA==
+X-Received: by 2002:a17:907:6d86:b0:72b:5ad6:6df1 with SMTP id sb6-20020a1709076d8600b0072b5ad66df1mr6456076ejc.264.1657579414361;
+        Mon, 11 Jul 2022 15:43:34 -0700 (PDT)
+Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id f5-20020a1709064dc500b0072af7566927sm3176853ejw.13.2022.07.11.15.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 15:43:33 -0700 (PDT)
+Message-ID: <f5ebfd23-26b1-1407-c0d4-a3a60f860c5b@gmail.com>
+Date:   Tue, 12 Jul 2022 00:43:32 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70541fe2-f9bf-44e9-ac3b-08da638e8278
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 22:41:35.1330
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u2B8AAgnkaNV2w+5Hjzqmz8SpRBcfrGQtGs+ixnl8KaHG7zN22P5ak2v47WrIK6oi49C88dYMMpWGb3hzZKqtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5209
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] staging: r8188eu: remove HW_VAR_MLME_SITESURVEY from
+ SetHwReg8188EU()
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220711174417.10721-1-straube.linux@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220711174417.10721-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -173,64 +76,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhlbGxvIFBldGVyLA0KDQo+PiBU
-aGUgS1ZNX1NFVl9TTlBfTEFVTkNIX0ZJTklTSCBmaW5hbGl6ZSB0aGUgY3J5cHRvZ3JhcGhpYyBk
-aWdlc3QgYW5kIA0KPj4gc3RvcmVzIGl0IGFzIHRoZSBtZWFzdXJlbWVudCBvZiB0aGUgZ3Vlc3Qg
-YXQgbGF1bmNoLg0KPj4NCj4+IFdoaWxlIGZpbmFsaXppbmcgdGhlIGxhdW5jaCBmbG93LCBpdCBh
-bHNvIGlzc3VlcyB0aGUgTEFVTkNIX1VQREFURSANCj4+IGNvbW1hbmQgdG8gZW5jcnlwdCB0aGUg
-Vk1TQSBwYWdlcy4NCg0KPkdpdmVuIHRoZSBndWVzdCB1c2VzIHRoZSBTTlAgTkFFIEFQIGJvb3Qg
-cHJvdG9jb2wgd2Ugd2VyZSBleHBlY3RpbmcgdGhhdCB0aGVyZSB3b3VsZCBiZSBzb21lIG9wdGlv
-biB0byBhZGQgdkNQVXMgdG8gdGhlIFZNIGJ1dCBtYXJrIHRoZW0gYXMgInBlbmRpbmcgQVAgYm9v
-dCBjcmVhdGlvbiBwcm90b2NvbCIgc3RhdGUuIFRoaXMgd291bGQgYWxsb3cgdGhlIExhdW5jaERp
-Z2VzdCBvZiBhIFZNIGRvZXNuJ3QgY2hhbmdlID5qdXN0IGJlY2F1c2UgaXRzIHZDUFUgY291bnQg
-Y2hhbmdlcy4gV291bGQgaXQgYmUgcG9zc2libGUgdG8gYWRkIGEgbmV3IGFkZCBhbiBhcmd1bWVu
-dCB0byBLVk1fU05QX0xBVU5DSF9GSU5JU0ggdG8gdGVsbCBpdCB3aGljaCB2Q1BVcyB0byBMQVVO
-Q0hfVVBEQVRFIFZNU0EgcGFnZXMgZm9yIG9yIHNpbWlsYXJseSBhIG5ldyBhcmd1bWVudCBmb3Ig
-S1ZNX0NSRUFURV9WQ1BVPw0KDQpCdXQgZG9uJ3Qgd2Ugd2FudC9uZWVkIHRvIG1lYXN1cmUgYWxs
-IHZDUFVzIHVzaW5nIExBVU5DSF9VUERBVEVfVk1TQSBiZWZvcmUgd2UgaXNzdWUgU05QX0xBVU5D
-SF9GSU5JU0ggY29tbWFuZCA/DQoNCklmIHdlIGFyZSBnb2luZyB0byBhZGQgdkNQVXMgYW5kIG1h
-cmsgdGhlbSBhcyAicGVuZGluZyBBUCBib290IGNyZWF0aW9uIiBzdGF0ZSB0aGVuIGhvdyBhcmUg
-d2UgZ29pbmcgdG8gZG8gTEFVTkNIX1VQREFURV9WTVNBcyBmb3IgdGhlbSBhZnRlciBTTlBfTEFV
-TkNIX0ZJTklTSCA/DQoNCmludCBzbnBfbGF1bmNoX3VwZGF0ZV92bXNhKHN0cnVjdCBrdm0gKmt2
-bSwgc3RydWN0IGt2bV9zZXZfY21kIA0KPj4gKyphcmdwKSB7DQo+PiArICAgICAgIHN0cnVjdCBr
-dm1fc2V2X2luZm8gKnNldiA9ICZ0b19rdm1fc3ZtKGt2bSktPnNldl9pbmZvOw0KPj4gKyAgICAg
-ICBzdHJ1Y3Qgc2V2X2RhdGFfc25wX2xhdW5jaF91cGRhdGUgZGF0YSA9IHt9Ow0KPj4gKyAgICAg
-ICBpbnQgaSwgcmV0Ow0KPj4gKw0KPj4gKyAgICAgICBkYXRhLmdjdHhfcGFkZHIgPSBfX3BzcF9w
-YShzZXYtPnNucF9jb250ZXh0KTsNCj4+ICsgICAgICAgZGF0YS5wYWdlX3R5cGUgPSBTTlBfUEFH
-RV9UWVBFX1ZNU0E7DQo+PiArDQo+PiArICAgICAgIGZvciAoaSA9IDA7IGkgPCBrdm0tPmNyZWF0
-ZWRfdmNwdXM7IGkrKykgew0KPj4gKyAgICAgICAgICAgICAgIHN0cnVjdCB2Y3B1X3N2bSAqc3Zt
-ID0gDQo+PiArIHRvX3N2bSh4YV9sb2FkKCZrdm0tPnZjcHVfYXJyYXksIGkpKTsNCg0KPiBXaHkg
-YXJlIHdlIGl0ZXJhdGluZyBvdmVyIHxjcmVhdGVkX3ZjcHVzfCByYXRoZXIgdGhhbiB1c2luZyBr
-dm1fZm9yX2VhY2hfdmNwdT8NCg0KWWVzIHdlIHNob3VsZCBiZSB1c2luZyBrdm1fZm9yX2VhY2hf
-dmNwdSgpLCB0aGF0IHdpbGwgYWxzbyBoZWxwIGF2b2lkIHRvdWNoaW5nIGltcGxlbWVudGF0aW9u
-DQpzcGVjaWZpYyBkZXRhaWxzIGFuZCBoaWRlIGNvbXBsZXhpdGllcyBzdWNoIGFzIHhhX2xvYWQo
-KSwgbG9ja2luZyByZXF1aXJlbWVudHMsIGV0Yy4NCg0KQWRkaXRpb25hbGx5LCBrdm1fZm9yX2Vh
-Y2hfdmNwdSgpIHdvcmtzIG9uIG9ubGluZV9jcHVzLCBidXQgSSB0aGluayB0aGF0IGlzIHdoYXQg
-d2Ugc2hvdWxkDQpiZSBjb25zaWRlcmluZyBhdCBMQVVOQ0hfVVBEQVRFX1ZNU0EgdGltZSwgdmlh
-LWEtdmlzIGNyZWF0ZWRfdmNwdXMuDQoNCj4+ICsgICAgICAgICAgICAgICB1NjQgcGZuID0gX19w
-YShzdm0tPnNldl9lcy52bXNhKSA+PiBQQUdFX1NISUZUOw0KPj4gKw0KPj4gKyAgICAgICAgICAg
-ICAgIC8qIFBlcmZvcm0gc29tZSBwcmUtZW5jcnlwdGlvbiBjaGVja3MgYWdhaW5zdCB0aGUgVk1T
-QSAqLw0KPj4gKyAgICAgICAgICAgICAgIHJldCA9IHNldl9lc19zeW5jX3Ztc2Eoc3ZtKTsNCj4+
-ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0
-dXJuIHJldDsNCg0KPkRvIHdlIG5lZWQgdG8gdGFrZSB0aGUgJ3ZjcHUtPm11dGV4JyBsb2NrIGJl
-Zm9yZSBtb2RpZnlpbmcgdGhlIHZjcHUsbGlrZSB3ZSBkbyBmb3IgU0VWLUVTIGluIHNldl9sYXVu
-Y2hfdXBkYXRlX3Ztc2EoKT8NCg0KVGhpcyBpcyB1c2luZyB0aGUgcGVyLWNwdSB2Y3B1X3N2bSBz
-dHJ1Y3R1cmUsICBidXQgd2UgbWF5IG5lZWQgdG8gZ3VhcmQgYWdhaW5zdCB0aGUgS1ZNIHZDUFUg
-aW9jdGwgcmVxdWVzdHMsIHNvIHllcyBpdCBpcw0Kc2FmZXIgdG8gdGFrZSB0aGUgJ3ZjcHUtPm11
-dGV4JyBsb2NrIGhlcmUuIA0KDQo+PiArICAgICAgIC8qDQo+PiArICAgICAgICAqIElmIGl0cyBh
-biBTTlAgZ3Vlc3QsIHRoZW4gVk1TQSB3YXMgYWRkZWQgaW4gdGhlIFJNUCBlbnRyeSBhcw0KPj4g
-KyAgICAgICAgKiBhIGd1ZXN0IG93bmVkIHBhZ2UuIFRyYW5zaXRpb24gdGhlIHBhZ2UgdG8gaHlw
-ZXJ2aXNvciBzdGF0ZQ0KPj4gKyAgICAgICAgKiBiZWZvcmUgcmVsZWFzaW5nIGl0IGJhY2sgdG8g
-dGhlIHN5c3RlbS4NCj4+ICsgICAgICAgICogQWxzbyB0aGUgcGFnZSBpcyByZW1vdmVkIGZyb20g
-dGhlIGtlcm5lbCBkaXJlY3QgbWFwLCBzbyBmbHVzaCBpdA0KPj4gKyAgICAgICAgKiBsYXRlciBh
-ZnRlciBpdCBpcyB0cmFuc2l0aW9uZWQgYmFjayB0byBoeXBlcnZpc29yIHN0YXRlIGFuZA0KPj4g
-KyAgICAgICAgKiByZXN0b3JlZCBpbiB0aGUgZGlyZWN0IG1hcC4NCj4+ICsgICAgICAgICovDQo+
-PiArICAgICAgIGlmIChzZXZfc25wX2d1ZXN0KHZjcHUtPmt2bSkpIHsNCj4+ICsgICAgICAgICAg
-ICAgICB1NjQgcGZuID0gX19wYShzdm0tPnNldl9lcy52bXNhKSA+PiBQQUdFX1NISUZUOw0KPj4g
-Kw0KPj4gKyAgICAgICAgICAgICAgIGlmIChob3N0X3JtcF9tYWtlX3NoYXJlZChwZm4sIFBHX0xF
-VkVMXzRLLCBmYWxzZSkpDQo+PiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIHNraXBfdm1z
-YV9mcmVlOw0KDQo+V2h5IG5vdCBjYWxsIGhvc3Rfcm1wX21ha2Vfc2hhcmVkIHdpdGggbGVhaz09
-dHJ1ZT8gVGhpcyBvbGQgVk1TQSBwYWdlIGlzIG5vdyB1bnVzYWJsZSBJSVVDLg0KDQpZZXMgdGhl
-IG9sZCBWTVNBIHBhZ2UgaXMgbm93IHVuYXZhaWxhYmxlIGFuZCBsb3N0LCBzbyBtYWtlcyBzZW5z
-ZSB0byBjYWxsIGhvc3Rfcm1wX21ha2Vfc2hhcmVkKCkgd2l0aCBsZWFrPT10cnVlLg0KDQpUaGFu
-a3MsDQpBc2hpc2gNCg==
+On 7/11/22 19:44, Michael Straube wrote:
+> Remove the HW_VAR_MLME_SITESURVEY case from SetHwReg8188EU() and move
+> the functionality to two new functions in rtw_mlme_ext.c. This is part
+> of the ongoing effort to get rid of SetHwReg8188EU().
+> 
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 70 +++++++++++++++++--
+>   drivers/staging/r8188eu/core/rtw_p2p.c        |  9 +--
+>   drivers/staging/r8188eu/hal/usb_halinit.c     | 53 --------------
+>   drivers/staging/r8188eu/include/hal_intf.h    |  1 -
+>   .../staging/r8188eu/include/rtw_mlme_ext.h    |  3 +
+>   5 files changed, 70 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index eecb00e41d6a..771910763fec 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -5695,9 +5695,70 @@ static void rtw_set_initial_gain(struct adapter *adapter, u8 gain)
+>   	}
+>   }
+>   
+> +void rtw_mlme_under_site_survey(struct adapter *adapter)
+> +{
+> +	/* config RCR to receive different BSSID & not to receive data frame */
+> +
+> +	int res;
+> +	u8 reg;
+> +	u32 v;
+> +
+> +	res = rtw_read32(adapter, REG_RCR, &v);
+> +	if (res)
+> +		return;
+> +
+> +	v &= ~(RCR_CBSSID_BCN);
+> +	rtw_write32(adapter, REG_RCR, v);
+> +	/* reject all data frame */
+> +	rtw_write16(adapter, REG_RXFLTMAP2, 0x00);
+> +
+> +	/* disable update TSF */
+> +	res = rtw_read8(adapter, REG_BCN_CTRL, &reg);
+> +	if (res)
+> +		return;
+> +
+> +	rtw_write8(adapter, REG_BCN_CTRL, reg | BIT(4));
+> +}
+> +
+> +void rtw_mlme_site_survey_done(struct adapter *adapter)
+> +{
+> +	struct mlme_ext_priv *pmlmeext = &adapter->mlmeextpriv;
+> +	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
+> +	u32 reg32;
+> +	int res;
+> +	u8 reg;
+> +
+> +	if ((is_client_associated_to_ap(adapter)) ||
+> +	    ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE)) {
+> +		/* enable to rx data frame */
+> +		rtw_write16(adapter, REG_RXFLTMAP2, 0xFFFF);
+> +
+> +		/* enable update TSF */
+> +		res = rtw_read8(adapter, REG_BCN_CTRL, &reg);
+> +		if (res)
+> +			return;
+> +
+> +		rtw_write8(adapter, REG_BCN_CTRL, reg & (~BIT(4)));
+> +	} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
+> +		rtw_write16(adapter, REG_RXFLTMAP2, 0xFFFF);
+> +		/* enable update TSF */
+> +		res = rtw_read8(adapter, REG_BCN_CTRL, &reg);
+> +		if (res)
+> +			return;
+> +
+> +		rtw_write8(adapter, REG_BCN_CTRL, reg & (~BIT(4)));
+> +	}
+> +
+> +	res = rtw_read32(adapter, REG_RCR, &reg32);
+> +	if (res)
+> +		return;
+> +
+> +	rtw_write32(adapter, REG_RCR, reg32 | RCR_CBSSID_BCN);
+> +}
+> +
+>   void site_survey(struct adapter *padapter)
+>   {
+> -	unsigned char		survey_channel = 0, val8;
+> +	unsigned char survey_channel = 0;
+>   	enum rt_scan_type ScanType = SCAN_PASSIVE;
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+>   	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+> @@ -5821,8 +5882,7 @@ void site_survey(struct adapter *padapter)
+>   			if (is_client_associated_to_ap(padapter))
+>   				issue_nulldata(padapter, NULL, 0, 3, 500);
+>   
+> -			val8 = 0; /* survey done */
+> -			SetHwReg8188EU(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
+> +			rtw_mlme_site_survey_done(padapter);
+>   
+>   			report_surveydone_event(padapter);
+>   
+> @@ -7343,7 +7403,6 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+>   	struct sitesurvey_parm	*pparm = (struct sitesurvey_parm *)pbuf;
+>   	u8 bdelayscan = false;
+> -	u8 val8;
+>   	u32	i;
+>   	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
+>   
+> @@ -7400,8 +7459,7 @@ u8 sitesurvey_cmd_hdl(struct adapter *padapter, u8 *pbuf)
+>   		/* set MSR to no link state */
+>   		Set_MSR(padapter, _HW_STATE_NOLINK_);
+>   
+> -		val8 = 1; /* under site survey */
+> -		SetHwReg8188EU(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
+> +		rtw_mlme_under_site_survey(padapter);
+>   
+>   		pmlmeext->sitesurvey_res.state = SCAN_PROCESS;
+>   	}
+> diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
+> index beffe5b16f1e..c306aafa183b 100644
+> --- a/drivers/staging/r8188eu/core/rtw_p2p.c
+> +++ b/drivers/staging/r8188eu/core/rtw_p2p.c
+> @@ -1450,10 +1450,9 @@ static void restore_p2p_state_handler(struct adapter *padapter)
+>   static void pre_tx_invitereq_handler(struct adapter *padapter)
+>   {
+>   	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
+> -	u8	val8 = 1;
+>   
+>   	set_channel_bwmode(padapter, pwdinfo->invitereq_info.peer_ch, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
+> -	SetHwReg8188EU(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
+> +	rtw_mlme_under_site_survey(padapter);
+>   	issue_probereq_p2p(padapter, NULL);
+>   	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
+>   
+> @@ -1462,10 +1461,9 @@ static void pre_tx_invitereq_handler(struct adapter *padapter)
+>   static void pre_tx_provdisc_handler(struct adapter *padapter)
+>   {
+>   	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
+> -	u8	val8 = 1;
+>   
+>   	set_channel_bwmode(padapter, pwdinfo->tx_prov_disc_info.peer_channel_num[0], HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
+> -	SetHwReg8188EU(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
+> +	rtw_mlme_under_site_survey(padapter);
+>   	issue_probereq_p2p(padapter, NULL);
+>   	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
+>   
+> @@ -1474,10 +1472,9 @@ static void pre_tx_provdisc_handler(struct adapter *padapter)
+>   static void pre_tx_negoreq_handler(struct adapter *padapter)
+>   {
+>   	struct wifidirect_info  *pwdinfo = &padapter->wdinfo;
+> -	u8	val8 = 1;
+>   
+>   	set_channel_bwmode(padapter, pwdinfo->nego_req_info.peer_channel_num[0], HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
+> -	SetHwReg8188EU(padapter, HW_VAR_MLME_SITESURVEY, (u8 *)(&val8));
+> +	rtw_mlme_under_site_survey(padapter);
+>   	issue_probereq_p2p(padapter, NULL);
+>   	_set_timer(&pwdinfo->pre_tx_scan_timer, P2P_TX_PRESCAN_TIMEOUT);
+>   
+> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+> index 6b0337c09915..68d012a442a8 100644
+> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
+> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+> @@ -1104,59 +1104,6 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+>   				ResumeTxBeacon(Adapter);
+>   		}
+>   		break;
+> -	case HW_VAR_MLME_SITESURVEY:
+> -		if (*((u8 *)val)) { /* under sitesurvey */
+> -			/* config RCR to receive different BSSID & not to receive data frame */
+> -			u32 v;
+> -
+> -			res = rtw_read32(Adapter, REG_RCR, &v);
+> -			if (res)
+> -				return;
+> -
+> -			v &= ~(RCR_CBSSID_BCN);
+> -			rtw_write32(Adapter, REG_RCR, v);
+> -			/* reject all data frame */
+> -			rtw_write16(Adapter, REG_RXFLTMAP2, 0x00);
+> -
+> -			/* disable update TSF */
+> -			res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
+> -			if (res)
+> -				return;
+> -
+> -			rtw_write8(Adapter, REG_BCN_CTRL, reg | BIT(4));
+> -		} else { /* sitesurvey done */
+> -			struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
+> -			struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+> -			u32 reg32;
+> -
+> -			if ((is_client_associated_to_ap(Adapter)) ||
+> -			    ((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE)) {
+> -				/* enable to rx data frame */
+> -				rtw_write16(Adapter, REG_RXFLTMAP2, 0xFFFF);
+> -
+> -				/* enable update TSF */
+> -				res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
+> -				if (res)
+> -					return;
+> -
+> -				rtw_write8(Adapter, REG_BCN_CTRL, reg & (~BIT(4)));
+> -			} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
+> -				rtw_write16(Adapter, REG_RXFLTMAP2, 0xFFFF);
+> -				/* enable update TSF */
+> -				res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
+> -				if (res)
+> -					return;
+> -
+> -				rtw_write8(Adapter, REG_BCN_CTRL, reg & (~BIT(4)));
+> -			}
+> -
+> -			res = rtw_read32(Adapter, REG_RCR, &reg32);
+> -			if (res)
+> -				return;
+> -
+> -			rtw_write32(Adapter, REG_RCR, reg32 | RCR_CBSSID_BCN);
+> -		}
+> -		break;
+>   	default:
+>   		break;
+>   	}
+> diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
+> index 24bbba2cb7cf..819d0dc6e6dc 100644
+> --- a/drivers/staging/r8188eu/include/hal_intf.h
+> +++ b/drivers/staging/r8188eu/include/hal_intf.h
+> @@ -11,7 +11,6 @@
+>   enum hw_variables {
+>   	HW_VAR_SET_OPMODE,
+>   	HW_VAR_CORRECT_TSF,
+> -	HW_VAR_MLME_SITESURVEY,
+>   };
+>   
+>   typedef s32 (*c2h_id_filter)(u8 id);
+> diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> index 3cc475aa912a..c630700ea657 100644
+> --- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> +++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+> @@ -424,6 +424,9 @@ void invalidate_cam_all(struct adapter *padapter);
+>   int allocate_fw_sta_entry(struct adapter *padapter);
+>   void flush_all_cam_entry(struct adapter *padapter);
+>   
+> +void rtw_mlme_under_site_survey(struct adapter *adapter);
+> +void rtw_mlme_site_survey_done(struct adapter *adapter);
+> +
+>   void site_survey(struct adapter *padapter);
+>   u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame,
+>   		    struct wlan_bssid_ex *bssid);
+
+
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150

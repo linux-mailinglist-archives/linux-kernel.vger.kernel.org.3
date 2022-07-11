@@ -2,50 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C6256FEC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF5C56FED6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiGKKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S230305AbiGKK0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGKKXS (ORCPT
+        with ESMTP id S230265AbiGKKZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:23:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8BACAF2C;
-        Mon, 11 Jul 2022 02:37:39 -0700 (PDT)
+        Mon, 11 Jul 2022 06:25:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB865F69;
+        Mon, 11 Jul 2022 02:38:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55E50B80E9B;
-        Mon, 11 Jul 2022 09:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7C4C34115;
-        Mon, 11 Jul 2022 09:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657532257;
-        bh=bcLD/qxsUGv+AF1rTNdpKdzVizCDffffHzxuyCpZio4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D72626091E;
+        Mon, 11 Jul 2022 09:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B151C34115;
+        Mon, 11 Jul 2022 09:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657532309;
+        bh=a0ha78P3wXjA5uoUnAW93wgzH8yzlsNaKHmhJbbHDc8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2qf86FdYQl0eJl6YZA6POKfpuzIr8AZzwyHXZPN5qCylgtNW/KMDmytEszIvoQoaK
-         19pJELOavgTCURd9gaJk09ISsDUMY1h3n06IPUrbaxfaWtnSxgXHEsPqjHDhEQmiOG
-         BM/MS7yqUUJPEQIVJnJQQsa8sR+X+r9FA8T+db6E=
-Date:   Mon, 11 Jul 2022 11:37:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 138/230] drm/amdgpu: bind to any 0x1002 PCI diplay
- class device
-Message-ID: <YsvvXmH9DpMMIIiK@kroah.com>
-References: <20220711090604.055883544@linuxfoundation.org>
- <20220711090607.978575207@linuxfoundation.org>
- <8c73c2b5-f70e-f343-7ca4-e1db420d5419@amd.com>
+        b=H4k050iUWOLbbtPhqJa63hJsvwUrW4UfGC6MmyGT+iBvTJJR0QJ5bS5lrR9izvQWc
+         jGD/AjfWcZp8a56MfaScFv5gjzJPk07xnkwXXTBcsYQEPiunNRaELhhJ0SHba1P1iP
+         Ask33i5XfTAIK6YZeNvAU/YgOhnzjd32+kmVRtGarSDPCjfL25tmh+w+CEwAjeslvY
+         D9MphIrh6Me/J4O/c3rhq3xVWuLSLmFZfrl4uQOJeBpi/XZxs7UEwt/g2Mx8A86QlP
+         8zTsrPocOe/nijf/4ieHVtLn/6lxMEubtqssreF/xyyAHVS/OTC6Lwsp+OD+QERzzJ
+         gtmSnliRhD5uA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oAps5-0006eD-QD; Mon, 11 Jul 2022 11:38:29 +0200
+Date:   Mon, 11 Jul 2022 11:38:29 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] dt-bindings: PCI: qcom: Add SA8540P to binding
+Message-ID: <Ysvvlb/Wu2Vodane@hovoldconsulting.com>
+References: <20220629141000.18111-1-johan+linaro@kernel.org>
+ <20220629141000.18111-6-johan+linaro@kernel.org>
+ <20220709080203.GL5063@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c73c2b5-f70e-f343-7ca4-e1db420d5419@amd.com>
+In-Reply-To: <20220709080203.GL5063@thinkpad>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,20 +69,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 11:29:53AM +0200, Christian König wrote:
-> Hi Greg & Alex
+On Sat, Jul 09, 2022 at 01:32:03PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jun 29, 2022 at 04:09:55PM +0200, Johan Hovold wrote:
+> > SA8540P is a new platform related to SC8280XP but which uses a single
+> > host interrupt for MSI routing.
+> > 
 > 
-> why is that patch picked up for stable? Or are we backporting IP based
-> discovery?
+> The newer chipsets are supposed to use 8 MSI's. How come this one uses only 1?
 
-New device ids are usually added to stable trees as they are "trivial".
+No idea, but the people with access to the documentation could not find
+more than one interrupt for SA8540P (unlike SC8280XP).
 
-> If yes, is that wise? IIRC we had quite a number of typos etc.. in the
-> initial patches.
-
-If this commit is incorrect, we will be glad to drop it, or add any
-needed add-on commits.  Which do you want to see happen here?
-
-thanks,
-
-greg k-h
+Johan

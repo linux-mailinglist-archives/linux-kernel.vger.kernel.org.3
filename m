@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AD956FBFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D979856FABF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiGKJhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S231802AbiGKJV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbiGKJhC (ORCPT
+        with ESMTP id S231919AbiGKJUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:37:02 -0400
+        Mon, 11 Jul 2022 05:20:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E24D4CD;
-        Mon, 11 Jul 2022 02:19:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFBA558E0;
+        Mon, 11 Jul 2022 02:12:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 986BC6129D;
-        Mon, 11 Jul 2022 09:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E76C34115;
-        Mon, 11 Jul 2022 09:19:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEEE16111F;
+        Mon, 11 Jul 2022 09:12:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4360C385A5;
+        Mon, 11 Jul 2022 09:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531153;
-        bh=Lx4hc0nUrNwQiiQOUQxsaBTqW6L6HwC4km2Y1mY4GHk=;
+        s=korg; t=1657530765;
+        bh=83a72sjXNaJzb4ILacnxZowX5LjUNTxN6KSv30OSb0A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HNZd+WfIGP0VtfiHLQ0TtMIJKm5phVZPxyHWiNTWGjhCTyxuGHQ6gTE+VuKF9YvdE
-         PSQyqjUGk36NGxr3mv1yd42Ah02bMwURBbCft4LvWFZYtQXiiI7CZOMo4zSyMBLkqV
-         /aJujp1IOTH2xca2V5b0J9TezwAXd/LdZpko0Czw=
+        b=bLtvDCOmWiVpedQvrCiovvMocfsIRyCg47MtWfN6qEbnE/JnJJbWbbkB2+gUo3XBd
+         fXMG3toElnvVp9XCAurqAG8NUlqU9MWz2iY688TewwEk8vVu32lYYs2WaH8l4ymlTv
+         IM9DNgv7ZonuSmtUHAoIXa7Av8OHH/jaB5Y3PYF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        stable@vger.kernel.org, Andrei Lalaev <andrey.lalaev@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 080/112] ARM: dts: stm32: add missing usbh clock and fix clk order on stm32mp15
+Subject: [PATCH 5.10 32/55] pinctrl: sunxi: sunxi_pconf_set: use correct offset
 Date:   Mon, 11 Jul 2022 11:07:20 +0200
-Message-Id: <20220711090551.842963197@linuxfoundation.org>
+Message-Id: <20220711090542.710329127@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+From: Andrei Lalaev <andrey.lalaev@gmail.com>
 
-[ Upstream commit 1d0c1aadf1fd9f3de95d1532b3651e8634546e71 ]
+[ Upstream commit cd4c1e65a32afd003b08ad4aafe1e4d3e4e8e61b ]
 
-The USBH composed of EHCI and OHCI controllers needs the PHY clock to be
-initialized first, before enabling (gating) them. The reverse is also
-required when going to suspend.
-So, add USBPHY clock as 1st entry in both controllers, so the USBPHY PLL
-gets enabled 1st upon controller init. Upon suspend/resume, this also makes
-the clock to be disabled/re-enabled in the correct order.
-This fixes some IRQ storm conditions seen when going to low-power, due to
-PHY PLL being disabled before all clocks are cleanly gated.
+Some Allwinner SoCs have 2 pinctrls (PIO and R_PIO).
+Previous implementation used absolute pin numbering and it was incorrect
+for R_PIO pinctrl.
+It's necessary to take into account the base pin number.
 
-Fixes: 949a0c0dec85 ("ARM: dts: stm32: add USB Host (USBH) support to stm32mp157c")
-Fixes: db7be2cb87ae ("ARM: dts: stm32: use usbphyc ck_usbo_48m as USBH OHCI clock on stm32mp151")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Fixes: 90be64e27621 ("pinctrl: sunxi: implement pin_config_set")
+Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Link: https://lore.kernel.org/r/20220525190423.410609-1-andrey.lalaev@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index f9aa9af31efd..9c2bbf115f4c 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1474,7 +1474,7 @@
- 		usbh_ohci: usb@5800c000 {
- 			compatible = "generic-ohci";
- 			reg = <0x5800c000 0x1000>;
--			clocks = <&rcc USBH>, <&usbphyc>;
-+			clocks = <&usbphyc>, <&rcc USBH>;
- 			resets = <&rcc USBH_R>;
- 			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
- 			status = "disabled";
-@@ -1483,7 +1483,7 @@
- 		usbh_ehci: usb@5800d000 {
- 			compatible = "generic-ehci";
- 			reg = <0x5800d000 0x1000>;
--			clocks = <&rcc USBH>;
-+			clocks = <&usbphyc>, <&rcc USBH>;
- 			resets = <&rcc USBH_R>;
- 			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
- 			companion = <&usbh_ohci>;
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+index be7f4f95f455..24c861434bf1 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+@@ -544,6 +544,8 @@ static int sunxi_pconf_set(struct pinctrl_dev *pctldev, unsigned pin,
+ 	struct sunxi_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+ 	int i;
+ 
++	pin -= pctl->desc->pin_base;
++
+ 	for (i = 0; i < num_configs; i++) {
+ 		enum pin_config_param param;
+ 		unsigned long flags;
 -- 
 2.35.1
 

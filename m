@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5F5570DB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4C5570DB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiGKWzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S230175AbiGKW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiGKWzv (ORCPT
+        with ESMTP id S229622AbiGKW5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:55:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F6252A4;
-        Mon, 11 Jul 2022 15:55:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A07E611E0;
-        Mon, 11 Jul 2022 22:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30295C3411C;
-        Mon, 11 Jul 2022 22:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657580149;
-        bh=306Zt8on93XWkgQdga4uepYhOUdbfhX4MuA93F+mjDg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CK6oxDOms/jOi0NV/YznDDefa7DzL+1hTYbuZsX1ubF2D7Dc5bCKUoODI2BCGJX89
-         6NLGGeBf3orU1q8LBrJxMsNrQ0j6cVdbG3FhfCDMN0ZUKz6D4riXo6CB4iwPDRT739
-         WOsA0EPpXuYXczd0Z+7ZxV5U8ulJl+qvCV/9mIm8Od50we4E7mN8kQ/5NHAjIteesc
-         FN/ZwBzoV7cycc328T5X0MdbBOZh++pvIOcHOY+cxZ32ENLjyEp+N/wTvpM+lrH73/
-         OAKQmoBmgIRy7tKoG4wIdPCUTRZq+cWBaLHhQcwgxOs/xFu2GAaqFudOGbWjPVirLB
-         ATxDuYv4YevKQ==
-Message-ID: <bced9f7f-992d-0965-949f-2682d31a6a2e@kernel.org>
-Date:   Mon, 11 Jul 2022 17:55:44 -0500
+        Mon, 11 Jul 2022 18:57:09 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93D8252A4;
+        Mon, 11 Jul 2022 15:57:08 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id n68so6343086iod.3;
+        Mon, 11 Jul 2022 15:57:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nkB1LobiQA6NccntvHF5Qv0wX7FCiVqXUkIF4H0VLgA=;
+        b=6WpHXJfHvRvNFBp5FTCa+WTfeAucfOHTl28bbx6FI0nQlaqGTGJ0g5aHUeNAyP/FJw
+         CwzmLo40XdnTlXxIDwpkkZmAC23eRxt586uB09P9GDAEmUWncxgdEgR3wat/pCU0Dncq
+         J5QBr5natNdVkVG59eM2pMneAMOY0gJwoXJsOqIl/1wAEG25J2TjqOw/HRYNohoPnb0c
+         Hw7/7S2Olsywo7iTqMEnBJ9tN9CalJzEHuPq06ZiW4x2hNXJMFkeKy9SyZ65fy3wduD8
+         rfNc5FY18F14qv2U3uq1PPLuGVT4jIgFKkVucaQCpu+vwW4TFcjvKq9zcD9zbgjg2Gf8
+         xY/A==
+X-Gm-Message-State: AJIora+1XXemFmyzAY+K8t5vP8Um6HIqs6ecDpgiN/8y6rVttv9Rx3R6
+        UEVvxWyFK5pjevqPhMeaDNq+xF093A==
+X-Google-Smtp-Source: AGRyM1vX/8+PDDhf0f+QHpvSfhNzgqMs8567A/5TH4WA3ncvtyaETEfARInjSczaw0kMVaD9wvB4IQ==
+X-Received: by 2002:a05:6602:2586:b0:675:9050:4651 with SMTP id p6-20020a056602258600b0067590504651mr11049758ioo.192.1657580227931;
+        Mon, 11 Jul 2022 15:57:07 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q4-20020a02b044000000b00339c1f7130csm3452121jah.84.2022.07.11.15.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 15:57:07 -0700 (PDT)
+Received: (nullmailer pid 424684 invoked by uid 1000);
+        Mon, 11 Jul 2022 22:57:05 -0000
+Date:   Mon, 11 Jul 2022 16:57:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] dt-bindings: firmware: convert Qualcomm SCM binding
+ to the yaml
+Message-ID: <20220711225705.GA422079-robh@kernel.org>
+References: <20220708090431.30437-1-david@ixit.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 08/15] nios2: drop definition of PGD_ORDER
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        loongarch@lists.linux.dev
-References: <20220705154708.181258-1-rppt@kernel.org>
- <20220705154708.181258-9-rppt@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220705154708.181258-9-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708090431.30437-1-david@ixit.cz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/5/22 10:47, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Fri, Jul 08, 2022 at 11:04:31AM +0200, David Heidelberg wrote:
+> Convert Qualcomm SCM firmware binding to the yaml format.
 > 
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
+> This commit also:
+>  - adds qcom,scm-mdm9607 into list which has only core clock
+>  - adds qcom,scm-sm6125, qcom,scm-ipq6018
+>  - #reset-cells, because the property is already used
 > 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->   arch/nios2/include/asm/pgtable.h | 4 +---
->   arch/nios2/mm/init.c             | 3 +--
->   arch/nios2/mm/pgtable.c          | 2 +-
->   3 files changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index eaf8f28baa8b..74af16dafe86 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -68,9 +68,7 @@ struct mm_struct;
->   
->   #define PAGE_COPY MKP(0, 0, 1)
->   
-> -#define PGD_ORDER	0
-> -
-> -#define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
-> +#define PTRS_PER_PGD	(PAGE_SIZE / sizeof(pgd_t))
->   #define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
->   
->   #define USER_PTRS_PER_PGD	\
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 2d6dbf7701f6..eab65e8ea69c 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -78,8 +78,7 @@ void __init mmu_init(void)
->   	flush_tlb_all();
->   }
->   
-> -#define __page_aligned(order) __aligned(PAGE_SIZE << (order))
-> -pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned(PGD_ORDER);
-> +pgd_t swapper_pg_dir[PTRS_PER_PGD] __aligned(PAGE_SIZE);
->   pte_t invalid_pte_table[PTRS_PER_PTE] __aligned(PAGE_SIZE);
->   static struct page *kuser_page[1];
->   
-> diff --git a/arch/nios2/mm/pgtable.c b/arch/nios2/mm/pgtable.c
-> index 9b587fd592dd..7c76e8a7447a 100644
-> --- a/arch/nios2/mm/pgtable.c
-> +++ b/arch/nios2/mm/pgtable.c
-> @@ -54,7 +54,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
->   {
->   	pgd_t *ret, *init;
->   
-> -	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
-> +	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
->   	if (ret) {
->   		init = pgd_offset(&init_mm, 0UL);
->   		pgd_init(ret);
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> --
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Should be '---' in order to be removed automatically when applying.
+
+> v5:
+>  - add qcom,scm-sdx65 from new commit to txt binding
+>  - add freshly merged qcom,scm-sc8280xp
+>  - add interconnects
+>  - add accidentally removed # from #include directive
+>  - move mdm9607 to 3 clocks (thx @Guru)
+>  - fix compatible string in example
+> v4:
+>  - added clocks minItems and maxItems
+>  - removed quotes from $id and $schema
+>  - adjusted description of TCSR HW block
+> v3:
+>  - add preceding patches for ARM and arm64 adding missing compatible strings
+>  - extended with missing compatible strings
+>  - added two additional maintainers, see https://lkml.org/lkml/2022/6/23/1969
+> v2:
+>  - changed maintainer to Bjorn
+>  - document #reset-cells
+> 
+>  .../devicetree/bindings/firmware/qcom,scm.txt |  61 --------
+>  .../bindings/firmware/qcom,scm.yaml           | 147 ++++++++++++++++++
+>  2 files changed, 147 insertions(+), 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+
+Doesn't apply for me, so I'm assuming this will go via QCom tree.
+
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,210 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFED6570A0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD71570A14
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiGKSk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S230064AbiGKSoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiGKSk0 (ORCPT
+        with ESMTP id S229685AbiGKSoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:40:26 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2D12A416;
-        Mon, 11 Jul 2022 11:40:24 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t25so10151787lfg.7;
-        Mon, 11 Jul 2022 11:40:24 -0700 (PDT)
+        Mon, 11 Jul 2022 14:44:14 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23BD13E0E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:44:09 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id v14so8165062wra.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=KlQUK2zAvSsYY9+HkP1fxNkctblwyKNfY8+Zlr8/0W4=;
-        b=GNL0CWbWjXmuPbVFuAxYcdBV7iXrGkC1IYqMjQo4jwPPjlODY/BX3gXpfZL4zVHvT8
-         B9jKTqMv5Gy7lR5a4wt1DyGFslGrvii56AkOpMCCWiGnYJYNYFrVZU5U0YWR6QrqLMm4
-         N+oV6tDyiAUyzcoUjgVuQ2aLsjdhnVEtfdBHoEqhQUrUO1ialxMBOa2bU2c9br5MEsar
-         BqLhRA1ulAfhy/KkWSYoC1Ar1jQyyD18kQZM/wA+ZCAgp0IPIkfze4OeTbbvn04/hpZ4
-         7AlkOk3OmHNJchgB/DDc+HxVvfEQJMSORa2I5ssWp3Ncy34ig7dbkLCO4iQSc9/+tvks
-         W3Zw==
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Faba1IAeoFPLJV2hWR4qx2pHr6WFp+URpSyXW9hD/sw=;
+        b=EnKbvDK3bChx+ZOchcvV42N2sV91Y4yRRlv8gQYXMV5YZwSb4p4phAYGN2arUTkd1U
+         9V/94GurexAHB62cHXmX+NUAm0MzT0A9K05Mp8BmavqOut87xxXt9lXLVLfM0JWRLhC3
+         XzHjlOskracRxd3jY8q3Z9h7YfH7Xj0jmi6JTUwwqtB8KhV47qU21mFL+KaCjf1OUtBH
+         fdkmCs+vDWudLzSm070UBLxH6KMnAicJv11Gubqd3bfVb541VC007JULyGU4vy24hJZv
+         FsuAhASoDzEgHAI9vt4eWUl1dIGDFJuXi/1VF1JD2xhN345jAwYgiCB2SUgXmybObRuN
+         hrLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=KlQUK2zAvSsYY9+HkP1fxNkctblwyKNfY8+Zlr8/0W4=;
-        b=Zp9iDQ86DAIkU56MTk2JI+RS+fwcRyC5Ds4kGOEpG90bw43uy2mBR02aAEL29OlAig
-         bLuACv9Gbt4p4lt+MnP9Hq5bvQuEvrEy4LDnTzvTgR5F7touZeks2zDtR/KWnc9ra0F/
-         JlB7Tw35Rc1460hwMl4rQJoECerXjYVR4cL4vUxVYhaHQcbofV5CKL0HxQPVu0h2O9SU
-         5ChfDyjADmjh3+p5zfNSFAVzGjNL4wG8jr+dPAQdgZpPB0UiWxiyw7Nf+haAHDLVgk0X
-         OjQK3D8RhLHfNU8k8hT65ScSd62duk9W8rynA3Z8gPZdXg7WkUFPggic2OAFI5MpjP5/
-         gOMg==
-X-Gm-Message-State: AJIora+qbtOiVmMyD7AswnUOEnF9zbqEOLaJr2VkYnrJSAJxQalExgqV
-        4l40pfyDZ06DsqaHHy9YPhw=
-X-Google-Smtp-Source: AGRyM1vDE6nbnMjDZgCNsMQ1Fbxfr8MT1sluE3y17vg2UBfrADHdzgzByx3vNOhD9TFRAox2eTq15A==
-X-Received: by 2002:ac2:4e10:0:b0:47f:9af2:9c64 with SMTP id e16-20020ac24e10000000b0047f9af29c64mr11762430lfr.109.1657564823066;
-        Mon, 11 Jul 2022 11:40:23 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id b5-20020ac25625000000b004896ed8dce3sm1681064lff.2.2022.07.11.11.40.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Faba1IAeoFPLJV2hWR4qx2pHr6WFp+URpSyXW9hD/sw=;
+        b=nlOC6+WlEMI8VogVR9PuSizfFg7Ga6xGU7ZMJXyMKHsy1vQe/CG57Z1eNpE98eZtjg
+         GYtDS2KMeUjvuekvFFWFEbk6X9YaTx2HGreChtdHARMBwJmtJhPsaZeHiRearO2kyCrx
+         1KHc7y5tPNiyf8xnWbhSV2fSp8I2aDpyUm0fiTcNHKLk6vAiOrbMxQnWvloJfXSUzD8i
+         Ky6XfGxdUiwW/EOAClkHMrb9hPuGuZwpHwG3BRTJxDithlmnSsXiTxjfe+cu+L93GrGl
+         0TJp2jN9kIS2mBfRl9O8X9VJs5yXQXH6hR+IvO3HeMQB8WvbcGLAu1ugwh8pdLDQqwNv
+         hWhw==
+X-Gm-Message-State: AJIora+eLNOrOCKJohUIHzVC1TJU18L/eruqBR2BFEJ/xo8YlkkwAw78
+        KKLo+Gz1HQBZPrUS1S51eIXIMA==
+X-Google-Smtp-Source: AGRyM1sqEmRYcTGeiTRRmrfP00jXcrV10B5+0GrH64Vg9kxTeAJXcFnx94KqZ4MPYAQZ6yfHVrhfaA==
+X-Received: by 2002:adf:eb0f:0:b0:21d:2f1d:8e40 with SMTP id s15-20020adfeb0f000000b0021d2f1d8e40mr17664845wrn.207.1657565048244;
+        Mon, 11 Jul 2022 11:44:08 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05600c410900b003a02cbf862esm7330892wmi.13.2022.07.11.11.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 11:40:22 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 21:40:20 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 00/18] PCI: dwc: Various fixes and cleanups
-Message-ID: <20220711184020.k4i22724gr7nc4qw@mobilestation>
-References: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
- <20220628233527.GA1883848@bhelgaas>
- <20220629013836.r55ldp7s7v7acsbs@mobilestation>
+        Mon, 11 Jul 2022 11:44:07 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] Add the JH7100's Monitor Core
+Date:   Mon, 11 Jul 2022 19:43:24 +0100
+Message-Id: <20220711184325.1367393-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629013836.r55ldp7s7v7acsbs@mobilestation>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-On Wed, Jun 29, 2022 at 04:38:36AM +0300, Serge Semin wrote:
-> On Tue, Jun 28, 2022 at 06:35:27PM -0500, Bjorn Helgaas wrote:
-> > On Fri, Jun 24, 2022 at 05:34:10PM +0300, Serge Semin wrote:
-> > > This patchset is a first one in the series created in the framework of
-> > > my Baikal-T1 PCIe/eDMA-related work:
-> > > 
-> > > [1: In-progress v5] PCI: dwc: Various fixes and cleanups
-> > > Link: ---you are looking at it---
-> > > [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> > > Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> > > [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> > > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> > > [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> > > Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru/
-> > > 
-> > > Note it is very recommended to merge the patchsets in the same order as
-> > > they are placed in the list above in order to prevent possible merge
-> > > conflicts. Nothing prevents them from being reviewed synchronously though.
-> > > Any tests are very welcome!
-> > > 
-> > > [...]
-> > > 
-> > > Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> > > Changelog v5:
-> > > - Just resend the series.
-> > > - Rebase onto v5.19-rcX.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > > Cc: Jingoo Han <jingoohan1@gmail.com>
-> > > Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-> > > Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> > > Cc: Frank Li <Frank.Li@nxp.com>
-> > > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > Cc: linux-pci@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > 
-> 
+Hey Emil,
 
-> > I applied these to pci/ctrl/dwc-fixes for now.  We'll have some tweaks
-> > (to merge with previous dwc changes, if nothing else), but I pushed
-> > this interim version 
-> 
-> I've got three more DW PCIe+eDMA based patchsets to review and merge in.
-> As I noted in the cover letter and graphically represented here:
-> Link: https://lore.kernel.org/linux-pci/20220616152048.gcqacgs2ed66vsl4@mobilestation/
-> the last series depends on the previous changes and the changes
-> introduced by Frank Li. The Frank' work has been merged in into the
-> branch 'pci/edma' of your repo. Could you please move my patchset(s)
-> there too in order to avoid merge conflicts in future?
+Following on from my RFC [0], here's the real patches adding the
+monitor core for the JH7100 w/ the ordering changed as requested.
 
-Are you back from vacation yet? If so please consider the request
-above.
+I had a look in the SiFive E24 docs [1] & in [2] which said "16KB
+I-cache with 32 Byte cache line". Didn't have anything else to go on,
+so I kept the same ratio between lines/sets/size as other SiFive
+monitor cores, but since they're not 32 bit I dunno if that's correct
+(IOW it is a wild guess).
 
--Sergey
+The dts patch depends on adding the series adding the cpu-map [3]:
 
-> 
-> > since I'll be on vacation for a week or so.
-> > 
-> 
-> * Sigh... I have a feeling one more merge window will pass with
-> my patchsets hanging out in limbo.
-> 
-> > Looks like some nice fixes and cleanups, thank you!
-> 
-> Thanks.
-> 
-> -Sergey
-> 
-> > 
-> > > Serge Semin (18):
-> > >   PCI: dwc: Stop link in the host init error and de-initialization
-> > >   PCI: dwc: Add unroll iATU space support to the regions disable method
-> > >   PCI: dwc: Disable outbound windows for controllers with iATU
-> > >   PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
-> > >   PCI: dwc: Deallocate EPC memory on EP init error
-> > >   PCI: dwc: Enable CDM-check independently from the num_lanes value
-> > >   PCI: dwc: Add braces to the multi-line if-else statements
-> > >   PCI: dwc: Add trailing new-line literals to the log messages
-> > >   PCI: dwc: Discard IP-core version checking on unrolled iATU detection
-> > >   PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
-> > >   PCI: dwc: Organize local variables usage
-> > >   PCI: dwc: Re-use local pointer to the resource data
-> > >   PCI: dwc: Add start_link/stop_link inliners
-> > >   PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
-> > >   PCI: dwc: Add dw_ prefix to the pcie_port structure name
-> > >   PCI: dwc-plat: Simplify the probe method return value handling
-> > >   PCI: dwc-plat: Discard unused regmap pointer
-> > >   PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
-> > > 
-> > >  drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +--
-> > >  drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
-> > >  drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
-> > >  drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
-> > >  .../pci/controller/dwc/pci-layerscape-ep.c    |  12 ---
-> > >  drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
-> > >  drivers/pci/controller/dwc/pci-meson.c        |   2 +-
-> > >  drivers/pci/controller/dwc/pcie-al.c          |   6 +-
-> > >  drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
-> > >  drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  30 ++++--
-> > >  .../pci/controller/dwc/pcie-designware-host.c | 102 ++++++++++--------
-> > >  .../pci/controller/dwc/pcie-designware-plat.c |  25 ++---
-> > >  drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++------
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
-> > >  drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
-> > >  drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
-> > >  drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
-> > >  drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
-> > >  drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
-> > >  drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
-> > >  drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
-> > >  drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
-> > >  drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
-> > >  drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
-> > >  drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
-> > >  26 files changed, 224 insertions(+), 201 deletions(-)
-> > > 
-> > > -- 
-> > > 2.35.1
-> > > 
+Thanks,
+Conor.
+
+0: https://lore.kernel.org/linux-riscv/20220710111330.3920699-1-mail@conchuod.ie/
+1: https://sifive.cdn.prismic.io/sifive/dc408861-94ce-4d82-a704-caddec98609d_e24_core_complex_manual_21G3.pdf
+2: https://github.com/starfive-tech/JH7100_Docs/blob/main/JH7100%20Data%20Sheet%20V01.01.04-EN%20(4-21-2021).pdf
+3: https://lore.kernel.org/linux-riscv/20220705190435.1790466-1-mail@conchuod.ie/
+
+Conor Dooley (2):
+  dt-bindings: riscv: document the sifive e24
+  riscv: dts: starfive: add the missing monitor core
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  2 ++
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      | 21 +++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+
+base-commit: b6f1f2fa2bddd69ff46a190b8120bd440fd50563
+prerequisite-patch-id: 946df827e9dad8ca6e9751fe4ba01fd5fe9d18cc
+prerequisite-patch-id: 59626290ee7b1e725bd446a4b7170ee2d6ca9bc0
+prerequisite-patch-id: e57a94cb7d69855a4e2d6044dcf86fbfe35cb696
+prerequisite-patch-id: 0ba94fd09377953ec4e9692358de569a7932bfa3
+prerequisite-patch-id: 398e9b178ce51c924bbd9115020d84b677f773bb
+-- 
+2.37.0
+

@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894C656D238
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 02:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B4556D23B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 02:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiGKAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 20:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S229668AbiGKAgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 20:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGKAeY (ORCPT
+        with ESMTP id S229477AbiGKAgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 20:34:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3DD63DF;
-        Sun, 10 Jul 2022 17:34:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh4dN5LR1z4xXj;
-        Mon, 11 Jul 2022 10:34:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657499657;
-        bh=g8nUc2vrjLqbAhzxUgKGnKRtz0OKsUg950t4UTQmsp4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z301i0/uikn8CUgfH2+bDfOykMRhmBiNMYC4C2pUSWpUYPURaNWM9ZId7Bjf64x/v
-         IbMqKXMSd/ndx9Iq9KKxNMXm1umw0U1BUT1oy4S1f2N1pNXguO5pQrY2r+i3Oq+hUX
-         ftQWNcdDbQSV227VRd5mjbEGyWY6Kg3Hwa/5DJsew+kNcTHEuqz8PaVbRU7ZeANSfK
-         ZjZfNHkFz7wS9VE89c5HO/3UkPaDtKajShDpJ6xti9tiRnXe3S2U22PPQ1h7WeWB2l
-         /8G2yQ8FASqIR5SzqVxbTh6NiUVXoaxDoMwyQj/fxyUCoWucBNa/X+UkWCwrGzpDMJ
-         Ob+Em63tZ/XMg==
-Date:   Mon, 11 Jul 2022 10:34:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>, David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>, Filipe Manana <fdmanana@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs tree with the btrfs tree
-Message-ID: <20220711103415.41685daa@canb.auug.org.au>
+        Sun, 10 Jul 2022 20:36:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0881E63DF;
+        Sun, 10 Jul 2022 17:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=PZ48ag4JsCJQwRf+bGkFcTAC/I8X5hdkoFIm/OJJqOE=; b=BGeIGUudIIh6JnnOm+nhW7z+Fl
+        aLMSr+BXpol0PJ9z/jpE8TZOKuMFgrb2DPWDhhDrjY6pQ1DyVFmiR7Z0kmks1/oPKE6MGCNmmLAzv
+        pK7Lk6IWPf93mBLveSh6mzxDS5f4bpku5JPt3907ZECgH5gHvmslhaXDmnZWPyemOl2IJ0KSB+51i
+        I9V3iz/6XWOUPdOMc/NR4mfum7E5VY8S9uuGTz8sk9nQJxBsK+LOgnpydSxFtowmTn/hSFRYuz60X
+        Fnni/wt8jatkNh3SKdAF+a4hifDKFljVr1jherHR+M5quuI4S/wlCqS9XjM+ovaFbAARyqaqQI+AA
+        khTu8akA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oAhPB-00EmFp-Lw; Mon, 11 Jul 2022 00:36:05 +0000
+Message-ID: <b707a74b-48ca-5547-3d07-8aa05be0c132@infradead.org>
+Date:   Sun, 10 Jul 2022 17:36:04 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/86LkagoEDZiU+_Nw13S3VCn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next] certs: Fix Kconfig dependency
+Content-Language: en-US
+To:     Ren Zhijie <renzhijie2@huawei.com>, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, simo@redhat.com
+Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220704112028.183193-1-renzhijie2@huawei.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220704112028.183193-1-renzhijie2@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/86LkagoEDZiU+_Nw13S3VCn
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the vfs tree got a conflict in:
+On 7/4/22 04:20, Ren Zhijie wrote:
+> If CONFIG_PKCS7_MESSAGE_PARSER=m and CONFIG_FIPS_SIGNATURE_SELFTEST=y,
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+> 
+> crypto/asymmetric_keys/selftest.o: In function `fips_signature_selftest':
+> selftest.c:(.init.text+0xc3): undefined reference to `pkcs7_parse_message'
+> selftest.c:(.init.text+0x101): undefined reference to `pkcs7_supply_detached_data'
+> selftest.c:(.init.text+0x112): undefined reference to `pkcs7_verify'
+> selftest.c:(.init.text+0x13f): undefined reference to `pkcs7_validate_trust'
+> selftest.c:(.init.text+0x169): undefined reference to `pkcs7_free_message'
+> make: *** [vmlinux] Error 1
+> 
+> To fix this error, add depends on PKCS7_MESSAGE_PARSER=y to FIPS_SIGNATURE_SELFTEST
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 3cde3174eb91 ("certs: Add FIPS selftests")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> ---
+>  crypto/asymmetric_keys/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
+> index 3df3fe4ed95f..fe007db96c69 100644
+> --- a/crypto/asymmetric_keys/Kconfig
+> +++ b/crypto/asymmetric_keys/Kconfig
+> @@ -83,6 +83,6 @@ config FIPS_SIGNATURE_SELFTEST
+>  	  for FIPS.
+>  	depends on KEYS
+>  	depends on ASYMMETRIC_KEY_TYPE
+> -	depends on PKCS7_MESSAGE_PARSER
+> +	depends on PKCS7_MESSAGE_PARSER=y
+>  
+>  endif # ASYMMETRIC_KEY_TYPE
 
-  fs/btrfs/file.c
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Reported-by: kernel test robot <lkp@intel.com> # 2022-06-30
 
-between commit:
+thanks.
 
-  c8223467948b ("btrfs: don't fallback to buffered IO for NOWAIT direct IO =
-writes")
-
-from the btrfs tree and commit:
-
-  eacdf4eaca63 ("btrfs: use IOMAP_DIO_NOSYNC")
-
-from the vfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/btrfs/file.c
-index 1876072dee9d,30e6aef9739f..000000000000
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@@ -1846,36 -1846,8 +1846,35 @@@ static ssize_t check_direct_IO(struct b
-  	return 0;
-  }
- =20
- +static size_t dio_fault_in_size(const struct kiocb *iocb,
- +				const struct iov_iter *iov,
- +				size_t prev_left)
- +{
- +	const size_t left =3D iov_iter_count(iov);
- +	size_t size =3D PAGE_SIZE;
- +
- +	/*
- +	 * If there's no progress since the last time we had to fault in pages,
- +	 * then we fault in at most 1 page. Faulting in more than that may
- +	 * result in making very slow progress or falling back to buffered IO,
- +	 * because by the time we retry the DIO operation some of the first
- +	 * remaining pages may have been evicted in order to fault in other pages
- +	 * that follow them. That can happen when we are under memory pressure a=
-nd
- +	 * the iov represents a large buffer.
- +	 */
- +	if (left !=3D prev_left) {
- +		int dirty_tresh =3D current->nr_dirtied_pause - current->nr_dirtied;
- +
- +		size =3D max(dirty_tresh, 8) << PAGE_SHIFT;
- +		size =3D min_t(size_t, SZ_1M, size);
- +	}
- +	size -=3D offset_in_page(iocb->ki_pos);
- +
- +	return min(left, size);
- +}
- +
-  static ssize_t btrfs_direct_write(struct kiocb *iocb, struct iov_iter *fr=
-om)
-  {
-- 	const bool is_sync_write =3D (iocb->ki_flags & IOCB_DSYNC);
-  	struct file *file =3D iocb->ki_filp;
-  	struct inode *inode =3D file_inode(file);
-  	struct btrfs_fs_info *fs_info =3D btrfs_sb(inode->i_sb);
-@@@ -1993,17 -1954,7 +1983,10 @@@ again
- =20
-  	btrfs_inode_unlock(inode, ilock_flags);
- =20
-- 	/*
-- 	 * Add back IOCB_DSYNC. Our caller, btrfs_file_write_iter(), will do
-- 	 * the fsync (call generic_write_sync()).
-- 	 */
-- 	if (is_sync_write)
-- 		iocb->ki_flags |=3D IOCB_DSYNC;
--=20
- -	/* If 'err' is -ENOTBLK then it means we must fallback to buffered IO. */
- +	/*
- +	 * If 'err' is -ENOTBLK or we have not written all data, then it means
- +	 * we must fallback to buffered IO.
- +	 */
-  	if ((err < 0 && err !=3D -ENOTBLK) || !iov_iter_count(from))
-  		goto out;
- =20
-
---Sig_/86LkagoEDZiU+_Nw13S3VCn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLcAcACgkQAVBC80lX
-0GxRqgf9FugW9YMDrncdybNoM9hXJeIedTisKZ+dPtY+2Kg30BmnV4wglx0l5nnN
-UjO4AJr6GVccZZj10tQJ1CW8J2U18zQxf8IK74L8qio4U71agBe7vA1V9S7gRk3g
-J56WSEEuVKpxLCkZ0EjS9fCDovf3b0LdEm7IbRTkMUM/Obs84Vo5wTN1ujVQEAnh
-BmGgF9Lh7U+OJyc/l6dG8NPD1XdiXEpuw76SaThwcb/VmeMb8wssRSsyNfVvR107
-+l9xKJDILvP6gRxbthGrL8qkU+bVtOzKr1LQYAbuNR7WFS86DP0lPQWvcr45Rnvx
-NSkuBqesnHILyYs2CyQiytQ6WEEzNQ==
-=I9Ev
------END PGP SIGNATURE-----
-
---Sig_/86LkagoEDZiU+_Nw13S3VCn--
+-- 
+~Randy

@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6869E56D72E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980A656D730
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiGKH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S229673AbiGKH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiGKH4A (ORCPT
+        with ESMTP id S229823AbiGKH4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:56:00 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE4F186C7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:55:59 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id j15-20020a056830014f00b0061c4d8736b5so1167640otp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:55:59 -0700 (PDT)
+        Mon, 11 Jul 2022 03:56:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465521AF0C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:56:22 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z12so5880739wrq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=q6o9JVRE687hr1p3UnsWW+UGjb7NYoGpQcgQLTRc/EA=;
-        b=NcB3UWoeVTuWWYfvJO9tjkVrw3frvptajR4mjcMeGyPHf6dekvpbXb5CMnFL3QpEZX
-         kphzplbp6KSSr0yxOZpTFG7PTT8wp5WLxNkbFbphzVoPdlUqHjISy1xNOEb3fqUv1P2y
-         vgT1CQr1jNZJEgcCrd6lmkzRFM6AUz4nv5kzYHNIMpyAzxXJR7RJXHNQLpQ3869RazMm
-         Zlzcj/SpqStyj3RgwqDAb4VzYs2Ec7sg1uDgvHZVXnUJ1Xw1Jpfxzucm1QHdQorhwHTC
-         OnX/DP3OEh1U6k48Jnj2IJPwB7zmdSoRhvbHM3aB6Z+O0saMxmS87poHSXZrTvjKf4WY
-         xGLQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=sKkZ7/Q/K9Q/sXgFuA0gAflfil/CLZ0p6StfFEg8nR8=;
+        b=s7i1I56YvzM46mtZQRunYDg5XIgJBb5tiEtkaWXeKEwoVS6JeIyKRh8Jvf4O5wOW+z
+         ak6CPvdefTVUYin40r8D+h0x1ulauO8TC9fe5XuasEfMn4kdr8f/iEMhCQYtPmBBGVG0
+         r3XsOtVtHFoSLyzODC+OBfUa9nj3ZaDjiEvRZ+sbkhpgEbxOCNWTJK5soE+oLcZXY14Y
+         HPtpVPPLZJGPBpjKpBkxbG+9B7fr1in762kRl+0NE3hTeeDwvvUtFW7OXi/4ouHOHhM2
+         yEqhz8zwbJpk7lWGiEZQufDi6tgDT9ozjBDYkk8kWPm2vK0YAOgfkKosNoBnVMuv7S1v
+         UNcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=q6o9JVRE687hr1p3UnsWW+UGjb7NYoGpQcgQLTRc/EA=;
-        b=L9HQT1ok6JftR/j0HfF54/Im50Tg9z1clEBOG5jV6sF1HJuKjLyDMcwOkAWCoONAdU
-         u1ezYXsZQuAW7VtDZstkoT15xsnx27ZZsd5HFGtUVZaRDH7llNh7/dwUffFUY93E8Q3i
-         AkXGxv58hDHxVHbWXPd1fNjTl9bD3f0nHVnSULlneNSnItxnd68f6V/Zfq/GKVva9WH5
-         Bl+9ssgkKcClpY7zuEc5s6/+/CcDzVvi+ZQLTGWj2tpKPzOpH4aOjYRjvw9zTGMSsTSl
-         vn4b1VZE5G7/XAQCkWZmp6efZDXfAnJMolHPWCc0bxDWsjKe6LoTcZys6OVnFeYAftXl
-         I57A==
-X-Gm-Message-State: AJIora9mknLxEXyFvroqWSyNVK8K7R8EAhXKXbX+hm/XKVnrle7cnSo9
-        5si7ozI8w2NGgs0RRNJGAWfGcu4/b3qwPaZP0uU=
-X-Google-Smtp-Source: AGRyM1vOyjTiq8QRa61DwTw/ayzCHAhd8qSwJW9Ev/hRl7untuLhXMC8MqGy3BlFnqIW6KvMSQ7uxudPaA7oxPsNKC4=
-X-Received: by 2002:a05:6830:4489:b0:61c:55ca:ecf3 with SMTP id
- r9-20020a056830448900b0061c55caecf3mr121888otv.198.1657526158492; Mon, 11 Jul
- 2022 00:55:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sKkZ7/Q/K9Q/sXgFuA0gAflfil/CLZ0p6StfFEg8nR8=;
+        b=NQ3udQOXQ/S6BWKqJ/eLW7TOs9RF+aFieP0AjECn6LY7N/rAgfXmpS/E7Jf6WQK3DA
+         ZUOzmNWfdjdCecz2FuekG5ejgzYrbro/0Ru5lJzPJ7+HEYGSo/Kk8rV74zTItHmPYmo8
+         iHpatlpYCx5rTgspDCgoApzxRCj1u5wL9zMaJIWQP4UgpqCe0gVXz5isTIbJA+luDFo0
+         jPkpA6gAjnmskhwQ8zImQcnypYmYH83i2s2qXG7Mc0cSTAy4ZJJm7LsqXGW+3Uif6ZQP
+         v1j1UkX0EreoUwk4H7estAQJ1Ao6H5UyeUu3xvFbGjvE9ef/7xlvGu2Q08j0CV+XJZmI
+         +MoA==
+X-Gm-Message-State: AJIora+yNQGI0Xh4mRDNbskxoWHw60KJoTg/3VmvFYauac3XMNQ/6MBn
+        bPNBqBdZQ3Gf0YwEvAfJ2LWejA==
+X-Google-Smtp-Source: AGRyM1s6svVopaidI0OqhRnWkGg8+xnz5jCXAwHpMAKVlD9l503OW6LkbUqRx2CDpsnrcEh3ryN9Gg==
+X-Received: by 2002:a5d:68c1:0:b0:21d:8810:23c0 with SMTP id p1-20020a5d68c1000000b0021d881023c0mr16086309wrw.711.1657526180807;
+        Mon, 11 Jul 2022 00:56:20 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003a03e63e428sm13082839wmq.36.2022.07.11.00.56.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 00:56:20 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 08:56:18 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] mfd: sm5703: Add support for SM5703 MFD
+Message-ID: <YsvXom7CQ8qpzR5O@google.com>
+References: <20220423085319.483524-1-markuss.broks@gmail.com>
+ <20220423085319.483524-5-markuss.broks@gmail.com>
+ <Yqj+aUNLC00Tcu49@google.com>
+ <3ec8570e-a730-b572-8246-631b91f46735@gmail.com>
 MIME-Version: 1.0
-Sender: dafsgsgasfsggg@gmail.com
-Received: by 2002:a05:6838:bd4f:0:0:0:0 with HTTP; Mon, 11 Jul 2022 00:55:58
- -0700 (PDT)
-From:   "carlsen.monika" <carlsen.monika@gmail.com>
-Date:   Mon, 11 Jul 2022 08:55:58 +0100
-X-Google-Sender-Auth: gdOU22b4ufiZ9yWy_FGoLmZhyL4
-Message-ID: <CANR0r5OL1zuC0BCGRAQg80egaba07exbvUhktjkNPLyfM0sLiA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3ec8570e-a730-b572-8246-631b91f46735@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [carlsen.monika[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, 09 Jul 2022, Markuss Broks wrote:
 
-    CHARITY DONATION Please read carefully, I know it is true that
-this letter may come to you as a surprise. I came across your e-mail
-contact through a private search while in need of your assistance. am
-writing this mail to you with heavy sorrow in my heart, I have chose
-to reach out to you through Internet because it still remains the
-fastest medium of communication. I sent this mail praying it will
-found you in a good condition of health, since I myself are in a very
-critical health condition in which I sleep every night without knowing
-if I may be alive to see the next day.
+> Hi Lee,
+> 
+> On 6/15/22 00:32, Lee Jones wrote:
+> > On Sat, 23 Apr 2022, Markuss Broks wrote:
+> > 
+> > > Silicon Mitus SM5703 is a multi-function device, meant to be
+> > Please avoid using the term MFD.
+> > 
+> > How is the device described in the data-sheet?
+> I don't have a data-sheet for this device. The only reference I have is
+> downstream Linux driver. Maybe a better way to call it would be PMIC?
 
-Am Mrs.Monika John Carlsen, wife of late Mr John Carlsen, a widow
-suffering from long time illness. I have some funds I inherited from
-my late husband, the sum of ($11.000.000,eleven million dollars) my
-Doctor told me recently that I have serious sickness which is cancer
-problem. What disturbs me most is my stroke sickness. Having known my
-condition, I decided to donate this fund to a good person that will
-utilize it the way am going to instruct herein. I need a very honest
-and God fearing person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained.
+Yes, if that's what this is, PMIC sounds better.
 
-I do not want a situation where this money will be used in an ungodly
-manners. That is why am taking this decision. am not afraid of death
-so I know where am going. I accept this decision because I do not have
-any child who will inherit this money after I die. Please I want your
-sincerely and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. am waiting for your reply,
+> > What do you mean by "meant to be"?
+> "designed to be", it appears that this part is almost exclusively used by
+> Samsung in its mobile phones.
 
-Best Regards
-Mrs.Monika John Carlsen,
+"designed to be" sounds better.
+
+> > > used in mobile devices. It has several modules: LDO, BUCK regulators,
+> > Modules or functions?
+> 
+> Some of "modules" are quite separate, so I decided to call it that way. How
+> should it be called?
+
+Functions.
+
+> > > charger circuit, flash LED driver, a fuel gauge for monitoring the battery
+> > > and a MUIC USB switcher. The MUIC and fuel gauge parts are separate in that
+> > > they use separate i2c lines to communicate with the device, while charger
+> > "I2C"
+> > 
+> > > circuit, LED driver and regulators are on the main i2c line the device is
+> > > controlled with.
+> > > 
+> > > Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+> > > ---
+> > >   MAINTAINERS                |   8 +++
+> > >   drivers/mfd/Kconfig        |  13 +++++
+> > >   drivers/mfd/Makefile       |   1 +
+> > >   drivers/mfd/sm5703.c       |  78 +++++++++++++++++++++++++++
+> > >   include/linux/mfd/sm5703.h | 105 +++++++++++++++++++++++++++++++++++++
+> > >   5 files changed, 205 insertions(+)
+> > >   create mode 100644 drivers/mfd/sm5703.c
+> > >   create mode 100644 include/linux/mfd/sm5703.h
+> > > 
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 6157e706ed02..6125ed1a3be4 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -18172,6 +18172,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+> > >   F:	include/linux/srcu*.h
+> > >   F:	kernel/rcu/srcu*.c
+> > > +SM5703 MFD DRIVER
+> > > +M:	Markuss Broks <markuss.broks@gmail.com>
+> > > +S:	Maintained
+> > > +F:	Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+> > > +F:	Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
+> > > +F:	drivers/mfd/sm5703.c
+> > > +F:	drivers/regulator/sm5703-regulator.c
+> > > +
+> > >   SMACK SECURITY MODULE
+> > >   M:	Casey Schaufler <casey@schaufler-ca.com>
+> > >   L:	linux-security-module@vger.kernel.org
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 3b59456f5545..c13a99ceae99 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -1237,6 +1237,19 @@ config MFD_SM501
+> > >   	  interface. The device may be connected by PCI or local bus with
+> > >   	  varying functions enabled.
+> > > +config MFD_SM5703
+> > > +	tristate "Silicon Mitus SM5703 MFD"
+> > > +	depends on I2C
+> > > +	depends on OF
+> > > +	select MFD_CORE
+> > > +	select REGMAP_I2C
+> > > +	help
+> > > +	  This is the core driver for the Silicon Mitus SM5703 multi-function
+> > Please drop the MFD term, as above.
+> > 
+> > > +	  device. This device is meant to be used in phones and it has numerous
+> > "meant to be"?
+> > 
+> > > +	  modules, including LED controller, regulators, fuel gauge, MUIC and
+> > Either "an LED controller" or "LED controllers"
+> > 
+> > Same with "charger circuit" below.
+> > 
+> > > +	  charger circuit. It also support muxing a serial interface over USB
+> > "supports"
+> > 
+> > What kind of serial?
+> UART as a standard Samsung debug port interface (619K Ohm resistor between
+> data lines is Samsung's debug cable).
+
+Probably best to state that then.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

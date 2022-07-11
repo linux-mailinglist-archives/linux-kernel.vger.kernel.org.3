@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31A56FACB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FD456FDCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiGKJV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S234319AbiGKKAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiGKJVU (ORCPT
+        with ESMTP id S234306AbiGKJ7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:21:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807957205;
-        Mon, 11 Jul 2022 02:12:57 -0700 (PDT)
+        Mon, 11 Jul 2022 05:59:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1035063911;
+        Mon, 11 Jul 2022 02:27:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C257E6111F;
-        Mon, 11 Jul 2022 09:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B74C341C8;
-        Mon, 11 Jul 2022 09:12:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8F1761372;
+        Mon, 11 Jul 2022 09:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6390C34115;
+        Mon, 11 Jul 2022 09:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530776;
-        bh=746gWq6hUeI15+eXiH/h4H5jA1QjJ9DrC7C7ZPtgN7U=;
+        s=korg; t=1657531662;
+        bh=XUoSAv6TxAwN+8OKNJOnZbAN/7rSjDyG73oAYspuHQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PWWgl7jI7E9ZFZd1QCyiOdfX1FE/yGWpEp0qrxHv2nUJpMGU5wlPkC0vWFIA2Nnvk
-         8o0IUzZJGPAZNDwh36evwxPdyyG15EJeAxMnMWjc87ap0+vbah8ysUn8Mae17d60Z+
-         nnvoKZY4F07OxtywLe1rBv85B4W3xKq1119W8cms=
+        b=1jupjsNGqxTm2ziXn1JfImzpQkdvDVRlnaUDzrbJ9YyojDUSOjIr+9dX5jH+QYq0X
+         W0BvLtzYO/2jC7RjP33x7i20VmI23LIX5ijUJW2eQzvv7cgCD1wdSTLWDIKd8iKlTr
+         hUxIfuED/H2LgiZr1JNGTBeb/36LaCBAFzrZNpbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 35/55] ARM: at91: pm: use proper compatibles for sam9x60s rtc and rtt
+Subject: [PATCH 5.15 187/230] arm64: dts: imx8mp-evk: correct gpio-led pad settings
 Date:   Mon, 11 Jul 2022 11:07:23 +0200
-Message-Id: <20220711090542.796201126@linuxfoundation.org>
+Message-Id: <20220711090609.412872318@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-[ Upstream commit 641522665dbb25ce117c78746df1aad8b58c80e5 ]
+[ Upstream commit b838582ab8d5fb11b2c0275056a9f34e1d94fece ]
 
-Use proper compatible strings for SAM9X60's RTC and RTT IPs. These are
-necessary for configuring wakeup sources for ULP1 PM mode.
+0x19 is not a valid setting. According to RM bit layout,
+BIT3 and BIT0 are reserved.
+  8  7   6   5   4   3  2 1  0
+ PE HYS PUE ODE FSEL X  DSE  X
 
-Fixes: eaedc0d379da ("ARM: at91: pm: add ULP1 support for SAM9X60")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220523092421.317345-3-claudiu.beznea@microchip.com
+Correct setting with PE PUE set, DSE set to 0.
+
+Fixes: 50d336b12f34 ("arm64: dts: imx8mp-evk: Add GPIO LED support")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-at91/pm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-index 6a68ff0466e0..f2ce2d094925 100644
---- a/arch/arm/mach-at91/pm.c
-+++ b/arch/arm/mach-at91/pm.c
-@@ -115,12 +115,12 @@ static const struct of_device_id sama5d2_ws_ids[] = {
- };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 3f424a8937f1..be3b01b5e159 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -351,7 +351,7 @@
  
- static const struct of_device_id sam9x60_ws_ids[] = {
--	{ .compatible = "atmel,at91sam9x5-rtc",		.data = &ws_info[1] },
-+	{ .compatible = "microchip,sam9x60-rtc",	.data = &ws_info[1] },
- 	{ .compatible = "atmel,at91rm9200-ohci",	.data = &ws_info[2] },
- 	{ .compatible = "usb-ohci",			.data = &ws_info[2] },
- 	{ .compatible = "atmel,at91sam9g45-ehci",	.data = &ws_info[2] },
- 	{ .compatible = "usb-ehci",			.data = &ws_info[2] },
--	{ .compatible = "atmel,at91sam9260-rtt",	.data = &ws_info[4] },
-+	{ .compatible = "microchip,sam9x60-rtt",	.data = &ws_info[4] },
- 	{ .compatible = "cdns,sam9x60-macb",		.data = &ws_info[5] },
- 	{ /* sentinel */ }
- };
+ 	pinctrl_gpio_led: gpioledgrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_NAND_READY_B__GPIO3_IO16	0x19
++			MX8MP_IOMUXC_NAND_READY_B__GPIO3_IO16	0x140
+ 		>;
+ 	};
+ 
 -- 
 2.35.1
 

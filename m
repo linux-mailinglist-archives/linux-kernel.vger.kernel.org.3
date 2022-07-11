@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8DA56D709
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0011B56D70C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiGKHts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S230207AbiGKHuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiGKHtq (ORCPT
+        with ESMTP id S230198AbiGKHuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:49:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022FA167D7;
-        Mon, 11 Jul 2022 00:49:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657525776;
-        bh=X8TyN9CyILknghhxouhGz5KDBpMuUPkomyRmVP6/WJQ=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=ciFgp6FFpYmKHdsOciitwiLjRv9x7YktwFfuh5UWVTvq1CzT4eYHq6d7043zQY7Cj
-         QoaKzXmpz7GYs5QEbYkBB4Z9nybNZUqYKdjaPpULhn27jW74MuM6dfhRXkYUhqk6aD
-         B2+3DelqMhTZus1IOwd0Py8Nqq71qpeJYqwOOkNk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.101.2.47] ([185.104.136.29]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MJmKh-1nqfx8429p-00KBVE; Mon, 11
- Jul 2022 09:49:36 +0200
-Message-ID: <df7313597d2ac3212f10c05aa3d369728f030c86.camel@gmx.co.uk>
-Subject: Re: input/i8042: Malfunctioning brightness keys on HP Elite
- Dragonfly G2
-From:   Alex Dewar <alex.dewar@gmx.co.uk>
-To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
-        tiwai@suse.de, markgross@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Mon, 11 Jul 2022 08:49:27 +0100
-In-Reply-To: <8b893c42-e514-bcef-0513-070b3723cdcc@redhat.com>
-References: <20220629094314.b7xmfb3xccj7vs6v@ic-alex-elitebook>
-         <3fedf676645bfa638c9a6c656121083abc2c98ea.camel@gmx.co.uk>
-         <8b893c42-e514-bcef-0513-070b3723cdcc@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Mon, 11 Jul 2022 03:50:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21F421B7A3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657525798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=65+qN8d8sGZSpzbvLfg3emL2uyMu+GmRHRjSzDdv/js=;
+        b=LpG/tNwfj5EM1z5qpvYVCkGzyy9Lap6xAb1VcVjFhhFeX6LrIlbGsXNf37OA1/9JSRWYqe
+        LRKfIFEAH0Is7uTz27Kf+tkyLNLwl8Amq7ydTeXyCHyP0g0vOQz8GnTibAuxuJAoMG69Ob
+        pGPZD2xFJXxMBUsvBEefJMBOKzm98sA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-PcKH02_GNmyyAY5EzywamA-1; Mon, 11 Jul 2022 03:49:55 -0400
+X-MC-Unique: PcKH02_GNmyyAY5EzywamA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8D5D6804197;
+        Mon, 11 Jul 2022 07:49:55 +0000 (UTC)
+Received: from localhost (ovpn-12-204.pek2.redhat.com [10.72.12.204])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E0E9140CF8EA;
+        Mon, 11 Jul 2022 07:49:54 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 15:49:51 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3] proc/vmcore: fix potential memory leak in
+ vmcore_init()
+Message-ID: <YsvWHwrltqqAb12h@MiWiFi-R3L-srv>
+References: <20220711073449.2319585-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:VwGkmh3JaBEWCVMCW8dyte5COe3jDZpDWSZrT1/KhFIj1pj71LG
- KMYdeiAzn5grTZRJ0CcwVeFzlonTahgV+1Fnc4IqtuG7qAQ/Squc+M1lyP5k8c4MLQgOqEg
- AYW9fyt49xlzipdwla8Q3HlX+JleIAWJYAQgBwQTLEynIHtq9X7xE1JsPq4iIOTd2TkTmpi
- JAH+dsjlUMWgM6iD35gRA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qkZG5VY/jvc=:3evydC3xMAcZQb3g3dkQwS
- /YTSc/PNcdiu3DeC0Mn8j4aY6SHeZqIyhF/IUs0uIwMqaugjyj8UkrI2sK5ipzVSYuOt8Tq2J
- 1j6Oq6cCTjh2EPzJpX3AdE0DRoxTMXCUkb6ehc20zM9wvxExg0OVWXuLsFgnAXLQKT8rSEhT8
- ghVyPyADz/WbvFE3Z9SWY9l7da7L7wEzu6TLdQVeLbgSRTNyW2m0xFxPZsw7a50NjAfOBTXch
- JPufTW4H8XbmZjpdfR92eiAQ9J7NPO2k7lBkzi87156EuQndJfCVnITOfZ4TTB/c/2Vb7LHF4
- zm+PvH7ISDo2ENnNV189LlNICpXHLKyzRKzgvgELrMW3qNP83CFfCSdZtCrKT5lY/jkO/VZKR
- 6oCV7WMCoH1Ujcn82gTDSOrFAUJoTFzrq2I7X8JgBt/DKQ2A7Veir2tg+EwU51vmlnfSoodjw
- kCbLLfoRuzwbjqHpoB5TzNcHFPpV3xU/+WfkvpGJshFrToUGwh4kJVsGhMxXSd0qpctZHBS7f
- LWvdSD/qEYe/5svIVgSuyz9uZJdriKIUmJds2T9m+J7Jz4hrcRczpkWKQ+MZmSWtizkaKaeBu
- 50SZraeKvqZdd3SgfcNnu/mLA/BbAGRaM/Ny28D+GoNvKSIfes9vIgCT0Dqn+dSqHEVZ91kOd
- 31daldwNCUiLCiWMYP4I3v0Eyouso5FZ7mJeReuZujc5Rf/YZ2Er4Xtjf+WYrU9+xwmH2gEPw
- yGwjPiOliOp8R92Y0eYWPlXUMWCRZ+ah2X/w4G/FwaE0Cxk0XavQXEGVTuZeyrzs4B0jQTnuf
- v+hB+Hk4w6J6akLdpFQAx2nQs2ve3L+BS36VW1eBypddc8xOCEZza0hfscHl4nY5lasGzej8U
- 5f4PbZf3hnLiAIKycXeIo4QfRbGtpvgfTLmvr/Zn/2sKa4qdvBFEtDPSgBkAMh0WxfpPR15ff
- dpF4zDzUv7yQVdfHVQhrZbNuLxv14lM7lH2lZlW0z8gHx4k7FcWPEzhiNCzHzmnwNF5XEN3Rb
- bSALeodXVZH7ihWvRWfwYz7Kd88aJDzgLoTLePLqmHosDO6F1teFPW8+oTLrlmN0mhWVKQuT8
- Ye+VfqWoqXINbWgIPrcJswYZnUMh9LUN22u21rdk3NJn1lKzK0ZbqkWHw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711073449.2319585-1-niejianglei2021@163.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 07/11/22 at 03:34pm, Jianglei Nie wrote:
+> elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
+> kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
+> predefined value. If parse_crash_elf_headers() occurs some error and
+> returns a negetive value, the elfcorehdr_addr should be released with
+> elfcorehdr_free().
+> 
+> We can fix by calling elfcorehdr_free() when parse_crash_elf_headers()
+> fails.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  fs/proc/vmcore.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+> index 4eaeb645e759..125efe63f281 100644
+> --- a/fs/proc/vmcore.c
+> +++ b/fs/proc/vmcore.c
+> @@ -1569,7 +1569,7 @@ static int __init vmcore_init(void)
+>  	rc = parse_crash_elf_headers();
+>  	if (rc) {
+>  		pr_warn("Kdump: vmcore not initialized\n");
+> -		return rc;
+> +		goto fail;
 
-On Sat, 2022-07-09 at 16:56 +0200, Hans de Goede wrote:
-> Hi,
->=20
-> On 7/5/22 19:25, Alex Dewar wrote:
-> > Friendly ping? =F0=9F=99=82
-> >=20
-> > I'm also CC'ing the x86 platform people into this, as I'm not sure
-> > whether this problem is something more within their remit.
->=20
-> Please test the atbkd device with "sudo evemu-record" or "sudo
-> evtest"
-> and if the brightness keys generate events there, write down the
-> raw event codes (MSC events).
+Sigh. Why don't you copy my suggested code directly?
 
-I tried this but unfortunately this doesn't seem to be the whole story.
-If I press "decrease brightness" I get:
-Event: time 1657525393.922727, -------------- SYN_REPORT ------------
-Event: time 1657525397.043348, type 4 (EV_MSC), code 4 (MSC_SCAN),
-value 81
-Event: time 1657525397.043348, type 1 (EV_KEY), code 190 (KEY_F20),
-value 1
-Event: time 1657525397.043348, -------------- SYN_REPORT ------------
-Event: time 1657525397.050384, type 4 (EV_MSC), code 4 (MSC_SCAN),
-value 81
-Event: time 1657525397.050384, type 1 (EV_KEY), code 190 (KEY_F20),
-value 0
+>  	}
+>  	elfcorehdr_free(elfcorehdr_addr);
 
-And if I press "increase brightness" I get:
-Event: time 1657525397.050384, -------------- SYN_REPORT ------------
-Event: time 1657525398.607184, type 4 (EV_MSC), code 4 (MSC_SCAN),
-value 81
-Event: time 1657525398.607184, type 1 (EV_KEY), code 190 (KEY_F20),
-value 1
-Event: time 1657525398.607184, -------------- SYN_REPORT ------------
-Event: time 1657525398.614190, type 4 (EV_MSC), code 4 (MSC_SCAN),
-value 81
-Event: time 1657525398.614190, type 1 (EV_KEY), code 190 (KEY_F20),
-value 0
+Remove above line.
 
-There's no difference! And I also get the same thing if I press the
-*actual* mute mic button =F0=9F=98=9E.
+>  	elfcorehdr_addr = ELFCORE_ADDR_ERR;
+> @@ -1578,6 +1578,9 @@ static int __init vmcore_init(void)
+>  	if (proc_vmcore)
+>  		proc_vmcore->size = vmcore_size;
+>  	return 0;
 
-Any ideas?
+Remove above line too.
 
-Best,
-Alex
+> +fail:
+> +	elfcorehdr_free(elfcorehdr_addr);
+> +	return rc;
+>  }
+>  fs_initcall(vmcore_init);
+>  
+> -- 
+> 2.25.1
+> 
 

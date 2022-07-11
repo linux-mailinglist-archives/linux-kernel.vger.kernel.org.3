@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D6756FD03
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C528956FD09
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbiGKJt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S233537AbiGKJuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbiGKJtL (ORCPT
+        with ESMTP id S233771AbiGKJtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:49:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA06068E;
-        Mon, 11 Jul 2022 02:23:52 -0700 (PDT)
+        Mon, 11 Jul 2022 05:49:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3174353;
+        Mon, 11 Jul 2022 02:23:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03F8EB80E7A;
-        Mon, 11 Jul 2022 09:23:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F656C34115;
-        Mon, 11 Jul 2022 09:23:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37568612B7;
+        Mon, 11 Jul 2022 09:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF84C34115;
+        Mon, 11 Jul 2022 09:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531429;
-        bh=Oc3uZAn2SjytfeW43gNwv+Wr/ecIVvXA2iXT/tRe3yw=;
+        s=korg; t=1657531432;
+        bh=zigCpVn/B3vzOaksBD336+TQT3rmGIw/ZQWAKwCVs9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VMNHPouqxk1ctAFunqzgbrbgKD7BjeRIoLc8i0JckvEfBnBmv7dPJLPeeKHVpmL84
-         YWbizMxfQ1nw3dhYCZER+7z4cnuqT6u3bjRgZ9Yjvba9SZKkBmZz1kh55MrxnHRqxt
-         uU6zF98nC58Eq1LHTfZ2yO2oMrGiZc9tNXhIsKNE=
+        b=ZH2WKAKy1p27LcfOOTP4EiPA7UwaLAgpCPywtQdyT5OhYSmJN6UX9e/4UZcFaf9+S
+         JKjqHxXUiJeDDdGNIWxJqjpAfMtAoLakjbT3vPfbQN2EQ+nC/OXE3LcloAOoo/3NDf
+         Pqpy+/lmCZuqvDhHHvsFJXV1R35Kdskbcr1IghsU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 103/230] btrfs: dont access possibly stale fs_info data in device_list_add
-Date:   Mon, 11 Jul 2022 11:05:59 +0200
-Message-Id: <20220711090606.990492753@linuxfoundation.org>
+        stable@vger.kernel.org, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 104/230] KVM: s390x: fix SCK locking
+Date:   Mon, 11 Jul 2022 11:06:00 +0200
+Message-Id: <20220711090607.019176476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -56,81 +56,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-[ Upstream commit 79c9234ba596e903907de20573fd4bcc85315b06 ]
+[ Upstream commit c0573ba5c5a2244dc02060b1f374d4593c1d20b7 ]
 
-Syzbot reported a possible use-after-free in printing information
-in device_list_add.
+When handling the SCK instruction, the kvm lock is taken, even though
+the vcpu lock is already being held. The normal locking order is kvm
+lock first and then vcpu lock. This is can (and in some circumstances
+does) lead to deadlocks.
 
-Very similar with the bug fixed by commit 0697d9a61099 ("btrfs: don't
-access possibly stale fs_info data for printing duplicate device"),
-but this time the use occurs in btrfs_info_in_rcu.
+The function kvm_s390_set_tod_clock is called both by the SCK handler
+and by some IOCTLs to set the clock. The IOCTLs will not hold the vcpu
+lock, so they can safely take the kvm lock. The SCK handler holds the
+vcpu lock, but will also somehow need to acquire the kvm lock without
+relinquishing the vcpu lock.
 
-  Call Trace:
-   kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
-   btrfs_printk+0x395/0x425 fs/btrfs/super.c:244
-   device_list_add.cold+0xd7/0x2ed fs/btrfs/volumes.c:957
-   btrfs_scan_one_device+0x4c7/0x5c0 fs/btrfs/volumes.c:1387
-   btrfs_control_ioctl+0x12a/0x2d0 fs/btrfs/super.c:2409
-   vfs_ioctl fs/ioctl.c:51 [inline]
-   __do_sys_ioctl fs/ioctl.c:874 [inline]
-   __se_sys_ioctl fs/ioctl.c:860 [inline]
-   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
+The solution is to factor out the code to set the clock, and provide
+two wrappers. One is called like the original function and does the
+locking, the other is called kvm_s390_try_set_tod_clock and uses
+trylock to try to acquire the kvm lock. This new wrapper is then used
+in the SCK handler. If locking fails, -EAGAIN is returned, which is
+eventually propagated to userspace, thus also freeing the vcpu lock and
+allowing for forward progress.
 
-Fix this by modifying device->fs_info to NULL too.
+This is not the most efficient or elegant way to solve this issue, but
+the SCK instruction is deprecated and its performance is not critical.
 
-Reported-and-tested-by: syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com
-CC: stable@vger.kernel.org # 4.19+
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+The goal of this patch is just to provide a simple but correct way to
+fix the bug.
+
+Fixes: 6a3f95a6b04c ("KVM: s390: Intercept SCK instruction")
+Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220301143340.111129-1-imbrenda@linux.ibm.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/volumes.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/s390/kvm/kvm-s390.c | 19 ++++++++++++++++---
+ arch/s390/kvm/kvm-s390.h |  4 ++--
+ arch/s390/kvm/priv.c     | 15 ++++++++++++++-
+ 3 files changed, 32 insertions(+), 6 deletions(-)
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index cec54c6e1cdd..89ce0b449c22 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -955,6 +955,11 @@ static noinline struct btrfs_device *device_list_add(const char *path,
- 		/*
- 		 * We are going to replace the device path for a given devid,
- 		 * make sure it's the same device if the device is mounted
-+		 *
-+		 * NOTE: the device->fs_info may not be reliable here so pass
-+		 * in a NULL to message helpers instead. This avoids a possible
-+		 * use-after-free when the fs_info and fs_info->sb are already
-+		 * torn down.
- 		 */
- 		if (device->bdev) {
- 			int error;
-@@ -968,12 +973,6 @@ static noinline struct btrfs_device *device_list_add(const char *path,
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 402597f9d050..b456aa196c04 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -3913,14 +3913,12 @@ static int kvm_s390_handle_requests(struct kvm_vcpu *vcpu)
+ 	return 0;
+ }
  
- 			if (device->bdev->bd_dev != path_dev) {
- 				mutex_unlock(&fs_devices->device_list_mutex);
--				/*
--				 * device->fs_info may not be reliable here, so
--				 * pass in a NULL instead. This avoids a
--				 * possible use-after-free when the fs_info and
--				 * fs_info->sb are already torn down.
--				 */
- 				btrfs_warn_in_rcu(NULL,
- 	"duplicate device %s devid %llu generation %llu scanned by %s (%d)",
- 						  path, devid, found_transid,
-@@ -981,7 +980,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
- 						  task_pid_nr(current));
- 				return ERR_PTR(-EEXIST);
- 			}
--			btrfs_info_in_rcu(device->fs_info,
-+			btrfs_info_in_rcu(NULL,
- 	"devid %llu device path %s changed to %s scanned by %s (%d)",
- 					  devid, rcu_str_deref(device->name),
- 					  path, current->comm,
+-void kvm_s390_set_tod_clock(struct kvm *kvm,
+-			    const struct kvm_s390_vm_tod_clock *gtod)
++static void __kvm_s390_set_tod_clock(struct kvm *kvm, const struct kvm_s390_vm_tod_clock *gtod)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	union tod_clock clk;
+ 	int i;
+ 
+-	mutex_lock(&kvm->lock);
+ 	preempt_disable();
+ 
+ 	store_tod_clock_ext(&clk);
+@@ -3941,7 +3939,22 @@ void kvm_s390_set_tod_clock(struct kvm *kvm,
+ 
+ 	kvm_s390_vcpu_unblock_all(kvm);
+ 	preempt_enable();
++}
++
++void kvm_s390_set_tod_clock(struct kvm *kvm, const struct kvm_s390_vm_tod_clock *gtod)
++{
++	mutex_lock(&kvm->lock);
++	__kvm_s390_set_tod_clock(kvm, gtod);
++	mutex_unlock(&kvm->lock);
++}
++
++int kvm_s390_try_set_tod_clock(struct kvm *kvm, const struct kvm_s390_vm_tod_clock *gtod)
++{
++	if (!mutex_trylock(&kvm->lock))
++		return 0;
++	__kvm_s390_set_tod_clock(kvm, gtod);
+ 	mutex_unlock(&kvm->lock);
++	return 1;
+ }
+ 
+ /**
+diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
+index 1539dd981104..f8803bf0ff17 100644
+--- a/arch/s390/kvm/kvm-s390.h
++++ b/arch/s390/kvm/kvm-s390.h
+@@ -326,8 +326,8 @@ int kvm_s390_handle_sigp(struct kvm_vcpu *vcpu);
+ int kvm_s390_handle_sigp_pei(struct kvm_vcpu *vcpu);
+ 
+ /* implemented in kvm-s390.c */
+-void kvm_s390_set_tod_clock(struct kvm *kvm,
+-			    const struct kvm_s390_vm_tod_clock *gtod);
++void kvm_s390_set_tod_clock(struct kvm *kvm, const struct kvm_s390_vm_tod_clock *gtod);
++int kvm_s390_try_set_tod_clock(struct kvm *kvm, const struct kvm_s390_vm_tod_clock *gtod);
+ long kvm_arch_fault_in_page(struct kvm_vcpu *vcpu, gpa_t gpa, int writable);
+ int kvm_s390_store_status_unloaded(struct kvm_vcpu *vcpu, unsigned long addr);
+ int kvm_s390_vcpu_store_status(struct kvm_vcpu *vcpu, unsigned long addr);
+diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
+index 417154b314a6..6a765fe22eaf 100644
+--- a/arch/s390/kvm/priv.c
++++ b/arch/s390/kvm/priv.c
+@@ -102,7 +102,20 @@ static int handle_set_clock(struct kvm_vcpu *vcpu)
+ 		return kvm_s390_inject_prog_cond(vcpu, rc);
+ 
+ 	VCPU_EVENT(vcpu, 3, "SCK: setting guest TOD to 0x%llx", gtod.tod);
+-	kvm_s390_set_tod_clock(vcpu->kvm, &gtod);
++	/*
++	 * To set the TOD clock the kvm lock must be taken, but the vcpu lock
++	 * is already held in handle_set_clock. The usual lock order is the
++	 * opposite.  As SCK is deprecated and should not be used in several
++	 * cases, for example when the multiple epoch facility or TOD clock
++	 * steering facility is installed (see Principles of Operation),  a
++	 * slow path can be used.  If the lock can not be taken via try_lock,
++	 * the instruction will be retried via -EAGAIN at a later point in
++	 * time.
++	 */
++	if (!kvm_s390_try_set_tod_clock(vcpu->kvm, &gtod)) {
++		kvm_s390_retry_instr(vcpu);
++		return -EAGAIN;
++	}
+ 
+ 	kvm_s390_set_psw_cc(vcpu, 0);
+ 	return 0;
 -- 
 2.35.1
 

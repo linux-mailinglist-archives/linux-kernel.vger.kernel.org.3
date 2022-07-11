@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE4E5707B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E6C5707B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiGKPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S230382AbiGKPzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiGKPxm (ORCPT
+        with ESMTP id S229868AbiGKPzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:53:42 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FD0205EB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:53:39 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn33so6686650ljb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=85DEu1xuo9m6TpYYmG3UGJAS94hTnePhq7yS+YuyNtE=;
-        b=V65HvM1rKqLT8eCjdFPbWBLPRJKLb9JlT3XSZEPP/urQZEO4bcFQd7goxwj5fxFNAX
-         QxusI58KfS/8HjeD8BuCpGnZdVcwgxW8FfTv/oVqk1+WQj/5q5J8VJ6nl7BVXfX6k/lu
-         wNRUM9ck+V9UT/Z2Hf9Y3MRbxgKg+XKC3+xHOHLj5DW+xpTq84FLdR2v9tCRkpLS+fBt
-         3d0X1+QSzUoOJNwDlayMqCfhN+AQrP8MlmleQgz7EeBg3+0pCGSrjlH3eibUEOXO5KaF
-         3P2D+vvqwPjTlSPSEb799RqqPzSq5R7sE3tNcXmRq23ekIUSV1amUYbWuke3SAP3eDsI
-         XEiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=85DEu1xuo9m6TpYYmG3UGJAS94hTnePhq7yS+YuyNtE=;
-        b=E+1tST3Lm51Nqa33FUKq3sukStgJEHIXQbJEKmH23y9PIRFyOgShMVgP2Dft4M0S5q
-         RiZ9TTkySYWhRts956KpQc3SSDpMfTPeSuq1kn7PTzHBDdTSelLPczpSuQcU/BJr7Pe7
-         vnjqfF60fxD/ud/hLu+/+DS3nyQ5noAHGsz5pjSlWksZjZq1YpGDubw06iSf7gHBVqsP
-         9/ja44yoibAkLNwORQsLttAEQeNgx7Uf2fofW4vl2XA/BIKxc8CeSvMiWXcAc1c2ygdX
-         d15NF3y13K4X1TgCbWWEERZRXi5g/p1nH+NYsLRwv7QmLdCbozTFsOaAt1EeKdAlyN1t
-         RVBg==
-X-Gm-Message-State: AJIora8ssj/PDC1Ipsak/vebBDyB0AJNwuNpRziVX/WWJjXO78Vu6A8O
-        uTPLqHDsUU2M1Ru4QNSSCs+GGvESO9L9Vg==
-X-Google-Smtp-Source: AGRyM1uGsEFytWwLuoILQFiiprIrbwpKTlL6wKeQDwG/joC8wYBKrG+Puw8l4ehXLtTdXYNJ9EawYg==
-X-Received: by 2002:a2e:bd89:0:b0:25a:86c8:93ca with SMTP id o9-20020a2ebd89000000b0025a86c893camr9942346ljq.419.1657554817892;
-        Mon, 11 Jul 2022 08:53:37 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id a28-20020a2eb17c000000b0025d3c2e6b8dsm1779848ljm.105.2022.07.11.08.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 08:53:37 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:53:35 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        soc@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 1/2] bus: bt1-apb: Don't print error on
- -EPROBE_DEFER
-Message-ID: <20220711155335.ltctlk66vylwcpcj@mobilestation>
-References: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 11 Jul 2022 11:55:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548527FCA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657554935; x=1689090935;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pr1rtMouHTlc0gc8hvqSAtyTe8IXxsnri8zSjUL00uQ=;
+  b=XOZOlNr1XRtiqgU33UWim2r5CKXn9xItnQaQY/38Q4f4OPTVke1x5ZgK
+   XpqFGl/xnQ1yIkPWCxBEWKU2XCRCt7Et6+3BLIobndThGFIlyUx5VCUmf
+   2sp0ilmpj2Rowre6a8ALWim6GwVqQwM26fNMnVs00MZ4vjLOiJRB4655E
+   XW1td2OCygus/TlpO/oQeDiM3/IEZFuP+5SZc3N1Qjgtkr97mXVK9GPxj
+   ujleFwQ4ePRFnrvRR/96GCrmG33mg/8TnMEujO0L7DCA+YS03EXva1cix
+   lBTSCAu2igaMCS6mnmIdpKBp60D7A059XhxOM1VAhhBrGGDyGbE3lM/vv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="348675819"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="348675819"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 08:55:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="921833030"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Jul 2022 08:55:33 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAvky-0000wd-Np;
+        Mon, 11 Jul 2022 15:55:32 +0000
+Date:   Mon, 11 Jul 2022 23:54:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>
+Subject: drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:59:6: error: no
+ previous prototype for 'intel_pxp_debugfs_register'
+Message-ID: <202207112334.aT2Wz3dC-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd, Philipp
+Hi Daniele,
 
-Since no comments have been posted for the patches lately and the @Philipp
-notes have been fixed way on v2, could you please consider merge the
-patchset in through any of your repos?
+FYI, the error/warning still remains.
 
--Sergey
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   32346491ddf24599decca06190ebca03ff9de7f8
+commit: 390cf1b28b11190121cb05d4cec1f86787b47668 drm/i915/pxp: add pxp debugfs
+date:   9 months ago
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220711/202207112334.aT2Wz3dC-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=390cf1b28b11190121cb05d4cec1f86787b47668
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 390cf1b28b11190121cb05d4cec1f86787b47668
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Fri, Jul 08, 2022 at 10:44:47PM +0300, Serge Semin wrote:
-> The Baikal-T1 APB bus driver correctly handles the deferred probe
-> situation, but still pollutes the system log with a misleading error
-> message. Let's fix that by using the dev_err_probe() method to print the
-> log message in case of the clocks/resets request errors.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Link: https://lore.kernel.org/lkml/20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Use the dev_err_probe() return value as the return status of the
->   corresponding method. (@Philipp)
-> 
-> Link: https://lore.kernel.org/lkml/20220610104030.28399-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v3:
-> - Just resend.
-> - Rebase onto the kernel v5.19-rcX.
-> 
-> Link: https://lore.kernel.org/lkml/20220624211233.7529-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v4:
-> - Just resend.
-> ---
->  drivers/bus/bt1-apb.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-> index b25ff941e7c7..63b1b4a76671 100644
-> --- a/drivers/bus/bt1-apb.c
-> +++ b/drivers/bus/bt1-apb.c
-> @@ -175,10 +175,9 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
->  	int ret;
->  
->  	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
-> -	if (IS_ERR(apb->prst)) {
-> -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> -		return PTR_ERR(apb->prst);
-> -	}
-> +	if (IS_ERR(apb->prst))
-> +		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> +				     "Couldn't get reset control line\n");
->  
->  	ret = reset_control_deassert(apb->prst);
->  	if (ret)
-> @@ -199,10 +198,9 @@ static int bt1_apb_request_clk(struct bt1_apb *apb)
->  	int ret;
->  
->  	apb->pclk = devm_clk_get(apb->dev, "pclk");
-> -	if (IS_ERR(apb->pclk)) {
-> -		dev_err(apb->dev, "Couldn't get APB clock descriptor\n");
-> -		return PTR_ERR(apb->pclk);
-> -	}
-> +	if (IS_ERR(apb->pclk))
-> +		return dev_err_probe(apb->dev, PTR_ERR(apb->pclk),
-> +				     "Couldn't get APB clock descriptor\n");
->  
->  	ret = clk_prepare_enable(apb->pclk);
->  	if (ret) {
-> -- 
-> 2.35.1
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:59:6: error: no previous prototype for 'intel_pxp_debugfs_register' [-Werror=missing-prototypes]
+      59 | void intel_pxp_debugfs_register(struct intel_pxp *pxp, struct dentry *gt_root)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/intel_pxp_debugfs_register +59 drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c
+
+    57	
+    58	DEFINE_SIMPLE_ATTRIBUTE(pxp_terminate_fops, pxp_terminate_get, pxp_terminate_set, "%llx\n");
+  > 59	void intel_pxp_debugfs_register(struct intel_pxp *pxp, struct dentry *gt_root)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

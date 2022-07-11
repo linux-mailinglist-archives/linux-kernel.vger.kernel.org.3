@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCEF570961
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8178570965
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiGKRrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 13:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S231248AbiGKRrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 13:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiGKRqr (ORCPT
+        with ESMTP id S229978AbiGKRqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 13:46:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1272AC69
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:46:46 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id r6so2615522plg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:46:46 -0700 (PDT)
+        Mon, 11 Jul 2022 13:46:48 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536492B60B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:46:47 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id e132so5336401pgc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vOTmDUkpz+mPbUuokk0QP2W08wgjCdIdsM+mPgDGou0=;
-        b=V3fp0VSk9gvbvNZrW10f40Ews5n1xiSMtpJLcvEJcjL4jfDI8R2TfjOjLurvL4a4Kq
-         asHseIaY3FLyAeWFMiKkq0kSBrv5HX+CVWLg2bcTMK6rqrTNY9ZaT/VnugE9FK6xBpZx
-         gQcwByn7AW4Y130Y5S7itIxIX36fnfT0Oc4UMjhaMyVK0ugJ6+vJ2UipWRSj0sjWCUUm
-         Z5HiKKnYAQDZ7BDFqjV9T5OOyPNvMNnMg/dA0L+ND0cf8DCb1TuPQgSofpxZG3h543tu
-         4Ln4NjBamXgFyUsiOGtTQsVl8lFrvfSHHlVbqN6VXz2N2850DfkpvZqP/QihGroIj8lQ
-         clmA==
+        bh=sDSNj3lh6sTDX65OlCD100Y9q85i9QCNDNF32ttMwM0=;
+        b=u3VR8WAkynCBOJ8n0dSu67CSUM1scF+iq2HkJHHwWNCnCzIicRNMFcHK+9f0MZBUKQ
+         2aXzF3fJ2mSF/+/pXnxqh2DTiPjFsIQHBlpw9mwaQZQwXWVMG1Tm8cmVlOY07txFp/dW
+         ZD1VpBG/GdY26VU7j8RIWu88xaedmSxqrUubsg6pCNJxJUjE6UhSZsXkVVtzmdGuQ0e9
+         zx/pZSfjxadzXscPBqTtjVyAGHeqKieBkSg3veGkPyQD6B3MwJJuS1NbTFiUg3ak5Jwd
+         XKyyefVrH/G6lP4dpA8Y9wSPXHR3C5iUpIV+fwToNTXH+opA8A8zr5fKwNdlhvhludvn
+         nHrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vOTmDUkpz+mPbUuokk0QP2W08wgjCdIdsM+mPgDGou0=;
-        b=sskKLpwgiDI0jvbbDS1M6rFaJ0jOr+2DIT4wlA2/1+6xnyWGW0w2Af+W0zlIswk3ym
-         0xQph2pr5LZzGk1XgMQmpTGA4VVVRA9w7RlMOru6hkmRW2PLOEr5zcYZ26TcdmWDVB8q
-         UYMFsvIzsL0js/kK/tniFmIojcsCda4xZ/uZt2gvKLZRshKd17tJa/hbEatRNu98vTjo
-         qKmBjILOE7j0p6ix5I9e3iSfMp2wGQ+3G0x0IQAy3rnStGvl3lpJGPRoRk4wKHSehOFw
-         spsJxySQTJ1TdG6S86jPI5Qo9f3tMz238aUqo4PePhPWsbWAOUWsXWJ9YMPenZnFYa9l
-         TfIw==
-X-Gm-Message-State: AJIora8XqJKtfqp1AxhRi30rKkxPvb4uzWrv5+0XwAP4TgODoNAhy/sn
-        ejrreH0n31So4Sovz7d6TPWi6n9SDNqsaA==
-X-Google-Smtp-Source: AGRyM1sK7JtXLDkoMbF7C0EBnsfOqSTLfT/Hz3fUBzvyeiD8bJ+TTXzlwwJKP5VkY0rN4NQcrJVdZw==
-X-Received: by 2002:a17:902:ef4f:b0:16b:8744:6c5f with SMTP id e15-20020a170902ef4f00b0016b87446c5fmr20376864plx.60.1657561605667;
-        Mon, 11 Jul 2022 10:46:45 -0700 (PDT)
+        bh=sDSNj3lh6sTDX65OlCD100Y9q85i9QCNDNF32ttMwM0=;
+        b=H1q5UPWACNS5zBJsqN61gorwJcA8Z+JXLpoRur9Yie0lqz5khkhSDMbb9nQ+/q9orL
+         WzMrSwy71cx4b0lXifKaAMDVY/cyM8VqhaL1SMOFtda0gxhwFxnNwaVllItpcN/U7sbg
+         MPrIG6KH0HYVE+UDu5V+/L2LpRrpqiWGBc+9U8KZI0S8lChaDYQZKnfKidLFahTf3fB6
+         4grcrby8Jeyqan2xhPO/IbqvBMK4c5F49pDjMrm5hj4SKNeLaqMnQPjEjDJChvvFt3o0
+         6VYlutkPW6lZkn4dsFrIoZLSuxAvccPVZML015VjUNP4cmkUTXEmGIW2f1EeVZCOzcne
+         Rm3w==
+X-Gm-Message-State: AJIora9prtwgsWqcoCBvpeCFG57XLEprqYm830SzApDrBgTnIdhuiTVh
+        qEBFZ8PjxwAcr+Fx668+ItYAavOyoyFLVg==
+X-Google-Smtp-Source: AGRyM1sIjQ1yNU2YHO1M9vKkr0zih6h/RokRxyqSx3Rq6iQfnUyNXXET1eBJmKXi1sEon9yRbHennQ==
+X-Received: by 2002:a05:6a00:1d18:b0:52a:c350:6538 with SMTP id a24-20020a056a001d1800b0052ac3506538mr10510717pfx.7.1657561606627;
+        Mon, 11 Jul 2022 10:46:46 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b0016be9fa6807sm3236866pll.284.2022.07.11.10.46.44
+        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b0016be9fa6807sm3236866pll.284.2022.07.11.10.46.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 10:46:45 -0700 (PDT)
+        Mon, 11 Jul 2022 10:46:46 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -59,9 +59,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Will Deacon <will@kernel.org>
-Subject: [v3  3/5] RISC-V: Fix SBI PMU calls for RV32
-Date:   Mon, 11 Jul 2022 10:46:30 -0700
-Message-Id: <20220711174632.4186047-4-atishp@rivosinc.com>
+Subject: [v3  4/5] RISC-V: Move counter info definition to sbi header file
+Date:   Mon, 11 Jul 2022 10:46:31 -0700
+Message-Id: <20220711174632.4186047-5-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711174632.4186047-1-atishp@rivosinc.com>
 References: <20220711174632.4186047-1-atishp@rivosinc.com>
@@ -76,53 +76,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the SBI PMU calls does not pass 64bit arguments
-correctly and not under RV32 compile time flags. Currently,
-this doesn't create any incorrect results as RV64 ignores
-any value in the additional register and qemu doesn't support
-raw events.
-
-Fix those SBI calls in order to set correct values for RV32.
-
-Fixes: e9991434596f ("RISC-V: Add perf platform driver based on SBI PMU extension")
+Counter info encoding format is defined by the SBI specificaiton.
+KVM implementation of SBI PMU extension will also leverage this definition.
+Move the definition to common sbi header file from the sbi pmu driver.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- drivers/perf/riscv_pmu_sbi.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/riscv/include/asm/sbi.h | 14 ++++++++++++++
+ drivers/perf/riscv_pmu_sbi.c | 14 --------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 9e3c2cf1edaf..d633ac0f5a32 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -122,6 +122,20 @@ enum sbi_ext_pmu_fid {
+ 	SBI_EXT_PMU_COUNTER_FW_READ,
+ };
+ 
++union sbi_pmu_ctr_info {
++	unsigned long value;
++	struct {
++		unsigned long csr:12;
++		unsigned long width:6;
++#if __riscv_xlen == 32
++		unsigned long reserved:13;
++#else
++		unsigned long reserved:45;
++#endif
++		unsigned long type:1;
++	};
++};
++
+ #define RISCV_PMU_RAW_EVENT_MASK GENMASK_ULL(55, 0)
+ #define RISCV_PMU_RAW_EVENT_IDX 0x20000
+ 
 diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 3735337a4cfb..bae614c73b14 100644
+index bae614c73b14..24124546844c 100644
 --- a/drivers/perf/riscv_pmu_sbi.c
 +++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -274,8 +274,13 @@ static int pmu_sbi_ctr_get_idx(struct perf_event *event)
- 		cflags |= SBI_PMU_CFG_FLAG_SET_UINH;
+@@ -21,20 +21,6 @@
+ #include <asm/sbi.h>
+ #include <asm/hwcap.h>
  
- 	/* retrieve the available counter index */
-+#if defined(CONFIG_32BIT)
-+	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase, cmask,
-+			cflags, hwc->event_base, hwc->config, hwc->config >> 32);
-+#else
- 	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase, cmask,
- 			cflags, hwc->event_base, hwc->config, 0);
-+#endif
- 	if (ret.error) {
- 		pr_debug("Not able to find a counter for event %lx config %llx\n",
- 			hwc->event_base, hwc->config);
-@@ -417,8 +422,13 @@ static void pmu_sbi_ctr_start(struct perf_event *event, u64 ival)
- 	struct hw_perf_event *hwc = &event->hw;
- 	unsigned long flag = SBI_PMU_START_FLAG_SET_INIT_VALUE;
- 
-+#if defined(CONFIG_32BIT)
- 	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, hwc->idx,
- 			1, flag, ival, ival >> 32, 0);
-+#else
-+	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, hwc->idx,
-+			1, flag, ival, 0, 0);
-+#endif
- 	if (ret.error && (ret.error != SBI_ERR_ALREADY_STARTED))
- 		pr_err("Starting counter idx %d failed with error %d\n",
- 			hwc->idx, sbi_err_map_linux_errno(ret.error));
+-union sbi_pmu_ctr_info {
+-	unsigned long value;
+-	struct {
+-		unsigned long csr:12;
+-		unsigned long width:6;
+-#if __riscv_xlen == 32
+-		unsigned long reserved:13;
+-#else
+-		unsigned long reserved:45;
+-#endif
+-		unsigned long type:1;
+-	};
+-};
+-
+ /*
+  * RISC-V doesn't have hetergenous harts yet. This need to be part of
+  * per_cpu in case of harts with different pmu counters
 -- 
 2.25.1
 

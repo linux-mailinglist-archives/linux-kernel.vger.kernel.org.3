@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D410056F9AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AFD56F9AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiGKJHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S230293AbiGKJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiGKJHO (ORCPT
+        with ESMTP id S231127AbiGKJHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 05:07:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF222534;
-        Mon, 11 Jul 2022 02:07:06 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B7522BD6;
+        Mon, 11 Jul 2022 02:07:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC36FB80E7A;
-        Mon, 11 Jul 2022 09:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE9FC341CA;
-        Mon, 11 Jul 2022 09:07:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1AF06115B;
+        Mon, 11 Jul 2022 09:07:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4A1C34115;
+        Mon, 11 Jul 2022 09:07:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530423;
-        bh=S8GfHA3b6Zbarn8g73Z5/mfjji8h8RDNnKivTthVQsA=;
+        s=korg; t=1657530426;
+        bh=3Rmk8qZWpW2yMzZ5SsMzHiMd/7zR1ly06CyIaurBVtM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QDnKRZXjolUqS2Qte6wA1MrlslE3M9JCOFicfFSuE14liTX72wtmL3AtQ9umbSfOc
-         XCR1aAh1A8CguWAHkJR0tP5qB5/1kSGUbJANc+N9qyvvHpOcwt0cFCoNb63svlgTAb
-         B2lJoXG1DcIX3qXo1lpZnfFWrbF5/UuwHCbfcHAs=
+        b=b9LlgR20keYs0zimBSBBjgZ/Zn9LbHAx8ptUTcfGmUCcn+ky8hGMjP3Dvnoc4D29v
+         pNcV7PqnUNc6Fj93TTDWuMzIg9Z32jHbkT3dway5dSqd6WxSXZcZetNa7jmuSNPKcz
+         UuKh4gLfL8wbxOD+QWEJBtJqgc3uegZN650uo5Q8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Zhang, Bernice" <bernice.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Yian Chen <yian.chen@intel.com>,
-        Joerg Roedel <jroedel@suse.de>, Zhang@vger.kernel.org
-Subject: [PATCH 4.9 06/14] iommu/vt-d: Fix PCI bus rescan device hot add
-Date:   Mon, 11 Jul 2022 11:06:25 +0200
-Message-Id: <20220711090535.707526215@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.9 07/14] video: of_display_timing.h: include errno.h
+Date:   Mon, 11 Jul 2022 11:06:26 +0200
+Message-Id: <20220711090535.736124488@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
 References: <20220711090535.517697227@linuxfoundation.org>
@@ -56,57 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yian Chen <yian.chen@intel.com>
+From: Hsin-Yi Wang <hsinyi@chromium.org>
 
-commit 316f92a705a4c2bf4712135180d56f3cca09243a upstream.
+commit 3663a2fb325b8782524f3edb0ae32d6faa615109 upstream.
 
-Notifier calling chain uses priority to determine the execution
-order of the notifiers or listeners registered to the chain.
-PCI bus device hot add utilizes the notification mechanism.
+If CONFIG_OF is not enabled, default of_get_display_timing() returns an
+errno, so include the header.
 
-The current code sets low priority (INT_MIN) to Intel
-dmar_pci_bus_notifier and postpones DMAR decoding after adding
-new device into IOMMU. The result is that struct device pointer
-cannot be found in DRHD search for the new device's DMAR/IOMMU.
-Subsequently, the device is put under the "catch-all" IOMMU
-instead of the correct one. This could cause system hang when
-device TLB invalidation is sent to the wrong IOMMU. Invalidation
-timeout error and hard lockup have been observed and data
-inconsistency/crush may occur as well.
-
-This patch fixes the issue by setting a positive priority(1) for
-dmar_pci_bus_notifier while the priority of IOMMU bus notifier
-uses the default value(0), therefore DMAR decoding will be in
-advance of DRHD search for a new device to find the correct IOMMU.
-
-Following is a 2-step example that triggers the bug by simulating
-PCI device hot add behavior in Intel Sapphire Rapids server.
-
-echo 1 > /sys/bus/pci/devices/0000:6a:01.0/remove
-echo 1 > /sys/bus/pci/rescan
-
-Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
-Cc: stable@vger.kernel.org # v3.15+
-Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Yian Chen <yian.chen@intel.com>
-Link: https://lore.kernel.org/r/20220521002115.1624069-1-yian.chen@intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: 422b67e0b31a ("videomode: provide dummy inline functions for !CONFIG_OF")
+Suggested-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/dmar.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/video/of_display_timing.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/iommu/dmar.c
-+++ b/drivers/iommu/dmar.c
-@@ -373,7 +373,7 @@ static int dmar_pci_bus_notifier(struct
+--- a/include/video/of_display_timing.h
++++ b/include/video/of_display_timing.h
+@@ -9,6 +9,8 @@
+ #ifndef __LINUX_OF_DISPLAY_TIMING_H
+ #define __LINUX_OF_DISPLAY_TIMING_H
  
- static struct notifier_block dmar_pci_bus_nb = {
- 	.notifier_call = dmar_pci_bus_notifier,
--	.priority = INT_MIN,
-+	.priority = 1,
- };
- 
- static struct dmar_drhd_unit *
++#include <linux/errno.h>
++
+ struct device_node;
+ struct display_timing;
+ struct display_timings;
 
 

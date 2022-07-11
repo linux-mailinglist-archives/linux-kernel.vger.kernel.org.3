@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B5756FA3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AE856FB69
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiGKJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S232543AbiGKJaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiGKJNy (ORCPT
+        with ESMTP id S232606AbiGKJ3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:13:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E214A286E6;
-        Mon, 11 Jul 2022 02:09:59 -0700 (PDT)
+        Mon, 11 Jul 2022 05:29:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3E110EF;
+        Mon, 11 Jul 2022 02:16:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6807AB80D2C;
-        Mon, 11 Jul 2022 09:09:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B94C34115;
-        Mon, 11 Jul 2022 09:09:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C3061278;
+        Mon, 11 Jul 2022 09:16:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E96C34115;
+        Mon, 11 Jul 2022 09:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530597;
-        bh=6sP7RL3xTS8nI1qeT7Pu8e+0tD2TtYrZtzMZePXEVaE=;
+        s=korg; t=1657530977;
+        bh=45YfZqTeBaddWVj5ELAXw0HVwdPptdajeRd/ErUVfHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZKFqocZgopyMoMoQAjityRGj0X8FPG7vFefg2FYJiDcrGZji2Mb3GmiRAufKdzZP
-         F4bKHT6CScZ/yn+XnbxE93sZ584an4O5LvMgdWrN/fqsdjFnnReSxHKF4h6+0FFKMS
-         jpzJeZHDURewUIA6U1fV1o3fYLQOnSYA44EyGiTg=
+        b=FqpQHRqHfUCDdwFZIaxZACgQjp+XkAl84aJP+Tt9HtwBrF0wq7KywZbDZZRfJ7Hdm
+         ecz0pdRSkVAZ846FPGhTAGYkD8ERm2xzSoEWLAh4NuCb+OeViBPfmd+FoK4fA7wK35
+         QmEbEUbjaiNvJkJPFTn+DYXl2Xr3FzQMiZ7X/qyM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 5.4 10/38] fbmem: Check virtual screen sizes in fb_set_var()
+        stable@vger.kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 052/112] ASoC: SOF: Intel: hda: Fix compressed stream position tracking
 Date:   Mon, 11 Jul 2022 11:06:52 +0200
-Message-Id: <20220711090539.031561621@linuxfoundation.org>
+Message-Id: <20220711090551.048463206@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +58,250 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-commit 6c11df58fd1ac0aefcb3b227f72769272b939e56 upstream.
+[ Upstream commit ca7ab1dcf58dfce5bc851bf7e50fd94822c24665 ]
 
-Verify that the fbdev or drm driver correctly adjusted the virtual
-screen sizes. On failure report the failing driver and reject the screen
-size change.
+Commit 288fad2f71fa ("ASoC: SOF: Intel: hda: add quirks for HDAudio DMA position information")
+modified the PCM path only, but left the compressed data patch using an
+obsolete option.
+Move the functionality in a helper that can be called for both PCM and
+compressed data.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stable@vger.kernel.org # v5.4+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Fixes: 288fad2f71fa ("ASoC: SOF: Intel: hda: add quirks for HDAudio DMA position information")
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220616201953.130876-1-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ sound/soc/sof/intel/hda-pcm.c    | 74 +------------------------
+ sound/soc/sof/intel/hda-stream.c | 94 ++++++++++++++++++++++++++++++--
+ sound/soc/sof/intel/hda.h        |  3 +
+ 3 files changed, 94 insertions(+), 77 deletions(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1014,6 +1014,16 @@ fb_set_var(struct fb_info *info, struct
- 	if (ret)
- 		return ret;
+diff --git a/sound/soc/sof/intel/hda-pcm.c b/sound/soc/sof/intel/hda-pcm.c
+index dc1f743730c0..6888e0a4665d 100644
+--- a/sound/soc/sof/intel/hda-pcm.c
++++ b/sound/soc/sof/intel/hda-pcm.c
+@@ -192,79 +192,7 @@ snd_pcm_uframes_t hda_dsp_pcm_pointer(struct snd_sof_dev *sdev,
+ 		goto found;
+ 	}
  
-+	/* verify that virtual resolution >= physical resolution */
-+	if (var->xres_virtual < var->xres ||
-+	    var->yres_virtual < var->yres) {
-+		pr_warn("WARNING: fbcon: Driver '%s' missed to adjust virtual screen size (%ux%u vs. %ux%u)\n",
-+			info->fix.id,
-+			var->xres_virtual, var->yres_virtual,
-+			var->xres, var->yres);
-+		return -EINVAL;
+-	switch (sof_hda_position_quirk) {
+-	case SOF_HDA_POSITION_QUIRK_USE_SKYLAKE_LEGACY:
+-		/*
+-		 * This legacy code, inherited from the Skylake driver,
+-		 * mixes DPIB registers and DPIB DDR updates and
+-		 * does not seem to follow any known hardware recommendations.
+-		 * It's not clear e.g. why there is a different flow
+-		 * for capture and playback, the only information that matters is
+-		 * what traffic class is used, and on all SOF-enabled platforms
+-		 * only VC0 is supported so the work-around was likely not necessary
+-		 * and quite possibly wrong.
+-		 */
+-
+-		/* DPIB/posbuf position mode:
+-		 * For Playback, Use DPIB register from HDA space which
+-		 * reflects the actual data transferred.
+-		 * For Capture, Use the position buffer for pointer, as DPIB
+-		 * is not accurate enough, its update may be completed
+-		 * earlier than the data written to DDR.
+-		 */
+-		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-			pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
+-					       AZX_REG_VS_SDXDPIB_XBASE +
+-					       (AZX_REG_VS_SDXDPIB_XINTERVAL *
+-						hstream->index));
+-		} else {
+-			/*
+-			 * For capture stream, we need more workaround to fix the
+-			 * position incorrect issue:
+-			 *
+-			 * 1. Wait at least 20us before reading position buffer after
+-			 * the interrupt generated(IOC), to make sure position update
+-			 * happens on frame boundary i.e. 20.833uSec for 48KHz.
+-			 * 2. Perform a dummy Read to DPIB register to flush DMA
+-			 * position value.
+-			 * 3. Read the DMA Position from posbuf. Now the readback
+-			 * value should be >= period boundary.
+-			 */
+-			usleep_range(20, 21);
+-			snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
+-					 AZX_REG_VS_SDXDPIB_XBASE +
+-					 (AZX_REG_VS_SDXDPIB_XINTERVAL *
+-					  hstream->index));
+-			pos = snd_hdac_stream_get_pos_posbuf(hstream);
+-		}
+-		break;
+-	case SOF_HDA_POSITION_QUIRK_USE_DPIB_REGISTERS:
+-		/*
+-		 * In case VC1 traffic is disabled this is the recommended option
+-		 */
+-		pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
+-				       AZX_REG_VS_SDXDPIB_XBASE +
+-				       (AZX_REG_VS_SDXDPIB_XINTERVAL *
+-					hstream->index));
+-		break;
+-	case SOF_HDA_POSITION_QUIRK_USE_DPIB_DDR_UPDATE:
+-		/*
+-		 * This is the recommended option when VC1 is enabled.
+-		 * While this isn't needed for SOF platforms it's added for
+-		 * consistency and debug.
+-		 */
+-		pos = snd_hdac_stream_get_pos_posbuf(hstream);
+-		break;
+-	default:
+-		dev_err_once(sdev->dev, "hda_position_quirk value %d not supported\n",
+-			     sof_hda_position_quirk);
+-		pos = 0;
+-		break;
+-	}
+-
+-	if (pos >= hstream->bufsize)
+-		pos = 0;
+-
++	pos = hda_dsp_stream_get_position(hstream, substream->stream, true);
+ found:
+ 	pos = bytes_to_frames(substream->runtime, pos);
+ 
+diff --git a/sound/soc/sof/intel/hda-stream.c b/sound/soc/sof/intel/hda-stream.c
+index daeb64c495e4..d95ae17e81cc 100644
+--- a/sound/soc/sof/intel/hda-stream.c
++++ b/sound/soc/sof/intel/hda-stream.c
+@@ -707,12 +707,13 @@ bool hda_dsp_check_stream_irq(struct snd_sof_dev *sdev)
+ }
+ 
+ static void
+-hda_dsp_set_bytes_transferred(struct hdac_stream *hstream, u64 buffer_size)
++hda_dsp_compr_bytes_transferred(struct hdac_stream *hstream, int direction)
+ {
++	u64 buffer_size = hstream->bufsize;
+ 	u64 prev_pos, pos, num_bytes;
+ 
+ 	div64_u64_rem(hstream->curr_pos, buffer_size, &prev_pos);
+-	pos = snd_hdac_stream_get_pos_posbuf(hstream);
++	pos = hda_dsp_stream_get_position(hstream, direction, false);
+ 
+ 	if (pos < prev_pos)
+ 		num_bytes = (buffer_size - prev_pos) +  pos;
+@@ -748,8 +749,7 @@ static bool hda_dsp_stream_check(struct hdac_bus *bus, u32 status)
+ 			if (s->substream && sof_hda->no_ipc_position) {
+ 				snd_sof_pcm_period_elapsed(s->substream);
+ 			} else if (s->cstream) {
+-				hda_dsp_set_bytes_transferred(s,
+-					s->cstream->runtime->buffer_size);
++				hda_dsp_compr_bytes_transferred(s, s->cstream->direction);
+ 				snd_compr_fragment_elapsed(s->cstream);
+ 			}
+ 		}
+@@ -1009,3 +1009,89 @@ void hda_dsp_stream_free(struct snd_sof_dev *sdev)
+ 		devm_kfree(sdev->dev, hda_stream);
+ 	}
+ }
++
++snd_pcm_uframes_t hda_dsp_stream_get_position(struct hdac_stream *hstream,
++					      int direction, bool can_sleep)
++{
++	struct hdac_ext_stream *hext_stream = stream_to_hdac_ext_stream(hstream);
++	struct sof_intel_hda_stream *hda_stream = hstream_to_sof_hda_stream(hext_stream);
++	struct snd_sof_dev *sdev = hda_stream->sdev;
++	snd_pcm_uframes_t pos;
++
++	switch (sof_hda_position_quirk) {
++	case SOF_HDA_POSITION_QUIRK_USE_SKYLAKE_LEGACY:
++		/*
++		 * This legacy code, inherited from the Skylake driver,
++		 * mixes DPIB registers and DPIB DDR updates and
++		 * does not seem to follow any known hardware recommendations.
++		 * It's not clear e.g. why there is a different flow
++		 * for capture and playback, the only information that matters is
++		 * what traffic class is used, and on all SOF-enabled platforms
++		 * only VC0 is supported so the work-around was likely not necessary
++		 * and quite possibly wrong.
++		 */
++
++		/* DPIB/posbuf position mode:
++		 * For Playback, Use DPIB register from HDA space which
++		 * reflects the actual data transferred.
++		 * For Capture, Use the position buffer for pointer, as DPIB
++		 * is not accurate enough, its update may be completed
++		 * earlier than the data written to DDR.
++		 */
++		if (direction == SNDRV_PCM_STREAM_PLAYBACK) {
++			pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
++					       AZX_REG_VS_SDXDPIB_XBASE +
++					       (AZX_REG_VS_SDXDPIB_XINTERVAL *
++						hstream->index));
++		} else {
++			/*
++			 * For capture stream, we need more workaround to fix the
++			 * position incorrect issue:
++			 *
++			 * 1. Wait at least 20us before reading position buffer after
++			 * the interrupt generated(IOC), to make sure position update
++			 * happens on frame boundary i.e. 20.833uSec for 48KHz.
++			 * 2. Perform a dummy Read to DPIB register to flush DMA
++			 * position value.
++			 * 3. Read the DMA Position from posbuf. Now the readback
++			 * value should be >= period boundary.
++			 */
++			if (can_sleep)
++				usleep_range(20, 21);
++
++			snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
++					 AZX_REG_VS_SDXDPIB_XBASE +
++					 (AZX_REG_VS_SDXDPIB_XINTERVAL *
++					  hstream->index));
++			pos = snd_hdac_stream_get_pos_posbuf(hstream);
++		}
++		break;
++	case SOF_HDA_POSITION_QUIRK_USE_DPIB_REGISTERS:
++		/*
++		 * In case VC1 traffic is disabled this is the recommended option
++		 */
++		pos = snd_sof_dsp_read(sdev, HDA_DSP_HDA_BAR,
++				       AZX_REG_VS_SDXDPIB_XBASE +
++				       (AZX_REG_VS_SDXDPIB_XINTERVAL *
++					hstream->index));
++		break;
++	case SOF_HDA_POSITION_QUIRK_USE_DPIB_DDR_UPDATE:
++		/*
++		 * This is the recommended option when VC1 is enabled.
++		 * While this isn't needed for SOF platforms it's added for
++		 * consistency and debug.
++		 */
++		pos = snd_hdac_stream_get_pos_posbuf(hstream);
++		break;
++	default:
++		dev_err_once(sdev->dev, "hda_position_quirk value %d not supported\n",
++			     sof_hda_position_quirk);
++		pos = 0;
++		break;
 +	}
 +
- 	if ((var->activate & FB_ACTIVATE_MASK) != FB_ACTIVATE_NOW)
- 		return 0;
++	if (pos >= hstream->bufsize)
++		pos = 0;
++
++	return pos;
++}
+diff --git a/sound/soc/sof/intel/hda.h b/sound/soc/sof/intel/hda.h
+index 05e5e158614a..196494ba1245 100644
+--- a/sound/soc/sof/intel/hda.h
++++ b/sound/soc/sof/intel/hda.h
+@@ -557,6 +557,9 @@ int hda_dsp_stream_setup_bdl(struct snd_sof_dev *sdev,
+ bool hda_dsp_check_ipc_irq(struct snd_sof_dev *sdev);
+ bool hda_dsp_check_stream_irq(struct snd_sof_dev *sdev);
  
++snd_pcm_uframes_t hda_dsp_stream_get_position(struct hdac_stream *hstream,
++					      int direction, bool can_sleep);
++
+ struct hdac_ext_stream *
+ 	hda_dsp_stream_get(struct snd_sof_dev *sdev, int direction, u32 flags);
+ int hda_dsp_stream_put(struct snd_sof_dev *sdev, int direction, int stream_tag);
+-- 
+2.35.1
+
 
 

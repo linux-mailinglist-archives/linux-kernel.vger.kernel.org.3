@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A617C570494
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA6057049F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiGKNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S229599AbiGKNri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiGKNnz (ORCPT
+        with ESMTP id S229676AbiGKNrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:43:55 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5914116F;
-        Mon, 11 Jul 2022 06:43:50 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 6B14E1B000E0;
-        Mon, 11 Jul 2022 16:43:47 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1657547027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EluWmIIUJxvr7SA4wTQouzBF9nmaOCP6Dx5/r969wak=;
-        b=jMPZZKxAGCUYgmypae0r1zi5xD/0LFMxc+8F16hdZVR6eaOava31hZjQG+oDh+ll52lm5q
-        LsOJguT6DuSvtPtyfOvQuMIPOy6CDg77pEX84Yan7N70TjgJyVMzXEe/NNbtKaE8h5tUCb
-        uRN1QarbLJCOjG8yoFx4WJ7L9p5zYvT09oyIlyXfyMxbt183Ap4gk0937wYcQUDMRM6gh3
-        OLjVqIHDAZxr0Oe2PAy3yyf0FP65+tjIvpJaFd3S+pJQTtYARRfiK5Y+JGKJXSUfiF1OiR
-        x3EIQ1euD+6554xrUMpbyf7Z/341FfniEdv4cvxNmyQZEmBg1fTr2qrQ3dxYgQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id EDB27634D5F;
-        Mon, 11 Jul 2022 16:43:46 +0300 (EEST)
-Date:   Mon, 11 Jul 2022 16:43:46 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ovl: Modify the section of Return Value
-Message-ID: <YswpEo+liqx9qBCI@valkosipuli.retiisi.eu>
-References: <20220624014707.2057-1-wangdeming@inspur.com>
+        Mon, 11 Jul 2022 09:47:36 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A2452E57
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:47:35 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id l23so8908806ejr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DjwJ2lXT0i+HUz5O+JVv9nTb4O1sy57SFFPwASu6wgc=;
+        b=Eedf74tXPQaZVVxLSk0EQ3VllXkjFE9SWr72ktJrdcVUbqy6T0l3fE6qbwf9wvqSHQ
+         gUTCkL5Bmh6wzRR/+3N8twr8x6+OOgPG3qENPbelO8gKJDGlT792ykdOAdsLUNobbaiv
+         ggC+DAwcCSibGE5VWiUeiiHXNvZ1V1fL8nhQU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DjwJ2lXT0i+HUz5O+JVv9nTb4O1sy57SFFPwASu6wgc=;
+        b=pIGALkG5ZZJ02MKKu8JJ10wb8YFcIxcxWdGQ4dMO/kKXgcldLzzapnA9R7ZVSiO0po
+         uZjfuKT3gD7uVHb6bZ634WcsJStSuyPKNPXfZr2+FFkjh3CLD6i2MboiQ+7gYZbbXJ6C
+         yc5UIwi28ASWHyU2w/cfts6D3aWTnoDfx4o8+/sgFYtpT/poZXf4fkdUXz95aZbC+m+x
+         VZfDDyF0p3b3rP7ZM1FBYKO+7CPY4MO/G565+aoZeCgwBpdjlGFUOfKsb4MbBPoI55KN
+         FhIXcdMGvExnhx77kcg5QVrgeCt+jLSpcok+A5RluYQCE10o4b4wj+Zb/+6GF5fmydPs
+         y/cg==
+X-Gm-Message-State: AJIora/ri7xjQYKbW3I1JyMNckbV5ZB8BBFPqBM1fl4UrswzVsS11ZCU
+        gj4lpzcM7J2yvRQ6GH7fp42r/Eg975R1VQ==
+X-Google-Smtp-Source: AGRyM1uF9nnTLdiI88Jm6suK/3/gBlwc++HFuSCvdVr7qInEeI+SQyAvx/DY0KnY3Z2SF8OxEnPwCQ==
+X-Received: by 2002:a17:907:6818:b0:72b:5bac:c3a3 with SMTP id qz24-20020a170907681800b0072b5bacc3a3mr3537900ejc.139.1657547253429;
+        Mon, 11 Jul 2022 06:47:33 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id p13-20020aa7d30d000000b0043575ae2051sm4298898edq.62.2022.07.11.06.47.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 06:47:32 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so5063740wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:47:32 -0700 (PDT)
+X-Received: by 2002:a05:600c:511c:b0:3a2:d480:9390 with SMTP id
+ o28-20020a05600c511c00b003a2d4809390mr15693873wms.93.1657547252097; Mon, 11
+ Jul 2022 06:47:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624014707.2057-1-wangdeming@inspur.com>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1657547027; a=rsa-sha256;
-        cv=none;
-        b=lBcoLn+UOrbixn8DIme3yR1+2yKbRZvldDuErCa+3rabvt8/tO+swQzWq4b5QXkNaV0kAi
-        Z1YVbhr3TRrvI4ekYhpBF09V/MQcApZfej5lqsdgS1RG8X2wQN9Orl8bMIc/HGjLTYoMtM
-        QM+5+8C0SRJGq76rvSZya1japm0bHtFDFItnyrvO57cPu27G9tKckkBTYK+CGWhhmwr4bB
-        zQ0VxFw6xYW33xMJQsIJS769QycQ4fe+XjmgE6v4AWrG7X4XqZFHpfGJFpgtRHIpn3QTiz
-        aSFSycgHBeXHOnHxRcIsYjmB04YLGUneW0la65fhzoTp05BOgY9yLefJFkuHng==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1657547027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EluWmIIUJxvr7SA4wTQouzBF9nmaOCP6Dx5/r969wak=;
-        b=ntgK91V9HqVo8mWXPNy0PIStFxYgfEY37WnRFVdI/mrxuxiO0FFd3PZ/eFcynKcCNZmaj1
-        UbrlSsNwLKLKSdASBjLG4E0Y3NS77mF/QZXOFvhhV2QGSkNXQn83xtjNUN3Ml5jqSf89G2
-        sdiYp4Z03Me43tf0cYbj6/euG0hZ5HFn3Uukl3FEF/eFqVgmT7FIpNidomj7ir2S6J+tn7
-        ABllOLjZN02NGI+Ry9UM7PWNGoaAAGnSw0bhYEx+aTAVTdweaqKzgZmO+Jz9HHnknSuu4D
-        VccT0feLIByl1T0kgHALmYquArXMpVFpnIwjvI6e4HBhdEvLo6D3HFuUsFMfpg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220511060521.465744-1-sumit.garg@linaro.org>
+ <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com> <CAFA6WYPmFqCXk24J71tNO=5bJHgJRAOPFr7cGq8YYLR+MWBoPw@mail.gmail.com>
+In-Reply-To: <CAFA6WYPmFqCXk24J71tNO=5bJHgJRAOPFr7cGq8YYLR+MWBoPw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 11 Jul 2022 06:47:18 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WdMsqrsWzX=0RU5HJ1a0cy-pm4BwP47siLj=+eeEXUQA@mail.gmail.com>
+Message-ID: <CAD=FV=WdMsqrsWzX=0RU5HJ1a0cy-pm4BwP47siLj=+eeEXUQA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Will Deacon <will@kernel.org>, Wei Li <liwei391@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Deming,
+Hi,
 
-On Thu, Jun 23, 2022 at 09:47:07PM -0400, Deming Wang wrote:
-> Delete duplicate words of "the".
+On Mon, Jul 11, 2022 at 5:44 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> > I'll also note that I _think_ I remember that with Wei's series that
+> > the gdb function "call" started working. I tried that here and it
+> > didn't seem so happy. To keep things simple, I created a dummy
+> > function in my kernel that looked like:
+> >
+> > void doug_test(void)
+> > {
+> >   pr_info("testing, 1 2 3\n");
+> > }
+> >
+> > I broke into the debugger by echoing "g" to /proc/sysrq-trigger and
+> > then tried "call doug_test()". I guess my printout actually printed
+> > but it wasn't so happy after that. Seems like it somehow ended up
+> > returning to a bogus address after the call which then caused a crash.
+> >
+>
+> I am able to reproduce this issue on my setup as well. But it doesn't
+> seem to be a regression caused by this patch-set over Wei's series. As
+> I could reproduce this issue with v1 [1] patch-set as well which was
+> just a forward port of pending patches from Wei's series to the latest
+> upstream.
+>
+> Maybe it's a different regression caused by other changes? BTW, do you
+> remember the kernel version you tested with Wei's series applied?
 
-Thanks for the patch.
+Sorry, I don't remember! :( I can't even be 100% sure that I'm
+remembering correctly that I tested it back in the day, so it's
+possible that it simply never worked...
 
-The patch itself seems fine, but I'd reword the subject and try to improve
-the commit message.
-
-In the commit message, there's a single article (the) and "of" is just
-extra.
-
--- 
-Regards,
-
-Sakari Ailus
+-Doug

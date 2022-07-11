@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E154256FF91
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEAC56FF95
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiGKK4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S229843AbiGKK5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiGKK4L (ORCPT
+        with ESMTP id S229769AbiGKK45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:56:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FB1FE516
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657533687; x=1689069687;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1oSD9MqauB/qwzh9VWhLPcyk4oTHCUen8yzMNm9SlPE=;
-  b=PpcQZLRl6VhSryOzpUaUNwfqU4Um3/3GkO+l9sBqW7ubPFCfuw2cdKTG
-   yLizUWFsC1sVtngMbkOmKx5fVqU6ViNbOvUNmO7Gulov3SGBmrb7vRM4C
-   HAimoNmE54IN9GTjo5oDB3NL+J/yPNVOqaXpyA5pnlKBOXwf7ORtsezi3
-   fK+dXePRL8OPB7vp9Ycts/ulSK9liO2zlMxA28qzeGloKmdIpKlMpsSlQ
-   KC5qEQdyoo52JwuDeVUhEEZk9M7l3+OtC+ehYkMBKPdIhh9fYnAJv31sy
-   1vC6Lu0ltYYfXPJxPfwa01evW2uXOP/UFHcEmvm7u4C4ENh7+fYQwdTcC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="370931585"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="370931585"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 03:01:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="840955816"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2022 03:01:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DD1561A0; Mon, 11 Jul 2022 13:01:30 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Takashi Iwai <tiwai@suse.de>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Cc:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v1 1/1] ALSA: hda: cs35l41: Fix comments wrt serial-multi-instantiate reference
-Date:   Mon, 11 Jul 2022 13:01:29 +0300
-Message-Id: <20220711100129.37326-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 11 Jul 2022 06:56:57 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96DEFFE01
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:02:04 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id mf4so6764355ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wGvgUoEpgRoFdw5xB3ByPDZ/Z4C3Oec3OA9m4e/7zr0=;
+        b=RSgSJPGfw4G/qutpiBewn0jq3S+XphrS/nSQldk+zB5jc6SNG8BxH9gtyCt31mxMv2
+         oFN/E92Iu6kUuYasX4qE1vwxnsrS6rsW9XS9HaKp2j5hSWLKACY+5Y0RnDzYL1vDfZUr
+         Y4zo4jJ1CbgQdJCqjgjTo6/1lYCsgeB+9xLhRAL4bWzEBn5tENPcU8udqd3DNZxIJwYP
+         MK3PTfEigpvND3GsN13ZGfI4lDjQxQEWHY72T7bXff0JD+5fP+ua4D2MEcPRKBP/HYmX
+         m7RAaehwlsir7ffzRR4pswlInHpW6hvYC3ZKdGfzSrXN4ZRu9KmRl4fMxi6g1trSpdNT
+         GqaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wGvgUoEpgRoFdw5xB3ByPDZ/Z4C3Oec3OA9m4e/7zr0=;
+        b=IYrBG6iWzBHlAVu29qIKbVAhshRTKsOclVMrBFQqnVBNNPYpSUoGHfN1Ti29xK4Mn7
+         5gmmjwE81q/4XL/VMVpCteyqrvtO8N9NQzmSQJ3TjUaaCDX3xGBlqB1SYE4sDy8mfbc1
+         DjKdf4HWjUHZowlGrgPB4iiGyGWKf+Ztt+TCt3VBvQXlkuio9pKl3GBKzQhPc5/qpn0f
+         gB7fzu+H6qS9yoPN86Jrrezeuj+ou2L2g+kZ3bjxC2yXnDQD/dfpD9ZbAVKeCvCdbgJt
+         cchAtO55Zp7Z8rU5m6FzKmftOTHdfRkwqnh34SWJkWP4M3CyP6yMen6udr6iOQ9+MnMk
+         XOlw==
+X-Gm-Message-State: AJIora8E079hB/Gr89MQ8/yAdJcCSXjkwMb8g6EYG1muKbkphwFEHWXp
+        0yexZNGZTiUIw/7ubV/MUds2mJk592Srt5TZRt5kDg==
+X-Google-Smtp-Source: AGRyM1vafSCHUmSjW+hMdfrXxS7hOwpJ9tY3psQHMQaljV4Evx72JF9q90YXl+Rpw/+ZgPbrzliXxhhDryKeNeHi9yQ=
+X-Received: by 2002:a17:906:8462:b0:72b:4e05:a8c1 with SMTP id
+ hx2-20020a170906846200b0072b4e05a8c1mr6181720ejc.443.1657533723516; Mon, 11
+ Jul 2022 03:02:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ca9c5c8301d76d60de34640568b3db0d4401d050.1657298747.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ca9c5c8301d76d60de34640568b3db0d4401d050.1657298747.git.christophe.jaillet@wanadoo.fr>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Mon, 11 Jul 2022 12:01:53 +0200
+Message-ID: <CAMGffEk46vD2d-GCR5VPYiAQi3268sz9PiH6Zvuru8zUW03eXQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] RDMA/rtrs-clt: Use the bitmap API to allocate bitmaps
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comments are inconsistent and point to the wrong driver name.
-The initially named i2c-multi-instantiate it was renamed to the
-serial-multi-instantiate exactly due to support of the platforms
-with multiple CS35L41 codecs.
-
-Fix comments accordingly.
-
-While at it, drop file names from the files.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- sound/pci/hda/cs35l41_hda.c     | 4 ++--
- sound/pci/hda/cs35l41_hda_i2c.c | 7 ++++---
- sound/pci/hda/cs35l41_hda_spi.c | 7 ++++---
- 3 files changed, 10 insertions(+), 8 deletions(-)
-
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 23a97ada7272..49b25432a9f5 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -415,8 +415,8 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
- no_acpi_dsd:
- 	/*
- 	 * Device CLSA0100 doesn't have _DSD so a gpiod_get by the label reset won't work.
--	 * And devices created by i2c-multi-instantiate don't have their device struct pointing to
--	 * the correct fwnode, so acpi_dev must be used here.
-+	 * And devices created by serial-multi-instantiate don't have their device struct
-+	 * pointing to the correct fwnode, so acpi_dev must be used here.
- 	 * And devm functions expect that the device requesting the resource has the correct
- 	 * fwnode.
- 	 */
-diff --git a/sound/pci/hda/cs35l41_hda_i2c.c b/sound/pci/hda/cs35l41_hda_i2c.c
-index 5cfb5aac37ac..df39fc76e6be 100644
---- a/sound/pci/hda/cs35l41_hda_i2c.c
-+++ b/sound/pci/hda/cs35l41_hda_i2c.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- //
--// cs35l41.c -- CS35l41 HDA I2C driver
-+// CS35l41 HDA I2C driver
- //
- // Copyright 2021 Cirrus Logic, Inc.
- //
-@@ -16,8 +16,9 @@ static int cs35l41_hda_i2c_probe(struct i2c_client *clt, const struct i2c_device
- {
- 	const char *device_name;
- 
--	/* Compare against the device name so it works for I2C, normal ACPI
--	 * and for ACPI by i2c-multi-instantiate matching cases
-+	/*
-+	 * Compare against the device name so it works for SPI, normal ACPI
-+	 * and for ACPI by serial-multi-instantiate matching cases.
- 	 */
- 	if (strstr(dev_name(&clt->dev), "CLSA0100"))
- 		device_name = "CLSA0100";
-diff --git a/sound/pci/hda/cs35l41_hda_spi.c b/sound/pci/hda/cs35l41_hda_spi.c
-index c9a61675c4fd..2f5afad3719e 100644
---- a/sound/pci/hda/cs35l41_hda_spi.c
-+++ b/sound/pci/hda/cs35l41_hda_spi.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- //
--// cs35l41.c -- CS35l41 HDA SPI driver
-+// CS35l41 HDA SPI driver
- //
- // Copyright 2021 Cirrus Logic, Inc.
- //
-@@ -16,8 +16,9 @@ static int cs35l41_hda_spi_probe(struct spi_device *spi)
- {
- 	const char *device_name;
- 
--	/* Compare against the device name so it works for SPI, normal ACPI
--	 * and for ACPI by spi-multi-instantiate matching cases
-+	/*
-+	 * Compare against the device name so it works for SPI, normal ACPI
-+	 * and for ACPI by serial-multi-instantiate matching cases.
- 	 */
- 	if (strstr(dev_name(&spi->dev), "CSC3551"))
- 		device_name = "CSC3551";
--- 
-2.35.1
-
+On Fri, Jul 8, 2022 at 6:47 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+>
+> It is less verbose and it improves the semantic.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+Thx!
+> ---
+>  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> index 9809c3883979..06c27a3d83f5 100644
+> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> @@ -1403,8 +1403,7 @@ static int alloc_permits(struct rtrs_clt_sess *clt)
+>         unsigned int chunk_bits;
+>         int err, i;
+>
+> -       clt->permits_map = kcalloc(BITS_TO_LONGS(clt->queue_depth),
+> -                                  sizeof(long), GFP_KERNEL);
+> +       clt->permits_map = bitmap_zalloc(clt->queue_depth, GFP_KERNEL);
+>         if (!clt->permits_map) {
+>                 err = -ENOMEM;
+>                 goto out_err;
+> @@ -1426,7 +1425,7 @@ static int alloc_permits(struct rtrs_clt_sess *clt)
+>         return 0;
+>
+>  err_map:
+> -       kfree(clt->permits_map);
+> +       bitmap_free(clt->permits_map);
+>         clt->permits_map = NULL;
+>  out_err:
+>         return err;
+> @@ -1440,7 +1439,7 @@ static void free_permits(struct rtrs_clt_sess *clt)
+>                 wait_event(clt->permits_wait,
+>                            find_first_bit(clt->permits_map, sz) >= sz);
+>         }
+> -       kfree(clt->permits_map);
+> +       bitmap_free(clt->permits_map);
+>         clt->permits_map = NULL;
+>         kfree(clt->permits);
+>         clt->permits = NULL;
+> --
+> 2.34.1
+>

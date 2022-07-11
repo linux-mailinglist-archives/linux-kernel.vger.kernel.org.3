@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4070856FC06
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D3D56FACD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiGKJh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S231723AbiGKJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiGKJhE (ORCPT
+        with ESMTP id S231859AbiGKJVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:37:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D76F4D4DE;
-        Mon, 11 Jul 2022 02:19:22 -0700 (PDT)
+        Mon, 11 Jul 2022 05:21:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7709E2B615;
+        Mon, 11 Jul 2022 02:13:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C0D612B7;
-        Mon, 11 Jul 2022 09:19:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D1AC34115;
-        Mon, 11 Jul 2022 09:19:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D1DBB80CEF;
+        Mon, 11 Jul 2022 09:13:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC7AC34115;
+        Mon, 11 Jul 2022 09:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531161;
-        bh=13USmbIN3HFkiw1i02GRSczp16nmyxwwPWc6C2ThZb8=;
+        s=korg; t=1657530778;
+        bh=jhc/ulTw10SoBS56aSkgurPUpyWUw86gbF4tzyLdDKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fOsG8kTSUWExCk95r5st4sNHLxcKgUT3wLjJhIvhtoI5SDS2Hj4kMa7Si9Ap1amn9
-         Mh7FwnfLgmsXeyKhkJgsLZQQkx+qqmJmWcNa6JH9Wa1gBrCY3rOIGX0dJQe2wQB9jM
-         ONVeoj1+U3M/llD/fAzLIa1wr60WXpVcYIPbl9Tw=
+        b=xtPbbOZ5MsR4AuTB3tW78G4VMNDlwqNzJ2MTGckELxTFF/i4zfCUrUfUdlAhopU2Y
+         w95Q6JbsPbCdqUx/iwWius/lOBrLPsHGBdTizriKwnLnUNkJfSAMvcgrGbjHRcDufO
+         ZrZEv5hvzmC4mRSBOqJIb0JZUje9CRxCAVrH/RDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 083/112] selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
-Date:   Mon, 11 Jul 2022 11:07:23 +0200
-Message-Id: <20220711090551.927835704@linuxfoundation.org>
+Subject: [PATCH 5.10 36/55] ARM: dts: at91: sam9x60ek: fix eeprom compatible and size
+Date:   Mon, 11 Jul 2022 11:07:24 +0200
+Message-Id: <20220711090542.825168485@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 1a635d3e1c80626237fdae47a5545b6655d8d81c ]
+[ Upstream commit f2cbbc3f926316ccf8ef9363d8a60c1110afc1c7 ]
 
-The first host interface has by default no interest in receiving packets
-MAC DA de:ad:be:ef:13:37, so it might drop them before they hit the tc
-filter and this might confuse the selftest.
+The board has a microchip 24aa025e48 eeprom, which is a 2 Kbits memory,
+so it's compatible with at24c02 not at24c32.
+Also the size property is wrong, it's not 128 bytes, but 256 bytes.
+Thus removing and leaving it to the default (256).
 
-Enable promiscuous mode such that the filter properly counts received
-packets.
-
-Fixes: d4deb01467ec ("selftests: forwarding: Add a test for FDB learning")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 1e5f532c27371 ("ARM: dts: at91: sam9x60: add device tree for soc and board")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220607090455.80433-1-eugen.hristev@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 823e5cef062d..412e52e89071 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -1176,6 +1176,7 @@ learning_test()
- 	# FDB entry was installed.
- 	bridge link set dev $br_port1 flood off
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index b1068cca4228..fd8dc1183b3e 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -233,10 +233,9 @@
+ 		status = "okay";
  
-+	ip link set $host1_if promisc on
- 	tc qdisc add dev $host1_if ingress
- 	tc filter add dev $host1_if ingress protocol ip pref 1 handle 101 \
- 		flower dst_mac $mac action drop
-@@ -1225,6 +1226,7 @@ learning_test()
- 
- 	tc filter del dev $host1_if ingress protocol ip pref 1 handle 101 flower
- 	tc qdisc del dev $host1_if ingress
-+	ip link set $host1_if promisc off
- 
- 	bridge link set dev $br_port1 flood on
- 
+ 		eeprom@53 {
+-			compatible = "atmel,24c32";
++			compatible = "atmel,24c02";
+ 			reg = <0x53>;
+ 			pagesize = <16>;
+-			size = <128>;
+ 			status = "okay";
+ 		};
+ 	};
 -- 
 2.35.1
 

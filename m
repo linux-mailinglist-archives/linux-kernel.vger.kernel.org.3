@@ -2,381 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791635703DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDD957040A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiGKNJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S230100AbiGKNR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiGKNJd (ORCPT
+        with ESMTP id S229555AbiGKNRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:09:33 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21F220EB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:09:29 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31c9b70c382so48155757b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8hdR6wA/Ggd2gA8DcSgx7JJYDWO5orF2/Da/JvkxxXU=;
-        b=MQguYadtCskNosJmCKLF7ENtz8vN+6izzknkYBdQTCh8wfaHpZNWm4IDv9i92OQxx0
-         vxY+yeOhq+LS99mFc2vYRvySc251kuWRjJlXExG99312L8C4w+6hi8YVz8itlc1+2/5o
-         /79oBSru0i27tTXCWtkzXZ6VDavIRs1PiySqXKeB57F62ge60BWa/SFK9ERZD26iWyvI
-         s4qU2pvOJamIn41+aT2lze6YcxFRuI4PgKzw35YSMKuToZJjNypWFCO7uA0Wz7dGOtMq
-         7s4ZwBRSHAxtmnx/9qGUo0m0FhQKltDl19rFIAUxS+E3sF13YjVwJFfglc74zIvzWVU/
-         rlhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8hdR6wA/Ggd2gA8DcSgx7JJYDWO5orF2/Da/JvkxxXU=;
-        b=wMTCPCTz1B8UqFiF3QRz4xlY8d/9awvf2ojIb0sco1JmzxL7/MqdJyGc/pybTpKL1+
-         1tYtocQZj/WlJkL523133aXfNGvkkoAUPSAJUUFnwg2JndIiWvTF9/T8s4EpDjFFpAIn
-         0XCXnCCIb3YkzKeq/WvzfsUvhr1Bk6TLVGIYj+aEIcWwB3JEll0mr1fqg/dYAnguXcwt
-         oiYU8kd0AnpoJlZn0iL+ZbU24SkOSTY/TT7KYUvHY2WoJFLbPhFvorpb9Rt3lsmTI0+Z
-         2vxCTkVpbHkalYl7yYwSjpNokwtgfl4ePx+d2YFUbgicz49RlO6RxBvhcFyxkOMk+r/U
-         1HQA==
-X-Gm-Message-State: AJIora+QO8QoY4V7NTNUVfSNpWNHwAAKJASfHCkZGbexoPIj0Tw8WCv1
-        PAwbg3K00rJJJKCktmH9q37E7SBhvArswUWah7UGxw==
-X-Google-Smtp-Source: AGRyM1tSgJ6BrCx6ZptHGdg8QQJ0JsYV3dIpUt7NYRNHlDBOJKHkPH3F9U4B6J4hSCkpRZy5R621KBvu5rIjxgQb+PQ=
-X-Received: by 2002:a0d:d58c:0:b0:31c:e04f:33e0 with SMTP id
- x134-20020a0dd58c000000b0031ce04f33e0mr20375770ywd.86.1657544968700; Mon, 11
- Jul 2022 06:09:28 -0700 (PDT)
+        Mon, 11 Jul 2022 09:17:25 -0400
+X-Greylist: delayed 355 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Jul 2022 06:17:23 PDT
+Received: from us-smtp-delivery-162.mimecast.com (us-smtp-delivery-162.mimecast.com [170.10.129.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2833ED55
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hp.com; s=mimecast20180716;
+        t=1657545442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MqYOMtvV6peSEhSN0WLCzjAXE4OBKnA5rR5fMzI1/O4=;
+        b=d5QQZvNy66VKws6wQHtfzSI8YaKqBOlrTs7TLrbEcqyMNTYxcr/3+eQGXfE77CTcvnBUkg
+        EAV5A62QwtccKFvENvUqSM2GO/agxEt47HjvZjYkqYqdQvvdUV7H8XYTKISnNNcXaqy/Zd
+        Bvqrl8/5sTJKfX2AF15Er7+yjQi21/M=
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-246-KVK_JjppNsic-Wtt1Lmprw-1; Mon, 11 Jul 2022 09:10:13 -0400
+X-MC-Unique: KVK_JjppNsic-Wtt1Lmprw-1
+Received: from PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:160::10)
+ by PH0PR84MB1672.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:160::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
+ 2022 13:10:11 +0000
+Received: from PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::880d:1bb8:7f9e:19cc]) by PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::880d:1bb8:7f9e:19cc%7]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
+ 13:10:11 +0000
+From:   "Lopez, Jorge A (Security)" <jorge.lopez2@hp.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Alex Dewar <alex.dewar@gmx.co.uk>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "tiwai@suse.de" <tiwai@suse.de>,
+        "markgross@kernel.org" <markgross@kernel.org>
+CC:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: RE: input/i8042: Malfunctioning brightness keys on HP Elite Dragonfly
+ G2
+Thread-Topic: input/i8042: Malfunctioning brightness keys on HP Elite
+ Dragonfly G2
+Thread-Index: AQHYlR8s56cSTJIX+UqJ5MPQFYzlza15IwvQ
+Date:   Mon, 11 Jul 2022 13:10:11 +0000
+Message-ID: <PH0PR84MB195309F5BA5B96858024E61FA8879@PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220629094314.b7xmfb3xccj7vs6v@ic-alex-elitebook>
+ <3fedf676645bfa638c9a6c656121083abc2c98ea.camel@gmx.co.uk>
+ <8b893c42-e514-bcef-0513-070b3723cdcc@redhat.com>
+ <df7313597d2ac3212f10c05aa3d369728f030c86.camel@gmx.co.uk>
+ <c89d39eb-17b9-8800-c8ff-8d236b80de2f@redhat.com>
+In-Reply-To: <c89d39eb-17b9-8800-c8ff-8d236b80de2f@redhat.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-bromium-msgid: b02d3f79-ed5b-4e49-a1d4-8863e6b815a7
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2a11d15a-11db-4586-c7b1-08da633eafd3
+x-ms-traffictypediagnostic: PH0PR84MB1672:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: bPLk7LXfD4RFQi9W00Azk+CyPeETA0n4RaiTrkTo0fdfim+54Nu9dg7KkYSwzukHsaWG79ahqiyK05wd+ftDskQ733CZCO4jVC8jEu3lcDKs6WyqSxotu5gdY/f3oKDPRGGbx26gCZTG/lof9/+mi98scI2sgHnq/6vb3MHqp+krNvAqDuCwzxj2LS2Jb6U5bIhOWd9wzXeWEvUhop9GWRgZDaBLt13VKMOFZLc5v3W2Yc0TyIvFVu+Z6mfbHZXX2WwrYT8IyvvZhjnXg0BnJjp2sRgsFVXeQaV/rZoh2OHegiwatPc7jkU10lrrBe2nbI5p5JoSgsT6E7fOEQAf7ny6sKGJaGpRa6m6mM7V7ksj+TibNVV1KBsXsSFCE9jxynnZwvNcYgstL7uRwgqmqPFP2EngTNytSG/zpISOuuCo7xkEtx5BrRbZlJM1MClJaBW+4gg5RQMgdBWvPg8gsq0QgBRNUCkiMbmGcFR39KyFB68aYQws8B1mYDohictzsXl9naculX/eEccWdGMHQjDQ+WPF8pWC3VF6hV3ieyD23/Buf9jrxL6rC1KxmRmMG+U/WSVAs0kwhx+rh0HRJHxHTbz7zKENhYuEat1nReLGUOEYEZl4PGO1fNWMMyP4APr2qU/yc06HdiGVdX8+zBOAXm72PvcGjuXTJqfrQrg10depaS8tU/FQ3JacAgShpPW3TxajCE+OQApNl+IzceNEXVAmrcFokScSMm+SIn2k3gq54E8som1HQhDszGSnT/wDPQsjMI3gTyP5fwrQyBUw73rRoBoM40LcrNTe047QDWc1BG3AZnRm6Ocbov5L
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(346002)(376002)(136003)(366004)(84040400005)(316002)(76116006)(66946007)(66556008)(83380400001)(66446008)(66476007)(64756008)(8676002)(4326008)(5660300002)(7696005)(6506007)(26005)(9686003)(54906003)(110136005)(186003)(38070700005)(53546011)(71200400001)(86362001)(478600001)(55016003)(2906002)(41300700001)(38100700002)(33656002)(122000001)(52536014)(8936002)(82960400001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YmxrRjRhdHhWVWJFNEtVUjZscG1WczNoQ1ZzeTNLNi9walhZMzk2VURyNkJp?=
+ =?utf-8?B?L1FPS2tHYmJrWEhURTRBSm9JaGxGM1pHMVVlUDdFZm9EcE1mQ2p0SUVNOHpy?=
+ =?utf-8?B?TWZZT2RUYWhHbUV1emVMcTFId1B3aW8wUjNjbjM0bjJ3dXdHckF5cng5R0NY?=
+ =?utf-8?B?OTcwTGYyOVZHWjFmamVGdlVmdXBSQjUxVW5yNEtzMVJ5M2RuVVltV2hYbmdr?=
+ =?utf-8?B?SFZQNTdHYURpbk0yTmNGaUMraSsrRDRTQjhmUEQwWkRqeEJlZmdCb1QxQllK?=
+ =?utf-8?B?ZmE4MVI4aU5qa0ZpUWJPcUpKVTZNUGJSRWIyYWdCVGF4bmlDemUvYWE0Y2Y5?=
+ =?utf-8?B?RE9wVyt5d1NwT3I5dzVmUWNkc1NxYWMvRDZMMHN6d002RE0ybUZ5OEloWm9o?=
+ =?utf-8?B?QS80dFBoRWVwaUhGaDlwZTJQZFp3NklWOVNhTklTTUg2VlRVRzUxTHhwY0Vy?=
+ =?utf-8?B?bCt0Y3FWKzZEKzVQcHNVeGpISXdUMlV3TStBbmZmeVVNVjk1aW8rZFgzSGFD?=
+ =?utf-8?B?M09PeFhRZlYzRGMxS1NUMkd6L3hMaVRiVWtWT0FlZTdZTDYyVUFZV096VUow?=
+ =?utf-8?B?UXJqWHEvSkhDQzNUT0dGUS9wc3N0eHlKcFRsR2QvazAwZWJvenpKaU9QaUFQ?=
+ =?utf-8?B?VnFmVXRLM0R2UjJ6eDdzclA4a1NBSjQxd0xRN1l6OE5pWUcvSUN3c2laUjYv?=
+ =?utf-8?B?aG9ZTFEraWVLUXM4MnpNelJGVXRrVnBWeWVCMVQ3R1Avekg3OE5oOWc5dENl?=
+ =?utf-8?B?blc2Z3poVzRKc0NtMFhJcFJQSENGdWxuWmpLUkduTGhqYnlwVUFKZGFNdHov?=
+ =?utf-8?B?U1FreTNoeGVUMnMvdkhnMmh2Ykpvd1o4RC9DWGNaRHZVaXFnUGRyUHRBKzNy?=
+ =?utf-8?B?M1RxY1IvZWUycjhsRzFjNXo3MCtEWEdPUEVhQS9KZXFDSCsyc1FGRFp4Q0tJ?=
+ =?utf-8?B?SllyNHE1TWxCTTJrSjNreHJNUUlzRTZZd2RwSGo1S0VJcVNvYXBRb2N0RVlJ?=
+ =?utf-8?B?NDRnUDQzWXhxUmJTUmNudHJaYnVQWFZQai80azdWZFhvbFI1a1JtcmdUVysx?=
+ =?utf-8?B?KzM0VGpzT3hVNzVtQ1oyRFRXTDRZa3VPRk5KZmorNlRZdVc2N1JxVkF4RWwx?=
+ =?utf-8?B?N0E5UVJUU3lHOURnTXh3UWJOVE52K0tnQXZDRU5PZkFGZzhlY3hlY2thTmIx?=
+ =?utf-8?B?dEhxQVVnZzZuaU8yVXo5d1krK1RDaHREOHNrZWJRdDVMY1lwN1BqZ2tDMVVL?=
+ =?utf-8?B?YUlGRWN3aDlyM0dUQUI4blhWYWJCdHV3S3cydmFENnFUMnI5a1UzVU01Wk11?=
+ =?utf-8?B?UmVaV0p2RlBNbU1BRTBJdnlTUERCMVNOUjQ3TnNrd1NmZndrd3NIN2tsZ1Q0?=
+ =?utf-8?B?WWFjdGgxbVNBQzM5Wlk5TXdCVFIyV1UybktOSVpDU1NXRmtxSHRpODlkaXJV?=
+ =?utf-8?B?cnR3T2haejdlREw4VjBtN1V0L3VEcDlkNGVybjJDU05lQ1ZRaXZpNVZnbHFT?=
+ =?utf-8?B?MDVJK2U4aFltTXVYVWFVMERuUGNiKzgwSkdFWTIrVW53cXI0cnk2dE5rbmE3?=
+ =?utf-8?B?cWUrVWdOdEY4WGgxY3M5T29yZzJOd3ZJMkMvbkhDd0pJLzVkb2hPREdNbkZt?=
+ =?utf-8?B?WmZKYjJUUmlmM1A5bjMvMlg5allBVDh6UDVUUmJGaTd1WVpvbkozZmsydmVV?=
+ =?utf-8?B?ejJtU0tCWG5CZDdqdHRvK1ZjV3hGUkxRamgxMzFSSVNUVHNHZWk4WVVVT0RI?=
+ =?utf-8?B?TE4vVnBkbXg5MjN2NFF0WDJqeHZHdzliNEdGZEg2QVZrbkRhNWxuTktVa0JD?=
+ =?utf-8?B?UmNDUXlxWEQ1c1p4bWNWVnZIRnhDKzlkcXU1d0xXVzgyUllYYTJWMU5CSlVJ?=
+ =?utf-8?B?TjlwZEI2c0haRTJIY0t6VGRHVnZKeGZsT0NScWVzMHBBOFBlNVowQmxPclNv?=
+ =?utf-8?B?USt2T0UrbmR5bFROeCtnQ3hsaUhoRDNYdi9UdSs0TE5jaGFDRW01elQ0aGhu?=
+ =?utf-8?B?T1ZzSFlkcDE0L2RSb0psdU5UVnFVSjVQSWtsYmJEekZkdzdNaW5odXdNMVZE?=
+ =?utf-8?B?K2NnWjlVYVNCZE5zUkpkYy9xbnErYmszTHkvZGVhL3VxY0lYMHFoWEVWdVdx?=
+ =?utf-8?Q?cDTryDcmffbwVvGDBlJUNRz1U?=
 MIME-Version: 1.0
-References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-3-qais.yousef@arm.com>
-In-Reply-To: <20220629194632.1117723-3-qais.yousef@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 11 Jul 2022 15:09:17 +0200
-Message-ID: <CAKfTPtAxK=NGbpQkiW8-tx3kEwp-M7LAr1Rq_kdWDdsSq7Hd9A@mail.gmail.com>
-Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: hp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1953.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a11d15a-11db-4586-c7b1-08da633eafd3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 13:10:11.5204
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ca7981a2-785a-463d-b82a-3db87dfc3ce6
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: se6P5DdHxDw1P6jdeNXkQqbrOKbsJwnLG7+g7ZlBqyloREKzmdU0whZZ64u4ZMoklvEHnzdYFPqOrBqL9qobiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB1672
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA62A171 smtp.mailfrom=jorge.lopez2@hp.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: hp.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Jun 2022 at 21:48, Qais Yousef <qais.yousef@arm.com> wrote:
->
-> So that the new uclamp rules in regard to migration margin and capacity
-> pressure are taken into account correctly.
->
-> To cater for update_sg_wakeup_stats() user, we add new
-> {min,max}_capacity_cpu to struct sched_group_capacity since
-> util_fits_cpu() takes the cpu rather than capacity as an argument.
->
-> This includes updating capacity_greater() definition to take cpu as an
-> argument instead of capacity.
->
-> Fixes: a7008c07a568 ("sched/fair: Make task_fits_capacity() consider uclamp restrictions")
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  kernel/sched/fair.c     | 67 ++++++++++++++++++++++++++---------------
->  kernel/sched/sched.h    | 13 ++++++--
->  kernel/sched/topology.c | 18 ++++++-----
->  3 files changed, 64 insertions(+), 34 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5eecae32a0f6..313437bea5a2 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -160,7 +160,7 @@ int __weak arch_asym_cpu_priority(int cpu)
->   *
->   * (default: ~5%)
->   */
-> -#define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
-> +#define capacity_greater(cpu1, cpu2) ((capacity_of(cpu1)) * 1024 > (capacity_of(cpu2)) * 1078)
->  #endif
->
->  #ifdef CONFIG_CFS_BANDWIDTH
-> @@ -4317,10 +4317,12 @@ static inline int util_fits_cpu(unsigned long util,
->         return fits;
->  }
->
-> -static inline int task_fits_capacity(struct task_struct *p,
-> -                                    unsigned long capacity)
-> +static inline int task_fits_cpu(struct task_struct *p, int cpu)
->  {
-> -       return fits_capacity(uclamp_task_util(p), capacity);
-> +       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
-> +       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
-> +       unsigned long util = task_util_est(p);
-> +       return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
->  }
->
->  static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
-> @@ -4333,7 +4335,7 @@ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
->                 return;
->         }
->
-> -       if (task_fits_capacity(p, capacity_of(cpu_of(rq)))) {
-> +       if (task_fits_cpu(p, cpu_of(rq))) {
->                 rq->misfit_task_load = 0;
->                 return;
->         }
-> @@ -8104,7 +8106,7 @@ static int detach_tasks(struct lb_env *env)
->
->                 case migrate_misfit:
->                         /* This is not a misfit task */
-> -                       if (task_fits_capacity(p, capacity_of(env->src_cpu)))
-> +                       if (task_fits_cpu(p, env->src_cpu))
->                                 goto next;
->
->                         env->imbalance = 0;
-> @@ -8502,15 +8504,16 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
->         trace_sched_cpu_capacity_tp(cpu_rq(cpu));
->
->         sdg->sgc->capacity = capacity;
-> -       sdg->sgc->min_capacity = capacity;
-> -       sdg->sgc->max_capacity = capacity;
-> +       sdg->sgc->min_capacity_cpu = cpu;
-> +       sdg->sgc->max_capacity_cpu = cpu;
+SGkgQWxleCwNCg0KTGV0IG1lIGludmVzdGlnYXRlIHRoaXMgaXNzdWUuICBUaGUgZHJpdmVyIG1h
+cHMgc29tZSBrZXlzLCBzbyBpdCBpcyBwb3NzaWJsZSB0aGUgbGlzdCBpcyBpbmNvbXBsZXRlLiAg
+DQpJdCBpcyBleHBlY3RlZCBocF93bWkgZHJpdmVyIHRvIGJlIGxvYWRlZCwgQ29ycmVjdD8NCkNh
+biB5b3UgcHJvdmlkZSB0aGUgQklPUyB2ZXJzaW9uIGN1cnJlbnQgaW4geW91ciBzeXN0ZW0/DQoN
+Cg0KUmVnYXJkcywNCg0KSm9yZ2UgTG9wZXoNCkhld2xldHQtUGFja2FyZCANCg0K4oCcT25jZSB5
+b3Ugc3RvcCBsZWFybmluZywgeW91IHN0YXJ0IGR5aW5n4oCdDQpBbGJlcnQgRWluc3RlaW4NCg0K
+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEhhbnMgZGUgR29lZGUgPGhkZWdvZWRl
+QHJlZGhhdC5jb20+IA0KU2VudDogTW9uZGF5LCBKdWx5IDExLCAyMDIyIDc6MTAgQU0NClRvOiBB
+bGV4IERld2FyIDxhbGV4LmRld2FyQGdteC5jby51az47IGRtaXRyeS50b3Jva2hvdkBnbWFpbC5j
+b207IHRpd2FpQHN1c2UuZGU7IG1hcmtncm9zc0BrZXJuZWwub3JnOyBMb3BleiwgSm9yZ2UgQSAo
+U2VjdXJpdHkpIDxqb3JnZS5sb3BlejJAaHAuY29tPg0KQ2M6IGxpbnV4LWlucHV0QHZnZXIua2Vy
+bmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgcGxhdGZvcm0tZHJpdmVyLXg4
+NkB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBpbnB1dC9pODA0MjogTWFsZnVuY3Rpb25p
+bmcgYnJpZ2h0bmVzcyBrZXlzIG9uIEhQIEVsaXRlIERyYWdvbmZseSBHMg0KDQpIaSBBbGV4LA0K
+DQpPbiA3LzExLzIyIDA5OjQ5LCBBbGV4IERld2FyIHdyb3RlOg0KPiBIaSBIYW5zLA0KPiANCj4g
+T24gU2F0LCAyMDIyLTA3LTA5IGF0IDE2OjU2ICswMjAwLCBIYW5zIGRlIEdvZWRlIHdyb3RlOg0K
+Pj4gSGksDQo+Pg0KPj4gT24gNy81LzIyIDE5OjI1LCBBbGV4IERld2FyIHdyb3RlOg0KPj4+IEZy
+aWVuZGx5IHBpbmc/IPCfmYINCj4+Pg0KPj4+IEknbSBhbHNvIENDJ2luZyB0aGUgeDg2IHBsYXRm
+b3JtIHBlb3BsZSBpbnRvIHRoaXMsIGFzIEknbSBub3Qgc3VyZSANCj4+PiB3aGV0aGVyIHRoaXMg
+cHJvYmxlbSBpcyBzb21ldGhpbmcgbW9yZSB3aXRoaW4gdGhlaXIgcmVtaXQuDQo+Pg0KPj4gUGxl
+YXNlIHRlc3QgdGhlIGF0YmtkIGRldmljZSB3aXRoICJzdWRvIGV2ZW11LXJlY29yZCIgb3IgInN1
+ZG8gDQo+PiBldnRlc3QiDQo+PiBhbmQgaWYgdGhlIGJyaWdodG5lc3Mga2V5cyBnZW5lcmF0ZSBl
+dmVudHMgdGhlcmUsIHdyaXRlIGRvd24gdGhlIHJhdyANCj4+IGV2ZW50IGNvZGVzIChNU0MgZXZl
+bnRzKS4NCj4gDQo+IEkgdHJpZWQgdGhpcyBidXQgdW5mb3J0dW5hdGVseSB0aGlzIGRvZXNuJ3Qg
+c2VlbSB0byBiZSB0aGUgd2hvbGUgc3RvcnkuDQo+IElmIEkgcHJlc3MgImRlY3JlYXNlIGJyaWdo
+dG5lc3MiIEkgZ2V0Og0KPiBFdmVudDogdGltZSAxNjU3NTI1MzkzLjkyMjcyNywgLS0tLS0tLS0t
+LS0tLS0gU1lOX1JFUE9SVCAtLS0tLS0tLS0tLS0NCj4gRXZlbnQ6IHRpbWUgMTY1NzUyNTM5Ny4w
+NDMzNDgsIHR5cGUgNCAoRVZfTVNDKSwgY29kZSA0IChNU0NfU0NBTiksIA0KPiB2YWx1ZSA4MQ0K
+PiBFdmVudDogdGltZSAxNjU3NTI1Mzk3LjA0MzM0OCwgdHlwZSAxIChFVl9LRVkpLCBjb2RlIDE5
+MCAoS0VZX0YyMCksIA0KPiB2YWx1ZSAxDQo+IEV2ZW50OiB0aW1lIDE2NTc1MjUzOTcuMDQzMzQ4
+LCAtLS0tLS0tLS0tLS0tLSBTWU5fUkVQT1JUIC0tLS0tLS0tLS0tLQ0KPiBFdmVudDogdGltZSAx
+NjU3NTI1Mzk3LjA1MDM4NCwgdHlwZSA0IChFVl9NU0MpLCBjb2RlIDQgKE1TQ19TQ0FOKSwgDQo+
+IHZhbHVlIDgxDQo+IEV2ZW50OiB0aW1lIDE2NTc1MjUzOTcuMDUwMzg0LCB0eXBlIDEgKEVWX0tF
+WSksIGNvZGUgMTkwIChLRVlfRjIwKSwgDQo+IHZhbHVlIDANCj4gDQo+IEFuZCBpZiBJIHByZXNz
+ICJpbmNyZWFzZSBicmlnaHRuZXNzIiBJIGdldDoNCj4gRXZlbnQ6IHRpbWUgMTY1NzUyNTM5Ny4w
+NTAzODQsIC0tLS0tLS0tLS0tLS0tIFNZTl9SRVBPUlQgLS0tLS0tLS0tLS0tDQo+IEV2ZW50OiB0
+aW1lIDE2NTc1MjUzOTguNjA3MTg0LCB0eXBlIDQgKEVWX01TQyksIGNvZGUgNCAoTVNDX1NDQU4p
+LCANCj4gdmFsdWUgODENCj4gRXZlbnQ6IHRpbWUgMTY1NzUyNTM5OC42MDcxODQsIHR5cGUgMSAo
+RVZfS0VZKSwgY29kZSAxOTAgKEtFWV9GMjApLCANCj4gdmFsdWUgMQ0KPiBFdmVudDogdGltZSAx
+NjU3NTI1Mzk4LjYwNzE4NCwgLS0tLS0tLS0tLS0tLS0gU1lOX1JFUE9SVCAtLS0tLS0tLS0tLS0N
+Cj4gRXZlbnQ6IHRpbWUgMTY1NzUyNTM5OC42MTQxOTAsIHR5cGUgNCAoRVZfTVNDKSwgY29kZSA0
+IChNU0NfU0NBTiksIA0KPiB2YWx1ZSA4MQ0KPiBFdmVudDogdGltZSAxNjU3NTI1Mzk4LjYxNDE5
+MCwgdHlwZSAxIChFVl9LRVkpLCBjb2RlIDE5MCAoS0VZX0YyMCksIA0KPiB2YWx1ZSAwDQo+IA0K
+PiBUaGVyZSdzIG5vIGRpZmZlcmVuY2UhIEFuZCBJIGFsc28gZ2V0IHRoZSBzYW1lIHRoaW5nIGlm
+IEkgcHJlc3MgdGhlDQo+ICphY3R1YWwqIG11dGUgbWljIGJ1dHRvbiDwn5ieLg0KPiANCj4gQW55
+IGlkZWFzPw0KDQpGcm9tIHRoaXMgaXQgbG9va3MgbGlrZSB3ZSBuZWVkIHRvIHVzZSBzb21lIG90
+aGVyIGludGVyZmFjZSB0byBnZXQgdGhlc2UgZXZlbnRzICgrIGlnbm9yZSB0aGUgYWJvdmUgZXZl
+bnRzKS4NCg0KRG8geW91IGhhdmUgYSAiSFAgV01JIGhvdGtleXMiIGRldmljZSBpbiB5b3VyIGxp
+c3Qgb2YgaW5wdXQgZGV2aWNlcz8gIEFuZCBhcmUgeW91IGdldHRpbmcgYW55IGV2ZW50cyBvbiB0
+aGF0ID8NCg0KTGlrZXdpc2UgZG8geW91IGhhdmUgYSAiVmlkZW8gQnVzIiBkZXZpY2UgYW5kIGFu
+eSBldmVudHMgb24gdGhhdCA/DQoNCkkndmUgYWxzbyBhZGRlZCBKb3JnZSBmcm9tIEhQIHRvIHRo
+ZSBDYy4gSm9yZ2UsIGNhbiB5b3UgaGVscCB3aXRoIHRoaXMgPw0KDQpSZWdhcmRzLA0KDQpIYW5z
+DQoNCg==
 
-you make these fields useless. There is only one cpu per sched_group
-at this level so you don't need to save the twice cpu number of the
-nly cpu of this group
-
-
->  }
->
->  void update_group_capacity(struct sched_domain *sd, int cpu)
->  {
-> -       struct sched_domain *child = sd->child;
->         struct sched_group *group, *sdg = sd->groups;
-> -       unsigned long capacity, min_capacity, max_capacity;
-> +       struct sched_domain *child = sd->child;
-> +       int min_capacity_cpu, max_capacity_cpu;
-> +       unsigned long capacity;
->         unsigned long interval;
->
->         interval = msecs_to_jiffies(sd->balance_interval);
-> @@ -8523,8 +8526,7 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
->         }
->
->         capacity = 0;
-> -       min_capacity = ULONG_MAX;
-> -       max_capacity = 0;
-> +       min_capacity_cpu = max_capacity_cpu = cpu;
->
->         if (child->flags & SD_OVERLAP) {
->                 /*
-> @@ -8536,29 +8538,44 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
->                         unsigned long cpu_cap = capacity_of(cpu);
->
->                         capacity += cpu_cap;
-> -                       min_capacity = min(cpu_cap, min_capacity);
-> -                       max_capacity = max(cpu_cap, max_capacity);
-> +                       if (cpu_cap < capacity_of(min_capacity_cpu))
-> +                               min_capacity_cpu = cpu;
-> +
-> +                       if (cpu_cap > capacity_of(max_capacity_cpu))
-> +                               max_capacity_cpu = cpu;
->                 }
->         } else  {
->                 /*
->                  * !SD_OVERLAP domains can assume that child groups
->                  * span the current group.
->                  */
-> +               unsigned long min_capacity = ULONG_MAX;
-> +               unsigned long max_capacity = 0;
->
->                 group = child->groups;
->                 do {
->                         struct sched_group_capacity *sgc = group->sgc;
-> +                       unsigned long cpu_cap_min = capacity_of(sgc->min_capacity_cpu);
-> +                       unsigned long cpu_cap_max = capacity_of(sgc->max_capacity_cpu);
-
-By replacing sgc->min_capacity with sgc->min_capacity_cpu, the
-min_capacity is no more stable and can become > max_capacity
-
->
->                         capacity += sgc->capacity;
-> -                       min_capacity = min(sgc->min_capacity, min_capacity);
-> -                       max_capacity = max(sgc->max_capacity, max_capacity);
-> +                       if (cpu_cap_min < min_capacity) {
-> +                               min_capacity = cpu_cap_min;
-> +                               min_capacity_cpu = sgc->min_capacity_cpu;
-> +                       }
-> +
-> +                       if (cpu_cap_max > max_capacity) {
-> +                               max_capacity = cpu_cap_max;
-> +                               max_capacity_cpu = sgc->max_capacity_cpu;
-> +                       }
-> +
->                         group = group->next;
->                 } while (group != child->groups);
->         }
->
->         sdg->sgc->capacity = capacity;
-> -       sdg->sgc->min_capacity = min_capacity;
-> -       sdg->sgc->max_capacity = max_capacity;
-> +       sdg->sgc->min_capacity_cpu = min_capacity_cpu;
-> +       sdg->sgc->max_capacity_cpu = max_capacity_cpu;
->  }
->
->  /*
-> @@ -8902,7 +8919,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
->          * internally or be covered by avg_load imbalance (eventually).
->          */
->         if (sgs->group_type == group_misfit_task &&
-> -           (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
-> +           (!capacity_greater(env->dst_cpu, sg->sgc->max_capacity_cpu) ||
->              sds->local_stat.group_type != group_has_spare))
->                 return false;
->
-> @@ -8986,7 +9003,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
->          */
->         if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
->             (sgs->group_type <= group_fully_busy) &&
-> -           (capacity_greater(sg->sgc->min_capacity, capacity_of(env->dst_cpu))))
-> +           (capacity_greater(sg->sgc->min_capacity_cpu, env->dst_cpu)))
->                 return false;
->
->         return true;
-> @@ -9108,7 +9125,7 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
->
->         /* Check if task fits in the group */
->         if (sd->flags & SD_ASYM_CPUCAPACITY &&
-> -           !task_fits_capacity(p, group->sgc->max_capacity)) {
-> +           !task_fits_cpu(p, group->sgc->max_capacity_cpu)) {
-
-All the changes and added complexity above for this line. Can't you
-find another way ?
-
-
->                 sgs->group_misfit_task_load = 1;
->         }
->
-> @@ -9159,7 +9176,8 @@ static bool update_pick_idlest(struct sched_group *idlest,
->
->         case group_misfit_task:
->                 /* Select group with the highest max capacity */
-> -               if (idlest->sgc->max_capacity >= group->sgc->max_capacity)
-> +               if (capacity_of(idlest->sgc->max_capacity_cpu) >=
-> +                   capacity_of(group->sgc->max_capacity_cpu))
->                         return false;
->                 break;
->
-> @@ -9290,7 +9308,8 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
->
->         case group_misfit_task:
->                 /* Select group with the highest max capacity */
-> -               if (local->sgc->max_capacity >= idlest->sgc->max_capacity)
-> +               if (capacity_of(local->sgc->max_capacity_cpu) >=
-> +                   capacity_of(idlest->sgc->max_capacity_cpu))
->                         return NULL;
->                 break;
->
-> @@ -9860,7 +9879,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
->                  * average load.
->                  */
->                 if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
-> -                   !capacity_greater(capacity_of(env->dst_cpu), capacity) &&
-> +                   !capacity_greater(env->dst_cpu, i) &&
->                     nr_running == 1)
->                         continue;
->
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 02c970501295..9599d2eea3e7 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1766,8 +1766,8 @@ struct sched_group_capacity {
->          * for a single CPU.
->          */
->         unsigned long           capacity;
-> -       unsigned long           min_capacity;           /* Min per-CPU capacity in group */
-> -       unsigned long           max_capacity;           /* Max per-CPU capacity in group */
-> +       int                     min_capacity_cpu;
-> +       int                     max_capacity_cpu;
->         unsigned long           next_update;
->         int                     imbalance;              /* XXX unrelated to capacity but shared group state */
->
-> @@ -2988,6 +2988,15 @@ static inline bool uclamp_is_used(void)
->         return static_branch_likely(&sched_uclamp_used);
->  }
->  #else /* CONFIG_UCLAMP_TASK */
-> +static inline unsigned long uclamp_eff_value(struct task_struct *p,
-> +                                            enum uclamp_id clamp_id)
-> +{
-> +       if (clamp_id == UCLAMP_MIN)
-> +               return 0;
-> +
-> +       return SCHED_CAPACITY_SCALE;
-> +}
-> +
->  static inline
->  unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
->                                   struct task_struct *p)
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 8739c2a5a54e..25e6a346ad70 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -979,8 +979,8 @@ static void init_overlap_sched_group(struct sched_domain *sd,
->          */
->         sg_span = sched_group_span(sg);
->         sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sg_span);
-> -       sg->sgc->min_capacity = SCHED_CAPACITY_SCALE;
-> -       sg->sgc->max_capacity = SCHED_CAPACITY_SCALE;
-> +       sg->sgc->min_capacity_cpu = cpumask_first(sg_span);
-> +       sg->sgc->max_capacity_cpu = cpumask_first(sg_span);
->  }
->
->  static struct sched_domain *
-> @@ -1178,6 +1178,7 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
->  {
->         struct sched_domain *sd = *per_cpu_ptr(sdd->sd, cpu);
->         struct sched_domain *child = sd->child;
-> +       struct cpumask *sg_span;
->         struct sched_group *sg;
->         bool already_visited;
->
-> @@ -1186,6 +1187,7 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
->
->         sg = *per_cpu_ptr(sdd->sg, cpu);
->         sg->sgc = *per_cpu_ptr(sdd->sgc, cpu);
-> +       sg_span = sched_group_span(sg);
->
->         /* Increase refcounts for claim_allocations: */
->         already_visited = atomic_inc_return(&sg->ref) > 1;
-> @@ -1197,17 +1199,17 @@ static struct sched_group *get_group(int cpu, struct sd_data *sdd)
->                 return sg;
->
->         if (child) {
-> -               cpumask_copy(sched_group_span(sg), sched_domain_span(child));
-> -               cpumask_copy(group_balance_mask(sg), sched_group_span(sg));
-> +               cpumask_copy(sg_span, sched_domain_span(child));
-> +               cpumask_copy(group_balance_mask(sg), sg_span);
->                 sg->flags = child->flags;
->         } else {
-> -               cpumask_set_cpu(cpu, sched_group_span(sg));
-> +               cpumask_set_cpu(cpu, sg_span);
->                 cpumask_set_cpu(cpu, group_balance_mask(sg));
->         }
->
-> -       sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sched_group_span(sg));
-> -       sg->sgc->min_capacity = SCHED_CAPACITY_SCALE;
-> -       sg->sgc->max_capacity = SCHED_CAPACITY_SCALE;
-> +       sg->sgc->capacity = SCHED_CAPACITY_SCALE * cpumask_weight(sg_span);
-> +       sg->sgc->min_capacity_cpu = cpumask_first(sg_span);
-> +       sg->sgc->max_capacity_cpu = cpumask_first(sg_span);
->
->         return sg;
->  }
-> --
-> 2.25.1
->

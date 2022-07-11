@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0E856F9E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410056F9AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiGKJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S230348AbiGKJHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiGKJJ4 (ORCPT
+        with ESMTP id S230527AbiGKJHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:09:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62E924957;
-        Mon, 11 Jul 2022 02:08:19 -0700 (PDT)
+        Mon, 11 Jul 2022 05:07:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FF222534;
+        Mon, 11 Jul 2022 02:07:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FDBE611BB;
-        Mon, 11 Jul 2022 09:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05216C34115;
-        Mon, 11 Jul 2022 09:08:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC36FB80E7A;
+        Mon, 11 Jul 2022 09:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE9FC341CA;
+        Mon, 11 Jul 2022 09:07:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530498;
-        bh=D0avMhJxW3+auuJHpdx5C75y1GDvMuofmJOViNo+6VE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CsHAWALfiQX6bRVTshUmqiV3+bgoqn7kEKhGmyadOmEL3swTYVEKt4sC6f9OuNJUu
-         bZRn62PkXV1dyjau9jg6uQfdLYGhM2pjMQRuUEJH/Zrl/ohekJB5UTMg4GAc5G5lsX
-         M9O8y0Vhkg61OI5tlNvQfmiaGqr8Bw2RIPA/sjbI=
+        s=korg; t=1657530423;
+        bh=S8GfHA3b6Zbarn8g73Z5/mfjji8h8RDNnKivTthVQsA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QDnKRZXjolUqS2Qte6wA1MrlslE3M9JCOFicfFSuE14liTX72wtmL3AtQ9umbSfOc
+         XCR1aAh1A8CguWAHkJR0tP5qB5/1kSGUbJANc+N9qyvvHpOcwt0cFCoNb63svlgTAb
+         B2lJoXG1DcIX3qXo1lpZnfFWrbF5/UuwHCbfcHAs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/17] 4.14.288-rc1 review
+        stable@vger.kernel.org, "Zhang, Bernice" <bernice.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Yian Chen <yian.chen@intel.com>,
+        Joerg Roedel <jroedel@suse.de>, Zhang@vger.kernel.org
+Subject: [PATCH 4.9 06/14] iommu/vt-d: Fix PCI bus rescan device hot add
 Date:   Mon, 11 Jul 2022 11:06:25 +0200
-Message-Id: <20220711090536.245939953@linuxfoundation.org>
+Message-Id: <20220711090535.707526215@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-MIME-Version: 1.0
+In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
+References: <20220711090535.517697227@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.288-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.288-rc1
-X-KernelTest-Deadline: 2022-07-13T09:05+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,105 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.288 release.
-There are 17 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Yian Chen <yian.chen@intel.com>
 
-Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-Anything received after that time might be too late.
+commit 316f92a705a4c2bf4712135180d56f3cca09243a upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.288-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+Notifier calling chain uses priority to determine the execution
+order of the notifiers or listeners registered to the chain.
+PCI bus device hot add utilizes the notification mechanism.
 
-thanks,
+The current code sets low priority (INT_MIN) to Intel
+dmar_pci_bus_notifier and postpones DMAR decoding after adding
+new device into IOMMU. The result is that struct device pointer
+cannot be found in DRHD search for the new device's DMAR/IOMMU.
+Subsequently, the device is put under the "catch-all" IOMMU
+instead of the correct one. This could cause system hang when
+device TLB invalidation is sent to the wrong IOMMU. Invalidation
+timeout error and hard lockup have been observed and data
+inconsistency/crush may occur as well.
 
-greg k-h
+This patch fixes the issue by setting a positive priority(1) for
+dmar_pci_bus_notifier while the priority of IOMMU bus notifier
+uses the default value(0), therefore DMAR decoding will be in
+advance of DRHD search for a new device to find the correct IOMMU.
 
--------------
-Pseudo-Shortlog of commits:
+Following is a 2-step example that triggers the bug by simulating
+PCI device hot add behavior in Intel Sapphire Rapids server.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.288-rc1
+echo 1 > /sys/bus/pci/devices/0000:6a:01.0/remove
+echo 1 > /sys/bus/pci/rescan
 
-Miaoqian Lin <linmq006@gmail.com>
-    dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
+Cc: stable@vger.kernel.org # v3.15+
+Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Signed-off-by: Yian Chen <yian.chen@intel.com>
+Link: https://lore.kernel.org/r/20220521002115.1624069-1-yian.chen@intel.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/iommu/dmar.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Miaoqian Lin <linmq006@gmail.com>
-    dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
-
-Michael Walle <michael@walle.cc>
-    dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    ida: don't use BUG_ON() for debugging
-
-Satish Nagireddy <satish.nagireddy@getcruise.com>
-    i2c: cadence: Unregister the clk notifier in error path
-
-Samuel Holland <samuel@sholland.org>
-    pinctrl: sunxi: a83t: Fix NAND function name for some pins
-
-Eric Sandeen <sandeen@redhat.com>
-    xfs: remove incorrect ASSERT in xfs_rename
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    powerpc/powernv: delay rng platform device creation until later in boot
-
-Hsin-Yi Wang <hsinyi@chromium.org>
-    video: of_display_timing.h: include errno.h
-
-Helge Deller <deller@gmx.de>
-    fbcon: Disallow setting font bigger than screen size
-
-Yian Chen <yian.chen@intel.com>
-    iommu/vt-d: Fix PCI bus rescan device hot add
-
-Duoming Zhou <duoming@zju.edu.cn>
-    net: rose: fix UAF bug caused by rose_t0timer_expiry
-
-Oliver Neukum <oneukum@suse.com>
-    usbnet: fix memory leak in error case
-
-Rhett Aultman <rhett.aultman@samsara.com>
-    can: gs_usb: gs_usb_open/close(): fix memory leak
-
-Liang He <windhl@126.com>
-    can: grcan: grcan_probe(): remove extra of_node_get()
-
-Jann Horn <jannh@google.com>
-    mm/slub: add missing TID updates on slab deactivation
-
-Sabrina Dubroca <sd@queasysnail.net>
-    esp: limit skb_page_frag_refill use to a single page
-
-
--------------
-
-Diffstat:
-
- Makefile                                   |  4 ++--
- arch/powerpc/platforms/powernv/rng.c       | 16 ++++++++++------
- drivers/dma/at_xdmac.c                     |  5 +++++
- drivers/dma/ti-dma-crossbar.c              |  5 +++++
- drivers/i2c/busses/i2c-cadence.c           |  1 +
- drivers/iommu/dmar.c                       |  2 +-
- drivers/net/can/grcan.c                    |  1 -
- drivers/net/can/usb/gs_usb.c               | 23 +++++++++++++++++++++--
- drivers/net/usb/usbnet.c                   | 17 ++++++++++++-----
- drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c | 10 +++++-----
- drivers/video/fbdev/core/fbcon.c           |  5 +++++
- fs/xfs/xfs_inode.c                         |  1 -
- include/net/esp.h                          |  2 --
- include/video/of_display_timing.h          |  2 ++
- lib/idr.c                                  |  4 +++-
- mm/slub.c                                  |  4 ++--
- net/ipv4/esp4.c                            |  5 ++---
- net/ipv6/esp6.c                            |  5 ++---
- net/rose/rose_route.c                      |  4 ++--
- 19 files changed, 80 insertions(+), 36 deletions(-)
+--- a/drivers/iommu/dmar.c
++++ b/drivers/iommu/dmar.c
+@@ -373,7 +373,7 @@ static int dmar_pci_bus_notifier(struct
+ 
+ static struct notifier_block dmar_pci_bus_nb = {
+ 	.notifier_call = dmar_pci_bus_notifier,
+-	.priority = INT_MIN,
++	.priority = 1,
+ };
+ 
+ static struct dmar_drhd_unit *
 
 

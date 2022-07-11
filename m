@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233D656F9CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD78356F9D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiGKJJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S229986AbiGKJJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiGKJIi (ORCPT
+        with ESMTP id S230056AbiGKJIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:08:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5952022B26;
-        Mon, 11 Jul 2022 02:07:51 -0700 (PDT)
+        Mon, 11 Jul 2022 05:08:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61E4275C0;
+        Mon, 11 Jul 2022 02:07:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2BA6B80E7B;
-        Mon, 11 Jul 2022 09:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12064C34115;
-        Mon, 11 Jul 2022 09:07:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD4BF6118F;
+        Mon, 11 Jul 2022 09:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C612CC341CD;
+        Mon, 11 Jul 2022 09:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530468;
-        bh=8tFdo+OIIS3mTEzo0rS2Tz8lJWzmLaRAn8Rg1nhuTjE=;
+        s=korg; t=1657530471;
+        bh=CJBE30fgZXe3monlOPi4HZcMFV3BbSj4yu2McIeje50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2MFfU6I7TkLRps5DBMJBzDrL2zd/YSZCbzmNN9XkxOV5ZaafPfYHssmzjgL3EN3C8
-         noWM7VG+Nna9j0LDrDqnnFgwWyBXWdNg40ZEJfegtiaM5qF/vcuHpmrnrQqeJgCQiw
-         S20xk5CgdCzG6asEGbLeQfm+ngezBkQVQ2ju2ez8=
+        b=clJTqzAUaBixZgu1sUEE8eXG+1d+cekYuk43qjFLmrxYESosYE7ZeZ0RFb43MfGIJ
+         wcTKN9cgaW3CsM8Lv9uVUhkIrLeu3/aYpyj1iTlIP9qW5ws6strNgtjlyZ/mDmFUhB
+         QPvtpV/6xMAhlnbUTjA9cfXs2dgMlS1DlsONNAy4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.14 15/17] dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
-Date:   Mon, 11 Jul 2022 11:06:40 +0200
-Message-Id: <20220711090536.717217005@linuxfoundation.org>
+Subject: [PATCH 4.14 16/17] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+Date:   Mon, 11 Jul 2022 11:06:41 +0200
+Message-Id: <20220711090536.747481497@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090536.245939953@linuxfoundation.org>
 References: <20220711090536.245939953@linuxfoundation.org>
@@ -54,36 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 3770d92bd5237d686e49da7b2fb86f53ee6ed259 upstream.
+commit c132fe78ad7b4ce8b5d49a501a15c29d08eeb23a upstream.
 
-It seems that it is valid to have less than the requested number of
-descriptors. But what is not valid and leads to subsequent errors is to
-have zero descriptors. In that case, abort the probing.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not needed anymore.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220526135111.1470926-1-michael@walle.cc
+Add missing of_node_put() in to fix this.
+
+Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220605042723.17668-2-linmq006@gmail.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/dma/ti-dma-crossbar.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1804,6 +1804,11 @@ static int at_xdmac_alloc_chan_resources
- 	for (i = 0; i < init_nr_desc_per_channel; i++) {
- 		desc = at_xdmac_alloc_desc(chan, GFP_ATOMIC);
- 		if (!desc) {
-+			if (i == 0) {
-+				dev_warn(chan2dev(chan),
-+					 "can't allocate any descriptors\n");
-+				return -EIO;
-+			}
- 			dev_warn(chan2dev(chan),
- 				"only %d descriptors have been allocated\n", i);
- 			break;
+--- a/drivers/dma/ti-dma-crossbar.c
++++ b/drivers/dma/ti-dma-crossbar.c
+@@ -274,6 +274,7 @@ static void *ti_dra7_xbar_route_allocate
+ 		mutex_unlock(&xbar->mutex);
+ 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+ 		kfree(map);
++		of_node_put(dma_spec->np);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 	set_bit(map->xbar_out, xbar->dma_inuse);
 
 

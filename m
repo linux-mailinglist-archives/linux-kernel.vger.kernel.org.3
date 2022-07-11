@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916F756FB8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ABC56FDB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbiGKJcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S231584AbiGKJ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbiGKJbc (ORCPT
+        with ESMTP id S234217AbiGKJ6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:31:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDF2747A7;
-        Mon, 11 Jul 2022 02:17:11 -0700 (PDT)
+        Mon, 11 Jul 2022 05:58:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD4BB5D16;
+        Mon, 11 Jul 2022 02:27:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37BBE61227;
-        Mon, 11 Jul 2022 09:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436AAC34115;
-        Mon, 11 Jul 2022 09:17:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A819B80D2C;
+        Mon, 11 Jul 2022 09:27:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F7AC34115;
+        Mon, 11 Jul 2022 09:27:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531027;
-        bh=CvZxMF564fImUCGGwfXZ9rZR8Plvf1bwcZjjJWcrvAE=;
+        s=korg; t=1657531648;
+        bh=n0hYW14P2MKpZwo1i5aFk7orNBSieQ8KYy2b4+bCFyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=slzW9vM2bvQhphegeZxFh/lOcAq6IuIB/8hYU0YGkvAOj5yF/DsbDXfPYpueEEM/O
-         vjgvuO2LhN9lwQy8KxwaF+IqTTLNfq/dMheGp9d3B266zgf/dFqpTy7fX4huiapJ8E
-         /mBvujLWK5fBUG9KPvTrrHSbgE6QK05mzjsvEL2I=
+        b=jm281VnOWQIOe18JArJwlJQZO0F/RsYuHa4UXtC2N0g9U6DjkNAC0V3qnBWwGb4n9
+         9zKXrLVEhSLOuxaxXy6p+cUqvszFeapNXLhGuonlXnh5ECnYQERoFr5qbEjI+wEa8P
+         xk5IJ/9H6yYycjjRfqXdCCAMq5VeS2eDkKabk7N0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 069/112] arm64: dts: qcom: msm8992-*: Fix vdd_lvs1_2-supply typo
-Date:   Mon, 11 Jul 2022 11:07:09 +0200
-Message-Id: <20220711090551.532705662@linuxfoundation.org>
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Ye Guojin <ye.guojin@zte.com.cn>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Subject: [PATCH 5.15 174/230] virtio-blk: modify the value type of num in virtio_queue_rq()
+Date:   Mon, 11 Jul 2022 11:07:10 +0200
+Message-Id: <20220711090608.997252359@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,67 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+From: Ye Guojin <ye.guojin@zte.com.cn>
 
-[ Upstream commit 5fb779558f1c97e2bf2794cb59553e569c38e2f9 ]
+commit 0466a39bd0b6c462338f10d18076703d14a552de upstream.
 
-"make dtbs_check" complains about the missing "-supply" suffix for
-vdd_lvs1_2 which is clearly a typo, originally introduced in the
-msm8994-smd-rpm.dtsi file and apparently later copied to
-msm8992-xiaomi-libra.dts:
+This was found by coccicheck:
+./drivers/block/virtio_blk.c, 334, 14-17, WARNING Unsigned expression
+compared with zero  num < 0
 
-msm8992-lg-bullhead-rev-10/101.dtb: pm8994-regulators: 'vdd_lvs1_2'
-does not match any of the regexes:
-  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
->From schema: regulator/qcom,smd-rpm-regulator.yaml
-
-msm8992-xiaomi-libra.dtb: pm8994-regulators: 'vdd_lvs1_2'
-does not match any of the regexes:
-  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
->From schema: regulator/qcom,smd-rpm-regulator.yaml
-
-Reported-by: Rob Herring <robh@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Fixes: f3b2c99e73be ("arm64: dts: Enable onboard SDHCI on msm8992")
-Fixes: 0f5cdb31e850 ("arm64: dts: qcom: Add Xiaomi Libra (Mi 4C) device tree")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220627135938.2901871-1-stephan.gerhold@kernkonzept.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
+Link: https://lore.kernel.org/r/20211117063955.160777-1-ye.guojin@zte.com.cn
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 02746e26c39e ("virtio-blk: avoid preallocating big SGL for data")
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Reviewed-by: Max Gurtovoy <mgurtovoy@nvidia.com>
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/block/virtio_blk.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-index 3b0cc85d6674..71e373b11de9 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-@@ -74,7 +74,7 @@
- 		vdd_l17_29-supply = <&vph_pwr>;
- 		vdd_l20_21-supply = <&vph_pwr>;
- 		vdd_l25-supply = <&pm8994_s5>;
--		vdd_lvs1_2 = <&pm8994_s4>;
-+		vdd_lvs1_2-supply = <&pm8994_s4>;
- 
- 		/* S1, S2, S6 and S12 are managed by RPMPD */
- 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index 84558ab5fe86..ae882bfbf48d 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -143,7 +143,7 @@
- 		vdd_l17_29-supply = <&vph_pwr>;
- 		vdd_l20_21-supply = <&vph_pwr>;
- 		vdd_l25-supply = <&pm8994_s5>;
--		vdd_lvs1_2 = <&pm8994_s4>;
-+		vdd_lvs1_2-supply = <&pm8994_s4>;
- 
- 		/* S1, S2, S6 and S12 are managed by RPMPD */
- 
--- 
-2.35.1
-
+--- a/drivers/block/virtio_blk.c
++++ b/drivers/block/virtio_blk.c
+@@ -308,7 +308,7 @@ static blk_status_t virtio_queue_rq(stru
+ 	struct request *req = bd->rq;
+ 	struct virtblk_req *vbr = blk_mq_rq_to_pdu(req);
+ 	unsigned long flags;
+-	unsigned int num;
++	int num;
+ 	int qid = hctx->queue_num;
+ 	int err;
+ 	bool notify = false;
 
 

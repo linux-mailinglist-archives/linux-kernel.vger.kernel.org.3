@@ -2,119 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8A570810
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF95570814
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiGKQMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S231878AbiGKQNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGKQMq (ORCPT
+        with ESMTP id S231593AbiGKQNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:12:46 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA1379EE6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:12:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id fd6so6867540edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:12:45 -0700 (PDT)
+        Mon, 11 Jul 2022 12:13:38 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810CC10BF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:13:36 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso54074757b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EpUWA0CCK9VbBCJDoo4DsDsKj3ehCYJDBTp0s+uL7as=;
-        b=ixU/xMq7Hv7sYGK7x3fdtMTt6aasWztP+joaQKiF3Qoz8jom4Zbc/6yW2OaMtJkOni
-         QRGTqspiIYsKDwbpNgmJ05SE4tIR3oGEcMR0OpCFjW/x/t+QR2pLDk1XL1qU/cZ3VQjn
-         R+Rda0PCnymlDaO5mqJNz0TzmHAvame4MLDOw=
+        bh=BOu1n0uYdCsudxoJVtyz5/UL8tUbc5xPCGC+9KrKzU4=;
+        b=jfZhtAzNU5rTNiQTs4mptKw1m2kTa9R6IQTrIM+PBmuO9yyCHXVyohDAlN7KTzn6Ah
+         we0Ko3BSxqQWXKVCJWUqcjMFYTQ78+eNUIvCbS8SdyauGnfHltCkJdcl53p9aqKvWY3m
+         IRJ3N9l8PXZ6ZZNwNwgBnoO6YhW3Kajtwmk3Yppwor2+/X/PfamcxKpfKaKnsiD5jMwe
+         C7PQoBo9a8L6Gtf9tzt2aclez/bEA+frq7ccjV5CWtuVTh7ZAko/VlLMTBm4+dOZMCSz
+         yHdAEc6RTrY4quwMSVG8R6BnUsgBhGlxx3SUpp5nDkGFTpMdMtR9QNkzjQOQ51Hqem1r
+         ROgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EpUWA0CCK9VbBCJDoo4DsDsKj3ehCYJDBTp0s+uL7as=;
-        b=epsYcoPiBKS/Or+OqagnJkAkGE76Aj3oszExBlixI3hpoPhyXozkhCvvwYajgxKU6O
-         MR+tEdq6u84DFQZkXhR5DdG6en7sez2GtOx4+vxvFHCQ0/NhwSajlZn+IuLx9OguqDkc
-         FFgcw47YqAJeYf6xkPm23o0oVaAoc/o0ek7aiL0Z18GfzsL92uEbH3VVjvX8IR0WEAT2
-         ibk9klI7cr8epmXaE0LgdOaAuhvP6nCgtI4vu4lep+fpHrszeQldj8wM4lh0352vM7Eq
-         HTSJXABqpsvykM9VnwZa94+EqWbLgHZy+pOLp3PrAjQNG2s8uGOb1nW1OmkrZ3yGRirH
-         Y7nw==
-X-Gm-Message-State: AJIora+QUt7VlkTBmKaLupCfIKhi55d/cmkeJxSYhUZg/UTklTuq4VHn
-        BzG41LPCmVVc+io8P2ru0cYnnb3dJm4NIgbAT/g=
-X-Google-Smtp-Source: AGRyM1uVpcUM41OpblJQTIvsGmVtDDcuQPOciOEKoJUMPYR5e5Dpo0ghf4YlwCWa+LMwnJ/cpPDI3A==
-X-Received: by 2002:a05:6402:b3b:b0:439:b0cc:d409 with SMTP id bo27-20020a0564020b3b00b00439b0ccd409mr25203008edb.325.1657555964411;
-        Mon, 11 Jul 2022 09:12:44 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id ks6-20020a170906f84600b0072ae8fb13e6sm2785363ejb.126.2022.07.11.09.12.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 09:12:43 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id v16so7629725wrd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:12:42 -0700 (PDT)
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
- b13-20020adff90d000000b0020cde324d35mr17134813wrr.583.1657555961970; Mon, 11
- Jul 2022 09:12:41 -0700 (PDT)
+        bh=BOu1n0uYdCsudxoJVtyz5/UL8tUbc5xPCGC+9KrKzU4=;
+        b=PuVZ+S0Af3FxhT6OcZKdN1Ansg0pK2jbcf0SXw9TPSDHUl1qRtVgqfBbnHH5FiFZdu
+         g0+l4VGftSwmZscII4dnxS/JBcpa1Z1blgXu7hJRD/YT8XDj3OICYfOQz12fGh54OdQe
+         ej9Rz4LtWbt1lqC1R9CwqRSeiOC5REwfper6QtxJGP4dMm8XpTAqzPqOJeAqN6sz2BHM
+         2tFrBj1ZTOvgqo+etoTrkRCY9vWdAqVOxQDuwFSmTScg9zDPzCbsIgXtOC0WVi8AYFfd
+         nLaF5tghooYHS/+oE5/gPCcd43tZgN3U98Zs22q3dId0hv9VTzIvS3tXR0zGI1qQZAxi
+         hEQw==
+X-Gm-Message-State: AJIora+c/9sTCvdqJZy9bdgefKpJ6h61HiYI+DBEpLCDudWuja6Kg+kU
+        edb5w3pF7C01vWsh6zgxluJrGBq9PZ9Zgl21EQKixQ==
+X-Google-Smtp-Source: AGRyM1u7w4vwWQLqCchegA4jWk07R+nBUJyoXBnwnNANR5KSe1C5dJ2LQvRXdoOq/VOfMNDgU8kdjtBCXiK48O1MRt0=
+X-Received: by 2002:a81:98d:0:b0:31c:921c:9783 with SMTP id
+ 135-20020a81098d000000b0031c921c9783mr19996386ywj.316.1657556015569; Mon, 11
+ Jul 2022 09:13:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <1657555122-18605-1-git-send-email-quic_khsieh@quicinc.com>
- <CAD=FV=WC0XQqOyONddX37=ad8M4N2NHB5UTmDVZU5SEggLvFEA@mail.gmail.com> <9abb6a67-e7a5-a3dc-1bff-30e9d2922b84@quicinc.com>
-In-Reply-To: <9abb6a67-e7a5-a3dc-1bff-30e9d2922b84@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 11 Jul 2022 09:12:29 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VHC_mTya4ywa50_Af0uwt19rYDs9PyGfOh_AhRAJTEgA@mail.gmail.com>
-Message-ID: <CAD=FV=VHC_mTya4ywa50_Af0uwt19rYDs9PyGfOh_AhRAJTEgA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dta: qcom: sc7280: delete vdda-1p2 and vdda-0p9
- from mdss_edp
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        quic_mkrishn@quicinc.com, quic_kalyant@quicinc.coml,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-10-glider@google.com>
+In-Reply-To: <20220701142310.2188015-10-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 11 Jul 2022 18:12:59 +0200
+Message-ID: <CANpmjNN8xD2WK_Au86ww1eqGaUbWr+B=m0GuzrDrbhKA=hJYwQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/45] x86: kmsan: pgtable: reduce vmalloc space
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, Jul 11, 2022 at 9:10 AM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
 >
+> KMSAN is going to use 3/4 of existing vmalloc space to hold the
+> metadata, therefore we lower VMALLOC_END to make sure vmalloc() doesn't
+> allocate past the first 1/4.
 >
-> On 7/11/2022 9:02 AM, Doug Anderson wrote:
->
-> Hi,
->
-> On Mon, Jul 11, 2022 at 8:58 AM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> Both vdda-1p2-supply and vdda-0p9-supply regulators are controlled
-> by dp combo phy. Therefore remove them from dp controller.
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi | 3 ---
->  1 file changed, 3 deletions(-)
+> v2:
+>  -- added x86: to the title
 >
-> You also need to remove it from
-> `arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi`.
+> Link: https://linux-review.googlesource.com/id/I9d8b7f0a88a639f1263bc693cbd5c136626f7efd
+> ---
+>  arch/x86/include/asm/pgtable_64_types.h | 41 ++++++++++++++++++++++++-
+>  arch/x86/mm/init_64.c                   |  2 +-
+>  2 files changed, 41 insertions(+), 2 deletions(-)
 >
-> arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi: vdda-1p2-supply = <&vdd_a_usbssdp_0_1p2>;
+> diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
+> index 70e360a2e5fb7..ad6ded5b1dedf 100644
+> --- a/arch/x86/include/asm/pgtable_64_types.h
+> +++ b/arch/x86/include/asm/pgtable_64_types.h
+> @@ -139,7 +139,46 @@ extern unsigned int ptrs_per_p4d;
+>  # define VMEMMAP_START         __VMEMMAP_BASE_L4
+>  #endif /* CONFIG_DYNAMIC_MEMORY_LAYOUT */
 >
-> I did not see above line at sc7280-herobrine.dtsi at latest msm-next tree.
+> -#define VMALLOC_END            (VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
+> +#define VMEMORY_END            (VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
 
-It's in the qcom tree...
+Comment what VMEMORY_END is? (Seems obvious, but less guessing is better here.)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/tree/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi?h=for-next#n438
-
--Doug
+> +#ifndef CONFIG_KMSAN
+> +#define VMALLOC_END            VMEMORY_END
+> +#else
+> +/*
+> + * In KMSAN builds vmalloc area is four times smaller, and the remaining 3/4
+> + * are used to keep the metadata for virtual pages. The memory formerly
+> + * belonging to vmalloc area is now laid out as follows:
+> + *
+> + * 1st quarter: VMALLOC_START to VMALLOC_END - new vmalloc area
+> + * 2nd quarter: KMSAN_VMALLOC_SHADOW_START to
+> + *              VMALLOC_END+KMSAN_VMALLOC_SHADOW_OFFSET - vmalloc area shadow
+> + * 3rd quarter: KMSAN_VMALLOC_ORIGIN_START to
+> + *              VMALLOC_END+KMSAN_VMALLOC_ORIGIN_OFFSET - vmalloc area origins
+> + * 4th quarter: KMSAN_MODULES_SHADOW_START to KMSAN_MODULES_ORIGIN_START
+> + *              - shadow for modules,
+> + *              KMSAN_MODULES_ORIGIN_START to
+> + *              KMSAN_MODULES_ORIGIN_START + MODULES_LEN - origins for modules.
+> + */
+> +#define VMALLOC_QUARTER_SIZE   ((VMALLOC_SIZE_TB << 40) >> 2)
+> +#define VMALLOC_END            (VMALLOC_START + VMALLOC_QUARTER_SIZE - 1)
+> +
+> +/*
+> + * vmalloc metadata addresses are calculated by adding shadow/origin offsets
+> + * to vmalloc address.
+> + */
+> +#define KMSAN_VMALLOC_SHADOW_OFFSET    VMALLOC_QUARTER_SIZE
+> +#define KMSAN_VMALLOC_ORIGIN_OFFSET    (VMALLOC_QUARTER_SIZE << 1)
+> +
+> +#define KMSAN_VMALLOC_SHADOW_START     (VMALLOC_START + KMSAN_VMALLOC_SHADOW_OFFSET)
+> +#define KMSAN_VMALLOC_ORIGIN_START     (VMALLOC_START + KMSAN_VMALLOC_ORIGIN_OFFSET)
+> +
+> +/*
+> + * The shadow/origin for modules are placed one by one in the last 1/4 of
+> + * vmalloc space.
+> + */
+> +#define KMSAN_MODULES_SHADOW_START     (VMALLOC_END + KMSAN_VMALLOC_ORIGIN_OFFSET + 1)
+> +#define KMSAN_MODULES_ORIGIN_START     (KMSAN_MODULES_SHADOW_START + MODULES_LEN)
+> +#endif /* CONFIG_KMSAN */
+>
+>  #define MODULES_VADDR          (__START_KERNEL_map + KERNEL_IMAGE_SIZE)
+>  /* The module sections ends with the start of the fixmap */
+> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+> index 39c5246964a91..5806331172361 100644
+> --- a/arch/x86/mm/init_64.c
+> +++ b/arch/x86/mm/init_64.c
+> @@ -1287,7 +1287,7 @@ static void __init preallocate_vmalloc_pages(void)
+>         unsigned long addr;
+>         const char *lvl;
+>
+> -       for (addr = VMALLOC_START; addr <= VMALLOC_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
+> +       for (addr = VMALLOC_START; addr <= VMEMORY_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
+>                 pgd_t *pgd = pgd_offset_k(addr);
+>                 p4d_t *p4d;
+>                 pud_t *pud;
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

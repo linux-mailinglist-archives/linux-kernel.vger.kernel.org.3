@@ -2,53 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E2D570490
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A617C570494
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiGKNnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S230347AbiGKNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiGKNnW (ORCPT
+        with ESMTP id S230399AbiGKNnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:43:22 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A60684D809;
-        Mon, 11 Jul 2022 06:43:21 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id E21CC1C80CA9;
-        Mon, 11 Jul 2022 21:43:20 +0800 (CST)
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 11 Jul
- 2022 21:43:20 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Mon, 11 Jul 2022 21:43:20 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 81BDA63A23; Mon, 11 Jul 2022 16:43:19 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <jic23@kernel.org>, <lars@metafoo.de>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <j.neuschaefer@gmx.net>, <zhengbin13@huawei.com>
-CC:     <openbmc@lists.ozlabs.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 2/2] iio: adc: npcm: Add NPCM8XX support
-Date:   Mon, 11 Jul 2022 16:43:11 +0300
-Message-ID: <20220711134312.234268-3-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220711134312.234268-1-tmaimon77@gmail.com>
-References: <20220711134312.234268-1-tmaimon77@gmail.com>
+        Mon, 11 Jul 2022 09:43:55 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5914116F;
+        Mon, 11 Jul 2022 06:43:50 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 6B14E1B000E0;
+        Mon, 11 Jul 2022 16:43:47 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1657547027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EluWmIIUJxvr7SA4wTQouzBF9nmaOCP6Dx5/r969wak=;
+        b=jMPZZKxAGCUYgmypae0r1zi5xD/0LFMxc+8F16hdZVR6eaOava31hZjQG+oDh+ll52lm5q
+        LsOJguT6DuSvtPtyfOvQuMIPOy6CDg77pEX84Yan7N70TjgJyVMzXEe/NNbtKaE8h5tUCb
+        uRN1QarbLJCOjG8yoFx4WJ7L9p5zYvT09oyIlyXfyMxbt183Ap4gk0937wYcQUDMRM6gh3
+        OLjVqIHDAZxr0Oe2PAy3yyf0FP65+tjIvpJaFd3S+pJQTtYARRfiK5Y+JGKJXSUfiF1OiR
+        x3EIQ1euD+6554xrUMpbyf7Z/341FfniEdv4cvxNmyQZEmBg1fTr2qrQ3dxYgQ==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id EDB27634D5F;
+        Mon, 11 Jul 2022 16:43:46 +0300 (EEST)
+Date:   Mon, 11 Jul 2022 16:43:46 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ovl: Modify the section of Return Value
+Message-ID: <YswpEo+liqx9qBCI@valkosipuli.retiisi.eu>
+References: <20220624014707.2057-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624014707.2057-1-wangdeming@inspur.com>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1657547027; a=rsa-sha256;
+        cv=none;
+        b=lBcoLn+UOrbixn8DIme3yR1+2yKbRZvldDuErCa+3rabvt8/tO+swQzWq4b5QXkNaV0kAi
+        Z1YVbhr3TRrvI4ekYhpBF09V/MQcApZfej5lqsdgS1RG8X2wQN9Orl8bMIc/HGjLTYoMtM
+        QM+5+8C0SRJGq76rvSZya1japm0bHtFDFItnyrvO57cPu27G9tKckkBTYK+CGWhhmwr4bB
+        zQ0VxFw6xYW33xMJQsIJS769QycQ4fe+XjmgE6v4AWrG7X4XqZFHpfGJFpgtRHIpn3QTiz
+        aSFSycgHBeXHOnHxRcIsYjmB04YLGUneW0la65fhzoTp05BOgY9yLefJFkuHng==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1657547027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EluWmIIUJxvr7SA4wTQouzBF9nmaOCP6Dx5/r969wak=;
+        b=ntgK91V9HqVo8mWXPNy0PIStFxYgfEY37WnRFVdI/mrxuxiO0FFd3PZ/eFcynKcCNZmaj1
+        UbrlSsNwLKLKSdASBjLG4E0Y3NS77mF/QZXOFvhhV2QGSkNXQn83xtjNUN3Ml5jqSf89G2
+        sdiYp4Z03Me43tf0cYbj6/euG0hZ5HFn3Uukl3FEF/eFqVgmT7FIpNidomj7ir2S6J+tn7
+        ABllOLjZN02NGI+Ry9UM7PWNGoaAAGnSw0bhYEx+aTAVTdweaqKzgZmO+Jz9HHnknSuu4D
+        VccT0feLIByl1T0kgHALmYquArXMpVFpnIwjvI6e4HBhdEvLo6D3HFuUsFMfpg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,122 +82,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding ADC NPCM8XX support to NPCM ADC driver.
-ADC NPCM8XX uses a different resolution and voltage reference.
+Hi Deming,
 
-As part of adding NPCM8XX support:
-- Add NPCM8XX specific compatible string.
-- Add data to handle architecture-specific ADC parameters.
+On Thu, Jun 23, 2022 at 09:47:07PM -0400, Deming Wang wrote:
+> Delete duplicate words of "the".
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- drivers/iio/adc/npcm_adc.c | 39 ++++++++++++++++++++++++++++++--------
- 1 file changed, 31 insertions(+), 8 deletions(-)
+Thanks for the patch.
 
-diff --git a/drivers/iio/adc/npcm_adc.c b/drivers/iio/adc/npcm_adc.c
-index f7bc0bb7f112..efacba256056 100644
---- a/drivers/iio/adc/npcm_adc.c
-+++ b/drivers/iio/adc/npcm_adc.c
-@@ -16,6 +16,12 @@
- #include <linux/uaccess.h>
- #include <linux/reset.h>
- 
-+struct npcm_adc_info {
-+	u32 data_mask;
-+	u32 internal_vref;
-+	u32 res_bits;
-+};
-+
- struct npcm_adc {
- 	bool int_status;
- 	u32 adc_sample_hz;
-@@ -34,6 +40,7 @@ struct npcm_adc {
- 	 * has finished.
- 	 */
- 	struct mutex lock;
-+	struct npcm_adc_info *data;
- };
- 
- /* ADC registers */
-@@ -52,13 +59,21 @@ struct npcm_adc {
- #define NPCM_ADCCON_CH(x)		((x) << 24)
- #define NPCM_ADCCON_DIV_SHIFT		1
- #define NPCM_ADCCON_DIV_MASK		GENMASK(8, 1)
--#define NPCM_ADC_DATA_MASK(x)		((x) & GENMASK(9, 0))
- 
- #define NPCM_ADC_ENABLE		(NPCM_ADCCON_ADC_EN | NPCM_ADCCON_ADC_INT_EN)
- 
- /* ADC General Definition */
--#define NPCM_RESOLUTION_BITS		10
--#define NPCM_INT_VREF_MV		2000
-+static const struct npcm_adc_info npxm7xx_adc_info = {
-+	.data_mask = GENMASK(9, 0),
-+	.internal_vref = 2048,
-+	.res_bits = 10,
-+};
-+
-+static const struct npcm_adc_info npxm8xx_adc_info = {
-+	.data_mask = GENMASK(11, 0),
-+	.internal_vref = 1229,
-+	.res_bits = 12,
-+};
- 
- #define NPCM_ADC_CHAN(ch) {					\
- 	.type = IIO_VOLTAGE,					\
-@@ -129,7 +144,8 @@ static int npcm_adc_read(struct npcm_adc *info, int *val, u8 channel)
- 	if (ret < 0)
- 		return ret;
- 
--	*val = NPCM_ADC_DATA_MASK(ioread32(info->regs + NPCM_ADCDATA));
-+	*val = ioread32(info->regs + NPCM_ADCDATA);
-+	*val &= info->data->data_mask;
- 
- 	return 0;
- }
-@@ -157,9 +173,9 @@ static int npcm_adc_read_raw(struct iio_dev *indio_dev,
- 			vref_uv = regulator_get_voltage(info->vref);
- 			*val = vref_uv / 1000;
- 		} else {
--			*val = NPCM_INT_VREF_MV;
-+			*val = info->data->internal_vref;
- 		}
--		*val2 = NPCM_RESOLUTION_BITS;
-+		*val2 = info->data->res_bits;
- 		return IIO_VAL_FRACTIONAL_LOG2;
- 	case IIO_CHAN_INFO_SAMP_FREQ:
- 		*val = info->adc_sample_hz;
-@@ -176,7 +192,8 @@ static const struct iio_info npcm_adc_iio_info = {
- };
- 
- static const struct of_device_id npcm_adc_match[] = {
--	{ .compatible = "nuvoton,npcm750-adc", },
-+	{ .compatible = "nuvoton,npcm750-adc", .data = &npxm7xx_adc_info},
-+	{ .compatible = "nuvoton,npcm845-adc", .data = &npxm8xx_adc_info},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, npcm_adc_match);
-@@ -190,14 +207,20 @@ static int npcm_adc_probe(struct platform_device *pdev)
- 	struct npcm_adc *info;
- 	struct iio_dev *indio_dev;
- 	struct device *dev = &pdev->dev;
-+	const struct of_device_id *match;
- 
- 	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*info));
- 	if (!indio_dev)
- 		return -ENOMEM;
- 	info = iio_priv(indio_dev);
- 
--	mutex_init(&info->lock);
-+	match = of_match_node(npcm_adc_match, pdev->dev.of_node);
-+	if (!match || !match->data) {
-+		dev_err(dev, "Failed getting npcm_adc_data\n");
-+		return -ENODEV;
-+	}
- 
-+	info->data = (struct npcm_adc_info *)match->data;
- 	info->dev = &pdev->dev;
- 
- 	info->regs = devm_platform_ioremap_resource(pdev, 0);
+The patch itself seems fine, but I'd reword the subject and try to improve
+the commit message.
+
+In the commit message, there's a single article (the) and "of" is just
+extra.
+
 -- 
-2.33.0
+Regards,
 
+Sakari Ailus

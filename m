@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38EB56D3F6
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC3856D3F3
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiGKEaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S229714AbiGKEaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiGKEaA (ORCPT
+        with ESMTP id S229688AbiGKEaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:30:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7A18E3A;
-        Sun, 10 Jul 2022 21:29:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id dn9so6805312ejc.7;
-        Sun, 10 Jul 2022 21:29:58 -0700 (PDT)
+        Mon, 11 Jul 2022 00:30:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A20418E3A;
+        Sun, 10 Jul 2022 21:30:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a9so6815246ejf.6;
+        Sun, 10 Jul 2022 21:30:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yv9OpwL9wanJopC4m2vgg7+GMxN3Dmx4qKHjP8pLI8w=;
-        b=GSc+/hthmv5AO96QcPzeJ5L0HfFuhhef8GwitjmYLtqK+6gUdyDwMUSLNvI8WQ3wE/
-         uk4FUWIbbdPvX9mHKYNCJ3qDr7GFLm9SA122abF9DY1VuOO6S+PYY4fyAlROCM1qJ9PD
-         ghAkG3Ds1donGmWhE0KwrJpNo4XoJlV0hs7UEB3Zaorwxd40IqULWIpmiB/3yiejsXUF
-         575A8s/+z45xloSQbZVd0Tg5Pi/FghOrMtBM6yQH5aM8d0KCgshH1NsscCD/itN/M2fq
-         hFXMnkUr93DPl0VANY5aPINw5Z61DwCtCum/hnOXj3UDqeZylhxTR36xzpY7izj1HksX
-         RxVQ==
+        bh=fi53u4QJgosCISnTmcyYiG9I9s/LhFX3/A6st//BwUM=;
+        b=Hd55IR61uvW2yTondhIt00vpk9E5U8B+C/utJoAupC7aIVwBiC7pAfSfxjlP69HlVf
+         I1BJfhC5TyMSkhHlKm843yxrBVePP/9I/yoM4WQbkxAAtduvvOBUZWbYxezVbdhBN/A5
+         yA4Za8Uid9NBZXuudDSvgmQgTvV0G1f0/ralZYpK3kOXdsyCnzhh+h2PSAPXj0px2b4h
+         raz1bIHbnL89lX/3jpX96yf5esgDt+ohllt3rgvqItOpWZXOdPKnhr1GyVDCEXIXh36P
+         Sus3XA2j1PIH/POGVvqtc6WTkynYteu1zzcA9HdtMftFgOC9MAphnEWyKN+k/ZbFAqbH
+         bhkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Yv9OpwL9wanJopC4m2vgg7+GMxN3Dmx4qKHjP8pLI8w=;
-        b=BdGiyIoqBTFTNhCquFpohVwFNHKHFaKAOAL2qBp1lyU0uecolbuxfIZxuhcpsnZPmI
-         nK5YOWharpdgzDIOKl0EjmoBDRO+zYBT2Ln4UnH1e2pDGcYZ1AORZL4CCvU5IBl/uQmr
-         RdgPJ7LOEtQKitYwaPN344e0ouhZEMeFQ7Pfz3/wsql8FFmCsiPGMZ9SoN5/Z2KEAyaL
-         2VSeJsjhS1LFTOty9z+aCq43qC7mUjZNIix3auWgUFu3vl82zFtkA/m7YRnlYvKcOEcC
-         3GJJ/abTckTQ9bWfSSWlShAppA4zygQ5xqLwdzcjNMyfhO2L/1EVnyuY+i2Xu9Ryzcag
-         /VCg==
-X-Gm-Message-State: AJIora/EO6J5ZBfJ0pGJspUDkO32JXRnTK3T2tdGe9QXGVnU94iTSNyP
-        nlYt6e8bEdBj1kmO1PitowU=
-X-Google-Smtp-Source: AGRyM1uD5satbuuh1hHHCA8GEKVcLteXvA4sAWvyM3FwCJY4LWBcHQfj9LuFHg84KkrCfUwIaQ/aqw==
-X-Received: by 2002:a17:907:2cf0:b0:72a:aec1:2bcb with SMTP id hz16-20020a1709072cf000b0072aaec12bcbmr16089440ejc.565.1657513797092;
-        Sun, 10 Jul 2022 21:29:57 -0700 (PDT)
+        bh=fi53u4QJgosCISnTmcyYiG9I9s/LhFX3/A6st//BwUM=;
+        b=lzTMnzvnD234ZSdverwU4ltgdiqDyqkWniTF1oZBqgD5bMHLsc7CfFVcKJ8NIYKscT
+         YwLCr+QgbL+JExLIFpumuA2mzzw8uSv55qEvSJoNUOTvJKUGtD8rRc/6a/UrqZfjbfWJ
+         K02lofA2uUU4s4bTeRcFVCVKhSeKMJ6ON2lAzdq0Q640fK2hQmz9UIGcctkNlG6NIsRG
+         O/BH50k0/SQLBZL2j0Q14fqk6eSjg/4hOu9H6dePYfho7TKfFrSw5SL19C6q4K6MrWIZ
+         RufyOKT92ZFf70BX+I4VgSpHpLaOyYRpJGFcemspNN4z30xElipSw0x3tMo+7iyKJiC7
+         U8zA==
+X-Gm-Message-State: AJIora/R0kq6bYmSwaUNf1tONomxuxxsxVb8sD4XUzTwNnNJQ43zRIQh
+        vXY9lAJ1AIXV5Bm43oVI2Uk=
+X-Google-Smtp-Source: AGRyM1u5ok/VBonTP+OnfW26t7V5NT0deUGsauIvg2tLk5Lm3cqcvEcU3/9UoIiQdJ31AK80gQo3Bg==
+X-Received: by 2002:a17:907:75c6:b0:72b:496c:77c7 with SMTP id jl6-20020a17090775c600b0072b496c77c7mr6465141ejc.47.1657513801672;
+        Sun, 10 Jul 2022 21:30:01 -0700 (PDT)
 Received: from localhost.localdomain (89-39-107-113.hosted-by-worldstream.net. [89.39.107.113])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b00726298147b1sm2203100ejg.161.2022.07.10.21.29.54
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b00726298147b1sm2203100ejg.161.2022.07.10.21.29.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 21:29:56 -0700 (PDT)
+        Sun, 10 Jul 2022 21:30:01 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Yassine Oudjana <yassine.oudjana@gmail.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] media: dt-bindings: ak7375: Convert to DT schema
-Date:   Mon, 11 Jul 2022 08:28:37 +0400
-Message-Id: <20220711042838.213351-2-y.oudjana@protonmail.com>
+Subject: [PATCH 2/3] media: dt-bindings: ak7375: Add supplies
+Date:   Mon, 11 Jul 2022 08:28:38 +0400
+Message-Id: <20220711042838.213351-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711042838.213351-1-y.oudjana@protonmail.com>
 References: <20220711042838.213351-1-y.oudjana@protonmail.com>
@@ -80,92 +80,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Convert DT bindings document for AKM AK7375 VCM to DT schema
-format and add an example.
+Add supply properties to describe regulators needed to power
+the AK7375 VCM.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- .../devicetree/bindings/media/i2c/ak7375.txt  |  8 ----
- .../devicetree/bindings/media/i2c/ak7375.yaml | 41 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 42 insertions(+), 9 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/i2c/ak7375.txt
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ak7375.yaml
+ .../devicetree/bindings/media/i2c/ak7375.yaml         | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ak7375.txt b/Documentation/devicetree/bindings/media/i2c/ak7375.txt
-deleted file mode 100644
-index aa3e24b41241..000000000000
---- a/Documentation/devicetree/bindings/media/i2c/ak7375.txt
-+++ /dev/null
-@@ -1,8 +0,0 @@
--Asahi Kasei Microdevices AK7375 voice coil lens driver
--
--AK7375 is a camera voice coil lens.
--
--Mandatory properties:
--
--- compatible: "asahi-kasei,ak7375"
--- reg: I2C slave address
 diff --git a/Documentation/devicetree/bindings/media/i2c/ak7375.yaml b/Documentation/devicetree/bindings/media/i2c/ak7375.yaml
-new file mode 100644
-index 000000000000..4fc216846ae7
---- /dev/null
+index 4fc216846ae7..baa91de55927 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ak7375.yaml
 +++ b/Documentation/devicetree/bindings/media/i2c/ak7375.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ak7375.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Asahi Kasei Microdevices AK7375 voice coil lens actuator
-+
-+maintainers:
-+  - Tianshu Qiu <tian.shu.qiu@intel.com>
-+
-+description:
-+  AK7375 is a voice coil motor (VCM) camera lens actuator that
-+  is controlled over I2C.
-+
-+properties:
-+  compatible:
-+    const: asahi-kasei,ak7375
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ak7375: camera-lens@c {
-+            compatible = "asahi-kasei,ak7375";
-+            reg = <0x0c>;
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a97fef8c131d..19faf9ce8258 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3063,7 +3063,7 @@ M:	Tianshu Qiu <tian.shu.qiu@intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/ak7375.txt
-+F:	Documentation/devicetree/bindings/media/i2c/ak7375.yaml
- F:	drivers/media/i2c/ak7375.c
+@@ -20,9 +20,17 @@ properties:
+   reg:
+     maxItems: 1
  
- ASAHI KASEI AK8974 DRIVER
++  vdd-supply:
++    description: VDD supply
++
++  vio-supply:
++    description: I/O pull-up supply
++
+ required:
+   - compatible
+   - reg
++  - vdd-supply
++  - vio-supply
+ 
+ additionalProperties: false
+ 
+@@ -35,6 +43,9 @@ examples:
+         ak7375: camera-lens@c {
+             compatible = "asahi-kasei,ak7375";
+             reg = <0x0c>;
++
++            vdd-supply = <&vreg_l23a_2p8>;
++            vio-supply = <&vreg_lvs1a_1p8>;
+         };
+     };
+ 
 -- 
 2.37.0
 

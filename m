@@ -2,187 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3A0570316
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FF6570318
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiGKMom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S231939AbiGKMor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiGKMoS (ORCPT
+        with ESMTP id S231935AbiGKMoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:44:18 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F80F20F6D;
-        Mon, 11 Jul 2022 05:44:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T9HATa5u+6+9CiwoaxccEM8rJtMBnPvCtEfmjJdgutHvYVXbo1+40eR5xUhDXGEgNQVwu0bDVtoCDcja++Pnpuj3x1Ujq0xspoxxzIP5oHQZEDJ+pRSdcbcb/FIZel1q0cnvRe/DxDPvn5NV+vVwegf8yY2Pc3PYVfHukF9e/HakA4H0NiCul0zZIY47XiU0dcszTpKz5PgVVjoZYvHD/vUKJtiNU29zMWCDb6awwGNHQuZa6jjlglGD2pPEL4IVUfcs4+mk+uyQlCAP1JR9ti7p2y8vMI6EpjrkteWqnVzB3kUHNT8AZGVxLJdijZIBUEGJfvrFi0TrCLsMMccYvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rUlhp03MTKWpusw7v0d+KFX0mR4/0AbH61miRGzOACg=;
- b=BgxZpMN18yOEzMh87W5OktD+gifmQy7fLGRqanif1EFQEpMFH8kpDba1RxRMVwdI7cjE995ki0mbddRDmCUVOu2mtRJ85dsaRY7js3cA45WHVcw3JrQXrmoxAHbTC2mipSgwwOJ+Bph5hQTuYnYsQZfy+JI7kWjRlHn2oXiSlNLomPwbaM7IMSSss4+dsV4gIr2lfysee+hrQMSu3HR6h4740ilPRiTXEbwiwm1ZAAOOAgFoAUYgt2V1Nn0Ln72U12VxwubFOASf2fL3ixFd179ySPk6hAIchKTdJWbohAguHHbLWfGr5o1iPMcpJp6edWHuYaMjcVbyQ2m9hks2lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rUlhp03MTKWpusw7v0d+KFX0mR4/0AbH61miRGzOACg=;
- b=XnhQGJP172y8w5QRb6vjADMyHiCl8TwiYa9Q+Ur3gOQOpUNghg1Bo5xooe8fx0WkYrNR9mUkwOrjxmf3fvzlQEzikQRH519W6hh2cW1/0lDlOX6g5HiG+xQY5WtQ9H/CkfPp3Nd3HsUtVXvB/2boo3pQ3Lc4sgsurqmsLZWXANbzbYM5sjI5W/7ACXuc4Bce+NVE1XISbPoGRT2AFuQPL7bIOGHPnsse1u3X5D27a6iCVhxjvY9+JSQduurzyRT/19cVq50Ap4AM2YC894mG7HBrDDINZytECNivaihX6Kmz4Gd7J+ZD/iEDpxhyQjbgyCvkPel67FwMYuEM366MZg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- DM4PR12MB5054.namprd12.prod.outlook.com (2603:10b6:5:389::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.16; Mon, 11 Jul 2022 12:44:08 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::b148:f3bb:5247:a55d]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::b148:f3bb:5247:a55d%2]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 12:44:08 +0000
-Message-ID: <7c552ad4-81e9-2abe-3114-dd55c924844c@nvidia.com>
-Date:   Mon, 11 Jul 2022 13:43:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 000/230] 5.15.54-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20220711090604.055883544@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0156.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:188::17) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Mon, 11 Jul 2022 08:44:19 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9017C3C8DE
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:44:11 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id l124so4655423pfl.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C+gJs7VqVfK3BDvcgbxJ4+3h2qQW9iOJlXrEnDEYLpc=;
+        b=Ia8bUiFWa4gOdKjqqGrm6PAlh7m1OBtZkF0pzB+IbQVMhcpUarK4W12KoTpnyk/JCT
+         HafKVveYDyFmL6jIW5uNBaRfYRj6rCNn0ID1qzDkAomv4Nv+qHaDdVtGIm+ZFNZf8ENh
+         guJ/ga9phkyVE9MGHi1+nrDfJS6RgAhZnKmIutaKkmolEoWztbsw29uuZGm6el9LQYRE
+         hUiyKUMq46cC5KQQ7qu2UW/ZiczhGh/FBJML6rXPefqnC3SzQdeDnwNg2fKXfTwBftRH
+         JvQ/i4PhSaGqDZkTryhuVUJ1i3BQyi6xrLKuZ1IMLP4qfJSNinXIwk64pIqtWHfs3ssx
+         kibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C+gJs7VqVfK3BDvcgbxJ4+3h2qQW9iOJlXrEnDEYLpc=;
+        b=1VgxPkQV5rZqouHxfCEXUdd58Au7tY5kn6acF+8tcPw5fgF2TVZoxE5QjTKudzIQwV
+         O/fKM3OXSckXoVce7P1tKYVminTNkMJP+i2+FNa0yy6nMOGjTmmtCx3jEZwMNL9Q9CoK
+         +J0zG6w0OS+mUtvyF83V63W06jv9UMhFA0nHByTh5PiNvtzI65eXr6sC8GfovpVd6piv
+         hybcd1T+eTCxf9uD2o9JuL6CNyEOahS1NeyCbZCXdVuXLpgpK0iEDX8gf0fPb71Bwy1a
+         s0T2nAGiOxMrzylF3Ab8ZxAnMSHTXTVLYUZaFP5zjylK7A9kSr0YwzOjUCn7E8gTYKcd
+         o4og==
+X-Gm-Message-State: AJIora9uTdU+kKkwoKlK+aYRUASInwLeslaSwZRV2tdBEWpEhjiCPRyN
+        ZAKcYpL5POflH17h9FNQ31gBMPkIuM1RlEFmag/IjA==
+X-Google-Smtp-Source: AGRyM1ud07aLumP5FfPBITa5JTwbhHQ7uDbVBi2bmNc9DKckpyy2ISAlTUsz+KFSdKEAM9ezaWWxYibArBUH1NLF14A=
+X-Received: by 2002:a63:4b03:0:b0:40d:9515:2863 with SMTP id
+ y3-20020a634b03000000b0040d95152863mr14996796pga.341.1657543450577; Mon, 11
+ Jul 2022 05:44:10 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7e119242-9c8c-437f-c128-08da633b0bbb
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5054:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BPJz9PWq0g6Nt7X/OvUHSVwcVJ/9m5/EcB8HhndgXvGBslWiKtInC3hoAaJJPlSS7jKobn4KANQzmkFodSpP/UnjFE/bd8BtDo7LhDDdaUfEV2STB8grwsGSVSVaMSglMRN5fUxak4MrT8ACM7hXXBpkc6BfNQY95K0kuJ3fS4H2ZduWaPo2zMnTD1VT5tRamCN1xw3DUq9rpUBEle56q44vD8DZ/KlbEFGiOd+KFn34An+DPnYmJMXZaE8JNXdqgShTru5lWtp4c0izpYNJTQqGFEPQgBTxS0FtfAdoSSAtZCV0rFwY96oZd91JDr/35LbXymz10QmdcWv/YjhL7MXPMyc/F0vVPb7cfgVR50jNQn3yaLhFF+laHs7/yw2suBmhCYI4TM+zwZRZNi0LvcpJuBgc//R6B/A4+JDgFNft/s4Cxe1Xbj8aYjkpZVTZg/0fVjZDxotN53spWk4tLZTAsJpZiC2rr9eYYxF6UVFSStetMXs5BRRJ3B01GrPfd+9PYlHO0UEScnX7wh9SlkE7PXeypa5M0citUiBov0DpllpI0Q+HJ1GM8Zr/hII4HYGYxIpyanfDy7KVyCCJowwojnEz/kqwggCOAZ5XzYqXXu+K3CFyudpQxI5kcIId1+OyD2NY+c6mUcZ1FMQFnwmW3v2nZMfDioEucW3+odJK/sZr70FZH5TCXDx7yI30Mrpx21TJ+CE1gr8HgGiAEjSJjXJvcM7W+pPVDOgAjDyVEOdUd0k4XO2jAT5DS2B+iJyiGAO6FgyCpQPENnxQFt3+dI3ovN4DcGr3EsXQd5lLkoNnfSKfsUyNvzMXjYpd2T718FsgIdOqLJFheOFN4xu2+GUdq1B487SVSmAwsMb2YUpiuw/+ZZYnkk1N8OihUmrBmxpn/113va2o0KBY3wX2Qxpx4cUPBWyE8ezgZeA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(376002)(136003)(396003)(39860400002)(8936002)(7416002)(66556008)(4326008)(186003)(5660300002)(316002)(66476007)(8676002)(86362001)(41300700001)(31696002)(6666004)(6506007)(66946007)(6512007)(2616005)(53546011)(26005)(38100700002)(6486002)(478600001)(55236004)(31686004)(2906002)(36756003)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ci8reTRaTTZzSUdQcmVhRWdMUGxWMk5SUlFXbWpJY0ozbUNKNUcvUGpQbmZF?=
- =?utf-8?B?b3FLUG1nQmlyWFdFRHpSVFpETGZMd1lTdlFFWTVTQVdkZ1FqVVo1eGpvTjBu?=
- =?utf-8?B?UzFTYzJXUDhoekF0Y3ZTVjdONFVjNlFLODc4bjdHTUNYOGE4a01vcStMaWt5?=
- =?utf-8?B?ZmMyZVBlMFFodEFHYUw1cDYxSnJCK0ZDRVdGVEY0QlI1M3ZUYWdBWlJNaUMw?=
- =?utf-8?B?WEFxWWs5OXdoYk1CR0Q0S1d6MEpRRUVVSkZSQ0hIREVFYllqQ2hLRjRZaTNl?=
- =?utf-8?B?Yk9EWXJDallwajJrZHVaTURJS3FYNmxRR3pmRzk2aGhSclM2dmMyZUxJVHRz?=
- =?utf-8?B?N3RYYUpLbGJOM1hEVEN5OUpZR2RBZDVrcnRYVWNZL1pHbTB6MG9Sb3h2VEtx?=
- =?utf-8?B?bCtXUXVEeExHMWdQRkVVdnQxaDZuTHE4cmlxbFJoS3BnUGh4Y2dQUVVEdDgz?=
- =?utf-8?B?eEk5WUpFa2NzZmJGQW5iN0ZXblNhcUVuNHU1LzNyeDBEMGNzUGpEZEFVNTFq?=
- =?utf-8?B?cklQMzJhckhyNXVLSUdWanpsMytnWmNYblJmVjV3dU5HQ2wxNUIzMWpjQWdT?=
- =?utf-8?B?TWhFUkh4NzYrYkJlemR2T2I4UHZBSmtpcnVzVGtjQVB6Z1hOeGtsWENXMWVv?=
- =?utf-8?B?dzF5Y0l4aWg3SXRuL2I3b1hHd0F6T2kyRHFxLytFU3ZJbzNBcGtlQVQrb3FK?=
- =?utf-8?B?UHl5RE5NaURaYTFpdkhHcGhPdk1mcldQczBKalFWZTFyR0VKMFBwWWE0dVZs?=
- =?utf-8?B?M1pxYlVQUFlGd0hUcW9NZlBrcnNkLzFUM0hnd1ozUXdHM1UxSkZUQU95Umla?=
- =?utf-8?B?ZWVIdkxkVTgzS0pHZ1pIdzNVVGxaV0hRNi9hV2prL1QzY1FrNWY5a3dMNFVH?=
- =?utf-8?B?cE42d2xua2hmVDRxUjNSRFNWb3JFL3NHVzByMDB4YkpKd082TDBOYmU3L1U0?=
- =?utf-8?B?SnZES3FLMVdFSTF1eUxYZlZkdDFnc2QrZWJLd0xBYWpzNXMvWVFJNEtlTVc0?=
- =?utf-8?B?ak41M2I1VlQzWXdCRElaSVZYM3JacnkvRVl5bDJjZmx6Tm9ldjhrdGVlYXdu?=
- =?utf-8?B?QjRKN3BFRWNWaWlNMkVYc0xlTzNMYU93UnFUNTZ2dVRVNWlWMEdRVE1ZVzFN?=
- =?utf-8?B?SDE4VWNwcDFaQm5zY2d2WFJLVG5oRTBUd3BnemJLZVB6NEIrQkxKRHhlZEk1?=
- =?utf-8?B?a0VuYUV4UGdQMkJ3Y0FFcjRYc0Ywc24vMVRwR1dTNnB0SWZNK1V1dGR6Y0Zk?=
- =?utf-8?B?T2dsTlgxMVMwUEZOMFYrY2FJcFhqZWFwb2ZOMlpCNTQ1TXB5V283MHRKbVRZ?=
- =?utf-8?B?c29mOWhOTkh2UHNodW1Pbkl5NmdwTzRkVkowOHYyUGRVTUFCdDdhUEVNWEQ5?=
- =?utf-8?B?enl3Q1IxOUJucnlFMVBkRW9IaEp2ckZ0Z2NwcWo1eW1DSTZKMkxscnQvU3BZ?=
- =?utf-8?B?dVRsbG9YSlpXU1dJSTFoL0tNZzJ4ME1BK3c2YjNJWDRSam9OalROZEhKRVJi?=
- =?utf-8?B?U0pVTVNaSGV1N3JJTWNwb3U1UFFaSGR0NlUxdVhyazdvaGZvUnBGd2FYeGNO?=
- =?utf-8?B?MW05cDY3d1Zhb2xwWG0zYmhhZEE1MHJHNEcwU1FIVEtOZDhiNTNHUlFPZWVT?=
- =?utf-8?B?L3Qrb2JmK3JBbWsrL1ptRzFQWXZScXBEMXdUTi9XcGp4eXpGYzl4QXg1Z2dC?=
- =?utf-8?B?UXM3MG9ubHVNYThlRTc4MjAwQkttR2hwR3h3Q2IxVmRyVjhqQ0labGtDL0Jv?=
- =?utf-8?B?bER5QjJwMFlFU1VmZjUyVWN3ekpxaTc4a3FDLytVYVhzT2tUMHJuMHZXMHpn?=
- =?utf-8?B?Tm53TlhsSHpXY3A1NjQ2TXlUY3h0UVlKT0Q4dmZCYlBMd0VHdWUzMFZvTjV3?=
- =?utf-8?B?RDVmaFhJbWM1dlBvWmVGYldCbUE5VjB0NW0rTVo2c3RwS1dJMjkwOUpZekpH?=
- =?utf-8?B?ZjlUSHhLOVNYR2xUZ2I4dTB4bkNxS3hZNmN2ZWpHaWVkMmFkYmppbmxiL3E2?=
- =?utf-8?B?eS9mck1jdE1LWUlyZ3VmYmxXMmdzNWZVSHhNVFdwUWZnUXJlT0ppUktGTVM3?=
- =?utf-8?B?RWxKZjMzc29YY3RBNkVOSGllREJQWFBnWEphVUhLSXZCQTFGai9peTVzdTVu?=
- =?utf-8?Q?4A39IQDiFZ5ue4J6QAm+P3q2J?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e119242-9c8c-437f-c128-08da633b0bbb
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 12:44:07.9920
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7WGV00erZcZdpObuLxvOzLscPq+URgoD/2umtjTFwTr0m7oZwPX1+VpKUccOW5J3uWCnLTtxeLu0rCobWMIcyA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5054
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220511060521.465744-1-sumit.garg@linaro.org> <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com>
+In-Reply-To: <CAD=FV=WXoDvWuH=yjzCcqOZ5CeUtYun7C8zrtrBP4FC409GkqA@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 11 Jul 2022 18:13:59 +0530
+Message-ID: <CAFA6WYPmFqCXk24J71tNO=5bJHgJRAOPFr7cGq8YYLR+MWBoPw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] arm64: Fix pending single-step debugging issues
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Will Deacon <will@kernel.org>, Wei Li <liwei391@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Doug,
 
-On 11/07/2022 10:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.54 release.
-> There are 230 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.54-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
+On Sat, 2 Jul 2022 at 03:44, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Tue, May 10, 2022 at 11:05 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > This patch-set reworks pending fixes from Wei's series [1] to make
+> > single-step debugging via kgdb/kdb on arm64 work as expected. There was
+> > a prior discussion on ML [2] regarding if we should keep the interrupts
+> > enabled during single-stepping. So patch #1 follows suggestion from Will
+> > [3] to not disable interrupts during single stepping but rather skip
+> > single stepping within interrupt handler.
+> >
+> > [1] https://lore.kernel.org/all/20200509214159.19680-1-liwei391@huawei.com/
+> > [2] https://lore.kernel.org/all/CAD=FV=Voyfq3Qz0T3RY+aYWYJ0utdH=P_AweB=13rcV8GDBeyQ@mail.gmail.com/
+> > [3] https://lore.kernel.org/all/20200626095551.GA9312@willie-the-truck/
+> >
+> > Changes in v3:
+> > - Reword commit descriptions as per Daniel's suggestions.
+> >
+> > Changes in v2:
+> > - Replace patch #1 to rather follow Will's suggestion.
+> >
+> > Sumit Garg (2):
+> >   arm64: entry: Skip single stepping into interrupt handlers
+> >   arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+> >
+> >  arch/arm64/include/asm/debug-monitors.h |  1 +
+> >  arch/arm64/kernel/debug-monitors.c      |  5 +++++
+> >  arch/arm64/kernel/entry-common.c        | 18 +++++++++++++++++-
+> >  arch/arm64/kernel/kgdb.c                |  2 ++
+> >  4 files changed, 25 insertions(+), 1 deletion(-)
+>
+> Sorry it took so long for me to respond. I kept dreaming that I'd find
+> the time to really dig deep into this to understand it fully and I'm
+> finally giving up on it.
 
-...
+No worries and apologies on my part as well as I had to find some time
+to reproduce the issue that you have reported below.
 
-> Mark Rutland <mark.rutland@arm.com>
->      irqchip/gic-v3: Ensure pseudo-NMIs have an ISB between ack and handling
+> I'm going to hope that Will and/or Catalin
+> knows this area of the code well and can give it a good review. If not
+> then I'll strive harder to make the time...
+>
+> In any case, I poked around with this a bunch and it definitely
+> improved the stepping behavior a whole lot. I still got one case where
+> gdb hit an assertion while I was stepping, but I could believe that
+> was a problem with gdb? I couldn't reproduce it. Thus I can at least
+> give:
+>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+>
 
+Thanks for the testing.
 
-The above change is missing a semi-colon and so is causing the following 
-build error ...
+> I'll also note that I _think_ I remember that with Wei's series that
+> the gdb function "call" started working. I tried that here and it
+> didn't seem so happy. To keep things simple, I created a dummy
+> function in my kernel that looked like:
+>
+> void doug_test(void)
+> {
+>   pr_info("testing, 1 2 3\n");
+> }
+>
+> I broke into the debugger by echoing "g" to /proc/sysrq-trigger and
+> then tried "call doug_test()". I guess my printout actually printed
+> but it wasn't so happy after that. Seems like it somehow ended up
+> returning to a bogus address after the call which then caused a crash.
+>
 
-drivers/irqchip/irq-gic-v3.c: In function 'gic_handle_nmi':
-drivers/irqchip/irq-gic-v3.c:666:2: error: expected ';' before 'err'
-   err = handle_domain_nmi(gic_data.domain, irqnr, regs);
-   ^~~
+I am able to reproduce this issue on my setup as well. But it doesn't
+seem to be a regression caused by this patch-set over Wei's series. As
+I could reproduce this issue with v1 [1] patch-set as well which was
+just a forward port of pending patches from Wei's series to the latest
+upstream.
 
-> Hou Tao <houtao1@huawei.com>
->      bpf, arm64: Use emit_addr_mov_i64() for BPF_PSEUDO_FUNC
+Maybe it's a different regression caused by other changes? BTW, do you
+remember the kernel version you tested with Wei's series applied?
 
-And the above commit is generating the following build error ...
+[1] https://lore.kernel.org/linux-arm-kernel/20220411093819.1012583-1-sumit.garg@linaro.org/T/
 
-arch/arm64/net/bpf_jit_comp.c: In function 'build_insn':
-arch/arm64/net/bpf_jit_comp.c:791:7: error: implicit declaration of 
-function 'bpf_pseudo_func' [-Werror=implicit-function-declaration]
-    if (bpf_pseudo_func(insn))
-        ^~~~~~~~~~~~~~~
+-Sumit
 
-These are seen with ARM64 builds.
-
-Cheers
-Jon
-
--- 
-nvpublic
+>   testing, 1 2 3
+>   BUG: sleeping function called from invalid context at
+> arch/arm64/mm/fault.c:593
+>   in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 3393, name: bash
+>   preempt_count: 0, expected: 0
+>   RCU nest depth: 1, expected: 0
+>   CPU: 6 PID: 3393 Comm: bash Not tainted 5.19.0-rc4+ #3
+> dbec0bdb8582e447bccdcf2e70d7fe04477b1aac
+>   Hardware name: Google Herobrine (rev1+) (DT)
+>   Call trace:
+>    dump_backtrace+0xf0/0x110
+>    show_stack+0x24/0x70
+>    dump_stack_lvl+0x64/0x7c
+>    dump_stack+0x18/0x38
+>    __might_resched+0x144/0x154
+>    __might_sleep+0x54/0x84
+>    do_page_fault+0x1d4/0x42c
+>    do_mem_abort+0x4c/0xb0
+>    el1_abort+0x3c/0x5c
+>    el1h_64_sync_handler+0x4c/0xc4
+>    el1h_64_sync+0x64/0x68
+>    0xffffffc008000000
+>    __handle_sysrq+0x15c/0x184
+>    write_sysrq_trigger+0x94/0x128
+>    proc_reg_write+0xbc/0xec
+>    vfs_write+0xf0/0x2c8
+>    ksys_write+0x84/0xf0
+>    __arm64_sys_write+0x28/0x34
+>    invoke_syscall+0x4c/0x120
+>    el0_svc_common+0x94/0xfc
+>    do_el0_svc+0x38/0xc0
+>    el0_svc+0x2c/0x7c
+>    el0t_64_sync_handler+0x48/0x114
+>    el0t_64_sync+0x18c/0x190
+>   Unable to handle kernel execute from non-executable memory at
+> virtual address ffffffc008000000
+>   Mem abort info:
+>     ESR = 0x000000008600000f
+>     EC = 0x21: IABT (current EL), IL = 32 bits
+>     SET = 0, FnV = 0
+>     EA = 0, S1PTW = 0
+>     FSC = 0x0f: level 3 permission fault
+>   swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000082863000
+>   [ffffffc008000000] pgd=100000027ffff003, p4d=100000027ffff003,
+> pud=100000027ffff003, pmd=100000027fffe003, pte=00680001001c3703
+>   Internal error: Oops: 8600000f [#1] PREEMPT SMP
+>
+> I'm not sure if that's a sign that something is missing with your patch or not.
+>
+> -Doug

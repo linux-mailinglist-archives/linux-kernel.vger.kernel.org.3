@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99EC56D41F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5724056D3F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiGKEwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
+        id S229680AbiGKE34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGKEwF (ORCPT
+        with ESMTP id S229469AbiGKE3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:52:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1324ADF03
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657515125; x=1689051125;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=DrEr0YY0JHDS3YJofqeW5jphPqHQVzUUumdDoE67utM=;
-  b=am7f/my+gTejag5qnw2Lm0GFZ0TlwUGTeS56Grfz48puGVq/3mh4i5Di
-   ysU96DBd6GJLiEqfZyfDlb6hNqPhmXUMrJcC29joFp1NJqrBYT0tFADUc
-   wIWyq3AyhVW5XrjVq7EuqC8HE6lqj0ZHSg9Vt5Fxm2j8X+hqAFnr0egUf
-   BThVc/aJItpeeddvT0COsGBARlizDHIja2mZB5YBcDh/bsoaSUY3lsIbV
-   a6eztoFpu9ZHgBrFZrOrK36hW2iUxvun1DXQXTtcAtMR55rXKYGPZ8tK9
-   CHmUv/OghqzzNLpGusOi6a3SBPO9E96wy+8SGas7+r88SagIvCEcyYCzI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285702616"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="asc'?scan'208";a="285702616"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 21:52:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="asc'?scan'208";a="621924301"
-Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jul 2022 21:52:01 -0700
-Date:   Mon, 11 Jul 2022 12:28:36 +0800
-From:   Zhenyu Wang <zhenyuw@linux.intel.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
-        intel-gfx@lists.freedesktop.org, joonas.lahtinen@linux.intel.com,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, jani.nikula@linux.intel.com,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
-        rodrigo.vivi@intel.com, intel-gvt-dev@lists.freedesktop.org,
-        zhi.a.wang@intel.com
-Subject: Re: [PATCH 2/2] drm/i915/gvt: Fix kernel-doc
-Message-ID: <20220711042836.GT1089@zhen-hp.sh.intel.com>
-Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
-References: <20220524083733.67148-1-jiapeng.chong@linux.alibaba.com>
+        Mon, 11 Jul 2022 00:29:55 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F2517E29;
+        Sun, 10 Jul 2022 21:29:54 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v12so4784637edc.10;
+        Sun, 10 Jul 2022 21:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DttVB14cH7FHBMmOjyJF3G0VYFKo+sEsLDSk8HgieQg=;
+        b=nE/54efZBUx9zWQH+3wzN+1js0Mkof/OoZf0ksfF2yE7z4/DzJzBVEbelq1X38IDPJ
+         edfD/P0BpMhJgui4YWm33VDrvXnhK+Biolo/g7P2PVwmvgXx5N89WB5eAkYeLmZq05ac
+         ZbeqZje2Dp8eL5QH4veQ/ultoTGHeCV+uY4TwJQJ3hHyFJMhxs6kILjWafdH7IQvjXeG
+         DzPmwlAx2mkGfpldYyL9lRvlcdGvuxY1tLmIAE458KCcTKNX08q1mc1ZG5pREzBcY3cU
+         D1bqjwHq/7PEgl8scBZbT2G8PoRwBxLqf2gMzxGA3GTozPjRDRlc7zGMbIgqePskU4AC
+         L/uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DttVB14cH7FHBMmOjyJF3G0VYFKo+sEsLDSk8HgieQg=;
+        b=pxVLg/GaiKTRj/Y5OcA/PLwJzmiPpufXFZGu+ND+CCuHqa3XpoTwUS/ebdJCMdip8l
+         lF3X1t/bKPHZ0pUNcz0hFy4QvbSeqn4Xkg+thEl/jIZOxjqK518ENoyvomaqyJnyYdrK
+         wTr+wkYrQW7jPr8qwoDUfTJqgjiUmLogo5sXCGx9E/ULGmX4YE/XqpvxW0UtmzShHUgT
+         5IIGOwBAUmJyB8/+zwyS7AwSfZWsi858WRxd91eFFSPwOwgOffLS9fig4rM0GrN9aGbn
+         5XKMC+ojM2ihW0BX4ZRKhv/E+EpxmJWdlbWDwG1KlEO6nBjUhQ8EQzDJhhEG82qdvZbv
+         zF/A==
+X-Gm-Message-State: AJIora87s0H3q27oJ3cNal/ENnvAUUdZiMtZkEZzvrxjSNt+XbMU52gZ
+        cLNMU6z8x0NfWF1WUc2ZzKAt46JvKjSsS7WU
+X-Google-Smtp-Source: AGRyM1vBD4LDgfY5nOBIXTtmIxj8tgyFfGgQKzmBKaGVYnkqYXSkGVHsimLQrlRxuwEniEF4naGc5Q==
+X-Received: by 2002:a05:6402:4518:b0:43a:3b90:7457 with SMTP id ez24-20020a056402451800b0043a3b907457mr22482188edb.422.1657513793088;
+        Sun, 10 Jul 2022 21:29:53 -0700 (PDT)
+Received: from localhost.localdomain (89-39-107-113.hosted-by-worldstream.net. [89.39.107.113])
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b00726298147b1sm2203100ejg.161.2022.07.10.21.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 21:29:52 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] media: i2c: ak7375: Add regulator management
+Date:   Mon, 11 Jul 2022 08:28:36 +0400
+Message-Id: <20220711042838.213351-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="s8ux8MQukyWAm3r7"
-Content-Disposition: inline
-In-Reply-To: <20220524083733.67148-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
---s8ux8MQukyWAm3r7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds needed regulator management for the AK7375 VCM.
+A DT schema conversion is made before adding new properties.
 
-On 2022.05.24 16:37:32 +0800, Jiapeng Chong wrote:
-> Fix the following W=3D1 kernel warnings:
->=20
-> drivers/gpu/drm/i915/gvt/mmio_context.c:560: warning: expecting
-> prototype for intel_gvt_switch_render_mmio(). Prototype was for
-> intel_gvt_switch_mmio() instead.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/i915/gvt/mmio_context.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/i915/gvt/mmio_context.c b/drivers/gpu/drm/i9=
-15/gvt/mmio_context.c
-> index c85bafe7539e..1c6e941c9666 100644
-> --- a/drivers/gpu/drm/i915/gvt/mmio_context.c
-> +++ b/drivers/gpu/drm/i915/gvt/mmio_context.c
-> @@ -546,7 +546,7 @@ static void switch_mmio(struct intel_vgpu *pre,
->  }
-> =20
->  /**
-> - * intel_gvt_switch_render_mmio - switch mmio context of specific engine
-> + * intel_gvt_switch_mmio - switch mmio context of specific engine
->   * @pre: the last vGPU that own the engine
->   * @next: the vGPU to switch to
->   * @engine: the engine
-> --=20
-> 2.20.1.7.g153144c
->=20
+Yassine Oudjana (3):
+  media: dt-bindings: ak7375: Convert to DT schema
+  media: dt-bindings: ak7375: Add supplies
+  media: i2c: ak7375: Add regulator management
 
-Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+ .../devicetree/bindings/media/i2c/ak7375.txt  |  8 ---
+ .../devicetree/bindings/media/i2c/ak7375.yaml | 52 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ drivers/media/i2c/ak7375.c                    | 39 ++++++++++++++
+ 4 files changed, 92 insertions(+), 9 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/i2c/ak7375.txt
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ak7375.yaml
 
-Thanks!
+-- 
+2.37.0
 
---s8ux8MQukyWAm3r7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCYsum9AAKCRCxBBozTXgY
-JxqgAJwIrYJXfBQ0XTDldIopiPc0bE4vzACfSD3CAS0q31WF8Kwf4MSEmTIf/Ao=
-=BhqC
------END PGP SIGNATURE-----
-
---s8ux8MQukyWAm3r7--

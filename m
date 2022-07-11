@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA77570A9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730D6570A9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiGKTUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 15:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S231424AbiGKTUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 15:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiGKTUh (ORCPT
+        with ESMTP id S230353AbiGKTUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 15:20:37 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25171747B5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=JNV6gBlFKpE5Sku4/hH2lTFvl7x+/bQwXOO7dBTV2Qk=; b=naH+ihJXx5mGCV/kABr0P97Z7X
-        AIntrUY+bEzSCb+uJroM7Vn4+hlJ8i17IJDr1jWLi5IhdUftMxg5x1zDbn5p1/5qbSvRdEgLhh9w1
-        8SpaUz14ZDLI0FVwvqzuBbMLihlTkYMC2OW/vScKv/gEdEuu1zhy7zIFxd7sm69Ycfjbsm4K31SGl
-        QeBCVfUK7IIgmNzz4eyDiIvpy31KHw+6ZjHWldL6zulLpvP8SKnv8gAfnUFSkfRVB1ZZVd+99GJac
-        gtla2Mn9CnWE+AKARm8LeBlOuVTepMUEJwkkhv3lpB8FWV2CddVc1K546vZ/S/YJFfbJtYR6oJ7aq
-        yDPBzbsA==;
-Received: from [177.45.248.119] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oAyxJ-00CJom-W5; Mon, 11 Jul 2022 21:20:30 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
-        'Pan Xinhui' <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH 2/2] drm/amd/pm: Implement get GFXOFF status for vangogh
-Date:   Mon, 11 Jul 2022 16:19:53 -0300
-Message-Id: <20220711191953.145518-3-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711191953.145518-1-andrealmeid@igalia.com>
-References: <20220711191953.145518-1-andrealmeid@igalia.com>
+        Mon, 11 Jul 2022 15:20:32 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC5C71724
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:20:31 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c15so438351pla.6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NrYdGTk0yKCuMljUwPZ7/uXlafiom1+RNi/pXfEgS+Y=;
+        b=avtznRRY4iS1AmoNE+xFYckNON9ycVHYL5nrww0X0/cL24DXv29e4e7u9Ra3AulsGp
+         t8nShsS3H0X29qd3p2cDNwKAQ+T1Lc6bZfy2P+sNHEhC773m5LtNMKtdbh7p4XerMl3+
+         WxVrB5yDkfmcO8w7XD9Vna5BS8Y7HSlmDtonN0dcDUgaB+8GsyYbXvPaLe8B8Y15QS5F
+         4fpAqxlzmXrZeei0rEj/LduqDgjqPXhsTN5zJeQzqMQGXLs0hKXTbbD81UbEHtdDz6zO
+         Yvkseu6BtC9cklXVX5PtKZ568HnkGJJ32D9CrRb+kVJVC4mqqqh2dvIHjoJjg9Mvao4Y
+         Lvdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NrYdGTk0yKCuMljUwPZ7/uXlafiom1+RNi/pXfEgS+Y=;
+        b=QyCeLTxc3rG0Hjis7kkm0hocNa32BM1tJYcoFs9B77KlzoU2mrb+8pSIfNTI9aKpqZ
+         VmNB3VmvlQB3S0BieyjipoGlz2kGT5eZ7qdWTpUTnpY92vEyzLRTgs1vBEkgejb477Ou
+         ox5ZY//GYSF98ZF13IXjCfJ+IjkS4bHD1I8Px2QXL6xTxAG2CdYBuQy0GNV9zFeXKfQo
+         bf3nBRFmP7wYrSD4EsRWGcpR8C4DYXtBZfoOYOc1o8fHZQhH6iZ+RcbuTAcj9tbTdMXK
+         OnjU48PWpSocuTlETRVeFYRNJttY2jhn+QyI9bADkEpBQav3gwwMd3rQciC2FUeJ/tny
+         d0gA==
+X-Gm-Message-State: AJIora8Kk7iOrtWPArmDYCIrQpZcqcg/uPx4CwXn9RLeQSL+xwOQC4mX
+        JxTpls4JxVcqsxpQM8q+XXORSg==
+X-Google-Smtp-Source: AGRyM1t/be+eF6H+YW5M2kcvwqqjrTB3VqZ6D3Mx34zzp6TePEh7gNQILyffnVjxOuTtoikVhDnlfQ==
+X-Received: by 2002:a17:902:8f87:b0:16c:2c88:39ec with SMTP id z7-20020a1709028f8700b0016c2c8839ecmr17150281plo.52.1657567231016;
+        Mon, 11 Jul 2022 12:20:31 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:a8b3:6eff:f380:e88b])
+        by smtp.gmail.com with ESMTPSA id o33-20020a17090a0a2400b001ece32cbec9sm7270672pjo.24.2022.07.11.12.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 12:20:29 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 12:20:22 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Haibo Li <haibo.li@mediatek.com>
+Cc:     xiaoming.yu@mediatek.com, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] cfi: free old cfi shadow asynchronously
+Message-ID: <Ysx39t+I56lDGe4i@google.com>
+References: <20220704014046.34596-1-haibo.li@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704014046.34596-1-haibo.li@mediatek.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement function to get current GFXOFF status for vangogh.
+On Mon, Jul 04, 2022 at 09:40:44AM +0800, Haibo Li wrote:
+> This patchset changes synchronize_rcu to call_rcu in update_shadow.
+> 
+> Patch 1 enables the CFI sanitization for cfi.c and 
+> bypass __cfi_slowpath_diag.
+> It is the prerequisite for using call_rcu in cfi.c.
+> 
+> Patch 2 changes synchronize_rcu to call_rcu and
+> free old cfi shadow in rcu cb
+> 
+> Changes in v2:
+>  - Remove _run_cfi_check,add __nocfi to __cfi_slowpath_diag directly
+>  - Rename _cfi_shadow_free_rcu to free_shadow
+> 
+> Haibo Li (2):
+>   cfi: enable sanitize for cfi.c
+>   cfi: free old cfi shadow asynchronously
+> 
+>  kernel/Makefile |  3 ---
+>  kernel/cfi.c    | 14 +++++++++++---
+>  2 files changed, 11 insertions(+), 6 deletions(-)
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
- .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Thanks for sending v2! For the series:
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-index e2d8ac90cf36..c6aca79376b8 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-@@ -2045,6 +2045,31 @@ static int vangogh_mode2_reset(struct smu_context *smu)
- 	return vangogh_mode_reset(smu, SMU_RESET_MODE_2);
- }
- 
-+/**
-+ * vangogh_get_gfxoff_status - Get gfxoff status
-+ *
-+ * @smu: amdgpu_device pointer
-+ *
-+ * Get current gfxoff status
-+ *
-+ * Return:
-+ * * 0	- GFXOFF (default if enabled).
-+ * * 1	- Transition out of GFX State.
-+ * * 2	- Not in GFXOFF.
-+ * * 3	- Transition into GFXOFF.
-+ */
-+static u32 vangogh_get_gfxoff_status(struct smu_context *smu)
-+{
-+	struct amdgpu_device *adev = smu->adev;
-+	u32 reg, gfxoff_status;
-+
-+	reg = RREG32_SOC15(SMUIO, 0, mmSMUIO_GFX_MISC_CNTL);
-+	gfxoff_status = (reg & SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS_MASK)
-+		>> SMUIO_GFX_MISC_CNTL__PWR_GFXOFF_STATUS__SHIFT;
-+
-+	return gfxoff_status;
-+}
-+
- static int vangogh_get_power_limit(struct smu_context *smu,
- 				   uint32_t *current_power_limit,
- 				   uint32_t *default_power_limit,
-@@ -2199,6 +2224,7 @@ static const struct pptable_funcs vangogh_ppt_funcs = {
- 	.post_init = vangogh_post_smu_init,
- 	.mode2_reset = vangogh_mode2_reset,
- 	.gfx_off_control = smu_v11_0_gfx_off_control,
-+	.get_gfx_off_status = vangogh_get_gfxoff_status,
- 	.get_ppt_limit = vangogh_get_ppt_limit,
- 	.get_power_limit = vangogh_get_power_limit,
- 	.set_power_limit = vangogh_set_power_limit,
--- 
-2.37.0
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
+Sami

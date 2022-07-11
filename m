@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62258570199
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FDF57019E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiGKMD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S231243AbiGKMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231335AbiGKMDU (ORCPT
+        with ESMTP id S231390AbiGKMEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:03:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E835A3DF28;
-        Mon, 11 Jul 2022 05:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657540991; x=1689076991;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2029vpBZxaoYh8HV6PEJ1yGjJDrgRwD0SKpNgEYQ2PI=;
-  b=kpS0fsSQkmwDimE+hLBOuY2TP9TH3Wx6i8FGtRxzpMdCUk99FQ2yIra0
-   96bLHmpVncpegn2qic0msAhGcsbfsDj7kGNwb2sXiy9heshZImH832Im0
-   Mol9SfimuvAtgiDXTgB1dX88bi5rdC1rL3Qy2fP47VGk1lDdtZKxR4Vpy
-   mHFXCkeDJtHpoKX+ljCnwuWR8k8akCilalZ3+2Qm81yPYt3Sj7jQISWAd
-   0ZBiaaplnH+92mOAqYhjrceHw53i537Sc2aUZkSzuYbMshJZg6xeuGz1e
-   U+sBrVUqGwGJk5vK4V7bLDfQydl0w4OXBca+Sv7Aa64ov1bFRCoTlUrNH
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="181598669"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jul 2022 05:03:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Jul 2022 05:03:10 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 11 Jul 2022 05:03:08 -0700
-Message-ID: <8dbed370-c6d6-496c-eb41-efce2ee78286@microchip.com>
-Date:   Mon, 11 Jul 2022 14:03:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] gpio: GPIO_SAMA5D2_PIOBU should depend on ARCH_AT91
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Horatiu Vultur <Horatiu.Vultur@microchip.com>,
-        Kavyasree Kotagiri <Kavyasree.Kotagiri@microchip.com>
-CC:     <linux-gpio@vger.kernel.org>,
+        Mon, 11 Jul 2022 08:04:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD02DAE47;
+        Mon, 11 Jul 2022 05:03:52 -0700 (PDT)
+X-UUID: 3c8c5df364dc4235a485009a948a9808-20220711
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:1200bcbc-04a8-40e6-a4a9-6eae801b09d6,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:6c941a87-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3c8c5df364dc4235a485009a948a9808-20220711
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 485703959; Mon, 11 Jul 2022 20:03:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 11 Jul 2022 20:03:46 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 11 Jul 2022 20:03:46 +0800
+Message-ID: <459bb032c68be7c5be682d90462becfbb17ccda8.camel@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: mmc: Add compatible for MediaTek MT8188
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <9996cb86818d2e935494d6b414d549432f91797a.1657528504.git.geert+renesas@glider.be>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <9996cb86818d2e935494d6b414d549432f91797a.1657528504.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 11 Jul 2022 20:03:46 +0800
+In-Reply-To: <c8f8f5f4-173e-797d-e060-e5eaac7ca822@linaro.org>
+References: <20220707054710.1396-1-johnson.wang@mediatek.com>
+         <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
+         <3216ec92952c7d722feaeb76986e0a6a54340646.camel@mediatek.com>
+         <c8f8f5f4-173e-797d-e060-e5eaac7ca822@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,50 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 at 10:36, Geert Uytterhoeven wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Mon, 2022-07-11 at 13:02 +0200, Krzysztof Kozlowski wrote:
+> On 07/07/2022 09:30, Johnson Wang wrote:
+> > On Thu, 2022-07-07 at 08:46 +0200, Krzysztof Kozlowski wrote:
+> > > On 07/07/2022 07:47, Johnson Wang wrote:
+> > > > This commit adds dt-binding documentation of mmc for MediaTek
+> > > > MT8188 SoC
+> > > > platform.
+> > > > 
+> > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > index 2a2e9fa8c188..3fbf33ad4f7c 100644
+> > > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> > > > @@ -32,6 +32,9 @@ properties:
+> > > >        - items:
+> > > >            - const: mediatek,mt8186-mmc
+> > > >            - const: mediatek,mt8183-mmc
+> > > > +      - items:
+> > > > +          - const: mediatek,mt8188-mmc
+> > > 
+> > > You duplicate quite a lot. Use enum.
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> > 
+> > Hi Krzysztof,
+> > 
+> > Thanks for you suggestion.
+> > 
+> > I will use 'enum' to place this compatible strings.
+> > 
+> > Just like this:
+> > - items:
+> >     - enum:
+> >         - mediatek,mt8186-mmc
+> >         - mediatek,mt8188-mmc
+> >         - mediatek,mt8192-mmc
+> >         - mediatek,mt8195-mmc
+> >     - const: mediatek,mt8183-mmc
+> > 
+> > Moreover, it seems that missing an "items:" between oneOf and enum
+> > in
+> > the compatible property.
+> > Is my understanding wrong?
 > 
-> The SAMA5D2 PIOBU is only present on some AT91/Microchip SoCs.  Hence
-> add a dependency on ARCH_AT91, to prevent asking the user about this
-> driver when configuring a kernel without AT91/Microchip SoC support.
+> I did not propose to remove items, so where are they missing? Not
+> sure
+> what you are asking about...
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Best regards,
+> Krzysztof
 
-Looks good to me:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hi Krzysztof,
 
-I'm adding to the thread my colleagues from lan966 and mpfs if it 
-happens that they use this same IP on their SoC. Anyway, we can add them 
-afterwards.
+Sorry for the confusion.
+That was my misunderstanding. Please ignore it...
 
-Thanks for your heads-up Geert, Best regards,
-   Nicolas
+BRs,
+Johnson Wang
 
-> ---
->   drivers/gpio/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 63a89ff7865e374f..1852656d5eb248f6 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -553,6 +553,7 @@ config GPIO_SAMA5D2_PIOBU
->          tristate "SAMA5D2 PIOBU GPIO support"
->          depends on MFD_SYSCON
->          depends on OF_GPIO
-> +       depends on ARCH_AT91 || COMPILE_TEST
->          select GPIO_SYSCON
->          help
->            Say yes here to use the PIOBU pins as GPIOs.
-> --
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
-
--- 
-Nicolas Ferre

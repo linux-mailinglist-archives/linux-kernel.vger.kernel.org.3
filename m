@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC15256FD5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AF256FD60
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiGKJyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S233973AbiGKJyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234029AbiGKJx4 (ORCPT
+        with ESMTP id S233943AbiGKJx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:53:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A54AEF49;
-        Mon, 11 Jul 2022 02:25:40 -0700 (PDT)
+        Mon, 11 Jul 2022 05:53:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4294AEF53;
+        Mon, 11 Jul 2022 02:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74AF0B80E8C;
-        Mon, 11 Jul 2022 09:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73FDC34115;
-        Mon, 11 Jul 2022 09:25:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9487D6136F;
+        Mon, 11 Jul 2022 09:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F6C1C36AED;
+        Mon, 11 Jul 2022 09:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531538;
-        bh=NFoeWV8XCLFB34kMOAY52aZI2Cc0cS6OCzNu6IoLMZE=;
+        s=korg; t=1657531541;
+        bh=nY92Q6t9HQ1EGT2GXplwzbOzFAiJHfULIB3VSs63zjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hFP1Unq6OGm7o8v0qe8wLC52X02pH9H+hR8cSip4eM4KYEF0zGaYh2vv4GauTWlJc
-         4bF9FGMspkdVtfOqzYNT6XraJ8LoBvkBRdfoqK505S7E+A8lJ7OCx5Kh9g96mqQOL9
-         dwoQCF1UE3ZPonfzXcmHA46shDwwCjA5c7YxfjqY=
+        b=Wgko3kNsBIzDMdOsWkE0CyVbcojpPg6XqkMicw5x20s1dVk9X0lk0HXhILEHYJY2P
+         p4DL36uH8ZvW2d5XAd1TYIM52MpvHXd/gJxf5c6j6sXdA9XhRqEiKzdyK8jq1ZFWPH
+         KdxOZ3lbO7su0vO1T4OmlONJXfGTKagbqcTxjK1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Gong <richard.gong@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 142/230] drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems
-Date:   Mon, 11 Jul 2022 11:06:38 +0200
-Message-Id: <20220711090608.091098872@linuxfoundation.org>
+Subject: [PATCH 5.15 143/230] drm/i915: Fix a race between vma / object destruction and unbinding
+Date:   Mon, 11 Jul 2022 11:06:39 +0200
+Message-Id: <20220711090608.119577076@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -55,74 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Gong <richard.gong@amd.com>
+From: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 
-[ Upstream commit aa482ddca85a3485be0e7b83a0789dc4d987670b ]
+[ Upstream commit bc1922e5d349db4be14c55513102c024c2ae8a50 ]
 
-Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-There are some AMD Volcanic Islands (VI) GFX cards, such as the WX3200 and
-RX640, that do not work with ASPM-enabled Intel Alder Lake based systems.
-Using these GFX cards as video/display output, Intel Alder Lake based
-systems will freeze after suspend/resume.
+The vma destruction code was using an unlocked advisory check for
+drm_mm_node_allocated() to avoid racing with eviction code unbinding
+the vma.
 
-The issue was originally reported on one system (Dell Precision 3660 with
-BIOS version 0.14.81), but was later confirmed to affect at least 4
-pre-production Alder Lake based systems.
+This is very fragile and prohibits the dereference of non-refcounted
+pointers of dying vmas after a call to __i915_vma_unbind(). It also
+prohibits the dereference of vma->obj of refcounted pointers of
+dying vmas after a call to __i915_vma_unbind(), since even if a
+refcount is held on the vma, that won't guarantee that its backing
+object doesn't get destroyed.
 
-Add an extra check to disable ASPM on Intel Alder Lake based systems with
-the problematic AMD Volcanic Islands GFX cards.
+So introduce an unbind under the vm mutex at object destroy time,
+removing all weak references of the vma and its object from the
+object vma list and from the vm bound list.
 
-Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-Signed-off-by: Richard Gong <richard.gong@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Reviewed-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220127115622.302970-1-thomas.hellstrom@linux.intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_object.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-index 039b90cdc3bc..45f0188c4273 100644
---- a/drivers/gpu/drm/amd/amdgpu/vi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-@@ -81,6 +81,10 @@
- #include "mxgpu_vi.h"
- #include "amdgpu_dm.h"
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.c b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+index 6fb9afb65034..5f48d5ea5c15 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_object.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_object.c
+@@ -224,6 +224,12 @@ void __i915_gem_free_object(struct drm_i915_gem_object *obj)
+ 			GEM_BUG_ON(vma->obj != obj);
+ 			spin_unlock(&obj->vma.lock);
  
-+#if IS_ENABLED(CONFIG_X86)
-+#include <asm/intel-family.h>
-+#endif
++			/* Verify that the vma is unbound under the vm mutex. */
++			mutex_lock(&vma->vm->mutex);
++			atomic_and(~I915_VMA_PIN_MASK, &vma->flags);
++			__i915_vma_unbind(vma);
++			mutex_unlock(&vma->vm->mutex);
 +
- #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
- #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
- #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
-@@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
- 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
- }
+ 			__i915_vma_put(vma);
  
-+static bool aspm_support_quirk_check(void)
-+{
-+#if IS_ENABLED(CONFIG_X86)
-+	struct cpuinfo_x86 *c = &cpu_data(0);
-+
-+	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-+#else
-+	return true;
-+#endif
-+}
-+
- static void vi_program_aspm(struct amdgpu_device *adev)
- {
- 	u32 data, data1, orig;
- 	bool bL1SS = false;
- 	bool bClkReqSupport = true;
- 
--	if (!amdgpu_device_should_use_aspm(adev))
-+	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
- 		return;
- 
- 	if (adev->flags & AMD_IS_APU ||
+ 			spin_lock(&obj->vma.lock);
 -- 
 2.35.1
 

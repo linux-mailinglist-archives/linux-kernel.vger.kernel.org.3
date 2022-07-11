@@ -2,132 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3490C570189
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1A9570191
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiGKMCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S231283AbiGKMCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiGKMCO (ORCPT
+        with ESMTP id S231391AbiGKMCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:02:14 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F75C3B974
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:02:06 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bf9so8254577lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:02:06 -0700 (PDT)
+        Mon, 11 Jul 2022 08:02:43 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE01A3DBF9;
+        Mon, 11 Jul 2022 05:02:41 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id e15so5951848edj.2;
+        Mon, 11 Jul 2022 05:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QVqxg0dp3wEYOZpL9v9ilM2FSVRUoonO6i41pxiTzI8=;
-        b=hFlw6gC8Q7phUNCtcoZ+mnhDG3DT2Icr9ctPW9MH8XjMtD29CbFUV/+EqObdE85V3+
-         84TFY8D/cPCLDmxM+Yjze8C5OqepE/+Jks3xTPjY8bvxWBK6PIcNzNssTM1CFhs9LtEk
-         jwd7bOEnaXnycO0NG4YXMJQxd0/Iydvchv52ywJ4QVSlfLFKenAy31lHszz6+D8Fiwtu
-         0PxvFQZMrFg2Ig2iOO7St7bU6PIywmAR7oIdOA8wSFtGZNMLW2Wx+fOS0U4T/Sc9xrDA
-         yiqr7V7dxkxre7p2jDbyB8gkHTM4L7MGLh1bGnShicdj+usImIZHWFNsR4CLEWZT0lgl
-         /CIQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=BWPy1/wLCTu6ilQ4qUtHXwXwf7Z3gLlHQb6cz3/Ocik=;
+        b=Km4YSWpymZHkGx1rK7YmaWp5bO7T4ldo5feo4/eotjCLPx0cA4uhJ7EFb+nHLoMc0z
+         n8a8f6Sd0JTo4jq+fK7He9B0gtwTn0AfeNcEpUHCkdozbEmU1gSBLDGkrZzehRLd4XSR
+         HaM1NjnsXectLRiGhKY1Wd2EZOJznd3w2/v2zSlwUgtUZ3/ODINZUOi9XUpQxWUPgGIO
+         YUxQH4CI6H/cSxO7DydgPsEVvvf6UN1B/8mh2tfxWuS+3XJFIJHdmoRLyYwSRL8HZ3Hc
+         3A4KhZpWMItX33PeoMcCpKDbJjw7vONygOQag9qg7V91/nwFbdBJnNgqxqJ9yqAycdlF
+         SQbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QVqxg0dp3wEYOZpL9v9ilM2FSVRUoonO6i41pxiTzI8=;
-        b=lioXDo8271tJCaSEpgs1B9ObN2UBgXqIox1vIqhGJLBTUUkXIOHrAe/7pVxgk3JWP6
-         E84YgB8FjuuJt/bx1nQKoLI2a6RvD4XWaCT79Plr936Wj5O49ACpTCk09s0MN6E1rBQy
-         0c2duIJPnF0zemwGdMmpRUBKAkkuDyWXIrbUUI66COAO/oLlW+H8J5Ae9uZTckA75UQc
-         v/o7Bcr8394U4YsmyQoUR/Oss81qSUDfPoy40pAF1KXqxku0GfaxvtrBLXbG4Lt9Y8cR
-         GwxpRZvZqWQ4qNDDqUGv/OWFvmBcbrvC7dn0TLIkmap1IPBpjMbzQaJLWRpGmhLr3Ond
-         R5GQ==
-X-Gm-Message-State: AJIora8Up6Ja1af65P/j2heqDaKfFAGXbdKerxH5l1jqJhqMw75RejZl
-        6gyboDTP6zsY5nFs1M96Qa7Z8Q==
-X-Google-Smtp-Source: AGRyM1tPFsxY/xB1ICxsLpx4b0d9lJislbMty935ePwpSxLaNm08XHOXHHUPjHR/WWsfjwVIeBOlQg==
-X-Received: by 2002:a05:6512:398c:b0:488:f524:b7e9 with SMTP id j12-20020a056512398c00b00488f524b7e9mr10868068lfu.259.1657540924386;
-        Mon, 11 Jul 2022 05:02:04 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id d28-20020ac25edc000000b00489c719b809sm1492196lfq.284.2022.07.11.05.02.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 05:02:03 -0700 (PDT)
-Message-ID: <9e1ff864-3952-6442-13db-a3d8e18f86c3@linaro.org>
-Date:   Mon, 11 Jul 2022 14:02:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/6] clk: qcom: apss-ipq6018: add MODULE_ALIAS
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220711104719.40939-1-robimarko@gmail.com>
- <20220711104719.40939-4-robimarko@gmail.com>
- <4de38d90-0020-c2db-b283-319b4a0e2ce5@linaro.org>
- <CAOX2RU6X=JiV1As+_N6c_=VaHfVYpke_deQmmNPMMDxfnz5i8g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAOX2RU6X=JiV1As+_N6c_=VaHfVYpke_deQmmNPMMDxfnz5i8g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BWPy1/wLCTu6ilQ4qUtHXwXwf7Z3gLlHQb6cz3/Ocik=;
+        b=wvjTTMri/Tqc4SAE2Syn50ivvlPP+hQLZbIXoZKZKT1Q8BZ6Soe5aDhRLtpN7rbDYq
+         lYheLCH57qJJrfSJvIEs/WZYrn/adnEZ3mMYJrrVdhCJ/G8tWsrxqO9hC101n+6rOjvo
+         0Gk7uTT0iis+nmCFX0oClvhLeHW4AP3JXcXqrABDz/TSyAHePAQMeOPrR5DU2+/gh6y+
+         GRotX+bTqzmAtRHXPbaPl4ibHn1TNyWI8HqqtlQB/i1C575+kqzxQbzK5+9Jb93jeg5p
+         LDXwg1C+N+xIMPXs72sHChE7Wktw6QQcLR9Wg5hJHwOzCRBVEP34GbYRLTzeRHArOIoX
+         49Yg==
+X-Gm-Message-State: AJIora9LktsDEG3UeJHwq6Swrrip5+1chIeNvps1ycC9vfmZbUYNLjhS
+        olvN/ik+y68/i0mBKU/o+yM=
+X-Google-Smtp-Source: AGRyM1ve4fGvpX//Ha5C48qcrSCWGYrkCUCqWsQMWsnGm5i1oa0340q2eUVYe7/+FksBdB/Z3Ta2eQ==
+X-Received: by 2002:a05:6402:84f:b0:437:6293:d264 with SMTP id b15-20020a056402084f00b004376293d264mr23916942edz.317.1657540960468;
+        Mon, 11 Jul 2022 05:02:40 -0700 (PDT)
+Received: from felia.fritz.box (200116b8266e42009c70ae84c5cabc2b.dip.versatel-1u1.de. [2001:16b8:266e:4200:9c70:ae84:c5ca:bc2b])
+        by smtp.gmail.com with ESMTPSA id hx24-20020a170906847800b00722fadc4279sm2608036ejc.124.2022.07.11.05.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 05:02:39 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel-janitors@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH SECOND RESEND] arm: davinci: remove reference to obsolete BLK_DEV_PALMCHIP_BK3710
+Date:   Mon, 11 Jul 2022 14:02:29 +0200
+Message-Id: <20220711120229.30806-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 13:46, Robert Marko wrote:
-> On Mon, 11 Jul 2022 at 13:05, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 11/07/2022 12:47, Robert Marko wrote:
->>> Add MODULE_ALIAS so that driver will be autoloaded if built as a module.
->>>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>>  drivers/clk/qcom/apss-ipq6018.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
->>> index f2f502e2d5a4..963c69f2c0c2 100644
->>> --- a/drivers/clk/qcom/apss-ipq6018.c
->>> +++ b/drivers/clk/qcom/apss-ipq6018.c
->>> @@ -101,5 +101,6 @@ static struct platform_driver apss_ipq6018_driver = {
->>>
->>>  module_platform_driver(apss_ipq6018_driver);
->>>
->>> +MODULE_ALIAS("platform:qcom,apss-ipq6018-clk");
->>
->> That's not correct alias (no commas) and usually alias is not needed at
->> all. If you need one, please explain why it is needed. Module
->> autoloading works fine without aliases...
-> 
-> Hi Krzysztof,
-> alias is required here as the driver does not use a DT compatible but
-> is registered
-> by the APCS driver, if built as a module, it won't get autoloaded
-> without an alias.
+Commit b7fb14d3ac63 ("ide: remove the legacy ide driver") removes the
+definition of the config BLK_DEV_PALMCHIP_BK3710.
 
-Instead you need device ID table. Aliases are not a workaround for
-missing core driver elements.
+So, remove the obsolete references in the mach-davinci architecture.
 
-> 
-> I can only fix up the driver name here and in APCS first to have an
-> alias without commas.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+---
+first send:
+  https://lore.kernel.org/linux-arm-kernel/20210804123426.16947-3-lukas.bulwahn@gmail.com/
 
-I see that the comma is used in driver name, so this is an independent
-issue. Maybe change it to '-' in separate commit?
+first resend:
+  https://lore.kernel.org/linux-arm-kernel/20211011063624.12269-2-lukas.bulwahn@gmail.com/
 
+another resend (as part of a larger series):
+  https://lore.kernel.org/linux-arm-kernel/20211028141938.3530-6-lukas.bulwahn@gmail.com/
+  
+addition now in second resend:
+  - added Arnd's Reviewed-by tag from
+    https://lore.kernel.org/linux-arm-kernel/CAK8P3a2GGbik3r5BCKE2ZCkpFyzv8Q54z_iV84ZJ+kNXYUTMzw@mail.gmail.com/
 
-Best regards,
-Krzysztof
+ arch/arm/mach-davinci/board-dm644x-evm.c  | 3 +--
+ arch/arm/mach-davinci/board-dm646x-evm.c  | 3 +--
+ arch/arm/mach-davinci/board-neuros-osd2.c | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
+index ebdd5c334ac1..4cde283f7f03 100644
+--- a/arch/arm/mach-davinci/board-dm644x-evm.c
++++ b/arch/arm/mach-davinci/board-dm644x-evm.c
+@@ -828,8 +828,7 @@ static int davinci_phy_fixup(struct phy_device *phydev)
+ 	return 0;
+ }
+ 
+-#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
+-			 IS_ENABLED(CONFIG_PATA_BK3710))
++#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
+ 
+ #define HAS_NOR		IS_ENABLED(CONFIG_MTD_PHYSMAP)
+ 
+diff --git a/arch/arm/mach-davinci/board-dm646x-evm.c b/arch/arm/mach-davinci/board-dm646x-evm.c
+index 28861fee493b..151e246c99b8 100644
+--- a/arch/arm/mach-davinci/board-dm646x-evm.c
++++ b/arch/arm/mach-davinci/board-dm646x-evm.c
+@@ -146,8 +146,7 @@ static struct platform_device davinci_aemif_device = {
+ 	.num_resources	= ARRAY_SIZE(davinci_aemif_resources),
+ };
+ 
+-#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
+-			 IS_ENABLED(CONFIG_PATA_BK3710))
++#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
+ 
+ #ifdef CONFIG_I2C
+ /* CPLD Register 0 bits to control ATA */
+diff --git a/arch/arm/mach-davinci/board-neuros-osd2.c b/arch/arm/mach-davinci/board-neuros-osd2.c
+index 9748a2c12cc4..3b2298d686d5 100644
+--- a/arch/arm/mach-davinci/board-neuros-osd2.c
++++ b/arch/arm/mach-davinci/board-neuros-osd2.c
+@@ -160,8 +160,7 @@ static struct davinci_mmc_config davinci_ntosd2_mmc_config = {
+ 	.wires		= 4,
+ };
+ 
+-#define HAS_ATA		(IS_ENABLED(CONFIG_BLK_DEV_PALMCHIP_BK3710) || \
+-			 IS_ENABLED(CONFIG_PATA_BK3710))
++#define HAS_ATA		IS_ENABLED(CONFIG_PATA_BK3710)
+ 
+ #define HAS_NAND	IS_ENABLED(CONFIG_MTD_NAND_DAVINCI)
+ 
+-- 
+2.17.1
+

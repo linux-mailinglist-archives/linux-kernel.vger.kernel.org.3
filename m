@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539A356D8CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A496D56D8D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiGKIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S230484AbiGKIus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiGKIuX (ORCPT
+        with ESMTP id S230307AbiGKIuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:50:23 -0400
+        Mon, 11 Jul 2022 04:50:25 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2062F19C3F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E31EEE1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657529412; x=1689065412;
+  t=1657529414; x=1689065414;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RJQzdlyWZrxxXfyYtTiwuvRSPwvEeRLnDLri6vLxLHk=;
-  b=TOKpT6pR1U1LzB7XBa1oHctWh6EiPL/5ri70cGYABs8BcFFDFp3iB+4a
-   HiXiO2+cDY1rRBCtgzaOT9vPWbM0cl9Y3gNYawoHRzujwZF+wk5QacpJv
-   rtF7WYOAq16RoPBKtrcb8xnj6pLIowHeJ6MdPQsZGs1wYDI2GFkK9gOx0
-   8RKKSDZ1fnZXW5vNTwHIE8jI/fi28osh6yBcB6Lx8/oof8SKatdPWeERT
-   1GE3h94GHpV+2RK3hj4AZ/aipC0AuDwjqPSA34QFSEvxxCVw/7wFeY+UI
-   zBzpqBw++Eq3vcWcLC30m5HMiW5g1o6p5c7YF1Xt/IQ+z7XrVHbQPY+GY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637847"
+  bh=tbVtvIK8XMk4xb1SU8xCdADdmx3jSPLB5EdXqTq3PBc=;
+  b=Ux06BiEHYrjtywykn3AJ+imdmz96I/Fzz+OFXLy2lBUrgxb9ZJdYJNG5
+   ycxkXrQZzU3psGcKJb4vZ1qCUeQrHTgH5jdvloIgVRxVSJye2cYm3QuIl
+   Imc0zhGPnr9W7iCp3qio2BbYAd+C8dCIK/s8wX/Uv6dGCWBWq6TaWiQzj
+   oNKHfMFlPCvo6NJkF9E67eH9ublDSvLz+RrM7VFkRL3awfwJL3brxH+45
+   wy/kAWMogLdZKMb3+jSZCkphjf7IpLB79cCm/+yvp4kKpflQA1jtwUglA
+   hOBOSG69/cRtfQHAKOIycth1uYp642LZ8aBdBfO9tgEvXQsKFWOwwdgtU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="284637852"
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="284637847"
+   d="scan'208";a="284637852"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:11 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:13 -0700
 X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="652374146"
+   d="scan'208";a="652374162"
 Received: from yhuang6-mobl1.sh.intel.com ([10.238.5.168])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:09 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:50:11 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Huang Ying <ying.huang@intel.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
-Subject: [PATCH -V2 4/7] migrate_pages(): fix failure counting for THP subpages retrying
-Date:   Mon, 11 Jul 2022 16:49:45 +0800
-Message-Id: <20220711084948.274787-5-ying.huang@intel.com>
+Subject: [PATCH -V2 5/7] migrate_pages(): fix failure counting for THP on -ENOSYS
+Date:   Mon, 11 Jul 2022 16:49:46 +0800
+Message-Id: <20220711084948.274787-6-ying.huang@intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220711084948.274787-1-ying.huang@intel.com>
 References: <20220711084948.274787-1-ying.huang@intel.com>
@@ -61,13 +61,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If THP is failed to be migrated for -ENOSYS and -ENOMEM, the THP will
-be split into thp_split_pages, and after other pages are migrated,
-pages in thp_split_pages will be migrated with no_subpage_counting ==
-true, because its failure have been counted already.  If some pages in
-thp_split_pages are retried during migration, we should not count
-their failure if no_subpage_counting == true too.  This is done this
-patch to fix the failure counting for THP subpages retrying.
+If THP or hugetlbfs page migration isn't supported, unmap_and_move()
+or unmap_and_move_huge_page() will return -ENOSYS.  For THP, splitting
+will be tried, but if splitting doesn't succeed, the THP will be left
+in "from" list wrongly.  If some other pages are retried, the THP
+migration failure will counted again.  This is fixed via moving the
+failure THP from "from" to "ret_pages".
+
+Another issue of the original code is that the unsupported failure
+processing isn't consistent between THP and hugetlbfs page.  Make them
+consistent in this patch to make the code easier to be understood too.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
@@ -75,23 +78,41 @@ Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Cc: Zi Yan <ziy@nvidia.com>
 Cc: Yang Shi <shy828301@gmail.com>
 ---
- mm/migrate.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/migrate.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index 38e2c789a9c3..4bceba143db0 100644
+index 4bceba143db0..8cce73b7c046 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1477,7 +1477,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
- 			}
- 		}
- 	}
--	nr_failed += retry;
-+	if (!no_subpage_counting)
-+		nr_failed += retry;
- 	nr_thp_failed += thp_retry;
- 	/*
- 	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed
+@@ -1192,10 +1192,8 @@ static int unmap_and_move_huge_page(new_page_t get_new_page,
+ 	 * tables or check whether the hugepage is pmd-based or not before
+ 	 * kicking migration.
+ 	 */
+-	if (!hugepage_migration_supported(page_hstate(hpage))) {
+-		list_move_tail(&hpage->lru, ret);
++	if (!hugepage_migration_supported(page_hstate(hpage)))
+ 		return -ENOSYS;
+-	}
+ 
+ 	if (page_count(hpage) == 1) {
+ 		/* page was freed from under us. So we are done. */
+@@ -1392,6 +1390,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 			 *		 page will be put back
+ 			 *	-EAGAIN: stay on the from list
+ 			 *	-ENOMEM: stay on the from list
++			 *	-ENOSYS: stay on the from list
+ 			 *	Other errno: put on ret_pages list then splice to
+ 			 *		     from list
+ 			 */
+@@ -1421,6 +1420,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 				}
+ 
+ 				nr_failed_pages += nr_subpages;
++				list_move_tail(&page->lru, &ret_pages);
+ 				break;
+ 			case -ENOMEM:
+ 				/*
 -- 
 2.30.2
 

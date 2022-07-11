@@ -2,188 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D7256D3F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E8D56D423
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiGKEaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S229593AbiGKExX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiGKEaO (ORCPT
+        with ESMTP id S229479AbiGKExU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:30:14 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6311901C;
-        Sun, 10 Jul 2022 21:30:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id h23so6780463ejj.12;
-        Sun, 10 Jul 2022 21:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oYyjBapI7Ol5ghwqsEsi6GKvHQk9dNKwshNrm1MBekA=;
-        b=RIJjqGzCfNlhD/70v6LwMYa0s/R2xFo5RVDVOx6F1CGLarPal0lwxbPMR9I7PJl6xz
-         5TB2wRFgDihYRAH+UAnw3r1i3D3NPgwxRHjA82+3oUGxJSeuO4A+MOl+WY3fWjQNrec0
-         wbh8OQsHX3+i9bhcnZmV6aHyjRr2AK7METCWENv71z4a/7VknZibizx3H/VpyacyFNfY
-         n5N+VUc/5EirLbiA1Vux++K6ZIdcPhE8myBvnj4BhZPp7c7ubAiErPASUnzKx734rjrO
-         IfLpgPXgh32FjWnZ1ZXhhvt9jyxhKU/4NPoc4sJZc+atCbuDKxc2jee7sgo8t4mOosPJ
-         FBVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oYyjBapI7Ol5ghwqsEsi6GKvHQk9dNKwshNrm1MBekA=;
-        b=ptKVPN7VynepkZUTZNWwcejnGyu5sLe51uGAi/sz7Dfps4zDrt0HyWKa2xAYn7ZLuj
-         Lfwkw8sbMnZPbZAjvr0HGzTLbdJznX4uFAl4Lh/NVznZ5Di02TbTBOWKu+F0KENAzEUo
-         A4yjDMWRFokFUZDfxHQj7/ptFLlLZ3U1qIRK9v89nUEiBd6SgZh08hN0muCMlx1DZySq
-         9wf/WQDT8RtpsaZSlFqHUUjaFnT50KXIceTkZhHp5+lcuYK+zwq+PmKLi03FAzHDVFgu
-         0KH58Ruw/GPGmeh2q860LpR9f+bcUyvey+RuWFof7X79rinFyr/E3nZYL5Um8ZQsrG6f
-         JhGg==
-X-Gm-Message-State: AJIora+VTuivWDZig/8grZrsQJCdMQzrX945NMksV45S0OuPy3SGPQa4
-        gB5XxxWO9tUir0KBD8VHPA8=
-X-Google-Smtp-Source: AGRyM1tBsjHVOKf2envHi/oecZSomJvRCwVJM9BRJfdwLv3Yi8sUtsE3UkUVCACw5K7DDFClUw/q4Q==
-X-Received: by 2002:a17:907:16a2:b0:726:abbc:69bf with SMTP id hc34-20020a17090716a200b00726abbc69bfmr16517666ejc.363.1657513805976;
-        Sun, 10 Jul 2022 21:30:05 -0700 (PDT)
-Received: from localhost.localdomain (89-39-107-113.hosted-by-worldstream.net. [89.39.107.113])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b00726298147b1sm2203100ejg.161.2022.07.10.21.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 21:30:05 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] media: i2c: ak7375: Add regulator management
-Date:   Mon, 11 Jul 2022 08:28:39 +0400
-Message-Id: <20220711042838.213351-4-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711042838.213351-1-y.oudjana@protonmail.com>
-References: <20220711042838.213351-1-y.oudjana@protonmail.com>
+        Mon, 11 Jul 2022 00:53:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA2DF26
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657515199; x=1689051199;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=d6/ngeTVNk998Ig8RGaNDRrOoPTixlzEU/yTANqW8Fk=;
+  b=L97GUPW9t5M3SCSI7rRi3hOEInFtoPdx+wTZjdTviXRc6rCeCI8NfooP
+   5V2NFGuz0CjlUNU4gerEFik+DdCjzcxwc8dFOAqVOnWD7Kob1ksROIqnd
+   9f9P4WHeH+5RvYU83uKo2NAD6yicM1QIqQSYKPYJ7XkG4dOTcg0F5XW7y
+   k/n1Y0F7HkywCh7gYjZU8omFk87eTWuSW6vYuq4qOUmkdgfEw3HW9rJNV
+   oHAFtzuwKQqN920Lh/ND1BP3gYnr8rvJE/VfJSiaWzSRonVhCX+FQHxqN
+   tY8SJy87pfH/zXeMhHQCuDxi0KNUbU1GQVyQMnFihrwXx0dw2793/cNPh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285702708"
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="asc'?scan'208";a="285702708"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 21:53:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
+   d="asc'?scan'208";a="598911385"
+Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Jul 2022 21:53:16 -0700
+Date:   Mon, 11 Jul 2022 12:29:51 +0800
+From:   Zhenyu Wang <zhenyuw@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
+        intel-gfx@lists.freedesktop.org, joonas.lahtinen@linux.intel.com,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        rodrigo.vivi@intel.com, intel-gvt-dev@lists.freedesktop.org,
+        zhi.a.wang@intel.com
+Subject: Re: [PATCH] drm/i915/gvt: Fix kernel-doc
+Message-ID: <20220711042951.GU1089@zhen-hp.sh.intel.com>
+Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
+References: <20220602073519.22363-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="NqXz6hVRMdSFrLFa"
+Content-Disposition: inline
+In-Reply-To: <20220602073519.22363-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Make the driver get needed regulators on probe and enable/disable
-them on runtime PM callbacks.
+--NqXz6hVRMdSFrLFa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/media/i2c/ak7375.c | 39 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On 2022.06.02 15:35:19 +0800, Jiapeng Chong wrote:
+> Fix the following W=3D1 kernel warnings:
+>=20
+> drivers/gpu/drm/i915/gvt/aperture_gm.c:308: warning: expecting prototype
+> for inte_gvt_free_vgpu_resource(). Prototype was for
+> intel_vgpu_free_resource() instead.
+>=20
+> drivers/gpu/drm/i915/gvt/aperture_gm.c:344: warning: expecting prototype
+> for intel_alloc_vgpu_resource(). Prototype was for
+> intel_vgpu_alloc_resource() instead.
+>=20
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/i915/gvt/aperture_gm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/gvt/aperture_gm.c b/drivers/gpu/drm/i91=
+5/gvt/aperture_gm.c
+> index 557f3314291a..3b81a6d35a7b 100644
+> --- a/drivers/gpu/drm/i915/gvt/aperture_gm.c
+> +++ b/drivers/gpu/drm/i915/gvt/aperture_gm.c
+> @@ -298,7 +298,7 @@ static int alloc_resource(struct intel_vgpu *vgpu,
+>  }
+> =20
+>  /**
+> - * inte_gvt_free_vgpu_resource - free HW resource owned by a vGPU
+> + * intel_vgpu_free_resource() - free HW resource owned by a vGPU
+>   * @vgpu: a vGPU
+>   *
+>   * This function is used to free the HW resource owned by a vGPU.
+> @@ -328,7 +328,7 @@ void intel_vgpu_reset_resource(struct intel_vgpu *vgp=
+u)
+>  }
+> =20
+>  /**
+> - * intel_alloc_vgpu_resource - allocate HW resource for a vGPU
+> + * intel_vgpu_alloc_resource() - allocate HW resource for a vGPU
+>   * @vgpu: vGPU
+>   * @param: vGPU creation params
+>   *
+> --=20
+> 2.20.1.7.g153144c
+>=20
 
-diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
-index 40b1a4aa846c..59d5cb00e3ba 100644
---- a/drivers/media/i2c/ak7375.c
-+++ b/drivers/media/i2c/ak7375.c
-@@ -6,6 +6,7 @@
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- 
-@@ -23,17 +24,32 @@
-  */
- #define AK7375_CTRL_STEPS	64
- #define AK7375_CTRL_DELAY_US	1000
-+/*
-+ * The vcm takes around 3 ms to power on and start taking
-+ * I2C messages. This value was found experimentally due to
-+ * lack of documentation. 2 ms is added as a safety margin.
-+ */
-+#define AK7375_POWER_DELAY_US	5000
- 
- #define AK7375_REG_POSITION	0x0
- #define AK7375_REG_CONT		0x2
- #define AK7375_MODE_ACTIVE	0x0
- #define AK7375_MODE_STANDBY	0x40
- 
-+static const char * const ak7375_supply_names[] = {
-+	"vdd",
-+	"vio",
-+};
-+
-+#define AK7375_NUM_SUPPLIES ARRAY_SIZE(ak7375_supply_names)
-+
- /* ak7375 device structure */
- struct ak7375_device {
- 	struct v4l2_ctrl_handler ctrls_vcm;
- 	struct v4l2_subdev sd;
- 	struct v4l2_ctrl *focus;
-+	struct regulator_bulk_data supplies[AK7375_NUM_SUPPLIES];
-+
- 	/* active or standby mode */
- 	bool active;
- };
-@@ -132,6 +148,7 @@ static int ak7375_init_controls(struct ak7375_device *dev_vcm)
- static int ak7375_probe(struct i2c_client *client)
- {
- 	struct ak7375_device *ak7375_dev;
-+	int i;
- 	int ret;
- 
- 	ak7375_dev = devm_kzalloc(&client->dev, sizeof(*ak7375_dev),
-@@ -139,6 +156,17 @@ static int ak7375_probe(struct i2c_client *client)
- 	if (!ak7375_dev)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < AK7375_NUM_SUPPLIES; i++)
-+		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
-+
-+	ret = devm_regulator_bulk_get(&client->dev, AK7375_NUM_SUPPLIES,
-+				      ak7375_dev->supplies);
-+	if (ret) {
-+		dev_err(&client->dev, "Failed to get regulators: %pe",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
- 	v4l2_i2c_subdev_init(&ak7375_dev->sd, client, &ak7375_ops);
- 	ak7375_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	ak7375_dev->sd.internal_ops = &ak7375_int_ops;
-@@ -210,6 +238,10 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
- 	if (ret)
- 		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
- 
-+	ret = regulator_bulk_disable(AK7375_NUM_SUPPLIES, ak7375_dev->supplies);
-+	if (ret)
-+		return ret;
-+
- 	ak7375_dev->active = false;
- 
- 	return 0;
-@@ -230,6 +262,13 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
- 	if (ak7375_dev->active)
- 		return 0;
- 
-+	ret = regulator_bulk_enable(AK7375_NUM_SUPPLIES, ak7375_dev->supplies);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for vcm to become ready */
-+	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 10);
-+
- 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
- 		AK7375_MODE_ACTIVE, 1);
- 	if (ret) {
--- 
-2.37.0
+Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
 
+Thanks!
+
+--NqXz6hVRMdSFrLFa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCYsunPwAKCRCxBBozTXgY
+JxhDAJ4k/6vczxEcG5rUQ4LYbrk0JcAieQCbBmYAN+bZ+WtisN1xVouxnZnQ4RY=
+=Fs2v
+-----END PGP SIGNATURE-----
+
+--NqXz6hVRMdSFrLFa--

@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D2C56D460
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA7A56D468
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 07:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiGKFsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 01:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S229613AbiGKFwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 01:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGKFss (ORCPT
+        with ESMTP id S229469AbiGKFwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 01:48:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CC415FCC;
-        Sun, 10 Jul 2022 22:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657518527; x=1689054527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nJ8PlUBoQwoeShO3ziyubBuG2AA62mhcNqL/Nkw5+kg=;
-  b=X85//BZqeOUqbF6OOFzYdQ8dJjFqifi4pNcmUDAcqFNCuZEetTNyOUT0
-   pt6imWpgfsGEpqRZ0XciucJtpZuZc+bP+wWsM6cM1YYVmfzvkkZ6ZdZN3
-   KPZExkLO7IVjU4iK44LoIG3Kkv16+CkqaFYfDn+yulZCxd84wmqy+G5Py
-   tUBvMgDMMPjplDFoDztm7CVGSF6lsLyzPXQdRw9MQZHm1Pmv9fEH29mUT
-   8lDKF0sZF7moTuUNC42ou/GWnIG93hHVuI7QRfEMXx5e9Yfs/6/z4jVKL
-   xweF1l8BghffHqcYI+f7MI8CkDO9IaH8LXtvDC2pz4RMofbzislXh+AnB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="264357379"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="264357379"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 22:48:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="598921065"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga007.fm.intel.com with ESMTP; 10 Jul 2022 22:48:45 -0700
-Date:   Mon, 11 Jul 2022 13:48:44 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 043/102] KVM: x86/mmu: Focibly use TDP MMU for TDX
-Message-ID: <20220711054844.wb34vvqf74wkb2jp@yy-desk-7060>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <c198d2be26aa9a041176826cf86b51a337427783.1656366338.git.isaku.yamahata@intel.com>
+        Mon, 11 Jul 2022 01:52:07 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D28D15A16;
+        Sun, 10 Jul 2022 22:52:05 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 26B5pbZA022952;
+        Mon, 11 Jul 2022 14:51:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 26B5pbZA022952
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657518698;
+        bh=nJdtwmIgrVPA0dtmVpPR8fp9Vk3EMrRlmk8wkbLbI2w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=obxUlw7OF194lDxjAIa3n2rN6jPm7eELxwBq6iY3pQGba6zF0OcdR1XxugDvxyFdn
+         +cmOr74FTMVs+0gU6uh+hcByvVNbJR8I2QYpwNhtru9eOhOb5FvUfpouviOF1Ewh/7
+         oUpUvtwgcrMQvOhvJXXvRZENbaNQlTlJuvJDfmx+In98EK0xbxFuVHn0aEKVWOkEZV
+         lDThjLUdHlO8B06R7ZjtNJ7RtSYnNCaq7RIPT0TjsE6LmIt9kyQ44z/5HFtocPlBl/
+         BFWzF9ER7I9ccZIj0anEW4mmBTouEsiKeqXCfvSr1V2fNVeWtqVDu7T/ODaOT0tV8O
+         Vvzpcq9TjBMaw==
+X-Nifty-SrcIP: [209.85.128.44]
+Received: by mail-wm1-f44.google.com with SMTP id v10-20020a05600c15ca00b003a2db8aa2c4so2387029wmf.2;
+        Sun, 10 Jul 2022 22:51:38 -0700 (PDT)
+X-Gm-Message-State: AJIora+RyjZ7nF0mWwbOblAS2+jl+buoP5H6mj5tyL8f+pXEz2fOyyL/
+        Z/e1AArKLjYluEW9KMHpReMo9/Nl6L85wqqffiQ=
+X-Google-Smtp-Source: AGRyM1vsDrLJ6rtJwQeHonOKDhW3TOmc/Pg1e+zzajG3BZKqRdOLhg3kdPsXEWwSsp+e27u8+CqE7x9sWMupfSPLYJ4=
+X-Received: by 2002:a05:600c:35d6:b0:3a2:e873:6295 with SMTP id
+ r22-20020a05600c35d600b003a2e8736295mr2783183wmq.22.1657518696690; Sun, 10
+ Jul 2022 22:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c198d2be26aa9a041176826cf86b51a337427783.1656366338.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+55aFz2sNBbZyg-_i8_Ldr2e8o9dfvdSfHHuRzVtP2VMAUWPg@mail.gmail.com>
+ <20220628210407.3343118-1-ndesaulniers@google.com> <2842572.mvXUDI8C0e@sakura.myxoz.lan>
+In-Reply-To: <2842572.mvXUDI8C0e@sakura.myxoz.lan>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 11 Jul 2022 14:50:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATrgiJX7VGAda4YaXCso2wMufd_X1Q0XMYfG0yGg4mLBw@mail.gmail.com>
+Message-ID: <CAK7LNATrgiJX7VGAda4YaXCso2wMufd_X1Q0XMYfG0yGg4mLBw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+To:     Miko Larsson <mikoxyzzz@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Chris Down <chris@chrisdown.name>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Oleksandr Natalenko <oleksandr@redhat.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, X86 ML <x86@kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Vineet Gupta <vgupta@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:53:35PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Wed, Jun 29, 2022 at 7:48 PM Miko Larsson <mikoxyzzz@gmail.com> wrote:
 >
-> In this patch series, TDX supports only TDP MMU and doesn't support legacy
-> MMU.  Forcibly use TDP MMU for TDX irrelevant of kernel parameter to
-> disable TDP MMU.
+> On Tuesday, 28 June 2022 23:04:07 CEST Nick Desaulniers wrote:
+> > The difference in most compilers between `-O3` and `-O2` is mostly down
+> > to whether loops with statically determinable trip counts are fully
+> > unrolled vs unrolled to a multiple of SIMD width.
+> >
+> > This patch is effectively a revert of
+> > commit 15f5db60a137 ("kbuild,arc: add
+> > CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 for ARC") without re-adding
+> > ARCH_CFLAGS
+> >
+> > Ever since
+> > commit cfdbc2e16e65 ("ARC: Build system: Makefiles, Kconfig, Linker
+> > script")
+> > ARC has been built with -O3, though the reason for doing so was not
+> > specified in inline comments or the commit message. This commit does not
+> > re-add -O3 to arch/arc/Makefile.
+> >
+> > Folks looking to experiment with `-O3` (or any compiler flag for that
+> > matter) may pass them along to the command line invocation of make:
+> >
+> > $ make KCFLAGS=-O3
+> >
+> > Code that looks to re-add an explicit Kconfig option for `-O3` should
+> > provide:
+> > 1. A rigorous and reproducible performance profile of a reasonable
+> >    userspace workload that demonstrates a hot loop in the kernel that
+> >    would benefit from `-O3` over `-O2`.
+> > 2. Disassembly of said loop body before and after.
+> > 3. Provides stats on terms of increase in file size.
+> >
 >
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 82f1bfac7ee6..7eb41b176d1e 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -18,8 +18,13 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
->  {
->  	struct workqueue_struct *wq;
->
-> -	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
-> -		return 0;
-> +	/*
-> +	 *  Because TDX supports only TDP MMU, forcibly use TDP MMU in the case
-> +	 *  of TDX.
-> +	 */
-> +	if (kvm->arch.vm_type != KVM_X86_TDX_VM &&
-> +		(!tdp_enabled || !READ_ONCE(tdp_mmu_enabled)))
-> +		return false;
+> Might be worth cleaning up the rest of the kernel of instances of -O3,
+> too. -O3 used to build lz4 and mips vdso, for instance. Might be a bit
+> of a digression, though
 
-Please return 0 here for int return value type.
+
+This patch focuses on the removal of CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3,
+so I think it is OK as-is.
+
+The rest of cleanups, if needed,
+should be submitted separately.
+
+
+
 
 >
->  	wq = alloc_workqueue("kvm", WQ_UNBOUND|WQ_MEM_RECLAIM|WQ_CPU_INTENSIVE, 0);
->  	if (!wq)
 > --
-> 2.25.1
+> ~miko
 >
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,168 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530E256D70F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CFB56D712
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiGKHuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S230138AbiGKHuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiGKHuT (ORCPT
+        with ESMTP id S230204AbiGKHun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:50:19 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0071CB14
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:50:11 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g1so5167945edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WSqEx710a/dVEa0ZY3sqIrplA+wvP7kZvKBSjYsRL+0=;
-        b=g3AjwPVuCmFuH2Z2Krvx4nORro3p2TISC2aa45lo3zMi465zLZGOVxZqMQVkNjT9a5
-         slk5dFjFnAXMeBdcBe/HEb5YmQm3EeHMeaD5BMZHR0Z5RCbYPswpRy+mauB17WaGWJDW
-         9pMDEWFVb2b1dGF297V/frM7nSpXYp2ENTuKk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WSqEx710a/dVEa0ZY3sqIrplA+wvP7kZvKBSjYsRL+0=;
-        b=3Z4N3s2kHDFHsIbdfmo/Jpw7XoULmY2oyrlcfS7oWJRdxPMjsQLWodbVuBpJh+HwCF
-         Nz85yvNc24s99+AEuVij1ydHMoNrxQMGlqckUTmSljta5yHaMJvhRJXOFTpGPmSemSbp
-         +B6rWt6vukjPmowkntklihWLmLCEdhK7DJAgrLw0hzwxR2SGD9hE+k7uBPyJQPEEL58K
-         SPX5/L1X+VPa9zkNIU8+4+fCBNRqRAEvYzD0HrmXmqPJvYIQoahew9MWPoZBUauzgRPq
-         Ol4VePfRPaq/4LFxtobCS3BHXIPgYMydH+cUTibcrc3LXpCcPey6eEmX0m8JN8UcYEQn
-         t5PQ==
-X-Gm-Message-State: AJIora9qESyqXv9W9mPJwTZzZFu6ehIWYHPi2BLTSwh6g0u4cFtjS5lK
-        nxQP6f7zKQOwCd8qHK2Dw7sysGKJWaQH8QPYPYSgJQ==
-X-Google-Smtp-Source: AGRyM1vF54zPBUlQATEp+E2C1DXyhmVx30QVsruomgLtrYIxOCRiML3DWfAHfwJ2JjmBWg+Kr9La04lJap4WM3jsFlg=
-X-Received: by 2002:a05:6402:2b8d:b0:43a:5410:a9fc with SMTP id
- fj13-20020a0564022b8d00b0043a5410a9fcmr22881125edb.99.1657525810007; Mon, 11
- Jul 2022 00:50:10 -0700 (PDT)
+        Mon, 11 Jul 2022 03:50:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8E911C932;
+        Mon, 11 Jul 2022 00:50:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19F41176B;
+        Mon, 11 Jul 2022 00:50:42 -0700 (PDT)
+Received: from [10.57.12.169] (unknown [10.57.12.169])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D850E3F70D;
+        Mon, 11 Jul 2022 00:50:38 -0700 (PDT)
+Message-ID: <5b3d0cea-482c-a908-8575-e5846e43b286@arm.com>
+Date:   Mon, 11 Jul 2022 08:50:37 +0100
 MIME-Version: 1.0
-References: <20210603125242.31699-1-chenguanyou@xiaomi.com>
- <CAJfpegsEkRnU26Vvo4BTQUmx89Hahp6=RTuyEcPm=rqz8icwUQ@mail.gmail.com>
- <1fabb91167a86990f4723e9036a0e006293518f4.camel@mediatek.com>
- <CAJfpegsOSWZpKHqDNE_B489dGCzLr-RVAhimVOsFkxJwMYmj9A@mail.gmail.com>
- <07c5f2f1e10671bc462f88717f84aae9ee1e4d2b.camel@mediatek.com>
- <CAJfpegvAJS=An+hyAshkNcTS8A2TM28V2UP4SYycXUw3awOR+g@mail.gmail.com>
- <YVMz8E1Lg/GZQcjw@miu.piliscsaba.redhat.com> <SI2PR03MB5545E0B76E54013678B9FEEC8BA99@SI2PR03MB5545.apcprd03.prod.outlook.com>
- <07ad7d51d15c7ffc708b55066ded653a4b2c5c98.camel@mediatek.com>
- <CAJfpegsw3NpH6oTU9nxJLPUYMJVmfWhAa6yB8vnDZctP9vHc0g@mail.gmail.com> <490be4e0b984e146c93586507442de3dad8694bb.camel@mediatek.com>
-In-Reply-To: <490be4e0b984e146c93586507442de3dad8694bb.camel@mediatek.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 11 Jul 2022 09:49:59 +0200
-Message-ID: <CAJfpegsShacuTHvWUnWbdvnN_WcoKGzynsrSnkibAmphsr2kXg@mail.gmail.com>
-Subject: Re: [PATCH] [fuse] alloc_page nofs avoid deadlock
-To:     Ed Tsai <ed.tsai@mediatek.com>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        chenguanyou <chenguanyou9338@gmail.com>,
-        =?UTF-8?B?U3RhbmxleSBDaHUgKOacseWOn+mZnik=?= 
-        <stanley.chu@mediatek.com>,
-        =?UTF-8?B?WW9uZy14dWFuIFdhbmcgKOeOi+ipoOiQsSk=?= 
-        <Yong-xuan.Wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Content-Language: en-US
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <CAB8ipk8w1=cMJV2_ZjWuX6T9RH9VXCMdUaZhLEkCziarhpy-5w@mail.gmail.com>
+ <9ade9d43-3ed1-1239-f26e-73145856275a@arm.com>
+ <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAB8ipk_Y5vaUMnRQVJsbHUue_J00qqy0E1ifu3W_hFSspL1r1w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 11:29, Ed Tsai <ed.tsai@mediatek.com> wrote:
->
-> On Mon, 2022-06-13 at 16:45 +0800, Miklos Szeredi wrote:
-> > On Fri, 10 Jun 2022 at 09:48, Ed Tsai <ed.tsai@mediatek.com> wrote:
-> >
-> > > Recently, we get this deadlock issue again.
-> > > fuse_flush_time_update()
-> > > use sync_inode_metadata() and it only write the metadata, so the
-> > > writeback worker could still be blocked becaused of file data.
-> > >
-> > > I try to use write_inode_now() instead of sync_inode_metadata() and
-> > > the
-> > > writeback thread will not be blocked anymore. I don't think this is
-> > > a
-> > > good solution, but this confirm that there is still a potential
-> > > deadlock because of file data. WDYT.
-> >
-> > I'm not sure how that happens.  Normally writeback doesn't
-> > block.  Can
-> > you provide the stack traces of all related tasks in the deadlock?
-> >
-> > Thanks,
-> > Miklos
->
-> The writeback worker
-> ppid=22915 pid=22915 S cpu=6 prio=120 wait=3614s kworker/u16:21
-> vmlinux  request_wait_answer + 64
-> vmlinux  __fuse_request_send + 328
-> vmlinux  fuse_request_send + 60
-> vmlinux  fuse_simple_request + 376
-> vmlinux  fuse_flush_times + 276
-> vmlinux  fuse_write_inode + 104 (inode=0xFFFFFFD516CC4780, ff=0)
-> vmlinux  write_inode + 384
-> vmlinux  __writeback_single_inode + 960
-> vmlinux  writeback_sb_inodes + 892
-> vmlinux  __writeback_inodes_wb + 156
-> vmlinux  wb_writeback + 512
-> vmlinux  wb_check_background_flush + 600
-> vmlinux  wb_do_writeback + 644
-> vmlinux  wb_workfn + 756
-> vmlinux  process_one_work + 628
-> vmlinux  worker_thread + 708
-> vmlinux  kthread + 376
-> vmlinux  ret_from_fork + 16
->
-> Thread-11
-> ppid=3961 pid=26057 D cpu=4 prio=120 wait=3614s Thread-11
-> vmlinux  __inode_wait_for_writeback + 108
-> vmlinux  inode_wait_for_writeback + 156
-> vmlinux  evict + 160
-> vmlinux  iput_final + 292
-> vmlinux  iput + 600
-> vmlinux  dentry_unlink_inode + 212
-> vmlinux  __dentry_kill + 228
-> vmlinux  shrink_dentry_list + 408
-> vmlinux  prune_dcache_sb + 80
-> vmlinux  super_cache_scan + 272
-> vmlinux  do_shrink_slab + 944
-> vmlinux  shrink_slab + 1104
-> vmlinux  shrink_node + 712
-> vmlinux  shrink_zones + 188
-> vmlinux  do_try_to_free_pages + 348
-> vmlinux  try_to_free_pages + 848
-> vmlinux  __perform_reclaim + 64
-> vmlinux  __alloc_pages_direct_reclaim + 64
-> vmlinux  __alloc_pages_slowpath + 1296
-> vmlinux  __alloc_pages_nodemask + 2004
-> vmlinux  __alloc_pages + 16
-> vmlinux  __alloc_pages_node + 16
-> vmlinux  alloc_pages_node + 16
-> vmlinux  __read_swap_cache_async + 172
-> vmlinux  read_swap_cache_async + 12
-> vmlinux  swapin_readahead + 328
-> vmlinux  do_swap_page + 844
-> vmlinux  handle_pte_fault + 268
-> vmlinux  __handle_speculative_fault + 548
-> vmlinux  handle_speculative_fault + 44
-> vmlinux  do_page_fault + 500
-> vmlinux  do_translation_fault + 64
-> vmlinux  do_mem_abort + 72
-> vmlinux  el0_sync + 1032
->
-> ppid=3961 is com.google.android.providers.media.module, and it is the
-> android fuse daemon.
->
-> So, the daemon and wb worker were wait for each other.
 
-Is commit 5c791fe1e2a4 ("fuse: make sure reclaim doesn't write the
-inode") applied to this kernel?
 
-Thanks,
-Miklos
+On 7/11/22 08:43, Xuewen Yan wrote:
+> On Mon, Jul 11, 2022 at 3:32 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Xuewen,
+>>
+>> On 7/11/22 08:21, Xuewen Yan wrote:
+>>> Hi all
+>>>
+>>> This deadlock is inevitable, any comment?
+>>
+>> Could you tell me how to reproduce this?
+>> Is there a need of special cgroup setup?
+> 
+> This deadlock occurs when we run the monkey test on an Android phone,
+> at the same time, randomly put online or offline a cpu core.
+> Indeed the thread-A which get the cgroup_threadgroup_rwsem and waiting
+> for the cpu_hotplug_lock is the thread whose name is "OomAdjuster" in
+> android.
+
+Thanks, let me have a look. We have some hotplug stress tests in our
+EAS mainline integration tests, which haven't triggered this issue.
+I'll try to trigger this on mainline kernel.
+
+> 
+> And I see the cpu_hotplug_lock is added by the patch:
+> https://lore.kernel.org/all/20220121101210.84926-1-zhangqiao22@huawei.com/
+
+Thanks for the pointer.

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB5356FA7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8073056FA16
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiGKJSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S231409AbiGKJMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiGKJRi (ORCPT
+        with ESMTP id S231359AbiGKJMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:17:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B30C4AD43;
-        Mon, 11 Jul 2022 02:11:31 -0700 (PDT)
+        Mon, 11 Jul 2022 05:12:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8B922B05;
+        Mon, 11 Jul 2022 02:09:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6DEB80E7E;
-        Mon, 11 Jul 2022 09:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C18C341C0;
-        Mon, 11 Jul 2022 09:11:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF55B80E5E;
+        Mon, 11 Jul 2022 09:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D162AC34115;
+        Mon, 11 Jul 2022 09:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530688;
-        bh=pbH4+/eifaogvlXXGDGFmEoG1UUw+Kn1yNbwrEJfSsc=;
+        s=korg; t=1657530558;
+        bh=mp9c0u3Olp1mR637kiOEdlcgDsTF7diXWpPkTx7Q9yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GgwD5iRrItoivj7ZaEG3P+B9S9zM5DeMLGKO1pZhVqQW2nzRW2uvHQDyvQQOrSFJ7
-         QSzZhwCgr05QdH1bQg32qF7qVlDpzh6fUQQ84feW9nRHpSB0Roobp2o9295ccBa182
-         v0t+XzV5Rg5u/kRoMYTDUjkcI+B2iEmiMtw12wBA=
+        b=UM5IqHJv53olfOk0OiZpAAUvnsDuC8RVbVbfOk32nyndapzeZL8Ol54MS1vgg3I+m
+         1l+AWHOePe84kcmQF+c9i+ff1RVJDStQiy4syNzi9m8KGbbgoU6jbcAVk++vKzvBDE
+         d1ynVe+5zAgUqd51bXyE5tTnFqSI5oH9yuuDPyHE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 25/38] selftests: forwarding: fix flood_unicast_test when h2 supports IFF_UNICAST_FLT
+        stable@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 4.19 28/31] dmaengine: pl330: Fix lockdep warning about non-static key
 Date:   Mon, 11 Jul 2022 11:07:07 +0200
-Message-Id: <20220711090539.472540621@linuxfoundation.org>
+Message-Id: <20220711090538.677136893@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-[ Upstream commit b8e629b05f5d23f9649c901bef09fab8b0c2e4b9 ]
+commit b64b3b2f1d81f83519582e1feee87d77f51f5f17 upstream.
 
-As mentioned in the blamed commit, flood_unicast_test() works by
-checking the match count on a tc filter placed on the receiving
-interface.
+The DEFINE_SPINLOCK() macro shouldn't be used for dynamically allocated
+spinlocks. The lockdep warns about this and disables locking validator.
+Fix the warning by making lock static.
 
-But the second host interface (host2_if) has no interest in receiving a
-packet with MAC DA de:ad:be:ef:13:37, so its RX filter drops it even
-before the ingress tc filter gets to be executed. So we will incorrectly
-get the message "Packet was not flooded when should", when in fact, the
-packet was flooded as expected but dropped due to an unrelated reason,
-at some other layer on the receiving side.
+ INFO: trying to register non-static key.
+ The code is fine but needs lockdep annotation, or maybe
+ you didn't initialize this object before use?
+ turning off the locking correctness validator.
+ Hardware name: Radxa ROCK Pi 4C (DT)
+ Call trace:
+  dump_backtrace.part.0+0xcc/0xe0
+  show_stack+0x18/0x6c
+  dump_stack_lvl+0x8c/0xb8
+  dump_stack+0x18/0x34
+  register_lock_class+0x4a8/0x4cc
+  __lock_acquire+0x78/0x20cc
+  lock_acquire.part.0+0xe0/0x230
+  lock_acquire+0x68/0x84
+  _raw_spin_lock_irqsave+0x84/0xc4
+  add_desc+0x44/0xc0
+  pl330_get_desc+0x15c/0x1d0
+  pl330_prep_dma_cyclic+0x100/0x270
+  snd_dmaengine_pcm_trigger+0xec/0x1c0
+  dmaengine_pcm_trigger+0x18/0x24
+  ...
 
-Force h2 to accept this packet by temporarily placing it in promiscuous
-mode. Alternatively we could either deliver to its MAC address or use
-tcpdump_start, but this has the fewest complications.
-
-This fixes the "flooding" test from bridge_vlan_aware.sh and
-bridge_vlan_unaware.sh, which calls flood_test from the lib.
-
-Fixes: 236dd50bf67a ("selftests: forwarding: Add a test for flooded traffic")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e588710311ee ("dmaengine: pl330: fix descriptor allocation fail")
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Link: https://lore.kernel.org/r/20220520181432.149904-1-dmitry.osipenko@collabora.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/dma/pl330.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 85c587a03c8a..be977cd4bfe3 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -960,6 +960,7 @@ flood_test_do()
+--- a/drivers/dma/pl330.c
++++ b/drivers/dma/pl330.c
+@@ -2568,7 +2568,7 @@ static struct dma_pl330_desc *pl330_get_
  
- 	# Add an ACL on `host2_if` which will tell us whether the packet
- 	# was flooded to it or not.
-+	ip link set $host2_if promisc on
- 	tc qdisc add dev $host2_if ingress
- 	tc filter add dev $host2_if ingress protocol ip pref 1 handle 101 \
- 		flower dst_mac $mac action drop
-@@ -977,6 +978,7 @@ flood_test_do()
+ 	/* If the DMAC pool is empty, alloc new */
+ 	if (!desc) {
+-		DEFINE_SPINLOCK(lock);
++		static DEFINE_SPINLOCK(lock);
+ 		LIST_HEAD(pool);
  
- 	tc filter del dev $host2_if ingress protocol ip pref 1 handle 101 flower
- 	tc qdisc del dev $host2_if ingress
-+	ip link set $host2_if promisc off
- 
- 	return $err
- }
--- 
-2.35.1
-
+ 		if (!add_desc(&pool, &lock, GFP_ATOMIC, 1))
 
 

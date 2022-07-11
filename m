@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8066570B70
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D48570B95
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbiGKU0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S231970AbiGKU0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiGKUZa (ORCPT
+        with ESMTP id S229638AbiGKUZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:25:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09E633424
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:25:26 -0700 (PDT)
+        Mon, 11 Jul 2022 16:25:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96364D83E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:25:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33162B81211
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD0DDB81227
         for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B213C341CE;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41361C36AE3;
         Mon, 11 Jul 2022 20:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657571123;
-        bh=iPo5yEgWndhfMQR64zKLfth2omME0GYPHNfw6ZASCpQ=;
+        bh=D0bEjONKO0OQMVFCtOYHA/FPk+KIm9oq17OfYHcIwdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C4whE9rwW4KXNlMHWzbc7yx6XzNTYs9ra7km0iqGCLFDSLSmTni+LfhcvLghZeXyo
-         cfLGuGuLp8khxdX4eYIE/2X/pDzsup0ditp5lTcwMkCfKbSm5LV6bawjEYAvHr34ui
-         /jVq5+jx2ky7bEWrHOCnVtcX7zF8l4om6DPr7iH0bvI5oFiTEDympLGL/aAtjaY1jY
-         sWOkkCmowZ8nVUVlsmsg0BKU6Wp+hkQE2zzBlKtFz1Eci8I0QJ45ucMzN8WLseNgZw
-         aWTIf+VCcDacRzHJZnWbCP9C6T3JEYLudQ7VbBG9OVbKyE0JCnf5Jga06VDVK5i5PU
-         WqGCMrIJ2kJeg==
+        b=iAQZIC6/tx0PdX1S4dItst07G5SzprXk10MbTdVninLlEgXFztK88oOXF17hRb+Qy
+         79AHrZQumux78yo8Bql9RPDBmI0lV5ni/FVY86sLnxj4QRIbS8bNkwpMlB7tGX+hcQ
+         CO0RFyWH4qL6cHkBDB9bcpecNNXZUGCXQBz/STfDHscTfc3jz8nr4vUO0BCt7aJJCx
+         urNm4bwOWrpb8rvPrjrza5Z06Kwu1SwuEzUuVvIn7JvOU4W/iq5FOLxD35eM9Y747O
+         rcG0qu4nw6Exv0Iz7cULcidDGvQtCUEu75b9BMui7asn2/4ODu110lSNjk2jPjqyGD
+         6bO3LYI/04EOA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oAzy3-004e8k-PG;
+        id 1oAzy3-004e8o-Pr;
         Mon, 11 Jul 2022 21:25:19 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 22/32] drm/i915: i915_vma_resource.c: fix some kernel-doc markups
-Date:   Mon, 11 Jul 2022 21:25:07 +0100
-Message-Id: <7d31d5221e03c875f3b366e320355faaf98a10a4.1657565224.git.mchehab@kernel.org>
+Subject: [PATCH 23/32] drm/i915: i915_gem.c fix a kernel-doc issue
+Date:   Mon, 11 Jul 2022 21:25:08 +0100
+Message-Id: <037b710c2a65c4b3da5b0b9bb947f740bf08c12e.1657565224.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657565224.git.mchehab@kernel.org>
 References: <cover.1657565224.git.mchehab@kernel.org>
@@ -66,14 +66,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building docs currently produces two warnings:
+Prevent this Sphinx warning:
 
-    Documentation/foo/i915:71: ./drivers/gpu/drm/i915/i915_vma_resource.c:286: WARNING: Inline strong start-string without end-string.
-    Documentation/foo/i915:71: ./drivers/gpu/drm/i915/i915_vma_resource.c:370: WARNING: Inline strong start-string without end-string.
+	Documentation/foo/i915:728: ./drivers/gpu/drm/i915/i915_gem.c:447: WARNING: Inline emphasis start-string without end-string.
 
-That's because @foo evaluates into **foo**, and placing anything
-after it without spaces cause Sphinx to warn and do the wrong
-thing.. So, replace them by a different Sphinx-compatible tag.
+By using @data to identify the data field, as expected by kernel-doc.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -81,31 +78,22 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/32] at: https://lore.kernel.org/all/cover.1657565224.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/i915_vma_resource.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/i915_gem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_vma_resource.c b/drivers/gpu/drm/i915/i915_vma_resource.c
-index 27c55027387a..fa5a678018d9 100644
---- a/drivers/gpu/drm/i915/i915_vma_resource.c
-+++ b/drivers/gpu/drm/i915/i915_vma_resource.c
-@@ -283,7 +283,7 @@ i915_vma_resource_color_adjust_range(struct i915_address_space *vm,
+diff --git a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
+index f01f0896ff5c..0bc895c6a1fc 100644
+--- a/drivers/gpu/drm/i915/i915_gem.c
++++ b/drivers/gpu/drm/i915/i915_gem.c
+@@ -444,7 +444,7 @@ i915_gem_gtt_pread(struct drm_i915_gem_object *obj,
+  * @data: ioctl data blob
+  * @file: drm file pointer
   *
-  * The function needs to be called with the vm lock held.
-  *
-- * Return: Zero on success, -ERESTARTSYS if interrupted and @intr==true
-+ * Return: Zero on success, -ERESTARTSYS if interrupted and ``intr==true``
+- * On error, the contents of *data are undefined.
++ * On error, the contents of @data is undefined.
   */
- int i915_vma_resource_bind_dep_sync(struct i915_address_space *vm,
- 				    u64 offset,
-@@ -367,7 +367,7 @@ void i915_vma_resource_bind_dep_sync_all(struct i915_address_space *vm)
-  * this means that during heavy memory pressure, we will sync in this
-  * function.
-  *
-- * Return: Zero on success, -ERESTARTSYS if interrupted and @intr==true
-+ * Return: Zero on success, -ERESTARTSYS if interrupted and ``intr==true``
-  */
- int i915_vma_resource_bind_dep_await(struct i915_address_space *vm,
- 				     struct i915_sw_fence *sw_fence,
+ int
+ i915_gem_pread_ioctl(struct drm_device *dev, void *data,
 -- 
 2.36.1
 

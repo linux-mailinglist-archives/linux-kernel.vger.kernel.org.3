@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A58056FDD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E9F56FAD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiGKKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S231337AbiGKJWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234430AbiGKJ7e (ORCPT
+        with ESMTP id S231825AbiGKJVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:59:34 -0400
+        Mon, 11 Jul 2022 05:21:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9C474E0D;
-        Mon, 11 Jul 2022 02:27:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595772C125;
+        Mon, 11 Jul 2022 02:13:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17920B80DB7;
-        Mon, 11 Jul 2022 09:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5056AC34115;
-        Mon, 11 Jul 2022 09:27:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A40B2B80C69;
+        Mon, 11 Jul 2022 09:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C64C34115;
+        Mon, 11 Jul 2022 09:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531670;
-        bh=OyjUG9OJISP1exqApWeTSGxAKba3do33WPDZ9BPAzV8=;
+        s=korg; t=1657530784;
+        bh=KckelC0+UIj+BdSGFzqzK+FDGwK+j/pgQZwXovIVAyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xqoMbCQ5+wWXYA6JmbHgvdMDCMflKOs1putUxSJLOLNT1hsWAM8nFjCNKRO9OU1K2
-         Z1VAaytxYphgAjy2vNG1xzix09ZTz4aBzo9SixDjz+omWd943JCcBHEaL+mQZ7sYxa
-         HG9zTWGWXE3GfT+u8N4EgIIavPOX24dBrAH5R9Q8=
+        b=H5bS2MLqTKENjmaxljb/RGi5jvfFygOTRprO/mAXWwOKmb83nhAhq3KZcw/ac6jJp
+         XADE7f7Ji/gPCu6KdFahCHMpHb1o0xwx/54o2ScyJeFybEETO9heYmkFCgSkI6WgU9
+         BeuIVrIdnoK364DfmZpzq6/vTykqma1KJ9OrvhNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Ivan Malov <ivan.malov@oktetlabs.ru>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 190/230] arm64: dts: imx8mp-evk: correct I2C1 pad settings
+Subject: [PATCH 5.10 38/55] xsk: Clear page contiguity bit when unmapping pool
 Date:   Mon, 11 Jul 2022 11:07:26 +0200
-Message-Id: <20220711090609.496413034@linuxfoundation.org>
+Message-Id: <20220711090542.881801977@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+From: Ivan Malov <ivan.malov@oktetlabs.ru>
 
-[ Upstream commit 05a7f43478e890513d571f36660bfedc1482a588 ]
+[ Upstream commit 512d1999b8e94a5d43fba3afc73e774849674742 ]
 
-According to RM bit layout, BIT3 and BIT0 are reserved.
- 8  7   6   5   4   3  2 1  0
-PE HYS PUE ODE FSEL X  DSE  X
+When a XSK pool gets mapped, xp_check_dma_contiguity() adds bit 0x1
+to pages' DMA addresses that go in ascending order and at 4K stride.
 
-Although function is not broken, we should not set reserved bit.
+The problem is that the bit does not get cleared before doing unmap.
+As a result, a lot of warnings from iommu_dma_unmap_page() are seen
+in dmesg, which indicates that lookups by iommu_iova_to_phys() fail.
 
-Fixes: 5497bc2a2bff ("arm64: dts: imx8mp-evk: Add PMIC device")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 2b43470add8c ("xsk: Introduce AF_XDP buffer allocation API")
+Signed-off-by: Ivan Malov <ivan.malov@oktetlabs.ru>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Link: https://lore.kernel.org/bpf/20220628091848.534803-1-ivan.malov@oktetlabs.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/xdp/xsk_buff_pool.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-index 33664c217673..de6f3297fea4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-@@ -357,8 +357,8 @@
- 
- 	pinctrl_i2c1: i2c1grp {
- 		fsl,pins = <
--			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c3
--			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c3
-+			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c2
-+			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
- 		>;
- 	};
- 
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 2ef6f926610e..e63a285a9856 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -318,6 +318,7 @@ static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
+ 	for (i = 0; i < dma_map->dma_pages_cnt; i++) {
+ 		dma = &dma_map->dma_pages[i];
+ 		if (*dma) {
++			*dma &= ~XSK_NEXT_PG_CONTIG_MASK;
+ 			dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
+ 					     DMA_BIDIRECTIONAL, attrs);
+ 			*dma = 0;
 -- 
 2.35.1
 

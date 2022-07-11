@@ -2,149 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0B357058D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778F85705A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiGKO1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S230476AbiGKOdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGKO1r (ORCPT
+        with ESMTP id S231129AbiGKOdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:27:47 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238F83E777;
-        Mon, 11 Jul 2022 07:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657549667; x=1689085667;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N/5+FOmUbjUHJKfvtD9I2r0cQTVjN/Gvm2Dt7WX01LM=;
-  b=L2fOLDwSIael7qTpTOJD7hEcZuRqUaCwhKBq+3kkdAGF43tz8o+66eBu
-   TYWqS4UhicDsXpTdQ6eNkxOot4lowsHOIpn1BghFl563Rbv7zafdnOK+v
-   bB9xYCeu22HEL1b+1bAkNGjOA+bWHj97ConZLAfnh41YhUtVag7nLmC2r
-   iAOL7GWif4BYMDCpPUhNRW+GojlTOM1x0OtlGPCf68/99mpuUZPSo73tt
-   c+9CPRORAQeDHd+oDm8iv4T4P7JlKVHdzmUF6T4AiGJkSrLCeQdsHtK4X
-   RwzpW+JZ0rviFbGnEOe2LEgeEYrTPYp89RgFrNz9HI0m2NR+XXcJH5Rto
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="267713289"
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="267713289"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 07:27:46 -0700
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="721614482"
-Received: from tzanussi-mobl4.amr.corp.intel.com (HELO [10.209.163.145]) ([10.209.163.145])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 07:27:45 -0700
-Message-ID: <7b562ff6-3f44-053b-d8e6-3c40be145446@linux.intel.com>
-Date:   Mon, 11 Jul 2022 09:27:44 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] tracing/histograms: Fix memory leak problem
-To:     Zheng Yejian <zhengyejian1@huawei.com>, rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        stable@vger.kernel.org, trix@redhat.com, zhangjinhao2@huawei.com
-References: <20220708210335.79a38356@gandalf.local.home>
- <20220711014731.69520-1-zhengyejian1@huawei.com>
-From:   "Zanussi, Tom" <tom.zanussi@linux.intel.com>
-In-Reply-To: <20220711014731.69520-1-zhengyejian1@huawei.com>
+        Mon, 11 Jul 2022 10:33:37 -0400
+Received: from jari.cn (unknown [218.92.28.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 962CC25D2;
+        Mon, 11 Jul 2022 07:33:33 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Mon, 11 Jul
+ 2022 22:27:58 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.15.109]
+Date:   Mon, 11 Jul 2022 22:27:58 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "XueBing Chen" <chenxuebing@jari.cn>
+To:     johannes@sipsolutions.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, davem@davemloft.net
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] wireless: use strscpy to replace strlcpy
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Message-ID: <2d2fcbf7.e33.181eda8e70e.Coremail.chenxuebing@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwAXIW9uM8xi5uRIAA--.894W
+X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQAECmFEYxs0ZwAFsE
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW5Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yejian,
-
-On 7/10/2022 8:47 PM, Zheng Yejian wrote:
-> This reverts commit 46bbe5c671e06f070428b9be142cc4ee5cedebac.
-> 
-> As commit 46bbe5c671e0 ("tracing: fix double free") said, the
-> "double free" problem reported by clang static analyzer is:
->   > In parse_var_defs() if there is a problem allocating
->   > var_defs.expr, the earlier var_defs.name is freed.
->   > This free is duplicated by free_var_defs() which frees
->   > the rest of the list.
-> 
-> However, if there is a problem allocating N-th var_defs.expr:
->   + in parse_var_defs(), the freed 'earlier var_defs.name' is
->     actually the N-th var_defs.name;
->   + then in free_var_defs(), the names from 0th to (N-1)-th are freed;
-> 
->                         IF ALLOCATING PROBLEM HAPPENED HERE!!! -+
->                                                                  \
->                                                                   |
->           0th           1th                 (N-1)-th      N-th    V
->           +-------------+-------------+-----+-------------+-----------
-> var_defs: | name | expr | name | expr | ... | name | expr | name | ///
->           +-------------+-------------+-----+-------------+-----------
-> 
-> These two frees don't act on same name, so there was no "double free"
-> problem before. Conversely, after that commit, we get a "memory leak"
-> problem because the above "N-th var_defs.name" is not freed.
-
-Good catch, thanks for fixing it.
-
-So I'm wondering if this means that that the original unnecessary bugfix
-was based on a bug in the clang static analyzer or if that would just be
-considered a false positive...
-
-Reviewed-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-
-Tom  
-
-> 
-> If enable CONFIG_DEBUG_KMEMLEAK and inject a fault at where the N-th
-> var_defs.expr allocated, then execute on shell like:
->   $ echo 'hist:key=call_site:val=$v1,$v2:v1=bytes_req,v2=bytes_alloc' > \
-> /sys/kernel/debug/tracing/events/kmem/kmalloc/trigger
-> 
-> Then kmemleak reports:
->   unreferenced object 0xffff8fb100ef3518 (size 8):
->     comm "bash", pid 196, jiffies 4295681690 (age 28.538s)
->     hex dump (first 8 bytes):
->       76 31 00 00 b1 8f ff ff                          v1......
->     backtrace:
->       [<0000000038fe4895>] kstrdup+0x2d/0x60
->       [<00000000c99c049a>] event_hist_trigger_parse+0x206f/0x20e0
->       [<00000000ae70d2cc>] trigger_process_regex+0xc0/0x110
->       [<0000000066737a4c>] event_trigger_write+0x75/0xd0
->       [<000000007341e40c>] vfs_write+0xbb/0x2a0
->       [<0000000087fde4c2>] ksys_write+0x59/0xd0
->       [<00000000581e9cdf>] do_syscall_64+0x3a/0x80
->       [<00000000cf3b065c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 46bbe5c671e0 ("tracing: fix double free")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> ---
->  kernel/trace/trace_events_hist.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> Changes since v1:
-> - Assign 'NULL' after 'kfree' for safety as suggested by Steven
-> - Rename commit title and add Suggested-by tag
-> 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 48e82e141d54..e87a46794079 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -4430,6 +4430,8 @@ static int parse_var_defs(struct hist_trigger_data *hist_data)
->  
->  			s = kstrdup(field_str, GFP_KERNEL);
->  			if (!s) {
-> +				kfree(hist_data->attrs->var_defs.name[n_vars]);
-> +				hist_data->attrs->var_defs.name[n_vars] = NULL;
->  				ret = -ENOMEM;
->  				goto free;
->  			}
+ClRoZSBzdHJsY3B5IHNob3VsZCBub3QgYmUgdXNlZCBiZWNhdXNlIGl0IGRvZXNuJ3QgbGltaXQg
+dGhlIHNvdXJjZQpsZW5ndGguIFByZWZlcnJlZCBpcyBzdHJzY3B5LgoKU2lnbmVkLW9mZi1ieTog
+WHVlQmluZyBDaGVuIDxjaGVueHVlYmluZ0BqYXJpLmNuPgotLS0KIG5ldC93aXJlbGVzcy9ldGh0
+b29sLmMgfCAxMiArKysrKystLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyks
+IDYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L3dpcmVsZXNzL2V0aHRvb2wuYyBiL25l
+dC93aXJlbGVzcy9ldGh0b29sLmMKaW5kZXggMjRlMTg0MDVjZGI0Li4yNjEzZDZhYzBmZGEgMTAw
+NjQ0Ci0tLSBhL25ldC93aXJlbGVzcy9ldGh0b29sLmMKKysrIGIvbmV0L3dpcmVsZXNzL2V0aHRv
+b2wuYwpAQCAtMTAsMjAgKzEwLDIwIEBAIHZvaWQgY2ZnODAyMTFfZ2V0X2RydmluZm8oc3RydWN0
+IG5ldF9kZXZpY2UgKmRldiwgc3RydWN0IGV0aHRvb2xfZHJ2aW5mbyAqaW5mbykKIAlzdHJ1Y3Qg
+ZGV2aWNlICpwZGV2ID0gd2lwaHlfZGV2KHdkZXYtPndpcGh5KTsKIAogCWlmIChwZGV2LT5kcml2
+ZXIpCi0JCXN0cmxjcHkoaW5mby0+ZHJpdmVyLCBwZGV2LT5kcml2ZXItPm5hbWUsCisJCXN0cnNj
+cHkoaW5mby0+ZHJpdmVyLCBwZGV2LT5kcml2ZXItPm5hbWUsCiAJCQlzaXplb2YoaW5mby0+ZHJp
+dmVyKSk7CiAJZWxzZQotCQlzdHJsY3B5KGluZm8tPmRyaXZlciwgIk4vQSIsIHNpemVvZihpbmZv
+LT5kcml2ZXIpKTsKKwkJc3Ryc2NweShpbmZvLT5kcml2ZXIsICJOL0EiLCBzaXplb2YoaW5mby0+
+ZHJpdmVyKSk7CiAKLQlzdHJsY3B5KGluZm8tPnZlcnNpb24sIGluaXRfdXRzbmFtZSgpLT5yZWxl
+YXNlLCBzaXplb2YoaW5mby0+dmVyc2lvbikpOworCXN0cnNjcHkoaW5mby0+dmVyc2lvbiwgaW5p
+dF91dHNuYW1lKCktPnJlbGVhc2UsIHNpemVvZihpbmZvLT52ZXJzaW9uKSk7CiAKIAlpZiAod2Rl
+di0+d2lwaHktPmZ3X3ZlcnNpb25bMF0pCi0JCXN0cmxjcHkoaW5mby0+ZndfdmVyc2lvbiwgd2Rl
+di0+d2lwaHktPmZ3X3ZlcnNpb24sCisJCXN0cnNjcHkoaW5mby0+ZndfdmVyc2lvbiwgd2Rldi0+
+d2lwaHktPmZ3X3ZlcnNpb24sCiAJCQlzaXplb2YoaW5mby0+ZndfdmVyc2lvbikpOwogCWVsc2UK
+LQkJc3RybGNweShpbmZvLT5md192ZXJzaW9uLCAiTi9BIiwgc2l6ZW9mKGluZm8tPmZ3X3ZlcnNp
+b24pKTsKKwkJc3Ryc2NweShpbmZvLT5md192ZXJzaW9uLCAiTi9BIiwgc2l6ZW9mKGluZm8tPmZ3
+X3ZlcnNpb24pKTsKIAotCXN0cmxjcHkoaW5mby0+YnVzX2luZm8sIGRldl9uYW1lKHdpcGh5X2Rl
+dih3ZGV2LT53aXBoeSkpLAorCXN0cnNjcHkoaW5mby0+YnVzX2luZm8sIGRldl9uYW1lKHdpcGh5
+X2Rldih3ZGV2LT53aXBoeSkpLAogCQlzaXplb2YoaW5mby0+YnVzX2luZm8pKTsKIH0KIEVYUE9S
+VF9TWU1CT0woY2ZnODAyMTFfZ2V0X2RydmluZm8pOwotLSAKMi4yNS4xCg==

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F59556FD6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2424856FB37
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiGKJzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S232400AbiGKJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiGKJyc (ORCPT
+        with ESMTP id S232516AbiGKJYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:54:32 -0400
+        Mon, 11 Jul 2022 05:24:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E499D33A0A;
-        Mon, 11 Jul 2022 02:26:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3154A37186;
+        Mon, 11 Jul 2022 02:15:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98F17B80D2C;
-        Mon, 11 Jul 2022 09:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59BFC34115;
-        Mon, 11 Jul 2022 09:25:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4650CB80E7E;
+        Mon, 11 Jul 2022 09:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0269C341C0;
+        Mon, 11 Jul 2022 09:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531560;
-        bh=Alp2MHh6Ac99EuP+tf9BV2sOZk7KseWriY8CNcxWR9I=;
+        s=korg; t=1657530914;
+        bh=cI6yKnCywpfP9pCIdeMRNme6AxuT+26wTSRXrQmwRB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xeXiaqnWGU7HRviybDx/K9KYNLSUEJ+BvS9wbRnqnqfjSZ5qlEKxziHTRRUGTl4dn
-         AadkNNtRZmFQlnuX9G874UVbw3E9jsPHDD+Vvk4wNiSazA0qbdL7lr6m3VpNIAjyLa
-         qerzacx39ohhVCoa9DnsAZZvLAMgQfOVdI63eG7Y=
+        b=qqGhJw6ArpkgLMGqyZ7CIcpv6KDxqeQ30gQ6nqRwYjREQ7k7+sObWEj9Pa4qQlSBh
+         RENSNtVJZiHc8g5o7Tm3wHcNJHmmH+pNWtwnEXz+oY3OM4vs+n2ilcAD+sukp6MVxq
+         bY7AS5xFgQi2CQ0jTALp4zswXSxD3ecgcZ2HGKL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Daniel Starke <daniel.starke@siemens.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 132/230] tty: n_gsm: fix sometimes uninitialized warning in gsm_dlci_modem_output()
-Date:   Mon, 11 Jul 2022 11:06:28 +0200
-Message-Id: <20220711090607.809091125@linuxfoundation.org>
+        stable@vger.kernel.org, "Zhang, Bernice" <bernice.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Yian Chen <yian.chen@intel.com>,
+        Joerg Roedel <jroedel@suse.de>, Zhang@vger.kernel.org
+Subject: [PATCH 5.18 029/112] iommu/vt-d: Fix PCI bus rescan device hot add
+Date:   Mon, 11 Jul 2022 11:06:29 +0200
+Message-Id: <20220711090550.393546816@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Yian Chen <yian.chen@intel.com>
 
-[ Upstream commit 19317433057dc1f2ca9a975e4e6b547282c2a5ef ]
+commit 316f92a705a4c2bf4712135180d56f3cca09243a upstream.
 
-'size' may be used uninitialized in gsm_dlci_modem_output() if called with
-an adaption that is neither 1 nor 2. The function is currently only called
-by gsm_modem_upd_via_data() and only for adaption 2.
-Properly handle every invalid case by returning -EINVAL to silence the
-compiler warning and avoid future regressions.
+Notifier calling chain uses priority to determine the execution
+order of the notifiers or listeners registered to the chain.
+PCI bus device hot add utilizes the notification mechanism.
 
-Fixes: c19ffe00fed6 ("tty: n_gsm: fix invalid use of MSC in advanced option")
-Cc: stable@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220425104726.7986-1-daniel.starke@siemens.com
+The current code sets low priority (INT_MIN) to Intel
+dmar_pci_bus_notifier and postpones DMAR decoding after adding
+new device into IOMMU. The result is that struct device pointer
+cannot be found in DRHD search for the new device's DMAR/IOMMU.
+Subsequently, the device is put under the "catch-all" IOMMU
+instead of the correct one. This could cause system hang when
+device TLB invalidation is sent to the wrong IOMMU. Invalidation
+timeout error and hard lockup have been observed and data
+inconsistency/crush may occur as well.
+
+This patch fixes the issue by setting a positive priority(1) for
+dmar_pci_bus_notifier while the priority of IOMMU bus notifier
+uses the default value(0), therefore DMAR decoding will be in
+advance of DRHD search for a new device to find the correct IOMMU.
+
+Following is a 2-step example that triggers the bug by simulating
+PCI device hot add behavior in Intel Sapphire Rapids server.
+
+echo 1 > /sys/bus/pci/devices/0000:6a:01.0/remove
+echo 1 > /sys/bus/pci/rescan
+
+Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
+Cc: stable@vger.kernel.org # v3.15+
+Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Signed-off-by: Yian Chen <yian.chen@intel.com>
+Link: https://lore.kernel.org/r/20220521002115.1624069-1-yian.chen@intel.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/iommu/intel/dmar.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index c8ca00fad8e4..fd4a86111a6e 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -945,18 +945,21 @@ static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
- {
- 	u8 *dp = NULL;
- 	struct gsm_msg *msg;
--	int size;
-+	int size = 0;
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -383,7 +383,7 @@ static int dmar_pci_bus_notifier(struct
  
- 	/* for modem bits without break data */
--	if (dlci->adaption == 1) {
--		size = 0;
--	} else if (dlci->adaption == 2) {
--		size = 1;
-+	switch (dlci->adaption) {
-+	case 1: /* Unstructured */
-+		break;
-+	case 2: /* Unstructured with modem bits. */
-+		size++;
- 		if (brk > 0)
- 			size++;
--	} else {
-+		break;
-+	default:
- 		pr_err("%s: unsupported adaption %d\n", __func__,
- 		       dlci->adaption);
-+		return -EINVAL;
- 	}
+ static struct notifier_block dmar_pci_bus_nb = {
+ 	.notifier_call = dmar_pci_bus_notifier,
+-	.priority = INT_MIN,
++	.priority = 1,
+ };
  
- 	msg = gsm_data_alloc(gsm, dlci->addr, size, gsm->ftype);
--- 
-2.35.1
-
+ static struct dmar_drhd_unit *
 
 

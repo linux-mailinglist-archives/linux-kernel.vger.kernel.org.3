@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EE9570376
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01175703AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiGKM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S229750AbiGKM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiGKM4l (ORCPT
+        with ESMTP id S232203AbiGKM5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:56:41 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367E9545F9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:56:39 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id x17so3689728qkh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:56:39 -0700 (PDT)
+        Mon, 11 Jul 2022 08:57:41 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2D05B051;
+        Mon, 11 Jul 2022 05:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDlFrz82XEV559hOxt/9KTdlawVN8UslB7cohDHmlKk=;
-        b=UGSIMFUIAjpBDWVNaLdfMacUu/FNYeJA/ajTQGHLFVW1PsgSlI9Msf9I4lRCrO4oxg
-         MlKNe8vitsaANDx5V1aZOKDe/FWJY7FMqnNo2WffF1BccvyuXYl0ljDiBtm2U7M6p3PY
-         Uv6g75BblWi8jZL/vU86KL/R82HQqpyHViaSMpPHCBJFy1tw3ImPFZr6Yhur5MNRpgwx
-         jFIln7OmJlAOp7lwI93AmGcIS24/HH1k+lh4t849Ktm3RgI36SgPSqrnNVX9MMJfU0MR
-         buHhUDsCZt9JXZ/j0aPHgaVGgj6y5cleY3xopEwmEd7PinxpbD6BNU+IuP+rvRCK9SvE
-         N2yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDlFrz82XEV559hOxt/9KTdlawVN8UslB7cohDHmlKk=;
-        b=fLROPMrFEEkqw8VEParxLARM3LF8QATIyUKIcWh3+DAEZVSKgsYItPUb6rOAK4lyCi
-         Y9GSMqQD7hc7kkE7bS3xfCOc0rj9govgOk9JvBbNvI8qZqmb9nxtwFI/1t95mGSYYHYx
-         44n4NIrmrBMnMs4jtXr8wAKFsIrk11Iq/xxVPHXiT/puOuHTdOnk+JsbAWoqCsLgL8wp
-         v2efbzynJkSO4zdYFSQRVVbRS3zZYe3Oq/quKE4/sc49e3FtamF5o5pLLfMWRmgMyEfw
-         FITGT4p14176OSZaOvEwwpeg12szVR6ihOOcSHUxuN7siPU+PTVAUQJK5Tr2tLfArRzA
-         9W4A==
-X-Gm-Message-State: AJIora+JpRk1P0mF9PemUSyqCodhIzqDL4MCuJv9IvWZO1OxMx07xGRN
-        tuSQPf9cLIn3cSBvffW8FcZal5JPW8Njz4Sgs9b8DA==
-X-Google-Smtp-Source: AGRyM1vyiLG3J4nejZR7X7psv05VMDKCUlQ7HErJz+5Ve+FWvo6yHgHVMzjp++8/sc8+P4BwkHsNGjkuwjt/BeRFF1Y=
-X-Received: by 2002:a05:620a:288c:b0:6b3:9d1:dbf1 with SMTP id
- j12-20020a05620a288c00b006b309d1dbf1mr10943389qkp.593.1657544198360; Mon, 11
- Jul 2022 05:56:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-6-robimarko@gmail.com>
- <CAA8EJppAdwuXQsvvy9+hT_-mzke5xOaDcTSM5ewjS_cPk3Q+oA@mail.gmail.com> <CAOX2RU6FMyzGGpnLtzRy=szjBSE+wcvbs+6z6ChZ5Z6g4-9Baw@mail.gmail.com>
-In-Reply-To: <CAOX2RU6FMyzGGpnLtzRy=szjBSE+wcvbs+6z6ChZ5Z6g4-9Baw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 11 Jul 2022 15:56:27 +0300
-Message-ID: <CAA8EJpr=_ezgyQcLhfuswtkoRCr+kxxwqkaTYHMxCJ1xm7_avw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] clk: qcom: apss-ipq-pll: add support for IPQ8074
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657544259; x=1689080259;
+  h=from:to:cc:subject:date:message-id;
+  bh=N1Au1sCNeLEVzE5yuJiy6D1CMqGqOEhc0JaB3fgl/XE=;
+  b=sDiKyS7AYiYlKi5iudkdb0ePSbL0Af3IPoiOwohelsW1ZjbREA4aH3fS
+   pwQecMjP8qVbLMnwLj3c2nqZHqKk8KDSSCqiUTnTy7UpA1sMO/tX5GWQ4
+   /KuUh1S7eH3f42bLUdTWTa87ji6MxP2LtZh9WQ2oLa7YCwHoyaeMPdex1
+   Y=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 05:57:38 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 05:57:37 -0700
+X-QCInternal: smtphost
+Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Jul 2022 18:27:08 +0530
+Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
+        id B9AAD3E38; Mon, 11 Jul 2022 18:27:06 +0530 (IST)
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
+        bjorn.andersson@linaro.org, quic_aravindh@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
+Subject: [PATCH v6 00/10] Add PSR support for eDP
+Date:   Mon, 11 Jul 2022 18:26:54 +0530
+Message-Id: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 15:55, Robert Marko <robimarko@gmail.com> wrote:
->
-> On Mon, 11 Jul 2022 at 14:51, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
-> > >
-> > > Add support for IPQ8074 since it uses the same PLL setup, however it does
-> > > not require the Alpha PLL to be reconfigured.
-> > >
-> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > ---
-> > >  drivers/clk/qcom/apss-ipq-pll.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
-> > > index bef7899ad0d6..acfb3ec4f142 100644
-> > > --- a/drivers/clk/qcom/apss-ipq-pll.c
-> > > +++ b/drivers/clk/qcom/apss-ipq-pll.c
-> > > @@ -55,6 +55,7 @@ static const struct regmap_config ipq_pll_regmap_config = {
-> > >  static int apss_ipq_pll_probe(struct platform_device *pdev)
-> > >  {
-> > >         struct device *dev = &pdev->dev;
-> > > +       struct device_node *node = dev->of_node;
-> > >         struct regmap *regmap;
-> > >         void __iomem *base;
-> > >         int ret;
-> > > @@ -67,7 +68,8 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
-> > >         if (IS_ERR(regmap))
-> > >                 return PTR_ERR(regmap);
-> > >
-> > > -       clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
-> > > +       if (of_device_is_compatible(node, "qcom,ipq6018-a53pll"))
-> > > +               clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
-> >
-> > I'd suggest having the 8074 config here too. It seems logical to me to
-> > make sure that the pll is configured correctly.
->
-> Hi,
->
-> I have reworked the driver to use match data so it can be easily provided,
-> However, I dont have it as the downstream QCA kernel does not
-> reconfigure the PLL, unlike IPQ6018.
-> I can probably read the registers from a running board and provide that?
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-Yes, please try that.
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
->
-> Regards,
-> Robert
-> >
-> > >
-> > >         ret = devm_clk_register_regmap(dev, &ipq_pll.clkr);
-> > >         if (ret)
-> > > @@ -79,6 +81,7 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
-> > >
-> > >  static const struct of_device_id apss_ipq_pll_match_table[] = {
-> > >         { .compatible = "qcom,ipq6018-a53pll" },
-> > > +       { .compatible = "qcom,ipq8074-a53pll" },
-> > >         { }
-> > >  };
-> > >  MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
-> > > --
-> > > 2.36.1
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - Return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
 
+Changes in v5:
+  - Move the mode_valid changes into a different patch.
+  - Complete psr_op_comp only when isr is set.
+  - Move the DP atomic callback changes to a different patch.
+  - Get crtc from drm connector state crtc.
+  - Move to separate patch for check for crtc state enable while
+reserving resources.
 
+Changes in v6:
+  - Remove crtc from dpu_encoder_virt struct.
+  - fix crtc check during vblank toggle crtc.
+  - Misc changes. 
+
+Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+
+Vinod Polimera (10):
+  drm/msm/disp/dpu: clear dpu_assign_crtc and get crtc from connector
+    state instead of dpu_enc
+  drm: add helper functions to retrieve old and new crtc
+  drm/msm/dp: use atomic callbacks for DP bridge ops
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/msm/dp: use the eDP bridge ops to validate eDP modes
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: add psr support for panel bridge callbacks
+  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+    release shared resources
+
+ drivers/gpu/drm/bridge/panel.c              |  68 ++++++++--
+ drivers/gpu/drm/drm_atomic.c                |  60 +++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  17 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  56 +++++----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |   8 --
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c            |  73 +++++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c         |  31 +++--
+ drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c             | 184 ++++++++++++++++++++++++++--
+ drivers/gpu/drm/msm/dp/dp_drm.h             |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
+ drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h             |  27 ++++
+ include/drm/drm_atomic.h                    |   7 ++
+ 19 files changed, 631 insertions(+), 65 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.7.4
+

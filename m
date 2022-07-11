@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53E156FA6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4405756FDC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiGKJRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S230123AbiGKKAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiGKJRB (ORCPT
+        with ESMTP id S234211AbiGKJ7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:17:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D02542AF7;
-        Mon, 11 Jul 2022 02:11:11 -0700 (PDT)
+        Mon, 11 Jul 2022 05:59:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAA7B6290;
+        Mon, 11 Jul 2022 02:27:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A7ACB80E5E;
-        Mon, 11 Jul 2022 09:11:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9C03C34115;
-        Mon, 11 Jul 2022 09:11:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B477ECE1268;
+        Mon, 11 Jul 2022 09:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E774C34115;
+        Mon, 11 Jul 2022 09:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530669;
-        bh=7+wQWifZoehsBLdojVlQMAj1oNFB+5tvGwcAx1N7vNc=;
+        s=korg; t=1657531650;
+        bh=73Uh7vu2OsPbWICEJYHjM7Eli153prRiBAG3rtQxm8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gAe//7fERabEjaNlEPcwMhqGqxB6t0gGlX6Xsyno2u9QW74aCl8bSTERLRljmV7wl
-         09D8KLwRLliFsq/+/VWnATwv/oSYDBlN6zcjxP7OSy45BPLQDU0VnJSWD/NkMjGBYx
-         2sN3GotkS9fbWUn5LjGR8gBpSOCDeCM2QbSoIBVk=
+        b=r8svoC5bvpKyqWRQ47p0LXKJKTdNaA3PEnsjKhDpg7rdD+syy0T08eixgbRdBbE7v
+         Be9m8oIwukF5Y2jBQfvZT0l6076zy6oCzfDAkQAbLMWq77o269ras3bgBWEWvsGEqu
+         yBv5Z4c8oWXO6ITuP+Wtii4kjqqhC6CdYtwW9YY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.4 36/38] dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
-Date:   Mon, 11 Jul 2022 11:07:18 +0200
-Message-Id: <20220711090539.789841287@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 183/230] arm64: dts: qcom: sdm845: use dispcc AHB clock for mdss node
+Date:   Mon, 11 Jul 2022 11:07:19 +0200
+Message-Id: <20220711090609.301392757@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit 3770d92bd5237d686e49da7b2fb86f53ee6ed259 upstream.
+[ Upstream commit 3ba500dee327e0261e728edec8a4f2f563d2760c ]
 
-It seems that it is valid to have less than the requested number of
-descriptors. But what is not valid and leads to subsequent errors is to
-have zero descriptors. In that case, abort the probing.
+It was noticed that on sdm845 after an MDSS suspend/resume cycle the
+driver can not read HW_REV registers properly (they will return 0
+instead). Chaning the "iface" clock from <&gcc GCC_DISP_AHB_CLK> to
+<&dispcc DISP_CC_MDSS_AHB_CLK> fixes the issue.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220526135111.1470926-1-michael@walle.cc
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 08c2a076d18f ("arm64: dts: qcom: sdm845: Add dpu to sdm845 dts file")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220531124735.1165582-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/at_xdmac.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1848,6 +1848,11 @@ static int at_xdmac_alloc_chan_resources
- 	for (i = 0; i < init_nr_desc_per_channel; i++) {
- 		desc = at_xdmac_alloc_desc(chan, GFP_ATOMIC);
- 		if (!desc) {
-+			if (i == 0) {
-+				dev_warn(chan2dev(chan),
-+					 "can't allocate any descriptors\n");
-+				return -EIO;
-+			}
- 			dev_warn(chan2dev(chan),
- 				"only %d descriptors have been allocated\n", i);
- 			break;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index d20eacfc1017..ea7a272d267a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -4147,7 +4147,7 @@
+ 
+ 			power-domains = <&dispcc MDSS_GDSC>;
+ 
+-			clocks = <&gcc GCC_DISP_AHB_CLK>,
++			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+ 				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+ 			clock-names = "iface", "core";
+ 
+-- 
+2.35.1
+
 
 

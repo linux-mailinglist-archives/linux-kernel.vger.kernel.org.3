@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ACA570BDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E62B570BDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiGKUcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S229899AbiGKUdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiGKUcb (ORCPT
+        with ESMTP id S229470AbiGKUdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:32:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B00E28053C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 13:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657571518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MaqOIGg6xgZBfAmnDVAtLCB8oPOY5LSspAi0WrEqOzs=;
-        b=FMqGAEyS7C49ycMA7J9KcKwqCo4MajNnS5YvZGNsOVXcpD/W2fg1AlR7S3+ga6PtVh9whG
-        1Of8l2/owdTZWjaUOCqbttGkK3W+uQ6ZjIicLc9w/Ss7+v1X21pM4POfU+f0sPxx2LAFvI
-        xqvtSUDhxBY9M2nhNczQpybXDfsSJOE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-PwhzJposNP--KzvI3NNIaw-1; Mon, 11 Jul 2022 16:31:52 -0400
-X-MC-Unique: PwhzJposNP--KzvI3NNIaw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CC1E2803025;
-        Mon, 11 Jul 2022 20:31:52 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 529DCC15D58;
-        Mon, 11 Jul 2022 20:31:52 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 26BKVqfE005700;
-        Mon, 11 Jul 2022 16:31:52 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 26BKVqBw005696;
-        Mon, 11 Jul 2022 16:31:52 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 11 Jul 2022 16:31:52 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Mike Snitzer <msnitzer@redhat.com>
-cc:     agk@redhat.com, dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: [PATCH 4/4] dm-writecache: count the number of blocks discarded,
- not the number of discard bios
-In-Reply-To: <alpine.LRH.2.02.2207111627260.5249@file01.intranet.prod.int.rdu2.redhat.com>
-Message-ID: <alpine.LRH.2.02.2207111631360.5249@file01.intranet.prod.int.rdu2.redhat.com>
-References: <20220706093146.1961598-1-yukuai1@huaweicloud.com> <alpine.LRH.2.02.2207111627260.5249@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Mon, 11 Jul 2022 16:33:50 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1905D33404;
+        Mon, 11 Jul 2022 13:33:49 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31cac89d8d6so61444227b3.2;
+        Mon, 11 Jul 2022 13:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=847p17DesiUPrAbTrGt+da4YJYmyj4ybBvLUVEuSIjY=;
+        b=J4WttHlaqvEgBfuXBOlq7Cn8H1LHHBEHnfD+usVNNf3XdpUKSGcz8IGIC0CH1Yfmol
+         kUpd0qMrcglCv7BVwhQ7brGk96fa5ovV5b6TzmWIVXjV4xgrpuznHRCgtQRSzXPr7E/J
+         OUS2TYH8ALc8D31qvjCclWzRy4E5MwvPQSsMuUve8EGSRLKpr6FS7ilsuaz2fPNiMnjg
+         FJrsIi8Yuu1Etq+XLcVJ0li4S7B1wVbV1xnFvRZhlWo4rS4foOG3zIEb5Xi1OzBdOI6s
+         Ksz0exapPlOZnUdUZ4jrnGSIvV/1pTKOzmXtNiZs/w3LY3lPGrlG7HVFdyUzmuOpLkDF
+         G5nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=847p17DesiUPrAbTrGt+da4YJYmyj4ybBvLUVEuSIjY=;
+        b=bY3/IWI/zLkJFl5xNRR1pweqAi544ETzwKyP25tAIQRS/lahDl6xH6m4Iht8ghY5FI
+         8RL3ZQLwuiCMGTeaAB05hms4/ToATwrLOLnh+g5B7qoq5lnDKjvN2HZYQdois1JEiRjA
+         ptA7IdeABzUuXqSwjOjBDcGA4RwKzBvivh+ElnV9wRWL6ljE5plN6WPjJbrIsKLbnQYT
+         3INexnYuzEVCSGfilINBPrLd8V1J1lfM66BXscbjmNCwDT7Ec18ZI19ZXNoP2/RVcaNq
+         BAyJ2vs6+NLHuuTJhM9AH4ArXskt25878Y4n20hNCG9WaZ5DiEZE9Xa//f6hvu44ZlY9
+         gOWg==
+X-Gm-Message-State: AJIora/eqMjjlWign45HJ79ABw/CqY7Vu+sIv87xF2CKbyr7ajOefMFD
+        f2iyE7O78U1vtiUjnSLeqXPieQv+URvOKRJRbiQ=
+X-Google-Smtp-Source: AGRyM1soa/b5CVtvIJwCZk3wxZrzaUqyUaH+jrfMwcncwn0dl8Hm8H2RvISAWcx5pab5/XocLBsGF/kqMjj8c3nfY18=
+X-Received: by 2002:a81:4bd7:0:b0:31c:91da:5a20 with SMTP id
+ y206-20020a814bd7000000b0031c91da5a20mr23140384ywa.131.1657571628325; Mon, 11
+ Jul 2022 13:33:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220711192113.3522664-1-horatiu.vultur@microchip.com>
+ <20220711192113.3522664-3-horatiu.vultur@microchip.com> <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
+ <20220711202646.om65vrksyifvkfkw@soft-dev3-1.localhost> <CAHp75VeJgUFdFgBpG5avmKCn-CGNOJ6wZAhc0a4f2MHfLbvXmA@mail.gmail.com>
+In-Reply-To: <CAHp75VeJgUFdFgBpG5avmKCn-CGNOJ6wZAhc0a4f2MHfLbvXmA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Jul 2022 22:33:11 +0200
+Message-ID: <CAHp75VdTUqP+Ho2cmeMiOwNtu_HhOMoo3cCUQ27vdPftcJ-xUA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] pinctrl: ocelot: Fix pincfg
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kavyasree.kotagiri@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Michael Walle <michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change dm-writecache, so that it counts the number of blocks discarded
-instead of the number of discard bios. Make it consistent with the read
-and write statistics counters that were changed to count the number of
-blocks instead of bios.
+On Mon, Jul 11, 2022 at 10:29 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Mon, Jul 11, 2022 at 10:23 PM Horatiu Vultur
+> <horatiu.vultur@microchip.com> wrote:
+> >
+> > The 07/11/2022 21:51, Andy Shevchenko wrote:
+> > >
+> > > On Mon, Jul 11, 2022 at 9:17 PM Horatiu Vultur
+> > > <horatiu.vultur@microchip.com> wrote:
+> > > >
+> > > > The blamed commit changed to use regmaps instead of __iomem. But it
+> > > > didn't update the register offsets to be at word offset, so it uses byte
+> > > > offset.
+> > > > Another issue with the same commit is that it has a limit of 32 registers
+> > > > which is incorrect. The sparx5 has 64 while lan966x has 77.
+> > >
+> > > ...
+> > >
+> > > > -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+> > > > +static struct regmap *ocelot_pinctrl_create_pincfg(struct ocelot_pinctrl *info,
+> > > > +                                                  struct platform_device *pdev)
+> > >
+> > > const?
+> > >
+> > > And I would leave pdev to be the first parameter, if there are no
+> > > other functions that have them like this.
+> >
+> > I will do that in the next version.
+> > Just for my understanding/knowledge why is this desire to have const or
+> > to keep the const?
+>
+> For non-POD types it's a good coding practice to reduce surface of
+> attack, if any (the data will be located in the pages with RO flag
+> set, and attempt to write will give you a page fault or other
+> exception, it depends on architecture).
+> Also a common sense, if you don't change data (which is actually
+> initial configuration or so), then why shouldn't you use const?
+> Note, in cases when it's not initial data, but runtime stuff (like
+> really run time), const is obviously either can't or not needed to be
+> used.
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+One more specifically for drivers (related to the first item above),
+it allows one to scope the point of failure in case of wrong
+configuration comes in. The device might misbehave badly because of
+some garbage somewhere. Also, the driver won't write data to that
+area, which is just a good preventive programming practice (but this I
+already implied by the second item above).
 
-Index: linux-2.6/drivers/md/dm-writecache.c
-===================================================================
---- linux-2.6.orig/drivers/md/dm-writecache.c
-+++ linux-2.6/drivers/md/dm-writecache.c
-@@ -1514,7 +1514,7 @@ static enum wc_map_op writecache_map_flu
- 
- static enum wc_map_op writecache_map_discard(struct dm_writecache *wc, struct bio *bio)
- {
--	wc->stats.discards++;
-+	wc->stats.discards += bio->bi_iter.bi_size >> wc->block_size_bits;
- 
- 	if (writecache_has_error(wc))
- 		return WC_MAP_ERROR;
-Index: linux-2.6/Documentation/admin-guide/device-mapper/writecache.rst
-===================================================================
---- linux-2.6.orig/Documentation/admin-guide/device-mapper/writecache.rst
-+++ linux-2.6/Documentation/admin-guide/device-mapper/writecache.rst
-@@ -87,7 +87,7 @@ Status:
- 11. the number of write blocks that are allocated in the cache
- 12. the number of write requests that are blocked on the freelist
- 13. the number of flush requests
--14. the number of discard requests
-+14. the number of discarded blocks
- 
- Messages:
- 	flush
 
+-- 
+With Best Regards,
+Andy Shevchenko

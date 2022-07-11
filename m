@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D7056F9FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2FF56FB4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiGKJL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S232471AbiGKJ2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiGKJKq (ORCPT
+        with ESMTP id S232373AbiGKJ2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:10:46 -0400
+        Mon, 11 Jul 2022 05:28:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D6A101D8;
-        Mon, 11 Jul 2022 02:08:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D187065D4A;
+        Mon, 11 Jul 2022 02:15:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B906AB80E5E;
-        Mon, 11 Jul 2022 09:08:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18CE5C34115;
-        Mon, 11 Jul 2022 09:08:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1895EB80CEF;
+        Mon, 11 Jul 2022 09:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D89C34115;
+        Mon, 11 Jul 2022 09:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530522;
-        bh=D1fw9SBEdLLiGz2v/bCqCLfzabITJcsw3FvtzFYsETM=;
+        s=korg; t=1657530946;
+        bh=W8/U7RwBnc4bjGCMnrC47ATNXOlB1KpgtdGMePTGKuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjHDHAbuiUjIYJs2XhkYxW9Neee7pry257w9eP35rKUQ4+VA6PsxlHG+sUmfF/sgw
-         /Qi7mFgsTalxV3EiV9hTNqTEuW2xNMOH+kZ6xsEc0vTsQMUV877+DQHfV8VgGqsycq
-         1c5YhKb4mAtrLhqYW5WFF5lL3UEJLsLIPMpi3NNE=
+        b=JeC3ZXeqQS3jLUSVS+3rZarJzq5xz50vvvapDFMKlMjAW7vRtQrkzOF6bQv1v8OsT
+         H1e78waiISvdu5EsCocoei3gi68dL+zMeFuB2SzLAQsq5CDRQmHdtuye7WOn9nImDT
+         c+9JYvmkvRjikv9s12FFkmPBVZf0WNxqbc4V9TC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Norbert Slusarek <nslusarek@gmx.net>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 03/31] can: bcm: use call_rcu() instead of costly synchronize_rcu()
+        stable@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        David Howells <dhowells@redhat.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Jeff Layton <jlayton@kernel.org>
+Subject: [PATCH 5.18 042/112] fscache: Fix if condition in fscache_wait_on_volume_collision()
 Date:   Mon, 11 Jul 2022 11:06:42 +0200
-Message-Id: <20220711090537.946973884@linuxfoundation.org>
+Message-Id: <20220711090550.767202252@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,97 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Yue Hu <huyue2@coolpad.com>
 
-commit f1b4e32aca0811aa011c76e5d6cf2fa19224b386 upstream.
+commit bf17455b9cbd4b10bf30d39c047307e1d774fb1a upstream.
 
-In commit d5f9023fa61e ("can: bcm: delay release of struct bcm_op
-after synchronize_rcu()") Thadeu Lima de Souza Cascardo introduced two
-synchronize_rcu() calls in bcm_release() (only once at socket close)
-and in bcm_delete_rx_op() (called on removal of each single bcm_op).
+After waiting for the volume to complete the acquisition with timeout,
+the if condition under which potential volume collision occurs should be
+acquire the volume is still pending rather than not pending so that we
+will continue to wait until the pending flag is cleared. Also, use the
+existing test pending wrapper directly instead of test_bit().
 
-Unfortunately this slow removal of the bcm_op's affects user space
-applications like cansniffer where the modification of a filter
-removes 2048 bcm_op's which blocks the cansniffer application for
-40(!) seconds.
-
-In commit 181d4447905d ("can: gw: use call_rcu() instead of costly
-synchronize_rcu()") Eric Dumazet replaced the synchronize_rcu() calls
-with several call_rcu()'s to safely remove the data structures after
-the removal of CAN ID subscriptions with can_rx_unregister() calls.
-
-This patch adopts Erics approach for the can-bcm which should be
-applicable since the removal of tasklet_kill() in bcm_remove_op() and
-the introduction of the HRTIMER_MODE_SOFT timer handling in Linux 5.4.
-
-Fixes: d5f9023fa61e ("can: bcm: delay release of struct bcm_op after synchronize_rcu()") # >= 5.4
-Link: https://lore.kernel.org/all/20220520183239.19111-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Norbert Slusarek <nslusarek@gmx.net>
-Cc: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 62ab63352350 ("fscache: Implement volume registration")
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Reviewed-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Link: https://listman.redhat.com/archives/linux-cachefs/2022-May/006918.html
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/bcm.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ fs/fscache/volume.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -99,6 +99,7 @@ static inline u64 get_u64(const struct c
- 
- struct bcm_op {
- 	struct list_head list;
-+	struct rcu_head rcu;
- 	int ifindex;
- 	canid_t can_id;
- 	u32 flags;
-@@ -717,10 +718,9 @@ static struct bcm_op *bcm_find_op(struct
- 	return NULL;
- }
- 
--static void bcm_remove_op(struct bcm_op *op)
-+static void bcm_free_op_rcu(struct rcu_head *rcu_head)
+--- a/fs/fscache/volume.c
++++ b/fs/fscache/volume.c
+@@ -143,7 +143,7 @@ static void fscache_wait_on_volume_colli
  {
--	hrtimer_cancel(&op->timer);
--	hrtimer_cancel(&op->thrtimer);
-+	struct bcm_op *op = container_of(rcu_head, struct bcm_op, rcu);
+ 	wait_var_event_timeout(&candidate->flags,
+ 			       !fscache_is_acquire_pending(candidate), 20 * HZ);
+-	if (!fscache_is_acquire_pending(candidate)) {
++	if (fscache_is_acquire_pending(candidate)) {
+ 		pr_notice("Potential volume collision new=%08x old=%08x",
+ 			  candidate->debug_id, collidee_debug_id);
+ 		fscache_stat(&fscache_n_volumes_collision);
+@@ -182,7 +182,7 @@ static bool fscache_hash_volume(struct f
+ 	hlist_bl_add_head(&candidate->hash_link, h);
+ 	hlist_bl_unlock(h);
  
- 	if ((op->frames) && (op->frames != &op->sframe))
- 		kfree(op->frames);
-@@ -731,6 +731,14 @@ static void bcm_remove_op(struct bcm_op
- 	kfree(op);
- }
+-	if (test_bit(FSCACHE_VOLUME_ACQUIRE_PENDING, &candidate->flags))
++	if (fscache_is_acquire_pending(candidate))
+ 		fscache_wait_on_volume_collision(candidate, collidee_debug_id);
+ 	return true;
  
-+static void bcm_remove_op(struct bcm_op *op)
-+{
-+	hrtimer_cancel(&op->timer);
-+	hrtimer_cancel(&op->thrtimer);
-+
-+	call_rcu(&op->rcu, bcm_free_op_rcu);
-+}
-+
- static void bcm_rx_unreg(struct net_device *dev, struct bcm_op *op)
- {
- 	if (op->rx_reg_dev == dev) {
-@@ -756,6 +764,9 @@ static int bcm_delete_rx_op(struct list_
- 		if ((op->can_id == mh->can_id) && (op->ifindex == ifindex) &&
- 		    (op->flags & CAN_FD_FRAME) == (mh->flags & CAN_FD_FRAME)) {
- 
-+			/* disable automatic timer on frame reception */
-+			op->flags |= RX_NO_AUTOTIMER;
-+
- 			/*
- 			 * Don't care if we're bound or not (due to netdev
- 			 * problems) can_rx_unregister() is always a save
-@@ -784,7 +795,6 @@ static int bcm_delete_rx_op(struct list_
- 						  bcm_rx_handler, op);
- 
- 			list_del(&op->list);
--			synchronize_rcu();
- 			bcm_remove_op(op);
- 			return 1; /* done */
- 		}
 
 

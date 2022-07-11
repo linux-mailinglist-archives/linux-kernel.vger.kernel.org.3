@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96C9570AF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5534D570AF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiGKTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 15:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S231698AbiGKTwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 15:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGKTv7 (ORCPT
+        with ESMTP id S230287AbiGKTwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 15:51:59 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AC63F32B;
-        Mon, 11 Jul 2022 12:51:58 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31c9b70c382so60250907b3.6;
-        Mon, 11 Jul 2022 12:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0bcHAJ8pPu9Z1dzwWU277Taf7IekpIK9rBLhRh5jWmg=;
-        b=DvGAa0zK7HF46aB4MyzxMuUILtwCScFPzDzgP0it6UdyIbOGLVY1S2FdA0PbJoxiSh
-         ze6DBRZBRKGCq2YdUjM3FasdOPTNoVygliP/fQlVRM+HUZWWAcXF9whSngETrgb+JsZX
-         smYRS+jbDrcjrtcY2KenTHhKqZ/l4hWD1SCpANjcyh/jxQRXcxFeFKqPegE/lowVciTW
-         atcfvW5Z7NyTJZIMNue0bOYSJxQV0xSzJ1SdgIgy8qD1qwHuTJGLbiJs/H7dj44+KQXc
-         abg0OjJ/DfKuArHGSQ6KotSx3y6b6RQ4b5LpczBpdy0igiE+bEAfai2vdd4Z5hKJrMSr
-         vy/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0bcHAJ8pPu9Z1dzwWU277Taf7IekpIK9rBLhRh5jWmg=;
-        b=xmDQBB/w7hzr8lOLC8uG4zKg40MomKkr60nDiS9Ni+Lb76O92D5yJ+WJ6qgudbYnka
-         pft0l1nU9FsWntVIjfCL9HFJHxsJy6kbm93YT7JO2UOuWdRbAEg0+7DpeVDyQSvdLY3m
-         QaftgkIGoR/2eSoOgCFI43+ghxlF4TuV4ajQh2agSlqdiiQ4M4vnBB6MNOW6Og7dlPQX
-         lZpOtXZbh3zWPclVu8daRJYBPdAaoMhnjwsbDoBWZBpsyXd7TPgA4satxNCskCIC1CHi
-         S7XiXoBjWa7pQtIh9eS+TmrZ7J9XodenVnh4eMryUTM1qZQ7OfKyx1kZo8PRpsbVRccE
-         vZQw==
-X-Gm-Message-State: AJIora+NIbyyP3AKCPT1h+SKLYefScclGyZpdQsgv+QVg6hEVENL55BZ
-        HZfvTpfzG9ighKCTTv9cQoj/Voh/pKJu6zjiCMs=
-X-Google-Smtp-Source: AGRyM1s0GzjIdZ6IxH9DtjsXq8yr4icmAJGSU8Bb25HOYqSIg36WSyORcHFgw/kXzLiERs5OY7g032OZCQBohYrVvnM=
-X-Received: by 2002:a81:8397:0:b0:31c:8a02:3f6d with SMTP id
- t145-20020a818397000000b0031c8a023f6dmr21537093ywf.486.1657569117610; Mon, 11
- Jul 2022 12:51:57 -0700 (PDT)
+        Mon, 11 Jul 2022 15:52:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C3F5720D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657569161; x=1689105161;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nKybO9tUqV03SxQ/6tRzuuqCi0DJgi6UGQRUw0ZICrw=;
+  b=i/iafMzFIaLIsRGXPats/R2zAHWtuevoYvFyOwBri29qStFrNC2/6JfY
+   fSxf+co9qWhLDlcXLyBfRRP8kr+HdXUhbkhHX0KtwlT/3Z/dD0iXZg0mB
+   x/HXNjHdrmhJMhh/ALe78akQLjciFCBhDVOmSIkIjqFZdAmSfnf14PQ+p
+   1Q+JkpKlctNchkxM8WDHVIQZiDiLrZZac34TU+jfZOCVEDTyQ8PjzM12G
+   ln8k8a1UBjE51EaC+s4Ee64SJHKjzHf61SKxZr85+Y7Tnoz54p8UB4Z55
+   B/HFefaaW33IVlQzQzJWRNnv+PSzzvZf5ruLbZAhqiiVrYIKEGqVakOAf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="371063783"
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="371063783"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 12:52:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
+   d="scan'208";a="622214183"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 11 Jul 2022 12:52:40 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oAzSR-0001Ah-OG;
+        Mon, 11 Jul 2022 19:52:39 +0000
+Date:   Tue, 12 Jul 2022 03:52:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/build] BUILD SUCCESS
+ 8b979924b9f9e945a095a2f622b39b9fd9f65acb
+Message-ID: <62cc7f7e.jaIxoQ58GWsnQOBY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220711192113.3522664-1-horatiu.vultur@microchip.com> <20220711192113.3522664-3-horatiu.vultur@microchip.com>
-In-Reply-To: <20220711192113.3522664-3-horatiu.vultur@microchip.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Jul 2022 21:51:20 +0200
-Message-ID: <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] pinctrl: ocelot: Fix pincfg
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kavyasree.kotagiri@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Michael Walle <michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 9:17 PM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
->
-> The blamed commit changed to use regmaps instead of __iomem. But it
-> didn't update the register offsets to be at word offset, so it uses byte
-> offset.
-> Another issue with the same commit is that it has a limit of 32 registers
-> which is incorrect. The sparx5 has 64 while lan966x has 77.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/build
+branch HEAD: 8b979924b9f9e945a095a2f622b39b9fd9f65acb  x86/build: Remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
 
-...
+elapsed time: 765m
 
-> -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
-> +static struct regmap *ocelot_pinctrl_create_pincfg(struct ocelot_pinctrl *info,
-> +                                                  struct platform_device *pdev)
+configs tested: 3
+configs skipped: 12
 
-const?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-And I would leave pdev to be the first parameter, if there are no
-other functions that have them like this.
+gcc tested configs:
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

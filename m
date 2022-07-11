@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8967956D409
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE4E56D40D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiGKErk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S229754AbiGKErq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiGKErU (ORCPT
+        with ESMTP id S229724AbiGKErV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:47:20 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C24660CF
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:19 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id f12so3014886qka.12
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:19 -0700 (PDT)
+        Mon, 11 Jul 2022 00:47:21 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D5760CF
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:20 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id b2so523872qkk.3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=B/+c9EiF9/emkxKF8PsBaxLM8SipI/6o4W1rL+EK1gU=;
-        b=iVll2f8cJnDQrGa2Adcc428xEcVhjWAHcHz4MptpjtUXN7lnsvBHVwYUVrBL+lVxLp
-         ioI+6DQiSLkhH7bxizmPtsxWX7bvNq831jjdTTXwQIVp3Gu0DUlB9T2vROndZgAKoXL5
-         KWbHUK7jZwULl4dCf4FKU73XgOCwp+O+R3oyUtqlR3/gDoJHO7dO1Ltrt9xNNnsdkEBB
-         fSc1GvTvvOMUsm8GbZQoYn84G5kFElABalMDwTMQ7fbodhc0Fw0FvKM33tZPXslgciQh
-         6ImKhDSs51frYo79Nhj+NWrFBTTnRkKMRfSRxnjPI6Zshs/KYkUXPMKbUBwubKSejp6G
-         bxDg==
+        bh=INvUTYu9dairWJ/J98PrS85b9AuqfQWZLIuDZmgdIug=;
+        b=YaKowwfmmEcDAw8khKC4VVPEog0/+uU4H8CAy1j0FgHqSR9O2QCzFFd5uEf13z5XIo
+         3m2TviDjmax/vb/ztAi1FDg4qTC9UlSaU0JCb+1vwxCBCHttWpfh2xCsgiRlMHywfw2j
+         DWQrvlrQ151l7EhmHKdqTjPwSh6xCBm7C0S2cSX7aXY/nHMEFPB68ry2YhV0QhYXsq38
+         hdyBAduJHpfO0SpgX7Ro53uItDqvLACOrCGWAjmH1EmgPSo9g1afCaNTqbzleXBUqqjQ
+         VL0nEIsG36DdajEO67uDK6aKGLYfDENjGJGR3tyUC0laHGfzYc+0pJ1IiKmHCCNb3skV
+         KYtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B/+c9EiF9/emkxKF8PsBaxLM8SipI/6o4W1rL+EK1gU=;
-        b=GMzV5YGdZiFV/f6gIhPfymvhBeaIbuM6NCyBxUNSN7PXqZpcEs+cAgZUu8wN42ScOl
-         /ZK7WlsTUv5X/r+4QzGGiPrtNUtRr6VMM4BZsFe09Gti9lddanoBhzX43//HUxTivPwt
-         YAVm5ZEs0mVbdVEiCYpeuFc4OR/fF4TVUfK3HIdkS28IxsgmsWxaGvKp6o47qyKIz1KS
-         8UHAJiz59uHQ53VPPvXCiMM5UuTvzWgd5S+oeZ8Rk1hUet8GRuIvi5TDbVe1Qx38TXZ0
-         lLI/m1sYax5DAbTl8DOS7/JSvIIzvjQG5oQBftPe4l43LeFMxQifu6S0V3Vi7JEB97M9
-         T//w==
-X-Gm-Message-State: AJIora+JJf71jEcwgpiAXPrR3y2H6WVdI7mr0fiq0UhEmw9aryZRqt2y
-        UKEPbY9y9BEOChluyquHmu+JmbtlFhV9MA==
-X-Google-Smtp-Source: AGRyM1vy5C+3k70AnLvG6MY8AfNBJisfqJNqFquWqUWry5GwuGQPhe1VcOtAB3dWWWo5lY1U5QWQ5g==
-X-Received: by 2002:a05:620a:8018:b0:6af:1fee:41ac with SMTP id ee24-20020a05620a801800b006af1fee41acmr10105424qkb.476.1657514838130;
-        Sun, 10 Jul 2022 21:47:18 -0700 (PDT)
+        bh=INvUTYu9dairWJ/J98PrS85b9AuqfQWZLIuDZmgdIug=;
+        b=feER4AHfHTNCEtLzg02VzEIejk4fT35ezjitp+RyJZCM3VU80W3tdB61hPX2hoOYMK
+         nuw+cbg88Ygh1znyr+2eqgPseKG+ZsIJTl2+nWhDxmuKYmMUS0h0wqE3/yMvh4pTmVl1
+         at2ITSpSjuSVmBo6ulzXyl5t4Ycha7HpvgXGsrSJzewEiWbfJ/jjphx65vKNkEiAME4b
+         gJANak1pCVMTT0Jr0URUgPYQ3GzmQdlaiWi2uV7dhY8xtTziVaFGIuG4Go8GcARrx00M
+         MhJwCe4qIfWQDe0ch9mZKtT6qWmfr6kgzRGZl5Mjn3N43boUmLxiPsLAFd23hKP46oif
+         Z5HQ==
+X-Gm-Message-State: AJIora/UyBBBqQy/GCVULBeABuwyrNQDEh49WAIImzNLC3810LuxPjmP
+        8vKRKwEP4Fjw+q2GQoA+uEMm8LofbQvq3A==
+X-Google-Smtp-Source: AGRyM1uhBWsCKUmq9aDc1F1otrdss8jIzZiRjquWwL0Ewzd4Viza65MG7AjCdPZ5uUgUUBzgQluFxA==
+X-Received: by 2002:a05:620a:1e5:b0:6b5:55d5:5ce3 with SMTP id x5-20020a05620a01e500b006b555d55ce3mr10018006qkn.640.1657514839230;
+        Sun, 10 Jul 2022 21:47:19 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:a22e:180:f963:1eff])
-        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006b555509398sm5455586qkn.136.2022.07.10.21.47.17
+        by smtp.gmail.com with ESMTPSA id f20-20020a05620a409400b006b5840f3eefsm2475579qko.130.2022.07.10.21.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 21:47:17 -0700 (PDT)
+        Sun, 10 Jul 2022 21:47:18 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -64,9 +64,9 @@ To:     linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 4/5] cpumask: add cpumask_nth_{,and,andnot}
-Date:   Sun, 10 Jul 2022 21:47:10 -0700
-Message-Id: <20220711044711.466822-5-yury.norov@gmail.com>
+Subject: [PATCH 5/5] lib/nodemask: inline next_node_in() and node_random()
+Date:   Sun, 10 Jul 2022 21:47:11 -0700
+Message-Id: <20220711044711.466822-6-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220711044711.466822-1-yury.norov@gmail.com>
 References: <20220711044711.466822-1-yury.norov@gmail.com>
@@ -82,109 +82,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add cpumask_nth_{,and,andnot} as wrappers around corresponding
-find functions, and use it in cpumask_local_spread().
+The functions are pretty thin wrappers around find_bit engine, and
+keeping them in c-file prevents compiler from small_const_nbits()
+optimization, which must take place for all systems with MAX_NUMNODES
+less than BITS_PER_LONG (default is 16 for me).
+
+Moving them in header file doesn't blow up the kernel size:
+add/remove: 1/2 grow/shrink: 9/5 up/down: 968/-88 (880)
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/cpumask.h | 44 +++++++++++++++++++++++++++++++++++++++++
- lib/cpumask.c           | 26 +++++++++++-------------
- 2 files changed, 55 insertions(+), 15 deletions(-)
+ MAINTAINERS              |  1 -
+ include/linux/nodemask.h | 27 ++++++++++++++++++++++-----
+ lib/Makefile             |  2 +-
+ lib/nodemask.c           | 30 ------------------------------
+ 4 files changed, 23 insertions(+), 37 deletions(-)
+ delete mode 100644 lib/nodemask.c
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 80627362c774..86c7e6c6e473 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -379,6 +379,50 @@ unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
- }
- #endif /* SMP */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7c0b8f28aa25..19c8d0ef1177 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3540,7 +3540,6 @@ F:	lib/bitmap.c
+ F:	lib/cpumask.c
+ F:	lib/find_bit.c
+ F:	lib/find_bit_benchmark.c
+-F:	lib/nodemask.c
+ F:	lib/test_bitmap.c
+ F:	tools/include/linux/bitmap.h
+ F:	tools/include/linux/find.h
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index 0f233b76c9ce..48ebe4007955 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -94,6 +94,7 @@
+ #include <linux/bitmap.h>
+ #include <linux/minmax.h>
+ #include <linux/numa.h>
++#include <linux/random.h>
  
-+/**
-+ * cpumask_nth - get the first cpu in a cpumask
-+ * @srcp: the cpumask pointer
-+ * @cpu: the N'th cpu to find, starting from 0
-+ *
-+ * Returns >= nr_cpu_ids if such cpu doesn't exist.
-+ */
-+static inline unsigned int cpumask_nth(unsigned int cpu, const struct cpumask *srcp)
+ typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
+ extern nodemask_t _unused_nodemask_arg_;
+@@ -276,7 +277,14 @@ static inline unsigned int __next_node(int n, const nodemask_t *srcp)
+  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
+  */
+ #define next_node_in(n, src) __next_node_in((n), &(src))
+-unsigned int __next_node_in(int node, const nodemask_t *srcp);
++static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
 +{
-+	return find_nth_bit(cpumask_bits(srcp), nr_cpumask_bits, cpumask_check(cpu));
-+}
++	unsigned int ret = __next_node(node, srcp);
 +
-+/**
-+ * cpumask_nth_and - get the first cpu in 2 cpumasks
-+ * @srcp1: the cpumask pointer
-+ * @srcp2: the cpumask pointer
-+ * @cpu: the N'th cpu to find, starting from 0
-+ *
-+ * Returns >= nr_cpu_ids if such cpu doesn't exist.
-+ */
-+static inline
-+unsigned int cpumask_nth_and(unsigned int cpu, const struct cpumask *srcp1,
-+							const struct cpumask *srcp2)
-+{
-+	return find_nth_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2),
-+				nr_cpumask_bits, cpumask_check(cpu));
++	if (ret == MAX_NUMNODES)
++		ret = __first_node(srcp);
++	return ret;
 +}
-+
-+/**
-+ * cpumask_nth_andnot - get the first cpu set in 1st cpumask, and clear in 2nd.
-+ * @srcp1: the cpumask pointer
-+ * @srcp2: the cpumask pointer
-+ * @cpu: the N'th cpu to find, starting from 0
-+ *
-+ * Returns >= nr_cpu_ids if such cpu doesn't exist.
-+ */
-+static inline
-+unsigned int cpumask_nth_andnot(unsigned int cpu, const struct cpumask *srcp1,
-+							const struct cpumask *srcp2)
-+{
-+	return find_nth_andnot_bit(cpumask_bits(srcp1), cpumask_bits(srcp2),
-+				nr_cpumask_bits, cpumask_check(cpu));
-+}
-+
- #define CPU_BITS_NONE						\
- {								\
- 	[0 ... BITS_TO_LONGS(NR_CPUS)-1] = 0UL			\
-diff --git a/lib/cpumask.c b/lib/cpumask.c
-index f0ae119be8c4..062821dbf65f 100644
---- a/lib/cpumask.c
-+++ b/lib/cpumask.c
-@@ -128,23 +128,19 @@ unsigned int cpumask_local_spread(unsigned int i, int node)
- 	i %= num_online_cpus();
  
- 	if (node == NUMA_NO_NODE) {
--		for_each_cpu(cpu, cpu_online_mask)
--			if (i-- == 0)
--				return cpu;
-+		cpu = cpumask_nth(i, cpu_online_mask);
-+		if (cpu < nr_cpu_ids)
-+			return cpu;
- 	} else {
- 		/* NUMA first. */
--		for_each_cpu_and(cpu, cpumask_of_node(node), cpu_online_mask)
--			if (i-- == 0)
--				return cpu;
--
--		for_each_cpu(cpu, cpu_online_mask) {
--			/* Skip NUMA nodes, done above. */
--			if (cpumask_test_cpu(cpu, cpumask_of_node(node)))
--				continue;
--
--			if (i-- == 0)
--				return cpu;
--		}
-+		cpu = cpumask_nth_and(i, cpu_online_mask, cpumask_of_node(node));
-+		if (cpu < nr_cpu_ids)
-+			return cpu;
+ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
+ {
+@@ -493,14 +501,23 @@ static inline int num_node_state(enum node_states state)
+ 
+ #endif
+ 
++/*
++ * Return the bit number of a random bit set in the nodemask.
++ * (returns NUMA_NO_NODE if nodemask is empty)
++ */
++static inline int node_random(const nodemask_t *maskp)
++{
+ #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
+-extern int node_random(const nodemask_t *maskp);
++	int w, bit = NUMA_NO_NODE;
 +
-+		/* Skip NUMA nodes, done above. */
-+		cpu = cpumask_nth_andnot(i, cpu_online_mask, cpumask_of_node(node));
-+		if (cpu < nr_cpu_ids)
-+			return cpu;
- 	}
- 	BUG();
- }
++	w = nodes_weight(*maskp);
++	if (w)
++		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
++	return bit;
+ #else
+-static inline int node_random(const nodemask_t *mask)
+-{
+ 	return 0;
+-}
+ #endif
++}
+ 
+ #define node_online_map 	node_states[N_ONLINE]
+ #define node_possible_map 	node_states[N_POSSIBLE]
+diff --git a/lib/Makefile b/lib/Makefile
+index f99bf61f8bbc..731cea0342d1 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -33,7 +33,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 flex_proportions.o ratelimit.o show_mem.o \
+ 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+ 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+-	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
++	 nmi_backtrace.o win_minmax.o memcat_p.o \
+ 	 buildid.o
+ 
+ lib-$(CONFIG_PRINTK) += dump_stack.o
+diff --git a/lib/nodemask.c b/lib/nodemask.c
+deleted file mode 100644
+index 7dad4ce8ff59..000000000000
+--- a/lib/nodemask.c
++++ /dev/null
+@@ -1,30 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <linux/nodemask.h>
+-#include <linux/module.h>
+-#include <linux/random.h>
+-
+-unsigned int __next_node_in(int node, const nodemask_t *srcp)
+-{
+-	unsigned int ret = __next_node(node, srcp);
+-
+-	if (ret == MAX_NUMNODES)
+-		ret = __first_node(srcp);
+-	return ret;
+-}
+-EXPORT_SYMBOL(__next_node_in);
+-
+-#ifdef CONFIG_NUMA
+-/*
+- * Return the bit number of a random bit set in the nodemask.
+- * (returns NUMA_NO_NODE if nodemask is empty)
+- */
+-int node_random(const nodemask_t *maskp)
+-{
+-	int w, bit = NUMA_NO_NODE;
+-
+-	w = nodes_weight(*maskp);
+-	if (w)
+-		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
+-	return bit;
+-}
+-#endif
 -- 
 2.34.1
 

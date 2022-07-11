@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7A75703E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216B1570400
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiGKNMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S230079AbiGKNQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGKNMB (ORCPT
+        with ESMTP id S229966AbiGKNQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:12:01 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34CB32BA0;
-        Mon, 11 Jul 2022 06:12:00 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31bf3656517so47981867b3.12;
-        Mon, 11 Jul 2022 06:12:00 -0700 (PDT)
+        Mon, 11 Jul 2022 09:16:24 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25953F335;
+        Mon, 11 Jul 2022 06:16:21 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10c0119dd16so6631543fac.6;
+        Mon, 11 Jul 2022 06:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=y3hw6BXOnJJA/B1/8AwjpeEcbM/baHIGT7ARnD85NyI=;
-        b=FTNuNnuyAredYrCdM1vdFkJJ9TPqQx1ss4cqvqqdCFeVHvpnxDoHoC28BnaL48nRu8
-         Tc+JdV9RyjJ6v9Z1myqifaTO6D2fF/fDkGoMoOb40Ckwukd2Gg0A/RN+d4ghchQJy5ut
-         OwnLWPbPlgAEDdpMi9aruCC369vpKzY1dDauw00hImuvXrJQikU99isR7DvgduL7ZJrP
-         eMQ7TL0yNhykAqwsT0mmju2Uzpq/xKU9bLDC1J2i1u6roN5FatUDIoJQSs6YS5u7QZt7
-         VzG7zH2ZkDk83YSNaJAhSh3Bpn492Yvpr8OoM1+vdo//zYvISlgSpSvx1fcH/I5cZX8G
-         wviQ==
+        bh=d3w648xSE+rcJKTvNdyXERDjQNCJb3jaHtEQzPygYFY=;
+        b=iX4ZaqHu72v0xD/rGJLs5RBCMorkup6Zpug1ld/RhBeeDwfdDOCfSAx1pqWGit6Pw0
+         1NSiKv14MkaDc/07mOyOkc52bTekpdbzZjsUp0+aTTADL/NXO/mRXtuymP0l6iJDSQP4
+         fdaEqFQAQAGMBpUus7TqrV+DjIfzYjK/0ckyFONHPI44EuwvgTfD/x74fveRRbauW+Ts
+         dK63F0Fy4xh5lbmLcsUWqAgV7Scdfq4B28UNu1no6KQEgq3n5ul80Ce090W9rrOHzpcH
+         69YwITAaobSKbZDKcMO6QXqQY0biuv0y2Gu/1eyT/ZzugX9BAiH4eEcuGfW+IImSwfR0
+         Q8ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y3hw6BXOnJJA/B1/8AwjpeEcbM/baHIGT7ARnD85NyI=;
-        b=Wi6360BS29VWvmeLKgJluCKbYyoQ6TCnXi0zJLjsjO9kThxOjsqzg3T9sX0dhLIO6j
-         2RBDRCFv/FOa2hk+/fAb8/FUbMSq5WKlvQepHZOOlo9/e4pMH6e6YYI1D59WtHW5nXK0
-         NGm2O+ybAroii9UeCaccy6qasRgFmCZTqTdpCx+9LM7ILpOTsU0sjCmU+4WOvUBSY5lZ
-         V7u0HoOlP3boLpdN1dumBnFA87ZKFKftnmJfcWvDegHT3JBWa8pSyWA/Y8pltkAPPRmc
-         dGn+Pnrw8gk/Tg43XwZNB69lOT5EKwdvBTxifgCyBAbcuj7afhYXKKJdzzJWTBauSn07
-         z3Nw==
-X-Gm-Message-State: AJIora+YRGPQCm9MiJcr4jDaGFZuawn7P4FD8oVEEpT7vz4326sdTN0v
-        +AIX05L+HCbOMiRXwRmWkIOIK23Yv9ry/PE8c8s=
-X-Google-Smtp-Source: AGRyM1sgyS2IJO19mUsfBZR68VCEihUvKKYyQDmJj51tYgf9YH5TX1xKQ8I3vt1IfCU6XnO1fK2F1u0IoSv+MhIIjZc=
-X-Received: by 2002:a81:108f:0:b0:31c:d7ae:9ff1 with SMTP id
- 137-20020a81108f000000b0031cd7ae9ff1mr18769185ywq.18.1657545119722; Mon, 11
- Jul 2022 06:11:59 -0700 (PDT)
+        bh=d3w648xSE+rcJKTvNdyXERDjQNCJb3jaHtEQzPygYFY=;
+        b=Xj5iq8ecbotCgfceFakb9lPhQSDZ+YBb0542OtjD/Fcwf3UFgIzkjAc6l+eU0Y8Jlz
+         ismxOSh9h+K+gCgu0Id13IhYufZt3iVzxhN0AIBIxeUIQbhG9FKExHvJSZe5IzpYvTox
+         tNuajjtSUVy6XKSfF2vLWxw4+3wkid4aLNT3ZV1I4rad2Fk4uYkx6pI4A07u+2wtew8q
+         AltnBCrL0rsvf8QvQNZRuj+Y1Kl7PUCxo4SHhS6AxgTwT8Fx0I2rMXgq5aPFn+93ny06
+         +eBqJwS1PWihmMIw4cjrNZ7OmYER5GgYOzweH7Df9tm6LD+ttPYu+zYWlmxxxwRx836L
+         Tnhg==
+X-Gm-Message-State: AJIora+rMxLN1P5ufetwazgw3DeKfknZzWZPYsCs+HtzDPBu0YEHNdgU
+        RUOU7IFVwG/Rd108l8er1p7A9mcP/LK5odLtyUU=
+X-Google-Smtp-Source: AGRyM1vHUwMfzsAuyFfGAtwXj66YEBhPY1/EKrt5hIUCsTBDWoEbm6tCw4w8T9poyEk0kDAxCe/USrdGcFWqXAfF4Cs=
+X-Received: by 2002:a05:6870:c093:b0:10c:4f6f:d0ab with SMTP id
+ c19-20020a056870c09300b0010c4f6fd0abmr7254468oad.194.1657545380424; Mon, 11
+ Jul 2022 06:16:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220710091708.15967-1-ang.iglesiasg@gmail.com>
- <YssdPch7dVmRWDbB@smile.fi.intel.com> <046a29a5191c53813ce9477000b07c21ca5699fc.camel@gmail.com>
-In-Reply-To: <046a29a5191c53813ce9477000b07c21ca5699fc.camel@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Jul 2022 15:11:23 +0200
-Message-ID: <CAHp75VfYVVPuNmukq9Civ2vHu_au5Nj-MPm5JXDHiTaMXpyzUQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] iio: pressure: bmp280: simplify driver
- initialization logic
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220711005319.2619-1-liubo03@inspur.com>
+In-Reply-To: <20220711005319.2619-1-liubo03@inspur.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Mon, 11 Jul 2022 16:16:08 +0300
+Message-ID: <CAHNKnsSoBMDC4P1nFXT+FGDyGYKSinLyhPDCNZ3RdQgkNA9f3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] net: wwan: call ida_free when device_register fails
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,22 +71,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:46 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
-> On dom, 2022-07-10 at 21:41 +0300, Andy Shevchenko wrote:
+Hello Bo,
 
-> > It seems you somehow managed to send patches separately from email
-> > perspective.
-> > Make sure you pass parameter --thread to `git format-patch`, so it will create
-> > a proper chain of emails.
+generally the patch looks good to me, but it needs improvement in the
+wwan_create_dev() part. Sorry that I missed this part in the previous
+review. See details below.
+
+On Mon, Jul 11, 2022 at 3:54 AM Bo Liu <liubo03@inspur.com> wrote:
 >
-> How should I proceed to fix this issue? Should I wait for more feedback and send
-> a new revision of the patches, now as a proper mail chain? Or should I resend
-> current patchset as a chain? I don't want to spam the mailing list more due to
-> my inexperience contributing.
+> when device_register() fails, we should call ida_free().
+>
+> Fixes: 9a44c1cc6388 ("net: Add a WWAN subsystem")
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  Changes from v1:
+>  -Add a Fixes tag pointing to the commit
+>
+>  drivers/net/wwan/wwan_core.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+> index b8c7843730ed..0f653e320b2b 100644
+> --- a/drivers/net/wwan/wwan_core.c
+> +++ b/drivers/net/wwan/wwan_core.c
+> @@ -228,8 +228,7 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
+>         wwandev = kzalloc(sizeof(*wwandev), GFP_KERNEL);
+>         if (!wwandev) {
+>                 wwandev = ERR_PTR(-ENOMEM);
+> -               ida_free(&wwan_dev_ids, id);
+> -               goto done_unlock;
+> +               goto error_free_ida;
+>         }
+>
+>         wwandev->dev.parent = parent;
+> @@ -242,7 +241,7 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
+>         if (err) {
+>                 put_device(&wwandev->dev);
+>                 wwandev = ERR_PTR(err);
+> -               goto done_unlock;
+> +               goto error_free_ida;
+>         }
+>
+>  #ifdef CONFIG_WWAN_DEBUGFS
+> @@ -251,6 +250,8 @@ static struct wwan_device *wwan_create_dev(struct device *parent)
+>                                            wwan_debugfs_dir);
+>  #endif
+>
+> +error_free_ida:
+> +       ida_free(&wwan_dev_ids, id);
+>  done_unlock:
+>         mutex_unlock(&wwan_register_lock);
+>
 
-Since there are already comments and more might come, wait a few days
-and send a new version.
+This hunk misses the case of a successful device registration. After
+patching, the code will look like this:
+
+    err = device_register(&wwandev->dev);
+    if (err) {
+        put_device(&wwandev->dev);
+        wwandev = ERR_PTR(err);
+        goto error_free_ida;
+    }
+
+    wwandev->debugfs_dir =
+debugfs_create_dir(kobject_name(&wwandev->dev.kobj),
+wwan_debugfs_dir);
+
+error_free_ida:
+    ida_free(&wwan_dev_ids, id);
+done_unlock:
+    mutex_unlock(&wwan_register_lock);
+
+As you can see, even if the device will be registered successfully,
+the allocated id will be unconditionally freed.
+
+The easiest way to fix this is to add "goto done_unlock" right after
+the debugfs directory creation call. So the hunk should become
+something like this:
+
+@@ -249,8 +248,12 @@ static struct wwan_device *wwan_create_dev(struct
+device *parent)
+        wwandev->debugfs_dir =
+                     debugfs_create_dir(kobject_name(&wwandev->dev.kobj),
+                                           wwan_debugfs_dir);
+ #endif
+
++      goto done_unlock;
++
++error_free_ida:
++       ida_free(&wwan_dev_ids, id);
+ done_unlock:
+        mutex_unlock(&wwan_register_lock);
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Sergey

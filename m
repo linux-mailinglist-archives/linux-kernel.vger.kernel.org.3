@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E5F56D3AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187F556D3B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiGKEPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
+        id S229636AbiGKEQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGKEPp (ORCPT
+        with ESMTP id S229570AbiGKEQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:15:45 -0400
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29143186D2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:15:43 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 26B4DEo2018381;
-        Mon, 11 Jul 2022 13:13:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 26B4DEo2018381
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1657512796;
-        bh=vmX1TC8ghk+PT+J3sj3bSAW/EXY5N/4tuqRl5sau7A8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=wSpV+zS3BNvT9eILdgxeZwNZEsbNKj2YqU5O4MFo5HtKNxL1aWkWn0o5WxpELiKeW
-         DUXtBoJPlFyGBumxTI1vhWLALhgG7ksjmqvm1Oj3b9b6UpPrJt8I7W+4ElkoCyyrSu
-         SBrhXj02KJlu2Pb5JIQMWKIZID67Lj9hIWJxMAIrDhgVNdWU6yjE0MLTBmxNPgD3pF
-         80lJZlfNCF4yNdHseJx8HJ3oBr7NTaovcnKqISbSKYMMBh4dqB6uuYhGuRo9s90SA0
-         lqUZENX7mDuiM23ANBHOekU92g+h2KZmwLY/Qf4Dyj7jW4RkXLSyrIl0K9JKes7De2
-         F1jtEKBZr9eYw==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] x86/build: remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
-Date:   Mon, 11 Jul 2022 13:12:47 +0900
-Message-Id: <20220711041247.119357-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 11 Jul 2022 00:16:37 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C1186D2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:16:36 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u14so4825218ljh.2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yokId+kL1XsUAJzXfOxjC7q00UnhVLg0heLq8/CzKNw=;
+        b=ZY8Gy+sHLWu8VAYvzEiXRTHT9tuRT7ejaosM1Xw4V3DhLlBw2Af9kiToQwGhgSSWL6
+         KuXNkb0i3epNJ4ykkbpocsM2Tan54xsOLECsVy2OIHB0MDmQHKuyDj4aNVG50X/8xmKQ
+         4000H37gmgWprf0OeYatZ3qFHZy2hCNnwnbgrE3CgKaSoVtEfndEHG8fCC89B+ZYZ6a+
+         n+7N82T0k1KIxO5Jf2nqYhS60Dvv08dfX1qs5sGDQU/HCLb48UqkPYxTkhG2IYioaaBf
+         R04SIhoyxkSEoa+ocCn+6DXlkhYEpailJNgOLnS+Vi9bm+K4Bxz9aN8chbL6rkgeH9zz
+         mV1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yokId+kL1XsUAJzXfOxjC7q00UnhVLg0heLq8/CzKNw=;
+        b=ESTgdSbSMV8r9eOE67ptk2w8Hl+vn5rb5kwBFbixhj2n9yFOlpON8UOZ3WyNgpBNhe
+         4WtlAvtTrKRdvcB5aX4DlDPFoN7nQH9uVFVEyYCIYA3edPb2WSdmRvoaTk+g4U04UBR4
+         +5CMv/Y48Dcq75VbMQq4vxurPUzuKXWlcl0Osi6Wr6MXVltTY2bIb2SQaKEiNqQ0fDiE
+         c8Bqqt89euhWhxYcmD60YSCM3nXdShifNtpdJRutz1pCNOZlQ38LPoWak2o6iSGiNx9w
+         qK8bQDSNfsnUtjrQcplPMgslb5Oqup1IaPQcjekiYZesVTtPAda8bUntbpmc9KqLAc9z
+         +WqA==
+X-Gm-Message-State: AJIora+lFsxwlsY7Md/fPgcukxSShjlSZG0hNhtjsHwKvU48EOp5XCpl
+        Fba7734KkiC16mVVUUpTwdlnCuGRBAIUOIhK55pbZw==
+X-Google-Smtp-Source: AGRyM1uUtWel5vfmZuYAD/gK8/SRSmF+9d0yqlY3PAatmC3KkMAUQM6LA2GseceFzLwP7ShlE/BzxDKqkbySrYf7Apw=
+X-Received: by 2002:a2e:9dd3:0:b0:25d:4ee0:f55d with SMTP id
+ x19-20020a2e9dd3000000b0025d4ee0f55dmr8524188ljj.266.1657512994653; Sun, 10
+ Jul 2022 21:16:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220710151105.687193-1-apatel@ventanamicro.com>
+In-Reply-To: <20220710151105.687193-1-apatel@ventanamicro.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Mon, 11 Jul 2022 09:46:19 +0530
+Message-ID: <CAK9=C2UjJ8eqXSBzsbpdUn9E=5_6Zp2NAnHts_FaGpxWxN-Krw@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: Fix SRCU deadlock caused by kvm_riscv_check_vcpu_requests()
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Anup Patel <anup@brainfault.org>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3ad38ceb2769 ("x86/mm: Remove CONFIG_DEBUG_NX_TEST")
-removed arch/x86/kernel/test_nx.c
+On Sun, Jul 10, 2022 at 8:41 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> The kvm_riscv_check_vcpu_requests() is called with SRCU read lock held
+> and for KVM_REQ_SLEEP request it will block the VCPU without releasing
+> SRCU read lock. This causes KVM ioctls (such as KVM_IOEVENTFD) from
+> other VCPUs of the same Guest/VM to hang/deadlock if there is any
+> synchronize_srcu() or synchronize_srcu_expedited() in the path.
+>
+> To fix the above in kvm_riscv_check_vcpu_requests(), we should do SRCU
+> read unlock before blocking the VCPU and do SRCU read lock after VCPU
+> wakeup.
+>
+> Fixes: cce69aff689e ("RISC-V: KVM: Implement VCPU interrupts and
+> requests handling")
+> Reported-by: Bin Meng <bmeng.cn@gmail.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Thanks everyone for providing Tested-by and Reviewed-by.
 
-I sent the same patch in April:
-https://lore.kernel.org/all/CAK7LNATRH4sHYrZk556Sjo4nP=S3qD170OMCZ21n0TEz7gyDUw@mail.gmail.com/
+I have queued this patch for 5.19-rcX fixes.
 
-It did not make into the mainline.
-I pinged the X86 maintainers, but none of them responded.
+Regards,
+Anup
 
-
-
- arch/x86/kernel/Makefile | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 4c8b6ae802ac..a20a5ebfacd7 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -34,8 +34,6 @@ KASAN_SANITIZE_sev.o					:= n
- # by several compilation units. To be safe, disable all instrumentation.
- KCSAN_SANITIZE := n
- 
--OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
--
- # If instrumentation of this dir is enabled, boot hangs during first second.
- # Probably could be more selective here, but note that files related to irqs,
- # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
--- 
-2.32.0
-
+> ---
+>  arch/riscv/kvm/vcpu.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index b7a433c54d0f..5d271b597613 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -845,9 +845,11 @@ static void kvm_riscv_check_vcpu_requests(struct kvm_vcpu *vcpu)
+>
+>         if (kvm_request_pending(vcpu)) {
+>                 if (kvm_check_request(KVM_REQ_SLEEP, vcpu)) {
+> +                       kvm_vcpu_srcu_read_unlock(vcpu);
+>                         rcuwait_wait_event(wait,
+>                                 (!vcpu->arch.power_off) && (!vcpu->arch.pause),
+>                                 TASK_INTERRUPTIBLE);
+> +                       kvm_vcpu_srcu_read_lock(vcpu);
+>
+>                         if (vcpu->arch.power_off || vcpu->arch.pause) {
+>                                 /*
+> --
+> 2.34.1
+>

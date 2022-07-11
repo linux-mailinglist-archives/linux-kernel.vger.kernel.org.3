@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985D85708F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA245708F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiGKRht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 13:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S230027AbiGKRiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 13:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiGKRhr (ORCPT
+        with ESMTP id S229660AbiGKRim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 13:37:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C519C28E03
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657561065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3x/88KGK1UOzm+kY543e59CSvKjhxLTSG5BFabMAIIE=;
-        b=KVm666gHuXYHKAr3JMhbcQbdLkZJb99LZNfB7A/mWXFxaSIrngblW4FVXYWxCNPdgDTKIe
-        wcFMwdTgZVrlz90grAGGvhuXVinej49WS76VFKSEHLDURuC2zLrgFc6j2qzDmxPknvgIXc
-        vh2I6aQL7jVKzdPZlDtegJIR88DEgxw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-uAY0fSbiORqtjpkRYzv9EQ-1; Mon, 11 Jul 2022 13:37:43 -0400
-X-MC-Unique: uAY0fSbiORqtjpkRYzv9EQ-1
-Received: by mail-wm1-f69.google.com with SMTP id t25-20020a7bc3d9000000b003a2ea772bd2so429390wmj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:37:43 -0700 (PDT)
+        Mon, 11 Jul 2022 13:38:42 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE106569
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:38:40 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id r9so7058704ljp.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zQj9SC9LzzvOt29hChR7g7E0Lc7GX6Hy0KSuYXInGDE=;
+        b=f1TD0jljg/IWNfS09CDUXQ2i7XWpMyLwkZYu7JGV2gzXGa2UVnksceghpfLAy/UQC6
+         AJ114v+NuGgFr7knklFFpz6ynue3oYETOfOm5R//r6OUBA7BELjDo5Wk3tlBs1wDb689
+         O923kaNhZUnHvdp476b/5NIklZmtWSPbnYd5u8VIpENd0nwqvMtIwuwospT0OuzRRfFD
+         yM6dWj90pCYNGJRTDqlWUJo/Nu7KHUnfX0Dzn2Dj1MmFEQJwptkhESV4I+WFwN4PRbMS
+         wIrYu07ulUmuOQggE46pqVEpy2So5a9Vp6pUcKuZ+2W31x+Drf9hUABiGkzYO5DfaZ+C
+         dJVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3x/88KGK1UOzm+kY543e59CSvKjhxLTSG5BFabMAIIE=;
-        b=CpJdK/Mw9hrm1Hk7FfIIbMpxljShoqU9ES6PclPpS8JhGEKpTiRuz+LPL7rys5dpdW
-         b/RoQwbfepWA9euyB6y4aqLG2NXGxKst02H0ebUMnz3QVdZ8OUEortUUYTgSPThPL+Og
-         TvGiiqEEV2f070bCLxPr1kTUTNybrd1g4ma8WfWriik7zxgsornmVjshuAfw4ejD6MAj
-         JXHfHS58B0Qdv5/c3XcBw+YpW3I6D1b253pF9HwtwPzngG8FvjMipiNF8bsQbFnFjc9i
-         SiU18+ImBJPmHQsTllQOMkbTCv4jh7lA6klZ2Mgqp1pzyG2vOoZk4mYuCGvtyemK7S8H
-         exhA==
-X-Gm-Message-State: AJIora+JqBBCRNo49SU5nJaL2fys5g5TDinHgI/DGhwZsJD/VIN5WPV4
-        HEakmYxdx780WI2ichSwZDQt7Sb5hpuU/7n1g8OVRq3dRo06Qx9ie2V9Kz9eD3v2dz/y19lwwMX
-        KjjUiU+p702uhpIuuBFT/c1w=
-X-Received: by 2002:a1c:7918:0:b0:3a2:e17c:cbfe with SMTP id l24-20020a1c7918000000b003a2e17ccbfemr14203661wme.80.1657561062719;
-        Mon, 11 Jul 2022 10:37:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uC0kDstnO9C7PIIOHozWvLwOLpD+F/HXFSC5vHo/Y3VyAh8b+xOf2gwEgriKQpkkjzmP31Bw==
-X-Received: by 2002:a1c:7918:0:b0:3a2:e17c:cbfe with SMTP id l24-20020a1c7918000000b003a2e17ccbfemr14203643wme.80.1657561062500;
-        Mon, 11 Jul 2022 10:37:42 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b0021d9d13bf6csm4844219wrs.97.2022.07.11.10.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 10:37:41 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:37:40 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] modules: Fix corruption of /proc/kallsyms
-Message-ID: <20220711173740.6zyo7an5rbhxf4nq@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220701094403.3044-1-adrian.hunter@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zQj9SC9LzzvOt29hChR7g7E0Lc7GX6Hy0KSuYXInGDE=;
+        b=OwNFnGOEOzq7RRnHRcdppk9CbjGHu0jQyqQ7Kwz9Qsg2JPUOvV+cwg1eJHwRlhLG2+
+         lk+mPyrdY4M8FiTouV2/3bv2RCERVp13LOuzxENjL6Daylq5P9SytmHSjWckv+a5fhDD
+         dBxmMCaFK8ad5Bn5zZtu3PJap4XdliMcbonP9ce/5W22wlRWV18jwtJnYpV9kRIqdgGV
+         gjD+sqEekASw/6GIQUWicYFm0Nov/GXhhn4MiBGTeIMz2nHYqgG8k7eUAPYhasf8wBRw
+         E4uFGTLG6qpWOIiiDHzfTri2+1sVvfbde75BA6JHLE2iOZWNXCn3ZDHzDvGdaaXIv1wT
+         dopg==
+X-Gm-Message-State: AJIora+Tok/+qy72VklFc/ooa2igLdNjgs5Jx7Dvsr3aZPfjbOI3A7u/
+        IbgDYd/TSRO1FT5ngFtbSJEUL7eTdYiUt6hwd6kczg==
+X-Google-Smtp-Source: AGRyM1u0DMzzoMdO3sxBWXuOKwxHG4cPlzL7241+1VuSMH0ejamZIb6JycU8Bwpc+nLYSgUU3vNiSrLtM6MHva0BM8c=
+X-Received: by 2002:a05:651c:2104:b0:25b:f4ed:db93 with SMTP id
+ a4-20020a05651c210400b0025bf4eddb93mr10900111ljq.295.1657561118922; Mon, 11
+ Jul 2022 10:38:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220701094403.3044-1-adrian.hunter@intel.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220710071117.446112-1-maskray@google.com>
+In-Reply-To: <20220710071117.446112-1-maskray@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 11 Jul 2022 10:38:25 -0700
+Message-ID: <CAKwvOd=yTio6SDG-dEEB1W3nQdZZNk67x_DsiedmC5t95P8XNg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Pass -mno-relax only on lld < 15.0.0
+To:     Fangrui Song <maskray@google.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Khem Raj <raj.khem@gmail.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-07-01 12:44 +0300, Adrian Hunter wrote:
-> The commit 91fb02f31505 ("module: Move kallsyms support into a separate
-> file") changed from using strlcpy() to using strscpy() which created a
-> buffer overflow. That happened because:
->  1) an incorrect value was passed as the buffer length
->  2) strscpy() (unlike strlcpy()) may copy beyond the length of the
->     input string when copying word-by-word.
-> The assumption was that because it was already known that the strings
-> being copied would fit in the space available, it was not necessary
-> to correctly set the buffer length.  strscpy() breaks that assumption
-> because although it will not touch bytes beyond the given buffer length
-> it may write bytes beyond the input string length when writing
-> word-by-word.
-> 
-> The result of the buffer overflow is to corrupt the symbol type
-> information that follows. e.g.
-> 
->  $ sudo cat -v /proc/kallsyms | grep '\^' | head
->  ffffffffc0615000 ^@ rfcomm_session_get  [rfcomm]
->  ffffffffc061c060 ^@ session_list        [rfcomm]
->  ffffffffc06150d0 ^@ rfcomm_send_frame   [rfcomm]
->  ffffffffc0615130 ^@ rfcomm_make_uih     [rfcomm]
->  ffffffffc07ed58d ^@ bnep_exit   [bnep]
->  ffffffffc07ec000 ^@ bnep_rx_control     [bnep]
->  ffffffffc07ec1a0 ^@ bnep_session        [bnep]
->  ffffffffc07e7000 ^@ input_leds_event    [input_leds]
->  ffffffffc07e9000 ^@ input_leds_handler  [input_leds]
->  ffffffffc07e7010 ^@ input_leds_disconnect       [input_leds]
-> 
-> Notably, the null bytes (represented above by ^@) can confuse tools.
-> 
-> Fix by correcting the buffer length.
-> 
-> Fixes: 91fb02f31505 ("module: Move kallsyms support into a separate file")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Sun, Jul 10, 2022 at 12:11 AM Fangrui Song <maskray@google.com> wrote:
+>
+> lld since
+> https://github.com/llvm/llvm-project/commit/6611d58f5bbcbec77262d392e2923e1d680f6985
+> (milestone: 15.0.0) has implemented some RISC-V linker relaxation.
+> -mno-relax is no longer needed in KBUILD_CFLAGS/KBUILD_AFLAGS to
+> suppress R_RISCV_ALIGN which older lld can not handle:
+>
+> ld.lld: error: capability.c:(.fixup+0x0): relocation R_RISCV_ALIGN requires unimplemented linker relaxation; recompile with -mno-relax but the .o is already compiled with -mno-relax
+>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+
+Thanks for implementing relaxation in LLD for RISC-V!
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
->  kernel/module/kallsyms.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  arch/riscv/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 34cf8a598617..7e4ceb2a0981 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -37,6 +37,7 @@ else
+>  endif
+>
+>  ifeq ($(CONFIG_LD_IS_LLD),y)
+> +ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
+>         KBUILD_CFLAGS += -mno-relax
+>         KBUILD_AFLAGS += -mno-relax
+>  ifndef CONFIG_AS_IS_LLVM
+> @@ -44,6 +45,7 @@ ifndef CONFIG_AS_IS_LLVM
+>         KBUILD_AFLAGS += -Wa,-mno-relax
+>  endif
+>  endif
+> +endif
+>
+>  # ISA string setting
+>  riscv-march-$(CONFIG_ARCH_RV32I)       := rv32ima
+> --
+> 2.37.0.144.g8ac04bfd2-goog
+>
+>
 
-Hi Adrian,
 
-Thanks for following up!
-
-
-Kind regards,
 -- 
-Aaron Tomlin
-
+Thanks,
+~Nick Desaulniers

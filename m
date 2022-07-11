@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B431056FB3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD0656FDA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiGKJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        id S234247AbiGKJ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiGKJZa (ORCPT
+        with ESMTP id S234160AbiGKJ6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:25:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190AC3C16B;
-        Mon, 11 Jul 2022 02:15:23 -0700 (PDT)
+        Mon, 11 Jul 2022 05:58:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D858AB4BD9;
+        Mon, 11 Jul 2022 02:27:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E72B61226;
-        Mon, 11 Jul 2022 09:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB432C36AE2;
-        Mon, 11 Jul 2022 09:15:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 03BD6CE126E;
+        Mon, 11 Jul 2022 09:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CA3C34115;
+        Mon, 11 Jul 2022 09:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530922;
-        bh=VPZKuoyCmG6wEttXmpKkWoqkMqKHAQupFqKBA0qKEA4=;
+        s=korg; t=1657531631;
+        bh=G3XdD4ZflwNdqfaY4yjkjFso/enpN8n0LYdk3KU1qK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sOj5P1uzD/2dzj8ii78QzFVk37JHVaPjSjltRFwkgizPqVg4P+uYoPPs8/kEFV6W/
-         TUMICy2xUhLbsT5C37azwGo0g5bZFCQIFhIWSXHV04KGpfVUfXM4VSG7bnl+2PMHyR
-         j/q+eGs7KI0Zgy1C4bov/K8XQwB+F/oPtOrQIhwY=
+        b=OQb3oxKDlGk3BXmyKcfFkk406Dqvl202qd6JJSNFMKndRGIlv3nlMClJhAash5i16
+         b3L8YbTrVL2DaBINa6syD0pY3YL2JJ6JG0sUgHhG8GkkNLSd2o8CxkcxSM4O2eDDf1
+         HKhnW6eOup39kHwvtsh8xJpS2BCnHsTpRn8NyRi8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>
-Subject: [PATCH 5.18 031/112] cxl/mbox: Use __le32 in get,set_lsa mailbox structures
+        stable@vger.kernel.org, Alan Modra <amodra@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 135/230] powerpc/vdso: Fix incorrect CFI in gettimeofday.S
 Date:   Mon, 11 Jul 2022 11:06:31 +0200
-Message-Id: <20220711090550.450548703@linuxfoundation.org>
+Message-Id: <20220711090607.893284695@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +56,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Schofield <alison.schofield@intel.com>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-commit 8a66487506161dbc1d22fd154d2de0244e232040 upstream.
+[ Upstream commit 6d65028eb67dbb7627651adfc460d64196d38bd8 ]
 
-CXL specification defines these as little endian.
+As reported by Alan, the CFI (Call Frame Information) in the VDSO time
+routines is incorrect since commit ce7d8056e38b ("powerpc/vdso: Prepare
+for switching VDSO to generic C implementation.").
 
-Fixes: 60b8f17215de ("cxl/pmem: Translate NVDIMM label commands to CXL label commands")
-Reported-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-Link: https://lore.kernel.org/r/20220225221456.1025635-1-alison.schofield@intel.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+DWARF has a concept called the CFA (Canonical Frame Address), which on
+powerpc is calculated as an offset from the stack pointer (r1). That
+means when the stack pointer is changed there must be a corresponding
+CFI directive to update the calculation of the CFA.
+
+The current code is missing those directives for the changes to r1,
+which prevents gdb from being able to generate a backtrace from inside
+VDSO functions, eg:
+
+  Breakpoint 1, 0x00007ffff7f804dc in __kernel_clock_gettime ()
+  (gdb) bt
+  #0  0x00007ffff7f804dc in __kernel_clock_gettime ()
+  #1  0x00007ffff7d8872c in clock_gettime@@GLIBC_2.17 () from /lib64/libc.so.6
+  #2  0x00007fffffffd960 in ?? ()
+  #3  0x00007ffff7d8872c in clock_gettime@@GLIBC_2.17 () from /lib64/libc.so.6
+  Backtrace stopped: frame did not save the PC
+
+Alan helpfully describes some rules for correctly maintaining the CFI information:
+
+  1) Every adjustment to the current frame address reg (ie. r1) must be
+     described, and exactly at the instruction where r1 changes. Why?
+     Because stack unwinding might want to access previous frames.
+
+  2) If a function changes LR or any non-volatile register, the save
+     location for those regs must be given. The CFI can be at any
+     instruction after the saves up to the point that the reg is
+     changed.
+     (Exception: LR save should be described before a bl. not after)
+
+  3) If asychronous unwind info is needed then restores of LR and
+     non-volatile regs must also be described. The CFI can be at any
+     instruction after the reg is restored up to the point where the
+     save location is (potentially) trashed.
+
+Fix the inability to backtrace by adding CFI directives describing the
+changes to r1, ie. satisfying rule 1.
+
+Also change the information for LR to point to the copy saved on the
+stack, not the value in r0 that will be overwritten by the function
+call.
+
+Finally, add CFI directives describing the save/restore of r2.
+
+With the fix gdb can correctly back trace and navigate up and down the stack:
+
+  Breakpoint 1, 0x00007ffff7f804dc in __kernel_clock_gettime ()
+  (gdb) bt
+  #0  0x00007ffff7f804dc in __kernel_clock_gettime ()
+  #1  0x00007ffff7d8872c in clock_gettime@@GLIBC_2.17 () from /lib64/libc.so.6
+  #2  0x0000000100015b60 in gettime ()
+  #3  0x000000010000c8bc in print_long_format ()
+  #4  0x000000010000d180 in print_current_files ()
+  #5  0x00000001000054ac in main ()
+  (gdb) up
+  #1  0x00007ffff7d8872c in clock_gettime@@GLIBC_2.17 () from /lib64/libc.so.6
+  (gdb)
+  #2  0x0000000100015b60 in gettime ()
+  (gdb)
+  #3  0x000000010000c8bc in print_long_format ()
+  (gdb)
+  #4  0x000000010000d180 in print_current_files ()
+  (gdb)
+  #5  0x00000001000054ac in main ()
+  (gdb)
+  Initial frame selected; you cannot go up.
+  (gdb) down
+  #4  0x000000010000d180 in print_current_files ()
+  (gdb)
+  #3  0x000000010000c8bc in print_long_format ()
+  (gdb)
+  #2  0x0000000100015b60 in gettime ()
+  (gdb)
+  #1  0x00007ffff7d8872c in clock_gettime@@GLIBC_2.17 () from /lib64/libc.so.6
+  (gdb)
+  #0  0x00007ffff7f804dc in __kernel_clock_gettime ()
+  (gdb)
+
+Fixes: ce7d8056e38b ("powerpc/vdso: Prepare for switching VDSO to generic C implementation.")
+Cc: stable@vger.kernel.org # v5.11+
+Reported-by: Alan Modra <amodra@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+Link: https://lore.kernel.org/r/20220502125010.1319370-1-mpe@ellerman.id.au
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/cxlmem.h |    8 ++++----
- drivers/cxl/pmem.c   |    6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ arch/powerpc/kernel/vdso32/gettimeofday.S | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -252,13 +252,13 @@ struct cxl_mbox_identify {
- } __packed;
- 
- struct cxl_mbox_get_lsa {
--	u32 offset;
--	u32 length;
-+	__le32 offset;
-+	__le32 length;
- } __packed;
- 
- struct cxl_mbox_set_lsa {
--	u32 offset;
--	u32 reserved;
-+	__le32 offset;
-+	__le32 reserved;
- 	u8 data[];
- } __packed;
- 
---- a/drivers/cxl/pmem.c
-+++ b/drivers/cxl/pmem.c
-@@ -108,8 +108,8 @@ static int cxl_pmem_get_config_data(stru
- 		return -EINVAL;
- 
- 	get_lsa = (struct cxl_mbox_get_lsa) {
--		.offset = cmd->in_offset,
--		.length = cmd->in_length,
-+		.offset = cpu_to_le32(cmd->in_offset),
-+		.length = cpu_to_le32(cmd->in_length),
- 	};
- 
- 	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_LSA, &get_lsa,
-@@ -139,7 +139,7 @@ static int cxl_pmem_set_config_data(stru
- 		return -ENOMEM;
- 
- 	*set_lsa = (struct cxl_mbox_set_lsa) {
--		.offset = cmd->in_offset,
-+		.offset = cpu_to_le32(cmd->in_offset),
- 	};
- 	memcpy(set_lsa->data, cmd->in_buf, cmd->in_length);
- 
+diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
+index dd2099128b8f..42d40f895c1f 100644
+--- a/arch/powerpc/kernel/vdso32/gettimeofday.S
++++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
+@@ -22,12 +22,15 @@
+ .macro cvdso_call funct call_time=0
+   .cfi_startproc
+ 	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
++  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+ 	mflr		r0
+-  .cfi_register lr, r0
+ 	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
++  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+ 	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
++  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+ #ifdef __powerpc64__
+ 	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
++  .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
+ #endif
+ 	get_datapage	r5
+ 	.ifeq	\call_time
+@@ -39,13 +42,15 @@
+ 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+ #ifdef __powerpc64__
+ 	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
++  .cfi_restore r2
+ #endif
+ 	.ifeq	\call_time
+ 	cmpwi		r3, 0
+ 	.endif
+ 	mtlr		r0
+-  .cfi_restore lr
+ 	addi		r1, r1, 2 * PPC_MIN_STKFRM
++  .cfi_restore lr
++  .cfi_def_cfa_offset 0
+ 	crclr		so
+ 	.ifeq	\call_time
+ 	beqlr+
+-- 
+2.35.1
+
 
 

@@ -2,506 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308CB570AE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE06B570AE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 21:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiGKTnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 15:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S229861AbiGKTnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 15:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiGKTnI (ORCPT
+        with ESMTP id S229918AbiGKTnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 15:43:08 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A11564D4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:43:06 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3137316bb69so59845707b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 12:43:06 -0700 (PDT)
+        Mon, 11 Jul 2022 15:43:35 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701A4299;
+        Mon, 11 Jul 2022 12:43:31 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id dn9so10551068ejc.7;
+        Mon, 11 Jul 2022 12:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9RJBGdJg3iVhm1FhwPL+IxC3gwhMnibPk+Kf1pd8WGU=;
-        b=GReNISz70QJFYt5EywEh0DyiyFZAfWc2ocdjZmRLdJBnUw99R9ivm/8uDczRhLbMI2
-         mrLvU9l16cFlTy16exClJGA14i1IxmSQCJwsz1LRPlvnYvBKbjB+Rek9vxGsQ3GCJj9o
-         VxdpzhIRWiBYqvteNsp2RMciGkgi6ExISJ3sqXh3qHlSZ2B3koVcXQr/OMqqnfv7XGfS
-         eh0kl0vnzq6z8Ns3EATAWlKmyi7wCxGHK8wgjaM5exVFYVm65KV1qc9Cu/LWgnVlsl7T
-         VWx7te48tfVY+AYIk1TQsBd98Ginq8lioWU/gITyXtK0qIyWdzJwW2xytPAcAd+nhxxn
-         /UeQ==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X6YcFOi9vVSWQNUlxBl94IPJJoQTqvk/+3AV7YIEgTo=;
+        b=n7lzLfcDU1qPigH8KYX6Iex/Z9iNnGNY+BBOkopgofe2Uu2HAFkCdrcCzTXcabnyvp
+         SfrMlwZrtaJG+lQu3ykGLdCBBYJyuyXgfuMvf/9gA9aiezAySH8ZDVaswCBb5etx4EYc
+         1dxuqTzgyztY2nMuI4U6SQ9Ry7PQmpOCIZUrzxcUCH9HJ5vEaOhoVYl5UokOica7vl78
+         l3pHOAXp94LqCFVYusfdYONR3dfgWzss74lBL4UZXfowP2mX2Ud13hxqWT+S2FiBkGTL
+         OY1sEGVEFPV/zNX3ltTRJWfgegsJ6cE+pMfTpSSuGMkN9GURouuC7x5ZVYBlqYJ5hb6O
+         chMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9RJBGdJg3iVhm1FhwPL+IxC3gwhMnibPk+Kf1pd8WGU=;
-        b=ZS7rU2BswYj9W1373cdcTggTgt6/MLBfyREbFTrsrqSzGpQ3cf4xZzI2Lu0ilJvaai
-         TyCgfZIoxNBXmoPQM6lKLYCnttqDpslijeendrrmcM3as549+nuzAIi5wP4PrHrprI6H
-         V6D0Sus/wslt372CdCyl3VEG0tNaRxXjKOEyvnPx+6sLbC2L/9KygS3Fu8aMSQJiEiU6
-         X8rCtjT8VH9QVIReG6bW+VGju3+A53UVmsQuvclaVpr8DMgTD+HtTI8ITlh715ptMa1K
-         BMp37yFs1td9Znu7+LNs87mfGpeqpRlik4Ktloi44DITaYEfkA4LAkhTDcRw5eIMSM7r
-         QWuA==
-X-Gm-Message-State: AJIora8MOYoip9Zu+HO8DcljPiUOjqBJ3zNdnSYb0UnJrAtFljRAuTrB
-        TKBPMyPo/pcG0Z9lexuk6c/wLwWhZlqa3DnAKQpG0g==
-X-Google-Smtp-Source: AGRyM1vsO3wbYzUKlAr4wdnwJa3iSdSLV0VClODEhJVHSMuAT9qIv6UelV6GBttO9c/qpzYpN4hyCh4APAkP+NhXlnE=
-X-Received: by 2002:a81:4994:0:b0:31c:d036:d0b1 with SMTP id
- w142-20020a814994000000b0031cd036d0b1mr21533834ywa.255.1657568585904; Mon, 11
- Jul 2022 12:43:05 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X6YcFOi9vVSWQNUlxBl94IPJJoQTqvk/+3AV7YIEgTo=;
+        b=hy9Dbs+of2b5PJHpy9QyIPl/aIj2/VTm1EOVFcEqgLv4NExb0WLOr+rYHv4FEPYx/b
+         lgmWQUCxj+AkzOD6blCfFU95DYrz+lGoXauMWazo/yhf3nAidr4HFMEgEC/hmPPKE9x9
+         aJGnl7j7V+11n21l3Sm6oxb005UhpEjdUL7MDQdA2cPJMNPaChj3qT8kiBB0VwONU+51
+         lkdrh10hSCkk7DWlRvnV6jOw5ERoFC4OY143+v5t49tbGFreCTtkt93uF9m2IU7sClOe
+         shhVntrCs0SVYQv0o8XBEhDiOeOLuPRl+uLyjZCPnE3B+jkgQsPeuqqezJq9V1fXfzhe
+         oMKQ==
+X-Gm-Message-State: AJIora9N4IxmTBuyb3sxNdYGE/8czJ/84kdiC8WVFYIxDieHYywKR3Qs
+        8L2EnC7NT32FjpoiLkoC2wI=
+X-Google-Smtp-Source: AGRyM1tS//FePH9b5wvXMtiy880ZNtdzrpGjjXWqRq/HCz7dmXC7+yormM3Oba95wBNCkq9NdrSSBw==
+X-Received: by 2002:a17:907:3da0:b0:72b:47df:c1d7 with SMTP id he32-20020a1709073da000b0072b47dfc1d7mr10001492ejc.214.1657568609910;
+        Mon, 11 Jul 2022 12:43:29 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a1709063d3200b0072af3c59354sm3015020ejf.146.2022.07.11.12.43.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 12:43:29 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <880aac01-9c78-34f7-8a11-d48179e1635c@redhat.com>
+Date:   Mon, 11 Jul 2022 21:43:27 +0200
 MIME-Version: 1.0
-References: <20220711160519.741990-1-sean.anderson@seco.com> <20220711160519.741990-4-sean.anderson@seco.com>
-In-Reply-To: <20220711160519.741990-4-sean.anderson@seco.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 11 Jul 2022 12:42:29 -0700
-Message-ID: <CAGETcx97ijCpVyOqCfnrDuGh+SahQCC-3QrJta5HOscUkJQdEw@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 3/9] net: pcs: Add helpers for registering
- and finding PCSs
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] MMIO should have more priority then IO
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>, Nadav Amit <namit@vmware.com>
+Cc:     Ajay Kaher <akaher@vmware.com>, Bjorn Helgaas <helgaas@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Srivatsa Bhat <srivatsab@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Anish Swaminathan <anishs@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+References: <1656433761-9163-1-git-send-email-akaher@vmware.com>
+ <20220628180919.GA1850423@bhelgaas>
+ <25F843ED-7EB4-4D00-96CB-7DE1AC886460@vmware.com>
+ <YsgplrrJnk5Ly19z@casper.infradead.org>
+ <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com>
+ <YshvnodeqmJV6uIJ@casper.infradead.org>
+ <1A0FA5B7-39E8-4CAE-90DD-E260937F14E1@vmware.com>
+ <Ysh63kRVGMFJMNfG@casper.infradead.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ysh63kRVGMFJMNfG@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 9:05 AM Sean Anderson <sean.anderson@seco.com> wrote:
->
-> This adds support for getting PCS devices from the device tree. PCS
-> drivers must first register with phylink_register_pcs. After that, MAC
-> drivers may look up their PCS using phylink_get_pcs.
->
-> To prevent the PCS driver from leaving suddenly, we use try_module_get. To
-> provide some ordering during probing/removal, we use device links managed
-> by of_fwnode_add_links. This will reduce the number of probe failures due
-> to deferral. It will not prevent this for non-standard properties (aka
-> pcsphy-handle), but the worst that happens is that we re-probe a few times.
->
-> At the moment there is no support for specifying the interface used to
-> talk to the PCS. The MAC driver is expected to know how to talk to the
-> PCS. This is not a change, but it is perhaps an area for improvement.
->
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> This is adapted from [1], primarily incorporating the changes discussed
-> there.
->
-> [1] https://lore.kernel.org/netdev/9f73bc4f-5f99-95f5-78fa-dac96f9e0146@seco.com/
->
->  MAINTAINERS              |   1 +
->  drivers/net/pcs/Kconfig  |  12 +++
->  drivers/net/pcs/Makefile |   2 +
->  drivers/net/pcs/core.c   | 226 +++++++++++++++++++++++++++++++++++++++
->  drivers/of/property.c    |   2 +
->  include/linux/pcs.h      |  33 ++++++
->  include/linux/phylink.h  |   6 ++
->  7 files changed, 282 insertions(+)
->  create mode 100644 drivers/net/pcs/core.c
->  create mode 100644 include/linux/pcs.h
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ca95b1833b97..3965d49753d3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7450,6 +7450,7 @@ F:        include/linux/*mdio*.h
->  F:     include/linux/mdio/*.h
->  F:     include/linux/mii.h
->  F:     include/linux/of_net.h
-> +F:     include/linux/pcs.h
->  F:     include/linux/phy.h
->  F:     include/linux/phy_fixed.h
->  F:     include/linux/platform_data/mdio-bcm-unimac.h
-> diff --git a/drivers/net/pcs/Kconfig b/drivers/net/pcs/Kconfig
-> index 22ba7b0b476d..fed6264fdf33 100644
-> --- a/drivers/net/pcs/Kconfig
-> +++ b/drivers/net/pcs/Kconfig
-> @@ -5,6 +5,18 @@
->
->  menu "PCS device drivers"
->
-> +config PCS
-> +       bool "PCS subsystem"
-> +       help
-> +         This provides common helper functions for registering and looking up
-> +         Physical Coding Sublayer (PCS) devices. PCS devices translate between
-> +         different interface types. In some use cases, they may either
-> +         translate between different types of Medium-Independent Interfaces
-> +         (MIIs), such as translating GMII to SGMII. This allows using a fast
-> +         serial interface to talk to the phy which translates the MII to the
-> +         Medium-Dependent Interface. Alternatively, they may translate a MII
-> +         directly to an MDI, such as translating GMII to 1000Base-X.
-> +
->  config PCS_XPCS
->         tristate "Synopsys DesignWare XPCS controller"
->         depends on MDIO_DEVICE && MDIO_BUS
-> diff --git a/drivers/net/pcs/Makefile b/drivers/net/pcs/Makefile
-> index 0603d469bd57..1fd21a1619d4 100644
-> --- a/drivers/net/pcs/Makefile
-> +++ b/drivers/net/pcs/Makefile
-> @@ -1,6 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Makefile for Linux PCS drivers
->
-> +obj-$(CONFIG_PCS)              += core.o
-> +
->  pcs_xpcs-$(CONFIG_PCS_XPCS)    := pcs-xpcs.o pcs-xpcs-nxp.o
->
->  obj-$(CONFIG_PCS_XPCS)         += pcs_xpcs.o
-> diff --git a/drivers/net/pcs/core.c b/drivers/net/pcs/core.c
-> new file mode 100644
-> index 000000000000..b39ff1ccdb34
-> --- /dev/null
-> +++ b/drivers/net/pcs/core.c
-> @@ -0,0 +1,226 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Sean Anderson <sean.anderson@seco.com>
-> + */
-> +
-> +#include <linux/fwnode.h>
-> +#include <linux/list.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pcs.h>
-> +#include <linux/phylink.h>
-> +#include <linux/property.h>
-> +
-> +static LIST_HEAD(pcs_devices);
-> +static DEFINE_MUTEX(pcs_mutex);
-> +
-> +/**
-> + * pcs_register() - register a new PCS
-> + * @pcs: the PCS to register
-> + *
-> + * Registers a new PCS which can be automatically attached to a phylink.
-> + *
-> + * Return: 0 on success, or -errno on error
-> + */
-> +int pcs_register(struct phylink_pcs *pcs)
-> +{
-> +       if (!pcs->dev || !pcs->ops)
-> +               return -EINVAL;
-> +       if (!pcs->ops->pcs_an_restart || !pcs->ops->pcs_config ||
-> +           !pcs->ops->pcs_get_state)
-> +               return -EINVAL;
-> +
-> +       INIT_LIST_HEAD(&pcs->list);
-> +       mutex_lock(&pcs_mutex);
-> +       list_add(&pcs->list, &pcs_devices);
-> +       mutex_unlock(&pcs_mutex);
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pcs_register);
-> +
-> +/**
-> + * pcs_unregister() - unregister a PCS
-> + * @pcs: a PCS previously registered with pcs_register()
-> + */
-> +void pcs_unregister(struct phylink_pcs *pcs)
-> +{
-> +       mutex_lock(&pcs_mutex);
-> +       list_del(&pcs->list);
-> +       mutex_unlock(&pcs_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(pcs_unregister);
-> +
-> +static void devm_pcs_release(struct device *dev, void *res)
-> +{
-> +       pcs_unregister(*(struct phylink_pcs **)res);
-> +}
-> +
-> +/**
-> + * devm_pcs_register - resource managed pcs_register()
-> + * @dev: device that is registering this PCS
-> + * @pcs: the PCS to register
-> + *
-> + * Managed pcs_register(). For PCSs registered by this function,
-> + * pcs_unregister() is automatically called on driver detach. See
-> + * pcs_register() for more information.
-> + *
-> + * Return: 0 on success, or -errno on failure
-> + */
-> +int devm_pcs_register(struct device *dev, struct phylink_pcs *pcs)
-> +{
-> +       struct phylink_pcs **pcsp;
-> +       int ret;
-> +
-> +       pcsp = devres_alloc(devm_pcs_release, sizeof(*pcsp),
-> +                           GFP_KERNEL);
-> +       if (!pcsp)
-> +               return -ENOMEM;
-> +
-> +       ret = pcs_register(pcs);
-> +       if (ret) {
-> +               devres_free(pcsp);
-> +               return ret;
-> +       }
-> +
-> +       *pcsp = pcs;
-> +       devres_add(dev, pcsp);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pcs_register);
-> +
-> +/**
-> + * pcs_find() - Find the PCS associated with a fwnode or device
-> + * @fwnode: The PCS's fwnode
-> + * @dev: The PCS's device
-> + *
-> + * Search PCSs registered with pcs_register() for one with a matching
-> + * fwnode or device. Either @fwnode or @dev may be %NULL if matching against a
-> + * fwnode or device is not desired (respectively).
-> + *
-> + * Return: a matching PCS, or %NULL if not found
-> + */
-> +static struct phylink_pcs *pcs_find(const struct fwnode_handle *fwnode,
-> +                                   const struct device *dev)
-> +{
-> +       struct phylink_pcs *pcs;
-> +
-> +       mutex_lock(&pcs_mutex);
-> +       list_for_each_entry(pcs, &pcs_devices, list) {
-> +               if (dev && pcs->dev == dev)
-> +                       goto out;
-> +               if (fwnode && pcs->dev->fwnode == fwnode)
-> +                       goto out;
-> +       }
-> +       pcs = NULL;
-> +
-> +out:
-> +       mutex_unlock(&pcs_mutex);
-> +       pr_devel("%s: looking for %pfwf or %s %s...%s found\n", __func__,
-> +                fwnode, dev ? dev_driver_string(dev) : "(null)",
-> +                dev ? dev_name(dev) : "(null)", pcs ? " not" : "");
-> +       return pcs;
-> +}
-> +
-> +/**
-> + * pcs_get_tail() - Finish getting a PCS
-> + * @pcs: The PCS to get, or %NULL if one could not be found
-> + *
-> + * This performs common operations necessary when getting a PCS (chiefly
-> + * incrementing reference counts)
-> + *
-> + * Return: @pcs, or an error pointer on failure
-> + */
-> +static struct phylink_pcs *pcs_get_tail(struct phylink_pcs *pcs)
-> +{
-> +       if (!pcs)
-> +               return ERR_PTR(-EPROBE_DEFER);
-> +
-> +       if (!try_module_get(pcs->ops->owner))
-> +               return ERR_PTR(-ENODEV);
-> +       get_device(pcs->dev);
-> +
-> +       return pcs;
-> +}
-> +
-> +/**
-> + * _pcs_get_by_fwnode() - Get a PCS from a fwnode property
-> + * @fwnode: The fwnode to get an associated PCS of
-> + * @id: The name of the PCS to get. May be %NULL to get the first PCS.
-> + * @optional: Whether the PCS is optional or not
-> + *
-> + * Look up a PCS associated with @fwnode and return a reference to it. Every
-> + * call to pcs_get_by_fwnode() must be balanced with one to pcs_put().
-> + *
-> + * If @optional is true, and @id is non-%NULL, then if @id cannot be found in
-> + * pcs-names, %NULL is returned (instead of an error). If @optional is true and
-> + * @id is %NULL, then no error is returned if pcs-handle is absent.
-> + *
-> + * Return: a PCS if found, or an error pointer on failure
-> + */
-> +struct phylink_pcs *_pcs_get_by_fwnode(const struct fwnode_handle *fwnode,
-> +                                      const char *id, bool optional)
-> +{
-> +       int index;
-> +       struct phylink_pcs *pcs;
-> +       struct fwnode_handle *pcs_fwnode;
-> +
-> +       if (id)
-> +               index = fwnode_property_match_string(fwnode, "pcs-names", id);
-> +       else
-> +               index = 0;
-> +       if (index < 0) {
-> +               if (optional && (index == -EINVAL || index == -ENODATA))
-> +                       return NULL;
-> +               return ERR_PTR(index);
-> +       }
-> +
-> +       /* First try pcs-handle, and if that doesn't work fall back to the
-> +        * (legacy) pcsphy-handle.
-> +        */
-> +       pcs_fwnode = fwnode_find_reference(fwnode, "pcs-handle", index);
-> +       if (PTR_ERR(pcs_fwnode) == -ENOENT)
-> +               pcs_fwnode = fwnode_find_reference(fwnode, "pcsphy-handle",
-> +                                                  index);
-> +       if (optional && !id && PTR_ERR(pcs_fwnode) == -ENOENT)
-> +               return NULL;
-> +       else if (IS_ERR(pcs_fwnode))
-> +               return ERR_CAST(pcs_fwnode);
-> +
-> +       pcs = pcs_find(pcs_fwnode, NULL);
-> +       fwnode_handle_put(pcs_fwnode);
-> +       return pcs_get_tail(pcs);
-> +}
-> +EXPORT_SYMBOL_GPL(pcs_get_by_fwnode);
-> +
-> +/**
-> + * pcs_get_by_provider() - Get a PCS from an existing provider
-> + * @dev: The device providing the PCS
-> + *
-> + * This finds the first PCS registersed by @dev and returns a reference to it.
-> + * Every call to pcs_get_by_provider() must be balanced with one to
-> + * pcs_put().
-> + *
-> + * Return: a PCS if found, or an error pointer on failure
-> + */
-> +struct phylink_pcs *pcs_get_by_provider(const struct device *dev)
-> +{
-> +       return pcs_get_tail(pcs_find(NULL, dev));
-> +}
-> +EXPORT_SYMBOL_GPL(pcs_get_by_provider);
-> +
-> +/**
-> + * pcs_put() - Release a previously-acquired PCS
-> + * @pcs: The PCS to put
-> + *
-> + * This frees resources associated with the PCS which were acquired when it was
-> + * gotten.
-> + */
-> +void pcs_put(struct phylink_pcs *pcs)
-> +{
-> +       if (!pcs)
-> +               return;
-> +
-> +       put_device(pcs->dev);
-> +       module_put(pcs->ops->owner);
-> +}
-> +EXPORT_SYMBOL_GPL(pcs_put);
-> diff --git a/drivers/of/property.c b/drivers/of/property.c
-> index 967f79b59016..860d35bde5e9 100644
-> --- a/drivers/of/property.c
-> +++ b/drivers/of/property.c
-> @@ -1318,6 +1318,7 @@ DEFINE_SIMPLE_PROP(pinctrl6, "pinctrl-6", NULL)
->  DEFINE_SIMPLE_PROP(pinctrl7, "pinctrl-7", NULL)
->  DEFINE_SIMPLE_PROP(pinctrl8, "pinctrl-8", NULL)
->  DEFINE_SIMPLE_PROP(remote_endpoint, "remote-endpoint", NULL)
-> +DEFINE_SIMPLE_PROP(pcs_handle, "pcs-handle", NULL)
->  DEFINE_SIMPLE_PROP(pwms, "pwms", "#pwm-cells")
->  DEFINE_SIMPLE_PROP(resets, "resets", "#reset-cells")
->  DEFINE_SIMPLE_PROP(leds, "leds", NULL)
-> @@ -1406,6 +1407,7 @@ static const struct supplier_bindings of_supplier_bindings[] = {
->         { .parse_prop = parse_pinctrl7, },
->         { .parse_prop = parse_pinctrl8, },
->         { .parse_prop = parse_remote_endpoint, .node_not_dev = true, },
-> +       { .parse_prop = parse_pcs_handle, },
->         { .parse_prop = parse_pwms, },
->         { .parse_prop = parse_resets, },
->         { .parse_prop = parse_leds, },
+On 7/8/22 20:43, Matthew Wilcox wrote:
+> Just because I don't use your terminology, you think I have
+> "misconceptions"?  Fuck you, you condescending piece of shit.
 
-Can you break the changes to this file into a separate patch please?
-That'll clarify that this doesn't depend on any of the other changes
-in this patch to work and it can stand on its own.
+Matthew, perhaps your vacation was not long enough?
 
-Also, I don't know how the pcs-handle is used, but it's likely that
-this probe ordering enforcement could cause issues. So, if we need to
-revert it, having it as a separate patch would help too.
+This is not even a violation of the code of conduct, it's a violation of 
+basic human decency.
 
-And put this at the end of the series maybe?
-
-Thanks,
-Saravana
-
->
-> diff --git a/include/linux/pcs.h b/include/linux/pcs.h
-> new file mode 100644
-> index 000000000000..00e76594e03c
-> --- /dev/null
-> +++ b/include/linux/pcs.h
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022 Sean Anderson <sean.anderson@seco.com>
-> + */
-> +
-> +#ifndef _PCS_H
-> +#define _PCS_H
-> +
-> +struct phylink_pcs;
-> +struct fwnode;
-> +
-> +int pcs_register(struct phylink_pcs *pcs);
-> +void pcs_unregister(struct phylink_pcs *pcs);
-> +int devm_pcs_register(struct device *dev, struct phylink_pcs *pcs);
-> +struct phylink_pcs *_pcs_get_by_fwnode(const struct fwnode_handle *fwnode,
-> +                                      const char *id, bool optional);
-> +struct phylink_pcs *pcs_get_by_provider(const struct device *dev);
-> +void pcs_put(struct phylink_pcs *pcs);
-> +
-> +static inline struct phylink_pcs
-> +*pcs_get_by_fwnode(const struct fwnode_handle *fwnode,
-> +                  const char *id)
-> +{
-> +       return _pcs_get_by_fwnode(fwnode, id, false);
-> +}
-> +
-> +static inline struct phylink_pcs
-> +*pcs_get_by_fwnode_optional(const struct fwnode_handle *fwnode, const char *id)
-> +{
-> +       return _pcs_get_by_fwnode(fwnode, id, true);
-> +}
-> +
-> +#endif /* PCS_H */
-> diff --git a/include/linux/phylink.h b/include/linux/phylink.h
-> index 6d06896fc20d..a713e70108a1 100644
-> --- a/include/linux/phylink.h
-> +++ b/include/linux/phylink.h
-> @@ -396,19 +396,24 @@ struct phylink_pcs_ops;
->
->  /**
->   * struct phylink_pcs - PHYLINK PCS instance
-> + * @dev: the device associated with this PCS
->   * @ops: a pointer to the &struct phylink_pcs_ops structure
-> + * @list: internal list of PCS devices
->   * @poll: poll the PCS for link changes
->   *
->   * This structure is designed to be embedded within the PCS private data,
->   * and will be passed between phylink and the PCS.
->   */
->  struct phylink_pcs {
-> +       struct device *dev;
->         const struct phylink_pcs_ops *ops;
-> +       struct list_head list;
->         bool poll;
->  };
->
->  /**
->   * struct phylink_pcs_ops - MAC PCS operations structure.
-> + * @owner: the module which implements this PCS.
->   * @pcs_validate: validate the link configuration.
->   * @pcs_get_state: read the current MAC PCS link state from the hardware.
->   * @pcs_config: configure the MAC PCS for the selected mode and state.
-> @@ -417,6 +422,7 @@ struct phylink_pcs {
->   *               (where necessary).
->   */
->  struct phylink_pcs_ops {
-> +       struct module *owner;
->         int (*pcs_validate)(struct phylink_pcs *pcs, unsigned long *supported,
->                             const struct phylink_link_state *state);
->         void (*pcs_get_state)(struct phylink_pcs *pcs,
-> --
-> 2.35.1.1320.gc452695387.dirty
->
+Paolo

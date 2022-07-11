@@ -2,73 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E88256FE49
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6C456FFE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiGKKIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S230436AbiGKLOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbiGKKHq (ORCPT
+        with ESMTP id S230181AbiGKLNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:07:46 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9849BBD35
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:31:29 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id a184so4382598vsa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 02:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=DBXVr+2yQA4Yc+mJwCPapHs1PcqJSd/+SbzdjhsE7eQ=;
-        b=UyuYhCpeqCpq+XCxjDW15M1VPxXZVypFQSDO+9r7mma7oioaWrbY9OBJ9p7SQmWuTb
-         LnO6nk9yoaCLbOMr81M5kQj2Ts4afG6olH5aVzgJlStk2+suhFJPbU76xXVeHJX0ZjUU
-         YiZb6jLQSVufG8GtZEEr8tt7qbCW3tqEqe5gwyGTevIVlg+Qlguwh3NVtTvDsmNkng0E
-         22Gjq4vKiJAB902zAm6I+V5rFVCZhhARQo5RmVjwp/RvefP8JaVP19D0eZIJCWDKrzxo
-         tz21X5TXIswTmGoK/hIE90G7qG5LM6so948nLwv97Bl8U5r+Si2vyn2lMYR1nY2YDiJO
-         Q1+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=DBXVr+2yQA4Yc+mJwCPapHs1PcqJSd/+SbzdjhsE7eQ=;
-        b=a9Rc1Cjia1lbJXCallTIVAuOBOC7BSDnb/H5oGuFq1sRgq7cnfvod8Eg5iEEof5sPF
-         JenFt5xYvfLpqEWBzXg3NoSH82iM5kmiZRGE6Iu3OfwaO49BlnI1P5AHQpSXQZb04nxD
-         rqhw+0ERGAtU6XEgjlfFgvdDOdaIKqOocz4dzLHvvJ8BrUwgkFdbFevdGEe+23dy8kFN
-         TOmeHtGgSqzOWvjpX7bGN1RZIEa3aVDnHvQ7H3oZTRqqvwTSOYGvl7GgkTWEXT2JnjYe
-         s5nH0Uu+BHI4+qYNtHNAUclOnRlyQAZlMkJe7rzR/soWO1MZD6ONzCpiJ5empBPfjCuA
-         RRTg==
-X-Gm-Message-State: AJIora+2xJoGnmQ7VlcpALcvPFLOx/TaHIQJkryqm1gBs+HurtHKMhMl
-        ufjoEXKK71V3U6GHJnF3A2p/Y9XFQsqX6jiwLMU=
-X-Google-Smtp-Source: AGRyM1vDb8P/DEJhaTm+vB9FeDARvO4SMKH8zf2qaC/rAstu4OQPRmsuF0EgDt4wqEsFRMKoGzMYEz5rzNn96mfDN4A=
-X-Received: by 2002:a67:c801:0:b0:357:50cb:1e83 with SMTP id
- u1-20020a67c801000000b0035750cb1e83mr2631854vsk.69.1657531888302; Mon, 11 Jul
- 2022 02:31:28 -0700 (PDT)
+        Mon, 11 Jul 2022 07:13:31 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747615FCC
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:28:02 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by michel.telenet-ops.be with bizsmtp
+        id tmU02700G4C55Sk06mU0P1; Mon, 11 Jul 2022 12:28:00 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAqCx-0032if-9M
+        for linux-kernel@vger.kernel.org; Mon, 11 Jul 2022 12:00:03 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oAn9d-00CwLx-7x
+        for linux-kernel@vger.kernel.org; Mon, 11 Jul 2022 08:44:25 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v5.19-rc6
+Date:   Mon, 11 Jul 2022 08:44:25 +0200
+Message-Id: <20220711064425.3084093-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
 MIME-Version: 1.0
-Sender: myofficeada@gmail.com
-Received: by 2002:ab0:a94:0:0:0:0:0 with HTTP; Mon, 11 Jul 2022 02:31:27 -0700 (PDT)
-From:   Chevronoil Corporation <corporationchevronoil@gmail.com>
-Date:   Mon, 11 Jul 2022 10:31:27 +0100
-X-Google-Sender-Auth: zhChCjA2qgIfISzUyC9o_tBWMrM
-Message-ID: <CACvfspRjVbo6wbQvgbxP9Aw2yUxMZrJGOBg9=MxkrTmBss3SKA@mail.gmail.com>
-Subject: RE U INTERESTED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BEWARE, Real company doesn't ask for money, Chevron Oil and Gas United
-States is employing now free flight ticket, if you are interested
-reply with your Resume/CV.
+Below is the list of build error/warning regressions/improvements in
+v5.19-rc6[1] compared to v5.18[2].
 
-Regards,
-Mr Jack McDonald.
-Chevron Corporation United USA.
+Summarized:
+  - build errors: +8/-10
+  - build warnings: +11/-10
+
+JFYI, when comparing v5.19-rc6[1] to v5.19-rc5[3], the summaries are:
+  - build errors: +0/-0
+  - build warnings: +0/-0
+
+Note that there may be false regressions, as some logs are incomplete.
+Still, they're build errors/warnings.
+
+Happy fixing! ;-)
+
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/32346491ddf24599decca06190ebca03ff9de7f8/ (all 135 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4b0986a3613c92f4ec1bdc7f60ec66fea135991f/ (131 out of 135 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/88084a3df1672e131ddc1b4e39eeacfd39864acf/ (all 135 configs)
+
+
+*** ERRORS ***
+
+8 error regressions:
+  + /kisskb/src/arch/um/include/asm/page.h: error: too few arguments to function 'to_phys':  => 105:20
+  + /kisskb/src/drivers/mfd/asic3.c: error: unused variable 'asic' [-Werror=unused-variable]:  => 941:23
+  + /kisskb/src/drivers/nvdimm/pmem.c: error: conflicting types for 'to_phys':  => 48:20
+  + /kisskb/src/drivers/nvdimm/pmem.c: error: control reaches end of non-void function [-Werror=return-type]:  => 324:1
+  + /kisskb/src/drivers/tty/serial/sh-sci.c: error: unused variable 'sport' [-Werror=unused-variable]:  => 2655:26
+  + /kisskb/src/include/ufs/ufshci.h: error: initializer element is not constant:  => 245:36
+  + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5040), (.head.text+0x5100)
+  + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
+
+10 error improvements:
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant: 4917:4 => 
+  - /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant: 1983:2 => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text': (.head.text+0x5100), (.head.text+0x5040) => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o: (.init.text+0xa4) => 
+
+
+*** WARNINGS ***
+
+11 warning regressions:
+  + .config: warning: override: ARCH_RV32I changes choice state:  => 3864
+  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 61
+  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 37
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
+
+10 warning improvements:
+  - .config: warning: override: reassigning to symbol GCC_PLUGIN_RANDSTRUCT: 12253, 12475 => 
+  - /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]: 5396:40, 5400:40, 5403:43 => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4790): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47a8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47d8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4808): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4820): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45d4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

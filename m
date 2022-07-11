@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C83156FD2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC7056FD30
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiGKJvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S233451AbiGKJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiGKJuh (ORCPT
+        with ESMTP id S233807AbiGKJuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 05:50:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C61F23BDE;
-        Mon, 11 Jul 2022 02:24:55 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABE3248D4;
+        Mon, 11 Jul 2022 02:24:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC23ECE1257;
-        Mon, 11 Jul 2022 09:24:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BF7C34115;
-        Mon, 11 Jul 2022 09:24:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49F87B80D2C;
+        Mon, 11 Jul 2022 09:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E95C34115;
+        Mon, 11 Jul 2022 09:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531491;
-        bh=Ogtk9ds9PUoZv1yHNlKP+Gp/qGJsLeUWAZAHVWnzl1I=;
+        s=korg; t=1657531494;
+        bh=Z0FI6AxhInGWtJD1LczNEjiGeOd7WuiQcvBy+zjdl9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GSeXE8Mbi03DbJG58PrIk3rl6YxsVxa1JTXvzTCrpR3Vw7VpCInx416xpw0FM+Dn1
-         LJA0yFf/NC+bnqJld3XN8i++G4nA7jmMOLrdq3nPDWi+9i4+sHdZ2i0Ng1MIGa8Vge
-         ZteJFMHKy8fg2IqK4nJagkKuvtdt1u5fEyzM/DM4=
+        b=nIQ5t1pGMBbpx/YLAiWMKTn+cag93ru9wVxZIPYBdcjoti/0n2G4NpYbulbsac1AX
+         hybHJJWzu6agpr/NcoAkSanb9X3LOrKxu6CZIiZBhgG4VeWeaqUiQK8jD4GVK72Ux2
+         UiPg+IyhYNtzteS68XXqvWaUmfSseRVHUZBrNhPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 123/230] tty: n_gsm: fix missing update of modem controls after DLCI open
-Date:   Mon, 11 Jul 2022 11:06:19 +0200
-Message-Id: <20220711090607.554714477@linuxfoundation.org>
+Subject: [PATCH 5.15 124/230] btrfs: zoned: encapsulate inode locking for zoned relocation
+Date:   Mon, 11 Jul 2022 11:06:20 +0200
+Message-Id: <20220711090607.582974972@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -54,46 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 
-[ Upstream commit 48473802506d2d6151f59e0e764932b33b53cb3b ]
+[ Upstream commit 869f4cdc73f9378986755030c684c011f0b71517 ]
 
-Currently the peer is not informed about the initial state of the modem
-control lines after a new DLCI has been opened.
-Fix this by sending the initial modem control line states after DLCI open.
+Encapsulate the inode lock needed for serializing the data relocation
+writes on a zoned filesystem into a helper.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220420101346.3315-1-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This streamlines the code reading flow and hides special casing for
+zoned filesystems.
+
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/btrfs/extent_io.c |  8 ++------
+ fs/btrfs/zoned.h     | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index d3d5308daf35..c52d5e0d5c6f 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -371,6 +371,7 @@ static const u8 gsm_fcs8[256] = {
- #define GOOD_FCS	0xCF
+diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+index 6dd375ed6e3d..059bd0753e27 100644
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -5139,8 +5139,6 @@ int extent_writepages(struct address_space *mapping,
+ 		      struct writeback_control *wbc)
+ {
+ 	struct inode *inode = mapping->host;
+-	const bool data_reloc = btrfs_is_data_reloc_root(BTRFS_I(inode)->root);
+-	const bool zoned = btrfs_is_zoned(BTRFS_I(inode)->root->fs_info);
+ 	int ret = 0;
+ 	struct extent_page_data epd = {
+ 		.bio_ctrl = { 0 },
+@@ -5152,11 +5150,9 @@ int extent_writepages(struct address_space *mapping,
+ 	 * Allow only a single thread to do the reloc work in zoned mode to
+ 	 * protect the write pointer updates.
+ 	 */
+-	if (data_reloc && zoned)
+-		btrfs_inode_lock(inode, 0);
++	btrfs_zoned_data_reloc_lock(BTRFS_I(inode));
+ 	ret = extent_write_cache_pages(mapping, wbc, &epd);
+-	if (data_reloc && zoned)
+-		btrfs_inode_unlock(inode, 0);
++	btrfs_zoned_data_reloc_unlock(BTRFS_I(inode));
+ 	ASSERT(ret <= 0);
+ 	if (ret < 0) {
+ 		end_write_bio(&epd, ret);
+diff --git a/fs/btrfs/zoned.h b/fs/btrfs/zoned.h
+index 813aa3cddc11..d680c3ee918a 100644
+--- a/fs/btrfs/zoned.h
++++ b/fs/btrfs/zoned.h
+@@ -8,6 +8,7 @@
+ #include "volumes.h"
+ #include "disk-io.h"
+ #include "block-group.h"
++#include "btrfs_inode.h"
  
- static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len);
-+static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk);
- 
- /**
-  *	gsm_fcs_add	-	update FCS
-@@ -1489,6 +1490,9 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
- 	dlci->state = DLCI_OPEN;
- 	if (debug & 8)
- 		pr_debug("DLCI %d goes open.\n", dlci->addr);
-+	/* Send current modem state */
-+	if (dlci->addr)
-+		gsmtty_modem_update(dlci, 0);
- 	wake_up(&dlci->gsm->event);
+ /*
+  * Block groups with more than this value (percents) of unusable space will be
+@@ -324,4 +325,20 @@ static inline void btrfs_clear_treelog_bg(struct btrfs_block_group *bg)
+ 	spin_unlock(&fs_info->treelog_bg_lock);
  }
  
++static inline void btrfs_zoned_data_reloc_lock(struct btrfs_inode *inode)
++{
++	struct btrfs_root *root = inode->root;
++
++	if (btrfs_is_data_reloc_root(root) && btrfs_is_zoned(root->fs_info))
++		btrfs_inode_lock(&inode->vfs_inode, 0);
++}
++
++static inline void btrfs_zoned_data_reloc_unlock(struct btrfs_inode *inode)
++{
++	struct btrfs_root *root = inode->root;
++
++	if (btrfs_is_data_reloc_root(root) && btrfs_is_zoned(root->fs_info))
++		btrfs_inode_unlock(&inode->vfs_inode, 0);
++}
++
+ #endif
 -- 
 2.35.1
 

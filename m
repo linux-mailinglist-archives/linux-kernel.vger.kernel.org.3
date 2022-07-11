@@ -2,120 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAEF570CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562CB570CCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbiGKVgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S230306AbiGKVhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiGKVgI (ORCPT
+        with ESMTP id S230399AbiGKVhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:36:08 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392A085F8C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:36:04 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id t189so8257248oie.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W1lfMFF7GwisucHEs2WhdN/ngSj9xjvJck8CvmDPr8Q=;
-        b=m3zlf3eaY+ozNxIYDmb53Dyn4cP8iN10VPE2PcHMMkNQ9B2QriL/uoXD3KinNbSCAf
-         R/jGyCPjVfs+Y/AURJLDM3VfiBz+w/TJUmx1mPLs5NfjNaUicM/sJBmLH7oa78GdqTRd
-         dCfTnoM1Y/xR0GDVkc+OMWaXuozZ8hXrGWyFj3Oc8s9x/D7hYkqVt7waYUXceAKyQYBR
-         hJGiu3OXz4anUqmK+YnlzMOskhRFOwH68SeARH3VE9rqYgvskwyPmoxINBIWCoKpQqS5
-         ZS5z+fQYqavQg+9MF6Bgtw4OiOxkzfd4UPKbX12r6/rTuAJsMPguquCbHZi1YOP5NHGG
-         CIXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W1lfMFF7GwisucHEs2WhdN/ngSj9xjvJck8CvmDPr8Q=;
-        b=NZ7+pKh177ViHnz4xVEe+Ou+ORNWvg52PZF3PL1p9B4VeAdmoM3mwyYszX5FXevYTy
-         VJs15RiZo1A1xBBb0GewEgp6YWSNeerVRxj74AkR8KA8/BMTdE42H3RBfJ/lVVYj0qyf
-         fLFGRG83U13AwNCMt4rVfUM0ONvUKdcXul+/UCU2Q5vTsy6IOhuBiLKfZjtMovW1TlAt
-         0/ZT4HoipXNgb3wLKw2LPUWDlmabmLElJZFtH8zMv1EJsZzbQ+H4OqaXdueMPLAW6Z3D
-         6/W1XWoE6z9nhRlfikhYyQ8cVMOn0M2HmQRMS2f9EMV6MkjiIdB04ZxhgsNLn39o51wK
-         O3Tw==
-X-Gm-Message-State: AJIora8yA/OC+DK89A6wTQB0e/aI5KikBmX1U91ObXOiD+aa8Ugsr6Zt
-        X1n1qwane1yYTPwE/jhxcF2zwg==
-X-Google-Smtp-Source: AGRyM1ukzkSjiYh6xdbkafb6/cn72eoJoX+cxrroy+Ym4I4X16AsdivaNNxd+cGYK6dsX/hak9UA+A==
-X-Received: by 2002:a05:6808:2127:b0:335:9807:959e with SMTP id r39-20020a056808212700b003359807959emr251350oiw.270.1657575363633;
-        Mon, 11 Jul 2022 14:36:03 -0700 (PDT)
-Received: from eze-laptop ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id cj8-20020a0568081b8800b00339e4ca6a15sm3239334oib.45.2022.07.11.14.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 14:36:03 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:35:57 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        samuel@sholland.org, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] media: cedrus: Improve error messages for controls
-Message-ID: <YsyXvfvjxWIPZle6@eze-laptop>
-References: <20220620175517.648767-1-jernej.skrabec@gmail.com>
- <20220620175517.648767-4-jernej.skrabec@gmail.com>
+        Mon, 11 Jul 2022 17:37:48 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E810032BB2;
+        Mon, 11 Jul 2022 14:37:46 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:56004)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oB169-00Fyyi-KE; Mon, 11 Jul 2022 15:37:45 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:45020 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oB168-00GwFM-AH; Mon, 11 Jul 2022 15:37:45 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Christian Brauner <brauner@kernel.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <YrShFXRLtRt6T/j+@risky>
+        <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
+        <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
+        <YsyHMVLuT5U6mm+I@netflix>
+Date:   Mon, 11 Jul 2022 16:37:12 -0500
+In-Reply-To: <YsyHMVLuT5U6mm+I@netflix> (Tycho Andersen's message of "Mon, 11
+        Jul 2022 14:25:21 -0600")
+Message-ID: <877d4jbabb.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620175517.648767-4-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oB168-00GwFM-AH;;;mid=<877d4jbabb.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+BNhhz/q5rz9OSWYm2QD2VMDoDaU2rMNc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Tycho Andersen <tycho@tycho.pizza>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 745 ms - load_scoreonly_sql: 0.10 (0.0%),
+        signal_user_changed: 14 (1.8%), b_tie_ro: 12 (1.6%), parse: 1.03
+        (0.1%), extract_message_metadata: 16 (2.2%), get_uri_detail_list: 2.3
+        (0.3%), tests_pri_-1000: 14 (1.9%), tests_pri_-950: 1.32 (0.2%),
+        tests_pri_-900: 1.17 (0.2%), tests_pri_-90: 335 (44.9%), check_bayes:
+        326 (43.8%), b_tokenize: 9 (1.2%), b_tok_get_all: 184 (24.7%),
+        b_comp_prob: 2.9 (0.4%), b_tok_touch_all: 126 (17.0%), b_finish: 0.85
+        (0.1%), tests_pri_0: 343 (46.1%), check_dkim_signature: 0.61 (0.1%),
+        check_dkim_adsp: 3.0 (0.4%), poll_dns_idle: 1.10 (0.1%), tests_pri_10:
+        2.7 (0.4%), tests_pri_500: 13 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: strange interaction between fuse + pidns
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 07:55:13PM +0200, Jernej Skrabec wrote:
-> Currently error messages when control creation fails are very sparse.
-> Granted, user should never observe them. However, developer working on
-> codecs can. In such cases additional information like which control
-> creation failed and error number are very useful.
-> 
-> Expand error messages with additional info.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Tycho Andersen <tycho@tycho.pizza> writes:
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> Hi all,
+>
+> On Mon, Jul 11, 2022 at 03:59:15PM +0200, Miklos Szeredi wrote:
+>> On Mon, 11 Jul 2022 at 12:35, Miklos Szeredi <miklos@szeredi.hu> wrote:
+>> >
+>> > Can you try the attached untested patch?
+>> 
+>> Updated patch to avoid use after free on req->args.
+>> 
+>> Still mostly untested.
+>
+> Thanks, when I applied your patch, I still ended up with tasks stuck
+> waiting with a SIGKILL pending. So I looked into that and came up with
+> the patch below. With both your patch and mine, my testcase exits
+> cleanly.
+>
+> Eric (or Christian, or anyone), can you comment on the patch below? I
+> have no idea what this will break. Maybe instead a better approach is
+> some additional special case in __send_signal_locked()?
+>
+> Tycho
+>
+> From b7ea26adcf3546be5745063cc86658acb5ed37e9 Mon Sep 17 00:00:00 2001
+> From: Tycho Andersen <tycho@tycho.pizza>
+> Date: Mon, 11 Jul 2022 11:26:58 -0600
+> Subject: [PATCH] sched: __fatal_signal_pending() should also check shared
+>  signals
+>
+> The wait_* code uses signal_pending_state() to test whether a thread has
+> been interrupted, which ultimately uses __fatal_signal_pending() to detect
+> if there is a fatal signal.
+>
+> When a pid ns dies, in zap_pid_ns_processes() it does:
+>
+>     group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
+>
+> for all the tasks in the pid ns. That calls through:
+>
+>     group_send_sig_info() ->
+>       do_send_sig_info() ->
+>         send_signal_locked() ->
+>           __send_signal_locked()
+>
+> which does:
+>
+>     pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+>
+> which puts sigkill in the set of shared signals, but not the individual
+> pending ones. If tasks are stuck in a killable wait (e.g. a fuse flush
+> operation), they won't see this shared signal, and will hang forever, since
+> TIF_SIGPENDING is set, but the fatal signal can't be detected.
 
+Hmm.
+
+That is perplexing.
+
+__send_signal_locked calls complete_signal.  Then if any of the tasks of
+the process can receive the signal, complete_signal will loop through
+all of the tasks of the process and set the per thread SIGKILL.  Pretty
+much by definition tasks can always receive SIGKILL.
+
+Is complete_signal not being able to do that?
+
+The patch below really should not be necessary, and I have pending work
+that if I can push over the finish line won't even make sense.
+
+As it is currently an abuse to use the per thread SIGKILL to indicate
+that a fatal signal has been short circuit delivered.  That abuse as
+well as being unclean tends to confuse people reading the code.
+
+Eric
+
+> Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
 > ---
->  drivers/staging/media/sunxi/cedrus/cedrus.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> index b12219123a6b..99c87319d2b4 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> @@ -242,7 +242,8 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
->  	v4l2_ctrl_handler_init(hdl, CEDRUS_CONTROLS_COUNT);
->  	if (hdl->error) {
->  		v4l2_err(&dev->v4l2_dev,
-> -			 "Failed to initialize control handler\n");
-> +			 "Failed to initialize control handler: %d\n",
-> +			 hdl->error);
->  		return hdl->error;
->  	}
+>  include/linux/sched/signal.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> index cafbe03eed01..a033ccb0a729 100644
+> --- a/include/linux/sched/signal.h
+> +++ b/include/linux/sched/signal.h
+> @@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
 >  
-> @@ -257,7 +258,9 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
->  					    NULL);
->  		if (hdl->error) {
->  			v4l2_err(&dev->v4l2_dev,
-> -				 "Failed to create new custom control\n");
-> +				 "Failed to create %s control: %d\n",
-> +				 v4l2_ctrl_get_name(cedrus_controls[i].cfg.id),
-> +				 hdl->error);
+>  static inline int __fatal_signal_pending(struct task_struct *p)
+>  {
+> -	return unlikely(sigismember(&p->pending.signal, SIGKILL));
+> +	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
+> +			sigismember(&p->signal->shared_pending.signal, SIGKILL));
+>  }
 >  
->  			v4l2_ctrl_handler_free(hdl);
->  			kfree(ctx->ctrls);
-> -- 
-> 2.36.1
-> 
+>  static inline int fatal_signal_pending(struct task_struct *p)
+>
+> base-commit: 32346491ddf24599decca06190ebca03ff9de7f8

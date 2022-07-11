@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE7F56FD9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E357F56FB82
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiGKJ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S232625AbiGKJbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbiGKJ50 (ORCPT
+        with ESMTP id S231664AbiGKJbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:57:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5467FB4BF8;
-        Mon, 11 Jul 2022 02:27:03 -0700 (PDT)
+        Mon, 11 Jul 2022 05:31:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCDE643F;
+        Mon, 11 Jul 2022 02:17:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98159B80E93;
-        Mon, 11 Jul 2022 09:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D78C341C0;
-        Mon, 11 Jul 2022 09:26:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D4FE61226;
+        Mon, 11 Jul 2022 09:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A55C34115;
+        Mon, 11 Jul 2022 09:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531612;
-        bh=YqtQP35jXWYBrQLN/cToll7pQXBag6WgH9ZCEqVLZqI=;
+        s=korg; t=1657531011;
+        bh=J9c10HAnH2hw2pDgYHAA0dGZKXuDFaJLoxPb6YbGnLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sDcPASoI4017RjWKxApzpGY3hszY4O4+P8FioF3BeXNI0FhfYbUkMxXDI3ZUACiHM
-         UwUegjZly1P9Hat7yhFFu/AzrfxWez9JLC+hwpTWSYedgRCf+oI8RDIOCPWVH6vMN2
-         l097QVscXcCwDwN3s/SVfoxtBSoDsf8ZcuzE/+Ig=
+        b=1FGiIJKhKwp9rWtYQi+vMYinCO4PzcgToob9im5CBlfpaOIR2glZsRkbu6AKQ+Y4V
+         IHs42czp+8G2XCH72lkE4lZjhhcQolmzogMTZAFgpdf8A+HduNnjy3KUdqOLq/0ScB
+         FSgbEb3WULy99nr6tuGzO+c3ecZlSQRJrHDl1NdQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 167/230] net: dsa: qca8k: reset cpu port on MTU change
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 063/112] arm64: dts: imx8mp-evk: correct I2C1 pad settings
 Date:   Mon, 11 Jul 2022 11:07:03 +0200
-Message-Id: <20220711090608.797548765@linuxfoundation.org>
+Message-Id: <20220711090551.362280006@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Marangi <ansuelsmth@gmail.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-commit 386228c694bf1e7a7688e44412cb33500b0ac585 upstream.
+[ Upstream commit 05a7f43478e890513d571f36660bfedc1482a588 ]
 
-It was discovered that the Documentation lacks of a fundamental detail
-on how to correctly change the MAX_FRAME_SIZE of the switch.
+According to RM bit layout, BIT3 and BIT0 are reserved.
+ 8  7   6   5   4   3  2 1  0
+PE HYS PUE ODE FSEL X  DSE  X
 
-In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
-switch panics and cease to send any packet. This cause the mgmt ethernet
-system to not receive any packet (the slow fallback still works) and
-makes the device not reachable. To recover from this a switch reset is
-required.
+Although function is not broken, we should not set reserved bit.
 
-To correctly handle this, turn off the cpu ports before changing the
-MAX_FRAME_SIZE and turn on again after the value is applied.
-
-Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Link: https://lore.kernel.org/r/20220621151122.10220-1-ansuelsmth@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5497bc2a2bff ("arm64: dts: imx8mp-evk: Add PMIC device")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/qca8k.c |   23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -1599,7 +1599,7 @@ static int
- qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
- {
- 	struct qca8k_priv *priv = ds->priv;
--	int i, mtu = 0;
-+	int ret, i, mtu = 0;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 938757b26add..b4499d9953ed 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -467,8 +467,8 @@
  
- 	priv->port_mtu[port] = new_mtu;
+ 	pinctrl_i2c1: i2c1grp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c3
+-			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c3
++			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c2
++			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
+ 		>;
+ 	};
  
-@@ -1607,8 +1607,27 @@ qca8k_port_change_mtu(struct dsa_switch
- 		if (priv->port_mtu[i] > mtu)
- 			mtu = priv->port_mtu[i];
- 
-+	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
-+	 * the switch panics.
-+	 * Turn off both cpu ports before applying the new value to prevent
-+	 * this.
-+	 */
-+	if (priv->port_sts[0].enabled)
-+		qca8k_port_set_status(priv, 0, 0);
-+
-+	if (priv->port_sts[6].enabled)
-+		qca8k_port_set_status(priv, 6, 0);
-+
- 	/* Include L2 header / FCS length */
--	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
-+	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
-+
-+	if (priv->port_sts[0].enabled)
-+		qca8k_port_set_status(priv, 0, 1);
-+
-+	if (priv->port_sts[6].enabled)
-+		qca8k_port_set_status(priv, 6, 1);
-+
-+	return ret;
- }
- 
- static int
+-- 
+2.35.1
+
 
 

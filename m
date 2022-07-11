@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BEA56FDDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC15F56FADF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbiGKKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S231892AbiGKJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234296AbiGKKAx (ORCPT
+        with ESMTP id S231959AbiGKJWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:00:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F22D77A53;
-        Mon, 11 Jul 2022 02:28:13 -0700 (PDT)
+        Mon, 11 Jul 2022 05:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CBE5C356;
+        Mon, 11 Jul 2022 02:13:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40FC0B80E87;
-        Mon, 11 Jul 2022 09:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868A7C34115;
-        Mon, 11 Jul 2022 09:28:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84A7E61188;
+        Mon, 11 Jul 2022 09:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EE7C34115;
+        Mon, 11 Jul 2022 09:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531689;
-        bh=Hvax53qgUXZsqWatbkd00eJvztr3uDyt+Tr8Kc4Y1WU=;
+        s=korg; t=1657530806;
+        bh=ddvnf/kpXr5ctM8ugEd/957e7Vj5A8FhBl6VTjMoKys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=thFOMEOuQ/TJ8yXUr0jnn+wrg+aRKY96wHoDsM4RMf2T5T4splbu+KdJHe75Gd2pJ
-         RpZzSP55hGbr9PH8CX8I5bKqXEHDWcvwrwGSeUgKnduQIV/Y7AJJ38Uv2mI1vxipwQ
-         ONVWxvIXM+ixbbj5jSlQGT/kQoODtH3vjlveNX2Y=
+        b=B8z0QxZjlmOFDuMPD+tIQ9PqjRk55LKd99aEK2GwY9uxDDXCAJk8bBqk77mR3na6g
+         92jV3dy6l9X3V7hAOoiypR9Adl4y771EEeblo1+89UqxNMhCRKANYZFAxl3bN5nwB4
+         5oC5tMCu+NkEOuSCJynO8ET4vihtnqU28kd94YTU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 196/230] arm64: dts: qcom: msm8992-*: Fix vdd_lvs1_2-supply typo
-Date:   Mon, 11 Jul 2022 11:07:32 +0200
-Message-Id: <20220711090609.667912132@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@amd.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 45/55] i2c: cadence: Unregister the clk notifier in error path
+Date:   Mon, 11 Jul 2022 11:07:33 +0200
+Message-Id: <20220711090543.084972317@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+From: Satish Nagireddy <satish.nagireddy@getcruise.com>
 
-[ Upstream commit 5fb779558f1c97e2bf2794cb59553e569c38e2f9 ]
+[ Upstream commit 3501f0c663063513ad604fb1b3f06af637d3396d ]
 
-"make dtbs_check" complains about the missing "-supply" suffix for
-vdd_lvs1_2 which is clearly a typo, originally introduced in the
-msm8994-smd-rpm.dtsi file and apparently later copied to
-msm8992-xiaomi-libra.dts:
+This patch ensures that the clock notifier is unregistered
+when driver probe is returning error.
 
-msm8992-lg-bullhead-rev-10/101.dtb: pm8994-regulators: 'vdd_lvs1_2'
-does not match any of the regexes:
-  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
->From schema: regulator/qcom,smd-rpm-regulator.yaml
-
-msm8992-xiaomi-libra.dtb: pm8994-regulators: 'vdd_lvs1_2'
-does not match any of the regexes:
-  '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
->From schema: regulator/qcom,smd-rpm-regulator.yaml
-
-Reported-by: Rob Herring <robh@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Fixes: f3b2c99e73be ("arm64: dts: Enable onboard SDHCI on msm8992")
-Fixes: 0f5cdb31e850 ("arm64: dts: qcom: Add Xiaomi Libra (Mi 4C) device tree")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220627135938.2901871-1-stephan.gerhold@kernkonzept.com
+Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
+Signed-off-by: Satish Nagireddy <satish.nagireddy@getcruise.com>
+Tested-by: Lars-Peter Clausen <lars@metafoo.de>
+Reviewed-by: Michal Simek <michal.simek@amd.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts | 2 +-
- arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-index 1ccca83292ac..c7d191dc6d4b 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-@@ -74,7 +74,7 @@
- 		vdd_l17_29-supply = <&vph_pwr>;
- 		vdd_l20_21-supply = <&vph_pwr>;
- 		vdd_l25-supply = <&pm8994_s5>;
--		vdd_lvs1_2 = <&pm8994_s4>;
-+		vdd_lvs1_2-supply = <&pm8994_s4>;
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 50e3ddba52ba..01564bd96c62 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -1289,6 +1289,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	return 0;
  
- 		/* S1, S2, S6 and S12 are managed by RPMPD */
- 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index 357d55496e75..a3d6340a0c55 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -142,7 +142,7 @@
- 		vdd_l17_29-supply = <&vph_pwr>;
- 		vdd_l20_21-supply = <&vph_pwr>;
- 		vdd_l25-supply = <&pm8994_s5>;
--		vdd_lvs1_2 = <&pm8994_s4>;
-+		vdd_lvs1_2-supply = <&pm8994_s4>;
- 
- 		/* S1, S2, S6 and S12 are managed by RPMPD */
- 
+ err_clk_dis:
++	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
+ 	clk_disable_unprepare(id->clk);
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
 -- 
 2.35.1
 

@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A155707B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE1C5707B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiGKPzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S231156AbiGKP4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiGKPzg (ORCPT
+        with ESMTP id S230358AbiGKP4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:55:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FDB27CD2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657554935; x=1689090935;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/lBUXvFbuDKqJhn10UzZd1HkLo026hUSTaL1EnIl+pM=;
-  b=AcRHI/u/7w7JZzS4wfHiATI/mf4KjAqaYY1RzfO8UeIHrNaw20ld8Rwb
-   WRzIZM+2l7nevAyvsUCV3JAdoouMfKE9d3n2oZLi1xAJfdx2/tiu5oXYi
-   w2rh9gI6CqtiBIxyYU0EL4SNArJH/qrzPe2rwN9YzSoPpjZnWn2OatSuj
-   NzIoRIHD3zPq495xWOuGC/oJQB0bCl6mL2o3l43VlHT69SrnhX26dMmXy
-   7f7P8nGQrOxjM0UTaekKqiRT74Ot3Ed8kri+mLk4JEZV1CPBKpn+i27ge
-   19KvGxre75IyGffqMxEKKVGyVq37JtYLaOwZTZujU75s84lQMdPj/NpXI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="283449251"
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="283449251"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 08:55:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,263,1650956400"; 
-   d="scan'208";a="622126872"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 11 Jul 2022 08:55:33 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAvky-0000wb-NO;
-        Mon, 11 Jul 2022 15:55:32 +0000
-Date:   Mon, 11 Jul 2022 23:54:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yishai Hadas <yishaih@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leon@kernel.org>
-Subject: [leon-rdma:rdma-next 19/27] ERROR: modpost:
- "interval_tree_iter_first" [drivers/vfio/vfio.ko] undefined!
-Message-ID: <202207112353.TpyzFpSc-lkp@intel.com>
+        Mon, 11 Jul 2022 11:56:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB502A263
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:56:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91B61B81031
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D788C34115;
+        Mon, 11 Jul 2022 15:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657554961;
+        bh=8HV9yZZGFBJidulDHDzfWS4Ajwr3bhBQMRksoe8XUHI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MDIxfWkN7FUIOBu2c4cTc5keVGVoKO2v+NQgGOoloxL6OwZ0VNankrbwYB3yBk7pk
+         TSFHe2oY+KK0YR7zfpizEhsXxn0wbAhNnNKmqyBCCaE8mncbW134UskBO4J8gmY/6L
+         2xHvfMTI7f3VV2PQM3arYmPQrV2zsKU2Y0LZd2umyPXMPPtdw2DsjmkMF6xU63sj8g
+         7djIbycrg4FC4RKZmUXtLnaeiOSHXpZh6p/Aoowqy+L41xsSyo1DNrwgEiWV/a52vO
+         5dekxUddpSXcHrEvl6jwjgYqJ4nWHmo8xjwF3GJVAyIenm0zM1heexVSuuykMWNGKk
+         AnxZ5mZxddM8A==
+Date:   Mon, 11 Jul 2022 16:55:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, judyhsiao@chromium.org
+Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix NULL pointer dereference when
+ pinctrl is not found
+Message-ID: <YsxIDCaMf0Z0BnxH@sirena.org.uk>
+References: <20220711130522.401551-1-alexandru.elisei@arm.com>
+ <Yswkb6mvwUywOTLg@sirena.org.uk>
+ <YswoOE/sP088lius@monolith.localdoman>
+ <Ysw2mzhw4pyrxirc@sirena.org.uk>
+ <Ysw+3Hg+GbDjXuTn@monolith.localdoman>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tg1MdlMwJWKMRNAi"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ysw+3Hg+GbDjXuTn@monolith.localdoman>
+X-Cookie: I am NOMAD!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,30 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   325f0cb55fe7505ffc12020edf66e91f1bdbe021
-commit: de08f6b555c0b4687890265b2f2358f69f28512a [19/27] vfio: Introduce the DMA logging feature support
-config: m68k-randconfig-r032-20220710 (https://download.01.org/0day-ci/archive/20220711/202207112353.TpyzFpSc-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/commit/?id=de08f6b555c0b4687890265b2f2358f69f28512a
-        git remote add leon-rdma https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git
-        git fetch --no-tags leon-rdma rdma-next
-        git checkout de08f6b555c0b4687890265b2f2358f69f28512a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--tg1MdlMwJWKMRNAi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+On Mon, Jul 11, 2022 at 04:17:37PM +0100, Alexandru Elisei wrote:
 
->> ERROR: modpost: "interval_tree_iter_first" [drivers/vfio/vfio.ko] undefined!
->> ERROR: modpost: "interval_tree_insert" [drivers/vfio/vfio.ko] undefined!
+> Do you want me to respin the patch with an abbreviated splat?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+It's fine, just leave this one.
+
+--tg1MdlMwJWKMRNAi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLMSAsACgkQJNaLcl1U
+h9DfVAf3fsWaAiN9qpjwm1k+G3+bQFU/BeOTROHaL2wDeSqy50zlg6PJy+C8/DWW
+FLEDtXUo/3Y+fuC9hjkEhpElWej3xK292MXE0d3gkc+pZe3FQzOYn6JTNvOeUS3u
+MQIZKwXplY4jbXBYnDzt9JKl7Hc8ZdVYfngtQkOj/bJiU5IrqRQIrQpivaNi6Jpz
+wRNdd01A/z5Rk09lWCQz6uTg8XxLpI8pxrL3BL6Q0TjA5J8rIp8ki5UMYhkcmi78
+8tMo/IOyLGRLJCJij+wAilMpUZPIoAgexZhuSJlZyWyuHf0qWEFZSSK+z0g7Ybfn
+KE6lm2sRo6syEO4ln0OneVdgv/9a
+=vq9L
+-----END PGP SIGNATURE-----
+
+--tg1MdlMwJWKMRNAi--

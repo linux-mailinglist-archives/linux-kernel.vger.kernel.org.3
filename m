@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D9256FD61
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F3956F9FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbiGKJys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S231274AbiGKJLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiGKJyI (ORCPT
+        with ESMTP id S230127AbiGKJKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:54:08 -0400
+        Mon, 11 Jul 2022 05:10:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9ADAF743;
-        Mon, 11 Jul 2022 02:25:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7827B4B4;
+        Mon, 11 Jul 2022 02:08:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF3061366;
-        Mon, 11 Jul 2022 09:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB2BC34115;
-        Mon, 11 Jul 2022 09:25:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D0E611DF;
+        Mon, 11 Jul 2022 09:08:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A48C34115;
+        Mon, 11 Jul 2022 09:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531546;
-        bh=y6KWV1l7vFa0AvPblk5Xk5IqSRITdwavbUj/jVWrbMo=;
+        s=korg; t=1657530519;
+        bh=AOZzCYGpTcjFuNIF7fPsACXJ58sxB04TYtQtbnyTpWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IttRf0t12GDfEPitC9FLR2iXKOngwGS0p8NIqZCDHnCdz2EVAKQfBCWqbXWQS9WHj
-         wmrdQWrJrzWbW3KOinKn6SwzDOMZEp/VWJlSZWo3d2woXLERIuvTpNycBpTeU2u2ij
-         m92XUT3S35y/XPXX9YkeDMUgw70ZTQMXquzkNFXw=
+        b=GJT5mkXTyH55+AncgeUdnRbdz3WhPmnNIbOzCpLljJcaU2WgKQ6tNHISLhIhuAhZ1
+         rNjsF7Tx0I3KvgxMq0O1y0HLTOHdhukBQ5LkYkTpxwfUyWZ8A8feE8hpjpS8AnYvtH
+         JPTbBs9IkH0CvOnmFGRVGkPXAUg71aPhUTQbZ14Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 145/230] drm/mediatek: Remove the pointer of struct cmdq_client
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH 4.19 02/31] mm/slub: add missing TID updates on slab deactivation
 Date:   Mon, 11 Jul 2022 11:06:41 +0200
-Message-Id: <20220711090608.175503461@linuxfoundation.org>
+Message-Id: <20220711090537.917739384@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,131 +58,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 563c9d4a5b117552150efbecbaf0877947e98a32 ]
+commit eeaa345e128515135ccb864c04482180c08e3259 upstream.
 
-In mailbox rx_callback, it pass struct mbox_client to callback
-function, but it could not map back to mtk_drm_crtc instance
-because struct cmdq_client use a pointer to struct mbox_client:
+The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
+the TID stays the same. However, two places in __slab_alloc() currently
+don't update the TID when deactivating the CPU slab.
 
-struct cmdq_client {
-	struct mbox_client client;
-	struct mbox_chan *chan;
-};
+If multiple operations race the right way, this could lead to an object
+getting lost; or, in an even more unlikely situation, it could even lead to
+an object being freed onto the wrong slab's freelist, messing up the
+`inuse` counter and eventually causing a page to be freed to the page
+allocator while it still contains slab objects.
 
-struct mtk_drm_crtc {
-	/* client instance data */
-	struct cmdq_client *cmdq_client;
-};
+(I haven't actually tested these cases though, this is just based on
+looking at the code. Writing testcases for this stuff seems like it'd be
+a pain...)
 
-so remove the pointer of struct cmdq_client and let mtk_drm_crtc
-instance define cmdq_client as:
+The race leading to state inconsistency is (all operations on the same CPU
+and kmem_cache):
 
-struct mtk_drm_crtc {
-	/* client instance data */
-	struct cmdq_client cmdq_client;
-};
+ - task A: begin do_slab_free():
+    - read TID
+    - read pcpu freelist (==NULL)
+    - check `slab == c->slab` (true)
+ - [PREEMPT A->B]
+ - task B: begin slab_alloc_node():
+    - fastpath fails (`c->freelist` is NULL)
+    - enter __slab_alloc()
+    - slub_get_cpu_ptr() (disables preemption)
+    - enter ___slab_alloc()
+    - take local_lock_irqsave()
+    - read c->freelist as NULL
+    - get_freelist() returns NULL
+    - write `c->slab = NULL`
+    - drop local_unlock_irqrestore()
+    - goto new_slab
+    - slub_percpu_partial() is NULL
+    - get_partial() returns NULL
+    - slub_put_cpu_ptr() (enables preemption)
+ - [PREEMPT B->A]
+ - task A: finish do_slab_free():
+    - this_cpu_cmpxchg_double() succeeds()
+    - [CORRUPT STATE: c->slab==NULL, c->freelist!=NULL]
 
-and in rx_callback function, use struct mbox_client to get
-struct mtk_drm_crtc.
+>From there, the object on c->freelist will get lost if task B is allowed to
+continue from here: It will proceed to the retry_load_slab label,
+set c->slab, then jump to load_freelist, which clobbers c->freelist.
 
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+But if we instead continue as follows, we get worse corruption:
+
+ - task A: run __slab_free() on object from other struct slab:
+    - CPU_PARTIAL_FREE case (slab was on no list, is now on pcpu partial)
+ - task A: run slab_alloc_node() with NUMA node constraint:
+    - fastpath fails (c->slab is NULL)
+    - call __slab_alloc()
+    - slub_get_cpu_ptr() (disables preemption)
+    - enter ___slab_alloc()
+    - c->slab is NULL: goto new_slab
+    - slub_percpu_partial() is non-NULL
+    - set c->slab to slub_percpu_partial(c)
+    - [CORRUPT STATE: c->slab points to slab-1, c->freelist has objects
+      from slab-2]
+    - goto redo
+    - node_match() fails
+    - goto deactivate_slab
+    - existing c->freelist is passed into deactivate_slab()
+    - inuse count of slab-1 is decremented to account for object from
+      slab-2
+
+At this point, the inuse count of slab-1 is 1 lower than it should be.
+This means that if we free all allocated objects in slab-1 except for one,
+SLUB will think that slab-1 is completely unused, and may free its page,
+leading to use-after-free.
+
+Fixes: c17dda40a6a4e ("slub: Separate out kmem_cache_cpu processing from deactivate_slab")
+Fixes: 03e404af26dc2 ("slub: fast release on full slab")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+Acked-by: Christoph Lameter <cl@linux.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Link: https://lore.kernel.org/r/20220608182205.2945720-1-jannh@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c | 37 +++++++++++++------------
- 1 file changed, 20 insertions(+), 17 deletions(-)
+ mm/slub.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 369d3e68c0b6..e23e3224ac67 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -52,7 +52,7 @@ struct mtk_drm_crtc {
- 	bool				pending_async_planes;
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2162,6 +2162,7 @@ redo:
  
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	struct cmdq_client		*cmdq_client;
-+	struct cmdq_client		cmdq_client;
- 	u32				cmdq_event;
- #endif
+ 	c->page = NULL;
+ 	c->freelist = NULL;
++	c->tid = next_tid(c->tid);
+ }
  
-@@ -472,19 +472,19 @@ static void mtk_drm_crtc_update_config(struct mtk_drm_crtc *mtk_crtc,
- 		mtk_mutex_release(mtk_crtc->mutex);
+ /*
+@@ -2295,8 +2296,6 @@ static inline void flush_slab(struct kme
+ {
+ 	stat(s, CPUSLAB_FLUSH);
+ 	deactivate_slab(s, c->page, c->freelist, c);
+-
+-	c->tid = next_tid(c->tid);
+ }
+ 
+ /*
+@@ -2583,6 +2582,7 @@ redo:
+ 
+ 	if (!freelist) {
+ 		c->page = NULL;
++		c->tid = next_tid(c->tid);
+ 		stat(s, DEACTIVATE_BYPASS);
+ 		goto new_slab;
  	}
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	if (mtk_crtc->cmdq_client) {
--		mbox_flush(mtk_crtc->cmdq_client->chan, 2000);
--		cmdq_handle = cmdq_pkt_create(mtk_crtc->cmdq_client, PAGE_SIZE);
-+	if (mtk_crtc->cmdq_client.chan) {
-+		mbox_flush(mtk_crtc->cmdq_client.chan, 2000);
-+		cmdq_handle = cmdq_pkt_create(&mtk_crtc->cmdq_client, PAGE_SIZE);
- 		cmdq_pkt_clear_event(cmdq_handle, mtk_crtc->cmdq_event);
- 		cmdq_pkt_wfe(cmdq_handle, mtk_crtc->cmdq_event, false);
- 		mtk_crtc_ddp_config(crtc, cmdq_handle);
- 		cmdq_pkt_finalize(cmdq_handle);
--		dma_sync_single_for_device(mtk_crtc->cmdq_client->chan->mbox->dev,
-+		dma_sync_single_for_device(mtk_crtc->cmdq_client.chan->mbox->dev,
- 					   cmdq_handle->pa_base,
- 					   cmdq_handle->cmd_buf_size,
- 					   DMA_TO_DEVICE);
--		mbox_send_message(mtk_crtc->cmdq_client->chan, cmdq_handle);
--		mbox_client_txdone(mtk_crtc->cmdq_client->chan, 0);
-+		mbox_send_message(mtk_crtc->cmdq_client.chan, cmdq_handle);
-+		mbox_client_txdone(mtk_crtc->cmdq_client.chan, 0);
- 	}
- #endif
- 	mtk_crtc->config_updating = false;
-@@ -498,7 +498,7 @@ static void mtk_crtc_ddp_irq(void *data)
- 	struct mtk_drm_private *priv = crtc->dev->dev_private;
- 
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	if (!priv->data->shadow_register && !mtk_crtc->cmdq_client)
-+	if (!priv->data->shadow_register && !mtk_crtc->cmdq_client.chan)
- #else
- 	if (!priv->data->shadow_register)
- #endif
-@@ -838,17 +838,20 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 	mutex_init(&mtk_crtc->hw_lock);
- 
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	mtk_crtc->cmdq_client =
--			cmdq_mbox_create(mtk_crtc->mmsys_dev,
--					 drm_crtc_index(&mtk_crtc->base));
--	if (IS_ERR(mtk_crtc->cmdq_client)) {
-+	mtk_crtc->cmdq_client.client.dev = mtk_crtc->mmsys_dev;
-+	mtk_crtc->cmdq_client.client.tx_block = false;
-+	mtk_crtc->cmdq_client.client.knows_txdone = true;
-+	mtk_crtc->cmdq_client.client.rx_callback = ddp_cmdq_cb;
-+	mtk_crtc->cmdq_client.chan =
-+			mbox_request_channel(&mtk_crtc->cmdq_client.client,
-+					     drm_crtc_index(&mtk_crtc->base));
-+	if (IS_ERR(mtk_crtc->cmdq_client.chan)) {
- 		dev_dbg(dev, "mtk_crtc %d failed to create mailbox client, writing register by CPU now\n",
- 			drm_crtc_index(&mtk_crtc->base));
--		mtk_crtc->cmdq_client = NULL;
-+		mtk_crtc->cmdq_client.chan = NULL;
- 	}
- 
--	if (mtk_crtc->cmdq_client) {
--		mtk_crtc->cmdq_client->client.rx_callback = ddp_cmdq_cb;
-+	if (mtk_crtc->cmdq_client.chan) {
- 		ret = of_property_read_u32_index(priv->mutex_node,
- 						 "mediatek,gce-events",
- 						 drm_crtc_index(&mtk_crtc->base),
-@@ -856,8 +859,8 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 		if (ret) {
- 			dev_dbg(dev, "mtk_crtc %d failed to get mediatek,gce-events property\n",
- 				drm_crtc_index(&mtk_crtc->base));
--			cmdq_mbox_destroy(mtk_crtc->cmdq_client);
--			mtk_crtc->cmdq_client = NULL;
-+			mbox_free_channel(mtk_crtc->cmdq_client.chan);
-+			mtk_crtc->cmdq_client.chan = NULL;
- 		}
- 	}
- #endif
--- 
-2.35.1
-
 
 

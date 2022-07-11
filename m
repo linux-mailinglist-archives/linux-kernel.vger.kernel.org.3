@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CC256FAC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F5156FA70
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiGKJVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S231574AbiGKJRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbiGKJUs (ORCPT
+        with ESMTP id S231565AbiGKJRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:20:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA983550B8;
-        Mon, 11 Jul 2022 02:12:43 -0700 (PDT)
+        Mon, 11 Jul 2022 05:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DF14507B;
+        Mon, 11 Jul 2022 02:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E684061148;
-        Mon, 11 Jul 2022 09:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05387C341CB;
-        Mon, 11 Jul 2022 09:12:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C548B80E76;
+        Mon, 11 Jul 2022 09:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CD13C34115;
+        Mon, 11 Jul 2022 09:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530762;
-        bh=+vTkH3RZDBI92uQCYAYfCPRyOw85ue/9OySuXaIhlos=;
+        s=korg; t=1657530674;
+        bh=xLZOiuU/pXl1/j8USvLoYf6qp+A9l3h0Rl+n8ZdBK+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ju5sM/yH1rPtHOxn382t8rivyUlauYbUvhbwgEYm1d1kW0Fx7nhSjwFMd3InuplDq
-         dNOxGUg4cliHdjIFQ7iSrNwHiPbjfUwsmD8Q/IbcHn1NQNy0r2dr0Vh0lwR014g3rA
-         uFJ9h1Kf593R8ivPzh4y10rVlzOFGUsexP7pZKok=
+        b=P5PG7QY8S5t0fvFcHTIXkBp6wT7oqZyKA6HqyM5A34r6spGN6K8VO02niR9SuJwns
+         Ag4z6nQ2C2TS5Ne0r/3WzAW6uj0Q8p+kB+BMgBKR0hSZ7XgadgjW2xIS8fifo33g64
+         l+cA7qFd7bQhOnvPYos5v5TaZ+2qZPuk5AEfflqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 31/55] arm64: dts: imx8mp-evk: correct I2C3 pad settings
-Date:   Mon, 11 Jul 2022 11:07:19 +0200
-Message-Id: <20220711090542.681601764@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.4 38/38] dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+Date:   Mon, 11 Jul 2022 11:07:20 +0200
+Message-Id: <20220711090539.846431997@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 0836de513ebaae5f03014641eac996290d67493d ]
+commit 615a4bfc426e11dba05c2cf343f9ac752fb381d2 upstream.
 
-According to RM bit layout, BIT3 and BIT0 are reserved.
- 8  7   6   5   4   3  2 1  0
-PE HYS PUE ODE FSEL X  DSE  X
+of_find_device_by_node() takes reference, we should use put_device()
+to release it when not need anymore.
 
-Although function is not broken, we should not set reserved bit.
-
-Fixes: 5e4a67ff7f69 ("arm64: dts: imx8mp-evk: Add i2c3 support")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Link: https://lore.kernel.org/r/20220605042723.17668-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/dma/ti/dma-crossbar.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-index c0663a6c8376..c016f5b7d24a 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-@@ -154,8 +154,8 @@
+--- a/drivers/dma/ti/dma-crossbar.c
++++ b/drivers/dma/ti/dma-crossbar.c
+@@ -247,6 +247,7 @@ static void *ti_dra7_xbar_route_allocate
+ 	if (dma_spec->args[0] >= xbar->xbar_requests) {
+ 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
+ 			dma_spec->args[0]);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
- 	pinctrl_i2c3: i2c3grp {
- 		fsl,pins = <
--			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c3
--			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c3
-+			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c2
-+			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c2
- 		>;
- 	};
+@@ -254,12 +255,14 @@ static void *ti_dra7_xbar_route_allocate
+ 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
+ 	if (!dma_spec->np) {
+ 		dev_err(&pdev->dev, "Can't get DMA master\n");
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
--- 
-2.35.1
-
+ 	map = kzalloc(sizeof(*map), GFP_KERNEL);
+ 	if (!map) {
+ 		of_node_put(dma_spec->np);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+@@ -271,6 +274,7 @@ static void *ti_dra7_xbar_route_allocate
+ 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+ 		kfree(map);
+ 		of_node_put(dma_spec->np);
++		put_device(&pdev->dev);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 	set_bit(map->xbar_out, xbar->dma_inuse);
 
 

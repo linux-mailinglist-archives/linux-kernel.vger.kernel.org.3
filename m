@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E3156FDA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0924A56FB3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiGKJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S232420AbiGKJ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiGKJ6U (ORCPT
+        with ESMTP id S232186AbiGKJZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:58:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8B13C148;
-        Mon, 11 Jul 2022 02:27:19 -0700 (PDT)
+        Mon, 11 Jul 2022 05:25:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812BC3C15E;
+        Mon, 11 Jul 2022 02:15:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0191BB80D2C;
-        Mon, 11 Jul 2022 09:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FC5C34115;
-        Mon, 11 Jul 2022 09:27:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD772B80E6D;
+        Mon, 11 Jul 2022 09:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C99FC385A2;
+        Mon, 11 Jul 2022 09:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531620;
-        bh=W3FkDVsaLvy6NEH/0/OxivKco67wNMOeiRL3HtMFaUQ=;
+        s=korg; t=1657530919;
+        bh=3Oqf7mTGRy74t/mYgL2BARavYyB7H0SI+5g6itj9mUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sBB6Xs4idaGIfu3TQK/PAwZH/8r+Geh6uG9IG8z31IqeXLjp7ycy4MCT7hhg7u30F
-         4VL1iSgpYO8caBf8mzGFMbBCr6VIFcC/NC5FqsyD0UYKzzA+ZDhG+IjgL2BfabMu09
-         R+weYhwGChflVWwMjAYKq0Pg3pKCAZCzKJ/CIJ0Q=
+        b=QTUX16Lq5sU3WtvNRHfTV+/bCfUWM9xvPV1XbJMoe7f0SUYxwL0zLfJqcDt8kfs0l
+         ThYzs73AGEelHbNtgv+tvIUPuXCmsA9KFsQ4RDqadLUi8nRygbNQdRkiS8OaKovLpH
+         GUKv/dwT7asLuo8ksuqszgo7DeDFe12OfdeeUyng=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 134/230] powerpc/vdso: Move cvdso_call macro into gettimeofday.S
+        stable@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>,
+        Ethan Zhao <haifeng.zhao@linux.intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.18 030/112] iommu/vt-d: Fix RID2PASID setup/teardown failure
 Date:   Mon, 11 Jul 2022 11:06:30 +0200
-Message-Id: <20220711090607.865563405@linuxfoundation.org>
+Message-Id: <20220711090550.422283157@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,143 +57,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-[ Upstream commit 692b21d78046851e75dc25bba773189c670b49c2 ]
+commit 4140d77a022101376bbfa3ec3e3da5063455c60e upstream.
 
-Now that gettimeofday.S is unique, move cvdso_call macro
-into that file which is the only user.
+The IOMMU driver shares the pasid table for PCI alias devices. When the
+RID2PASID entry of the shared pasid table has been filled by the first
+device, the subsequent device will encounter the "DMAR: Setup RID2PASID
+failed" failure as the pasid entry has already been marked as present.
+As the result, the IOMMU probing process will be aborted.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/72720359d4c58e3a3b96dd74952741225faac3de.1642782130.git.christophe.leroy@csgroup.eu
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+On the contrary, when any alias device is hot-removed from the system,
+for example, by writing to /sys/bus/pci/devices/.../remove, the shared
+RID2PASID will be cleared without any notifications to other devices.
+As the result, any DMAs from those rest devices are blocked.
+
+Sharing pasid table among PCI alias devices could save two memory pages
+for devices underneath the PCIe-to-PCI bridges. Anyway, considering that
+those devices are rare on modern platforms that support VT-d in scalable
+mode and the saved memory is negligible, it's reasonable to remove this
+part of immature code to make the driver feasible and stable.
+
+Fixes: ef848b7e5a6a0 ("iommu/vt-d: Setup pasid entry for RID2PASID support")
+Reported-by: Chenyi Qiang <chenyi.qiang@intel.com>
+Reported-by: Ethan Zhao <haifeng.zhao@linux.intel.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Ethan Zhao <haifeng.zhao@linux.intel.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220623065720.727849-1-baolu.lu@linux.intel.com
+Link: https://lore.kernel.org/r/20220625133430.2200315-2-baolu.lu@linux.intel.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/vdso/gettimeofday.h | 52 +-------------------
- arch/powerpc/kernel/vdso32/gettimeofday.S    | 44 ++++++++++++++++-
- 2 files changed, 45 insertions(+), 51 deletions(-)
+ drivers/iommu/intel/iommu.c |   24 ---------------
+ drivers/iommu/intel/pasid.c |   69 +-------------------------------------------
+ drivers/iommu/intel/pasid.h |    1 
+ include/linux/intel-iommu.h |    3 -
+ 4 files changed, 3 insertions(+), 94 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index df00e91c9a90..f0a4cf01e85c 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -2,57 +2,9 @@
- #ifndef _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
- #define _ASM_POWERPC_VDSO_GETTIMEOFDAY_H
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -320,30 +320,6 @@ EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped
+ DEFINE_SPINLOCK(device_domain_lock);
+ static LIST_HEAD(device_domain_list);
  
--#include <asm/page.h>
--
--#ifdef __ASSEMBLY__
--
--#include <asm/ppc_asm.h>
--
 -/*
-- * The macro sets two stack frames, one for the caller and one for the callee
-- * because there are no requirement for the caller to set a stack frame when
-- * calling VDSO so it may have omitted to set one, especially on PPC64
+- * Iterate over elements in device_domain_list and call the specified
+- * callback @fn against each element.
 - */
+-int for_each_device_domain(int (*fn)(struct device_domain_info *info,
+-				     void *data), void *data)
+-{
+-	int ret = 0;
+-	unsigned long flags;
+-	struct device_domain_info *info;
 -
--.macro cvdso_call funct call_time=0
--  .cfi_startproc
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	mflr		r0
--  .cfi_register lr, r0
--	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
--	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	get_datapage	r5
--	.ifeq	\call_time
--	addi		r5, r5, VDSO_DATA_OFFSET
--	.else
--	addi		r4, r5, VDSO_DATA_OFFSET
--	.endif
--	bl		DOTSYM(\funct)
--	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
--#ifdef __powerpc64__
--	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
--#endif
--	.ifeq	\call_time
--	cmpwi		r3, 0
--	.endif
--	mtlr		r0
--  .cfi_restore lr
--	addi		r1, r1, 2 * PPC_MIN_STKFRM
--	crclr		so
--	.ifeq	\call_time
--	beqlr+
--	crset		so
--	neg		r3, r3
--	.endif
--	blr
--  .cfi_endproc
--.endm
+-	spin_lock_irqsave(&device_domain_lock, flags);
+-	list_for_each_entry(info, &device_domain_list, global) {
+-		ret = fn(info, data);
+-		if (ret) {
+-			spin_unlock_irqrestore(&device_domain_lock, flags);
+-			return ret;
+-		}
+-	}
+-	spin_unlock_irqrestore(&device_domain_lock, flags);
 -
--#else
-+#ifndef __ASSEMBLY__
+-	return 0;
+-}
+-
+ const struct iommu_ops intel_iommu_ops;
  
-+#include <asm/page.h>
- #include <asm/vdso/timebase.h>
- #include <asm/barrier.h>
- #include <asm/unistd.h>
-diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
-index 9b3ac09423c8..dd2099128b8f 100644
---- a/arch/powerpc/kernel/vdso32/gettimeofday.S
-+++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
-@@ -12,7 +12,49 @@
- #include <asm/vdso_datapage.h>
- #include <asm/asm-offsets.h>
- #include <asm/unistd.h>
--#include <asm/vdso/gettimeofday.h>
-+
-+/*
-+ * The macro sets two stack frames, one for the caller and one for the callee
-+ * because there are no requirement for the caller to set a stack frame when
-+ * calling VDSO so it may have omitted to set one, especially on PPC64
-+ */
-+
-+.macro cvdso_call funct call_time=0
-+  .cfi_startproc
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	mflr		r0
-+  .cfi_register lr, r0
-+	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-+	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	get_datapage	r5
-+	.ifeq	\call_time
-+	addi		r5, r5, VDSO_DATA_OFFSET
-+	.else
-+	addi		r4, r5, VDSO_DATA_OFFSET
-+	.endif
-+	bl		DOTSYM(\funct)
-+	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+#endif
-+	.ifeq	\call_time
-+	cmpwi		r3, 0
-+	.endif
-+	mtlr		r0
-+  .cfi_restore lr
-+	addi		r1, r1, 2 * PPC_MIN_STKFRM
-+	crclr		so
-+	.ifeq	\call_time
-+	beqlr+
-+	crset		so
-+	neg		r3, r3
-+	.endif
-+	blr
-+  .cfi_endproc
-+.endm
- 
- 	.text
+ static bool translation_pre_enabled(struct intel_iommu *iommu)
+--- a/drivers/iommu/intel/pasid.c
++++ b/drivers/iommu/intel/pasid.c
+@@ -86,54 +86,6 @@ void vcmd_free_pasid(struct intel_iommu
  /*
--- 
-2.35.1
-
+  * Per device pasid table management:
+  */
+-static inline void
+-device_attach_pasid_table(struct device_domain_info *info,
+-			  struct pasid_table *pasid_table)
+-{
+-	info->pasid_table = pasid_table;
+-	list_add(&info->table, &pasid_table->dev);
+-}
+-
+-static inline void
+-device_detach_pasid_table(struct device_domain_info *info,
+-			  struct pasid_table *pasid_table)
+-{
+-	info->pasid_table = NULL;
+-	list_del(&info->table);
+-}
+-
+-struct pasid_table_opaque {
+-	struct pasid_table	**pasid_table;
+-	int			segment;
+-	int			bus;
+-	int			devfn;
+-};
+-
+-static int search_pasid_table(struct device_domain_info *info, void *opaque)
+-{
+-	struct pasid_table_opaque *data = opaque;
+-
+-	if (info->iommu->segment == data->segment &&
+-	    info->bus == data->bus &&
+-	    info->devfn == data->devfn &&
+-	    info->pasid_table) {
+-		*data->pasid_table = info->pasid_table;
+-		return 1;
+-	}
+-
+-	return 0;
+-}
+-
+-static int get_alias_pasid_table(struct pci_dev *pdev, u16 alias, void *opaque)
+-{
+-	struct pasid_table_opaque *data = opaque;
+-
+-	data->segment = pci_domain_nr(pdev->bus);
+-	data->bus = PCI_BUS_NUM(alias);
+-	data->devfn = alias & 0xff;
+-
+-	return for_each_device_domain(&search_pasid_table, data);
+-}
+ 
+ /*
+  * Allocate a pasid table for @dev. It should be called in a
+@@ -143,28 +95,18 @@ int intel_pasid_alloc_table(struct devic
+ {
+ 	struct device_domain_info *info;
+ 	struct pasid_table *pasid_table;
+-	struct pasid_table_opaque data;
+ 	struct page *pages;
+ 	u32 max_pasid = 0;
+-	int ret, order;
+-	int size;
++	int order, size;
+ 
+ 	might_sleep();
+ 	info = dev_iommu_priv_get(dev);
+ 	if (WARN_ON(!info || !dev_is_pci(dev) || info->pasid_table))
+ 		return -EINVAL;
+ 
+-	/* DMA alias device already has a pasid table, use it: */
+-	data.pasid_table = &pasid_table;
+-	ret = pci_for_each_dma_alias(to_pci_dev(dev),
+-				     &get_alias_pasid_table, &data);
+-	if (ret)
+-		goto attach_out;
+-
+ 	pasid_table = kzalloc(sizeof(*pasid_table), GFP_KERNEL);
+ 	if (!pasid_table)
+ 		return -ENOMEM;
+-	INIT_LIST_HEAD(&pasid_table->dev);
+ 
+ 	if (info->pasid_supported)
+ 		max_pasid = min_t(u32, pci_max_pasids(to_pci_dev(dev)),
+@@ -182,9 +124,7 @@ int intel_pasid_alloc_table(struct devic
+ 	pasid_table->table = page_address(pages);
+ 	pasid_table->order = order;
+ 	pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
+-
+-attach_out:
+-	device_attach_pasid_table(info, pasid_table);
++	info->pasid_table = pasid_table;
+ 
+ 	return 0;
+ }
+@@ -202,10 +142,7 @@ void intel_pasid_free_table(struct devic
+ 		return;
+ 
+ 	pasid_table = info->pasid_table;
+-	device_detach_pasid_table(info, pasid_table);
+-
+-	if (!list_empty(&pasid_table->dev))
+-		return;
++	info->pasid_table = NULL;
+ 
+ 	/* Free scalable mode PASID directory tables: */
+ 	dir = pasid_table->table;
+--- a/drivers/iommu/intel/pasid.h
++++ b/drivers/iommu/intel/pasid.h
+@@ -74,7 +74,6 @@ struct pasid_table {
+ 	void			*table;		/* pasid table pointer */
+ 	int			order;		/* page order of pasid table */
+ 	u32			max_pasid;	/* max pasid */
+-	struct list_head	dev;		/* device list */
+ };
+ 
+ /* Get PRESENT bit of a PASID directory entry. */
+--- a/include/linux/intel-iommu.h
++++ b/include/linux/intel-iommu.h
+@@ -611,7 +611,6 @@ struct intel_iommu {
+ struct device_domain_info {
+ 	struct list_head link;	/* link to domain siblings */
+ 	struct list_head global; /* link to global list */
+-	struct list_head table;	/* link to pasid table */
+ 	u32 segment;		/* PCI segment number */
+ 	u8 bus;			/* PCI bus number */
+ 	u8 devfn;		/* PCI devfn number */
+@@ -728,8 +727,6 @@ extern int dmar_ir_support(void);
+ void *alloc_pgtable_page(int node);
+ void free_pgtable_page(void *vaddr);
+ struct intel_iommu *domain_get_iommu(struct dmar_domain *domain);
+-int for_each_device_domain(int (*fn)(struct device_domain_info *info,
+-				     void *data), void *data);
+ void iommu_flush_write_buffer(struct intel_iommu *iommu);
+ int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev);
+ struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
 
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C71B56F9FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C21656FB56
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiGKJLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S231418AbiGKJ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiGKJKt (ORCPT
+        with ESMTP id S232297AbiGKJ2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:10:49 -0400
+        Mon, 11 Jul 2022 05:28:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCC411C22;
-        Mon, 11 Jul 2022 02:08:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C0366B83;
+        Mon, 11 Jul 2022 02:15:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 374F1B80E5E;
-        Mon, 11 Jul 2022 09:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88309C34115;
-        Mon, 11 Jul 2022 09:08:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55521B80E6D;
+        Mon, 11 Jul 2022 09:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF179C34115;
+        Mon, 11 Jul 2022 09:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530527;
-        bh=pILSbY4XJmMlzVTApIp6ncXPXmKzjXMYUZqolYEqo2U=;
+        s=korg; t=1657530955;
+        bh=8xduzV9XPwv+MRJJNBuvjbGKAF/YIl6fxiUCeWx2Z4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D2VvvNVleZyudN2K/6qYOwtp8D0SmBZmBo5B6l3BcO1a8a54XhnVhmeUNa77v9MM5
-         /aQeXJekOYwv61VN8Atp6VCwNwiwuZeGxaKzAQ4D2qnFc2wyX1YmAOROYU/Yjki5A9
-         zlRqSuQ2aWqPBNqQ7lfec/PsLn3xkU9zIn7YayGk=
+        b=FeNbjR8toCySRRLL6K6rn7EuTzIWbwEh7Dh8Hv0tz/BToehms2EJAPdFLxNy0fpHy
+         l5br1bn5kfsUzZvYO6k2V2/aUUzJguhGJDOLuAChxudbh5IT97ArOYsvZ+k9V4CpxA
+         EQRCLT/LqBb+dVytw+qjWQoC5aYGly0e0f4QHfbg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rhett Aultman <rhett.aultman@samsara.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 05/31] can: gs_usb: gs_usb_open/close(): fix memory leak
-Date:   Mon, 11 Jul 2022 11:06:44 +0200
-Message-Id: <20220711090538.004891604@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 045/112] ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
+Date:   Mon, 11 Jul 2022 11:06:45 +0200
+Message-Id: <20220711090550.851832759@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,113 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rhett Aultman <rhett.aultman@samsara.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 2bda24ef95c0311ab93bda00db40486acf30bd0a upstream.
+[ Upstream commit 34d2cd3fccced12b958b8848e3eff0ee4296764c ]
 
-The gs_usb driver appears to suffer from a malady common to many USB
-CAN adapter drivers in that it performs usb_alloc_coherent() to
-allocate a number of USB request blocks (URBs) for RX, and then later
-relies on usb_kill_anchored_urbs() to free them, but this doesn't
-actually free them. As a result, this may be leaking DMA memory that's
-been used by the driver.
+of_find_compatible_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-This commit is an adaptation of the techniques found in the esd_usb2
-driver where a similar design pattern led to a memory leak. It
-explicitly frees the RX URBs and their DMA memory via a call to
-usb_free_coherent(). Since the RX URBs were allocated in the
-gs_can_open(), we remove them in gs_can_close() rather than in the
-disconnect function as was done in esd_usb2.
-
-For more information, see the 928150fad41b ("can: esd_usb2: fix memory
-leak").
-
-Link: https://lore.kernel.org/all/alpine.DEB.2.22.394.2206031547001.1630869@thelappy
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Cc: stable@vger.kernel.org
-Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d850f3e5d296 ("ARM: meson: Add SMP bringup code for Meson8 and Meson8b")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220512021611.47921-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/gs_usb.c |   23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ arch/arm/mach-meson/platsmp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -192,6 +192,8 @@ struct gs_can {
+diff --git a/arch/arm/mach-meson/platsmp.c b/arch/arm/mach-meson/platsmp.c
+index 4b8ad728bb42..32ac60b89fdc 100644
+--- a/arch/arm/mach-meson/platsmp.c
++++ b/arch/arm/mach-meson/platsmp.c
+@@ -71,6 +71,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
+ 	}
  
- 	struct usb_anchor tx_submitted;
- 	atomic_t active_tx_urbs;
-+	void *rxbuf[GS_MAX_RX_URBS];
-+	dma_addr_t rxbuf_dma[GS_MAX_RX_URBS];
- };
+ 	sram_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!sram_base) {
+ 		pr_err("Couldn't map SRAM registers\n");
+ 		return;
+@@ -91,6 +92,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
+ 	}
  
- /* usb interface struct */
-@@ -600,6 +602,7 @@ static int gs_can_open(struct net_device
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-+			dma_addr_t buf_dma;
- 
- 			/* alloc rx urb */
- 			urb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -610,7 +613,7 @@ static int gs_can_open(struct net_device
- 			buf = usb_alloc_coherent(dev->udev,
- 						 sizeof(struct gs_host_frame),
- 						 GFP_KERNEL,
--						 &urb->transfer_dma);
-+						 &buf_dma);
- 			if (!buf) {
- 				netdev_err(netdev,
- 					   "No memory left for USB buffer\n");
-@@ -618,6 +621,8 @@ static int gs_can_open(struct net_device
- 				return -ENOMEM;
- 			}
- 
-+			urb->transfer_dma = buf_dma;
-+
- 			/* fill, anchor, and submit rx urb */
- 			usb_fill_bulk_urb(urb,
- 					  dev->udev,
-@@ -641,10 +646,17 @@ static int gs_can_open(struct net_device
- 					   rc);
- 
- 				usb_unanchor_urb(urb);
-+				usb_free_coherent(dev->udev,
-+						  sizeof(struct gs_host_frame),
-+						  buf,
-+						  buf_dma);
- 				usb_free_urb(urb);
- 				break;
- 			}
- 
-+			dev->rxbuf[i] = buf;
-+			dev->rxbuf_dma[i] = buf_dma;
-+
- 			/* Drop reference,
- 			 * USB core will take care of freeing it
- 			 */
-@@ -709,13 +721,20 @@ static int gs_can_close(struct net_devic
- 	int rc;
- 	struct gs_can *dev = netdev_priv(netdev);
- 	struct gs_usb *parent = dev->parent;
-+	unsigned int i;
- 
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
- 	parent->active_channels--;
--	if (!parent->active_channels)
-+	if (!parent->active_channels) {
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
-+		for (i = 0; i < GS_MAX_RX_URBS; i++)
-+			usb_free_coherent(dev->udev,
-+					  sizeof(struct gs_host_frame),
-+					  dev->rxbuf[i],
-+					  dev->rxbuf_dma[i]);
-+	}
- 
- 	/* Stop sending URBs */
- 	usb_kill_anchored_urbs(&dev->tx_submitted);
+ 	scu_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!scu_base) {
+ 		pr_err("Couldn't map SCU registers\n");
+ 		return;
+-- 
+2.35.1
+
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B72456FBAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE1156FAD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiGKJeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S232047AbiGKJWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiGKJdQ (ORCPT
+        with ESMTP id S232012AbiGKJV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:33:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FDA7AB14;
-        Mon, 11 Jul 2022 02:17:56 -0700 (PDT)
+        Mon, 11 Jul 2022 05:21:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A696A5925E;
+        Mon, 11 Jul 2022 02:13:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 281DB612B8;
-        Mon, 11 Jul 2022 09:17:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8BDC36AE7;
-        Mon, 11 Jul 2022 09:17:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DA15B80C69;
+        Mon, 11 Jul 2022 09:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1CCC34115;
+        Mon, 11 Jul 2022 09:13:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531075;
-        bh=WewbxobdXy3VRk5+aYIVvs3YD7Yl6NReJmWuY9HmJdw=;
+        s=korg; t=1657530789;
+        bh=/PA375MgRFKqGCoyHk5O+DJmD8t1VvU0w48L065Ejd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1R6MsxSBbw/cOsTCQhdHVgNM796dT6yzN/wZHAzGIyrmPEjUqQSEh0VlBoh3HL9o7
-         EqzQoUN+tREajs49jdKJOLfzzlIgHu7WZRcg4Gd8tc7H39r0BKVZQ3wvxAZHvrLhT/
-         hUXOj9s90beQWOGLemkXRfn42zMAgS0a8cYTscs4=
+        b=XudkG12Wxon6kdTdy4uzGWE+DR2idV/IUgFvCsMbj8Nn3NtztUiXIWvZC5OMzMISS
+         6xelNP+FFQBEekup1+70hqRhX3owV/91QqBq9I242qfevR7eh81PHXnAWE3q1d+Sij
+         xbYrBWsRyr/zOkZNqTPtkpVPq2R0ShItMkQWUQGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Perry Yuan <perry.yuan@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Nick Child <nnac123@linux.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        Rick Lindsley <ricklind@us.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 088/112] ACPI: CPPC: Dont require _OSC if X86_FEATURE_CPPC is supported
+Subject: [PATCH 5.10 40/55] ibmvnic: Properly dispose of all skbs during a failover.
 Date:   Mon, 11 Jul 2022 11:07:28 +0200
-Message-Id: <20220711090552.069300240@linuxfoundation.org>
+Message-Id: <20220711090542.940872889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Rick Lindsley <ricklind@us.ibm.com>
 
-[ Upstream commit 8b356e536e69f3a4d6778ae9f0858a1beadabb1f ]
+[ Upstream commit 1b18f09d31cfa7148df15a7d5c5e0e86f105f7d1 ]
 
-commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and
-when CPPC_LIB is supported") added support for claiming to
-support CPPC in _OSC on non-Intel platforms.
+During a reset, there may have been transmits in flight that are no
+longer valid and cannot be fulfilled.  Resetting and clearing the
+queues is insufficient; each skb also needs to be explicitly freed
+so that upper levels are not left waiting for confirmation of a
+transmit that will never happen.  If this happens frequently enough,
+the apparent backlog will cause TCP to begin "congestion control"
+unnecessarily, culminating in permanently decreased throughput.
 
-This unfortunately caused a regression on a vartiety of AMD
-platforms in the field because a number of AMD platforms don't set
-the `_OSC` bit 5 or 6 to indicate CPPC or CPPC v2 support.
-
-As these AMD platforms already claim CPPC support via a dedicated
-MSR from `X86_FEATURE_CPPC`, use this enable this feature rather
-than requiring the `_OSC` on platforms with a dedicated MSR.
-
-If there is additional breakage on the shared memory designs also
-missing this _OSC, additional follow up changes may be needed.
-
-Fixes: 72f2ecb7ece7 ("Set CPPC _OSC bits for all and when CPPC_LIB is supported")
-Reported-by: Perry Yuan <perry.yuan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: d7c0ef36bde03 ("ibmvnic: Free and re-allocate scrqs when tx/rx scrqs change")
+Tested-by: Nick Child <nnac123@linux.ibm.com>
+Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
+Signed-off-by: Rick Lindsley <ricklind@us.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/acpi/cppc.c | 10 ++++++++++
- drivers/acpi/cppc_acpi.c    | 16 +++++++++++++++-
- include/acpi/cppc_acpi.h    |  1 +
- 3 files changed, 26 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-index df1644d9b3b6..3677df836e91 100644
---- a/arch/x86/kernel/acpi/cppc.c
-+++ b/arch/x86/kernel/acpi/cppc.c
-@@ -11,6 +11,16 @@
- 
- /* Refer to drivers/acpi/cppc_acpi.c for the description of functions */
- 
-+bool cpc_supported_by_cpu(void)
-+{
-+	switch (boot_cpu_data.x86_vendor) {
-+	case X86_VENDOR_AMD:
-+	case X86_VENDOR_HYGON:
-+		return boot_cpu_has(X86_FEATURE_CPPC);
-+	}
-+	return false;
-+}
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 61fb2a092451..7fe2e47dc83d 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -5228,6 +5228,15 @@ static int ibmvnic_reset_init(struct ibmvnic_adapter *adapter, bool reset)
+ 			release_sub_crqs(adapter, 0);
+ 			rc = init_sub_crqs(adapter);
+ 		} else {
++			/* no need to reinitialize completely, but we do
++			 * need to clean up transmits that were in flight
++			 * when we processed the reset.  Failure to do so
++			 * will confound the upper layer, usually TCP, by
++			 * creating the illusion of transmits that are
++			 * awaiting completion.
++			 */
++			clean_tx_pools(adapter);
 +
- bool cpc_ffh_supported(void)
- {
- 	return true;
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 6aff8019047b..57ca7aa0e169 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -559,6 +559,19 @@ bool __weak cpc_ffh_supported(void)
- 	return false;
- }
- 
-+/**
-+ * cpc_supported_by_cpu() - check if CPPC is supported by CPU
-+ *
-+ * Check if the architectural support for CPPC is present even
-+ * if the _OSC hasn't prescribed it
-+ *
-+ * Return: true for supported, false for not supported
-+ */
-+bool __weak cpc_supported_by_cpu(void)
-+{
-+	return false;
-+}
-+
- /**
-  * pcc_data_alloc() - Allocate the pcc_data memory for pcc subspace
-  *
-@@ -668,7 +681,8 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
- 
- 	if (!osc_sb_cppc2_support_acked) {
- 		pr_debug("CPPC v2 _OSC not acked\n");
--		return -ENODEV;
-+		if (!cpc_supported_by_cpu())
-+			return -ENODEV;
- 	}
- 
- 	/* Parse the ACPI _CPC table for this CPU. */
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index 92b7ea8d8f5e..181907349b49 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -144,6 +144,7 @@ extern bool acpi_cpc_valid(void);
- extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
- extern unsigned int cppc_get_transition_latency(int cpu);
- extern bool cpc_ffh_supported(void);
-+extern bool cpc_supported_by_cpu(void);
- extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
- extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
- #else /* !CONFIG_ACPI_CPPC_LIB */
+ 			rc = reset_sub_crq_queues(adapter);
+ 		}
+ 	} else {
 -- 
 2.35.1
 

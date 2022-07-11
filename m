@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F143056FDB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6740356FDB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbiGKJ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S234307AbiGKJ7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiGKJ6g (ORCPT
+        with ESMTP id S234228AbiGKJ6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:58:36 -0400
+        Mon, 11 Jul 2022 05:58:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E8DB5D15;
-        Mon, 11 Jul 2022 02:27:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0815BB5D29;
+        Mon, 11 Jul 2022 02:27:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D376A61366;
-        Mon, 11 Jul 2022 09:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9CDC34115;
-        Mon, 11 Jul 2022 09:27:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A17E161383;
+        Mon, 11 Jul 2022 09:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE1BC34115;
+        Mon, 11 Jul 2022 09:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531634;
-        bh=72C4Cq7hWJ3xQ8q5umw7jp4XTDXmIZeMx894K7C2sR4=;
+        s=korg; t=1657531637;
+        bh=yukl6GV3BRbGGtmdnfo95ezX+H3GVr/qNTWjY1Phkmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iAon/scjWfPjDlstymWMlbqgoQ+EipU9/rtfFRkOjkW/DWESSNqq+e2N03xIOD5vU
-         8p5gJUMFL0mC8jzxxEeJPAhAhVUtxRO1Pu6moZKIsdlbagcxBuuEZWG+XM35RM6I0K
-         ncyh5XXKPh6PyDtCv4Xavwgx+ntBpQpavbTYpbSo=
+        b=CczWVxuyhWIh4CL3FxPASBHzJclnkjJUr48pLliffnahP1cz++FSQLAuhz8WQO9/n
+         +IO6MNS1roQ02vx7e1fj0YN5YSHcJlrUvhOl4obRYKa+rsDKfvulAlYIHR0Z/PMcOy
+         dsZ1Oh7IOaZyFgKpXkBRQ4PI8RwhEcRCXIojaLGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 136/230] serial: 8250_mtk: Make sure to select the right FEATURE_SEL
-Date:   Mon, 11 Jul 2022 11:06:32 +0200
-Message-Id: <20220711090607.922087626@linuxfoundation.org>
+Subject: [PATCH 5.15 137/230] tty: n_gsm: fix invalid gsmtty_write_room() result
+Date:   Mon, 11 Jul 2022 11:06:33 +0200
+Message-Id: <20220711090607.950458131@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -56,48 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit 6f81fdded0d024c7d4084d434764f30bca1cd6b1 ]
+[ Upstream commit 9361ebfbb79fd1bc8594a487c01ad52cdaa391ea ]
 
-Set the FEATURE_SEL at probe time to make sure that BIT(0) is enabled:
-this guarantees that when the port is configured as AP UART, the
-right register layout is interpreted by the UART IP.
+gsmtty_write() does not prevent the user to use the full fifo size of 4096
+bytes as allocated in gsm_dlci_alloc(). However, gsmtty_write_room() tries
+to limit the return value by 'TX_SIZE' and returns a negative value if the
+fifo has more than 'TX_SIZE' bytes stored. This is obviously wrong as
+'TX_SIZE' is defined as 512.
+Define 'TX_SIZE' to the fifo size and use it accordingly for allocation to
+keep the current behavior. Return the correct remaining size of the fifo in
+gsmtty_write_room() via kfifo_avail().
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220427132328.228297-3-angelogioacchino.delregno@collabora.com
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220504081733.3494-3-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_mtk.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/tty/n_gsm.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index de48a58460f4..de57f47635cd 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -57,6 +57,9 @@
- #define MTK_UART_XON1		40	/* I/O: Xon character 1 */
- #define MTK_UART_XOFF1		42	/* I/O: Xoff character 1 */
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index fd4a86111a6e..4a430f6ca170 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -137,6 +137,7 @@ struct gsm_dlci {
+ 	int retries;
+ 	/* Uplink tty if active */
+ 	struct tty_port port;	/* The tty bound to this DLCI if there is one */
++#define TX_SIZE		4096    /* Must be power of 2. */
+ 	struct kfifo fifo;	/* Queue fifo for the DLCI */
+ 	int adaption;		/* Adaption layer in use */
+ 	int prev_adaption;
+@@ -1758,7 +1759,7 @@ static struct gsm_dlci *gsm_dlci_alloc(struct gsm_mux *gsm, int addr)
+ 		return NULL;
+ 	spin_lock_init(&dlci->lock);
+ 	mutex_init(&dlci->mutex);
+-	if (kfifo_alloc(&dlci->fifo, 4096, GFP_KERNEL) < 0) {
++	if (kfifo_alloc(&dlci->fifo, TX_SIZE, GFP_KERNEL) < 0) {
+ 		kfree(dlci);
+ 		return NULL;
+ 	}
+@@ -3035,8 +3036,6 @@ static struct tty_ldisc_ops tty_ldisc_packet = {
+  *	Virtual tty side
+  */
  
-+#define MTK_UART_FEATURE_SEL	39	/* Feature Selection register */
-+#define MTK_UART_FEAT_NEWRMAP	BIT(0)	/* Use new register map */
-+
- #ifdef CONFIG_SERIAL_8250_DMA
- enum dma_rx_status {
- 	DMA_RX_START = 0,
-@@ -572,6 +575,10 @@ static int mtk8250_probe(struct platform_device *pdev)
- 		uart.dma = data->dma;
- #endif
+-#define TX_SIZE		512
+-
+ /**
+  *	gsm_modem_upd_via_data	-	send modem bits via convergence layer
+  *	@dlci: channel
+@@ -3274,7 +3273,7 @@ static unsigned int gsmtty_write_room(struct tty_struct *tty)
+ 	struct gsm_dlci *dlci = tty->driver_data;
+ 	if (dlci->state == DLCI_CLOSED)
+ 		return 0;
+-	return TX_SIZE - kfifo_len(&dlci->fifo);
++	return kfifo_avail(&dlci->fifo);
+ }
  
-+	/* Set AP UART new register map */
-+	writel(MTK_UART_FEAT_NEWRMAP, uart.port.membase +
-+	       (MTK_UART_FEATURE_SEL << uart.port.regshift));
-+
- 	/* Disable Rate Fix function */
- 	writel(0x0, uart.port.membase +
- 			(MTK_UART_RATE_FIX << uart.port.regshift));
+ static unsigned int gsmtty_chars_in_buffer(struct tty_struct *tty)
 -- 
 2.35.1
 

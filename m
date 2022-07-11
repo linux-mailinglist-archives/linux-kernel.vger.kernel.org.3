@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF47570C85
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EFF570C8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiGKVNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S231719AbiGKVN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiGKVNX (ORCPT
+        with ESMTP id S229639AbiGKVN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:13:23 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F133A25;
-        Mon, 11 Jul 2022 14:13:21 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r6so7764872edd.7;
-        Mon, 11 Jul 2022 14:13:20 -0700 (PDT)
+        Mon, 11 Jul 2022 17:13:56 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B651CEE39
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:13:54 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id j29so7522812qtv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=9vJqD4dzKiefaURSHAzLn/KqkmwP/2hOLemxSE6nXqw=;
-        b=bmWur8VTc2YHg662mUHDsMzevR3CeXD6HsvfX937EYWhgLFsNaoO49Sgbncjt3Pncf
-         phDrEaNFFfzOxNq27QvLmHDhQ98GLvMlTsBU9K7klijeYSHL/+o+8IkV77L1y85GZqKK
-         hAhoNKByCVg75T5iIU7A63/pkzQoQnuditCXdnCD+HOMBcnourCRM33yqFmlAGhnhawS
-         3wbluXKXPnpikO2Of5DGfCsdqqA/Tfk7EJBZYyE0n5OFNK0UdEFFEaeNcMovUO1CUxAO
-         cT35Mjg4vbLB3EVs1LzKjvPeMKhv5xP4L2KwThfPiaIsEy90nzF3xLNFzis6XdqgJtXX
-         YUWQ==
+        d=maine.edu; s=google;
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=8vTBmzv852xKhWrN9h9mYQ3XpcRNGRn6fXVgj6QYgw8=;
+        b=PKGGj9RM5A+JX4lcrP1HKxNMQxBQ7Yqm5bImHQaaz+co5hEWpJr0AD9Ac5dwerESWZ
+         6t2nN7TASEaCg7UvKsrANOp3zeKoA5YdfcVREuBUWyyZ2peDhiuKaqbBWzzpQqwEd7dn
+         /br0nPtmqyyaG9bM3v7WSThELezUjK2PUuSso=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9vJqD4dzKiefaURSHAzLn/KqkmwP/2hOLemxSE6nXqw=;
-        b=Qq5xq+lxoelQd7n/ZmM8tK+V58TsjYqJ9SPIbBC0xebOgfwlsrmr1xCIIwRlMp9VaR
-         7HiGMcJcxRgQd7lb0s5Wh7UoLXewY+bOuKKChRlZfkIGVJy+GkWyClYqgT+J1iIae70n
-         Drr1C20JGgA96qtiiUosjlz6+ySQCvZ5QpkJCP7HNpfWvoS8yBtv3QPHRhgciTx1Vwkz
-         PjYB3FQ3ygg1tdmLq/Me5YxjyBFXRA4NOwwls89Q6+axWxd5ZUUEBHFsPzVUxURKItyL
-         EO2eLIRg3keZDmQSEPAL125Qtzml5A8RoWXgW/hMwtnI31HCo4mPx8CxM9qAMESdWPhT
-         UFvg==
-X-Gm-Message-State: AJIora8iGCP7lcJuW6BQBTklUu8GfC3Q8y/M098mn2khzn4GNoPFSpML
-        SiQO2vZieTBiGcUFxJXPEwA=
-X-Google-Smtp-Source: AGRyM1vpuBDVRTyo9k7hWrbxwGW/aE8q3aNoICJ24NNjG0knFtRUwDF9bsIt3LHbqbm9ninaV4JGjA==
-X-Received: by 2002:a05:6402:1e8c:b0:43a:c57f:2cbb with SMTP id f12-20020a0564021e8c00b0043ac57f2cbbmr17183847edf.97.1657573999624;
-        Mon, 11 Jul 2022 14:13:19 -0700 (PDT)
-Received: from laptop ([77.222.6.10])
-        by smtp.gmail.com with ESMTPSA id az21-20020a170907905500b0072b02f99e55sm3039939ejc.197.2022.07.11.14.13.18
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=8vTBmzv852xKhWrN9h9mYQ3XpcRNGRn6fXVgj6QYgw8=;
+        b=Ut7ykPjoS14j7MG1fpqbWDYKxI4uLUp1HC5Wjj+EzwuG/munlHO4UW+oGTh+IJCg8E
+         /eXamRR1fpOLuLjI9YjIRM6pgXX2mPX6Ggo14jJmxwhLwofDSJiIfpZ834/pER7nVrdb
+         I8s6Ub5eZ+rwBwR5dp1i3MJ1lsRzUU2s7AnCbx93RwSfLUJJRO8qvR/SswmOWAT+h6yO
+         OUobkV82UStLFc5zYxYXBlOZQtA7nykKzSZRCk2DaYmIalyhrp3EVRDQmsFGuRYrFzQn
+         zzNwPZZws6gpRO6/pLqTjiU/wDV4qKA/odq1Q40aMYwRm6aOCcRxFPUO/SX1BVGAiPVJ
+         /5Rw==
+X-Gm-Message-State: AJIora8nwk9tcLC5XnbHeJ7hr/Zp59QkeB2kp6dXMbTbfijr95bLmxx3
+        JdslgZBUO631Xoi8lO9x9GvJRA==
+X-Google-Smtp-Source: AGRyM1vRKchYufioyisseSRjD9AXUuhb5O0TI80r7JEQkCqxHm6U9I3uUypQjpbui5FT6oPUBrVexg==
+X-Received: by 2002:ac8:7fd1:0:b0:31d:4c2d:c448 with SMTP id b17-20020ac87fd1000000b0031d4c2dc448mr15503431qtk.11.1657574033866;
+        Mon, 11 Jul 2022 14:13:53 -0700 (PDT)
+Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
+        by smtp.gmail.com with ESMTPSA id br15-20020a05620a460f00b006af290182c8sm7275293qkb.86.2022.07.11.14.13.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 14:13:19 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 23:13:17 +0200
-From:   Fedor Tokarev <ftokarev@gmail.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ftokarev@gmail.com
-Subject: [PATCH] bpf: btf: Fix vsnprintf return value check
-Message-ID: <20220711211317.GA1143610@laptop>
+        Mon, 11 Jul 2022 14:13:53 -0700 (PDT)
+From:   Vince Weaver <vincent.weaver@maine.edu>
+X-Google-Original-From: Vince Weaver <vince@maine.edu>
+Date:   Mon, 11 Jul 2022 17:13:52 -0400 (EDT)
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        pawan.kumar.gupta@linux.intel.com
+Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
+ intel_pmu_lbr_restore
+In-Reply-To: <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com>
+Message-ID: <f22dd6fb-48b7-99cf-3d7a-348e5792c8@maine.edu>
+References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu> <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu> <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vsnprintf returns the number of characters which would have been written if
-enough space had been available, excluding the terminating null byte. Thus,
-the return value of 'len_left' means that the last character has been
-dropped.
+On Mon, 11 Jul 2022, Liang, Kan wrote:
 
-Signed-off-by: Fedor Tokarev <ftokarev@gmail.com>
----
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> 
+> On 2022-07-08 12:13 p.m., Vince Weaver wrote:
+> > [ 7763.384369] unchecked MSR access error: WRMSR to 0x689 (tried to write 0x1fffffff8101349e) at rIP: 0xffffffff810704a4 (native_write_msr+0x4/0x20)
+> 
+> The 0x689 is a valid LBR register, which is MSR_LASTBRANCH_9_FROM_IP.
+> The issue should be caused by the known TSX bug, which is mentioned in
+> the commit 9fc9ddd61e0 ("perf/x86/intel: Fix MSR_LAST_BRANCH_FROM_x bug
+> when no TSX"). It looks like the TSX support has been deactivated,
+> however the quirk in the commit isn't applied for some reason.
+> 
+> 
+> To apply the quirk, perf relies on the boot CPU's flag and LBR format.
+> 
+> static inline bool lbr_from_signext_quirk_needed(void)
+> {
+> 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
+> 			   boot_cpu_has(X86_FEATURE_RTM);
+> 
+> 	return !tsx_support && x86_pmu.lbr_has_tsx;
+> }
+> 
+> Could you please share the value of the PERF_CAPABILITIES MSR	0x00000345
+> of the machine?
+> I'd like to double check whether the LBR fromat is correct. 0x5 is expected.
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index eb12d4f705cc..a9c1c98017d4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6519,7 +6519,7 @@ static void btf_snprintf_show(struct btf_show *show, const char *fmt,
- 	if (len < 0) {
- 		ssnprintf->len_left = 0;
- 		ssnprintf->len = len;
--	} else if (len > ssnprintf->len_left) {
-+	} else if (len >= ssnprintf->len_left) {
- 		/* no space, drive on to get length we would have written */
- 		ssnprintf->len_left = 0;
- 		ssnprintf->len += len;
--- 
-2.25.1
+How would I do that?  Just something like:
+# rdmsr 0x00000345
+32c4
 
+or is it more involved than that?
+
+Vince Weaver
+vincent.weaver@maine.edu

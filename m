@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB5C56D315
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5DF56D31B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 04:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiGKCvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Jul 2022 22:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S229581AbiGKCxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Jul 2022 22:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKCvH (ORCPT
+        with ESMTP id S229470AbiGKCxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Jul 2022 22:51:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D0643C;
-        Sun, 10 Jul 2022 19:51:06 -0700 (PDT)
+        Sun, 10 Jul 2022 22:53:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696A9183A8;
+        Sun, 10 Jul 2022 19:53:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 327FDB80108;
-        Mon, 11 Jul 2022 02:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862D9C3411E;
-        Mon, 11 Jul 2022 02:51:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F36E8610A5;
+        Mon, 11 Jul 2022 02:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07264C3411E;
+        Mon, 11 Jul 2022 02:53:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657507863;
-        bh=H18WbEDpqrNp4Wv/6cAAcQW8aWlTFhtktPnU33Y3Uxc=;
+        s=k20201202; t=1657507983;
+        bh=PCWoXAlR4NxLTHXg0LrKWX+ks7as6mmpDn6fX/LsNHU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TEZzuuCgh8b0tXrC0+uVi2NuujwZ69Vja/JfuKIVq/DZ5Jq94cL9CDud/73zslcND
-         RK7vWMJq84ADpRIlO/BgpVEWWr8bhmVyW4WyhMsqUkEkEY58mHj0bHZPGBY1iBu2VP
-         Aq4VIQZRFb6PVYv1y96R+Gx7tHpAIDzIWGi3QhidVcBm4ys6VWmBfDUgCOpyZU/p5z
-         rcbq02lqSMQFum+ON3ndRzNa8gGuZvTeJWDiNkOxCV42vXRigOJmdWyBJNIUozEMA5
-         NKYx6lmN8Z5BksFjM751mlCA/mld8sHub2OkNKBJTnr2Jb2SIE3ZPv6IEgRKmchO7t
-         YfHtq9HcB3Gnw==
-Date:   Mon, 11 Jul 2022 05:50:58 +0300
+        b=hywFkzoAIkBPJDBfXVkvAObcMXd2FqviNCH/dD4P34ClqDPjfWp2U3b4k6HdRaw3P
+         Xbc/i/wrzaYBnlKavv9BCRAnZ1NganrvYxGA+mkgP3Ewy6L096MKjQWhO/QLEK8jxn
+         4Z/p3VldcMJSjcXWd3LrTbpyop020gD5uIlSSXXnr91QQeU11Y0BIZqIjDEmtcrDKO
+         8j9ule6Umk3yel3Le4oYzW6IRgEMq5PZB8NtR9uW8wOyacVgXD4lykuis40gHbaQ6+
+         Yb8vX0SzNMhb71rn5VTD3UQsnx5XcexEbDSefXz4DwKe5FYa3l0UT7cYpO6c1m9m4R
+         wCokhaeSl4Mgg==
+Date:   Mon, 11 Jul 2022 05:52:58 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Message-ID: <YsuQEoVuVa00gIdE@kernel.org>
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
- <Yr4x6KRSvzlXNdH2@kernel.org>
- <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@nfschina.com
+Subject: Re: [PATCH] keys/keyring: Fix typo in string
+Message-ID: <YsuQihEKR8DC+Pnm@kernel.org>
+References: <20220704025610.3834-1-zeming@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+In-Reply-To: <20220704025610.3834-1-zeming@nfschina.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,33 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 07:45:12PM +0200, Lino Sanfilippo wrote:
+On Mon, Jul 04, 2022 at 10:56:10AM +0800, Li zeming wrote:
+> Remove the repeated ',' from string
 > 
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  security/keys/keyring.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> On 01.07.22 01:29, Jarkko Sakkinen wrote:
+> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+> index 5e6a90760753..c6c47ca9b57d 100644
+> --- a/security/keys/keyring.c
+> +++ b/security/keys/keyring.c
+> @@ -460,7 +460,7 @@ static int keyring_read_iterator(const void *object, void *data)
+>  	struct keyring_read_iterator_context *ctx = data;
+>  	const struct key *key = keyring_ptr_to_key(object);
+>  
+> -	kenter("{%s,%d},,{%zu/%zu}",
+> +	kenter("{%s,%d},{%zu/%zu}",
+>  	       key->type->name, key->serial, ctx->count, ctx->buflen);
+>  
+>  	if (ctx->count >= ctx->buflen)
+> @@ -484,7 +484,7 @@ static long keyring_read(const struct key *keyring,
+>  	struct keyring_read_iterator_context ctx;
+>  	long ret;
+>  
+> -	kenter("{%d},,%zu", key_serial(keyring), buflen);
+> +	kenter("{%d},%zu", key_serial(keyring), buflen);
+>  
+>  	if (buflen & (sizeof(key_serial_t) - 1))
+>  		return -EINVAL;
+> -- 
+> 2.18.2
 > 
-> >
-> > I'm kind of thinking that should tpm_tis_data have a lock for its
-> > contents?
-> 
-> Most of the tpm_tis_data structure elements are set once during init and
-> then never changed but only read. So no need for locking for these. The
-> exceptions I see are
-> 
-> - flags
-> - locality_count
-> - locality
 
-I'd still go for single data struct lock, since this lock would
-be taken in every transmit flow. It makes the whole thing easier
-to maintain over time, and does not really affect scalability.
-
-This brings me to another question: what does this lock protect
-against given that tpm_try_get_ops() already takes tpm_mutex?
-It's not clear and that should be somehow reasoned in the commit
-message.
-
-Anyway, *if* a lock is needed the granularity should be the whole
-struct.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko

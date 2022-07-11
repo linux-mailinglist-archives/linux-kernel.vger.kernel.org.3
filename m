@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55F156FA99
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C045956FA43
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbiGKJT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
+        id S231392AbiGKJPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiGKJTK (ORCPT
+        with ESMTP id S231389AbiGKJOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:19:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F84E87D;
-        Mon, 11 Jul 2022 02:12:07 -0700 (PDT)
+        Mon, 11 Jul 2022 05:14:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ADA3204E;
+        Mon, 11 Jul 2022 02:10:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15463611F0;
-        Mon, 11 Jul 2022 09:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AF2C34115;
-        Mon, 11 Jul 2022 09:12:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3968B80E79;
+        Mon, 11 Jul 2022 09:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F89C34115;
+        Mon, 11 Jul 2022 09:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530726;
-        bh=zmAKCFuifIgrl8xnK7nnzm4KnOms+s9J9t89VFFdE/g=;
+        s=korg; t=1657530602;
+        bh=lDnrGg8XCrWs/U/ZDqKOXJWJ3M8ICXOK/64L4R+o3h0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TXGjBDabfSuNUihUJaGrVGvedaUuK55BvIC8BALUcxgqWz8AKigfyDHSkXsLg6a52
-         Mrt0f0t4IdMTfPVZyYDGy0f2FMewvXuIneIAVZveaarwcHyM92zbZ8GxUd6mmOGKna
-         +3oh8V4wzbv0CE/qyRpF+xr/2K29yLzcuBX02eVM=
+        b=dOPbot7d6CBUC5M2rKKN2/QaMuSgdChoqvYjgzUIHXf7H7nisId7U50mdg0J2qTGi
+         f53d3taAv0OWhNSAS3G/aci0MwH8rplQoKhCCftdvJH1roBk6EedaTbmn1nKGcl47S
+         FoZrAC1PkorKpIlAiSgPhaBnGFABm63he84+GLgY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuee K1r0a <liulin063@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH 5.10 06/55] bpf: Fix incorrect verifier simulation around jmp32s jeq/jne
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH 5.4 12/38] fbcon: Prevent that screen size is smaller than font size
 Date:   Mon, 11 Jul 2022 11:06:54 +0200
-Message-Id: <20220711090541.951730942@linuxfoundation.org>
+Message-Id: <20220711090539.090838502@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,119 +54,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+From: Helge Deller <deller@gmx.de>
 
-commit a12ca6277eca6aeeccf66e840c23a2b520e24c8f upstream.
+commit e64242caef18b4a5840b0e7a9bff37abd4f4f933 upstream.
 
-Kuee reported a quirk in the jmp32's jeq/jne simulation, namely that the
-register value does not match expectations for the fall-through path. For
-example:
+We need to prevent that users configure a screen size which is smaller than the
+currently selected font size. Otherwise rendering chars on the screen will
+access memory outside the graphics memory region.
 
-Before fix:
+This patch adds a new function fbcon_modechange_possible() which
+implements this check and which later may be extended with other checks
+if necessary.  The new function is called from the FBIOPUT_VSCREENINFO
+ioctl handler in fbmem.c, which will return -EINVAL if userspace asked
+for a too small screen size.
 
-  0: R1=ctx(off=0,imm=0) R10=fp0
-  0: (b7) r2 = 0                        ; R2_w=P0
-  1: (b7) r6 = 563                      ; R6_w=P563
-  2: (87) r2 = -r2                      ; R2_w=Pscalar()
-  3: (87) r2 = -r2                      ; R2_w=Pscalar()
-  4: (4c) w2 |= w6                      ; R2_w=Pscalar(umin=563,umax=4294967295,var_off=(0x233; 0xfffffdcc),s32_min=-2147483085) R6_w=P563
-  5: (56) if w2 != 0x8 goto pc+1        ; R2_w=P571  <--- [*]
-  6: (95) exit
-  R0 !read_ok
-
-After fix:
-
-  0: R1=ctx(off=0,imm=0) R10=fp0
-  0: (b7) r2 = 0                        ; R2_w=P0
-  1: (b7) r6 = 563                      ; R6_w=P563
-  2: (87) r2 = -r2                      ; R2_w=Pscalar()
-  3: (87) r2 = -r2                      ; R2_w=Pscalar()
-  4: (4c) w2 |= w6                      ; R2_w=Pscalar(umin=563,umax=4294967295,var_off=(0x233; 0xfffffdcc),s32_min=-2147483085) R6_w=P563
-  5: (56) if w2 != 0x8 goto pc+1        ; R2_w=P8  <--- [*]
-  6: (95) exit
-  R0 !read_ok
-
-As can be seen on line 5 for the branch fall-through path in R2 [*] is that
-given condition w2 != 0x8 is false, verifier should conclude that r2 = 8 as
-upper 32 bit are known to be zero. However, verifier incorrectly concludes
-that r2 = 571 which is far off.
-
-The problem is it only marks false{true}_reg as known in the switch for JE/NE
-case, but at the end of the function, it uses {false,true}_{64,32}off to
-update {false,true}_reg->var_off and they still hold the prior value of
-{false,true}_reg->var_off before it got marked as known. The subsequent
-__reg_combine_32_into_64() then propagates this old var_off and derives new
-bounds. The information between min/max bounds on {false,true}_reg from
-setting the register to known const combined with the {false,true}_reg->var_off
-based on the old information then derives wrong register data.
-
-Fix it by detangling the BPF_JEQ/BPF_JNE cases and updating relevant
-{false,true}_{64,32}off tnums along with the register marking to known
-constant.
-
-Fixes: 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
-Reported-by: Kuee K1r0a <liulin063@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20220701124727.11153-1-daniel@iogearbox.net
+Signed-off-by: Helge Deller <deller@gmx.de>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: stable@vger.kernel.org # v5.4+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/verifier.c |   41 ++++++++++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 17 deletions(-)
+ drivers/video/fbdev/core/fbcon.c |   28 ++++++++++++++++++++++++++++
+ drivers/video/fbdev/core/fbmem.c |    4 +++-
+ include/linux/fbcon.h            |    4 ++++
+ 3 files changed, 35 insertions(+), 1 deletion(-)
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7512,26 +7512,33 @@ static void reg_set_min_max(struct bpf_r
- 		return;
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -2761,6 +2761,34 @@ void fbcon_update_vcs(struct fb_info *in
+ }
+ EXPORT_SYMBOL(fbcon_update_vcs);
  
- 	switch (opcode) {
-+	/* JEQ/JNE comparison doesn't change the register equivalence.
-+	 *
-+	 * r1 = r2;
-+	 * if (r1 == 42) goto label;
-+	 * ...
-+	 * label: // here both r1 and r2 are known to be 42.
-+	 *
-+	 * Hence when marking register as known preserve it's ID.
-+	 */
- 	case BPF_JEQ:
-+		if (is_jmp32) {
-+			__mark_reg32_known(true_reg, val32);
-+			true_32off = tnum_subreg(true_reg->var_off);
-+		} else {
-+			___mark_reg_known(true_reg, val);
-+			true_64off = true_reg->var_off;
-+		}
-+		break;
- 	case BPF_JNE:
--	{
--		struct bpf_reg_state *reg =
--			opcode == BPF_JEQ ? true_reg : false_reg;
--
--		/* JEQ/JNE comparison doesn't change the register equivalence.
--		 * r1 = r2;
--		 * if (r1 == 42) goto label;
--		 * ...
--		 * label: // here both r1 and r2 are known to be 42.
--		 *
--		 * Hence when marking register as known preserve it's ID.
--		 */
--		if (is_jmp32)
--			__mark_reg32_known(reg, val32);
--		else
--			___mark_reg_known(reg, val);
-+		if (is_jmp32) {
-+			__mark_reg32_known(false_reg, val32);
-+			false_32off = tnum_subreg(false_reg->var_off);
-+		} else {
-+			___mark_reg_known(false_reg, val);
-+			false_64off = false_reg->var_off;
-+		}
- 		break;
--	}
- 	case BPF_JSET:
- 		if (is_jmp32) {
- 			false_32off = tnum_and(false_32off, tnum_const(~val32));
++/* let fbcon check if it supports a new screen resolution */
++int fbcon_modechange_possible(struct fb_info *info, struct fb_var_screeninfo *var)
++{
++	struct fbcon_ops *ops = info->fbcon_par;
++	struct vc_data *vc;
++	unsigned int i;
++
++	WARN_CONSOLE_UNLOCKED();
++
++	if (!ops)
++		return 0;
++
++	/* prevent setting a screen size which is smaller than font size */
++	for (i = first_fb_vc; i <= last_fb_vc; i++) {
++		vc = vc_cons[i].d;
++		if (!vc || vc->vc_mode != KD_TEXT ||
++			   registered_fb[con2fb_map[i]] != info)
++			continue;
++
++		if (vc->vc_font.width  > FBCON_SWAP(var->rotate, var->xres, var->yres) ||
++		    vc->vc_font.height > FBCON_SWAP(var->rotate, var->yres, var->xres))
++			return -EINVAL;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(fbcon_modechange_possible);
++
+ int fbcon_mode_deleted(struct fb_info *info,
+ 		       struct fb_videomode *mode)
+ {
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1114,7 +1114,9 @@ static long do_fb_ioctl(struct fb_info *
+ 			return -EFAULT;
+ 		console_lock();
+ 		lock_fb_info(info);
+-		ret = fb_set_var(info, &var);
++		ret = fbcon_modechange_possible(info, &var);
++		if (!ret)
++			ret = fb_set_var(info, &var);
+ 		if (!ret)
+ 			fbcon_update_vcs(info, var.activate & FB_ACTIVATE_ALL);
+ 		unlock_fb_info(info);
+--- a/include/linux/fbcon.h
++++ b/include/linux/fbcon.h
+@@ -15,6 +15,8 @@ void fbcon_new_modelist(struct fb_info *
+ void fbcon_get_requirement(struct fb_info *info,
+ 			   struct fb_blit_caps *caps);
+ void fbcon_fb_blanked(struct fb_info *info, int blank);
++int  fbcon_modechange_possible(struct fb_info *info,
++			       struct fb_var_screeninfo *var);
+ void fbcon_update_vcs(struct fb_info *info, bool all);
+ void fbcon_remap_all(struct fb_info *info);
+ int fbcon_set_con2fb_map_ioctl(void __user *argp);
+@@ -33,6 +35,8 @@ static inline void fbcon_new_modelist(st
+ static inline void fbcon_get_requirement(struct fb_info *info,
+ 					 struct fb_blit_caps *caps) {}
+ static inline void fbcon_fb_blanked(struct fb_info *info, int blank) {}
++static inline int  fbcon_modechange_possible(struct fb_info *info,
++				struct fb_var_screeninfo *var) { return 0; }
+ static inline void fbcon_update_vcs(struct fb_info *info, bool all) {}
+ static inline void fbcon_remap_all(struct fb_info *info) {}
+ static inline int fbcon_set_con2fb_map_ioctl(void __user *argp) { return 0; }
 
 

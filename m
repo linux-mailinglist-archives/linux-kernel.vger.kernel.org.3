@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FDF57019E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804185701A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiGKMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S230242AbiGKMEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiGKMEA (ORCPT
+        with ESMTP id S231363AbiGKMEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:04:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD02DAE47;
-        Mon, 11 Jul 2022 05:03:52 -0700 (PDT)
-X-UUID: 3c8c5df364dc4235a485009a948a9808-20220711
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:1200bcbc-04a8-40e6-a4a9-6eae801b09d6,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:6c941a87-57f0-47ca-ba27-fe8c57fbf305,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3c8c5df364dc4235a485009a948a9808-20220711
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 485703959; Mon, 11 Jul 2022 20:03:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 11 Jul 2022 20:03:46 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 11 Jul 2022 20:03:46 +0800
-Message-ID: <459bb032c68be7c5be682d90462becfbb17ccda8.camel@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: mmc: Add compatible for MediaTek MT8188
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Jul 2022 20:03:46 +0800
-In-Reply-To: <c8f8f5f4-173e-797d-e060-e5eaac7ca822@linaro.org>
-References: <20220707054710.1396-1-johnson.wang@mediatek.com>
-         <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
-         <3216ec92952c7d722feaeb76986e0a6a54340646.camel@mediatek.com>
-         <c8f8f5f4-173e-797d-e060-e5eaac7ca822@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Mon, 11 Jul 2022 08:04:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF66741D33;
+        Mon, 11 Jul 2022 05:04:20 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BBJPKt014047;
+        Mon, 11 Jul 2022 12:04:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=dy5qnrY8PKyQYQC1yezcdT8KNhS4VxqtVLh8J5ex2n0=;
+ b=kldtlybrL5SobUYT5Gx/8XXk5K2c3LFBfbnr25NJqOxoa2Ve+4PeBkpMFOGvYfaifTwR
+ xdfVysUDoMrcEasglFMFDRXwyLEHnJuzLJBf388+HcEsUoDCek+GX2Qm2GEXtdqFq/e9
+ iE1VOH0aXbuxFl1Vj+xHxHIyblZ0GEkj6Ej3XBgOwuFdLXwC4Xz7XDracfuHZC8zDNCz
+ l1T4Ac+pc45iuUmsqZLfCtKFvKMxhlnY/fw4VVcN4rR8nGYHvxmCnhgoqi7fxnre+CKi
+ 5vglCmgwIFBoxXTcq89TUDgVJgP62QFUw6s6CQSxSef9RBJciPDhDsWf1EuL6zQ1fNJv mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h84sagfn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:04:10 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26BAXTw3026877;
+        Mon, 11 Jul 2022 12:04:10 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h84sagfkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:04:09 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26BBq16i027196;
+        Mon, 11 Jul 2022 12:04:07 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3h71a8tpgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:04:07 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26BC45nA17629598
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Jul 2022 12:04:05 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 113D9A4060;
+        Mon, 11 Jul 2022 12:04:05 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04CFBA405F;
+        Mon, 11 Jul 2022 12:04:03 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.107.19])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 11 Jul 2022 12:04:02 +0000 (GMT)
+Message-ID: <81ea189fd671947efc61000a745599a4b0573370.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima/evm: Fix potential memory leak in ima_init_crypto()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 11 Jul 2022 08:04:01 -0400
+In-Reply-To: <20220711072202.2319030-1-niejianglei2021@163.com>
+References: <20220711072202.2319030-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kM73rs2Rr-dLTyIY3ri_t9sjkc7zXq29
+X-Proofpoint-ORIG-GUID: ESBp5WcxjtrgDeLcV_KlZiXzMkb1K52C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_17,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
+ mlxlogscore=797 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207110052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 13:02 +0200, Krzysztof Kozlowski wrote:
-> On 07/07/2022 09:30, Johnson Wang wrote:
-> > On Thu, 2022-07-07 at 08:46 +0200, Krzysztof Kozlowski wrote:
-> > > On 07/07/2022 07:47, Johnson Wang wrote:
-> > > > This commit adds dt-binding documentation of mmc for MediaTek
-> > > > MT8188 SoC
-> > > > platform.
-> > > > 
-> > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > index 2a2e9fa8c188..3fbf33ad4f7c 100644
-> > > > --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> > > > @@ -32,6 +32,9 @@ properties:
-> > > >        - items:
-> > > >            - const: mediatek,mt8186-mmc
-> > > >            - const: mediatek,mt8183-mmc
-> > > > +      - items:
-> > > > +          - const: mediatek,mt8188-mmc
-> > > 
-> > > You duplicate quite a lot. Use enum.
-> > > 
-> > > Best regards,
-> > > Krzysztof
-> > 
-> > Hi Krzysztof,
-> > 
-> > Thanks for you suggestion.
-> > 
-> > I will use 'enum' to place this compatible strings.
-> > 
-> > Just like this:
-> > - items:
-> >     - enum:
-> >         - mediatek,mt8186-mmc
-> >         - mediatek,mt8188-mmc
-> >         - mediatek,mt8192-mmc
-> >         - mediatek,mt8195-mmc
-> >     - const: mediatek,mt8183-mmc
-> > 
-> > Moreover, it seems that missing an "items:" between oneOf and enum
-> > in
-> > the compatible property.
-> > Is my understanding wrong?
-> 
-> I did not propose to remove items, so where are they missing? Not
-> sure
-> what you are asking about...
-> 
-> Best regards,
-> Krzysztof
+On Mon, 2022-07-11 at 15:22 +0800, Jianglei Nie wrote:
+> This patch adds the missing kfree() for ima_algo_array allocated by
+> kcalloc() to avoid potential memory leak.
 
-Hi Krzysztof,
+Missing is the reason that ima_algo_array is being freed.
 
-Sorry for the confusion.
-That was my misunderstanding. Please ignore it...
+Perhaps something like, 
+"On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
+without freeing the ima_algo_array.   Add the missing kfree() for
+ima_algo_array to avoid the potential memory leak."
 
-BRs,
-Johnson Wang
+thanks,
+
+Mimi
 

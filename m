@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E4756F9A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B6556F9A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiGKJG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S229952AbiGKJHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiGKJGx (ORCPT
+        with ESMTP id S230272AbiGKJGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:06:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E662A22B04;
-        Mon, 11 Jul 2022 02:06:51 -0700 (PDT)
+        Mon, 11 Jul 2022 05:06:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C91E22531;
+        Mon, 11 Jul 2022 02:06:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A7C6B80E79;
-        Mon, 11 Jul 2022 09:06:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CB1C341C0;
-        Mon, 11 Jul 2022 09:06:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFBD06118B;
+        Mon, 11 Jul 2022 09:06:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBC0C34115;
+        Mon, 11 Jul 2022 09:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530409;
-        bh=q2Q+I9n0V02sBi/QwXHzZEGvewpBRryFzoh+Tb46EPA=;
+        s=korg; t=1657530412;
+        bh=++Ww8pPVHs+rvU8WtFnJVr6Tf7qYaVEmgDt46VFu64o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZZ8Qdmo6x3F14x/fosgqdZhlXiNgMdtljGOF0XihpTkaSKI9ae7cqPiP7CZNS0x/a
-         B2AtNA8B59VLqW/Bo3nQZjB1QJokwoIlmtahannXkLZx00Qx0i/UCgIDOI6m2ZCUcC
-         4MDIjXqrIZgbxvHB48m+j7W2a/nb2XtuKKW2z10Q=
+        b=WYd+pf0++Q8oNYdgSp1hgMRWZrm1YX+pJfYBQdewgz4Kv9SesDhOaQCyQ8SSkHcn+
+         fF72LB+UE3EjK8t8Wwh/loiBhE3/f/24I4RDOYwljMm4/OiCMFPgXq8I71kjCd1Yc5
+         pvUYxBb2pRm9/nl5lwVKtKoDIHdt2ozEc2uUIcuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 4.9 01/14] mm/slub: add missing TID updates on slab deactivation
-Date:   Mon, 11 Jul 2022 11:06:20 +0200
-Message-Id: <20220711090535.564053922@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
+        Liang He <windhl@126.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.9 02/14] can: grcan: grcan_probe(): remove extra of_node_get()
+Date:   Mon, 11 Jul 2022 11:06:21 +0200
+Message-Id: <20220711090535.593925777@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
 References: <20220711090535.517697227@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -60,137 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Liang He <windhl@126.com>
 
-commit eeaa345e128515135ccb864c04482180c08e3259 upstream.
+commit 562fed945ea482833667f85496eeda766d511386 upstream.
 
-The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
-the TID stays the same. However, two places in __slab_alloc() currently
-don't update the TID when deactivating the CPU slab.
+In grcan_probe(), of_find_node_by_path() has already increased the
+refcount. There is no need to call of_node_get() again, so remove it.
 
-If multiple operations race the right way, this could lead to an object
-getting lost; or, in an even more unlikely situation, it could even lead to
-an object being freed onto the wrong slab's freelist, messing up the
-`inuse` counter and eventually causing a page to be freed to the page
-allocator while it still contains slab objects.
-
-(I haven't actually tested these cases though, this is just based on
-looking at the code. Writing testcases for this stuff seems like it'd be
-a pain...)
-
-The race leading to state inconsistency is (all operations on the same CPU
-and kmem_cache):
-
- - task A: begin do_slab_free():
-    - read TID
-    - read pcpu freelist (==NULL)
-    - check `slab == c->slab` (true)
- - [PREEMPT A->B]
- - task B: begin slab_alloc_node():
-    - fastpath fails (`c->freelist` is NULL)
-    - enter __slab_alloc()
-    - slub_get_cpu_ptr() (disables preemption)
-    - enter ___slab_alloc()
-    - take local_lock_irqsave()
-    - read c->freelist as NULL
-    - get_freelist() returns NULL
-    - write `c->slab = NULL`
-    - drop local_unlock_irqrestore()
-    - goto new_slab
-    - slub_percpu_partial() is NULL
-    - get_partial() returns NULL
-    - slub_put_cpu_ptr() (enables preemption)
- - [PREEMPT B->A]
- - task A: finish do_slab_free():
-    - this_cpu_cmpxchg_double() succeeds()
-    - [CORRUPT STATE: c->slab==NULL, c->freelist!=NULL]
-
->From there, the object on c->freelist will get lost if task B is allowed to
-continue from here: It will proceed to the retry_load_slab label,
-set c->slab, then jump to load_freelist, which clobbers c->freelist.
-
-But if we instead continue as follows, we get worse corruption:
-
- - task A: run __slab_free() on object from other struct slab:
-    - CPU_PARTIAL_FREE case (slab was on no list, is now on pcpu partial)
- - task A: run slab_alloc_node() with NUMA node constraint:
-    - fastpath fails (c->slab is NULL)
-    - call __slab_alloc()
-    - slub_get_cpu_ptr() (disables preemption)
-    - enter ___slab_alloc()
-    - c->slab is NULL: goto new_slab
-    - slub_percpu_partial() is non-NULL
-    - set c->slab to slub_percpu_partial(c)
-    - [CORRUPT STATE: c->slab points to slab-1, c->freelist has objects
-      from slab-2]
-    - goto redo
-    - node_match() fails
-    - goto deactivate_slab
-    - existing c->freelist is passed into deactivate_slab()
-    - inuse count of slab-1 is decremented to account for object from
-      slab-2
-
-At this point, the inuse count of slab-1 is 1 lower than it should be.
-This means that if we free all allocated objects in slab-1 except for one,
-SLUB will think that slab-1 is completely unused, and may free its page,
-leading to use-after-free.
-
-Fixes: c17dda40a6a4e ("slub: Separate out kmem_cache_cpu processing from deactivate_slab")
-Fixes: 03e404af26dc2 ("slub: fast release on full slab")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jann Horn <jannh@google.com>
-Acked-by: Christoph Lameter <cl@linux.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Link: https://lore.kernel.org/r/20220608182205.2945720-1-jannh@google.com
+Link: https://lore.kernel.org/all/20220619070257.4067022-1-windhl@126.com
+Fixes: 1e93ed26acf0 ("can: grcan: grcan_probe(): fix broken system id check for errata workaround needs")
+Cc: stable@vger.kernel.org # v5.18
+Cc: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/slub.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/can/grcan.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2556,6 +2556,7 @@ redo:
- 			deactivate_slab(s, page, c->freelist);
- 			c->page = NULL;
- 			c->freelist = NULL;
-+			c->tid = next_tid(c->tid);
- 			goto new_slab;
- 		}
- 	}
-@@ -2569,6 +2570,7 @@ redo:
- 		deactivate_slab(s, page, c->freelist);
- 		c->page = NULL;
- 		c->freelist = NULL;
-+		c->tid = next_tid(c->tid);
- 		goto new_slab;
- 	}
- 
-@@ -2581,6 +2583,7 @@ redo:
- 
- 	if (!freelist) {
- 		c->page = NULL;
-+		c->tid = next_tid(c->tid);
- 		stat(s, DEACTIVATE_BYPASS);
- 		goto new_slab;
- 	}
-@@ -2605,6 +2608,7 @@ new_slab:
- 		c->partial = page->next;
- 		stat(s, CPU_PARTIAL_ALLOC);
- 		c->freelist = NULL;
-+		c->tid = next_tid(c->tid);
- 		goto redo;
- 	}
- 
-@@ -2627,6 +2631,7 @@ new_slab:
- 	deactivate_slab(s, page, get_freepointer(s, freelist));
- 	c->page = NULL;
- 	c->freelist = NULL;
-+	c->tid = next_tid(c->tid);
- 	return freelist;
- }
- 
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1669,7 +1669,6 @@ static int grcan_probe(struct platform_d
+ 	 */
+ 	sysid_parent = of_find_node_by_path("/ambapp0");
+ 	if (sysid_parent) {
+-		of_node_get(sysid_parent);
+ 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
+ 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
+ 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
 
 

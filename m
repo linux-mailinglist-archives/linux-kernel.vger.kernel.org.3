@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A212C57063B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A87857063D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiGKOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S231826AbiGKOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiGKOwV (ORCPT
+        with ESMTP id S229868AbiGKOwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:52:21 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A486F7E6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:52:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m16so6549772edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SGTevPUwkzc81+3xxS7RaXwvxQl65M4pwfdwK/mf7M8=;
-        b=Z4XNDNccxkqkkO69BxWuxx6IsFvM9Iy0/pO+RqiO8BrUoiKcx1R1xBCQ13TE/3t9Bw
-         onK38E1qGpBYWskQ0GBgkh6x2n4S3k9KaSM3oMUWRo9sVHRiL40eS9WhzYfitS6df7IE
-         vjbiZz9yu5MdyHrK0cs75bFs7cpF22uzW2PaA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SGTevPUwkzc81+3xxS7RaXwvxQl65M4pwfdwK/mf7M8=;
-        b=T3IzyskpHvBb/foSU/8xxeeJCVX4pDL4SazRdTooYzFC1PTshnuasKEivx4tPoNyVD
-         4LKzS3BlQRZgEjoT6G1Xpuen2uRT9dqP6ihVttbENCVKEo8SBmHb/3olHqzEojx9jBg6
-         kmV/N63q4aVnFwlR+8XvoaSfitkbQ4VWAi6w9dK6qp9L9/AzD0rSPj5CGArLDFtutplW
-         IMaalTQn01kwcfyzs3PqRjOGv3azWt2Se8KsIAwTnwjjoA1Xwk1oGRnxEfpUTUtS+Sgv
-         zuILU6/pzAxiDyBesHs7aCugUk/OYHqgxTBUO6inEZ4XNwr6fEfnDHAA1wC0h21sUoUA
-         DPbA==
-X-Gm-Message-State: AJIora9h6MmfRyUOU9z0sfxFTWKHmOpbt5V2YjBIDNTJ3Q8pgM3Dk7IV
-        r1vJWs6FPn2NSw9b1RG15zl/T72AkykxShBu
-X-Google-Smtp-Source: AGRyM1uQ1x1JBNL6IhqwzmyUngXtqxwrJRLFNvBJYLIjLVCYnZBTKtPS+D07ZBY6g01B+de64ygR6w==
-X-Received: by 2002:a05:6402:14a:b0:43a:a1a7:abbd with SMTP id s10-20020a056402014a00b0043aa1a7abbdmr26320238edu.137.1657551138456;
-        Mon, 11 Jul 2022 07:52:18 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id f19-20020a170906139300b00722e52d043dsm2754837ejc.114.2022.07.11.07.52.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 07:52:17 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id r10so1189284wrv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:52:16 -0700 (PDT)
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr17639861wrr.617.1657551136373; Mon, 11
- Jul 2022 07:52:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org> <20220711082940.39539-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220711082940.39539-3-krzysztof.kozlowski@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 11 Jul 2022 07:52:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WUCPzzZHAPqoz-vhmcVxzYDxkKQs=+1tLZvsQjWe4q3Q@mail.gmail.com>
-Message-ID: <CAD=FV=WUCPzzZHAPqoz-vhmcVxzYDxkKQs=+1tLZvsQjWe4q3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] dt-bindings: mmc: sdhci-msm: constrain reg-names
- perp variants
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 11 Jul 2022 10:52:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B1C6F7EC;
+        Mon, 11 Jul 2022 07:52:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7FF5B81026;
+        Mon, 11 Jul 2022 14:52:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66C9C34115;
+        Mon, 11 Jul 2022 14:52:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657551160;
+        bh=T5/YgjZEyFa9qar9PBcP/h4QGGDW5ssEp2nL2da/rbk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FruxfvHb7pRbBBKIhc4BZ4LRHPprizlmPVXQS1iaXTGP3mgGGgRP55lY90bNGTJnA
+         OT1+WTtiPEFSUVn2Tg5wAMGpjjG3usGRRsF6/jUH758RS/RygHWSHg/lMONF2Rqlkq
+         4X1cHCexjg+mTGOGHaJGJ6nPWWtvjhHaSnFpd3vYobOIzYlxPgZjnRkAZ/Luf40u83
+         0t9djetXzX5gMjB7V4yP0O1Gm/io7vVDjEJy3sg8p3PodwEUxchAZxGEksxtZB8Blu
+         sFcf1VXgD+ZN0cIf0lQtlo+upOC9x0DA/NjhmVkz2e4jveY5VCqFuBi3ES8Y2BtO4q
+         Tmr8GBBH/12eQ==
+Date:   Mon, 11 Jul 2022 15:52:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, git@xilinx.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        michael@walle.cc, linux-mtd@lists.infradead.org
+Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
+ device
+Message-ID: <Ysw5MpvjKM5LKvWd@sirena.org.uk>
+References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
+ <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
+ <YqHfccvhy7e5Bc6m@sirena.org.uk>
+ <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="myd8/Fo7asf/V7NN"
+Content-Disposition: inline
+In-Reply-To: <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+X-Cookie: I am NOMAD!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,115 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-On Mon, Jul 11, 2022 at 1:29 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The entries in arrays must have fixed order, so the bindings and Linux
-> driver expecting various combinations of 'reg' addresses was never
-> actually conforming to guidelines.
->
-> The 'core' reg entry is valid only for SDCC v4 and lower, so disallow it
-> in SDCC v5.  SDCC v4 supports CQE and ICE, so allow them, even though
-> the qcom,sdhci-msm-v4 compatible is used also for earlier SoCs with SDCC
-> v2 or v3, so it is not entirely accurate.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Changes since v1:
-> 1. Rework the patch based on Doug's feedback.
-> ---
->  .../devicetree/bindings/mmc/sdhci-msm.yaml    | 61 ++++++++++++-------
->  1 file changed, 38 insertions(+), 23 deletions(-)
+--myd8/Fo7asf/V7NN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In the ${SUBJECT} I'm not sure what a "perp variant" is. Is that a
-typo or just a phrase I'm not aware of?
+On Mon, Jul 11, 2022 at 02:47:54PM +0200, Michal Simek wrote:
+> On 6/9/22 13:54, Mark Brown wrote:
+> > On Mon, Jun 06, 2022 at 04:56:06PM +0530, Amit Kumar Mahapatra wrote:
 
+> > > +	u32 cs[SPI_CS_CNT_MAX];
+> > > +	u8 idx;
+> > >   	/* Mode (clock phase/polarity/etc.) */
+> > >   	if (of_property_read_bool(nc, "spi-cpha"))
 
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> index fc6e5221985a..2f0fdd65e908 100644
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> @@ -49,33 +49,11 @@ properties:
->
->    reg:
->      minItems: 1
-> -    items:
-> -      - description: Host controller register map
-> -      - description: SD Core register map
-> -      - description: CQE register map
-> -      - description: Inline Crypto Engine register map
-> +    maxItems: 4
->
->    reg-names:
->      minItems: 1
->      maxItems: 4
-> -    oneOf:
-> -      - items:
-> -          - const: hc
-> -      - items:
-> -          - const: hc
-> -          - const: core
-> -      - items:
-> -          - const: hc
-> -          - const: cqhci
-> -      - items:
-> -          - const: hc
-> -          - const: cqhci
-> -          - const: ice
-> -      - items:
-> -          - const: hc
-> -          - const: core
-> -          - const: cqhci
-> -          - const: ice
->
->    clocks:
->      minItems: 3
-> @@ -177,6 +155,43 @@ required:
->  allOf:
->    - $ref: mmc-controller.yaml#
->
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sdhci-msm-v4
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +          items:
-> +            - description: Host controller register map
-> +            - description: SD Core register map
-> +            - description: CQE register map
-> +            - description: Inline Crypto Engine register map
-> +        reg-names:
-> +          minItems: 2
-> +          items:
-> +            - const: hc
-> +            - const: core
-> +            - const: cqhci
-> +            - const: ice
-> +    else:
-> +      properties:
-> +        reg:
-> +          minItems: 1
-> +          items:
-> +            - description: Host controller register map
-> +            - description: CQE register map
-> +            - description: Inline Crypto Engine register map
-> +        reg-names:
-> +          minItems: 1
-> +          items:
-> +            - const: hc
-> +            - const: cqhci
-> +            - const: ice
+> > This is changing the DT binding but doesn't have any updates to the
+> > binding document.  The binding code also doesn't validate that we don't
+> > have too many chip selects.
 
-Do you need to set "maxItems" here? If you don't then will it inherit
-the maxItems of 4 from above?
+> I would like to better understand your request here in connection to change
+> in the binding code for validation.
+> What exactly do you want to validate?
+> That child reg property is not bigger than num-cs in controller node?
 
--Doug
+If you are adding support for multiple chip selects in the driver then
+there must be some mechanism for expressing that in the bindings which I
+would expect to see appear as a change to the binding document.
+
+--myd8/Fo7asf/V7NN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLMOTEACgkQJNaLcl1U
+h9DUywf/elR3ZLKLxsB3PZJFT+KXa1Qr7NqEluE38DikQ0asVPDKT2SyDCuVZBFu
+P1WzVgQFGEAjOkRrNtJYKBi8zPlGyjCp45MoWQeXNMqI/1jyNP0O9ewCBZH8rT2x
+zhtyqxEFRWbPxdGdiNvhUodfbdnWjbE6tgt6XEgnJT+b9yqAUx13OGx5PK4tf8ql
+Bg+I0GCGybcOmQgJ1DPuTY8l1c5Hs2sd3kHCdpgjtEjnSnD7dqOtDQ0lH2vSVVzF
+1tlp1tSqbatA+jmgJSki0T/eVtXpiNHOWq/WBdjEx9nBu8YN28UR8iMVtxeua7Ni
+i8DPKRKrXRFE6Qz2NK5U6/DYNEVDVw==
+=ZBqB
+-----END PGP SIGNATURE-----
+
+--myd8/Fo7asf/V7NN--

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966BA56F9F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47156FA93
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiGKJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S231724AbiGKJTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiGKJKU (ORCPT
+        with ESMTP id S231765AbiGKJSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:10:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33E02A94C;
-        Mon, 11 Jul 2022 02:08:29 -0700 (PDT)
+        Mon, 11 Jul 2022 05:18:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673AD120BC;
+        Mon, 11 Jul 2022 02:11:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EE261148;
-        Mon, 11 Jul 2022 09:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E196C34115;
-        Mon, 11 Jul 2022 09:08:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB3D610A5;
+        Mon, 11 Jul 2022 09:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C93C34115;
+        Mon, 11 Jul 2022 09:11:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530508;
-        bh=3Rmk8qZWpW2yMzZ5SsMzHiMd/7zR1ly06CyIaurBVtM=;
+        s=korg; t=1657530715;
+        bh=y+hHn47PRGENKtZJ5c2vk7CjPtGcxMIn+fnzxsUje0Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L/8Okk+VX4yz5o3FeVHJNBj6OH/LoWNZDxSX8h9FExcIsFWmu5a8UC//E0yLJhMpe
-         izAwgMlNI0j0mdT0eMzfcOeasdnfdLmJUfJOwpDxjJX0A1uS8OHAm7gCBsZYLuhLl6
-         QHzDtuGKw28ivou/FbcLvtExqYAFZ6NhZHxudM+s=
+        b=D3ILpBcvW4cFftmt+DT5Izi5MTjaeiv4xKzYIjEgrvBiiuftLZ2vMBAIcWOl3c8/Z
+         dzAKNTX4tKbONRTIe7zjqwXEQWvBzLmnFv+gq4+tTneiBKJ1F+/Q2Iy262TnyJKEZd
+         AsXhaObkLUlLuuoaFcEYwbqDorAmeZz9D9UT6Lmg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.19 10/31] video: of_display_timing.h: include errno.h
-Date:   Mon, 11 Jul 2022 11:06:49 +0200
-Message-Id: <20220711090538.151308075@linuxfoundation.org>
+        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 02/55] ALSA: hda/realtek: Add quirk for Clevo L140PU
+Date:   Mon, 11 Jul 2022 11:06:50 +0200
+Message-Id: <20220711090541.837613248@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hsin-Yi Wang <hsinyi@chromium.org>
+From: Tim Crawford <tcrawford@system76.com>
 
-commit 3663a2fb325b8782524f3edb0ae32d6faa615109 upstream.
+commit 11bea26929a1a3a9dd1a287b60c2f471701bf706 upstream.
 
-If CONFIG_OF is not enabled, default of_get_display_timing() returns an
-errno, so include the header.
+Fixes headset detection on Clevo L140PU.
 
-Fixes: 422b67e0b31a ("videomode: provide dummy inline functions for !CONFIG_OF")
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Tim Crawford <tcrawford@system76.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220624144109.3957-1-tcrawford@system76.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/video/of_display_timing.h |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/include/video/of_display_timing.h
-+++ b/include/video/of_display_timing.h
-@@ -9,6 +9,8 @@
- #ifndef __LINUX_OF_DISPLAY_TIMING_H
- #define __LINUX_OF_DISPLAY_TIMING_H
- 
-+#include <linux/errno.h>
-+
- struct device_node;
- struct display_timing;
- struct display_timings;
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8934,6 +8934,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1558, 0x70f4, "Clevo NH77EPY", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x70f6, "Clevo NH77DPQ-Y", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x7716, "Clevo NS50PU", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
++	SND_PCI_QUIRK(0x1558, 0x7718, "Clevo L140PU", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x8228, "Clevo NR40BU", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x8520, "Clevo NH50D[CD]", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1558, 0x8521, "Clevo NH77D[CD]", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
 
 

@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FA856FD3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB04356FB34
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbiGKJws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S232369AbiGKJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbiGKJwB (ORCPT
+        with ESMTP id S232408AbiGKJYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:52:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF32ACEE5;
-        Mon, 11 Jul 2022 02:25:12 -0700 (PDT)
+        Mon, 11 Jul 2022 05:24:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798AA2A427;
+        Mon, 11 Jul 2022 02:15:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F04706124E;
-        Mon, 11 Jul 2022 09:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9261C34115;
-        Mon, 11 Jul 2022 09:25:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D532F6123B;
+        Mon, 11 Jul 2022 09:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FFEC341C0;
+        Mon, 11 Jul 2022 09:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531510;
-        bh=9K04RVcc5+Of6dPmUZUF7MfhV/bdoktf5T5hjkB0ntw=;
+        s=korg; t=1657530903;
+        bh=Thsqa8+oXxSlU5z5RVlpc5ANmuoUcNe2Gohr70520l0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eXC9+49lgVNTgEhlxEohSlTfn5cog2wd29rOWzRTLSYtks6fzG3xWY98eg5xbQ9/J
-         E//BuVMT5nsJpvW7jJALjtX+i1CRJza+R9FJgXFqpFsaCuuWmcxNf83jeydohP4RU7
-         H+8dSmjwEam0cLaLUyYAp9ffsuz1LI85Jr9xt8oE=
+        b=izkg/dP0IREvJoxSbtbPLGhy3rgx9JI0VU11q4eTPwd684LYCfOwtH8BvND2ZCIXW
+         gZU/Zh97egZvz7LAFjqtkBi0QpTtQrfgO5XgmF6smUJXAWAe1K+lmh2MWzV1AOOsiN
+         Ja8zqFl+wAT5USu0fiaGhg9rjMCo3lacbIllgKiY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/230] mm/memory-failure.c: fix race with changing page compound again
+        stable@vger.kernel.org,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.18 025/112] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
 Date:   Mon, 11 Jul 2022 11:06:25 +0200
-Message-Id: <20220711090607.725243061@linuxfoundation.org>
+Message-Id: <20220711090550.274324178@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,107 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 888af2701db79b9b27c7e37f9ede528a5ca53b76 ]
+commit 1c0e78a287e3493e22bde8553d02f3b89177eaf7 upstream.
 
-Patch series "A few fixup patches for memory failure", v2.
+In mcp251xfd_register_get_dev_id() the device ID register is read with
+handcrafted SPI transfers. As all registers, this register is in
+little endian. Further it is not naturally aligned in struct
+mcp251xfd_map_buf_nocrc::data. However after the transfer the register
+content is converted from big endian to CPU endianness not taking care
+of being unaligned.
 
-This series contains a few patches to fix the race with changing page
-compound page, make non-LRU movable pages unhandlable and so on.  More
-details can be found in the respective changelogs.
+Fix the conversion by converting from little endian to CPU endianness
+taking the unaligned source into account.
 
-There is a race window where we got the compound_head, the hugetlb page
-could be freed to buddy, or even changed to another compound page just
-before we try to get hwpoison page.  Think about the below race window:
+Side note: So far the register content is 0x0 on all mcp251xfd
+compatible chips, and is only used for an informative printk.
 
-  CPU 1					  CPU 2
-  memory_failure_hugetlb
-  struct page *head = compound_head(p);
-					  hugetlb page might be freed to
-					  buddy, or even changed to another
-					  compound page.
-
-  get_hwpoison_page -- page is not what we want now...
-
-If this race happens, just bail out.  Also MF_MSG_DIFFERENT_PAGE_SIZE is
-introduced to record this event.
-
-[akpm@linux-foundation.org: s@/**@/*@, per Naoya Horiguchi]
-
-Link: https://lkml.kernel.org/r/20220312074613.4798-1-linmiaohe@huawei.com
-Link: https://lkml.kernel.org/r/20220312074613.4798-2-linmiaohe@huawei.com
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Yang Shi <shy828301@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/all/20220627092859.809042-1-mkl@pengutronix.de
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/mm.h      |  1 +
- include/ras/ras_event.h |  1 +
- mm/memory-failure.c     | 12 ++++++++++++
- 3 files changed, 14 insertions(+)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 85205adcdd0d..7a80a08eec84 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3167,6 +3167,7 @@ enum mf_action_page_type {
- 	MF_MSG_BUDDY_2ND,
- 	MF_MSG_DAX,
- 	MF_MSG_UNSPLIT_THP,
-+	MF_MSG_DIFFERENT_PAGE_SIZE,
- 	MF_MSG_UNKNOWN,
- };
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -12,6 +12,7 @@
+ // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
+ //
  
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index 0bdbc0d17d2f..cac13ff1d6eb 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -376,6 +376,7 @@ TRACE_EVENT(aer_event,
- 	EM ( MF_MSG_BUDDY_2ND, "free buddy page (2nd try)" )		\
- 	EM ( MF_MSG_DAX, "dax page" )					\
- 	EM ( MF_MSG_UNSPLIT_THP, "unsplit thp" )			\
-+	EM ( MF_MSG_DIFFERENT_PAGE_SIZE, "different page size" )	\
- 	EMe ( MF_MSG_UNKNOWN, "unknown page" )
++#include <asm/unaligned.h>
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
+@@ -1778,7 +1779,7 @@ mcp251xfd_register_get_dev_id(const stru
+ 	if (err)
+ 		goto out_kfree_buf_tx;
  
- /*
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 5664bafd5e77..a4d70c21c146 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -741,6 +741,7 @@ static const char * const action_page_types[] = {
- 	[MF_MSG_BUDDY_2ND]		= "free buddy page (2nd try)",
- 	[MF_MSG_DAX]			= "dax page",
- 	[MF_MSG_UNSPLIT_THP]		= "unsplit thp",
-+	[MF_MSG_DIFFERENT_PAGE_SIZE]	= "different page size",
- 	[MF_MSG_UNKNOWN]		= "unknown page",
- };
+-	*dev_id = be32_to_cpup((__be32 *)buf_rx->data);
++	*dev_id = get_unaligned_le32(buf_rx->data);
+ 	*effective_speed_hz_slow = xfer[0].effective_speed_hz;
+ 	*effective_speed_hz_fast = xfer[1].effective_speed_hz;
  
-@@ -1461,6 +1462,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	}
- 
- 	lock_page(head);
-+
-+	/*
-+	 * The page could have changed compound pages due to race window.
-+	 * If this happens just bail out.
-+	 */
-+	if (!PageHuge(p) || compound_head(p) != head) {
-+		action_result(pfn, MF_MSG_DIFFERENT_PAGE_SIZE, MF_IGNORED);
-+		res = -EBUSY;
-+		goto out;
-+	}
-+
- 	page_flags = head->flags;
- 
- 	/*
--- 
-2.35.1
-
 
 

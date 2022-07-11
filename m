@@ -2,146 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9358956D3B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6584A56D3BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiGKEWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S229638AbiGKEXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGKEWn (ORCPT
+        with ESMTP id S229592AbiGKEXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:22:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50FF18B1F;
-        Sun, 10 Jul 2022 21:22:42 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so7154199pjr.4;
-        Sun, 10 Jul 2022 21:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dy7+GGN73umpQ2Bj6ZKtVNghFJ8bz6lPPPijWYG4Dy0=;
-        b=iqarByK8IT+N2BbRHDK6Rtx6x6WVei2xs98PxQ+dt/A8dXl91s0EamQ5q1Jjg9TsL/
-         yy+c7ADACWYCbh/WmABlv1vyE4towXZ4h9Cz13GEvu/mp16IJU8Niqqpo9DvUKLbkwVc
-         u6ELg7Ft3k3kB0lebbvYLwwfc2tHfjQufadRsLLa9IywNg+t7rnkgiLbLBArlR9kJc0K
-         hbC+T85cz6REwN1lA+czh0IdHWHgNXVN6nLNmpLl5ErXC8QA7h5QzSpIRwfyvlJtt6uN
-         5f3ygL4FrIkUHXyPq7ODAS/efk0ehpwO04th8I0nOyBwY/bOJn1OZFL54PN8o4laDoqU
-         hajA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dy7+GGN73umpQ2Bj6ZKtVNghFJ8bz6lPPPijWYG4Dy0=;
-        b=i49Ghk9kzCv29PMjwkfXAcSYnlVy0HRz3QYDnkUuCHJpR/sG1R88/q9hxzCSn0nh2i
-         /bpXL2v8JdsKc+JfJmQ05Krv6mqeVGMwJ7oDaUDGW3o+wggCZktS7hPQ5JGMQBwLCxwx
-         aMqko9LHmwbJY//Db2wZ9ZoF+WHeqBHBDzjXugt5RowBzaIf+0bA7lC4ZuokzFC7eJQj
-         ssqqUMgJXM/ELb23RYaB1Rc86di8Ad2A3pfhFa78epIjImP88oMrS6A/QVKdlblV6sjl
-         u7TQMKAnGKmSC7kKRsopoECQs9BsT9YWbBPv75nHhOlzOOMOOzAReVfawtfMRFUWewgd
-         wPCQ==
-X-Gm-Message-State: AJIora+bq8zBTk9K/IHzTreBhUPFeWSvkq5ByR2WhDoEY1w6uPj9BqAk
-        qELGlBMbf5tUKd+sXtrQ5ww=
-X-Google-Smtp-Source: AGRyM1uiZMUMMhRPI8kqqb30ejrMbEQUWkDHOx9Vj+HTvTOSd+7yf1HmDg+K9oQ/6MfPZ9xHR/Yhqg==
-X-Received: by 2002:a17:902:7290:b0:16b:b6b5:7e6c with SMTP id d16-20020a170902729000b0016bb6b57e6cmr17081706pll.116.1657513362248;
-        Sun, 10 Jul 2022 21:22:42 -0700 (PDT)
-Received: from fedora ([103.230.148.186])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090a154800b001eee8998f2esm5877357pja.17.2022.07.10.21.22.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Jul 2022 21:22:41 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 09:52:36 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/kcmp: Make the test output consistent and clear
-Message-ID: <YsuljDee9KGDPfsH@fedora>
-References: <20220629192822.47577-1-gautammenghani201@gmail.com>
+        Mon, 11 Jul 2022 00:23:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD66D2DC9
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657513424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3P7dCne5l6opjJU2k3qWtqi1rMQbIE4VPCehg9nJnr0=;
+        b=Uv4aAWd86j5HyQborPIxDYcSCROuUbwHX+WKncU60tVJmjYusgQ3j+9imTKXIyRSB/xHSK
+        7jOQ7D5lxzxOxFmLrG97Oc/Kpi+jUe3GArHYZZopOZfa4a8LWFu9xj2G2zoGwdTUfAi0ln
+        TQb+cLxh1aoIEMf8sMkdAOKInYXjn8w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-1EuZQ595Pz-dpg66gg4NMw-1; Mon, 11 Jul 2022 00:23:41 -0400
+X-MC-Unique: 1EuZQ595Pz-dpg66gg4NMw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0685802D2C;
+        Mon, 11 Jul 2022 04:23:40 +0000 (UTC)
+Received: from lxbceph1.gsslab.pek2.redhat.com (unknown [10.72.47.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 71DF3492CA2;
+        Mon, 11 Jul 2022 04:23:35 +0000 (UTC)
+From:   xiubli@redhat.com
+To:     dhowells@redhat.com, idryomov@gmail.com, jlayton@kernel.org
+Cc:     marc.dionne@auristor.com, willy@infradead.org,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        william.kucharski@oracle.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cachefs@redhat.com, vshankar@redhat.com,
+        Xiubo Li <xiubli@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH v5] netfs: do not unlock and put the folio twice
+Date:   Mon, 11 Jul 2022 12:23:28 +0800
+Message-Id: <20220711042328.417942-1-xiubli@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629192822.47577-1-gautammenghani201@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuah,
-Please review this patch and let me know if any changes are required.
-On Thu, Jun 30, 2022 at 12:58:22AM +0530, Gautam Menghani wrote:
-> Make the output format of this test consistent. Currently the output is
-> as follows:
-> 
-> +TAP version 13
-> +1..1
-> +# selftests: kcmp: kcmp_test
-> +# pid1:  45814 pid2:  45815 FD:  1 FILES:  1 VM:  2 FS:  1 SIGHAND:  2 
-> +  IO:  0 SYSVSEM:  0 INV: -1
-> +# PASS: 0 returned as expected
-> +# PASS: 0 returned as expected
-> +# PASS: 0 returned as expected
-> +# # Planned tests != run tests (0 != 3)
-> +# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> +# # Planned tests != run tests (0 != 3)
-> +# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> +# # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> +ok 1 selftests: kcmp: kcmp_test
-> 
-> With this patch applied the output is as follows:
-> 
-> +TAP version 13
-> +1..1
-> +# selftests: kcmp: kcmp_test
-> +# TAP version 13
-> +# 1..3
-> +# pid1:  46330 pid2:  46331 FD:  1 FILES:  2 VM:  2 FS:  2 SIGHAND:  1 
-> +  IO:  0 SYSVSEM:  0 INV: -1
-> +# PASS: 0 returned as expected
-> +# PASS: 0 returned as expected
-> +# PASS: 0 returned as expected
-> +# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> +ok 1 selftests: kcmp: kcmp_test
-> 
-> 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
->  tools/testing/selftests/kcmp/kcmp_test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kcmp/kcmp_test.c b/tools/testing/selftests/kcmp/kcmp_test.c
-> index 6ea7b9f37a41..25110c7c0b3e 100644
-> --- a/tools/testing/selftests/kcmp/kcmp_test.c
-> +++ b/tools/testing/selftests/kcmp/kcmp_test.c
-> @@ -88,6 +88,9 @@ int main(int argc, char **argv)
->  		int pid2 = getpid();
->  		int ret;
->  
-> +		ksft_print_header();
-> +		ksft_set_plan(3);
-> +
->  		fd2 = open(kpath, O_RDWR, 0644);
->  		if (fd2 < 0) {
->  			perror("Can't open file");
-> @@ -152,7 +155,6 @@ int main(int argc, char **argv)
->  			ksft_inc_pass_cnt();
->  		}
->  
-> -		ksft_print_cnts();
->  
->  		if (ret)
->  			ksft_exit_fail();
-> @@ -162,5 +164,5 @@ int main(int argc, char **argv)
->  
->  	waitpid(pid2, &status, P_ALL);
->  
-> -	return ksft_exit_pass();
-> +	return 0;
->  }
-> -- 
-> 2.36.1
-> 
+From: Xiubo Li <xiubli@redhat.com>
+
+check_write_begin() will unlock and put the folio when return
+non-zero.  So we should avoid unlocking and putting it twice in
+netfs layer.
+
+Change the way ->check_write_begin() works in the following two ways:
+
+ (1) Pass it a pointer to the folio pointer, allowing it to unlock and put
+     the folio prior to doing the stuff it wants to do, provided it clears
+     the folio pointer.
+
+ (2) Change the return values such that 0 with folio pointer set means
+     continue, 0 with folio pointer cleared means re-get and all error
+     codes indicating an error (no special treatment for -EAGAIN).
+
+Cc: stable@vger.kernel.org
+Link: https://tracker.ceph.com/issues/56423
+Link: https://lore.kernel.org/r/20220707045112.10177-2-xiubli@redhat.com/
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Co-developed-by: David Howells <dhowells@redhat.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+---
+ Documentation/filesystems/netfs_library.rst |  8 +++++---
+ fs/afs/file.c                               |  2 +-
+ fs/ceph/addr.c                              | 11 ++++++-----
+ fs/netfs/buffered_read.c                    | 17 ++++++++++-------
+ include/linux/netfs.h                       |  2 +-
+ 5 files changed, 23 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/filesystems/netfs_library.rst b/Documentation/filesystems/netfs_library.rst
+index 4d19b19bcc08..8d4cf5d5822d 100644
+--- a/Documentation/filesystems/netfs_library.rst
++++ b/Documentation/filesystems/netfs_library.rst
+@@ -301,7 +301,7 @@ through which it can issue requests and negotiate::
+ 		void (*issue_read)(struct netfs_io_subrequest *subreq);
+ 		bool (*is_still_valid)(struct netfs_io_request *rreq);
+ 		int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+-					 struct folio *folio, void **_fsdata);
++					 struct folio **foliop, void **_fsdata);
+ 		void (*done)(struct netfs_io_request *rreq);
+ 	};
+ 
+@@ -381,8 +381,10 @@ The operations are as follows:
+    allocated/grabbed the folio to be modified to allow the filesystem to flush
+    conflicting state before allowing it to be modified.
+ 
+-   It should return 0 if everything is now fine, -EAGAIN if the folio should be
+-   regrabbed and any other error code to abort the operation.
++   It may unlock and discard the folio it was given and set the caller's folio
++   pointer to NULL.  It should return 0 if everything is now fine (*foliop
++   left set) or the op should be retried (*foliop cleared) and any other error
++   code to abort the operation.
+ 
+  * ``done``
+ 
+diff --git a/fs/afs/file.c b/fs/afs/file.c
+index 42118a4f3383..d1cfb235c4b9 100644
+--- a/fs/afs/file.c
++++ b/fs/afs/file.c
+@@ -375,7 +375,7 @@ static int afs_begin_cache_operation(struct netfs_io_request *rreq)
+ }
+ 
+ static int afs_check_write_begin(struct file *file, loff_t pos, unsigned len,
+-				 struct folio *folio, void **_fsdata)
++				 struct folio **foliop, void **_fsdata)
+ {
+ 	struct afs_vnode *vnode = AFS_FS_I(file_inode(file));
+ 
+diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+index 8095fc47230e..3369c54d8002 100644
+--- a/fs/ceph/addr.c
++++ b/fs/ceph/addr.c
+@@ -63,7 +63,7 @@
+ 	 (CONGESTION_ON_THRESH(congestion_kb) >> 2))
+ 
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, unsigned int len,
+-					struct folio *folio, void **_fsdata);
++					struct folio **foliop, void **_fsdata);
+ 
+ static inline struct ceph_snap_context *page_snap_context(struct page *page)
+ {
+@@ -1280,18 +1280,19 @@ ceph_find_incompatible(struct page *page)
+ }
+ 
+ static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, unsigned int len,
+-					struct folio *folio, void **_fsdata)
++					struct folio **foliop, void **_fsdata)
+ {
+ 	struct inode *inode = file_inode(file);
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
+ 	struct ceph_snap_context *snapc;
+ 
+-	snapc = ceph_find_incompatible(folio_page(folio, 0));
++	snapc = ceph_find_incompatible(folio_page(*foliop, 0));
+ 	if (snapc) {
+ 		int r;
+ 
+-		folio_unlock(folio);
+-		folio_put(folio);
++		folio_unlock(*foliop);
++		folio_put(*foliop);
++		*foliop = NULL;
+ 		if (IS_ERR(snapc))
+ 			return PTR_ERR(snapc);
+ 
+diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
+index 42f892c5712e..8fa0725cd649 100644
+--- a/fs/netfs/buffered_read.c
++++ b/fs/netfs/buffered_read.c
+@@ -319,8 +319,9 @@ static bool netfs_skip_folio_read(struct folio *folio, loff_t pos, size_t len,
+  * conflicting writes once the folio is grabbed and locked.  It is passed a
+  * pointer to the fsdata cookie that gets returned to the VM to be passed to
+  * write_end.  It is permitted to sleep.  It should return 0 if the request
+- * should go ahead; unlock the folio and return -EAGAIN to cause the folio to
+- * be regot; or return an error.
++ * should go ahead or it may return an error.  It may also unlock and put the
++ * folio, provided it sets *foliop to NULL, in which case a return of 0 will
++ * cause the folio to be re-got and the process to be retried.
+  *
+  * The calling netfs must initialise a netfs context contiguous to the vfs
+  * inode before calling this.
+@@ -348,13 +349,13 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ 
+ 	if (ctx->ops->check_write_begin) {
+ 		/* Allow the netfs (eg. ceph) to flush conflicts. */
+-		ret = ctx->ops->check_write_begin(file, pos, len, folio, _fsdata);
++		ret = ctx->ops->check_write_begin(file, pos, len, &folio, _fsdata);
+ 		if (ret < 0) {
+ 			trace_netfs_failure(NULL, NULL, ret, netfs_fail_check_write_begin);
+-			if (ret == -EAGAIN)
+-				goto retry;
+ 			goto error;
+ 		}
++		if (!folio)
++			goto retry;
+ 	}
+ 
+ 	if (folio_test_uptodate(folio))
+@@ -416,8 +417,10 @@ int netfs_write_begin(struct netfs_inode *ctx,
+ error_put:
+ 	netfs_put_request(rreq, false, netfs_rreq_trace_put_failed);
+ error:
+-	folio_unlock(folio);
+-	folio_put(folio);
++	if (folio) {
++		folio_unlock(folio);
++		folio_put(folio);
++	}
+ 	_leave(" = %d", ret);
+ 	return ret;
+ }
+diff --git a/include/linux/netfs.h b/include/linux/netfs.h
+index 1773e5df8e65..1b18dfa52e48 100644
+--- a/include/linux/netfs.h
++++ b/include/linux/netfs.h
+@@ -214,7 +214,7 @@ struct netfs_request_ops {
+ 	void (*issue_read)(struct netfs_io_subrequest *subreq);
+ 	bool (*is_still_valid)(struct netfs_io_request *rreq);
+ 	int (*check_write_begin)(struct file *file, loff_t pos, unsigned len,
+-				 struct folio *folio, void **_fsdata);
++				 struct folio **foliop, void **_fsdata);
+ 	void (*done)(struct netfs_io_request *rreq);
+ };
+ 
+-- 
+2.36.0.rc1
+

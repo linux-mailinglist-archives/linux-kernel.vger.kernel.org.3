@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB165705C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4745705CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiGKOi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S231425AbiGKOi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiGKOi0 (ORCPT
+        with ESMTP id S231379AbiGKOir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:38:26 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF03765D7D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:38:25 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id y22so2825046qki.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Blomt85uNlJFKRzFdDf6WPS4oNZcEoc+RW9ZvBV0BXg=;
-        b=PBfGUiXs+SZ0whqRgpSkB35i7Kyk9ocwf5YAgyfirVzthaeICJgeKznJOPyJyBmG/R
-         ZKtfM3reD7LONy8l0sJG9Np2HSqnyB1wjLvdUBeHJ9hlhz3I5aHVTfDX14oDd+U8cjJu
-         EhK54M0hUX1HZ83JmtE8dJE2UXaly3crWcgprO11Im9awTY7mGV0qHi3/7N1zBbEqhMz
-         k3uYfpHFmgQ+aT1NTchgWgMthV1cBsdX4G5s/absXbmSOLZUBlNWuvUL/eZfnF34d/6G
-         NaytaRMtirJejZZXdje9HE2lZ3fLh2H9MSXQJR8YTOULbnZ/nbTx0I1f6b0Z1zpsPEsK
-         3KFg==
+        Mon, 11 Jul 2022 10:38:47 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB6C110F;
+        Mon, 11 Jul 2022 07:38:45 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id v2so3118641ilo.7;
+        Mon, 11 Jul 2022 07:38:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Blomt85uNlJFKRzFdDf6WPS4oNZcEoc+RW9ZvBV0BXg=;
-        b=5V6PHZhHEVO/pbzl2428PCByZrLG5zCDy0Vzk4SxNJ9TttI4OfnlZUREBHnu/bmfmk
-         jrF0HykW5FJkXpppGFo/6C6EWt+nO8LWCwICzpi9sANWxMlewZ75mNQIWqput2G5yYic
-         2zqbTveoo1wiEcMqopEUh+m4RQWqvsPMJ/VLpgiYd1fw/siCAHqT5NS6iVYoVQ7YZiDw
-         +1dyIJs8WeszQnrP23LUcZW8CQWfmKd3zung/042ctYpiwQug6TetfebufLKsVV1z+EX
-         m6QI749/8gOUos3SSPqj6ayFgZRSljtak0w3ai0CsFmsNU0ea1ntUkJv0DJjqF2nMcIW
-         QcFg==
-X-Gm-Message-State: AJIora9oTkIQMxDK2kKN1IqY1337XFh56EyY0CQJtSIUMD+t5HXQqIjO
-        qeu1tbqbTltD3afB0ogdKNUzpr7lGmL3BcvhEJZ+Eg==
-X-Google-Smtp-Source: AGRyM1vdLvsBn8IiFeoJegAqtKMkOsN5CIRJpKTXMiY3nMKIb78gvTnAc6NmUCQKDRI0YFdwgeQ6h+bKM96WL/ueQ74=
-X-Received: by 2002:a05:620a:288c:b0:6b3:9d1:dbf1 with SMTP id
- j12-20020a05620a288c00b006b309d1dbf1mr11330803qkp.593.1657550304850; Mon, 11
- Jul 2022 07:38:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QI8NoXmTu99A3BGvUDI/8ShLiNFWmdGoMBR5ix0lWDo=;
+        b=isFWdPpUsJEtb3YRqEZyVZhJdZUgu6rdoaukTP8lBnC3z2f8C7vYXvm2NozLaGg5lw
+         TFT+4lZQc/RFEFZASQzNz5nrZ26Rq7RFhrgBV3/fE3CzHSq5cXToSiHuDJPqyaNQ5QHt
+         1Jd2jl9+CPja65JysdSisuAhBlzoUvkd6PDuUJR0xITokLDEytfr2rTagL4+aMTOGhJU
+         QIaw6qW9wxPgyoZKgO0PMu7xZ9TQy9kugpNSk61mLCmWJSjzITQQeJb7tFRyk+8nDdyu
+         4wUkkh36wnL4qH/SC6upR4gYHa6zj6Ka2yrx9ZYNxPqpXf8szltwE20H5nBHbfJYyn2b
+         l0Vg==
+X-Gm-Message-State: AJIora+vMsqjZHl2nThta2mBgmSov+a5uKhzx5UHgiCbN5Q9ujwoqOws
+        rHm+K3A2uEjcZzx1T5ZkCA==
+X-Google-Smtp-Source: AGRyM1vv3IGpJxVA3/ctWFf3shZBxzdiPh3c5Ui151b/79yHG8d9Nn0GwZ8SPYFxfnp8pK50KoGb7g==
+X-Received: by 2002:a05:6e02:164b:b0:2dc:85e3:238b with SMTP id v11-20020a056e02164b00b002dc85e3238bmr1220980ilu.121.1657550324397;
+        Mon, 11 Jul 2022 07:38:44 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r16-20020a92c5b0000000b002dad39ff841sm2787827ilt.19.2022.07.11.07.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 07:38:44 -0700 (PDT)
+Received: (nullmailer pid 3845949 invoked by uid 1000);
+        Mon, 11 Jul 2022 14:38:42 -0000
+Date:   Mon, 11 Jul 2022 08:38:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     kthota@nvidia.com, sagar.tv@gmail.com, lpieralisi@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, jonathanh@nvidia.com,
+        gustavo.pimentel@synopsys.com, linux-tegra@vger.kernel.org,
+        thierry.reding@gmail.com, mmaddireddy@nvidia.com,
+        jingoohan1@gmail.com, kw@linux.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 3/9] dt-bindings: PCI: tegra234: Add schema for
+ tegra234 endpoint mode
+Message-ID: <20220711143842.GA3840001-robh@kernel.org>
+References: <20220707081301.29961-1-vidyas@nvidia.com>
+ <20220707081301.29961-4-vidyas@nvidia.com>
+ <1657196871.476299.1454231.nullmailer@robh.at.kernel.org>
+ <afc9cd15-a895-792f-3f49-1dca3694b0f3@nvidia.com>
 MIME-Version: 1.0
-References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-2-robimarko@gmail.com>
- <CAA8EJprfAW7kFSPxs7=LEHLmAVrWhV8KRbUseg8jXyiUbyZuRQ@mail.gmail.com> <CAOX2RU7+f3vXdOmMNi6Dt=9jadrgVFhrU56vm=6dYKkhnPUJwQ@mail.gmail.com>
-In-Reply-To: <CAOX2RU7+f3vXdOmMNi6Dt=9jadrgVFhrU56vm=6dYKkhnPUJwQ@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 11 Jul 2022 17:38:13 +0300
-Message-ID: <CAA8EJpr8b+UxmCjuXVj+DMrvsHkgEk=ZKw8Ktj_vRT4oRZRutQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] clk: qcom: apss-ipq6018: fix apcs_alias0_clk_src
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afc9cd15-a895-792f-3f49-1dca3694b0f3@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,125 +71,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 16:23, Robert Marko <robimarko@gmail.com> wrote:
->
-> On Mon, 11 Jul 2022 at 14:48, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
-> > >
-> > > While working on IPQ8074 APSS driver it was discovered that IPQ6018 and
-> > > IPQ8074 use almost the same PLL and APSS clocks, however APSS driver is
-> > > currently broken.
-> > >
-> > > More precisely apcs_alias0_clk_src is broken, it was added as regmap_mux
-> > > clock.
-> > > However after debugging why it was always stuck at 800Mhz, it was figured
-> > > out that its not regmap_mux compatible at all.
-> > > It is a simple mux but it uses RCG2 register layout and control bits, so
-> >
-> > To utilize control bits, you probably should also use
->
-> Hi,
-> I am not really sure what you mean here?
-
-Ugh, excuse me. Sent the message too early.
-I mean that to utilize RCG2 control bits, you probably also need to
-use clk_rcg2_is_enabled, etc.
-
->
-> >
-> > > utilize the new clk_rcg2_mux_closest_ops to correctly drive it while not
-> > > having to provide a dummy frequency table.
-> >
-> > Could you please clarify this. Your new rcg2 ops seems to be literally
-> > equivalent to the clk_regmap_mux_closest_ops provided the shift and
-> > width are set correctly..
->
-> Well, I have tried playing with the clk_regmap_mux_closest_ops but I
-> just cannot get it
-> to work.
->
-> The width like you pointed out should be 8, register offset is
-> currently pointing at the RCG control
-> register and not the CFG one, so it obviously does not work.
->
-> Setting the register to 0x54 and shift to 8 will just fail silently,
-> leaving the shift at 7 and correcting
-> the register won't work as RCG control bits are not utilized at all
-> with regmap_mux and DIRTY_CFG
-> is active when I manually look at the register.
-
-Ok, I missed the update_cfg part. So, yes, this looks correct.
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
->
-> So, I am really not sure how clk_regmap_mux_closest_ops are supposed
-> to work here at all.
->
-> Regards,
-> Robert
-> >
-> > > While we are here, use ARRAY_SIZE for number of parents.
-> > >
-> > > Tested on IPQ6018-CP01-C1 reference board and multiple IPQ8074 boards.
-> > >
-> > > Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
-> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
+On Sat, Jul 09, 2022 at 08:03:45AM +0530, Vidya Sagar wrote:
+> 
+> 
+> On 7/7/2022 5:57 PM, Rob Herring wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Thu, 07 Jul 2022 13:42:55 +0530, Vidya Sagar wrote:
+> > > Add support for PCIe controllers that operate in the endpoint mode
+> > > in tegra234 chipset.
+> > > 
+> > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
 > > > ---
-> > >  drivers/clk/qcom/apss-ipq6018.c | 13 ++++++-------
-> > >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-> > > index d78ff2f310bf..be952d417ded 100644
-> > > --- a/drivers/clk/qcom/apss-ipq6018.c
-> > > +++ b/drivers/clk/qcom/apss-ipq6018.c
-> > > @@ -16,7 +16,7 @@
-> > >  #include "clk-regmap.h"
-> > >  #include "clk-branch.h"
-> > >  #include "clk-alpha-pll.h"
-> > > -#include "clk-regmap-mux.h"
-> > > +#include "clk-rcg.h"
-> > >
-> > >  enum {
-> > >         P_XO,
-> > > @@ -33,16 +33,15 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
-> > >         { P_APSS_PLL_EARLY, 5 },
-> > >  };
-> > >
-> > > -static struct clk_regmap_mux apcs_alias0_clk_src = {
-> > > -       .reg = 0x0050,
-> > > -       .width = 3,
-> > > -       .shift = 7,
-> >
-> > Judging from rcg2 ops, .shift should be set to 8.
-> >
-> > > +static struct clk_rcg2 apcs_alias0_clk_src = {
-> > > +       .cmd_rcgr = 0x0050,
-> > > +       .hid_width = 5,
-> > >         .parent_map = parents_apcs_alias0_clk_src_map,
-> > >         .clkr.hw.init = &(struct clk_init_data){
-> > >                 .name = "apcs_alias0_clk_src",
-> > >                 .parent_data = parents_apcs_alias0_clk_src,
-> > > -               .num_parents = 2,
-> > > -               .ops = &clk_regmap_mux_closest_ops,
-> > > +               .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
-> > > +               .ops = &clk_rcg2_mux_closest_ops,
-> > >                 .flags = CLK_SET_RATE_PARENT,
-> > >         },
-> > >  };
-> > > --
-> > > 2.36.1
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
+> > > V4:
+> > > * Rebased on top of previous patch
+> > > 
+> > > V3:
+> > > * New patch in this series
+> > > 
+> > >   .../bindings/pci/nvidia,tegra194-pcie-ep.yaml | 123 +++++++++++++++++-
+> > >   1 file changed, 117 insertions(+), 6 deletions(-)
+> > > 
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.example.dtb: pcie-ep@141a0000: Unevaluated properties are not allowed ('nvidia,enable-ext-refclk' was unexpected)
+> >          From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/nvidia,tegra194-pcie-ep.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://patchwork.ozlabs.org/patch/
+> > 
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit.
+> 
+> I did run 'make dt_binding_check' before sending the patches for review and
+> didn't observe any issue. Just to make sure that I observe the same issue
+> locally, I updated dtschema and gave DT_CHECKER_FLAGS=-m and yet didn't
+> observe the tool reporting any issue.
+> FWIW, I think I missed adding the documentation for
+> 'nvidia,enable-ext-refclk' property. I'll add it and send again, but before
+> that, I would like to see if my change addresses the issue correctly and
+> also there are no other issues. Could you please help me with why I'm not
+> observing the issue locally?
 
+There's a fix for unevaluatedProperties that's only in the dtschema main 
+branch and not yet in a release.
 
-
--- 
-With best wishes
-Dmitry
+Rob

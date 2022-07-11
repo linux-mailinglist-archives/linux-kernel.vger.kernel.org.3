@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE7A56FB2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCC056FD31
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbiGKJ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S230135AbiGKJvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbiGKJYf (ORCPT
+        with ESMTP id S233809AbiGKJui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6529822;
-        Mon, 11 Jul 2022 02:14:52 -0700 (PDT)
+        Mon, 11 Jul 2022 05:50:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C50248FF;
+        Mon, 11 Jul 2022 02:24:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAA54B80D2C;
-        Mon, 11 Jul 2022 09:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBABC36AEB;
-        Mon, 11 Jul 2022 09:14:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E6B66112E;
+        Mon, 11 Jul 2022 09:24:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633D7C341C0;
+        Mon, 11 Jul 2022 09:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530889;
-        bh=404RDpCX/R8w6TAuufcmeta5kQhm/fqKDMIEIfueZ68=;
+        s=korg; t=1657531496;
+        bh=yZtrHS6oc+q1zJ4xFjTvui4hoYjxxt2NUH81KemFZrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RRFRelNDBAUV1HJrUqnLdB6C63PCqbUa2C6gIqK1eTETL/wiQXwYxbqUoMIv1JdAo
-         VV3sADs1ETEyFi06tu2DxDRr6kZwjkWLF+CThe6fr8rK/Z7OOi2kzs3nV53+5vrWQF
-         ZyYIK9NKhcldrPQOBmfN6jDdlkuall6d9+1w/LRI=
+        b=sYT2OHsaeYfS9NUWDXqu8O/qxAN7rXGPM7/ujrxr+waDRqnpkUrosrtoJVvuhocn+
+         7W38AwrD/95Bb0R/aMj7KakiOzyV+3VdZjJ6W8pYB3NYg6ouG1ZokZRQ7wHZ1eXT++
+         Pe4DmHSFRpBdTKfJrvSk59tmh/faQbBjSImgwyQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 020/112] net: lan966x: hardcode the number of external ports
-Date:   Mon, 11 Jul 2022 11:06:20 +0200
-Message-Id: <20220711090550.133256899@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 125/230] btrfs: zoned: use dedicated lock for data relocation
+Date:   Mon, 11 Jul 2022 11:06:21 +0200
+Message-Id: <20220711090607.610632602@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +57,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-commit e6fa930f73a15238f3cb0c204e2f786c919b815c upstream.
+[ Upstream commit 5f0addf7b89085f8e0a2593faa419d6111612b9b ]
 
-Instead of counting the child nodes in the device tree, hardcode the
-number of ports in the driver itself.  The counting won't work at all
-if an ethernet port is marked as disabled, e.g. because it is not
-connected on the board at all.
+Currently, we use btrfs_inode_{lock,unlock}() to grant an exclusive
+writeback of the relocation data inode in
+btrfs_zoned_data_reloc_{lock,unlock}(). However, that can cause a deadlock
+in the following path.
 
-It turns out that the LAN9662 and LAN9668 use the same switching IP
-with the same synthesis parameters. The only difference is that the
-output ports are not connected. Thus, we can just hardcode the
-number of physical ports to 8.
+Thread A takes btrfs_inode_lock() and waits for metadata reservation by
+e.g, waiting for writeback:
 
-Fixes: db8bcaad5393 ("net: lan966x: add the basic lan966x driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Link: https://lore.kernel.org/r/20220704153654.1167886-1-michael@walle.cc
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+prealloc_file_extent_cluster()
+  - btrfs_inode_lock(&inode->vfs_inode, 0);
+  - btrfs_prealloc_file_range()
+  ...
+    - btrfs_replace_file_extents()
+      - btrfs_start_transaction
+      ...
+        - btrfs_reserve_metadata_bytes()
+
+Thread B (e.g, doing a writeback work) needs to wait for the inode lock to
+continue writeback process:
+
+do_writepages
+  - btrfs_writepages
+    - extent_writpages
+      - btrfs_zoned_data_reloc_lock(BTRFS_I(inode));
+        - btrfs_inode_lock()
+
+The deadlock is caused by relying on the vfs_inode's lock. By using it, we
+introduced unnecessary exclusion of writeback and
+btrfs_prealloc_file_range(). Also, the lock at this point is useless as we
+don't have any dirty pages in the inode yet.
+
+Introduce fs_info->zoned_data_reloc_io_lock and use it for the exclusive
+writeback.
+
+Fixes: 35156d852762 ("btrfs: zoned: only allow one process to add pages to a relocation inode")
+CC: stable@vger.kernel.org # 5.16.x: 869f4cdc73f9: btrfs: zoned: encapsulate inode locking for zoned relocation
+CC: stable@vger.kernel.org # 5.16.x
+CC: stable@vger.kernel.org # 5.17
+Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c |    8 ++------
- drivers/net/ethernet/microchip/lan966x/lan966x_main.h |    1 +
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ fs/btrfs/ctree.h   | 1 +
+ fs/btrfs/disk-io.c | 1 +
+ fs/btrfs/zoned.h   | 4 ++--
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -979,7 +979,7 @@ static int lan966x_probe(struct platform
- 	struct fwnode_handle *ports, *portnp;
- 	struct lan966x *lan966x;
- 	u8 mac_addr[ETH_ALEN];
--	int err, i;
-+	int err;
+diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+index cc72d8981c47..d1838de0b39c 100644
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+@@ -1027,6 +1027,7 @@ struct btrfs_fs_info {
+ 	 */
+ 	spinlock_t relocation_bg_lock;
+ 	u64 data_reloc_bg;
++	struct mutex zoned_data_reloc_io_lock;
  
- 	lan966x = devm_kzalloc(&pdev->dev, sizeof(*lan966x), GFP_KERNEL);
- 	if (!lan966x)
-@@ -1010,11 +1010,7 @@ static int lan966x_probe(struct platform
- 	if (err)
- 		return dev_err_probe(&pdev->dev, err, "Reset failed");
+ #ifdef CONFIG_BTRFS_FS_REF_VERIFY
+ 	spinlock_t ref_verify_lock;
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index 233d894f6feb..909d19656316 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -2914,6 +2914,7 @@ void btrfs_init_fs_info(struct btrfs_fs_info *fs_info)
+ 	mutex_init(&fs_info->reloc_mutex);
+ 	mutex_init(&fs_info->delalloc_root_mutex);
+ 	mutex_init(&fs_info->zoned_meta_io_lock);
++	mutex_init(&fs_info->zoned_data_reloc_io_lock);
+ 	seqlock_init(&fs_info->profiles_lock);
  
--	i = 0;
--	fwnode_for_each_available_child_node(ports, portnp)
--		++i;
--
--	lan966x->num_phys_ports = i;
-+	lan966x->num_phys_ports = NUM_PHYS_PORTS;
- 	lan966x->ports = devm_kcalloc(&pdev->dev, lan966x->num_phys_ports,
- 				      sizeof(struct lan966x_port *),
- 				      GFP_KERNEL);
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -31,6 +31,7 @@
- /* Reserved amount for (SRC, PRIO) at index 8*SRC + PRIO */
- #define QSYS_Q_RSRV			95
+ 	INIT_LIST_HEAD(&fs_info->dirty_cowonly_roots);
+diff --git a/fs/btrfs/zoned.h b/fs/btrfs/zoned.h
+index d680c3ee918a..3a826f7c2040 100644
+--- a/fs/btrfs/zoned.h
++++ b/fs/btrfs/zoned.h
+@@ -330,7 +330,7 @@ static inline void btrfs_zoned_data_reloc_lock(struct btrfs_inode *inode)
+ 	struct btrfs_root *root = inode->root;
  
-+#define NUM_PHYS_PORTS			8
- #define CPU_PORT			8
+ 	if (btrfs_is_data_reloc_root(root) && btrfs_is_zoned(root->fs_info))
+-		btrfs_inode_lock(&inode->vfs_inode, 0);
++		mutex_lock(&root->fs_info->zoned_data_reloc_io_lock);
+ }
  
- /* Reserved PGIDs */
+ static inline void btrfs_zoned_data_reloc_unlock(struct btrfs_inode *inode)
+@@ -338,7 +338,7 @@ static inline void btrfs_zoned_data_reloc_unlock(struct btrfs_inode *inode)
+ 	struct btrfs_root *root = inode->root;
+ 
+ 	if (btrfs_is_data_reloc_root(root) && btrfs_is_zoned(root->fs_info))
+-		btrfs_inode_unlock(&inode->vfs_inode, 0);
++		mutex_unlock(&root->fs_info->zoned_data_reloc_io_lock);
+ }
+ 
+ #endif
+-- 
+2.35.1
+
 
 

@@ -2,136 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0E2570E31
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111F4570E38
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiGKXWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S231282AbiGKXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiGKXWm (ORCPT
+        with ESMTP id S229698AbiGKXYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:22:42 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4962820C1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:40 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l23so11382493ejr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:40 -0700 (PDT)
+        Mon, 11 Jul 2022 19:24:20 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BB127170
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id h11-20020a170902f54b00b0016bfdca124fso4567385plf.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2g/SRedCTGa3FW1fDb+EmyQOw6AOS/KFbwj3cy8GxXM=;
-        b=fAXlbz7CXR4/Kg6TafHz6Jq1ObQFjoGNWKETyL5sK1ogIAZ7eh86yG8EZsMgg7dLi9
-         i4WwRk7mJjU5ORPXarDHnJ6nA7DhMcGY5zkpAGZAjIj2sF0ZoSiyOfhWy3cqaB77JJH2
-         dTkyj2oPvErEYbjlvTsVHSPFBKhF6aamfznp4=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
+        b=sCVKm48mz9thFPGiNjebj0f8Ux4GHLmdUiWrS5kfCfL7Skr7uUpfr7BCOZeTmn5G/q
+         l4q/M5QlFd9IjG111yuY+KY+3tkSuhKAMd++FE4a6dm8KwA+Xu+cDNQIqm2v7Ktc1H7X
+         cgaHSVeIKa/TrMlyRILF+DLaQhCQFDTPfjTwHGQTrD31hw5XI56K6ANsyMRI17TISxPu
+         lKy3I3qWsmop7UvoliD1b2lAxEItNWmXCgUY5mTyI2hoBVvOtBmM6WASGpGxuDcgihZB
+         OEbIY9duvztNj5VbFLdgpBm3DelWHxpS+MbfmeswjLA1Atu0KvuIiqe9jNUhtf1zfnpw
+         SV7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2g/SRedCTGa3FW1fDb+EmyQOw6AOS/KFbwj3cy8GxXM=;
-        b=T2mMubpvKZoWTrXWfrXy9VY+gPZvTc7bvmQEJg1c7uYSFl1BXk+VPWB2PdvUttyxt0
-         m2Dg/yoXEVcmZoeoMoSumExqiV375OXMd/K4iTQ/WwuMmdNzHp2kg8v4Svet6wsOn2CX
-         dPX72U3i0+4N4/Y82vuTF4O+QrRvnVrs2YSeKOrmZKaPGGD9EvIJDbhQeiGzwz+wZxyn
-         BtoEF5PyF7ud3YU5Dbf5AQxE/2K7+J6NK3kgsKMfpRM7ElrQ+UHZ5pVBjiJGNJFvG+dQ
-         ND7M+5UB8hdgQkz2kWW0iJ3jneaXqS6X605DkAkAieTTZsraZB3hCSpUpaWs9PqeB16v
-         VU/A==
-X-Gm-Message-State: AJIora95takOGkmjyN6bpAywo64LMvVTHNZ3JzYZxgu98tA+CbUWjYIs
-        vBe4BQtroH7cS6wbvexU542DqC6wX63rLFnEwg8=
-X-Google-Smtp-Source: AGRyM1ur0iCl+jsIDoIacyfBtICju/6mjJiZEWKOfHipN/D/0Uht3c/HTnIC1bGA2K7GNKhVfeCgcw==
-X-Received: by 2002:a17:907:8a28:b0:726:a02a:5bea with SMTP id sc40-20020a1709078a2800b00726a02a5beamr21718411ejc.175.1657581759281;
-        Mon, 11 Jul 2022 16:22:39 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id s10-20020a1709064d8a00b0072b33e91f96sm3130082eju.190.2022.07.11.16.22.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 16:22:37 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id z12so8899371wrq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:22:37 -0700 (PDT)
-X-Received: by 2002:adf:d1e9:0:b0:21b:c8f8:3c16 with SMTP id
- g9-20020adfd1e9000000b0021bc8f83c16mr18888013wrd.659.1657581756957; Mon, 11
- Jul 2022 16:22:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com> <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
-In-Reply-To: <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 11 Jul 2022 16:22:25 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com>
-Message-ID: <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] drm/msm: Fix cx collapse issue during recovery
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sean Paul <sean@poorly.run>,
-        LKML <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=F0fFIAEea6XvRD5n1PAysRjm9A6hwPjkRJP2PMLf7zQ=;
+        b=2djRs5D4LCern+7w2UGftKsvDzgFqKmcBSHjAhylrs15qxvNX4Mmj/fo1UQSYdP2L3
+         TNkQsKXk04CF4O/1Ys8Sxs1JVIgk5dBybPXbx8qIngkpzr+/nhHwuWdENlR7MI1as2YY
+         y9e3Z4HKuPMdmeeFa6vmtfu+gRHWDYGpzRcJ+thx0efwJdQE479WA2DuHkrmQv+3sIzV
+         +23hqizFCEA1tF7E1YTPW7Fw01oWuyi00H/KjYiMC2ttHLFg0929gxPuzQ/4oEgubyUf
+         U6imYzP2O5DW7gsAvsbAu/vr58RhOw+urzX2fVFbFnzqFNCxgjWmyI7J988pYjXo0O66
+         1uTg==
+X-Gm-Message-State: AJIora+YWLy6vIVLowJtd/BW4YrondbfC/GazM7aREexSGItmdnzGqIm
+        t6LOqkviNyz8qpE9n1ojd2GTG8luJuU+/fcfMw==
+X-Google-Smtp-Source: AGRyM1urqIouEsnUe5KdWsxfF/hyxCnwf9BX7/8Ikk+sg+vUOJng3563UFtUsVQar7sVaOqBBGg/XKztAe8jRDsNPA==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
+ (user=justinstitt job=sendgmr) by 2002:a05:6a00:1946:b0:52a:e551:2241 with
+ SMTP id s6-20020a056a00194600b0052ae5512241mr1307184pfk.29.1657581859475;
+ Mon, 11 Jul 2022 16:24:19 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 16:24:04 -0700
+Message-Id: <20220711232404.2189257-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] qlogic: qed: fix clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When building with Clang we encounter these warnings:
+| drivers/net/ethernet/qlogic/qed/qed_dev.c:416:30: error: format
+| specifies type 'char' but the argument has type 'u32' (aka 'unsigned
+| int') [-Werror,-Wformat] i);
+-
+| drivers/net/ethernet/qlogic/qed/qed_dev.c:630:13: error: format
+| specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
+| p_llh_info->num_ppfid - 1);
 
-On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> There are some hardware logic under CX domain. For a successful
-> recovery, we should ensure cx headswitch collapses to ensure all the
-> stale states are cleard out. This is especially true to for a6xx family
-> where we can GMU co-processor.
->
-> Currently, cx doesn't collapse due to a devlink between gpu and its
-> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
-> that the iommu driver removes its vote on cx gdsc.
->
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
->
-> (no changes since v1)
->
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 16 ++++++++++++++--
->  drivers/gpu/drm/msm/msm_gpu.c         |  2 --
->  2 files changed, 14 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 4d50110..7ed347c 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1278,8 +1278,20 @@ static void a6xx_recover(struct msm_gpu *gpu)
->          */
->         gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
->
-> -       gpu->funcs->pm_suspend(gpu);
-> -       gpu->funcs->pm_resume(gpu);
-> +       /*
-> +        * Now drop all the pm_runtime usage count to allow cx gdsc to collapse.
-> +        * First drop the usage count from all active submits
-> +        */
-> +       for (i = gpu->active_submits; i > 0; i--)
-> +               pm_runtime_put(&gpu->pdev->dev);
-> +
-> +       /* And the final one from recover worker */
-> +       pm_runtime_put_sync(&gpu->pdev->dev);
-> +
-> +       for (i = gpu->active_submits; i > 0; i--)
-> +               pm_runtime_get(&gpu->pdev->dev);
-> +
-> +       pm_runtime_get_sync(&gpu->pdev->dev);
+For the first warning, `i` is a u32 which is much wider than the format
+specifier `%hhd` describes. This results in a loss of bits after 2^7.
 
-In response to v1, Rob suggested pm_runtime_force_suspend/resume().
-Those seem like they would work to me, too. Why not use them?
+The second warning involves implicit integer promotion as the resulting
+type of addition cannot be smaller than an int.
+
+example:
+``
+uint8_t a = 4, b = 7;
+int size = sizeof(a + b - 1);
+printf("%d\n", size);
+// output: 4
+```
+
+See more:
+(https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
+"Integer types smaller than int are promoted when an operation is
+performed on them. If all values of the original type can be represented
+as an int, the value of the smaller type is converted to an int;
+otherwise, it is converted to an unsigned int."
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ drivers/net/ethernet/qlogic/qed/qed_dev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+index 672480c9d195..d61cd32ec3b6 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+@@ -412,7 +412,7 @@ static int qed_llh_alloc(struct qed_dev *cdev)
+ 			continue;
+ 
+ 		p_llh_info->ppfid_array[p_llh_info->num_ppfid] = i;
+-		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %hhd\n",
++		DP_VERBOSE(cdev, QED_MSG_SP, "ppfid_array[%d] = %u\n",
+ 			   p_llh_info->num_ppfid, i);
+ 		p_llh_info->num_ppfid++;
+ 	}
+@@ -626,7 +626,7 @@ static int qed_llh_abs_ppfid(struct qed_dev *cdev, u8 ppfid, u8 *p_abs_ppfid)
+ 
+ 	if (ppfid >= p_llh_info->num_ppfid) {
+ 		DP_NOTICE(cdev,
+-			  "ppfid %d is not valid, available indices are 0..%hhd\n",
++			  "ppfid %d is not valid, available indices are 0..%d\n",
+ 			  ppfid, p_llh_info->num_ppfid - 1);
+ 		*p_abs_ppfid = 0;
+ 		return -EINVAL;
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

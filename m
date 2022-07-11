@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8C7570875
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98B5570874
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiGKQhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S230226AbiGKQhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiGKQhi (ORCPT
+        with ESMTP id S229542AbiGKQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:37:38 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F612D1EC;
-        Mon, 11 Jul 2022 09:37:38 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BC040326;
-        Mon, 11 Jul 2022 18:37:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1657557456;
-        bh=H0/PNeex08QqGr77w/wMDcNvV0zS5pcv6Pf6XA2aPDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RTHbug2ivmL13wgsm46BJgzLm1/MJcV9RJDHMvgLRee/0y/XcCP8UrOI/QFYWzh7o
-         VBeOT83TvBUmCJy96bBLw+V1gyotx/TrwsBWvuuMLg1i0oawFcQFLqu9ASdrVxTWKv
-         I1eUUiE1uCEt2xlOowiTWy+2JnZouYBDZntKP/1I=
-Date:   Mon, 11 Jul 2022 19:37:09 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     XueBing Chen <chenxuebing@jari.cn>
-Cc:     hyun.kwon@xilinx.com, vkoul@kernel.org, michal.simek@xilinx.com,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: xilinx: use strscpy to replace strlcpy
-Message-ID: <YsxRtSDbRK+lCnnD@pendragon.ideasonboard.com>
-References: <39aa840f.e31.181ed9461c2.Coremail.chenxuebing@jari.cn>
+        Mon, 11 Jul 2022 12:37:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAFA2CCA3;
+        Mon, 11 Jul 2022 09:37:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0639761278;
+        Mon, 11 Jul 2022 16:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676A6C34115;
+        Mon, 11 Jul 2022 16:37:30 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 12:37:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Schspa Shi <schspa@gmail.com>, pmladek@suse.com,
+        sergey.senozhatsky@gmail.com, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bigeasy@linutronix.de,
+        tglx@linutronix.de,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Subject: Re: [PATCH 5.10-rt] printk: fix suppressed message print when
+ reboot/panic
+Message-ID: <20220711123728.79bc0f93@gandalf.local.home>
+In-Reply-To: <20220711123128.1278e203@gandalf.local.home>
+References: <20220321053815.71316-1-schspa@gmail.com>
+        <87a6dj3b5c.fsf@jogness.linutronix.de>
+        <20220711123128.1278e203@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <39aa840f.e31.181ed9461c2.Coremail.chenxuebing@jari.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,37 +50,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi XueBing,
 
-Thank you for the patch.
+I guess the lclaudio@uudg.org is no longer valid. I need to update my
+address book :-/
 
-On Mon, Jul 11, 2022 at 10:05:33PM +0800, XueBing Chen wrote:
+On Mon, 11 Jul 2022 12:31:28 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Luis,
 > 
-> The strlcpy should not be used because it doesn't limit the source
-> length. Preferred is strscpy.
+> Care to add this patch into the 5.10-rt stable?
 > 
-> Signed-off-by: XueBing Chen <chenxuebing@jari.cn>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/dma/xilinx/xilinx_dpdma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks,
 > 
-> diff --git a/drivers/dma/xilinx/xilinx_dpdma.c b/drivers/dma/xilinx/xilinx_dpdma.c
-> index b0f4948b00a5..f5815465e83b 100644
-> --- a/drivers/dma/xilinx/xilinx_dpdma.c
-> +++ b/drivers/dma/xilinx/xilinx_dpdma.c
-> @@ -376,7 +376,7 @@ static ssize_t xilinx_dpdma_debugfs_read(struct file *f, char __user *buf,
->  		if (ret < 0)
->  			goto done;
->  	} else {
-> -		strlcpy(kern_buff, "No testcase executed",
-> +		strscpy(kern_buff, "No testcase executed",
->  			XILINX_DPDMA_DEBUGFS_READ_MAX_SIZE);
->  	}
->  
--- 
-Regards,
+> -- Steve
+> 
+> On Mon, 21 Mar 2022 10:36:55 +0106
+> John Ogness <john.ogness@linutronix.de> wrote:
+> 
+> > On 2022-03-21, Schspa Shi <schspa@gmail.com> wrote:  
+> > > Update printk_seq for suppressed message.
+> > >
+> > > Affects 5.9-rt and 5.10-rt
+> > >
+> > > When message is suppressed, printk_seq should be updated, otherwise
+> > > this message will be printed when reboot. This problem was introduced
+> > > in commit 3edc0c85d154 ("printk: Rebase on top of new ring buffer").
+> > >
+> > > Signed-off-by: Schspa Shi <schspa@gmail.com>    
+> > 
+> > Reviewed-by: John Ogness <john.ogness@linutronix.de>
+> > 
+> > Nice catch. Thanks.
+> > 
+> > 5.15-rt also has this issue, although the fix is slightly different. For
+> > 5.15-rt, writing to con->printk_seq (via latched_seq_write()) requires
+> > the console locked. Would you like to post a patch for 5.15-rt as well,
+> > or would you like me to do it?
+> > 
+> > 5.16 and beyond does not have this issue.
+> > 
+> > John Ogness  
+> 
 
-Laurent Pinchart

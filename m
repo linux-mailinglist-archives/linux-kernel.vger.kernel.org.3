@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BAA56F96D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2B756F96A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiGKI6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S230314AbiGKI6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiGKI6c (ORCPT
+        with ESMTP id S229526AbiGKI5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:58:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B01F22503
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657529907; x=1689065907;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wGJDzEFR+Tk3jcvAhFJBDfKoe8dSvdR+9ahbECtp+YI=;
-  b=MZnmD/rddLegmqlzc2jUOP4mUdfCAnpaipxz2y+A9tKNVPyjQfAyaHgR
-   pC47INdT0FFJTf3nAn1i3Cb7VxOTLKD4KNqKuvGfA03PRZFANK0vfg8BY
-   gCHKyyo7PHUA+px06UtCpOBqa+7t4fT8bNGDW5/IuVVe39Cyj7jnsSilY
-   b2VLH3x68lycf9r2BsQRDv44boXXpVC7n94SeoEAND2uPwhyuvC9IPXn9
-   OtaexyhQ59DTQu5nAuCKix96XhTtIXmw2cVr8CEOXbMObeRhjRG0RR2SQ
-   uXlMLnuV2EimaT7x5JjNQAMZE0Of0LupokfAS6e9+BHphl7IpNEm9HCrg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="285740556"
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="285740556"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 01:58:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,262,1650956400"; 
-   d="scan'208";a="921705367"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jul 2022 01:58:22 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oApFG-0000dl-85;
-        Mon, 11 Jul 2022 08:58:22 +0000
-Date:   Mon, 11 Jul 2022 16:57:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bluetooth-wip 8/8]
- drivers/bluetooth/hci_bcm43xx.c:1088:23: warning: unused variable 'bcm43xx'
-Message-ID: <202207111654.rRuKu0Ms-lkp@intel.com>
+        Mon, 11 Jul 2022 04:57:51 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF861A042;
+        Mon, 11 Jul 2022 01:57:51 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26B8vj7q052237;
+        Mon, 11 Jul 2022 03:57:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1657529865;
+        bh=Q2llsh/2FKRNS8ubLOQgjDkJPI6SEWj033eHEtQSi+o=;
+        h=From:To:CC:Subject:Date;
+        b=oqqxE5cRFxDJNO1hvRPoOzjHp6XAiVTNkpYX7sZ7a8Rg+aCIQTpFSaaLzjVwvLp6i
+         2JHFhCOkaAplGD6Ojmd7Y/8V5TTUp4pWZJKBak00NkPQzWqygZ39/PvXtgk6kmInRA
+         OJW9E/EfHfiBqf8RwaPkB2iKT5GBqv8ia1nJOYEg=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26B8vjfs126426
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 11 Jul 2022 03:57:45 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
+ Jul 2022 03:57:45 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 11 Jul 2022 03:57:45 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26B8viha094120;
+        Mon, 11 Jul 2022 03:57:44 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <devicetree@vger.kernel.org>
+CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <j-choudhary@ti.com>
+Subject: [PATCH v2 0/2] Enable SA2UL support on AM64X
+Date:   Mon, 11 Jul 2022 14:27:41 +0530
+Message-ID: <20220711085743.10128-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +63,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bluetooth-wip
-head:   988727c92ef6a0ae2c476c6f06676b63665c6059
-commit: 988727c92ef6a0ae2c476c6f06676b63665c6059 [8/8] Bluetooth: hci_bcm43xx: Add new driver for BCM43XX PCI boards
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220711/202207111654.rRuKu0Ms-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/988727c92ef6a0ae2c476c6f06676b63665c6059
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bluetooth-wip
-        git checkout 988727c92ef6a0ae2c476c6f06676b63665c6059
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/ drivers/hid/ drivers/md/ drivers/net/ethernet/mellanox/mlx5/core/ drivers/vfio/pci/mlx5/
+This series enables sa2ul support for TI SoC AM64X.
+It is based on another series posted by Suman Anna:
+<https://lore.kernel.org/linux-arm-kernel/20210514210725.32720-1-s-anna@ti.com/>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+rng node has been disabled due to its indirect access from OP-TEE.
 
-All warnings (new ones prefixed by >>):
+Since the sa2ul hardware is being used by OP-TEE as well,
+it should be requested using shared TI-SCI flag. So the flag
+has been changed from TI-SCI-EXCLUSIVE to TI-SCI-SHARED.
 
->> drivers/bluetooth/hci_bcm43xx.c:1088:23: warning: unused variable 'bcm43xx' [-Wunused-variable]
-           struct bcm43xx_data *bcm43xx = hci_get_drvdata(hdev);
-                                ^
-   drivers/bluetooth/hci_bcm43xx.c:1280:8: error: incompatible pointer types passing '__le64 *' (aka 'unsigned long long *') to parameter of type 'dma_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-                               &bcm43xx->ctx->per_info_addr, GFP_KERNEL);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:550:15: note: passing argument to parameter 'dma_handle' here
-                   dma_addr_t *dma_handle, gfp_t gfp)
-                               ^
-   1 warning and 1 error generated.
+I have tried crypto tests on my local setup, and tcrypt and
+self-tests are passing.
 
+Changes from v1:
+- disable rng node instead of dropping it
 
-vim +/bcm43xx +1088 drivers/bluetooth/hci_bcm43xx.c
+Peter Ujfalusi (1):
+  arm64: dts: ti: k3-am64-main: Enable crypto accelerator
 
-  1085	
-  1086	static int bcm43xx_hci_close(struct hci_dev *hdev)
-  1087	{
-> 1088		struct bcm43xx_data *bcm43xx = hci_get_drvdata(hdev);
-  1089	
+Suman Anna (1):
+  arm64: dts: ti: k3-am64: Add SA2UL address space to Main CBASS ranges
+
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 20 ++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am64.dtsi      |  1 +
+ 2 files changed, 21 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

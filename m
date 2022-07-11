@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E0F56FA4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5F156FD89
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiGKJPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S234074AbiGKJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiGKJOX (ORCPT
+        with ESMTP id S233720AbiGKJ4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:14:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A58D33A3F;
-        Mon, 11 Jul 2022 02:10:19 -0700 (PDT)
+        Mon, 11 Jul 2022 05:56:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE0B38E7;
+        Mon, 11 Jul 2022 02:26:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F08E7B80D2C;
-        Mon, 11 Jul 2022 09:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1B6C34115;
-        Mon, 11 Jul 2022 09:10:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E83EBB80E91;
+        Mon, 11 Jul 2022 09:26:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BBA6C34115;
+        Mon, 11 Jul 2022 09:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530616;
-        bh=ISSddOJwrfYJ67l+qWRGRS53lNFwLCrHeQ3tWTBa6Yg=;
+        s=korg; t=1657531601;
+        bh=NL2ogyRTiRWJHJiqmYU+cNarar9DcAoC2rgdkm966C0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HibgTc4U++bnuZXWjuxlmyHGxRHvq8MKbHbd4BRBvA5N6rz11UAa5JMBGegbpEALn
-         1PLgYJt3DAsfTTFgNEPrz8MQpUJKKT39Buz2odyQlwdXkKu+OjgC4FSEsOx1tVhAUO
-         tea/ics9ycPCIuXUMszd+ebliLNPGS1vRdQk6UYc=
+        b=Z84AN8+/+SN57c3muZAe4S8srGHnl+93FwGxNj64YvY5h+r8U9nyKvnhJyjJAPajm
+         ZiEhBSP5yfQsQuXhfPpG/2hrAK8oyR5lazXdQ+ix2S/nOsorwaAyeIlD/lqe3/o4lf
+         5AABo+suCPdQE0W4sgaRWu9VrFSXetn2X6PkHuPE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org, linux-can@vger.kernel.org, Marc Kleine-Budde" 
-        <mkl@pengutronix.de>
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH 5.4 17/38] can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+        stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.15 163/230] PM: runtime: Redefine pm_runtime_release_supplier()
 Date:   Mon, 11 Jul 2022 11:06:59 +0200
-Message-Id: <20220711090539.239691835@linuxfoundation.org>
+Message-Id: <20220711090608.686442021@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,192 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit b3b6df2c56d80b8c6740433cff5f016668b8de70 upstream.
+commit 07358194badf73e267289b40b761f5dc56928eab upstream.
 
-Use correct bittiming limits depending on device. For devices based on
-USBcanII, Leaf M32C or Leaf i.MX28.
+Instead of passing an extra bool argument to pm_runtime_release_supplier(),
+make its callers take care of triggering a runtime-suspend of the
+supplier device as needed.
 
-Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
-Fixes: b4f20130af23 ("can: kvaser_usb: add support for Kvaser Leaf v2 and usb mini PCIe")
-Fixes: f5d4abea3ce0 ("can: kvaser_usb: Add support for the USBcan-II family")
-Link: https://lore.kernel.org/all/20220603083820.800246-4-extja@kvaser.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-[mkl: remove stray netlink.h include]
-[mkl: keep struct can_bittiming_const kvaser_usb_flexc_bittiming_const in kvaser_usb_hydra.c]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+No expected functional impact.
+
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: 5.1+ <stable@vger.kernel.org> # 5.1+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |    2 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |    4 -
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |   76 ++++++++++++----------
- 3 files changed, 47 insertions(+), 35 deletions(-)
+ drivers/base/core.c          |    3 ++-
+ drivers/base/power/runtime.c |   20 +++++++++-----------
+ include/linux/pm_runtime.h   |    5 ++---
+ 3 files changed, 13 insertions(+), 15 deletions(-)
 
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-@@ -188,4 +188,6 @@ int kvaser_usb_send_cmd_async(struct kva
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -485,7 +485,8 @@ static void device_link_release_fn(struc
+ 	/* Ensure that all references to the link object have been dropped. */
+ 	device_link_synchronize_removal();
  
- int kvaser_usb_can_rx_over_error(struct net_device *netdev);
+-	pm_runtime_release_supplier(link, true);
++	pm_runtime_release_supplier(link);
++	pm_request_idle(link->supplier);
  
-+extern const struct can_bittiming_const kvaser_usb_flexc_bittiming_const;
-+
- #endif /* KVASER_USB_H */
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -371,7 +371,7 @@ static const struct can_bittiming_const
- 	.brp_inc = 1,
- };
+ 	put_device(link->consumer);
+ 	put_device(link->supplier);
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -308,13 +308,10 @@ static int rpm_get_suppliers(struct devi
+ /**
+  * pm_runtime_release_supplier - Drop references to device link's supplier.
+  * @link: Target device link.
+- * @check_idle: Whether or not to check if the supplier device is idle.
+  *
+- * Drop all runtime PM references associated with @link to its supplier device
+- * and if @check_idle is set, check if that device is idle (and so it can be
+- * suspended).
++ * Drop all runtime PM references associated with @link to its supplier device.
+  */
+-void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
++void pm_runtime_release_supplier(struct device_link *link)
+ {
+ 	struct device *supplier = link->supplier;
  
--static const struct can_bittiming_const kvaser_usb_hydra_flexc_bittiming_c = {
-+const struct can_bittiming_const kvaser_usb_flexc_bittiming_const = {
- 	.name = "kvaser_usb_flex",
- 	.tseg1_min = 4,
- 	.tseg1_max = 16,
-@@ -2024,5 +2024,5 @@ static const struct kvaser_usb_dev_cfg k
- 		.freq = 24000000,
- 	},
- 	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_hydra_flexc_bittiming_c,
-+	.bittiming_const = &kvaser_usb_flexc_bittiming_const,
- };
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -100,16 +100,6 @@
- #define USBCAN_ERROR_STATE_RX_ERROR	BIT(1)
- #define USBCAN_ERROR_STATE_BUSERROR	BIT(2)
- 
--/* bittiming parameters */
--#define KVASER_USB_TSEG1_MIN		1
--#define KVASER_USB_TSEG1_MAX		16
--#define KVASER_USB_TSEG2_MIN		1
--#define KVASER_USB_TSEG2_MAX		8
--#define KVASER_USB_SJW_MAX		4
--#define KVASER_USB_BRP_MIN		1
--#define KVASER_USB_BRP_MAX		64
--#define KVASER_USB_BRP_INC		1
+@@ -327,9 +324,6 @@ void pm_runtime_release_supplier(struct
+ 	while (refcount_dec_not_one(&link->rpm_active) &&
+ 	       atomic_read(&supplier->power.usage_count) > 0)
+ 		pm_runtime_put_noidle(supplier);
 -
- /* ctrl modes */
- #define KVASER_CTRL_MODE_NORMAL		1
- #define KVASER_CTRL_MODE_SILENT		2
-@@ -342,48 +332,68 @@ struct kvaser_usb_err_summary {
- 	};
- };
+-	if (check_idle)
+-		pm_request_idle(supplier);
+ }
  
--static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
--	.name = "kvaser_usb",
--	.tseg1_min = KVASER_USB_TSEG1_MIN,
--	.tseg1_max = KVASER_USB_TSEG1_MAX,
--	.tseg2_min = KVASER_USB_TSEG2_MIN,
--	.tseg2_max = KVASER_USB_TSEG2_MAX,
--	.sjw_max = KVASER_USB_SJW_MAX,
--	.brp_min = KVASER_USB_BRP_MIN,
--	.brp_max = KVASER_USB_BRP_MAX,
--	.brp_inc = KVASER_USB_BRP_INC,
-+static const struct can_bittiming_const kvaser_usb_leaf_m16c_bittiming_const = {
-+	.name = "kvaser_usb_ucii",
-+	.tseg1_min = 4,
-+	.tseg1_max = 16,
-+	.tseg2_min = 2,
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 1,
-+	.brp_max = 16,
-+	.brp_inc = 1,
-+};
-+
-+static const struct can_bittiming_const kvaser_usb_leaf_m32c_bittiming_const = {
-+	.name = "kvaser_usb_leaf",
-+	.tseg1_min = 3,
-+	.tseg1_max = 16,
-+	.tseg2_min = 2,
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 2,
-+	.brp_max = 128,
-+	.brp_inc = 2,
- };
+ static void __rpm_put_suppliers(struct device *dev, bool try_to_suspend)
+@@ -337,8 +331,11 @@ static void __rpm_put_suppliers(struct d
+ 	struct device_link *link;
  
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_8mhz = {
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_usbcan_dev_cfg = {
- 	.clock = {
- 		.freq = 8000000,
- 	},
- 	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+	.bittiming_const = &kvaser_usb_leaf_m16c_bittiming_const,
-+};
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_m32c_dev_cfg = {
-+	.clock = {
-+		.freq = 16000000,
-+	},
-+	.timestamp_freq = 1,
-+	.bittiming_const = &kvaser_usb_leaf_m32c_bittiming_const,
- };
+ 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+-				device_links_read_lock_held())
+-		pm_runtime_release_supplier(link, try_to_suspend);
++				device_links_read_lock_held()) {
++		pm_runtime_release_supplier(link);
++		if (try_to_suspend)
++			pm_request_idle(link->supplier);
++	}
+ }
  
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_16mhz = {
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_imx_dev_cfg_16mhz = {
- 	.clock = {
- 		.freq = 16000000,
- 	},
- 	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+	.bittiming_const = &kvaser_usb_flexc_bittiming_const,
- };
+ static void rpm_put_suppliers(struct device *dev)
+@@ -1791,7 +1788,8 @@ void pm_runtime_drop_link(struct device_
+ 		return;
  
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_24mhz = {
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_imx_dev_cfg_24mhz = {
- 	.clock = {
- 		.freq = 24000000,
- 	},
- 	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+	.bittiming_const = &kvaser_usb_flexc_bittiming_const,
- };
+ 	pm_runtime_drop_link_count(link->consumer);
+-	pm_runtime_release_supplier(link, true);
++	pm_runtime_release_supplier(link);
++	pm_request_idle(link->supplier);
+ }
  
--static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_32mhz = {
-+static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_imx_dev_cfg_32mhz = {
- 	.clock = {
- 		.freq = 32000000,
- 	},
- 	.timestamp_freq = 1,
--	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
-+	.bittiming_const = &kvaser_usb_flexc_bittiming_const,
- };
+ static bool pm_runtime_need_not_resume(struct device *dev)
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -58,7 +58,7 @@ extern void pm_runtime_get_suppliers(str
+ extern void pm_runtime_put_suppliers(struct device *dev);
+ extern void pm_runtime_new_link(struct device *dev);
+ extern void pm_runtime_drop_link(struct device_link *link);
+-extern void pm_runtime_release_supplier(struct device_link *link, bool check_idle);
++extern void pm_runtime_release_supplier(struct device_link *link);
  
- static void *
-@@ -529,17 +539,17 @@ static void kvaser_usb_leaf_get_software
- 		/* Firmware expects bittiming parameters calculated for 16MHz
- 		 * clock, regardless of the actual clock
- 		 */
--		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
-+		dev->cfg = &kvaser_usb_leaf_m32c_dev_cfg;
- 	} else {
- 		switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
- 		case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
--			dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
-+			dev->cfg = &kvaser_usb_leaf_imx_dev_cfg_16mhz;
- 			break;
- 		case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
--			dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
-+			dev->cfg = &kvaser_usb_leaf_imx_dev_cfg_24mhz;
- 			break;
- 		case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
--			dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
-+			dev->cfg = &kvaser_usb_leaf_imx_dev_cfg_32mhz;
- 			break;
- 		}
- 	}
-@@ -566,7 +576,7 @@ static int kvaser_usb_leaf_get_software_
- 		dev->fw_version = le32_to_cpu(cmd.u.usbcan.softinfo.fw_version);
- 		dev->max_tx_urbs =
- 			le16_to_cpu(cmd.u.usbcan.softinfo.max_outstanding_tx);
--		dev->cfg = &kvaser_usb_leaf_dev_cfg_8mhz;
-+		dev->cfg = &kvaser_usb_leaf_usbcan_dev_cfg;
- 		break;
- 	}
+ extern int devm_pm_runtime_enable(struct device *dev);
+ 
+@@ -284,8 +284,7 @@ static inline void pm_runtime_get_suppli
+ static inline void pm_runtime_put_suppliers(struct device *dev) {}
+ static inline void pm_runtime_new_link(struct device *dev) {}
+ static inline void pm_runtime_drop_link(struct device_link *link) {}
+-static inline void pm_runtime_release_supplier(struct device_link *link,
+-					       bool check_idle) {}
++static inline void pm_runtime_release_supplier(struct device_link *link) {}
+ 
+ #endif /* !CONFIG_PM */
  
 
 

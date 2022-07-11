@@ -2,145 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B29570847
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210FC57084A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiGKQ1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S230075AbiGKQ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiGKQ1F (ORCPT
+        with ESMTP id S229793AbiGKQ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:27:05 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6D97A526
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:27:04 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31c8bb90d09so54545097b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:27:04 -0700 (PDT)
+        Mon, 11 Jul 2022 12:27:20 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3DA7AB31
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:27:19 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id y37-20020a056a001ca500b00528bbf82c1eso1180920pfw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MNiOG9VLTXfyIumAzSkdBTE4Ro/vczfTyGGlVgeFa4E=;
-        b=TEsjKApZIm2eGVFXX6zjsDd7ABvdwUwkWxz0rYWMXDFUGDLUjnYfCbSEh8axaflEcf
-         /XAr0TEV8rX+gPcA0+uljGw/dhOFVhYtwVaJfH/iJZzU8Zl9ttHoRuTvQCNKLVlL8au0
-         3zPqttuKlbdSz8ISmN8t7W1UOYA8ZrDRI5lCKPMSixLQXgh7Jn8yPSiKsQw08yTUdZL0
-         fLEnLlY1fQ4/ZXeGTZzytVnyhHPgk+fmSFRNyB3kHmNQtFfPUaq1d4vdLWJxwt9rEGwT
-         oYED+Sgjnb2pGD++4nURXUCClA1/XfbK7RNX65wwZQAx6AsAxtCq6ItH03wFIU9LttK1
-         POzQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=AI9VSSKfUAJq0F0wpBlSk+XMmmCJHlZ66YlR5SdU9/E=;
+        b=XJOCF2hjgEIcyyljemwSCUCMLBCUcdXfpNhAGEaRJo4ZkAyIVFf/3TmKTSjcaSXMok
+         /7FQb3FItAL26+kPYU57KJI9K3JSENx6e3ZEJW5u1Xqfyu0cuh4xyB08qXcDxmugdRam
+         Igto/4zjQPVWFynrSOICpblUhiSxo1O32ZoyZd8F0sg6pm/NSHjMwKtH7DNlVptQT+xQ
+         UP6dg8fGoQr/5u4FK9I4OBeZaTWr8M6hG0dldMhS7s7VrPWjX0Rolspmvh/KF1I86aVU
+         j21VKFmEaTf2O94gvBl3Be0w73GLkfS/+aAd/hd1J19oJGK0Fwwutq1hdIQiDGXW6cI5
+         dF4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MNiOG9VLTXfyIumAzSkdBTE4Ro/vczfTyGGlVgeFa4E=;
-        b=z9icRFGkx+6eXjNFQ7a+6bZQN8B9KItQgYG8nfQff4o6F8eqFr/qwbcI/Kd0bbGq/Q
-         YdOyOo8AJ5DtU1BA4rfbZTkYa7YpHuqsZxGlYJ/2xMz528+Nb6ZSK4Cet61DHyWVgmTs
-         YNuvXgkoUXPDlTCj9QPWOeX8mZHQmeZoxvSEW/HQPAqPrlCyyMxu/GG3RRr1BbuIpC/J
-         8ZG3xvHQvaTeFfKKawnaFZOu5XMmaAk4KXfGE/cj5XWKjayRhRxHi5TXFapsfRGcvlGa
-         EAvpfcfg21hoDgky77o+cFypLPrzWEdzHw11+DNpClJ58Ph9I+X7YYmifSTlkiaZ0PlW
-         JLcg==
-X-Gm-Message-State: AJIora9jIzFJykyRlLBfyIWhqvref6X6NCFFkhmTPBIcaFQ4tE2LVXCD
-        X4YKYkifzQh3gaArHqUbg/2vbIAGfHe+X6zzp9yxFw==
-X-Google-Smtp-Source: AGRyM1vFc9Nz3PdQYWOkyhyxSAnFDy6tbKimAKMs5WJU/DJQWlYu903flN0tTaSuogpfrJrZGoq5RrujLcEOvlsW8HY=
-X-Received: by 2002:a81:98d:0:b0:31c:921c:9783 with SMTP id
- 135-20020a81098d000000b0031c921c9783mr20064789ywj.316.1657556823180; Mon, 11
- Jul 2022 09:27:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
-In-Reply-To: <20220701142310.2188015-11-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 11 Jul 2022 18:26:27 +0200
-Message-ID: <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=AI9VSSKfUAJq0F0wpBlSk+XMmmCJHlZ66YlR5SdU9/E=;
+        b=v1KPTIrH115nnNSUkK2/wGMqGxzbzv/gW0x4R4s7xrvQ+GSEOX8UldsZiFD12NdGac
+         yOIkBqfcSwGpVAWdIGCkagWEFQDFg/aqXPG/g4Kw4t23Qft2EbrcaNCBdaLzqtyVfd6H
+         xPWHCyr+zDZgiZFlxsYTRIf3ZppedaPxPonXve7ziN2gXY3uXIOxfx6SCiWYU2ebkqrh
+         jeRkXir0gpQWCag6hzZ1A1xn2gqZ3xkxTuIxCRpnlxYyKcWoGWTUHNpqDTNrww7GmFGW
+         esrGxT+bpE5nrg2iWkzKXfc4HA+HaxJOh66mdt0TMNi0brU+GkTj1VLJIGUKtPMBjIfF
+         Zbig==
+X-Gm-Message-State: AJIora8bd9bzH0vdSNv0jhwpUlwoYJDdEv2OlaggZzn0ZucgcfmlQuq2
+        pwTtSv+1TH+AuvPWPqSe+ohk4GcxzkByJA==
+X-Google-Smtp-Source: AGRyM1tD/j9WRxYgHSoH/KZQ2O2qiduJtYWHUlyPQqPUyiNDItqwNNw9mPuBMggDC3CUfbX0jWbh5rwoHyUIUA==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a63:710c:0:b0:40c:adcf:ce72 with SMTP id
+ m12-20020a63710c000000b0040cadcfce72mr17092957pgc.310.1657556839298; Mon, 11
+ Jul 2022 09:27:19 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 16:27:13 +0000
+Message-Id: <20220711162713.2467476-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] clk: explicitly disable CONFIG_UML_PCI_OVER_VIRTIO in .kunitconfig
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Maxime Ripard <maxime@cerno.tech>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
->
-> KMSAN adds extra metadata fields to struct page, so it does not fit into
-> 64 bytes anymore.
+CONFIG_UML_PCI_OVER_VIRTIO=y is needed to enable CONFIG_PCI=y on UML.
+However, this causes test failures when running the clk tests, i.e.
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/clk
 
-Does this somehow cause extra space being used in all kernel configs?
-If not, it would be good to note this in the commit message.
+A snippet of the particular error is:
+>     ok 1 - clk_gate_test_parent_rate
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 45 at lib/logic_iomem.c:141 __raw_readl+0x9f/0xd0
 
+This is triggered by this cast in the test:
+   143          ctx->fake_mem = (void __force __iomem *)&ctx->fake_reg;
+this seems to work except when logic iomem is enabled, i.e.
+CONFIG_INDIRECT_IOMEM=y.
 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+As a short-term fix, explicitly disable CONFIG_UML_PCI_OVER_VIRTIO in
+drivers/clk/.kunitconfig so we can enable it for everyone else by
+default in kunit.py.
 
-Reviewed-by: Marco Elver <elver@google.com>
+The long-term fix probably requires something more complicated, like
+  #ifdef CONFIG_INDIRECT_IOMEM
+    logic_iomem_add_region(...);
+  #endif
 
-> ---
-> Link: https://linux-review.googlesource.com/id/I353796acc6a850bfd7bb342aa1b63e616fc614f1
-> ---
->  drivers/nvdimm/nd.h       | 2 +-
->  drivers/nvdimm/pfn_devs.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-> index ec5219680092d..85ca5b4da3cf3 100644
-> --- a/drivers/nvdimm/nd.h
-> +++ b/drivers/nvdimm/nd.h
-> @@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
->                 struct nd_namespace_common *ndns);
->  #if IS_ENABLED(CONFIG_ND_CLAIM)
->  /* max struct page size independent of kernel config */
-> -#define MAX_STRUCT_PAGE_SIZE 64
-> +#define MAX_STRUCT_PAGE_SIZE 128
->  int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
->  #else
->  static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-> diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> index 0e92ab4b32833..61af072ac98f9 100644
-> --- a/drivers/nvdimm/pfn_devs.c
-> +++ b/drivers/nvdimm/pfn_devs.c
-> @@ -787,7 +787,7 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
->                  * when populating the vmemmap. This *should* be equal to
->                  * PMD_SIZE for most architectures.
->                  *
-> -                * Also make sure size of struct page is less than 64. We
-> +                * Also make sure size of struct page is less than 128. We
->                  * want to make sure we use large enough size here so that
->                  * we don't have a dynamic reserve space depending on
->                  * struct page size. But we also want to make sure we notice
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reported-by: Maxime Ripard <maxime@cerno.tech>
+Tested-by: Maxime Ripard <maxime@cerno.tech>
+---
+Note: this targeting the -kselftest kunit branch.
+There's a commit that triggers this by enabling logic iomem by default
+[1] and there's also a commit that lets disable it via kunitconfig file
+[2], which this fix relies on.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=6fc3a8636a7b0f7dbd6d0a4e450e765dc17518d4
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=8a7c6f859a20ca36a9e3ce71662de697898c9ef5
+---
+ drivers/clk/.kunitconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/.kunitconfig b/drivers/clk/.kunitconfig
+index cdbc7d7deba9..2fbeb71316f8 100644
+--- a/drivers/clk/.kunitconfig
++++ b/drivers/clk/.kunitconfig
+@@ -2,3 +2,4 @@ CONFIG_KUNIT=y
+ CONFIG_COMMON_CLK=y
+ CONFIG_CLK_KUNIT_TEST=y
+ CONFIG_CLK_GATE_KUNIT_TEST=y
++CONFIG_UML_PCI_OVER_VIRTIO=n
+
+base-commit: 7635778bac7e46458392c1261e3916e8e9e86860
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

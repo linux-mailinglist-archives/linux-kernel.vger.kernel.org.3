@@ -2,77 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC255709C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D5A5709CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiGKSOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S230184AbiGKSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiGKSOP (ORCPT
+        with ESMTP id S229903AbiGKSTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:14:15 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0F4DE96;
-        Mon, 11 Jul 2022 11:14:15 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 136so10059233ybl.5;
-        Mon, 11 Jul 2022 11:14:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jSE6Rh7NY69yyV0HNEoeIzk/x23R3XqEd+aAFDoyzfs=;
-        b=e7Y6RlP5Uq1l+KwZBD6NPVouRaHbbLlPnMwsJ7ET+8OQmruK37HMTtxYq93Ty4wePd
-         t/DkP8GobjxwGJ25I6WmCU2JgrM6Xzasp/I7OJpAEIBkAejFsLobtsV4eXBM5dmpZ0p5
-         tLVvmdTHQOym00+L9XXjmawSL04LS18o+ZdAhaFu4AIkd2mtUytHsifJJydik5ViJs8y
-         YrAMX9SQ2gwDpF3Wy4WxfttG+WrgMZNZGXXAyq4eDj8ZEivWZAvSOteo54D53U8XaFxM
-         dfCAOzHtuIZ+7CbyhaqOK3FVhHybNT4WX+axyAYQ3UfRJjIvspuxPpMeDKTtT0Oswb6m
-         47uw==
-X-Gm-Message-State: AJIora/X0ktzbAvN/WDsF1SkJ/M9OewOAccWoheCBEFfA5j79dq+BZGO
-        ylryShzuQRu1hSAM0CDUYQluk3knbYM4bO0y5qk=
-X-Google-Smtp-Source: AGRyM1tK3zv2r6Gc27U2VFdxVpar/3lHXCtSY3cI6oDJV8EmnDJdAaAULbDnlXxtooPJjAEiig9O3iDQlMkPBqtiegE=
-X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
- c10-20020a25a2ca000000b0066e719e0279mr17594626ybn.622.1657563254492; Mon, 11
- Jul 2022 11:14:14 -0700 (PDT)
+        Mon, 11 Jul 2022 14:19:11 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9E5DFD5;
+        Mon, 11 Jul 2022 11:19:09 -0700 (PDT)
+Received: from [192.168.16.236] (helo=vzdev.sw.ru)
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oAxzO-009oVU-VU;
+        Mon, 11 Jul 2022 20:18:46 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/1] Create debugfs file with hyper-v balloon usage information
+Date:   Mon, 11 Jul 2022 18:18:22 +0000
+Message-Id: <20220711181825.52318-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
- <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
- <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
- <YsvbgxJ80kMP5juv@kroah.com> <601436f2-b13e-6c24-bcfd-29548e288f23@I-love.SAKURA.ne.jp>
-In-Reply-To: <601436f2-b13e-6c24-bcfd-29548e288f23@I-love.SAKURA.ne.jp>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 Jul 2022 20:14:03 +0200
-Message-ID: <CAJZ5v0g9v35m9vaSeBC19axqRuNqG7qp+AGPn8wRb3Gzn+H9CA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] PM: hibernate: allow wait_for_device_probe() to
- timeout when resuming from hibernation
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@sisk.pl>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 1:21 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2022/07/11 17:12, Greg KH wrote:
-> >                                                        creating a
-> > locking loop like this should be resolved first,
->
-> Rafael and Arjan, can we agree with removing wait_for_device_probe() from snapshot_open() ?
+Allow the guest to know how much it is ballooned by the host.
+It is useful when debugging out of memory conditions.
 
-No, we can't.
+When host gets back memory from the guest it is accounted
+as used memory in the guest but the guest have no way to know
+how much it is actually ballooned.
+
+Expose current state, flags and max possible memory to the guest.
+While at it - fix a 10+ years old typo.
+
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ drivers/hv/hv_balloon.c | 135 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 129 insertions(+), 6 deletions(-)
+
+V1->V2:
+ - Fix C&P errors
+V2->V3:
+ - Move computation to a separate funcion
+ - Remove ifdefs to reduce code clutter
+
+This patch addresses your suggestions. Once again, sorry i have missed
+your email reply last time.
+
+
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index 91e8a72eee14..ba52d3a3e3e3 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/jiffies.h>
+ #include <linux/mman.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -248,7 +249,7 @@ struct dm_capabilities_resp_msg {
+  * num_committed: Committed memory in pages.
+  * page_file_size: The accumulated size of all page files
+  *		   in the system in pages.
+- * zero_free: The nunber of zero and free pages.
++ * zero_free: The number of zero and free pages.
+  * page_file_writes: The writes to the page file in pages.
+  * io_diff: An indicator of file cache efficiency or page file activity,
+  *	    calculated as File Cache Page Fault Count - Page Read Count.
+@@ -567,6 +568,11 @@ struct hv_dynmem_device {
+ 	__u32 version;
+ 
+ 	struct page_reporting_dev_info pr_dev_info;
++
++	/*
++	 * Maximum number of pages that can be hot_add-ed
++	 */
++	__u64 max_dynamic_page_count;
+ };
+ 
+ static struct hv_dynmem_device dm_device;
+@@ -1078,6 +1084,7 @@ static void process_info(struct hv_dynmem_device *dm, struct dm_info_msg *msg)
+ 
+ 			pr_info("Max. dynamic memory size: %llu MB\n",
+ 				(*max_page_count) >> (20 - HV_HYP_PAGE_SHIFT));
++			dm->max_dynamic_page_count = *max_page_count;
+ 		}
+ 
+ 		break;
+@@ -1116,6 +1123,19 @@ static unsigned long compute_balloon_floor(void)
+ 	return min_pages;
+ }
+ 
++/*
++ * Compute total committed memory pages
++ */
++
++static unsigned long get_pages_committed(struct hv_dynmem_device *dm)
++{
++	return vm_memory_committed() +
++		dm->num_pages_ballooned +
++		(dm->num_pages_added > dm->num_pages_onlined ?
++		 dm->num_pages_added - dm->num_pages_onlined : 0) +
++		compute_balloon_floor();
++}
++
+ /*
+  * Post our status as it relates memory pressure to the
+  * host. Host expects the guests to post this status
+@@ -1157,11 +1177,7 @@ static void post_status(struct hv_dynmem_device *dm)
+ 	 * asking us to balloon them out.
+ 	 */
+ 	num_pages_avail = si_mem_available();
+-	num_pages_committed = vm_memory_committed() +
+-		dm->num_pages_ballooned +
+-		(dm->num_pages_added > dm->num_pages_onlined ?
+-		 dm->num_pages_added - dm->num_pages_onlined : 0) +
+-		compute_balloon_floor();
++	num_pages_committed = get_pages_committed(dm);
+ 
+ 	trace_balloon_status(num_pages_avail, num_pages_committed,
+ 			     vm_memory_committed(), dm->num_pages_ballooned,
+@@ -1807,6 +1823,109 @@ static int balloon_connect_vsp(struct hv_device *dev)
+ 	return ret;
+ }
+ 
++/*
++ * DEBUGFS Interface
++ */
++#ifdef CONFIG_DEBUG_FS
++
++/**
++ * hv_balloon_debug_show - shows statistics of balloon operations.
++ * @f: pointer to the &struct seq_file.
++ * @offset: ignored.
++ *
++ * Provides the statistics that can be accessed in hv-balloon in the debugfs.
++ *
++ * Return: zero on success or an error code.
++ */
++static int hv_balloon_debug_show(struct seq_file *f, void *offset)
++{
++	struct hv_dynmem_device *dm = f->private;
++	char *sname;
++
++	seq_printf(f, "%-22s: %u.%u\n", "host_version",
++				DYNMEM_MAJOR_VERSION(dm->version),
++				DYNMEM_MINOR_VERSION(dm->version));
++
++	seq_printf(f, "%-22s:", "capabilities");
++	if (ballooning_enabled())
++		seq_puts(f, " enabled");
++
++	if (hot_add_enabled())
++		seq_puts(f, " hot_add");
++
++	seq_puts(f, "\n");
++
++	seq_printf(f, "%-22s: %u", "state", dm->state);
++	switch (dm->state) {
++	case DM_INITIALIZING:
++			sname = "Initializing";
++			break;
++	case DM_INITIALIZED:
++			sname = "Initialized";
++			break;
++	case DM_BALLOON_UP:
++			sname = "Balloon Up";
++			break;
++	case DM_BALLOON_DOWN:
++			sname = "Balloon Down";
++			break;
++	case DM_HOT_ADD:
++			sname = "Hot Add";
++			break;
++	case DM_INIT_ERROR:
++			sname = "Error";
++			break;
++	default:
++			sname = "Unknown";
++	}
++	seq_printf(f, " (%s)\n", sname);
++
++	/* HV Page Size */
++	seq_printf(f, "%-22s: %ld\n", "page_size", HV_HYP_PAGE_SIZE);
++
++	/* Pages added with hot_add */
++	seq_printf(f, "%-22s: %u\n", "pages_added", dm->num_pages_added);
++
++	/* pages that are "onlined"/used from pages_added */
++	seq_printf(f, "%-22s: %u\n", "pages_onlined", dm->num_pages_onlined);
++
++	/* pages we have given back to host */
++	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
++
++	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
++				get_pages_committed(dm));
++
++	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
++				dm->max_dynamic_page_count);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(hv_balloon_debug);
++
++static void  hv_balloon_debugfs_init(struct hv_dynmem_device *b)
++{
++	debugfs_create_file("hv-balloon", 0444, NULL, b,
++			&hv_balloon_debug_fops);
++}
++
++static void  hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
++{
++	debugfs_remove(debugfs_lookup("hv-balloon", NULL));
++}
++
++#else
++
++static inline void hv_balloon_debugfs_init(struct hv_dynmem_device  *b)
++{
++}
++
++static inline void hv_balloon_debugfs_exit(struct hv_dynmem_device *b)
++{
++}
++
++#endif	/* CONFIG_DEBUG_FS */
++
+ static int balloon_probe(struct hv_device *dev,
+ 			 const struct hv_vmbus_device_id *dev_id)
+ {
+@@ -1854,6 +1973,8 @@ static int balloon_probe(struct hv_device *dev,
+ 		goto probe_error;
+ 	}
+ 
++	hv_balloon_debugfs_init(&dm_device);
++
+ 	return 0;
+ 
+ probe_error:
+@@ -1879,6 +2000,8 @@ static int balloon_remove(struct hv_device *dev)
+ 	if (dm->num_pages_ballooned != 0)
+ 		pr_warn("Ballooned pages: %d\n", dm->num_pages_ballooned);
+ 
++	hv_balloon_debugfs_exit(dm);
++
+ 	cancel_work_sync(&dm->balloon_wrk.wrk);
+ 	cancel_work_sync(&dm->ha_wrk.wrk);
+ 
+-- 
+2.25.1
+

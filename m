@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF3D56D6B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AAE56D6B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiGKHYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S230102AbiGKHYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiGKHY2 (ORCPT
+        with ESMTP id S229606AbiGKHYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:24:28 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE013FB6;
-        Mon, 11 Jul 2022 00:24:26 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id BADC24015A;
-        Mon, 11 Jul 2022 12:24:21 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1657524262; bh=TM9PHjFhwqnCKFfKFeJ/O4AXSs6yiSWKFZdtW4tUdSI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HleYzFOM5qHYA1KyvH8h3iXhrHKMkIrWWvwkKOj5EJ1hYE49Oq2CFe8t0FhtdT0ve
-         IzblL86zDpzuKrVnynCiidcH+PwpwlzNuHaDB7j1Xdjl+y0KEwTgwT/mZdRl512nyb
-         PTXhcShdrHOn85yBKqgX0mFAjrk7ztJ3dJsBmfRAfzlH3fIMwQeW3HTU8Ln/WCMbbL
-         8J1opkiS289BTmOB0uxZjj8q29mPyAh/x2rdT+yrHZ8CLpr88VWYnnF3baiq/H6xha
-         Uk2C5lvbycdnDU4YhCPBexo2yBrNCOCmhLcE0fzoUFSGMZVXBJTSyCpOXafJjTXHhJ
-         TWluiD7W6VuRg==
+        Mon, 11 Jul 2022 03:24:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A85B13FB6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:24:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id e15so5141855edj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wDveJzFZvRjiL1p9LtdiJFd70DGE33Tfto29/Q9eZIc=;
+        b=faCMdkRJbTLAW1mT2GEpBEvgCpZbtj4RfoLXG75nue3CJ/SqoLmZGuLfHs/21mK5e6
+         4sARlKgvrEhQ8rhJOEi1P1hf8qPUjiq0yXfgagquQm9wJHr3mQixjkEx5LfyOYXy469F
+         sLc8sohYou4aJy2giHSCUjlbVfYuGzVCFO9JfPpDJYOYicAMCyVnBsXVgQ5ByMT49Pi0
+         u4Wpe3WZzVKLDaFHsQi4qw2TYlbbYgk40ZlDX3lnnJkB5MZVv0ZRiebHOkmHFGDfKCCh
+         3fR1b5Dc3CcsT4inKT5rMvLtWYUBTodWRDswp4RRDuBMZTEyv8KzSXdwggESl/orK6IJ
+         lqaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wDveJzFZvRjiL1p9LtdiJFd70DGE33Tfto29/Q9eZIc=;
+        b=GNVSKjJ2U9GcTBdlduEoLeZzXOh3L+8vneZglqsCkm08JhjBxRaVm9rMMgLToCpTf2
+         6FJjOSJj+U52Vhb9j715C8d+leAJBFdyn7BEMmNyXFlOYwB17JGVKHnaN1rK9izsozmO
+         HRLr9UpneOBN6EEM/375iCOWLvXIXBLWRdkYFFBAy+bo2/Lri60BdVeopPz/T9m5OAjz
+         KZJcBc01Qp63z6E72qBhU5NOkK/B1T2Moe3BnEIdPU2eEV95vtHax1BOgCAVb6AApR8R
+         7LDyDgkaHIPqLvMVpuA1506eTkAn5563AJN1NSDxh/OC3jfCFoxEzU2xwkTgYLI/jKE3
+         JhTg==
+X-Gm-Message-State: AJIora9St4OSyQZlafRff0hrXGCeP8MazMQfZI4P+lswRMp/uH5pauRI
+        DUQNhIRuT8oddpjPGjwfKSaZonFqfi7h9+Ed1g/i
+X-Google-Smtp-Source: AGRyM1vv0aPwxFE/jj4WcGMRymePPG14ezSoC47aHzECUL2MuCr+eTMM0BvBw0+r4HWJPU5QcGRM3VnUbYrpnMYBr4Q=
+X-Received: by 2002:a05:6402:240a:b0:437:d2b6:3dde with SMTP id
+ t10-20020a056402240a00b00437d2b63ddemr23062785eda.62.1657524284790; Mon, 11
+ Jul 2022 00:24:44 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Mon, 11 Jul 2022 12:24:19 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
-        masneyb@onstation.org, sean.anderson@seco.com,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v7 2/2] pwm: Add clock based PWM output driver
-In-Reply-To: <20220711070349.udyej2qxj2hqyowz@pengutronix.de>
-References: <20220612132203.290726-1-nikita@trvn.ru>
- <20220612132203.290726-3-nikita@trvn.ru>
- <20220701075012.xpkcd5xk42frevyq@pengutronix.de>
- <ef73636abfc6df26c249863e0288dc48@trvn.ru>
- <20220711070349.udyej2qxj2hqyowz@pengutronix.de>
-Message-ID: <5b2c8ae074ede3263c67381758311398@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <20220706050503.171-1-xieyongji@bytedance.com> <CACGkMEv1tzenaGSUvYXEuxdmXyaZxQ24QspXRRA_95mMp4PWSg@mail.gmail.com>
+ <CACycT3u3kOzzQjKBYNAB5vtpgcmPg7FjJ5yTYMtQo0SJVrBmZg@mail.gmail.com>
+ <CACGkMEvtC1VmGjhV6QpEeu+nUikGj5eT79hhyS59rpK1s31TUg@mail.gmail.com>
+ <CACycT3sNnmV8jrnjFkft6oST_6SGLc43f8Y4ZpomkPeOsvsorQ@mail.gmail.com> <CACGkMEsuGif+X4Maa-qSNYLzfkvBKV9ZkVEUFgYnjsUUwS4Dkw@mail.gmail.com>
+In-Reply-To: <CACGkMEsuGif+X4Maa-qSNYLzfkvBKV9ZkVEUFgYnjsUUwS4Dkw@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 11 Jul 2022 15:24:33 +0800
+Message-ID: <CACycT3vgaOrLVq+GDRK1PqqBRCkUAU0bYH=2CDvudsX0F9FBDA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] VDUSE: Support registering userspace memory as
+ bounce buffer
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,109 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uwe Kleine-König писал(а) 11.07.2022 12:03:
-> On Mon, Jul 11, 2022 at 10:55:09AM +0500, Nikita Travkin wrote:
->> Uwe Kleine-König писал(а) 01.07.2022 12:50:
->> > On Sun, Jun 12, 2022 at 06:22:03PM +0500, Nikita Travkin wrote:
->> >> Some systems have clocks exposed to external devices. If the clock
->> >> controller supports duty-cycle configuration, such clocks can be used as
->> >> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
->> >> similar way and an "opposite" driver already exists (clk-pwm). Add a
->> >> driver that would enable pwm devices to be used via clk subsystem.
->> >>
->> >> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> >> --
->> >>
->> >> Changes in v2:
->> >>  - Address Uwe's review comments:
->> >>    - Round set clk rate up
->> >>    - Add a description with limitations of the driver
->> >>    - Disable and unprepare clock before removing pwmchip
->> >> Changes in v3:
->> >>  - Use 64bit version of div round up
->> >>  - Address Uwe's review comments:
->> >>    - Reword the limitations to avoid incorrect claims
->> >>    - Move the clk_enabled flag assignment
->> >>    - Drop unnecessary statements
->> >> Changes in v5:
->> >>  - add missed returns
->> >> Changes in v6:
->> >>  - Unprepare the clock on error
->> >>  - Drop redundant limitations points
->> >> Changes in v7:
->> >>  - Rename some variables to be in line with common naming
->> >>
->> >> --
->> >> It seems like my mailserver wasn't able to send the last review
->> >> response to Uwe's so I'll repeat here that afaict clk.h has all the
->> >> methods stubbed out so compiling without HAVE_CLK is possible.
->> >> Sorry for a long delay with sending this since v6.
-> 
-> FTR: The only problems I have with mail sending in this thread is to
-> "devicetree@vger.kernel.or", I added a 'g' for this mail to that address
-> :-) Otherwise if you diagnose to have problems with the pengutronix
-> server accepting your mail, I'd like to hear about that.
+On Mon, Jul 11, 2022 at 2:02 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Fri, Jul 8, 2022 at 5:53 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+> >
+> > On Fri, Jul 8, 2022 at 4:38 PM Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > > On Wed, Jul 6, 2022 at 6:16 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+> > > >
+> > > > On Wed, Jul 6, 2022 at 5:30 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > >
+> > > > > On Wed, Jul 6, 2022 at 1:05 PM Xie Yongji <xieyongji@bytedance.com> wrote:
+> > > > > >
+> > > > > > Hi all,
+> > > > > >
+> > > > > > This series introduces some new ioctls: VDUSE_IOTLB_GET_INFO,
+> > > > > > VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM to support
+> > > > > > registering and de-registering userspace memory for IOTLB
+> > > > > > as bounce buffer in virtio-vdpa case.
+> > > > > >
+> > > > > > The VDUSE_IOTLB_GET_INFO ioctl can help user to query IOLTB
+> > > > > > information such as bounce buffer size. Then user can use
+> > > > > > those information on VDUSE_IOTLB_REG_UMEM and
+> > > > > > VDUSE_IOTLB_DEREG_UMEM ioctls to register and de-register
+> > > > > > userspace memory for IOTLB.
+> > > > > >
+> > > > > > During registering and de-registering, the DMA data in use
+> > > > > > would be copied from kernel bounce pages to userspace bounce
+> > > > > > pages and back.
+> > > > > >
+> > > > > > With this feature, some existing application such as SPDK
+> > > > > > and DPDK can leverage the datapath of VDUSE directly and
+> > > > > > efficiently as discussed before [1][2]. They can register
+> > > > > > some preallocated hugepages to VDUSE to avoid an extra
+> > > > > > memcpy from bounce-buffer to hugepages.
+> > > > >
+> > > > > This is really interesting.
+> > > > >
+> > > > > But a small concern on uAPI is that this seems to expose the VDUSE
+> > > > > internal implementation (bounce buffer) to userspace. We tried hard to
+> > > > > hide it via the GET_FD before. Anyway can we keep it?
+> > > > >
+> > > >
+> > > > Another way is changing GET_FD ioctl to add a flag or reuse 'perm'
+> > > > field to indicate whether a IOVA region supports userspace memory
+> > > > registration. Then userspace can use
+> > > > VDUSE_IOTLB_REG_UMEM/VDUSE_IOTLB_DEREG_UMEM to register/deregister
+> > > > userspace memory for this IOVA region.
+> > >
+> > > Looks better.
+> > >
+> >
+> > OK.
+> >
+> > > > Any suggestions?
+> > >
+> > > I wonder what's the value of keeping the compatibility with the kernel
+> > > mmaped bounce buffer. It means we need to take extra care on e.g data
+> > > copying when reg/reg user space memory.
+> > >
+> >
+> > I'm not sure I get your point on the compatibility with the kernel
+> > bounce buffer. Do you mean they use the same iova region?
+>
+> Yes.
+>
+> >
+> > The userspace daemon might crash or reboot. In those cases, we still
+> > need a kernel buffer to store/recover the data.
+>
+> Yes, this should be a good point.
+>
+> >
+> > > Can we simply allow the third kind of fd that only works for umem registration?
+> > >
+> >
+> > Do you mean using another iova region for umem?
+>
+> I meant having a new kind of fd that only allows umem registration.
+>
 
-I think the problem for me was that my server, for some reason,
-insisted on using ipv6 which it has no access to. I think it might
-just be some (very) temporary problem on my end as now the mails go
-fine again.
+OK. It seems to be a little complicated to allow mapping a registered
+user memory via a new fd, e.g. how to handle the mapping if the
+userspace daemon exits but the fd is already passed to another
+process.
 
-And the missing "g" is just the artifact of me preferring to manually
-build the git send-email command every time, then forgetting I made
-this typo when replying...
+> >I think we don't need
+> > a fd in umem case since the userspace daemon can access the memory
+> > directly without using mmap() to map it into the address space in
+> > advance.
+>
+> Ok, I will have a look at the code and get back.
+>
 
-> 
->> >> +	pcchip = devm_kzalloc(&pdev->dev, sizeof(*pcchip), GFP_KERNEL);
->> >> +	if (!pcchip)
->> >> +		return -ENOMEM;
->> >> +
->> >> +	pcchip->clk = devm_clk_get(&pdev->dev, NULL);
->> >
->> > You can use devm_clk_get_prepared() here and drop the clk_prepare()
->> > below and the clk_unprepare in .remove().
->>
->> Here I spent a bit of time trying to remember why I thought
->> I've already looked at this, but after figuring out that this
->> devm helper didn't even exist earlier (I only see it in clk-next)
->> I remembered considering a totally different thing (being
->> clk_disable_unprepare in the _remove, which doesn't play well)
->>
->> Given that this seems to be absent from 5.19-rc6, I'm afraid adding
->> it here will upset the 0day as well as possibly cause issues in case
->> both are taken for the same merge window...
-> 
-> Pass --base with a sensible parameter to git-format-patch (or
-> git-send-email) to make the 0day bots happy.
-
-Thanks for the suggestion!
-
-> 
->> On the other hand it takes me quite a while to provide replies for
->> this series (the trend I'm not happy with) so maybe 3-4 weeks
->> will indeed pass for 5.20-rc1 to have it...
-> 
-> It's not me who merges PWM patches but Thierry. I don't know his plans
-> and if he would be willing to pick up a new driver for the next cycle.
-> You might still get lucky with a fast next iteration.
-> 
-> If you want ignore the devm_clk_get_prepared() suggestion, we can still
-> convert to that once both patches hit Linus Torvald's tree.
-
-Yes, I decided to immediately send a v8 instead of giving a bit
-of time for the discussion to settle (which seem to often end up
-too long) as there was no functional change otherwise.
+OK. Looking forward to your reply.
 
 Thanks,
-Nikita
-
-> 
->> I think I will try to send a new version with just the comment
->> added shortly in case it's still not too late for the next merge
->> window and you can feel free to nack it if you think it already is :)
-> 
-> I think the driver looks good otherwise, so I don't expect to have more
-> feedback in the next round.
-> 
-> Best regards
-> Uwe
+Yongji

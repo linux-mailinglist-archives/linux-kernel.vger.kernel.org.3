@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FEE57067B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E29570680
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbiGKPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S232042AbiGKPBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiGKPAU (ORCPT
+        with ESMTP id S232062AbiGKPBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:00:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A357696F;
-        Mon, 11 Jul 2022 07:59:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9B5A61582;
-        Mon, 11 Jul 2022 14:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA62C34115;
-        Mon, 11 Jul 2022 14:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657551583;
-        bh=dxZGKngfKO1Un0ysAWdBwrkK8xmIWeIei9M7jEZdOHg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NGwk1jTuNGOtpzHLQ7/aldklQ4LAtQOSBbU+hNaaRFVKhRQBPEbIk14EDNRiubnXH
-         xc5ETYEeLmrbgkdEvLWPOVDBqn4kQpo9dUqZ2AuuGDBHBRuoV406k9kaI+KN867EdD
-         v/fMt8rcjQfkhnMy87zktIzILzf4T8zZtfCNwx7AuGJHfKvon8lXc+aR4cZqHbDV1M
-         M4ibjcxGLSNTqO1IDyudF9xbDd8hzsv4weSah2mk5lUhSYe4/RPJr/QeJIGZ+fp1xV
-         ocVMh/BCEFRW5dnbOmvsL8yvd9baP8OKXmjc9+jQE4YxWr/9w8Smsdqn/zf+5+szQ8
-         60nlq1Rbh9q7A==
-Date:   Mon, 11 Jul 2022 08:59:39 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: Block: bio.c:1232:6: error: variable 'i' is used uninitialized
- whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-Message-ID: <Ysw627zSWSrEzrUZ@kbusch-mbp>
-References: <CA+G9fYtDr=tqPmM6f9aGQOfqkxUo-yP-kHBQG787D0Cj6oO-dg@mail.gmail.com>
+        Mon, 11 Jul 2022 11:01:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE39C5F9BA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:00:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE1D91596;
+        Mon, 11 Jul 2022 08:00:57 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2DE23F70D;
+        Mon, 11 Jul 2022 08:00:52 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 15:59:41 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [PATCH v3 2/2] riscv: topology: fix default topology reporting
+Message-ID: <20220711145941.q5rdrtavstjkp3km@bogus>
+References: <20220709152354.2856586-1-mail@conchuod.ie>
+ <20220709152354.2856586-3-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtDr=tqPmM6f9aGQOfqkxUo-yP-kHBQG787D0Cj6oO-dg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220709152354.2856586-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,13 +67,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 06:14:10PM +0530, Naresh Kamboju wrote:
-> Following regression found with clang i386 and x86 builds failed on
-> Linux next-20220711 tag. Please find the build error logs.
+On Sat, Jul 09, 2022 at 04:23:55PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> RISC-V has no sane defaults to fall back on where there is no cpu-map
+> in the devicetree.
+> Without sane defaults, the package, core and thread IDs are all set to
+> -1. This causes user-visible inaccuracies for tools like hwloc/lstopo
+> which rely on the sysfs cpu topology files to detect a system's
+> topology.
+> 
+> On a PolarFire SoC, which should have 4 harts with a thread each,
+> lstopo currently reports:
+> 
+> Machine (793MB total)
+>   Package L#0
+>     NUMANode L#0 (P#0 793MB)
+>     Core L#0
+>       L1d L#0 (32KB) + L1i L#0 (32KB) + PU L#0 (P#0)
+>       L1d L#1 (32KB) + L1i L#1 (32KB) + PU L#1 (P#1)
+>       L1d L#2 (32KB) + L1i L#2 (32KB) + PU L#2 (P#2)
+>       L1d L#3 (32KB) + L1i L#3 (32KB) + PU L#3 (P#3)
+> 
+> Adding calls to store_cpu_topology() in {boot,smp} hart bringup code
+> results in the correct topolgy being reported:
+> 
+> Machine (793MB total)
+>   Package L#0
+>     NUMANode L#0 (P#0 793MB)
+>     L1d L#0 (32KB) + L1i L#0 (32KB) + Core L#0 + PU L#0 (P#0)
+>     L1d L#1 (32KB) + L1i L#1 (32KB) + Core L#1 + PU L#1 (P#1)
+>     L1d L#2 (32KB) + L1i L#2 (32KB) + Core L#2 + PU L#2 (P#2)
+>     L1d L#3 (32KB) + L1i L#3 (32KB) + Core L#3 + PU L#3 (P#3)
+> 
+> CC: stable@vger.kernel.org
+> Fixes: 03f11f03dbfe ("RISC-V: Parse cpu topology during boot.")
+> Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
+> Link: https://github.com/open-mpi/hwloc/issues/536
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> ---
+>  arch/riscv/Kconfig          | 2 +-
+>  arch/riscv/kernel/smpboot.c | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 2af0701b7518..4b6c2fdbb57c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -52,7 +52,7 @@ config RISCV
+>  	select COMMON_CLK
+>  	select CPU_PM if CPU_IDLE
+>  	select EDAC_SUPPORT
+> -	select GENERIC_ARCH_TOPOLOGY if SMP
+> +	select GENERIC_ARCH_TOPOLOGY
 
-Sorry, I needed to send a v2 of this patch. I didn't realize this was already
-merged (it doesn't appear in the block tree), though, so I'm not sure if I need
-send a fixup patch or the correct version now.
+I am not sure of !SMP as ARM64 is default SMP only. I have never reviewed
+the arch topology code with !SMP considered. I will leave that part to
+RISC-V developers.
+
+>  	select GENERIC_ATOMIC64 if !64BIT
+>  	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+>  	select GENERIC_EARLY_IOREMAP
+> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> index f1e4948a4b52..a1c861f84fe2 100644
+> --- a/arch/riscv/kernel/smpboot.c
+> +++ b/arch/riscv/kernel/smpboot.c
+> @@ -40,6 +40,8 @@ static DECLARE_COMPLETION(cpu_running);
+>  void __init smp_prepare_boot_cpu(void)
+>  {
+>  	init_cpu_topology();
+> +
+> +	store_cpu_topology(smp_processor_id());
+>  }
+>  
+>  void __init smp_prepare_cpus(unsigned int max_cpus)
+> @@ -161,9 +163,9 @@ asmlinkage __visible void smp_callin(void)
+>  	mmgrab(mm);
+>  	current->active_mm = mm;
+>  
+> +	store_cpu_topology(curr_cpuid);
+>  	notify_cpu_starting(curr_cpuid);
+>  	numa_add_cpu(curr_cpuid);
+> -	update_siblings_masks(curr_cpuid);
+>  	set_cpu_online(curr_cpuid, 1);
+>  
+>  	/*
+
+Other than that, this looks good. FWIW:
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep

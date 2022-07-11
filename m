@@ -2,207 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A677570151
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1F6570154
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiGKLxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:53:41 -0400
+        id S230504AbiGKLyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:54:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiGKLxP (ORCPT
+        with ESMTP id S230468AbiGKLyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:53:15 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0886825EBF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:53:10 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q82so4522233pgq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
-        b=vUebZIGKNacxF3KqZp8W0o7xTR8bwMilpI1OMr+YKfjbmxpHzCKq8DfP+s/d7BrbKk
-         vqUfx0AJTq+tlRaVvaCvg6+cewoJZY4++sqiwpgU2wMvnnoA1cKwdpZU+9+yLTwHCU6R
-         ygRvVQDUiggbMbr07B0VtyBk1eXhHVVZbCanUv6uOoiFaATgLNuRSfXyUZ5yjp0qfrrs
-         Ouogbe02NP7BFzX25uiWgLFH5XvVG2A3A52pHpdjNt9Pnfh1dnIyt9IvKh8HtAssLccG
-         /rDbXdNYAeGCVDYP0CLq/+dnumAW/bT17c+SyoL4AaSEg6jtLvgWHwKAjEkIqAPXuj/u
-         yYAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F9C4b2eXgqDOnaISTWY3hd8BHivbis4FswsOZcWe/jU=;
-        b=7xbej/VhvQQEWlufkNz0zx/kL9wqdzjv1uLE+Nj51w6CIzhpQxsqKRFX6MveWY+Fh9
-         uMXFWEvdFpBSh4ZyzIiEolucO6n4Hcc9cBkV5HDROL/MyrQzjXbBMPo5vlJbbvgDPoDI
-         VWNFOxWwEX55CRN1GcNOcyJl0CDho7Dp1v9HSx3dar6Rhx2P/hoWDv19vMWXmDMTS/mk
-         BWaelKoKr4zeNsWsP82plzOvnOUgVNdv3M8iWMScyleCoZYwP5MhFkQPRCuR6+wHi7Z5
-         OiAoeif/kEBxCJBLkhEZpW6WRBczZ97AJ2K/RivHSKghK/9PuVP5OoIcbL6M8mSWgd46
-         QJfw==
-X-Gm-Message-State: AJIora/0zifFtzCsj3EwZjCBzM9L7QJiRc+z7nZbgwGc7swjPJUyNzxR
-        9Q4FOHgyBcLX1Y2Nw1LDf6p/TA==
-X-Google-Smtp-Source: AGRyM1vpZXo8S0A+cw9lPocExuKZFE4v5svlvg3jjLPozwoQPPVwu6Nf4Qtp7bhf5TPqR8+tyxmQXw==
-X-Received: by 2002:a63:9701:0:b0:40c:a588:b488 with SMTP id n1-20020a639701000000b0040ca588b488mr15689995pge.303.1657540389089;
-        Mon, 11 Jul 2022 04:53:09 -0700 (PDT)
-Received: from leo-build-box.lan (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090a648e00b001eaec8cea55sm4586502pjj.57.2022.07.11.04.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 04:53:08 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v5 5/5] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
-Date:   Mon, 11 Jul 2022 19:52:40 +0800
-Message-Id: <20220711115240.806236-6-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711115240.806236-1-leo.yan@linaro.org>
-References: <20220711115240.806236-1-leo.yan@linaro.org>
+        Mon, 11 Jul 2022 07:54:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DA5275C8;
+        Mon, 11 Jul 2022 04:53:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C7866114C;
+        Mon, 11 Jul 2022 11:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D45EC341CD;
+        Mon, 11 Jul 2022 11:53:38 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MzCw4sK9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657540414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=720mTc1nsSAPrwWFG+973FguSUx8/hicJxk0ef4PlVU=;
+        b=MzCw4sK9qZsQsPPK1O23afqypc3QjfcYtfDr5Phr3bgH0rLukZ9+znNizqsFlom/dF4uHM
+        4soBx2Yc2m42FPOdZLdHkwPe3k/XNSU4S8HNZlpaf7wFGsuXqBlhq4YjM4rCHDXACMn6jy
+        KlLcwb0nbtXoBZIEdZBZhRwd3TtXWlw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f0912a61 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 11 Jul 2022 11:53:34 +0000 (UTC)
+Received: by mail-il1-f169.google.com with SMTP id v1so2847305ilg.11;
+        Mon, 11 Jul 2022 04:53:34 -0700 (PDT)
+X-Gm-Message-State: AJIora9GZFVJ2OWd16ug+6eNkIayYvS4lF7xxZPYUPmBgAPuZX1PaIai
+        68cSfPGyYKN1aD9xo4VjkKga5jxNO6lSme3ko5w=
+X-Google-Smtp-Source: AGRyM1u5obHWevbMsvQU1IKF5fNjRTUaC3CDj1Mg81SozNPECyRaM6/1pfwyObSD0LHNocgSliRVj9L1FRR/H0CkoSw=
+X-Received: by 2002:a05:6e02:164f:b0:2dc:6d38:ff8e with SMTP id
+ v15-20020a056e02164f00b002dc6d38ff8emr5606184ilu.16.1657540412032; Mon, 11
+ Jul 2022 04:53:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:20e5:0:0:0:0 with HTTP; Mon, 11 Jul 2022 04:53:31
+ -0700 (PDT)
+In-Reply-To: <xhsmho7xv512f.mognet@vschneid.remote.csb>
+References: <Yrw5f8GN2fh2orid@zx2c4.com> <20220629114240.946411-1-Jason@zx2c4.com>
+ <87v8s8ubws.fsf@kernel.org> <xhsmho7xv512f.mognet@vschneid.remote.csb>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 11 Jul 2022 13:53:31 +0200
+X-Gmail-Original-Message-ID: <CAHmME9q8-1vpV9zFsKkawk+XFm96S6fmug7v-NPJNpQmRoe6-Q@mail.gmail.com>
+Message-ID: <CAHmME9q8-1vpV9zFsKkawk+XFm96S6fmug7v-NPJNpQmRoe6-Q@mail.gmail.com>
+Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering hwrng
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Gregory Erwin <gregerwin256@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit uses buckets for support bandwidth and clock rates.  It
-introduces a new function qcom_icc_bus_aggregate() to calculate the
-aggregate average and peak bandwidths for every bucket, and also it
-calculates the maximum value of aggregated average bandwidth across all
-buckets.
+Hi Valentin,
 
-The maximum aggregated average is used to calculate the final bandwidth
-requests.  And we can set the clock rate per bucket, we use SLEEP bucket
-as default bucket if a platform doesn't enable the interconnect path
-tags in DT binding; otherwise, we use WAKE bucket to set active clock
-and use SLEEP bucket for other clocks.  So far we don't use AMC bucket.
+On 7/11/22, Valentin Schneider <vschneid@redhat.com> wrote:
+> On 07/07/22 19:26, Kalle Valo wrote:
+>> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+>>
+>>> There are two deadlock scenarios that need addressing, which cause
+>>> problems when the computer goes to sleep, the interface is set down, an=
+d
+>>> hwrng_unregister() is called. When the deadlock is hit, sleep is delaye=
+d
+>>> for tens of seconds, causing it to fail. These scenarios are:
+>>>
+>>> 1) The hwrng kthread can't be stopped while it's sleeping, because it
+>>>    uses msleep_interruptible() instead of
+>>> schedule_timeout_interruptible().
+>>>    The fix is a simple moving to the correct function. At the same time=
+,
+>>>    we should cleanup a common and useless dmesg splat in the same area.
+>>>
+>>> 2) A normal user thread can't be interrupted by hwrng_unregister() whil=
+e
+>>>    it's sleeping, because hwrng_unregister() is called from elsewhere.
+>>>    The solution here is to keep track of which thread is currently
+>>>    reading, and asleep, and signal that thread when it's time to
+>>>    unregister. There's a bit of book keeping required to prevent
+>>>    lifetime issues on current.
+>>>
+>>> Reported-by: Gregory Erwin <gregerwin256@gmail.com>
+>>> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>>> Cc: Kalle Valo <kvalo@kernel.org>
+>>> Cc: Rui Salvaterra <rsalvaterra@gmail.com>
+>>> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly
+>>> dumping into random.c")
+>>> Link:
+>>> https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgDsFGTEj=
+s0c00giw@mail.gmail.com/
+>>> Link:
+>>> https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8Hys_D=
+VXtent3HA@mail.gmail.com/
+>>> Link: https://bugs.archlinux.org/task/75138
+>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>> ---
+>>> Changes v7->v8:
+>>> - Add a missing export_symbol.
+>>>
+>>>  drivers/char/hw_random/core.c        | 30 ++++++++++++++++++++++++----
+>>>  drivers/net/wireless/ath/ath9k/rng.c | 19 +++++++-----------
+>>>  kernel/sched/core.c                  |  1 +
+>>>  3 files changed, 34 insertions(+), 16 deletions(-)
+>>
+>> I don't see any acks for the hw_random and the scheduler change, adding
+>> more
+>> people to CC. Full patch here:
+>>
+>> https://patchwork.kernel.org/project/linux-wireless/patch/20220629114240=
+.946411-1-Jason@zx2c4.com/
+>>
+>> Are everyone ok if I take this patch via wireless-next?
+>>
+>
+> Thanks for the Cc.
+>
+> I'm not hot on the export of wake_up_state(), IMO any wakeup with
+> !(state & TASK_NORMAL) should be reserved to kernel internals. Now, here
+> IIUC the problem is that the patch uses an inline invoking
+>
+>   wake_up_state(p, TASK_INTERRUPTIBLE)
+>
+> so this isn't playing with any 'exotic' task state, thus it shouldn't
+> actually need the export.
+>
+> I've been trying to figure out if this could work with just a
+> wake_up_process(), but the sleeping pattern here is not very conforming
+> (cf. 'wait loop' pattern in sched/core.c), AFAICT the signal is used to
+> circumvent that :/
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 75 +++++++++++++++++++++++------
- 1 file changed, 61 insertions(+), 14 deletions(-)
+I don't intend to work on this patch more. If you'd like to ack the
+trivial scheduler change (adding EXPORT_SYMBOL), that'd help, and then
+this can move forward as planned. Otherwise, if you have particular
+opinions about this patch that you want to happen, feel free to pick
+up the patch and send your own revisions (though I don't intend to do
+further review). Alternatively, I'll just send a patch to remove the
+driver entirely. Hopefully you do find this ack-able, though.
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index d27b1582521f..f15f5deee6ef 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -302,18 +302,57 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	return 0;
- }
- 
-+/**
-+ * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * @provider: generic interconnect provider
-+ * @agg_avg: an array for aggregated average bandwidth of buckets
-+ * @agg_peak: an array for aggregated peak bandwidth of buckets
-+ * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ */
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider,
-+				   u64 *agg_avg, u64 *agg_peak,
-+				   u64 *max_agg_avg)
-+{
-+	struct icc_node *node;
-+	struct qcom_icc_node *qn;
-+	int i;
-+
-+	/* Initialise aggregate values */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+		agg_avg[i] = 0;
-+		agg_peak[i] = 0;
-+	}
-+
-+	*max_agg_avg = 0;
-+
-+	/*
-+	 * Iterate nodes on the interconnect and aggregate bandwidth
-+	 * requests for every bucket.
-+	 */
-+	list_for_each_entry(node, &provider->nodes, node_list) {
-+		qn = node->data;
-+		for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-+			agg_avg[i] += qn->sum_avg[i];
-+			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+		}
-+	}
-+
-+	/* Find maximum values across all buckets */
-+	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++)
-+		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
-+}
-+
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
- 	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
- 	struct icc_provider *provider;
--	struct icc_node *n;
- 	u64 sum_bw;
--	u64 max_peak_bw;
- 	u64 rate;
--	u32 agg_avg = 0;
--	u32 agg_peak = 0;
-+	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
-+	u64 max_agg_avg, max_agg_peak;
- 	int ret, i;
-+	int bucket;
- 
- 	src_qn = src->data;
- 	if (dst)
-@@ -321,12 +360,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	list_for_each_entry(n, &provider->nodes, node_list)
--		provider->aggregate(n, 0, n->avg_bw, n->peak_bw,
--				    &agg_avg, &agg_peak);
-+	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
- 
--	sum_bw = icc_units_to_bps(agg_avg);
--	max_peak_bw = icc_units_to_bps(agg_peak);
-+	sum_bw = icc_units_to_bps(max_agg_avg);
- 
- 	ret = __qcom_icc_set(src, src_qn, sum_bw);
- 	if (ret)
-@@ -337,12 +373,23 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 			return ret;
- 	}
- 
--	rate = max(sum_bw, max_peak_bw);
--
--	do_div(rate, src_qn->buswidth);
--	rate = min_t(u64, rate, LONG_MAX);
--
- 	for (i = 0; i < qp->num_clks; i++) {
-+		/*
-+		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-+		 * for other clocks.  If a platform doesn't set interconnect
-+		 * path tags, by default use sleep bucket for all clocks.
-+		 *
-+		 * Note, AMC bucket is not supported yet.
-+		 */
-+		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-+			bucket = QCOM_ICC_BUCKET_WAKE;
-+		else
-+			bucket = QCOM_ICC_BUCKET_SLEEP;
-+
-+		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-+		do_div(rate, src_qn->buswidth);
-+		rate = min_t(u64, rate, LONG_MAX);
-+
- 		if (qp->bus_clk_rate[i] == rate)
- 			continue;
- 
--- 
-2.25.1
-
+Jason

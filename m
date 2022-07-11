@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5941256FD86
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC1156FB6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiGKJ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S232566AbiGKJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiGKJ4N (ORCPT
+        with ESMTP id S232682AbiGKJ31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:56:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F997B31D9;
-        Mon, 11 Jul 2022 02:26:37 -0700 (PDT)
+        Mon, 11 Jul 2022 05:29:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E136D56B;
+        Mon, 11 Jul 2022 02:16:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E140612E8;
-        Mon, 11 Jul 2022 09:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29020C34115;
-        Mon, 11 Jul 2022 09:26:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9419F61243;
+        Mon, 11 Jul 2022 09:16:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2061C34115;
+        Mon, 11 Jul 2022 09:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531587;
-        bh=FEfMHg6hOiOU9NuBqymi/4Nkwi5QgLNr/8rryIS5iF8=;
+        s=korg; t=1657530986;
+        bh=QpAJqreb6gSFTrZdxgUfc7154j1uRiyvfmEosIasGDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UdZo5tNev8AoZKuPpoxcwH9G1yj34OkDVn07hFuAnYoAcuvzJ4nH3i9ZVj64jzIGT
-         /KVpXZ32sYG2Ndjyw9wP8RE6UUlibo0AnzpCYzFapDGeJbpIpZqGhEruwg16wPbV06
-         HM4dXMZuegBlS0hvGoFKRG6TCmsk3BLDIWH7dyGQ=
+        b=MwB1bGutfVJab+Q0WGygxmi+bHbLCcWs42AAv9aLxbY/Oo+Q+rtqIHXD6uu0mxhWq
+         2qBNf2jmhiluwSdCFeV4PzzPL3MmsiOw1z9G3Ri6JeNpiZHcBiFlV3CKahqIL5LlDr
+         wJS/CzmVAzL5GhRqGxEQ2wQPVfjfmSiZNHyjQNw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guiling Deng <greens9@163.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.15 159/230] fbdev: fbmem: Fix logo center image dx issue
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 055/112] arm64: dts: qcom: sdm845: use dispcc AHB clock for mdss node
 Date:   Mon, 11 Jul 2022 11:06:55 +0200
-Message-Id: <20220711090608.570810128@linuxfoundation.org>
+Message-Id: <20220711090551.133270013@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guiling Deng <greens9@163.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit 955f04766d4e6eb94bf3baa539e096808c74ebfb upstream.
+[ Upstream commit 3ba500dee327e0261e728edec8a4f2f563d2760c ]
 
-Image.dx gets wrong value because of missing '()'.
+It was noticed that on sdm845 after an MDSS suspend/resume cycle the
+driver can not read HW_REV registers properly (they will return 0
+instead). Chaning the "iface" clock from <&gcc GCC_DISP_AHB_CLK> to
+<&dispcc DISP_CC_MDSS_AHB_CLK> fixes the issue.
 
-If xres == logo->width and n == 1, image.dx = -16.
-
-Signed-off-by: Guiling Deng <greens9@163.com>
-Fixes: 3d8b1933eb1c ("fbdev: fbmem: add config option to center the bootup logo")
-Cc: stable@vger.kernel.org # v5.0+
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 08c2a076d18f ("arm64: dts: qcom: sdm845: Add dpu to sdm845 dts file")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220531124735.1165582-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |    2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -514,7 +514,7 @@ static int fb_show_logo_line(struct fb_i
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index b31bf62e8680..ad21cf465c98 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -4238,7 +4238,7 @@
  
- 		while (n && (n * (logo->width + 8) - 8 > xres))
- 			--n;
--		image.dx = (xres - n * (logo->width + 8) - 8) / 2;
-+		image.dx = (xres - (n * (logo->width + 8) - 8)) / 2;
- 		image.dy = y ?: (yres - logo->height) / 2;
- 	} else {
- 		image.dx = 0;
+ 			power-domains = <&dispcc MDSS_GDSC>;
+ 
+-			clocks = <&gcc GCC_DISP_AHB_CLK>,
++			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+ 				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+ 			clock-names = "iface", "core";
+ 
+-- 
+2.35.1
+
 
 

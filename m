@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7910756FBCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A248F56FBC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbiGKJfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S229825AbiGKJfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbiGKJdY (ORCPT
+        with ESMTP id S232915AbiGKJd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:33:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5BE7AC0B;
-        Mon, 11 Jul 2022 02:18:03 -0700 (PDT)
+        Mon, 11 Jul 2022 05:33:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5C21055E;
+        Mon, 11 Jul 2022 02:18:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26DE2B80E74;
-        Mon, 11 Jul 2022 09:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EE8C34115;
-        Mon, 11 Jul 2022 09:18:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC663B80E76;
+        Mon, 11 Jul 2022 09:18:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49208C34115;
+        Mon, 11 Jul 2022 09:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531080;
-        bh=XpgknY7GZkaapSMyf+HiPgrIBtIyDVXS7/RWFf/2jKg=;
+        s=korg; t=1657531083;
+        bh=eflLSHmdQJmlx3Jr8ZLDE+HE6JQPzKLnL+kk1obFACA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lGvbGKaxMAGNSCVJiKHJAsXwRM3LhjOvHNw0H1s5iCDufrmfMJvB4tE/Qiofg51xO
-         bfRI1m9Z2OK52aQGMLQl0AZYsbqmWtpFE3TF2VxGOAxgL+KeNwNX2pder2zycy+313
-         NlAo0sz+8d3mSepSXhC3vAWbqTrNJDZlH0YzANZk=
+        b=oyxAmWIBOYeRgAWd7dNQpGXMr4aNRnrIrLDdbkH5G6Q1qIqCa72IQgQgfMArZRQqj
+         LigVBTUFYsXA31dInYjhyUnnz9zry3h0qEwd/usLbJNonasfjEjdYBOzUb9zjQvMNT
+         rWKyY2VTB9svAIGYxEyBNg3JlUUOgmQscZEMAOcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 090/112] mptcp: Avoid acquiring PM lock for subflow priority changes
-Date:   Mon, 11 Jul 2022 11:07:30 +0200
-Message-Id: <20220711090552.125703382@linuxfoundation.org>
+Subject: [PATCH 5.18 091/112] mptcp: Acquire the subflow socket lock before modifying MP_PRIO flags
+Date:   Mon, 11 Jul 2022 11:07:31 +0200
+Message-Id: <20220711090552.154216495@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
 References: <20220711090549.543317027@linuxfoundation.org>
@@ -58,97 +58,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mat Martineau <mathew.j.martineau@linux.intel.com>
 
-[ Upstream commit c21b50d5912b68c4414c60ef5b30416c103f9fd8 ]
+[ Upstream commit a657430260e5437df16004c8c317821d946b5ead ]
 
-The in-kernel path manager code for changing subflow flags acquired both
-the msk socket lock and the PM lock when possibly changing the "backup"
-and "fullmesh" flags. mptcp_pm_nl_mp_prio_send_ack() does not access
-anything protected by the PM lock, and it must release and reacquire
-the PM lock.
+When setting up a subflow's flags for sending MP_PRIO MPTCP options, the
+subflow socket lock was not held while reading and modifying several
+struct members that are also read and modified in mptcp_write_options().
 
-By pushing the PM lock to where it is needed in mptcp_pm_nl_fullmesh(),
-the lock is only acquired when the fullmesh flag is changed and the
-backup flag code no longer has to release and reacquire the PM lock. The
-change in locking context requires the MIB update to be modified - move
-that to a better location instead.
+Acquire the subflow socket lock earlier and send the MP_PRIO ACK with
+that lock already acquired. Add a new variant of the
+mptcp_subflow_send_ack() helper to use with the subflow lock held.
 
-This change also makes it possible to call
-mptcp_pm_nl_mp_prio_send_ack() for the userspace PM commands without
-manipulating the in-kernel PM lock.
-
-Fixes: 0f9f696a502e ("mptcp: add set_flags command in PM netlink")
+Fixes: 067065422fcd ("mptcp: add the outgoing MP_PRIO support")
 Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/options.c    | 3 +++
- net/mptcp/pm_netlink.c | 8 ++------
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ net/mptcp/pm_netlink.c | 5 ++++-
+ net/mptcp/protocol.c   | 9 +++++++--
+ net/mptcp/protocol.h   | 1 +
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-index b548cec86c9d..48e34b81fa1c 100644
---- a/net/mptcp/options.c
-+++ b/net/mptcp/options.c
-@@ -1538,6 +1538,9 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 		*ptr++ = mptcp_option(MPTCPOPT_MP_PRIO,
- 				      TCPOLEN_MPTCP_PRIO,
- 				      opts->backup, TCPOPT_NOP);
-+
-+		MPTCP_INC_STATS(sock_net((const struct sock *)tp),
-+				MPTCP_MIB_MPPRIOTX);
- 	}
- 
- mp_capable_done:
 diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index e3dcc5501579..88077ea02ed3 100644
+index 88077ea02ed3..3384569f73b8 100644
 --- a/net/mptcp/pm_netlink.c
 +++ b/net/mptcp/pm_netlink.c
-@@ -720,7 +720,6 @@ static int mptcp_pm_nl_mp_prio_send_ack(struct mptcp_sock *msk,
- 
+@@ -721,11 +721,13 @@ static int mptcp_pm_nl_mp_prio_send_ack(struct mptcp_sock *msk,
  	mptcp_for_each_subflow(msk, subflow) {
  		struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
--		struct sock *sk = (struct sock *)msk;
  		struct mptcp_addr_info local;
++		bool slow;
  
  		local_address((struct sock_common *)ssk, &local);
-@@ -732,12 +731,9 @@ static int mptcp_pm_nl_mp_prio_send_ack(struct mptcp_sock *msk,
- 		subflow->backup = bkup;
- 		subflow->send_mp_prio = 1;
- 		subflow->request_bkup = bkup;
--		__MPTCP_INC_STATS(sock_net(sk), MPTCP_MIB_MPPRIOTX);
+ 		if (!addresses_equal(&local, addr, addr->port))
+ 			continue;
  
--		spin_unlock_bh(&msk->pm.lock);
++		slow = lock_sock_fast(ssk);
+ 		if (subflow->backup != bkup)
+ 			msk->last_snd = NULL;
+ 		subflow->backup = bkup;
+@@ -733,7 +735,8 @@ static int mptcp_pm_nl_mp_prio_send_ack(struct mptcp_sock *msk,
+ 		subflow->request_bkup = bkup;
+ 
  		pr_debug("send ack for mp_prio");
- 		mptcp_subflow_send_ack(ssk);
--		spin_lock_bh(&msk->pm.lock);
+-		mptcp_subflow_send_ack(ssk);
++		__mptcp_subflow_send_ack(ssk);
++		unlock_sock_fast(ssk, slow);
  
  		return 0;
  	}
-@@ -1769,8 +1765,10 @@ static void mptcp_pm_nl_fullmesh(struct mptcp_sock *msk,
- 
- 	list.ids[list.nr++] = addr->id;
- 
-+	spin_lock_bh(&msk->pm.lock);
- 	mptcp_pm_nl_rm_subflow_received(msk, &list);
- 	mptcp_pm_create_subflow_or_signal_addr(msk);
-+	spin_unlock_bh(&msk->pm.lock);
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 713077eef04a..b0fb1fc0bd4a 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -506,13 +506,18 @@ static bool tcp_can_send_ack(const struct sock *ssk)
+ 	       (TCPF_SYN_SENT | TCPF_SYN_RECV | TCPF_TIME_WAIT | TCPF_CLOSE | TCPF_LISTEN));
  }
  
- static int mptcp_nl_set_flags(struct net *net,
-@@ -1788,12 +1786,10 @@ static int mptcp_nl_set_flags(struct net *net,
- 			goto next;
++void __mptcp_subflow_send_ack(struct sock *ssk)
++{
++	if (tcp_can_send_ack(ssk))
++		tcp_send_ack(ssk);
++}
++
+ void mptcp_subflow_send_ack(struct sock *ssk)
+ {
+ 	bool slow;
  
- 		lock_sock(sk);
--		spin_lock_bh(&msk->pm.lock);
- 		if (changed & MPTCP_PM_ADDR_FLAG_BACKUP)
- 			ret = mptcp_pm_nl_mp_prio_send_ack(msk, addr, bkup);
- 		if (changed & MPTCP_PM_ADDR_FLAG_FULLMESH)
- 			mptcp_pm_nl_fullmesh(msk, addr);
--		spin_unlock_bh(&msk->pm.lock);
- 		release_sock(sk);
+ 	slow = lock_sock_fast(ssk);
+-	if (tcp_can_send_ack(ssk))
+-		tcp_send_ack(ssk);
++	__mptcp_subflow_send_ack(ssk);
+ 	unlock_sock_fast(ssk, slow);
+ }
  
- next:
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 2aab5aff6bcd..ad36a05aa67d 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -584,6 +584,7 @@ void __init mptcp_subflow_init(void);
+ void mptcp_subflow_shutdown(struct sock *sk, struct sock *ssk, int how);
+ void mptcp_close_ssk(struct sock *sk, struct sock *ssk,
+ 		     struct mptcp_subflow_context *subflow);
++void __mptcp_subflow_send_ack(struct sock *ssk);
+ void mptcp_subflow_send_ack(struct sock *ssk);
+ void mptcp_subflow_reset(struct sock *ssk);
+ void mptcp_subflow_queue_clean(struct sock *ssk);
 -- 
 2.35.1
 

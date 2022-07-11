@@ -2,77 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1907570E0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643A9570E11
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 01:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiGKXO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 19:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S231268AbiGKXPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 19:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiGKXO0 (ORCPT
+        with ESMTP id S231208AbiGKXPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 19:14:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B2713F2B;
-        Mon, 11 Jul 2022 16:14:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F5A5B81600;
-        Mon, 11 Jul 2022 23:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8584FC3411C;
-        Mon, 11 Jul 2022 23:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657581262;
-        bh=mMba7gFzAF0TrMtX204scPIT/uUpco94eMziNYXbX3M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=E5krMtZBm8Fpy2NU2Q4kb3/MzAszbuZPcWJKLGaBi3bYAOaLktzLKzQebeNe+i7g+
-         zh/MWBykuSBt7+XemK4mVdws9YaKRVz+5MCtS6FW3Z3eRZL96obQljdqj6Oa9PCl7o
-         qgPN0XUKYZCxoNwTEFmuuPeTAPfggXJR7z0RxZOQiF76PoMYCTVoTb7ytIK+V/ip6+
-         3Mtm9Lg57jERWh0uV4ovFXDDruNP6rUpJ1Hn9Mx/YJH+XGVeXQnJX34/JKjqHaSCQr
-         aVEbNiG4RuLdYZTldAw2rpKU7P5XhFpepOjDFRcKeHhS950TkHvKijfjvBER3Eg3U2
-         jUzEhYM1yzFJQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] PCI/ASPM: Unexport pcie_aspm_support_enabled()
-Date:   Mon, 11 Jul 2022 18:14:19 -0500
-Message-Id: <20220711231419.706639-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 19:15:43 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0CF8734C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:15:42 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id y195so11268651yby.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 16:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5ZvoNrrFE3nmN7+wVapurCnBu267yWOoQYKYwm2cZlA=;
+        b=h8DT22+wyNOULS4PEbbruwv3a1Q9EfxNbIhiIbhn8IsCxwXCugztDCZt4aXB5+uKpN
+         i+xlpK84BAxiJQJe8rtnCbxrzwdjOPexodrhYRuLJHcft08Pt3q9LWOUFj33isPZM8OG
+         sL0McsoxzhkVCxGHUbaDxOk/rie/TecBPLIYT7Rj90gO4atNc00hTgnLRMXi65d6/rgw
+         xYmz1vdFuYfjvK9EDognJsm9m4kSgrWC2J+IyMpU8F7XoOOgVJiXBZhf2lokwhxv7XVF
+         sToTs4rGW/lTcVAS5JMqE6iwMMayB/noPDwC/ke6PjNdFxt7uxMoCW5y41vKEP9bqK2n
+         8e5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5ZvoNrrFE3nmN7+wVapurCnBu267yWOoQYKYwm2cZlA=;
+        b=s4EWZggZqsV4Io+YGGprLV1cEHsI4Q9THuaU8VxwN/fVBLgr+8QPxC5E0qLNgAwcuY
+         ipyqAqIEBvuBLHOw8hMuI/WiiTtzhfIzHV+HlVDpwT8LoLyP60t4Bm9LRsoHMTmvtnMT
+         76dCf5AYcgV6B48gjXcnToNchX6aNIM1krvojvbFXOSnbxYJYbwn75nijXtxela07VSJ
+         oACNW6Rzz85ql1O+7EYj5WRctiAe5ZwV8tnC/2feVQlmC9i6ASq9h93hsi8343wRQxRm
+         8SUzynBw+bZgdTOO1ZqAxJg47d0/5JuUGO/MhHctHyJESLssJU73c7an5xsCgjXtmJxB
+         uuBw==
+X-Gm-Message-State: AJIora/WR4Q4zWV86eHnnaUxTs5b8g0YYHx/LEn+jVmvhrBGYMjEv4PP
+        n+fSMf5v4FDhgUBAVnayrI6hDbLBpAwLYrQAxlRpOw==
+X-Google-Smtp-Source: AGRyM1sNriE+i2iOsMQUz8LcFB7VN+nenZ8+7T7fgkdvZ66sbrVYCEI8HVMMnMGX6jzX4rNdbiE1FVjCtgbXzcYRBEA=
+X-Received: by 2002:a25:cfd0:0:b0:66e:b731:7954 with SMTP id
+ f199-20020a25cfd0000000b0066eb7317954mr20007259ybg.396.1657581341375; Mon, 11
+ Jul 2022 16:15:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
+ <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+ <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
+ <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
+ <CADBMgpzyOKVO1ju_WkxYLhXGvwJjHoL6V-+Nw49UdTFoPY7NvQ@mail.gmail.com>
+ <b48cc574-302c-e74f-0720-9912f4663cbe@linuxfoundation.org> <CADBMgpz3z_hB_5BVVD5-4r3qYCVc_p_SrYKZLwaLg9Fy+h2p6g@mail.gmail.com>
+In-Reply-To: <CADBMgpz3z_hB_5BVVD5-4r3qYCVc_p_SrYKZLwaLg9Fy+h2p6g@mail.gmail.com>
+From:   Dylan Hatch <dylanbhatch@google.com>
+Date:   Mon, 11 Jul 2022 16:15:30 -0700
+Message-ID: <CADBMgpzPkErW=exgbzr+0z1x3JFdX9fuUJBhFG6ePxG59kvHaA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+Accidentally hit direct reply, adding Shuah Khan <shuah@kernel.org>,
+linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+linux-kselftest@vger.kernel.org, Shuah Khan
+<skhan@linuxfoundation.org>
 
-pcie_aspm_support_enabled() is used only by the acpi/pci_root.c driver,
-which cannot be built as a module, so it does not need to be exported.
-Unexport it.
+On Mon, Jul 11, 2022 at 4:04 PM Dylan Hatch <dylanbhatch@google.com> wrote:
+>
+> On Wed, Jun 22, 2022 at 10:15 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >
+> > On 6/21/22 6:18 PM, Dylan Hatch wrote:
+> > > On Fri, Jun 17, 2022 at 3:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> > >>
+> > >> On 6/17/22 4:05 PM, Dylan Hatch wrote:
+> > >>> On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> > >>>>
+> > >>>> On 6/17/22 12:45 PM, Dylan Hatch wrote:
+> > >>>>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> > >>>>>>
+> > >>>
+> > >>>>
+> > >>>> It depends on the goal of the test. Is the test looking to see if the
+> > >>>> probe fails with insufficient permissions, then you are changing the
+> > >>>> test to not check for that condition.
+> > >>>
+> > >>> The goal of the test is to validate the output of /proc/$PID/maps, and
+> > >>> the memory probe is only needed as setup to determine what the
+> > >>> expected output should be. This used to be sufficient, but now it can
+> > >>> no longer fully disambiguate it with the introduction of
+> > >>> vsyscall=xonly. The solution proposed here is to disambiguate it by
+> > >>> also checking the length read from /proc/$PID/maps.
+> > >>>
+> > >>>>
+> > >>
+> > >> Makes sense. However the question is does this test need to be enhanced
+> > >> with the addition of vsyscall=xonly?
+> > >>
+> > >>>> I would say in this case, the right approach would be to leave the test
+> > >>>> as is and report expected fail and add other cases.
+> > >>>>
+> > >>>> The goal being adding more coverage and not necessarily opt for a simple
+> > >>>> solution.
+> > >>>
+> > >>> What does it mean to report a test as expected fail? Is this a
+> > >>> mechanism unique to kselftest? I agree adding another test case would
+> > >>> work, but I'm unsure how to do it within the framework of kselftest.
+> > >>> Ideally, there would be separate test cases for vsyscall=none,
+> > >>> vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
+> > >>> both in the kernel config and on the kernel command line, meaning (to
+> > >>> the best of my knowledge) these test cases would have to be built
+> > >>> conditionally against the conflig options and also parse the command
+> > >>> line for the 'vsyscall' option.
+> > >>>
+> > >>
+> > >> Expected fail isn't unique kselftest. It is a testing criteria where
+> > >> a test is expected to fail. For example if a file can only be opened
+> > >> with privileged user a test that runs and looks for failure is an
+> > >> expected to fail case - we are looking for a failure.
+> > >>
+> > >> A complete battery of tests for vsyscall=none, vsyscall=emulate,
+> > >> vsyscall=xonly would test for conditions that are expected to pass
+> > >> and fail based on the config.
+> > >>
+> > >> tools/testing/selftests/proc/config doesn't have any config options
+> > >> that are relevant to VSYSCALL
+> > >>
+> > >> Can you please send me the how you are running the test and what the
+> > >> failure output looks like?
+> > >
+> > > I'm building a kernel with the following relevant configurations:
+> > >
+> > > $ cat .config | grep VSYSCALL
+> > > CONFIG_GENERIC_TIME_VSYSCALL=y
+> > > CONFIG_X86_VSYSCALL_EMULATION=y
+> > > CONFIG_LEGACY_VSYSCALL_XONLY=y
+> > > # CONFIG_LEGACY_VSYSCALL_NONE is not set
+> > >
+> > > Running the test without this change both in virtme and on real
+> > > hardware gives the following error:
+> > >
+> > > # ./tools/testing/selftests/proc/proc-pid-vm
+> > > proc-pid-vm: proc-pid-vm.c:328: int main(void): Assertion `rv == len' failed.
+> > > Aborted
+> > >
+> > > This is because when CONFIG_LEGACY_VSYSCALL_XONLY=y a probe of the
+> > > vsyscall page results in a segfault. This test was originally written
+> > > before this option existed so it incorrectly assumes the vsyscall page
+> > > isn't mapped at all, and the expected buffer length doesn't match the
+> > > result.
+> > >
+> > > An alternate method of fixing this test could involve setting the
+> > > expected result based on the config with #ifdef blocks, but I wasn't
+> > > sure if that could be done for kernel config options in kselftest
+> > > code. There's also the matter of checking the kernel command line for
+> > > a `vsyscall=` arg, is parsing /proc/cmdline the best way to do this?
+> > >
+> >
+> > We have a few tests do ifdef to be able to test the code as well as deal
+> > with config specific tests. Not an issue.
+> >
+> > Parsing /proc/cmdline line is flexible for sure, if you want to use that
+> > route.
+> >
+> > Thank you for finding the problem and identifying missing coverage. Look
+> > forward to any patches fixing the problem.
+> >
+> > thanks,
+> > -- Shuah
+>
+I've done some experimenting with ifdefs on config options, but it
+seems that these options do not propagate properly into the tests. Is
+there a specific method I should be using to propagate the config
+values, or would you be able to point me to an example where this is
+done properly?
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/pci/pcie/aspm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 7f76a5875feb..a8aec190986c 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -1347,4 +1347,3 @@ bool pcie_aspm_support_enabled(void)
- {
- 	return aspm_support_enabled;
- }
--EXPORT_SYMBOL(pcie_aspm_support_enabled);
--- 
-2.25.1
-
+Thanks and sorry for the slow reply on this,
+Dylan

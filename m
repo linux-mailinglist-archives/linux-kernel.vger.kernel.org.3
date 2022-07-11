@@ -2,183 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2BF56D3A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E5F56D3AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 06:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiGKELu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 00:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S229616AbiGKEPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 00:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGKELs (ORCPT
+        with ESMTP id S229469AbiGKEPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 00:11:48 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BADD5AE55;
-        Sun, 10 Jul 2022 21:11:47 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 68CA8204C3F9; Sun, 10 Jul 2022 21:11:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 68CA8204C3F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1657512707;
-        bh=Xs8lHMI1d5UjjzqajP+0VvqNhA0StiIxtQScVDNesuo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FWCRnglcabhIKwRAjv0wxvkzb3FKr28ua4h20nwogHqRAUQWIm2v4fdE5XCQ/YHXo
-         JY8HejrCl9KDLniWJoZBlukaZNbY2yGfqmINxY72at9dq9tkLpAxxjmA4WBd2G+1Ba
-         OQ65LWGd8I7mXQWlZRgtseIf1nhaTxY9ZwRiUYZM=
-Date:   Sun, 10 Jul 2022 21:11:47 -0700
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Shradha Gupta <shradhagupta@microsoft.com>,
-        Praveen Kumar <kumarpraveen@microsoft.com>
-Subject: [PATCH v3] Drivers: hv: vm_bus: Handle vmbus rescind calls after
- vmbus is suspended
-Message-ID: <20220711041147.GA5569@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        Mon, 11 Jul 2022 00:15:45 -0400
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29143186D2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 21:15:43 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 26B4DEo2018381;
+        Mon, 11 Jul 2022 13:13:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 26B4DEo2018381
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657512796;
+        bh=vmX1TC8ghk+PT+J3sj3bSAW/EXY5N/4tuqRl5sau7A8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wSpV+zS3BNvT9eILdgxeZwNZEsbNKj2YqU5O4MFo5HtKNxL1aWkWn0o5WxpELiKeW
+         DUXtBoJPlFyGBumxTI1vhWLALhgG7ksjmqvm1Oj3b9b6UpPrJt8I7W+4ElkoCyyrSu
+         SBrhXj02KJlu2Pb5JIQMWKIZID67Lj9hIWJxMAIrDhgVNdWU6yjE0MLTBmxNPgD3pF
+         80lJZlfNCF4yNdHseJx8HJ3oBr7NTaovcnKqISbSKYMMBh4dqB6uuYhGuRo9s90SA0
+         lqUZENX7mDuiM23ANBHOekU92g+h2KZmwLY/Qf4Dyj7jW4RkXLSyrIl0K9JKes7De2
+         F1jtEKBZr9eYw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Roth <michael.roth@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] x86/build: remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
+Date:   Mon, 11 Jul 2022 13:12:47 +0900
+Message-Id: <20220711041247.119357-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a flag to indicate that the vmbus is suspended so we should ignore
-any offer message. Add a new work_queue for rescind msg, so we could drain
-it along with other offer work_queues upon suspension.
-It was observed that in some hibernation related scenario testing, after
-vmbus_bus_suspend() we get rescind offer message for the vmbus. This would
-lead to processing of a rescind message for a channel that has already been
-suspended.
+Commit 3ad38ceb2769 ("x86/mm: Remove CONFIG_DEBUG_NX_TEST")
+removed arch/x86/kernel/test_nx.c
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-Changes in v3:
-* Remove unused variable hv_cpu from vmbus_bus_resume() call
+I sent the same patch in April:
+https://lore.kernel.org/all/CAK7LNATRH4sHYrZk556Sjo4nP=S3qD170OMCZ21n0TEz7gyDUw@mail.gmail.com/
 
----
- drivers/hv/connection.c   | 11 +++++++++++
- drivers/hv/hyperv_vmbus.h |  7 +++++++
- drivers/hv/vmbus_drv.c    | 27 +++++++++++++++++++--------
- 3 files changed, 37 insertions(+), 8 deletions(-)
+It did not make into the mainline.
+I pinged the X86 maintainers, but none of them responded.
 
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 6218bbf6863a..eca7afd366d6 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -171,6 +171,14 @@ int vmbus_connect(void)
- 		goto cleanup;
- 	}
+
+
+ arch/x86/kernel/Makefile | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 4c8b6ae802ac..a20a5ebfacd7 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -34,8 +34,6 @@ KASAN_SANITIZE_sev.o					:= n
+ # by several compilation units. To be safe, disable all instrumentation.
+ KCSAN_SANITIZE := n
  
-+	vmbus_connection.rescind_work_queue =
-+		create_workqueue("hv_vmbus_rescind");
-+	if (!vmbus_connection.rescind_work_queue) {
-+		ret = -ENOMEM;
-+		goto cleanup;
-+	}
-+	vmbus_connection.ignore_any_offer_msg = false;
-+
- 	vmbus_connection.handle_primary_chan_wq =
- 		create_workqueue("hv_pri_chan");
- 	if (!vmbus_connection.handle_primary_chan_wq) {
-@@ -357,6 +365,9 @@ void vmbus_disconnect(void)
- 	if (vmbus_connection.handle_primary_chan_wq)
- 		destroy_workqueue(vmbus_connection.handle_primary_chan_wq);
- 
-+	if (vmbus_connection.rescind_work_queue)
-+		destroy_workqueue(vmbus_connection.rescind_work_queue);
-+
- 	if (vmbus_connection.work_queue)
- 		destroy_workqueue(vmbus_connection.work_queue);
- 
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index 4f5b824b16cf..dc673edf053c 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -261,6 +261,13 @@ struct vmbus_connection {
- 	struct workqueue_struct *work_queue;
- 	struct workqueue_struct *handle_primary_chan_wq;
- 	struct workqueue_struct *handle_sub_chan_wq;
-+	struct workqueue_struct *rescind_work_queue;
-+
-+	/*
-+	 * On suspension of the vmbus, the accumulated offer messages
-+	 * must be dropped.
-+	 */
-+	bool ignore_any_offer_msg;
- 
- 	/*
- 	 * The number of sub-channels and hv_sock channels that should be
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 547ae334e5cd..23c680d1a0f5 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1160,7 +1160,9 @@ void vmbus_on_msg_dpc(unsigned long data)
- 			 * work queue: the RESCIND handler can not start to
- 			 * run before the OFFER handler finishes.
- 			 */
--			schedule_work(&ctx->work);
-+			if (vmbus_connection.ignore_any_offer_msg)
-+				break;
-+			queue_work(vmbus_connection.rescind_work_queue, &ctx->work);
- 			break;
- 
- 		case CHANNELMSG_OFFERCHANNEL:
-@@ -1186,6 +1188,8 @@ void vmbus_on_msg_dpc(unsigned long data)
- 			 * to the CPUs which will execute the offer & rescind
- 			 * works by the time these works will start execution.
- 			 */
-+			if (vmbus_connection.ignore_any_offer_msg)
-+				break;
- 			atomic_inc(&vmbus_connection.offer_in_progress);
- 			fallthrough;
- 
-@@ -2446,15 +2450,20 @@ static int vmbus_acpi_add(struct acpi_device *device)
- #ifdef CONFIG_PM_SLEEP
- static int vmbus_bus_suspend(struct device *dev)
- {
-+	struct hv_per_cpu_context *hv_cpu = per_cpu_ptr(
-+			hv_context.cpu_context, VMBUS_CONNECT_CPU);
- 	struct vmbus_channel *channel, *sc;
- 
--	while (atomic_read(&vmbus_connection.offer_in_progress) != 0) {
--		/*
--		 * We wait here until the completion of any channel
--		 * offers that are currently in progress.
--		 */
--		usleep_range(1000, 2000);
--	}
-+	tasklet_disable(&hv_cpu->msg_dpc);
-+	vmbus_connection.ignore_any_offer_msg = true;
-+	/* The tasklet_enable() takes care of providing a memory barrier */
-+	tasklet_enable(&hv_cpu->msg_dpc);
-+
-+	/* Drain all the workqueues as we are in suspend */
-+	drain_workqueue(vmbus_connection.rescind_work_queue);
-+	drain_workqueue(vmbus_connection.work_queue);
-+	drain_workqueue(vmbus_connection.handle_primary_chan_wq);
-+	drain_workqueue(vmbus_connection.handle_sub_chan_wq);
- 
- 	mutex_lock(&vmbus_connection.channel_mutex);
- 	list_for_each_entry(channel, &vmbus_connection.chn_list, listentry) {
-@@ -2531,6 +2540,8 @@ static int vmbus_bus_resume(struct device *dev)
- 	size_t msgsize;
- 	int ret;
- 
-+	vmbus_connection.ignore_any_offer_msg = false;
-+
- 	/*
- 	 * We only use the 'vmbus_proto_version', which was in use before
- 	 * hibernation, to re-negotiate with the host.
+-OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+-
+ # If instrumentation of this dir is enabled, boot hangs during first second.
+ # Probably could be more selective here, but note that files related to irqs,
+ # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
 -- 
-2.17.1
+2.32.0
 

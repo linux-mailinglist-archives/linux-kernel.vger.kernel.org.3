@@ -2,78 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007A956D788
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CF756D78A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiGKIOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S229816AbiGKIPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiGKIOa (ORCPT
+        with ESMTP id S229862AbiGKIOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:14:30 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4521DA4E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:14:24 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x91so5280289ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KrQxX2gBzZZDVhE/CShD3Z/x258B1REM+4UC78XOk2s=;
-        b=KXAmxk+0HNlzIi8DXKhRIRXjspRVhtV48M6fwP2cLApGSpYu170jcyzHJllf5wOsSI
-         LT4T6Owan1XfawL3IYYWnhz0fB7CKhvXirocJa8hjlDUKkK5qVfK3ohDVoBuFgeqWSea
-         Fb2JoOlLKQrBoOuvD1Wea3SeE11TM4VNzFLAPOOlndYDas7vghL2ojFbuwUmt2DzNCom
-         KmsKSbcJurfnhnsQGs0ML1bUcumpZsLMTDDikNJfuX3v5PqEFfTI17+Jn+HS3Kddd5At
-         nq5sXQ5xPmZgRtYwVQTFWcPLM6tVPjlM/BMwCh96hl+I7DwAWZq+g/QXWa3mnZsgw6lN
-         218g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KrQxX2gBzZZDVhE/CShD3Z/x258B1REM+4UC78XOk2s=;
-        b=kUoExaE6jeiXihapNlstf/BsHzodGPu4rK/SGGhEOiUZW9shdgWPgh3io7/FUpu5Tm
-         sDCtze8DaxWHj6o/5UhUe9CG6Yg5AghWw5WqkUrhS/aEVlPcOtl+3JUbo/M7WqnWoTi1
-         0uSG9NYtfEe5M+cIQ0FKMw9wZmvDyRR5qfi3wBGqni7ZZVt8mEmrTHAj+olFN2EfOmKE
-         7Fr7eygnujU2RdojyUfxMBVLZoOqT6H9RYXHLMGzqaxGMDOReM9ayeIUJSSNK1X4Dq6D
-         i89FZIJyksAR1r00KmH+tB0dg14NODpaMgvR+fszqZ2YpMaKYp7JAStVuj3y9dSjdLhR
-         pBQA==
-X-Gm-Message-State: AJIora9kBMao6ArfuH5oP2tsm6H964rCJRgVYJNCHVQdjVj+4bXja057
-        5XZwRKaj8G+dqmKdf/SuRm3lbrir+Jb3auMyOUBLOw==
-X-Google-Smtp-Source: AGRyM1scrRYWLqCYq5WRtEI1PajwTXnuQOKqExjsTLS3nzYMWx983yp80SN9DpgfmK8eabci7I//7Kq1QPljFamVWgM=
-X-Received: by 2002:a05:6402:430f:b0:43a:d521:bda with SMTP id
- m15-20020a056402430f00b0043ad5210bdamr5417174edc.69.1657527262617; Mon, 11
- Jul 2022 01:14:22 -0700 (PDT)
+        Mon, 11 Jul 2022 04:14:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA58013F46;
+        Mon, 11 Jul 2022 01:14:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhGrK2MPwz4xbn;
+        Mon, 11 Jul 2022 18:14:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657527266;
+        bh=h+M4Jcz3tcEssYonG7T7apPq9JSRl1tVYCyueBu9jkw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qhiBd0dOxF+c3g6GKDSUuFXHSb5ZZG7Mem9THLspP5WD1/CfVWSj+4DM0OReU7u/P
+         hDTRi1zOqwIZZ58Z6/ZFaOeueruoQPlP2mgUxTjBjeV2R1I9WiCDWu23rKoBPQuOz8
+         vIGHnAtryfWaUH5rwraQbcDamUiN6zjoYVIeKWVldgCcBbt0/O4VKN5+EON26coUEd
+         PjfpTNwGQNfQYxaPGIW9vcapv63QaVfcZJ8pznXFwP8v6wSzHt0RZiM+mazdNJslmj
+         gJ8VLF0oHRPfDrVPn6sqVQ6gM/l8eTtsJesLBdVBNvFmIsi6t5HGLStZoaXH01qqKQ
+         IzOoXmHKsFVtQ==
+Date:   Mon, 11 Jul 2022 18:14:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rtc tree with the arm-soc-fixes
+ tree
+Message-ID: <20220711181424.70195b52@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220711052935.2322-1-aakashsensharma@gmail.com>
-In-Reply-To: <20220711052935.2322-1-aakashsensharma@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 11 Jul 2022 10:14:11 +0200
-Message-ID: <CAMRc=MefDXzawodvNYWS8h-fzdeUhmSCFjOFwfkALpB-a0PjCw@mail.gmail.com>
-Subject: Re: [PATCH] gpio/gpio-lp3943: unsigned to unsigned int cleanup
-To:     Shinyzenith <aakashsensharma@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/X9DcZDdyUOHWlvTL.w1xqt5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 7:29 AM Shinyzenith <aakashsensharma@gmail.com> wrote:
->
-> Getting rid of checkpatch findings. No functional changes.
->
-> Signed-off-by: Shinyzenith <aakashsensharma@gmail.com>
-> ---
+--Sig_/X9DcZDdyUOHWlvTL.w1xqt5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied with a tweaked commit message.
+Hi all,
 
-Bart
+Today's linux-next merge of the rtc tree got a conflict in:
+
+  MAINTAINERS
+
+between commit:
+
+  2058dc831ff8 ("MAINTAINERS: add polarfire rng, pci and clock drivers")
+
+from the arm-soc-fixes tree and commit:
+
+  1bdb08c180e8 ("MAINTAINERS: add PolarFire SoC's RTC")
+
+from the rtc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 2f618be2906f,69a960561e37..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -17443,13 -17141,9 +17443,14 @@@ M:	Daire McNamara <daire.mcnamara@micro
+  L:	linux-riscv@lists.infradead.org
+  S:	Supported
+  F:	arch/riscv/boot/dts/microchip/
+ +F:	drivers/char/hw_random/mpfs-rng.c
+ +F:	drivers/clk/microchip/clk-mpfs.c
+  F:	drivers/mailbox/mailbox-mpfs.c
+ +F:	drivers/pci/controller/pcie-microchip-host.c
++ F:	drivers/rtc/rtc-mpfs.c
+  F:	drivers/soc/microchip/
+ +F:	drivers/spi/spi-microchip-core.c
+ +F:	drivers/usb/musb/mpfs.c
+  F:	include/soc/microchip/mpfs.h
+ =20
+  RNBD BLOCK DRIVERS
+
+--Sig_/X9DcZDdyUOHWlvTL.w1xqt5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLL2+AACgkQAVBC80lX
+0GxfIQgAoVgli0HBZGny4OhVRSX4257QV2bJyb/+xI9UjpQEUTVo/rnazskKZHgf
+rykQetoq3tpP7n04+4s/YrGgg0RibsNS504E/Lk+30dnxN4S63275ZG0lWtIyhmM
+NEqNaKEHYh4ZdyIV/i+v1rcyldccT6RzF9A6BjSX0/vsdOgP/+8hOJnJ8CX9WFYI
+2HHxVu5BfaRwxhPyv+SxS70sGMbiFee7yCv45wRSH5nup1VPDDXekzijdqBzdSQ3
+2llgsGx+ixAMJPb5dB9AmwZ13EuWZ9A99qLs2Z3SmoJtLRTy+oXRFTRZK3TfoCzw
+TMWNq47erOa0sInGgnXl/N2SPq0QFg==
+=yPvP
+-----END PGP SIGNATURE-----
+
+--Sig_/X9DcZDdyUOHWlvTL.w1xqt5--

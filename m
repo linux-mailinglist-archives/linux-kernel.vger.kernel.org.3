@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC566570A29
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C24570A2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiGKSy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S231151AbiGKSys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGKSyY (ORCPT
+        with ESMTP id S229656AbiGKSyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:54:24 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C7286C2;
-        Mon, 11 Jul 2022 11:54:22 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id v14so8195447wra.5;
-        Mon, 11 Jul 2022 11:54:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4TxPXEbDng0zPcNaFjZQIJsUTvNsX8wiFVkIkSJFZBQ=;
-        b=NfKklrVn6lkfFSW9Yhz6XchJC2FywFKcJGVMRwVd4iB6HKU2IE8be8Z8ZU8MSObPh+
-         Qzv2ViXccysz5FnFzLuxxBHUUsg81goHuXP5PLX++2a8N2tJzBTW+fRmz+FvkmOem2hs
-         O+qI/oKOmpWkhQFCUvCQzhqQMHtKVrc+OtIvULT9AXZnafpnQ0bJqq3A0W7b8smotujN
-         h1DeOrUF05rvVw/JlbiHwgfbqUP4aPsqUKVinVq0jsUjWBWKaDI0DenaLQDY7k8fJMvy
-         NFkGuInOpvdXeXS+EF+4HQFh4fyLN9V2niixRtr9xnQ+4xsxvdmOoawOzojzvp3PAGl4
-         gaXw==
-X-Gm-Message-State: AJIora9EwlF6mOoBtIoTXT1s1jRSyVENNXs8t98yBX2UhdAFVNWoC1xy
-        h/8Dbv/YHjSbT7Bk4Ca8aY0=
-X-Google-Smtp-Source: AGRyM1tl1Bz2uCqc5K/giCKJIInASHkR8sWtuYj2B2XsYlYAf2xGMmtkkfQEED/suxOUesIA6QZXHw==
-X-Received: by 2002:a5d:51c6:0:b0:21d:7ec4:7ecb with SMTP id n6-20020a5d51c6000000b0021d7ec47ecbmr18282508wrv.645.1657565661312;
-        Mon, 11 Jul 2022 11:54:21 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b0021dac657337sm1498053wrt.75.2022.07.11.11.54.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 11:54:19 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 18:54:07 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Shradha Gupta <shradhagupta@microsoft.com>,
-        Praveen Kumar <kumarpraveen@microsoft.com>
-Subject: Re: [PATCH v3] Drivers: hv: vm_bus: Handle vmbus rescind calls after
- vmbus is suspended
-Message-ID: <20220711185407.nr4fythfoup7lk27@liuwe-devbox-debian-v2>
-References: <20220711041147.GA5569@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <PH0PR21MB3025AC6A419A5BB7B408DD20D7879@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Mon, 11 Jul 2022 14:54:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AF3286C2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:54:45 -0700 (PDT)
+Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mr8SG-1noWDy16m6-00oIP7 for <linux-kernel@vger.kernel.org>; Mon, 11 Jul
+ 2022 20:54:44 +0200
+Received: by mail-yb1-f181.google.com with SMTP id l11so10181927ybu.13
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:54:44 -0700 (PDT)
+X-Gm-Message-State: AJIora9Iq+JcgESMnzowEHyTA89OUHlg8yjRhMRCM8zxw/J0GxkB8JFH
+        3b4r+5kaJggYZT/BG/fQzcplboSWdbBG+ntyhSo=
+X-Google-Smtp-Source: AGRyM1teQ9by6wwYpEa4TUiw+qV+gY/b/EQAj5dDeWf1gTsk/iOKJ37ZYiJsFa3tHVGbiKmMuKCKz+TO3trwL567zV4=
+X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
+ x62-20020a257c41000000b0066d766a4815mr18584569ybc.480.1657565683096; Mon, 11
+ Jul 2022 11:54:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025AC6A419A5BB7B408DD20D7879@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru> <20220711155335.ltctlk66vylwcpcj@mobilestation>
+In-Reply-To: <20220711155335.ltctlk66vylwcpcj@mobilestation>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 11 Jul 2022 20:54:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
+Message-ID: <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v4 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:nOCKlvN/fQTwf+TuLkYHB5kka8JYYHX4z207CMk8nR1nfJ61ysM
+ q8BJKzh/yAfVD2AnaBX7i7IRtIwbGPfZlhiWT9pUmn4EmDBNLJ9F/XvI3yCBakrMHyfuZcE
+ 0qESpamgUFp9v8exZJKF10jMss8cb3Rt8SRp+oNWemtvXEkXbJBhiGm1Sjxm/RRCz3BobQz
+ quNtkGTdGEASIFsBdDRVA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Vve9IZ+rZmQ=:xuPaansrjs143YfxHhYuUQ
+ O5RN0O/3tFkuOCFfjths3/Rp4nABdSlYFdu3xNBgj5VeH7OQubtzeIJg08qlursNpmH8LqQa/
+ B9cOukjQzcT9fvmJlqtqd+wQkSn2/4lj1QoLKmySh5iT65mxBEE1BAVRecLRA3ML7UjTy7kFz
+ D/EuM1yIzstjgnt/FTXjXbiBl6NC0UNNx4e3pTXWqq8R069Rhc1B54alWLeuuM/V3iWkDcTwl
+ vQJbPMGs3Gxlm3mi0exXFZ+kEybKiYQolnjv0CmWtS70Nw6AhXcLl+aqf8h2EKQjojFHUJPAZ
+ mZBihGmtwAkZjfeul6UMfXjfQo5gQJTp8tbAIraW9YlRUcxPKATuWanpkwdpD7fO6TWFk0HJx
+ PHoMAOaoJCe2QPmX9W2qP94ozBAEYnC6GyM6H6O5J1Eb2uhnFIVYYnyCKfglpvY7/tXOlL1sa
+ J5y2OFOqaqyCRdwGIaqrK6zNtuYgqJ8VVbI+hRHXiHchD9ffbp50Tmge0KUS+n5Zg8MpfFPHB
+ brUpBlDANQG79NIZ5Z8VTODmR4WnZWNu5YvYBJPJj9LpVRlNRPr9oOUoXCv0cqONWFWywL4P1
+ OPEvksD8yDeOrv8Bp6XEiE6RPh1LWmKgXkvVyti+M3mc2yfGfeUanbk6zgnyCgog6KtD6HluP
+ 1LSezFQpRp5lx6dke5MhOxT7E12Df51q6oTkxlpATWSxx4BmPJSTwHM5K9m5yTCl/gBR63udK
+ HOpU7jbz2lM/RA6n5+Z88Fr/fiKJnSX8PVQ9aGk3ft3HFn9XzZMngSe84R34K//BEr/mnltgk
+ QWMAj2eQAFpGGcDU+1KHfkbCf8Ja/BiodL+Jhy2nbsPNXsor/5agup5gJWT8jj77jhjgzsoUn
+ 6oNzsfB0v5lnunvHLa5A==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:50:43PM +0000, Michael Kelley (LINUX) wrote:
-> From: Shradha Gupta <shradhagupta@linux.microsoft.com> Sent: Sunday, July 10, 2022 9:12 PM
-> > 
-> > Add a flag to indicate that the vmbus is suspended so we should ignore
-> > any offer message. Add a new work_queue for rescind msg, so we could drain
-> > it along with other offer work_queues upon suspension.
-> > It was observed that in some hibernation related scenario testing, after
-> > vmbus_bus_suspend() we get rescind offer message for the vmbus. This would
-> > lead to processing of a rescind message for a channel that has already been
-> > suspended.
-> > 
-> > Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
-[...]
-> 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> 
+On Mon, Jul 11, 2022 at 5:53 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> Hi Arnd, Philipp
+>
+> Since no comments have been posted for the patches lately and the @Philipp
+> notes have been fixed way on v2, could you please consider merge the
+> patchset in through any of your repos?
 
-Applied to hyperv-next. Thanks.
+
+Hi Sergey,
+
+I already merged these into the arm/drivers tree on June 10, I suppose
+something went wrong with the notification email.
+
+      Arnd

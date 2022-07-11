@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5854856FA82
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA7D56FB7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiGKJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S232665AbiGKJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbiGKJSF (ORCPT
+        with ESMTP id S232238AbiGKJaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:18:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4816E4B48F;
-        Mon, 11 Jul 2022 02:11:40 -0700 (PDT)
+        Mon, 11 Jul 2022 05:30:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1B672EE2;
+        Mon, 11 Jul 2022 02:16:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8277E611E4;
-        Mon, 11 Jul 2022 09:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9058CC34115;
-        Mon, 11 Jul 2022 09:11:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73F7EB80E84;
+        Mon, 11 Jul 2022 09:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A962CC34115;
+        Mon, 11 Jul 2022 09:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530698;
-        bh=8xduzV9XPwv+MRJJNBuvjbGKAF/YIl6fxiUCeWx2Z4Q=;
+        s=korg; t=1657531008;
+        bh=MvmgnXxSGFc0Vw1XACvyfAJ3wLGDYlztU1H00/h+Z1s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fh7gVxJaKGoyx5oFIMmrO/RRfOk35vvtT+KYJ4ISeHh3GydNhqDJNnwsDe84ASsTL
-         5hSA18gWoVakZH92AJqoFEl32kss0fLjnUooxw/nKssCNvFUrwQrLHQM4QwQRxINDp
-         4Jnqbcu+WmQzKngrtA3D9IsJ4qwkc1shB2VhHDHM=
+        b=xR0lYE7ZZ1cKPlfePi4vG62yc6RgkeCtck2QPcHatiDf5ZUFYTzqWp9x9UTCXGmL1
+         daQkwSKSd0HZVlX6ucFgMUN3YSXzOuj/CnOwuqT7ZozCOz6wJ3HJAPg7s25d9+nhmI
+         bZ12HceEnFFx9YnZQBm/Z5fMzWw8OtPLEyrlVVRk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 19/38] ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
-Date:   Mon, 11 Jul 2022 11:07:01 +0200
-Message-Id: <20220711090539.299572813@linuxfoundation.org>
+Subject: [PATCH 5.18 062/112] arm64: dts: imx8mp-evk: correct I2C5 pad settings
+Date:   Mon, 11 Jul 2022 11:07:02 +0200
+Message-Id: <20220711090551.334196919@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-[ Upstream commit 34d2cd3fccced12b958b8848e3eff0ee4296764c ]
+[ Upstream commit 8c214b78e149dc7209e38a031292fe21d7017561 ]
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+According to RM bit layout, BIT3 and BIT0 are reserved.
+ 8  7   6   5   4   3  2 1  0
+PE HYS PUE ODE FSEL X  DSE  X
 
-Fixes: d850f3e5d296 ("ARM: meson: Add SMP bringup code for Meson8 and Meson8b")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220512021611.47921-1-linmq006@gmail.com
+Although function is not broken, we should not set reserved bit.
+
+Fixes: 8134822db08d ("arm64: dts: imx8mp-evk: add support for I2C5")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-meson/platsmp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-meson/platsmp.c b/arch/arm/mach-meson/platsmp.c
-index 4b8ad728bb42..32ac60b89fdc 100644
---- a/arch/arm/mach-meson/platsmp.c
-+++ b/arch/arm/mach-meson/platsmp.c
-@@ -71,6 +71,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
- 	}
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index 454856bd4f56..938757b26add 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -481,8 +481,8 @@
  
- 	sram_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!sram_base) {
- 		pr_err("Couldn't map SRAM registers\n");
- 		return;
-@@ -91,6 +92,7 @@ static void __init meson_smp_prepare_cpus(const char *scu_compatible,
- 	}
+ 	pinctrl_i2c5: i2c5grp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_SPDIF_RX__I2C5_SDA         0x400001c3
+-			MX8MP_IOMUXC_SPDIF_TX__I2C5_SCL         0x400001c3
++			MX8MP_IOMUXC_SPDIF_RX__I2C5_SDA         0x400001c2
++			MX8MP_IOMUXC_SPDIF_TX__I2C5_SCL         0x400001c2
+ 		>;
+ 	};
  
- 	scu_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!scu_base) {
- 		pr_err("Couldn't map SCU registers\n");
- 		return;
 -- 
 2.35.1
 

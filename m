@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C058E56FB60
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF1256FB5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiGKJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231913AbiGKJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbiGKJ2l (ORCPT
+        with ESMTP id S231269AbiGKJ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Jul 2022 05:28:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933E966BAE;
-        Mon, 11 Jul 2022 02:16:02 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D15466BB5;
+        Mon, 11 Jul 2022 02:16:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 740DFB80E76;
-        Mon, 11 Jul 2022 09:15:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C6A7C341C0;
-        Mon, 11 Jul 2022 09:15:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 693286122D;
+        Mon, 11 Jul 2022 09:16:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DBCEC34115;
+        Mon, 11 Jul 2022 09:16:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530958;
-        bh=JnbQUXFmoCPU/Ryxi5nJ3JILasfWjNYUzM7FYb5s3Dg=;
+        s=korg; t=1657530960;
+        bh=Mk2mPfafefPzBg8D/s3U0LXolpcBRBnONqnf4t85Qdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v3cOSiqDotguFJ+lWWhl4b06ja+7eu0UwX9S8vf6NVwv55460T15eW+hNxlkUwYAA
-         r3RXGM7BEDhT5SWu/r5rJvsUtqEV52Tw1kH1B7kSOSOHojbNUr3NvEZjqL+T6eiOo+
-         bya79tCnnGwLygYlzwzQDe1P1BlEp6Du/wsHjEls=
+        b=gD/Kk6tFyP63Z/I5hIMsz1vKDCD9bLbRMuhI9aDDJ5jDwaTZog8IYZrblfsAKPZcc
+         J7pAclhKOQmGBgZCBy23VzQ4S672zCfNx1nWOMKxVQMrmm3VzpfSAK/KKNxKj1/TxE
+         3o+IxKwk5Nof8rkP4hyNr8CCzfZhxiq0n9xp//oQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 046/112] pinctrl: sunxi: a83t: Fix NAND function name for some pins
-Date:   Mon, 11 Jul 2022 11:06:46 +0200
-Message-Id: <20220711090550.879919936@linuxfoundation.org>
+Subject: [PATCH 5.18 047/112] srcu: Tighten cleanup_srcu_struct() GP checks
+Date:   Mon, 11 Jul 2022 11:06:47 +0200
+Message-Id: <20220711090550.908046442@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
 References: <20220711090549.543317027@linuxfoundation.org>
@@ -56,59 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-[ Upstream commit aaefa29270d9551b604165a08406543efa9d16f5 ]
+[ Upstream commit 8ed00760203d8018bee042fbfe8e076579be2c2b ]
 
-The other NAND pins on Port C use the "nand0" function name.
-"nand0" also matches all of the other Allwinner SoCs.
+Currently, cleanup_srcu_struct() checks for a grace period in progress,
+but it does not check for a grace period that has not yet started but
+which might start at any time.  Such a situation could result in a
+use-after-free bug, so this commit adds a check for a grace period that
+is needed but not yet started to cleanup_srcu_struct().
 
-Fixes: 4730f33f0d82 ("pinctrl: sunxi: add allwinner A83T PIO controller support")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220526024956.49500-1-samuel@sholland.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/rcu/srcutree.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c b/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-index 4ada80317a3b..b5c1a8f363f3 100644
---- a/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-@@ -158,26 +158,26 @@ static const struct sunxi_desc_pin sun8i_a83t_pins[] = {
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 14),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQ6 */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQ6 */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* D6 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 15),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQ7 */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQ7 */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* D7 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 16),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQS */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQS */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* RST */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 17),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand")),		/* CE2 */
-+		  SUNXI_FUNCTION(0x2, "nand0")),	/* CE2 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 18),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand")),		/* CE3 */
-+		  SUNXI_FUNCTION(0x2, "nand0")),	/* CE3 */
- 	/* Hole */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(D, 2),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 6833d8887181..d30e4db04506 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -382,9 +382,11 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
+ 			return; /* Forgot srcu_barrier(), so just leak it! */
+ 	}
+ 	if (WARN_ON(rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) != SRCU_STATE_IDLE) ||
++	    WARN_ON(rcu_seq_current(&ssp->srcu_gp_seq) != ssp->srcu_gp_seq_needed) ||
+ 	    WARN_ON(srcu_readers_active(ssp))) {
+-		pr_info("%s: Active srcu_struct %p state: %d\n",
+-			__func__, ssp, rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)));
++		pr_info("%s: Active srcu_struct %p read state: %d gp state: %lu/%lu\n",
++			__func__, ssp, rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)),
++			rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
+ 		return; /* Caller forgot to stop doing call_srcu()? */
+ 	}
+ 	free_percpu(ssp->sda);
 -- 
 2.35.1
 

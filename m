@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F056F995
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF4856F98D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiGKJEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S230354AbiGKJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiGKJEu (ORCPT
+        with ESMTP id S229652AbiGKJDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:04:50 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752912638;
-        Mon, 11 Jul 2022 02:04:49 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LhHtB0k8zzTgkG;
-        Mon, 11 Jul 2022 17:01:06 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Jul 2022 17:04:43 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Jul 2022 17:04:42 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: [PATCH v3 2/2] arm64: kdump: Support crashkernel=X fall back to reserve region above DMA zones
-Date:   Mon, 11 Jul 2022 17:03:19 +0800
-Message-ID: <20220711090319.1604-3-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220711090319.1604-1-thunder.leizhen@huawei.com>
-References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+        Mon, 11 Jul 2022 05:03:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212FF64EB;
+        Mon, 11 Jul 2022 02:03:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 03FBB226B2;
+        Mon, 11 Jul 2022 09:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657530219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YHFvpJ9HZGIrPeQPuzym79G8/kyQVIfu90WIp/40lrI=;
+        b=r//wUZgrU9F6EXZ67R6ut5+bIdVZD/pOqxHq//7tgykvfDP5E2fL+fHSCGc0vRSGW037FD
+        27Q0Ytov5xgQic1WjcJGyVGjmfNAlFlrCJN+XIN3/U1NSzFURJYDukaMHKne3MeM5utNNq
+        YIwNALqqS4+CpqoDbeG040384kLHToU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657530219;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YHFvpJ9HZGIrPeQPuzym79G8/kyQVIfu90WIp/40lrI=;
+        b=8+nc45zwLuD3FGlEN42gW8xKvgVizWg0IaZuN3qR5/w0fyUEokB+d1JcFri1kqlZ/8l2IP
+        ohLa3YzDe5Cf3qCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B717A13322;
+        Mon, 11 Jul 2022 09:03:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +6aoK2rny2I+NQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 11 Jul 2022 09:03:38 +0000
+Message-ID: <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+Date:   Mon, 11 Jul 2022 11:03:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------i9HZ5JhPjq6YARR0Q2xTKKbe"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,72 +80,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For crashkernel=X without '@offset', select a region within DMA zones
-first, and fall back to reserve region above DMA zones. This allows
-users to use the same configuration on multiple platforms.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------i9HZ5JhPjq6YARR0Q2xTKKbe
+Content-Type: multipart/mixed; boundary="------------0dPtI0BWIf6KarQZJXsRZvt7";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>
+Cc: dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+ linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <ef2aada2-96e4-c2e4-645f-39bc9094e93a@suse.de>
+Subject: Re: [PATCH 4/5] drm/modes: Add support for driver-specific named
+ modes
+References: <cover.1657301107.git.geert@linux-m68k.org>
+ <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
+In-Reply-To: <68923c8a129b6c2a70b570103679a1cf7876bbc2.1657301107.git.geert@linux-m68k.org>
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Acked-by: Baoquan He <bhe@redhat.com>
----
- Documentation/admin-guide/kernel-parameters.txt |  2 +-
- arch/arm64/mm/init.c                            | 16 +++++++++++++++-
- 2 files changed, 16 insertions(+), 2 deletions(-)
+--------------0dPtI0BWIf6KarQZJXsRZvt7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 65a2c3a22a4b57d..cb6a346419a1fe0 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -823,7 +823,7 @@
- 			memory region [offset, offset + size] for that kernel
- 			image. If '@offset' is omitted, then a suitable offset
- 			is selected automatically.
--			[KNL, X86-64] Select a region under 4G first, and
-+			[KNL, X86-64, ARM64] Select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
- 			See Documentation/admin-guide/kdump/kdump.rst for further details.
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 5390f361208ccf7..8539598f9e58b4d 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -138,6 +138,7 @@ static void __init reserve_crashkernel(void)
- 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
- 	char *cmdline = boot_command_line;
- 	int ret;
-+	bool fixed_base;
- 
- 	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
- 		return;
-@@ -166,15 +167,28 @@ static void __init reserve_crashkernel(void)
- 		return;
- 	}
- 
-+	fixed_base = !!crash_base;
- 	crash_size = PAGE_ALIGN(crash_size);
- 
- 	/* User specifies base address explicitly. */
--	if (crash_base)
-+	if (fixed_base)
- 		crash_max = crash_base + crash_size;
- 
-+retry:
- 	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
- 					       crash_base, crash_max);
- 	if (!crash_base) {
-+		/*
-+		 * Attempt to fully allocate low memory failed, fall back
-+		 * to high memory, the minimum required low memory will be
-+		 * reserved later.
-+		 */
-+		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-+			crash_max = CRASH_ADDR_HIGH_MAX;
-+			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-+			goto retry;
-+		}
-+
- 		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
- 			crash_size);
- 		return;
--- 
-2.25.1
+SGkgR2VlcnQNCg0KQW0gMDguMDcuMjIgdW0gMjA6MjEgc2NocmllYiBHZWVydCBVeXR0ZXJo
+b2V2ZW46DQo+IFRoZSBtb2RlIHBhcnNpbmcgY29kZSByZWNvZ25pemVzIG5hbWVkIG1vZGVz
+IG9ubHkgaWYgdGhleSBhcmUgZXhwbGljaXRseQ0KPiBsaXN0ZWQgaW4gdGhlIGludGVybmFs
+IHdoaXRlbGlzdCwgd2hpY2ggaXMgY3VycmVudGx5IGxpbWl0ZWQgdG8gIk5UU0MiDQo+IGFu
+ZCAiUEFMIi4NCj4gDQo+IFByb3ZpZGUgYSBtZWNoYW5pc20gZm9yIGRyaXZlcnMgdG8gb3Zl
+cnJpZGUgdGhpcyBsaXN0IHRvIHN1cHBvcnQgY3VzdG9tDQo+IG1vZGUgbmFtZXMuDQo+IA0K
+PiBJZGVhbGx5LCB0aGlzIGxpc3Qgc2hvdWxkIGp1c3QgY29tZSBmcm9tIHRoZSBkcml2ZXIn
+cyBhY3R1YWwgbGlzdCBvZg0KPiBtb2RlcywgYnV0IGNvbm5lY3Rvci0+cHJvYmVkX21vZGVz
+IGlzIG5vdCB5ZXQgcG9wdWxhdGVkIGF0IHRoZSB0aW1lIG9mDQo+IHBhcnNpbmcuDQoNCkkn
+dmUgbG9va2VkIGZvciBjb2RlIHRoYXQgdXNlcyB0aGVzZSBuYW1lcywgY291bGRuJ3QgZmlu
+ZCBhbnkuIEhvdyBpcyANCnRoaXMgYmVpbmcgdXNlZCBpbiBwcmFjdGljZT8gRm9yIGV4YW1w
+bGUsIGlmIEkgc2F5ICJQQUwiIG9uIHRoZSBjb21tYW5kIA0KbGluZSwgaXMgdGhlcmUgRFJN
+IGNvZGUgdGhhdCBmaWxscyBpbiB0aGUgUEFMIG1vZGUgcGFyYW1ldGVycz8NCg0KQW5kIGFu
+b3RoZXIgcXVlc3Rpb24gSSBoYXZlIGlzIHdoZXRoZXIgdGhpcyB3aGl0ZWxpc3QgYmVsb25n
+cyBpbnRvIHRoZSANCmRyaXZlciBhdCBhbGwuIFN0YW5kYXJkIG1vZGVzIGV4aXN0IGluZGVw
+ZW5kZW50IGZyb20gZHJpdmVycyBvciANCmhhcmR3YXJlLiBTaG91bGRuJ3QgdGhlcmUgc2lt
+cGx5IGJlIGEgZ2xvYmFsIGxpc3Qgb2YgYWxsIHBvc3NpYmxlIG1vZGUgDQpuYW1lcz8gRHJp
+dmVycyB3b3VsZCBmaWx0ZXIgb3V0IHRoZSB1bnN1cHBvcnRlZCBtb2RlcyBhbnl3YXkuDQoN
+CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEdlZXJ0IFV5
+dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4ay5vcmc+DQo+IC0tLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9kcm1fbW9kZXMuYyB8IDE1ICsrKysrKysrKysrLS0tLQ0KPiAgIGluY2x1ZGUv
+ZHJtL2RybV9jb25uZWN0b3IuaCB8IDEwICsrKysrKysrKysNCj4gICAyIGZpbGVzIGNoYW5n
+ZWQsIDIxIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9ncHUvZHJtL2RybV9tb2Rlcy5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9t
+b2Rlcy5jDQo+IGluZGV4IDljZTI3NWZiZGE1NjZiN2MuLjdhMDBlYjZkZjUwMmU5OTEgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fbW9kZXMuYw0KPiArKysgYi9kcml2
+ZXJzL2dwdS9kcm0vZHJtX21vZGVzLmMNCj4gQEAgLTE3NDgsMjUgKzE3NDgsMzEgQEAgc3Rh
+dGljIGludCBkcm1fbW9kZV9wYXJzZV9jbWRsaW5lX29wdGlvbnMoY29uc3QgY2hhciAqc3Ry
+LA0KPiAgIHN0YXRpYyBjb25zdCBjaGFyICogY29uc3QgZHJtX25hbWVkX21vZGVzX3doaXRl
+bGlzdFtdID0gew0KPiAgIAkiTlRTQyIsDQo+ICAgCSJQQUwiLA0KPiArCU5VTEwNCj4gICB9
+Ow0KPiAgIA0KPiAgIHN0YXRpYyBpbnQgZHJtX21vZGVfcGFyc2VfY21kbGluZV9uYW1lZF9t
+b2RlKGNvbnN0IGNoYXIgKm5hbWUsDQo+ICAgCQkJCQkgICAgIHVuc2lnbmVkIGludCBsZW5n
+dGgsDQo+ICAgCQkJCQkgICAgIGJvb2wgcmVmcmVzaCwNCj4gKwkJCQkJICAgICBjb25zdCBz
+dHJ1Y3QgZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9yLA0KPiAgIAkJCQkJICAgICBzdHJ1Y3Qg
+ZHJtX2NtZGxpbmVfbW9kZSAqbW9kZSkNCj4gICB7DQo+ICsJY29uc3QgY2hhciAqIGNvbnN0
+ICpuYW1lZF9tb2Rlc193aGl0ZWxpc3Q7DQo+ICAgCXVuc2lnbmVkIGludCBpOw0KPiAgIAlp
+bnQgcmV0Ow0KPiAgIA0KPiAtCWZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKGRybV9uYW1l
+ZF9tb2Rlc193aGl0ZWxpc3QpOyBpKyspIHsNCj4gLQkJcmV0ID0gc3RyX2hhc19wcmVmaXgo
+bmFtZSwgZHJtX25hbWVkX21vZGVzX3doaXRlbGlzdFtpXSk7DQo+ICsJbmFtZWRfbW9kZXNf
+d2hpdGVsaXN0ID0gY29ubmVjdG9yLT5uYW1lZF9tb2Rlc193aGl0ZWxpc3QgPyA6DQo+ICsJ
+CQkJZHJtX25hbWVkX21vZGVzX3doaXRlbGlzdDsNCj4gKw0KPiArCWZvciAoaSA9IDA7IG5h
+bWVkX21vZGVzX3doaXRlbGlzdFtpXTsgaSsrKSB7DQo+ICsJCXJldCA9IHN0cl9oYXNfcHJl
+Zml4KG5hbWUsIG5hbWVkX21vZGVzX3doaXRlbGlzdFtpXSk7DQo+ICAgCQlpZiAoIXJldCkN
+Cj4gICAJCQljb250aW51ZTsNCj4gICANCj4gICAJCWlmIChyZWZyZXNoKQ0KPiAgIAkJCXJl
+dHVybiAtRUlOVkFMOyAvKiBuYW1lZCArIHJlZnJlc2ggaXMgaW52YWxpZCAqLw0KPiAgIA0K
+PiAtCQlzdHJjcHkobW9kZS0+bmFtZSwgZHJtX25hbWVkX21vZGVzX3doaXRlbGlzdFtpXSk7
+DQo+ICsJCXN0cmNweShtb2RlLT5uYW1lLCBuYW1lZF9tb2Rlc193aGl0ZWxpc3RbaV0pOw0K
+PiAgIAkJbW9kZS0+c3BlY2lmaWVkID0gdHJ1ZTsNCj4gICAJCXJldHVybiAwOw0KPiAgIAl9
+DQo+IEBAIC0xODUwLDcgKzE4NTYsOCBAQCBib29sIGRybV9tb2RlX3BhcnNlX2NvbW1hbmRf
+bGluZV9mb3JfY29ubmVjdG9yKGNvbnN0IGNoYXIgKm1vZGVfb3B0aW9uLA0KPiAgIAkvKiBG
+aXJzdCBjaGVjayBmb3IgYSBuYW1lZCBtb2RlICovDQo+ICAgCWlmIChtb2RlX2VuZCkgew0K
+PiAgIAkJcmV0ID0gZHJtX21vZGVfcGFyc2VfY21kbGluZV9uYW1lZF9tb2RlKG5hbWUsIG1v
+ZGVfZW5kLA0KPiAtCQkJCQkJCXJlZnJlc2hfcHRyLCBtb2RlKTsNCj4gKwkJCQkJCQlyZWZy
+ZXNoX3B0ciwgY29ubmVjdG9yLA0KPiArCQkJCQkJCW1vZGUpOw0KPiAgIAkJaWYgKHJldCkN
+Cj4gICAJCQlyZXR1cm4gZmFsc2U7DQo+ICAgCX0NCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUv
+ZHJtL2RybV9jb25uZWN0b3IuaCBiL2luY2x1ZGUvZHJtL2RybV9jb25uZWN0b3IuaA0KPiBp
+bmRleCAzYWM0YmY4N2YyNTcxYzRjLi42MzYxZjhhNTk2YzAxMTA3IDEwMDY0NA0KPiAtLS0g
+YS9pbmNsdWRlL2RybS9kcm1fY29ubmVjdG9yLmgNCj4gKysrIGIvaW5jbHVkZS9kcm0vZHJt
+X2Nvbm5lY3Rvci5oDQo+IEBAIC0xNjU5LDYgKzE2NTksMTYgQEAgc3RydWN0IGRybV9jb25u
+ZWN0b3Igew0KPiAgIA0KPiAgIAkvKiogQGhkcl9zaW5rX21ldGFkYXRhOiBIRFIgTWV0YWRh
+dGEgSW5mb3JtYXRpb24gcmVhZCBmcm9tIHNpbmsgKi8NCj4gICAJc3RydWN0IGhkcl9zaW5r
+X21ldGFkYXRhIGhkcl9zaW5rX21ldGFkYXRhOw0KPiArDQo+ICsJLyoqDQo+ICsJICogQG5h
+bWVkX21vZGVzX3doaXRlbGlzdDoNCj4gKwkgKg0KPiArCSAqIE9wdGlvbmFsIE5VTEwtdGVy
+bWluYXRlZCBhcnJheSBvZiBuYW1lcyB0byBiZSBjb25zaWRlcmVkIHZhbGlkIG1vZGUNCj4g
+KwkgKiBuYW1lcy4gIFRoaXMgbGV0cyB0aGUgY29tbWFuZCBsaW5lIG9wdGlvbiBwYXJzZXIg
+ZGlzdGluZ3Vpc2ggYmV0d2Vlbg0KPiArCSAqIG1vZGUgbmFtZXMgYW5kIGZyZWVzdGFuZGlu
+ZyBleHRyYXMgYW5kL29yIG9wdGlvbnMuDQo+ICsJICogSWYgbm90IHNldCwgYSBzZXQgb2Yg
+ZGVmYXVsdHMgd2lsbCBiZSB1c2VkLg0KPiArCSAqLw0KPiArCWNvbnN0IGNoYXIgKiBjb25z
+dCAqbmFtZWRfbW9kZXNfd2hpdGVsaXN0Ow0KPiAgIH07DQo+ICAgDQo+ICAgI2RlZmluZSBv
+YmpfdG9fY29ubmVjdG9yKHgpIGNvbnRhaW5lcl9vZih4LCBzdHJ1Y3QgZHJtX2Nvbm5lY3Rv
+ciwgYmFzZSkNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
+dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
+c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
+YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
+--------------0dPtI0BWIf6KarQZJXsRZvt7--
+
+--------------i9HZ5JhPjq6YARR0Q2xTKKbe
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLL52oFAwAAAAAACgkQlh/E3EQov+AL
+yQ//T1sdtC7YTRKogLLqelJAozXBm8YVBGwx46Tx0OM3fS4AJRH5a7VxaAu4VY/koVsNhXomDocb
+PfWfy+mixDOSpxyBv4j6b9rn/nuG2wrHvBFvqzJTA8WthwGQtKImAG1b+QUdG7DAQQs5ILRtQZRi
+TO0dK1pzJ5DLsclz9wgMxBiaZ0ikzNdHx05ok9CIRbqpWb+dzM7RncMVM+i+kPY/J+DFKOzFdnUr
+imDnX5Y/XM4K/arrJGSeSTQiWCvlqO5SysRAfKYQcv9e7JN388N3qyDZQEMpqUbjSmvK0/zh5NO/
+CMXzSIoOC9ClBCjsrqM9JzsFJFJ87o6ExIP3qzxdtc8Jq+gR8YKt710e83kaDJDSGIl6ssjYFI/8
+4/PZkAjYbrZVqc45/gJgRIwcegw6MXoGl1gAQX45jQj4OSCECnbSwxAdQ9cD0bc2FSC4yz+Q861W
+4bQkXLctnKFsOE1rDfTF1QKLZm3hh8jzFhmL5LE0f0OYXl5P12Tcmx/0gw3Xg54GvacB4ctCFzbZ
+hd103iaGPvPaqIJkkuIRcmAeOcSG4vIM8OBIUMPrO2mVCxq7c6cferG8UTkVx6m2OlCoGHWftB4v
+pdGujCckewx7fo90JDfC4+97UejVfwLHMGrjv79HrVgod1wM01kJHXa2i1XWuHo+cuL1d/aKGA1J
+A/k=
+=YsXd
+-----END PGP SIGNATURE-----
+
+--------------i9HZ5JhPjq6YARR0Q2xTKKbe--

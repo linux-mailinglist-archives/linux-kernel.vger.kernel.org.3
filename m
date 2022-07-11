@@ -2,156 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4FC570469
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EDF57046A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiGKNgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S230017AbiGKNgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiGKNgd (ORCPT
+        with ESMTP id S229558AbiGKNgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:36:33 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9285732DA9;
-        Mon, 11 Jul 2022 06:36:32 -0700 (PDT)
-Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M1JJC-1o9Fgq37X8-002rHW; Mon, 11 Jul 2022 15:36:30 +0200
-Received: by mail-yb1-f181.google.com with SMTP id y195so8798548yby.0;
-        Mon, 11 Jul 2022 06:36:30 -0700 (PDT)
-X-Gm-Message-State: AJIora+MHLcxvDz7arGYC29Vqqc1ZGJC0Y2KjeacpDKzlPAZbNylK54/
-        G4S76UBaxbXMhsw54xF5em4LtDfnstN4caflgTo=
-X-Google-Smtp-Source: AGRyM1tvmyWfjf82f5DfzmUlldR8SOU5epceJ5HO7+gjgCpS/5zLrbpHMFqt2IKVqyew31oGn0XpM/p2gIWyEDNyGSY=
-X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
- b7-20020a5b0b47000000b0066e3617d262mr16460264ybr.106.1657546589339; Mon, 11
- Jul 2022 06:36:29 -0700 (PDT)
+        Mon, 11 Jul 2022 09:36:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD2F73DF08
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657546607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=RyQr2XtUjaVXF3HOvn9hwgYpa3kaUN7VZup2EdcZGH0=;
+        b=edAxIqyIepbgyoATVA/pUqUnIEd0IYGO2/8+H2ry0d+LOWqyHYvSkJjZRq/lCgJimC9gRt
+        2tbcf57dmrwHw8+Xzr4OiS9b6RvuQK0AOiHABx2heiivxUs7Zm3dH+BhvvebVOGHbbPtMh
+        3yLvaqqMyHlxg+RqcdS6OHO/hpJim/Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-360-1Keaw8EeN-27uI4bphW5vA-1; Mon, 11 Jul 2022 09:36:46 -0400
+X-MC-Unique: 1Keaw8EeN-27uI4bphW5vA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58C8E1C06EC4;
+        Mon, 11 Jul 2022 13:36:46 +0000 (UTC)
+Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 331AF2166B26;
+        Mon, 11 Jul 2022 13:36:46 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 08:36:44 -0500
+From:   David Teigland <teigland@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] dlm updates for 5.20
+Message-ID: <20220711133644.GA27727@redhat.com>
 MIME-Version: 1.0
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-2-me@linux.beauty>
-In-Reply-To: <20220711122459.13773-2-me@linux.beauty>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Jul 2022 15:36:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1WbJSWHsfegTtLhzSRwAoN8WfdezTTedRk9-FCiM8+GA@mail.gmail.com>
-Message-ID: <CAK8P3a1WbJSWHsfegTtLhzSRwAoN8WfdezTTedRk9-FCiM8+GA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] of: add struct page support to rmem
-To:     Li Chen <me@linux.beauty>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Li Chen <lchen@ambarella.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:+vSjRl9oSi/iE1EbjAqxe1rh3a2TRjOncdk46lDtTdWea5l0MIM
- t8yIi6JNbiNrhQtaCvubdvxVQ2E03qKvNkj90z8j8DgEPZeDcKVydG9mvptN0/W+UWzD9D9
- c8qsQB7ck8BrM8AJ7CG00OrCyMaa6BkjV/6SlYF21HCqC52uKHn9nvasgnUxzUtHxZhHA8s
- iF2Lwk/IDj4yPFdkoqT2w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yWJtuEELCNY=:XS8tS57yqii7qh54aSKa63
- 5DMySW79XjC3t2Zu9CGaXpEtXm+HyMgtagXxKDF6q8mhREkJiATr05UA7PMe2jHp7UX9NuipQ
- 29FwW6h+c7QgmI/xI5jSbDBisLbMkxnHfr0eVP+rtFKxWIanl3fKKKzom5sNfMOHWByvegS6e
- Rgwi66x9/WFgsNFLqy2w5AABcXHWVN/0y4/J3Sv+4bouUPKy2yUngumSqsQKQQVf/kEBU0Q6J
- q1yB/SELvY6PJv2fRHxpoVVGqracx1D6Zyh8hV0ZYdcUnG1bgTfB4BWyLC/0s3evdWhvnhb4i
- fsgvXI6wGGKChPS0tQ8Pju445hKFk/QERXbhXrLYOK1i1ixgF0WxGQyGxeg0B6uApGGMueXHt
- hCBkPi00SD7NWqKA18pIq2KY35ZKQVQyo83eFC5cVxhIzfhTFmTN+mocJ9x1Twz0NWYU/DU0W
- 0foVmExr2n68CznVh0F3I/x/ohfR26yN6UKI8V9KUVJYdbosi/aEiI65l0pu5unFO4GGoI91x
- 9Rs/paVHxMMWpqPvDWt5ZuBQ8rarj6knt1QOIeGOsSv/PuL6LdoT437CtlRCOpeVbSKYh91K7
- 0vQMUqkGiD8z2/Gj9vMzg7qeBMUc7F33/hAFk6ZPeK2O9imXFj0kWtWjWx7UoybeVpXcKI0E0
- Ux16JJ52Z87yIltKa/W5Vix2xwOnbC5gLwU57Ro9N5p5rivZLXgzV5rBvq8v1de/CL01GyxBW
- OlUH5vfLFLL3x2ZbAnKr8umRo9NZXeSj53MMPwUPmAyymZLw3aDQFqqtEnaUvDAZqM0bdu1WJ
- M0BAvgmjZl2QcdZ8TPqCmAF0MEL3MQkFoDQXI/qWAC4KxKeu4aw0Sy1vSpteR45W7soRj+kNc
- nSmu3Jk2Q3HNs+EaN88g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
+Hi Linus,
 
-> +config OF_RESERVED_MEM_DIO_SUPPORT
-> +       bool "add Direct I/O support to reserved_mem"
-> +       depends on ZONE_DEVICE && ARCH_KEEP_MEMBLOCK
-> +       help
-> +          By default, reserved memory don't get struct page support, which
-> +                means you cannot do Direct I/O from this region. This config takes
-> +                uses of ZONE_DEVICE and treats rmem as hotplug mem to get struct
-> +                page and DIO support.
+Please pull dlm updates from tag:
 
-This probably does not need to be user visible, it's enough to select it from
-the drivers that need it.
+git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-5.20
 
-> @@ -72,7 +72,6 @@ void __init fdt_reserved_mem_save_node(unsigned long node, const char *uname,
->         rmem->size = size;
->
->         reserved_mem_count++;
-> -       return;
->  }
+Changes in this set of commits:
 
-This change is not wrong, but it does not belong into the same patch
-as the rest, just drop it.
+. Delay the cleanup of interrupted posix lock requests until the
+  user space result arrives. Previously, the immediate cleanup
+  would lead to extraneous warnings when the result arrived.
 
-> +/**
-> + * get_reserved_mem_from_dev() - get reserved_mem from a device node
-> + * @dev: device pointer
-> + *
-> + * This function look for reserved_mem from given device.
-> + *
-> + * Returns a reserved_mem pointer, or NULL on error.
-> + */
-> +struct reserved_mem *get_reserved_mem_from_dev(struct device *dev)
-> +{
-> +       struct device_node *np = dev_of_node(dev);
-> +       struct device_node *rmem_np;
-> +       struct reserved_mem *rmem = NULL;
-> +
-> +       rmem_np = of_parse_phandle(np, "memory-region", 0);
-> +       if (!rmem_np) {
-> +               dev_err(dev, "failed to get memory region node\n");
-> +               return ERR_PTR(-ENODEV);
-> +       }
-> +
-> +       rmem = of_reserved_mem_lookup(rmem_np);
-> +       if (!rmem) {
-> +               dev_err(dev, "Failed to lookup reserved memory\n");
-> +               return ERR_PTR(EINVAL);
+. Tracepoint improvements, e.g. adding the lock resource name.
 
-This needs to be a negative error code rather than the positive EINVAL.
-No need to initialize rmem=NULL first if you override it here.
+. Delay the completion of lockspace creation until one full recove
+  cycle has completed. This allows more error cases to be returned
+  the caller.
 
-> +       if (likely(reserved_mem_dio_in_region(pfn << PAGE_SHIFT, PAGE_SIZE, rmem) <
-> +                  0))
-> +               goto out;
+. Remove warnings from the locking layer about delayed network rep
+  The recently added midcomms warnings are much more useful.
 
-It's not performance critical, so just drop the 'likely()' and put the
-rest into one line.
+. Begin the process of deprecating two unused lock-timeout-related
+  features. These features now require enabling via a Kconfig opti
+  and enabling them triggers deprecation warnings. We expect to
+  remove the code in v5.22.
+
+Thanks,
+Dave
+
+Alexander Aring (19):
+      fs: dlm: plock use list_first_entry
+      fs: dlm: add pid to debug log
+      fs: dlm: change plock interrupted message to debug again
+      fs: dlm: use dlm_plock_info for do_unlock_close
+      fs: dlm: change posix lock sigint handling
+      fs: dlm: change ast and bast trace order
+      fs: dlm: remove additional dereference of lksb
+      fs: dlm: add resource name to tracepoints
+      fs: dlm: update comments about recovery and membership handling
+      fs: dlm: call dlm_lsop_recover_prep once
+      fs: dlm: make new_lockspace() wait until recovery completes
+      fs: dlm: handle recovery result outside of ls_recover
+      fs: dlm: add comment about lkb IFL flags
+      fs: dlm: fix grammar in lowcomms output
+      fs: dlm: remove waiter warnings
+      fs: dlm: remove timeout from dlm_user_adopt_orphan
+      fs: dlm: add deprecation Kconfig and warnings for timeouts
+      fs: dlm: don't use deprecated timeout features by default
+      fs: dlm: move kref_put assert for lkb structs
 
 
-> +       if (page) {
-> +               *page = pfn_to_page(pfn);
-> +               get_page(*page);
-> +       }
-> +
-> +       ret = 0;
-> +
-> +out:
-> +       pte_unmap(pte);
-> +       return ret;
-> +}
+ fs/dlm/Kconfig             |   9 +++
+ fs/dlm/Makefile            |   2 +-
+ fs/dlm/ast.c               |   4 +-
+ fs/dlm/config.c            |  21 ++++---
+ fs/dlm/config.h            |   3 +-
+ fs/dlm/dlm_internal.h      |  32 ++++++++--
+ fs/dlm/lock.c              | 143 ++++++++++++++++++---------------------------
+ fs/dlm/lock.h              |  17 +++++-
+ fs/dlm/lockspace.c         |  31 +++++++---
+ fs/dlm/lowcomms.c          |   4 +-
+ fs/dlm/member.c            |  30 +++++-----
+ fs/dlm/plock.c             |  51 +++++++++++-----
+ fs/dlm/recoverd.c          |  35 +++++++++--
+ fs/dlm/user.c              |  21 ++++++-
+ include/trace/events/dlm.h | 118 ++++++++++++++++++++++++++++++-------
+ 15 files changed, 351 insertions(+), 170 deletions(-)
 
-Should you perhaps return an error when 'page' is NULL?
-
-> +#ifdef CONFIG_OF_RESERVED_MEM_DIO_SUPPORT
-> +int reserved_mem_dio_mmap(struct file *file, struct vm_area_struct *vma, struct reserved_mem *rmem);
-> +void *reserved_mem_memremap_pages(struct device *dev, struct reserved_mem *rmem);
-> +#endif
-
-The '#ifdef' check can be dropped here, declarations are normally
-not hidden like this.
-
-         Arnd

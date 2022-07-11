@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCB356FE25
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8692E56FDEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiGKKEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S234121AbiGKKCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbiGKKDa (ORCPT
+        with ESMTP id S234369AbiGKKB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:03:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10C48E8C;
-        Mon, 11 Jul 2022 02:29:27 -0700 (PDT)
+        Mon, 11 Jul 2022 06:01:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24168B8E9E;
+        Mon, 11 Jul 2022 02:28:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 786DDB80E6D;
-        Mon, 11 Jul 2022 09:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92FAC34115;
-        Mon, 11 Jul 2022 09:29:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CA886136E;
+        Mon, 11 Jul 2022 09:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936F8C34115;
+        Mon, 11 Jul 2022 09:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531765;
-        bh=s1ijYzDz9YDw93VsXIoGWIkfJnpWGJMooOl/cYJ8gQ8=;
+        s=korg; t=1657531707;
+        bh=J9gjBr0TQqFK/KpB6aju9Ih/fw36Qss8gW2FcaEI0Hw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OAnH1cQHTbEdMEfC8SrxWZSkgE/DOXJ4edKEMqprom7VX2s2bv34OTHg9Koc5O0df
-         zClOdlZ9pVo7rp39Sx8JOsY4RpMvVka7sUkC9ts0GAqOfiMnIr2a7AZXro4tZc1IR2
-         UGlH/m+5rJMXzExjDTq01QvmhDV83G8VRgNZ5J/k=
+        b=kAtBgykUXR6gPR9lIBZ35/3un8woDyvMRyS7qk9tOUxGDm9IypagT12tirj9cDBbv
+         saFv53xaX5ZwelyNnmOawlWv4ijYJ07gvcwqvi9TWthWExJgKLqwDtRGv3d6hedIjF
+         0DFTqmWOXKMnKyH6graij2ajzZXsr8nKNyj/fgtg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Mihai Sain <mihai.sain@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 182/230] arm64: dts: qcom: msm8994: Fix CPU6/7 reg values
-Date:   Mon, 11 Jul 2022 11:07:18 +0200
-Message-Id: <20220711090609.274114574@linuxfoundation.org>
+Subject: [PATCH 5.15 202/230] ARM: at91: fix soc detection for SAM9X60 SiPs
+Date:   Mon, 11 Jul 2022 11:07:38 +0200
+Message-Id: <20220711090609.835572698@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -56,43 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Mihai Sain <mihai.sain@microchip.com>
 
-[ Upstream commit 47bf59c4755930f616dd90c8c6a85f40a6d347ea ]
+[ Upstream commit 35074df65a8d8c5328a83e2eea948f7bbc8e6e08 ]
 
-CPU6 and CPU7 were mistakengly pointing to CPU5 reg. Fix it.
+Fix SoC detection for SAM9X60 SiPs:
+SAM9X60D5M
+SAM9X60D1G
+SAM9X60D6K
 
-Fixes: 02d8091bbca0 ("arm64: dts: qcom: msm8994: Add a proper CPU map")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220501184016.64138-1-konrad.dybcio@somainline.org
+Fixes: af3a10513cd6 ("drivers: soc: atmel: add per soc id and version match masks")
+Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220616081344.1978664-1-claudiu.beznea@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8994.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soc/atmel/soc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 3c27671c8b5c..a8dc8163ee82 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -93,7 +93,7 @@
- 		CPU6: cpu@102 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a57";
--			reg = <0x0 0x101>;
-+			reg = <0x0 0x102>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 		};
-@@ -101,7 +101,7 @@
- 		CPU7: cpu@103 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a57";
--			reg = <0x0 0x101>;
-+			reg = <0x0 0x103>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 		};
+diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
+index a490ad7e090f..9e3d37011447 100644
+--- a/drivers/soc/atmel/soc.c
++++ b/drivers/soc/atmel/soc.c
+@@ -91,14 +91,14 @@ static const struct at91_soc socs[] __initconst = {
+ 	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
+ 		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
+ 		 "sam9x60", "sam9x60"),
+-	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D5M_EXID_MATCH,
+-		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
++	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK, SAM9X60_D5M_EXID_MATCH,
+ 		 "sam9x60 64MiB DDR2 SiP", "sam9x60"),
+-	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D1G_EXID_MATCH,
+-		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
++	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK, SAM9X60_D1G_EXID_MATCH,
+ 		 "sam9x60 128MiB DDR2 SiP", "sam9x60"),
+-	AT91_SOC(SAM9X60_CIDR_MATCH, SAM9X60_D6K_EXID_MATCH,
+-		 AT91_CIDR_VERSION_MASK, SAM9X60_EXID_MATCH,
++	AT91_SOC(SAM9X60_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
++		 AT91_CIDR_VERSION_MASK, SAM9X60_D6K_EXID_MATCH,
+ 		 "sam9x60 8MiB SDRAM SiP", "sam9x60"),
+ #endif
+ #ifdef CONFIG_SOC_SAMA5
 -- 
 2.35.1
 

@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E66570C6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADD5570C71
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiGKVKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S229895AbiGKVLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKVKv (ORCPT
+        with ESMTP id S229476AbiGKVLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:10:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653A52B272;
-        Mon, 11 Jul 2022 14:10:50 -0700 (PDT)
+        Mon, 11 Jul 2022 17:11:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61D22B609;
+        Mon, 11 Jul 2022 14:11:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01D16B80ECC;
-        Mon, 11 Jul 2022 21:10:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952F4C34115;
-        Mon, 11 Jul 2022 21:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657573847;
-        bh=ew4bowO6kNFQLODResBCj9sJiJJyN84qEWosF0EMHEM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Gyh2Zkn/ZsKToodeu8WZ62KhqOysXZrLTpxnbcKxgxlbbbBV4ED41P8d+UQK6sNgp
-         1QTlDuxq59skJFTlVlzqWx8UP8YTgiuNh1b3qaROYVK1ylhzz5DWutaxIfjYJxzoAa
-         3Ur2xEV56Fjp5USmy0eskr+agEpfP4ueHJkTgKaT2HN95D1fTi7rOInYNJeAcBmrYl
-         a86QCFmaHAXXIGpfL64+7dxjzSnya3o0dTMp6T6PF7IJCNGyM+GukZmr5JNKjJAWhz
-         mvZKD1xQm1PbEJNajAUN3jaZMYxM8jPDBN3AjiVNBXkjnoGRz1KZGfWfJbe0/QDrfc
-         uHD2iBxfj014Q==
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C57161699;
+        Mon, 11 Jul 2022 21:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7967C34115;
+        Mon, 11 Jul 2022 21:11:31 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 17:11:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Message-ID: <20220711171130.6390600b@gandalf.local.home>
+In-Reply-To: <YsyO9GM9mCydaybo@slm.duckdns.org>
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+        <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+        <YsyO9GM9mCydaybo@slm.duckdns.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220515210048.483898-10-robimarko@gmail.com>
-References: <20220515210048.483898-1-robimarko@gmail.com> <20220515210048.483898-10-robimarko@gmail.com>
-Subject: Re: [PATCH v4 10/11] clk: qcom: ipq8074: dont disable gcc_sleep_clk_src
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>
-To:     Robert Marko <robimarko@gmail.com>, absahu@codeaurora.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, tdas@codeaurora.org
-Date:   Mon, 11 Jul 2022 14:10:45 -0700
-User-Agent: alot/0.10
-Message-Id: <20220711211047.952F4C34115@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Robert Marko (2022-05-15 14:00:47)
-> diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq807=
-4.c
-> index 3204d550ff76..42d185fe19c8 100644
-> --- a/drivers/clk/qcom/gcc-ipq8074.c
-> +++ b/drivers/clk/qcom/gcc-ipq8074.c
-> @@ -663,6 +663,7 @@ static struct clk_branch gcc_sleep_clk_src =3D {
->                         },
->                         .num_parents =3D 1,
->                         .ops =3D &clk_branch2_ops,
-> +                       .flags =3D CLK_IS_CRITICAL,
->                 },
+On Mon, 11 Jul 2022 10:58:28 -1000
+Tejun Heo <tj@kernel.org> wrote:
 
-Why not just remove the clk from the driver? Is anything using it?
+> I don't think lockdep would be able to track CPU1 -> CPU2 dependency here
+> unfortunately.
+> 
+> > AFAIU:
+> > 
+> > 
+> > CPU0                                     CPU1                                   CPU2
+> > 
+> > // attach task to a different
+> > // cpuset cgroup via sysfs
+> > __acquire(cgroup_threadgroup_rwsem)
+> > 
+> >                                          // pring up CPU2 online
+> >                                          __acquire(cpu_hotplug_lock)
+> >                                          // wait for CPU2 to come online
+
+Should there be some annotation here that tells lockdep that CPU1 is now
+blocked on CPU2?
+
+Then this case would be caught by lockdep.
+
+-- Steve
+
+
+> >                                                                                 // bringup cpu online
+> >                                                                                 // call cpufreq_online() which tries to create sugov kthread
+> > __acquire(cpu_hotplug_lock)                                                     copy_process()
+> >                                                                                    cgroup_can_fork()
+> >                                                                                       cgroup_css_set_fork()
+> >                                                                                       __acquire(cgroup_threadgroup_rwsem)
+> > // blocks forever                        // blocks forever                            // blocks forever
+> > 

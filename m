@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6060570C88
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF47570C85
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiGKVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S231473AbiGKVNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiGKVN3 (ORCPT
+        with ESMTP id S229622AbiGKVNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:13:29 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C662E804AE;
-        Mon, 11 Jul 2022 14:13:27 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id p22so4867367qkj.4;
-        Mon, 11 Jul 2022 14:13:27 -0700 (PDT)
+        Mon, 11 Jul 2022 17:13:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F133A25;
+        Mon, 11 Jul 2022 14:13:21 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r6so7764872edd.7;
+        Mon, 11 Jul 2022 14:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N5YRuTB5MYa3nbG8lCPemrZYrkhyGUXIRY7YTJn3UJI=;
-        b=KkEAKuvCwlihbCqH52qxZhTQfjrKb1t9ydLos5qqmCRFzfJM35qZdJaxnqOYfVKl5J
-         jnwWRee3uoiDVHlenzYQzabO9t79JtPJdqyns6M4OO9zL8/zj9VC8gmPcQIYZQfDf1Vj
-         meW5ioYcgJjiu3HYWluL2B2KUIF9cVS4sJqGXnMl+8N92XshkIYBpSLbF/saTtyyW1XC
-         J23Gfm1lzun4nkgvj5Ywp9iN4bQpuPd9vdu5vbMXrPANCbIg9CsCs5fJ1VPd0H2WkaNq
-         s62op9zmZaDy+LT2jITTXIdjEI1Yhdi8KLMAm3QUclydCEOJlggWykdw9Lv8q2JIRLZf
-         SBAw==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=9vJqD4dzKiefaURSHAzLn/KqkmwP/2hOLemxSE6nXqw=;
+        b=bmWur8VTc2YHg662mUHDsMzevR3CeXD6HsvfX937EYWhgLFsNaoO49Sgbncjt3Pncf
+         phDrEaNFFfzOxNq27QvLmHDhQ98GLvMlTsBU9K7klijeYSHL/+o+8IkV77L1y85GZqKK
+         hAhoNKByCVg75T5iIU7A63/pkzQoQnuditCXdnCD+HOMBcnourCRM33yqFmlAGhnhawS
+         3wbluXKXPnpikO2Of5DGfCsdqqA/Tfk7EJBZYyE0n5OFNK0UdEFFEaeNcMovUO1CUxAO
+         cT35Mjg4vbLB3EVs1LzKjvPeMKhv5xP4L2KwThfPiaIsEy90nzF3xLNFzis6XdqgJtXX
+         YUWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N5YRuTB5MYa3nbG8lCPemrZYrkhyGUXIRY7YTJn3UJI=;
-        b=jPvq4/UXo/OtGcv8TCbryusroWPYSi7XMfAHq+GcgK/loYmQeCOKgRXLqUfsAYaH+w
-         jteXc8ozJpnUqN46HBC/GXQKZ/qD4Ha4EsDNOVFGiI4iEHj9+k+S4sTsAcFKQJ0ACNZI
-         m55jm4qKKar3N1x3/gcyESgEukf47QScV5nquRjmOp1jjDqNhryoauuU6ap+qhC5miNs
-         3WuUfdcisHQb2LlKGKQ4BttE8vZO+cPbo+i3938Jsi3MbRaSuUlzixsarLfjfJ32NDjD
-         m8zI3RQWTpVdp1YNSGcoVowPmIMTSGABFpfuBWKQtOEv+7M1UAg4fTx5IU8Iz2BNNXpp
-         G2GQ==
-X-Gm-Message-State: AJIora8WUt5CWn3VX/821TbcISD7zaeL4mdDXihsYiG9jFWqMFGDMkcf
-        hGctMmPeEbox0NN2MgElBJUl7VQrY8j0FitbP38s6ZfywA4=
-X-Google-Smtp-Source: AGRyM1v6iC7cQ8Eaq8NUKqwSLK7fQXPg6pPLltynOQoFb7RtxNOP0mrSa5CNksyZpDPBfzZOCT0x3SN2QzrTkfcFUPc=
-X-Received: by 2002:a05:620a:2996:b0:6af:2c34:423f with SMTP id
- r22-20020a05620a299600b006af2c34423fmr12774984qkp.679.1657574006935; Mon, 11
- Jul 2022 14:13:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=9vJqD4dzKiefaURSHAzLn/KqkmwP/2hOLemxSE6nXqw=;
+        b=Qq5xq+lxoelQd7n/ZmM8tK+V58TsjYqJ9SPIbBC0xebOgfwlsrmr1xCIIwRlMp9VaR
+         7HiGMcJcxRgQd7lb0s5Wh7UoLXewY+bOuKKChRlZfkIGVJy+GkWyClYqgT+J1iIae70n
+         Drr1C20JGgA96qtiiUosjlz6+ySQCvZ5QpkJCP7HNpfWvoS8yBtv3QPHRhgciTx1Vwkz
+         PjYB3FQ3ygg1tdmLq/Me5YxjyBFXRA4NOwwls89Q6+axWxd5ZUUEBHFsPzVUxURKItyL
+         EO2eLIRg3keZDmQSEPAL125Qtzml5A8RoWXgW/hMwtnI31HCo4mPx8CxM9qAMESdWPhT
+         UFvg==
+X-Gm-Message-State: AJIora8iGCP7lcJuW6BQBTklUu8GfC3Q8y/M098mn2khzn4GNoPFSpML
+        SiQO2vZieTBiGcUFxJXPEwA=
+X-Google-Smtp-Source: AGRyM1vpuBDVRTyo9k7hWrbxwGW/aE8q3aNoICJ24NNjG0knFtRUwDF9bsIt3LHbqbm9ninaV4JGjA==
+X-Received: by 2002:a05:6402:1e8c:b0:43a:c57f:2cbb with SMTP id f12-20020a0564021e8c00b0043ac57f2cbbmr17183847edf.97.1657573999624;
+        Mon, 11 Jul 2022 14:13:19 -0700 (PDT)
+Received: from laptop ([77.222.6.10])
+        by smtp.gmail.com with ESMTPSA id az21-20020a170907905500b0072b02f99e55sm3039939ejc.197.2022.07.11.14.13.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 14:13:19 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 23:13:17 +0200
+From:   Fedor Tokarev <ftokarev@gmail.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ftokarev@gmail.com
+Subject: [PATCH] bpf: btf: Fix vsnprintf return value check
+Message-ID: <20220711211317.GA1143610@laptop>
 MIME-Version: 1.0
-References: <62c8d3e8.1c69fb81.26eee.0249@mx.google.com> <20220711192229.GA678639@bhelgaas>
-In-Reply-To: <20220711192229.GA678639@bhelgaas>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 11 Jul 2022 23:13:16 +0200
-Message-ID: <CAOX2RU6VYpsML62zCaEhdu5YPEqy8u2DVXB=5hpok5MHmXk3fw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: qcom: Enable clocks only after PARF_PHY setup for
- rev 2.1.0
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,61 +67,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 21:22, Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Robert since I resolved a conflict in his patch, -cc stable]
->
-> On Sat, Jul 09, 2022 at 03:03:34AM +0200, Christian Marangi wrote:
-> > On Fri, Jul 08, 2022 at 06:01:55PM -0500, Bjorn Helgaas wrote:
-> > > On Sat, Jul 09, 2022 at 12:27:43AM +0200, Christian Marangi wrote:
-> > > > We currently enable clocks BEFORE we write to PARF_PHY_CTRL reg to
-> > > > enable clocks and resets. This case the driver to never set to a ready
-> > > > state with the error 'Phy link never came up'.
-> > > >
-> > > > This in fact is caused by the phy clock getting enabled before setting
-> > > > the required bits in the PARF regs.
-> > > >
-> > > > A workaround for this was set but with this new discovery we can drop
-> > > > the workaround and use a proper solution to the problem by just enabling
-> > > > the clock only AFTER the PARF_PHY_CTRL bit is set.
-> > > >
-> > > > This correctly setup the pcie line and makes it usable even when a
-> > > > bootloader leave the pcie line to a underfined state.
-> > >
-> > > Is "pcie" here a signal name?  Maybe this refers to the "PCIe link"?
-> >
-> > no i was referring to PCIe link. Fell free to fix it if it's not a
-> > problem (or if you want i can just resend)
->
-> I fixed it.
->
-> > Think something went wrong in the rebase as the patch fixup is reverted.
-> >
-> > 11946f8b6e77a6794c111aafef7772e9967d9a54 is still wrong.
-> >
-> > clk_bulk_prepare_enable must be after
-> > writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
-> > so in the post init.
->
-> My error, sorry.  I updated it, current head:
->
->   1a88605a3efd ("dt-bindings: PCI: qcom: Fix description typo")
->
-> Robert, your patch that I updated is:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom-pending&id=cdb32283bcf202d0db512abb80794056d44e7e9f
->
-> It would still be nice to get an ack from one of the maintainers for
-> this.
+vsnprintf returns the number of characters which would have been written if
+enough space had been available, excluding the terminating null byte. Thus,
+the return value of 'len_left' means that the last character has been
+dropped.
 
-Hi,
-Thanks, everybody for working on sorting this out.
-I understand, hopefully, somebody can take a look at it.
+Signed-off-by: Fedor Tokarev <ftokarev@gmail.com>
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BTW, happy to see IPQ60xx support made it in as IPQ807x
-can use it for Gen3.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index eb12d4f705cc..a9c1c98017d4 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6519,7 +6519,7 @@ static void btf_snprintf_show(struct btf_show *show, const char *fmt,
+ 	if (len < 0) {
+ 		ssnprintf->len_left = 0;
+ 		ssnprintf->len = len;
+-	} else if (len > ssnprintf->len_left) {
++	} else if (len >= ssnprintf->len_left) {
+ 		/* no space, drive on to get length we would have written */
+ 		ssnprintf->len_left = 0;
+ 		ssnprintf->len += len;
+-- 
+2.25.1
 
-Regards,
-Robert
->
-> Bjorn

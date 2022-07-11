@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39CE56D4B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A977B56D4B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiGKGad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 02:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S229777AbiGKGar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 02:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGKGaU (ORCPT
+        with ESMTP id S229660AbiGKGaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 02:30:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB0AB491
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:30:19 -0700 (PDT)
+        Mon, 11 Jul 2022 02:30:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D46BE25
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:30:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A051611EE
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACECDC341C0;
-        Mon, 11 Jul 2022 06:30:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8015B80D9F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3C5C34115
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657521018;
-        bh=AnjlGY0oPQW4urpHEI87j2xxZ/49V3A13LD+O7W1b08=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fB388AwwBUbRbkWJ3U4q1nvfpiEYod1Or8DNJ02CumrWRIdhOXceUHgkCRYkaUL8V
-         pNOWFgEcuAE+bU3UFOEkbYMO9WxOkiGIR1aE41b7WpBW01HF+I653RqyqdtDjyNIkU
-         vzuQQiZBGIGe48a2CkVmkIVGlyeA7GNz3GAn1L/8Wm5meCpksJmffzpn6fRIvKOaC3
-         p2XzfuzeAurtsXBD8nxvAcAPUep/qgLMUm55khPA84YnVSMlPlOkY6asvjMF23ky0G
-         iKzxEauHozNGEQevsYt8tFB10D+x1JeOkgPKbOhiAVIVX60fBSJBoYAYFh8/y+YwqG
-         A3U4NjlRBI4WA==
+        s=k20201202; t=1657521019;
+        bh=83Z3dBr0EAEDGNw5mEkCIQFTIMC5O4T0Hz0XD7hPevE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=A+2dy7RQMzsdfJgDJxA4I8QZM7O+a1Tk/ky7YK3SiP39Z6mCEnFMYBDp0EQd/y/mF
+         Bt51y3iulX0/ImqOO8PpUPmYSFVtKfG6nlxGVqDPu6yHJ7lNgewz8GKRLPJfXXZ6Yf
+         KQWyplx+zs0Pee9YtcDox8MpdRtFY6DMyhlmVL6MCBsRRoCzOP08ckxGsoqoKaowxD
+         aWSARL+rLsodpMlYszx50c0VxVT53ruF4pp454n7hjMID7zXYwOZT/mUbJg3v/j9om
+         fXS+BkQfdTjgaFjyhPqopz9qZgnJshUtKHMmEtmHBI/6vAGenqZnaRcKTFuWgcT/gZ
+         19Ub/Mvur0faQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 08/12] habanalabs: expose only valid debugfs nodes
-Date:   Mon, 11 Jul 2022 09:29:59 +0300
-Message-Id: <20220711063003.3182795-8-ogabbay@kernel.org>
+Subject: [PATCH 09/12] habanalabs: fix update of is_in_soft_reset
+Date:   Mon, 11 Jul 2022 09:30:00 +0300
+Message-Id: <20220711063003.3182795-9-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711063003.3182795-1-ogabbay@kernel.org>
 References: <20220711063003.3182795-1-ogabbay@kernel.org>
@@ -53,213 +52,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+reset_info.is_in_soft_reset should be updated both before in_reset
+and inside the spin lock of the reset info structure.
 
-In case security is enabled on the device, some debugfs nodes will
-fail. Hence, we do not expose them.
+The reasons are:
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+- When we are inside soft reset, it implies we are in reset. Therefore,
+  if someone checks if we are in soft reset, he can deduce we are
+  in reset, while the opposite is not correct and might be misleading.
+
+- Both these flags are changed together so they must be changed
+  inside the reset info spinlock.
+
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../ABI/testing/debugfs-driver-habanalabs     | 24 +++--
- drivers/misc/habanalabs/common/debugfs.c      | 94 ++++++++++---------
- 2 files changed, 66 insertions(+), 52 deletions(-)
+ drivers/misc/habanalabs/common/device.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/debugfs-driver-habanalabs b/Documentation/ABI/testing/debugfs-driver-habanalabs
-index d9580f5d08a0..c915bf17b293 100644
---- a/Documentation/ABI/testing/debugfs-driver-habanalabs
-+++ b/Documentation/ABI/testing/debugfs-driver-habanalabs
-@@ -130,14 +130,16 @@ Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
- Description:    Sets I2C device address for I2C transaction that is generated
--                by the device's CPU
-+                by the device's CPU, Not available when device is loaded with secured
-+                firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_bus
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
- Description:    Sets I2C bus address for I2C transaction that is generated by
--                the device's CPU
-+                the device's CPU, Not available when device is loaded with secured
-+                firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_data
- Date:           Jan 2019
-@@ -145,39 +147,45 @@ KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
- Description:    Triggers an I2C transaction that is generated by the device's
-                 CPU. Writing to this file generates a write transaction while
--                reading from the file generates a read transaction
-+                reading from the file generates a read transaction, Not available
-+                when device is loaded with secured firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_len
- Date:           Dec 2021
- KernelVersion:  5.17
- Contact:        obitton@habana.ai
- Description:    Sets I2C length in bytes for I2C transaction that is generated by
--                the device's CPU
-+                the device's CPU, Not available when device is loaded with secured
-+                firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_reg
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
- Description:    Sets I2C register id for I2C transaction that is generated by
--                the device's CPU
-+                the device's CPU, Not available when device is loaded with secured
-+                firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/led0
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
--Description:    Sets the state of the first S/W led on the device
-+Description:    Sets the state of the first S/W led on the device, Not available
-+                when device is loaded with secured firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/led1
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
--Description:    Sets the state of the second S/W led on the device
-+Description:    Sets the state of the second S/W led on the device, Not available
-+                when device is loaded with secured firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/led2
- Date:           Jan 2019
- KernelVersion:  5.1
- Contact:        ogabbay@kernel.org
--Description:    Sets the state of the third S/W led on the device
-+Description:    Sets the state of the third S/W led on the device, Not available
-+                when device is loaded with secured firmware
- 
- What:           /sys/kernel/debug/habanalabs/hl<n>/memory_scrub
- Date:           May 2022
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
-index 3da39662abd9..64439f33a19b 100644
---- a/drivers/misc/habanalabs/common/debugfs.c
-+++ b/drivers/misc/habanalabs/common/debugfs.c
-@@ -1562,6 +1562,53 @@ static const struct file_operations hl_debugfs_fops = {
- 	.release = single_release,
- };
- 
-+static void add_secured_nodes(struct hl_dbg_device_entry *dev_entry)
-+{
-+	debugfs_create_u8("i2c_bus",
-+				0644,
-+				dev_entry->root,
-+				&dev_entry->i2c_bus);
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 4391eb22ddb8..5bc291c11e9b 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -1346,7 +1346,14 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 			spin_unlock(&hdev->reset_info.lock);
+ 			return 0;
+ 		}
 +
-+	debugfs_create_u8("i2c_addr",
-+				0644,
-+				dev_entry->root,
-+				&dev_entry->i2c_addr);
++		/* This still allows the completion of some KDMA ops
++		 * Update this before in_reset because is_in_soft_reset implies we are in reset
++		 */
++		hdev->reset_info.is_in_soft_reset = !hard_reset;
 +
-+	debugfs_create_u8("i2c_reg",
-+				0644,
-+				dev_entry->root,
-+				&dev_entry->i2c_reg);
+ 		hdev->reset_info.in_reset = 1;
 +
-+	debugfs_create_u8("i2c_len",
-+				0644,
-+				dev_entry->root,
-+				&dev_entry->i2c_len);
-+
-+	debugfs_create_file("i2c_data",
-+				0644,
-+				dev_entry->root,
-+				dev_entry,
-+				&hl_i2c_data_fops);
-+
-+	debugfs_create_file("led0",
-+				0200,
-+				dev_entry->root,
-+				dev_entry,
-+				&hl_led0_fops);
-+
-+	debugfs_create_file("led1",
-+				0200,
-+				dev_entry->root,
-+				dev_entry,
-+				&hl_led1_fops);
-+
-+	debugfs_create_file("led2",
-+				0200,
-+				dev_entry->root,
-+				dev_entry,
-+				&hl_led2_fops);
-+}
-+
- void hl_debugfs_add_device(struct hl_device *hdev)
- {
- 	struct hl_dbg_device_entry *dev_entry = &hdev->hl_debugfs;
-@@ -1632,50 +1679,6 @@ void hl_debugfs_add_device(struct hl_device *hdev)
- 				dev_entry,
- 				&hl_power_fops);
+ 		spin_unlock(&hdev->reset_info.lock);
  
--	debugfs_create_u8("i2c_bus",
--				0644,
--				dev_entry->root,
--				&dev_entry->i2c_bus);
+ 		if (delay_reset)
+@@ -1354,9 +1361,6 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 
+ 		handle_reset_trigger(hdev, flags);
+ 
+-		/* This still allows the completion of some KDMA ops */
+-		hdev->reset_info.is_in_soft_reset = !hard_reset;
 -
--	debugfs_create_u8("i2c_addr",
--				0644,
--				dev_entry->root,
--				&dev_entry->i2c_addr);
--
--	debugfs_create_u8("i2c_reg",
--				0644,
--				dev_entry->root,
--				&dev_entry->i2c_reg);
--
--	debugfs_create_u8("i2c_len",
--				0644,
--				dev_entry->root,
--				&dev_entry->i2c_len);
--
--	debugfs_create_file("i2c_data",
--				0644,
--				dev_entry->root,
--				dev_entry,
--				&hl_i2c_data_fops);
--
--	debugfs_create_file("led0",
--				0200,
--				dev_entry->root,
--				dev_entry,
--				&hl_led0_fops);
--
--	debugfs_create_file("led1",
--				0200,
--				dev_entry->root,
--				dev_entry,
--				&hl_led1_fops);
--
--	debugfs_create_file("led2",
--				0200,
--				dev_entry->root,
--				dev_entry,
--				&hl_led2_fops);
--
- 	debugfs_create_file("device",
- 				0200,
- 				dev_entry->root,
-@@ -1754,6 +1757,9 @@ void hl_debugfs_add_device(struct hl_device *hdev)
- 		entry->info_ent = &hl_debugfs_list[i];
- 		entry->dev_entry = dev_entry;
+ 		/* This also blocks future CS/VM/JOB completion operations */
+ 		hdev->disabled = true;
+ 
+@@ -1565,7 +1569,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
  	}
+ 
+ 	spin_lock(&hdev->reset_info.lock);
+-	hdev->reset_info.is_in_soft_reset = false;
++	hdev->reset_info.is_in_soft_reset = 0;
+ 
+ 	/* Schedule hard reset only if requested and if not already in hard reset.
+ 	 * We keep 'in_reset' enabled, so no other reset can go in during the hard
+@@ -1612,18 +1616,22 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 
+ out_err:
+ 	hdev->disabled = true;
+-	hdev->reset_info.is_in_soft_reset = false;
 +
-+	if (!hdev->asic_prop.fw_security_enabled)
-+		add_secured_nodes(dev_entry);
++	spin_lock(&hdev->reset_info.lock);
++	hdev->reset_info.is_in_soft_reset = 0;
+ 
+ 	if (hard_reset) {
+ 		dev_err(hdev->dev, "Failed to reset! Device is NOT usable\n");
+ 		hdev->reset_info.hard_reset_cnt++;
+ 	} else if (reset_upon_device_release) {
++		spin_unlock(&hdev->reset_info.lock);
+ 		dev_err(hdev->dev, "Failed to reset device after user release\n");
+ 		flags |= HL_DRV_RESET_HARD;
+ 		flags &= ~HL_DRV_RESET_DEV_RELEASE;
+ 		hard_reset = true;
+ 		goto again;
+ 	} else {
++		spin_unlock(&hdev->reset_info.lock);
+ 		dev_err(hdev->dev, "Failed to do soft-reset\n");
+ 		hdev->reset_info.soft_reset_cnt++;
+ 		flags |= HL_DRV_RESET_HARD;
+@@ -1633,6 +1641,8 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 
+ 	hdev->reset_info.in_reset = 0;
+ 
++	spin_unlock(&hdev->reset_info.lock);
++
+ 	return rc;
  }
  
- void hl_debugfs_remove_device(struct hl_device *hdev)
 -- 
 2.25.1
 

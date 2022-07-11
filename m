@@ -2,193 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF16F56FFBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EA456FFE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiGKLL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S230461AbiGKLOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiGKLLC (ORCPT
+        with ESMTP id S230223AbiGKLNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:11:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278A855B0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:18:10 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LhKXb0NPNzkX2s;
-        Mon, 11 Jul 2022 18:15:59 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Jul 2022 18:18:08 +0800
-Received: from huawei.com (10.175.101.6) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Jul
- 2022 18:18:07 +0800
-From:   ZhaoLong Wang <wangzhaolong1@huawei.com>
-To:     <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <wangzhaolong1@huawei.com>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH V2] ubifs: Fix the issue that UBIFS be read-only due to truncate in the encrypted directory.
-Date:   Mon, 11 Jul 2022 18:26:39 +0800
-Message-ID: <20220711102639.1331660-1-wangzhaolong1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 11 Jul 2022 07:13:34 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1721E1D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:28:20 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id 5so4050669plk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 03:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=z1md6F7/3AZxekQ1lEvwzSkQ1K5wYgKixBGsvUPHp7I=;
+        b=JIJ3XTnM68C0Y4Afd4noJBz2RXyhX8APgKIgZpFvZq5dKGHy7kI5TEIce0mmiqZ7wL
+         9NXIiMXXcljoGTJu1QCEAqnYFbodge9Vw00QeIyfJv0ZGzaH1udAqtDFqmadh67StWrr
+         UpIpq7nk8ZNSFP8rjowN3/+t8B6MjUtqvCvXrAsPsqKBwkngKKSG6nfMEJRi8FTV9Ayj
+         UBcJaGUHHlxcTEefo6kXrGQlLx3UPqjFDxN4qxqloSs2kSVBpXXFMnbzGe3VnRqEmqSX
+         2Z7Jnon7oLKmLMIHjmltAF48io6r0zulyUpHliBr9QBbcLjeotyOlYnDOV/FmFeCfDqE
+         xuJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=z1md6F7/3AZxekQ1lEvwzSkQ1K5wYgKixBGsvUPHp7I=;
+        b=MWctfShBjOBs0kr4JISMNb+01KGoLCO4FBRJA+dhHVpkRaG3q4wRsUhhgkXV7HuWPl
+         jwKiu16UBLkd/aYTD5t/smvTFByAJxNmmRyVp7GEj+T6y7VUrk3Yssbz+/k4G82bDPBE
+         5nL7keULTn9rSq5DfHQy3Z3iqP7lwgT+ctksMG1Jf8uKjwIfWRJExGBCgMtGAK0nlsdt
+         gnYScWTbWkern+2iYNPcYHpOA7f91URhZJtrngFzyE2xNkkHRiTCA560DMhRGHLPR1jw
+         qwQ/393GbY5whAWR+Ga5S3uZwPtvxVBoBdAVsEHnKqYl5gMYnELyek3IkCeqXmH/pwzT
+         u04g==
+X-Gm-Message-State: AJIora8OFBz8FuoqT3LlXPKaYoCJZ+IdSJCaiKCFq1tUjsSSuNm1Z2T+
+        grVCVMMdbgcUnRLDNSSpskOY2A==
+X-Google-Smtp-Source: AGRyM1sEAMwmFyOyStoAuw+D7NFPL4mHlfOyBs+gqABulq7Hn4Anot/yMvedG+G48L2gP94WqYLhKA==
+X-Received: by 2002:a17:90a:8413:b0:1ea:ebf4:7079 with SMTP id j19-20020a17090a841300b001eaebf47079mr17496893pjn.48.1657535299897;
+        Mon, 11 Jul 2022 03:28:19 -0700 (PDT)
+Received: from [10.85.115.102] ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id 6-20020a631446000000b00415fcde23a4sm1799850pgu.27.2022.07.11.03.28.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 03:28:19 -0700 (PDT)
+Message-ID: <e5eed9c9-afd4-e88c-dbee-7fef2e76043a@bytedance.com>
+Date:   Mon, 11 Jul 2022 18:28:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH] sched/topology: Optimized copy default
+ topology in sched_init_numa()
+To:     Valentin Schneider <vschneid@redhat.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220627105349.80715-1-jiahao.os@bytedance.com>
+ <xhsmh35fhgcww.mognet@vschneid.remote.csb>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <xhsmh35fhgcww.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ubifs_compress() function does not compress the data When the
-data length is short than 128 bytes or the compressed data length
-is not ideal.It cause that the compressed length of the truncated
-data in the truncate_data_node() function may be greater than the
-length of the raw data read from the flash.
 
-The above two lengths are transferred to the ubifs_encrypt()
-function as parameters. This may lead to assertion fails and then
-the file system becomes read-only.
 
-This patch use the actual length of the data in the memory as the
-input parameter for assert comparison, which avoids the problem.
+On 2022/7/4 Valentin Schneider wrote:
+> 
+> It's not a very hot path but I guess this lets you shave off a bit of boot
+> time... While you're at it, you could add an early
+Thanks for your time and suggestion.
+> 
+>    if (nr_node_ids == 1)
+>            return;
+> 
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216213
-Signed-off-by: ZhaoLong Wang <wangzhaolong1@huawei.com>
+This will cause the values of sched_domains_numa_levels and 
+sched_max_numa_distance to be different from before, and 
+sched_domains_numa_levels may cause the return value of 
+sched_numa_find_closest() to be different.
+I'm not sure if it will cause problems.
+
+> since !NUMA systems still go through sched_init_numa() if they have a
+> kernel with CONFIG_NUMA (which should be most of them nowdays) and IIRC
+> they end up with an unused NODE topology level.
+> 
+
+I'm confused why most !NUMA systems enable CONFIG_NUMA in the kernel?
+Maybe for scalability?
+
+
+> Regardless:
+> 
+> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+> 
+
+How about this?
+
+The size of struct sched_domain_topology_level is 64 bytes.
+For NUMA platforms, almost all are multi-core (enable CONFIG_SCHED_MC),
+That is to say, the default_topology array has at least 128 bytes that
+need to be copied in sched_init_numa(). For most x86 platforms,
+CONFIG_SCHED_SMT will be enabled, so more copies will be required.
+
+And memcpy() will be optimized under different architectures.
+Fortunately, for platforms with CONFIG_NUMA enabled,
+these optimizations are likely to be used.
+So, let's use memcpy() to copy default topology in sched_init_numa().
+
+Tests are done in an Intel Xeon(R) Platinum 8260 CPU@2.40GHz machine
+with 2 NUMA nodes each of which has 24 cores with SMT2 enabled, so 96
+CPUs in total.
+
+Use RDTSC to count time-consuming, and based on 5.19-rc4.
+
+Enable CONFIG_SCHED_SMT && CONFIG_SCHED_CLUSTER && CONFIG_SCHED_MC,
+So the default_topology array has 256 bytes that need to be copied
+in sched_init_numa().
+                      5.19-rc4   5.19-rc4 with patch
+average tsc ticks    516.57      85.33   （-83.48%*）
+
+Enable CONFIG_SCHED_MC, So the default_topology array has
+128 bytes that need to be copied in sched_init_numa().
+                      5.19-rc4   5.19-rc4 with patch
+average tsc ticks    65.71       55.00   （-16.30%*）
+
+since !NUMA systems still go through sched_init_numa() if they have a
+kernel with CONFIG_NUMA (which should be most of them nowdays) and we
+can skip copying and memory allocation of useless default topology.
+
+Suggested-by: Valentin Schneider <vschneid@redhat.com>
+Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 ---
- V1->V2
-   Change:
-	1. An extra space is deleted.
-	2. The code text aligns like the previous code
-	3. dn_size variable in ubifs_jnl_truncate() declare on previous line.
- fs/ubifs/crypto.c  | 11 +++++++++++
- fs/ubifs/journal.c | 28 +++++++++++++++++-----------
- 2 files changed, 28 insertions(+), 11 deletions(-)
+  kernel/sched/topology.c | 7 +++++--
+  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ubifs/crypto.c b/fs/ubifs/crypto.c
-index c57b46a352d8..3125e76376ee 100644
---- a/fs/ubifs/crypto.c
-+++ b/fs/ubifs/crypto.c
-@@ -24,6 +24,17 @@ static bool ubifs_crypt_empty_dir(struct inode *inode)
- 	return ubifs_check_dir_empty(inode) == 0;
- }
- 
-+/**
-+ * ubifs_encrypt - Encrypt data.
-+ * @inode: inode which refers to the data node
-+ * @dn: data node to encrypt
-+ * @in_len: length of data to be compressed
-+ * @out_len: allocated memory size for the data area of @dn
-+ * @block: logical block number of the block
-+ *
-+ * This function encrypt a possibly-compressed data in the data node.
-+ * The encrypted data length will store in @out_len.
-+ */
- int ubifs_encrypt(const struct inode *inode, struct ubifs_data_node *dn,
- 		  unsigned int in_len, unsigned int *out_len, int block)
- {
-diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
-index 75dab0ae3939..2b1d7c4297bf 100644
---- a/fs/ubifs/journal.c
-+++ b/fs/ubifs/journal.c
-@@ -1472,23 +1472,25 @@ int ubifs_jnl_rename(struct ubifs_info *c, const struct inode *old_dir,
-  * @block: data block number
-  * @dn: data node to re-compress
-  * @new_len: new length
-+ * @dn_size: size of the data node @dn in memory
-  *
-  * This function is used when an inode is truncated and the last data node of
-  * the inode has to be re-compressed/encrypted and re-written.
-  */
- static int truncate_data_node(const struct ubifs_info *c, const struct inode *inode,
- 			      unsigned int block, struct ubifs_data_node *dn,
--			      int *new_len)
-+			      int *new_len, int dn_size)
- {
- 	void *buf;
--	int err, dlen, compr_type, out_len, old_dlen;
-+	int err, dlen, compr_type, out_len, data_size;
- 
- 	out_len = le32_to_cpu(dn->size);
- 	buf = kmalloc_array(out_len, WORST_COMPR_FACTOR, GFP_NOFS);
- 	if (!buf)
- 		return -ENOMEM;
- 
--	dlen = old_dlen = le32_to_cpu(dn->ch.len) - UBIFS_DATA_NODE_SZ;
-+	dlen = le32_to_cpu(dn->ch.len) - UBIFS_DATA_NODE_SZ;
-+	data_size = dn_size - UBIFS_DATA_NODE_SZ;
- 	compr_type = le16_to_cpu(dn->compr_type);
- 
- 	if (IS_ENCRYPTED(inode)) {
-@@ -1508,11 +1510,11 @@ static int truncate_data_node(const struct ubifs_info *c, const struct inode *in
- 	}
- 
- 	if (IS_ENCRYPTED(inode)) {
--		err = ubifs_encrypt(inode, dn, out_len, &old_dlen, block);
-+		err = ubifs_encrypt(inode, dn, out_len, &data_size, block);
- 		if (err)
- 			goto out;
- 
--		out_len = old_dlen;
-+		out_len = data_size;
- 	} else {
- 		dn->compr_size = 0;
- 	}
-@@ -1550,6 +1552,6 @@ int ubifs_jnl_truncate(struct ubifs_info *c, const struct inode *inode,
- 	struct ubifs_trun_node *trun;
- 	struct ubifs_data_node *dn;
--	int err, dlen, len, lnum, offs, bit, sz, sync = IS_SYNC(inode);
-+	int err, dlen, len, lnum, offs, bit, sz, dn_size, sync = IS_SYNC(inode);
- 	struct ubifs_inode *ui = ubifs_inode(inode);
- 	ino_t inum = inode->i_ino;
- 	unsigned int blk;
-@@ -1562,10 +1565,13 @@ int ubifs_jnl_truncate(struct ubifs_info *c, const struct inode *inode,
- 	ubifs_assert(c, S_ISREG(inode->i_mode));
- 	ubifs_assert(c, mutex_is_locked(&ui->ui_mutex));
- 
--	sz = UBIFS_TRUN_NODE_SZ + UBIFS_INO_NODE_SZ +
--	     UBIFS_MAX_DATA_NODE_SZ * WORST_COMPR_FACTOR;
-+	dn_size = COMPRESSED_DATA_NODE_BUF_SZ;
- 
--	sz += ubifs_auth_node_sz(c);
-+	if (IS_ENCRYPTED(inode))
-+		dn_size += UBIFS_CIPHER_BLOCK_SIZE;
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 05b6c2ad90b9..c439e58f22b9 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1907,6 +1907,9 @@ void sched_init_numa(int offline_node)
+  	}
+  	rcu_assign_pointer(sched_domains_numa_masks, masks);
+
++	if (nr_node_ids == 1)
++		goto skip;
 +
-+	sz = UBIFS_TRUN_NODE_SZ + UBIFS_INO_NODE_SZ +
-+	     dn_size + ubifs_auth_node_sz(c);
- 
- 	ino = kmalloc(sz, GFP_NOFS);
- 	if (!ino)
-@@ -1596,15 +1602,15 @@ int ubifs_jnl_truncate(struct ubifs_info *c, const struct inode *inode,
- 			if (dn_len <= 0 || dn_len > UBIFS_BLOCK_SIZE) {
- 				ubifs_err(c, "bad data node (block %u, inode %lu)",
- 					  blk, inode->i_ino);
--				ubifs_dump_node(c, dn, sz - UBIFS_INO_NODE_SZ -
--						UBIFS_TRUN_NODE_SZ);
-+				ubifs_dump_node(c, dn, dn_size);
- 				goto out_free;
- 			}
- 
- 			if (dn_len <= dlen)
- 				dlen = 0; /* Nothing to do */
- 			else {
--				err = truncate_data_node(c, inode, blk, dn, &dlen);
-+				err = truncate_data_node(c, inode, blk, dn,
-+						&dlen, dn_size);
- 				if (err)
- 					goto out_free;
- 			}
--- 
-2.31.1
+  	/* Compute default topology size */
+  	for (i = 0; sched_domain_topology[i].mask; i++);
 
+@@ -1918,8 +1921,7 @@ void sched_init_numa(int offline_node)
+  	/*
+  	 * Copy the default topology bits..
+  	 */
+-	for (i = 0; sched_domain_topology[i].mask; i++)
+-		tl[i] = sched_domain_topology[i];
++	memcpy(tl, sched_domain_topology, sizeof(struct 
+sched_domain_topology_level) * i);
+
+  	/*
+  	 * Add the NUMA identity distance, aka single NODE.
+@@ -1946,6 +1948,7 @@ void sched_init_numa(int offline_node)
+  	sched_domain_topology_saved = sched_domain_topology;
+  	sched_domain_topology = tl;
+
++skip:
+  	sched_domains_numa_levels = nr_levels;
+  	WRITE_ONCE(sched_max_numa_distance, 
+sched_domains_numa_distance[nr_levels - 1]);
+
+
+thanks,
+Hao

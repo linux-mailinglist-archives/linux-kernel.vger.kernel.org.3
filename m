@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09A656FA12
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD47256FAF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiGKJMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S232149AbiGKJYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiGKJLw (ORCPT
+        with ESMTP id S231967AbiGKJXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:11:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB532497C;
-        Mon, 11 Jul 2022 02:09:13 -0700 (PDT)
+        Mon, 11 Jul 2022 05:23:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCF5BE31;
+        Mon, 11 Jul 2022 02:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EFFA6118F;
-        Mon, 11 Jul 2022 09:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694CBC34115;
-        Mon, 11 Jul 2022 09:09:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D10516121F;
+        Mon, 11 Jul 2022 09:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCCDAC34115;
+        Mon, 11 Jul 2022 09:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530552;
-        bh=HnhxTr+4nZF2l5NxyJbulsJQA3Ua+EnyXX1DfFFt/Cc=;
+        s=korg; t=1657530831;
+        bh=SKoJobLuXWL5FRX92QKZJyelch0U0Zzj/8c/a3u1sTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0en6wQcy8qcUqyB4J7KKIYOoXDedpejTRUDO6T19iwG1i/GTD1i5i/3xZpnNRo0bM
-         +AxZCwpMnDTcr5JYV/oVb7CuyovcsoTXOMsPVCjRJ+B0tC+/vnHsTX6rCS4KbfiLS1
-         K2rHc+Pfvz+1Fvdjte5IwklXEPu5Zg6cdDbueScc=
+        b=jlv2r9V2rOhT/aDKaPBfi2n954tgaMP3JsIPHmDj93nqbVR70S5AY5nxsjyeyxNXc
+         3Es7DoPlhhEWAo+C7jaiXdI0kbqMBmPLIPgMrJSf6OV0gMF7HBpycagEjZfr9LSv5c
+         LICjO3B3srhXTAxlQkNuM2kCwPDZOZxB2av/Ll+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        stable <stable@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 4.19 26/31] misc: rtsx_usb: set return value in rsp_buf alloc err path
-Date:   Mon, 11 Jul 2022 11:07:05 +0200
-Message-Id: <20220711090538.619148342@linuxfoundation.org>
+        Alison Schofield <alison.schofield@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH 5.10 18/55] memregion: Fix memregion_free() fallback definition
+Date:   Mon, 11 Jul 2022 11:07:06 +0200
+Message-Id: <20220711090542.303296560@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-References: <20220711090537.841305347@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Dan Williams <dan.j.williams@intel.com>
 
-commit 2cd37c2e72449a7add6da1183d20a6247d6db111 upstream.
+commit f50974eee5c4a5de1e4f1a3d873099f170df25f8 upstream.
 
-Set return value in rsp_buf alloc error path before going to
-error handling.
+In the CONFIG_MEMREGION=n case, memregion_free() is meant to be a static
+inline. 0day reports:
 
-drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!ucr->rsp_buf)
-               ^~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
-           if (!ucr->rsp_buf)
-           ^~~~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
+    In file included from drivers/cxl/core/port.c:4:
+    include/linux/memregion.h:19:6: warning: no previous prototype for
+    function 'memregion_free' [-Wmissing-prototypes]
 
-Fixes: 3776c7855985 ("misc: rtsx_usb: use separate command and response buffers")
+Mark memregion_free() static.
+
+Fixes: 33dd70752cd7 ("lib: Uplevel the pmem "region" ida to a global allocator")
 Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220701165352.15687-1-skhan@linuxfoundation.org
+Reviewed-by: Alison Schofield <alison.schofield@intel.com>
+Link: https://lore.kernel.org/r/165601455171.4042645.3350844271068713515.stgit@dwillia2-xfh
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/cardreader/rtsx_usb.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/memregion.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/misc/cardreader/rtsx_usb.c
-+++ b/drivers/misc/cardreader/rtsx_usb.c
-@@ -647,8 +647,10 @@ static int rtsx_usb_probe(struct usb_int
- 		return -ENOMEM;
- 
- 	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
--	if (!ucr->rsp_buf)
-+	if (!ucr->rsp_buf) {
-+		ret = -ENOMEM;
- 		goto out_free_cmd_buf;
-+	}
- 
- 	usb_set_intfdata(intf, ucr);
- 
+--- a/include/linux/memregion.h
++++ b/include/linux/memregion.h
+@@ -16,7 +16,7 @@ static inline int memregion_alloc(gfp_t
+ {
+ 	return -ENOMEM;
+ }
+-void memregion_free(int id)
++static inline void memregion_free(int id)
+ {
+ }
+ #endif
 
 

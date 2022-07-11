@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A607D57060D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D731570610
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiGKOpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S231665AbiGKOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiGKOpo (ORCPT
+        with ESMTP id S231649AbiGKOqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:45:44 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6816716D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:45:42 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c13so4616737pla.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1ouPjR2MW5IomOgKJq3rJwpFMtsFaXhBKbb1mHLZqVs=;
-        b=NzaLPQ7vgolBPdOkJfYU5ihgMNwnn5JSE6xX+iCqV+UNlxAyGTzpH8R4G6VaVKTQWF
-         L/C2AU32HyRVADW7Ood2lTnEfG+h+5QIvUtQ0roXS9VR5+3zOzmHq3h4tH+xkKmiclrb
-         w3OS9w8yCNf7cbK1k0wUFCDtXLOvxiAJNj1v7/1DSPCP2OxbulUFe8s0XAdOgdLvrAy6
-         Erun3qpwbFvwRJKC+fT8rRu/+IuMG7h1D2AGDpiidTQtNXqmgVQ7Vy/dSixk0mp8UC/G
-         WrDgBjnZMve7RFkdfHCupJeskQ3QaDo/SIeZPV6FMY3noQTFgYQfeQDUCcCEvh9vpOMT
-         mH3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1ouPjR2MW5IomOgKJq3rJwpFMtsFaXhBKbb1mHLZqVs=;
-        b=BwvkJxwyG1IGZAY3lRJQynhr1DYhCjjqPatJ1TGVpgR8kG3Kg1c8yJcx96BfaQ+8EM
-         EGtJMCrWCT/uuHa8236YgK6fXqYYVOpnhuTVpeo6h04inblr8Iy2pbWEawbMVoQVjzjo
-         U9hgDTSr7MBB5DYM9lS07YmeCtMRc/pkTEDeTQw7LiKw+TvOJtP7Ofri7lCevHvSVJbz
-         G6nWIhipmi/VjMoz0Tx6w3L5mvky2eSRXv02Xh+n9Mnatn4rze/LxnBTtPbNngLX5byc
-         3HMWTCLFk1SsYlcVEx0pRDZaCClA903g8ZrJDGcvZ+7x+qMnxGcB51brGZFyNjy0BhSO
-         GoGA==
-X-Gm-Message-State: AJIora8lkJBK9eWUqvKkfU9aWIq0oWexIZlvfkv+H5EgKYWplLFwhMb7
-        VXTQO6FR0X6tuTtgKiZ/L9v/
-X-Google-Smtp-Source: AGRyM1t3CVZLftaeGEhg9VMHvlaTJcnQ6oF1rpH/+TY+iGjmlqCePoB3jiEHKNQnWWFLhYe7T7bv0A==
-X-Received: by 2002:a17:902:ee42:b0:16b:e518:d894 with SMTP id 2-20020a170902ee4200b0016be518d894mr18963519plo.5.1657550741628;
-        Mon, 11 Jul 2022 07:45:41 -0700 (PDT)
-Received: from thinkpad ([117.207.27.92])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902ce8900b0016bec529f77sm4822415plg.272.2022.07.11.07.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 07:45:41 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 20:15:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220711144533.GA3830@thinkpad>
-References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
- <20220610092133.uhsu5gphhvjhe2jm@mobilestation>
+        Mon, 11 Jul 2022 10:46:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985CA6D2D6;
+        Mon, 11 Jul 2022 07:46:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3716061560;
+        Mon, 11 Jul 2022 14:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D877C34115;
+        Mon, 11 Jul 2022 14:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657550802;
+        bh=jrUv4z5LMs11ZLIe2A8vKlBsKHYnzkjcZtWqM7wVg7M=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mEfZ16gIbHEF9wNz15BuSauTpVCSKDFCyTnWC+SDg/4Q3vquAJmDavd/v+d6m0CWT
+         XNlrbUgIOBF+iv/1biciF34zoj+BRzmSLSyZFYGy/zYzsxismdByGzkwQzQcvRySZt
+         OTMx9wLy7FtqH1cF+3XAzOxF9E+qI8QwJs27mCP2PBbf65w3bio9XoCAnLwBm9sOqp
+         hXjvDRwuBdGUwCG7PQkW5ds0tqE3zy1aswjRNDlg9hxg2hQyAjpmhfiV4azHKfC6KZ
+         htPbi1Dnm+0xPWH2gvPW4UoJ33sjM/Ck4LSL1uDbJIfnYF3YgJF0+3qGhtmuhGYubI
+         1VuBTvUVwxY1Q==
+Message-ID: <cc71fab34310e40df01022bfce78e5ac501fb53d.camel@kernel.org>
+Subject: Re: [PATCH v1] NFSD: Decode NFSv4 birth time attribute
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Mon, 11 Jul 2022 10:46:40 -0400
+In-Reply-To: <26FF2E45-1463-4923-8B17-CEB4441D774A@oracle.com>
+References: <165747876458.1259.8334435718280903102.stgit@bazille.1015granger.net>
+         <531053e36e291fc5d99bb766e76d52b0333ecc94.camel@kernel.org>
+         <26FF2E45-1463-4923-8B17-CEB4441D774A@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610092133.uhsu5gphhvjhe2jm@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,170 +58,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:21:33PM +0300, Serge Semin wrote:
-> On Fri, Jun 10, 2022 at 12:14:35PM +0300, Serge Semin wrote:
-> > This is a final patchset in the series created in the framework of
-> > my Baikal-T1 PCIe/eDMA-related work:
-> > 
-> > [1: In-progress v4] PCI: dwc: Various fixes and cleanups
-> > Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> > [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> > Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> > [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> > [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> > Link: ---you are looking at it---
-> > 
-> > Note it is very recommended to merge the patchsets in the same order as
-> > they are listed in the set above in order to have them applied smoothly.
-> > Nothing prevents them from being reviewed synchronously though.
-> > 
-> > Please note originally this series was self content, but due to Frank
-> > being a bit faster in his work submission I had to rebase my patchset onto
-> > his one. So now this patchset turns to be dependent on the Frank' work:
-> > 
-> > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
-> > 
-> > So please merge Frank' series first before applying this one.
-> > 
-> > Here is a short summary regarding this patchset. The series starts with
-> > fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
-> > initializes the LL/DT base addresses for the platforms with not matching
-> > CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> > method to get a correct base address. After that you can find a series of
-> > the interleaved xfers fixes. It turned out the interleaved transfers
-> > implementation didn't work quite correctly from the very beginning for
-> > instance missing src/dst addresses initialization, etc. In the framework
-> > of the next two patches we suggest to add a new platform-specific
-> > callback - pci_address() and use it to convert the CPU address to the PCIe
-> > space address. It is at least required for the DW eDMA remote End-point
-> > setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> > of the DW eDMA local RP/EP setup the conversion will be done automatically
-> > by the outbound iATU (if no DMA-bypass flag is specified for the
-> > corresponding iATU window). Then we introduce a set of the patches to make
-> > the DebugFS part of the code supporting the multi-eDMA controllers
-> > platforms. It starts with several cleanup patches and is closed joining
-> > the Read/Write channels into a single DMA-device as they originally should
-> > have been. After that you can find the patches with adding the non-atomic
-> > io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> > chip IDs with the device name. In addition to that in order to have the
-> > eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> > dma-ranges-based memory ranges mapping since in case of the root port DT
-> > node it's applicable for the peripheral PCIe devices only. Finally at the
-> > series closure we introduce a generic DW eDMA controller support being
-> > available in the DW PCIe Root Port/Endpoint driver.
-> > 
-> > Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> > Changelog v2:
-> > - Drop the patches:
-> >   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
-> >   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
-> >   since they are going to be merged in in the framework of the
-> >   Frank's patchset.
-> > - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
-> >   failure."
-> > - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
-> >   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
-> > - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
-> >   'dent'." (@Manivannan)
-> > - Slightly extend the eDMA name array size. (@Manivannan)
-> > - Change the specific DMA mapping comment a bit to being
-> >   clearer. (@Manivannan)
-> > - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
-> >   method."
-> > - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
-> >   device. That happens if the driver is disabled. (@Manivannan)
-> > - Add "dma" registers resource mapping procedure. (@Manivannan)
-> > - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
-> > - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
-> > - Remove eDMA in the dw_pcie_ep_exit() method.
-> > - Move the dw_pcie_edma_detect() method execution to the tail of the
-> >   dw_pcie_ep_init() function.
-> > 
-> > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
-> > Changelog v3:
-> 
-> > - Conditionally set dchan->dev->device.dma_coherent field since it can
-> >   be missing on some platforms. (@Manivannan)
-> > - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
-> >   method". A similar modification has been done in another patchset.
-> > - Add more comprehensive and less regression prune eDMA block detection
-> >   procedure.
-> > - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
-> >   resource mapping". It will be separately reviewed.
-> > - Remove Manivannan tb tag from the modified patches.
-> 
-> @Mani, several patches have been changed. Could you have a look at the
-> series one more time?
-> 
+On Mon, 2022-07-11 at 14:29 +0000, Chuck Lever III wrote:
+>=20
+> > On Jul 11, 2022, at 7:36 AM, Jeff Layton <jlayton@kernel.org> wrote:
+> >=20
+> > On Sun, 2022-07-10 at 14:46 -0400, Chuck Lever wrote:
+> > > NFSD has advertised support for the NFSv4 time_create attribute
+> > > since commit e377a3e698fb ("nfsd: Add support for the birth time
+> > > attribute").
+> > >=20
+> > > Igor Mammedov reports that Mac OS clients attempt to set the NFSv4
+> > > birth time attribute via OPEN(CREATE) and SETATTR if the server
+> > > indicates that it supports it, but since the above commit was
+> > > merged, those attempts now fail.
+> > >=20
+> > > Table 5 in RFC 8881 lists the time_create attribute as one that can
+> > > be both set and retrieved, but the above commit did not add server
+> > > support for clients to provide a time_create attribute. IMO that's
+> > > a bug in our implementation of the NFSv4 protocol, which this commit
+> > > addresses.
+> > >=20
+> > > Whether NFSD silently ignores the new birth time or actually sets it
+> > > is another matter. I haven't found another filesystem service in the
+> > > Linux kernel that enables users or clients to modify a file's birth
+> > > time attribute.
+> > >=20
+> > > This commit reflects my (perhaps incorrect) understanding of whether
+> > > Linux users can set a file's birth time. NFSD will now recognize a
+> > > time_create attribute but it ignores its value. It clears the
+> > > time_create bit in the returned attribute bitmask to indicate that
+> > > the value was not used.
+> > >=20
+> > > Reported-by: Igor Mammedov <imammedo@redhat.com>
+> > > Fixes: e377a3e698fb ("nfsd: Add support for the birth time attribute"=
+)
+> > > Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+> > > ---
+> > > fs/nfsd/nfs4xdr.c |    9 +++++++++
+> > > fs/nfsd/nfsd.h    |    3 ++-
+> > > 2 files changed, 11 insertions(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> > > index 61b2aae81abb..2acea7792bb2 100644
+> > > --- a/fs/nfsd/nfs4xdr.c
+> > > +++ b/fs/nfsd/nfs4xdr.c
+> > > @@ -470,6 +470,15 @@ nfsd4_decode_fattr4(struct nfsd4_compoundargs *a=
+rgp, u32 *bmval, u32 bmlen,
+> > > 			return nfserr_bad_xdr;
+> > > 		}
+> > > 	}
+> > > +	if (bmval[1] & FATTR4_WORD1_TIME_CREATE) {
+> > > +		struct timespec64 ts;
+> > > +
+> > > +		/* No Linux filesystem supports setting this attribute. */
+> > > +		bmval[1] &=3D ~FATTR4_WORD1_TIME_CREATE;
+> > > +		status =3D nfsd4_decode_nfstime4(argp, &ts);
+> > > +		if (status)
+> > > +			return status;
+> > > +	}
+> > > 	if (bmval[1] & FATTR4_WORD1_TIME_MODIFY_SET) {
+> > > 		u32 set_it;
+> > >=20
+> > > diff --git a/fs/nfsd/nfsd.h b/fs/nfsd/nfsd.h
+> > > index 847b482155ae..9a8b09afc173 100644
+> > > --- a/fs/nfsd/nfsd.h
+> > > +++ b/fs/nfsd/nfsd.h
+> > > @@ -465,7 +465,8 @@ static inline bool nfsd_attrs_supported(u32 minor=
+version, const u32 *bmval)
+> > > 	(FATTR4_WORD0_SIZE | FATTR4_WORD0_ACL)
+> > > #define NFSD_WRITEABLE_ATTRS_WORD1 \
+> > > 	(FATTR4_WORD1_MODE | FATTR4_WORD1_OWNER | FATTR4_WORD1_OWNER_GROUP \
+> > > -	| FATTR4_WORD1_TIME_ACCESS_SET | FATTR4_WORD1_TIME_MODIFY_SET)
+> > > +	| FATTR4_WORD1_TIME_ACCESS_SET | FATTR4_WORD1_TIME_CREATE \
+> > > +	| FATTR4_WORD1_TIME_MODIFY_SET)
+> > > #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
+> > > #define MAYBE_FATTR4_WORD2_SECURITY_LABEL \
+> > > 	FATTR4_WORD2_SECURITY_LABEL
+> > >=20
+> > >=20
+> >=20
+> > RFC5661 lists time_create as being writeable, so silently ignoring it
+> > seems wrong.
+>=20
+> Open for debate. The protocol does allow a SETATTR. But the
+> specification doesn't have much else to say about the semantics
+> of time_create; contrast that with mtime or ctime.
+>=20
+>=20
+> > It seems like we ought to have nfsd attempt to set the
+> > btime and then just return an error if it doesn't work...
+>=20
+> The usual way the NFSv4 protocol handles this is that the
+> attribute's bit in the returned bitmask is cleared, so that
+> the rest of the COMPOUND is able to succeed. There's no
+> NFS4ERR status code in this case.
+>=20
+>=20
+> > but, I don't
+> > see a mechanism in the kernel for setting it. ATTR_BTIME doesn't exist,
+> > for instance.
+>=20
+> That's what I observed: there doesn't seem to be a mechanism in
+> Linux for setting it. Perhaps I should have copied fsdevel.
+>=20
+>=20
+> > Still, since we can't set it, returning an error there seems more
+> > correct. NFS4ERR_INVAL is probably the wrong one -- maybe
+> > NFS4ERR_NOTSUPP ? It's a bit weird since we do support querying it, but
+> > not setting it. Maybe we need to propose a new NFS4ERR_ATTR_RO ?
+>=20
+> As I said above, the protocol's way of dealing with it is to
+> clear the attribute's bit in the returned attribute bitmask.
+> "You asked me to set this attribute, but I didn't". Clients,
+> IMO, will be more prepared to deal with that than having
+> all of their OPENs fail with NFS4ERR_NOTSUPP.
+>=20
+> IMO explicitly setting a file's birth time doesn't seem quite
+> kosher, and it's not a POSIX attribute anyway, so we don't
+> have a standard to cleave to here (at least one that I'm aware
+> of). I'm fine with the patch as it stands, but I'm open to
+> hear more opinions about this.
+>=20
+>=20
 
-Reviewed all patches in this series. I believe this will still work on my
-hardware once I test it. But even if it doesn't work, we can fix it in
-5.20-rc's as it supposed to be. So definitely not a show stopper.
+Ok, now that I looked over the SETATTR part of the spec, I agree. Just
+clearing the bit in the "attrsset" mask should do the right thing, and
+that's probably better than returning an error.
 
-Vinod: Could you please merge this one for 5.20?
-
-Thanks,
-Mani
-
-> -Sergey
-> 
-> > - Rebase onto the kernel v5.18.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> > Cc: linux-pci@vger.kernel.org
-> > Cc: dmaengine@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > 
-> > Serge Semin (24):
-> >   dmaengine: Fix dma_slave_config.dst_addr description
-> >   dmaengine: dw-edma: Release requested IRQs on failure
-> >   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
-> >   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
-> >     xfers
-> >   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
-> >   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
-> >   dmaengine: dw-edma: Add CPU to PCIe bus address translation
-> >   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
-> >     glue-driver
-> >   dmaengine: dw-edma: Drop chancnt initialization
-> >   dmaengine: dw-edma: Fix DebugFS reg entry type
-> >   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
-> >   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
-> >   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
-> >   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
-> >   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
-> >   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
-> >   dmaengine: dw-edma: Join Write/Read channels into a single device
-> >   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
-> >   dmaengine: dw-edma: Use non-atomic io-64 methods
-> >   dmaengine: dw-edma: Drop DT-region allocation
-> >   dmaengine: dw-edma: Replace chip ID number with device name
-> >   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
-> >   dmaengine: dw-edma: Skip cleanup procedure if no private data found
-> >   PCI: dwc: Add DW eDMA engine support
-> > 
-> >  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
-> >  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
-> >  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
-> >  drivers/dma/dw-edma/dw-edma-v0-core.c         |  76 ++--
-> >  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
-> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
-> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
-> >  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
-> >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
-> >  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
-> >  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
-> >  include/linux/dma/edma.h                      |  18 +-
-> >  include/linux/dmaengine.h                     |   2 +-
-> >  13 files changed, 589 insertions(+), 366 deletions(-)
-> > 
-> > -- 
-> > 2.35.1
-> > 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

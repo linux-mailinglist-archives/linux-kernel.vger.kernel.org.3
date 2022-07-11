@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7F656D8DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5923D56D8E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiGKIwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S230471AbiGKIws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiGKIvp (ORCPT
+        with ESMTP id S230337AbiGKIw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:51:45 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A10823153;
-        Mon, 11 Jul 2022 01:51:07 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3137316bb69so41757687b3.10;
-        Mon, 11 Jul 2022 01:51:07 -0700 (PDT)
+        Mon, 11 Jul 2022 04:52:28 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948BB2250E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:51:45 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id g4so7631215ybg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pHQn1JVWbDSH3JZfxKdnwJpphKglDSbLfd4kF7J211M=;
-        b=qQJAowdJUsDa2J/lzEGAR/ykKnf3eA0zoA0/0qowgm67UYLYdXwxh8IFZJ1KMmj93U
-         SzH5E1gqWdjqNMSwDvbk8NCp2upljSBSOCgoqqqzv8DBfNKgULsZQxDj7FCZ+6XXc/1z
-         Jy386ma2+EmqkuPDrw1OIMbOcvyP7+seNvKnAmdtIwxiPY1BRdUWwoJ+pvwY8qGR0lP+
-         Cj9tBFCC9eRojzNyz85rvdh6ZxRchzlOqznRq+5UCAKcdRLL8snYrsMvCGtnOuVn6LHs
-         Ui883yKHSIpGAp/QXA/+RNzMUVspGIT14fOv5dh0inoV1CVR3RYhLZ/Jt0FYFqEqSg1X
-         WiPQ==
+         :cc;
+        bh=oCCoYwA6Xo79naahfzsaqUYKymVR7vZ6x0VBH0fAwSY=;
+        b=KgEpwlYUjIxPqeS0n1sMwZBjNPdUGNT7O1KFsaFMxULZXFtpTO8+uI9BZEYUHrRhui
+         E8xp9H6xkVf85Kf+anAroUSLxAlLsdeaVP2oe4C+cKgVUzFx6MCdlLLx7bOR7BNP56r7
+         6d/FTvKCyYdFWnq1/TuI1gsqcnK8xJnCad9oEVp29nzWHRCXGkkLTSPVPt/MS17Rabch
+         Z9wmqlW1fjc6VOog/E8ERKDe85VDa7RWtdBRtKIH5ROz2fSdJ+qFoVAI+mBOMsqqgtg6
+         3miyB9HB0oSt8v7XQU9TwU/2IPoP/O42NWPtN5K/wHbkaRMbQghXlLtD+PEysiATUfJt
+         aziQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pHQn1JVWbDSH3JZfxKdnwJpphKglDSbLfd4kF7J211M=;
-        b=YZD8+xn3MacsYZGa4bs4ABAms8XHCQKY/1lijAAjcvQnh9ypHNC4kUetFfPww8AWZH
-         DGKeFfRNFKiG3g+n8OA8wJ7A+EHbCdR4N2DAGEMyPb+B968HEV6z4u3Xk3eAswDer9sm
-         ciRhLfNzUeq1O2HP4P8vaEvbqN/ur+7ez9diK6bzHVpmDMym5z7sYyfF6ei/47eHHBmd
-         /iBDnm6huthVGPSLVgb4AQ297LzQKsB7mwbuMM54SqA8V2iFsiUv69NToEVJjCOzVUq5
-         5tgcpBzZKCqpEnCELHbsWH69N92kM/4H467kUzvxCMlu+GfRfWDznoWIeg5hCP4sPKau
-         gQng==
-X-Gm-Message-State: AJIora+DMn4hGMtd3y7XYoXl0nxpPZ1N45Yf5qErGNOFukEs97BeyNQI
-        bcL4SKSNiO3Rf1JuySZkxglhN4OIKkp6Ne/Sb2E=
-X-Google-Smtp-Source: AGRyM1uJ/p5FyiLt1lkFAzNbU5AnfYyf2RWk0tpW8iuxeoiFT3pt+a4iDnWPy6GED9umPbisV3/kx6H3szHL2bJ0xOo=
-X-Received: by 2002:a81:108f:0:b0:31c:d7ae:9ff1 with SMTP id
- 137-20020a81108f000000b0031cd7ae9ff1mr17717422ywq.18.1657529466146; Mon, 11
- Jul 2022 01:51:06 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=oCCoYwA6Xo79naahfzsaqUYKymVR7vZ6x0VBH0fAwSY=;
+        b=aSAgOB07uvQcOGc8qcx/+zWt3hCfirxanLS+H5hBFbPFzPbI2rvXbA1I473biK27yM
+         iFBCQB6A4g8tFWV/BEWPONAo7iifyMbnP1XBrUFxmpyjAjajPWzSWasm49iLkPsR0Y6l
+         9aUK59HvR9Y7KX6UzYyI6ht0nIGq0dludV15rMzToC6UKt3wsfebNG3MJ/17dwJwneYI
+         N/ujsW804wfvzQAdl5uAgl8seAdRb0X3RAoHp03Qeam5v5Un4ydfhsFxdfn5uSnefRBf
+         +KCf9ol79BOOp/KXsgzcF288+O30cKp/4P7xUdpiuqemNBZUNSB8yWrxMRb/R2kNj09V
+         XFJw==
+X-Gm-Message-State: AJIora+i3iqOH+FhaRmO3XUBnRvLtw/R0K1wBPqXgtS2pmt4Umjl0AoU
+        AHeEfHgsY2npBJzmj7UjcPmp5PUbvw7NDvkI+S3mdg==
+X-Google-Smtp-Source: AGRyM1uKbHI7q/R1gcPw/USyJqnRHCFtiAlgKUxoTaKXXMmcR+q5YmNfBJ71fCB3vqnDWcXf+Df9409dWttXpSjB83I=
+X-Received: by 2002:a25:d07:0:b0:66e:6c0e:a2d1 with SMTP id
+ 7-20020a250d07000000b0066e6c0ea2d1mr14553827ybn.369.1657529504905; Mon, 11
+ Jul 2022 01:51:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <HK0PR04MB33636680A6DC47211560BB43FA879@HK0PR04MB3363.apcprd04.prod.outlook.com>
- <20220711024718.1700067-1-PaddyKP_Yao@asus.com>
-In-Reply-To: <20220711024718.1700067-1-PaddyKP_Yao@asus.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Jul 2022 10:50:29 +0200
-Message-ID: <CAHp75Vfnt0DX9wnx0pKhit4JWCjBST+4caTjY6x6VYNdGjqn9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] platform/x86: asus-wmi: Add mic-mute LED classdev support
-To:     PaddyKP_Yao@asus.com
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        acpi4asus-user <acpi4asus-user@lists.sourceforge.net>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        PaddyKP_Yao <ispaddy@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Luke Jones <luke@ljones.dev>,
-        Mark Gross <mgross@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>
+References: <20220708105235.3983266-1-andre.przywara@arm.com>
+In-Reply-To: <20220708105235.3983266-1-andre.przywara@arm.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 11 Jul 2022 10:51:33 +0200
+Message-ID: <CACRpkdYPgFeVJurZyPnWQg2jQGvBSybrNxWDXBF4W32p_HD1_Q@mail.gmail.com>
+Subject: Re: [PATCH v13 0/7] arm64: sunxi: Allwinner H616 SoC DT support
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBKdWwgMTEsIDIwMjIgYXQgNDo0NyBBTSA8UGFkZHlLUF9ZYW9AYXN1cy5jb20+IHdy
-b3RlOg0KPg0KPiBGcm9tOiBQYWRkeUtQX1lhbyA8UGFkZHlLUF9ZYW9AYXN1cy5jb20+DQoNCkJl
-c2lkZXMgd2UgZ290IHR3byBlbWFpbHMgYWdhaW4gb2YgdGhlIHNhbWUgdmVyc2lvbi4uLg0KDQo+
-ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09DQo+IFRoaXMgZW1haWwgYW5kIGFueSBhdHRhY2htZW50cyB0byBp
-dCBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBhbmQgYXJlIGludGVuZGVkIHNvbGVs
-eSBmb3IgdGhlIHVzZSBvZiB0aGUgaW5kaXZpZHVhbCB0byB3aG9tIGl0IGlzIGFkZHJlc3NlZC5J
-ZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50IG9yIHJlY2VpdmUgaXQgYWNjaWRl
-bnRhbGx5LCBwbGVhc2UgaW1tZWRpYXRlbHkgbm90aWZ5IHRoZSBzZW5kZXIgYnkgZS1tYWlsIGFu
-ZCBkZWxldGUgdGhlIG1lc3NhZ2UgYW5kIGFueSBhdHRhY2htZW50cyBmcm9tIHlvdXIgY29tcHV0
-ZXIgc3lzdGVtLCBhbmQgZGVzdHJveSBhbGwgaGFyZCBjb3BpZXMuIElmIGFueSwgcGxlYXNlIGJl
-IGFkdmlzZWQgdGhhdCBhbnkgdW5hdXRob3JpemVkIGRpc2Nsb3N1cmUsIGNvcHlpbmcsIGRpc3Ry
-aWJ1dGlvbiBvciBhbnkgYWN0aW9uIHRha2VuIG9yIG9taXR0ZWQgaW4gcmVsaWFuY2Ugb24gdGhp
-cywgaXMgaWxsZWdhbCBhbmQgcHJvaGliaXRlZC4gRnVydGhlcm1vcmUsIGFueSB2aWV3cyBvciBv
-cGluaW9ucyBleHByZXNzZWQgYXJlIHNvbGVseSB0aG9zZSBvZiB0aGUgYXV0aG9yIGFuZCBkbyBu
-b3QgcmVwcmVzZW50IHRob3NlIG9mIEFTVVNUZUsuIFRoYW5rIHlvdSBmb3IgeW91ciBjb29wZXJh
-dGlvbi4NCj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KLi4udGhpcyBpcyBwcm9ibGVtYXRpYyBhbmQg
-Y2FuJ3QgYmUgdXNlZCBpbiBvcGVuIHNvdXJjZSBwcm9qZWN0cy4gQXNrDQp5b3VyIGxlZ2FsIHRl
-YW0gaG93IHRvIGRlYWwgd2l0aCBpdC4NCg0KLS0gDQpXaXRoIEJlc3QgUmVnYXJkcywNCkFuZHkg
-U2hldmNoZW5rbw0K
+On Fri, Jul 8, 2022 at 12:52 PM Andre Przywara <andre.przywara@arm.com> wrote:
+
+> only some minor changes this time in the .dtsi, addressing the comments,
+> many thanks to Jernej and Samuel for that! Also adding the R-b tags.
+
+> Andre Przywara (7):
+>   dt-bindings: pinctrl: sunxi: Make interrupts optional
+>   dt-bindings: pinctrl: sunxi: allow vcc-pi-supply
+
+These two (patches 2 & 4) applied to the pinctrl tree, I suppose it
+is what I'm supposed to do?
+
+If they end up also applied to the SoC tree it's not the end of the
+world.
+
+Yours,
+Linus Walleij

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EBC56FB99
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DF056FA65
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbiGKJcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S231571AbiGKJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiGKJcN (ORCPT
+        with ESMTP id S230497AbiGKJQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:32:13 -0400
+        Mon, 11 Jul 2022 05:16:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D013C4330F;
-        Mon, 11 Jul 2022 02:17:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE50B402D3;
+        Mon, 11 Jul 2022 02:11:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB32D61243;
-        Mon, 11 Jul 2022 09:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3689C341C0;
-        Mon, 11 Jul 2022 09:17:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B565B611E4;
+        Mon, 11 Jul 2022 09:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C19C341C8;
+        Mon, 11 Jul 2022 09:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531044;
-        bh=sHcfpShKWSDRKQYb8GObnyX1seYyzwG9Pz2xF486Y9M=;
+        s=korg; t=1657530661;
+        bh=NbA28TAuTrYYXJwoVDSHTqYmT/Qw5wS2/4IKKLTHgKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q3OXiC661ocFEmfXf4AXNmQUHiaaq5j5N+YfRtYZWsF0qYphlBZidyApwbkLMXtRW
-         23fZCl26JefuXfsoBGCZwfn6nFUlTEFO69T8pvu/F3VKBth3yUp8mY6xdTSh1PL4oy
-         pkTClaSO116nQJH/oezYuUaYSLEzwhU2KEc4v54U=
+        b=tM0QHUO9JcwG5tph6jByehwLFBPWc+0sn/9sw760NelnSEwjC7jtpYlCEZDSCdznD
+         64skqtpIb7al/AZoD2t87T9YUeyhetol1v40OrLdm3idbZDfsDCFBATSR+2MJIwZ6i
+         DqelGZnXx9Tfe0r4BwMwY9QhZrjud+qfn5d+BH84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 074/112] ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
-Date:   Mon, 11 Jul 2022 11:07:14 +0200
-Message-Id: <20220711090551.672969978@linuxfoundation.org>
+        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.4 33/38] dt-bindings: dma: allwinner,sun50i-a64-dma: Fix min/max typo
+Date:   Mon, 11 Jul 2022 11:07:15 +0200
+Message-Id: <20220711090539.702563238@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
+References: <20220711090538.722676354@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Samuel Holland <samuel@sholland.org>
 
-[ Upstream commit 416ce193d73a734ded6d09fe141017b38af1c567 ]
+commit 607a48c78e6b427b0b684d24e61c19e846ad65d6 upstream.
 
-The eeprom memories on the board are microchip 24aa025e48, which are 2 Kbits
-and are compatible with at24c02 not at24c32.
+The conditional block for variants with a second clock should have set
+minItems, not maxItems, which was already 2. Since clock-names requires
+two items, this typo should not have caused any problems.
 
-Fixes: 68a95ef72cefe ("ARM: dts: at91: sama5d2-icp: add SAMA5D2-ICP")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220607090455.80433-2-eugen.hristev@microchip.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: edd14218bd66 ("dt-bindings: dmaengine: Convert Allwinner A31 and A64 DMA to a schema")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220702031903.21703-1-samuel@sholland.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/at91-sama5d2_icp.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-index 806eb1d911d7..164201a8fbf2 100644
---- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
-+++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-@@ -329,21 +329,21 @@
- 	status = "okay";
+--- a/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/allwinner,sun50i-a64-dma.yaml
+@@ -58,7 +58,7 @@ if:
+ then:
+   properties:
+     clocks:
+-      maxItems: 2
++      minItems: 2
  
- 	eeprom@50 {
--		compatible = "atmel,24c32";
-+		compatible = "atmel,24c02";
- 		reg = <0x50>;
- 		pagesize = <16>;
- 		status = "okay";
- 	};
- 
- 	eeprom@52 {
--		compatible = "atmel,24c32";
-+		compatible = "atmel,24c02";
- 		reg = <0x52>;
- 		pagesize = <16>;
- 		status = "disabled";
- 	};
- 
- 	eeprom@53 {
--		compatible = "atmel,24c32";
-+		compatible = "atmel,24c02";
- 		reg = <0x53>;
- 		pagesize = <16>;
- 		status = "disabled";
--- 
-2.35.1
-
+   required:
+     - clock-names
 
 

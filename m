@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F80570547
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC6857054C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiGKOSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S230085AbiGKOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiGKOSp (ORCPT
+        with ESMTP id S229747AbiGKOTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:18:45 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD40CAE67
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:18:42 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id w2so6377193ljj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:18:42 -0700 (PDT)
+        Mon, 11 Jul 2022 10:19:24 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E09313BB
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:19:23 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id w17so4828498ljh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=b7SdKMYg4SycbRSH1mMmTVYESP88FDzn0X5ZB9E+lyY=;
-        b=kVbTSc+CYmzNm6oox7k33Ru8QpP56OKO/76x+uEbG+KMsOVUxMZTdqnnkavvwQvnbg
-         wSXQ9O22gYvP/TGdptZFJ8WlXHmgKOyLaj5MWc0NZCgHBLxDMHkPpH2PfD/w6o+JERtb
-         Y+39KDrNkqZZ/3y5Rxg8FbfsVjSUldB5qf3k1awmm4yjmJHViFndEA8D5oqhdp1GoaFq
-         yPH5qedGvjQ3wIs4eE/N51uoyqbRsdPjG5I1e4PCWQXS6GAC1tNuF2akyOT5A3WYB3H1
-         6lNuczaq+KYoYkmMtaG49tX+N3AwjxG9CCCYpBl1ERwYzCgnKGGdBz92DTeT3gtjaD5b
-         Dc7w==
+        bh=2eZo4Uf6DLNwIqIGEbJqR98FHQ75J7mZnbMsiIwBVKI=;
+        b=vujer/oRPRtI1ITzp7sb4qrUT0cs7mbUQjUa2ra+SuUd2wHg2VERiBFINrc7WNUuQV
+         KtfF02S1QYcC5W0ss7ATKEEoDs07h4GacynEfju7LtaM+sB5pkPB9I93JryFKB1QhDSz
+         FsshgD2tJJIIpthobBWkQxaGmPQBF69sx6h0z6596x/XvtdlObx8rtMH3bm66cKHjj8o
+         i92TOVUwdFVy8EVa6ewL0B9ctibdzxBcGLMzS2LRuZABMYy23H+t8Fj1FZnx7K9/BdZu
+         3GSSOpXXl6Vw5P2FJLCEIqXCl5yLZ3MLWSgOfHYhTGUNQzI/Nb4/twogEiFwojnLJ7Io
+         e2Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=b7SdKMYg4SycbRSH1mMmTVYESP88FDzn0X5ZB9E+lyY=;
-        b=QbK9GYDn/qabyJlamt5Htue6Qc0cXSgrhwi5s0+42a0T13fHAgRMeyxAeo83cTPBL0
-         PkJRZau8XglEOXAUncEoDe0baXANX7LkxN8bV2bmiVUBpQGGzAtanbQ0yS/+1RlDVn/r
-         U0mWgYinywXJBIJVHC3ksHYHSnmZBmL0swl7A6JpEB9uJ/wdrcP45wzebjzjIeYB9fqo
-         KLIiBD3I+nXIVueVjr8pdjjyQotwal7pz+TORQwf4r2jJrX9Hjbcaty9QHe3ZFiHkudc
-         PRmh3yFutxyPcx5J5go8WfeQQQ2e1VwkBwmHCaYicbbSHO2UJg6nDQT55xlNmzlPmOw8
-         Qnaw==
-X-Gm-Message-State: AJIora9J09KdWMj+cMaS5aUD8mNRI3BMCjdrGBRCncOmkfA73Ue26cN0
-        wL0zCkmNI29qn3qbwYhf7g76/Q==
-X-Google-Smtp-Source: AGRyM1t+rcO7zLukhnTeAtr9wIv+TuBRN1t7cwF6Uf/ZBblf78k0lNSJjmUIwhyMfpXMCyvCTeD9Ig==
-X-Received: by 2002:a2e:240e:0:b0:25d:71af:f9b5 with SMTP id k14-20020a2e240e000000b0025d71aff9b5mr1582330ljk.253.1657549120884;
-        Mon, 11 Jul 2022 07:18:40 -0700 (PDT)
+        bh=2eZo4Uf6DLNwIqIGEbJqR98FHQ75J7mZnbMsiIwBVKI=;
+        b=joKpoQaBbxXBGQ8/nYsJ93VTB9NwHTpkBRMy97EJBTy0w43ZSbYbrOZzJaAX8QVgty
+         X4cFsC+dUerPVtp86pp2QK333te+/eTqOPhdJohPhENm64XNbw2DmgsqFX+fkezpZ89j
+         oaVaK2CwsHtUZjDFzd6DZULTre6VUiMGalIHsRpFIciBvpncr7BolUIdBVz3D25cxJgb
+         apa6a/7PFv1Lr4Vt9cDQpHIpLaRzkZS6iXt9I16bamCQ7ALPuEKcGHTLmy0d4ldNlW1w
+         sGiZA9ZngXnueaRZHR28+pRrWQzT2Gdjbdi25Ps7tM+XaA80rzglI8fLefLJZvFZJYjl
+         RZIw==
+X-Gm-Message-State: AJIora/ySn1s2pj0xUXJPv71HL1ma1ztUxPoNk2Sextr8AwV5pX+gemN
+        Jpe1Huhlc+DiDNJ/pmDDJIWbIA==
+X-Google-Smtp-Source: AGRyM1sUAjzTkZR8LmknXSW2Y4xr55HJXTle46S+m4AlsuiejFOrYPId1uZ2SDxwXBlZq8YNe76JCA==
+X-Received: by 2002:a05:651c:1246:b0:25a:9a7c:680c with SMTP id h6-20020a05651c124600b0025a9a7c680cmr10637075ljh.79.1657549161556;
+        Mon, 11 Jul 2022 07:19:21 -0700 (PDT)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05651203e100b0047255d21124sm1573863lfq.83.2022.07.11.07.18.39
+        by smtp.gmail.com with ESMTPSA id p13-20020a2e804d000000b0025a885a135csm1780371ljg.119.2022.07.11.07.19.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 07:18:40 -0700 (PDT)
-Message-ID: <ef5d82ec-22ab-298f-740d-e86cb7fe3046@linaro.org>
-Date:   Mon, 11 Jul 2022 17:18:39 +0300
+        Mon, 11 Jul 2022 07:19:21 -0700 (PDT)
+Message-ID: <28b560ab-7323-3c0d-b07c-1741874b6d00@linaro.org>
+Date:   Mon, 11 Jul 2022 17:19:20 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 05/10] drm/msm/dp: use the eDP bridge ops to validate
- eDP modes
+Subject: Re: [PATCH v6 09/10] drm/msm/disp/dpu: add PSR support for eDP
+ interface in dpu driver
 Content-Language: en-GB
 To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -67,14 +67,14 @@ Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
         quic_aravindh@quicinc.com, quic_abhinavk@quicinc.com,
         quic_sbillaka@quicinc.com
 References: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
- <1657544224-10680-6-git-send-email-quic_vpolimer@quicinc.com>
+ <1657544224-10680-10-git-send-email-quic_vpolimer@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1657544224-10680-6-git-send-email-quic_vpolimer@quicinc.com>
+In-Reply-To: <1657544224-10680-10-git-send-email-quic_vpolimer@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,93 +82,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 15:56, Vinod Polimera wrote:
-> The eDP and DP interfaces shared the bridge operations and
-> the eDP specific changes were implemented under is_edp check.
-> To add psr support for eDP, we started using a new set of eDP
-> bridge ops. We are moving the eDP specific code in the
-> dp_bridge_mode_valid function to a new eDP function,
-> edp_bridge_mode_valid under the eDP bridge ops.
+On 11/07/2022 15:57, Vinod Polimera wrote:
+> Enable PSR on eDP interface using drm self-refresh librabry.
+> This patch uses a trigger from self-refresh library to enter/exit
+> into PSR, when there are no updates from framework.
 > 
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
 > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > ---
->   drivers/gpu/drm/msm/dp/dp_display.c |  8 --------
->   drivers/gpu/drm/msm/dp/dp_drm.c     | 34 +++++++++++++++++++++++++++++++++-
->   2 files changed, 33 insertions(+), 9 deletions(-)
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 13 ++++++++++++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
+>   3 files changed, 27 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 64a6254..2b3ec6b 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -986,14 +986,6 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
->   		return -EINVAL;
->   	}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index f91e3d1..eb3915a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -18,6 +18,7 @@
+>   #include <drm/drm_probe_helper.h>
+>   #include <drm/drm_rect.h>
+>   #include <drm/drm_vblank.h>
+> +#include <drm/drm_self_refresh_helper.h>
 >   
-> -	/*
-> -	 * The eDP controller currently does not have a reliable way of
-> -	 * enabling panel power to read sink capabilities. So, we rely
-> -	 * on the panel driver to populate only supported modes for now.
-> -	 */
-> -	if (dp->is_edp)
-> -		return MODE_OK;
-> -
->   	if (mode->clock > DP_MAX_PIXEL_CLK_KHZ)
->   		return MODE_BAD;
+>   #include "dpu_kms.h"
+>   #include "dpu_hw_lm.h"
+> @@ -961,6 +962,9 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
 >   
-> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> index 8ca0b37..2bf8c8d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> @@ -181,12 +181,44 @@ static void edp_bridge_atomic_post_disable(struct drm_bridge *drm_bridge,
->   	dp_bridge_atomic_post_disable(drm_bridge, old_bridge_state);
->   }
+>   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
 >   
-> +/**
-> + * edp_bridge_mode_valid - callback to determine if specified mode is valid
-> + * @bridge: Pointer to drm bridge structure
-> + * @info: display info
-> + * @mode: Pointer to drm mode structure
-> + * Returns: Validity status for specified mode
-> + */
-> +static enum drm_mode_status edp_bridge_mode_valid(struct drm_bridge *bridge,
-> +					  const struct drm_display_info *info,
-> +					  const struct drm_display_mode *mode)
-> +{
-> +	struct msm_dp *dp;
-> +	int mode_pclk_khz = mode->clock;
+> +	if (old_crtc_state->self_refresh_active)
+> +		return;
 > +
-> +	dp = to_dp_bridge(bridge)->dp_display;
-> +
-> +	if (!dp || !mode_pclk_khz || !dp->connector) {
-> +		DRM_ERROR("invalid params\n");
-> +		return -EINVAL;
+>   	/* Disable/save vblank irq handling */
+>   	drm_crtc_vblank_off(crtc);
+>   
+> @@ -1521,7 +1525,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>   {
+>   	struct drm_crtc *crtc = NULL;
+>   	struct dpu_crtc *dpu_crtc = NULL;
+> -	int i;
+> +	int i, ret;
+>   
+>   	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
+>   	if (!dpu_crtc)
+> @@ -1558,6 +1562,13 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>   	/* initialize event handling */
+>   	spin_lock_init(&dpu_crtc->event_lock);
+>   
+> +	ret = drm_self_refresh_helper_init(crtc);
+> +	if (ret) {
+> +		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
+> +			crtc->name, ret);
+> +		return ERR_PTR(ret);
 > +	}
 > +
-> +	if (mode->clock > DP_MAX_PIXEL_CLK_KHZ)
-> +		return MODE_CLOCK_HIGH;
+>   	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
+>   	return crtc;
+>   }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 3156efb..5dfb56a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/kthread.h>
+>   #include <linux/seq_file.h>
+>   
+> +#include <drm/drm_atomic.h>
+>   #include <drm/drm_crtc.h>
+>   #include <drm/drm_file.h>
+>   #include <drm/drm_probe_helper.h>
+> @@ -1170,11 +1171,24 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
+>   					struct drm_atomic_state *state)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> +	struct drm_crtc *crtc;
+> +	struct drm_crtc_state *old_state = NULL;
+>   	int i = 0;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   	DPU_DEBUG_ENC(dpu_enc, "\n");
+>   
+> +	crtc = drm_atomic_get_old_crtc_for_encoder(state, drm_enc);
+> +	if (crtc)
+> +		old_state = drm_atomic_get_old_crtc_state(state, crtc);
 > +
 > +	/*
-> +	 * The eDP controller currently does not have a reliable way of
-> +	 * enabling panel power to read sink capabilities. So, we rely
-> +	 * on the panel driver to populate only supported modes for now.
+> +	 * The encoder is already disabled if self refresh mode was set earlier,
+> +	 * in the old_state for the corresponding crtc.
 > +	 */
-> +	return MODE_OK;
-> +}
+> +	if (old_state && old_state->self_refresh_active)
+> +		return;
 > +
->   static const struct drm_bridge_funcs edp_bridge_ops = {
->   	.atomic_enable = edp_bridge_atomic_enable,
->   	.atomic_disable = edp_bridge_atomic_disable,
->   	.atomic_post_disable = edp_bridge_atomic_post_disable,
->   	.mode_set = dp_bridge_mode_set,
-> -	.mode_valid = dp_bridge_mode_valid,
-> +	.mode_valid = edp_bridge_mode_valid,
->   	.atomic_reset = drm_atomic_helper_bridge_reset,
->   	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
->   	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+>   	mutex_lock(&dpu_enc->enc_lock);
+>   	dpu_enc->enabled = false;
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index bce4764..cc0a674 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -507,7 +507,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
+>   		return;
+>   	}
+>   
+> -	if (!crtc->state->active) {
+> +	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
+>   		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
+>   		return;
+>   	}
 
 
 -- 

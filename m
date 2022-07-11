@@ -2,134 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F7457077E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34043570781
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiGKPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S230072AbiGKPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGKPt1 (ORCPT
+        with ESMTP id S229490AbiGKPuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:49:27 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90041.outbound.protection.outlook.com [40.107.9.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F43237F7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 08:49:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C5OT9pYboUiaJ/lhdX4xMhYqkhjL4C91+iwcoJd9IfKWlI4qKRevSeY2UPzBParbToNTOlPkzUoYr20vsl5ZJfXtiuu/LkxHqPN882OLgtlxPkCT5s3Jq8Somc1+A+Z2Vp4I4K4Vwmcf11gP6r875Qs+HbZubrnjsETBc+BCGCfPKxpYDVXkRTAKMDAacSFGYA7b0TG0xN7qitPNM45TyKMYllQzseRG/dOL6ZBsFLEx6IkjzWXtAo5ulWl5E7ptJHgqRbIrfxE5mdp9uPlHGlrqFM+n6XXgNsOxb2+C1TzQUBUOjoeYgjgAjAjheRW634O8kliu4Xl3+SOPt5/0gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Nj5L+CUUBkE3S/wBm39IyWJ6btRtv1nNljoL/TfrJA=;
- b=fLmT5RU4CrS/WbIvw3Mc4f5ZCEBo0rjN16Slim2jGGog+/2JyZcqCgqmKbCyC/vPbFmYIP1/01POYlXb793ZdT0qIeWfvZY1AY7KOJlt4OuZo40Vmy1cZ3/cwWONjLAZ3K9i/r66I+9NMSchgFtwut17+yIZyRMDLKs4QeNbx3AitRYOqUhMrXX5I7q/S0ctEtSciOYdBT5cmTInJD/f605WGfJrI1/PdR3Rs6JtutlMzxTT8oD7XLrOtHyqgH9WYPwqr82m5yjMUIa0/qsnk8tXJEhFVcAh1FbPS/beDov7LbfyatQ7gTiq+JtVL+o4Pjs443r6KBhjoalCb6A+3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Nj5L+CUUBkE3S/wBm39IyWJ6btRtv1nNljoL/TfrJA=;
- b=0zFOUetR36QdijLshjNJhCLaCbUainhzxHYQ0HgIJlwCtcFrZzjUlhqSf6R5QHtJQQ7njB0sAMuOh6ok9LU1gVnivpHkY+sn1hEDZT1Dd8uo2bxdJJrmqRzNUAzSoGnRtGoJND/RVofji6oxI/16+zPB90Pjf38NmEy+8pZzLC1uKW2qOWGqzC1fHla6GkYP2XITKed3cyS+wOS7vdHWiAd5oWm5E0WKLSdMcwcYBm8rcqWc1zpNtQa+NHlE1ajNpJwZnG1G/N7wwtQidU/HbNoYlpe4EQ9VN7mU5T7M6zScYnffPu5MRT1hvVJeDvOP8rycKF4im6NTcq7jbH2H2A==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2101.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:16::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Mon, 11 Jul
- 2022 15:49:22 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624%6]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 15:49:22 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 4/5] powerpc/44x: Fix build failure with GCC 12
- (unrecognized opcode: `wrteei')
-Thread-Topic: [PATCH v1 4/5] powerpc/44x: Fix build failure with GCC 12
- (unrecognized opcode: `wrteei')
-Thread-Index: AQHYlTFZM8ItLf3W0UGDH9TWcWhutq15RNAAgAAMX4A=
-Date:   Mon, 11 Jul 2022 15:49:22 +0000
-Message-ID: <2970b49d-25cd-3c14-ed75-7558ac82df68@csgroup.eu>
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu>
- <b0d982e223314ed82ab959f5d4ad2c4c00bedb99.1657549153.git.christophe.leroy@csgroup.eu>
- <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-In-Reply-To: <CAK8P3a33jf5CUpyzWmRHpoUDMWB7TqSw5afUW=rcmMVSK8BvRA@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ade1fc53-7a3d-4cf4-b107-08da6354ec65
-x-ms-traffictypediagnostic: MRZP264MB2101:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o/1n7aS3VZYskhSIinjE3UsSxoLxV6tf1sWP5IVOXlJX/+RkzfD1pDX57aptg4ZGjaCC6/5SarECnA49R9uUGEWU+xJhpitNU4Jl16SQ6wgdzcVdt0BTUElSwV+3cAROdCY9J41b1xQaA0KdcXImErTQ+hkvbKFsexLFAtFEKF33TACTdd+W39ULK0e5S41q7HhUKtCNwsVBtyEsfXUMncoKtbLgXzs+23b5+SCqmqE1Bwj36NR7u4XO/42o+Oq/a8V5n18Q18vG9Ahywfa9mEeCkD6GB6bFqnDxSYbjrfhBT/4fvHBq7fxkGDZHqzA8o6TBv69o5r5ziupes7O/kdU1FE3/15pS6vcdXqDuMrVwjgz/va4SjxKVKT3Xqs0toP+fdbefq0K7O40o8z9B/IBrkvLTGLuh3SNYX9mxsQt3qzGbtiHBDOwVbP5yk13DiIzZ9G66OO7DH1K2ss/fHHCscoA326Koh8fHdO3d4jY3VCo2O+nK1wclSV7LTTkEpb3VOwd3wM6RIVtod/aJkdMey2MFOe5W2MK7vlaAuuOfFP/CPxrGmqamGfY8RRIrpLT7Hi0He1DqwgcMkS9QAVyyMkyqbgNHLU8xCpqFmPN6OZ98+mzs8hc6n98SxjKZHko+lGNKI1jlnwdm8/j3FQjkagLcVRW/srEsAVcRlqB9u/f5DgcnNX9UUrgS9AnPsFfb5DxwPv1zQWSoeI+Fsm3YAQy1Dhx0QUg5NS5lWo/FbUnzqmCvWuoEdzzr41Y7aYfApubRFK73U04WtQG6vpdUnTdz+3uDU+sKEmimPbBJJTyqg2r4wXesxwvFh2ej0LTKlRc3I4u6zhwUWnGpt8t7POYu//1/PR4dM3pQ/D6Feo0tFnaxaq14xWjE3vpJxaV30MV+xEiQWp8XtVSlYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(346002)(136003)(39850400004)(38100700002)(186003)(76116006)(5660300002)(122000001)(110136005)(316002)(4326008)(71200400001)(66476007)(66446008)(31686004)(54906003)(66556008)(36756003)(91956017)(66946007)(8676002)(64756008)(86362001)(2906002)(6506007)(44832011)(6486002)(478600001)(31696002)(8936002)(6512007)(41300700001)(2616005)(38070700005)(53546011)(26005)(81973001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TVBoNFJmYnByajhmUG9DTHQwN0lwcjlTRDlFSE95dXM4cmxKajIxT2hBKzB2?=
- =?utf-8?B?V2dqbEZMdWp0YW5TRkRyUnhYVUJqcEYwZGQyVHo5dDBUdWJqQldMd3kvbHd4?=
- =?utf-8?B?Ti9hdmJCSzBvYnJjL0JhYmVsQjNqTFdMaGxQV0dPNUljand6aHl0SGltblN1?=
- =?utf-8?B?Wkp6amNRa3pIYWR4clVBSjlYRmg0d0ZlVDI3Sk9zVVhOQmdmYWgrY055RWpR?=
- =?utf-8?B?SkV0aW9oUWt1aU1IVHd0N1NjMW5EL2IrSUIwWEM2eVJncksyaEN4czVHZE9P?=
- =?utf-8?B?b1JjK1hESFNrZGZHVkpWV3gwZ0FEbDBQRzJ2MUpmQVljN0hLR2VPZE84M3lv?=
- =?utf-8?B?WGhGNE1ERTFNQ253YkhVNlRFbUc4NmN5T2FhN0FrU1BYNzBVOU9NWndHNzVl?=
- =?utf-8?B?Q25JZEpTN0Iva3BqQ21LMlVSQUk3N3pqS2lpOFlRT0ZTMlZueTQ0ZCtJSVJN?=
- =?utf-8?B?Sk9YZTk3RzdiWFlrcnprWjRURUJ6UWNNTVVGOXI2RU5rOEpxeGU1RlZFSi9x?=
- =?utf-8?B?M004MFJnbVhCR0dDcm5hRU1Wbk9KWmtRNXlVODhHZ3dOVitSRXVJdmplMWJY?=
- =?utf-8?B?bzY1dFlqWmNaKzBnSHllcG1NSGRFQ1Nmbm1HZVBtOU1zdS9ROFhLOUxxbG5w?=
- =?utf-8?B?cTRVYUF6YytybW9BMVBkSVZUQ3huQzZLdjJwTWVDemdVV2E5b3BHMFVzd2lj?=
- =?utf-8?B?WVIra2V5UGxSWEpxak9qaVZjZ1I1TzhwUW1XOGJpNXdpYitNcFNCMlVId2JI?=
- =?utf-8?B?ZFBBakVCUkxwR2tEcFN0UW4xby84Ry9ZVFgrS243T1haVHByUWVtbHNwSTRl?=
- =?utf-8?B?eVpwa2lTNUQ4M290Q1NFb2dWbEFwdlplQzNlT3ZwRUI3MmJISlNWblNndzhq?=
- =?utf-8?B?TExLV3FiRGZUbllwcGdCWVlXSHdyK20vZXIwcis5QWVKMDRlV2NvazkwQ1NL?=
- =?utf-8?B?aXV0eGFPS1BQYjRMMGxFcmsrQnBuVUFCN0FwUU9MY3o5dUpvZlNhZFljUC93?=
- =?utf-8?B?SmNWSkVnTWM1Q0VkL3dub3BicGRpRjdKMzZjTlk1Q0I0NnNPbGpkZmZDb1Vz?=
- =?utf-8?B?MGdyM0Q0Q0REMk9HNGFEZGhmSUZZNkdxZU15TWgvb050MERWTHVOR0hIeExv?=
- =?utf-8?B?ekRkMjUzOWRuS091ajBjNjMzTi84emc5VjE2bzFTeVVTdk4zWi8vdFN6VERJ?=
- =?utf-8?B?UWpldmtuRDZJYTlLYVRkOEttVTBncEM0MzgxZnR2c2phNWlTQlVMMXg0c3Ft?=
- =?utf-8?B?ckUwV2Y4SFVRYWx4bFNiT1hzd1VkUHpLUEY1cUxwNW9uZGh4N3B2dHNDSDlQ?=
- =?utf-8?B?RWF4YmVQcE8yMHNRY01kY29TelBCUUgxcmQ3dFMyMzk4K2dFWEF5cTFjZFFj?=
- =?utf-8?B?SVFIUUFlbW4venlvSmoxWGx0cUp5MGFaeDdSOGFqSDdMVlQyL2dFVEV5NVZq?=
- =?utf-8?B?dHB0V1dDVXExQnRHQ29sa1JEampoYmlSbDVRdGRGWjNNQnhTejgrbHJDQ1Ft?=
- =?utf-8?B?bTQzK2o4Y3F0NENmVjZETXU4TnFRbUFRM3hJUGk2aEQrYm9JU3dBaUpwUjgy?=
- =?utf-8?B?dmhac1poM01wYjBxVWgycHd5L2NxNFVxMHFBVWd2d09PZ3lzYVp0SWNQTEpB?=
- =?utf-8?B?YXNEOExQTExjUlp1SzZmUTdFS1hIY09TRGFjMG92bjB4a0dDTHpGY1paYnJP?=
- =?utf-8?B?QTJDM3BYZUZhUUdEVURubHlFNEo0TWIwdHo2amtDMEF0ajNveWdCeWxTZENY?=
- =?utf-8?B?dDE3VUFZVWk1T1p1ZG01Unc4cTV0QTkzaHVFdlQvWTUvS1FwVS9ESVpld3E3?=
- =?utf-8?B?MnQ0UFhFK3JtZnhwbU5SMFYxZGlGMUVnRFFEOU11TURaOTRGRmhxeEVwZ1Bw?=
- =?utf-8?B?STZCTU8vemx6bUFMcTNMZG8zUElGRE00eTFlZEtEK3lSS2diN2ZNOWtHU3Er?=
- =?utf-8?B?V21MZlpzN0dLV1VQckRweTJiODd0bG90Y3pydk9uenZmOUJMaHJTbnFvdVVn?=
- =?utf-8?B?Zi9icnIxNGJkTk5WRmpoZWMvNGdXajlEKzM3MW05RWNESjZhWjFadmZjV0Y4?=
- =?utf-8?B?OXFKUUx0VkhCUDAxRHUyejRqbEFwREFCOFA4T0ZraEtxNUNxWVJPbHZDSllo?=
- =?utf-8?B?WGZGN0RkMlRQNHNJbjFnWHBialBYOGR4aU1MMzNEWHFscWxZQTBKdHhMeWwz?=
- =?utf-8?Q?tCS/aVtZkntNwIBHrNRvOLg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EF4BF3C08A986F4689727D7DBD755374@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 11 Jul 2022 11:50:01 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD9F32BB6;
+        Mon, 11 Jul 2022 08:49:56 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id y11so2863928lfs.6;
+        Mon, 11 Jul 2022 08:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XNKMk+SkOTTHVD6A9dfA5sEpEr4a3tbiNrfB9IdATgk=;
+        b=SWldESJYk2VXMiiGnhsMgUoI8s8NAd0JxSKrR/orICyfOn+dCRw+w3JmRy/vNfj1ZO
+         1dfi+NATW17zKhYle0Hf6cF/sHujYAjCpLigT+AXi1dOMjpO2473eQHy7zNppNXsx4FH
+         a0Kh33BK9/Z+ef1naRTMqJbElAZUfMGFSPRG0R0udO4FsSoCMiTZiSWcw9vImiFACjF6
+         BBshNiI0CH1rNoGno8czHNMTaINROUpgTrRnh7jqFJwqK6yhwXzSkd1FH05ZeeOWp0h7
+         QakcqJ4Lv7Og+xJOG0bbc6HfKyN7wOVMOWVK5hhpzEKkiJWZ2xIvMgj10WvUTkRGM4eR
+         ONsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XNKMk+SkOTTHVD6A9dfA5sEpEr4a3tbiNrfB9IdATgk=;
+        b=IBygQdDTZ168wM409KwuGYIp9JhPl7E0osEDb3wFpWizgy3zhUXgHfwbfBylHVx3fK
+         s6Kvs2yaDzpCDINnJmzF86IZxxta+oiUEIJkTNci9RQyxOvsqIUkNiVgHs6+W9ysJlGI
+         XRrf9ebK8W9boz+6K1oAtSXQbLFHUj3AQKxKHzP2rNLWEZ5t9QxVEjvQRixrkmiRJldW
+         y8e5NYNU5MFVAlMTo9PBP88S3MJs/l0L1elzGURiMPW72n9hepzqRNM2RAwWEI7GXOZf
+         xWyrJdfHkj+5WNISN+5PBQf3BJZEfDM1n1i0qbctvpmKRG0Lca04wPpzSK2ceSotAnpl
+         CClg==
+X-Gm-Message-State: AJIora9MCRrHT2rKSzENLJ5gJx2ijf8OuARHaMrfTtS5llTFXTZ/FPT8
+        Qr3SyhPjFtslAQ7sFrefkJA=
+X-Google-Smtp-Source: AGRyM1twlnWIvKZyUvrK5kN5SYsZAWIY0KnnFTvChOU1DZggE/a3qf531BBGVF/JUfpGzpC8h2ddhw==
+X-Received: by 2002:a19:7017:0:b0:486:5af9:5c2b with SMTP id h23-20020a197017000000b004865af95c2bmr11448870lfc.283.1657554594721;
+        Mon, 11 Jul 2022 08:49:54 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id j16-20020ac25510000000b0048160c5e625sm1614724lfk.12.2022.07.11.08.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 08:49:54 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 18:49:52 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/7] clk/resets: baikal-t1: Add DDR/PCIe resets and
+ xGMAC/SATA fixes
+Message-ID: <20220711154952.y7k6ninuicmrio6w@mobilestation>
+References: <20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: ade1fc53-7a3d-4cf4-b107-08da6354ec65
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 15:49:22.0680
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: r9QOSj6aCt04amFokgkp81O7FhigKO2QJNvbqOaN/6kACHIp18UPWyYsSFxrGmGDEFEbaERj1NR3mtUSqWcKcrObdV6+c5gWY8D82dM9zdY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2101
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,26 +77,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T29wcywgSSB3YW50ZWQgdG8gaW5jbHVkZSBQYWxpIGFuZCBTZWdoZXIgd2hlbiBJIHNlbnQgdGhl
-IHNlcmllcywgSSANCnByZXBhcmVkIGEgc2NyaXB0IGluY2x1ZGluZyB0aGVtIGJ1dCB1c2VkIHRo
-ZSB3cm9uZyBzY3JpcHQgYXQgdGhlIGVuZC4NCg0KTGUgMTEvMDcvMjAyMiDDoCAxNzowNSwgQXJu
-ZCBCZXJnbWFubiBhIMOpY3JpdMKgOg0KPiBPbiBNb24sIEp1bCAxMSwgMjAyMiBhdCA0OjE5IFBN
-IENocmlzdG9waGUgTGVyb3kNCj4gPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4gd3JvdGU6
-DQo+PiBAQCAtMTgzLDYgKzE4MywxOCBAQCBjb25maWcgNDA1X0NQVQ0KPj4gICAgICAgICAgYm9v
-bCAiNDB4IGZhbWlseSINCj4+ICAgICAgICAgIGRlcGVuZHMgb24gNDB4DQo+Pg0KPj4gK2NvbmZp
-ZyA0NDBfQ1BVDQo+PiArICAgICAgIGJvb2wgIjQ0MCAoNDR4IGZhbWlseSkiDQo+PiArICAgICAg
-IGRlcGVuZHMgb24gNDR4DQo+PiArDQo+PiArY29uZmlnIDQ2NF9DUFUNCj4+ICsgICAgICAgYm9v
-bCAiNDY0ICg0NHggZmFtaWx5KSINCj4+ICsgICAgICAgZGVwZW5kcyBvbiA0NHgNCj4+ICsNCj4+
-ICtjb25maWcgNDc2X0NQVQ0KPj4gKyAgICAgICBib29sICI0NzYgKDQ3eCBmYW1pbHkpIg0KPj4g
-KyAgICAgICBkZXBlbmRzIG9uIFBQQ180N3gNCj4gDQo+IElzIHRoZXJlIGFueSB2YWx1ZSBpbiBi
-dWlsZGluZyBmb3IgLW1jcHU9NDQwIG9yIC1tY3B1PTQ2NCB3aGVuIHRhcmdldGluZyBhIDQ3Nj8N
-Cg0KTm8gaWRlYSwgbWF5YmUgbm90Lg0KDQo+IE1heWJlIGFkZCBhbm90aGVyICFQUENfNDd4IGRl
-cGVuZGVuY3kgZm9yIHRoZSBmaXJzdCB0d28uIElkZWFsbHkgd2Ugd291bGQgYWxzbw0KPiBlbmZv
-cmNlIHRoYXQgNDQwLzQ2NCBiYXNlZCBib2FyZHMgY2Fubm90IGJlIHNlbGVjdGVkIHRvZ2V0aGVy
-IHdpdGggNDc2LCB0aG91Z2gNCj4gSSBndWVzcyB0aGF0IGlzIGEgc2VwYXJhdGUgaXNzdWUuDQoN
-ClllcyBjYW4gZG8gdGhhdC4NCg0KQnkgdGhlIHdheSwgNDQwLzQ2NCBib2FyZHMgZ2V0IGV4Y2x1
-ZGVkIGZyb20ga2VybmVsL2NwdXRhYmxlLmMgd2hlbiA0N3ggDQppcyBzZWxlY3RlZA0KDQo+IA0K
-PiBJcyB0aGVyZSBhIHByYWN0aWNhbCBkaWZmZXJlbmNlIGJldHdlZW4gNDQwIGFuZCA0NjQgd2hl
-biBidWlsZGluZyBrZXJuZWxzPw0KPiBnY2Mgc2VlbXMgdG8gdHJlYXQgdGhlbSB0aGUgc2FtZSB3
-YXksIHNvIG1heWJlIG9uZSBvcHRpb24gZm9yIGJvdGggaXMgZW5vdWdoDQo+IGhlcmUuDQo+IA0K
-DQpJIGRvbid0IGtub3cuDQoNCkNocmlzdG9waGU=
+Hi @Stephen.
+
+Philipp has completed the reset-related patches review. Could you
+please merge the series in so it would make it into the kernel v5.20?
+
+-Sergey
+
+On Mon, Jul 11, 2022 at 06:44:26PM +0300, Serge Semin wrote:
+> Folks! It has been over four months since the first series submission for
+> review. Please merge it in.
+> 
+> Short summary regarding this patchset. The series starts from fixing of
+> the clocks glitching cause by the Renesas 5P49V6901 chip in some
+> circumstances. Afterwards a few more modifications are introduced to
+> finally finish the Baikal-T1 CCU unit support up and prepare the code
+> before adding the Baikal-T1 PCIe/xGMAC support. First of all it turned out
+> I specified wrong DW xGMAC PTP reference clock divider in my initial
+> patches. It must be 8, not 10. Secondly I was wrong to add a joint xGMAC
+> Ref and PTP clock instead of having them separately defined.  The SoC
+> manual describes these clocks as separate fixed clock wrappers. Finally
+> in order to close the SoC clock/reset support up we need to add the DDR
+> and PCIe interfaces reset controls support. It's done in two steps. First
+> I've moved the reset-controls-related code into a dedicated module. Then
+> the DDR/PCIe reset-control functionality is added. As the series
+> finalization we've decided to convert the Baikal-T1 clock/reset source
+> drivers to mainly being the platform device driver and pre-initialize the
+> basic clocks only at the early kernel boot stages.
+> 
+> Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v2:
+> - Resubmit the series with adding @Philipp to the list of the recipients.
+> 
+> Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v3:
+> - No comments. Just resend the series.
+> - Rebased from v5.17 onto v5.18-rc3.
+> 
+> Link: https://lore.kernel.org/linux-clk/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v4:
+> - Completely split the CCU Dividers and Resets functionality up. (@Stephen)
+> - Add a new fixes patch: "clk: baikal-t1: Actually enable SATA internal
+>   ref clock".
+> - Add a new fixes patch: "reset: Fix devm bulk optional exclusive control
+>   getter".
+> - Add a new fixes patch: "clk: vc5: Fix 5P49V6901 outputs disabling when
+>   enabling FOD".
+> - Add a new feagure patch: "clk: baikal-t1: Convert to platform device
+>   driver".
+> - Change the internal clock ID to the XGMAC-referred name.
+> - Rebase onto the kernel v5.18.
+> 
+> Link: https://lore.kernel.org/lkml/20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v5:
+> - Just resend.
+> - Rebase onto the kernel v5.19-rcX.
+> 
+> Link: https://lore.kernel.org/linux-clk/20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v6:
+> - Drop the patch
+>   [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive control getter
+>   since it has already been accepted by @Philipp.
+> - Refactor the reset-control code to support the linear reset IDs only.
+>   (@Philipp)
+> - Combine the reset-related code into a single file. (@Philipp)
+> - Drop CCU_DIV_RST_MAP() macro. It's no longer used.
+> 
+> Link: https://lore.kernel.org/linux-clk/20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v7:
+> - Fix "Alignment should match open parenthesis" warning for the
+>   pr_err() method invocations. (@Philipp)
+> - Drop empty line from the sys_rst_info structure initialization block.
+>   (@Philipp)
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Serge Semin (7):
+>   clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+>   clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+>   clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
+>   clk: baikal-t1: Add SATA internal ref clock buffer
+>   clk: baikal-t1: Move reset-controls code into a dedicated module
+>   clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+>   clk: baikal-t1: Convert to platform device driver
+> 
+>  drivers/clk/baikal-t1/Kconfig       |  12 +-
+>  drivers/clk/baikal-t1/Makefile      |   1 +
+>  drivers/clk/baikal-t1/ccu-div.c     |  84 +++++++--
+>  drivers/clk/baikal-t1/ccu-div.h     |  17 +-
+>  drivers/clk/baikal-t1/ccu-pll.h     |   8 +
+>  drivers/clk/baikal-t1/ccu-rst.c     | 217 +++++++++++++++++++++++
+>  drivers/clk/baikal-t1/ccu-rst.h     |  67 +++++++
+>  drivers/clk/baikal-t1/clk-ccu-div.c | 263 ++++++++++++++++------------
+>  drivers/clk/baikal-t1/clk-ccu-pll.c | 128 +++++++++++---
+>  drivers/clk/clk-versaclock5.c       |   2 +-
+>  include/dt-bindings/reset/bt1-ccu.h |   9 +
+>  11 files changed, 647 insertions(+), 161 deletions(-)
+>  create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+>  create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+> 
+> -- 
+> 2.35.1
+> 

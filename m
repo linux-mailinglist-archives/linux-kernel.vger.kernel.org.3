@@ -2,108 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A87857063D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF1A57063F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiGKOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S231834AbiGKOw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiGKOwn (ORCPT
+        with ESMTP id S229868AbiGKOwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:52:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B1C6F7EC;
-        Mon, 11 Jul 2022 07:52:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7FF5B81026;
-        Mon, 11 Jul 2022 14:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66C9C34115;
-        Mon, 11 Jul 2022 14:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657551160;
-        bh=T5/YgjZEyFa9qar9PBcP/h4QGGDW5ssEp2nL2da/rbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FruxfvHb7pRbBBKIhc4BZ4LRHPprizlmPVXQS1iaXTGP3mgGGgRP55lY90bNGTJnA
-         OT1+WTtiPEFSUVn2Tg5wAMGpjjG3usGRRsF6/jUH758RS/RygHWSHg/lMONF2Rqlkq
-         4X1cHCexjg+mTGOGHaJGJ6nPWWtvjhHaSnFpd3vYobOIzYlxPgZjnRkAZ/Luf40u83
-         0t9djetXzX5gMjB7V4yP0O1Gm/io7vVDjEJy3sg8p3PodwEUxchAZxGEksxtZB8Blu
-         sFcf1VXgD+ZN0cIf0lQtlo+upOC9x0DA/NjhmVkz2e4jveY5VCqFuBi3ES8Y2BtO4q
-         Tmr8GBBH/12eQ==
-Date:   Mon, 11 Jul 2022 15:52:34 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, git@xilinx.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, linux-mtd@lists.infradead.org
-Subject: Re: [RFC PATCH 1/2] spi: Add multiple CS support for a single SPI
- device
-Message-ID: <Ysw5MpvjKM5LKvWd@sirena.org.uk>
-References: <20220606112607.20800-1-amit.kumar-mahapatra@xilinx.com>
- <20220606112607.20800-2-amit.kumar-mahapatra@xilinx.com>
- <YqHfccvhy7e5Bc6m@sirena.org.uk>
- <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
+        Mon, 11 Jul 2022 10:52:53 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29730709B9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:52:53 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id h200so5100674iof.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:52:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IOmSXtIObJZCkHHKPwMtA28vY3wQaei+yVFr9ly6L/Y=;
+        b=OhJZu5sWJ01VJVRnzDcozrUQv3TZwnfjvju5/n5ng4b6K85snksKvm5auSi1QeEBd3
+         V5dXdPWM53I4wspOMxpxBh8yfGBtpkvXcD5e5suhLVAStn3Cs3InjEA7QUFLVdhqEvqM
+         22Q7kJLW6XC9JGuMl/TqzxkFfygdZ0HzY/iWrrnaBI+lZTEH72XwEAuBQOTrf8R2G0Dn
+         +oxi7kbn3/0XQbiugQE5vkpSxRWqGUbwEJkifpE5vL1dl7OQGB2RoiSrUvtL2igFEPJK
+         ruIr1n20JUmJQkpuP+pUhi1RhhY6wCj+nTloaKmY9zEW/nP2bcgRuQtUlLtNs9uZt7wb
+         4/hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IOmSXtIObJZCkHHKPwMtA28vY3wQaei+yVFr9ly6L/Y=;
+        b=OenGXu6GT8SOEBe6siMAAJAMc2ISsVazPRhTYll8qGn+FSWm6qdTf7b+p/AQtjEhgJ
+         4/WHdSHJFir9S7MAZ2JPcUx6Od04YovuJMYs6hmOe/0aJlKChCtmRh8VD56xbWUJB2ZU
+         RhJv7h4r4RAXoIbCJ0Xf3J4qZdGvRRrn1BMkqjjAXeBnBFPv8uyMpOXfQQYh8ptF+jLM
+         hWHrQIcbntvPUf6dTNJZhTuz3Uegp3/Hdt2N4aK99l6KYNE2EYfJnXjB+3c6Vei4uL5h
+         U7DYvcWVtftznijC6Z65TGjfYkUFc0zNIBCwf9pxhYzKYfWPwSnQBNj7ZvKBzcmRpLBw
+         cNkQ==
+X-Gm-Message-State: AJIora//x+oVbC6jnoAq3LPvmfSrp+bYctd442sqPG+pVSHDd/7XPCVB
+        5DnHFOzHxUJ6k/EaJ9G9a1u5MLyAsQrXesP/sc7oKxvT5r0=
+X-Google-Smtp-Source: AGRyM1vtPDdCC2NmCHaSrRsZHpu0Qwq9jZCnyJk0nWgjqHI5s0fBT26fLvZL/+8xaqrMwnL+oIQbyXXw1RgoGB1j04s=
+X-Received: by 2002:a05:6638:4188:b0:33f:66d8:408b with SMTP id
+ az8-20020a056638418800b0033f66d8408bmr923333jab.295.1657551172145; Mon, 11
+ Jul 2022 07:52:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="myd8/Fo7asf/V7NN"
-Content-Disposition: inline
-In-Reply-To: <40110ff8-5c19-bc54-759b-a51a919788eb@xilinx.com>
-X-Cookie: I am NOMAD!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220710142822.52539-1-arthurchang09@gmail.com>
+ <20220710142822.52539-3-arthurchang09@gmail.com> <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
+In-Reply-To: <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
+From:   Yu-Jen Chang <arthurchang09@gmail.com>
+Date:   Mon, 11 Jul 2022 22:52:41 +0800
+Message-ID: <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
+To:     Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     andy@kernel.org, akinobu.mita@gmail.com,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E5=87=8C=E6=99=A84:01=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On 7/10/22 17:28, Yu-Jen Chang wrote:
+> > The original version of memchr() is implemented with the byte-wise
+> > comparing technique, which does not fully use 64-bits or 32-bits
+> > registers in CPU. We use word-wide comparing so that 8 characters
+> > can be compared at the same time on CPU. This code is base on
+> > David Laight's implementation.
+> >
+> > We create two files to measure the performance. The first file
+> > contains on average 10 characters ahead the target character.
+> > The second file contains at least 1000 characters ahead the
+> > target character. Our implementation of =E2=80=9Cmemchr()=E2=80=9D is s=
+lightly
+> > better in the first test and nearly 4x faster than the orginal
+> > implementation in the second test.
+> >
+> > Signed-off-by: Yu-Jen Chang <arthurchang09@gmail.com>
+> > Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
+> > ---
+> >  lib/string.c | 28 +++++++++++++++++++++-------
+> >  1 file changed, 21 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/lib/string.c b/lib/string.c
+> > index 80469e6c3..8ca965431 100644
+> > --- a/lib/string.c
+> > +++ b/lib/string.c
+> > @@ -905,21 +905,35 @@ EXPORT_SYMBOL(strnstr);
+> >  #ifndef __HAVE_ARCH_MEMCHR
+> >  /**
+> >   * memchr - Find a character in an area of memory.
+> > - * @s: The memory area
+> > + * @p: The memory area
+> >   * @c: The byte to search for
+> > - * @n: The size of the area.
+> > + * @length: The size of the area.
+> >   *
+> >   * returns the address of the first occurrence of @c, or %NULL
+> >   * if @c is not found
+> >   */
+> > -void *memchr(const void *s, int c, size_t n)
+> > +void *memchr(const void *p, int c, unsigned long length)
+> >  {
+> > -     const unsigned char *p =3D s;
+> > -     while (n-- !=3D 0) {
+> > -             if ((unsigned char)c =3D=3D *p++) {
+> > -                     return (void *)(p - 1);
+> > +     u64 mask, val;
+> > +     const void *end =3D p + length;
+> > +
+> > +     c &=3D 0xff;
+> > +     if (p <=3D end - 8) {
+> > +             mask =3D c;
+> > +             MEMCHR_MASK_GEN(mask);
+> > +
+> > +             for (; p <=3D end - 8; p +=3D 8) {
+> > +                     val =3D *(u64 *)p ^ mask;
+>
+> What if p is not aligned to 8 (or 4 on 32-bit targets) bytes? Not all
+> targets support (efficient) unaligned loads, do they?
 
---myd8/Fo7asf/V7NN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think it works if p is not aligned to 8 or 4 bytes.
 
-On Mon, Jul 11, 2022 at 02:47:54PM +0200, Michal Simek wrote:
-> On 6/9/22 13:54, Mark Brown wrote:
-> > On Mon, Jun 06, 2022 at 04:56:06PM +0530, Amit Kumar Mahapatra wrote:
+Let's say the string is 10 bytes. The for loop here will search the first
+8 bytes. If the target character is in the last 2 bytes, the second for
+loop will find it. It also work like this on 32-bit machine.
 
-> > > +	u32 cs[SPI_CS_CNT_MAX];
-> > > +	u8 idx;
-> > >   	/* Mode (clock phase/polarity/etc.) */
-> > >   	if (of_property_read_bool(nc, "spi-cpha"))
-
-> > This is changing the DT binding but doesn't have any updates to the
-> > binding document.  The binding code also doesn't validate that we don't
-> > have too many chip selects.
-
-> I would like to better understand your request here in connection to change
-> in the binding code for validation.
-> What exactly do you want to validate?
-> That child reg property is not bigger than num-cs in controller node?
-
-If you are adding support for multiple chip selects in the driver then
-there must be some mechanism for expressing that in the bindings which I
-would expect to see appear as a change to the binding document.
-
---myd8/Fo7asf/V7NN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLMOTEACgkQJNaLcl1U
-h9DUywf/elR3ZLKLxsB3PZJFT+KXa1Qr7NqEluE38DikQ0asVPDKT2SyDCuVZBFu
-P1WzVgQFGEAjOkRrNtJYKBi8zPlGyjCp45MoWQeXNMqI/1jyNP0O9ewCBZH8rT2x
-zhtyqxEFRWbPxdGdiNvhUodfbdnWjbE6tgt6XEgnJT+b9yqAUx13OGx5PK4tf8ql
-Bg+I0GCGybcOmQgJ1DPuTY8l1c5Hs2sd3kHCdpgjtEjnSnD7dqOtDQ0lH2vSVVzF
-1tlp1tSqbatA+jmgJSki0T/eVtXpiNHOWq/WBdjEx9nBu8YN28UR8iMVtxeua7Ni
-i8DPKRKrXRFE6Qz2NK5U6/DYNEVDVw==
-=ZBqB
------END PGP SIGNATURE-----
-
---myd8/Fo7asf/V7NN--
+>
+> > +                     if ((val + 0xfefefefefefefeffu) &
+> > +                         (~val & 0x8080808080808080u))
+> > +                             break;
+> >               }
+> >       }
+> > +
+> > +     for (; p < end; p++)
+> > +             if (*(unsigned char *)p =3D=3D c)
+> > +                     return (void *)p;
+> > +
+> >       return NULL;
+> >  }
+> >  EXPORT_SYMBOL(memchr);
+>

@@ -2,274 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA31570419
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27198570422
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiGKNWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S229805AbiGKNXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGKNWo (ORCPT
+        with ESMTP id S229717AbiGKNXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:22:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CDE3DF18;
-        Mon, 11 Jul 2022 06:22:43 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BDGGZl014186;
-        Mon, 11 Jul 2022 13:22:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+TK7pnfBgaa6gONlXE/jaGv8AvYdPLPAEx4msVoi8Vc=;
- b=NbKX0d49VmSSVK2PB+WjGBLOheIh77RMZ1v1b2UQ6BeWkKBwBzGvSCRbcRApopmfb2UQ
- kf4XD+5YbPOCibGGZmmHAz7CstCkJ1UugZ6H6jNM6I5+LqEmy4nomDfnpkMck9YnQH0Z
- H/k0outHndqEg2CgtgAVeJWvWX80PUFyLnkYTU6xqeech9FSqx2P1ptTGkajXp/3NfJg
- M0O1W3LzNEsAJVi/35up0r+f3s9G5sUT72lbVDM6EHM9+0henb5F1RRIYnnDg+2loUI/
- d8KzJy2n1kyV9Gz4YYxVovZPjZDDQisacLBiI8ihttZiJ6VRpgPftNp6bqKv9XtsSBO4 Rg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8mkg048r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 13:22:43 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26BDIhsu023559;
-        Mon, 11 Jul 2022 13:22:42 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8mkg047y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 13:22:42 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26BDLdlT006844;
-        Mon, 11 Jul 2022 13:22:40 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3h71a8j3gp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 13:22:40 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26BDMlXW31261160
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jul 2022 13:22:47 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC98DA404D;
-        Mon, 11 Jul 2022 13:22:36 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29C51A4040;
-        Mon, 11 Jul 2022 13:22:36 +0000 (GMT)
-Received: from [9.171.40.247] (unknown [9.171.40.247])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Jul 2022 13:22:36 +0000 (GMT)
-Message-ID: <58016efc-9053-b743-05d6-4ace4dcdc2a8@linux.ibm.com>
-Date:   Mon, 11 Jul 2022 15:22:35 +0200
+        Mon, 11 Jul 2022 09:23:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714BB3DF0A
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:23:20 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1oAtNW-0006xY-HM; Mon, 11 Jul 2022 15:23:10 +0200
+Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1oAtNT-0001Ww-Vt; Mon, 11 Jul 2022 15:23:07 +0200
+Date:   Mon, 11 Jul 2022 15:23:07 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] clk: baikal-t1: Move reset-controls code into a
+ dedicated module
+Message-ID: <20220711132307.GA3771@pengutronix.de>
+References: <20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru>
+ <20220708192725.9501-6-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v12 3/3] KVM: s390: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220711084148.25017-1-pmorel@linux.ibm.com>
- <20220711084148.25017-4-pmorel@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <20220711084148.25017-4-pmorel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1tQZ4Ku-j1HWFhEtmTcIlEcTyPOF5KYx
-X-Proofpoint-GUID: b2sj9AX8GOOPCXDPSw2CXcncCkKqF7SS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-11_18,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 phishscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207110056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708192725.9501-6-Sergey.Semin@baikalelectronics.ru>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: pza@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 10:41, Pierre Morel wrote:
-> During a subsystem reset the Topology-Change-Report is cleared.
+On Fri, Jul 08, 2022 at 10:27:23PM +0300, Serge Semin wrote:
+> Before adding the directly controlled resets support it's reasonable to
+> move the existing resets control functionality into a dedicated object for
+> the sake of the CCU dividers clock driver simplification. After the new
+> functionality was added clk-ccu-div.c would have got to a mixture of the
+> weakly dependent clocks and resets methods. Splitting the methods up into
+> the two objects will make the code easier to read and maintain. It shall
+> also improve the code scalability (though hopefully we won't need this
+> part that much in the future).
 > 
-> Let's give userland the possibility to clear the MTCR in the case
-> of a subsystem reset.
+> The reset control functionality is now implemented in the framework of a
+> single unit since splitting it up doesn't make much sense due to
+> relatively simple reset operations. The ccu-rst.c has been designed to be
+> looking like ccu-div.c or ccu-pll.c with two globally available methods
+> for the sake of the code unification and better code readability.
 > 
-> To migrate the MTCR, we give userland the possibility to
-> query the MTCR state.
+> This commit doesn't provide any change in the CCU reset implementation
+> semantics. As before the driver will support the trigger-like CCU resets
+> only, which are responsible for the AXI-bus, APB-bus and SATA-ref blocks
+> reset. The assert/de-assert-capable reset controls support will be added
+> in the next commit.
 > 
-> We indicate KVM support for the CPU topology facility with a new
-> KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+> Note the CCU Clock dividers and resets functionality split up was possible
+> due to not having any side-effects (at least we didn't found ones) of the
+> regmap-based concurrent access of the common CCU dividers/reset CSRs.
 > 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Nothing left I'd insist to be changed, so:
 
-See nits/comments below.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
+Just a few nitpicks below:
+
+> 
 > ---
->  Documentation/virt/kvm/api.rst   | 25 ++++++++++++++
->  arch/s390/include/uapi/asm/kvm.h |  1 +
->  arch/s390/kvm/kvm-s390.c         | 56 ++++++++++++++++++++++++++++++++
->  include/uapi/linux/kvm.h         |  1 +
->  4 files changed, 83 insertions(+)
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 11e00a46c610..5e086125d8ad 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7956,6 +7956,31 @@ should adjust CPUID leaf 0xA to reflect that the PMU is disabled.
->  When enabled, KVM will exit to userspace with KVM_EXIT_SYSTEM_EVENT of
->  type KVM_SYSTEM_EVENT_SUSPEND to process the guest suspend request.
->  
-> +8.37 KVM_CAP_S390_CPU_TOPOLOGY
-> +------------------------------
+> Changelog v4:
+> - Completely split CCU Dividers and Resets functionality. (@Stephen)
+> 
+> Changelog v6:
+> - Combine the reset-related code into a single file. (@Philipp)
+> - Refactor the code to support the linear reset IDs only. (@Philipp)
+> - Drop CCU_DIV_RST_MAP() macro. It's no longer used.
+> ---
+>  drivers/clk/baikal-t1/Kconfig       |  12 ++-
+>  drivers/clk/baikal-t1/Makefile      |   1 +
+>  drivers/clk/baikal-t1/ccu-div.c     |  19 ----
+>  drivers/clk/baikal-t1/ccu-div.h     |   4 +-
+>  drivers/clk/baikal-t1/ccu-rst.c     | 151 ++++++++++++++++++++++++++++
+>  drivers/clk/baikal-t1/ccu-rst.h     |  57 +++++++++++
+>  drivers/clk/baikal-t1/clk-ccu-div.c |  92 ++---------------
+>  7 files changed, 231 insertions(+), 105 deletions(-)
+>  create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+>  create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+> 
+[...]
+> diff --git a/drivers/clk/baikal-t1/ccu-rst.c b/drivers/clk/baikal-t1/ccu-rst.c
+> new file mode 100644
+> index 000000000000..8fd40810d24e
+> --- /dev/null
+> +++ b/drivers/clk/baikal-t1/ccu-rst.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Authors:
+> + *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> + *
+> + * Baikal-T1 CCU Resets interface driver
+> + */
 > +
-> +:Capability: KVM_CAP_S390_CPU_TOPOLOGY
-> +:Architectures: s390
-> +:Type: vm
+> +#define pr_fmt(fmt) "bt1-ccu-rst: " fmt
 > +
-> +This capability indicates that KVM will provide the S390 CPU Topology
-> +facility which consist of the interpretation of the PTF instruction for
-> +the function code 2 along with interception and forwarding of both the
-> +PTF instruction with function codes 0 or 1 and the STSI(15,1,x)
-
-Is the architecture allowed to extend STSI without a facility?
-If so, if we say here that STSI 15.1.x is passed to user space, then
-I think we should have a
-
-if (sel1 != 1)
-	goto out_no_data;
-
-or maybe even
-
-if (sel1 != 1 || sel2 < 2 || sel2 > 6)
-	goto out_no_data;
-
-in priv.c
-
-> +instruction to the userland hypervisor.
+> +#include <linux/bits.h>
+> +#include <linux/delay.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of.h>
+> +#include <linux/printk.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/slab.h>
 > +
-> +The stfle facility 11, CPU Topology facility, should not be indicated
-> +to the guest without this capability.
+> +#include <dt-bindings/reset/bt1-ccu.h>
 > +
-> +When this capability is present, KVM provides a new attribute group
-> +on vm fd, KVM_S390_VM_CPU_TOPOLOGY.
-> +This new attribute allows to get, set or clear the Modified Change
-
-get or set, now that there is no explicit clear anymore.
-
-> +Topology Report (MTCR) bit of the SCA through the kvm_device_attr
-> +structure.> +
-> +When getting the Modified Change Topology Report value, the attr->addr
-
-When getting/setting the...
-
-> +must point to a byte where the value will be stored.
-
-... will be stored/retrieved from.
+> +#include "ccu-rst.h"
 > +
->  9. Known KVM API problems
->  =========================
->  
-> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
-> index 7a6b14874d65..a73cf01a1606 100644
-> --- a/arch/s390/include/uapi/asm/kvm.h
-> +++ b/arch/s390/include/uapi/asm/kvm.h
-> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
->  #define KVM_S390_VM_CRYPTO		2
->  #define KVM_S390_VM_CPU_MODEL		3
->  #define KVM_S390_VM_MIGRATION		4
-> +#define KVM_S390_VM_CPU_TOPOLOGY	5
->  
->  /* kvm attributes for mem_ctrl */
->  #define KVM_S390_VM_MEM_ENABLE_CMMA	0
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 70436bfff53a..b18e0b940b26 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -606,6 +606,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_S390_PROTECTED:
->  		r = is_prot_virt_host();
->  		break;
-> +	case KVM_CAP_S390_CPU_TOPOLOGY:
-> +		r = test_facility(11);
-> +		break;
->  	default:
->  		r = 0;
->  	}
-> @@ -817,6 +820,20 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
->  		icpt_operexc_on_all_vcpus(kvm);
->  		r = 0;
->  		break;
-> +	case KVM_CAP_S390_CPU_TOPOLOGY:
-> +		r = -EINVAL;
-> +		mutex_lock(&kvm->lock);
-> +		if (kvm->created_vcpus) {
-> +			r = -EBUSY;
-> +		} else if (test_facility(11)) {
-> +			set_kvm_facility(kvm->arch.model.fac_mask, 11);
-> +			set_kvm_facility(kvm->arch.model.fac_list, 11);
-> +			r = 0;
-> +		}
-> +		mutex_unlock(&kvm->lock);
-> +		VM_EVENT(kvm, 3, "ENABLE: CAP_S390_CPU_TOPOLOGY %s",
-> +			 r ? "(not available)" : "(success)");
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		break;
-> @@ -1717,6 +1734,36 @@ static void kvm_s390_update_topology_change_report(struct kvm *kvm, bool val)
->  	read_unlock(&kvm->arch.sca_lock);
->  }
->  
-> +static int kvm_s390_set_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-
-kvm_s390_set_topology_changed maybe?
-kvm_s390_get_topology_changed below then.
-
-> +{
-> +	if (!test_kvm_facility(kvm, 11))
-> +		return -ENXIO;
+> +#define CCU_AXI_MAIN_BASE		0x030
+> +#define CCU_AXI_DDR_BASE		0x034
+> +#define CCU_AXI_SATA_BASE		0x038
+> +#define CCU_AXI_GMAC0_BASE		0x03C
+> +#define CCU_AXI_GMAC1_BASE		0x040
+> +#define CCU_AXI_XGMAC_BASE		0x044
+> +#define CCU_AXI_PCIE_M_BASE		0x048
+> +#define CCU_AXI_PCIE_S_BASE		0x04C
+> +#define CCU_AXI_USB_BASE		0x050
+> +#define CCU_AXI_HWA_BASE		0x054
+> +#define CCU_AXI_SRAM_BASE		0x058
 > +
-> +	kvm_s390_update_topology_change_report(kvm, !!attr->attr);
-> +	return 0;
-> +}
+> +#define CCU_SYS_SATA_REF_BASE		0x060
+> +#define CCU_SYS_APB_BASE		0x064
 > +
-> +static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-> +{
-> +	union sca_utility utility;
-> +	struct bsca_block *sca;
-> +	__u8 topo;
+> +#define CCU_RST_DELAY_US		1
 > +
-> +	if (!test_kvm_facility(kvm, 11))
-> +		return -ENXIO;
+> +#define CCU_RST_TRIG(_base, _ofs)		\
+> +	{					\
+> +		.base = _base,			\
+> +		.mask = BIT(_ofs),		\
+> +	}
 > +
-> +	read_lock(&kvm->arch.sca_lock);
-> +	sca = kvm->arch.sca;
-> +	utility.val = READ_ONCE(sca->utility.val);
-
-I don't think you need the READ_ONCE anymore, now that there is a lock it should act as a compile barrier.
-> +	read_unlock(&kvm->arch.sca_lock);
-> +	topo = utility.mtcr;
-> +
-> +	if (copy_to_user((void __user *)attr->addr, &topo, sizeof(topo)))
-
-Why void not u8?
-
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
+> +struct ccu_rst_info {
+> +	unsigned int base;
+> +	unsigned int mask;
+> +};
 [...]
 
+This could be compacted by making the base offset u16 and - if there are
+no resets that require toggling two bits at once - by storing an u8 bit
+offset instead of the mask.
+
+> diff --git a/drivers/clk/baikal-t1/ccu-rst.h b/drivers/clk/baikal-t1/ccu-rst.h
+> new file mode 100644
+> index 000000000000..68214d777465
+> --- /dev/null
+> +++ b/drivers/clk/baikal-t1/ccu-rst.h
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2021 BAIKAL ELECTRONICS, JSC
+> + *
+> + * Baikal-T1 CCU Resets interface driver
+> + */
+> +#ifndef __CLK_BT1_CCU_RST_H__
+> +#define __CLK_BT1_CCU_RST_H__
+> +
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset-controller.h>
+> +
+> +struct ccu_rst_info;
+> +
+> +/*
+> + * struct ccu_rst_init_data - CCU Resets initialization data
+> + * @sys_regs: Baikal-T1 System Controller registers map.
+> + * @np: Pointer to the node with the System CCU block.
+> + */
+> +struct ccu_rst_init_data {
+> +	struct regmap *sys_regs;
+> +	struct device_node *np;
+> +};
+> +
+> +/*
+> + * struct ccu_rst - CCU Reset descriptor
+> + * @rcdev: Reset controller descriptor.
+> + * @sys_regs: Baikal-T1 System Controller registers map.
+> + * @rsts_info: Reset flag info (base address and mask).
+> + */
+> +struct ccu_rst {
+> +	struct reset_controller_dev rcdev;
+> +	struct regmap *sys_regs;
+> +	const struct ccu_rst_info *rsts_info;
+> +};
+> +#define to_ccu_rst(_rcdev) container_of(_rcdev, struct ccu_rst, rcdev)
+
+I'd make this a static inline function.
+
+> diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
+> index 90f4fda406ee..278aa38d767e 100644
+> --- a/drivers/clk/baikal-t1/clk-ccu-div.c
+> +++ b/drivers/clk/baikal-t1/clk-ccu-div.c
+[...]
+> @@ -274,42 +241,6 @@ static struct ccu_div *ccu_div_find_desc(struct ccu_div_data *data,
+>  	return ERR_PTR(-EINVAL);
+>  }
+>  
+> -static int ccu_div_reset(struct reset_controller_dev *rcdev,
+> -			 unsigned long rst_id)
+> -{
+> -	struct ccu_div_data *data = to_ccu_div_data(rcdev);
+> -	const struct ccu_div_rst_map *map;
+> -	struct ccu_div *div;
+> -	int idx, ret;
+> -
+> -	for (idx = 0, map = data->rst_map; idx < data->rst_num; ++idx, ++map) {
+> -		if (map->rst_id == rst_id)
+> -			break;
+> -	}
+> -	if (idx == data->rst_num) {
+> -		pr_err("Invalid reset ID %lu specified\n", rst_id);
+> -		return -EINVAL;
+> -	}
+> -
+> -	div = ccu_div_find_desc(data, map->clk_id);
+> -	if (IS_ERR(div)) {
+> -		pr_err("Invalid clock ID %d in mapping\n", map->clk_id);
+> -		return PTR_ERR(div);
+> -	}
+> -
+> -	ret = ccu_div_reset_domain(div);
+> -	if (ret) {
+> -		pr_err("Reset isn't supported by divider %s\n",
+> -			clk_hw_get_name(ccu_div_get_clk_hw(div)));
+                       ^
+This should be aligned to the parenthesis, see checkpatch.pl --strict.
+
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+> -static const struct reset_control_ops ccu_div_rst_ops = {
+> -	.reset = ccu_div_reset,
+> -};
+> -
+>  static struct ccu_div_data *ccu_div_create_data(struct device_node *np)
+>  {
+>  	struct ccu_div_data *data;
+> @@ -323,13 +254,9 @@ static struct ccu_div_data *ccu_div_create_data(struct device_node *np)
+>  	if (of_device_is_compatible(np, "baikal,bt1-ccu-axi")) {
+>  		data->divs_num = ARRAY_SIZE(axi_info);
+>  		data->divs_info = axi_info;
+> -		data->rst_num = ARRAY_SIZE(axi_rst_map);
+> -		data->rst_map = axi_rst_map;
+>  	} else if (of_device_is_compatible(np, "baikal,bt1-ccu-sys")) {
+>  		data->divs_num = ARRAY_SIZE(sys_info);
+>  		data->divs_info = sys_info;
+> -		data->rst_num = ARRAY_SIZE(sys_rst_map);
+> -		data->rst_map = sys_rst_map;
+>  	} else {
+>  		pr_err("Incompatible DT node '%s' specified\n",
+>  			of_node_full_name(np));
+                       ^
+Same as above.
+
+regards
+Philipp

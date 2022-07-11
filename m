@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C0656FA4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59F056FB53
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiGKJPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S229910AbiGKJ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbiGKJO2 (ORCPT
+        with ESMTP id S232461AbiGKJ2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:14:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CB433E3E;
-        Mon, 11 Jul 2022 02:10:23 -0700 (PDT)
+        Mon, 11 Jul 2022 05:28:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A22166AF1;
+        Mon, 11 Jul 2022 02:15:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 940046118F;
-        Mon, 11 Jul 2022 09:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC3DC34115;
-        Mon, 11 Jul 2022 09:10:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C600FCE1260;
+        Mon, 11 Jul 2022 09:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75CDC34115;
+        Mon, 11 Jul 2022 09:15:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530622;
-        bh=zp3JffDA6rZtfMFo04/+4E4M7pjTJoUkbaSDYbzk3MQ=;
+        s=korg; t=1657530952;
+        bh=/sbOSX3Pnsxhpi+1YjZXiP7EM8K6cK3NsOE1FwYeRFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vRR6PJeQxHP+Osvhi1eOsReGunngrK6Bug4YiP0/AfzUuf8S+dm6KIFhho3ujcGyi
-         WfTQxTTMgYcyt3dVFeVxAbD6gDnGstp+ohZtPBpLMm4PMAHxABaaQEL5YMCfzoAQ1s
-         YE3EkNH2KtykUEoQ4LfTxDXUpNZUMFTl4TzEDgPM=
+        b=MaxrDC+BrL36d47/jbDs+ajZ3SSgeCtpAxmOsv5D/XVui+7Yow35ffNB9wcrb2fYm
+         6ovIl5UIcleIAnBs703pFpZ8Dd6RiwFbHDoHvXzvbnfBag5nnTNRFpaon6nJVzl+mF
+         vdYQJS/zXee0m5uZP8Cy2vx+3SAJVK1FXBZ++yPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH 5.4 02/38] mm/slub: add missing TID updates on slab deactivation
+        stable@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 044/112] net: dsa: qca8k: reset cpu port on MTU change
 Date:   Mon, 11 Jul 2022 11:06:44 +0200
-Message-Id: <20220711090538.798574175@linuxfoundation.org>
+Message-Id: <20220711090550.823175937@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,122 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Christian Marangi <ansuelsmth@gmail.com>
 
-commit eeaa345e128515135ccb864c04482180c08e3259 upstream.
+commit 386228c694bf1e7a7688e44412cb33500b0ac585 upstream.
 
-The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
-the TID stays the same. However, two places in __slab_alloc() currently
-don't update the TID when deactivating the CPU slab.
+It was discovered that the Documentation lacks of a fundamental detail
+on how to correctly change the MAX_FRAME_SIZE of the switch.
 
-If multiple operations race the right way, this could lead to an object
-getting lost; or, in an even more unlikely situation, it could even lead to
-an object being freed onto the wrong slab's freelist, messing up the
-`inuse` counter and eventually causing a page to be freed to the page
-allocator while it still contains slab objects.
+In fact if the MAX_FRAME_SIZE is changed while the cpu port is on, the
+switch panics and cease to send any packet. This cause the mgmt ethernet
+system to not receive any packet (the slow fallback still works) and
+makes the device not reachable. To recover from this a switch reset is
+required.
 
-(I haven't actually tested these cases though, this is just based on
-looking at the code. Writing testcases for this stuff seems like it'd be
-a pain...)
+To correctly handle this, turn off the cpu ports before changing the
+MAX_FRAME_SIZE and turn on again after the value is applied.
 
-The race leading to state inconsistency is (all operations on the same CPU
-and kmem_cache):
-
- - task A: begin do_slab_free():
-    - read TID
-    - read pcpu freelist (==NULL)
-    - check `slab == c->slab` (true)
- - [PREEMPT A->B]
- - task B: begin slab_alloc_node():
-    - fastpath fails (`c->freelist` is NULL)
-    - enter __slab_alloc()
-    - slub_get_cpu_ptr() (disables preemption)
-    - enter ___slab_alloc()
-    - take local_lock_irqsave()
-    - read c->freelist as NULL
-    - get_freelist() returns NULL
-    - write `c->slab = NULL`
-    - drop local_unlock_irqrestore()
-    - goto new_slab
-    - slub_percpu_partial() is NULL
-    - get_partial() returns NULL
-    - slub_put_cpu_ptr() (enables preemption)
- - [PREEMPT B->A]
- - task A: finish do_slab_free():
-    - this_cpu_cmpxchg_double() succeeds()
-    - [CORRUPT STATE: c->slab==NULL, c->freelist!=NULL]
-
->From there, the object on c->freelist will get lost if task B is allowed to
-continue from here: It will proceed to the retry_load_slab label,
-set c->slab, then jump to load_freelist, which clobbers c->freelist.
-
-But if we instead continue as follows, we get worse corruption:
-
- - task A: run __slab_free() on object from other struct slab:
-    - CPU_PARTIAL_FREE case (slab was on no list, is now on pcpu partial)
- - task A: run slab_alloc_node() with NUMA node constraint:
-    - fastpath fails (c->slab is NULL)
-    - call __slab_alloc()
-    - slub_get_cpu_ptr() (disables preemption)
-    - enter ___slab_alloc()
-    - c->slab is NULL: goto new_slab
-    - slub_percpu_partial() is non-NULL
-    - set c->slab to slub_percpu_partial(c)
-    - [CORRUPT STATE: c->slab points to slab-1, c->freelist has objects
-      from slab-2]
-    - goto redo
-    - node_match() fails
-    - goto deactivate_slab
-    - existing c->freelist is passed into deactivate_slab()
-    - inuse count of slab-1 is decremented to account for object from
-      slab-2
-
-At this point, the inuse count of slab-1 is 1 lower than it should be.
-This means that if we free all allocated objects in slab-1 except for one,
-SLUB will think that slab-1 is completely unused, and may free its page,
-leading to use-after-free.
-
-Fixes: c17dda40a6a4e ("slub: Separate out kmem_cache_cpu processing from deactivate_slab")
-Fixes: 03e404af26dc2 ("slub: fast release on full slab")
+Fixes: f58d2598cf70 ("net: dsa: qca8k: implement the port MTU callbacks")
 Cc: stable@vger.kernel.org
-Signed-off-by: Jann Horn <jannh@google.com>
-Acked-by: Christoph Lameter <cl@linux.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Link: https://lore.kernel.org/r/20220608182205.2945720-1-jannh@google.com
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Link: https://lore.kernel.org/r/20220621151122.10220-1-ansuelsmth@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/slub.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/dsa/qca8k.c |   23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2214,6 +2214,7 @@ redo:
- 
- 	c->page = NULL;
- 	c->freelist = NULL;
-+	c->tid = next_tid(c->tid);
- }
- 
- /*
-@@ -2347,8 +2348,6 @@ static inline void flush_slab(struct kme
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -2372,7 +2372,7 @@ static int
+ qca8k_port_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
  {
- 	stat(s, CPUSLAB_FLUSH);
- 	deactivate_slab(s, c->page, c->freelist, c);
--
--	c->tid = next_tid(c->tid);
+ 	struct qca8k_priv *priv = ds->priv;
+-	int i, mtu = 0;
++	int ret, i, mtu = 0;
+ 
+ 	priv->port_mtu[port] = new_mtu;
+ 
+@@ -2380,8 +2380,27 @@ qca8k_port_change_mtu(struct dsa_switch
+ 		if (priv->port_mtu[i] > mtu)
+ 			mtu = priv->port_mtu[i];
+ 
++	/* To change the MAX_FRAME_SIZE the cpu ports must be off or
++	 * the switch panics.
++	 * Turn off both cpu ports before applying the new value to prevent
++	 * this.
++	 */
++	if (priv->port_sts[0].enabled)
++		qca8k_port_set_status(priv, 0, 0);
++
++	if (priv->port_sts[6].enabled)
++		qca8k_port_set_status(priv, 6, 0);
++
+ 	/* Include L2 header / FCS length */
+-	return qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
++	ret = qca8k_write(priv, QCA8K_MAX_FRAME_SIZE, mtu + ETH_HLEN + ETH_FCS_LEN);
++
++	if (priv->port_sts[0].enabled)
++		qca8k_port_set_status(priv, 0, 1);
++
++	if (priv->port_sts[6].enabled)
++		qca8k_port_set_status(priv, 6, 1);
++
++	return ret;
  }
  
- /*
-@@ -2632,6 +2631,7 @@ redo:
- 
- 	if (!freelist) {
- 		c->page = NULL;
-+		c->tid = next_tid(c->tid);
- 		stat(s, DEACTIVATE_BYPASS);
- 		goto new_slab;
- 	}
+ static int
 
 

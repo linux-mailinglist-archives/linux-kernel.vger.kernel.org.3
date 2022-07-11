@@ -2,182 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E610557036E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12A9570372
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiGKM4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S232160AbiGKM4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiGKM4F (ORCPT
+        with ESMTP id S231407AbiGKM4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:56:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F2C02A957
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657544163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kt5/cjcKZ2gRwWekh9fqy7LIWEf6ib/V3LQ9qeWBy+M=;
-        b=DFfnaYj/0boBPfYunZHEM9dKgQ9/VW30omSNgPp3b18sHtU3FUMpBaBdsE+iqXN/KURoQ1
-        dIzy8XXQ67QnLL6Ls5oEms7ejAn1miKItPKTkm2IEqF6RnTSTA2s5tG9YEl0WJ6IlWUBL5
-        3uWbOQm4nHYBNfNOfvpQHVV5LUm5P9Q=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-irYFcxxzMiyCjhJYjh6Rog-1; Mon, 11 Jul 2022 08:55:56 -0400
-X-MC-Unique: irYFcxxzMiyCjhJYjh6Rog-1
-Received: by mail-ed1-f72.google.com with SMTP id c9-20020a05640227c900b0043ad14b1fa0so1988424ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:55:56 -0700 (PDT)
+        Mon, 11 Jul 2022 08:56:31 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629D2BB03;
+        Mon, 11 Jul 2022 05:56:30 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v12so6096243edc.10;
+        Mon, 11 Jul 2022 05:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=xqiYcac4kjvK9KyWMTADB4nPOj16J3aqFw3fSaQHU2s=;
+        b=D60vK179GfL0CW7TTo/zvY1tKnXlZu2QJzzeiLfRqaUgh25JFtFQofkIuXHheYhAxr
+         KMLa+MlvNT4HvMTldeqvMW5DgXtgoib54d4NmpdHqYn2XkSrhE57ZKl10sbEGe5f+GYa
+         NxvpY1rbnD/fL2VxCIRBXOxEsaWnGiHvRmx3XRgzeVJ/NYC+ETphc2FL69PEzd3cV9pb
+         7OTi/hEXw9HO6RjXUGXevRcUH8N7uTkt/zv+RiQ08tpJ4zZi7s/FP/6DOtuyq5I7nBkk
+         7KbpDNBVuMz/kZ3Klyz8FixO0fmCnQLSzftsqJtMKfgfHKf6cF9cAJULxA+Z4nW6A2VN
+         1HVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=kt5/cjcKZ2gRwWekh9fqy7LIWEf6ib/V3LQ9qeWBy+M=;
-        b=Mrvc2LUZBhgiMD5ivtQm6ux/02avZdBeOaJ6WX624lvg8LjrOBz3hCbc7ON9HA2m4c
-         4v4oRqid3jzwydg1VL197Oa7KR7ss2AzTo2n8nkPA7PfJKKlIp2W0dgg78UTRSFi1FZ0
-         ExSVfZZpcfkfM1eJ01uV+fKVjhUHbvqFoxpuZ00ozf8sMJq1QfXSpM1BJz4kSdyK6S9c
-         N93UQ05CUQonOOoYyGDouuHQsEFKZ/qkyyaj8xvd63/TAT99UtE1tDfiOd4DZwIqZDDu
-         7MfjDVdUGVFY6UiYLWhOOmVcsyA5KQkapl02RVhLOI1/69Rc6sUMQjbEsxAo1F9t51va
-         fM1g==
-X-Gm-Message-State: AJIora+P28FP3jKuynJtJxkwj2YCYVhURTfVMOLHUAVGRpLb9MDxvfDl
-        WrYfMWE5XnopAXfBDCm1KdVRWG1AaVgJqQuCza3hCLavM8qgMAbDkIX+EeJlrIsyNL0+BdqAvog
-        p40m3DoFleZJuH8HiytcCgqfP
-X-Received: by 2002:a05:6402:2553:b0:43a:caa2:4956 with SMTP id l19-20020a056402255300b0043acaa24956mr10907660edb.406.1657544155316;
-        Mon, 11 Jul 2022 05:55:55 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tNqb7ZLkvusDSgn+rhuE3nnCzlnbhFr6wBS7PtlTl+WaJMGyDfPSkmDo3kuHbEDzZ/cgVouw==
-X-Received: by 2002:a05:6402:2553:b0:43a:caa2:4956 with SMTP id l19-20020a056402255300b0043acaa24956mr10907638edb.406.1657544155092;
-        Mon, 11 Jul 2022 05:55:55 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id cb1-20020a0564020b6100b0043a6dc3c4b0sm4300219edb.41.2022.07.11.05.55.54
+        bh=xqiYcac4kjvK9KyWMTADB4nPOj16J3aqFw3fSaQHU2s=;
+        b=p0ivP0sFk+HGIs3+I1oNVNCikh/87ao2DOdcLZZwC/82QHWG3MTM5z6PD/6Oz/GzCi
+         YB4if66I9ib2p52s3dl6jsrBXKd1aQUl9QG6Eru4xZfIEuoZkHcu9JZAyMBSzeiwKXj/
+         7L5VHNXWwreYEs/intToyGncFS/Fn3tnN/srA3Sju0X04O6oX1THHBConj0npBXXNB3b
+         sxsSLhQ/AHdn0KpImCD62WcRSa0Y5jJI5QfeKVmMoCe1p9N9v8LZDs8c4r/9dP5NwOpo
+         e7tJjgRy9IZ6XGKax2MTmRs/o1ZSHyRwEsk0RSLV3fWQ9T0BOiUuu1GjNkUAMMocdp2Z
+         pdbQ==
+X-Gm-Message-State: AJIora9WJfn2VwpDuzqLQBvAP2ihqxXl7DNqMcSpr4vg0TllgoGAyp1b
+        r+Gu/gDoUpGXLbR/bdFRsDY=
+X-Google-Smtp-Source: AGRyM1steBmZK6pUZ6poaeHbH2Prq62ZvS22AqIXf7JWoPHh3Nn0MSJ+kSf6usvWedT/aZc27UKgaw==
+X-Received: by 2002:a05:6402:11d3:b0:43a:c43b:7ff9 with SMTP id j19-20020a05640211d300b0043ac43b7ff9mr15254891edw.130.1657544188835;
+        Mon, 11 Jul 2022 05:56:28 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c093:600::1:ac34])
+        by smtp.gmail.com with ESMTPSA id j11-20020a50ed0b000000b0043a6b86f024sm4250111eds.67.2022.07.11.05.56.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 05:55:54 -0700 (PDT)
-Message-ID: <e84a2cb3-ea2f-6ce4-aba8-4026b3e6bedd@redhat.com>
-Date:   Mon, 11 Jul 2022 14:55:53 +0200
+        Mon, 11 Jul 2022 05:56:28 -0700 (PDT)
+Message-ID: <0f54508f-e819-e367-84c2-7aa0d7767097@gmail.com>
+Date:   Mon, 11 Jul 2022 13:56:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] Input: i8042 - add TUXEDO devices to i8042 quirk
- tables for partial fix
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next v4 00/27] io_uring zerocopy send
 Content-Language: en-US
-To:     Werner Sembach <wse@tuxedocomputers.com>,
-        dmitry.torokhov@gmail.com, tiwai@suse.de, samuel@cavoj.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220708161005.1251929-1-wse@tuxedocomputers.com>
- <20220708161005.1251929-3-wse@tuxedocomputers.com>
- <37a7e536-252a-c8a9-1412-37d3f2052a6d@redhat.com>
- <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <c5a7fa10-7b6a-fa0d-622e-4392fda1ee93@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     David Ahern <dsahern@kernel.org>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1657194434.git.asml.silence@gmail.com>
+ <2c49d634-bd8a-5a7f-0f66-65dba22bae0d@kernel.org>
+ <bd9960ab-c9d8-8e5d-c347-8049cdf5708a@gmail.com>
+In-Reply-To: <bd9960ab-c9d8-8e5d-c347-8049cdf5708a@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 7/11/22 14:45, Werner Sembach wrote:
-> Hi,
-> 
-> On 7/8/22 21:39, Hans de Goede wrote:
->> Hi,
+On 7/8/22 15:26, Pavel Begunkov wrote:
+> On 7/8/22 05:10, David Ahern wrote:
+>> On 7/7/22 5:49 AM, Pavel Begunkov wrote:
+>>> NOTE: Not be picked directly. After getting necessary acks, I'll be working
+>>>        out merging with Jakub and Jens.
+>>>
+>>> The patchset implements io_uring zerocopy send. It works with both registered
+>>> and normal buffers, mixing is allowed but not recommended. Apart from usual
+>>> request completions, just as with MSG_ZEROCOPY, io_uring separately notifies
+>>> the userspace when buffers are freed and can be reused (see API design below),
+>>> which is delivered into io_uring's Completion Queue. Those "buffer-free"
+>>> notifications are not necessarily per request, but the userspace has control
+>>> over it and should explicitly attaching a number of requests to a single
+>>> notification. The series also adds some internal optimisations when used with
+>>> registered buffers like removing page referencing.
+>>>
+>>>  From the kernel networking perspective there are two main changes. The first
+>>> one is passing ubuf_info into the network layer from io_uring (inside of an
+>>> in kernel struct msghdr). This allows extra optimisations, e.g. ubuf_info
+>>> caching on the io_uring side, but also helps to avoid cross-referencing
+>>> and synchronisation problems. The second part is an optional optimisation
+>>> removing page referencing for requests with registered buffers.
+>>>
+>>> Benchmarking with an optimised version of the selftest (see [1]), which sends
+>>> a bunch of requests, waits for completions and repeats. "+ flush" column posts
+>>> one additional "buffer-free" notification per request, and just "zc" doesn't
+>>> post buffer notifications at all.
+>>>
+>>> NIC (requests / second):
+>>> IO size | non-zc    | zc             | zc + flush
+>>> 4000    | 495134    | 606420 (+22%)  | 558971 (+12%)
+>>> 1500    | 551808    | 577116 (+4.5%) | 565803 (+2.5%)
+>>> 1000    | 584677    | 592088 (+1.2%) | 560885 (-4%)
+>>> 600     | 596292    | 598550 (+0.4%) | 555366 (-6.7%)
+>>>
+>>> dummy (requests / second):
+>>> IO size | non-zc    | zc             | zc + flush
+>>> 8000    | 1299916   | 2396600 (+84%) | 2224219 (+71%)
+>>> 4000    | 1869230   | 2344146 (+25%) | 2170069 (+16%)
+>>> 1200    | 2071617   | 2361960 (+14%) | 2203052 (+6%)
+>>> 600     | 2106794   | 2381527 (+13%) | 2195295 (+4%)
+>>>
+>>> Previously it also brought a massive performance speedup compared to the
+>>> msg_zerocopy tool (see [3]), which is probably not super interesting.
+>>>
 >>
->> On 7/8/22 18:10, Werner Sembach wrote:
->>> A lot of modern Clevo barebones have touchpad and/or keyboard issues after
->>> suspend fixable with nomux + reset + noloop + nopnp. Luckily, none of them
->>> have an external PS/2 port so this can safely be set for all of them.
->>>
->>> I'm not entirely sure if every device listed really needs all four quirks,
->>> but after testing and production use. No negative effects could be
->>> observed when setting all four.
->>>
->>> Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS on the Clevo N150CU
->>> and the Clevo NHxxRZQ makes the keyboard very laggy for ~5 seconds after
->>> boot and sometimes also after resume. However both are required for the
->>> keyboard to not fail completely sometimes after boot or resume.
->> Hmm, the very laggy bit does not sound good. Have you looked into other
->> solutions, e.g. what happens if you use just nomux without any of the
->> other 3 options ?
+>> can you add a comment that the above results are for UDP.
 > 
-> I tried a lot of combinations, but it was some time ago.
+> Oh, right, forgot to add it
 > 
-> iirc: at least nomux and reset are required and both individually cause the lagging.
 > 
-> So the issue is not fixed by just using a different set of quirks.
-
-Hmm, ok. So given that this seems to be the best we can do
-the patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
->>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->>> Cc: stable@vger.kernel.org
->>> ---
->>>   drivers/input/serio/i8042-x86ia64io.h | 28 +++++++++++++++++++++++++++
->>>   1 file changed, 28 insertions(+)
->>>
->>> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
->>> index 5204a7dd61d4..9dc0266e5168 100644
->>> --- a/drivers/input/serio/i8042-x86ia64io.h
->>> +++ b/drivers/input/serio/i8042-x86ia64io.h
->>> @@ -1107,6 +1107,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>>           .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>                       SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>       },
->>> +    {
->>> +        /*
->>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
->>> +         * the keyboard very laggy for ~5 seconds after boot and
->>> +         * sometimes also after resume.
->>> +         * However both are required for the keyboard to not fail
->>> +         * completely sometimes after boot or resume.
->>> +         */
->>> +        .matches = {
->>> +            DMI_MATCH(DMI_BOARD_NAME, "N150CU"),
->>> +        },
->>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>> +    },
->>>       {
->>>           .matches = {
->>>               DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
->>> @@ -1114,6 +1128,20 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>>           .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>>                       SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>>       },
->>> +    {
->>> +        /*
->>> +         * Setting SERIO_QUIRK_NOMUX or SERIO_QUIRK_RESET_ALWAYS makes
->>> +         * the keyboard very laggy for ~5 seconds after boot and
->>> +         * sometimes also after resume.
->>> +         * However both are required for the keyboard to not fail
->>> +         * completely sometimes after boot or resume.
->>> +         */
->>> +        .matches = {
->>> +            DMI_MATCH(DMI_BOARD_NAME, "NHxxRZQ"),
->>> +        },
->>> +        .driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_ALWAYS |
->>> +                    SERIO_QUIRK_NOLOOP | SERIO_QUIRK_NOPNP)
->>> +    },
->>>       {
->>>           .matches = {
->>>               DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+>> You dropped comments about TCP testing; any progress there? If not, can
+>> you relay any issues you are hitting?
 > 
+> Not really a problem, but for me it's bottle necked at NIC bandwidth
+> (~3GB/s) for both zc and non-zc and doesn't even nearly saturate a CPU.
+> Was actually benchmarked by my colleague quite a while ago, but can't
+> find numbers. Probably need to at least add localhost numbers or grab
+> a better server.
 
+Testing localhost TCP with a hack (see below), it doesn't include
+refcounting optimisations I was testing UDP with and that will be
+sent afterwards. Numbers are in MB/s
+
+IO size | non-zc    | zc
+1200    | 4174      | 4148
+4096    | 7597      | 11228
+
+Because it's localhost, we also spend cycles here for the recv side.
+Using a real NIC 1200 bytes, zc is worse than non-zc ~5-10%, maybe the
+omitted optimisations will somewhat help. I don't consider it to be a
+blocker. but would be interesting to poke into later. One thing helping
+non-zc is that it squeezes a number of requests into a single page
+whenever zerocopy adds a new frag for every request.
+
+Can't say anything new for larger payloads, I'm still NIC-bound but
+looking at CPU utilisation zc doesn't drain as much cycles as non-zc.
+Also, I don't remember if mentioned before, but another catch is that
+with TCP it expects users to not be flushing notifications too much,
+because it forces it to allocate a new skb and lose a good chunk of
+benefits from using TCP.
+
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 1111adefd906..c4b781b2c3b1 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -3218,9 +3218,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
+  /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
+  static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
+  {
+-	if (likely(!skb_zcopy(skb)))
+-		return 0;
+-	return skb_copy_ubufs(skb, gfp_mask);
++	return skb_orphan_frags(skb, gfp_mask);
+  }
+
+-- 
+Pavel Begunkov

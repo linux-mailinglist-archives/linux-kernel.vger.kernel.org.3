@@ -2,252 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542F856D801
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6AE56D808
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiGKIaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S229998AbiGKIbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiGKIaN (ORCPT
+        with ESMTP id S229943AbiGKIbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:30:13 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EAC1F2C4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:00 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id w2so5325895ljj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:00 -0700 (PDT)
+        Mon, 11 Jul 2022 04:31:05 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD91F600
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:56 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id f2so5991373wrr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 01:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c3iEWvXk42qlaQ1qEYi2t2qktg9E0Gqje32kNcC/AaE=;
-        b=pSCTwj3BO8/QQi3rTpFWMZX4j/6gmQu+IR9lgQU3FP8SLiVVOuFdKpHIIkBgIvfNu9
-         XbH218ZQiapHGrOrhkpRp1BBlccrpyNIuyl4NM7pZ+Ut2aSnZg7nHERtm+xrZ+Bu1YlA
-         mywWuJ1KcSKTcG8l68C99iH+1nzOQ3ID5PgAzvxNAfSs/tBPMZ8Fi8wXgDogySvF3Z1y
-         caEwWc2gb3aWJHO8n+WaDC4DRG4Xp7gFTC7bVwHX3+OxgeD4BLjzZvRWSbwyOB0vmG2d
-         hzrmuqkv4+qXZv/koFxtVf7+SSkPtQG8ZecuhzdriQpSESrXrY6NBa+H/jOBcmKkrJnQ
-         Dbvg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=c0ELfD4hIzwtzcZRc0K6SYG7uHfnXiZ3SBpLMfAV6G4=;
+        b=ZIgGjm4iQDXNkq4QqQIvx7RYgS24mMT6IxOF2+AVzdCcKduTPf/ckYxP0jhwgi8a+8
+         bgKBhkdpntCFl0wlt+N+VfVs0yDxaTpALGK5xC8jGDmN0YVnd6YE3LqHkC0h1mxKvP2T
+         IJUeNz7nMhMTXpRJZ31CIt2Oz9gHVxS3peNxOuHv0ea4cgol4ibKqyudVcoEzbElS5x+
+         Zo+5o2xUPW+YB8RzcyW0Il3jRunExhDM6iXHqtHoCyVepcb/6C8RL1i2SrwXLxCK5y3V
+         26CC9WTEHq0SeTQzTZ5k9kGPK3fv3FG5qiAVVJibDux8+lKDZFkAZK0UULczx3KlR2hF
+         2Enw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c3iEWvXk42qlaQ1qEYi2t2qktg9E0Gqje32kNcC/AaE=;
-        b=t+vOL08SQ07uOZ+D4IX43lu74rBepmtnNWZXB6OctCkYrm7WT2vMoC9LmHEydtpLFC
-         JBPy0j9wpZNvon2A8c3kZDgUNRJPhjuORpF6KUHSOqj/WqzQHlSpOwGUFMnoU8v5Ua2b
-         E824SM46pLn54geGhX33WxhH04HyClYeOcZsoUrUIeJtY+9488rllH4ss9MgPlpGgeFE
-         nIoFtnO516PCx2VqhrFccUBxpUBAQNOzFFP3Yi7V5C5HYpVPnutcyAB2AtNtW4JFOLp+
-         UpxKNEaVSwJ+Zl6rBxCWdlff5KlwIdp4swiHnztQ8npmcy+PTLwFm6x1qWsJtAfySTP6
-         irdA==
-X-Gm-Message-State: AJIora/59BTdTtHAdpqRil4utbPJYx+oeSTK/d2Y2TRQeTh7mLSjbbYz
-        +jCRlo2G+uUv2iGz+sCJyMq9JQ==
-X-Google-Smtp-Source: AGRyM1udjxHDIpCgvVnZJqTIKtWPOgZDEO+WOSsQI0b7Af+dV3w8qhzoHvlXStC2q8l2PaJx4+OuYA==
-X-Received: by 2002:a2e:8710:0:b0:25d:4d99:4f0e with SMTP id m16-20020a2e8710000000b0025d4d994f0emr2892655lji.448.1657528198445;
-        Mon, 11 Jul 2022 01:29:58 -0700 (PDT)
-Received: from krzk-bin.. (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05651206c200b00488ab8914b5sm1401504lff.213.2022.07.11.01.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 01:29:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 5/5] ARM: dts: qcom: align SDHCI clocks with DT schema
-Date:   Mon, 11 Jul 2022 10:29:40 +0200
-Message-Id: <20220711082940.39539-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org>
-References: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c0ELfD4hIzwtzcZRc0K6SYG7uHfnXiZ3SBpLMfAV6G4=;
+        b=WrjgB+GCdRsQt/mvJlhay/a31eGzzDLrzbmCJoWOY3ccJIYjKjfF4C5222Kbhb0VQt
+         UIJK8tcFf3YiH7po3mJYgDPtW4iNxcF84ITUaDJUyHvInSfpCW8waOteCiAOcSaTtRJL
+         lBSt+1B59e+mNtQrbOSPaR30nj4OzzpkeVDzCl1HvMnN+Yjv7Pf9G8z4vqYyCRV3IGOb
+         JKWSHHNGF1jll5cYHEJEVKZgTlpzn1Azcy6HAwfCx+SMZx4WlrbwjWJmGZIN98kBqtLa
+         GXft8Cl6yfhJP8ILC4fdkZ9RykBUPCjLYwHsu0/IsMGCAzVjQufGscrNkD7OwR3XpiIH
+         HC1g==
+X-Gm-Message-State: AJIora+ay9qhIExFK2Ea7nYFhZGSTZlGsq3AxJiUIOPqLbb8hrdtRzm/
+        IUcLXR5w0PLZB91IlMqsPVf4TW5K9F7YsMu4
+X-Google-Smtp-Source: AGRyM1suCBcWYAdoGZFZPFlBAmvLgRU17t2insa64IziNZ41eGi5Zc2UvXDdkQtm9wSxPGQTS5y42w==
+X-Received: by 2002:a5d:4a09:0:b0:21d:a9ad:3b1b with SMTP id m9-20020a5d4a09000000b0021da9ad3b1bmr1919543wrq.3.1657528255568;
+        Mon, 11 Jul 2022 01:30:55 -0700 (PDT)
+Received: from [192.168.1.69] (211.31.102.84.rev.sfr.net. [84.102.31.211])
+        by smtp.gmail.com with ESMTPSA id p12-20020a7bcc8c000000b0039749b01ea7sm7756281wma.32.2022.07.11.01.30.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 01:30:54 -0700 (PDT)
+Message-ID: <9d79cdf8-16ff-2976-a923-79374de349a1@baylibre.com>
+Date:   Mon, 11 Jul 2022 10:30:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [PATCH] arm64: dts: ti: k3-am62: add watchdog nodes
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+Cc:     vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220630070826.11074-1-jpanis@baylibre.com>
+ <20220706234954.7r2qdm5ebuboby6x@deceptive>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <20220706234954.7r2qdm5ebuboby6x@deceptive>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT schema expects clocks iface-core order.  No functional change.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
- arch/arm/boot/dts/qcom-apq8084.dtsi    | 12 ++++++------
- arch/arm/boot/dts/qcom-ipq4019.dtsi    |  4 ++--
- arch/arm/boot/dts/qcom-msm8226.dtsi    | 18 +++++++++---------
- arch/arm/boot/dts/qcom-msm8974.dtsi    | 18 +++++++++---------
- arch/arm/boot/dts/qcom-msm8974pro.dtsi |  6 +++---
- 5 files changed, 29 insertions(+), 29 deletions(-)
-
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index 45f3cbcf6238..c887ac5cdd7d 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -425,10 +425,10 @@ mmc@f9824900 {
- 			reg-names = "hc", "core";
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
--				 <&gcc GCC_SDCC1_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-+				 <&gcc GCC_SDCC1_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			status = "disabled";
- 		};
- 
-@@ -438,10 +438,10 @@ mmc@f98a4900 {
- 			reg-names = "hc", "core";
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
--				 <&gcc GCC_SDCC2_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-+				 <&gcc GCC_SDCC2_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			status = "disabled";
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index 1b98764bab7a..a8a32a5e7e5d 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -228,9 +228,9 @@ sdhci: mmc@7824900 {
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
- 			bus-width = <8>;
--			clocks = <&gcc GCC_SDCC1_APPS_CLK>, <&gcc GCC_SDCC1_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC1_AHB_CLK>, <&gcc GCC_SDCC1_APPS_CLK>,
- 				 <&gcc GCC_DCD_XO_CLK>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			status = "disabled";
- 		};
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index f711463d22dc..9d4223bf8fc1 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -141,10 +141,10 @@ sdhc_1: mmc@f9824900 {
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
--				 <&gcc GCC_SDCC1_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-+				 <&gcc GCC_SDCC1_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&sdhc1_default_state>;
- 			status = "disabled";
-@@ -157,10 +157,10 @@ sdhc_2: mmc@f98a4900 {
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
--				 <&gcc GCC_SDCC2_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-+				 <&gcc GCC_SDCC2_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&sdhc2_default_state>;
- 			status = "disabled";
-@@ -173,10 +173,10 @@ sdhc_3: mmc@f9864900 {
- 			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC3_APPS_CLK>,
--				 <&gcc GCC_SDCC3_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
-+				 <&gcc GCC_SDCC3_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&sdhc3_default_state>;
- 			status = "disabled";
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 971eceaef3d1..1f4baa6ac64d 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -443,10 +443,10 @@ sdhc_1: mmc@f9824900 {
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC1_APPS_CLK>,
--				 <&gcc GCC_SDCC1_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-+				 <&gcc GCC_SDCC1_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			bus-width = <8>;
- 			non-removable;
- 
-@@ -460,10 +460,10 @@ sdhc_3: mmc@f9864900 {
- 			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC3_APPS_CLK>,
--				 <&gcc GCC_SDCC3_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
-+				 <&gcc GCC_SDCC3_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			bus-width = <4>;
- 
- 			#address-cells = <1>;
-@@ -479,10 +479,10 @@ sdhc_2: mmc@f98a4900 {
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "hc_irq", "pwr_irq";
--			clocks = <&gcc GCC_SDCC2_APPS_CLK>,
--				 <&gcc GCC_SDCC2_AHB_CLK>,
-+			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-+				 <&gcc GCC_SDCC2_APPS_CLK>,
- 				 <&xo_board>;
--			clock-names = "core", "iface", "xo";
-+			clock-names = "iface", "core", "xo";
- 			bus-width = <4>;
- 
- 			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro.dtsi b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-index 1e882e16a221..58df6e75ab6d 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974pro.dtsi
-@@ -10,10 +10,10 @@ &gpu {
- };
- 
- &sdhc_1 {
--	clocks = <&gcc GCC_SDCC1_APPS_CLK>,
--		 <&gcc GCC_SDCC1_AHB_CLK>,
-+	clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-+		 <&gcc GCC_SDCC1_APPS_CLK>,
- 		 <&xo_board>,
- 		 <&gcc GCC_SDCC1_CDCCAL_FF_CLK>,
- 		 <&gcc GCC_SDCC1_CDCCAL_SLEEP_CLK>;
--	clock-names = "core", "iface", "xo", "cal", "sleep";
-+	clock-names = "iface", "core", "xo", "cal", "sleep";
- };
--- 
-2.34.1
-
+On 07/07/2022 01:49, Nishanth Menon wrote:
+> On 09:08-20220630, Julien Panis wrote:
+>> Add nodes for watchdogs :
+>> - 5 in main domain
+>> - 1 in MCU domain
+>> - 1 in wakeup domain
+> True, but note: MCU wdt is typically used by M4F and wakeup WDT is
+> typically used by DM (R5) firmware. Is'nt it better we mark them
+> reserved (with device tree comments) to indicate the same?
+>
+> This can allow the kernel device tree to be used by zephyr on M4 for example..
+Nishanth, I will submit a new version of this patch that will take your 
+suggestion into account.
+> [...]
+>

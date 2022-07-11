@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497C05707D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619A85707D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiGKQCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S231203AbiGKQDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiGKQCi (ORCPT
+        with ESMTP id S229699AbiGKQDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:02:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E05422F1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8tw7+5o1eNNksdmkuvrSyMN7jBNIPnt7KKD+kh71+7w=; b=I1ZnIgnm2ujuBsAUXF0WHAl0d0
-        SG/pigoiiZB4fSofQyGQoMQinBvx5eQKskB6k9vA+Hn2a51XL8DZ+DO5zbP7wEA1HZ/d1EQ8KwrFT
-        CewerfxW5HiaABPrAeTGlKisjXXNnn0fYwjqxYnw3c43HGvp9plNVNC8vCUkYhk7cENYIjZfR7dK0
-        UeEd0CL1lpIbY6SlJLRvXb5v+4KegnJS2IdI9X6xApYjWNpliVZBJVt5Xb9vKulkJ13n8NmRb5dPt
-        S0jqWIGoQo8BLwGZunT4OLly8jyIksrSkc3usX5DVdt6K/hQ9LV2bzvxsUU+Dh6OrKJI/Ct+cqtEH
-        NFSonGEg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oAvrg-0035XW-Hj; Mon, 11 Jul 2022 16:02:28 +0000
-Date:   Mon, 11 Jul 2022 09:02:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] modules: Fix corruption of /proc/kallsyms
-Message-ID: <YsxJlIEEjlvZKSRg@bombadil.infradead.org>
-References: <20220701094403.3044-1-adrian.hunter@intel.com>
- <Yr9p4YOOfJp5evCq@bombadil.infradead.org>
- <edcf6946-1c47-c01a-e795-e874f42b2e2d@intel.com>
+        Mon, 11 Jul 2022 12:03:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C5C2422F1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 09:03:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D311596;
+        Mon, 11 Jul 2022 09:03:08 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BD6A3F792;
+        Mon, 11 Jul 2022 09:03:06 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 17:03:04 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, david.chen@nutanix.com,
+        zhangqiao22@huawei.com
+Subject: Re: [PATCH v2] sched/fair: fix case with reduced capacity CPU
+Message-ID: <20220711160304.njkd3ml7nqpokiim@wubuntu>
+References: <20220708154401.21411-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <edcf6946-1c47-c01a-e795-e874f42b2e2d@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220708154401.21411-1-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 10:48:16AM +0300, Adrian Hunter wrote:
-> On 2/07/22 00:40, Luis Chamberlain wrote:
-> > On Fri, Jul 01, 2022 at 12:44:03PM +0300, Adrian Hunter wrote:
-> >> The commit 91fb02f31505 ("module: Move kallsyms support into a separate
-> >> file") changed from using strlcpy() to using strscpy() which created a
-> >> buffer overflow. That happened because:
-> >>  1) an incorrect value was passed as the buffer length
-> >>  2) strscpy() (unlike strlcpy()) may copy beyond the length of the
-> >>     input string when copying word-by-word.
-> >> The assumption was that because it was already known that the strings
-> >> being copied would fit in the space available, it was not necessary
-> >> to correctly set the buffer length.  strscpy() breaks that assumption
-> >> because although it will not touch bytes beyond the given buffer length
-> >> it may write bytes beyond the input string length when writing
-> >> word-by-word.
-> >>
-> >> The result of the buffer overflow is to corrupt the symbol type
-> >> information that follows. e.g.
-> >>
-> >>  $ sudo cat -v /proc/kallsyms | grep '\^' | head
-> >>  ffffffffc0615000 ^@ rfcomm_session_get  [rfcomm]
-> >>  ffffffffc061c060 ^@ session_list        [rfcomm]
-> >>  ffffffffc06150d0 ^@ rfcomm_send_frame   [rfcomm]
-> >>  ffffffffc0615130 ^@ rfcomm_make_uih     [rfcomm]
-> >>  ffffffffc07ed58d ^@ bnep_exit   [bnep]
-> >>  ffffffffc07ec000 ^@ bnep_rx_control     [bnep]
-> >>  ffffffffc07ec1a0 ^@ bnep_session        [bnep]
-> >>  ffffffffc07e7000 ^@ input_leds_event    [input_leds]
-> >>  ffffffffc07e9000 ^@ input_leds_handler  [input_leds]
-> >>  ffffffffc07e7010 ^@ input_leds_disconnect       [input_leds]
-> >>
-> >> Notably, the null bytes (represented above by ^@) can confuse tools.
-> >>
-> >> Fix by correcting the buffer length.
-> >>
-> >> Fixes: 91fb02f31505 ("module: Move kallsyms support into a separate file")
-> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> > 
-> > Queued up thanks!
-> > 
-> >   Luis
-> 
-> Thanks for processing this.
-> 
-> I notice it is -rc6 and I do not see it in Linus' tree. This is a fix
-> for a regression, shouldn't it be included in 5.19?
+Hi Vincent
 
-Yeah sorry this will get to Linus today.
+On 07/08/22 17:44, Vincent Guittot wrote:
+> The capacity of the CPU available for CFS tasks can be reduced because of
+> other activities running on the latter. In such case, it's worth trying to
+> move CFS tasks on a CPU with more available capacity.
+> 
+> The rework of the load balance has filtered the case when the CPU is
+> classified to be fully busy but its capacity is reduced.
+> 
+> Check if CPU's capacity is reduced while gathering load balance statistic
+> and classify it group_misfit_task instead of group_fully_busy so we can
+> try to move the load on another CPU.
+> 
+> Reported-by: David Chen <david.chen@nutanix.com>
+> Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Tested-by: David Chen <david.chen@nutanix.com>
+> Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
+> ---
 
-  Luis
+[...]
+
+> @@ -8820,8 +8833,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+>  
+>  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+>  		struct rq *rq = cpu_rq(i);
+> +		unsigned long load = cpu_load(rq);
+>  
+> -		sgs->group_load += cpu_load(rq);
+> +		sgs->group_load += load;
+>  		sgs->group_util += cpu_util_cfs(i);
+>  		sgs->group_runnable += cpu_runnable(rq);
+>  		sgs->sum_h_nr_running += rq->cfs.h_nr_running;
+> @@ -8851,11 +8865,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+>  		if (local_group)
+>  			continue;
+>  
+> -		/* Check for a misfit task on the cpu */
+> -		if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+> -		    sgs->group_misfit_task_load < rq->misfit_task_load) {
+> -			sgs->group_misfit_task_load = rq->misfit_task_load;
+> -			*sg_status |= SG_OVERLOAD;
+> +		if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
+> +			/* Check for a misfit task on the cpu */
+> +			if (sgs->group_misfit_task_load < rq->misfit_task_load) {
+> +				sgs->group_misfit_task_load = rq->misfit_task_load;
+> +				*sg_status |= SG_OVERLOAD;
+> +			}
+> +		} else if ((env->idle != CPU_NOT_IDLE) &&
+> +			   sched_reduced_capacity(rq, env->sd)) {
+> +			/* Check for a task running on a CPU with reduced capacity */
+> +			if (sgs->group_misfit_task_load < load)
+> +				sgs->group_misfit_task_load = load;
+>  		}
+>  	}
+
+Small questions mostly for my education purposes.
+
+The new condition only applies for SMP systems. The reason asym systems don't
+care is because misfit check already considers capacity pressure when checking
+that the task fits_capacity()?
+
+It **seems** to me that the migration margin in fits_capacity() acts like the
+sd->imbalance_pct when check_cpu_capacity() is called by
+sched_reduced_capacity(), did I get it right?
+
+If I got it right, if the migration margin ever tweaked, could we potentially
+start seeing this kind of reported issue on asym systems then? I guess not. It
+just seems to me for asym systems tweaking the migration margin is similar to
+tweaking imbalance_pct for smp ones. But the subtlety is greater as
+imbalance_pct is still used in asym systems.
+
+
+Thanks
+
+--
+Qais Yousef

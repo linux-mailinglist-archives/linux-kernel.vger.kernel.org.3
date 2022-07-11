@@ -2,50 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4845C56D859
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7201B56D873
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiGKIkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        id S229915AbiGKIlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiGKIjg (ORCPT
+        with ESMTP id S230216AbiGKIkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:39:36 -0400
-Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53E9B60C0;
-        Mon, 11 Jul 2022 01:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Iszld
-        rkcWJLeZEhSrUJwi5/TDWFFSntIsp/SlG4KVbs=; b=PeLy+5SG+BYwEAqSyHKVS
-        /FqIt+o09oZobfoGIFb0QsFFeOeylPvOqpuGPAkMnJmb/oV1oewAXQ9e3tNYPvqi
-        xmQ+GtRwwDSXKn0uiFqJAw2m/luxUIrvyLE3VLWQeUBLSSKjdMyfOcPzBc99Sj9Q
-        /knh2PsYwwEScBlqLXLmno=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp9 (Coremail) with SMTP id DcCowABXqRV74ctizvpuOg--.12243S2;
-        Mon, 11 Jul 2022 16:38:20 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     Kai.Makisara@kolumbus.fi, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH] scsi: st: replace ternary operator with min() or max()
-Date:   Mon, 11 Jul 2022 16:37:53 +0800
-Message-Id: <20220711083753.4041723-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 04:40:46 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3F7921E2D;
+        Mon, 11 Jul 2022 01:40:07 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1oAoxa-0006eA-01; Mon, 11 Jul 2022 10:40:06 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B4444C0353; Mon, 11 Jul 2022 10:37:54 +0200 (CEST)
+Date:   Mon, 11 Jul 2022 10:37:54 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: mm: Use the bitmap API to allocate bitmaps
+Message-ID: <20220711083754.GB6084@alpha.franken.de>
+References: <4b64934fe14f1c2d30193df01e67a52022703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowABXqRV74ctizvpuOg--.12243S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr4xurW8Xr45Cr1kXw4kXrb_yoW8KFW3pF
-        Z5K3y0k3y8JF1kWFnFgan8C34ftasYqFWjk3y5X3y5ZFn5GF909w1fGFyUKayrtrs7Jasr
-        tr1qgr95G3WUtr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j9iSdUUUUU=
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiVwo7+1etnohaeQABsT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b64934fe14f1c2d30193df01e67a52022703b95.1656961396.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,66 +42,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Tue, Jul 05, 2022 at 10:56:51PM +0200, Christophe JAILLET wrote:
+> Use bitmap_zalloc() instead of hand-writing them.
+> 
+> It is less verbose and it improves the semantic.
+> 
+> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
+> also less verbose.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> v1 --> v2: don't speak about bitmap_free() in the log message (Sergey Shtylyov)
+> ---
+>  arch/mips/mm/context.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/mm/context.c b/arch/mips/mm/context.c
+> index b25564090939..966f40066f03 100644
+> --- a/arch/mips/mm/context.c
+> +++ b/arch/mips/mm/context.c
+> @@ -67,7 +67,7 @@ static void flush_context(void)
+>  	int cpu;
+>  
+>  	/* Update the list of reserved MMIDs and the MMID bitmap */
+> -	bitmap_clear(mmid_map, 0, num_mmids);
+> +	bitmap_zero(mmid_map, num_mmids);
+>  
+>  	/* Reserve an MMID for kmap/wired entries */
+>  	__set_bit(MMID_KERNEL_WIRED, mmid_map);
+> @@ -277,8 +277,7 @@ static int mmid_init(void)
+>  	WARN_ON(num_mmids <= num_possible_cpus());
+>  
+>  	atomic64_set(&mmid_version, asid_first_version(0));
+> -	mmid_map = kcalloc(BITS_TO_LONGS(num_mmids), sizeof(*mmid_map),
+> -			   GFP_KERNEL);
+> +	mmid_map = bitmap_zalloc(num_mmids, GFP_KERNEL);
+>  	if (!mmid_map)
+>  		panic("Failed to allocate bitmap for %u MMIDs\n", num_mmids);
+>  
+> -- 
+> 2.34.1
 
-Fix the following coccicheck warning:
+applied to mips-next.
 
-drivers/scsi/st.c:1575: WARNING opportunity for max().
-drivers/scsi/st.c:2187: WARNING opportunity for min().
-drivers/scsi/st.c:3997: WARNING opportunity for min().
-drivers/scsi/st.c:4029: WARNING opportunity for min().
+Thomas.
 
-min() and max() macro is defined in include/linux/minmax.h. It avoids
-multiple evaluations of the arguments when non-constant and performs
-strict type-checking.
-
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/scsi/st.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 850172a2b8f1..9555988fa78e 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -1572,8 +1572,7 @@ static int setup_buffering(struct scsi_tape *STp, const char __user *buf,
- 
- 	if (!STbp->do_dio) {
- 		if (STp->block_size)
--			bufsize = STp->block_size > st_fixed_buffer_size ?
--				STp->block_size : st_fixed_buffer_size;
-+			bufsize = max(STp->block_size, st_fixed_buffer_size);
- 		else {
- 			bufsize = count;
- 			/* Make sure that data from previous user is not leaked even if
-@@ -2184,8 +2183,7 @@ st_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
- 					  STps->eof, STbp->buffer_bytes,
- 					  (int)(count - total));
- 			) /* end DEB */
--			transfer = STbp->buffer_bytes < count - total ?
--			    STbp->buffer_bytes : count - total;
-+			transfer = min((size_t)STbp->buffer_bytes, count - total);
- 			if (!do_dio) {
- 				i = from_buffer(STbp, buf, transfer);
- 				if (i) {
-@@ -3994,7 +3992,7 @@ static int append_to_buffer(const char __user *ubp, struct st_buffer * st_bp, in
- 	}
- 	for (; i < st_bp->frp_segs && do_count > 0; i++) {
- 		struct page *page = st_bp->reserved_pages[i];
--		cnt = length - offset < do_count ? length - offset : do_count;
-+		cnt = min(length - offset, do_count);
- 		res = copy_from_user(page_address(page) + offset, ubp, cnt);
- 		if (res)
- 			return (-EFAULT);
-@@ -4026,7 +4024,7 @@ static int from_buffer(struct st_buffer * st_bp, char __user *ubp, int do_count)
- 	}
- 	for (; i < st_bp->frp_segs && do_count > 0; i++) {
- 		struct page *page = st_bp->reserved_pages[i];
--		cnt = length - offset < do_count ? length - offset : do_count;
-+		cnt = min(length - offset, do_count);
- 		res = copy_to_user(ubp, page_address(page) + offset, cnt);
- 		if (res)
- 			return (-EFAULT);
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

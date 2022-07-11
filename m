@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE8857006C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B072557006F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 13:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiGKL0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 07:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S231288AbiGKL0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 07:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbiGKL0B (ORCPT
+        with ESMTP id S231273AbiGKL0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:26:01 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6414E48E8A
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:02:01 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id n7so4546763ioo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:02:01 -0700 (PDT)
+        Mon, 11 Jul 2022 07:26:11 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0B92198
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:02:35 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id d12so8034948lfq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 04:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=zZThk4si2Df2oCcklrdiFPTJcwReEc+65EKNL0Y3jcA=;
-        b=hEAtnyVmAaVw4hGQPfDNKMFHfWf4jgRpP6t4mIOeQ1ii1bvWwarph3IkjYrIp0OHcM
-         qqzhukxCRTsCy2RVueuQQQ471HbVEMfojJarVVyC+rLT8dl3eICYvnz7xoC/mrSDKGV0
-         DRCf/BUiKfzxT3KKEiQGdL9tCVlRRL1ZEXVkdvmKXlbLCYPvw2TsXYP+Mi5YSQlDhyZh
-         6IbCzUrXnPovc6SlPMeeaDkvS1/MhIuOdTlUe+Mfz1qx1AE6kwOIMVhF1IYf5/Sey43z
-         My6U9MNYp4hNZW2paUpegGjCM3lsWb4BMbzKL5nyqTSA8a/2whpRXJBDNTWMURGttMGB
-         uCcA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MeyCZN/nvsiRNNCAAR15uWNXyKxL+fyysaeRMmXtoJA=;
+        b=D4OVU2SdZDl1a2Jmvol1Su2acwSKKhbqYZKZn6/Qc8eT2iND/KO9t9DapzIOJtxYXe
+         Me3ljHAhTzWcyA62SHeecPkZ9BDGif3nIQh/4L6wxXSsOfYRKcaerfZkctH+lPcPcaXR
+         9nwslGSNuJR55nrpcs0QsF89vgcW8SmISLwf7h2vLLq4lkAVjwTUIVYO0/uBy/LsND6c
+         fUnyCOa9fgewXhbnW8EdRaMnWofxJvAWbnpmaDz4VV5KTLCEbsVuj6MgdDHsj0ja4Cm4
+         7iMTtMjKPL9Xg15Ww0kzLHvpVQi9YC6P0O0itH4F7zJK4x/PaxvCYROPFLopO6UyHl1u
+         Htcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=zZThk4si2Df2oCcklrdiFPTJcwReEc+65EKNL0Y3jcA=;
-        b=Js34VhpuulxOFOw4C3BcAhxjWCZ4dVJvv7VZSOCR+Qxn7wrHXB3FDRtrOhguAkRyCj
-         Cyg651uL9qFFHO570b57c9AEjIDnrmnIYBtBcXtNsy1Gm8s7UMvL0On9vFUB598pEUKy
-         FZesVkdnU1zy+rSWtEXHm0QYkYoCwHLVI9+8RkfUGuys/pH37Vz7G3pTq1Of423Z/jOd
-         qdWzlzMUcOCjelp36SvZrs0amedCEV4MEwlwa7QMriCSMjXRL6RH1WyAzUVOsI01rxzN
-         UUuyALR516ATPW3l2gCJMB7why9IJqm9lnkK7ipcbEDK/vsS/9cf6RZapApOcAPdEw4Y
-         cddw==
-X-Gm-Message-State: AJIora/9lNmAEZjEfGyDf8PgOpdbqrbzAtolKlcE4A3cwcV010bzrDqU
-        HZLH7ftnHRviLe831d3ZsuQQz7aCndHlfO89bQ908kWHrWXGxA==
-X-Google-Smtp-Source: AGRyM1u0MaIJ0uypZPWBkAr2NPKGat9OktcIuoHO3nP77sJq2pHTDV3AU8nizI+RjOYBzF88RInvbapcqca0SsR3g6c=
-X-Received: by 2002:a05:6602:2ace:b0:678:d781:2984 with SMTP id
- m14-20020a0566022ace00b00678d7812984mr8968851iov.186.1657537319833; Mon, 11
- Jul 2022 04:01:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MeyCZN/nvsiRNNCAAR15uWNXyKxL+fyysaeRMmXtoJA=;
+        b=7vzWIVe+f+qKRJzP0LEkgSr8FiMjxbeDtoO5BjA1KlX/5QLx31Dg5UeJyyePiH980g
+         q6UsD9Jl2fjLcYNf83/o7QPkRZrA7ildumc8krksjY6A6BVmqx/e0q40gi7SwweCdiko
+         MwncksUyw3D6D3YiwwIROxvCRWMXM1/uXq5gZXcjUV965TX835pDRRdTAjKsAlk5em6b
+         g9KnlIjj4MoywM93THdgX79Ad2ZfSJUVWZmmdMT/enRlQhgaMk4jZtlUnTYE82TZNWtk
+         O3LR5boIWzenbXA6w5eyYyCb5vW3CRmy6EgdMtlbDN3fZW8uz2G1rP5Jic8dadJ73aT7
+         d4Kw==
+X-Gm-Message-State: AJIora+Habb6qwk7bfnwJkLjyew8w5vs+R5MnaFt1OOUMP2v3BmZWodB
+        xP+OgZipjKG/irJHco+OmnogQQ==
+X-Google-Smtp-Source: AGRyM1vhnNj6aFdiTr/noru4YDiDuSvAcJcPUSJPfEwIMQ9AAASbaicPsvFT+S0lPieRGdaNAEiPLw==
+X-Received: by 2002:a05:6512:3b20:b0:47f:8ca1:bd7 with SMTP id f32-20020a0565123b2000b0047f8ca10bd7mr10686215lfv.105.1657537353492;
+        Mon, 11 Jul 2022 04:02:33 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id u10-20020ac258ca000000b00478a311d399sm1489609lfo.0.2022.07.11.04.02.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 04:02:32 -0700 (PDT)
+Message-ID: <c8f8f5f4-173e-797d-e060-e5eaac7ca822@linaro.org>
+Date:   Mon, 11 Jul 2022 13:02:30 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 11 Jul 2022 16:31:48 +0530
-Message-ID: <CA+G9fYvh7Wocueo0hb_q17xaEsnY_qLO8sFnEQG01GpK4rcwYw@mail.gmail.com>
-Subject: [next] arn: PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: mmc: Add compatible for MediaTek MT8188
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, ulf.hansson@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220707054710.1396-1-johnson.wang@mediatek.com>
+ <41e17a56-5cb0-8e90-c7ae-a7a56de986d0@linaro.org>
+ <3216ec92952c7d722feaeb76986e0a6a54340646.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3216ec92952c7d722feaeb76986e0a6a54340646.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +79,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux next arm BeagleBoard x15 device boot failed due to the
-following commit. The x15 did not event showed any crash log
-on the serial console.
+On 07/07/2022 09:30, Johnson Wang wrote:
+> On Thu, 2022-07-07 at 08:46 +0200, Krzysztof Kozlowski wrote:
+>> On 07/07/2022 07:47, Johnson Wang wrote:
+>>> This commit adds dt-binding documentation of mmc for MediaTek
+>>> MT8188 SoC
+>>> platform.
+>>>
+>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+>>> b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+>>> index 2a2e9fa8c188..3fbf33ad4f7c 100644
+>>> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+>>> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+>>> @@ -32,6 +32,9 @@ properties:
+>>>        - items:
+>>>            - const: mediatek,mt8186-mmc
+>>>            - const: mediatek,mt8183-mmc
+>>> +      - items:
+>>> +          - const: mediatek,mt8188-mmc
+>>
+>> You duplicate quite a lot. Use enum.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi Krzysztof,
+> 
+> Thanks for you suggestion.
+> 
+> I will use 'enum' to place this compatible strings.
+> 
+> Just like this:
+> - items:
+>     - enum:
+>         - mediatek,mt8186-mmc
+>         - mediatek,mt8188-mmc
+>         - mediatek,mt8192-mmc
+>         - mediatek,mt8195-mmc
+>     - const: mediatek,mt8183-mmc
+> 
+> Moreover, it seems that missing an "items:" between oneOf and enum in
+> the compatible property.
+> Is my understanding wrong?
 
-Anders bisect this and found the first bad commit is
+I did not propose to remove items, so where are they missing? Not sure
+what you are asking about...
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
-Author: Saravana Kannan <saravanak@google.com>
-Date:   Wed Jun 1 00:06:57 2022 -0700
-
-    PM: domains: Delete usage of driver_deferred_probe_check_state()
-
-    Now that fw_devlink=on by default and fw_devlink supports
-    "power-domains" property, the execution will never get to the point
-    where driver_deferred_probe_check_state() is called before the supplier
-    has probed successfully or before deferred probe timeout has expired.
-
-    So, delete the call and replace it with -ENODEV.
-
-    Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-    Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-    Signed-off-by: Saravana Kannan <saravanak@google.com>
-    Link: https://lore.kernel.org/r/20220601070707.3946847-2-saravanak@google.com
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 739e52cd4aba..3e86772d5fac 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device
-*dev, struct device *base_dev,
-                mutex_unlock(&gpd_list_lock);
-                dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-                        __func__, PTR_ERR(pd));
--               return driver_deferred_probe_check_state(base_dev);
-+               return -ENODEV;
-        }
-
-        dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

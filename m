@@ -2,53 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2640E5705BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563035705C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiGKOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S231330AbiGKOht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGKOgi (ORCPT
+        with ESMTP id S229607AbiGKOhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:36:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD0865D7D;
-        Mon, 11 Jul 2022 07:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30C65B80FAE;
-        Mon, 11 Jul 2022 14:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B25C34115;
-        Mon, 11 Jul 2022 14:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657550194;
-        bh=V6QwPdhvRlFZNf3VcUzFm9OphswgaGgjtz+UmgND7H0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rHbA9jkFoEINUY5zhlcGh04NP9luzwWnk/Nht835LvKS7Yb6v/19n3iLIgbh+YNHp
-         YWHiCrCdaGHk4qW4xYorqAHgcF1Xq5aJlu9VkP1T2SERxvtasy1OInuiMxAknl+Pna
-         3NQwCCL7hTE5wO+MO/7iuI5TbGWnrQojN4ZnlERs=
-Date:   Mon, 11 Jul 2022 16:36:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.15 000/230] 5.15.54-rc1 review
-Message-ID: <Ysw1cCYRwnpvhO7d@kroah.com>
-References: <20220711090604.055883544@linuxfoundation.org>
- <7c552ad4-81e9-2abe-3114-dd55c924844c@nvidia.com>
+        Mon, 11 Jul 2022 10:37:46 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF686714B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:37:45 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id bk26so7264761wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iJtfzfcC1AnsDV/pvGZu2fxxfQmMd6+WOUgRm2id0vA=;
+        b=I0e3YydFgfpoaHWWDRkccW6qtvLN35SFDD/+T6Zf3YSIMWNNV3Mff+f6Xw61zVX2cs
+         1uWFO47xJ8qdEm8xYURWHIZELaONyqchlS9wilP7b4oGmx9pxRIAyswMWZZvBk+smMZs
+         yt12KfMRmGjE7ITc9L9FP7FjpGG+tPFOdmowu1VcdHgpplgc5wTqflQTOes3qwN03qrq
+         eQVm0ExSbWAc4Rs5CMLNMlspn2+A8dO/qLPCZt/mPy0Zq5OQ1y8RZVetuvUzkDzMhtXK
+         UlvFSooupOa8nvx5j/W5rUWkIdPIT7Phoh0fet6WUybKhUPjpAePCaRIYdnqI4FifzE2
+         vNBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iJtfzfcC1AnsDV/pvGZu2fxxfQmMd6+WOUgRm2id0vA=;
+        b=O7ocByOwhxTVCcXNroMzjaWlhz+utahaN9j1wRSNNTr4Q3PGx8gxlxFI+5bI+/aVLR
+         xg6EDqdKVJCJTdh7f29RewXynDUPI8agmQzORxGjONQ9K0Vgr9yNchY5Xh4LsiRYG5kY
+         malKw0i4bS0hN8Siaqn5Ypw9wJyN0onhdtrRg1Iz7jB6s2zrT7ciBlvHEMdP0BNZYXSR
+         Ih0kq5Q1m7zaAjacxWrXqoE9seXSWt/Z5UIrWZr+xJDowYj2hF2hn04MS50/iLLLxs8k
+         Mxox4lwKNYZAF94lXIArVU2G9ILKParMkaQZJkKUuHTiPh7kBmpF/vRkb69PvGz82/2Q
+         CEyA==
+X-Gm-Message-State: AJIora9X9xNfaiKsrzDDj4Z7egH93FiK0XyFd1jnenUn/OtzTqUd+mfP
+        B6Wq5boO5V+Z4DeGsGnrwJaxWg==
+X-Google-Smtp-Source: AGRyM1t1yyqWZwS7XrcViX/JC5qBkc6Z05thqF1oYvTfe7VDmx7hhI7m+JnQqN9Z2J8tfLCknsoQtw==
+X-Received: by 2002:adf:f38f:0:b0:21d:66b5:21c with SMTP id m15-20020adff38f000000b0021d66b5021cmr16896532wro.144.1657550264039;
+        Mon, 11 Jul 2022 07:37:44 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id k5-20020a05600c1c8500b003974cb37a94sm10468691wms.22.2022.07.11.07.37.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 07:37:43 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 15:37:17 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: Re: [PATCH bpf-next v7 4/4] bpf, arm64: bpf trampoline for arm64
+Message-ID: <Ysw1nSxQUghvY/eY@myrica>
+References: <20220708093032.1832755-1-xukuohai@huawei.com>
+ <20220708093032.1832755-5-xukuohai@huawei.com>
+ <YswQQG7CUoTXCbDa@myrica>
+ <4852eba8-9fd0-6894-934c-ab89c0c7cea9@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c552ad4-81e9-2abe-3114-dd55c924844c@nvidia.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <4852eba8-9fd0-6894-934c-ab89c0c7cea9@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +96,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 01:43:59PM +0100, Jon Hunter wrote:
-> Hi Greg,
-> 
-> On 11/07/2022 10:04, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.54 release.
-> > There are 230 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
+On Mon, Jul 11, 2022 at 10:16:00PM +0800, Xu Kuohai wrote:
+> >> +	if (save_ret)
+> >> +		emit(A64_STR64I(p->jited ? r0 : A64_R(0), A64_SP, retval_off),
+> >> +		     ctx);
 > > 
-> > Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> > Anything received after that time might be too late.
+> > This should be only A64_R(0), not r0. r0 happens to equal A64_R(0) when
+> > jitted due to the way build_epilogue() builds the function at the moment,
+> > but we shouldn't rely on that.
 > > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.54-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> > -------------
-> > Pseudo-Shortlog of commits:
 > 
-> ...
+> looks like I misunderstood something, will change it to:
 > 
-> > Mark Rutland <mark.rutland@arm.com>
-> >      irqchip/gic-v3: Ensure pseudo-NMIs have an ISB between ack and handling
-> 
-> 
-> The above change is missing a semi-colon and so is causing the following
-> build error ...
-> 
-> drivers/irqchip/irq-gic-v3.c: In function 'gic_handle_nmi':
-> drivers/irqchip/irq-gic-v3.c:666:2: error: expected ';' before 'err'
->   err = handle_domain_nmi(gic_data.domain, irqnr, regs);
->   ^~~
+> /* store return value, which is held in x0 for interpreter and in
+>  * bpf register r0 for JIT,
 
-Ah, the original also didn't have the ; I'll go find the fix commit for
-this...
+It's simpler than that: in both cases the return value is in x0 because
+the function follows the procedure call standard. You could drop the
+comment to avoid confusion and only do the change to A64_R(0)
 
-> 
-> > Hou Tao <houtao1@huawei.com>
-> >      bpf, arm64: Use emit_addr_mov_i64() for BPF_PSEUDO_FUNC
-> 
-> And the above commit is generating the following build error ...
-> 
-> arch/arm64/net/bpf_jit_comp.c: In function 'build_insn':
-> arch/arm64/net/bpf_jit_comp.c:791:7: error: implicit declaration of function
-> 'bpf_pseudo_func' [-Werror=implicit-function-declaration]
->    if (bpf_pseudo_func(insn))
->        ^~~~~~~~~~~~~~~
+Thanks,
+Jean
 
-Thanks, will figure this one out and do a -rc2 release.
-
-greg k-h
+>
+>
+>  but r0 happens to equal x0 due to the
+>  * way build_epilogue() builds the JIT image.
+>  */
+> if (save_ret)
+>         emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+> 
+> > Apart from that, for the series
+> > 
+> > Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > 
+> > .

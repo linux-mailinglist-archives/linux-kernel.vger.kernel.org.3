@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E269156FD0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3640C56FD0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiGKJu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S233799AbiGKJug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbiGKJtW (ORCPT
+        with ESMTP id S233870AbiGKJtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:49:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43124940;
-        Mon, 11 Jul 2022 02:24:10 -0700 (PDT)
+        Mon, 11 Jul 2022 05:49:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611D623BD6;
+        Mon, 11 Jul 2022 02:24:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CA06124E;
-        Mon, 11 Jul 2022 09:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23856C341C8;
-        Mon, 11 Jul 2022 09:24:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C73AB612FE;
+        Mon, 11 Jul 2022 09:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1233C34115;
+        Mon, 11 Jul 2022 09:24:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531449;
-        bh=lRISEmsP/F7+HXwJ+1ZXXTgip6J9+k9Li3ei1iTB2z4=;
+        s=korg; t=1657531452;
+        bh=BhTQ1+OzpOMgF/TPBqjizHXL4xPWjSslKZNPIH5xw8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UZdOgsDN1Lft8HUd6fSo/jg/eVZnl8T/dWG9Bu+1TGLIPJrxMhJsBkKrAF6tI1t/0
-         p/Wxh19+lB6mQkGgUJmPqrlejZPTXcCutjlcnWkvwnBK5/d0A2h19v6iCbhofrzeM/
-         SaIL2rmrjS4J+/6sKLkmq6lXKKeBTMJue2yruKl0=
+        b=djda2JJbyu9+W0PFokRJbzAMmFQaBJjoFI6PLErUK4vaMvgbwX6MQVD+M1c+t+8ib
+         pvsVou0n3sh5mXguoWk5v4E18wO6CtQQDNKmY9tn3DwanY5M3WP1uKUjcHMjT9m7qX
+         DS0DbX66Np3/wNJhFvOiv4jopMQnwwRf8aCWWw6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hui Wang <hui.wang@canonical.com>,
+        stable@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/230] serial: sc16is7xx: Clear RS485 bits in the shutdown
-Date:   Mon, 11 Jul 2022 11:06:05 +0200
-Message-Id: <20220711090607.160112615@linuxfoundation.org>
+Subject: [PATCH 5.15 110/230] bus: mhi: core: Use correctly sized arguments for bit field
+Date:   Mon, 11 Jul 2022 11:06:06 +0200
+Message-Id: <20220711090607.187942873@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
 References: <20220711090604.055883544@linuxfoundation.org>
@@ -54,46 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hui Wang <hui.wang@canonical.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 927728a34f11b5a27f4610bdb7068317d6fdc72a ]
+[ Upstream commit 5a717e93239fc373a314e03e45c43b62ebea1b26 ]
 
-We tested RS485 function on an EVB which has SC16IS752, after
-finishing the test, we started the RS232 function test, but found the
-RTS is still working in the RS485 mode.
+The find.h APIs are designed to be used only on unsigned long arguments.
+This can technically result in a over-read, but it is harmless in this
+case. Regardless, fix it to avoid the warning seen under -Warray-bounds,
+which we'd like to enable globally:
 
-That is because both startup and shutdown call port_update() to set
-the EFCR_REG, this will not clear the RS485 bits once the bits are set
-in the reconf_rs485(). To fix it, clear the RS485 bits in shutdown.
+In file included from ./include/linux/bitmap.h:9,
+                 from ./include/linux/cpumask.h:12,
+                 from ./arch/x86/include/asm/cpumask.h:5,
+                 from ./arch/x86/include/asm/msr.h:11,
+                 from ./arch/x86/include/asm/processor.h:22,
+                 from ./arch/x86/include/asm/cpufeature.h:5,
+                 from ./arch/x86/include/asm/thread_info.h:53,
+                 from ./include/linux/thread_info.h:60,
+                 from ./arch/x86/include/asm/preempt.h:7,
+                 from ./include/linux/preempt.h:78,
+                 from ./include/linux/spinlock.h:55,
+                 from ./include/linux/wait.h:9,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from ./include/linux/debugfs.h:15,
+                 from drivers/bus/mhi/core/init.c:7:
+drivers/bus/mhi/core/init.c: In function 'to_mhi_pm_state_str':
+./include/linux/find.h:187:37: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'enum mhi_pm_state[1]' [-Warray-bounds]
+  187 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+      |                                     ^~~~~
+drivers/bus/mhi/core/init.c:80:51: note: while referencing 'state'
+   80 | const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+      |                                 ~~~~~~~~~~~~~~~~~~^~~~~
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Hui Wang <hui.wang@canonical.com>
-Link: https://lore.kernel.org/r/20220308110042.108451-1-hui.wang@canonical.com
+Link: https://lore.kernel.org/r/20211215232446.2069794-1-keescook@chromium.org
+[mani: changed the variable name "bits" to "pm_state"]
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Link: https://lore.kernel.org/r/20211216081227.237749-10-manivannan.sadhasivam@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sc16is7xx.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/bus/mhi/core/init.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 0ab788058fa2..e98aa7b97cc5 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1055,10 +1055,12 @@ static void sc16is7xx_shutdown(struct uart_port *port)
+diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+index 4183945fc2c4..c0187367ae75 100644
+--- a/drivers/bus/mhi/core/init.c
++++ b/drivers/bus/mhi/core/init.c
+@@ -79,7 +79,8 @@ static const char * const mhi_pm_state_str[] = {
  
- 	/* Disable all interrupts */
- 	sc16is7xx_port_write(port, SC16IS7XX_IER_REG, 0);
--	/* Disable TX/RX */
-+	/* Disable TX/RX, clear auto RS485 and RTS invert */
- 	sc16is7xx_port_update(port, SC16IS7XX_EFCR_REG,
- 			      SC16IS7XX_EFCR_RXDISABLE_BIT |
--			      SC16IS7XX_EFCR_TXDISABLE_BIT,
-+			      SC16IS7XX_EFCR_TXDISABLE_BIT |
-+			      SC16IS7XX_EFCR_AUTO_RS485_BIT |
-+			      SC16IS7XX_EFCR_RTS_INVERT_BIT,
- 			      SC16IS7XX_EFCR_RXDISABLE_BIT |
- 			      SC16IS7XX_EFCR_TXDISABLE_BIT);
+ const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+ {
+-	int index = find_last_bit((unsigned long *)&state, 32);
++	unsigned long pm_state = state;
++	int index = find_last_bit(&pm_state, 32);
  
+ 	if (index >= ARRAY_SIZE(mhi_pm_state_str))
+ 		return "Invalid State";
 -- 
 2.35.1
 

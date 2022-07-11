@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E62B570BDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8895570BE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 22:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiGKUdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 16:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S231477AbiGKUeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 16:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGKUdu (ORCPT
+        with ESMTP id S230440AbiGKUd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:33:50 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1905D33404;
-        Mon, 11 Jul 2022 13:33:49 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31cac89d8d6so61444227b3.2;
-        Mon, 11 Jul 2022 13:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=847p17DesiUPrAbTrGt+da4YJYmyj4ybBvLUVEuSIjY=;
-        b=J4WttHlaqvEgBfuXBOlq7Cn8H1LHHBEHnfD+usVNNf3XdpUKSGcz8IGIC0CH1Yfmol
-         kUpd0qMrcglCv7BVwhQ7brGk96fa5ovV5b6TzmWIVXjV4xgrpuznHRCgtQRSzXPr7E/J
-         OUS2TYH8ALc8D31qvjCclWzRy4E5MwvPQSsMuUve8EGSRLKpr6FS7ilsuaz2fPNiMnjg
-         FJrsIi8Yuu1Etq+XLcVJ0li4S7B1wVbV1xnFvRZhlWo4rS4foOG3zIEb5Xi1OzBdOI6s
-         Ksz0exapPlOZnUdUZ4jrnGSIvV/1pTKOzmXtNiZs/w3LY3lPGrlG7HVFdyUzmuOpLkDF
-         G5nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=847p17DesiUPrAbTrGt+da4YJYmyj4ybBvLUVEuSIjY=;
-        b=bY3/IWI/zLkJFl5xNRR1pweqAi544ETzwKyP25tAIQRS/lahDl6xH6m4Iht8ghY5FI
-         8RL3ZQLwuiCMGTeaAB05hms4/ToATwrLOLnh+g5B7qoq5lnDKjvN2HZYQdois1JEiRjA
-         ptA7IdeABzUuXqSwjOjBDcGA4RwKzBvivh+ElnV9wRWL6ljE5plN6WPjJbrIsKLbnQYT
-         3INexnYuzEVCSGfilINBPrLd8V1J1lfM66BXscbjmNCwDT7Ec18ZI19ZXNoP2/RVcaNq
-         BAyJ2vs6+NLHuuTJhM9AH4ArXskt25878Y4n20hNCG9WaZ5DiEZE9Xa//f6hvu44ZlY9
-         gOWg==
-X-Gm-Message-State: AJIora/eqMjjlWign45HJ79ABw/CqY7Vu+sIv87xF2CKbyr7ajOefMFD
-        f2iyE7O78U1vtiUjnSLeqXPieQv+URvOKRJRbiQ=
-X-Google-Smtp-Source: AGRyM1soa/b5CVtvIJwCZk3wxZrzaUqyUaH+jrfMwcncwn0dl8Hm8H2RvISAWcx5pab5/XocLBsGF/kqMjj8c3nfY18=
-X-Received: by 2002:a81:4bd7:0:b0:31c:91da:5a20 with SMTP id
- y206-20020a814bd7000000b0031c91da5a20mr23140384ywa.131.1657571628325; Mon, 11
- Jul 2022 13:33:48 -0700 (PDT)
+        Mon, 11 Jul 2022 16:33:57 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CC94E84C;
+        Mon, 11 Jul 2022 13:33:56 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 61DA040151;
+        Tue, 12 Jul 2022 01:33:48 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1657571630; bh=on71Fn6PJmPzhtPge1o/S9PoCOQqQHfSiY+DRr0U3Mc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Asgocgy5VCeyyV3unXB41fx422WbhirjUjfTmAz4gLdvATaazpBbym+tplMZVMmrN
+         70SRVHH7opuT8nyoTdoC2b0FxFENX3wBkad3eZQVThIcXxCl4pTZTRFLyBHIrTtdt6
+         oxg7V7XWAhVWuzsfBH4L8e4IbiKisRv9+mdF2lBEkyTQoDKKu1tRLmgB9RhgtbEend
+         gCgEGGDgn7pweaYacbHiauLHT5EQhzl2HSk8p7C9df6eKiU3ibK+PwkggmkQQJNxDS
+         zIME6sofpI/OlG/6V1uwibABcQTSEi96PDnuejrcv7zVCpxztvrlhh+YsNPhr9VuJ7
+         EHE62NcKd/Pyw==
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     thierry.reding@gmail.com, lee.jones@linaro.org
+Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
+        masneyb@onstation.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v9 0/2] Clock based PWM output driver
+Date:   Tue, 12 Jul 2022 01:33:38 +0500
+Message-Id: <20220711203340.648007-1-nikita@trvn.ru>
 MIME-Version: 1.0
-References: <20220711192113.3522664-1-horatiu.vultur@microchip.com>
- <20220711192113.3522664-3-horatiu.vultur@microchip.com> <CAHp75VdeZSP62qoOdQf=g4b7AheFd4=jNxfjMh-_T7Q1Zi=LbA@mail.gmail.com>
- <20220711202646.om65vrksyifvkfkw@soft-dev3-1.localhost> <CAHp75VeJgUFdFgBpG5avmKCn-CGNOJ6wZAhc0a4f2MHfLbvXmA@mail.gmail.com>
-In-Reply-To: <CAHp75VeJgUFdFgBpG5avmKCn-CGNOJ6wZAhc0a4f2MHfLbvXmA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 11 Jul 2022 22:33:11 +0200
-Message-ID: <CAHp75VdTUqP+Ho2cmeMiOwNtu_HhOMoo3cCUQ27vdPftcJ-xUA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] pinctrl: ocelot: Fix pincfg
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kavyasree.kotagiri@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Michael Walle <michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 10:29 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jul 11, 2022 at 10:23 PM Horatiu Vultur
-> <horatiu.vultur@microchip.com> wrote:
-> >
-> > The 07/11/2022 21:51, Andy Shevchenko wrote:
-> > >
-> > > On Mon, Jul 11, 2022 at 9:17 PM Horatiu Vultur
-> > > <horatiu.vultur@microchip.com> wrote:
-> > > >
-> > > > The blamed commit changed to use regmaps instead of __iomem. But it
-> > > > didn't update the register offsets to be at word offset, so it uses byte
-> > > > offset.
-> > > > Another issue with the same commit is that it has a limit of 32 registers
-> > > > which is incorrect. The sparx5 has 64 while lan966x has 77.
-> > >
-> > > ...
-> > >
-> > > > -static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
-> > > > +static struct regmap *ocelot_pinctrl_create_pincfg(struct ocelot_pinctrl *info,
-> > > > +                                                  struct platform_device *pdev)
-> > >
-> > > const?
-> > >
-> > > And I would leave pdev to be the first parameter, if there are no
-> > > other functions that have them like this.
-> >
-> > I will do that in the next version.
-> > Just for my understanding/knowledge why is this desire to have const or
-> > to keep the const?
->
-> For non-POD types it's a good coding practice to reduce surface of
-> attack, if any (the data will be located in the pages with RO flag
-> set, and attempt to write will give you a page fault or other
-> exception, it depends on architecture).
-> Also a common sense, if you don't change data (which is actually
-> initial configuration or so), then why shouldn't you use const?
-> Note, in cases when it's not initial data, but runtime stuff (like
-> really run time), const is obviously either can't or not needed to be
-> used.
+This series introduces an "adapter" driver that allows PWM consumers
+to control clock outputs with duty-cycle control.
 
-One more specifically for drivers (related to the first item above),
-it allows one to scope the point of failure in case of wrong
-configuration comes in. The device might misbehave badly because of
-some garbage somewhere. Also, the driver won't write data to that
-area, which is just a good preventive programming practice (but this I
-already implied by the second item above).
+Some platforms (e.g. some Qualcomm chipsets) have "General Purpose"
+clocks that can be muxed to GPIO outputs and used as PWM outputs.
+Those outputs may be connected to various peripherals such as
+leds in display backlight or haptic feedback motor driver.
 
+To avoid re-implementing every single PWM consumer driver with clk
+support (like in [1]) and don't put the burden of providing the PWM
+sources on the clock drivers (as was proposed in [2]), clk based
+pwm controller driver is introduced.
+
+There is an existing driver that provides the opposite function
+in drivers/clk/clk-pwm.c with a compatible "pwm-clock" so the new
+driver uses the opposite naming scheme: drivers/pwm/pwm-clk.c
+and compatible "clk-pwm".
+
+Changes in v2:
+ - Fix filename in the DT schema.
+ - Address Uwe's review comments.
+Changes in v3:
+ - Fix node pattern in the core pwm schema.
+ - Address Uwe's review comments.
+Changes in v4:
+ - Drop the (incorrect) pwm schema change.
+ - Use generic node name in the dt bindings example.
+Changes in v5:
+ - Correct required properties.
+ - add missed returns.
+Changes in v6:
+ - Add missed error cleanup
+ - Adjust limitations comment
+Changes in v7:
+ - Rename some variables to be in line with common naming
+Changes in v8:
+ - Document the glitch that happens inbetween multiple clock operations
+Changes in v9:
+ - Fix incorrect patch message separators ('---')
+
+Nikita Travkin (2):
+  dt-bindings: pwm: Document clk based PWM controller
+  pwm: Add clock based PWM output driver
+
+ .../devicetree/bindings/pwm/clk-pwm.yaml      |  46 ++++++
+ drivers/pwm/Kconfig                           |  10 ++
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-clk.c                         | 148 ++++++++++++++++++
+ 4 files changed, 205 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-clk.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.3
+

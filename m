@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4191256FA49
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C70756FAA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiGKJPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S231874AbiGKJUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbiGKJOP (ORCPT
+        with ESMTP id S231934AbiGKJTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:14:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE80326E0;
-        Mon, 11 Jul 2022 02:10:11 -0700 (PDT)
+        Mon, 11 Jul 2022 05:19:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C3C4F664;
+        Mon, 11 Jul 2022 02:12:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AAE69CE1178;
-        Mon, 11 Jul 2022 09:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82DCC34115;
-        Mon, 11 Jul 2022 09:10:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33A6BB80E85;
+        Mon, 11 Jul 2022 09:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF48C34115;
+        Mon, 11 Jul 2022 09:12:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530608;
-        bh=K6jNGp2dUuNiWhAggovJ4j01QWBZArB13C35cE1qd8I=;
+        s=korg; t=1657530732;
+        bh=dxqk0C/2vci2QZtOusG6l6QeXXWhdvJ1Cydl7u2uT6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lxj8b5UlxBgIaTxTDGYvYZd5gwW1REwOfKxxlrN4cED3u8rTfoLBx8NSYno3Vbf/2
-         F92ewx1stECF1xputwu8kusYrKt885kSE1D7T7yLsebARjmL6+XEm98/EwRQorHoSO
-         y/AGxlPGQseE2glU7Mm8FMuqfX0NEcrpN5lJyhJo=
+        b=ew+5YwGYEBxuNC4L4Hth0sVwDRA/DbDKi25cozH/RKm6SFcy5Wr6FyRSlus/X5dPI
+         Ii0SAfUfCdQL42Esxt5KFcPmfykaCcRNNs6aY2h+1M8/vf2bvZIAwZ6pmW0/YJZAmU
+         GUKIrF/ZncMEW6WCVTP3VMBaqBRFcD2OJl6GBe+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.4 14/38] powerpc/powernv: delay rng platform device creation until later in boot
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 08/55] usbnet: fix memory leak in error case
 Date:   Mon, 11 Jul 2022 11:06:56 +0200
-Message-Id: <20220711090539.150343511@linuxfoundation.org>
+Message-Id: <20220711090542.008524853@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
+References: <20220711090541.764895984@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,73 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 887502826549caa7e4215fd9e628f48f14c0825a upstream.
+commit b55a21b764c1e182014630fa5486d717484ac58f upstream.
 
-The platform device for the rng must be created much later in boot.
-Otherwise it tries to connect to a parent that doesn't yet exist,
-resulting in this splat:
+usbnet_write_cmd_async() mixed up which buffers
+need to be freed in which error case.
 
-  [    0.000478] kobject: '(null)' ((____ptrval____)): is not initialized, yet kobject_get() is being called.
-  [    0.002925] [c000000002a0fb30] [c00000000073b0bc] kobject_get+0x8c/0x100 (unreliable)
-  [    0.003071] [c000000002a0fba0] [c00000000087e464] device_add+0xf4/0xb00
-  [    0.003194] [c000000002a0fc80] [c000000000a7f6e4] of_device_add+0x64/0x80
-  [    0.003321] [c000000002a0fcb0] [c000000000a800d0] of_platform_device_create_pdata+0xd0/0x1b0
-  [    0.003476] [c000000002a0fd00] [c00000000201fa44] pnv_get_random_long_early+0x240/0x2e4
-  [    0.003623] [c000000002a0fe20] [c000000002060c38] random_init+0xc0/0x214
+v2: add Fixes tag
+v3: fix uninitialized buf pointer
 
-This patch fixes the issue by doing the platform device creation inside
-of machine_subsys_initcall.
-
-Fixes: f3eac426657d ("powerpc/powernv: wire up rng during setup_arch")
-Cc: stable@vger.kernel.org
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-[mpe: Change "of node" to "platform device" in change log]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220630121654.1939181-1-Jason@zx2c4.com
+Fixes: 877bd862f32b8 ("usbnet: introduce usbnet 3 command helpers")
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220705125351.17309-1-oneukum@suse.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/powernv/rng.c |   16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/net/usb/usbnet.c |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/arch/powerpc/platforms/powernv/rng.c
-+++ b/arch/powerpc/platforms/powernv/rng.c
-@@ -176,12 +176,8 @@ static int __init pnv_get_random_long_ea
- 		    NULL) != pnv_get_random_long_early)
- 		return 0;
- 
--	for_each_compatible_node(dn, NULL, "ibm,power-rng") {
--		if (rng_create(dn))
--			continue;
--		/* Create devices for hwrng driver */
--		of_platform_device_create(dn, NULL, NULL);
--	}
-+	for_each_compatible_node(dn, NULL, "ibm,power-rng")
-+		rng_create(dn);
- 
- 	if (!ppc_md.get_random_seed)
- 		return 0;
-@@ -205,10 +201,18 @@ void __init pnv_rng_init(void)
- 
- static int __init pnv_rng_late_init(void)
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -2102,7 +2102,7 @@ static void usbnet_async_cmd_cb(struct u
+ int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
+ 			   u16 value, u16 index, const void *data, u16 size)
  {
-+	struct device_node *dn;
- 	unsigned long v;
-+
- 	/* In case it wasn't called during init for some other reason. */
- 	if (ppc_md.get_random_seed == pnv_get_random_long_early)
- 		pnv_get_random_long_early(&v);
-+
-+	if (ppc_md.get_random_seed == powernv_get_random_long) {
-+		for_each_compatible_node(dn, NULL, "ibm,power-rng")
-+			of_platform_device_create(dn, NULL, NULL);
-+	}
-+
+-	struct usb_ctrlrequest *req = NULL;
++	struct usb_ctrlrequest *req;
+ 	struct urb *urb;
+ 	int err = -ENOMEM;
+ 	void *buf = NULL;
+@@ -2120,7 +2120,7 @@ int usbnet_write_cmd_async(struct usbnet
+ 		if (!buf) {
+ 			netdev_err(dev->net, "Error allocating buffer"
+ 				   " in %s!\n", __func__);
+-			goto fail_free;
++			goto fail_free_urb;
+ 		}
+ 	}
+ 
+@@ -2144,14 +2144,21 @@ int usbnet_write_cmd_async(struct usbnet
+ 	if (err < 0) {
+ 		netdev_err(dev->net, "Error submitting the control"
+ 			   " message: status=%d\n", err);
+-		goto fail_free;
++		goto fail_free_all;
+ 	}
  	return 0;
- }
- machine_subsys_initcall(powernv, pnv_rng_late_init);
+ 
++fail_free_all:
++	kfree(req);
+ fail_free_buf:
+ 	kfree(buf);
+-fail_free:
+-	kfree(req);
++	/*
++	 * avoid a double free
++	 * needed because the flag can be set only
++	 * after filling the URB
++	 */
++	urb->transfer_flags = 0;
++fail_free_urb:
+ 	usb_free_urb(urb);
+ fail:
+ 	return err;
 
 

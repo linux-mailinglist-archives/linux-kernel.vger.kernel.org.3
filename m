@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C0B570A2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FE4570A33
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 20:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiGKS4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 14:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S230093AbiGKS5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 14:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiGKS4q (ORCPT
+        with ESMTP id S229618AbiGKS52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 14:56:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9135A2981C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657565804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VhPkyw6JSqRXpaTvoZTUIcUz3k2QZrwRVRcGZdJSN50=;
-        b=i7Fnqb4oiGGJh+/ofFdLu14B6H5n7wKmS0axb1pc7OlnsXNRQ/XHKIWw6apYl29QC0G/pb
-        JXE4o9PrVbNET1A6eTiVDGY6Q8ZwzNyFvADHNWX6kDtoItGP1mSYUjL79wNjaiLn1VcJlT
-        jcN7wUHcje4xCg+eWhXVdd/OqbXrneY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-5DiOfgE-MAWN-nzGdA8kWQ-1; Mon, 11 Jul 2022 14:56:43 -0400
-X-MC-Unique: 5DiOfgE-MAWN-nzGdA8kWQ-1
-Received: by mail-qk1-f199.google.com with SMTP id a7-20020a37b107000000b006af3bc02282so6043764qkf.21
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:56:42 -0700 (PDT)
+        Mon, 11 Jul 2022 14:57:28 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBC4286E9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:57:27 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id a20so3550514ilk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 11:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5Fgbmw4uDNZm6f7Vc/Bsq7a4PLO0LnPjodqYsQmzIdk=;
+        b=A/DvD9KRP9krYQo+DRJrHbiJB7xiDCRxuT6mthX0PxWijJdEFZlpbC5xlM0pbb1RX5
+         bAxQ+2Y5FIUFC5NBWJPgveogalEmJ0jrcfj2jG3GjMI/CiI2IGWxi4ghl/ouDprBCUbB
+         aeXqe4LalLkPFtcC3QO1+dltzSduinsbaTP0Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=VhPkyw6JSqRXpaTvoZTUIcUz3k2QZrwRVRcGZdJSN50=;
-        b=MPNknKocDWA9+DxndyzjyY0ej+106J/SML2NZ7n3DPc7OQKZcIJrJSo4uWq5yKUSjj
-         5hZsuwiG+l30yyM85tZzfXe71Z5hPgVssdDrL2/vAV0wagdS8ZFwKR5Rn9JqJoVR91WJ
-         jp837UNDskgDuEHnSWyRDZCgSK3Rno3n/rcPRNbzC1dvA/YbEdqXH/1LzKtBYjKq5JK8
-         +7CsxjJGD33Djvp8XYXwiM1aaNeb9AiTcV8QltEv7QLlevZfz9KOTLxeBeHLiYYwLN/b
-         RrS/uVumRuP71nTPuL0Xl3djQR8bWfc4ScNIK44Jd2g4YMhcrRA3RO9de99tcV4m8mFn
-         l2sQ==
-X-Gm-Message-State: AJIora88ANO6cdO9f/LFVmn96q29SwCixXM4TDwZIAbYOjdHX8J+L2xi
-        p8763g+WKp+sC56otkTupUxjDaTgutDsoob/dSJgCPG5MNq2dhprOhxDw/IsUC4p6BCp0obU5VQ
-        mefVKSViW+fv19VZCQfr27c6L
-X-Received: by 2002:a05:620a:28c5:b0:6b2:5245:2901 with SMTP id l5-20020a05620a28c500b006b252452901mr12198435qkp.284.1657565802078;
-        Mon, 11 Jul 2022 11:56:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sbSnRL60Jwlg+CU4cgZnQiyj8dGPJzJr8nt0p4zQKZwFhARbZu4qXb2WCEHOrDI/LnVmA0gw==
-X-Received: by 2002:a05:620a:28c5:b0:6b2:5245:2901 with SMTP id l5-20020a05620a28c500b006b252452901mr12198424qkp.284.1657565801839;
-        Mon, 11 Jul 2022 11:56:41 -0700 (PDT)
-Received: from [192.168.1.3] (68-20-15-154.lightspeed.rlghnc.sbcglobal.net. [68.20.15.154])
-        by smtp.gmail.com with ESMTPSA id cb25-20020a05622a1f9900b0031b7441b02asm5846436qtb.89.2022.07.11.11.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 11:56:41 -0700 (PDT)
-Message-ID: <f5d20f4e1aeb5d478e10a39c17ed003616c7872c.camel@redhat.com>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-From:   Jeff Layton <jlayton@redhat.com>
-To:     Bruce Fields <bfields@fieldses.org>,
-        Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 11 Jul 2022 14:56:40 -0400
-In-Reply-To: <20220711183603.GD14184@fieldses.org>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
-         <20220710124344.36dfd857@redhat.com>
-         <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
-         <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
-         <20220711181941.GC14184@fieldses.org>
-         <7CD95BBD-3552-47BD-ACF6-EC51F62787E1@oracle.com>
-         <20220711183603.GD14184@fieldses.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5Fgbmw4uDNZm6f7Vc/Bsq7a4PLO0LnPjodqYsQmzIdk=;
+        b=yZ4+5yaDE7dGgaP5+A2pSQyIIURk+yNh0TXjpHd61I4ruXWIixzqnOOVgckLnD7KGU
+         W3JvaPx7krLOHiL/VwHoDBKLSa1q/N3gL/3gIeguag8qCBZTC5YNcZbaOmqpUlqbhcpV
+         Df0nrft9VMezOpP6zOOwTkgtNkOVfyi3RCdgKGuY3m0BeDKKUyG33znGeF36psdSgRuK
+         O7soxycJ+X1UIstqmbvEjhUZWPm6lbAONomPL/n7cs6sAl1O4D/T2FTfKytL7aDHdHo2
+         fKIzAK+aNnFxai4A37/qyBwWi+G7zre6I2gqLVY9/ozeRBcplvg94p6+PQ0+LSdyacPv
+         dDwg==
+X-Gm-Message-State: AJIora+WT5+saagVdjspNZuHtfLXhx2A4/DYADBrveNAB1ftnVirM7Ze
+        KJk6jn9qY4Z0rGe221fK3r4huuSiGfS1MA==
+X-Google-Smtp-Source: AGRyM1sVZES2YR3faa48MS8RCvVxvUPsXZ7hq7rtSzKygK6KwbhLBUysi45Zwayp9AWIjHCgI4/JpA==
+X-Received: by 2002:a05:6e02:11a2:b0:2dc:3cef:d430 with SMTP id 2-20020a056e0211a200b002dc3cefd430mr10246851ilj.279.1657565846695;
+        Mon, 11 Jul 2022 11:57:26 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p25-20020a02b899000000b0033de67b2ae3sm3230063jam.122.2022.07.11.11.57.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 11:57:26 -0700 (PDT)
+Subject: Re: [GIT PULL] Linux Media vimc update for 5.20-rc1
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <7e719640-80e6-b3ab-751a-156b8e74d87b@linuxfoundation.org>
+ <20220709111450.12e1dd61@sal.lan>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <28dbdf2b-3960-16c7-ff5e-30ea112e3f5e@linuxfoundation.org>
+Date:   Mon, 11 Jul 2022 12:57:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220709111450.12e1dd61@sal.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 14:36 -0400, Bruce Fields wrote:
-> On Mon, Jul 11, 2022 at 06:24:01PM +0000, Chuck Lever III wrote:
-> >=20
-> >=20
-> > > On Jul 11, 2022, at 2:19 PM, Bruce Fields <bfields@fieldses.org> wrot=
-e:
-> > >=20
-> > > On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:
-> > > > On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:
-> > > > > > This patch regressed clients that support TIME_CREATE attribute=
-.
-> > > > > > Starting with this patch client might think that server support=
-s
-> > > > > > TIME_CREATE and start sending this attribute in its requests.
-> > > > >=20
-> > > > > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> > > > > attribute") does not include a change to nfsd4_decode_fattr4()
-> > > > > that decodes the birth time attribute.
-> > > > >=20
-> > > > > I don't immediately see another storage protocol stack in our
-> > > > > kernel that supports a client setting the birth time, so NFSD
-> > > > > might have to ignore the client-provided value.
-> > > > >=20
-> > > >=20
-> > > > Cephfs allows this. My thinking at the time that I implemented it w=
-as
-> > > > that it should be settable for backup purposes, but this was possib=
-ly a
-> > > > mistake. On most filesystems, the btime seems to be equivalent to i=
-node
-> > > > creation time and is read-only.
-> > >=20
-> > > So supporting it as read-only seems reasonable.
-> > >=20
-> > > Clearly, failing to decode the setattr attempt isn't the right way to=
- do
-> > > that.  I'm not sure what exactly it should be doing--some kind of
-> > > permission error on any setattr containing TIME_CREATE?
-> >=20
-> > I don't think that will work.
-> >=20
-> > NFSD now asserts FATTR4_WORD1_TIME_CREATE when clients ask for
-> > the mask of attributes it supports. That means the server has
-> > to process GETATTR and SETATTR (and OPEN) operations that
-> > contain FATTR4_WORD1_TIME_CREATE as not an error.
->=20
-> Well, permissions or bad attribute values or other stuff may prevent
-> setting one of the attributes.
->=20
-> And setattr isn't guaranteed to be atomic, so I don't think you can
-> eliminate the possibility that part of it might succeed and part might
-> not.
->=20
-> But it might be more helpful to fail the whole thing up front if you
-> know part of it's going to fail?
->=20
+On 7/9/22 4:14 AM, Mauro Carvalho Chehab wrote:
+> Hi Shuah,
+> 
+> Em Thu, 7 Jul 2022 10:28:37 -0600
+> Shuah Khan <skhan@linuxfoundation.org> escreveu:
+> 
+>> Hi Mauro,
+>>
+>> Please pull the following vimc update for Linux 5.20-rc1.
+>>
+>> This vimc update Linux Media 5.20-rc1 consists of enhancement and
+>> cleanup patches:
+>>
+>> - add lens to vimc driver and links it with sensors using ancillary
+>>     links.
+>> - add documentation for lens
+>> - changes to make the code readable and maintainable.
+>>
+>> diff is attached.
+> 
+> Please also send the patches individually to the media ML, as reviews
+> happen using them.
+> 
 
-RFC5661 says:
+These are already on the linux-media mailing list and have been reviewed.
 
-   On either success or failure of the operation, the server will return
-   the attrsset bitmask to represent what (if any) attributes were
-   successfully set.  The attrsset in the response is a subset of the
-   attrmask field of the obj_attributes field in the argument.
-
-...and then later:
-
-   A mask of the attributes actually set is returned by SETATTR in all
-   cases.  That mask MUST NOT include attribute bits not requested to be
-   set by the client.  If the attribute masks in the request and reply
-   are equal, the status field in the reply MUST be NFS4_OK.
-
-So, I think just clearing the bit and returning NFS4_OK should be fine.
-
-If the mask ends up being 0 after clearing the bit though, it might be
-reasonable to return something like NFS4ERR_ATTRNOTSUPP. That would be a
-bit weird though since we do support it for GETATTR, hence my suggestion
-for a NFS4ERR_ATTR_RO.
-
-> > The protocol
-> > allows the server to indicate it ignored the time_create value
-> > by clearing the FATTR4_WORD1_TIME_CREATE bit in the attribute
-> > bitmask it returns in the reply.
->=20
-> Yes, I think you also return an error in that case, though.
->=20
-> --b.
->=20
-
---=20
-Jeff Layton <jlayton@redhat.com>
-
+thanks,
+-- Shuah

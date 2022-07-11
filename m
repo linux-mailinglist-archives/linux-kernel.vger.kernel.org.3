@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6B9570C83
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6060570C88
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiGKVMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S231830AbiGKVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiGKVMN (ORCPT
+        with ESMTP id S229622AbiGKVN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:12:13 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F385382452
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:12:07 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10c0430e27dso8196410fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:12:07 -0700 (PDT)
+        Mon, 11 Jul 2022 17:13:29 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C662E804AE;
+        Mon, 11 Jul 2022 14:13:27 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id p22so4867367qkj.4;
+        Mon, 11 Jul 2022 14:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UdBFHF56DJCJ7TVTujTvKpBH89sBJrOSHbI3IjUu/5k=;
-        b=Abr43rShDbmDOl7eDvr+8IqRRqycv2rTEkZVORgxxj/Eynw9PS7PIaSw8WFrvyvLSi
-         zLmKk/B8dmnrUX3o78pS4bHrMaT5Qc7mo4nt3RjY933+33KocRDQ8nv3mLzd9du86DJ2
-         6CwpqlESkxYh4rEOPPmD7CxtPPb4a8gauROm/6zfR/ggnFW/Spz7cmrLsBGwLcSYAQ96
-         a4V/IGvrwCE8mN5mwmqEHaCWEAdTNpgmWTfqe/ZZCRbp8/ZH8eqLxh0BmmfQ8I8ba9UM
-         wyNq/U6g2WZU21efd3OQQ61I4CyInHBs4PHUqT8Y9SUGNeFQTWpELp6i6J1PoUXWK0pO
-         fXEw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N5YRuTB5MYa3nbG8lCPemrZYrkhyGUXIRY7YTJn3UJI=;
+        b=KkEAKuvCwlihbCqH52qxZhTQfjrKb1t9ydLos5qqmCRFzfJM35qZdJaxnqOYfVKl5J
+         jnwWRee3uoiDVHlenzYQzabO9t79JtPJdqyns6M4OO9zL8/zj9VC8gmPcQIYZQfDf1Vj
+         meW5ioYcgJjiu3HYWluL2B2KUIF9cVS4sJqGXnMl+8N92XshkIYBpSLbF/saTtyyW1XC
+         J23Gfm1lzun4nkgvj5Ywp9iN4bQpuPd9vdu5vbMXrPANCbIg9CsCs5fJ1VPd0H2WkaNq
+         s62op9zmZaDy+LT2jITTXIdjEI1Yhdi8KLMAm3QUclydCEOJlggWykdw9Lv8q2JIRLZf
+         SBAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UdBFHF56DJCJ7TVTujTvKpBH89sBJrOSHbI3IjUu/5k=;
-        b=0rpxPOKzG1Lc3K8KJXWMiaTv4OIiY9JmmBgge3a9PRjsIAY3VBXXoz0/qZETWhV0kv
-         fh3M2Y9FFCyw+KThE9qtS/6Qv05XBHfTLr2roPAZNoBUObCW6i1lhYSSmLekzj1bUnGu
-         HAQqcDxYbbEfnjWpTrn/Ed55JJzoHmoDIJ+hDGGG7B0ivUuKrTIH+wjx+XmT5v2cI3eA
-         JxMQ/OLYCvLEDErBGchxzBtvWjmCl/n9YW2SSYGS4sw9VgMHq4tbgitJVnpIM3CM5XOb
-         7UJMLqqzmFYJ7JnzqQmNp+FeUYI3IO7/554ce1BPROY8ZgUaigM6ux5HxDh/JWOqb6Fc
-         h1Qw==
-X-Gm-Message-State: AJIora+bc/T9gn3KwL5UvhAEL+y94DifJgK5z100OcOK+jaiFpyV4Xem
-        Zqw3+gILO38i51dS/CTpMUjLsQ==
-X-Google-Smtp-Source: AGRyM1v1o3gDWK5MQ0gtVhHxbLXfSGQeLVeGwJDTrU3G+4bYsZkIF+Fc8L8jKMPdGN1n5vDPaNj+IA==
-X-Received: by 2002:a05:6870:c149:b0:100:9ea3:7913 with SMTP id g9-20020a056870c14900b001009ea37913mr167513oad.150.1657573927728;
-        Mon, 11 Jul 2022 14:12:07 -0700 (PDT)
-Received: from zeta-build.. ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id c128-20020aca3586000000b00338869042fdsm3198817oia.32.2022.07.11.14.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 14:12:07 -0700 (PDT)
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH v2 8/8] videobuf2: Remove vb2_find_timestamp()
-Date:   Mon, 11 Jul 2022 18:11:41 -0300
-Message-Id: <20220711211141.349902-9-ezequiel@vanguardiasur.com.ar>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220711211141.349902-1-ezequiel@vanguardiasur.com.ar>
-References: <20220711211141.349902-1-ezequiel@vanguardiasur.com.ar>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N5YRuTB5MYa3nbG8lCPemrZYrkhyGUXIRY7YTJn3UJI=;
+        b=jPvq4/UXo/OtGcv8TCbryusroWPYSi7XMfAHq+GcgK/loYmQeCOKgRXLqUfsAYaH+w
+         jteXc8ozJpnUqN46HBC/GXQKZ/qD4Ha4EsDNOVFGiI4iEHj9+k+S4sTsAcFKQJ0ACNZI
+         m55jm4qKKar3N1x3/gcyESgEukf47QScV5nquRjmOp1jjDqNhryoauuU6ap+qhC5miNs
+         3WuUfdcisHQb2LlKGKQ4BttE8vZO+cPbo+i3938Jsi3MbRaSuUlzixsarLfjfJ32NDjD
+         m8zI3RQWTpVdp1YNSGcoVowPmIMTSGABFpfuBWKQtOEv+7M1UAg4fTx5IU8Iz2BNNXpp
+         G2GQ==
+X-Gm-Message-State: AJIora8WUt5CWn3VX/821TbcISD7zaeL4mdDXihsYiG9jFWqMFGDMkcf
+        hGctMmPeEbox0NN2MgElBJUl7VQrY8j0FitbP38s6ZfywA4=
+X-Google-Smtp-Source: AGRyM1v6iC7cQ8Eaq8NUKqwSLK7fQXPg6pPLltynOQoFb7RtxNOP0mrSa5CNksyZpDPBfzZOCT0x3SN2QzrTkfcFUPc=
+X-Received: by 2002:a05:620a:2996:b0:6af:2c34:423f with SMTP id
+ r22-20020a05620a299600b006af2c34423fmr12774984qkp.679.1657574006935; Mon, 11
+ Jul 2022 14:13:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <62c8d3e8.1c69fb81.26eee.0249@mx.google.com> <20220711192229.GA678639@bhelgaas>
+In-Reply-To: <20220711192229.GA678639@bhelgaas>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 11 Jul 2022 23:13:16 +0200
+Message-ID: <CAOX2RU6VYpsML62zCaEhdu5YPEqy8u2DVXB=5hpok5MHmXk3fw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: qcom: Enable clocks only after PARF_PHY setup for
+ rev 2.1.0
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we've transitioned all users to vb2_find_buffer API,
-remove the unused vb2_find_timestamp().
+On Mon, 11 Jul 2022 at 21:22, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Robert since I resolved a conflict in his patch, -cc stable]
+>
+> On Sat, Jul 09, 2022 at 03:03:34AM +0200, Christian Marangi wrote:
+> > On Fri, Jul 08, 2022 at 06:01:55PM -0500, Bjorn Helgaas wrote:
+> > > On Sat, Jul 09, 2022 at 12:27:43AM +0200, Christian Marangi wrote:
+> > > > We currently enable clocks BEFORE we write to PARF_PHY_CTRL reg to
+> > > > enable clocks and resets. This case the driver to never set to a ready
+> > > > state with the error 'Phy link never came up'.
+> > > >
+> > > > This in fact is caused by the phy clock getting enabled before setting
+> > > > the required bits in the PARF regs.
+> > > >
+> > > > A workaround for this was set but with this new discovery we can drop
+> > > > the workaround and use a proper solution to the problem by just enabling
+> > > > the clock only AFTER the PARF_PHY_CTRL bit is set.
+> > > >
+> > > > This correctly setup the pcie line and makes it usable even when a
+> > > > bootloader leave the pcie line to a underfined state.
+> > >
+> > > Is "pcie" here a signal name?  Maybe this refers to the "PCIe link"?
+> >
+> > no i was referring to PCIe link. Fell free to fix it if it's not a
+> > problem (or if you want i can just resend)
+>
+> I fixed it.
+>
+> > Think something went wrong in the rebase as the patch fixup is reverted.
+> >
+> > 11946f8b6e77a6794c111aafef7772e9967d9a54 is still wrong.
+> >
+> > clk_bulk_prepare_enable must be after
+> > writel(val, pcie->parf + PCIE20_PARF_PHY_CTRL);
+> > so in the post init.
+>
+> My error, sorry.  I updated it, current head:
+>
+>   1a88605a3efd ("dt-bindings: PCI: qcom: Fix description typo")
+>
+> Robert, your patch that I updated is:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom-pending&id=cdb32283bcf202d0db512abb80794056d44e7e9f
+>
+> It would still be nice to get an ack from one of the maintainers for
+> this.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Acked-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/media/common/videobuf2/videobuf2-v4l2.c | 13 -------------
- include/media/videobuf2-v4l2.h                  | 16 ----------------
- 2 files changed, 29 deletions(-)
+Hi,
+Thanks, everybody for working on sorting this out.
+I understand, hopefully, somebody can take a look at it.
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index f26cb8586bd4..4e84a0e1aca2 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -625,19 +625,6 @@ static const struct vb2_buf_ops v4l2_buf_ops = {
- 	.copy_timestamp		= __copy_timestamp,
- };
- 
--int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
--		       unsigned int start_idx)
--{
--	unsigned int i;
--
--	for (i = start_idx; i < q->num_buffers; i++)
--		if (q->bufs[i]->copied_timestamp &&
--		    q->bufs[i]->timestamp == timestamp)
--			return i;
--	return -1;
--}
--EXPORT_SYMBOL_GPL(vb2_find_timestamp);
--
- struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
- {
- 	unsigned int i;
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index 76e405c0b003..5a845887850b 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -62,22 +62,6 @@ struct vb2_v4l2_buffer {
- #define to_vb2_v4l2_buffer(vb) \
- 	container_of(vb, struct vb2_v4l2_buffer, vb2_buf)
- 
--/**
-- * vb2_find_timestamp() - Find buffer with given timestamp in the queue
-- *
-- * @q:		pointer to &struct vb2_queue with videobuf2 queue.
-- * @timestamp:	the timestamp to find.
-- * @start_idx:	the start index (usually 0) in the buffer array to start
-- *		searching from. Note that there may be multiple buffers
-- *		with the same timestamp value, so you can restart the search
-- *		by setting @start_idx to the previously found index + 1.
-- *
-- * Returns the buffer index of the buffer with the given @timestamp, or
-- * -1 if no buffer with @timestamp was found.
-- */
--int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
--		       unsigned int start_idx);
--
- /**
-  * vb2_find_buffer() - Find a buffer with given timestamp
-  *
--- 
-2.34.3
+BTW, happy to see IPQ60xx support made it in as IPQ807x
+can use it for Gen3.
 
+Regards,
+Robert
+>
+> Bjorn

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0085656FBB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B72456FBAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiGKJeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S232764AbiGKJeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiGKJdN (ORCPT
+        with ESMTP id S232792AbiGKJdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:33:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3F57A537;
-        Mon, 11 Jul 2022 02:17:55 -0700 (PDT)
+        Mon, 11 Jul 2022 05:33:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FDA7AB14;
+        Mon, 11 Jul 2022 02:17:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F41CBB80D2C;
-        Mon, 11 Jul 2022 09:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 207EAC34115;
-        Mon, 11 Jul 2022 09:17:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 281DB612B8;
+        Mon, 11 Jul 2022 09:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8BDC36AE7;
+        Mon, 11 Jul 2022 09:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531072;
-        bh=RYid31WpNmRGIPa8flzGgo//b6LZ8YhVCis19SygF2A=;
+        s=korg; t=1657531075;
+        bh=WewbxobdXy3VRk5+aYIVvs3YD7Yl6NReJmWuY9HmJdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RmhvgD5EbCcN5FUdgge8GrqujycKoBvvpmDsTeeZhb4TRbSXe56V4QxCHajRSt6Jd
-         39vAJRandymSKYNbWTN7GpYLfT6MrBhjF5vtDqjppjN0tdx+Z558Q0y45E03/co/H9
-         f4f/emBKjKngHPlMISvg/w+6VhaGvZI/XIxCME9E=
+        b=1R6MsxSBbw/cOsTCQhdHVgNM796dT6yzN/wZHAzGIyrmPEjUqQSEh0VlBoh3HL9o7
+         EqzQoUN+tREajs49jdKJOLfzzlIgHu7WZRcg4Gd8tc7H39r0BKVZQ3wvxAZHvrLhT/
+         hUXOj9s90beQWOGLemkXRfn42zMAgS0a8cYTscs4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, CUI Hao <cuihao.leo@gmail.com>,
-        maxim.novozhilov@gmail.com, lethe.tree@protonmail.com,
-        garystephenwright@gmail.com, galaxyking0419@gmail.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org, Perry Yuan <perry.yuan@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 087/112] ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked
-Date:   Mon, 11 Jul 2022 11:07:27 +0200
-Message-Id: <20220711090552.041370592@linuxfoundation.org>
+Subject: [PATCH 5.18 088/112] ACPI: CPPC: Dont require _OSC if X86_FEATURE_CPPC is supported
+Date:   Mon, 11 Jul 2022 11:07:28 +0200
+Message-Id: <20220711090552.069300240@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
 References: <20220711090549.543317027@linuxfoundation.org>
@@ -61,115 +58,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 7feec7430edddb87c24b0a86b08a03d0b496a755 ]
+[ Upstream commit 8b356e536e69f3a4d6778ae9f0858a1beadabb1f ]
 
-Previously the kernel used to ignore whether the firmware masked CPPC
-or CPPCv2 and would just pretend that it worked.
+commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and
+when CPPC_LIB is supported") added support for claiming to
+support CPPC in _OSC on non-Intel platforms.
 
-When support for the USB4 bit in _OSC was introduced from commit
-9e1f561afb ("ACPI: Execute platform _OSC also with query bit clear")
-the kernel began to look at the return when the query bit was clear.
+This unfortunately caused a regression on a vartiety of AMD
+platforms in the field because a number of AMD platforms don't set
+the `_OSC` bit 5 or 6 to indicate CPPC or CPPC v2 support.
 
-This caused regressions that were misdiagnosed and attempted to be solved
-as part of commit 2ca8e6285250 ("Revert "ACPI: Pass the same capabilities
-to the _OSC regardless of the query flag""). This caused a different
-regression where non-Intel systems weren't able to negotiate _OSC
-properly.
+As these AMD platforms already claim CPPC support via a dedicated
+MSR from `X86_FEATURE_CPPC`, use this enable this feature rather
+than requiring the `_OSC` on platforms with a dedicated MSR.
 
-This was reverted in commit 2ca8e6285250 ("Revert "ACPI: Pass the same
-capabilities to the _OSC regardless of the query flag"") and attempted to
-be fixed by commit c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not
-supported by firmware") but the regression still returned.
+If there is additional breakage on the shared memory designs also
+missing this _OSC, additional follow up changes may be needed.
 
-These systems with the regression only load support for CPPC from an SSDT
-dynamically when _OSC reports CPPC v2.  Avoid the problem by not letting
-CPPC satisfy the requirement in `acpi_cppc_processor_probe`.
-
-Reported-by: CUI Hao <cuihao.leo@gmail.com>
-Reported-by: maxim.novozhilov@gmail.com
-Reported-by: lethe.tree@protonmail.com
-Reported-by: garystephenwright@gmail.com
-Reported-by: galaxyking0419@gmail.com
-Fixes: c42fa24b4475 ("ACPI: bus: Avoid using CPPC if not supported by firmware")
-Fixes: 2ca8e6285250 ("Revert "ACPI Pass the same capabilities to the _OSC regardless of the query flag"")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213023
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2075387
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Tested-by: CUI Hao <cuihao.leo@gmail.com>
+Fixes: 72f2ecb7ece7 ("Set CPPC _OSC bits for all and when CPPC_LIB is supported")
+Reported-by: Perry Yuan <perry.yuan@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/bus.c       | 11 +++++------
- drivers/acpi/cppc_acpi.c |  4 +++-
- include/linux/acpi.h     |  2 +-
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ arch/x86/kernel/acpi/cppc.c | 10 ++++++++++
+ drivers/acpi/cppc_acpi.c    | 16 +++++++++++++++-
+ include/acpi/cppc_acpi.h    |  1 +
+ 3 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 1fc24f4fbcb4..6c735cfa7d43 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -298,7 +298,7 @@ EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
- bool osc_sb_native_usb4_support_confirmed;
- EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
+index df1644d9b3b6..3677df836e91 100644
+--- a/arch/x86/kernel/acpi/cppc.c
++++ b/arch/x86/kernel/acpi/cppc.c
+@@ -11,6 +11,16 @@
  
--bool osc_sb_cppc_not_supported;
-+bool osc_sb_cppc2_support_acked;
+ /* Refer to drivers/acpi/cppc_acpi.c for the description of functions */
  
- static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
- static void acpi_bus_osc_negotiate_platform_control(void)
-@@ -358,11 +358,6 @@ static void acpi_bus_osc_negotiate_platform_control(void)
- 		return;
- 	}
- 
--#ifdef CONFIG_ACPI_CPPC_LIB
--	osc_sb_cppc_not_supported = !(capbuf_ret[OSC_SUPPORT_DWORD] &
--			(OSC_SB_CPC_SUPPORT | OSC_SB_CPCV2_SUPPORT));
--#endif
--
- 	/*
- 	 * Now run _OSC again with query flag clear and with the caps
- 	 * supported by both the OS and the platform.
-@@ -376,6 +371,10 @@ static void acpi_bus_osc_negotiate_platform_control(void)
- 
- 	capbuf_ret = context.ret.pointer;
- 	if (context.ret.length > OSC_SUPPORT_DWORD) {
-+#ifdef CONFIG_ACPI_CPPC_LIB
-+		osc_sb_cppc2_support_acked = capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPCV2_SUPPORT;
-+#endif
++bool cpc_supported_by_cpu(void)
++{
++	switch (boot_cpu_data.x86_vendor) {
++	case X86_VENDOR_AMD:
++	case X86_VENDOR_HYGON:
++		return boot_cpu_has(X86_FEATURE_CPPC);
++	}
++	return false;
++}
 +
- 		osc_sb_apei_support_acked =
- 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
- 		osc_pc_lpi_support_confirmed =
+ bool cpc_ffh_supported(void)
+ {
+ 	return true;
 diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 840223c12540..6aff8019047b 100644
+index 6aff8019047b..57ca7aa0e169 100644
 --- a/drivers/acpi/cppc_acpi.c
 +++ b/drivers/acpi/cppc_acpi.c
-@@ -666,8 +666,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
- 	acpi_status status;
- 	int ret = -ENODATA;
+@@ -559,6 +559,19 @@ bool __weak cpc_ffh_supported(void)
+ 	return false;
+ }
  
--	if (osc_sb_cppc_not_supported)
-+	if (!osc_sb_cppc2_support_acked) {
-+		pr_debug("CPPC v2 _OSC not acked\n");
- 		return -ENODEV;
-+	}
++/**
++ * cpc_supported_by_cpu() - check if CPPC is supported by CPU
++ *
++ * Check if the architectural support for CPPC is present even
++ * if the _OSC hasn't prescribed it
++ *
++ * Return: true for supported, false for not supported
++ */
++bool __weak cpc_supported_by_cpu(void)
++{
++	return false;
++}
++
+ /**
+  * pcc_data_alloc() - Allocate the pcc_data memory for pcc subspace
+  *
+@@ -668,7 +681,8 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 
+ 	if (!osc_sb_cppc2_support_acked) {
+ 		pr_debug("CPPC v2 _OSC not acked\n");
+-		return -ENODEV;
++		if (!cpc_supported_by_cpu())
++			return -ENODEV;
+ 	}
  
  	/* Parse the ACPI _CPC table for this CPU. */
- 	status = acpi_evaluate_object_typed(handle, "_CPC", NULL, &output,
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 03465db16b68..cf1f770208da 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -581,7 +581,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
- extern bool osc_sb_apei_support_acked;
- extern bool osc_pc_lpi_support_confirmed;
- extern bool osc_sb_native_usb4_support_confirmed;
--extern bool osc_sb_cppc_not_supported;
-+extern bool osc_sb_cppc2_support_acked;
- extern bool osc_cpc_flexible_adr_space_confirmed;
- 
- /* USB4 Capabilities */
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 92b7ea8d8f5e..181907349b49 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -144,6 +144,7 @@ extern bool acpi_cpc_valid(void);
+ extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+ extern unsigned int cppc_get_transition_latency(int cpu);
+ extern bool cpc_ffh_supported(void);
++extern bool cpc_supported_by_cpu(void);
+ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+ extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+ #else /* !CONFIG_ACPI_CPPC_LIB */
 -- 
 2.35.1
 

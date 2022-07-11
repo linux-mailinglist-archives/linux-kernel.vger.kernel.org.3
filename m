@@ -2,424 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BF256D675
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B6456D54A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiGKHNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S229923AbiGKHG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiGKHMh (ORCPT
+        with ESMTP id S229850AbiGKHGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:12:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88C0B1D303;
-        Mon, 11 Jul 2022 00:09:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E237176A;
-        Mon, 11 Jul 2022 00:09:58 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.45.183])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E9DC23F70D;
-        Mon, 11 Jul 2022 00:09:49 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, openrisc@lists.librecores.org,
-        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH V7 26/26] mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 11 Jul 2022 12:36:00 +0530
-Message-Id: <20220711070600.2378316-27-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711070600.2378316-1-anshuman.khandual@arm.com>
-References: <20220711070600.2378316-1-anshuman.khandual@arm.com>
+        Mon, 11 Jul 2022 03:06:39 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50085.outbound.protection.outlook.com [40.107.5.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B6B1A82B;
+        Mon, 11 Jul 2022 00:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TmfHDJu7r+HIr/mEVVnvJ+JLq6FOoRu6ufEXx7l8lb4KfN8vPhaXfzV0aZyLg79xnY3qj+BBSsDlQIyztaZhQpQIzkIQPhtZguH6xNgsjTTnN0WSKc81tVCZGj+0I5WRgGeyTPuMf6WNiBT/weHFB/AG0A8SKYS0a6vG2HG8Eo5koS1UwUIZHZUpCv/vOhkmIEOhm9an+3PEZa2ubf6L37dKmv75yT+/HUaQrkCR7wGKOsM3H48CyV6e+jtf65xHddbAMYVzcwtdH04+F+0j95jAMy6C8lUThEJztrsxoCuDgFri88yrthdwnhsMGsYEyWDEENJblQ71habHGRHsww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pJQ1uhsZRWRm38RoWyo5kQQnO7wav4vcTBiZjVr+FJ8=;
+ b=Qyni+KCUh8iHKZYpd0Ye2GxNWH9la5bTTVsOGjZAk9fNB/bAG+Yv+alYz9UyZdM2ibhI4Bwp2b1oB7y36EbxKiZbqSt3tqxYDI+a6n49KZzJ6GV0KvY38ij/qzt6H5ceIGn1LG8UdKoV7TBuDAsFsHfTwB4uP4r3ItNKdvUVjAfAcz2bXnpME3u+LJEIYjS0h4nvjtwBQQDOOL9IiHkfV3+qRFjXW/e8fDq05ZkVNlQHWbDzlORjt0qUWA91tZWsIBrlEUVqLxbw7gKrESP4GqKMd9yqMlp+YgaaMl+eSu/mRF8i3SqeeughHD/vSe3qL8SCUbX9WskIIKCS87H1PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJQ1uhsZRWRm38RoWyo5kQQnO7wav4vcTBiZjVr+FJ8=;
+ b=Rupqy0lKlPly6GkNh6tW1c+jiysgd6UoZP4hsKUJCAgk1qTsibwscWfRvfOnnIpZfiLC22qGoW5ZY9n9rHPj7eEpFoc5USkcQF9NJpfoRe/Z8SY6zrmAtm/4gGtjzQ9n9c+OJRjT6eYvVWfNC/brnntQol/7tCOeLznfoS3Vuio=
+Received: from DB9PR04MB8412.eurprd04.prod.outlook.com (2603:10a6:10:24d::9)
+ by DB3PR0402MB3785.eurprd04.prod.outlook.com (2603:10a6:8:f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
+ 2022 07:06:35 +0000
+Received: from DB9PR04MB8412.eurprd04.prod.outlook.com
+ ([fe80::1c1b:6695:20d7:fd10]) by DB9PR04MB8412.eurprd04.prod.outlook.com
+ ([fe80::1c1b:6695:20d7:fd10%6]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
+ 07:06:35 +0000
+From:   Jacky Bai <ping.bai@nxp.com>
+To:     Stefan Agner <stefan@agner.ch>
+CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] MAINTAINERS: Update freescale pin controllers maintainer
+Thread-Topic: [PATCH] MAINTAINERS: Update freescale pin controllers maintainer
+Thread-Index: AQHYkrKgOsXMp01W1USV9rkV5D7Muq10Z+GAgARb4AA=
+Date:   Mon, 11 Jul 2022 07:06:34 +0000
+Message-ID: <DB9PR04MB8412A2D2D536E2F3B47B080687879@DB9PR04MB8412.eurprd04.prod.outlook.com>
+References: <20220708100952.1998673-1-ping.bai@nxp.com>
+ <082e1f7cb783479edb34e2b3321eded7@agner.ch>
+In-Reply-To: <082e1f7cb783479edb34e2b3321eded7@agner.ch>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fcd81bfa-b854-4d16-3b03-08da630be478
+x-ms-traffictypediagnostic: DB3PR0402MB3785:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KeZEOvfPUH3kdq5yz91oqglG0SFyVyH4WHOM08RUg9pc0/JWTzK8APTairnmeZOLDYREg5M5cQRJXd1t10B3/x58BF6rfnBeevFfiHyPcrtFa3V6L4J2P4V61a5ZeLoHwcFmniDfyGC4IStaZ4vXrXclQ1pjvk18I2wGByQtAQy+CUQNvQEYvuiqpOpw3tQKJZW87RqdAAxK8CoDwIL/+0rj4n5zDLiD2Fjf2QBQpt2nvNixYk1jtWDajSrTaT0v0p+MxEKvnBeNw2doH+6qNh8udv4oAkQ86eD4lnwzAQW3d6nQ31Fjy1GKGstrHyc1qixkajLN0aqf3Dy34xtTakNbgdYDvTo7ABI8qc0oOIdo8AOx7tbJ+tumCjFQyy498o1cauhTSOaHY95LQhnhC9tqHK8Z1Javn+1uKansOP5hpOIanRlk6EkXX9hvosb9pGtMAqlDEDTVI7ltcDDrcwYmijVjSXki/sK/CE4u3K2RXvxRO8k178+14hsZKJd1V1RjJKXSJckeoF7mnQ2MLYozJC6Zz7J/SC+6mYdDzzFlE50aPT6YbFCfH6hy2V8MeKxv5fHro4dAimIzTcpJns82NlW2bmnpxqeNwiPkDot+rwQSnrgjzy+gFf2isU0z1uc94UvyIUUzghF8hKhe5qXr2b47J39Uz8Sz/KN39z36yzbnqM668UmKsehZSBKAHwOvEVpiJ81zKoCsPpSRUk10CF7132lmnLH7myO0FODqttBQq1ri6fcplSUNaRLdZRHc6UImE7gzhfgCCGNa8b4hfyK4iC+2odpS+bH1IRM2fHZJyD546OOXfucqrKxZ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8412.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(136003)(376002)(346002)(15650500001)(2906002)(38070700005)(122000001)(33656002)(478600001)(186003)(4744005)(55016003)(83380400001)(76116006)(86362001)(316002)(52536014)(5660300002)(66446008)(66476007)(6916009)(66946007)(54906003)(64756008)(66556008)(4326008)(8676002)(8936002)(53546011)(71200400001)(6506007)(38100700002)(9686003)(41300700001)(7696005)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KF3Klj9qQBXiI+Pu5OxrV/u2dvbDYh2JSA9c2UBdYnp+4RbV/iwgKOnyVdZW?=
+ =?us-ascii?Q?B5uB0xtPY9S15irGnXvldl9Xo+lWMom52ewP5kS/rEVHDlfjp0qJ7Qx2JlRi?=
+ =?us-ascii?Q?oLX3FWW8NH0Kqerjip6RlMi42AeOQ7uGxbw2rbqTQnHI7SBc+dITujdH66l/?=
+ =?us-ascii?Q?0VovdlypouewI8j7bye/JsyAS6/05Jot5qkdvfhzRJ9lMFHCtkhsQTUKhzjl?=
+ =?us-ascii?Q?L9qhbV5ewJctw4PhxOcdgsHnxn2pLTLOJlAEVqo7/fXx25UiaNiwBLCyLvQI?=
+ =?us-ascii?Q?zMxc92NqaJpLj19iXrLHpzHYvvsCacHMPlnBFJmR4+GxsQBYl4Tr4WzRAogi?=
+ =?us-ascii?Q?QBYIIrozA9WETFrOz+/rVmrb0GR5bSD/HI4a2Nw6Hy1xcHVd5jeTLW+CqgTz?=
+ =?us-ascii?Q?/3oaAJKuqJeXhoS1t7JPd/4Feio/uxhGcspStqjoxCEzjrTUC4Ouz6my8mGk?=
+ =?us-ascii?Q?sogVL2lKl6r05hi4yjhKFUjdMlh9kDbFxYmCuECoz40WaydsBUvN1xamcZPo?=
+ =?us-ascii?Q?kF/MeyW1lHkeFO/XE/kwWi4LQM3UuDZGSDhPR7rz6N22HxfWGDNKsFxzUgOE?=
+ =?us-ascii?Q?aBatZJDX1dxcdHjd/RKcBK4fYzJSKNYCbscDLqkd0UtV1GOfI3JZ67osYNxZ?=
+ =?us-ascii?Q?xi3HcLxrCLaosQmXBcuz767EVnXnPJ0HbhDcC7caGDLzkqjaM9GWR910yV80?=
+ =?us-ascii?Q?2k2Q5ij8z/EzeNyiRyxVpRe6rQ3H1jjADkuffUeb8MK8yUAKxlECs3bbE3b+?=
+ =?us-ascii?Q?JEAq6o0z6kPK52s+Jv0Pfb+sC3O34T2uF/cwoMxurgSsiYBnXPX7PGWX4YFo?=
+ =?us-ascii?Q?PUINKolO+jMTxN5vUQ/DvDAq8IAxpdzmw34KzWIUsHIgXpmcyJ4hOcS2uPei?=
+ =?us-ascii?Q?WLaQIv0V2zIi6BS978RbtGqvHTagneYBrArZaiohgqzXuO9EDVkJzx2y3znZ?=
+ =?us-ascii?Q?WPTcjkQVjsf+kHU9xQhUicx7FR0oeGXQTE66yn3l2q8HZL7T5q2niOTsx01C?=
+ =?us-ascii?Q?bKdKkvOwHwOK+kxJUS4doGbhtV4xBke9sMbUyqCGJU6BWpHYC1IbFW9/LTKa?=
+ =?us-ascii?Q?NaKrt/i2lirxf2HZHhEsKBuFySwKVcszQ0RBfNdZV6hTwTDpSTk4Afg4nxqG?=
+ =?us-ascii?Q?5L7m0YRn4NYG6Da5uVH6dVERO8F6LtaU4MrZEM+qsvvzL0ifv8KROn+miveM?=
+ =?us-ascii?Q?c+SU5/LivmrUJP6s7Wj7JZ4ULes5DscY7kczH0Q/4X8WXi5qpqpAUKOcNHia?=
+ =?us-ascii?Q?tEpzwDlqsUy8Q0kdFWXI2wJyy+QfcVhcwzlJtWYGIsw0J/+tX36FeYWEAXpH?=
+ =?us-ascii?Q?z4mFKdsX5BvcUcjhpYMSChk1qDIcecMzTspUtNNaN9rTUeW/rd+ByJXTfOJ4?=
+ =?us-ascii?Q?Z0bIEoOafZTPT41MV2+iiEbxI6Y1EWwJ1JrWPGOc2Y+kDsAy127HnULKiRta?=
+ =?us-ascii?Q?I0HjEsJhkdGfMl3QTQVTB4F2Rj/Qn+HxkKUHSNLp29h852qKezgCYgr4/6Ae?=
+ =?us-ascii?Q?Nca/NvJtQhKqLP8kM3upUxqiLTzsjs0bYByRXFIsVbmupKoDeUuRplMzMPbn?=
+ =?us-ascii?Q?emdtJT9xrvx8NdKJRWw=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8412.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcd81bfa-b854-4d16-3b03-08da630be478
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2022 07:06:35.5065
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: atKzevdX2Z/b/a1Q/HSEayNF2DPDhCnyNmelSkDB68XdNR2BYduHZzjfZn5WUA91Na06znqQMQ8xeA9hhD/fMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3785
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now all the platforms enable ARCH_HAS_GET_PAGE_PROT. They define and export
-own vm_get_page_prot() whether custom or standard DECLARE_VM_GET_PAGE_PROT.
-Hence there is no need for default generic fallback for vm_get_page_prot().
-Just drop this fallback and also ARCH_HAS_GET_PAGE_PROT mechanism.
+> Subject: Re: [PATCH] MAINTAINERS: Update freescale pin controllers
+> maintainer
+>=20
+> On 2022-07-08 12:09, Jacky Bai wrote:
+> > Add myself as co-maintainer of freescale pin controllers driver.
+>=20
+> Acked-by: Stefan Agner <stefan@agner.ch>
+>=20
+> While at it, can you remove myself from the list of maintainers? I don't =
+work
+> with NXP hardware lately.
+>=20
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/alpha/Kconfig      |  1 -
- arch/arc/Kconfig        |  1 -
- arch/arm/Kconfig        |  1 -
- arch/arm64/Kconfig      |  1 -
- arch/csky/Kconfig       |  1 -
- arch/hexagon/Kconfig    |  1 -
- arch/ia64/Kconfig       |  1 -
- arch/loongarch/Kconfig  |  1 -
- arch/m68k/Kconfig       |  1 -
- arch/microblaze/Kconfig |  1 -
- arch/mips/Kconfig       |  1 -
- arch/nios2/Kconfig      |  1 -
- arch/openrisc/Kconfig   |  1 -
- arch/parisc/Kconfig     |  1 -
- arch/powerpc/Kconfig    |  1 -
- arch/riscv/Kconfig      |  1 -
- arch/s390/Kconfig       |  1 -
- arch/sh/Kconfig         |  1 -
- arch/sparc/Kconfig      |  1 -
- arch/um/Kconfig         |  1 -
- arch/x86/Kconfig        |  1 -
- arch/xtensa/Kconfig     |  1 -
- include/linux/mm.h      |  3 ---
- mm/Kconfig              |  3 ---
- mm/mmap.c               | 22 ----------------------
- 25 files changed, 50 deletions(-)
+Thx for review, I will handle this in V2.
 
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index db1c8b329461..7d0d26b5b3f5 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -2,7 +2,6 @@
- config ALPHA
- 	bool
- 	default y
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_32BIT_USTAT_F_TINODE
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 8be56a5d8a9b..9e3653253ef2 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -13,7 +13,6 @@ config ARC
- 	select ARCH_HAS_SETUP_DMA_OPS
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_SUPPORTS_ATOMIC_RMW if ARC_HAS_LLSC
- 	select ARCH_32BIT_OFF_T
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index e153b6d4fc5b..7630ba9cb6cc 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -24,7 +24,6 @@ config ARM
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if SWIOTLB || !MMU
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if MMU
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_V7 || CPU_V7M || CPU_V6K
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..7030bf3f8d6f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -45,7 +45,6 @@ config ARM64
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_ELF_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 588b8a9c68ed..21d72b078eef 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -6,7 +6,6 @@ config CSKY
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-index bc4ceecd0588..54eadf265178 100644
---- a/arch/hexagon/Kconfig
-+++ b/arch/hexagon/Kconfig
-@@ -6,7 +6,6 @@ config HEXAGON
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select DMA_GLOBAL_POOL
- 	# Other pending projects/to-do items.
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 0510a5737711..cb93769a9f2a 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -12,7 +12,6 @@ config IA64
- 	select ARCH_HAS_DMA_MARK_CLEAN
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ACPI
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index ed55abcc3dbd..53a912befb62 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -9,7 +9,6 @@ config LOONGARCH
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select ARCH_HAS_PTE_SPECIAL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_INLINE_READ_LOCK if !PREEMPTION
- 	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 49aa0cf13e96..936cce42ae9a 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -7,7 +7,6 @@ config M68K
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
- 	select ARCH_NO_PREEMPT if !COLDFIRE
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 15f91ba8a0c4..8cf429ad1c84 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -7,7 +7,6 @@ config MICROBLAZE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d0b7eb11ec81..db09d45d59ec 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -14,7 +14,6 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index e0459dffd218..4167f1eb4cd8 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -6,7 +6,6 @@ config NIOS2
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_HAS_DMA_SET_UNCACHED
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_SWAP
- 	select COMMON_CLK
- 	select TIMER_OF
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index fe0dfb50eb86..e814df4c483c 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -10,7 +10,6 @@ config OPENRISC
- 	select ARCH_HAS_DMA_SET_UNCACHED
- 	select ARCH_HAS_DMA_CLEAR_UNCACHED
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select COMMON_CLK
- 	select OF
- 	select OF_EARLY_FLATTREE
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 891d82393957..fa400055b2d5 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -12,7 +12,6 @@ config PARISC
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_STRICT_MODULE_RWX
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_NO_SG_CHAIN
- 	select ARCH_SUPPORTS_HUGETLBFS if PA20
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 40cdd1f2dbaf..49a804312d75 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -140,7 +140,6 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 583389d4e43a..32ffef9f6e5b 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -32,7 +32,6 @@ config RISCV
- 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
- 	select ARCH_STACKWALK
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index abc8be547354..8cd9e56c629b 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -81,7 +81,6 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 91f3ea325388..5f220e903e5a 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -12,7 +12,6 @@ config SUPERH
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HIBERNATION_POSSIBLE if MMU
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 09f868613a4d..9c1cce74953a 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -13,7 +13,6 @@ config 64BIT
- config SPARC
- 	bool
- 	default y
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select DMA_OPS
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 7fb43654e5b5..4ec22e156a2e 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -10,7 +10,6 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..841e4843d0c4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -94,7 +94,6 @@ config X86
- 	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_DEBUG_WX
- 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 4c0d83520ff1..0b0f0172cced 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -11,7 +11,6 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
--	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 07b56995e0fe..4ccd29f6828f 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -424,9 +424,6 @@ extern unsigned int kobjsize(const void *objp);
-  * mapping from the currently active vm_flags protection bits (the
-  * low four bits) to a page protection mask..
-  */
--#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
--extern pgprot_t protection_map[16];
--#endif
- 
- /*
-  * The default fault flags that should be used by most of the
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 169e64192e48..f47d257a053b 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -951,9 +951,6 @@ config ARCH_HAS_CURRENT_STACK_POINTER
- 	  register alias named "current_stack_pointer", this config can be
- 	  selected.
- 
--config ARCH_HAS_VM_GET_PAGE_PROT
--	bool
--
- config ARCH_HAS_PTE_DEVMAP
- 	bool
- 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 2cc722e162fa..02d6889f0ef6 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -81,28 +81,6 @@ static void unmap_region(struct mm_struct *mm,
- 		struct vm_area_struct *vma, struct vm_area_struct *prev,
- 		unsigned long start, unsigned long end);
- 
--#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
--pgprot_t protection_map[16] __ro_after_init = {
--	[VM_NONE]					= __P000,
--	[VM_READ]					= __P001,
--	[VM_WRITE]					= __P010,
--	[VM_WRITE | VM_READ]				= __P011,
--	[VM_EXEC]					= __P100,
--	[VM_EXEC | VM_READ]				= __P101,
--	[VM_EXEC | VM_WRITE]				= __P110,
--	[VM_EXEC | VM_WRITE | VM_READ]			= __P111,
--	[VM_SHARED]					= __S000,
--	[VM_SHARED | VM_READ]				= __S001,
--	[VM_SHARED | VM_WRITE]				= __S010,
--	[VM_SHARED | VM_WRITE | VM_READ]		= __S011,
--	[VM_SHARED | VM_EXEC]				= __S100,
--	[VM_SHARED | VM_EXEC | VM_READ]			= __S101,
--	[VM_SHARED | VM_EXEC | VM_WRITE]		= __S110,
--	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
--};
--DECLARE_VM_GET_PAGE_PROT
--#endif	/* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
--
- static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
- {
- 	return pgprot_modify(oldprot, vm_get_page_prot(vm_flags));
--- 
-2.25.1
-
+Jacky
+> --
+> Stefan
+>=20
+> >
+> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> > ---
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS index
+> > d6d879cb0afd..fbed6cc287b7 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -15557,6 +15557,7 @@ M:	Dong Aisheng
+> <aisheng.dong@nxp.com>
+> >  M:	Fabio Estevam <festevam@gmail.com>
+> >  M:	Shawn Guo <shawnguo@kernel.org>
+> >  M:	Stefan Agner <stefan@agner.ch>
+> > +M:	Jacky Bai <ping.bai@nxp.com>
+> >  R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+> >  L:	linux-gpio@vger.kernel.org
+> >  S:	Maintained

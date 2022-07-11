@@ -2,67 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1701B570CAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F440570CCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiGKV12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S229832AbiGKVh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGKV10 (ORCPT
+        with ESMTP id S229602AbiGKVhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:27:26 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478E8326CC;
-        Mon, 11 Jul 2022 14:27:24 -0700 (PDT)
-Received: from [192.168.100.20] ([46.142.32.91]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MRC7g-1nwlKw2WOK-00N6Ay; Mon, 11 Jul 2022 23:27:22 +0200
-Message-ID: <0506af84-fedf-d431-3cd3-811c559d3776@online.de>
-Date:   Mon, 11 Jul 2022 23:27:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   sixpack13 <sixpack13@online.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.18 000/112] 5.18.11-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:cGLX+dILWc0H2wIBTYsDx/alFcq90Yml5zBCuCySNSC7n9TmvmT
- Fd7BVr0L+gzzmqvNomnLt3JtNB+K6SMOVENWNtN/pZY6BeThxwvzKzXiuyul/nUv1kg8t7c
- iOTR7L3eYntvpFrevJjLNwx7Cazgcnv7nqltSKDL5t3oSIVuabNE2w/UwJccgJ54Mzu3o8i
- buIh6JvW1g5ivXKxwb69w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Et0tlnx+zYs=:aM9KfIhn7E8MuBUqlEjhqu
- 2hJqzIxj0RkQXw8pTlNbN2BC9QgXB9HsiRE2RfDiDsuzl1HBX2w0+fNcWGNtaDMgINjfonWp0
- u9FEG69BOg45zQ1xt/mtsUteGFTqZMLUySnJDRJiq7aKb0dEjaRNZPKToBvEsLYV53vE0PMRV
- o7hA1aUZ+c8PrtEM8HHhdThAlpDkijK1nTbIOcIhtXXlOYwRsY54++Htwxcc0Fo4F1d+hzFBM
- 4XnCX2CpDi1wnETNEckseeN2+acJyz0OtojKc25BFcg0SLC3VqdtyPte+YqG/t7Jwh17UYNq7
- vyxjvGYyckvccM8VszPHhTrZGY5i3diKcQA5Y4OI6JZu45rQ4Yfdvcpy8VGfUvTJlZ/BS9kNG
- OaH7GFJSTCferBPJzpV3wknNYA/qCEZ5lbq5Ji6n7M+fjR4iY21hrNdSitc3O6tynfl7lIPS2
- cwCOdUePb1gkj0Q22+KZpUbqECj/zNOtr5P0qhhhT50yj+Z85cU7OFrDCTCaEftllmqh+XkoK
- ZURa8pK1OgjtCswgDjqY3s/09TOZUm1lK2ZkEgOE0UMhzUOrmyutSEehXho7CEyQ/JquTNiIU
- 6SC0jH8Cw8YwtqfDp6BhQYqsULN+mHOwOCfqubfVZKHyc8DAXb5oVHTq0UY44iaF3sgpFmzlY
- GvrIuA2lhpXFz9fWrbxgZBUA/uSSh+GCTsk8JsMjIzwFyaq2VQHcCddm3hxXGfVPciyF+jQRQ
- GBGP/jNLTq0dpe5lMGrkCDnXC2RRoV31mpUWZQ==
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 17:37:24 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA93B286E9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:37:23 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p7-20020a25d807000000b0066e36989a90so4585112ybg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zHqFC2vAvLBhn+dr9vFDSM6RsrMGwj0OEAPrK2Tbzq8=;
+        b=VTXLdAFTNd9UwJNVkky3hIozNLYY6mYM83YMxH8oGI4oLZBAwrAybsmBIb5wT4hiOp
+         bdGWsm17JWHSCJzj49qhZRobzJj/cMC/zFrpRXnXqFDoInwf3JdxlvrDAWJZGhsTJcch
+         UqKYp01WFjLcw6OpeHOtG8tmI5eii8XLUf7i1ZVfdU5Igxkj37TUP1Zb1KO0bHFDD1lq
+         kuGrwfn8OQJCUwzPCCJ4y4gnAwUy0gtn0C1Z+DnLJZbKF4EEoW7lnKV/30evtMD6VW1+
+         IGqFHOAYi+nDRuQEH5rVGt2b/P+iT6IuRMDfxQOEtoVoLo7alxaHnaDQ39NvfAs6Nr78
+         1A9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zHqFC2vAvLBhn+dr9vFDSM6RsrMGwj0OEAPrK2Tbzq8=;
+        b=8D+XIECxlWsMei2vyx43jafEALtw9fji8byfvwY4cKFVdRlGUBiKFvgDYDaxHKhkID
+         p3rvQIr3iOakxVovPayL1EgnBWnjAg5IPprvEIbO5MvAFd36Y1QoK5jGFWTKnPPr5/Zg
+         oIddYoHACyhPnNryqHyu4jHdVRdkGkcytwDQDR1DyFOtqcMncRbnDfODf0vaCu3PBMnG
+         Yc6Usjuu7edwWM7vAZZd3XhNMF0Yhl+B7rhNUrdJqymOgT7SoX/Yo46dwQJTxQl75cZ+
+         Ha59J+TV6f9UpGy3k+2rfug/Xuv49poRMkQLBcIdzS4tPudBNxFuc8olv+S9gVW1VHfW
+         VGKg==
+X-Gm-Message-State: AJIora+fvCZfsszS6+Jwc+Uic6dyuC+DVmYBmyojpzQAnxh1h6+mMY/q
+        zfVmieueNmEXE8PfaSpsVvte1inPJ/eRBCekFA==
+X-Google-Smtp-Source: AGRyM1t+1oh1h9sGwQmRmQGmeG2XnD9OhdrwpWmEnE6iE7hFzFQEg9WRj9cDgGkg4MOgmMnXwYe5lebG86W+m7D/eA==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:4bd0:f760:5332:9f1c])
+ (user=justinstitt job=sendgmr) by 2002:a0d:df48:0:b0:31c:973f:b444 with SMTP
+ id i69-20020a0ddf48000000b0031c973fb444mr21768515ywe.119.1657574997770; Mon,
+ 11 Jul 2022 14:29:57 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 14:29:32 -0700
+Message-Id: <20220711212932.1501592-1-justinstitt@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] mediatek: mt7601u: fix clang -Wformat warning
+From:   Justin Stitt <justinstitt@google.com>
+To:     Jakub Kicinski <kubakici@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+When building with Clang we encounter this warning:
+| drivers/net/wireless/mediatek/mt7601u/debugfs.c:92:6: error: format
+| specifies type 'unsigned char' but the argument has type 'int'
+| [-Werror,-Wformat] dev->ee->reg.start + dev->ee->reg.num - 1);
 
-5.18.11-rc1
+The format specifier used is `%hhu` which describes a u8. Both
+`dev->ee->reg.start` and `.num` are u8 as well. However, the expression
+as a whole is promoted to an int as you cannot get smaller-than-int from
+addition. Therefore, to fix the warning, use the promoted-to-type's
+format specifier -- in this case `%d`.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
+example:
+```
+uint8_t a = 4, b = 7;
+int size = sizeof(a + b - 1);
+printf("%d\n", size);
+// output: 4
+```
 
-Thanks
+See more:
+(https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
+"Integer types smaller than int are promoted when an operation is
+performed on them. If all values of the original type can be represented
+as an int, the value of the smaller type is converted to an int;
+otherwise, it is converted to an unsigned int."
 
-Tested-by: sixpack13@online.de
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+Note: This patch silences the -Wformat warning for this file (which is
+the goal) but in reality all instances of `%hh[dux]` should be converted
+to `%[dux]` for this file and probably every file. That's a bit larger
+scope than the goal of enabling -Wformat for Clang builds, though.
+
+ drivers/net/wireless/mediatek/mt7601u/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/mediatek/mt7601u/debugfs.c b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+index 20669eacb66e..230b0e1061a7 100644
+--- a/drivers/net/wireless/mediatek/mt7601u/debugfs.c
++++ b/drivers/net/wireless/mediatek/mt7601u/debugfs.c
+@@ -88,7 +88,7 @@ mt7601u_eeprom_param_show(struct seq_file *file, void *data)
+ 		   dev->ee->rssi_offset[0], dev->ee->rssi_offset[1]);
+ 	seq_printf(file, "Reference temp: %hhx\n", dev->ee->ref_temp);
+ 	seq_printf(file, "LNA gain: %hhx\n", dev->ee->lna_gain);
+-	seq_printf(file, "Reg channels: %hhu-%hhu\n", dev->ee->reg.start,
++	seq_printf(file, "Reg channels: %hhu-%d\n", dev->ee->reg.start,
+ 		   dev->ee->reg.start + dev->ee->reg.num - 1);
+ 
+ 	seq_puts(file, "Per rate power:\n");
+-- 
+2.37.0.144.g8ac04bfd2-goog
 

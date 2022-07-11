@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8A356FAF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4320E56FBDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiGKJXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S232942AbiGKJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiGKJXN (ORCPT
+        with ESMTP id S233133AbiGKJeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:23:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2809312D0A;
-        Mon, 11 Jul 2022 02:13:50 -0700 (PDT)
+        Mon, 11 Jul 2022 05:34:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A8965A5;
+        Mon, 11 Jul 2022 02:18:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19AD861224;
-        Mon, 11 Jul 2022 09:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A8BC34115;
-        Mon, 11 Jul 2022 09:13:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF67B61227;
+        Mon, 11 Jul 2022 09:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F46C34115;
+        Mon, 11 Jul 2022 09:18:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530828;
-        bh=xJvYm1Xz/bOAfFScisv+CCaGh5cTJMv5RPCtTdhN8Xg=;
+        s=korg; t=1657531117;
+        bh=lh7AYL4Z8YvuRd3eo1vbbmlhCCo0hOo/6FSah1I1Stk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FkLtWb5PgvPBFpNQabuMdkZJn4ErTyfQsBpVbUXW9icmiCufVs3HdnR8aSpzcH+Md
-         f0svQEp+OronNk+Y5f/SsWAGbkM0L+iRxycv7KluiRsp12+Gi5xyZc4VWNSs6RWvxr
-         B7n4UQ5z113Dzn2GOjYohNjRptLl7YdvMBir2dKI=
+        b=XnXAKEEcCxLV5Pxm9RMvtB92AMjidQ215doMoEsWLwR9qGvdgXtv2r0yHyREpPhWy
+         BX5vSEPgIvFdjD4bifU/fmIj9W2HwkTr4TeVPfWZWm1OZcs+9xeXxPfVfq5N9ePIDk
+         JslGHFmBArHfUEkRUkH64vEiNNdCC13FJkwXvvTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.10 53/55] dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
-Date:   Mon, 11 Jul 2022 11:07:41 +0200
-Message-Id: <20220711090543.314872553@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        stable <stable@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH 5.18 102/112] misc: rtsx_usb: set return value in rsp_buf alloc err path
+Date:   Mon, 11 Jul 2022 11:07:42 +0200
+Message-Id: <20220711090552.465851390@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-commit 3770d92bd5237d686e49da7b2fb86f53ee6ed259 upstream.
+commit 2cd37c2e72449a7add6da1183d20a6247d6db111 upstream.
 
-It seems that it is valid to have less than the requested number of
-descriptors. But what is not valid and leads to subsequent errors is to
-have zero descriptors. In that case, abort the probing.
+Set return value in rsp_buf alloc error path before going to
+error handling.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20220526135111.1470926-1-michael@walle.cc
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!ucr->rsp_buf)
+               ^~~~~~~~~~~~~
+   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
+           if (!ucr->rsp_buf)
+           ^~~~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+
+Fixes: 3776c7855985 ("misc: rtsx_usb: use separate command and response buffers")
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220701165352.15687-1-skhan@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/misc/cardreader/rtsx_usb.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1838,6 +1838,11 @@ static int at_xdmac_alloc_chan_resources
- 	for (i = 0; i < init_nr_desc_per_channel; i++) {
- 		desc = at_xdmac_alloc_desc(chan, GFP_KERNEL);
- 		if (!desc) {
-+			if (i == 0) {
-+				dev_warn(chan2dev(chan),
-+					 "can't allocate any descriptors\n");
-+				return -EIO;
-+			}
- 			dev_warn(chan2dev(chan),
- 				"only %d descriptors have been allocated\n", i);
- 			break;
+--- a/drivers/misc/cardreader/rtsx_usb.c
++++ b/drivers/misc/cardreader/rtsx_usb.c
+@@ -636,8 +636,10 @@ static int rtsx_usb_probe(struct usb_int
+ 		return -ENOMEM;
+ 
+ 	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
+-	if (!ucr->rsp_buf)
++	if (!ucr->rsp_buf) {
++		ret = -ENOMEM;
+ 		goto out_free_cmd_buf;
++	}
+ 
+ 	usb_set_intfdata(intf, ucr);
+ 
 
 

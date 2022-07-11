@@ -2,199 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC6857054C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05A7570553
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiGKOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S230200AbiGKOT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiGKOTY (ORCPT
+        with ESMTP id S229923AbiGKOTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:19:24 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E09313BB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:19:23 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id w17so4828498ljh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2eZo4Uf6DLNwIqIGEbJqR98FHQ75J7mZnbMsiIwBVKI=;
-        b=vujer/oRPRtI1ITzp7sb4qrUT0cs7mbUQjUa2ra+SuUd2wHg2VERiBFINrc7WNUuQV
-         KtfF02S1QYcC5W0ss7ATKEEoDs07h4GacynEfju7LtaM+sB5pkPB9I93JryFKB1QhDSz
-         FsshgD2tJJIIpthobBWkQxaGmPQBF69sx6h0z6596x/XvtdlObx8rtMH3bm66cKHjj8o
-         i92TOVUwdFVy8EVa6ewL0B9ctibdzxBcGLMzS2LRuZABMYy23H+t8Fj1FZnx7K9/BdZu
-         3GSSOpXXl6Vw5P2FJLCEIqXCl5yLZ3MLWSgOfHYhTGUNQzI/Nb4/twogEiFwojnLJ7Io
-         e2Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2eZo4Uf6DLNwIqIGEbJqR98FHQ75J7mZnbMsiIwBVKI=;
-        b=joKpoQaBbxXBGQ8/nYsJ93VTB9NwHTpkBRMy97EJBTy0w43ZSbYbrOZzJaAX8QVgty
-         X4cFsC+dUerPVtp86pp2QK333te+/eTqOPhdJohPhENm64XNbw2DmgsqFX+fkezpZ89j
-         oaVaK2CwsHtUZjDFzd6DZULTre6VUiMGalIHsRpFIciBvpncr7BolUIdBVz3D25cxJgb
-         apa6a/7PFv1Lr4Vt9cDQpHIpLaRzkZS6iXt9I16bamCQ7ALPuEKcGHTLmy0d4ldNlW1w
-         sGiZA9ZngXnueaRZHR28+pRrWQzT2Gdjbdi25Ps7tM+XaA80rzglI8fLefLJZvFZJYjl
-         RZIw==
-X-Gm-Message-State: AJIora/ySn1s2pj0xUXJPv71HL1ma1ztUxPoNk2Sextr8AwV5pX+gemN
-        Jpe1Huhlc+DiDNJ/pmDDJIWbIA==
-X-Google-Smtp-Source: AGRyM1sUAjzTkZR8LmknXSW2Y4xr55HJXTle46S+m4AlsuiejFOrYPId1uZ2SDxwXBlZq8YNe76JCA==
-X-Received: by 2002:a05:651c:1246:b0:25a:9a7c:680c with SMTP id h6-20020a05651c124600b0025a9a7c680cmr10637075ljh.79.1657549161556;
-        Mon, 11 Jul 2022 07:19:21 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id p13-20020a2e804d000000b0025a885a135csm1780371ljg.119.2022.07.11.07.19.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 07:19:21 -0700 (PDT)
-Message-ID: <28b560ab-7323-3c0d-b07c-1741874b6d00@linaro.org>
-Date:   Mon, 11 Jul 2022 17:19:20 +0300
+        Mon, 11 Jul 2022 10:19:53 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EDE32BAD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:19:51 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LhQxw6mVpz9sy3;
+        Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sEwUWcBuijtK; Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LhQxw5zZXz9sy2;
+        Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B59F98B767;
+        Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id PDug5ro-mtP4; Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9FFDD8B763;
+        Mon, 11 Jul 2022 16:19:48 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 26BEJZA41585422
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 16:19:35 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 26BEJYoC1585421;
+        Mon, 11 Jul 2022 16:19:34 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 1/5] powerpc/32: Do not allow selection of e5500 or e6500 CPUs on PPC32
+Date:   Mon, 11 Jul 2022 16:19:29 +0200
+Message-Id: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 09/10] drm/msm/disp/dpu: add PSR support for eDP
- interface in dpu driver
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
-        quic_vproddut@quicinc.com, bjorn.andersson@linaro.org,
-        quic_aravindh@quicinc.com, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com
-References: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
- <1657544224-10680-10-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1657544224-10680-10-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1657549171; l=1188; s=20211009; h=from:subject:message-id; bh=zbDq6NxwXwlkwZBaVuUjU96KJcBMe59aI2CjCuBbbW0=; b=nvquTDXxK4F5f7+tn9OG4myo91gcXQ+gwfwVbURPctKw20MDNI3R2XD51fkpnhqXGWwL6NHsEhcW uL5UdERGA9Szz6uQYRatryZ4Dkw3SaqNlmnGc7qX5+NdV9DWt7Xg
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 15:57, Vinod Polimera wrote:
-> Enable PSR on eDP interface using drm self-refresh librabry.
-> This patch uses a trigger from self-refresh library to enter/exit
-> into PSR, when there are no updates from framework.
-> 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+Commit 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+enlarged the CPU selection logic to PPC32 by removing depend to
+PPC64, and failed to restrict that depend to E5500_CPU and E6500_CPU.
+Fortunately that got unnoticed because -mcpu=8540 will override the
+-mcpu=e500mc64 or -mpcu=e6500 as they are ealier, but that's
+fragile and may no be right in the future.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Add back the depend PPC64 on E5500_CPU and E6500_CPU.
 
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 13 ++++++++++++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
->   3 files changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> index f91e3d1..eb3915a 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> @@ -18,6 +18,7 @@
->   #include <drm/drm_probe_helper.h>
->   #include <drm/drm_rect.h>
->   #include <drm/drm_vblank.h>
-> +#include <drm/drm_self_refresh_helper.h>
->   
->   #include "dpu_kms.h"
->   #include "dpu_hw_lm.h"
-> @@ -961,6 +962,9 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
->   
->   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
->   
-> +	if (old_crtc_state->self_refresh_active)
-> +		return;
-> +
->   	/* Disable/save vblank irq handling */
->   	drm_crtc_vblank_off(crtc);
->   
-> @@ -1521,7 +1525,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   {
->   	struct drm_crtc *crtc = NULL;
->   	struct dpu_crtc *dpu_crtc = NULL;
-> -	int i;
-> +	int i, ret;
->   
->   	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
->   	if (!dpu_crtc)
-> @@ -1558,6 +1562,13 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   	/* initialize event handling */
->   	spin_lock_init(&dpu_crtc->event_lock);
->   
-> +	ret = drm_self_refresh_helper_init(crtc);
-> +	if (ret) {
-> +		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
-> +			crtc->name, ret);
-> +		return ERR_PTR(ret);
-> +	}
-> +
->   	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
->   	return crtc;
->   }
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 3156efb..5dfb56a 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -12,6 +12,7 @@
->   #include <linux/kthread.h>
->   #include <linux/seq_file.h>
->   
-> +#include <drm/drm_atomic.h>
->   #include <drm/drm_crtc.h>
->   #include <drm/drm_file.h>
->   #include <drm/drm_probe_helper.h>
-> @@ -1170,11 +1171,24 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
->   					struct drm_atomic_state *state)
->   {
->   	struct dpu_encoder_virt *dpu_enc = NULL;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *old_state = NULL;
->   	int i = 0;
->   
->   	dpu_enc = to_dpu_encoder_virt(drm_enc);
->   	DPU_DEBUG_ENC(dpu_enc, "\n");
->   
-> +	crtc = drm_atomic_get_old_crtc_for_encoder(state, drm_enc);
-> +	if (crtc)
-> +		old_state = drm_atomic_get_old_crtc_state(state, crtc);
-> +
-> +	/*
-> +	 * The encoder is already disabled if self refresh mode was set earlier,
-> +	 * in the old_state for the corresponding crtc.
-> +	 */
-> +	if (old_state && old_state->self_refresh_active)
-> +		return;
-> +
->   	mutex_lock(&dpu_enc->enc_lock);
->   	dpu_enc->enabled = false;
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index bce4764..cc0a674 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -507,7 +507,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
->   		return;
->   	}
->   
-> -	if (!crtc->state->active) {
-> +	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
->   		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
->   		return;
->   	}
+Fixes: 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/Kconfig.cputype | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index 383ed4fe6013..9805a2c717b9 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -173,11 +173,11 @@ config POWER9_CPU
+ 
+ config E5500_CPU
+ 	bool "Freescale e5500"
+-	depends on E500
++	depends on PPC64 && E500
+ 
+ config E6500_CPU
+ 	bool "Freescale e6500"
+-	depends on E500
++	depends on PPC64 && E500
+ 
+ config 860_CPU
+ 	bool "8xx family"
 -- 
-With best wishes
-Dmitry
+2.36.1
+

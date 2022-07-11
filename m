@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A9356FA90
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B18356FA2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbiGKJTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S231466AbiGKJOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiGKJSf (ORCPT
+        with ESMTP id S229638AbiGKJNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:18:35 -0400
+        Mon, 11 Jul 2022 05:13:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC0D4D4C9;
-        Mon, 11 Jul 2022 02:11:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F692ED6D;
+        Mon, 11 Jul 2022 02:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5D65B80D2C;
-        Mon, 11 Jul 2022 09:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B88AC34115;
-        Mon, 11 Jul 2022 09:11:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B10EAB80E79;
+        Mon, 11 Jul 2022 09:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB36C34115;
+        Mon, 11 Jul 2022 09:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530709;
-        bh=ruQ50WIOI0+7m3siYikWENO+ppOpQi5iT7iajfkpbn4=;
+        s=korg; t=1657530583;
+        bh=+F0RncyVrvAtDhg+ElW2AegwdG2/C/FQyEGyK3+83CA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XhV/g3LDc/DHF6exZ9Fp29SevXhFRpr5W8rRyAEvYcPqOTPi01rOL6e9SzbGTAX68
-         AwaVamlIDYyE9zdzIKDAhRQ+rqt4oL2C2b5hx88jmGGfpZMzGz8SjoN/PIFz7bbPZx
-         Zl42qiR7Fq/L0t4D0///z/bx1rCqp83BTfkOULXE=
+        b=jzLTG9rqK6SeoQbG7Y0uUXvd6TUT2x7jGq3GUFT0XIUg90SpE7RUGTkKwjIDd5EiZ
+         78PHbruEpIS2yCWwM93ZnmsCmr6XLd7dZCgq9sSy2gIqf3pHoC4oSX358jurz7kbe3
+         gWKtCZGpFkCa47O/3nql6m47l9coVPRQ3lFpu5Cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Zhang, Bernice" <bernice.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Yian Chen <yian.chen@intel.com>,
-        Joerg Roedel <jroedel@suse.de>, Zhang@vger.kernel.org
-Subject: [PATCH 5.10 12/55] iommu/vt-d: Fix PCI bus rescan device hot add
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 21/31] selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
 Date:   Mon, 11 Jul 2022 11:07:00 +0200
-Message-Id: <20220711090542.122959295@linuxfoundation.org>
+Message-Id: <20220711090538.473146998@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yian Chen <yian.chen@intel.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 316f92a705a4c2bf4712135180d56f3cca09243a upstream.
+[ Upstream commit 1a635d3e1c80626237fdae47a5545b6655d8d81c ]
 
-Notifier calling chain uses priority to determine the execution
-order of the notifiers or listeners registered to the chain.
-PCI bus device hot add utilizes the notification mechanism.
+The first host interface has by default no interest in receiving packets
+MAC DA de:ad:be:ef:13:37, so it might drop them before they hit the tc
+filter and this might confuse the selftest.
 
-The current code sets low priority (INT_MIN) to Intel
-dmar_pci_bus_notifier and postpones DMAR decoding after adding
-new device into IOMMU. The result is that struct device pointer
-cannot be found in DRHD search for the new device's DMAR/IOMMU.
-Subsequently, the device is put under the "catch-all" IOMMU
-instead of the correct one. This could cause system hang when
-device TLB invalidation is sent to the wrong IOMMU. Invalidation
-timeout error and hard lockup have been observed and data
-inconsistency/crush may occur as well.
+Enable promiscuous mode such that the filter properly counts received
+packets.
 
-This patch fixes the issue by setting a positive priority(1) for
-dmar_pci_bus_notifier while the priority of IOMMU bus notifier
-uses the default value(0), therefore DMAR decoding will be in
-advance of DRHD search for a new device to find the correct IOMMU.
-
-Following is a 2-step example that triggers the bug by simulating
-PCI device hot add behavior in Intel Sapphire Rapids server.
-
-echo 1 > /sys/bus/pci/devices/0000:6a:01.0/remove
-echo 1 > /sys/bus/pci/rescan
-
-Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
-Cc: stable@vger.kernel.org # v3.15+
-Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Yian Chen <yian.chen@intel.com>
-Link: https://lore.kernel.org/r/20220521002115.1624069-1-yian.chen@intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d4deb01467ec ("selftests: forwarding: Add a test for FDB learning")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/intel/dmar.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -385,7 +385,7 @@ static int dmar_pci_bus_notifier(struct
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 4d98e8940095..054f776c3843 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -819,6 +819,7 @@ learning_test()
+ 	# FDB entry was installed.
+ 	bridge link set dev $br_port1 flood off
  
- static struct notifier_block dmar_pci_bus_nb = {
- 	.notifier_call = dmar_pci_bus_notifier,
--	.priority = INT_MIN,
-+	.priority = 1,
- };
++	ip link set $host1_if promisc on
+ 	tc qdisc add dev $host1_if ingress
+ 	tc filter add dev $host1_if ingress protocol ip pref 1 handle 101 \
+ 		flower dst_mac $mac action drop
+@@ -868,6 +869,7 @@ learning_test()
  
- static struct dmar_drhd_unit *
+ 	tc filter del dev $host1_if ingress protocol ip pref 1 handle 101 flower
+ 	tc qdisc del dev $host1_if ingress
++	ip link set $host1_if promisc off
+ 
+ 	bridge link set dev $br_port1 flood on
+ 
+-- 
+2.35.1
+
 
 

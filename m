@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EE556D4B5
+	by mail.lfdr.de (Postfix) with ESMTP id C39CE56D4B6
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiGKGai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 02:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S229810AbiGKGad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 02:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiGKGaT (ORCPT
+        with ESMTP id S229555AbiGKGaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 02:30:19 -0400
+        Mon, 11 Jul 2022 02:30:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489AAE56
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:30:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB0AB491
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Jul 2022 23:30:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB09611EA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B7DC34115;
-        Mon, 11 Jul 2022 06:30:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A051611EE
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACECDC341C0;
+        Mon, 11 Jul 2022 06:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657521017;
-        bh=HWr2/dy137HprWFt2Ex5jIfKt6IaG8hMYIe7QZYqwMg=;
+        s=k20201202; t=1657521018;
+        bh=AnjlGY0oPQW4urpHEI87j2xxZ/49V3A13LD+O7W1b08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iBXx+XcsRiat3qnFp2gEQ5hTM/JCx33CTAQJnZT2YqhpoMH6t8t44WU0GReXmbhyp
-         K4S1zPItAdNnLnXhQqb8FadOGLOpmkAECPKKK4W8HFxtWd6cv77TNMKaxB91j4JJaA
-         qvXsNCSvw0Umhdnk+Cf+Pl2z/RVb8ve6bPlx7BwgqBhTp6xt5u6K4SAFMcfiCwjf1Z
-         u4tptUAF5C+o3mlYpUttRutqS0iKIi4ye1o3YsORSYIs4FveVWqlge+tmurcC+RTvt
-         znOqwwboCSYi/R9bSY4slKB3wlXg8K/aKG/RaxbOy89yMUFMd0I7v6FVljyfcSa+WH
-         akx8p+5HVPpHQ==
+        b=fB388AwwBUbRbkWJ3U4q1nvfpiEYod1Or8DNJ02CumrWRIdhOXceUHgkCRYkaUL8V
+         pNOWFgEcuAE+bU3UFOEkbYMO9WxOkiGIR1aE41b7WpBW01HF+I653RqyqdtDjyNIkU
+         vzuQQiZBGIGe48a2CkVmkIVGlyeA7GNz3GAn1L/8Wm5meCpksJmffzpn6fRIvKOaC3
+         p2XzfuzeAurtsXBD8nxvAcAPUep/qgLMUm55khPA84YnVSMlPlOkY6asvjMF23ky0G
+         iKzxEauHozNGEQevsYt8tFB10D+x1JeOkgPKbOhiAVIVX60fBSJBoYAYFh8/y+YwqG
+         A3U4NjlRBI4WA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Tomer Tayar <ttayar@habana.ai>
-Subject: [PATCH 07/12] habanalabs/gaudi2: map virtual MSI-X doorbell memory for user
-Date:   Mon, 11 Jul 2022 09:29:58 +0300
-Message-Id: <20220711063003.3182795-7-ogabbay@kernel.org>
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 08/12] habanalabs: expose only valid debugfs nodes
+Date:   Mon, 11 Jul 2022 09:29:59 +0300
+Message-Id: <20220711063003.3182795-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711063003.3182795-1-ogabbay@kernel.org>
 References: <20220711063003.3182795-1-ogabbay@kernel.org>
@@ -53,110 +53,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomer Tayar <ttayar@habana.ai>
+From: Ofir Bitton <obitton@habana.ai>
 
-Upon the initialization of a user context, map the host memory page of
-the virtual MSI-X doorbell in the device MMU.
-A reserved VA is used for this purpose, so user can use it directly
-without any allocation/map operation.
+In case security is enabled on the device, some debugfs nodes will
+fail. Hence, we do not expose them.
 
-Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2.c       | 43 ++++++++++++++++++-
- .../misc/habanalabs/include/gaudi2/gaudi2.h   |  3 ++
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ .../ABI/testing/debugfs-driver-habanalabs     | 24 +++--
+ drivers/misc/habanalabs/common/debugfs.c      | 94 ++++++++++---------
+ 2 files changed, 66 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 760ce5b7f955..eba8b0d674c3 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -1920,7 +1920,7 @@ static int gaudi2_set_fixed_properties(struct hl_device *hdev)
- 	prop->pmmu.hop_table_size = prop->mmu_hop_table_size;
- 	prop->pmmu.hop0_tables_total_size = prop->mmu_hop0_tables_total_size;
+diff --git a/Documentation/ABI/testing/debugfs-driver-habanalabs b/Documentation/ABI/testing/debugfs-driver-habanalabs
+index d9580f5d08a0..c915bf17b293 100644
+--- a/Documentation/ABI/testing/debugfs-driver-habanalabs
++++ b/Documentation/ABI/testing/debugfs-driver-habanalabs
+@@ -130,14 +130,16 @@ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Sets I2C device address for I2C transaction that is generated
+-                by the device's CPU
++                by the device's CPU, Not available when device is loaded with secured
++                firmware
  
--	prop->hints_host_reserved_va_range.start_addr =	RESERVED_VA_RANGE_FOR_ARC_ON_HOST_START;
-+	prop->hints_host_reserved_va_range.start_addr = RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START;
- 	prop->hints_host_reserved_va_range.end_addr = RESERVED_VA_RANGE_FOR_ARC_ON_HOST_END;
- 	prop->hints_host_hpage_reserved_va_range.start_addr =
- 			RESERVED_VA_RANGE_FOR_ARC_ON_HOST_HPAGE_START;
-@@ -9241,6 +9241,35 @@ static void gaudi2_restore_user_registers(struct hl_device *hdev)
- 	gaudi2_restore_user_qm_registers(hdev);
- }
+ What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_bus
+ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Sets I2C bus address for I2C transaction that is generated by
+-                the device's CPU
++                the device's CPU, Not available when device is loaded with secured
++                firmware
  
-+static int gaudi2_map_virtual_msix_doorbell_memory(struct hl_ctx *ctx)
+ What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_data
+ Date:           Jan 2019
+@@ -145,39 +147,45 @@ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Triggers an I2C transaction that is generated by the device's
+                 CPU. Writing to this file generates a write transaction while
+-                reading from the file generates a read transaction
++                reading from the file generates a read transaction, Not available
++                when device is loaded with secured firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_len
+ Date:           Dec 2021
+ KernelVersion:  5.17
+ Contact:        obitton@habana.ai
+ Description:    Sets I2C length in bytes for I2C transaction that is generated by
+-                the device's CPU
++                the device's CPU, Not available when device is loaded with secured
++                firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/i2c_reg
+ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Sets I2C register id for I2C transaction that is generated by
+-                the device's CPU
++                the device's CPU, Not available when device is loaded with secured
++                firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/led0
+ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+-Description:    Sets the state of the first S/W led on the device
++Description:    Sets the state of the first S/W led on the device, Not available
++                when device is loaded with secured firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/led1
+ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+-Description:    Sets the state of the second S/W led on the device
++Description:    Sets the state of the second S/W led on the device, Not available
++                when device is loaded with secured firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/led2
+ Date:           Jan 2019
+ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+-Description:    Sets the state of the third S/W led on the device
++Description:    Sets the state of the third S/W led on the device, Not available
++                when device is loaded with secured firmware
+ 
+ What:           /sys/kernel/debug/habanalabs/hl<n>/memory_scrub
+ Date:           May 2022
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index 3da39662abd9..64439f33a19b 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -1562,6 +1562,53 @@ static const struct file_operations hl_debugfs_fops = {
+ 	.release = single_release,
+ };
+ 
++static void add_secured_nodes(struct hl_dbg_device_entry *dev_entry)
 +{
-+	struct hl_device *hdev = ctx->hdev;
-+	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	struct gaudi2_device *gaudi2 = hdev->asic_specific;
-+	int rc;
++	debugfs_create_u8("i2c_bus",
++				0644,
++				dev_entry->root,
++				&dev_entry->i2c_bus);
 +
-+	rc = hl_mmu_map_page(ctx, RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START,
-+				gaudi2->virt_msix_db_dma_addr, prop->pmmu.page_size, true);
-+	if (rc)
-+		dev_err(hdev->dev, "Failed to map VA %#llx for virtual MSI-X doorbell memory\n",
-+			RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START);
++	debugfs_create_u8("i2c_addr",
++				0644,
++				dev_entry->root,
++				&dev_entry->i2c_addr);
 +
-+	return rc;
++	debugfs_create_u8("i2c_reg",
++				0644,
++				dev_entry->root,
++				&dev_entry->i2c_reg);
++
++	debugfs_create_u8("i2c_len",
++				0644,
++				dev_entry->root,
++				&dev_entry->i2c_len);
++
++	debugfs_create_file("i2c_data",
++				0644,
++				dev_entry->root,
++				dev_entry,
++				&hl_i2c_data_fops);
++
++	debugfs_create_file("led0",
++				0200,
++				dev_entry->root,
++				dev_entry,
++				&hl_led0_fops);
++
++	debugfs_create_file("led1",
++				0200,
++				dev_entry->root,
++				dev_entry,
++				&hl_led1_fops);
++
++	debugfs_create_file("led2",
++				0200,
++				dev_entry->root,
++				dev_entry,
++				&hl_led2_fops);
 +}
 +
-+static void gaudi2_unmap_virtual_msix_doorbell_memory(struct hl_ctx *ctx)
-+{
-+	struct hl_device *hdev = ctx->hdev;
-+	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	int rc;
-+
-+	rc = hl_mmu_unmap_page(ctx, RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START,
-+				prop->pmmu.page_size, true);
-+	if (rc)
-+		dev_err(hdev->dev, "Failed to unmap VA %#llx of virtual MSI-X doorbell memory\n",
-+			RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START);
-+}
-+
- static int gaudi2_ctx_init(struct hl_ctx *ctx)
+ void hl_debugfs_add_device(struct hl_device *hdev)
  {
- 	int rc;
-@@ -9257,7 +9286,15 @@ static int gaudi2_ctx_init(struct hl_ctx *ctx)
- 	else
- 		gaudi2_restore_user_registers(ctx->hdev);
+ 	struct hl_dbg_device_entry *dev_entry = &hdev->hl_debugfs;
+@@ -1632,50 +1679,6 @@ void hl_debugfs_add_device(struct hl_device *hdev)
+ 				dev_entry,
+ 				&hl_power_fops);
  
--	return gaudi2_internal_cb_pool_init(ctx->hdev, ctx);
-+	rc = gaudi2_internal_cb_pool_init(ctx->hdev, ctx);
-+	if (rc)
-+		return rc;
+-	debugfs_create_u8("i2c_bus",
+-				0644,
+-				dev_entry->root,
+-				&dev_entry->i2c_bus);
+-
+-	debugfs_create_u8("i2c_addr",
+-				0644,
+-				dev_entry->root,
+-				&dev_entry->i2c_addr);
+-
+-	debugfs_create_u8("i2c_reg",
+-				0644,
+-				dev_entry->root,
+-				&dev_entry->i2c_reg);
+-
+-	debugfs_create_u8("i2c_len",
+-				0644,
+-				dev_entry->root,
+-				&dev_entry->i2c_len);
+-
+-	debugfs_create_file("i2c_data",
+-				0644,
+-				dev_entry->root,
+-				dev_entry,
+-				&hl_i2c_data_fops);
+-
+-	debugfs_create_file("led0",
+-				0200,
+-				dev_entry->root,
+-				dev_entry,
+-				&hl_led0_fops);
+-
+-	debugfs_create_file("led1",
+-				0200,
+-				dev_entry->root,
+-				dev_entry,
+-				&hl_led1_fops);
+-
+-	debugfs_create_file("led2",
+-				0200,
+-				dev_entry->root,
+-				dev_entry,
+-				&hl_led2_fops);
+-
+ 	debugfs_create_file("device",
+ 				0200,
+ 				dev_entry->root,
+@@ -1754,6 +1757,9 @@ void hl_debugfs_add_device(struct hl_device *hdev)
+ 		entry->info_ent = &hl_debugfs_list[i];
+ 		entry->dev_entry = dev_entry;
+ 	}
 +
-+	rc = gaudi2_map_virtual_msix_doorbell_memory(ctx);
-+	if (rc)
-+		gaudi2_internal_cb_pool_fini(ctx->hdev, ctx);
-+
-+	return rc;
++	if (!hdev->asic_prop.fw_security_enabled)
++		add_secured_nodes(dev_entry);
  }
  
- static void gaudi2_ctx_fini(struct hl_ctx *ctx)
-@@ -9266,6 +9303,8 @@ static void gaudi2_ctx_fini(struct hl_ctx *ctx)
- 		return;
- 
- 	gaudi2_internal_cb_pool_fini(ctx->hdev, ctx);
-+
-+	gaudi2_unmap_virtual_msix_doorbell_memory(ctx);
- }
- 
- static int gaudi2_pre_schedule_cs(struct hl_cs *cs)
-diff --git a/drivers/misc/habanalabs/include/gaudi2/gaudi2.h b/drivers/misc/habanalabs/include/gaudi2/gaudi2.h
-index 071fc5a820f7..5b4f9e108798 100644
---- a/drivers/misc/habanalabs/include/gaudi2/gaudi2.h
-+++ b/drivers/misc/habanalabs/include/gaudi2/gaudi2.h
-@@ -54,6 +54,9 @@
- #define RESERVED_VA_RANGE_FOR_ARC_ON_HBM_START	0x1001500000000000ull
- #define RESERVED_VA_RANGE_FOR_ARC_ON_HBM_END	0x10016FFFFFFFFFFFull
- 
-+#define RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_START	0xFFF077FFFFFF0000ull
-+#define RESERVED_VA_FOR_VIRTUAL_MSIX_DOORBELL_END	0xFFF077FFFFFFFFFFull
-+
- #define RESERVED_VA_RANGE_FOR_ARC_ON_HOST_START	0xFFF0780000000000ull
- #define RESERVED_VA_RANGE_FOR_ARC_ON_HOST_END	0xFFF07FFFFFFFFFFFull
- 
+ void hl_debugfs_remove_device(struct hl_device *hdev)
 -- 
 2.25.1
 

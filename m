@@ -2,91 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8A256FF11
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5735656FF0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 12:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiGKKhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 06:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S230328AbiGKKgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 06:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiGKKgy (ORCPT
+        with ESMTP id S229680AbiGKKgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 06:36:54 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD524AAB10;
-        Mon, 11 Jul 2022 02:47:04 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 4FD5CE008C;
-        Mon, 11 Jul 2022 02:46:34 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WZ3W3IKfRroK; Mon, 11 Jul 2022 02:46:33 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1657532793; bh=SIVg2R/dN6S1hh+ase98JVSdxk9pJlViqrkTdBueOtI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buz6fZx3y+cLK55HEj14phepTYXyAj71aD+cyoybxAxfN7gRYhvT8ypeXwmDkriNh
-         bIqJ09oVJLi0BqNoIf/2pY0HBM4ABWN6YASayJISkCT7gg0k548ZWKlmhWxVD5Kp4o
-         J1QH4YL2r/Adxzl8mxoewup2TymDC7CAKCadBKLAqd/7f2SjwAW+LNj38FVs+S7xLd
-         tlNRuUC3EvdhaBKx6mpIFXIzfHvUO9n39QydkXGjfgRKDdzUSNk1sYC6K9fUVc3QQZ
-         N2Bp4PQjOw8qnA24GmKCy3rIzAeDscdhL877ElJij6Sw3xKAVTFVmcy+rz82zDlj4r
-         sON2J1NjvORHQ==
-To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v1 3/3] arm64: dts: imx8mq-librem5: set pd power-supply-needs-irq when needed
-Date:   Mon, 11 Jul 2022 11:45:49 +0200
-Message-Id: <20220711094549.3445566-3-martin.kepplinger@puri.sm>
-In-Reply-To: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
-References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
+        Mon, 11 Jul 2022 06:36:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D54ADC1BD;
+        Mon, 11 Jul 2022 02:46:40 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 09:46:37 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657532798;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZLMKvNlLuZyHt1XbXuDEYOvJvwJl6HGEaIuqT7eYV64=;
+        b=4gandr0iHmpgVnfH1palqXTkSxKGcN12aR4K1CyTNtSGaffyCb+dWp7K8wk0vpTt+xJoyx
+        rXKcRn0N2lUF23d/YUqsCiprvXThwDYU1WGY6lhIBD0A1i9UUSz0oMJ8cvpk25nDgu2kRA
+        zkOVt8z3It5ksiJ/P6cL5wVXKPXJd3zA52DVBlZvXHAuXr38ZXslGvMNSMlxnhSGs5Zu2P
+        wYIM+NA2FhU32A+q5gV/mLWcgsDnjvwra1c9tMRXPQ7GlMk5qrwaXpsQN0U2q/JksD/GY5
+        BhezqHTLXDaHhPt2+MZUk5UKaDogpbeSzq132OA8d35Jk76uE75Lfz+IW4ZUzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657532798;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZLMKvNlLuZyHt1XbXuDEYOvJvwJl6HGEaIuqT7eYV64=;
+        b=RF99lBPVxYAunLo6oCARmlvWP/D0ksFo3M2Af/xw810Muw767HmtHXRvRFeItLgWBYqID3
+        0iULR2jC/7TQrJDw==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/pat: Fix x86_has_pat_wp()
+Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
+        <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220503132207.17234-1-jgross@suse.com>
+References: <20220503132207.17234-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <165753279712.15455.2555694789382546026.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the pgc power-supply nodes on the librem5 board, interrupts are
-always needed for them to work as they are regulators controlled via
-i2c.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Commit-ID:     da4600c76da7d787db04ce059b1f176da8a8d375
+Gitweb:        https://git.kernel.org/tip/da4600c76da7d787db04ce059b1f176da8a8d375
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Fri, 08 Jul 2022 15:14:56 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 11 Jul 2022 11:37:03 +02:00
+
+x86/pat: Fix x86_has_pat_wp()
+
+x86_has_pat_wp() is using a wrong test, as it relies on the normal
+PAT configuration used by the kernel. In case the PAT MSR has been
+setup by another entity (e.g. Xen hypervisor) it might return false
+even if the PAT configuration is allowing WP mappings. This due to the
+fact that when running as Xen PV guest the PAT MSR is setup by the
+hypervisor and cannot be changed by the guest. This results in the WP
+related entry to be at a different position when running as Xen PV
+guest compared to the bare metal or fully virtualized case.
+
+The correct way to test for WP support is:
+
+1. Get the PTE protection bits needed to select WP mode by reading
+   __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
+   setting this might return protection bits for a stronger mode, e.g.
+   UC-)
+2. Translate those bits back into the real cache mode selected by those
+   PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
+3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
+
+Fixes: f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org> # 4.14
+Link: https://lore.kernel.org/r/20220503132207.17234-1-jgross@suse.com
 ---
- arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/mm/init.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-index 9eec8a7eecfc..1b445cbfdc78 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-@@ -1159,14 +1159,17 @@ mipi_dsi_out: endpoint {
- 
- &pgc_gpu {
- 	power-supply = <&buck3_reg>;
-+	power-supply-needs-irq;
+diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+index d8cfce2..57ba550 100644
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -77,10 +77,20 @@ static uint8_t __pte2cachemode_tbl[8] = {
+ 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
  };
  
- &pgc_mipi {
- 	power-supply = <&ldo5_reg>;
-+	power-supply-needs-irq;
- };
+-/* Check that the write-protect PAT entry is set for write-protect */
++/*
++ * Check that the write-protect PAT entry is set for write-protect.
++ * To do this without making assumptions how PAT has been set up (Xen has
++ * another layout than the kernel), translate the _PAGE_CACHE_MODE_WP cache
++ * mode via the __cachemode2pte_tbl[] into protection bits (those protection
++ * bits will select a cache mode of WP or better), and then translate the
++ * protection bits back into the cache mode using __pte2cm_idx() and the
++ * __pte2cachemode_tbl[] array. This will return the really used cache mode.
++ */
+ bool x86_has_pat_wp(void)
+ {
+-	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
++	uint16_t prot = __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP];
++
++	return __pte2cachemode_tbl[__pte2cm_idx(prot)] == _PAGE_CACHE_MODE_WP;
+ }
  
- &pgc_vpu {
- 	power-supply = <&buck4_reg>;
-+	power-supply-needs-irq;
- };
- 
- &pwm1 {
--- 
-2.30.2
-
+ enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)

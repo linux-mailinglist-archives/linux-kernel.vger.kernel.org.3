@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E319256FD37
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF4156FB2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiGKJwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S232345AbiGKJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiGKJu6 (ORCPT
+        with ESMTP id S232397AbiGKJYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:50:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8D631DE1;
-        Mon, 11 Jul 2022 02:25:06 -0700 (PDT)
+        Mon, 11 Jul 2022 05:24:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9753D29CA4;
+        Mon, 11 Jul 2022 02:15:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97A726112E;
-        Mon, 11 Jul 2022 09:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B370C34115;
-        Mon, 11 Jul 2022 09:25:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E89AB80CEF;
+        Mon, 11 Jul 2022 09:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E78C34115;
+        Mon, 11 Jul 2022 09:14:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531505;
-        bh=GIfK8Byv40Doke3jciY44/Uks9FgkwxfoZqJmMCfspU=;
+        s=korg; t=1657530898;
+        bh=5m+h39eZ7eMqr/vCdn8mmEWEdo/XefaS2iIxrXuVj1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cI2eFNrPH3CA4sUoiUMUW61Q+zvoj7YK4UCO3XbZ+gXo6egVOQfaIfgjucDoiJ6hk
-         +z1UJ+cF9ZtvKDhKRRhcpXj6q8vmF35/vbJu5miAHJ2Snn3XXQC/+eeC4Bloqe8sEu
-         WxQhDf309dO7q854jXxDYgDzCDO6wWiGpoSX9e8c=
+        b=XjIrqSK4pBb5qS4kivrBSDFxEO2HWffD1PRwM6fngC1LnQ0SmHaHwJEHAqwX6y9nR
+         xI3UsB5kvUHQR+0a/RXkuq4E4M0rs/0c02CHHXwyBem+42GIXogYdWohvQnIB1aNAL
+         V9RBpXNhI0OdVkiQNzrEoOZY/A9tLOkv2w8rp+48=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ding Hui <dinghui@sangfor.com.cn>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Peter Xu <peterx@redhat.com>, Tony Luck <tony.luck@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 127/230] mm/hwpoison: mf_mutex for soft offline and unpoison
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 023/112] selftests/net: fix section name when using xdp_dummy.o
 Date:   Mon, 11 Jul 2022 11:06:23 +0200
-Message-Id: <20220711090607.668206816@linuxfoundation.org>
+Message-Id: <20220711090550.218320773@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,222 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 91d005479e06392617bacc114509d611b705eaac ]
+commit d28b25a62a47a8c8aa19bd543863aab6717e68c9 upstream.
 
-Patch series "mm/hwpoison: fix unpoison_memory()", v4.
+Since commit 8fffa0e3451a ("selftests/bpf: Normalize XDP section names in
+selftests") the xdp_dummy.o's section name has changed to xdp. But some
+tests are still using "section xdp_dummy", which make the tests failed.
+Fix them by updating to the new section name.
 
-The main purpose of this series is to sync unpoison code to recent
-changes around how hwpoison code takes page refcount.  Unpoison should
-work or simply fail (without crash) if impossible.
-
-The recent works of keeping hwpoison pages in shmem pagecache introduce
-a new state of hwpoisoned pages, but unpoison for such pages is not
-supported yet with this series.
-
-It seems that soft-offline and unpoison can be used as general purpose
-page offline/online mechanism (not in the context of memory error).  I
-think that we need some additional works to realize it because currently
-soft-offline and unpoison are assumed not to happen so frequently (print
-out too many messages for aggressive usecases).  But anyway this could
-be another interesting next topic.
-
-v1: https://lore.kernel.org/linux-mm/20210614021212.223326-1-nao.horiguchi@gmail.com/
-v2: https://lore.kernel.org/linux-mm/20211025230503.2650970-1-naoya.horiguchi@linux.dev/
-v3: https://lore.kernel.org/linux-mm/20211105055058.3152564-1-naoya.horiguchi@linux.dev/
-
-This patch (of 3):
-
-Originally mf_mutex is introduced to serialize multiple MCE events, but
-it is not that useful to allow unpoison to run in parallel with
-memory_failure() and soft offline.  So apply mf_mutex to soft offline
-and unpoison.  The memory failure handler and soft offline handler get
-simpler with this.
-
-Link: https://lkml.kernel.org/r/20211115084006.3728254-1-naoya.horiguchi@linux.dev
-Link: https://lkml.kernel.org/r/20211115084006.3728254-2-naoya.horiguchi@linux.dev
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Ding Hui <dinghui@sangfor.com.cn>
-Cc: Miaohe Lin <linmiaohe@huawei.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8fffa0e3451a ("selftests/bpf: Normalize XDP section names in selftests")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/r/20220630062228.3453016-1-liuhangbin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memory-failure.c | 62 +++++++++++++--------------------------------
- 1 file changed, 18 insertions(+), 44 deletions(-)
+ tools/testing/selftests/net/udpgro.sh         |    2 +-
+ tools/testing/selftests/net/udpgro_bench.sh   |    2 +-
+ tools/testing/selftests/net/udpgro_frglist.sh |    2 +-
+ tools/testing/selftests/net/udpgro_fwd.sh     |    2 +-
+ tools/testing/selftests/net/veth.sh           |    6 +++---
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index c3ceb7436933..e6425d959fa9 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1463,14 +1463,6 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	lock_page(head);
- 	page_flags = head->flags;
- 
--	if (!PageHWPoison(head)) {
--		pr_err("Memory failure: %#lx: just unpoisoned\n", pfn);
--		num_poisoned_pages_dec();
--		unlock_page(head);
--		put_page(head);
--		return 0;
--	}
--
- 	/*
- 	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
- 	 * simply disable it. In order to make it work properly, we need
-@@ -1584,6 +1576,8 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
- 	return rc;
+--- a/tools/testing/selftests/net/udpgro.sh
++++ b/tools/testing/selftests/net/udpgro.sh
+@@ -34,7 +34,7 @@ cfg_veth() {
+ 	ip -netns "${PEER_NS}" addr add dev veth1 192.168.1.1/24
+ 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
+ 	ip -netns "${PEER_NS}" link set dev veth1 up
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
++	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
  }
  
-+static DEFINE_MUTEX(mf_mutex);
-+
- /**
-  * memory_failure - Handle memory failure of a page.
-  * @pfn: Page Number of the corrupted page
-@@ -1610,7 +1604,6 @@ int memory_failure(unsigned long pfn, int flags)
- 	int res = 0;
- 	unsigned long page_flags;
- 	bool retry = true;
--	static DEFINE_MUTEX(mf_mutex);
+ run_one() {
+--- a/tools/testing/selftests/net/udpgro_bench.sh
++++ b/tools/testing/selftests/net/udpgro_bench.sh
+@@ -34,7 +34,7 @@ run_one() {
+ 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
+ 	ip -netns "${PEER_NS}" link set dev veth1 up
  
- 	if (!sysctl_memory_failure_recovery)
- 		panic("Memory failure on page %lx", pfn);
-@@ -1744,16 +1737,6 @@ int memory_failure(unsigned long pfn, int flags)
- 	 */
- 	page_flags = p->flags;
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
++	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -t ${rx_args} -r &
  
--	/*
--	 * unpoison always clear PG_hwpoison inside page lock
--	 */
--	if (!PageHWPoison(p)) {
--		pr_err("Memory failure: %#lx: just unpoisoned\n", pfn);
--		num_poisoned_pages_dec();
--		unlock_page(p);
--		put_page(p);
--		goto unlock_mutex;
--	}
- 	if (hwpoison_filter(p)) {
- 		if (TestClearPageHWPoison(p))
- 			num_poisoned_pages_dec();
-@@ -1934,6 +1917,7 @@ int unpoison_memory(unsigned long pfn)
- 	struct page *page;
- 	struct page *p;
- 	int freeit = 0;
-+	int ret = 0;
- 	unsigned long flags = 0;
- 	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
- 					DEFAULT_RATELIMIT_BURST);
-@@ -1944,39 +1928,30 @@ int unpoison_memory(unsigned long pfn)
- 	p = pfn_to_page(pfn);
- 	page = compound_head(p);
+--- a/tools/testing/selftests/net/udpgro_frglist.sh
++++ b/tools/testing/selftests/net/udpgro_frglist.sh
+@@ -36,7 +36,7 @@ run_one() {
+ 	ip netns exec "${PEER_NS}" ethtool -K veth1 rx-gro-list on
  
-+	mutex_lock(&mf_mutex);
-+
- 	if (!PageHWPoison(p)) {
- 		unpoison_pr_info("Unpoison: Page was already unpoisoned %#lx\n",
- 				 pfn, &unpoison_rs);
--		return 0;
-+		goto unlock_mutex;
- 	}
  
- 	if (page_count(page) > 1) {
- 		unpoison_pr_info("Unpoison: Someone grabs the hwpoison page %#lx\n",
- 				 pfn, &unpoison_rs);
--		return 0;
-+		goto unlock_mutex;
- 	}
- 
- 	if (page_mapped(page)) {
- 		unpoison_pr_info("Unpoison: Someone maps the hwpoison page %#lx\n",
- 				 pfn, &unpoison_rs);
--		return 0;
-+		goto unlock_mutex;
- 	}
- 
- 	if (page_mapping(page)) {
- 		unpoison_pr_info("Unpoison: the hwpoison page has non-NULL mapping %#lx\n",
- 				 pfn, &unpoison_rs);
--		return 0;
--	}
--
--	/*
--	 * unpoison_memory() can encounter thp only when the thp is being
--	 * worked by memory_failure() and the page lock is not held yet.
--	 * In such case, we yield to memory_failure() and make unpoison fail.
--	 */
--	if (!PageHuge(page) && PageTransHuge(page)) {
--		unpoison_pr_info("Unpoison: Memory failure is now running on %#lx\n",
--				 pfn, &unpoison_rs);
--		return 0;
-+		goto unlock_mutex;
- 	}
- 
- 	if (!get_hwpoison_page(p, flags)) {
-@@ -1984,29 +1959,23 @@ int unpoison_memory(unsigned long pfn)
- 			num_poisoned_pages_dec();
- 		unpoison_pr_info("Unpoison: Software-unpoisoned free page %#lx\n",
- 				 pfn, &unpoison_rs);
--		return 0;
-+		goto unlock_mutex;
- 	}
- 
--	lock_page(page);
--	/*
--	 * This test is racy because PG_hwpoison is set outside of page lock.
--	 * That's acceptable because that won't trigger kernel panic. Instead,
--	 * the PG_hwpoison page will be caught and isolated on the entrance to
--	 * the free buddy page pool.
--	 */
- 	if (TestClearPageHWPoison(page)) {
- 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
- 				 pfn, &unpoison_rs);
- 		num_poisoned_pages_dec();
- 		freeit = 1;
- 	}
--	unlock_page(page);
- 
- 	put_page(page);
- 	if (freeit && !(pfn == my_zero_pfn(0) && page_count(p) == 1))
- 		put_page(page);
- 
--	return 0;
-+unlock_mutex:
-+	mutex_unlock(&mf_mutex);
-+	return ret;
+-	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
++	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp
+ 	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
+ 	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
+ 	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
+--- a/tools/testing/selftests/net/udpgro_fwd.sh
++++ b/tools/testing/selftests/net/udpgro_fwd.sh
+@@ -46,7 +46,7 @@ create_ns() {
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V4$ns/24
+ 		ip -n $BASE$ns addr add dev veth$ns $BM_NET_V6$ns/64 nodad
+ 	done
+-	ip -n $NS_DST link set veth$DST xdp object ../bpf/xdp_dummy.o section xdp_dummy 2>/dev/null
++	ip -n $NS_DST link set veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
  }
- EXPORT_SYMBOL(unpoison_memory);
  
-@@ -2187,9 +2156,12 @@ int soft_offline_page(unsigned long pfn, int flags)
- 		return -EIO;
- 	}
+ create_vxlan_endpoint() {
+--- a/tools/testing/selftests/net/veth.sh
++++ b/tools/testing/selftests/net/veth.sh
+@@ -289,14 +289,14 @@ if [ $CPUS -gt 1 ]; then
+ 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
+ 	printf "%-60s" "bad setting: XDP with RX nr less than TX"
+ 	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
+-		section xdp_dummy 2>/dev/null &&\
++		section xdp 2>/dev/null &&\
+ 		echo "fail - set operation successful ?!?" || echo " ok "
  
-+	mutex_lock(&mf_mutex);
-+
- 	if (PageHWPoison(page)) {
- 		pr_info("%s: %#lx page already poisoned\n", __func__, pfn);
- 		put_ref_page(ref_page);
-+		mutex_unlock(&mf_mutex);
- 		return 0;
- 	}
+ 	# the following tests will run with multiple channels active
+ 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
+ 	ip netns exec $NS_DST ethtool -L veth$DST rx 2
+ 	ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o \
+-		section xdp_dummy 2>/dev/null
++		section xdp 2>/dev/null
+ 	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
+ 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
+ 		echo "fail - set operation successful ?!?" || echo " ok "
+@@ -311,7 +311,7 @@ if [ $CPUS -gt 2 ]; then
+ 	chk_channels "setting invalid channels nr" $DST 2 2
+ fi
  
-@@ -2208,5 +2180,7 @@ int soft_offline_page(unsigned long pfn, int flags)
- 		}
- 	}
- 
-+	mutex_unlock(&mf_mutex);
-+
- 	return ret;
- }
--- 
-2.35.1
-
+-ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o section xdp_dummy 2>/dev/null
++ip -n $NS_DST link set dev veth$DST xdp object ../bpf/xdp_dummy.o section xdp 2>/dev/null
+ chk_gro_flag "with xdp attached - gro flag" $DST on
+ chk_gro_flag "        - peer gro flag" $SRC off
+ chk_tso_flag "        - tso flag" $SRC off
 
 

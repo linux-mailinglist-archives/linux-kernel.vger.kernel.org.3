@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55DC570DB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194B4570DB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiGKW6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S231714AbiGKW6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiGKW54 (ORCPT
+        with ESMTP id S230455AbiGKW56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:57:56 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA72C7E81E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:55 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id b10-20020a170902d50a00b0016c56d1f90fso801602plg.21
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:55 -0700 (PDT)
+        Mon, 11 Jul 2022 18:57:58 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D67E81E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:57 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id q8-20020a17090a304800b001ef82a71a9eso4069964pjl.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=8lbFNJS9mZLEnNAVzNRXBcrMEjTr/r9Ec5unYJJecmg=;
-        b=YXREVBWZaz8Z10PkbJfyE2n8KjqCgFZBLq5wVuKzpzWyBtmTc8kvS833XqvcfPjtNm
-         PTeu7fdtuQlcoL69C1FQCHTbA0OFRln/rztMlZajMTY0Vj7CoYDYslh9PNm9/yW/06EB
-         Nv1Qke9xgOKjCXodIT9eTvuuSdFF9odZeAIIyOL5omilYUGj0eCBh5jq2T5xF9n6V2yQ
-         TxuzY5zS399IfATNC+FMaq6TlvI4vGL+m18K9MiTV5zG1qp0Yp01IB+qfQf3UFipzZp3
-         4oPsl+tsyW8Jnm0q8a4xCkXXyEfys1pPIsxZBSZJiBo5TE50zIZXMwT8U3x05R4AbEQl
-         mvSg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=DAD9AJ7hVwjGPDz75YLlVxSBr8Hz85c/OPljz7ZiLcc=;
+        b=Hq1sJ5nd7x3bSwdQ4k+YM00ufbIfu5r8ZXXNo6rc+iJW2lsKeDvt3zMzP2w6W5mbQr
+         JK6bM7r4G+IhGmOlpDcOCShmWyzfyFmBv9j5lQ/zY0lE8uzHz2B8+DPxkekPsQURrJUK
+         EJ/EurtISNpmOtxo89M6ar3ZNNaUhClkwbAs7/Ndyocl1hVsj2Yune79ZZ6kZekmic/i
+         XgR1Xl19alHsb6kSRfnDBA9bGpbIoqhan9I4y0H54mbBrxoHO6KtyafC0fFSb6/f2nEk
+         xV05QXJJ58vaGHhaEtVlq+KYLAYiuonU87Es2LIN6JnBrJrhOpv4x83Xh7wfqi2IfYqo
+         QKTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=8lbFNJS9mZLEnNAVzNRXBcrMEjTr/r9Ec5unYJJecmg=;
-        b=w+a1PpOqICmCeurIu1ahn8UnV1H8uecuudiVb9z1MeqZ5ka8aH14iIMQtzPVHon+Mo
-         4M9PySvYgHkjlUfEqusUwxxpZjAkypRXkDPaPDJWexiwizxCLVRhyBPIVHz6IEtTOWjO
-         XVQhHebx0pXSrhoq3x2K4cg9keefmkrodCV6kybZheEMz5kEoKY50fSmMZ7G2ukghkkL
-         fPF5Q0MOqPEF3+/6OY/6+iy+JIdwF+atBZ+1jILT7QeeMxmnr9IcGqqsMO8Paw1sSdzr
-         gXjOcMTXOCdsblxrjGvoI4uXtdlA1ufvLBGCbzvvcER/+HuJ2CfObusZJoi+edEdB7zs
-         xsTQ==
-X-Gm-Message-State: AJIora/wlcnE2bjvJlCsX2fPjrDK+BrJRpuiz4sSJQJ2UcsQk0gdIWWR
-        aYyCpwqwFjgmIjQT/OgzA2aEP9jMJZ4=
-X-Google-Smtp-Source: AGRyM1v3IoUTLKRUbg8JYiEg9MmKrRx8rnsHEhQVtDINuG9txKyQDM+rt/FZBJdE0OiPDhf+VpN4wsdUgBw=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=DAD9AJ7hVwjGPDz75YLlVxSBr8Hz85c/OPljz7ZiLcc=;
+        b=ry92tVE7TDu1v2487OuE9CvxsH21vJU7x7ttgwsO9xJJwUQxUXvqX0hlIldgj3TN69
+         oMx2wvwI+DoRA+i/ekg90yW+GSDcKUmfJvZCk9M8VsNJRjPfbXHK6lLaKEJw/0k4PKqa
+         JyQ+jFuVuCmRkPdTCwAiIZZPlrFkF9LlWULNBDP2Uljvyv4m4FVWuvKOfyiJoKGGWDSp
+         fqSxlUbi+jAXGCx4OQHWTatFpr8pQgwhodPXKwHA3ekbVysDlIiWXwcAjEB88yiGuhu6
+         XpopmWU0o5txWK/Mwk1fJ7aGnyJQPfS5b49H5NvbxAHj76JrbX5ku2Wgv1M0dKC2oKr0
+         eCuw==
+X-Gm-Message-State: AJIora8xF726WmwIx4tlsXA9bkJBZU42MbfCVEBow76Qcdoco3BC8mmq
+        5C92RFjr0vnsyZP+pkCUJfC0+FpbWuo=
+X-Google-Smtp-Source: AGRyM1srANk6OAlyQWS9Ezd7mhOg4d2we2G/mu8rFmQ0BGwOZGI75xAmbIW5VKBLR0DO9gq6iWlZwjUHJXU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:a502:b0:151:8289:b19 with SMTP id
- s2-20020a170902a50200b0015182890b19mr20872765plq.149.1657580275295; Mon, 11
- Jul 2022 15:57:55 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1a8b:b0:525:9c4f:ade5 with SMTP id
+ e11-20020a056a001a8b00b005259c4fade5mr21124511pfv.74.1657580276910; Mon, 11
+ Jul 2022 15:57:56 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon, 11 Jul 2022 22:57:50 +0000
-Message-Id: <20220711225753.1073989-1-seanjc@google.com>
+Date:   Mon, 11 Jul 2022 22:57:51 +0000
+In-Reply-To: <20220711225753.1073989-1-seanjc@google.com>
+Message-Id: <20220711225753.1073989-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220711225753.1073989-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH 0/3] KVM: x86: Fix goofs with MONITOR/MWAIT quirk
+Subject: [PATCH 1/3] KVM: selftests: Test MONITOR and MWAIT, not just MONITOR
+ for quirk
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -70,26 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two bugs in the MONITOR/MWAIT selftest, and tweak the name of the
-quirk (which isn't yet set in stone) to clarify that it only applies to
-the #UD behavior, i.e. to reserve the right to correctly emulate #GP and
-other faults in the future even if the quirk is enabled.
+Fix a copy+paste error in monitor_mwait_test by switching one of the two
+"monitor" instructions to  an "mwait".  The intent of the test is very
+much to verify the quirk handles both MONITOR and MWAIT.
 
-Sean Christopherson (3):
-  KVM: selftests: Test MONITOR and MWAIT, not just MONITOR for quirk
-  KVM: selftests: Provide valid inputs for MONITOR/MWAIT regs
-  KVM: x86: Tweak name of MONITOR/MWAIT #UD quirk to make it #UD
-    specific
+Fixes: 2325d4dd7321 ("KVM: selftests: Add MONITOR/MWAIT quirk test")
+Reported-by: Yuan Yao <yuan.yao@linux.intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/virt/kvm/api.rst                         |  2 +-
- arch/x86/include/asm/kvm_host.h                        |  2 +-
- arch/x86/include/uapi/asm/kvm.h                        |  2 +-
- arch/x86/kvm/x86.c                                     |  2 +-
- .../testing/selftests/kvm/x86_64/monitor_mwait_test.c  | 10 +++++++---
- 5 files changed, 11 insertions(+), 7 deletions(-)
-
-
-base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
+diff --git a/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c b/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
+index 49f2ed1c53fe..f5c09cb528ae 100644
+--- a/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
++++ b/tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c
+@@ -34,7 +34,7 @@ static void guest_monitor_wait(int testcase)
+ 	else
+ 		GUEST_ASSERT_2(!vector, testcase, vector);
+ 
+-	vector = kvm_asm_safe("monitor");
++	vector = kvm_asm_safe("mwait");
+ 	if (fault_wanted)
+ 		GUEST_ASSERT_2(vector == UD_VECTOR, testcase, vector);
+ 	else
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

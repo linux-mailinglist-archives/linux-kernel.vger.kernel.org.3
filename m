@@ -2,179 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4520A570211
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56C257020B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiGKMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S230051AbiGKMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiGKMaw (ORCPT
+        with ESMTP id S229708AbiGKMaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:30:52 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7CB4E600
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:30:51 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ez10so8507057ejc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oYvWlChUTRjZ40L2MhpeE72DGwoPhHfF/1ipkuBiJBE=;
-        b=b/Aa+wXf5yJPAx+b+cKVIzEPsd/fK4KDVHLBkpiBJlEe6/xTnwrsojoh5acydEzceI
-         BZ6xqSQ2iUzlRC9oj8dv5+RsJamcVJLzRL855YavTAkhKtqtDynEF2UIoo92TUJF7pGY
-         GlXYDZUrd7nnHVfp7WdK0blwj3Rr+anWSdeCc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oYvWlChUTRjZ40L2MhpeE72DGwoPhHfF/1ipkuBiJBE=;
-        b=hHBLIqmugIwEe/jtChkLRsrFzGkjFWeHjJcrMwtxK4TW3us9Z3HVtN/RKPSjJMwCuK
-         fzuydZ84nzKgoYkX3nW+2nRUHkxE0Qxlvisws5Rg8c5PngCGsZVokvxqtA7o0p7f63Lq
-         5VPG7Fgva6KXVUUlKZ8sItinhkNf9YqLnUEPbHa+kd2CCzRw4YbTTpssARwwTzUXuu2F
-         kmj2JNbGfVviSWDMO8zvMR1nA2bP4Mr7xNPm9lCHMV4lB7GUZ/0Ajt1fhVu6o+DLjnmc
-         eE36wLcWuO/EHVQhwrH93JVsXm3sjQDGlBQUkCQfaoNQDSJ7w5lIzpyjC3eSCvTrhWlI
-         AH2g==
-X-Gm-Message-State: AJIora/ABnn002tTk8k9KEs9nyiVhZNkf8y3BbvMsl7CkDRB8oaz8KPj
-        eJGTygyxbltSP2Si95s4sv3qeQ==
-X-Google-Smtp-Source: AGRyM1v82oZO0az0Nf6XSyx/DfS6/dODO82EVOMfKtCbzwizV+rE6Q2Kcqmp6s+ussAHNPGgtsISKA==
-X-Received: by 2002:a17:906:8a45:b0:72b:31d4:d537 with SMTP id gx5-20020a1709068a4500b0072b31d4d537mr14585748ejc.170.1657542650255;
-        Mon, 11 Jul 2022 05:30:50 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0072b16a57cdcsm738785eja.118.2022.07.11.05.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 05:30:48 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        van Spriel <arend@broadcom.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-Subject: [PATCH 2/2] wifi: brcmfmac: support brcm,ccode-map-trivial DT property
-Date:   Mon, 11 Jul 2022 14:30:04 +0200
-Message-Id: <20220711123005.3055300-3-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711123005.3055300-1-alvin@pqrs.dk>
-References: <20220711123005.3055300-1-alvin@pqrs.dk>
+        Mon, 11 Jul 2022 08:30:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00F4D83F;
+        Mon, 11 Jul 2022 05:30:13 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BCO1xf012639;
+        Mon, 11 Jul 2022 12:30:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zCfavFWfX6luXI0zxQXsavySL3RktRTzHRLXSHIh7Qo=;
+ b=nlyeZMwBU+koLcJioj/Q3pcUoG9gMz2QzD1RTGUmBbfszabrH/KQKArLV7frQJBF4lTq
+ 4Q/ibMnzgWvdXwQoJzbcQ25tCBPfA+Xg5LrSWGJ8nbi9jYtVd6RYD+PbMUMQuCQnWQtv
+ OQLFf73UkKB9Pqpy3KFlRvZn+eSg8WSlql5ZCsmx/xwo3f+TpWiAQUOmU+0EFqOe081d
+ PwzpwBB2/s0ExS6/oH5NA0uwygxIHfoY76wGqJaFd4zw3LYROB8AmE1DVKLE81cxtvvE
+ YOG4sO2Y10DCjrt/dvURIo9IzHA8HyCVtnhGv/TJesA75F7fUNZsLCLTtydb3CyAyM+M aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8hw52vjm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:30:13 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26BCA0u7019369;
+        Mon, 11 Jul 2022 12:30:12 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8hw52vhb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:30:12 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26BCNBTM009042;
+        Mon, 11 Jul 2022 12:30:10 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h71a8jqrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 12:30:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26BCUHLQ33358320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Jul 2022 12:30:17 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40882A4057;
+        Mon, 11 Jul 2022 12:30:07 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90C3CA4040;
+        Mon, 11 Jul 2022 12:30:06 +0000 (GMT)
+Received: from [9.171.40.247] (unknown [9.171.40.247])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 11 Jul 2022 12:30:06 +0000 (GMT)
+Message-ID: <92c6d13c-4494-de56-83f4-9d7384444008@linux.ibm.com>
+Date:   Mon, 11 Jul 2022 14:30:06 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v12 2/3] KVM: s390: guest support for topology function
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220711084148.25017-1-pmorel@linux.ibm.com>
+ <20220711084148.25017-3-pmorel@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <20220711084148.25017-3-pmorel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: n9LH3FGze_HEp6995bTOpqXTQ_e-ULWP
+X-Proofpoint-GUID: V3PS3cfy8paeZt03mx8h4tA1nFsaJ8g-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_17,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207110052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 7/11/22 10:41, Pierre Morel wrote:
+> We report a topology change to the guest for any CPU hotplug.
+> 
+> The reporting to the guest is done using the Multiprocessor
+> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
+> SCA which will be cleared during the interpretation of PTF.
+> 
+> On every vCPU creation we set the MCTR bit to let the guest know the
+> next time it uses the PTF with command 2 instruction that the
+> topology changed and that it should use the STSI(15.1.x) instruction
+> to get the topology details.
+> 
+> STSI(15.1.x) gives information on the CPU configuration topology.
+> Let's accept the interception of STSI with the function code 15 and
+> let the userland part of the hypervisor handle it when userland
+> supports the CPU Topology facility.
+> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
 
-Commit a21bf90e927f ("brcmfmac: use ISO3166 country code and 0 rev as
-fallback on some devices") introduced a fallback mechanism whereby a
-trivial mapping from ISO3166 country codes to firmware country code and
-revision is used on some devices. This fallback operates on the device
-level, so it is enabled only for certain supported chipsets.
+Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+See nit below.
+> ---
+>  arch/s390/include/asm/kvm_host.h | 18 +++++++++++++++---
+>  arch/s390/kvm/kvm-s390.c         | 31 +++++++++++++++++++++++++++++++
+>  arch/s390/kvm/priv.c             | 22 ++++++++++++++++++----
+>  arch/s390/kvm/vsie.c             |  8 ++++++++
+>  4 files changed, 72 insertions(+), 7 deletions(-)
+> 
 
-In general though, the firmware country codes are determined by the CLM
-blob, which is board-specific and may vary despite the underlying
-chipset being the same.
+[...]
 
-The aforementioned commit is actually a refinement of a previous commit
-that was reverted in commit 151a7c12c4fc ("Revert "brcmfmac: use ISO3166
-country code and 0 rev as fallback"") due to regressions with a BCM4359
-device. The refinement restricted the fallback mechanism to specific
-chipsets such as the BCM4345.
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 8fcb56141689..70436bfff53a 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -1691,6 +1691,32 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
+>  	return ret;
+>  }
+>  
+> +/**
+> + * kvm_s390_update_topology_change_report - update CPU topology change report
+> + * @kvm: guest KVM description
+> + * @val: set or clear the MTCR bit
+> + *
+> + * Updates the Multiprocessor Topology-Change-Report bit to signal
+> + * the guest with a topology change.
+> + * This is only relevant if the topology facility is present.
+> + *
+> + * The SCA version, bsca or esca, doesn't matter as offset is the same.
+> + */
+> +static void kvm_s390_update_topology_change_report(struct kvm *kvm, bool val)
+> +{
+> +	union sca_utility new, old;
+> +	struct bsca_block *sca;
+> +
+> +	read_lock(&kvm->arch.sca_lock);
+> +	do {
+> +		sca = kvm->arch.sca;
 
-We use a chipset - CYW88359 - that the driver identifies as a BCM4359
-too. But in our case, the CLM blob uses ISO3166 country codes
-internally, and all with revision 0. So the trivial mapping is exactly
-what is needed in order for the driver to sync the kernel regulatory
-domain to the firmware. This is just a matter of how the CLM blob was
-prepared by the hardware vendor. The same could hold for other boards
-too.
+I find this assignment being in the loop unintuitive, but it should not make a difference.
 
-Although the brcm,ccode-map device tree property is useful for cases
-where the mapping is more complex, the trivial case invites a much
-simpler specification. This patch adds support for parsing the
-brcm,ccode-map-trivial device tree property. Subordinate to the more
-specific brcm,ccode-map property, this new proprety simply informs the
-driver that the fallback method should be used in every case.
-
-In the absence of the new property in the device tree, expect no
-functional change.
-
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c | 3 +++
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h   | 2 ++
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c       | 6 ++++++
- 3 files changed, 11 insertions(+)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-index 3ae6779fe153..db45da33adfd 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-@@ -7481,6 +7481,9 @@ int brcmf_cfg80211_wait_vif_event(struct brcmf_cfg80211_info *cfg,
- 
- static bool brmcf_use_iso3166_ccode_fallback(struct brcmf_pub *drvr)
- {
-+	if (drvr->settings->trivial_ccode_map)
-+		return true;
-+
- 	switch (drvr->bus_if->chip) {
- 	case BRCM_CC_4345_CHIP_ID:
- 	case BRCM_CC_43602_CHIP_ID:
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-index 15accc88d5c0..fe717cce5d55 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.h
-@@ -38,6 +38,7 @@ extern struct brcmf_mp_global_t brcmf_mp_global;
-  * @fcmode: FWS flow control.
-  * @roamoff: Firmware roaming off?
-  * @ignore_probe_fail: Ignore probe failure.
-+ * @trivial_ccode_map: Assume firmware uses ISO3166 country codes with rev 0
-  * @country_codes: If available, pointer to struct for translating country codes
-  * @bus: Bus specific platform data. Only SDIO at the mmoment.
-  */
-@@ -48,6 +49,7 @@ struct brcmf_mp_device {
- 	bool		roamoff;
- 	bool		iapp;
- 	bool		ignore_probe_fail;
-+	bool		trivial_ccode_map;
- 	struct brcmfmac_pd_cc *country_codes;
- 	const char	*board_type;
- 	unsigned char	mac[ETH_ALEN];
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-index 083ac58f466d..1add942462f8 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-@@ -24,6 +24,12 @@ static int brcmf_of_get_country_codes(struct device *dev,
- 
- 	count = of_property_count_strings(np, "brcm,ccode-map");
- 	if (count < 0) {
-+		/* If no explicit country code map is specified, check whether
-+		 * the trivial map should be used.
-+		 */
-+		settings->trivial_ccode_map =
-+			of_property_read_bool(np, "brcm,ccode-map-trivial");
-+
- 		/* The property is optional, so return success if it doesn't
- 		 * exist. Otherwise propagate the error code.
- 		 */
--- 
-2.37.0
-
+> +		old = READ_ONCE(sca->utility);
+> +		new = old;
+> +		new.mtcr = val;
+> +	} while (cmpxchg(&sca->utility.val, old.val, new.val) != old.val);
+> +	read_unlock(&kvm->arch.sca_lock);
+> +}
+> +
+[...]

@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D03357062E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE1557062F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 16:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiGKOue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 10:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S231818AbiGKOut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 10:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiGKOuc (ORCPT
+        with ESMTP id S230255AbiGKOuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 10:50:32 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192766554C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:50:31 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id e5so5124828iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2nQQyi2Y1Dyz7g7vcoV4Drg669ob6/r1QgJUbLSS7/4=;
-        b=pmtSVmIXzowxFyD7MXFh4qHXxQi9j1PApnnhrBknTVUjQ8p3Yt4mX5GPmKUuVoN458
-         7ywC0CpSFAAkMDcTNR0XnsIuhHerb6fqPSV5+DXwg5jTCLWAs2OIIoRzFBsZOJl132ao
-         avLltGrkmmwzNhGURnU7Jaxph7lUy1zzkC9L7+aDZoL5d43rzC3E8I5jzy0OxFcNWmKA
-         bTqpEt6gG7jFXfrjfvCI13C08n9lwsezuATR0fod6xiA8s3VyCrJzxAxGurIQfSbWx1a
-         lM3JOCLr5k1sBv6Zy78gVDNUOqaRtzsrAMlAeMLCdR1815mbJGESv1wRc+E3b0htNQGe
-         kO3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2nQQyi2Y1Dyz7g7vcoV4Drg669ob6/r1QgJUbLSS7/4=;
-        b=WUFYHKnJdgdeg4vAe9XvRKmvr7PzJTBSotuW2LZ6hHlPlYDZNJ4nDZsLGqHzlhXfGy
-         I2lS8iOU/lIeowSUPa6A6VnvdFnVSPhLGEWqhc/29VKP1jsfmfORLT3Dos5UvRrGKzfo
-         aN5a2a8rRLFYVC8slPg+dgUT4tysCBchW1afSk+3NgihH8PdTPVZ99qohC9SImGYgweA
-         AOoiDk0oX7OiAxhkKptbbggCv5v9LS3uIP38eePfIurnom/dzu+VMKQFCTUBOGsNzWWt
-         xyQOKt5FKCE26TNLR9/LPPH+ynXeAsyaf1bYNDKwH7cSOCkEFC0+iAX1hCbeE2xukmtt
-         QgGQ==
-X-Gm-Message-State: AJIora+IY54PQz9x4O7ufUZcwIxQzWatFTjMzm/Lidcj11QAmAOdtD79
-        EPbcYl36HIFJ+on6p/j9TLRRkDraUU4vaR/89Z4=
-X-Google-Smtp-Source: AGRyM1vJu2fLe8POaa5J0TsGCKK+09HMPkLCW9bZkbI0Ho5UBUyGTGHkf9Wal9RpHJxsUvMrIF/eZYjJ06X2ycEOo/U=
-X-Received: by 2002:a05:6638:3829:b0:33f:5c61:650e with SMTP id
- i41-20020a056638382900b0033f5c61650emr2038325jav.185.1657551030446; Mon, 11
- Jul 2022 07:50:30 -0700 (PDT)
+        Mon, 11 Jul 2022 10:50:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529ED63939
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 07:50:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03A7DB81022
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:50:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E29EC3411C;
+        Mon, 11 Jul 2022 14:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657551040;
+        bh=MX80YwmblA+v/61UuXjnsNDDbo5cN2GQE6qtQk7/qnk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OO2E9gHGUI8pAsye9LKImxPqcZ+lOe39N3fNLx7J0ta3A0hdy7u6xT3q8dxDCqr1H
+         zebW4Ms/bYVlaWgX7tO8sNgaU39U8/EcVC31dgw2GjNM8fsjp6cJlG/bI565+n7Y4G
+         iRoixb73TYxQV3p9oeKSpNrJ/PKy+T4b2RC1xF4c=
+Date:   Mon, 11 Jul 2022 16:50:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Conor Dooley <mail@conchuod.ie>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Subject: Re: [PATCH v3 1/2] arm64: topology: move store_cpu_topology() to
+ shared code
+Message-ID: <Ysw4voXuz+tcSKhf@kroah.com>
+References: <20220709152354.2856586-1-mail@conchuod.ie>
+ <20220709152354.2856586-2-mail@conchuod.ie>
+ <20220711143542.nlq6a5nuh4nouomo@bogus>
 MIME-Version: 1.0
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com> <75e3bb4f88fa43097540f3e2023df8388def5719.camel@perches.com>
-In-Reply-To: <75e3bb4f88fa43097540f3e2023df8388def5719.camel@perches.com>
-From:   Yu-Jen Chang <arthurchang09@gmail.com>
-Date:   Mon, 11 Jul 2022 22:50:19 +0800
-Message-ID: <CAD4RrFPbT=R7rYZhN=9JFtTnaupVjrU3F+JN+Yuxzw2ns_AHBw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
-To:     Joe Perches <joe@perches.com>
-Cc:     andy@kernel.org, akinobu.mita@gmail.com,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711143542.nlq6a5nuh4nouomo@bogus>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joe Perches <joe@perches.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=8810=E6=97=A5 =
-=E9=80=B1=E6=97=A5 =E6=99=9A=E4=B8=8A11:16=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Sun, 2022-07-10 at 22:28 +0800, Yu-Jen Chang wrote:
-> > The original version of memchr() is implemented with the byte-wise
-> > comparing technique, which does not fully use 64-bits or 32-bits
-> > registers in CPU. We use word-wide comparing so that 8 characters
-> > can be compared at the same time on CPU. This code is base on
-> > David Laight's implementation.
+On Mon, Jul 11, 2022 at 03:35:42PM +0100, Sudeep Holla wrote:
+> On Sat, Jul 09, 2022 at 04:23:54PM +0100, Conor Dooley wrote:
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > arm64's method of defining a default cpu topology requires only minimal
+> > changes to apply to RISC-V also. The current arm64 implementation exits
+> > early in a uniprocessor configuration by reading MPIDR & claiming that
+> > uniprocessor can rely on the default values.
+> > 
+> > This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
+> > topology: Stop using MPIDR for topology information")', because the
+> > current code just assigns default values for multiprocessor systems.
+> > 
+> > With the MPIDR references removed, store_cpu_topolgy() can be moved to
+> > the common arch_topology code.
 > >
-> > We create two files to measure the performance. The first file
-> > contains on average 10 characters ahead the target character.
-> > The second file contains at least 1000 characters ahead the
-> > target character. Our implementation of =E2=80=9Cmemchr()=E2=80=9D is s=
-lightly
-> > better in the first test and nearly 4x faster than the orginal
-> > implementation in the second test.
->
-> It seems you did not test this with 32bit compilers as
-> there are 64 bit constants without ull
+> 
+> Looks good. FWIW,
+> 
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+> > CC: stable@vger.kernel.org
+> 
+> However, while I understand the reason why this is needed in stable trees
+> for RISC-V, I am not sure if we want this for stable tree at-least on arm64.
+> I leave that part to Greg and Will.
 
-Yeah, it is better to add ull at the end of the constant. I test with
-32-bit compiler and it works. The compiler will use two or more
-instruction to reach the same result.
-
-See https://godbolt.org/z/svbj18foP
-
->
-> > diff --git a/lib/string.c b/lib/string.c
-> []
-> > @@ -905,21 +905,35 @@ EXPORT_SYMBOL(strnstr);
-> >  #ifndef __HAVE_ARCH_MEMCHR
-> >  /**
-> >   * memchr - Find a character in an area of memory.
-> > - * @s: The memory area
-> > + * @p: The memory area
-> >   * @c: The byte to search for
-> > - * @n: The size of the area.
-> > + * @length: The size of the area.
-> >   *
-> >   * returns the address of the first occurrence of @c, or %NULL
-> >   * if @c is not found
-> >   */
-> > -void *memchr(const void *s, int c, size_t n)
-> > +void *memchr(const void *p, int c, unsigned long length)
-> >  {
-> > -     const unsigned char *p =3D s;
-> > -     while (n-- !=3D 0) {
-> > -             if ((unsigned char)c =3D=3D *p++) {
-> > -                     return (void *)(p - 1);
-> > +     u64 mask, val;
-> > +     const void *end =3D p + length;
-> > +
-> > +     c &=3D 0xff;
-> > +     if (p <=3D end - 8) {
-> > +             mask =3D c;
-> > +             MEMCHR_MASK_GEN(mask);
-> > +
-> > +             for (; p <=3D end - 8; p +=3D 8) {
-> > +                     val =3D *(u64 *)p ^ mask;
-> > +                     if ((val + 0xfefefefefefefeffu) &
-> > +                         (~val & 0x8080808080808080u))
->
-> here.
->
+Why would it be good for one arch but bad for another?

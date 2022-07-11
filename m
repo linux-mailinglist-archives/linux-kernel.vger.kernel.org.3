@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6DC5706A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C997E5706AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 17:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiGKPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 11:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S232111AbiGKPKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 11:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbiGKPJb (ORCPT
+        with ESMTP id S229490AbiGKPKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:09:31 -0400
-Received: from syslogsrv (unknown [217.20.186.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE6E5FAD6;
-        Mon, 11 Jul 2022 08:09:29 -0700 (PDT)
-Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
-        by syslogsrv with esmtp (Exim 4.90_1)
-        (envelope-from <maksym.glubokiy@plvision.eu>)
-        id 1oAv2F-000G64-1i; Mon, 11 Jul 2022 18:09:19 +0300
-From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-To:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Subject: [PATCH net-next v2 2/2] net: prestera: add support for port range filters
-Date:   Mon, 11 Jul 2022 18:09:08 +0300
-Message-Id: <20220711150908.1030650-3-maksym.glubokiy@plvision.eu>
+        Mon, 11 Jul 2022 11:10:43 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B95FAD7;
+        Mon, 11 Jul 2022 08:10:41 -0700 (PDT)
+Received: from andrey-lpc.intra.ispras.ru (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPS id 4A85140737A7;
+        Mon, 11 Jul 2022 15:10:37 +0000 (UTC)
+From:   Andrey Strachuk <strochuk@ispras.ru>
+To:     Peter Chen <peter.chen@kernel.org>
+Cc:     Andrey Strachuk <strochuk@ispras.ru>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: cdns3: removed useless condition in cdns3_gadget_ep_dequeue()
+Date:   Mon, 11 Jul 2022 18:10:32 +0300
+Message-Id: <20220711151032.16825-1-strochuk@ispras.ru>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711150908.1030650-1-maksym.glubokiy@plvision.eu>
-References: <20220711150908.1030650-1-maksym.glubokiy@plvision.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for port-range rules:
+Comparison of 'ep' with NULL is useless since
+'ep' is a result of container_of and cannot be NULL
+in any reasonable scenario.
 
-  $ tc qdisc add ... clsact
-  $ tc filter add ... flower ... src_port <PMIN>-<PMAX> ...
 
-Co-developed-by: Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Signed-off-by: Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+Fixes: 64b558f597d1 ("usb: cdns3: Change file names for cdns3 driver.")
 ---
- .../marvell/prestera/prestera_flower.c        | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_flower.c b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-index a54748ac6541..652aa95e65ac 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-@@ -202,6 +202,7 @@ static int prestera_flower_parse(struct prestera_flow_block *block,
- 	      BIT(FLOW_DISSECTOR_KEY_IPV6_ADDRS) |
- 	      BIT(FLOW_DISSECTOR_KEY_ICMP) |
- 	      BIT(FLOW_DISSECTOR_KEY_PORTS) |
-+	      BIT(FLOW_DISSECTOR_KEY_PORTS_RANGE) |
- 	      BIT(FLOW_DISSECTOR_KEY_VLAN))) {
- 		NL_SET_ERR_MSG_MOD(f->common.extack, "Unsupported key");
- 		return -EOPNOTSUPP;
-@@ -301,6 +302,29 @@ static int prestera_flower_parse(struct prestera_flow_block *block,
- 		rule_match_set(r_match->mask, L4_PORT_DST, match.mask->dst);
- 	}
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 5c15c48952a6..f31b389ae0b2 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2608,7 +2608,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+ 	unsigned long flags;
+ 	int ret = 0;
  
-+	if (flow_rule_match_key(f_rule, FLOW_DISSECTOR_KEY_PORTS_RANGE)) {
-+		struct flow_match_ports_range match;
-+		__be32 tp_key, tp_mask;
-+
-+		flow_rule_match_ports_range(f_rule, &match);
-+
-+		/* src port range (min, max) */
-+		tp_key = htonl(ntohs(match.key->tp_min.src) |
-+			       (ntohs(match.key->tp_max.src) << 16));
-+		tp_mask = htonl(ntohs(match.mask->tp_min.src) |
-+				(ntohs(match.mask->tp_max.src) << 16));
-+		rule_match_set(r_match->key, L4_PORT_RANGE_SRC, tp_key);
-+		rule_match_set(r_match->mask, L4_PORT_RANGE_SRC, tp_mask);
-+
-+		/* dst port range (min, max) */
-+		tp_key = htonl(ntohs(match.key->tp_min.dst) |
-+			       (ntohs(match.key->tp_max.dst) << 16));
-+		tp_mask = htonl(ntohs(match.mask->tp_min.dst) |
-+				(ntohs(match.mask->tp_max.dst) << 16));
-+		rule_match_set(r_match->key, L4_PORT_RANGE_DST, tp_key);
-+		rule_match_set(r_match->mask, L4_PORT_RANGE_DST, tp_mask);
-+	}
-+
- 	if (flow_rule_match_key(f_rule, FLOW_DISSECTOR_KEY_VLAN)) {
- 		struct flow_match_vlan match;
+-	if (!ep || !request || !ep->desc)
++	if (!request || !ep->desc)
+ 		return -EINVAL;
  
+ 	spin_lock_irqsave(&priv_dev->lock, flags);
 -- 
 2.25.1
 

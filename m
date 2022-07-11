@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530685704B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150835704AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 15:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiGKNww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 09:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
+        id S230266AbiGKNwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 09:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiGKNwp (ORCPT
+        with ESMTP id S229657AbiGKNwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 09:52:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6035B61D66
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:52:44 -0700 (PDT)
+        Mon, 11 Jul 2022 09:52:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA3565C97B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 06:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657547563;
+        s=mimecast20190719; t=1657547559;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2mSjA/SPr5DLrqocTMOuQhkZ+1jjuTVoS1exRVSQKa4=;
-        b=Jfp31RWPkKPtHfAhFL+xpXPethNuV7KhWEptfghsfq129KxYJMMG0qDwLTOdlzI33Eg2Q2
-        +5YdiNEwkMZesfnz2Na5oSRx+I/6JDdwhBPu+WCdG0WtTTHcDee1m2p83DTBQF+pjBNoue
-        05g2kzNKCukuS7lhkODbUEKWkREg05A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=SXxw8023X5Ng7EOWnmeS1q1VSSsbgfI4xN4bjScnx08=;
+        b=B5ojYFmUvcUPr4Ur9cvARWRSGY672n6DKk8cdycC2eRdoiDxjHi9iiMT3DT0Cw9nTo087w
+        zgp9KSxgbyCOcwihQwSvQRTMD8cUMbjwQGUdSYXNhhJaOH5Xh3eS6PxMzTysDbbMweDEy0
+        XO9ioo8oqEYG7KgfbZKZZJ/dqK59vHE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-xZrsl3tlPeSeCLwvcwrYmA-1; Mon, 11 Jul 2022 09:52:38 -0400
-X-MC-Unique: xZrsl3tlPeSeCLwvcwrYmA-1
+ us-mta-632-TJYriBkXMFySrijOEM6Z1w-1; Mon, 11 Jul 2022 09:52:38 -0400
+X-MC-Unique: TJYriBkXMFySrijOEM6Z1w-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1627685A584;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 555A938005C4;
         Mon, 11 Jul 2022 13:52:38 +0000 (UTC)
 Received: from bfoster.redhat.com (unknown [10.22.32.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D5EB418EA8;
-        Mon, 11 Jul 2022 13:52:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 22B8F18EA8;
+        Mon, 11 Jul 2022 13:52:38 +0000 (UTC)
 From:   Brian Foster <bfoster@redhat.com>
 To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     ikent@redhat.com, onestero@redhat.com, willy@infradead.org
-Subject: [PATCH v2 1/4] radix-tree: propagate all tags in idr tree
-Date:   Mon, 11 Jul 2022 09:52:34 -0400
-Message-Id: <20220711135237.173667-2-bfoster@redhat.com>
+Subject: [PATCH v2 2/4] idr: support optional id tagging
+Date:   Mon, 11 Jul 2022 09:52:35 -0400
+Message-Id: <20220711135237.173667-3-bfoster@redhat.com>
 In-Reply-To: <20220711135237.173667-1-bfoster@redhat.com>
 References: <20220711135237.173667-1-bfoster@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,63 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IDR tree has hardcoded tag propagation logic to handle the
-internal IDR_FREE tag and ignore all others. Fix up the hardcoded
-logic to support additional tags.
-
-This is specifically to support a new internal IDR_TGID radix tree
-tag used to improve search efficiency of pids with associated
-PIDTYPE_TGID tasks within a pid namespace.
+Certain idr users can benefit from generic tagging support of the
+underlying radix-tree (or xarray) data structure. For example, a
+readdir of the /proc root dir performs an inefficient walk of the
+pid namespace idr tree. This involves checking the entry of every
+allocated id for a group leader task association. Expose a simple,
+single tag interface for idr users to facilitate more efficient
+scans in situations like this.
 
 Signed-off-by: Brian Foster <bfoster@redhat.com>
 ---
- lib/radix-tree.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+ include/linux/idr.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/lib/radix-tree.c b/lib/radix-tree.c
-index b3afafe46fff..08eef33e7820 100644
---- a/lib/radix-tree.c
-+++ b/lib/radix-tree.c
-@@ -431,12 +431,14 @@ static int radix_tree_extend(struct radix_tree_root *root, gfp_t gfp,
- 				tag_clear(node, IDR_FREE, 0);
- 				root_tag_set(root, IDR_FREE);
- 			}
--		} else {
--			/* Propagate the aggregated tag info to the new child */
--			for (tag = 0; tag < RADIX_TREE_MAX_TAGS; tag++) {
--				if (root_tag_get(root, tag))
--					tag_set(node, tag, 0);
--			}
-+		}
+diff --git a/include/linux/idr.h b/include/linux/idr.h
+index a0dce14090a9..44e8bb287d0e 100644
+--- a/include/linux/idr.h
++++ b/include/linux/idr.h
+@@ -27,6 +27,7 @@ struct idr {
+  * to users.  Use tag 0 to track whether a node has free space below it.
+  */
+ #define IDR_FREE	0
++#define IDR_TAG		1
+ 
+ /* Set the IDR flag and the IDR_FREE tag */
+ #define IDR_RT_MARKER	(ROOT_IS_IDR | (__force gfp_t)			\
+@@ -174,6 +175,31 @@ static inline void idr_preload_end(void)
+ 	local_unlock(&radix_tree_preloads.lock);
+ }
+ 
++static inline void idr_set_tag(struct idr *idr, unsigned long id)
++{
++	radix_tree_tag_set(&idr->idr_rt, id - idr->idr_base, IDR_TAG);
++}
 +
-+		/* Propagate the aggregated tag info to the new child */
-+		for (tag = 0; tag < RADIX_TREE_MAX_TAGS; tag++) {
-+			if (is_idr(root) && tag == IDR_FREE)
-+				continue;
-+			if (root_tag_get(root, tag))
-+				tag_set(node, tag, 0);
- 		}
- 
- 		BUG_ON(shift > BITS_PER_LONG);
-@@ -1368,11 +1370,13 @@ static bool __radix_tree_delete(struct radix_tree_root *root,
- 	unsigned offset = get_slot_offset(node, slot);
- 	int tag;
- 
--	if (is_idr(root))
--		node_tag_set(root, node, IDR_FREE, offset);
--	else
--		for (tag = 0; tag < RADIX_TREE_MAX_TAGS; tag++)
--			node_tag_clear(root, node, tag, offset);
-+	for (tag = 0; tag < RADIX_TREE_MAX_TAGS; tag++) {
-+		if (is_idr(root) && tag == IDR_FREE) {
-+			node_tag_set(root, node, tag, offset);
-+			continue;
-+		}
-+		node_tag_clear(root, node, tag, offset);
-+	}
- 
- 	replace_slot(slot, NULL, node, -1, values);
- 	return node && delete_node(root, node);
++static inline bool idr_get_tag(struct idr *idr, unsigned long id)
++{
++	return radix_tree_tag_get(&idr->idr_rt, id - idr->idr_base, IDR_TAG);
++}
++
++/*
++ * Find the next id with the internal tag set.
++ */
++static inline void *idr_get_next_tag(struct idr *idr, unsigned long id)
++{
++	unsigned int ret;
++	void *entry;
++
++	ret = radix_tree_gang_lookup_tag(&idr->idr_rt, &entry,
++					 id - idr->idr_base, 1, IDR_TAG);
++	if (ret != 1)
++		return NULL;
++	return entry;
++}
++
+ /**
+  * idr_for_each_entry() - Iterate over an IDR's elements of a given type.
+  * @idr: IDR handle.
 -- 
 2.35.3
 

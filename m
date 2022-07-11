@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF3C56FA7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C158E56FDA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiGKJSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S231961AbiGKJ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiGKJRZ (ORCPT
+        with ESMTP id S234226AbiGKJ6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:17:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E7C48CAE;
-        Mon, 11 Jul 2022 02:11:26 -0700 (PDT)
+        Mon, 11 Jul 2022 05:58:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8BB3C8D1;
+        Mon, 11 Jul 2022 02:27:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 075DD611E9;
-        Mon, 11 Jul 2022 09:11:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC3DC385A9;
-        Mon, 11 Jul 2022 09:11:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A0A861363;
+        Mon, 11 Jul 2022 09:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9FCC34115;
+        Mon, 11 Jul 2022 09:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530685;
-        bh=UAloPygui7BXRMZl5jb5TSPhIEqwcaUK4m+sbscM76U=;
+        s=korg; t=1657531626;
+        bh=sdJokJh/mT6NTEEZR+84538Xzs9PvYlTM6kDBhenlis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=shJWk1XUnWBGvWzO0NfVFOsQk2yskOj3SXltcTQFSHYs0X6ow9veeYuLbRh3t1ep5
-         B8VpdQVtU5fC1ZoMr+TaQjBTMiNWo0h7F8JAsUUQeTJVfSfcB6xShDS5+4CfGJoswR
-         15xwZIAJ8EFRzXUNVQHoyJd23/8834YproqZRqw4=
+        b=tTWcjakxlatJtJ7KXYTSGOakj5TiV44VinyNGzYArj2mwEsz5KR2x2HEW08IDRJBv
+         iYXqX0yjwKb/yPRqICKVtwwWRvL1EDrE/7ifMeJ0Y9LH0vCNU+oyldAuxuCOFgR2AP
+         qKHWKzrjA56rAZc84YRfD/x6HM5gogAgvSy/9pgU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Child <nnac123@linux.ibm.com>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        Rick Lindsley <ricklind@us.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 24/38] ibmvnic: Properly dispose of all skbs during a failover.
-Date:   Mon, 11 Jul 2022 11:07:06 +0200
-Message-Id: <20220711090539.443682381@linuxfoundation.org>
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Sandeen <sandeen@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Ayushman Dutta <ayudutta@amazon.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: [PATCH 5.15 171/230] xfs: remove incorrect ASSERT in xfs_rename
+Date:   Mon, 11 Jul 2022 11:07:07 +0200
+Message-Id: <20220711090608.911844588@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090538.722676354@linuxfoundation.org>
-References: <20220711090538.722676354@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rick Lindsley <ricklind@us.ibm.com>
+From: Eric Sandeen <sandeen@redhat.com>
 
-[ Upstream commit 1b18f09d31cfa7148df15a7d5c5e0e86f105f7d1 ]
+commit e445976537ad139162980bee015b7364e5b64fff upstream.
 
-During a reset, there may have been transmits in flight that are no
-longer valid and cannot be fulfilled.  Resetting and clearing the
-queues is insufficient; each skb also needs to be explicitly freed
-so that upper levels are not left waiting for confirmation of a
-transmit that will never happen.  If this happens frequently enough,
-the apparent backlog will cause TCP to begin "congestion control"
-unnecessarily, culminating in permanently decreased throughput.
+This ASSERT in xfs_rename is a) incorrect, because
+(RENAME_WHITEOUT|RENAME_NOREPLACE) is a valid combination, and
+b) unnecessary, because actual invalid flag combinations are already
+handled at the vfs level in do_renameat2() before we get called.
+So, remove it.
 
-Fixes: d7c0ef36bde03 ("ibmvnic: Free and re-allocate scrqs when tx/rx scrqs change")
-Tested-by: Nick Child <nnac123@linux.ibm.com>
-Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
-Signed-off-by: Rick Lindsley <ricklind@us.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Eric Sandeen <sandeen@redhat.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Fixes: 7dcf5c3e4527 ("xfs: add RENAME_WHITEOUT support")
+Reported-by: Ayushman Dutta <ayudutta@amazon.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/ibm/ibmvnic.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/xfs/xfs_inode.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
-index 34bf6f4eef4a..bc313d85fe13 100644
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5022,6 +5022,15 @@ static int ibmvnic_reset_init(struct ibmvnic_adapter *adapter)
- 			release_sub_crqs(adapter, 0);
- 			rc = init_sub_crqs(adapter);
- 		} else {
-+			/* no need to reinitialize completely, but we do
-+			 * need to clean up transmits that were in flight
-+			 * when we processed the reset.  Failure to do so
-+			 * will confound the upper layer, usually TCP, by
-+			 * creating the illusion of transmits that are
-+			 * awaiting completion.
-+			 */
-+			clean_tx_pools(adapter);
-+
- 			rc = reset_sub_crq_queues(adapter);
- 		}
- 	} else {
--- 
-2.35.1
-
+--- a/fs/xfs/xfs_inode.c
++++ b/fs/xfs/xfs_inode.c
+@@ -3128,7 +3128,6 @@ xfs_rename(
+ 	 * appropriately.
+ 	 */
+ 	if (flags & RENAME_WHITEOUT) {
+-		ASSERT(!(flags & (RENAME_NOREPLACE | RENAME_EXCHANGE)));
+ 		error = xfs_rename_alloc_whiteout(mnt_userns, target_dp, &wip);
+ 		if (error)
+ 			return error;
 
 

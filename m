@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E92056FB28
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C83156FD2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbiGKJ0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S233946AbiGKJvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbiGKJYd (ORCPT
+        with ESMTP id S233806AbiGKJuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:24:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6F1248F7;
-        Mon, 11 Jul 2022 02:14:46 -0700 (PDT)
+        Mon, 11 Jul 2022 05:50:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C61F23BDE;
+        Mon, 11 Jul 2022 02:24:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42A6BB80956;
-        Mon, 11 Jul 2022 09:14:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A62C34115;
-        Mon, 11 Jul 2022 09:14:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DC23ECE1257;
+        Mon, 11 Jul 2022 09:24:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BF7C34115;
+        Mon, 11 Jul 2022 09:24:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530884;
-        bh=lIq5QL1O+Kc+TdTym8+QkepgY8j0DpxAsVZjsV1n+AI=;
+        s=korg; t=1657531491;
+        bh=Ogtk9ds9PUoZv1yHNlKP+Gp/qGJsLeUWAZAHVWnzl1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pq8O3yR3g8KYbWIVBqlqK6bODKqRrpTjBNGM0oei3+cVXUMoPrPhVs6n6KfShC/Ij
-         0nGpgngf6fDnjw5kUfJZMLYAoc75mNcESpUTnOxbgT7/Oyd0RKqoEYcsd87Ei/xiDK
-         Jp90cm3vrqXLElfEojk7vHUZuyt+n2xc5LYLL98k=
+        b=GSeXE8Mbi03DbJG58PrIk3rl6YxsVxa1JTXvzTCrpR3Vw7VpCInx416xpw0FM+Dn1
+         LJA0yFf/NC+bnqJld3XN8i++G4nA7jmMOLrdq3nPDWi+9i4+sHdZ2i0Ng1MIGa8Vge
+         ZteJFMHKy8fg2IqK4nJagkKuvtdt1u5fEyzM/DM4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 019/112] net: rose: fix UAF bug caused by rose_t0timer_expiry
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 123/230] tty: n_gsm: fix missing update of modem controls after DLCI open
 Date:   Mon, 11 Jul 2022 11:06:19 +0200
-Message-Id: <20220711090550.104404747@linuxfoundation.org>
+Message-Id: <20220711090607.554714477@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-References: <20220711090549.543317027@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,73 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 148ca04518070910739dfc4eeda765057856403d upstream.
+[ Upstream commit 48473802506d2d6151f59e0e764932b33b53cb3b ]
 
-There are UAF bugs caused by rose_t0timer_expiry(). The
-root cause is that del_timer() could not stop the timer
-handler that is running and there is no synchronization.
-One of the race conditions is shown below:
+Currently the peer is not informed about the initial state of the modem
+control lines after a new DLCI has been opened.
+Fix this by sending the initial modem control line states after DLCI open.
 
-    (thread 1)             |        (thread 2)
-                           | rose_device_event
-                           |   rose_rt_device_down
-                           |     rose_remove_neigh
-rose_t0timer_expiry        |       rose_stop_t0timer(rose_neigh)
-  ...                      |         del_timer(&neigh->t0timer)
-                           |         kfree(rose_neigh) //[1]FREE
-  neigh->dce_mode //[2]USE |
-
-The rose_neigh is deallocated in position [1] and use in
-position [2].
-
-The crash trace triggered by POC is like below:
-
-BUG: KASAN: use-after-free in expire_timers+0x144/0x320
-Write of size 8 at addr ffff888009b19658 by task swapper/0/0
-...
-Call Trace:
- <IRQ>
- dump_stack_lvl+0xbf/0xee
- print_address_description+0x7b/0x440
- print_report+0x101/0x230
- ? expire_timers+0x144/0x320
- kasan_report+0xed/0x120
- ? expire_timers+0x144/0x320
- expire_timers+0x144/0x320
- __run_timers+0x3ff/0x4d0
- run_timer_softirq+0x41/0x80
- __do_softirq+0x233/0x544
- ...
-
-This patch changes rose_stop_ftimer() and rose_stop_t0timer()
-in rose_remove_neigh() to del_timer_sync() in order that the
-timer handler could be finished before the resources such as
-rose_neigh and so on are deallocated. As a result, the UAF
-bugs could be mitigated.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220705125610.77971-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220420101346.3315-1-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rose/rose_route.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/n_gsm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/net/rose/rose_route.c
-+++ b/net/rose/rose_route.c
-@@ -227,8 +227,8 @@ static void rose_remove_neigh(struct ros
- {
- 	struct rose_neigh *s;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index d3d5308daf35..c52d5e0d5c6f 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -371,6 +371,7 @@ static const u8 gsm_fcs8[256] = {
+ #define GOOD_FCS	0xCF
  
--	rose_stop_ftimer(rose_neigh);
--	rose_stop_t0timer(rose_neigh);
-+	del_timer_sync(&rose_neigh->ftimer);
-+	del_timer_sync(&rose_neigh->t0timer);
+ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len);
++static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk);
  
- 	skb_queue_purge(&rose_neigh->queue);
+ /**
+  *	gsm_fcs_add	-	update FCS
+@@ -1489,6 +1490,9 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	dlci->state = DLCI_OPEN;
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes open.\n", dlci->addr);
++	/* Send current modem state */
++	if (dlci->addr)
++		gsmtty_modem_update(dlci, 0);
+ 	wake_up(&dlci->gsm->event);
+ }
  
+-- 
+2.35.1
+
 
 

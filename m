@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6AD56FAFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B52F56FBDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbiGKJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        id S232592AbiGKJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbiGKJXg (ORCPT
+        with ESMTP id S232118AbiGKJeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:23:36 -0400
+        Mon, 11 Jul 2022 05:34:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E7D31209;
-        Mon, 11 Jul 2022 02:13:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D086330;
+        Mon, 11 Jul 2022 02:18:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8359FB80DB7;
-        Mon, 11 Jul 2022 09:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0B7C34115;
-        Mon, 11 Jul 2022 09:13:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 183FEB80833;
+        Mon, 11 Jul 2022 09:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB0FC34115;
+        Mon, 11 Jul 2022 09:18:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530834;
-        bh=Hk/f5HEXN2CGqKGi2hWX/5xqot39iQo6TVSPqo3c+18=;
+        s=korg; t=1657531119;
+        bh=mtlslkPZOGbYO1mkm2rsME8Fmx8ft0J7wjRxl8Q0S6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NYA+MoA/pW6ePyECjqyee8+S/eRl3GehEQrjB4Smd6Eqt4kCRLWIeo+sZMsTmXnRz
-         4NcMOpl4gI2/2mHlAgqpgKbLEVrofDGhMnW6cn7Wy6RNWUCfKrGyJAuFw5MVAf75yg
-         HO15VPn/1Mz8yamEaNj8LRpKjPTeOMrFr9awlzO0=
+        b=UTHyPNEtckOlWmioD52H87fPcpfwPgg+Xz0udjgVcw3qnedyPkqiVWqmVpUdfmdNd
+         1LcQ0OPHXQ04FxeewAxHtj4kUfB8DTB7keAJMm1q6sI9erJ2euzCVGe8p6OZ5rh75S
+         NCDQEZ787T68JiX51QduU5mWqVbMWZXVT9JpE5Ns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Samin Guo <samin.guo@starfivetech.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.10 54/55] dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
-Date:   Mon, 11 Jul 2022 11:07:42 +0200
-Message-Id: <20220711090543.343274588@linuxfoundation.org>
+Subject: [PATCH 5.18 103/112] dmaengine: dw-axi-dmac: Fix RMW on channel suspend register
+Date:   Mon, 11 Jul 2022 11:07:43 +0200
+Message-Id: <20220711090552.494344585@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+References: <20220711090549.543317027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-commit c132fe78ad7b4ce8b5d49a501a15c29d08eeb23a upstream.
+commit 49db68d45bdcad06e28a420d5d911e4178389666 upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not needed anymore.
+When the DMA is configured for more than 8 channels the bits controlling
+suspend moves to another register. However when adding support for this
+the new register would be completely overwritten in one case and
+overwritten with values from the old register in another case.
 
-Add missing of_node_put() in to fix this.
+Found by comparing the parallel implementation of more than 8 channel
+support for the StarFive JH7100 SoC by Samin.
 
-Fixes: ec9bfa1e1a79 ("dmaengine: ti-dma-crossbar: dra7: Use bitops instead of idr")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220605042723.17668-2-linmq006@gmail.com
+Fixes: 824351668a41 ("dmaengine: dw-axi-dmac: support DMAX_NUM_CHANNELS > 8")
+Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
+Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Link: https://lore.kernel.org/r/20220627090939.1775717-1-emil.renner.berthing@canonical.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/ti/dma-crossbar.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/dma/ti/dma-crossbar.c
-+++ b/drivers/dma/ti/dma-crossbar.c
-@@ -268,6 +268,7 @@ static void *ti_dra7_xbar_route_allocate
- 		mutex_unlock(&xbar->mutex);
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
-+		of_node_put(dma_spec->np);
- 		return ERR_PTR(-ENOMEM);
+--- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
++++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+@@ -1164,8 +1164,9 @@ static int dma_chan_pause(struct dma_cha
+ 			BIT(chan->id) << DMAC_CHAN_SUSP_WE_SHIFT;
+ 		axi_dma_iowrite32(chan->chip, DMAC_CHEN, val);
+ 	} else {
+-		val = BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT |
+-		      BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT;
++		val = axi_dma_ioread32(chan->chip, DMAC_CHSUSPREG);
++		val |= BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT |
++			BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT;
+ 		axi_dma_iowrite32(chan->chip, DMAC_CHSUSPREG, val);
  	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
+ 
+@@ -1190,12 +1191,13 @@ static inline void axi_chan_resume(struc
+ {
+ 	u32 val;
+ 
+-	val = axi_dma_ioread32(chan->chip, DMAC_CHEN);
+ 	if (chan->chip->dw->hdata->reg_map_8_channels) {
++		val = axi_dma_ioread32(chan->chip, DMAC_CHEN);
+ 		val &= ~(BIT(chan->id) << DMAC_CHAN_SUSP_SHIFT);
+ 		val |=  (BIT(chan->id) << DMAC_CHAN_SUSP_WE_SHIFT);
+ 		axi_dma_iowrite32(chan->chip, DMAC_CHEN, val);
+ 	} else {
++		val = axi_dma_ioread32(chan->chip, DMAC_CHSUSPREG);
+ 		val &= ~(BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT);
+ 		val |=  (BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT);
+ 		axi_dma_iowrite32(chan->chip, DMAC_CHSUSPREG, val);
 
 

@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C360656D871
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721FE56D87D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 10:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiGKIlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 04:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S230360AbiGKIm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 04:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiGKIkp (ORCPT
+        with ESMTP id S230362AbiGKImK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 04:40:45 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8E3B21E26;
-        Mon, 11 Jul 2022 01:40:07 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oAoxb-0006eA-00; Mon, 11 Jul 2022 10:40:07 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 59B68C0353; Mon, 11 Jul 2022 10:39:38 +0200 (CEST)
-Date:   Mon, 11 Jul 2022 10:39:38 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, fancer.lancer@gmail.com,
-        gerg@kernel.org, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] MIPS: Enable ARCH_HAS_DEBUG_VIRTUAL for 64-bit
-Message-ID: <20220711083938.GF6084@alpha.franken.de>
-References: <20220707220428.1731083-1-f.fainelli@gmail.com>
+        Mon, 11 Jul 2022 04:42:10 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D44521801;
+        Mon, 11 Jul 2022 01:41:33 -0700 (PDT)
+Received: from [192.168.1.101] (abxi46.neoplus.adsl.tpnet.pl [83.9.2.46])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 07AEC1F4E8;
+        Mon, 11 Jul 2022 10:41:30 +0200 (CEST)
+Message-ID: <09f3f093-f6a0-455f-ad03-23f34fb71ecc@somainline.org>
+Date:   Mon, 11 Jul 2022 10:41:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707220428.1731083-1-f.fainelli@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8998: add MSM8998 SDCC specific
+ compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Douglas Anderson <dianders@chromium.org>
+References: <20220711082709.39102-1-krzysztof.kozlowski@linaro.org>
+ <20220711082709.39102-3-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220711082709.39102-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 03:04:27PM -0700, Florian Fainelli wrote:
-> Update __debug_virt_addr_valid() to check for a virtual address'
-> validity below CKSSEG and remove the !64BIT dependency on
-> ARCH_HAS_DEBUG_VIRTUAL to make DEBUG_VIRTUAL selectable.
+
+
+On 11.07.2022 10:27, Krzysztof Kozlowski wrote:
+> Add a MSM8998-specific SDCC compatible, because using only a generic
+> qcom,sdhci-msm-v4 fallback is deprecated.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> This requires the previous patch to be applied for this to work cleanly.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  arch/mips/Kconfig       | 2 +-
->  arch/mips/mm/physaddr.c | 4 ++++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index db09d45d59ec..ddb6bde8fa1f 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -5,7 +5,7 @@ config MIPS
->  	select ARCH_32BIT_OFF_T if !64BIT
->  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
->  	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
-> -	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
-> +	select ARCH_HAS_DEBUG_VIRTUAL
->  	select ARCH_HAS_FORTIFY_SOURCE
->  	select ARCH_HAS_KCOV
->  	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE if !EVA
-> diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
-> index a82f8f57a652..3076238943d3 100644
-> --- a/arch/mips/mm/physaddr.c
-> +++ b/arch/mips/mm/physaddr.c
-> @@ -31,7 +31,11 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
->  	if (x == MAX_DMA_ADDRESS)
->  		return true;
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index 91153a0234f5..c98f36f95f3c 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -2076,7 +2076,7 @@ qusb2phy: phy@c012000 {
+>  		};
 >  
-> +#ifdef CONFIG_64BIT
-> +	return KSEGX(x) < CKSSEG;
-
-as KSEGX does 32bit casts, I have some doubts that this is correct.
-What do I miss ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>  		sdhc2: mmc@c0a4900 {
+> -			compatible = "qcom,sdhci-msm-v4";
+> +			compatible = "qcom,msm8998-sdhci", "qcom,sdhci-msm-v4";
+>  			reg = <0x0c0a4900 0x314>, <0x0c0a4000 0x800>;
+>  			reg-names = "hc", "core";
+>  

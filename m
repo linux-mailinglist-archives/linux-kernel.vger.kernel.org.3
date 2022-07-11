@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BB8570C4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2636570C4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiGKVEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S231890AbiGKVE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKVEj (ORCPT
+        with ESMTP id S229476AbiGKVEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:04:39 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2004F682
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:04:38 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id e28so7135828lfj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=+UgIDtYPSeAAdD0Bhb7fjqhPnzO92RXBeyjlk68eVD0=;
-        b=Pn3lXvc3RSscT298QBon2VZJrIKoT5d3gH0WSdAjSZ4ZYinFkJz+R5b+8sbLpVOJGq
-         gMxlpRhH2yWd+GeC6SpQEAhzX4OLnFIR0rGwv07hsqkUQPOQEd9dULO8WMaCvZYUj99X
-         IPL7TUqhZiHSd8O30oe2RN/fBMQUCBY/i1YXu2RRv0jocIhGMW1TXFshnsblN6+2WNlU
-         WKpsupjJRmtxcCsaxECBZIJNPFK1e1z8tyLm4L6xbzTyzTs2M7N5bZgz6bJJxoCsm82W
-         g5Lu4kdQoMk2LRR6KRLmtgo5CYFUOPpvYXaRgqbrtWYJY8PdabLEysWz1Xbm2kcfYkbq
-         588w==
+        Mon, 11 Jul 2022 17:04:54 -0400
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E05552DC0;
+        Mon, 11 Jul 2022 14:04:54 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id b2so5492161plx.7;
+        Mon, 11 Jul 2022 14:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=+UgIDtYPSeAAdD0Bhb7fjqhPnzO92RXBeyjlk68eVD0=;
-        b=xhOx1xGiaaNUYBo90+ijtdV8Pm6Lpwga3aiicNJHUoPZpojmmPQv/EAL1cI+/7QhJX
-         t9IbR87+kxzcgKXNAIq1Fk4QkRWPsH3GLKEJN9iTgE+SHxJ48aq1vZEq1tA4rjMnJEJY
-         tRyf8cTEuMEoDEguXJQrs8oCgaGTe2W7+L6+JUkq6J+yCqrcsxl+y69qhIftw05e4w5T
-         7tOlhX2SWrvT14bwq/peMbeq6hYLw32suzZIaJ8IytMubXIYN478FLD2Nwp5DU7RdxMF
-         NUGz3jtVKVCEGEnqzgAGprBjPyiOYGHvkHbwuVpVCVWciaZ3Q8TlItTv1BBStubR8cn1
-         lTEw==
-X-Gm-Message-State: AJIora++/5B90TMoEjnqHfPFeUPeitrGfAVj7AL8fOn7ylXSJKQ3e9VG
-        AlY+qjHihcZBJnhZBAtTpNifdwETXETNrB4vLHIKasqZYEs=
-X-Google-Smtp-Source: AGRyM1vrIVWTlesS+/6RjGjt32fb8NL55Mn1eZ2mG5C1ujUuWkg55pL4yLqMDi3Jfk8BNnvs1aZS6SOVpO+V17W/FXg=
-X-Received: by 2002:ac2:4a86:0:b0:489:c5eb:3403 with SMTP id
- l6-20020ac24a86000000b00489c5eb3403mr10911944lfp.603.1657573476573; Mon, 11
- Jul 2022 14:04:36 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zmWcLVgHn2c2LDFYN2xm/2mc8MyVE1o/XyuPBL+yHj8=;
+        b=XhU2wkn6PHuTcxjIB4bMhNxWGM81eapeK38p0JsxRfTpHp+HTnQgLXKU54eBbZ+468
+         uhqzVj31wNdGvTlA8NTAOe+3SVvt6+e4wtuXo3D9ga2AOWsCvsAa/iYDH79OeskdnNmC
+         4yzb2Az6vdvD68fd1z2+MnkwNJis3mtmWMGb4EHuC4h+Xfmk9Q9RuqkKT+2nF1KICple
+         b4RqHo9WUyFk/KpfCYKUE6YSbDFfdqJsUH+BcDnYnYPSMhr7EU4mHderZOfPeuHeaXH7
+         SQvcPjUZXnjwFmMF4+6ZKsb8kLaQXjXEkIPv4HayCuXCL5wjIaZBIIuisZUwQh+3kTDm
+         2kDA==
+X-Gm-Message-State: AJIora/cbWFL6sneDMcIk8BBdDVpFpEupNz9CsJPccfH4c+0OyjVL0DW
+        nAXE6LU+3Sd++Tp2LWqs96Q=
+X-Google-Smtp-Source: AGRyM1uIvxYh+CSLv9wcMjfaFUJWfxyv9q7+4nCF5+kgjM2LxtJmqbJ7dx5OFKSO3nyLvGrtgvMakw==
+X-Received: by 2002:a17:903:1108:b0:16a:a0ab:8f89 with SMTP id n8-20020a170903110800b0016aa0ab8f89mr20384827plh.12.1657573493573;
+        Mon, 11 Jul 2022 14:04:53 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902b68100b0016bd62bc003sm5168339pls.141.2022.07.11.14.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 14:04:52 -0700 (PDT)
+Message-ID: <58eec756-0932-cc43-8702-1c6e23d89ea4@acm.org>
+Date:   Mon, 11 Jul 2022 14:04:51 -0700
 MIME-Version: 1.0
-References: <20220708095714.127736-1-michael@allwinnertech.com>
- <0cef31e4-7e07-087a-1d4b-241cdce76970@gmail.com> <e87feac9-e00e-1c83-79fe-c790e2f99e15@allwinnertech.com>
-In-Reply-To: <e87feac9-e00e-1c83-79fe-c790e2f99e15@allwinnertech.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Tue, 12 Jul 2022 06:04:00 +0900
-Message-ID: <CAGTfZH1YzEM+PjSvADtbeH8EoyA+opH5gAEFOvc8d6wsZ1cYuw@mail.gmail.com>
-Subject: Re: [PATCH] extcon: Add EXTCON_DISP_CVBS and EXTCON_DISP_EDP
-To:     Michael Wu <michael@allwinnertech.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        allwinner-opensource-support@allwinnertech.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3] scsi: ufs: exclude UECxx from SFR dump list
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+References: <CGME20220315095716epcas2p2ec52c66863b71180a6c2c45856058683@epcas2p2.samsung.com>
+ <1647338162-75639-1-git-send-email-kwmad.kim@samsung.com>
+ <1ad26d79-9f5c-9b53-6904-7d7fd53fac2f@acm.org>
+ <000001d894ca$45da51f0$d18ef5d0$@samsung.com>
+ <213634d7-a796-8509-9612-56fe7c61ef01@acm.org>
+ <002e01d894da$e2021bc0$a6065340$@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <002e01d894da$e2021bc0$a6065340$@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,78 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 11:23 PM Michael Wu <michael@allwinnertech.com> wrote:
->
-> On 7/9/2022 9:03 AM, Chanwoo Choi wrote:
-> > On 22. 7. 8. 18:57, Michael Wu wrote:
-> >> Add EXTCON_DISP_CVBS for Composite Video Broadcast Signal.
-> >> Add EXTCON_DISP_EDP for Embedded Display Port
-> >>
-> >> [1] https://en.wikipedia.org/wiki/Composite_video
-> >> [2] https://en.wikipedia.org/wiki/DisplayPort#eDP
-> >>
-> >> Signed-off-by: Michael Wu <michael@allwinnertech.com>
-> >> ---
-> >>   drivers/extcon/extcon.c | 10 ++++++++++
-> >>   include/linux/extcon.h  |  2 ++
-> >>   2 files changed, 12 insertions(+)
-> >>
-> >> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> >> index d3a32b8064994..774607a616f7b 100644
-> >> --- a/drivers/extcon/extcon.c
-> >> +++ b/drivers/extcon/extcon.c
-> >> @@ -167,6 +167,16 @@ static const struct __extcon_info {
-> >>              .id = EXTCON_DISP_HMD,
-> >>              .name = "HMD",
-> >>      },
-> >> +    [EXTCON_DISP_CVBS] = {
-> >> +            .type = EXTCON_TYPE_DISP,
-> >> +            .id = EXTCON_DISP_CVBS,
-> >> +            .name = "CVBS",
-> >> +    },
-> >> +    [EXTCON_DISP_EDP] = {
-> >> +            .type = EXTCON_TYPE_DISP,
-> >> +            .id = EXTCON_DISP_EDP,
-> >> +            .name = "EDP",
-> >> +    },
-> >>
-> >>      /* Miscellaneous external connector */
-> >>      [EXTCON_DOCK] = {
-> >> diff --git a/include/linux/extcon.h b/include/linux/extcon.h
-> >> index 685401d94d398..3c45c3846fe94 100644
-> >> --- a/include/linux/extcon.h
-> >> +++ b/include/linux/extcon.h
-> >> @@ -76,6 +76,8 @@
-> >>   #define EXTCON_DISP_VGA            43      /* Video Graphics Array */
-> >>   #define EXTCON_DISP_DP             44      /* Display Port */
-> >>   #define EXTCON_DISP_HMD            45      /* Head-Mounted Display */
-> >> +#define EXTCON_DISP_CVBS    46      /* Composite Video Broadcast Signal */
-> >> +#define EXTCON_DISP_EDP             47      /* Embedded Display Port */
-> >>
-> >>   /* Miscellaneous external connector */
-> >>   #define EXTCON_DOCK                60
-> >
-> > Applied it. Thanks.
-> >
-> > Do you have a plan to send extcon driver with newly added connector type?
-> >
->
-> Hi Chanwoo,
-> Thank you for the inviting. I'd like to send more patches for extcon,
-> unfortunately the SoCs I'm using only covers CVBS and EDP among the new
-> connector types. Once I had a chance to verify a new type, I'll surely
-> send it here.
-> BTW, should I send a patch-v2 with 'Reviewed-by Chanwoo Choi
-> <cwchoi00@gmail.com>' or 'Acked-by Chanwoo Choi <cwchoi00@gmail.com>',
-> or should I just wait?
+On 7/10/22 21:01, Kiwoong Kim wrote:
+> It's definitely not Exynos specific
+> because the fact that those SFRs are ROC type is written in UFSHCI.
+> I don't know more things to explain why this patch is needed.
+> 
+> You just want to know whether any additional descriptions about ROC is written ?
 
-No, I already applied this patch to extcon-next branch[1].
-[1]https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git/log/?h=extcon-next
+Hi Kiwoong,
 
-Your patch will be merged into v5.20-rc1.
+I had overlooked the "ROC" text in the "Type" column in the UFSHCI 
+specification. Thank you for having taken the time to answer my questions.
 
-Thanks.
-
--- 
-Best Regards,
-Chanwoo Choi
+Bart.

@@ -2,164 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119B7570C96
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4E5570C97
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiGKVQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S231979AbiGKVQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiGKVQF (ORCPT
+        with ESMTP id S230175AbiGKVQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:16:05 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE3180511;
-        Mon, 11 Jul 2022 14:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657574151;
-        bh=nv8eBRdrt/nRBtfZuGKt31XOt7uveMy1h9GnSDHGp8U=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=g/X13VjHb6trtBKvysWHApEgqf9syLb1aI/mOASSgbB0q0T59UmStoh3EhhEfgvAv
-         tNIVvCtTgzk1LIOjPDFwdhuXYHusR8GLvRGq/LXySG+BIbrmxkDNn+4PfKzkHzWKSq
-         TVCpx0kzbsl4fxFNoz5xe+WJeefWRcFUT62U0t3A=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.69] ([46.223.3.243]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MO9zH-1nvwkh3x6H-00OUCg; Mon, 11
- Jul 2022 23:15:51 +0200
-Message-ID: <ce36a48c-8e54-807d-038d-06cb77bdad23@gmx.de>
-Date:   Mon, 11 Jul 2022 23:15:49 +0200
+        Mon, 11 Jul 2022 17:16:06 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FBE80531
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:16:04 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id h23so10906993ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R0dZKbSqpa4RMujXbJGg6O0Ik7zsKtCn/44ZHpByEck=;
+        b=e6FVL2N1GoCx6ewvM5xcIt8X8A6DT47CZWwxmgZ6VEhVfW/hLzx4AqmMaA8ZxTGFWS
+         uYsECq9XltW1jX3WXVDCSl4hyA9wycz2iyuri01alyZn2ODyJEot44R/twY9O5rDye4a
+         okyW5qblZM0/RglcNNdkRWagXv8tPsS3+AXd314ElWLjuM77zrlG4L/FF+NpVR2YLvre
+         Egz2+eM0ShDiJiiv8apuJHGtKQXg0HaU7gPvRPFxF6UE4x4PTRSalTbp4Nan52wvFcYl
+         c/LTWEM3iI+8HolUo3hHSptP5Ux92BrNrF/ln3ThBN9BCLSH90A3+Pd7o1pLhD6YRk89
+         TP2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R0dZKbSqpa4RMujXbJGg6O0Ik7zsKtCn/44ZHpByEck=;
+        b=Co6mslfsJxBzn2lfuNrFRMTswIxsKcyTUAgrCWOjFrIql8L8TGz7LopOZYPoTOvpjE
+         TzgT+ZxyzinNhUA8AKTMA3+VN2MvtrjnIqwPJuuO1/+VWKzuP7hmjJsXwA3FqUQp5W2G
+         SmsAV96WsSNhCV2LNB/oXqnkQ/OhgwkvLP7EsdnDOSB6/THXZHngVS+WwzratfVpRb/S
+         qKvFUd+27AIsyIphnCwXmLaFBV5t3kCnRHaufUSrK9P4bZTFZEcw4fjrM6jyS4E47F3K
+         phm09FiBDVBOzMRGoI2UwzUt28ptKlpIwchA8mpe5PloC3139idun2nsyf2YT46ZtVU6
+         cC4w==
+X-Gm-Message-State: AJIora/2c1SZwyUVNMsqPxZmDyhL2uy8cIDAITIgiRa60N3VjhxPHapy
+        U957f7J8WggTnePP2NI7TbkkHg3Wn3KoUyCrEW6qvw==
+X-Google-Smtp-Source: AGRyM1tGmmZU3SpBCKiz6GQosaxZhhIYryeBP+xKYRre/YM9KWGoV/EtlPDw7fJzN8sXY5wD80lfJtt1tOD20TpLJD0=
+X-Received: by 2002:a17:906:5a5b:b0:72b:39cf:6042 with SMTP id
+ my27-20020a1709065a5b00b0072b39cf6042mr13921828ejc.301.1657574163407; Mon, 11
+ Jul 2022 14:16:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Content-Language: en-US
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
- <CAKf6xpvY1peO-mWM+bjaHnXhrqpOrGbyrOOaT18-myWYSJ88Sw@mail.gmail.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <CAKf6xpvY1peO-mWM+bjaHnXhrqpOrGbyrOOaT18-myWYSJ88Sw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6GpvZKvLIXEPEdvSK7eLKgDmlPTvX2NSSs3Beb9jGlI6qLEasbe
- gD9pT35uGHkjtcCziU+XE+3WxNdZ0CzxuOCy9fJXmbmv0+s+z0fJ4PkMGwLmgoB13oqSoaj
- ql79pd3r7A8xT7k551Op42RPCBqmVmFtcY2B608DhfayY47xFfWP+G4gsqCU16q6uS45tPF
- +AdMouTQsv8PTMGfFTqjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oKygosC5WxE=:oVF3szAJ9rF10SZFQWJikH
- +Qhc+9C7J6SC5jAIpeC/Xs0yF0e8KjcXf6ZD/5wKKja+GGMCVZHL3BgG7yu1tt6+cn7V3gX89
- 1TtdQNbEpohh5KZIdSPZqSlYL3ccZk6S0x+Xc1HMVUJXu/KZ2ZrS926y8xb6LeP3/N8g/DLF0
- cx10INId+5+fdGRldiojOB0urrl3Z21pg5D1ar2EgcyoWyjLOdIsJHtYQvai4C8kiljseS2HM
- IKcL/chYtXYQvlDCxefUbku92nxK/nMt1VsRM2WKcYjiXlSSB03U8Gv/1fjgLi0XuiLrF+32E
- YOcVLh72l3NEZ+6BTnBUXhHCi+y1URmJEO6+g1vbIav2Rc6BAiO3qjGvg92b+w3VJo0aeQfhp
- vgI2FhdlV9loBpTVQnmulAn6tQU2skRbp22iw0NG8w5IGVruN55M35h06Z+OKoV11fROOEi6O
- X3Y/AVJSo0F9/aOFUvsHo0Vdk5Y9+E30FQahuHl3Cpydby4HJYUDxRzgK0GUR9vSecUxdHeAU
- +INh+be4IYw9T+N8ZC84fNqmf9jdUmhPk19PvaCJVvrwovs3Jb+7VcyehYkKsragLOHOBzej6
- brByv8iTbLs+kUSRgnD3DnWQ8zX0WJmmff7JcPvGNShxAZiq25QEgVxPSbGvsbx9hggSGZ2/S
- 7r1JQT1L2Ihzd+Apyq60DD41yYHPIt87eTd5b6e1S/K1a8ZLEAU2SrdlMX3UYmBZ7eh8RMJ4p
- e5G8yZ7dwQGdyGmOBDFnhdiPQbOa4efD4C+7EOZR+I3TqPd3mfll30Tk1cWrLnnLoHrZ9oocG
- EDEy7iwREDLzHwkuDMGuHXNFZ6ji1CEdpQ5qn9efZOGakupS2flSYf0bhB8l1JitS8P/0Q/ZT
- 93hzbWYbs5V73mf87P2ngHNpKry+soC86D3EN+tfi585I4Yca00/V41kKa7R4jVdf2NsvkUrj
- sR2NBvJmVrR3yYSZ0dVVvyV+Wvjrzz1v3AGhNf+rndvCqDFXJSmdQ3P7dmwMeCudgEs/+CxpA
- ig8//fQf8yf9jsHasU6QoLBe+hlQdrPyM6iFVTtpBhEy3mqjR91mojLVIlvZSsucr+i5ZskVP
- RtE+13+s3wijy3z49UCbnWduA+ZkC3wFxaef3tNSMWNFKRj/gUyOBfHyw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706182901.78949-1-jernej.skrabec@gmail.com>
+In-Reply-To: <20220706182901.78949-1-jernej.skrabec@gmail.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Mon, 11 Jul 2022 18:15:52 -0300
+Message-ID: <CAAEAJfBYXXZ2CGFTQFEsBNGu8++MW=jsXNpO1F8T-K2m-jAu7A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] media: hantro: Add 10-bit support
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Jernej,
 
-On 11.07.22 21:39, Jason Andryuk wrote:
-> Hi,
+On Wed, Jul 6, 2022 at 3:29 PM Jernej Skrabec <jernej.skrabec@gmail.com> wrote:
 >
-> This patch subject has a typo "tmp, tmp_tis" -> "tpm, tpm_tis"
+> This series adds support for 10-bit format handling in Hantro driver.
+> Most patches adjust postproc behaviour to be more universal. There is
+> a lot of assumptions, which need to be replaced with more generalized.
+>
+> Tested on Allwinner H6. Tested with vp92-2-20-10bit-yuv420.webm sample,
+> which produces correct checksum.
+>
+> Please take a look.
 >
 
-Right, thanks for the hint!
+Looks really good.
 
-> On Wed, Jun 29, 2022 at 7:28 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> =
-wrote:
->>
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> Implement a usage counter for the (default) locality used by the TPM TI=
-S
->> driver:
->> Request the locality from the TPM if it has not been claimed yet, other=
-wise
->> only increment the counter. Also release the locality if the counter is=
- 0
->> otherwise only decrement the counter. Ensure thread-safety by protectin=
-g
->> the counter with a mutex.
->>
->> This allows to request and release the locality from a thread and the
->> interrupt handler at the same time without the danger to interfere with
->> each other.
->>
->> By doing this refactor the names of the amended functions to use the pr=
-oper
->> prefix.
->>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> Tested-by: Michael Niew=C3=B6hner <linux@mniewoehner.de>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 75 ++++++++++++++++++++++-----------
->>  drivers/char/tpm/tpm_tis_core.h |  2 +
->>  2 files changed, 53 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index bd4eeb0b2192..e50a2c78de9f 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->
->> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip,=
- int l)
->>         return -1;
->>  }
->>
->> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
->> +{
->> +       struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> +       int ret =3D 0;
->> +
->> +       mutex_lock(&priv->locality_count_mutex);
->> +       if (priv->locality_count =3D=3D 0)
->> +               ret =3D tpm_tis_request_locality_locked(chip, l);
->> +       if (!ret)
->> +               priv->locality_count++;
->> +       mutex_unlock(&priv->locality_count_mutex);
->> +       return ret;
->> +}
->> +
->
-> This function should check that the requested locality matches the
-> current locality otherwise this sequence would seemingly succeed
-> though locality 0 is the one acquired.
->
-> tpm_tis_request_locality(chip, 0);
-> tpm_tis_request_locality(chip, 1);
+Thanks for working on this.
+Ezequiel
 
-This should not really be an issue since the TPM TIS driver only uses
-locality 0.
-
+> Best regards,
+> Jernej
 >
-> Regards,
-> Jason
-
-Regards,
-Lino
+> Changes fron v2:
+> - rebased on media-stage/master
+> - added P010 4L4 format documentation
+> - added t-b and r-b tags
+>
+> Changes from RFC:
+> - fixed typo in function name
+> - removed merged patch (P010 format)
+> - removed broken patch (sunxi frequency change)
+> - added new patch (media: hantro: postproc: Properly calculate chroma offset)
+> - added r-b from Ezequiel
+>
+> Ezequiel Garcia (1):
+>   media: Add P010 tiled format
+>
+> Jernej Skrabec (6):
+>   media: hantro: Support format filtering by depth
+>   media: hantro: postproc: Fix buffer size calculation
+>   media: hantro: postproc: Fix legacy regs configuration
+>   media: hantro: postproc: Properly calculate chroma offset
+>   media: hantro: Store VP9 bit depth in context
+>   media: hantro: sunxi: Enable 10-bit decoding
+>
+>  .../media/v4l/pixfmt-yuv-planar.rst           | 18 +++++--
+>  drivers/media/v4l2-core/v4l2-common.c         |  1 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+>  drivers/staging/media/hantro/hantro.h         |  4 ++
+>  drivers/staging/media/hantro/hantro_drv.c     | 23 +++++++++
+>  .../staging/media/hantro/hantro_g2_vp9_dec.c  |  8 ---
+>  .../staging/media/hantro/hantro_postproc.c    | 38 +++++++++++---
+>  drivers/staging/media/hantro/hantro_v4l2.c    | 50 +++++++++++++++++--
+>  drivers/staging/media/hantro/hantro_v4l2.h    |  3 ++
+>  drivers/staging/media/hantro/sunxi_vpu_hw.c   | 27 ++++++++++
+>  include/uapi/linux/videodev2.h                |  1 +
+>  11 files changed, 151 insertions(+), 23 deletions(-)
+>
+> --
+> 2.37.0
+>

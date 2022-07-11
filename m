@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FBF570839
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F1457083C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 18:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiGKQXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 12:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S230240AbiGKQYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 12:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiGKQXi (ORCPT
+        with ESMTP id S229664AbiGKQYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:23:38 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CEC111F;
-        Mon, 11 Jul 2022 09:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657556616; x=1689092616;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=5W/cyp9V2EZN6jUCGc0So5pslzJEKD7nlHQUJeYIWQQ=;
-  b=Zz3dFKUR5kotdqmNNQAdADA4TkJxq8eUCjkUNaitMGzyih9jeL/fPUVq
-   BjmAAOOSj0y3ojtvWY3MIwg8G8D5oh120PSA8aXHPrLxL62dcKo7eZ07p
-   NxxBzRFNys/ZdZ5ZxLIDhvaDjhtxWGNGGAFgC1Ov72g176Zvsb4mdT2Z0
-   A=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Jul 2022 09:23:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 09:23:35 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Jul 2022 09:23:34 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Jul 2022 09:23:34 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <quic_mkrishn@quicinc.com>, <quic_kalyant@quicinc.coml>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] arm64: dta: qcom: sc7280: delete vdda-1p2 and vdda-0p9 from both dp and edp
-Date:   Mon, 11 Jul 2022 09:23:23 -0700
-Message-ID: <1657556603-15024-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 11 Jul 2022 12:24:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15B21835;
+        Mon, 11 Jul 2022 09:24:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6D6542298F;
+        Mon, 11 Jul 2022 16:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657556676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M+ZIKuMBKYf6iILzZp439lcSa19VN5bgrLR+ASf2Bx0=;
+        b=TnIjaLMox+kOMiA7MSs9PGijGwpUTPR1Gp3apVzCIokhbYQ/jpXYrxi56aGQM93pgcazcV
+        /fXxuL0Y8zRKuKpKzJVNuCn2/hUNZ3eSeR1pVnORgSH48LLn8wR6r1zBEi2S8rOeQAe8yr
+        +9TNNW9znECSwf3bVawntAU3+i4U8l0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DE6482C141;
+        Mon, 11 Jul 2022 16:24:35 +0000 (UTC)
+Date:   Mon, 11 Jul 2022 18:24:32 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
+ mkdir, cgroup
+Message-ID: <YsxOwEI7HOqdkRpz@dhcp22.suse.cz>
+References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+ <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
+ <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
+ <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
+ <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
+ <YrXDV7uPpmDigh3G@dhcp22.suse.cz>
+ <CALvZod6U8DvMUcuUNfpQRwfkevQB7=nP4ZLA2gWGNf_JGdyARQ@mail.gmail.com>
+ <Yr7Ukyy0vhBjebo4@dhcp22.suse.cz>
+ <1a64fc6a-a33d-03f4-ec12-980e42148061@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a64fc6a-a33d-03f4-ec12-980e42148061@openvz.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -66,43 +69,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both vdda-1p2-supply and vdda-0p9-supply regulators are controlled
-by dp combo phy. Therefore remove them from dp controller.
+On Sun 10-07-22 21:53:34, Vasily Averin wrote:
+> On 7/1/22 14:03, Michal Hocko wrote:
+> > On Mon 27-06-22 09:37:14, Shakeel Butt wrote:
+> >> On Fri, Jun 24, 2022 at 6:59 AM Michal Hocko <mhocko@suse.com> wrote:
+> > [...]
+> >>> Is it even possible to prevent from id
+> >>> depletion by the memory consumption? Any medium sized memcg can easily
+> >>> consume all the ids AFAICS.
+> >>
+> >> Though the patch series is pitched as protection against OOMs, I think
+> >> it is beneficial irrespective. Protection against an adversarial actor
+> >> should not be the aim here. IMO this patch series improves the memory
+> >> association to the actual user which is better than unattributed
+> >> memory treated as system overhead.
+> > 
+> > Considering the amount of memory and "normal" cgroup usage (I guess we
+> > can agree that delegated subtrees do not count their cgroups in
+> > thousands) is this really something that is worth bothering with?
+> > 
+> > I mean, these patches are really small and not really disruptive so I do
+> > not really see any problem with them. Except that they clearly add a
+> > maintenance overhead. Not directly with the memory they track but any
+> > future cgroup/memcg metadata related objects would need to be tracked as
+> > well and I am worried this will get quickly out of sync. So we will have
+> > a half assed solution in place that doesn't really help any containment
+> > nor it provides a good and robust consumption tracking.
+> > 
+> > All that being said I find these changes rather without a great value or
+> > use.
+> 
+> Dear Michal,
+> I sill have 2 questions:
+> 1) if you do not want to account any memory allocated for cgroup objects,
+> should you perhaps revert commit 3e38e0aaca9e "mm: memcg: charge memcg percpu
+> memory to the parent cgroup". Is it an exception perhaps?
+> (in fact I hope you will not revert this patch, I just would like to know 
+> your explanations about this accounting)
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 2 --
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi     | 3 ---
- 2 files changed, 5 deletions(-)
+Well, I have to say I was not a great fan of this patch when it was
+proposed but I didn't really have strong arguments against it to nack
+it. It was simple enough, rather self contained in few places. Just to
+give you an insight into my thinking here. Your patchseries is also not
+something I would nack (nor I have done that). I am not super fan of it
+either. I voiced against it because it just hit my internal thrashold of
+how many different places are patched without any systemic approach. If
+we consider that it doesn't really help with the initial intention to
+protect against adversaries then what is the point of all the churn?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index ed800817..3f8996c 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -435,8 +435,6 @@ ap_i2c_tpm: &i2c14 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&dp_hot_plug_det>;
- 	data-lanes = <0 1>;
--	vdda-1p2-supply = <&vdd_a_usbssdp_0_1p2>;
--	vdda-0p9-supply = <&vdd_a_usbssdp_0_core>;
- };
- 
- &mdss_mdp {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index 4c25ffc..7adf31b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -311,9 +311,6 @@
- 
- /* NOTE: Not all Qcards have eDP connector stuffed */
- &mdss_edp {
--	vdda-0p9-supply = <&vdd_a_edp_0_0p9>;
--	vdda-1p2-supply = <&vdd_a_edp_0_1p2>;
--
- 	aux-bus {
- 		edp_panel: panel {
- 			compatible = "edp-panel";
+Others might think differently and if you can get acks by other
+maintainers then I won't stand in the way. I have voiced my concerns and
+I hope my thinking is clear now.
+
+> 2) my patch set includes kernfs accounting required for proper netdevices accounting
+> 
+> Allocs  Alloc   Allocation
+> number  size
+> --------------------------------------------
+> 1   +  128      (__kernfs_new_node+0x4d)	kernfs node
+> 1   +   88      (__kernfs_iattrs+0x57)		kernfs iattrs
+> 1   +   96      (simple_xattr_alloc+0x28)	simple_xattr, can grow over 4Kb
+> 1       32      (simple_xattr_set+0x59)
+> 1       8       (__kernfs_new_node+0x30)
+> 
+>  2/9] memcg: enable accounting for kernfs nodes
+>  3/9] memcg: enable accounting for kernfs iattrs
+>  4/9] memcg: enable accounting for struct simple_xattr
+> 
+> What do you think about them? Should I resend them as a new separate patch set?
+
+kernfs is not really my area so I cannot really comment on those.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Michal Hocko
+SUSE Labs

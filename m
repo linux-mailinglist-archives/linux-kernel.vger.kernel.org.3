@@ -2,189 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BD556D505
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932BC56D50B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 08:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiGKG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 02:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S229749AbiGKG7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 02:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGKG43 (ORCPT
+        with ESMTP id S229479AbiGKG7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 02:56:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86CC14013;
-        Sun, 10 Jul 2022 23:56:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 96ADA2278C;
-        Mon, 11 Jul 2022 06:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657522586; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=15Lpxz7m/K0zmimJDOhkk99KZ262WAFilVkSyIFpJJg=;
-        b=EG22l+Os5xB7oc2o9ZQykOVm8vboQT6lzZfdTrJ4KKdp5+opfAPk82/1xIMr+SbPlN2Us0
-        QPvDy828nFggMq0eTDCbOyCggIsCpiavdEZYRIekAQ4BS8y66Aoqk6XMiV/MlKaZPCoLqP
-        SrJPQG3ZdngwqGMwRrXRTnb/LMENQ44=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6288C13524;
-        Mon, 11 Jul 2022 06:56:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LLo3FprJy2JHfAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 11 Jul 2022 06:56:26 +0000
-Message-ID: <bba1f8da-37c0-2d23-f529-8b2d866e69cf@suse.com>
-Date:   Mon, 11 Jul 2022 08:56:25 +0200
+        Mon, 11 Jul 2022 02:59:32 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F6D10FC8;
+        Sun, 10 Jul 2022 23:59:30 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso5319901pjz.0;
+        Sun, 10 Jul 2022 23:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GeihzPQ4gDEvIfkX96rheatYD9BEj0zBOuDE5t7m6pM=;
+        b=EIA8veF/UGA6fCHdCpgvNU75iz7I0Xiw+YjywF2DlGNY3pW+zQaJqrxRSJiMRssuSM
+         9kL0NmgU/ZtKKMJTLwYUROa6z4I/fy6H7GVLPf9ar03+iNjIJO/P96wjO+p7Zejopony
+         dEqnA5B8YWWyfSbOj3OqqLhOHQ7YgC95YVeuCUVSrWjPJt0wUMZtleG+W/3nPs8WJAjm
+         2n6Gj4A8CSVh0gg2kEDXIX9OdwgefV+I3pxo6FtJpG/Uql4lD9X1yf+3zA3wLdiknrlc
+         86LQpDBNszaGwTe0G9VcKxXYNif6TJwMvGwiPXsTaPZHtPFtM/eXtBBuJFx8J5wekm60
+         BSuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GeihzPQ4gDEvIfkX96rheatYD9BEj0zBOuDE5t7m6pM=;
+        b=SYV/GfjUlV/R0X9BTZpaK4vzbhUZh5gOsPHWd5zq2xTyoHbTVHSFIHpiYkh5AegbIK
+         shw24DCUKPzo88m3qSQyg1JMcd0Odf1SyAj2E5xldSg5ebO64+xOVLwXUEO6D9hM7+5Z
+         QPX1YMVZagJXfZVRQEIcAhtMWx5kgptYWMfxwGRQaQncoYNUoItpIFuv6V5Ru8bOodEO
+         Tb+0LYvwEtJWfFkPHlfAIeg87z45nAqvU3LrQGkUbhBz89mRevu8J3/k5rJiCxDFZjeU
+         mIncQ30RRSpSGOpqVsVR6IogIXM77ahL1PJYinUgB5cWEE/IO8bAcA5EqwpHcK7vzjl1
+         BMDQ==
+X-Gm-Message-State: AJIora+CBdAanAPI6EfR/Hv8k6N5ZEGSVtRtChqSoYu979pZpxk88+wo
+        K8VnQ84qkbmijmCkJY1L4xA=
+X-Google-Smtp-Source: AGRyM1uCInwr/NUdysJ0b7sefaWPA1c+O7e2tIqHEY64v2pvje38AiK2iGkVPsi0juW35BrPY2yGEg==
+X-Received: by 2002:a17:902:e850:b0:16c:41d1:19d2 with SMTP id t16-20020a170902e85000b0016c41d119d2mr5672566plg.125.1657522770331;
+        Sun, 10 Jul 2022 23:59:30 -0700 (PDT)
+Received: from localhost.localdomain ([129.227.148.126])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b00168c52319c3sm3910010plp.149.2022.07.10.23.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 23:59:29 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, tomasbortoli@gmail.com
+Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] net: 9p: fix possible refcount leak in p9_read_work() and recv_done()
+Date:   Mon, 11 Jul 2022 14:59:07 +0800
+Message-Id: <20220711065907.23105-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] xen/gntdev: Ignore failure to unmap
- INVALID_GRANT_HANDLE
-Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220710230522.1563-1-demi@invisiblethingslab.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220710230522.1563-1-demi@invisiblethingslab.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------HR0G2TUKyxlINMlPASC2HsHD"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------HR0G2TUKyxlINMlPASC2HsHD
-Content-Type: multipart/mixed; boundary="------------FfnGwjMERaMxLXCAN0gshF2I";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Demi Marie Obenour <demi@invisiblethingslab.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Message-ID: <bba1f8da-37c0-2d23-f529-8b2d866e69cf@suse.com>
-Subject: Re: [PATCH v3] xen/gntdev: Ignore failure to unmap
- INVALID_GRANT_HANDLE
-References: <20220710230522.1563-1-demi@invisiblethingslab.com>
-In-Reply-To: <20220710230522.1563-1-demi@invisiblethingslab.com>
+A ref got in p9_tag_lookup needs to be put when functions enter the
+error path.
 
---------------FfnGwjMERaMxLXCAN0gshF2I
-Content-Type: multipart/mixed; boundary="------------AHvtRssDqnEsWxYK0zAsGoED"
+Fix this by adding p9_req_put in error path.
 
---------------AHvtRssDqnEsWxYK0zAsGoED
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Fixes: 728356dedeff ("9p: Add refcount to p9_req_t")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/9p/trans_fd.c   | 3 +++
+ net/9p/trans_rdma.c | 1 +
+ 2 files changed, 4 insertions(+)
 
-T24gMTEuMDcuMjIgMDE6MDUsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gVGhlIGVy
-cm9yIHBhdGhzIG9mIGdudGRldl9tbWFwKCkgY2FuIGNhbGwgdW5tYXBfZ3JhbnRfcGFnZXMo
-KSBldmVuDQo+IHRob3VnaCBub3QgYWxsIG9mIHRoZSBwYWdlcyBoYXZlIGJlZW4gc3VjY2Vz
-c2Z1bGx5IG1hcHBlZC4gIFRoaXMgd2lsbA0KPiB0cmlnZ2VyIHRoZSBXQVJOX09OKClzIGlu
-IF9fdW5tYXBfZ3JhbnRfcGFnZXNfZG9uZSgpLiAgVGhlIG51bWJlciBvZg0KPiB3YXJuaW5n
-cyBjYW4gYmUgdmVyeSBsYXJnZTsgSSBoYXZlIG9ic2VydmVkIHRob3VzYW5kcyBvZiBsaW5l
-cyBvZg0KPiB3YXJuaW5ncyBpbiB0aGUgc3lzdGVtZCBqb3VybmFsLg0KPiANCj4gQXZvaWQg
-dGhpcyBwcm9ibGVtIGJ5IG9ubHkgd2FybmluZyBvbiB1bm1hcHBpbmcgZmFpbHVyZSBpZiB0
-aGUgaGFuZGxlDQo+IGJlaW5nIHVubWFwcGVkIGlzIG5vdCBJTlZBTElEX0dSQU5UX0hBTkRM
-RS4gIFRoZSBoYW5kbGUgZmllbGQgb2YgYW55DQo+IHBhZ2UgdGhhdCB3YXMgbm90IHN1Y2Nl
-c3NmdWxseSBtYXBwZWQgd2lsbCBiZSBJTlZBTElEX0dSQU5UX0hBTkRMRSwgc28NCj4gdGhp
-cyBjYXRjaGVzIGFsbCBjYXNlcyB3aGVyZSB1bm1hcHBpbmcgY2FuIGxlZ2l0aW1hdGVseSBm
-YWlsLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5j
-b20+DQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+IFNpZ25lZC1vZmYtYnk6IERl
-bWkgTWFyaWUgT2Jlbm91ciA8ZGVtaUBpbnZpc2libGV0aGluZ3NsYWIuY29tPg0KPiBGaXhl
-czogZGJlOTdjZmY3ZGQ5ICgieGVuL2dudGRldjogQXZvaWQgYmxvY2tpbmcgaW4gdW5tYXBf
-Z3JhbnRfcGFnZXMoKSIpDQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NA
-c3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------AHvtRssDqnEsWxYK0zAsGoED
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+index 8f8f95e39b03..c4ccb7b9e1bf 100644
+--- a/net/9p/trans_fd.c
++++ b/net/9p/trans_fd.c
+@@ -343,6 +343,7 @@ static void p9_read_work(struct work_struct *work)
+ 			p9_debug(P9_DEBUG_ERROR,
+ 				 "No recv fcall for tag %d (req %p), disconnecting!\n",
+ 				 m->rc.tag, m->rreq);
++			p9_req_put(m->rreq);
+ 			m->rreq = NULL;
+ 			err = -EIO;
+ 			goto error;
+@@ -372,6 +373,8 @@ static void p9_read_work(struct work_struct *work)
+ 				 "Request tag %d errored out while we were reading the reply\n",
+ 				 m->rc.tag);
+ 			err = -EIO;
++			p9_req_put(m->rreq);
++			m->rreq = NULL;
+ 			goto error;
+ 		}
+ 		spin_unlock(&m->client->lock);
+diff --git a/net/9p/trans_rdma.c b/net/9p/trans_rdma.c
+index 88e563826674..82b5d6894ee2 100644
+--- a/net/9p/trans_rdma.c
++++ b/net/9p/trans_rdma.c
+@@ -317,6 +317,7 @@ recv_done(struct ib_cq *cq, struct ib_wc *wc)
+ 	/* Check that we have not yet received a reply for this request.
+ 	 */
+ 	if (unlikely(req->rc.sdata)) {
++		p9_req_put(req);
+ 		pr_err("Duplicate reply for request %d", tag);
+ 		goto err_out;
+ 	}
+-- 
+2.25.1
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------AHvtRssDqnEsWxYK0zAsGoED--
-
---------------FfnGwjMERaMxLXCAN0gshF2I--
-
---------------HR0G2TUKyxlINMlPASC2HsHD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmLLyZoFAwAAAAAACgkQsN6d1ii/Ey9f
-KQf/W7zjk+LXMrWE/S19874/suItM4FQcKcLzdhBb5qFpObCR+bp1Mzgba1u+nOSeFvrR0Sda+Wo
-z1IvYewJ9/D4b5Lz1GXCNXBqL9PtTISn2aI61qPbA+s5Uo5yBr5bJiKah3GOqeunscsEtnbliFtL
-bn5rhhxVLruKScJgHxpxqPzGmRwHtESkMqS4ctJ+ACPZnQOnc7zteJR9UmSStl6GPzVsV1j15wbn
-/0ESdpnEYS7sPuIJ5cHluUTL2KdrBC6py51k2tejWgMJYYvQ2u5wGG96HLaO5qgU0JfXIFsgrfBh
-iEl/ENtMn2x6W5Xrvp89Fw6/U/t99BefPzw5ZkZUig==
-=mJgN
------END PGP SIGNATURE-----
-
---------------HR0G2TUKyxlINMlPASC2HsHD--

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6264056FA91
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DDA56FD95
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiGKJT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S234214AbiGKJ5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiGKJSi (ORCPT
+        with ESMTP id S234158AbiGKJ5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:18:38 -0400
+        Mon, 11 Jul 2022 05:57:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BDE4D4D7;
-        Mon, 11 Jul 2022 02:11:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EF9B4BE5;
+        Mon, 11 Jul 2022 02:26:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 969E3B80E79;
-        Mon, 11 Jul 2022 09:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5807C34115;
-        Mon, 11 Jul 2022 09:11:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C50EB80E8F;
+        Mon, 11 Jul 2022 09:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C4BC341C8;
+        Mon, 11 Jul 2022 09:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657530712;
-        bh=LTvfCJiPIP5D7fDUsggvikSCbkMOiuS1IHVDXNZ+uSY=;
+        s=korg; t=1657531606;
+        bh=7glkkp0LLer/1vOu19Ra/fd2zYttlhPNl2QaoAA/NUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KyExAqNUZBw6W+k/sbqZJgsQ7BIBhl8hcz4phyrKqLKN2Zb1Db18nHZlWD/z156LD
-         HEOL2NUY1/uXWmELmU0oCxA6JleK+mQZA2vcVXOaOhEDu6RkaMM05yHiUWZ92pn9BG
-         yITg0pLLDYhTpk7wojf+zdjNYYytdFDAzqFliF5Y=
+        b=CRJoLC+swP99YiWqrFNCE/D/y8b2XNi25A0YHYGUzBxEhytBy1JMy+EN/kKo9rruj
+         Fn8IlTO0wSkCQCVw+ykwICMceMfKkmg6qvg8moBsvPN5chEh2Ag0qm4T9+U9jGEEQ9
+         DpQuB1TJva5fAMRXdqx+bBebUILqy3hPN4y6qsaM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guiling Deng <greens9@163.com>,
+        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
         Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 13/55] fbdev: fbmem: Fix logo center image dx issue
+Subject: [PATCH 5.15 165/230] video: of_display_timing.h: include errno.h
 Date:   Mon, 11 Jul 2022 11:07:01 +0200
-Message-Id: <20220711090542.153048858@linuxfoundation.org>
+Message-Id: <20220711090608.742508474@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-References: <20220711090541.764895984@linuxfoundation.org>
+In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
+References: <20220711090604.055883544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guiling Deng <greens9@163.com>
+From: Hsin-Yi Wang <hsinyi@chromium.org>
 
-commit 955f04766d4e6eb94bf3baa539e096808c74ebfb upstream.
+commit 3663a2fb325b8782524f3edb0ae32d6faa615109 upstream.
 
-Image.dx gets wrong value because of missing '()'.
+If CONFIG_OF is not enabled, default of_get_display_timing() returns an
+errno, so include the header.
 
-If xres == logo->width and n == 1, image.dx = -16.
-
-Signed-off-by: Guiling Deng <greens9@163.com>
-Fixes: 3d8b1933eb1c ("fbdev: fbmem: add config option to center the bootup logo")
-Cc: stable@vger.kernel.org # v5.0+
+Fixes: 422b67e0b31a ("videomode: provide dummy inline functions for !CONFIG_OF")
+Suggested-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbmem.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/video/of_display_timing.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -513,7 +513,7 @@ static int fb_show_logo_line(struct fb_i
+--- a/include/video/of_display_timing.h
++++ b/include/video/of_display_timing.h
+@@ -8,6 +8,8 @@
+ #ifndef __LINUX_OF_DISPLAY_TIMING_H
+ #define __LINUX_OF_DISPLAY_TIMING_H
  
- 		while (n && (n * (logo->width + 8) - 8 > xres))
- 			--n;
--		image.dx = (xres - n * (logo->width + 8) - 8) / 2;
-+		image.dx = (xres - (n * (logo->width + 8) - 8)) / 2;
- 		image.dy = y ?: (yres - logo->height) / 2;
- 	} else {
- 		image.dx = 0;
++#include <linux/errno.h>
++
+ struct device_node;
+ struct display_timing;
+ struct display_timings;
 
 

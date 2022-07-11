@@ -2,44 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2137056FD3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F46F56FD4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiGKJxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S234016AbiGKJxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbiGKJwZ (ORCPT
+        with ESMTP id S233809AbiGKJxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:52:25 -0400
+        Mon, 11 Jul 2022 05:53:05 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95E303AB0E;
-        Mon, 11 Jul 2022 02:25:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C6A7ADD51;
+        Mon, 11 Jul 2022 02:25:26 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37F3315BF;
-        Mon, 11 Jul 2022 02:25:15 -0700 (PDT)
-Received: from [10.163.45.183] (unknown [10.163.45.183])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53DC93F73D;
-        Mon, 11 Jul 2022 02:25:12 -0700 (PDT)
-Message-ID: <d03e334a-ec7e-cd87-7f0b-ac7564266d3a@arm.com>
-Date:   Mon, 11 Jul 2022 14:55:12 +0530
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9865415BF;
+        Mon, 11 Jul 2022 02:25:25 -0700 (PDT)
+Received: from [10.57.43.82] (unknown [10.57.43.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3E43F73D;
+        Mon, 11 Jul 2022 02:25:22 -0700 (PDT)
+Message-ID: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
+Date:   Mon, 11 Jul 2022 10:25:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] perf/core: Add macros for possible
- sysctl_perf_event_paranoid values
+Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
+ not supported
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+To:     Vince Weaver <vincent.weaver@maine.edu>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-perf-users@vger.kernel.org
-References: <20220701063949.1769434-1-anshuman.khandual@arm.com>
- <b9da8d22-6896-68a3-b4e5-e8fd7b82b711@arm.com>
- <Ysgxzxl0N7+J8Vbt@worktop.programming.kicks-ass.net>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <Ysgxzxl0N7+J8Vbt@worktop.programming.kicks-ass.net>
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20220704145333.22557-1-andrew.kilroy@arm.com>
+ <20220704145333.22557-3-andrew.kilroy@arm.com>
+ <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -53,73 +62,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7/8/22 19:01, Peter Zijlstra wrote:
-> On Fri, Jul 08, 2022 at 10:10:15AM +0100, James Clark wrote:
->>
->>
->> On 01/07/2022 07:39, Anshuman Khandual wrote:
->>> sysctl_perf_event_paranoid can have values from [-1, 0, 1, 2] which decides
->>> on perf event restrictions for unprivileged users. But using them directly
->>> makes it difficult to correlate exact restriction level they might impose.
->>> This just adds macros for those numerical restriction values, making them
->>> clear and improving readability.
->>>
->>> Cc: Peter Zijlstra <peterz@infradead.org>
->>> Cc: Ingo Molnar <mingo@redhat.com>
->>> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->>> Cc: Mark Rutland <mark.rutland@arm.com>
->>> Cc: linux-perf-users@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>>  include/linux/perf_event.h | 22 ++++++++++++++++++----
->>>  kernel/events/core.c       |  9 +--------
->>>  kernel/kallsyms.c          |  3 ++-
->>>  3 files changed, 21 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
->>> index da759560eec5..78156b9154df 100644
->>> --- a/include/linux/perf_event.h
->>> +++ b/include/linux/perf_event.h
->>> @@ -1359,14 +1359,28 @@ int perf_event_max_stack_handler(struct ctl_table *table, int write,
->>>  #define PERF_SECURITY_KERNEL		2
->>>  #define PERF_SECURITY_TRACEPOINT	3
->>>  
->>> +/*
->>> + * perf event paranoia level:
->>> + *  -1 - not paranoid at all
->>> + *   0 - disallow raw tracepoint access for unpriv
->>> + *   1 - disallow cpu events for unpriv
->>> + *   2 - disallow kernel profiling for unpriv
->>> + */
->>> +enum {
->>> +	PERF_EVENT_DISALLOW_NONE	= -1,
->>> +	PERF_EVENT_DISALLOW_TRACE,
->>> +	PERF_EVENT_DISALLOW_CPU,
->>> +	PERF_EVENT_DISALLOW_KERNEL
->>> +};
->>> +
->>>  static inline int perf_is_paranoid(void)
->>>  {
->>> -	return sysctl_perf_event_paranoid > -1;
->>> +	return sysctl_perf_event_paranoid > PERF_EVENT_DISALLOW_NONE;
->>>  }
->>>  
->>
->> Hi Anshuman,
->>
->> There are quite a few other instances of integers left in the tools code.
->> If you search for perf_event_paranoid_check() and perf_event_paranoid()
->> you will find them.
->>
->> I'm also wondering if it makes sense to return your new enum from all of
->> the helper functions instead of an int and make it explicit that it's
->> an instance of this new type? Although the compiler doesn't seem to warn
->> about using integers so maybe it's not worth doing this.
+On 06/07/2022 17:01, Vince Weaver wrote:
+> On Mon, 4 Jul 2022, Andrew Kilroy wrote:
 > 
-> so I don't see the point of all this; it's already wrapped in these
-> helper functions that have a descriptive name, why do we need more muck
-> on top?
+>> A subsequent patch alters perf to perf_event_open with the
+>> PERF_SAMPLE_ARCH_1 bit on.
+>>
+>> This patch deals with the case where the kernel does not know about the
+>> PERF_SAMPLE_ARCH_1 bit, and does not know to send the pointer
+>> authentication masks.  In this case the perf_event_open system call
+>> returns -EINVAL (-22) and perf exits with an error.
+>>
+>> This patch causes userspace process to re-attempt the perf_event_open
+>> system call but without asking for the PERF_SAMPLE_ARCH_1 sample
+>> field, allowing the perf_event_open system call to succeed.
+> 
+> So in this case you are leaking ARM64-specific info into the generic 
+> perf_event_open() call?  Is there any way the kernel could implement this 
+> without userspace having to deal with the issue?
 
-Enumerating [-1, 0, 1, 2] paranoid range values in kernel too, does not add
-much value as well ?
+Hi Vince,
+
+The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
+and then it's not Arm specific, it's just that only Arm implements it for now.
+This is definitely an option.
+
+But if no platform ever implements something similar then that bit is wasted.
+The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
+But as you say, maybe making it arch specific isn't the right way either.
+
+I wouldn't say the perf_event_open call is currently generic though, lots of
+it already requires knowledge of the current platform, and searching for 'x86'
+in the docs for it gives 10 matches.
+
+> 
+> There are a few recent ARM64 perf_event related patches that are pushing 
+> ARM specific interfaces into the generic code, with the apparent 
+> assumption that it will just be implemented in the userspace perf tool.  
+> However there are a number of outside-the-kernel codebases that also use 
+> perf_event_open() and it seems a bit onerous if all of them have to start 
+> adding a lot of extra ARM64-specific code, especially because as far as I 
+
+Because pointer auth is a hardware feature, other tools have no choice but
+to implement this if they do Dwarf based stack unwinding. There is no way
+around that. The pointers are stored mangled and they don't make sense
+without masking them. GDB has already implemented support for it. If they
+don't do Dwarf based stack unwinding then they can carry on as they are
+and everything will still work.
+
+> can tell there haven't been any documentation patches included for the 
+> Makefile.
+
+We plan to update the docs for the syscall, but it's in another repo, and
+we'll wait for this change to be finalised first. I'm not sure what you
+mean about the Makefile?
+
+Thanks
+James
+
+> 
+> The other recent change that's annoying for userspace is the addition of 
+> the ARM-specific /proc/sys/kernel/perf_user_access that duplicates 
+> functionality found in /sys/devices/cpu/rdpmc
+> 
+> Vince Weaver
+> vincent.weaver@maine.edu

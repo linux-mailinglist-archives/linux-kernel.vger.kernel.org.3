@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A4C570C73
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8A5570C75
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 23:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiGKVLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 17:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S231187AbiGKVL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 17:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGKVLu (ORCPT
+        with ESMTP id S230217AbiGKVLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 17:11:50 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C747130F65
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:11:47 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-fe023ab520so8157269fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:11:47 -0700 (PDT)
+        Mon, 11 Jul 2022 17:11:52 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E7341D16
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:11:51 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10bf634bc50so8208068fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 14:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QbKWYct3zsrjoEzuaalBR5DOzaR3iOSKkKGj9VMXX4Q=;
-        b=lSyK+TybBpBJtkKE65SGZElfNa7FhIvZbZTMDtuhflL/1WfRJzRPIV5AeqCk3/8Jvk
-         qaIGSq6iuOumoe5N/dKmdpzyTSP2meopJ0j64azXBSzmbcQTa/jVdMfyAtD61aoRVL6n
-         LfkhQbhLhuK5RDAarGHQH/rYfYROieRKTVMHzkkOohMSvzSvmESQeHd01Qbdw5oNDghp
-         ychol7kyf7TXdt5/Kuyba1mCgKjxXNM6MmZaE/K3q2QpL05cvlwjFzcwxG06nV67ABGt
-         Jh7CS+LrCvOGs8sADuX+JPlobi3coeYrIm8KXqBp92iSHk/zdkbDxVrGiNVwK0KQduV4
-         D3hQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LyzUozuJU4BdsAIYqhi4n317kUN4El07MnlD4WMek9A=;
+        b=GiUsAiGhNhkqEvptw+JKaLtTm4VODxNLVRyC8XKIxO8El5hyrgsjyq0rcgPvDS9ivs
+         cCrLuIMpEKojgIHNfyVXej4Xu+UmuaTbo6qfPZD16zijup63334FxpBWWglPJzgzdl5t
+         RcKUgya+Opa4EwY9ni2K7YxVP5hLiIR8lLsvPAgfR5PXj11keW17MoWiobcU4I8idpPf
+         KbdD0TWw702UWVaEjp0Q/MLN6mPXZXlT1vGvz26UjFPbbVXZmUuv+39E3e8FX8jZlxV8
+         t8UwVF0wAYLiQvkq5qT2/WpHmH32QriPsMc5wUAj7zlc9Pab/jdld/XZHALml0loT3KU
+         V1AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QbKWYct3zsrjoEzuaalBR5DOzaR3iOSKkKGj9VMXX4Q=;
-        b=DmqCJ5Mfk16+125MNxiRKP+PkSMzllgbWuuIIhxfkNVPosWtpiU6175v53eezRvpAa
-         gh1/eaEZ2N2E8/neVLvHbw+u9BcLDgHNQriR+PZfNDj/lNBng7/hNWBUfk4rbPXzqL74
-         bN05euQlRqjpQFx2Tfeo1NpADQ82FTHEPKiqPSWxS7qLnWrZX4E4t8RijDpjdGOQI2Cy
-         Lec5FRX4MhM3RRL8Dm0Amyq/UWBDa91SnMIEFfhGNyfQ0T5QNOHieD0vBK7mxOc2Ma9W
-         C4S1Z48ZA62qs0Fohx7XJVCPyG05wZjTZjTeUqn1I19fWaeZNA2eArr8CMpQf5s1DVsC
-         IDHg==
-X-Gm-Message-State: AJIora+1qb1HY2lakvs23hvIdc9MnYP7HKNdJrFSkEA1mfxU4gaNUUD2
-        rcOp5PFr2ynUe7+4t0kT77GJ+A==
-X-Google-Smtp-Source: AGRyM1ufJbNzhzUX1SClCd4w/9qofyi8K7JJoWUJBXCkRPit7cmiGrp+C0J7kbNzO2JlBp8m5vMPng==
-X-Received: by 2002:a05:6870:2418:b0:101:9461:787c with SMTP id n24-20020a056870241800b001019461787cmr172168oap.196.1657573906945;
-        Mon, 11 Jul 2022 14:11:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LyzUozuJU4BdsAIYqhi4n317kUN4El07MnlD4WMek9A=;
+        b=xu6dD8m925qaBBT4/CuV5g2mkbXWmV84LDWKsqlJo1J3xEsQiLeSIKD0D2FV3dqWRc
+         ITyERqHVO/7rTgfoF6/zDqXO3xt9XKrHbxKkzzLZp0CZWnJ7kTtaNg5ayooLNHakkpNt
+         RjOWh9w6g3heYNvb1kjEC2sTXuKGfP3HdyBtAzQfvLG7ndvMIVYOMqO11OqqBaytcylo
+         CR3ZpPXyn8kXvRnqUw7dEn4vqxdtoEgVMPtbaM3lnZAPW3AJ7WUCkZmKETg+N428ZwzE
+         edVjMweCmC7hUgoVJ7tZMUy+A7RUfb57pCEv+/BKsV1S7xeLEglCevJ4b0q1RJPlGQW3
+         8g+Q==
+X-Gm-Message-State: AJIora8aB5Lm8zV7s2mHeCSs+9ibx09zez9tdnYBhOmRiNrYVX+CIABX
+        4GT7tiNobZbt6r9ogsFZlaJWxg==
+X-Google-Smtp-Source: AGRyM1vu3pSG3WIGRVXNNIZR77WzqoZE4bXt7ev5n7SYrsj7fTJ/whAiwWHnR22EqT18JI5TR1/69A==
+X-Received: by 2002:a05:6870:1490:b0:10c:3362:23c3 with SMTP id k16-20020a056870149000b0010c336223c3mr168171oab.73.1657573910976;
+        Mon, 11 Jul 2022 14:11:50 -0700 (PDT)
 Received: from zeta-build.. ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id c128-20020aca3586000000b00338869042fdsm3198817oia.32.2022.07.11.14.11.44
+        by smtp.gmail.com with ESMTPSA id c128-20020aca3586000000b00338869042fdsm3198817oia.32.2022.07.11.14.11.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 14:11:46 -0700 (PDT)
+        Mon, 11 Jul 2022 14:11:50 -0700 (PDT)
 From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tomasz Figa <tfiga@chromium.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH v2 0/8] videobuf2: Replace vb2_find_timestamp() with vb2_find_buffer()
-Date:   Mon, 11 Jul 2022 18:11:33 -0300
-Message-Id: <20220711211141.349902-1-ezequiel@vanguardiasur.com.ar>
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v2 1/8] videobuf2: Introduce vb2_find_buffer()
+Date:   Mon, 11 Jul 2022 18:11:34 -0300
+Message-Id: <20220711211141.349902-2-ezequiel@vanguardiasur.com.ar>
 X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20220711211141.349902-1-ezequiel@vanguardiasur.com.ar>
+References: <20220711211141.349902-1-ezequiel@vanguardiasur.com.ar>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,46 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ezequiel Garcia <ezequiel@collabora.com>
+
 All users of vb2_find_timestamp() combine it with vb2_get_buffer()
 to retrieve a videobuf2 buffer, given a u64 timestamp.
 
-Therefore, this series removes vb2_find_timestamp() and instead
-introduces a vb2_find_buffer, which is more suitable, making
-videobuf2 API slightly cleaner.
+Introduce an API for this use-case. Users will be converted to the new
+API as follow-up commits.
 
-Changes from v1:
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Acked-by: Tomasz Figa <tfiga@chromium.org>
+---
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 12 ++++++++++++
+ include/media/videobuf2-v4l2.h                  | 10 ++++++++++
+ 2 files changed, 22 insertions(+)
 
-* Introduce API in its final shape, to make review easier.
-* Prefix cedrus_write_ref_buf_addr and move to common cedrus.c
-
-Ezequiel Garcia (8):
-  videobuf2: Introduce vb2_find_buffer()
-  mediatek: vcodec: Use vb2_find_buffer
-  tegra-vde: Use vb2_find_buffer
-  vicodec: Use vb2_find_buffer
-  hantro: Use vb2_find_buffer
-  rkvdec: Use vb2_find_buffer
-  cedrus: Use vb2_find_buffer
-  videobuf2: Remove vb2_find_timestamp()
-
- .../media/common/videobuf2/videobuf2-v4l2.c   | 11 +++--
- .../vcodec/vdec/vdec_h264_req_common.c        |  7 ++-
- .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  7 ++-
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  8 ++--
- .../media/platform/nvidia/tegra-vde/h264.c    |  9 ++--
- .../media/test-drivers/vicodec/vicodec-core.c |  8 +---
- drivers/staging/media/hantro/hantro_drv.c     |  6 +--
- .../staging/media/hantro/hantro_g2_vp9_dec.c  | 10 ++---
- drivers/staging/media/rkvdec/rkvdec-h264.c    | 41 ++++++------------
- drivers/staging/media/rkvdec/rkvdec-vp9.c     | 10 ++---
- drivers/staging/media/sunxi/cedrus/cedrus.h   | 24 ++++++-----
- .../staging/media/sunxi/cedrus/cedrus_h264.c  | 16 +++----
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 16 +++----
- .../staging/media/sunxi/cedrus/cedrus_mpeg2.c | 28 ++++--------
- .../staging/media/sunxi/cedrus/cedrus_vp8.c   | 43 ++++---------------
- include/media/videobuf2-v4l2.h                | 12 ++----
- 16 files changed, 96 insertions(+), 160 deletions(-)
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 075d24ebf44c..f26cb8586bd4 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -638,6 +638,18 @@ int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
+ }
+ EXPORT_SYMBOL_GPL(vb2_find_timestamp);
+ 
++struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
++{
++	unsigned int i;
++
++	for (i = 0; i < q->num_buffers; i++)
++		if (q->bufs[i]->copied_timestamp &&
++		    q->bufs[i]->timestamp == timestamp)
++			return vb2_get_buffer(q, i);
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(vb2_find_buffer);
++
+ /*
+  * vb2_querybuf() - query video buffer information
+  * @q:		videobuf queue
+diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
+index d818d9707695..76e405c0b003 100644
+--- a/include/media/videobuf2-v4l2.h
++++ b/include/media/videobuf2-v4l2.h
+@@ -78,6 +78,16 @@ struct vb2_v4l2_buffer {
+ int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
+ 		       unsigned int start_idx);
+ 
++/**
++ * vb2_find_buffer() - Find a buffer with given timestamp
++ *
++ * @q:		pointer to &struct vb2_queue with videobuf2 queue.
++ * @timestamp:	the timestamp to find.
++ *
++ * Returns the buffer with the given @timestamp, or NULL if not found.
++ */
++struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp);
++
+ int vb2_querybuf(struct vb2_queue *q, struct v4l2_buffer *b);
+ 
+ /**
 -- 
 2.34.3
 

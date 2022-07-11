@@ -2,128 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5383656D6E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83EE56D6E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 09:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiGKHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 03:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S230163AbiGKHfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 03:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGKHfF (ORCPT
+        with ESMTP id S230096AbiGKHf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 03:35:05 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528BC1A05C;
-        Mon, 11 Jul 2022 00:35:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VIyDJnm_1657524897;
-Received: from 30.43.105.92(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VIyDJnm_1657524897)
-          by smtp.aliyun-inc.com;
-          Mon, 11 Jul 2022 15:34:58 +0800
-Message-ID: <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
-Date:   Mon, 11 Jul 2022 15:34:56 +0800
+        Mon, 11 Jul 2022 03:35:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49D41BE8B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 00:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zxI5Ju1zn3Hrr6mLV73xoE3t9N0u61rDH0mqVeKgZCY=; b=ZF8aIfKr9b2YLBkkHLIxZkEniy
+        suzNpZbhoOai42F1cMIVtEA8WxLfW9HP78e6XUwls3/sgevvyRY/591wcSwAUVuKMI+te/Rt4SFyE
+        Bj6Zc9QLG5L9iicV5Qjos6lZ9IRCcv83fkBPZlZ2JgLrA8Rq+Oseg4AMEOpgVFwtSeM12+9lFeDe7
+        OmxNNv0JQ2yWpwNaO5r0ApnYywRhNkkQrS6d+FsvF9BsO9GjgQPedCcRs0xFHKJVHHgaVrX5R8/pR
+        z2aHgNzMxiJ4jy6QD/E46VNNman1B10mkLvgQPQaGy9g1EUh76R9kCQCs6r9bSmrqPEmdsK/AdaFJ
+        wOtRTHNQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oAnwf-005lQL-OH; Mon, 11 Jul 2022 07:35:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81821300110;
+        Mon, 11 Jul 2022 09:35:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6C9832015BE8D; Mon, 11 Jul 2022 09:35:03 +0200 (CEST)
+Date:   Mon, 11 Jul 2022 09:35:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/8] sched/fair: remove redundant cpu_cgrp_subsys->fork()
+Message-ID: <YsvSpyrJxNv7jsQz@hirez.programming.kicks-ass.net>
+References: <20220709151353.32883-1-zhouchengming@bytedance.com>
+ <20220709151353.32883-4-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Kai Shen <kaishen@linux.alibaba.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
-From:   Cheng Xu <chengyou@linux.alibaba.com>
-In-Reply-To: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220709151353.32883-4-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/9/22 1:37 AM, Christophe JAILLET wrote:
-> Use [devm_]bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+On Sat, Jul 09, 2022 at 11:13:48PM +0800, Chengming Zhou wrote:
+> We use cpu_cgrp_subsys->fork() to set task group for the new fair task
+> in cgroup_post_fork().
 > 
-> It is less verbose and it improves the semantic.
+> Since commit b1e8206582f9 ("sched: Fix yet more sched_fork() races")
+> has already set task group for the new fair task in sched_cgroup_fork(),
+> so cpu_cgrp_subsys->fork() can be removed.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/infiniband/hw/erdma/erdma_cmdq.c | 7 +++----
->  drivers/infiniband/hw/erdma/erdma_main.c | 9 ++++-----
->  2 files changed, 7 insertions(+), 9 deletions(-)
+>   cgroup_can_fork()	--> pin parent's sched_task_group
+>   sched_cgroup_fork()
+>     __set_task_cpu	--> set task group
+>   cgroup_post_fork()
+>     ss->fork() := cpu_cgroup_fork()	--> set again
 > 
+> After this patch's change, task_change_group_fair() only need to
+> care about task cgroup migration, make the code much simplier.
 
-Hi Christophe,
+This:
 
-Thanks for your two patches of erdma.
+> This patch also move the task se depth setting to set_task_rq(), which
+> will set correct depth for the new task se in sched_cgroup_fork().
+> 
+> The se depth setting in attach_entity_cfs_rq() is removed since
+> set_task_rq() is a better place to do this when task moves across
+> CPUs/groups.
 
-The erdma code your got is our first upstreaming code, so I would like to squash your
-changes into the relevant commit in our next patchset to make the commit history cleaner.
+really should have been it's own patch. And this actually scares me. Did
+you test with priority inheritance bumping the task to FIFO while things
+change?
 
-BTW, the coding style in the patches is OK, but has a little differences with clang-format's
-result. I will use the format from clang-format to minimize manual adjustments.
- 
-Thanks,
-Cheng Xu
- 
-
-> diff --git a/drivers/infiniband/hw/erdma/erdma_cmdq.c b/drivers/infiniband/hw/erdma/erdma_cmdq.c
-> index 0cf5032d4b78..0489838d9717 100644
-> --- a/drivers/infiniband/hw/erdma/erdma_cmdq.c
-> +++ b/drivers/infiniband/hw/erdma/erdma_cmdq.c
-> @@ -78,10 +78,9 @@ static int erdma_cmdq_wait_res_init(struct erdma_dev *dev,
->  		return -ENOMEM;
->  
->  	spin_lock_init(&cmdq->lock);
-> -	cmdq->comp_wait_bitmap =
-> -		devm_kcalloc(&dev->pdev->dev,
-> -			     BITS_TO_LONGS(cmdq->max_outstandings),
-> -			     sizeof(unsigned long), GFP_KERNEL);
-> +	cmdq->comp_wait_bitmap = devm_bitmap_zalloc(&dev->pdev->dev,
-> +						    cmdq->max_outstandings,
-> +						    GFP_KERNEL);
->  	if (!cmdq->comp_wait_bitmap) {
->  		devm_kfree(&dev->pdev->dev, cmdq->wait_pool);
->  		return -ENOMEM;
-> diff --git a/drivers/infiniband/hw/erdma/erdma_main.c b/drivers/infiniband/hw/erdma/erdma_main.c
-> index 27484bea51d9..7e1e27acb404 100644
-> --- a/drivers/infiniband/hw/erdma/erdma_main.c
-> +++ b/drivers/infiniband/hw/erdma/erdma_main.c
-> @@ -423,9 +423,8 @@ static int erdma_res_cb_init(struct erdma_dev *dev)
->  	for (i = 0; i < ERDMA_RES_CNT; i++) {
->  		dev->res_cb[i].next_alloc_idx = 1;
->  		spin_lock_init(&dev->res_cb[i].lock);
-> -		dev->res_cb[i].bitmap =
-> -			kcalloc(BITS_TO_LONGS(dev->res_cb[i].max_cap),
-> -				sizeof(unsigned long), GFP_KERNEL);
-> +		dev->res_cb[i].bitmap = bitmap_zalloc(dev->res_cb[i].max_cap,
-> +						      GFP_KERNEL);
->  		/* We will free the memory in erdma_res_cb_free */
->  		if (!dev->res_cb[i].bitmap)
->  			goto err;
-> @@ -435,7 +434,7 @@ static int erdma_res_cb_init(struct erdma_dev *dev)
->  
->  err:
->  	for (j = 0; j < i; j++)
-> -		kfree(dev->res_cb[j].bitmap);
-> +		bitmap_free(dev->res_cb[j].bitmap);
->  
->  	return -ENOMEM;
->  }
-> @@ -445,7 +444,7 @@ static void erdma_res_cb_free(struct erdma_dev *dev)
->  	int i;
->  
->  	for (i = 0; i < ERDMA_RES_CNT; i++)
-> -		kfree(dev->res_cb[i].bitmap);
-> +		bitmap_free(dev->res_cb[i].bitmap);
->  }
->  
->  static const struct ib_device_ops erdma_device_ops = {
+This has nothing to do with fork().

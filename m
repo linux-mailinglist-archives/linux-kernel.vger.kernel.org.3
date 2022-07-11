@@ -2,311 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F525708D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731A25708DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiGKR1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 13:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S230141AbiGKRa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 13:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiGKR1N (ORCPT
+        with ESMTP id S229500AbiGKRa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 13:27:13 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65EE5C97F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:27:11 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id l12so4986159plk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 10:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WcvhCKti2055EmbLZjAJ5wRJ0YEDhf7c61xLVsqRjBI=;
-        b=WYOkGsJLMRHvHD5G03oUcaGbojV1/jsrNMdAXHuamvZA6gwtJ6Pt7PmGXUmsOkO2ro
-         hk5RXex8He+1mZ5WmuTKx4uhgtamA7VOO0h06l6Cj4vp5JqMkjPcICY9Z81SzPyMC0ti
-         ZrNu7vFPTYmKJETiOEC/G9gnDy5kOKzJtxiKvs5X4DqJnU/0GU5WK/nZ0Jkj/NKnzGd9
-         5Okcr5KCSIklGKh29VmSsL7dtlzZ3BzfjiGohsHpEr23mnBeTPJaFOpRwyJUmR8RhPnB
-         VFfOTR1Gekxq8cusTkhkqp4uKYIP1ADGUEfBJQzIhtN3DjBGnAq44ptSwO30hoLZGpK1
-         r36Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WcvhCKti2055EmbLZjAJ5wRJ0YEDhf7c61xLVsqRjBI=;
-        b=LmFbWp0a4vYUvAtZ6XIubHQcVMq1qGOh3Amvoxnr7TqiX0t/F8EDx2uC1gN7SlTy/L
-         sx68UYdJDdOW6YWXYXx9/sDtd3T3C9j7Uz05vD/cyD8nVKEjGlL+KE+9L5j2/6PVKL7o
-         8dN677f+507tD8Lmw3ov7Bhbt9PUjsaUtMyujeR2Vo/qtjG+rDb1bF/lhNr0drDmmVdt
-         UGDcK74Zp5+q2kDpzHSim7/oDbzx19xpzL8zrXqqfqwPTHJ6xeJjX7Yjv/niZXg/ut9X
-         l12xc155xpH25zFtvQP6ikprSzutYwhX1115SjPiBaNSkY4z9oetiVLu2tGtp1UxFPLj
-         kUNQ==
-X-Gm-Message-State: AJIora/8omBH8g/c0jNlof9tKy9WL+AesLiGqHXSjE07QKQMUaEVRDug
-        4L+CauDRvHgFp83UIn2t8BDCtg==
-X-Google-Smtp-Source: AGRyM1uUaucU50mPOjuv2B4dz98Z4bcnKuU/J0EIGrQk2bw8GbapVJ7+sXIizZgG7Cx519/ySEFmww==
-X-Received: by 2002:a17:90b:33ce:b0:1ef:e5f4:f8e2 with SMTP id lk14-20020a17090b33ce00b001efe5f4f8e2mr19571588pjb.70.1657560431115;
-        Mon, 11 Jul 2022 10:27:11 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:200:bbec:e06d:b778:f9bc])
-        by smtp.gmail.com with ESMTPSA id x5-20020a623105000000b005289ef6db79sm5012448pfx.32.2022.07.11.10.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 10:27:10 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 10:27:06 -0700
-From:   Fangrui Song <maskray@google.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chang Rui <changruinj@gmail.com>
-Subject: Re: [RFC PATCH v1] perf symbol: Correct address for bss symbols
-Message-ID: <20220711172706.rtfd6pp2pochmdre@google.com>
-References: <20220710012204.2390293-1-leo.yan@linaro.org>
- <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
+        Mon, 11 Jul 2022 13:30:28 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99418357E5;
+        Mon, 11 Jul 2022 10:30:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IjaivAOcTuczqOADCoUglled7i05yQE0pT2ZZhd6TH+Bwc3luUPKelY5uErzpjRXh+rbvXO+x8eoC1q87NBj9NxdfMVSJZsOXztszJRVXNDTBUOfewFoITWm/ru5TpTgEjwmT6bCdAEAQR44MCepFS65XS5Gx8sOLaoZvpCAMxpSig1jzriFeDhmF6BrfeutL6u6Of5w926o+hlH9vIiIlQcp2QqHvEovHMkhKwtb0IiiqU8P4eHZXL+pmqgzzOQA3pOKZnI8LkX4mz+VlDUjLzhNm+WXYiJffnSnh9kzYDnltKWCYIcNcrD5C4UdJCmvsx5ryUxfP/zcDo3onxlKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nuexyMSABsI7i0y6LtJQ6zCk9WVYeplEOiCYIPUXTeA=;
+ b=JJissBUYjGNitP4pwtmvJtkEj5LgZEmi7ZOIN4sM6fOEvY4Y+f7I843Ql1yKCBE3QVrl+mjj7hYjB9uO/iYCui3L1dw/BI0jzFSqs4y7GnT4N6awJSBwTL7VU9HN3tF66IshNzcxmeFz3mLSAGz87r/+xtzh2XxUxVOuiVsoLs3fmOoHd+5/7UnW4bDaeVwDJNrd/SDyDy7LAOUmlqMgvKxVZ4t8+PN7DKoL1e2wvGx1RnsSh7MvT1R//HckoKJ8OuswB0M0mb6ghz9UnsYWnuG4XBwDGH6+yDfhh0xW/3yyNF7XPXcK4uYd9gRnftvYNGqqIV2LunXe4HXW4Wn3Bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nuexyMSABsI7i0y6LtJQ6zCk9WVYeplEOiCYIPUXTeA=;
+ b=hEP3TumCdxGd9jr75yHaEGB1uJoDVd5p47IVN7mD55ysDa8iG5Prt+X/VaDcBQDYgXBZebwDBbkNd1jTi1Tb7XsOz79hPcqiqaPZUK2arIh8IB7hJ/1lmvrG+9oN6JuuOveDw0rAmv1o3P5099nO7evV/qqhKHP9i71HMcwPWxF7MuStkH/bJVshIEzfJu3grVGGvvuWGxodqHvHGN1LXyd8P53QrSsArYChKb+tX8M5cyvnagZehj3Sf3zoRb+B5BTX7Vnj5IQBCvrgpnvSU6XkFvSk9GR0an5VFr/O9iKUTBjjBTMmMu8nuJbgXznQa/pQniydq9yM46OCvF3iUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
+ by BYAPR12MB2981.namprd12.prod.outlook.com (2603:10b6:a03:de::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Mon, 11 Jul
+ 2022 17:30:24 +0000
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::784c:3561:5f6a:10ed]) by BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::784c:3561:5f6a:10ed%8]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
+ 17:30:23 +0000
+Message-ID: <99be22e1-db69-1ecf-a739-e4f603c96f6a@nvidia.com>
+Date:   Mon, 11 Jul 2022 23:00:10 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 2/6] vfio: Add a new device feature for the power
+ management
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20220701110814.7310-1-abhsahu@nvidia.com>
+ <20220701110814.7310-3-abhsahu@nvidia.com>
+ <20220706093959.3bd2cbbb.alex.williamson@redhat.com>
+ <ad80eb14-18a1-8895-ecfb-32687a4ba021@nvidia.com>
+ <20220708103612.18285301.alex.williamson@redhat.com>
+ <083b39f0-7ebf-cb8f-fc52-f9a29a4f3d3f@nvidia.com>
+ <20220711070446.2bd6ac80.alex.williamson@redhat.com>
+X-Nvconfidentiality: public
+From:   Abhishek Sahu <abhsahu@nvidia.com>
+In-Reply-To: <20220711070446.2bd6ac80.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR01CA0079.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00::19)
+ To BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: db90f352-3822-40dd-d5bd-08da63630925
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2981:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dJyqs1A42E0BJmWZyl0Lm9WVzq7ByZdbl1veq6yHaTCND9PNP987oILyAx68qxiLVusUoUoO/gYII9ZUbIDz8vtRgfxSyL/I9NY3B+dN+YIX939JPVE8XM2wF147YQ3cULzFWX+JMlRFqR9Z4A32vOmiDvtUPYAfVqK6WJEVoHlAlBv28eOr1NryBk/jVeUJRyMWlJzf3LNJCnLaTUeuW1YWS7O5Hgo2xHtlDrloFTv74dgzPJylZJ17biR88MXb9at/4dR5Pa2C56Mxgt7lzX92Q7eksG6Tbs/Ntsu09Mw6wllEkYg5vXc+Uo2ytOMfgxEWwc7XMwq/ND7fs7tkPvrHLF4T7n6I74aoWdD/7s8czb3AUrKHuKv+40maqSWuOBEmOU+w7CkYOT3jQUsf0nZVexoHyPwbcHsQaU/R66Lq2ebjJ1jM4tgHaqpgNPiFPw5boxtMCNYpm1YihdKJKCeu8maw6JeZKgHc5hETvbc2yapO6tyzI1r/tbTP/uf6xtCM/sUPuI4OLrU0zDrD+Ip5Y0Uem50I3iu/Rb7bdIUeGb4laIWsaHQZWjMRDsluV8Vj587eYFt7KcbK2tF7etHEg5tSeiTU1rkbvip9sVXWzNyeJO2vgr9EDv8qdg+otb7fPgzMcYvP9cQF/Sn86uL25QkEuAdurbmUCN4mKq8rS4Jw/O0dsyW1xB9JmGz4QzE9NHwj68dGnO1BmQALujZt42kYITyk9lZt5/hFhBPpritT4+un/QnXBMUsxGSe7aYacymmhEvyxi/prdgMJFRjFuyYZKFkS1M9Co8Fe5BwhikaRVPu/RauzL+8sZFa8ndVjNodZL3WVffJskj5wB1nLg9q10H0okhyg2KT0v8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(366004)(39860400002)(136003)(376002)(84040400005)(2616005)(66946007)(66476007)(66556008)(186003)(8676002)(31696002)(83380400001)(6666004)(316002)(6486002)(4326008)(478600001)(53546011)(55236004)(38100700002)(31686004)(6506007)(86362001)(26005)(6512007)(6916009)(54906003)(41300700001)(8936002)(2906002)(36756003)(7416002)(5660300002)(30864003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?KzREMWNXS0MwamhGRzlIY0tZTmlnRWQzcWVnY05HRjVaSE1EUVBDTDJOclp3?=
+ =?utf-8?B?cWU3UmxKSHloUEMrTGxYQ3RDb2JKUHZ5WkRvVG55ZlQwTmVpMFQwMXVLZkM2?=
+ =?utf-8?B?aDRreDh4MDNuK3M2U0dNb0p3UXFRQUtMOEVjMVpESWMxZmZCK1FsOVhlb2ZZ?=
+ =?utf-8?B?MlVxUm5neTc1MFM1RWFZeUVWTEc3NStPSEJuUmI4bERvMDhSSnFZaytHOEJv?=
+ =?utf-8?B?K3pVcEpPY045VndGWi9nRzVzUVB2dEtORVZ6MmZlL3JodUFHUTVJSG5adnYz?=
+ =?utf-8?B?QWhlNFhGaWxRaDJ6N0NmSkdXNEFXdExpMXE2MlZPRFVCN3YvM0N0eG02YXJJ?=
+ =?utf-8?B?YmVGNSszTHVUd0tWYWFuZFM2YjUreHZxRmtGYXZwajhObVZsdDVzVVcxU2lT?=
+ =?utf-8?B?Zy9oNjlDKyszTlZVZ3ZjVWQxME1BMXRtajdvNzMveXpsdm9QdVowcWxoeGlW?=
+ =?utf-8?B?bkFRL3hYQ1VUUXE3blJQOHhMUXJ5ckRCdHk1M1dRQm5NdENCbUw0QUNIWnUy?=
+ =?utf-8?B?NWtRVkNXYm03VEYwU3g5UHpGWVllZXFTaUVhay92cmNuYS8wOFJkcWZQWHJh?=
+ =?utf-8?B?dGlVa05WK0lpMmNzdUx6VlFmYTliU2J4aHlWTzRTNTVJZzNZUVZVQVBreWVt?=
+ =?utf-8?B?WExMNVlWR2E5ZGZWTW5pZGZ3dVRKVTlaK3BxekluN0p3bVpMWmRJdjkzUHBa?=
+ =?utf-8?B?aVRHYUs2VzZmTEFPTUJsWG1uZHZwTnpXajZ3YjJORUFISkRSVk5RWkExMnY0?=
+ =?utf-8?B?T203OHdpVExXUnNSV2JjQTljaGRVaEtoMnZjQnJHWXdUNWRKY0VtdExRSHF6?=
+ =?utf-8?B?eG1IT0xpaklweSs1Y3hRRnFPelRXdUdFNDN1V3diaXg0c2xwOENQV0hYZUxx?=
+ =?utf-8?B?Vlo4Y2VmTzN3U2kybXlkcFBJRkJ0TWkyNXBYSXhNRDhpVG54bWpHcWZ4YTJz?=
+ =?utf-8?B?RTdHSEw1Q0VVRkR3TytUTlBSSGVrS214N3diWGphUmQ3SExGZndLWFAwZGV4?=
+ =?utf-8?B?NW16cHNZd1BHNnh6YjdEcDVqQ0VkV1p6dEN4SlhFZEw3ay9RQ3YwMXhubllN?=
+ =?utf-8?B?OGI4SkNZWW10ZTB1M0c3a0N5L2ZzVGNTVDFaUmFKazhRZkdvb0F6UXVCS2hw?=
+ =?utf-8?B?WGZTREF0TTdDclFDYVA2d004d29vRU12dVh1V2RtNEdUYTcxT255Q0p1YmV1?=
+ =?utf-8?B?dG02ck9HaFFQS2hEMENNcFhMaFg0YmduNUpibXNiNWg0YkNHSFpkUDNQZEFy?=
+ =?utf-8?B?WnBkNkxNcVhUcU5RRXordng4Mkw0bWNoSzQyMFFDWGloUDVrMXloVjVjMlox?=
+ =?utf-8?B?R0c2bVpUc1VxMEFEQm1uRDMvWXJpd3dqVjhaY053TExtKzhybk9Tb3l4QUFi?=
+ =?utf-8?B?Vnh5QjBiODBYNkZseUxjZHVZb0Y1bTAxUTZreVVjb0dDbHV6aXBKRUNiUjhX?=
+ =?utf-8?B?UlVYT2M4czdyV1plcnJndCtYSmFibnl4enRsckVGK2liTmlUNWI1ZkNONSs3?=
+ =?utf-8?B?eW43SGhrUVhLdWRPbno3bHFQY0t0NVJvL0ZwQXJqZVZuYWtNYjRiUHZPWnpN?=
+ =?utf-8?B?WlVBRUk2cHQ3bmJoNEZBS3hQQ0RTNFh3d00zKzdLVzA1S0lmNGs0am00QUpZ?=
+ =?utf-8?B?dFcxZ2hQQWZWWC9ocTR0eXVPVDlVTmw1NlJKb0pFdlJPQmt4OUxWK0pSSVRI?=
+ =?utf-8?B?V01FUHliRW1aNlBWcmlMa0xQWGkvZEZIc3BCamJQZFNrYjdxd1JHY2F1aUlo?=
+ =?utf-8?B?YWF0c0dCc2tMcEJwZzNPWXJEWmdqd2dFZE5Db2lta2xTSW03NzBhaTZ1Q0Ev?=
+ =?utf-8?B?c1VsNWg3Wk15MkVCVmQycnoxL0dUYThSUE10RjlzUVVNb0NSbXlhTFRpTnA2?=
+ =?utf-8?B?NEEzNUNmYTg0anB1Z1RIa3dPVGNwZE9GVG90NmcyYnNVYURvZG56Ukl1R216?=
+ =?utf-8?B?OEI4RHo5QXgxdFc3R0hIUFlGV3h2aWk0MlZaR2FUQVZHREdJSWhIaTBWVW93?=
+ =?utf-8?B?MHJkTGNxeGxma1Jpd0xXWU5PRlF1cHdlVUdFeWRXcU1rSFhISTdidEFyNVE2?=
+ =?utf-8?B?emd4M01naUdwWG9nWWY1SmNHZ1NDcGtyR2hsNVZQMHJ2MWIrMmlDYTdxRndv?=
+ =?utf-8?Q?1JD1ncWjv+UMNIQQobcRx3uyi?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db90f352-3822-40dd-d5bd-08da63630925
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 17:30:23.6325
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BjyZXPRSEomHOvXUARTtVLLFYiDSKviosDWpX7mEyIJE7+pfD56mTPrcrnr0qhUhgDqLmk+R6QsDIcj+Rrsp2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2981
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-11, Ian Rogers wrote:
->On Sat, Jul 9, 2022 at 6:22 PM Leo Yan <leo.yan@linaro.org> wrote:
+On 7/11/2022 6:34 PM, Alex Williamson wrote:
+> On Mon, 11 Jul 2022 15:13:13 +0530
+> Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> 
+>> On 7/8/2022 10:06 PM, Alex Williamson wrote:
+>>> On Fri, 8 Jul 2022 15:09:22 +0530
+>>> Abhishek Sahu <abhsahu@nvidia.com> wrote:
+>>>   
+>>>> On 7/6/2022 9:09 PM, Alex Williamson wrote:  
+>>>>> On Fri, 1 Jul 2022 16:38:10 +0530
+>>>>> Abhishek Sahu <abhsahu@nvidia.com> wrote:
+>>>>>     
+>>>>>> This patch adds the new feature VFIO_DEVICE_FEATURE_POWER_MANAGEMENT
+>>>>>> for the power management in the header file. The implementation for the
+>>>>>> same will be added in the subsequent patches.
+>>>>>>
+>>>>>> With the standard registers, all power states cannot be achieved. The
+>>>>>> platform-based power management needs to be involved to go into the
+>>>>>> lowest power state. For all the platform-based power management, this
+>>>>>> device feature can be used.
+>>>>>>
+>>>>>> This device feature uses flags to specify the different operations. In
+>>>>>> the future, if any more power management functionality is needed then
+>>>>>> a new flag can be added to it. It supports both GET and SET operations.
+>>>>>>
+>>>>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+>>>>>> ---
+>>>>>>  include/uapi/linux/vfio.h | 55 +++++++++++++++++++++++++++++++++++++++
+>>>>>>  1 file changed, 55 insertions(+)
+>>>>>>
+>>>>>> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+>>>>>> index 733a1cddde30..7e00de5c21ea 100644
+>>>>>> --- a/include/uapi/linux/vfio.h
+>>>>>> +++ b/include/uapi/linux/vfio.h
+>>>>>> @@ -986,6 +986,61 @@ enum vfio_device_mig_state {
+>>>>>>  	VFIO_DEVICE_STATE_RUNNING_P2P = 5,
+>>>>>>  };
+>>>>>>  
+>>>>>> +/*
+>>>>>> + * Perform power management-related operations for the VFIO device.
+>>>>>> + *
+>>>>>> + * The low power feature uses platform-based power management to move the
+>>>>>> + * device into the low power state.  This low power state is device-specific.
+>>>>>> + *
+>>>>>> + * This device feature uses flags to specify the different operations.
+>>>>>> + * It supports both the GET and SET operations.
+>>>>>> + *
+>>>>>> + * - VFIO_PM_LOW_POWER_ENTER flag moves the VFIO device into the low power
+>>>>>> + *   state with platform-based power management.  This low power state will be
+>>>>>> + *   internal to the VFIO driver and the user will not come to know which power
+>>>>>> + *   state is chosen.  Once the user has moved the VFIO device into the low
+>>>>>> + *   power state, then the user should not do any device access without moving
+>>>>>> + *   the device out of the low power state.    
+>>>>>
+>>>>> Except we're wrapping device accesses to make this possible.  This
+>>>>> should probably describe how any discrete access will wake the device
+>>>>> but ongoing access through mmaps will generate user faults.
+>>>>>     
+>>>>
+>>>>  Sure. I will add that details also.
+>>>>  
+>>>>>> + *
+>>>>>> + * - VFIO_PM_LOW_POWER_EXIT flag moves the VFIO device out of the low power
+>>>>>> + *    state.  This flag should only be set if the user has previously put the
+>>>>>> + *    device into low power state with the VFIO_PM_LOW_POWER_ENTER flag.    
+>>>>>
+>>>>> Indenting.
+>>>>>     
+>>>>  
+>>>>  I will fix this.
+>>>>  
+>>>>>> + *
+>>>>>> + * - VFIO_PM_LOW_POWER_ENTER and VFIO_PM_LOW_POWER_EXIT are mutually exclusive.
+>>>>>> + *
+>>>>>> + * - VFIO_PM_LOW_POWER_REENTERY_DISABLE flag is only valid with
+>>>>>> + *   VFIO_PM_LOW_POWER_ENTER.  If there is any access for the VFIO device on
+>>>>>> + *   the host side, then the device will be moved out of the low power state
+>>>>>> + *   without the user's guest driver involvement.  Some devices require the
+>>>>>> + *   user's guest driver involvement for each low-power entry.  If this flag is
+>>>>>> + *   set, then the re-entry to the low power state will be disabled, and the
+>>>>>> + *   host kernel will not move the device again into the low power state.
+>>>>>> + *   The VFIO driver internally maintains a list of devices for which low
+>>>>>> + *   power re-entry is disabled by default and for those devices, the
+>>>>>> + *   re-entry will be disabled even if the user has not set this flag
+>>>>>> + *   explicitly.    
+>>>>>
+>>>>> Wrong polarity.  The kernel should not maintain the policy.  By default
+>>>>> every wakeup, whether from host kernel accesses or via user accesses
+>>>>> that do a pm-get should signal a wakeup to userspace.  Userspace needs
+>>>>> to opt-out of that wakeup to let the kernel automatically re-enter low
+>>>>> power and userspace needs to maintain the policy for which devices it
+>>>>> wants that to occur.
+>>>>>     
+>>>>  
+>>>>  Okay. So that means, in the kernel side, we don’t have to maintain
+>>>>  the list which currently contains NVIDIA device ID. Also, in our
+>>>>  updated approach, this opt-out of that wake-up means that user
+>>>>  has not provided eventfd in the feature SET ioctl. Correct ?  
+>>>
+>>> Yes, I'm imagining that if the user hasn't provided a one-shot wake-up
+>>> eventfd, that's the opt-out for being notified of device wakes.  For
+>>> example, pm-resume would have something like:
+>>>
+>>> 	
+>>> 	if (vdev->pm_wake_eventfd) {
+>>> 		eventfd_signal(vdev->pm_wake_eventfd, 1);
+>>> 		vdev->pm_wake_eventfd = NULL;
+>>> 		pm_runtime_get_noresume(dev);
+>>> 	}
+>>>
+>>> (eventfd pseudo handling substantially simplified)
+>>>
+>>> So w/o a wake-up eventfd, the user would need to call the pm feature
+>>> exit ioctl to elevate the pm reference to prevent it going back to low
+>>> power.  The pm feature exit ioctl would be optional if a wake eventfd is
+>>> provided, so some piece of the eventfd context would need to remain to
+>>> determine whether a pm-get is necessary.
+>>>   
+>>>>>> + *
+>>>>>> + * For the IOCTL call with VFIO_DEVICE_FEATURE_GET:
+>>>>>> + *
+>>>>>> + * - VFIO_PM_LOW_POWER_ENTER will be set if the user has put the device into
+>>>>>> + *   the low power state, otherwise, VFIO_PM_LOW_POWER_EXIT will be set.
+>>>>>> + *
+>>>>>> + * - If the device is in a normal power state currently, then
+>>>>>> + *   VFIO_PM_LOW_POWER_REENTERY_DISABLE will be set for the devices where low
+>>>>>> + *   power re-entry is disabled by default.  If the device is in the low power
+>>>>>> + *   state currently, then VFIO_PM_LOW_POWER_REENTERY_DISABLE will be set
+>>>>>> + *   according to the current transition.    
+>>>>>
+>>>>> Very confusing semantics.
+>>>>>
+>>>>> What if the feature SET ioctl took an eventfd and that eventfd was one
+>>>>> time use.  Calling the ioctl would setup the eventfd to notify the user
+>>>>> on wakeup and call pm-put.  Any access to the device via host, ioctl,
+>>>>> or region would be wrapped in pm-get/put and the pm-resume handler
+>>>>> would perform the matching pm-get to balance the feature SET and signal
+>>>>> the eventfd.     
+>>>>
+>>>>  This seems a better option. It will help in making the ioctl simpler
+>>>>  and we don’t have to add a separate index for PME which I added in
+>>>>  patch 6. 
+>>>>  
+>>>>> If the user opts-out by not providing a wakeup eventfd,
+>>>>> then the pm-resume handler does not perform a pm-get. Possibly we
+>>>>> could even allow mmap access if a wake-up eventfd is provided.    
+>>>>
+>>>>  Sorry. I am not clear on this mmap part. We currently invalidates
+>>>>  mapping before going into runtime-suspend. Now, if use tries do
+>>>>  mmap then do we need some extra handling in the fault handler ?
+>>>>  Need your help in understanding this part.  
+>>>
+>>> The option that I'm thinking about is if the mmap fault handler is
+>>> wrapped in a pm-get/put then we could actually populate the mmap.  In
+>>> the case where the pm-get triggers the wake-eventfd in pm-resume, the
+>>> device doesn't return to low power when the mmap fault handler calls
+>>> pm-put.  This possibly allows that we could actually invalidate mmaps on
+>>> pm-suspend rather than in the pm feature enter ioctl, essentially the
+>>> same as we're doing for intx.  I wonder though if this allows the
+>>> possibility that we just bounce between mmap fault and pm-suspend.  So
+>>> long as some work can be done, for instance the pm-suspend occurs
+>>> asynchronously to the pm-put, this might be ok.
+>>>   
 >>
->> When using 'perf mem' and 'perf c2c', an issue is observed that tool
->> reports the wrong offset for global data symbols.  This is a common
->> issue on both x86 and Arm64 platforms.
+>>  We can do this. But in the normal use case, the situation should
+>>  never arise where user should access any mmaped region when user has
+>>  already put the device into D3 (D3hot or D3cold). This can only happen
+>>  if there is some bug in the guest driver or user is doing wrong
+>>  sequence. Do we need to add handling to officially support this part ?
+> 
+> We cannot rely on userspace drivers to be bug free or non-malicious,
+> but if we want to impose that an mmap access while low power is
+> enabled always triggers a fault, that's ok.
+> 
+>>  pm-get can take more than a second for resume for some devices and
+>>  will doing this in fault handler be safe ?
 >>
->> Let's see an example, for a test program, below is the disassembly for
->> its .bss section which is dumped with objdump:
->>
->>   ...
->>
->>   Disassembly of section .data:
->>
->>   0000000000004000 <__data_start>:
->>         ...
->>
->>   0000000000004008 <__dso_handle>:
->>       4008:     08 40 00                or     %al,0x0(%rax)
->>       400b:     00 00                   add    %al,(%rax)
->>       400d:     00 00                   add    %al,(%rax)
->>         ...
->>
->>   0000000000004010 <wait_to_begin>:
->>       4010:     01 00                   add    %eax,(%rax)
->>       4012:     00 00                   add    %al,(%rax)
->>       4014:     00 00                   add    %al,(%rax)
->>         ...
->>
->>   0000000000004018 <lock_thd_name>:
->>       4018:     08 20                   or     %ah,(%rax)
->>       401a:     00 00                   add    %al,(%rax)
->>       401c:     00 00                   add    %al,(%rax)
->>         ...
->>
->>   0000000000004020 <reader_thd_name>:
->>       4020:     10 20                   adc    %ah,(%rax)
->>       4022:     00 00                   add    %al,(%rax)
->>       4024:     00 00                   add    %al,(%rax)
->>         ...
->>
->>   Disassembly of section .bss:
->>
->>   0000000000004040 <completed.0>:
->>         ...
->>
->>   0000000000004080 <buf1>:
->>         ...
->>
->>   00000000000040c0 <buf2>:
->>         ...
->>
->>   0000000000004100 <thread>:
->>         ...
->>
->> First we used 'perf mem record' to run the test program and then used
->> 'perf --debug verbose=4 mem report' to observe what's the symbol info
->> for 'buf1' and 'buf2' structures.
->>
->>   # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
->>   # ./perf --debug verbose=4 mem report
->>     ...
->>     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
->>     symbol__new: buf2 0x30a8-0x30e8
->>     ...
->>     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
->>     symbol__new: buf1 0x3068-0x30a8
->>     ...
+>>  Also, we will add this support only when wake-eventfd is provided so
+>>  still w/o wake-eventfd case, the mmap access will still generate fault.
+>>  So, we will have different behavior. Will that be acceptable ?
+> 
+> Let's keep it simple, generate a fault for all cases.
+> 
 
-It seems unclear how 0x30a8 and 0x3068 are derived,
+ Thanks Alex for confirmation.
 
->> Perf tool relies on libelf to parse symbols, here 'st_value' is the
->> address from executable file, 'sh_addr' is the belonged section's linked
->> start address, and 'sh_offset' is the dynamic loaded address for this
->> section, then perf tool uses below formula to adjust symbol address:
+>>>>> The
+>>>>> feature GET ioctl would be used to exit low power behavior and would be
+>>>>> a no-op if the wakeup eventfd had already been signaled.  Thanks,
+>>>>>    
+>>>>  
+>>>>  I will use the GET ioctl for low power exit instead of returning the
+>>>>  current status.  
+>>>
+>>> Note that Yishai is proposing a device DMA dirty logging feature where
+>>> the stop and start are exposed via SET on separate features, rather
+>>> than SET/GET.  We should probably maintain some consistency between
+>>> these use cases.  Possibly we might even want two separate pm enter
+>>> ioctls, one with the wake eventfd and one without.  I think this is the
+>>> sort of thing Jason is describing for future expansion of the dirty
+>>> tracking uAPI.  Thanks,
+>>>
+>>> Alex
+>>>   
 >>
->>   adjusted_address = st_value - sh_addr + sh_offset
+>>  Okay. So, we need to add 3 device features in total.
 >>
->> So we can see the final adjusted address ranges for buf1 and buf2 are
->> [0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
->> incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
->> compiler attribute with 64-byte alignment.
-
-so I cannot judge this paragraph.
-
->> The problem happens for 'sh_offset', libelf returns it as 0x3028 which
->> is not 64-byte aligned, on the other hand, we can see both 'st_value'
->> and 'sh_addr' are 64-byte aligned.  Combining with disassembly, it's
->> likely libelf uses the .data section end address as .bss section
->> start address, therefore, it doesn't respect the alignment attribute for
->> structures in .bss section.
+>>  VFIO_DEVICE_FEATURE_PM_ENTRY
+>>  VFIO_DEVICE_FEATURE_PM_ENTRY_WITH_WAKEUP
+>>  VFIO_DEVICE_FEATURE_PM_EXIT
 >>
->> Since .data and .bss sections are in the continuous virtual address
->> space, and .data section info returned by libelf is reliable, to fix
->> this issue, if detects it's a bss symbol, it rolls back to use .data
->> section info to adjust symbol's virtual address.
+>>  And only the second one need structure which will have only one field
+>>  for eventfd and we need to return error if wakeup-eventfd is not
+>>  provided in the second feature ?
+> 
+> Yes, we'd use eventfd_ctx and fail on a bad fileget.
+> 
+>>  Do we need to support GET operation also for these ?
+>>  We can skip GET operation since that won’t be very useful.
+> 
+> What would they do?  Thanks,
+> 
+> Alex
+> 
 
-This is not necessarily true.
+ If we implement GET operation then it can return the
+ current status. For example, for VFIO_DEVICE_FEATURE_PM_ENTRY
+ can return the information whether user has put the device into
+ low power previously. But this information is not much useful as such
+ and it requires to add a structure where this information needs to
+ be filled. Also, the GET will again cause the device wake-up.
+ So, for these device features, we can support only SET operation.
 
-* In GNU ld's internal linker script, .data1 sits between .data and .bss.
-* A linker script can add other sections between .data and .bss
-* A linker script may place .data and .bss in two PT_LOAD program headers.
+ I checked the Yishai DMA logging patches and there start
+ and stop seems to be supporting only SET operation and there is
+ separate feature which supports only GET operation.
 
-% readelf -WS aa
-There are 13 section headers, starting at offset 0x10a8:
-
-With a linker script like
-
-% cat a/a.lds
-SECTIONS {
-   .text : { *(.text) }
-   data1 : { *(data1) }
-   data2 : { *(data2) }
-   .bss : { *(.bss) }
-}
-
-I can get something like
-
-Section Headers:
-   [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
-   [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
-   [ 1] .text             PROGBITS        0000000000000000 001000 000001 00  AX  0   0  1
-   [ 2] data1             PROGBITS        0000000000000001 001001 000001 00  WA  0   0  1
-   [ 3] data2             PROGBITS        0000000000000002 001002 000001 00  WA  0   0  1
-   [ 4] .data             PROGBITS        0000000000000003 001003 000000 00  WA  0   0  1
-   [ 5] data3             PROGBITS        0000000000000003 001003 000001 00  WA  0   0  1
-   [ 6] .bss              NOBITS          0000000000000020 001004 000001 00  WA  0   0 32
-
-.bss's sh_offset does not need to be aligned per http://www.sco.com/developers/gabi/latest/ch4.sheader.html
-
-     sh_offset
-     This member's value gives the byte offset from the beginning of the file to the first byte in the section. One section type, SHT_NOBITS described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
-
-I don't have more context why the file offset is needed for a variable in the all-zero section.
-If the file offset has to be used and we want to use a heuristic, a better one is to find the section index of .bss, say, i.
-
-const uint64_t align = shdr[i].sh_addralign;
-assert(i > 0);
-if (shdr[i].offset % align == 0)
-   return shdr[i].offset;
-return (shdr[i-1].sh_offset + shdr[i-1].sh_size + align - 1) & -align;
-
-Really, it is better to use the program header to derive the virtual address of a variable residing in .bss.
-
->> Essentially, we need to fix libelf to return correct offsets for
->> sections, on the other hand, we live commonly with existed versions of
->> libelf.  So we also need this change in perf tool.
->>
->> Fixes: f17e04afaff8 ("perf report: Fix ELF symbol parsing")
->> Reported-by: Chang Rui <changruinj@gmail.com>
->> Signed-off-by: Leo Yan <leo.yan@linaro.org>
->
->This looks good to me, I'm happy to add my:
->Acked-by: Ian Rogers <irogers@google.com>
->I've added Fangrui Song who is more knowledge-able on ELF, libelf,
->etc. than me and may have additional thoughts.
->
->Thanks,
->Ian
->
->> ---
->>  tools/perf/util/dso.h        |  1 +
->>  tools/perf/util/symbol-elf.c | 26 ++++++++++++++++++++++++++
->>  2 files changed, 27 insertions(+)
->>
->> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
->> index 3a9fd4d389b5..00f57f4ac6bc 100644
->> --- a/tools/perf/util/dso.h
->> +++ b/tools/perf/util/dso.h
->> @@ -180,6 +180,7 @@ struct dso {
->>         u8               rel;
->>         struct build_id  bid;
->>         u64              text_offset;
->> +       int              data_sec_index;
->>         const char       *short_name;
->>         const char       *long_name;
->>         u16              long_name_len;
->> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
->> index ecd377938eea..ed65dd26d58e 100644
->> --- a/tools/perf/util/symbol-elf.c
->> +++ b/tools/perf/util/symbol-elf.c
->> @@ -1095,6 +1095,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
->>         Elf *elf;
->>         int nr = 0;
->>         bool remap_kernel = false, adjust_kernel_syms = false;
->> +       size_t sec_index;
->>
->>         if (kmap && !kmaps)
->>                 return -1;
->> @@ -1113,6 +1114,10 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
->>                                 ".text", NULL))
->>                 dso->text_offset = tshdr.sh_addr - tshdr.sh_offset;
->>
->> +       if (elf_section_by_name(runtime_ss->elf, &runtime_ss->ehdr, &tshdr,
->> +                               ".data", &sec_index))
->> +               dso->data_sec_index = sec_index;
->> +
->>         if (runtime_ss->opdsec)
->>                 opddata = elf_rawdata(runtime_ss->opdsec, NULL);
->>
->> @@ -1227,6 +1232,27 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
->>
->>                 gelf_getshdr(sec, &shdr);
->>
->> +               /*
->> +                * When the first data structure in .bss section is attributed
->> +                * with alignment (e.g. 64-byte aligned), libelf doesn't reflect
->> +                * the alignment in the 'shdr.sh_offset' field, at the end the
->> +                * field is filled with the end loading address of a prior
->> +                * section rather than the aligned address of .bss section.
->> +                * This leads to mess for later parsing .bss symbols.
->> +                *
->> +                * Since .data and .bss sections are in the continuous virtual
->> +                * address space, and .data section's info is reliable.  So if
->> +                * detects it's a bss symbol, we retrieve .data section info
->> +                * for adjusting address.
->> +                */
->> +               if (!strcmp(elf_sec__name(&shdr, secstrs_sym), ".bss")) {
->> +                       sec = elf_getscn(syms_ss->elf, dso->data_sec_index);
->> +                       if (!sec)
->> +                               goto out_elf_end;
->> +
->> +                       gelf_getshdr(sec, &shdr);
->> +               }
->> +
->>                 secstrs = secstrs_sym;
->>
->>                 /*
->> --
->> 2.25.1
->>
+ Regards,
+ Abhishek

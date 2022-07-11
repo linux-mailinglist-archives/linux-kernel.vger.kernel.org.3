@@ -2,144 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467D7570363
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F8457036A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 14:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiGKMyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 08:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S229693AbiGKMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiGKMyQ (ORCPT
+        with ESMTP id S231140AbiGKMzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:54:16 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1700E26ACA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:54:15 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r10so721327wrv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 05:54:15 -0700 (PDT)
+        Mon, 11 Jul 2022 08:55:23 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CD127FED;
+        Mon, 11 Jul 2022 05:55:22 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id r12so273427qvm.3;
+        Mon, 11 Jul 2022 05:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zjEIh4DqFEXRLYwuzGFMNC/3I63SrKxPqVblwnhPmog=;
-        b=kJA/NAnsNsjB3IBO7apOW66xuZ2zMyaJxMhEURJWw1AwKCAKPExd0qEE3n+vu0wSYb
-         CS2PCCgRiEn3I6CslpnOCHwUorwpj6K8k0IgRrGFjn824TgreOnqK8tZwz+4vfN8ytgY
-         icHgMkdCeKHMWvpsvaIfl939GMlDT3Qfw1YZeoJpC7HsKakEY/QZ029hacHl7TBQ5pR9
-         T8x1tiwT5HOx9mCxfaGA3AD7/N8EPrOe/P1BZODfpGh3dWB3/5Lo62edJA4b4ZuQlkzc
-         QXuK6qboNB9OK+040ZMV4tHRgRGIZnmjgeJcXRYLtq4GJCmnNeioX+AgmHjI6JgKEg2b
-         kf+Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lCEF/oXLtompCSo0q/JDXFQDLmqqQqZLZNzkV+0cmDI=;
+        b=UWEXMZk3VG/URLle64kq60e7GWp3vFjuL64eT4J9E5C0aDolIuUf9gz8DC9pOI1dlX
+         H3nhVV68Y0jgBOBdy7Bu46kE28Bh391JxYr/13tRHNP5hvNlCx4vczBrc+8qK+Ssj62t
+         3t6dKtSqorLhsc3/z73wJKuBs0/nOlSM+TS8Tesm9RlpRT8X0RO+6w4ndsoR6WW2Tnj3
+         q7UOaKzQXnE4W1pTQlkHrl8VL67wNsQ8aVwhogG7nPugA6M9fzsi5DNIuZO7quqecWEX
+         iqeuON/N0HD/Vy0anOB3RmClYXLNfTL+TPOjBhh2y0SxGfR9TOehhwA7rkaVnzo9PORc
+         xHGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zjEIh4DqFEXRLYwuzGFMNC/3I63SrKxPqVblwnhPmog=;
-        b=1/guOT6DDXwA7g09x/NCP4VPaq5QCLKkBSbhIqa4672gXraJrG6Q7ymu5xS50Njp2i
-         uvUfkuA43RbuKnvqvIZvmY9Vr8fbqS1nvG08T6qnJ54E9e1MOOg2k49xyoGMhYDH9gfj
-         IQ/KnF33NH4F96VO8QA6x499Vz6k7qq9H5Dfb6MJnm2v8vhGI9rCdtWf7KGgNGu7cf21
-         HRA8QU7443c9wlZTH/JPBEPtc2URfH5FWVByZsHj6x00l1ObN31NDuZ/XDVBt4tSgKwA
-         /DF0f8oNS2fbeAZNtNSIWWCoPHOGskapfERTUhxTbPCzEwhye7s89zlE9nQsUyO8UTOc
-         Mk3g==
-X-Gm-Message-State: AJIora8YP8gxctDbCHKBcZwuoWiH9vN+Z6p/z+eRe1Hv6I4Dibh+z9r+
-        NwFthBaeSkZZLDxiUh518XCNiKm+NQ5ocfbg
-X-Google-Smtp-Source: AGRyM1sEUkePYczWBSqEyhSQyn8LZryJCwMsuoh8eIAEeLas5yuDPs6yaRkyucKd4Hlu6ig/uWlZRw==
-X-Received: by 2002:a5d:4a01:0:b0:21d:8ce1:8b6d with SMTP id m1-20020a5d4a01000000b0021d8ce18b6dmr16532000wrq.718.1657544053570;
-        Mon, 11 Jul 2022 05:54:13 -0700 (PDT)
-Received: from [10.35.4.171] ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id l5-20020a05600c4f0500b003a04e6410e0sm10142773wmq.33.2022.07.11.05.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 05:54:12 -0700 (PDT)
-Message-ID: <265d7b6b-a0a4-ecaf-10bd-15e1ea416a06@sifive.com>
-Date:   Mon, 11 Jul 2022 13:54:11 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lCEF/oXLtompCSo0q/JDXFQDLmqqQqZLZNzkV+0cmDI=;
+        b=yYrRhL7HJhxUXy+vDyezKyHL6F6XcwCK489YMK4o7762ADkeUsj3m3XjKoFgGdK5Mv
+         1JdVJR4Ggm/BkUlyE0Veg25SLRgT9ebgEAC/77yQACGX30MCcOgbBZzy1WWdmE3Blmk6
+         Kx5I4rlKYyDTpdgQyOe+nRtk7tzP6jn6zvl/CE+TqVnTiwynoBqgCgscqyfK79+6VW/E
+         7P2yKtN0KEQyeABf01bUIZf7Ygg1i0Nna67hoO1/TtQX0MJqg42JNLDzZWkie4VTKYuq
+         vOC1j5i7KIfoXzxjpYritIK3jsJLIuIcW78ujR1DFMkGuT6DiJSRVfnKIugv5eV8G+sH
+         wZUQ==
+X-Gm-Message-State: AJIora/A5VOhj0ogEk9p8HJSghJ4XKW+KmPVXsrUvprwrDhCgLnRXfZZ
+        zPHrk6NrPPO9MGg6Nh664zt20dZ18E2qfw6dfdM=
+X-Google-Smtp-Source: AGRyM1uiBRBw8mvvpHhebATGoygOk5tYokyzAf+y43ARJXuXHSNib5B5xEwP9RlqJTxa/ykcZoiwSncF4nZyypMwCAw=
+X-Received: by 2002:a0c:e50f:0:b0:472:faa6:98e0 with SMTP id
+ l15-20020a0ce50f000000b00472faa698e0mr13043974qvm.50.1657544122173; Mon, 11
+ Jul 2022 05:55:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] swiotlb: ensure io_tlb_default_mem spinlock always
- initialised
-Content-Language: en-GB
-To:     Robin Murphy <robin.murphy@arm.com>, Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <20220708170811.270589-1-ben.dooks@sifive.com>
- <fdf5d34e-7668-c05c-9098-30e34939c88a@arm.com>
- <683344bd-dc9b-0bb5-9377-b3e9ab410a74@sifive.com>
- <e6c43ef0-870b-5fe6-141e-0a3d566b030e@arm.com> <20220711102134.GB4639@lst.de>
- <4fa8b709-c883-54dc-c302-20c9e55ae93a@sifive.com>
- <20220711103921.GA6542@lst.de>
- <43426798-44df-c2c7-1f46-0b79201cb620@sifive.com>
- <ac4944b8-5d15-4761-6315-7dba6eaee0e7@arm.com>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <ac4944b8-5d15-4761-6315-7dba6eaee0e7@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220711104719.40939-1-robimarko@gmail.com> <20220711104719.40939-6-robimarko@gmail.com>
+ <CAA8EJppAdwuXQsvvy9+hT_-mzke5xOaDcTSM5ewjS_cPk3Q+oA@mail.gmail.com>
+In-Reply-To: <CAA8EJppAdwuXQsvvy9+hT_-mzke5xOaDcTSM5ewjS_cPk3Q+oA@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 11 Jul 2022 14:55:11 +0200
+Message-ID: <CAOX2RU6FMyzGGpnLtzRy=szjBSE+wcvbs+6z6ChZ5Z6g4-9Baw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] clk: qcom: apss-ipq-pll: add support for IPQ8074
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 12:01, Robin Murphy wrote:
-> On 2022-07-11 11:42, Ben Dooks wrote:
->> On 11/07/2022 11:39, Christoph Hellwig wrote:
->>> On Mon, Jul 11, 2022 at 11:24:51AM +0100, Ben Dooks wrote:
->>>> On 11/07/2022 11:21, Christoph Hellwig wrote:
->>>>> On Mon, Jul 11, 2022 at 11:07:17AM +0100, Robin Murphy wrote:
->>>>>> If none of your peripherals should need SWIOTLB, then the fact that
->>>>>> you're ending up in swiotlb_map() at all is a clear sign that
->>>>>> something's wrong. Most likely someone's forgotten to set their DMA
->>>>>> masks correctly.
->>>>>
->>>>> Yes.
->>>>
->>>> Possibly, we had at least one driver which attempted to set a 32 bit
->>>> DMA mask which had to be removed as the DMA layer accepts this but
->>>> since there is no DMA32 memory the allocator then just fails.
->>>>
->>>> I expect the above may need to be a separate discussion(s) of how to
->>>> default the DMA mask and how to stop the implicit acceptance of setting
->>>> a 32-bit DMA mask.
->>>
->>> No.  Linux simply assumes you can do 32-bit DMA and this won't
->>> change.  So we'll need to fix your platform to support swiotlb
->>> eventually.
->>
->> Ok, is there any examples currently in the kernel that have no memory
->> in the DMA32 zone that do use swiotlb?
-> 
-> The arm64 code originally made an assumption that a system with that 
-> kind of memory layout would use a DMA offset in the interconnect, and so 
-> placed ZONE_DMA32 in the first 4GB of available RAM rather than actual 
-> physical address space. The only relatively mainstream platform we 
-> subsequently saw with all RAM above 32 bits was AMD Seattle, which also 
-> *didn't* use a DMA offset, so it "worked" by virtue of this bodge in the 
-> sense that allocations didn't fail, but DMA transactions would then 
-> disappear off into nowhere when the device truncated the MSBs of 
-> whatever too-big DMA address it was given.
-> 
-> I think that stuff's long gone by now, and if any of handful of 
-> remaining Seattle users plug in a 32-bit PCIe device and try to use it 
-> with the IOMMU disabled, they'll probably see the fireworks as intended.
-> 
-> Much as we'd like to make DMA an explicit opt-in for all drivers, that's 
-> something which can only really be solved 30 years ago.
+On Mon, 11 Jul 2022 at 14:51, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Mon, 11 Jul 2022 at 14:22, Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > Add support for IPQ8074 since it uses the same PLL setup, however it does
+> > not require the Alpha PLL to be reconfigured.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> >  drivers/clk/qcom/apss-ipq-pll.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
+> > index bef7899ad0d6..acfb3ec4f142 100644
+> > --- a/drivers/clk/qcom/apss-ipq-pll.c
+> > +++ b/drivers/clk/qcom/apss-ipq-pll.c
+> > @@ -55,6 +55,7 @@ static const struct regmap_config ipq_pll_regmap_config = {
+> >  static int apss_ipq_pll_probe(struct platform_device *pdev)
+> >  {
+> >         struct device *dev = &pdev->dev;
+> > +       struct device_node *node = dev->of_node;
+> >         struct regmap *regmap;
+> >         void __iomem *base;
+> >         int ret;
+> > @@ -67,7 +68,8 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
+> >         if (IS_ERR(regmap))
+> >                 return PTR_ERR(regmap);
+> >
+> > -       clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
+> > +       if (of_device_is_compatible(node, "qcom,ipq6018-a53pll"))
+> > +               clk_alpha_pll_configure(&ipq_pll, regmap, &ipq_pll_config);
+>
+> I'd suggest having the 8074 config here too. It seems logical to me to
+> make sure that the pll is configured correctly.
 
-I need to go back and check through what we did to get some that worked
-for us, and then come back and try and make some idea of how that is
-best done with upstream kernel.
+Hi,
 
-It might be possible for the PCIe controller to do some sort of very
-simple IOMMU for the case where we might have somehow an PCI device
-added to the system, but that is a very rare use-case I expect and
-if someone does it they can do the effort of updating the PCIe code
-and everything else that goes with it.
+I have reworked the driver to use match data so it can be easily provided,
+However, I dont have it as the downstream QCA kernel does not
+reconfigure the PLL, unlike IPQ6018.
+I can probably read the registers from a running board and provide that?
 
--- 
-Ben
-
+Regards,
+Robert
+>
+> >
+> >         ret = devm_clk_register_regmap(dev, &ipq_pll.clkr);
+> >         if (ret)
+> > @@ -79,6 +81,7 @@ static int apss_ipq_pll_probe(struct platform_device *pdev)
+> >
+> >  static const struct of_device_id apss_ipq_pll_match_table[] = {
+> >         { .compatible = "qcom,ipq6018-a53pll" },
+> > +       { .compatible = "qcom,ipq8074-a53pll" },
+> >         { }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
+> > --
+> > 2.36.1
+> >
+>
+>
+> --
+> With best wishes
+> Dmitry

@@ -2,111 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E23F5708E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764825708EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 19:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiGKRdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 13:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S231416AbiGKReJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 13:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiGKRc7 (ORCPT
+        with ESMTP id S229654AbiGKRdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 13:32:59 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEED06559C;
-        Mon, 11 Jul 2022 10:32:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WrczYPLbPBqAbGEdvEkF8gKYQou89iCOiZRdN4A8KDVz1T32N1pRLfNAUKLY4K5T+ziYjWGPSN3IQG+ynAZ+scMuO/9Sqf067V3qf8qGce1/rx33BYDRV/UHTfKRya9iy/h+DGflRlH9O2lFyd6N+LmvbJgH6JMRajbU0gM8gb53jTPE/BfsBGQ94ACE5km5INf+KmgKc/f+ERKF+AmYZCEkmeC+YFn75ftDoYZjJ6F9/Gdl6tiXgVz/lZS/0vTeOuFV+J0iXYghg/ytQHXLg7ItofkRag1l5QxCsyJzF37Z2AZjZyjtwlewo01QSFeXDNza6K3iPNCFVgQRiqUtiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sUs6mJCmefsaukeOX9FylDwj04XRdUA0zUPsmOuwR/4=;
- b=a1KoEdED39AhVCM9830PtiF9fPe3TedFoPMFWAOa9d6Bfw1Qt0D+WZ7TVJT0yiT1mtGQjt18M96BdMu/65SbH9PqlPrA+wWvnkDbf+tzUrq+ivQbIKpeRuqmJsVe2BcQCxTuHcuLZudaNJV8pysKNG9OVT/a3EtdXm+MQq8/o1jPKPTdLIn4N1tsgftH8ugDQnqDIKL2IBBFo+oRmKGnP5OQ8L0TMPJ57zea4/TqWe/MUGOrjGH9B8iPddf1Yh+hKmQgizbcF7JkIGOdnerIrZuN7j5A44XGmTqEdVQbmKB1H1mxBUvl2Hoaajnn1znaKYp6Qr+cdJAK0xYSLaopRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sUs6mJCmefsaukeOX9FylDwj04XRdUA0zUPsmOuwR/4=;
- b=Sc0kyB6VkGBteq3UtPM+EHIe08jIaXucNGb0vEJnkd3VeujUer3izuYDuxD4HN4sLnblKEKHM2/Rd4Vx4JZuYhyD54xAu/j89hy23FxZR0b43lgVK12v95c8dsPQAiMPGHbCPYG8bl33kcQs9iyO6dlwQZ9sutf1ikUzzHZ2RPU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM6PR12MB2732.namprd12.prod.outlook.com (2603:10b6:5:4a::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Mon, 11 Jul
- 2022 17:32:54 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e%3]) with mapi id 15.20.5417.026; Mon, 11 Jul 2022
- 17:32:53 +0000
-Date:   Mon, 11 Jul 2022 17:32:50 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 2/3] x86/MCE/APEI: Handle variable register array size
-Message-ID: <YsxewiVm5Vrg4OId@yaz-fattaah>
-References: <20220418174440.334336-1-yazen.ghannam@amd.com>
- <20220418174440.334336-3-yazen.ghannam@amd.com>
- <YsGL4JbTGF3Rcg9G@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsGL4JbTGF3Rcg9G@zn.tnic>
-X-ClientProxiedBy: MN2PR01CA0045.prod.exchangelabs.com (2603:10b6:208:23f::14)
- To BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d14b8ff-98ed-436f-c278-08da636362c4
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2732:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LVR+klXUp/+GTl1dvtjbksgc1RZpxx96dwomebV37gEshB4WKI7c5HNVIS3GQ/LOz687tCdnz4TuADFJ3F89Xi9HLEi54WKrvYmvtTg7HdloeNqpZ0VUWHvK0aJ5UIFJTN9TUU4KWgeYfZmpR6utq0pCWzZYw2u8xBoPkbXVpvnqaD5+628edfHsxQHfe/FigPFcnhcYaqD8+kO9mPkKzx7B3Q7G6mPr9vdF3onmULiC+vHFwq8nmzUmu4K3z6prn4HRA3qCvzmyEYVZWq4hg/wDrhidQiTIdO1CgVwyt4eAx8h+dK1S3+lg2EnqFfpgWgTJgT7bW4UnTLv/LTn6L0e+cRw+vJstR0beW+p3x+yIcHhYpayczPEdwwmBa+ImmbgE4OedI2FmCoftxteLDFtSsD7LUzd457hwRd4/ENcTJiOql8wu3VgAmxE0mqBspWiy3qQaQss8EjCg+1l29RwjMhLOfEF0NVqV+iL2R3xrt7zQiDwTVTyB8NytQFIrM9Opd9ySPKHXxqMbqr1jo3WQDk0a+7Ew1kU+pgFvIMOt56bEl6m4LsPJb96b8HiIabh/CM5/nHFVLNZ5DUYt7tpGeiJGkzOH6Vj+2aBdnc0nvD9lOod0yG79so8C4dfWx4d43nOUl1XDG4Bhd552Y0cXstmsQR/+2uRlfrIWc9lrgGYi6OREev4nczh44ts9B6EsY/7jnRv/Ox9tJyBALijGLOadXL2MPByRsm0f0eo0hGUHW5ao+S5NJu26S1MXHID9gd7QIx/do0REBVImcQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(376002)(366004)(396003)(136003)(346002)(39860400002)(86362001)(66946007)(8936002)(8676002)(66476007)(4326008)(6916009)(6512007)(38100700002)(5660300002)(66556008)(316002)(6506007)(26005)(41300700001)(9686003)(6486002)(478600001)(2906002)(83380400001)(33716001)(44832011)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EGLnGGWkWF9w/uP6PZbYBxxDhlme0eT2amAxf7asZEzKWJm0IKpQWRXYfv5P?=
- =?us-ascii?Q?zcS6si/LrXNoAbHCSLNtP4+iMJVo9KzJDsTQzR/NKLf8USf1QrAfiweRqBEO?=
- =?us-ascii?Q?DEhn38Jn6dNMrRW1Q3kjRXNkcL5PEGP8kcmcpbiIurT257NvyzGq2VEZMfgJ?=
- =?us-ascii?Q?Gv93IrFI3yOpF2hAl/7TuhJImYA0Y1NeWSctDk7yfuPd4v8AIqmSbqDjp59K?=
- =?us-ascii?Q?/g0NYhlmAKNYAzkqpS2z0+N3L5LFFRDIJXN8NCwsdo/PBw8qmyFH/j9Zri6l?=
- =?us-ascii?Q?fXXbetNs4PbGsOPs0gt7sytdP9qidJUglnHnAZlg7GrpNILMc1HcHVVglhh6?=
- =?us-ascii?Q?N3O+c85aHCCJKfKrgJj9D5kvGwZM81YfhpL+YuP7UDpGSgAqqNxSLc6YUdvw?=
- =?us-ascii?Q?p19aAo4UJliWzgFmjQAMnwWRdlPCZmZBvyq1QvSvNJ6XTaxKlcaiO47PLD3i?=
- =?us-ascii?Q?j02JOy/SdOf+sQ8Gz2FoAUxzqPxpqYuerX+KF5ocekfptwKKI8K1GJR9OVb2?=
- =?us-ascii?Q?2wnrCsPWuGg0HPpH2Z5J3NfCnAqA3Y/D3LLmspdc/JZD83Zzl5X3v8IIfrNh?=
- =?us-ascii?Q?QahB/Mz/RUkCbYKDUGH2dBCf+Kka1O5/f38CG6Q/tvaRjMx37XigkMOLpToI?=
- =?us-ascii?Q?JCpDT+hRf9N6nPHcYKt0gilMme+3ScT9M8pexR+Uo7LyAdNsFB3gvmaN2Soh?=
- =?us-ascii?Q?ydEmAYC0O9rJYzBrhDhEYCRdqtSVHcoZ/EUCdLPoLGQ85sjLhRWjkXqGEec6?=
- =?us-ascii?Q?GLFRRiJQsZBf6nN/YA19iS9EEavLjJvWB6OzqN+2mqDtYnUgcify0MShY4zi?=
- =?us-ascii?Q?6sJ54p5j/ovllcxwmvtBYbz2Veyc3eb3XoDkK25jdprEGvytAIsWnRQPuq3a?=
- =?us-ascii?Q?EVMofbHHuNl66fou81XGRgbCELojh1jNYCgIlffaOS9dSlQBwwTtXqR2isWP?=
- =?us-ascii?Q?L2cQNKIlOg8IYAWrQvYA4xsr3qBELCrzO30pFAski5uBPzEXie6PeyzHyTL0?=
- =?us-ascii?Q?cwqxllu0SyOw8b4dZEuDTqway3e5lmLabe3InCubz2X4OOS9cSEQ4DvvqKMt?=
- =?us-ascii?Q?bQhuQD4j7XPV54lsqdcq5BGijIuxEOVmnH+IHkaUA92ef5ooG6SC3mRn/hTH?=
- =?us-ascii?Q?xt3HE0f8pxUAr1j5wzhyFPAbwiB/AFhaoXZy71Ges8BnV9ne7VFrqALXGo6U?=
- =?us-ascii?Q?UyA+b/7IB0UT/WO7/YbQXa8abDbr35+oJOdIDfxoc+vnbKVMZM0LKrsaeumz?=
- =?us-ascii?Q?2iwZdZG3k9vOoNH1U7I/VP6vfmZP31A18TFMpaZP24o5s07nGnQsgDJVmhtK?=
- =?us-ascii?Q?NeVQbuET0INNSIJbRfPJmgHYWDU2AIg8Z5H4LYV3iIkUoUahFqXjclFH8uWq?=
- =?us-ascii?Q?f+gjmMH7hAFjdZGtQuAhR7iHCFI8OK4AmtpoLFS0o4ZfvOJIic45YLOo8lYJ?=
- =?us-ascii?Q?Jg8xAxHOdxPF4Bar7YlgxLfj74dgZunCBkbNgQ8aojqsZjxgcI6UNS/lOP2W?=
- =?us-ascii?Q?yrjhfdA8pqBJDwGpHR0hUTP6rE+oouh0VdD5NZryQlH1h3HYek0gSiUBkLZC?=
- =?us-ascii?Q?eYrkON+sf0l4pvuiEjUt76hKhpbKmge3qdOZbZ2j?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d14b8ff-98ed-436f-c278-08da636362c4
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 17:32:53.8507
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qESBpqqNxvB5W+y6jVJjktujrKwp24BwuOQzAd0zBEMRYDZa/mBzaR770D3B6zR+ghTsKCfTd6yqw9Vgu5pmPg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2732
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 11 Jul 2022 13:33:55 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF0B64D5;
+        Mon, 11 Jul 2022 10:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657560831; x=1689096831;
+  h=from:to:cc:subject:date:message-id;
+  bh=Kc4cDivDUaBoL2zBqpgtHP8w9cqA4NEFOrZFebj4Rs4=;
+  b=ryon+qW5rYr+gJJg43+E9fpvI02dncxxxMDj5TrYt0G2UU6IcSzOK0rR
+   wZmnVDqKlJu7/dg41+kdGw9hUVyVD/WCqtmTLXkmgp61+tLxcPbQB+eSJ
+   4gyCR0rff4/ruy609hgxkSYbEx0wZPtE48q0GYz7zHHZhhUSMnKArXYxF
+   c=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 11 Jul 2022 10:33:51 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jul 2022 10:33:50 -0700
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Jul 2022 23:03:33 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id D832B40EF; Mon, 11 Jul 2022 23:03:32 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [V4] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.
+Date:   Mon, 11 Jul 2022 23:03:28 +0530
+Message-Id: <1657560808-9795-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,27 +56,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 03, 2022 at 02:30:24PM +0200, Borislav Petkov wrote:
-> On Mon, Apr 18, 2022 at 05:44:39PM +0000, Yazen Ghannam wrote:
-> > Recent AMD systems may provide an x86 Common Platform Error Record
-> > (CPER) for errors reported in the ACPI Boot Error Record Table (BERT).
-> > The x86 CPER may contain one or more Processor Context Information
-> > Structures. The context structures may represent an x86 MSR range where
-> > a starting address is given, and the data represents a contiguous set of
-> > MSRs starting from, and including, the starting address.
-> 
-> You're killing me with these "may" formulations. Just say it once and
-> then drop it. I mean, we know some future hw "may" support something
-> new - you can just as well drop the "may" thing because if it only may
-> and it turns out it might not, you don't even have to do the work and
-> enabling it and sending the patch.
-> 
-> So no need to do that - the patch commit message should talk purely
-> about functionality and not sound like some vendor doc - there are
-> enough of those.
->
+In the logic around call to clk_round_rate(), for some corner conditions,
+get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
+exact clock rate was not found lowest clock was being returned.
 
-Understood.
+Search for suitable clock rate in 2 steps
+a) exact match or within 2% tolerance
+b) within 5% tolerance
+This also takes care of corner conditions.
 
-Thanks,
-Yazen
+Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+v4: replaced pr_dbg calls with dev_dbg
+v3: simplified algorithm further, fixed robot compile warnings
+v2: removed minor optimisations to make more readable
+v1: intial patch contained slightly complicated logic
+---
+ drivers/tty/serial/qcom_geni_serial.c | 89 +++++++++++++++++++++--------------
+ 1 file changed, 54 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 2e23b65..f88b042 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -943,52 +943,71 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+ 	return 0;
+ }
+ 
+-static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+-			unsigned int sampling_rate, unsigned int *clk_div)
++static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
++			unsigned int *clk_div, unsigned int percent_tol)
+ {
+-	unsigned long ser_clk;
+-	unsigned long desired_clk;
+-	unsigned long freq, prev;
++	unsigned long freq;
+ 	unsigned long div, maxdiv;
+-	int64_t mult;
+-
+-	desired_clk = baud * sampling_rate;
+-	if (!desired_clk) {
+-		pr_err("%s: Invalid frequency\n", __func__);
+-		return 0;
+-	}
++	u64 mult;
++	unsigned long offset, abs_tol, achieved;
+ 
++	abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
+ 	maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+-	prev = 0;
+-
+-	for (div = 1; div <= maxdiv; div++) {
+-		mult = div * desired_clk;
+-		if (mult > ULONG_MAX)
++	div = 1;
++	while (div <= maxdiv) {
++		mult = (u64)div * desired_clk;
++		if (mult != (unsigned long)mult)
+ 			break;
+ 
+-		freq = clk_round_rate(clk, (unsigned long)mult);
+-		if (!(freq % desired_clk)) {
+-			ser_clk = freq;
+-			break;
+-		}
++		offset = div * abs_tol;
++		freq = clk_round_rate(clk, mult - offset);
+ 
+-		if (!prev)
+-			ser_clk = freq;
+-		else if (prev == freq)
++		/* Can only get lower if we're done */
++		if (freq < mult - offset)
+ 			break;
+ 
+-		prev = freq;
++		/*
++		 * Re-calculate div in case rounding skipped rates but we
++		 * ended up at a good one, then check for a match.
++		 */
++		div = DIV_ROUND_CLOSEST(freq, desired_clk);
++		achieved = DIV_ROUND_CLOSEST(freq, div);
++		if (achieved <= desired_clk + abs_tol &&
++		    achieved >= desired_clk - abs_tol) {
++			*clk_div = div;
++			return freq;
++		}
++
++		div = DIV_ROUND_UP(freq, desired_clk);
+ 	}
+ 
+-	if (!ser_clk) {
+-		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+-								__func__, baud);
+-		return ser_clk;
++	return 0;
++}
++
++static unsigned long get_clk_div_rate(struct clk *clk, struct device *dev,
++		unsigned int baud, unsigned int sampling_rate, unsigned int *clk_div)
++{
++	unsigned long ser_clk;
++	unsigned long desired_clk;
++
++	desired_clk = baud * sampling_rate;
++	if (!desired_clk) {
++		dev_dbg(dev, "Invalid frequency\n");
++		return 0;
+ 	}
+ 
+-	*clk_div = ser_clk / desired_clk;
+-	if (!(*clk_div))
+-		*clk_div = 1;
++	/*
++	 * try to find a clock rate within 2% tolerance, then within
++	 */
++	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
++	if (!ser_clk)
++		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
++
++	if (!ser_clk)
++		dev_err(dev, "Couldn't find suitable clock rate for %d\n", desired_clk);
++	else
++		dev_dbg(dev, "desired_clk-%d, ser_clk-%d, clk_div-%d\n",
++				desired_clk, ser_clk, *clk_div);
+ 
+ 	return ser_clk;
+ }
+@@ -1021,8 +1040,8 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 	if (ver >= QUP_SE_VERSION_2_5)
+ 		sampling_rate /= 2;
+ 
+-	clk_rate = get_clk_div_rate(port->se.clk, baud,
+-		sampling_rate, &clk_div);
++	clk_rate = get_clk_div_rate(port->se.clk, port->se.dev, baud,
++					sampling_rate, &clk_div);
+ 	if (!clk_rate)
+ 		goto out_restart_rx;
+ 
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEC956FD63
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0019F56F9FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Jul 2022 11:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiGKJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 05:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S230381AbiGKJLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 05:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbiGKJyX (ORCPT
+        with ESMTP id S230273AbiGKJKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 05:54:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EBFB024E;
-        Mon, 11 Jul 2022 02:25:55 -0700 (PDT)
+        Mon, 11 Jul 2022 05:10:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223C41055E;
+        Mon, 11 Jul 2022 02:08:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22DD8B80E7E;
-        Mon, 11 Jul 2022 09:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D50C34115;
-        Mon, 11 Jul 2022 09:25:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B41AD6111F;
+        Mon, 11 Jul 2022 09:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27EEC34115;
+        Mon, 11 Jul 2022 09:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657531551;
-        bh=Ru0FlTXSFrP7c1l1IHpyvE9E4uTeRkhrDqGAdgkUydQ=;
+        s=korg; t=1657530525;
+        bh=HVOyzdU1y98c+gmFdpc4plQ71qq+aAF2Ye/Gn2JGFds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0juPWiErB7ZkHU/xiJ4vclQmLJG4pDfxEDlcBOwEHrrYudbv25OaTl53mejOz8nv
-         CRXLUOEErsuUcHJIM0L3QPKbfqAMY2fVCS3S/inp309Icbu53QuL/+sGQgct2s2ubX
-         rvMJSHnIjDJBRdo3z2kyU2n+KUtPUNtdTuw/r3HA=
+        b=hp+OwjPfUmrq2D0qqK/SHwBjT6+A+OsDq1BL9txy7LG5WWBJ955rRSu/MjI7c3pOH
+         lSzD+BnCw8ZyMDtA8wDfLLvrb3Om6ZQav4APbUp1+n6bvPGm7HjBr68sv6UlwVWRPQ
+         52OLXzl7NluisFUk9+dOIjBoo8Be9nDCRXfGTisI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 147/230] drm/mediatek: Add cmdq_handle in mtk_crtc
+        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
+        Liang He <windhl@126.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 04/31] can: grcan: grcan_probe(): remove extra of_node_get()
 Date:   Mon, 11 Jul 2022 11:06:43 +0200
-Message-Id: <20220711090608.231843173@linuxfoundation.org>
+Message-Id: <20220711090537.975647305@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220711090604.055883544@linuxfoundation.org>
-References: <20220711090604.055883544@linuxfoundation.org>
+In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
+References: <20220711090537.841305347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,140 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 7627122fd1c06800a1fe624e9fb3c269796115e8 ]
+commit 562fed945ea482833667f85496eeda766d511386 upstream.
 
-One mtk_crtc need just one cmdq_handle, so add one cmdq_handle
-in mtk_crtc to prevent frequently allocation and free of
-cmdq_handle.
+In grcan_probe(), of_find_node_by_path() has already increased the
+refcount. There is no need to call of_node_get() again, so remove it.
 
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/all/20220619070257.4067022-1-windhl@126.com
+Fixes: 1e93ed26acf0 ("can: grcan: grcan_probe(): fix broken system id check for errata workaround needs")
+Cc: stable@vger.kernel.org # v5.18
+Cc: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c | 62 +++++++++++++++++++++++--
- 1 file changed, 57 insertions(+), 5 deletions(-)
+ drivers/net/can/grcan.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index dad1f85ee315..ffa54b416ca7 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -53,6 +53,7 @@ struct mtk_drm_crtc {
- 
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
- 	struct cmdq_client		cmdq_client;
-+	struct cmdq_pkt			cmdq_handle;
- 	u32				cmdq_event;
- 	u32				cmdq_vblank_cnt;
- #endif
-@@ -107,12 +108,55 @@ static void mtk_drm_finish_page_flip(struct mtk_drm_crtc *mtk_crtc)
- 	}
- }
- 
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+static int mtk_drm_cmdq_pkt_create(struct cmdq_client *client, struct cmdq_pkt *pkt,
-+				   size_t size)
-+{
-+	struct device *dev;
-+	dma_addr_t dma_addr;
-+
-+	pkt->va_base = kzalloc(size, GFP_KERNEL);
-+	if (!pkt->va_base) {
-+		kfree(pkt);
-+		return -ENOMEM;
-+	}
-+	pkt->buf_size = size;
-+	pkt->cl = (void *)client;
-+
-+	dev = client->chan->mbox->dev;
-+	dma_addr = dma_map_single(dev, pkt->va_base, pkt->buf_size,
-+				  DMA_TO_DEVICE);
-+	if (dma_mapping_error(dev, dma_addr)) {
-+		dev_err(dev, "dma map failed, size=%u\n", (u32)(u64)size);
-+		kfree(pkt->va_base);
-+		kfree(pkt);
-+		return -ENOMEM;
-+	}
-+
-+	pkt->pa_base = dma_addr;
-+
-+	return 0;
-+}
-+
-+static void mtk_drm_cmdq_pkt_destroy(struct cmdq_pkt *pkt)
-+{
-+	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
-+
-+	dma_unmap_single(client->chan->mbox->dev, pkt->pa_base, pkt->buf_size,
-+			 DMA_TO_DEVICE);
-+	kfree(pkt->va_base);
-+	kfree(pkt);
-+}
-+#endif
-+
- static void mtk_drm_crtc_destroy(struct drm_crtc *crtc)
- {
- 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
- 
- 	mtk_mutex_put(mtk_crtc->mutex);
--
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	mtk_drm_cmdq_pkt_destroy(&mtk_crtc->cmdq_handle);
-+#endif
- 	drm_crtc_cleanup(crtc);
- }
- 
-@@ -227,12 +271,10 @@ struct mtk_ddp_comp *mtk_drm_ddp_comp_for_plane(struct drm_crtc *crtc,
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
- static void ddp_cmdq_cb(struct mbox_client *cl, void *mssg)
- {
--	struct cmdq_cb_data *data = mssg;
- 	struct cmdq_client *cmdq_cl = container_of(cl, struct cmdq_client, client);
- 	struct mtk_drm_crtc *mtk_crtc = container_of(cmdq_cl, struct mtk_drm_crtc, cmdq_client);
- 
- 	mtk_crtc->cmdq_vblank_cnt = 0;
--	cmdq_pkt_destroy(data->pkt);
- }
- #endif
- 
-@@ -438,7 +480,7 @@ static void mtk_drm_crtc_update_config(struct mtk_drm_crtc *mtk_crtc,
- 				       bool needs_vblank)
- {
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
--	struct cmdq_pkt *cmdq_handle;
-+	struct cmdq_pkt *cmdq_handle = &mtk_crtc->cmdq_handle;
- #endif
- 	struct drm_crtc *crtc = &mtk_crtc->base;
- 	struct mtk_drm_private *priv = crtc->dev->dev_private;
-@@ -478,7 +520,7 @@ static void mtk_drm_crtc_update_config(struct mtk_drm_crtc *mtk_crtc,
- #if IS_REACHABLE(CONFIG_MTK_CMDQ)
- 	if (mtk_crtc->cmdq_client.chan) {
- 		mbox_flush(mtk_crtc->cmdq_client.chan, 2000);
--		cmdq_handle = cmdq_pkt_create(&mtk_crtc->cmdq_client, PAGE_SIZE);
-+		cmdq_handle->cmd_buf_size = 0;
- 		cmdq_pkt_clear_event(cmdq_handle, mtk_crtc->cmdq_event);
- 		cmdq_pkt_wfe(cmdq_handle, mtk_crtc->cmdq_event, false);
- 		mtk_crtc_ddp_config(crtc, cmdq_handle);
-@@ -877,6 +919,16 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 				drm_crtc_index(&mtk_crtc->base));
- 			mbox_free_channel(mtk_crtc->cmdq_client.chan);
- 			mtk_crtc->cmdq_client.chan = NULL;
-+		} else {
-+			ret = mtk_drm_cmdq_pkt_create(&mtk_crtc->cmdq_client,
-+						      &mtk_crtc->cmdq_handle,
-+						      PAGE_SIZE);
-+			if (ret) {
-+				dev_dbg(dev, "mtk_crtc %d failed to create cmdq packet\n",
-+					drm_crtc_index(&mtk_crtc->base));
-+				mbox_free_channel(mtk_crtc->cmdq_client.chan);
-+				mtk_crtc->cmdq_client.chan = NULL;
-+			}
- 		}
- 	}
- #endif
--- 
-2.35.1
-
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1664,7 +1664,6 @@ static int grcan_probe(struct platform_d
+ 	 */
+ 	sysid_parent = of_find_node_by_path("/ambapp0");
+ 	if (sysid_parent) {
+-		of_node_get(sysid_parent);
+ 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
+ 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
+ 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
 
 

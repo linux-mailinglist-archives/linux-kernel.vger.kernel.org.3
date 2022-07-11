@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73915570D26
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A71570D28
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 00:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiGKWF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 18:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S229871AbiGKWFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 18:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbiGKWFV (ORCPT
+        with ESMTP id S229745AbiGKWFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 18:05:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953EE52DFC;
-        Mon, 11 Jul 2022 15:05:18 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26BL1eOW026600;
-        Mon, 11 Jul 2022 22:05:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0UYMY/8LSqYL9C1gfOyC9V3xGiHgeAVl6rhJahtce6Q=;
- b=H94rq4WcoObqeBYWGSXJURwJUm5ci5Mc/ycO4GQ/G1sZrqEOYRdO/ShJka+NP6Art3bI
- QN6XBNv7+ii1qKmkEbHaYt2IJz0XIy7TMDLUAjdr2sV/64tlDhSXRIMw+k4D4IecYYfP
- rwscuPYr2NUp1jZgp/qfJGU5bpH6O0Ci3PbO0aNpUGF4KakrVSR5MKQa1uxNueJKUR8Q
- XtHSpO1svbyrVIKvJMEhebHsGsJ+4EX5oAWyQ5DsPjP/XR7bI50clr+O5OP4U5FfpM/w
- tOsRhwKeTlcqmSnnJC2oSoxca5aayfMRgIfKQ8ozEPhqAqdtVOuIEgj1Csy4oA4OrH2O Rw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8udv16r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 22:05:11 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26BM14qi028560;
-        Mon, 11 Jul 2022 22:05:11 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h8udv16ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 22:05:10 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26BLqFHo008582;
-        Mon, 11 Jul 2022 22:05:08 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 3h71a8tf37-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 22:05:08 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26BM3bYY18809274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jul 2022 22:03:37 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4452A4053;
-        Mon, 11 Jul 2022 22:05:04 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19098A4051;
-        Mon, 11 Jul 2022 22:05:02 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.107.19])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Jul 2022 22:05:01 +0000 (GMT)
-Message-ID: <5f205957701fd4927d822221fcb5552134091e1e.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 5/6] of: kexec: Refactor IMA buffer related functions
- to make them reusable
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Date:   Mon, 11 Jul 2022 18:05:00 -0400
-In-Reply-To: <20220707172026.831614-6-stefanb@linux.ibm.com>
-References: <20220707172026.831614-1-stefanb@linux.ibm.com>
-         <20220707172026.831614-6-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hqoOL2CMUJUn5qgWL5bRBtIiAkrrg-ZD
-X-Proofpoint-ORIG-GUID: iG-GAhJJtFe1gvh7lTleTLoaSt3-nQll
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-11_25,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 phishscore=0 suspectscore=0
- mlxscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 adultscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207110089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Jul 2022 18:05:40 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE57852DCD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 15:05:39 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60254)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oB1X8-009oPi-UK; Mon, 11 Jul 2022 16:05:38 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:46764 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oB1X7-00H0OW-V3; Mon, 11 Jul 2022 16:05:38 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <YsyFhfAunVfVQKci@zx2c4.com>
+        <20220711202136.64458-1-Jason@zx2c4.com>
+Date:   Mon, 11 Jul 2022 17:05:32 -0500
+In-Reply-To: <20220711202136.64458-1-Jason@zx2c4.com> (Jason A. Donenfeld's
+        message of "Mon, 11 Jul 2022 22:21:36 +0200")
+Message-ID: <87h73n9ufn.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1oB1X7-00H0OW-V3;;;mid=<87h73n9ufn.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19gQz22kNlXnpFbMhsmJDc8JEhzQtYbb/A=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;"Jason A. Donenfeld" <Jason@zx2c4.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 390 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 16 (4.1%), b_tie_ro: 13 (3.4%), parse: 1.10
+        (0.3%), extract_message_metadata: 17 (4.3%), get_uri_detail_list: 1.85
+        (0.5%), tests_pri_-1000: 15 (3.9%), tests_pri_-950: 1.41 (0.4%),
+        tests_pri_-900: 1.12 (0.3%), tests_pri_-90: 129 (33.1%), check_bayes:
+        126 (32.3%), b_tokenize: 6 (1.5%), b_tok_get_all: 8 (2.1%),
+        b_comp_prob: 2.8 (0.7%), b_tok_touch_all: 103 (26.3%), b_finish: 1.53
+        (0.4%), tests_pri_0: 195 (50.0%), check_dkim_signature: 0.48 (0.1%),
+        check_dkim_adsp: 7 (1.7%), poll_dns_idle: 0.89 (0.2%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 9 (2.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4] signal: break out of wait loops on kthread_stop()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 13:20 -0400, Stefan Berger wrote:
-> Refactor IMA buffer related functions to make them reusable for carrying
-> TPM logs across kexec.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> I was recently surprised to learn that msleep_interruptible(),
+> wait_for_completion_interruptible_timeout(), and related functions
+> simply hung when I called kthread_stop() on kthreads using them. The
+> solution to fixing the case with msleep_interruptible() was more simply
+> to move to schedule_timeout_interruptible(). Why?
+>
+> The reason is that msleep_interruptible(), and many functions just like
+> it, has a loop like this:
+>
+>         while (timeout && !signal_pending(current))
+>                 timeout = schedule_timeout_interruptible(timeout);
+>
+> The call to kthread_stop() woke up the thread, so schedule_timeout_
+> interruptible() returned early, but because signal_pending() returned
+> true, it went back into another timeout, which was never woken up.
+>
+> This wait loop pattern is common to various pieces of code, and I
+> suspect that the subtle misuse in a kthread that caused a deadlock in
+> the code I looked at last week is also found elsewhere.
+>
+> So this commit causes signal_pending() to return true when
+> kthread_stop() is called, by setting TIF_NOTIFY_SIGNAL.
+>
+> The same also probably applies to the similar kthread_park()
+> functionality, but that can be addressed later, as its semantics are
+> slightly different.
+>
+> Cc: Eric W. Biederman <ebiederm@xmission.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Changes v3->v4:
+> - Don't address park() for now.
+> - Don't bother clearing the flag, since the task is about to be freed
+>   anyway.
+>
+>  kernel/kthread.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index 3c677918d8f2..8888987f2b25 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -704,6 +704,7 @@ int kthread_stop(struct task_struct *k)
+>  	kthread = to_kthread(k);
+>  	set_bit(KTHREAD_SHOULD_STOP, &kthread->flags);
+>  	kthread_unpark(k);
+> +	test_and_set_tsk_thread_flag(k, TIF_NOTIFY_SIGNAL);
+>  	wake_up_process(k);
+>  	wait_for_completion(&kthread->exited);
+>  	ret = kthread->result;
+
+Minor it.  Unless I have missed something that should just be
+set_tsk_thread_flag.  You aren't using the return value so I don't
+think there is any point in testing the previous state of
+TIF_NOTIFY_SIGNAL.
+
+Eric
 

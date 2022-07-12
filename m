@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C738570F8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8288F570F94
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbiGLBfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S230478AbiGLBgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGLBfW (ORCPT
+        with ESMTP id S229515AbiGLBge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:35:22 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7162AE1C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:35:20 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id l124so6218217pfl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=jXRrOtHMmDMb2DadCR02O1dtCn+wTACMEkhobAkdpNE=;
-        b=JLcc59y5fh09ywEyDKJ7x4gepL4JF4hxb2zvX9UVYa87uaRp9ul73Fj6NQr4FUV4h8
-         ylxqMYidlIO7XauV86NBKmMiz717kZzmlSORkNNtyyTfEyt6uzmci1umye3/3SZaTm7g
-         0XsYCwHYeVkfHhAXqlt++Fx1GUqWmh7NxrX2pO1PPKNBsc40yGTPTqX8EbwDZY0OhPHj
-         8f/72F7Qa5qy0N/Ah1wK2rGP96luC6koyDdw22W8h+RQjX4vpqe94mz/9TbtpBy/eD7m
-         xKHl6i++amGJhCMYk8HVP7s8suCQUiKnzDd1gRkO5kF/jklTq14OJKRmQmC+d2efY+Y1
-         ttuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=jXRrOtHMmDMb2DadCR02O1dtCn+wTACMEkhobAkdpNE=;
-        b=OAXuE8kyCuk/F8wygOMktnjXV7T54CuSkYoDfXplYdEgGPmQmyeqJEZoIHIv2iKy8J
-         F+KGqbm2Iwbm4ESZnc0c6XpETBJC+wt3qdzKhvH/FAGzUjNJngvQbM7sJMKLh4kksGcR
-         18bqNpS9sgurz7calffOJMu7XGS4vEQVHYe5SRpUduRyrWOxONNpZBd63RSARrRfw7xJ
-         owTeZ/FRdbd+Q0ecORAbzrVsZVbeUfcSkHka6Pzjudd9syJhk3uWH3/gG3VSwtYJ9jPX
-         ZWCkigNSFcGVw1MwhV15koJC7h6qgo3s7KelXhnb0W6lWr9ktihjOjJqrW2EsdF89H8t
-         R7ZQ==
-X-Gm-Message-State: AJIora/Ex7ppyHVDkTNbGRul/QAPoJom5/POld2FNCnVnnb5J8dsE2I/
-        LPRMRP8BjoE2nwW4YJgD6U9sSO40J0EUww==
-X-Google-Smtp-Source: AGRyM1uY4XxNFwUuqiwYISuIg8rYGVvu8Y2ALlr00SQqXAJZbRJH72e+bqt0pfXV8c5r62x5nbMFfQ==
-X-Received: by 2002:a05:6a00:c92:b0:528:a24f:60f9 with SMTP id a18-20020a056a000c9200b00528a24f60f9mr20853725pfv.47.1657589719888;
-        Mon, 11 Jul 2022 18:35:19 -0700 (PDT)
-Received: from ArchLinux (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id a200-20020a621ad1000000b0052ab37ef3absm5392606pfa.116.2022.07.11.18.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:35:19 -0700 (PDT)
-References: <20220708211755.73637-1-schspa@gmail.com>
- <20220708172614.14191089@gandalf.local.home> <m2v8s7mg78.fsf@gmail.com>
- <20220711161037.06b8c1ea@gandalf.local.home> <m2edyrnny9.fsf@gmail.com>
- <20220711211639.6c714635@gandalf.local.home>
-User-agent: mu4e 1.7.5; emacs 28.1
-From:   Schspa Shi <schspa@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] sched/rt: fix bad task migration for rt tasks
-Date:   Tue, 12 Jul 2022 09:33:58 +0800
-In-reply-to: <20220711211639.6c714635@gandalf.local.home>
-Message-ID: <m2sfn7glkk.fsf@gmail.com>
+        Mon, 11 Jul 2022 21:36:34 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D270C2AE1C;
+        Mon, 11 Jul 2022 18:36:32 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 26C1aA8l029362;
+        Tue, 12 Jul 2022 10:36:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 26C1aA8l029362
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1657589771;
+        bh=/DJh0T9UEeSd0UnVmkJ3Yb1uvTEdoJFkOji+14jZ4Ng=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UoSn8bUbb/ZWt7KcKridmJV+Sd0BR5TdoznG8B20/ipOYMKgAyl/WTkjPrVlzRqlQ
+         zYiWb+Z+zzYwi7jjiIHHqQUiTQtrvg7OxltvIpB5zQ4L2ALpMWh4USRAW6UqW3v2oB
+         RUyMkI8QUGuZ/CObljwd1UBo6vBg4lEgJHyw/bEDw/yjcg7RT3ko6ydhWzXvzOKHt8
+         etCvMaTk5YYgYEe1IQVsWeKOlR14oqVTPBvC9zRilWYUYYi523co62dp7I6gRTDxtC
+         7Gako/XtVZ3PzVOWfrp5GJWhblp3jfFoxffHez0PKmmywYbn25pNX/RPcfjwIU1mDo
+         EZoMNRWOlQ9UA==
+X-Nifty-SrcIP: [209.85.221.43]
+Received: by mail-wr1-f43.google.com with SMTP id b26so9161542wrc.2;
+        Mon, 11 Jul 2022 18:36:11 -0700 (PDT)
+X-Gm-Message-State: AJIora+ZogMsHMcBLyahFErYjHjPyZdo+fivR4UgvJlOxSJVllNqk2RI
+        ydMQWfTHwAz/vQIItO/YjcpxS/IWZVMfyYTmIJk=
+X-Google-Smtp-Source: AGRyM1sS0c7XakFYh+QVVsDh5Mp5VGqoOVoPqEqwSPVTCvw1lpzi8qbXdMfY3A5T8s0mm3VXDnQr5bgwD4PEB0vMGAQ=
+X-Received: by 2002:a05:6000:104c:b0:21d:87bf:63a2 with SMTP id
+ c12-20020a056000104c00b0021d87bf63a2mr18678986wrx.461.1657589769995; Mon, 11
+ Jul 2022 18:36:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1657296695.git.guillaume.tucker@collabora.com> <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+In-Reply-To: <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 12 Jul 2022 10:35:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASe3zQv82pQsTdWtia9nQQm8XGgs_mrUMvbLRkxa0T48Q@mail.gmail.com>
+Message-ID: <CAK7LNASe3zQv82pQsTdWtia9nQQm8XGgs_mrUMvbLRkxa0T48Q@mail.gmail.com>
+Subject: Re: [PATCH 4/4] Makefile: add headers_install to kselftest targets
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>, kernel@collabora.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Steven Rostedt <rostedt@goodmis.org> writes:
-
-> On Tue, 12 Jul 2022 08:53:56 +0800
-> Schspa Shi <schspa@gmail.com> wrote:
+On Sat, Jul 9, 2022 at 1:23 AM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
 >
->> How about to change this to 
->> 
->> 			/*
->> 			 * We had to unlock the run queue. In
->> 			 * the mean time, task could have
->> 			 * migrated already or had its affinity changed.
->> 			 * Also make sure that it wasn't scheduled on its rq.
->> 			 * It is possible the task was scheduled, set
->>              * "migrate_disabled" and then got preempted, And we
->>              * check task migration disable flag here too.
->> 			 */
+> Add headers_install as a dependency to kselftest targets so that they
+> can be run directly from the top of the tree.  The kselftest Makefile
+> used to try to call headers_install "backwards" but failed due to the
+> relative path not being consistent.
 >
-> That's better. But of course it needs better formatting ;-)
+> Now we can either run this directly:
 >
-> -- Steve
+>   $ make O=build kselftest-all
+>
+> or this:
+>
+>   $ make O=build headers_install
+>   $ make O=build -C tools/testing/selftest all
+>
+> The same commands work as well when building directly in the source
+> tree (no O=) or any arbitrary path (relative or absolute).
+>
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
+>  Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 1a6678d817bd..afc9d739ba44 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1347,10 +1347,10 @@ tools/%: FORCE
+>  # Kernel selftest
+>
+>  PHONY += kselftest
+> -kselftest:
+> +kselftest: headers_install
+>         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
 
-I have upload a v5 patch for this comment change, please review it. ;-)
-Link: https://lore.kernel.org/all/20220712013125.623338-1-schspa@gmail.com/T/#t
+Nit.
+Please use 'headers' for in-kernel use of exportedI headers.
+
+kselftest: headers
+
+
+>
+> -kselftest-%: FORCE
+> +kselftest-%: headers_install FORCE
+>         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+
+Ditto.
+
+kselftest-%: headers FORCE
+
+
+>
+>  PHONY += kselftest-merge
+> --
+> 2.30.2
+>
+
 
 -- 
-BRs
-Schspa Shi
+Best Regards
+Masahiro Yamada

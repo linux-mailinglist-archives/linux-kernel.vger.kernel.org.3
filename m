@@ -2,148 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB35157289F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9755728A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiGLV22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S232869AbiGLV3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGLV20 (ORCPT
+        with ESMTP id S229697AbiGLV3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:28:26 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FFFD0E2F;
-        Tue, 12 Jul 2022 14:28:25 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id e5so9176479iof.2;
-        Tue, 12 Jul 2022 14:28:25 -0700 (PDT)
+        Tue, 12 Jul 2022 17:29:00 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C56C9125;
+        Tue, 12 Jul 2022 14:28:58 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id b11so16563943eju.10;
+        Tue, 12 Jul 2022 14:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BknaE/Kld0FnjC1aUofNUzwSa+QGAFkBMskakzse0z8=;
+        b=oN5XoqcVxMnycuXA07RCPGjZGDbKv2XzrtoJdpEJqM+T/yQqztcOiBEJz+KqUqqJga
+         kw+SX/a38LI8HrpIyvN00Sbql19iG/4qDMO5R7dVKWLrNZjZ/E32SM4Ct8/1sjlnQEvY
+         jgrD6Usb1wE4swF5y3adFtdK17D5h5AYUAjgGh/JcsuDFRQPGc3krlBvRWHgeV2FqwN6
+         xxHG4wI1ZSJHbHvfA9ksmdK3ND3XVYsJVUcmpkbzGs8o0eU+i+pf2oTxtDfcO2p+SzWu
+         BcSKR36gyCkwm6wLNXFThR7tMjPOh084ssJxilJ4bp2NcqjfmpdRq5ufZU69xOQ4AF9a
+         EjLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6TLPAajBQT6bOULK9fb/tFfHBaPsFyW7O0ai+7s0acY=;
-        b=2ffeUMEThBHAn/wnhhVjbdDDoe1vU0yNen4aKvHUWZiOkbFDt948KryvCjNw6KAjE2
-         0HAo7AsvjszfCZK41TVRpJwtZMKA2zdJ2gFuyvAStMnN1kIviTipQobQC0bipv+oZjcb
-         n7fd3q3j3UEN34L7KR23wFctaK32ho732V0/5fEcy474ukkZJ3RkfYw0y3kUV/c0HKol
-         OJjj3tKXPnHpJ14ruoOevTFcG9spVuAukryzc4lu2ocBObdPphxAdRHtMOinOi6skUH6
-         JpkDFuUwsMs2CzahwerwMiriA+oCY8GQ1LjexpPqNc+3edHRq6jU0RQG/oRTqd1SAhPg
-         NEHg==
-X-Gm-Message-State: AJIora+2sH2oK9O6HPCvHSzujiz1f9dTkHJ4UpjX3741uIXuySiiBu1f
-        LFWHymBdtSuWVvN/0gx31g==
-X-Google-Smtp-Source: AGRyM1uSjAx2XnP+cp6DLP9rPk/b8JA0eEn3XWf/CdbWstFant9WzCWB22BaU4SzBJi67t3gJWDR9w==
-X-Received: by 2002:a02:84a7:0:b0:33f:4292:cf with SMTP id f36-20020a0284a7000000b0033f429200cfmr46679jai.319.1657661305105;
-        Tue, 12 Jul 2022 14:28:25 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056e02014c00b002dc1b615588sm4186648ilr.36.2022.07.12.14.28.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BknaE/Kld0FnjC1aUofNUzwSa+QGAFkBMskakzse0z8=;
+        b=bqG07SDVtPeK/s3LHrGLIzma6XioLSiy+aEe2tEDGsIX1DUmTgYbmDoSVXBebtGKwV
+         HOgcKfxWvVIEfxjOqdykPHPeE/+LsSkGayPcrVYaied3z1ykqmAV/95POAVFoKYWuMtM
+         WmCYMlCrX1uXoWZsNUV12HLAbS9bW6jJ/LrWRn8W/t6EeOdDnbZDmjwDS8udtHGzZKwW
+         Lm4XI/aNSmma0R5ZVsSeMKzSKTav9+HtXQfL21Jq+ushgT6icEIyYdOLcQfzbTU+xyn/
+         XlC+iGtLDbj+fkoNZT4RG7DPORc2Kh7LhYTb3leWySEYndiCQuOSgM748E+nqnk4cXSI
+         MpKw==
+X-Gm-Message-State: AJIora/fQGACKRJJSoxgWC/mb5sLpKBbg1sDVMXHtWvBC58x3MH+LoJS
+        5Zdg5QHR0+wguGEHlqrVVqa8N2kTkK/YmA==
+X-Google-Smtp-Source: AGRyM1ty94Bi/kThUyYCtcONkfQEatSMxB4zQNDcet6s1fIeNCkp6cZN9Ip6+R4/UZLfNCXrGMqLvg==
+X-Received: by 2002:a17:907:d18:b0:726:3172:2266 with SMTP id gn24-20020a1709070d1800b0072631722266mr129773ejc.476.1657661337442;
+        Tue, 12 Jul 2022 14:28:57 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id c17-20020a056402121100b00437e08d319csm6572339edw.61.2022.07.12.14.28.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:28:24 -0700 (PDT)
-Received: (nullmailer pid 2392608 invoked by uid 1000);
-        Tue, 12 Jul 2022 21:28:22 -0000
-Date:   Tue, 12 Jul 2022 15:28:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 12 Jul 2022 14:28:56 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        samuel@sholland.org
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] [RFT] dt-bindings: leds: Add
- cznic,turris1x-leds.yaml binding
-Message-ID: <20220712212822.GQ1823936-robh@kernel.org>
-References: <20220705000448.14337-1-pali@kernel.org>
- <20220705155929.25565-1-pali@kernel.org>
- <20220706131507.353f0bed@thinkpad>
- <20220706111912.hz2mx4dc35lgq6l5@pali>
- <20220706172732.6228d180@thinkpad>
- <25b43586-eeb3-4b7b-7362-2d599aa89cf0@linaro.org>
- <20220708160528.ysy4lzxfpwobfiwr@pali>
+Subject: Re: [PATCH 0/7] media: cedrus: h265: Implement tiles support
+Date:   Tue, 12 Jul 2022 23:28:55 +0200
+Message-ID: <12371972.VsHLxoZxqI@kista>
+In-Reply-To: <20220620175517.648767-1-jernej.skrabec@gmail.com>
+References: <20220620175517.648767-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220708160528.ysy4lzxfpwobfiwr@pali>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 06:05:28PM +0200, Pali Rohár wrote:
-> On Wednesday 06 July 2022 17:36:43 Krzysztof Kozlowski wrote:
-> > On 06/07/2022 17:27, Marek Behún wrote:
-> > > On Wed, 6 Jul 2022 13:19:12 +0200
-> > > Pali Rohár <pali@kernel.org> wrote:
-> > > 
-> > >> On Wednesday 06 July 2022 13:15:07 Marek Behún wrote:
-> > >>> On Tue,  5 Jul 2022 17:59:28 +0200
-> > >>> Pali Rohár <pali@kernel.org> wrote:
-> > >>>   
-> > >>>> +examples:
-> > >>>> +  - |
-> > >>>> +    #include <dt-bindings/leds/common.h>
-> > >>>> +
-> > >>>> +    cpld@3,0 {  
-> > >>>
-> > >>> The generic node name should be just "bus". That it is a CPLD
-> > >>> implementation should come from compatible string.  
-> > >>
-> > >> Sorry, I do not understand why "bus". Why other memory chips are named
-> > >> e.g. "nand" or "nor" and not "bus" too?
-> > > 
-> > > As far as I understand this is because that is the preferred name for
-> > > busses and this is a bus, since there is also the simple-bus compatible.
-> > > 
-> > >> By this logic should not be _every_ node called just "bus"? Hm... and 
-> > >> are names needed at all then?
-> > > 
-> > > :-)
-> > > 
-> > > The schema
-> > >   https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/simple-bus.yaml
-> > > allows for different names (soc|axi|ahb|*-bus) to avoid warnings on
-> > > existing old dts files.
-> > > 
-> > > The preferred way is to not have the implementation in nodename,
-> > > similar to how we use 'switch' instead of 'mv88e6xxx', or
-> > > 'ethernet-phy' instead of 'mv88e151x', or 'led-controller', ...
-> > 
-> > Thanks Marek for detailed explanation.
-> > The cases above rather trigger my comments and this one here, after
-> > Pali's explanation, do not fit them. pld is a generic class of a device,
-> > so it is okay here. cpld probably as well (although one could argue that
-> > it is a subset of pld, so the generic name is pld, but then one would
-> > say fpga also should be called pld). For me it does not have to be bus,
-> > just don't want mv88e6xxx or any other vendor/model names. Therefore
-> > cpld is fine.
+Dne ponedeljek, 20. junij 2022 ob 19:55:10 CEST je Jernej Skrabec napisal(a):
+> Now that we have full and stable HEVC uAPI, let's implement last big
+> missing piece of HEVC in Cedrus - tiles support. This is done in
+> last patch. Before that, there are bug fixes (patch 1 & 2, previously
+> submitted separately in [1]), error handling improvements (patch 3, 4)
+> and added helper for dealing with dynamic arrays (patch 5).
 > 
-> Exactly. cpld, fpga, nor, nand, soc... all of them are not real buses.
+> These patches are based on top of [2].
+> 
+> Final fluster score with this series is 125/147. 11 bitstreams are
+> MAIN10, which is not yet properly supported. 5 bitstreams need better
+> memory management with auxiliary buffers (wip patches exists). 4 are
+> too big and 2 probably fails due to ffmpeg implementation.
+> 
+> Used ffmpeg source is in [3].
+> 
+> Note - Cedrus driver currently supports only one slice per request since
+> HW takes data for 1 slice only. This can be improved by loading data for
+> next slice automatically after HW signalled end of decoding. Something
+> for later.
+> 
+> Please take a look.
+> 
+> Best regards,
+> Jernej
+> 
+> [1] https://patchwork.linuxtv.org/project/linux-media/list/?series=8187
+> [2] https://patchwork.linuxtv.org/project/linux-media/list/?series=8208
+> [3] https://github.com/jernejsk/FFmpeg/commits/hevc-mainline
+> 
+> Jernej Skrabec (7):
+>   media: cedrus: h265: Fix flag name
+>   media: cedrus: h265: Fix logic for not low delay flag
+>   media: cedrus: Improve error messages for controls
+>   media: cedrus: Add error handling for failed setup
+>   media: cedrus: h265: Add a couple of error checks
+>   media: cedrus: Add helper for determining number of elements
+>   media: cedrus: h265: Implement support for tiles
 
-I guess you could (and we do) have 'cpld' and 'fpga' as devices where 
-the OS can reprogram them and such. But if the implementation is fixed 
-with no implementation specific controls, I don't think naming how it's 
-implemented adds too much. If there's nothing else to identify the 
-device though, having 'cpld' in there does have some value I guess.
+Hi Hans,
 
-Same could be argued for soc too perhaps, but that's in the list largely 
-to avoid a bunch of s/soc/bus/ on dts files.
- 
-> simple-bus here is just name invented by device tree and without which
-> existing kernel drivers refuse to work.
+do you mind picking patch 6 and 7? They are reviewed and don't depend on patch 
+5.
 
-Everything is just names invented by DT.
+Best regards,
+Jernej
 
-simple-bus means 'a bus containing MMIO devices without any bus 
-configuration'. You want to add a clock to it?, then no longer a 
-simple-bus. Based on that definition, the kernel can enumerate child 
-devices without platform specific help. 
 
-Just use 'cpld-bus' and lets move on with our lives.
 
-Rob
+

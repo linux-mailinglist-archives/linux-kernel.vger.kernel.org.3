@@ -2,71 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97503571E4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF591571D87
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbiGLPHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S233555AbiGLO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiGLPGh (ORCPT
+        with ESMTP id S233786AbiGLO7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:06:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56A4FBE6A4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657638040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wOlWhIV+XudVrWBL1T1J9aTKgqmOIUwoY2JjAr1+xlU=;
-        b=Kz73A+IBmFEp8hKkqhLS/fhADCAxXMGTT9gDALdqdOp0oBYR+rfvYjwwzYf+6hhdwAQtv0
-        cFPTOsviapL8mzubOUqmz4sG47CkLtbPIx5PM3h/Cs7xflTUnuYRRJzBuJjALVFDbZ/OJ3
-        rVOwHSvjyC6UA8ycgFylM+pB/P5CdN0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-LzZXomZJMP2mco42OnRMGQ-1; Tue, 12 Jul 2022 11:00:35 -0400
-X-MC-Unique: LzZXomZJMP2mco42OnRMGQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 12 Jul 2022 10:59:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4C131936;
+        Tue, 12 Jul 2022 07:59:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 250F0802D2C;
-        Tue, 12 Jul 2022 15:00:34 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C27502166B26;
-        Tue, 12 Jul 2022 15:00:30 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 22/23] HID: bpf: add Surface Dial example
-Date:   Tue, 12 Jul 2022 16:58:49 +0200
-Message-Id: <20220712145850.599666-23-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67DC7B819AC;
+        Tue, 12 Jul 2022 14:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7C2C3411C;
+        Tue, 12 Jul 2022 14:59:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657637944;
+        bh=ldkrw/LwK1DTHKp7u2Zp2D/raa4Vtjs8SHf6Dtm+rZ0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ek8eoI3qAQbOpHw6WbtaFrfeCpBKwqqaGNnKuxDJ9x5ArBFhwxJwTFEgAlpT1hIh6
+         Xpza7ZFRJeSCWyQ0LEMJSLMcgvhzAYp5sESCx5HFvdoz8kEHwDIT+D/a5BRbuc0a8v
+         LiyexAUuDd/2nwrHoFCub8h9oW0hcbuVfaS/tU9E=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.252
+Date:   Tue, 12 Jul 2022 16:58:50 +0200
+Message-Id: <16576379311388@kroah.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,463 +50,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a more complete HID-BPF example.
+I'm announcing the release of the 4.19.252 kernel.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+All users of the 4.19 kernel series must upgrade.
 
----
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-new in v6
----
- samples/bpf/.gitignore             |   1 +
- samples/bpf/Makefile               |   6 +-
- samples/bpf/hid_surface_dial.bpf.c | 161 +++++++++++++++++++++
- samples/bpf/hid_surface_dial.c     | 216 +++++++++++++++++++++++++++++
- 4 files changed, 383 insertions(+), 1 deletion(-)
- create mode 100644 samples/bpf/hid_surface_dial.bpf.c
- create mode 100644 samples/bpf/hid_surface_dial.c
+thanks,
 
-diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
-index 65440bd618b2..6a1079d3d064 100644
---- a/samples/bpf/.gitignore
-+++ b/samples/bpf/.gitignore
-@@ -3,6 +3,7 @@ cpustat
- fds_example
- hbm
- hid_mouse
-+hid_surface_dial
- ibumad
- lathist
- lwt_len_hist
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index e67c1a0fed1c..d1e40aff0e55 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -58,6 +58,7 @@ tprogs-y += xdp_redirect
- tprogs-y += xdp_monitor
- 
- tprogs-y += hid_mouse
-+tprogs-y += hid_surface_dial
- 
- # Libbpf dependencies
- LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-@@ -122,6 +123,7 @@ xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
- xdp_router_ipv4-objs := xdp_router_ipv4_user.o $(XDP_SAMPLE)
- 
- hid_mouse-objs := hid_mouse.o
-+hid_surface_dial-objs := hid_surface_dial.o
- 
- # Tell kbuild to always build the programs
- always-y := $(tprogs-y)
-@@ -345,6 +347,7 @@ $(obj)/hbm.o: $(src)/hbm.h
- $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- 
- $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
-+$(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
- 
- # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
- # TPROGS_CFLAGS causes conflicts
-@@ -431,9 +434,10 @@ $(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
- 	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
- 
- # Generate BPF skeletons for non XDP progs
--OTHER_BPF_SKELS := hid_mouse.skel.h
-+OTHER_BPF_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
- 
- hid_mouse.skel.h-deps := hid_mouse.bpf.o
-+hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o
- 
- OTHER_BPF_SRCS_LINKED := $(patsubst %.skel.h,%.bpf.c, $(OTHER_BPF_SKELS))
- OTHER_BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(OTHER_BPF_SRCS_LINKED))
-diff --git a/samples/bpf/hid_surface_dial.bpf.c b/samples/bpf/hid_surface_dial.bpf.c
-new file mode 100644
-index 000000000000..16c821d3decf
---- /dev/null
-+++ b/samples/bpf/hid_surface_dial.bpf.c
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define HID_UP_BUTTON		0x0009
-+#define HID_GD_WHEEL		0x0038
-+
-+/* following are kfuncs exported by HID for HID-BPF */
-+extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
-+			      unsigned int offset,
-+			      const size_t __sz) __ksym;
-+extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8 *data,
-+			      size_t buf__sz,
-+			      enum hid_report_type type,
-+			      enum hid_class_request reqtype) __ksym;
-+
-+struct attach_prog_args {
-+	int prog_fd;
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+SEC("syscall")
-+int attach_prog(struct attach_prog_args *ctx)
-+{
-+	ctx->retval = hid_bpf_attach_prog(ctx->hid,
-+					  ctx->prog_fd,
-+					  0);
-+	return 0;
-+}
-+
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* Touch */
-+	data[1] &= 0xfd;
-+
-+	/* X */
-+	data[4] = 0;
-+	data[5] = 0;
-+
-+	/* Y */
-+	data[6] = 0;
-+	data[7] = 0;
-+
-+	return 0;
-+}
-+
-+/* 72 == 360 / 5 -> 1 report every 5 degrees */
-+int resolution = 72;
-+int physical = 5;
-+
-+struct haptic_syscall_args {
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+static __u8 haptic_data[8];
-+
-+SEC("syscall")
-+int set_haptic(struct haptic_syscall_args *args)
-+{
-+	struct hid_bpf_ctx *ctx;
-+	const size_t size = sizeof(haptic_data);
-+	u16 *res;
-+	int ret;
-+
-+	if (size > sizeof(haptic_data))
-+		return -7; /* -E2BIG */
-+
-+	ctx = hid_bpf_allocate_context(args->hid);
-+	if (!ctx)
-+		return -1; /* EPERM check */
-+
-+	haptic_data[0] = 1;  /* report ID */
-+
-+	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
-+
-+	bpf_printk("probed/remove event ret value: %d", ret);
-+	bpf_printk("buf: %02x %02x %02x",
-+		   haptic_data[0],
-+		   haptic_data[1],
-+		   haptic_data[2]);
-+	bpf_printk("     %02x %02x %02x",
-+		   haptic_data[3],
-+		   haptic_data[4],
-+		   haptic_data[5]);
-+	bpf_printk("     %02x %02x",
-+		   haptic_data[6],
-+		   haptic_data[7]);
-+
-+	/* whenever resolution multiplier is not 3600, we have the fixed report descriptor */
-+	res = (u16 *)&haptic_data[1];
-+	if (*res != 3600) {
-+//		haptic_data[1] = 72; /* resolution multiplier */
-+//		haptic_data[2] = 0;  /* resolution multiplier */
-+//		haptic_data[3] = 0;  /* Repeat Count */
-+		haptic_data[4] = 3;  /* haptic Auto Trigger */
-+//		haptic_data[5] = 5;  /* Waveform Cutoff Time */
-+//		haptic_data[6] = 80; /* Retrigger Period */
-+//		haptic_data[7] = 0;  /* Retrigger Period */
-+	} else {
-+		haptic_data[4] = 0;
-+	}
-+
-+	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
-+
-+	bpf_printk("set haptic ret value: %d -> %d", ret, haptic_data[4]);
-+
-+	args->retval = ret;
-+
-+	hid_bpf_release_context(ctx);
-+
-+	return 0;
-+}
-+
-+/* Convert REL_DIAL into REL_WHEEL */
-+SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-+	__u16 *res, *phys;
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* Convert TOUCH into a button */
-+	data[31] = HID_UP_BUTTON;
-+	data[33] = 2;
-+
-+	/* Convert REL_DIAL into REL_WHEEL */
-+	data[45] = HID_GD_WHEEL;
-+
-+	/* Change Resolution Multiplier */
-+	phys = (__u16 *)&data[61];
-+	*phys = physical;
-+	res = (__u16 *)&data[66];
-+	*res = resolution;
-+
-+	/* Convert X,Y from Abs to Rel */
-+	data[88] = 0x06;
-+	data[98] = 0x06;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-+u32 _version SEC("version") = 1;
-diff --git a/samples/bpf/hid_surface_dial.c b/samples/bpf/hid_surface_dial.c
-new file mode 100644
-index 000000000000..b901c578afac
---- /dev/null
-+++ b/samples/bpf/hid_surface_dial.c
-@@ -0,0 +1,216 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+
-+/* not sure why but this doesn't get preoperly imported */
-+#define __must_check
-+
-+#include <assert.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <libgen.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <unistd.h>
-+
-+#include <linux/bpf.h>
-+#include <linux/errno.h>
-+
-+#include "bpf_util.h"
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+#include "hid_surface_dial.skel.h"
-+
-+static bool running = true;
-+
-+struct attach_prog_args {
-+	int prog_fd;
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+struct haptic_syscall_args {
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+static void int_exit(int sig)
-+{
-+	running = false;
-+	exit(0);
-+}
-+
-+static void usage(const char *prog)
-+{
-+	fprintf(stderr,
-+		"%s: %s [OPTIONS] /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n"
-+		"  OPTIONS:\n"
-+		"    -r N\t set the given resolution to the device (number of ticks per 360°)\n\n",
-+		__func__, prog);
-+}
-+
-+static int get_hid_id(const char *path)
-+{
-+	const char *str_id, *dir;
-+	char uevent[1024];
-+	int fd;
-+
-+	memset(uevent, 0, sizeof(uevent));
-+	snprintf(uevent, sizeof(uevent) - 1, "%s/uevent", path);
-+
-+	fd = open(uevent, O_RDONLY | O_NONBLOCK);
-+	if (fd < 0)
-+		return -ENOENT;
-+
-+	close(fd);
-+
-+	dir = basename((char *)path);
-+
-+	str_id = dir + sizeof("0003:0001:0A37.");
-+	return (int)strtol(str_id, NULL, 16);
-+}
-+
-+static int attach_prog(struct hid_surface_dial_lskel *skel, struct bpf_program *prog, int hid_id)
-+{
-+	struct attach_prog_args args = {
-+		.hid = hid_id,
-+		.retval = -1,
-+	};
-+	int attach_fd, err;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	attach_fd = bpf_program__fd(skel->progs.attach_prog);
-+	if (attach_fd < 0) {
-+		fprintf(stderr, "can't locate attach prog: %m\n");
-+		return 1;
-+	}
-+
-+	args.prog_fd = bpf_program__fd(prog);
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (err) {
-+		fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
-+			hid_id, err);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static int set_haptic(struct hid_surface_dial_lskel *skel, int hid_id)
-+{
-+	struct haptic_syscall_args args = {
-+		.hid = hid_id,
-+		.retval = -1,
-+	};
-+	int haptic_fd, err;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	haptic_fd = bpf_program__fd(skel->progs.set_haptic);
-+	if (haptic_fd < 0) {
-+		fprintf(stderr, "can't locate haptic prog: %m\n");
-+		return 1;
-+	}
-+
-+	err = bpf_prog_test_run_opts(haptic_fd, &tattr);
-+	if (err) {
-+		fprintf(stderr, "can't set haptic configuration to hid device %d: %m (err: %d)\n",
-+			hid_id, err);
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct hid_surface_dial_lskel *skel;
-+	struct bpf_program *prog;
-+	const char *optstr = "r:";
-+	const char *sysfs_path;
-+	int opt, hid_id, resolution = 72;
-+
-+	while ((opt = getopt(argc, argv, optstr)) != -1) {
-+		switch (opt) {
-+		case 'r':
-+			{
-+				char *endp = NULL;
-+				long l = -1;
-+
-+				if (optarg) {
-+					l = strtol(optarg, &endp, 10);
-+					if (endp && *endp)
-+						l = -1;
-+				}
-+
-+				if (l < 0) {
-+					fprintf(stderr,
-+						"invalid r option %s - expecting a number\n",
-+						optarg ? optarg : "");
-+					exit(EXIT_FAILURE);
-+				};
-+
-+				resolution = (int) l;
-+				break;
-+			}
-+		default:
-+			usage(basename(argv[0]));
-+			return 1;
-+		}
-+	}
-+
-+	if (optind == argc) {
-+		usage(basename(argv[0]));
-+		return 1;
-+	}
-+
-+	sysfs_path = argv[optind];
-+	if (!sysfs_path) {
-+		perror("sysfs");
-+		return 1;
-+	}
-+
-+	skel = hid_surface_dial_lskel__open_and_load();
-+	if (!skel) {
-+		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
-+		return -1;
-+	}
-+
-+	hid_id = get_hid_id(sysfs_path);
-+	if (hid_id < 0) {
-+		fprintf(stderr, "can not open HID device: %m\n");
-+		return 1;
-+	}
-+
-+	skel->data->resolution = resolution;
-+	skel->data->physical = (int)(resolution / 72);
-+
-+	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
-+		/* ignore syscalls */
-+		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
-+			continue;
-+
-+		attach_prog(skel, prog, hid_id);
-+	}
-+
-+	signal(SIGINT, int_exit);
-+	signal(SIGTERM, int_exit);
-+
-+	set_haptic(skel, hid_id);
-+
-+	while (running)
-+		;
-+
-+	hid_surface_dial_lskel__destroy(skel);
-+
-+	return 0;
-+}
--- 
-2.36.1
+greg k-h
+
+------------
+
+ Makefile                                          |    2 
+ arch/arm/mach-at91/pm.c                           |    2 
+ arch/arm/mach-meson/platsmp.c                     |    2 
+ arch/powerpc/platforms/powernv/rng.c              |   16 -
+ drivers/dma/at_xdmac.c                            |    5 
+ drivers/dma/pl330.c                               |    2 
+ drivers/dma/ti/dma-crossbar.c                     |    5 
+ drivers/i2c/busses/i2c-cadence.c                  |    1 
+ drivers/iommu/dmar.c                              |    2 
+ drivers/misc/cardreader/rtsx_usb.c                |   27 +-
+ drivers/net/can/grcan.c                           |    1 
+ drivers/net/can/usb/gs_usb.c                      |   23 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |   25 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |  255 ++++++++++++----------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |    4 
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |  119 +++++-----
+ drivers/net/ethernet/ibm/ibmvnic.c                |    9 
+ drivers/net/usb/usbnet.c                          |   17 +
+ drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c        |   10 
+ drivers/video/fbdev/core/fbcon.c                  |    5 
+ fs/xfs/xfs_inode.c                                |    1 
+ include/linux/rtsx_usb.h                          |    2 
+ include/net/esp.h                                 |    2 
+ include/video/of_display_timing.h                 |    2 
+ lib/idr.c                                         |    4 
+ mm/slub.c                                         |    4 
+ net/can/bcm.c                                     |   18 +
+ net/ipv4/esp4.c                                   |    5 
+ net/ipv6/esp6.c                                   |    5 
+ net/rose/rose_route.c                             |    4 
+ tools/testing/selftests/net/forwarding/lib.sh     |    6 
+ 31 files changed, 356 insertions(+), 229 deletions(-)
+
+Claudiu Beznea (1):
+      ARM: at91: pm: use proper compatible for sama5d2's rtc
+
+Dmitry Osipenko (1):
+      dmaengine: pl330: Fix lockdep warning about non-static key
+
+Duoming Zhou (1):
+      net: rose: fix UAF bug caused by rose_t0timer_expiry
+
+Eric Sandeen (1):
+      xfs: remove incorrect ASSERT in xfs_rename
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.252
+
+Helge Deller (1):
+      fbcon: Disallow setting font bigger than screen size
+
+Hsin-Yi Wang (1):
+      video: of_display_timing.h: include errno.h
+
+Jann Horn (1):
+      mm/slub: add missing TID updates on slab deactivation
+
+Jason A. Donenfeld (1):
+      powerpc/powernv: delay rng platform device creation until later in boot
+
+Jimmy Assarsson (3):
+      can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info
+      can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+      can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+
+Liang He (1):
+      can: grcan: grcan_probe(): remove extra of_node_get()
+
+Linus Torvalds (1):
+      ida: don't use BUG_ON() for debugging
+
+Miaoqian Lin (3):
+      ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
+      dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+      dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+
+Michael Walle (1):
+      dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
+
+Oliver Hartkopp (1):
+      can: bcm: use call_rcu() instead of costly synchronize_rcu()
+
+Oliver Neukum (1):
+      usbnet: fix memory leak in error case
+
+Rhett Aultman (1):
+      can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Rick Lindsley (1):
+      ibmvnic: Properly dispose of all skbs during a failover.
+
+Sabrina Dubroca (1):
+      esp: limit skb_page_frag_refill use to a single page
+
+Samuel Holland (1):
+      pinctrl: sunxi: a83t: Fix NAND function name for some pins
+
+Satish Nagireddy (1):
+      i2c: cadence: Unregister the clk notifier in error path
+
+Shuah Khan (3):
+      misc: rtsx_usb: fix use of dma mapped buffer for usb bulk transfer
+      misc: rtsx_usb: use separate command and response buffers
+      misc: rtsx_usb: set return value in rsp_buf alloc err path
+
+Vladimir Oltean (3):
+      selftests: forwarding: fix flood_unicast_test when h2 supports IFF_UNICAST_FLT
+      selftests: forwarding: fix learning_test when h1 supports IFF_UNICAST_FLT
+      selftests: forwarding: fix error message in learning_test
+
+Yian Chen (1):
+      iommu/vt-d: Fix PCI bus rescan device hot add
 

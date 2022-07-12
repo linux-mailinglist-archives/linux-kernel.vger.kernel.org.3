@@ -2,152 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7A857179E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAEE5717A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiGLKwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S232537AbiGLKxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiGLKwa (ORCPT
+        with ESMTP id S232503AbiGLKxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:52:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BFEAE397;
-        Tue, 12 Jul 2022 03:52:29 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CAhmfp013021;
-        Tue, 12 Jul 2022 10:52:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=J2qnig8Gw6JMhiv1+zcuwBOemTwC4BF1Iyens8utySo=;
- b=VnJp5h9et4TVbW7kIhix1qquqVt5NIfT1HTYd1NRjTmuDucNWoAEEg1UQLB8tJQDcsrQ
- v8q1mHkqMaK0CAONolKoimJvVNvDYUJAxyS3zc4kNLPdPYalSyNbZUZC0AyfjDpguvn3
- FoYQwFNc35z76rLM+1u2bGJtyr51sCU3eyFD53J6cqCj5+xqHUrCWTk3N9xl8xfiVavn
- tppxClaFa24JIDtr7B2z9hFGZ324iAAVfwAa7QvA6Tuw5vuRVFQ+vt7ZmZC5kTD/HII5
- 3eiNpmJkM5iel5fEWUoBXnD83DlaQvVep8uOqMDSm68Gtlx0/aqMlEH7Aq8LJIFl3wSI Kw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h96jysfsv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:52:27 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CAqPe5003414;
-        Tue, 12 Jul 2022 10:52:25 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3h70xhv2rp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:52:25 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CAqMKZ25297306
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 10:52:22 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D1C111C04A;
-        Tue, 12 Jul 2022 10:52:22 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2445611C04C;
-        Tue, 12 Jul 2022 10:52:22 +0000 (GMT)
-Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 10:52:22 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     nrb@linux.ibm.com
-Subject: [PATCH 3/3] s390/uvdevice: autoload module based on CPU facility
-Date:   Tue, 12 Jul 2022 12:52:20 +0200
-Message-Id: <20220712105220.325010-4-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220712105220.325010-1-seiden@linux.ibm.com>
-References: <20220712105220.325010-1-seiden@linux.ibm.com>
+        Tue, 12 Jul 2022 06:53:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAB0AAEF43
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:52:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E57FB1515;
+        Tue, 12 Jul 2022 03:52:53 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACF8C3F792;
+        Tue, 12 Jul 2022 03:52:51 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:52:50 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, david.chen@nutanix.com,
+        zhangqiao22@huawei.com
+Subject: Re: [PATCH v2] sched/fair: fix case with reduced capacity CPU
+Message-ID: <20220712105250.axwscy5vna5mkppa@wubuntu>
+References: <20220708154401.21411-1-vincent.guittot@linaro.org>
+ <20220711160304.njkd3ml7nqpokiim@wubuntu>
+ <CAKfTPtBDYqXP4gx9_QFK-ibrC=FynufbXAiup6hxsmBT2AxOQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mdNDKtarlkAZ5t4gVuuQ1YCoMOv1elk9
-X-Proofpoint-ORIG-GUID: mdNDKtarlkAZ5t4gVuuQ1YCoMOv1elk9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 bulkscore=0 impostorscore=0 spamscore=0 malwarescore=0
- mlxscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207120039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBDYqXP4gx9_QFK-ibrC=FynufbXAiup6hxsmBT2AxOQQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure the uvdevice driver will be automatically loaded when
-facility 158 is available.
+On 07/11/22 18:42, Vincent Guittot wrote:
+> On Mon, 11 Jul 2022 at 18:03, Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > Hi Vincent
+> >
+> > On 07/08/22 17:44, Vincent Guittot wrote:
+> > > The capacity of the CPU available for CFS tasks can be reduced because of
+> > > other activities running on the latter. In such case, it's worth trying to
+> > > move CFS tasks on a CPU with more available capacity.
+> > >
+> > > The rework of the load balance has filtered the case when the CPU is
+> > > classified to be fully busy but its capacity is reduced.
+> > >
+> > > Check if CPU's capacity is reduced while gathering load balance statistic
+> > > and classify it group_misfit_task instead of group_fully_busy so we can
+> > > try to move the load on another CPU.
+> > >
+> > > Reported-by: David Chen <david.chen@nutanix.com>
+> > > Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > Tested-by: David Chen <david.chen@nutanix.com>
+> > > Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
+> > > ---
+> >
+> > [...]
+> >
+> > > @@ -8820,8 +8833,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> > >
+> > >       for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+> > >               struct rq *rq = cpu_rq(i);
+> > > +             unsigned long load = cpu_load(rq);
+> > >
+> > > -             sgs->group_load += cpu_load(rq);
+> > > +             sgs->group_load += load;
+> > >               sgs->group_util += cpu_util_cfs(i);
+> > >               sgs->group_runnable += cpu_runnable(rq);
+> > >               sgs->sum_h_nr_running += rq->cfs.h_nr_running;
+> > > @@ -8851,11 +8865,17 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> > >               if (local_group)
+> > >                       continue;
+> > >
+> > > -             /* Check for a misfit task on the cpu */
+> > > -             if (env->sd->flags & SD_ASYM_CPUCAPACITY &&
+> > > -                 sgs->group_misfit_task_load < rq->misfit_task_load) {
+> > > -                     sgs->group_misfit_task_load = rq->misfit_task_load;
+> > > -                     *sg_status |= SG_OVERLOAD;
+> > > +             if (env->sd->flags & SD_ASYM_CPUCAPACITY) {
+> > > +                     /* Check for a misfit task on the cpu */
+> > > +                     if (sgs->group_misfit_task_load < rq->misfit_task_load) {
+> > > +                             sgs->group_misfit_task_load = rq->misfit_task_load;
+> > > +                             *sg_status |= SG_OVERLOAD;
+> > > +                     }
+> > > +             } else if ((env->idle != CPU_NOT_IDLE) &&
+> > > +                        sched_reduced_capacity(rq, env->sd)) {
+> > > +                     /* Check for a task running on a CPU with reduced capacity */
+> > > +                     if (sgs->group_misfit_task_load < load)
+> > > +                             sgs->group_misfit_task_load = load;
+> > >               }
+> > >       }
+> >
+> > Small questions mostly for my education purposes.
+> >
+> > The new condition only applies for SMP systems. The reason asym systems don't
+> > care is because misfit check already considers capacity pressure when checking
+> > that the task fits_capacity()?
+> 
+> Yes
+> 
+> >
+> > It **seems** to me that the migration margin in fits_capacity() acts like the
+> > sd->imbalance_pct when check_cpu_capacity() is called by
+> > sched_reduced_capacity(), did I get it right?
+> 
+> Yes
+> 
+> >
+> > If I got it right, if the migration margin ever tweaked, could we potentially
+> > start seeing this kind of reported issue on asym systems then? I guess not. It
+> > just seems to me for asym systems tweaking the migration margin is similar to
+> > tweaking imbalance_pct for smp ones. But the subtlety is greater as
+> > imbalance_pct is still used in asym systems.
+> 
+> You should not because the task will end up being misfit whatever the
+> margin. The only change would be how fast you will detect and migrate
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
----
- arch/s390/include/asm/cpufeature.h | 1 +
- arch/s390/kernel/cpufeature.c      | 1 +
- drivers/s390/char/uvdevice.c       | 5 ++---
- 3 files changed, 4 insertions(+), 3 deletions(-)
+Yes. It's just this control/knob of how fast is different for HMP vs SMP.
 
-diff --git a/arch/s390/include/asm/cpufeature.h b/arch/s390/include/asm/cpufeature.h
-index aa8081dad411..4b17f876ab54 100644
---- a/arch/s390/include/asm/cpufeature.h
-+++ b/arch/s390/include/asm/cpufeature.h
-@@ -33,6 +33,7 @@ enum {
- 	S390_CPU_FEATURE_NNPA,
- 	S390_CPU_FEATURE_PCI_MIO,
- 	S390_CPU_FEATURE_SIE,
-+	S390_CPU_FEATURE_UV,
- 	MAX_CPU_FEATURES
- };
- 
-diff --git a/arch/s390/kernel/cpufeature.c b/arch/s390/kernel/cpufeature.c
-index e70b29804db4..0b854d37edcb 100644
---- a/arch/s390/kernel/cpufeature.c
-+++ b/arch/s390/kernel/cpufeature.c
-@@ -42,6 +42,7 @@ static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
- 	[S390_CPU_FEATURE_NNPA]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_NNPA},
- 	[S390_CPU_FEATURE_PCI_MIO]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_PCI_MIO},
- 	[S390_CPU_FEATURE_SIE]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_SIE},
-+	[S390_CPU_FEATURE_UV]		= {.type = TYPE_FACILITY, .num = 158},
- };
- 
- /*
-diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-index 66505d7166a6..1d40457c7b10 100644
---- a/drivers/s390/char/uvdevice.c
-+++ b/drivers/s390/char/uvdevice.c
-@@ -27,6 +27,7 @@
- #include <linux/stddef.h>
- #include <linux/vmalloc.h>
- #include <linux/slab.h>
-+#include <linux/cpufeature.h>
- 
- #include <asm/uvdevice.h>
- #include <asm/uv.h>
-@@ -244,12 +245,10 @@ static void __exit uvio_dev_exit(void)
- 
- static int __init uvio_dev_init(void)
- {
--	if (!test_facility(158))
--		return -ENXIO;
- 	return misc_register(&uvio_dev_miscdev);
- }
- 
--module_init(uvio_dev_init);
-+module_cpu_feature_match(S390_CPU_FEATURE_UV, uvio_dev_init);
- module_exit(uvio_dev_exit);
- 
- MODULE_AUTHOR("IBM Corporation");
--- 
-2.35.3
+check_misfit_status() does rely on rq->misfit_task_load AND
+check_cpu_capacity(). So for that case the 2 knobs will impact how fast this
+check will converge.
 
+I want to say we should document this with a comment, but tbh I have no clue
+how this can be explained clearly without being way too verbose.
+
+All looks good to me anyway. Thanks for clarifying.
+
+
+Cheers
+
+--
+Qais Yousef

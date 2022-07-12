@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34380571BBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3496571B9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbiGLNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S233278AbiGLNoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiGLNxa (ORCPT
+        with ESMTP id S232827AbiGLNof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:53:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C63B5D2C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:53:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 515E161857
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:53:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FDCC3411C;
-        Tue, 12 Jul 2022 13:53:27 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 09:53:25 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        zhaohui.shi@horizon.ai
-Subject: Re: [PATCH v5 1/2] sched/rt: fix bad task migration for rt tasks
-Message-ID: <20220712095325.408d1730@gandalf.local.home>
-In-Reply-To: <20220712013125.623338-1-schspa@gmail.com>
-References: <20220712013125.623338-1-schspa@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 12 Jul 2022 09:44:35 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B658388E;
+        Tue, 12 Jul 2022 06:44:34 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lj23n2KJXz1L8nk;
+        Tue, 12 Jul 2022 21:41:57 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 21:44:30 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 12 Jul
+ 2022 21:44:30 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <broonie@kernel.org>
+Subject: [PATCH -next 1/2] spi: microchip-core: fix UAF in mchp_corespi_remove()
+Date:   Tue, 12 Jul 2022 21:53:56 +0800
+Message-ID: <20220712135357.918997-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 09:31:24 +0800
-Schspa Shi <schspa@gmail.com> wrote:
+When using devm_spi_register_master(), the unregister function will
+be called in devres_release_all() which is called after ->remove(),
+so remove spi_unregister_master() andspi_master_put().
 
-> @@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
->  			 * the mean time, task could have
->  			 * migrated already or had its affinity changed.
->  			 * Also make sure that it wasn't scheduled on its rq.
-> +			 * It is possible the task was scheduled, set
-> +			 * "migrate_disabled" and then got preempted, And we
-> +			 * check task migration disable flag here too.
+Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-microchip-core.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Nit.  "got preempted, so we must check the task migration disable flag here
-too".
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index b3083075cd36..c26767343176 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -595,8 +595,6 @@ static int mchp_corespi_remove(struct platform_device *pdev)
+ 	struct mchp_corespi *spi = spi_master_get_devdata(master);
+ 
+ 	mchp_corespi_disable_ints(spi);
+-	spi_unregister_master(master);
+-	spi_master_put(master);
+ 	clk_disable_unprepare(spi->clk);
+ 	mchp_corespi_disable(spi);
+ 
+-- 
+2.25.1
 
-But other than that.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
->  			 */

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79AC57251A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4115723EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbiGLTHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S234740AbiGLSxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235459AbiGLTGx (ORCPT
+        with ESMTP id S234646AbiGLSwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:06:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC469FB8C2;
-        Tue, 12 Jul 2022 11:51:22 -0700 (PDT)
+        Tue, 12 Jul 2022 14:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA51DA0E4;
+        Tue, 12 Jul 2022 11:45:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A6861491;
-        Tue, 12 Jul 2022 18:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A974FC3411C;
-        Tue, 12 Jul 2022 18:51:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69763B81BBB;
+        Tue, 12 Jul 2022 18:44:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A49C3411C;
+        Tue, 12 Jul 2022 18:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651880;
-        bh=shRat7IUwl93UZ/ixdmyAqfcSvEzlZjfd1rUIGGZm38=;
+        s=korg; t=1657651495;
+        bh=BFyioED30kwJD9PGGxY9ZF6TW0CFgre5ZqlPuYrWpL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NxSogrnFqyfqhYwsMFHJDLbiwjBQ6lbs5pX8UComBPM0pOVA349r9rzZTSNF4V3jX
-         +pa+2pjKIUJwAADzVtGGCpNc7P7yrYo5kJGSgRoFhEWy7scENU9GhJ8fwXkIVIxwGf
-         aCbu+xkL1jS1fVwPnhuOPvDFc0x7mXHu1Lb8MsZY=
+        b=vllPcmRsJzbogyCvHz6x0VkXzTnRaggOi/NPTI+jWrYZuongHs7g82kMm44pl9d1T
+         iL2X19+KZQrZjugnA/rsNiCFjzVew004SKvqZ0x3TbbDO1dPqJSjVe2GO6YFrJjcLE
+         Xr1MZ+0pjnzIxIOiy2CSgv0s/xxbVlCu+cB7kNCA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 02/61] x86/entry: Switch the stack after error_entry() returns
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 093/130] x86: Use return-thunk in asm code
 Date:   Tue, 12 Jul 2022 20:38:59 +0200
-Message-Id: <20220712183237.044146273@linuxfoundation.org>
+Message-Id: <20220712183250.755673482@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +58,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 520a7e80c96d655fbe4650d9cc985bd9d0443389 upstream.
+commit aa3d480315ba6c3025a60958e1981072ea37c3df upstream.
 
-error_entry() calls fixup_bad_iret() before sync_regs() if it is a fault
-from a bad IRET, to copy pt_regs to the kernel stack. It switches to the
-kernel stack directly after sync_regs().
+Use the return thunk in asm code. If the thunk isn't needed, it will
+get patched into a RET instruction during boot by apply_returns().
 
-But error_entry() itself is also a function call, so it has to stash
-the address it is going to return to, in %r12 which is unnecessarily
-complicated.
+Since alternatives can't handle relocations outside of the first
+instruction, putting a 'jmp __x86_return_thunk' in one is not valid,
+therefore carve out the memmove ERMS path into a separate label and jump
+to it.
 
-Move the stack switching after error_entry() and get rid of the need to
-handle the return address.
-
-  [ bp: Massage commit message. ]
-
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220503032107.680190-3-jiangshanlai@gmail.com
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+[cascardo: no RANDSTRUCT_CFLAGS]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+[bwh: Backported to 5.10: adjust context]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/entry/entry_64.S |   16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ arch/x86/entry/vdso/Makefile   |    1 +
+ arch/x86/include/asm/linkage.h |    8 ++++++++
+ arch/x86/lib/memmove_64.S      |    7 ++++++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -326,6 +326,8 @@ SYM_CODE_END(ret_from_fork)
- .macro idtentry_body cfunc has_error_code:req
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -91,6 +91,7 @@ endif
+ endif
  
- 	call	error_entry
-+	movq	%rax, %rsp			/* switch to the task stack if from userspace */
-+	ENCODE_FRAME_POINTER
- 	UNWIND_HINT_REGS
+ $(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
++$(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
  
- 	movq	%rsp, %rdi			/* pt_regs pointer into 1st argument*/
-@@ -1003,14 +1005,10 @@ SYM_CODE_START_LOCAL(error_entry)
- 	/* We have user CR3.  Change to kernel CR3. */
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+--- a/arch/x86/include/asm/linkage.h
++++ b/arch/x86/include/asm/linkage.h
+@@ -18,19 +18,27 @@
+ #define __ALIGN_STR	__stringify(__ALIGN)
+ #endif
  
-+	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
- .Lerror_entry_from_usermode_after_swapgs:
- 	/* Put us onto the real thread stack. */
--	popq	%r12				/* save return addr in %12 */
--	movq	%rsp, %rdi			/* arg0 = pt_regs pointer */
- 	call	sync_regs
--	movq	%rax, %rsp			/* switch stack */
--	ENCODE_FRAME_POINTER
--	pushq	%r12
- 	RET
++#if defined(CONFIG_RETPOLINE) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
++#define RET	jmp __x86_return_thunk
++#else /* CONFIG_RETPOLINE */
+ #ifdef CONFIG_SLS
+ #define RET	ret; int3
+ #else
+ #define RET	ret
+ #endif
++#endif /* CONFIG_RETPOLINE */
+ 
+ #else /* __ASSEMBLY__ */
+ 
++#if defined(CONFIG_RETPOLINE) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
++#define ASM_RET	"jmp __x86_return_thunk\n\t"
++#else /* CONFIG_RETPOLINE */
+ #ifdef CONFIG_SLS
+ #define ASM_RET	"ret; int3\n\t"
+ #else
+ #define ASM_RET	"ret\n\t"
+ #endif
++#endif /* CONFIG_RETPOLINE */
+ 
+ #endif /* __ASSEMBLY__ */
+ 
+--- a/arch/x86/lib/memmove_64.S
++++ b/arch/x86/lib/memmove_64.S
+@@ -40,7 +40,7 @@ SYM_FUNC_START(__memmove)
+ 	/* FSRM implies ERMS => no length checks, do the copy directly */
+ .Lmemmove_begin_forward:
+ 	ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "", X86_FEATURE_FSRM
+-	ALTERNATIVE "", __stringify(movq %rdx, %rcx; rep movsb; RET), X86_FEATURE_ERMS
++	ALTERNATIVE "", "jmp .Lmemmove_erms", X86_FEATURE_ERMS
  
  	/*
-@@ -1042,6 +1040,7 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 */
- .Lerror_entry_done_lfence:
- 	FENCE_SWAPGS_KERNEL_ENTRY
-+	leaq	8(%rsp), %rax			/* return pt_regs pointer */
+ 	 * movsq instruction have many startup latency
+@@ -206,6 +206,11 @@ SYM_FUNC_START(__memmove)
+ 	movb %r11b, (%rdi)
+ 13:
  	RET
- 
- .Lbstep_iret:
-@@ -1062,12 +1061,9 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 * Pretend that the exception came from user mode: set up pt_regs
- 	 * as if we faulted immediately after IRET.
- 	 */
--	popq	%r12				/* save return addr in %12 */
--	movq	%rsp, %rdi			/* arg0 = pt_regs pointer */
-+	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
- 	call	fixup_bad_iret
--	mov	%rax, %rsp
--	ENCODE_FRAME_POINTER
--	pushq	%r12
-+	mov	%rax, %rdi
- 	jmp	.Lerror_entry_from_usermode_after_swapgs
- SYM_CODE_END(error_entry)
- 
++
++.Lmemmove_erms:
++	movq %rdx, %rcx
++	rep movsb
++	RET
+ SYM_FUNC_END(__memmove)
+ SYM_FUNC_END_ALIAS(memmove)
+ EXPORT_SYMBOL(__memmove)
 
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB8E572464
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EBD572516
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbiGLTBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S235708AbiGLTKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235111AbiGLTAg (ORCPT
+        with ESMTP id S235755AbiGLTJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:00:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680A6541;
-        Tue, 12 Jul 2022 11:48:38 -0700 (PDT)
+        Tue, 12 Jul 2022 15:09:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E508D31D5;
+        Tue, 12 Jul 2022 11:52:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699DF6090C;
-        Tue, 12 Jul 2022 18:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B848C3411C;
-        Tue, 12 Jul 2022 18:48:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 278C6B81BAB;
+        Tue, 12 Jul 2022 18:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A328C3411C;
+        Tue, 12 Jul 2022 18:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651717;
-        bh=mF/NTo3jFPn5PYFhpdCOvlbKcfW1wEd+E7B0WinnZkY=;
+        s=korg; t=1657651928;
+        bh=8XmEH2KkaR85M0+HGzx6p/eDV1VjnMNBHree5pGpxsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KaVon9nsQfpeyytMGhE0yJN4mLNFa53hv6GcGCq9qYC2MXqwvhHPEDlBFCYQXiJpW
-         tcq8wFalmQiy6P/HHLDmYDQ1s4a4KFJFeSOwuOJPPv+/yzcFZtH6npmkWhiMu++IW3
-         yg1zVecGdmsb9u/IuOZyueM42laAfsBMBzk3MhAQ=
+        b=asDBiuBPLQODPLFsAhUIWebDnZ9JO59Dd3OU36vDvwq8IIlqPRdbWc+bRRSFJWG7l
+         UQgzitm7kSNvtKSJtz7hl3LZjhaGEZTHIrJmEz0O7v4yxe9V8oAcP7v4MhM2pP7iyn
+         PgthtPW6VqRbOUiT8vutQ8AivIcngVIoUNfkWfjA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 34/78] x86/bpf: Use alternative RET encoding
-Date:   Tue, 12 Jul 2022 20:39:04 +0200
-Message-Id: <20220712183240.191489224@linuxfoundation.org>
+Subject: [PATCH 5.18 08/61] x86/retpoline: Cleanup some #ifdefery
+Date:   Tue, 12 Jul 2022 20:39:05 +0200
+Message-Id: <20220712183237.288892049@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-References: <20220712183238.844813653@linuxfoundation.org>
+In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
+References: <20220712183236.931648980@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,61 +59,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit d77cfe594ad50e0bf95d457e02ccd578791b2a15 upstream.
+commit 369ae6ffc41a3c1137cab697635a84d0cc7cdcea upstream.
 
-Use the return thunk in eBPF generated code, if needed.
+On it's own not much of a cleanup but it prepares for more/similar
+code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/net/bpf_jit_comp.c |   19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/disabled-features.h |    9 ++++++++-
+ arch/x86/include/asm/nospec-branch.h     |    7 +++----
+ arch/x86/net/bpf_jit_comp.c              |    7 +++----
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -56,6 +56,13 @@
+ # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
+ #endif
+ 
++#ifdef CONFIG_RETPOLINE
++# define DISABLE_RETPOLINE	0
++#else
++# define DISABLE_RETPOLINE	((1 << (X86_FEATURE_RETPOLINE & 31)) | \
++				 (1 << (X86_FEATURE_RETPOLINE_LFENCE & 31)))
++#endif
++
+ #ifdef CONFIG_INTEL_IOMMU_SVM
+ # define DISABLE_ENQCMD		0
+ #else
+@@ -82,7 +89,7 @@
+ #define DISABLED_MASK8	0
+ #define DISABLED_MASK9	(DISABLE_SMAP|DISABLE_SGX)
+ #define DISABLED_MASK10	0
+-#define DISABLED_MASK11	0
++#define DISABLED_MASK11	(DISABLE_RETPOLINE)
+ #define DISABLED_MASK12	0
+ #define DISABLED_MASK13	0
+ #define DISABLED_MASK14	0
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -120,17 +120,16 @@
+ 	_ASM_PTR " 999b\n\t"					\
+ 	".popsection\n\t"
+ 
+-#ifdef CONFIG_RETPOLINE
+-
+ typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
++extern retpoline_thunk_t __x86_indirect_thunk_array[];
++
++#ifdef CONFIG_RETPOLINE
+ 
+ #define GEN(reg) \
+ 	extern retpoline_thunk_t __x86_indirect_thunk_ ## reg;
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
+ 
+-extern retpoline_thunk_t __x86_indirect_thunk_array[];
+-
+ #ifdef CONFIG_X86_64
+ 
+ /*
 --- a/arch/x86/net/bpf_jit_comp.c
 +++ b/arch/x86/net/bpf_jit_comp.c
-@@ -406,6 +406,21 @@ static void emit_indirect_jump(u8 **ppro
+@@ -407,16 +407,15 @@ static void emit_indirect_jump(u8 **ppro
+ {
+ 	u8 *prog = *pprog;
+ 
+-#ifdef CONFIG_RETPOLINE
+ 	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
+ 		EMIT_LFENCE();
+ 		EMIT2(0xFF, 0xE0 + reg);
+ 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
+ 		OPTIMIZER_HIDE_VAR(reg);
+ 		emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
+-	} else
+-#endif
+-	EMIT2(0xFF, 0xE0 + reg);
++	} else {
++		EMIT2(0xFF, 0xE0 + reg);
++	}
+ 
  	*pprog = prog;
  }
- 
-+static void emit_return(u8 **pprog, u8 *ip)
-+{
-+	u8 *prog = *pprog;
-+
-+	if (cpu_feature_enabled(X86_FEATURE_RETHUNK)) {
-+		emit_jump(&prog, &__x86_return_thunk, ip);
-+	} else {
-+		EMIT1(0xC3);		/* ret */
-+		if (IS_ENABLED(CONFIG_SLS))
-+			EMIT1(0xCC);	/* int3 */
-+	}
-+
-+	*pprog = prog;
-+}
-+
- /*
-  * Generate the following code:
-  *
-@@ -1681,7 +1696,7 @@ emit_jmp:
- 			ctx->cleanup_addr = proglen;
- 			pop_callee_regs(&prog, callee_regs_used);
- 			EMIT1(0xC9);         /* leave */
--			EMIT1(0xC3);         /* ret */
-+			emit_return(&prog, image + addrs[i - 1] + (prog - temp));
- 			break;
- 
- 		default:
-@@ -2127,7 +2142,7 @@ int arch_prepare_bpf_trampoline(struct b
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
- 		/* skip our return address and return to parent */
- 		EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
--	EMIT1(0xC3); /* ret */
-+	emit_return(&prog, prog);
- 	/* Make sure the trampoline generation logic doesn't overflow */
- 	if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
- 		ret = -EFAULT;
 
 

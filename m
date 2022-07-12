@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A817857275E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463C6572762
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiGLUft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S231233AbiGLUgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiGLUfr (ORCPT
+        with ESMTP id S229681AbiGLUgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:35:47 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B065FA58D3;
-        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r186so1398915pgr.2;
-        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
+        Tue, 12 Jul 2022 16:36:52 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96710A58D8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:36:51 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id n7so9045998ioo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Dsj65B36SHPt1jY+YKCsF4AuEiEfb/4USf5ig8Q6FVI=;
-        b=NJGklDrevQF1++hLN9JDPGMlqEzdKsU4Peytf0ZZzfqMs6sNclbuhwaOtG4jXAXHvo
-         mFiUc0qGy4UZ5Q53GbZCfhZJEDrI2q97Q6YuNudNLrYulDhc+dq9pXbrkxvMv2VUftWy
-         w+o+Bu9wFUXcbDemgk8dc68ZQqp9kn0Wqv+JKu9EyTxj3Fg4l/7KcmGQ1pw4DEQpcV8C
-         R/JGB5ZeQa+RbFWGTfKMJ4rxIyx4g+x7KnVkeAdgoz9HuD0nHYDO7oJRaJeEllhTwKmr
-         aKT6EWDJINf/xtf569hyKTMXVrog1fUamgpdCeMbYaDOVummSChk3Ap4YLnNK00uvsm6
-         ZPeA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y/kf7WpiJhpV7S8Lv6B6nSloUE3ZIK760tIURsCB2pw=;
+        b=HK+0DWTz7CWIFl+SYCiY0c1eT23V1rfCJ2QRHvfA8bSUNlP5B7cbxj+fSAo0QWdQZF
+         L4916vyqIJ6hBECNHpwM9VpomRkI9oU7ux781zK8Ag6wUNbvi0zH1theP+ClUZe+WfHY
+         bB29E+meNCNUo/BX9CrmNicvZbvo7Dsb1noCwXeeg8uBLkIOTzOd2JFGDmLPi5Fxrwdh
+         pVPnnhlFhQXWdSntoI9CvaNMVywddCOqtSosLlEXuaU9ngzuYPqFAR4H3H3Z9UHakffi
+         K5w8ACxyuEOxAhWUkNEfCxymzEHp020sUAC2tCxdWfJj6r37lwRMsOlfEC07Le2qsU6U
+         hBRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dsj65B36SHPt1jY+YKCsF4AuEiEfb/4USf5ig8Q6FVI=;
-        b=S9puBipwVGmx+GzDQwnByAtw54sLqJFmeGfSiVbWwkMpOL7sm/PA9L+oryX4VSNCPi
-         C8yLYZfwwkvbS7iD10RCJGkst/RvxEISH8kATcnwjdB5SQD6kvv3eNqmeRzKZmlxzvG1
-         MPAp7mxnn3zLVie8H23ID/ivV8pqnmy7Ae0LMDJa0HRxSGMz71wwJKswQeMpMrbXrvmo
-         UlykO1XiSxqSGlIRARIk0I6H/jFepuIZ78hKFWAcu4WPHlgdBglZBbAyWfD67beQK5Zs
-         75UtHrW83e+sNwtt0Q6PEkVgethLA2GlZYHGe/t1msjDP21j3NaLt3ie/PDKtDkwKvcm
-         4DGA==
-X-Gm-Message-State: AJIora9Z8rRYSbMk/PNA9Q88q0ydBF+ixjLV410Obph48r5F6yRbX9F2
-        vvmggI88uVGxyjlWqBNKqyFNKjl2nqg=
-X-Google-Smtp-Source: AGRyM1vkrAwfzqqqFig6+mSzDiboUBQemdM5KezzgflIeKQTAkuvA5GgVeO8La6fgwwfxp5v8r1pPw==
-X-Received: by 2002:a63:6c06:0:b0:40d:e2a0:278c with SMTP id h6-20020a636c06000000b0040de2a0278cmr58333pgc.328.1657658146056;
-        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id d3-20020a17090ae28300b001ef8ab65052sm20883pjz.11.2022.07.12.13.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 13:35:44 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 13:35:42 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v7 030/102] KVM: TDX: Do TDX specific vcpu initialization
-Message-ID: <20220712203542.GN1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <e05ce01e400f80437803146564d4c351bf1df047.1656366338.git.isaku.yamahata@intel.com>
- <20220708021443.v4frmpcqgbk23hkp@yy-desk-7060>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y/kf7WpiJhpV7S8Lv6B6nSloUE3ZIK760tIURsCB2pw=;
+        b=ZACTWIqoIrGxxCXnE5CO38vmbknvpXVDBoEi7nJNYgOIz8eotO6Q7LbMkdZNgQnhxs
+         T8QxO/g95gtjXfCt2cp3UhlSIw0HW7sb3WVEAbibaWn/AWgEWhCiDQhW1suc22XmZwjq
+         axGx0j71JXaOp5yrAjk3bnQXfe6g9Hf7FpBYKKd42a8hh+dkhHy3Q8TMOo9MGG/JSpEL
+         k19vlZ7FBQwb3TAqzJ4QyK5YDG1alsO8EwrGefKSIwPdYWuFhWhg3n3ac8BUKKiF/Hzk
+         ULwEn1uz75vOs4drtjyIBv/jR+TZdZl41Gw1ToqwKCXW+lH63K9g8MFZBJmMTY1FOKbu
+         EN5w==
+X-Gm-Message-State: AJIora8vGGxaxGLLMCrWzU2NaW4WoYRMtMBYkUdIN2fqR88I3ldPf90Y
+        8KthZMgBwyuGJ55BR2djyc689eP9xV+hatYtHYwUfV/R
+X-Google-Smtp-Source: AGRyM1vcVt7E6J7CXFHWcDWieOMzcW12/B3aaLXom2LHjUZJ7rjCMBYmaxd73fcDTKZ0bf0NWkgwf+myIsxTC/h2scA=
+X-Received: by 2002:a05:6638:3812:b0:33f:4a06:ad48 with SMTP id
+ i18-20020a056638381200b0033f4a06ad48mr9488946jav.71.1657658210925; Tue, 12
+ Jul 2022 13:36:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220708021443.v4frmpcqgbk23hkp@yy-desk-7060>
+References: <20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com>
+In-Reply-To: <20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 12 Jul 2022 22:36:40 +0200
+Message-ID: <CA+fCnZc_sqfp4NOZPMWig9t01-yz2HOswoesTVfzGubrvqECDw@mail.gmail.com>
+Subject: Re: [PATCH] kasan: separate double free case from invalid free
+To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chinwen Chang <chinwen.chang@mediatek.com>,
+        =?UTF-8?B?WWVlIExlZSAo5p2O5bu66Kq8KQ==?= <yee.lee@mediatek.com>,
+        casper.li@mediatek.com, Andrew Yang <andrew.yang@mediatek.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,131 +79,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 10:14:43AM +0800,
-Yuan Yao <yuan.yao@linux.intel.com> wrote:
+On Wed, Jun 15, 2022 at 8:22 AM 'Kuan-Ying Lee' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> Currently, KASAN describes all invalid-free/double-free bugs as
+> "double-free or invalid-free". This is ambiguous.
+>
+> KASAN should report "double-free" when a double-free is a more
+> likely cause (the address points to the start of an object) and
+> report "invalid-free" otherwise [1].
+>
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=212193
+>
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+> ---
+>  mm/kasan/common.c |  8 ++++----
+>  mm/kasan/kasan.h  |  3 ++-
+>  mm/kasan/report.c | 12 ++++++++----
+>  3 files changed, 14 insertions(+), 9 deletions(-)
+>
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index c40c0e7b3b5f..707c3a527fcb 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -343,7 +343,7 @@ static inline bool ____kasan_slab_free(struct kmem_cache *cache, void *object,
+>
+>         if (unlikely(nearest_obj(cache, virt_to_slab(object), object) !=
+>             object)) {
+> -               kasan_report_invalid_free(tagged_object, ip);
+> +               kasan_report_invalid_free(tagged_object, ip, KASAN_REPORT_INVALID_FREE);
+>                 return true;
+>         }
+>
+> @@ -352,7 +352,7 @@ static inline bool ____kasan_slab_free(struct kmem_cache *cache, void *object,
+>                 return false;
+>
+>         if (!kasan_byte_accessible(tagged_object)) {
+> -               kasan_report_invalid_free(tagged_object, ip);
+> +               kasan_report_invalid_free(tagged_object, ip, KASAN_REPORT_DOUBLE_FREE);
+>                 return true;
+>         }
+>
+> @@ -377,12 +377,12 @@ bool __kasan_slab_free(struct kmem_cache *cache, void *object,
+>  static inline bool ____kasan_kfree_large(void *ptr, unsigned long ip)
+>  {
+>         if (ptr != page_address(virt_to_head_page(ptr))) {
+> -               kasan_report_invalid_free(ptr, ip);
+> +               kasan_report_invalid_free(ptr, ip, KASAN_REPORT_INVALID_FREE);
+>                 return true;
+>         }
+>
+>         if (!kasan_byte_accessible(ptr)) {
+> -               kasan_report_invalid_free(ptr, ip);
+> +               kasan_report_invalid_free(ptr, ip, KASAN_REPORT_DOUBLE_FREE);
+>                 return true;
+>         }
+>
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index 610d60d6e5b8..01c03e45acd4 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -125,6 +125,7 @@ static inline bool kasan_sync_fault_possible(void)
+>  enum kasan_report_type {
+>         KASAN_REPORT_ACCESS,
+>         KASAN_REPORT_INVALID_FREE,
+> +       KASAN_REPORT_DOUBLE_FREE,
+>  };
+>
+>  struct kasan_report_info {
+> @@ -277,7 +278,7 @@ static inline void kasan_print_address_stack_frame(const void *addr) { }
+>
+>  bool kasan_report(unsigned long addr, size_t size,
+>                 bool is_write, unsigned long ip);
+> -void kasan_report_invalid_free(void *object, unsigned long ip);
+> +void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report_type type);
+>
+>  struct page *kasan_addr_to_page(const void *addr);
+>  struct slab *kasan_addr_to_slab(const void *addr);
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index b341a191651d..fe3f606b3a98 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -176,8 +176,12 @@ static void end_report(unsigned long *flags, void *addr)
+>  static void print_error_description(struct kasan_report_info *info)
+>  {
+>         if (info->type == KASAN_REPORT_INVALID_FREE) {
+> -               pr_err("BUG: KASAN: double-free or invalid-free in %pS\n",
+> -                      (void *)info->ip);
+> +               pr_err("BUG: KASAN: invalid-free in %pS\n", (void *)info->ip);
+> +               return;
+> +       }
+> +
+> +       if (info->type == KASAN_REPORT_DOUBLE_FREE) {
+> +               pr_err("BUG: KASAN: double-free in %pS\n", (void *)info->ip);
+>                 return;
+>         }
+>
+> @@ -433,7 +437,7 @@ static void print_report(struct kasan_report_info *info)
+>         }
+>  }
+>
+> -void kasan_report_invalid_free(void *ptr, unsigned long ip)
+> +void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_type type)
+>  {
+>         unsigned long flags;
+>         struct kasan_report_info info;
+> @@ -448,7 +452,7 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip)
+>
+>         start_report(&flags, true);
+>
+> -       info.type = KASAN_REPORT_INVALID_FREE;
+> +       info.type = type;
+>         info.access_addr = ptr;
+>         info.first_bad_addr = kasan_reset_tag(ptr);
+>         info.access_size = 0;
+> --
+> 2.18.0
 
-> On Mon, Jun 27, 2022 at 02:53:22PM -0700, isaku.yamahata@intel.com wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >
-> > TD guest vcpu need to be configured before ready to run which requests
-> > addtional information from Device model (e.g. qemu), one 64bit value is
-> > passed to vcpu's RCX as an initial value.  Repurpose KVM_MEMORY_ENCRYPT_OP
-> > to vcpu-scope and add new sub-commands KVM_TDX_INIT_VCPU under it for such
-> > additional vcpu configuration.
-> >
-> > Add callback for kvm vCPU-scoped operations of KVM_MEMORY_ENCRYPT_OP and
-> > add a new subcommand, KVM_TDX_INIT_VCPU, for further vcpu initialization.
-> >
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
-> >  arch/x86/include/asm/kvm_host.h       |  1 +
-> >  arch/x86/include/uapi/asm/kvm.h       |  1 +
-> >  arch/x86/kvm/vmx/main.c               |  9 +++++++
-> >  arch/x86/kvm/vmx/tdx.c                | 36 +++++++++++++++++++++++++++
-> >  arch/x86/kvm/vmx/tdx.h                |  4 +++
-> >  arch/x86/kvm/vmx/x86_ops.h            |  2 ++
-> >  arch/x86/kvm/x86.c                    |  6 +++++
-> >  tools/arch/x86/include/uapi/asm/kvm.h |  1 +
-> >  9 files changed, 61 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > index 3677a5015a4f..32a6df784ea6 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -119,6 +119,7 @@ KVM_X86_OP(leave_smm)
-> >  KVM_X86_OP(enable_smi_window)
-> >  KVM_X86_OP_OPTIONAL(dev_mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
-> > +KVM_X86_OP_OPTIONAL(vcpu_mem_enc_ioctl)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
-> >  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
-> >  KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 81638987cdb9..e5d4e5b60fdc 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1595,6 +1595,7 @@ struct kvm_x86_ops {
-> >
-> >  	int (*dev_mem_enc_ioctl)(void __user *argp);
-> >  	int (*mem_enc_ioctl)(struct kvm *kvm, void __user *argp);
-> > +	int (*vcpu_mem_enc_ioctl)(struct kvm_vcpu *vcpu, void __user *argp);
-> >  	int (*mem_enc_register_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> >  	int (*mem_enc_unregister_region)(struct kvm *kvm, struct kvm_enc_region *argp);
-> >  	int (*vm_copy_enc_context_from)(struct kvm *kvm, unsigned int source_fd);
-> > diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> > index f89774ccd4ae..399c28b2f4f5 100644
-> > --- a/arch/x86/include/uapi/asm/kvm.h
-> > +++ b/arch/x86/include/uapi/asm/kvm.h
-> > @@ -538,6 +538,7 @@ struct kvm_pmu_event_filter {
-> >  enum kvm_tdx_cmd_id {
-> >  	KVM_TDX_CAPABILITIES = 0,
-> >  	KVM_TDX_INIT_VM,
-> > +	KVM_TDX_INIT_VCPU,
-> >
-> >  	KVM_TDX_CMD_NR_MAX,
-> >  };
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index 4f4ed4ad65a7..ce12cc8276ef 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -113,6 +113,14 @@ static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
-> >  	return tdx_vm_ioctl(kvm, argp);
-> >  }
-> >
-> > +static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
-> > +{
-> > +	if (!is_td_vcpu(vcpu))
-> > +		return -EINVAL;
-> > +
-> > +	return tdx_vcpu_ioctl(vcpu, argp);
-> > +}
-> > +
-> >  struct kvm_x86_ops vt_x86_ops __initdata = {
-> >  	.name = "kvm_intel",
-> >
-> > @@ -255,6 +263,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
-> >
-> >  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
-> >  	.mem_enc_ioctl = vt_mem_enc_ioctl,
-> > +	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
-> >  };
-> >
-> >  struct kvm_x86_init_ops vt_init_ops __initdata = {
-> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> > index d9fe3f6463c3..2772775457b0 100644
-> > --- a/arch/x86/kvm/vmx/tdx.c
-> > +++ b/arch/x86/kvm/vmx/tdx.c
-> > @@ -83,6 +83,11 @@ static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
-> >  	return kvm_tdx->hkid > 0;
-> >  }
-> >
-> > +static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
-> > +{
-> > +	return kvm_tdx->finalized;
-> > +}
-> > +
-> >  static void tdx_clear_page(unsigned long page)
-> >  {
-> >  	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> > @@ -805,6 +810,37 @@ int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
-> >  	return r;
-> >  }
-> >
-> > +int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
-> > +{
-> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-> > +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> > +	struct kvm_tdx_cmd cmd;
-> > +	u64 err;
-> > +
-> > +	if (tdx->initialized)
-> 
-> Minor: How about "tdx_vcpu->initialized" ? there's
-> "is_td_initialized()" below, the "tdx" here may lead guys to treat it
-> as whole td vm until they confirmed it's type again.
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-I think you man tdx->vcpu_initialized.  If so, makes sense. I'll rename it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks for the patch!

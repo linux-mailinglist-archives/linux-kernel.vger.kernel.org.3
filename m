@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E617D572786
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC30757277C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbiGLUkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S233036AbiGLUkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiGLUkA (ORCPT
+        with ESMTP id S232641AbiGLUj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:40:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C812CC790;
-        Tue, 12 Jul 2022 13:39:59 -0700 (PDT)
+        Tue, 12 Jul 2022 16:39:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED63CC790
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:39:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15EFDB81BE7;
-        Tue, 12 Jul 2022 20:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61ECC341C8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C09A61A91
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE074C3411E;
         Tue, 12 Jul 2022 20:39:56 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oBMfj-0049O7-PU;
-        Tue, 12 Jul 2022 16:39:55 -0400
-Message-ID: <20220712203955.624861483@goodmis.org>
+        id 1oBMfj-0049Of-VY;
+        Tue, 12 Jul 2022 16:39:56 -0400
+Message-ID: <20220712203955.808599610@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 12 Jul 2022 16:39:25 -0400
+Date:   Tue, 12 Jul 2022 16:39:26 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-Subject: [for-linus][PATCH 1/6] tracing/histograms: Fix memory leak problem
+        Douglas Anderson <dianders@chromium.org>
+Subject: [for-linus][PATCH 2/6] tracing: Fix sleeping while atomic in kdb ftdump
 References: <20220712203924.060569640@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,79 +47,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+From: Douglas Anderson <dianders@chromium.org>
 
-This reverts commit 46bbe5c671e06f070428b9be142cc4ee5cedebac.
+If you drop into kdb and type "ftdump" you'll get a sleeping while
+atomic warning from memory allocation in trace_find_next_entry().
 
-As commit 46bbe5c671e0 ("tracing: fix double free") said, the
-"double free" problem reported by clang static analyzer is:
-  > In parse_var_defs() if there is a problem allocating
-  > var_defs.expr, the earlier var_defs.name is freed.
-  > This free is duplicated by free_var_defs() which frees
-  > the rest of the list.
+This appears to have been caused by commit ff895103a84a ("tracing:
+Save off entry when peeking at next entry"), which added the
+allocation in that path. The problematic commit was already fixed by
+commit 8e99cf91b99b ("tracing: Do not allocate buffer in
+trace_find_next_entry() in atomic") but that fix missed the kdb case.
 
-However, if there is a problem allocating N-th var_defs.expr:
-  + in parse_var_defs(), the freed 'earlier var_defs.name' is
-    actually the N-th var_defs.name;
-  + then in free_var_defs(), the names from 0th to (N-1)-th are freed;
+The fix here is easy: just move the assignment of the static buffer to
+the place where it should have been to begin with:
+trace_init_global_iter(). That function is called in two places, once
+is right before the assignment of the static buffer added by the
+previous fix and once is in kdb.
 
-                        IF ALLOCATING PROBLEM HAPPENED HERE!!! -+
-                                                                 \
-                                                                  |
-          0th           1th                 (N-1)-th      N-th    V
-          +-------------+-------------+-----+-------------+-----------
-var_defs: | name | expr | name | expr | ... | name | expr | name | ///
-          +-------------+-------------+-----+-------------+-----------
+Note that it appears that there's a second static buffer that we need
+to assign that was added in commit efbbdaa22bb7 ("tracing: Show real
+address for trace event arguments"), so we'll move that too.
 
-These two frees don't act on same name, so there was no "double free"
-problem before. Conversely, after that commit, we get a "memory leak"
-problem because the above "N-th var_defs.name" is not freed.
+Link: https://lkml.kernel.org/r/20220708170919.1.I75844e5038d9425add2ad853a608cb44bb39df40@changeid
 
-If enable CONFIG_DEBUG_KMEMLEAK and inject a fault at where the N-th
-var_defs.expr allocated, then execute on shell like:
-  $ echo 'hist:key=call_site:val=$v1,$v2:v1=bytes_req,v2=bytes_alloc' > \
-/sys/kernel/debug/tracing/events/kmem/kmalloc/trigger
-
-Then kmemleak reports:
-  unreferenced object 0xffff8fb100ef3518 (size 8):
-    comm "bash", pid 196, jiffies 4295681690 (age 28.538s)
-    hex dump (first 8 bytes):
-      76 31 00 00 b1 8f ff ff                          v1......
-    backtrace:
-      [<0000000038fe4895>] kstrdup+0x2d/0x60
-      [<00000000c99c049a>] event_hist_trigger_parse+0x206f/0x20e0
-      [<00000000ae70d2cc>] trigger_process_regex+0xc0/0x110
-      [<0000000066737a4c>] event_trigger_write+0x75/0xd0
-      [<000000007341e40c>] vfs_write+0xbb/0x2a0
-      [<0000000087fde4c2>] ksys_write+0x59/0xd0
-      [<00000000581e9cdf>] do_syscall_64+0x3a/0x80
-      [<00000000cf3b065c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Link: https://lkml.kernel.org/r/20220711014731.69520-1-zhengyejian1@huawei.com
-
-Cc: stable@vger.kernel.org
-Fixes: 46bbe5c671e0 ("tracing: fix double free")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Reviewed-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Fixes: ff895103a84a ("tracing: Save off entry when peeking at next entry")
+Fixes: efbbdaa22bb7 ("tracing: Show real address for trace event arguments")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_hist.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 48e82e141d54..e87a46794079 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -4430,6 +4430,8 @@ static int parse_var_defs(struct hist_trigger_data *hist_data)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index a8cfac0611bc..b8dd54627075 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -9864,6 +9864,12 @@ void trace_init_global_iter(struct trace_iterator *iter)
+ 	/* Output in nanoseconds only if we are using a clock in nanoseconds. */
+ 	if (trace_clocks[iter->tr->clock_id].in_ns)
+ 		iter->iter_flags |= TRACE_FILE_TIME_IN_NS;
++
++	/* Can not use kmalloc for iter.temp and iter.fmt */
++	iter->temp = static_temp_buf;
++	iter->temp_size = STATIC_TEMP_BUF_SIZE;
++	iter->fmt = static_fmt_buf;
++	iter->fmt_size = STATIC_FMT_BUF_SIZE;
+ }
  
- 			s = kstrdup(field_str, GFP_KERNEL);
- 			if (!s) {
-+				kfree(hist_data->attrs->var_defs.name[n_vars]);
-+				hist_data->attrs->var_defs.name[n_vars] = NULL;
- 				ret = -ENOMEM;
- 				goto free;
- 			}
+ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
+@@ -9896,11 +9902,6 @@ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
+ 
+ 	/* Simulate the iterator */
+ 	trace_init_global_iter(&iter);
+-	/* Can not use kmalloc for iter.temp and iter.fmt */
+-	iter.temp = static_temp_buf;
+-	iter.temp_size = STATIC_TEMP_BUF_SIZE;
+-	iter.fmt = static_fmt_buf;
+-	iter.fmt_size = STATIC_FMT_BUF_SIZE;
+ 
+ 	for_each_tracing_cpu(cpu) {
+ 		atomic_inc(&per_cpu_ptr(iter.array_buffer->data, cpu)->disabled);
 -- 
 2.35.1

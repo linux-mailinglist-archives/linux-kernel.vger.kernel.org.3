@@ -2,175 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25662570F8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B680570F8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiGLBdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S231925AbiGLBdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiGLBdQ (ORCPT
+        with ESMTP id S230217AbiGLBdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:33:16 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156238E1E2;
-        Mon, 11 Jul 2022 18:33:14 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id v21so3441845plo.0;
-        Mon, 11 Jul 2022 18:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=A7qUftFMsHtAgHz7tg5ybnJxuA39QPif4EqnUQa2+ls=;
-        b=ilWwUWRBr2jcKjIgdGL97r01HtkS3jZpsabezxx1tUPUQ7nwzkvbBQbHRnZjyQHG4a
-         MTQaJauz2iosj/AQx2pFgDEGzCjs6RZtqEpfF4gFACV0PkzxpUgLKQV0r7SkoOS8p+M6
-         dkt68QM01GF7GmRIGvuVT1L4E6RCx066fAv8uES+/UuTbIGmK31aN4iXmUm6tF5eQPB7
-         5cr+316tp2G1/YM/tLLU7xm2kSvI7d4CRF8fGbsy8L1SfQhezD8s3MKooY5XZQOW0peI
-         yfloIeERrassAa9MWw/8ENoGPGt/oQ0X2g97fHelcTTOEjUWFON4xU58FfyK6IAAdjiL
-         f9WA==
+        Mon, 11 Jul 2022 21:33:04 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD28D5F0;
+        Mon, 11 Jul 2022 18:33:02 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id r3so11595503ybr.6;
+        Mon, 11 Jul 2022 18:33:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=A7qUftFMsHtAgHz7tg5ybnJxuA39QPif4EqnUQa2+ls=;
-        b=72Nna69Q1F9i9Y+pLDgwAgiBigMG/O9ZX/rMwDjwftA5LlmWdfG4wtrmivOCHlJoYr
-         hPGJdj857P0yc3GbaAf/t2+TiX3q+YK3VlslBr80PsSnZljK5Wbz7WNcFM6wpv9iFcKH
-         6eYlLq9ibcsNHc1dKK2AUbhuF/wVn7BaQM4GgB+A8u6kzEJXSWCiwyAObe6kEX7vGba/
-         50M5uEX9l2rxOHFQWPzJlQkwBauRFLASEYIDARSuG6xTfymauM9ufpcuBLB/KNJ9kw1c
-         91CY6HM3LXh2Quy4UC5a+GDw3CCZMASgAnNPA8pQfQdCNaBhR9s7cSlCERpwadZjLPWc
-         YbnQ==
-X-Gm-Message-State: AJIora8xUXzFpHxD3GUhKlduPltZopHqa6QdVf5hppuZeoVesBugSOuD
-        eco87cROGZGRStT/lAabfdo=
-X-Google-Smtp-Source: AGRyM1vCis+SHHXbUUZKdGWzSbZvOUw5k1uVmPkRtryAVoujeVtXJWzlAcnGlKYgxE8ZNZyVCCoiVA==
-X-Received: by 2002:a17:902:ea09:b0:16c:3f7a:adf7 with SMTP id s9-20020a170902ea0900b0016c3f7aadf7mr11199465plg.103.1657589593546;
-        Mon, 11 Jul 2022 18:33:13 -0700 (PDT)
-Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id f8-20020a17090ab94800b001ef42b3c5besm5450818pjw.23.2022.07.11.18.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:33:12 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 11:33:07 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 1/4] powerpc/mobility: wait for memory transfer to
- complete
-To:     benh@kernel.crashing.org, haren@linux.vnet.ibm.com,
-        Laurent Dufour <ldufour@linux.ibm.com>, linux@roeck-us.net,
-        mpe@ellerman.id.au, nathanl@linux.ibm.com, paulus@samba.org,
-        wim@linux-watchdog.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org
-References: <20220627135347.32624-1-ldufour@linux.ibm.com>
-        <20220627135347.32624-2-ldufour@linux.ibm.com>
-In-Reply-To: <20220627135347.32624-2-ldufour@linux.ibm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ldd/zpJwmj78yQKupkX1vWzC+GyweGRaRS0TSs8SWDY=;
+        b=GwcTWXIHrPEauze9nthM8ajJuQRhaOBJrqLd1YMoezYFnZ7wXXP6liHv4T2njgpJ4F
+         5Ju1dJ3XzjDovb0HfeP7mtRHnC0SOxwo7ZPWx7OvzMpPtg6fmgYFPVOFzpREXLX5zGAv
+         9eqMfAbG4JxPznvUaoSWcs4TbmGmAOyQ0w0vihTM0zyzpOaJySsHBN2pFz6CHduQEbOb
+         Hsq/rPWqPRjnzjpEgbzt39G+QD6xK7y60KSJ37QfZqCP6OqAKYhjmypYXYBR2XtKx2T9
+         FDorE+uMAlghfPpxq7RE99+OJwh8+dnxb+eE0q1Rh7dHeD/rMI511Uys2XgJSgmGLK4p
+         CTLQ==
+X-Gm-Message-State: AJIora+bauERk9C/rF+T12o9XtsUnjjSQSnBmTLWNzj0lJB/xngzVLG6
+        41jyuSOXBbCvxxzKXkFNmkGtPbiQetky9UbGSxSM8NuRbks=
+X-Google-Smtp-Source: AGRyM1uvMuQ5pwkMlrFt4f9cDZt+Q25E2CcdS6aIV4xvgCOYC/LdTyh64KRLiMuQrzAL3sAO40GRzkDv96ZWf6zn4SM=
+X-Received: by 2002:a25:9743:0:b0:66e:f62d:4956 with SMTP id
+ h3-20020a259743000000b0066ef62d4956mr12345502ybo.381.1657589581738; Mon, 11
+ Jul 2022 18:33:01 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <1657588908.mis26ebam4.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220708181235.4104943-1-frank.jungclaus@esd.eu> <20220708181235.4104943-7-frank.jungclaus@esd.eu>
+In-Reply-To: <20220708181235.4104943-7-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 12 Jul 2022 10:33:15 +0900
+Message-ID: <CAMZ6RqLC9a50mbyeaUSE4zqOfwPEVvOeYXcCVefC5EMD5dN6PA@mail.gmail.com>
+Subject: Re: [PATCH 6/6] can: esd_usb: Improved decoding for
+ ESD_EV_CAN_ERROR_EXT messages
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Laurent Dufour's message of June 27, 2022 11:53 pm:
-> In pseries_migration_partition(), loop until the memory transfer is
-> complete. This way the calling drmgr process will not exit earlier,
-> allowing callbacks to be run only once the migration is fully completed.
->=20
-> If reading the VASI state is done after the hypervisor has completed the
-> migration, the HCALL is returning H_PARAMETER. We can safely assume that
-> the memory transfer is achieved if this happens.
->=20
-> This will also allow to manage the NMI watchdog state in the next commits=
-.
->=20
-> Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+On Sat. 9 Jul. 2022 at 03:14, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> As suggested by Vincent I spend a union plus a struct ev_can_err_ext
+
+The canonical way to declare that something was suggested by someone
+else is to use the Suggested-by tag.
+
+Also, this particular change was suggested by Marc, not by me ;)
+https://lore.kernel.org/linux-can/20220621071152.ggyhrr5sbzvwpkpx@pengutronix.de/
+
+> for easier decoding of an ESD_EV_CAN_ERROR_EXT event message (which
+> simply is a rx_msg with some dedicated data).
+
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 > ---
->  arch/powerpc/platforms/pseries/mobility.c | 42 +++++++++++++++++++++--
->  1 file changed, 40 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/pla=
-tforms/pseries/mobility.c
-> index 78f3f74c7056..907a779074d6 100644
-> --- a/arch/powerpc/platforms/pseries/mobility.c
-> +++ b/arch/powerpc/platforms/pseries/mobility.c
-> @@ -427,6 +427,43 @@ static int wait_for_vasi_session_suspending(u64 hand=
-le)
->  	return ret;
->  }
-> =20
-> +static void wait_for_vasi_session_completed(u64 handle)
-> +{
-> +	unsigned long state =3D 0;
-> +	int ret;
-> +
-> +	pr_info("waiting for memory transfert to complete...\n");
+>  drivers/net/can/usb/esd_usb.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index 09649a45d6ff..2b149590720c 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -126,7 +126,15 @@ struct rx_msg {
+>         u8 dlc;
+>         __le32 ts;
+>         __le32 id; /* upper 3 bits contain flags */
+> -       u8 data[8];
+> +       union {
+> +               u8 data[8];
+> +               struct {
+> +                       u8 status; /* CAN Controller Status */
+> +                       u8 ecc;    /* Error Capture Register */
+> +                       u8 rec;    /* RX Error Counter */
+> +                       u8 tec;    /* TX Error Counter */
+> +               } ev_can_err_ext;  /* For ESD_EV_CAN_ERROR_EXT */
+> +       };
+>  };
+>
+>  struct tx_msg {
+> @@ -134,7 +142,7 @@ struct tx_msg {
+>         u8 cmd;
+>         u8 net;
+>         u8 dlc;
+> -       u32 hnd;        /* opaque handle, not used by device */
+> +       u32 hnd;   /* opaque handle, not used by device */
+>         __le32 id; /* upper 3 bits contain flags */
+>         u8 data[8];
+>  };
+> @@ -228,11 +236,11 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>         u32 id = le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
+>
+>         if (id == ESD_EV_CAN_ERROR_EXT) {
+> -               u8 state = msg->msg.rx.data[0];
+> -               u8 ecc   = msg->msg.rx.data[1];
+> +               u8 state = msg->msg.rx.ev_can_err_ext.status;
+> +               u8 ecc   = msg->msg.rx.ev_can_err_ext.ecc;
+>
+> -               priv->bec.rxerr = msg->msg.rx.data[2];
+> -               priv->bec.txerr = msg->msg.rx.data[3];
+> +               priv->bec.rxerr = msg->msg.rx.ev_can_err_ext.rec;
+> +               priv->bec.txerr = msg->msg.rx.ev_can_err_ext.tec;
+>
+>                 netdev_dbg(priv->netdev,
+>                            "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
 
-                                            ^ extra t (also below)
-> +
-> +	/*
-> +	 * Wait for transition from H_VASI_RESUMED to H_VASI_COMPLETED.
-> +	 */
-> +	while (true) {
-> +		ret =3D poll_vasi_state(handle, &state);
-> +
-> +		/*
-> +		 * If the memory transfer is already complete and the migration
-> +		 * has been cleaned up by the hypervisor, H_PARAMETER is return,
-> +		 * which is translate in EINVAL by poll_vasi_state().
-> +		 */
-> +		if (ret =3D=3D -EINVAL || (!ret && state =3D=3D H_VASI_COMPLETED)) {
-> +			pr_info("memory transfert completed.\n");
-> +			break;
-> +		}
-> +
-> +		if (ret) {
-> +			pr_err("H_VASI_STATE return error (%d)\n", ret);
-> +			break;
-> +		}
-> +
-> +		if (state !=3D H_VASI_RESUMED) {
-> +			pr_err("unexpected H_VASI_STATE result %lu\n", state);
-> +			break;
-> +		}
-> +
-> +		msleep(500);
-
-Is 500 specified anywhere? Another caller uses 1000, and the other one=20
-uses some backoff interval starting at 1ms...
-
-> +	}
-> +}
-> +
->  static void prod_single(unsigned int target_cpu)
->  {
->  	long hvrc;
-> @@ -673,9 +710,10 @@ static int pseries_migrate_partition(u64 handle)
->  	vas_migration_handler(VAS_SUSPEND);
-> =20
->  	ret =3D pseries_suspend(handle);
-> -	if (ret =3D=3D 0)
-> +	if (ret =3D=3D 0) {
->  		post_mobility_fixup();
-> -	else
-> +		wait_for_vasi_session_completed(handle);
-
-If this wasn't required until later patches, maybe a comment about why=20
-it's here? Could call it wait_for_migration() or similar too.
-
-Looks okay though from my basic reading of PAPR.
-
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-
-> +	} else
->  		pseries_cancel_migration(handle, ret);
-> =20
->  	vas_migration_handler(VAS_RESUME);
-> --=20
-> 2.36.1
->=20
->=20
+Yours sincerely,
+Vincent Mailhol

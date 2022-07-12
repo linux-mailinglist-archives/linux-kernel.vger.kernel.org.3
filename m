@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2C457134D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C39B571351
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbiGLHnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S232004AbiGLHny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiGLHnA (ORCPT
+        with ESMTP id S230139AbiGLHnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:43:00 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6099A693
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:42:59 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bf9so12508086lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:42:59 -0700 (PDT)
+        Tue, 12 Jul 2022 03:43:50 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D8AD137
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:43:49 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id t1so9006291lft.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OFwV0GnwEWzb8CnqbRyUTGeX9al/d39bPjBKtubmVOM=;
-        b=o1W8oqEsbambLrmck9k9jnDD2s/GDAq4FcLrOJ0b8a0giL0LWHLOC/1dvYsgkMBaIN
-         6I6f2/CrLsK1iiBRc6HF4NvegXCc1RQXolCUw7xSQElPiF37gzkWQG6QvhMBiW666CzG
-         6hNxkqJa+ArJAM2yoFDn8su4Q+nbr76nY4WkHxT1qPBMn/YURgxtLaHmYo6YiZoUL6pz
-         SQJf7QO2zQybxlAXiIcf/iBXDZSuvZN4PmWTp0VpCYQAWrwSJTUuCY67UQO5hnRWZAjp
-         qecLYLQDcJnk1q9x2KNOi3ydU5XWjtB/jPeSAFN2NCUB1CJTQrWvjgmLoEZ8Gic3JgRk
-         luFA==
+        bh=fykMBHjyV7LPXsdsR/MQifRdgrsDh/BFR1VZ9OfGQ4o=;
+        b=vc5mabH2GM3TX3F2Q0YU5t4wiikLaQ82BU5bfXStOZdQ2iNqfUc6XKszUswvqrBT40
+         O7L15l0WN7szG25GL6Ex0bwlGX4IbsJMwHQfm93B8QQue5hl+vkEso0BLxhXHd2PwGaU
+         8AaJCLvpdJQNaHzDKn56B6RKzZ2qS8/kL6hf5MARqR6E7h3FnfZglJjlcpjBzSF5rgu+
+         dKdUpFp/MPAe3ODMykJ05iAcL27ZlbGHaQRLPnzDl6kbL86VTK0+kIRdgmohwCRorsxr
+         fku7paqLlq2pZaKUgV41WjTkDG5QYnloWZjrEEUaCVJtBhLQ8sg7I7QT47ybWfN9VtlD
+         4iMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OFwV0GnwEWzb8CnqbRyUTGeX9al/d39bPjBKtubmVOM=;
-        b=DrM7+5Qi4n7tCBKf3qWPiDlg1rVeieN5ftI/MxR+2eQ8z2ZIQc9fQ09733T/tqZ0tX
-         6aD2dI3P+FP2vNdTcQINcc9lvIl6C7K1CviLp9GjiHjpOGyet/6E68t7pkXKvZPfulz/
-         7tK7iyimfYQL7St1TLhKjaIhXTg0PXymCRRYhZL+o4RCNNYoG9QUUBQlCd1pmHvQyI2h
-         0S6dcYdId54Srk13v0S3xrKi8UimPduCmIE8qXK9r4HfuWWGD0IDKKZeCXpHkUaRIWKb
-         bwbPfpsQKoQsPiTtlv/zC98Frt1sJldiSNk57NxQgSzefbFuXOcgHKhtNqg/MXTLm9uX
-         bu7w==
-X-Gm-Message-State: AJIora+liaK+KcaG4iqsUGNYL+jb8xx7DZA231+fP2WcUJKTOROxy+3h
-        BkL9k679sVdCfAQLBU0x0XXyxA==
-X-Google-Smtp-Source: AGRyM1s1uq9FLDTjLnPxNPASCty8gxzyOPR+BzP1K6BIHFjkkiMXm8ZYVxe/EM7Xena5vwvn5pvzug==
-X-Received: by 2002:a19:dc4d:0:b0:489:63cb:20c7 with SMTP id f13-20020a19dc4d000000b0048963cb20c7mr13224707lfj.101.1657611777630;
-        Tue, 12 Jul 2022 00:42:57 -0700 (PDT)
+        bh=fykMBHjyV7LPXsdsR/MQifRdgrsDh/BFR1VZ9OfGQ4o=;
+        b=fs1C0yLN/n+OzniAzgVT7ghqLW2IXYhfWqD0VNi84U5NmGzPvxWbe6bML3bGUJgad8
+         aIocPOzVTz5ILQ4dR+/NDf7RO2WH+p0E0FKhzhFPI8+KqR+vVIk7bhYrGqgSNItc1qMm
+         18PY1xknuHfCxs/sDz6UhnVYrIacPxJIQYUE3r8yFRAwaNeHk4HIFG9HOTUYjveOkvfJ
+         4hX9m7R2BkcUSN/6DxSLkknYETisUEVAtyONLIMlagagTzmJz/ZpjaPJsKShw+hWIuyc
+         6HP2ns8TATig372/najYXGLR1/Kbz6hcmkzZxgUVFJ8/dxYg8RGcLWNkNHf5SEc3Ur9w
+         GdeQ==
+X-Gm-Message-State: AJIora8LL9v93/Qili61EQqEpvc2cBMZl5gfx45m0bXOOFtJk4XFXp/D
+        SCssp3mAkzXG3m5aNN31A6KI2g==
+X-Google-Smtp-Source: AGRyM1tUTdl562QjFjmmC2O2M710ZXbgXFnEfKy7677dxZbiK3u5QWolbRfwZBRgRcA2E/thrQ5Ilw==
+X-Received: by 2002:a05:6512:39cc:b0:481:1b6b:4a7c with SMTP id k12-20020a05651239cc00b004811b6b4a7cmr15235404lfu.597.1657611828014;
+        Tue, 12 Jul 2022 00:43:48 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056512200600b00489d6460831sm1487838lfb.266.2022.07.12.00.42.55
+        by smtp.gmail.com with ESMTPSA id e13-20020ac25cad000000b0047fac0f34absm2027558lfq.196.2022.07.12.00.43.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:42:57 -0700 (PDT)
-Message-ID: <7a1199e6-cdfc-d89e-84d9-db43ef135786@linaro.org>
-Date:   Tue, 12 Jul 2022 09:42:54 +0200
+        Tue, 12 Jul 2022 00:43:47 -0700 (PDT)
+Message-ID: <2f593af5-442e-67cc-9b7c-303d4c24e389@linaro.org>
+Date:   Tue, 12 Jul 2022 09:43:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/3] ARM: dts: imx7d: fixed dts for UC-8210/8220
- hardware
+Subject: Re: [PATCH v5 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
+ Clock
 Content-Language: en-US
-To:     Jimmy Chen <u7702045@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Jimmy Chen <jimmy.chen@moxa.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220712045505.4500-1-jimmy.chen@moxa.com>
- <20220712045505.4500-3-jimmy.chen@moxa.com>
+To:     Mia Lin <mimi05633@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
+        medadyoung@gmail.com, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        KFTING@nuvoton.com, JJLIU0@nuvoton.com, mylin1@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220712030509.23904-1-mimi05633@gmail.com>
+ <20220712030509.23904-2-mimi05633@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220712045505.4500-3-jimmy.chen@moxa.com>
+In-Reply-To: <20220712030509.23904-2-mimi05633@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,48 +82,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 06:55, Jimmy Chen wrote:
-> fix compatible string reference to fsl.yaml
-> change regulator node name
-> replace underscore to dash
-> replace node name
-> remove 'status' attribute from node
-> add board compatible and model to ixm7d-moxa-uc-8210.dts
-> rearrange 82XX alphabet order in Makefile
-
-This commit description does not make any sense. You messed up commit
-description with changelog. Please go through SubmittingPatches doc few
-times.
-
+On 12/07/2022 05:05, Mia Lin wrote:
+> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
 > 
-> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
-> ---
->  arch/arm/boot/dts/Makefile               |  4 +--
->  arch/arm/boot/dts/imx7d-moxa-uc-8210.dts | 46 +++++++++++-------------
->  arch/arm/boot/dts/imx7d-moxa-uc-8220.dts |  9 +++--
->  3 files changed, 29 insertions(+), 30 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 37db3b60ba43..c9c57626876c 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -747,6 +747,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
->  	imx7d-flex-concentrator-mfg.dtb \
->  	imx7d-mba7.dtb \
->  	imx7d-meerkat96.dtb \
-> +	imx7d-moxa-uc-8210.dtb \
-> +	imx7d-moxa-uc-8220.dtb \
->  	imx7d-nitrogen7.dtb \
->  	imx7d-pico-dwarf.dtb \
->  	imx7d-pico-hobbit.dtb \
-> @@ -755,8 +757,6 @@ dtb-$(CONFIG_SOC_IMX7D) += \
->  	imx7d-remarkable2.dtb \
->  	imx7d-sbc-imx7.dtb \
->  	imx7d-sdb.dtb \
-> -	imx7d-moxa-uc-8210.dtb \
-> -	imx7d-moxa-uc-8220.dtb \
+> Signed-off-by: Mia Lin <mimi05633@gmail.com>
 
-There are no such entries. Rest is even weirder...
+Where is the review tag?
 
 Best regards,
 Krzysztof

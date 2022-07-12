@@ -2,134 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883B3571E08
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D602C571E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiGLPFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S233982AbiGLPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbiGLPEJ (ORCPT
+        with ESMTP id S234078AbiGLPGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:04:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4AD63A8;
-        Tue, 12 Jul 2022 08:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0553061221;
-        Tue, 12 Jul 2022 15:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33461C341CF;
-        Tue, 12 Jul 2022 15:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657638011;
-        bh=4stto/0WdKGy1PAM7cobud0ZktYRhwuIUHvFotEri6o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kuVF7pg7PKX53+paGnLUTnLYkCzxjavhSjkjkPKVKfMA6yBWwbCM0eCa78ysbYzNl
-         /MNYBktPDvvt3nGQrZjSbRkLOf1ESWkBOaEbCBCeZl/LmGhdm0XazCO7iCzetTzxIX
-         j/8bpJQgHZVljOZo/nXxlh/v2mhOWJCsztl4lFmK2yQEo4sZ8g+2UfzA712XvxDoOh
-         RH1IEtLDCFibFK4/zR50dUYCyCc+ctEcCTnsu9SkDMSAvJRbzc4JN6vKWjCFQ2Mx6/
-         rzouqEz4GAccJHA9K1XFes2H5kROO5Ial9u2R0uNkybUoEdu5dxxGZ4jaU0P+kGh91
-         kGqYwjooNtovA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBHMz-0002FB-38; Tue, 12 Jul 2022 17:00:13 +0200
-Date:   Tue, 12 Jul 2022 17:00:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Add lost ranges for timer
-Message-ID: <Ys2MfeD73qBLO7zV@hovoldconsulting.com>
-References: <20220707160858.3178771-1-bjorn.andersson@linaro.org>
- <Ysvlqw/+eMk5XLRY@hovoldconsulting.com>
- <YszcSgnSrbsncw0J@ripper>
- <Ys2K/BH/kAeTBz5t@hovoldconsulting.com>
+        Tue, 12 Jul 2022 11:06:52 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A4AC54A4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:01:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id o12so7691247pfp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C6szfa/YFuVli7Zl8D3g07FtZCaBqKl0sr0C3s801fw=;
+        b=wvGh1LaGBDR/G4joma/N0cvbJnBEIUQnqZL1xqzrAx2II/seQanvVrR3VC/+z7Zjld
+         zVpL3S1Sbap6Qr3EziCQwuz57jjlFSyqAIG//PrF57ckKsOjYnNA74IslrVRV8nnnvRN
+         3wVRUsNjq8E8LfWdZImw+6t4uy2qdxEczsZkafnLIRX6/tVcYH4YdvtrreW/yTwotczk
+         0N6jnX5GZaEEOxdbD89BmI2kjEa6YY8NeG+QQlMPkGzOPlGhGFtT53OgEj7W2CYR3byM
+         LQOFNKZQ1nRsJMbeAYgWlG0zgQMstkobCqEuCJ2MiVopQxFfrxJf8bduX6B6jN534ryq
+         abmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C6szfa/YFuVli7Zl8D3g07FtZCaBqKl0sr0C3s801fw=;
+        b=OTwjFh+MOPcyOmGSvoHs/OWoEeIqfwNe3KhI9XfAkjcvvdtzDxKncvvWDgZxccPp8y
+         nCw9tqSMkVYXWk2zlxNu+JpOnqXlGVHq7XK/IWQavmS/eH0MdztvWc66YRK/KSxe/dEV
+         6BM68FhVMk2pcjrPIzxiXXTY7/IWBcEArLUhakR1RrvGDKB5lIv5DBlnZFyL7pICKJ+7
+         ZVd5uooUd2YG2LIpkDelX0DLLD08GSp0MnLdSFPfAwKdCci+L710vbV4pbvw31U6f+/S
+         MwwGNzIxDwLWcDrTl6YSLz3P0GyVsTVL6RlVFAYPdTil2cfOsXdWVRD//LVma/o3cISM
+         +krA==
+X-Gm-Message-State: AJIora9RdQTMAGb54aMstEJcQMFw8WNGlqlN1jUmzqC2LBRmWgCNw5Kp
+        dyK6mbK27EQ1cEVo24b9rk82Og==
+X-Google-Smtp-Source: AGRyM1uF2yZ0fhTWiRIzaCuJhrMoYd2YKnjhN3avJPfSwtQ8ASEEXv5DvqmJeYAEZYa99COktBhysA==
+X-Received: by 2002:a63:9752:0:b0:3c6:5a7a:5bd6 with SMTP id d18-20020a639752000000b003c65a7a5bd6mr21070507pgo.390.1657638073175;
+        Tue, 12 Jul 2022 08:01:13 -0700 (PDT)
+Received: from [10.4.113.6] ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id l1-20020a170902f68100b0016bfbd99f64sm6892899plg.118.2022.07.12.08.00.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 08:01:12 -0700 (PDT)
+Message-ID: <6f6a2257-3b60-e312-3ee3-fb08b972dbf2@bytedance.com>
+Date:   Tue, 12 Jul 2022 23:00:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2K/BH/kAeTBz5t@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/5] mm, oom: Introduce per numa node oom for
+ CONSTRAINT_{MEMORY_POLICY,CPUSET}
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, akpm@linux-foundation.org,
+        surenb@google.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, keescook@chromium.org, rostedt@goodmis.org,
+        mingo@redhat.com, peterz@infradead.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, david@redhat.com,
+        imbrenda@linux.ibm.com, adobriyan@gmail.com,
+        yang.yang29@zte.com.cn, brauner@kernel.org,
+        stephen.s.brennan@oracle.com, zhengqi.arch@bytedance.com,
+        haolee.swjtu@gmail.com, xu.xin16@zte.com.cn,
+        Liam.Howlett@oracle.com, ohoono.kwon@samsung.com,
+        peterx@redhat.com, arnd@arndb.de, shy828301@gmail.com,
+        alex.sierra@amd.com, xianting.tian@linux.alibaba.com,
+        willy@infradead.org, ccross@google.com, vbabka@suse.cz,
+        sujiaxun@uniontech.com, sfr@canb.auug.org.au,
+        vasily.averin@linux.dev, mgorman@suse.de, vvghjk1234@gmail.com,
+        tglx@linutronix.de, luto@kernel.org, bigeasy@linutronix.de,
+        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        hezhongkun.hzk@bytedance.com
+References: <20220708082129.80115-1-ligang.bdlg@bytedance.com>
+ <YsfwyTHE/5py1kHC@dhcp22.suse.cz>
+ <41ae31a7-6998-be88-858c-744e31a76b2a@bytedance.com>
+ <Ys14oIHL85d/T7s+@dhcp22.suse.cz>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <Ys14oIHL85d/T7s+@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:53:48PM +0200, Johan Hovold wrote:
-> On Mon, Jul 11, 2022 at 07:28:26PM -0700, Bjorn Andersson wrote:
-> > On Mon 11 Jul 01:56 PDT 2022, Johan Hovold wrote:
-> > 
-> > > On Thu, Jul 07, 2022 at 09:08:58AM -0700, Bjorn Andersson wrote:
-> > > > The timer node needs ranges specified to map the 1-cell children to the
-> > > > 2-cell address range used in /soc. This addition never made it into the
-> > > > patch that was posted and merged, so add it now.
-> > > > 
-> > > > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > index 2bdb42c88311..37a4cd6f85b6 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > > > @@ -1667,6 +1667,7 @@ timer@17c20000 {
-> > > >  			reg = <0x0 0x17c20000 0x0 0x1000>;
-> > > >  			#address-cells = <1>;
-> > > >  			#size-cells = <1>;
-> > > > +			ranges = <0 0 0 0x20000000>;
-> > > 
-> > > While addressing the current issue, this looks odd to me. Why not use a
-> > > non-zero parent bus address here instead?
-> > > 
-> > 
-> > I guess we could express the frames relative the timer range, but that
-> > would imply that anyone porting downstream dts snippets would have to
-> > translate these addresses - or more likely would end up just copying the
-> > existing cases.
-> > 
-> > > And please use hex notation consistently for the addresses.
-> > 
-> > That seems like a reasonable ask, I can fix that up. But on both
-> > accounts this matches what I merged for all the other platforms in:
-> > 
-> > 458ebdbb8e5d ("arm64: dts: qcom: timer should use only 32-bit size")
-> > 
-> > 
-> > So I guess we'll also need to go back and fix up the style of all the
-> > other platforms - just because we're not allowed to express the frames
-> > in 64-bits according to the binding...
+
+On 7/12/22 9:35 PM, Michal Hocko Wrote:
+> On Tue 12-07-22 19:12:18, Abel Wu wrote:
+> [...]
+>> I was just going through the mail list and happen to see this. There
+>> is another usecase for us about per-numa memory usage.
+>>
+>> Say we have several important latency-critical services sitting inside
+>> different NUMA nodes without intersection. The need for memory of these
+>> LC services varies, so the free memory of each node is also different.
+>> Then we launch several background containers without cpuset constrains
+>> to eat the left resources. Now the problem is that there doesn't seem
+>> like a proper memory policy available to balance the usage between the
+>> nodes, which could lead to memory-heavy LC services suffer from high
+>> memory pressure and fails to meet the SLOs.
 > 
-> Would have been easier to just amend the binding. I don't think that
-> #size-cells = 1 constraint is set in stone as it was added when
-> converting to DT schema.
+> I do agree that cpusets would be rather clumsy if usable at all in a
+> scenario when you are trying to mix NUMA bound workloads with those
+> that do not have any NUMA proferences. Could you be more specific about
+> requirements here though?
 
-Ok, maybe it was done on purpose since Rob later merged
+Yes, these LC services are highly sensitive to memory access latency
+and bandwidth, so they are provisioned by NUMA node granule to meet
+their performance requirements. While on the other hand, they usually
+do not make full use of cpu/mem resources which increases the TCO of
+our IDCs, so we have to co-locate them with background tasks.
 
-	c5c689d3221e ("dt-bindings: timer: Use non-empty ranges in example")
+Some of these LC services are memory-bound but leave much of cpu's
+capacity unused. In this case we hope the co-located background tasks
+to consume some leftover without introducing obvious mm overhead to
+the LC services.
 
-which suggests we should use a non-empty ranges as I mentioned above.
-
-Any comments, Rob?
-
-> I also don't think you need to fixup the hex notation elsewhere, it's
-> quite inconsistent currently, but no need to make it worse.
 > 
-> But you probably should amend the commit message and mention that this
-> fixes time keeping. I had recently noticed that something was off
-> (journals rotating, and erratic cursor blinking) but didn't realise that
-> timers were broken until you posted this.
+> Let's say you run those latency critical services with "simple" memory
+> policies and mix them with the other workload without any policies in
+> place so they compete over memory. It is not really clear to me how can
+> you achieve any reasonable QoS in such an environment. Your latency
+> critical servises will be more constrained than the non-critical ones
+> yet they are more demanding AFAIU.
 
-Johan
+Yes, the QoS over memory is the biggest block in the way (the other
+resources are relatively easier). For now, we hacked a new mpol to
+achieve weighted-interleave behavior to balance the memory usage across
+NUMA nodes, and only set memcg protections to the LC services. If the
+memory pressure is still high, the background tasks will be killed.
+Ideas? Thanks!
+
+Abel

@@ -2,100 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FB5570E9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0358570EA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiGLAKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S231466AbiGLAL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiGLAKg (ORCPT
+        with ESMTP id S229776AbiGLALY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:10:36 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E8A3E771
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:10:35 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 73so6103139pgb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=nPm1+OWctOA0Hf4porrExLMLHsKwOrco71sJEdbBhGg=;
-        b=oYsF4NiH6G+/jxKKqgdR7avAvjSc5+n+MHMxK2MQ0BUE7i4KcN6Q7aSldg5ssnxs3d
-         z6QXwEFH0oHNCZbWlsfvX8WhZPU4N9NGI+xbPAKkYkG5V5CQOwWgOlmB3nLpK7Nc3/5u
-         bvLrwnMdBzPsoboRTaqnpf4l+OKWnvln7fO4z05VZMpHWZaX5ayB1Lvg4M3TCcZcq55K
-         tRryg3sN7kFnLVbFVcXELDq/6uhKYDa1mV//fpvQ/ArXAxulxRVGCKalrQU4rMrYIZHd
-         aW9vyfaKF88C+3o8jKB4139Mk9hF290blNVVkGJS8SAVdlK2gaMJ0ehBYXcUHWC1ufij
-         4Ibg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=nPm1+OWctOA0Hf4porrExLMLHsKwOrco71sJEdbBhGg=;
-        b=0mpHgHtuwgbU3XXl25UzxY+x4mqqosrecQcY7yE3NBpSggtLXkavSWW51anIlDkclU
-         /v1Ssl2zcDxy2PsA7QhUgPa7/QrPZPKvIDB3YantvtkFwO2atojumtTQ0JGeIH2/JRJZ
-         o65N4MntYoracf+wanuQhP2szP2xb1ScuslNhOlvFrOKgl83BGdqXdynMgP4xYu0W4oZ
-         jFOoGez9YoXJpZNr6a7f0n9rhQt8iaGXBuz/8k8LSWIzVorPTUuADMDJrYHIy3ZzbPti
-         7KztL5dxRp0WYeYwmPGQWHh33ugpLOk25HawbGCZ4BJKOSRVWVHU2DcuzRfgn63LWoqT
-         DEsg==
-X-Gm-Message-State: AJIora/iZjjaz5qEXtzIlcViRwIuBYGhbGAY4ySjXEIF6sg8009h/MjX
-        iIipt+OUIKziWvXPZh5iAMA=
-X-Google-Smtp-Source: AGRyM1slJeHPQsN+1JVSFRGQl9bHUvz+vaH7yldqTha7eQsTTCLPD8U/vXSui/10qDO+p5ev3Nb4nA==
-X-Received: by 2002:a63:4d5f:0:b0:412:12cb:b09f with SMTP id n31-20020a634d5f000000b0041212cbb09fmr17772429pgl.26.1657584634978;
-        Mon, 11 Jul 2022 17:10:34 -0700 (PDT)
-Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id w13-20020a17090a1b8d00b001e2f892b352sm7536224pjc.45.2022.07.11.17.10.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 17:10:34 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 10:10:27 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 03/13] locking/qspinlock: split common mcs queueing code
- into its own function
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <20220704143820.3071004-1-npiggin@gmail.com>
-        <20220704143820.3071004-4-npiggin@gmail.com>
-        <YsRucXLUueWlAeJC@worktop.programming.kicks-ass.net>
-In-Reply-To: <YsRucXLUueWlAeJC@worktop.programming.kicks-ass.net>
+        Mon, 11 Jul 2022 20:11:24 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C255A422C9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657584683; x=1689120683;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RqE/10F8cM5p6ujyAuxaXmD/9itGhRl3pE9JzAmilx0=;
+  b=S2c44iAHh/bI2G5da0SP9dFx7oNl4Gd8pYpdxNlNAha7DrD5wyeUFZ1e
+   bF8otqD0b/SuYRookvdIjYDO2ACysTaDvHfwVsll6GjFgnvyuw2Z7pkUk
+   o0Wbcehg3PQWj1W+peOAKtN9uf15kD5m0QRaOj1M1XwKUVrrPb6RnuKnb
+   FgiKW+XaLbhqckmIAb8RtIUP9yIetypJBy+AF8RYgbcafj0QfHrYJRmZ/
+   +UDezI1aO3dyXEoiGfkS6NFx2g4Gyhglfn7qVrxYsSezwxv67vuMHfAxa
+   Z+n+TuOsoxB5V+5Tif+6Nr+DVlQ5H+NwVpiOIfuPfQ9lGJDzMsmhUsjvr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="264589457"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="264589457"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 17:11:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="841187818"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2022 17:11:23 -0700
+Received: from [10.252.212.229] (kliang2-mobl1.ccr.corp.intel.com [10.252.212.229])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 712105805BD;
+        Mon, 11 Jul 2022 17:11:21 -0700 (PDT)
+Message-ID: <96d7a36e-c6d1-f45f-6d5a-3eb7c56ddc3d@linux.intel.com>
+Date:   Mon, 11 Jul 2022 20:11:19 -0400
 MIME-Version: 1.0
-Message-Id: <1657584429.qwey1g734l.astroid@bobo.none>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
+ intel_pmu_lbr_restore
+Content-Language: en-US
+To:     Vince Weaver <vincent.weaver@maine.edu>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        pawan.kumar.gupta@linux.intel.com
+References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu>
+ <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu>
+ <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com>
+ <f22dd6fb-48b7-99cf-3d7a-348e5792c8@maine.edu>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <f22dd6fb-48b7-99cf-3d7a-348e5792c8@maine.edu>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 6, 2022 3:01 am:
-> On Tue, Jul 05, 2022 at 12:38:10AM +1000, Nicholas Piggin wrote:
->> +void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
->> +{
->> +	if (pv_enabled()) {
->> +		queued_spin_lock_mcs_queue(lock);
->> +		return;
->> +	}
->> +
->> +	if (virt_spin_lock(lock))
->> +		return;
->> +
->=20
-> This reminds me; at the time I meant to make queued_spin_lock_slowpath()
-> a static_call() and redirect the function appropriately at boot time.
-> But that was before static_call() was merged and I never seem to have
-> gotten around to doing that afterwards...
 
-Wouldn't hurt. OTOH hyper optimising the contended path is probably
-almost not measurable. Optimising coherency in the contended path
-absolutely, but straight line code less so. That said don't let me
-stop you :)
+
+On 2022-07-11 5:13 p.m., Vince Weaver wrote:
+> On Mon, 11 Jul 2022, Liang, Kan wrote:
+> 
+>>
+>>
+>> On 2022-07-08 12:13 p.m., Vince Weaver wrote:
+>>> [ 7763.384369] unchecked MSR access error: WRMSR to 0x689 (tried to write 0x1fffffff8101349e) at rIP: 0xffffffff810704a4 (native_write_msr+0x4/0x20)
+>>
+>> The 0x689 is a valid LBR register, which is MSR_LASTBRANCH_9_FROM_IP.
+>> The issue should be caused by the known TSX bug, which is mentioned in
+>> the commit 9fc9ddd61e0 ("perf/x86/intel: Fix MSR_LAST_BRANCH_FROM_x bug
+>> when no TSX"). It looks like the TSX support has been deactivated,
+>> however the quirk in the commit isn't applied for some reason.
+>>
+>>
+>> To apply the quirk, perf relies on the boot CPU's flag and LBR format.
+>>
+>> static inline bool lbr_from_signext_quirk_needed(void)
+>> {
+>> 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
+>> 			   boot_cpu_has(X86_FEATURE_RTM);
+>>
+>> 	return !tsx_support && x86_pmu.lbr_has_tsx;
+>> }
+>>
+>> Could you please share the value of the PERF_CAPABILITIES MSR	0x00000345
+>> of the machine?
+>> I'd like to double check whether the LBR fromat is correct. 0x5 is expected.
+> 
+> How would I do that?  Just something like:
+> # rdmsr 0x00000345
+> 32c4
+>
+
+Yes. It indicates that the LBR format is 4. That's expected for HSW.
+(I made a mistake in the previous email. Skylake has format 5, not HSW.)
+For the LBR format 4, the x86_pmu.lbr_has_tsx must be 1.
+
+So it looks like an issue of the CPU flag.
+
+Could you please collect the TSX information which Pawan mentioned in
+the other thread?
 
 Thanks,
-Nick
+Kan
+
+> or is it more involved than that?
+> 
+> Vince Weaver
+> vincent.weaver@maine.edu

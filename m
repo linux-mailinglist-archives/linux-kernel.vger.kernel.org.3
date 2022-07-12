@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A89570F6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1BF570F6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiGLBYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S231828AbiGLBZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbiGLBYO (ORCPT
+        with ESMTP id S231585AbiGLBZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:24:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0967C20F48;
-        Mon, 11 Jul 2022 18:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657589053; x=1689125053;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=t/rZzEhN/luqnDo+goJEWDGNHozkvcN+wJndb+YzP8U=;
-  b=kG3EJc48NJjfycVW0Bsh3O3SCOxjfA2RTBOb/0SIemSq5FPNi3dJ6Kig
-   6wuiVGvhrrdWalw4so4D2YyN1z46Ckl6zC7XJYWhFpnZhI1ZqFid+0m7h
-   IQxv+NwQvJlLOSAyRaSxHLK1Bia1MffRf/KlO/0McNZt1sTlpSN4sFwkE
-   Re1L3ivoYpk00HMMkTv3JEnidPpwBQPESXHFecPQgY7UOTVbCmoHC+r1H
-   EFJhzsgtWrBWlhq5qNcNu0H9OVfa5i4Cp7e7RkaK7wATZrRD98bCXUiJg
-   gV0YA/73/3tkxhq4J2qZcpT+VgTeKu4t+LHLIsELH/29A581tqLxU7Iq9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="265223266"
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="265223266"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:24:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="545235317"
-Received: from snaskant-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.60.27])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:24:10 -0700
-Message-ID: <21d982b56e3958ae85c308defd13ec5f5e2edd39.camel@intel.com>
-Subject: Re: [PATCH v7 012/102] KVM: x86: Introduce vm_type to differentiate
- default VMs from confidential VMs
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Date:   Tue, 12 Jul 2022 13:24:08 +1200
-In-Reply-To: <20220712010115.GE1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <5979d880dc074c7fa57e02da34a41a6905ebd89d.1656366338.git.isaku.yamahata@intel.com>
-         <3c5d4e38b631a921006e44551fe1249339393e41.camel@intel.com>
-         <20220712010115.GE1379820@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 11 Jul 2022 21:25:26 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365828AEC1;
+        Mon, 11 Jul 2022 18:25:25 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so6503830pjf.2;
+        Mon, 11 Jul 2022 18:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=tJk6zBlY9QhoHDBqE6sf/Ar1VT3b2UIqq/vwqwhB/To=;
+        b=SdrCVU8V7n1mEnZPqiBABStsw6yqQpQVouPs7LbNp0b2rcLAsVIGMaNMDLdojJ3W8E
+         Uz5kHYF87Ipu9A/qN0aFy099JBAtGWbQNK4vShKsEUuRz35yDaIfdwKYUhyPrWXV3CI/
+         Q7wrdnRHslrlZkHOGFoAJJJiZ3Jtxej0qemOk4tbliYt1UwNkqhtXc/uaLGumK7b5Lq5
+         EkeGC0jNRvS+VKIOoD5CSCELfhowN7GK0fsapsmIeuxgVHaVRAZ/snVBF6EezSW+TFI/
+         nD+kJ09rEKfgzdxemzJ96Gz3SYXlHH+zAiDEo7Zf3/PCLV/cemSGhGa0F/4VGp0lwJGI
+         Lqeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=tJk6zBlY9QhoHDBqE6sf/Ar1VT3b2UIqq/vwqwhB/To=;
+        b=7GWkaIDhxw+/x18N3HdoCqBWq/RliQ4LDJg54x7fXz+nreLh3LxGAWBcjcSuIOCGPA
+         ZfODkbkCy0boliBFnFUzcQjvfhj593ffXuj2fkLP3+2r5gN9UW/6M4OKoMzve4GnlJIZ
+         7W9b1It+K2j8oZNZsi88yyh80KYNQS8MzZtpQ0WNoJl0IJfmGLjonKalSbsEcBerbgop
+         FrEFSHQeCTKyoNGHGIrxQzEOX63eSWHxQc3ZOOf+IHArpry65TavoI66/6UFBqU589Ln
+         f5lDliJwecbtAv6RLPP8PQoZ5FXV8HpXJ/CgUjJ0cKpQejFUQiwMDz8t2brPU1jlsotT
+         fC4Q==
+X-Gm-Message-State: AJIora+erUyUFiKenu+oU4yBvtRJb4paSKOJCOakq+uDgBSwS+nCbJSs
+        r7IR7pjZD4pS2nGbWHzfVZimUZPP8TA=
+X-Google-Smtp-Source: AGRyM1tVDFhTOh3SLdWErzTBq0Y0cdXLDepnSiDU+IuE3v/TMGPW7U3/ihBoOO5UGN0rk+sv+32csQ==
+X-Received: by 2002:a17:90b:4c42:b0:1ef:c8a6:fe91 with SMTP id np2-20020a17090b4c4200b001efc8a6fe91mr1304325pjb.202.1657589123951;
+        Mon, 11 Jul 2022 18:25:23 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a31e:fcfb:1279:f5f8])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090abd0700b001ec71be4145sm5408763pjr.2.2022.07.11.18.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 18:25:22 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 18:25:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     linux-input@vger.kernel.org, acz@semihalf.com
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: properly queue synthetic events
+Message-ID: <YszNfq4b6MkeoCJC@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,152 +69,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 18:01 -0700, Isaku Yamahata wrote:
-> On Tue, Jun 28, 2022 at 02:52:28PM +1200,
-> Kai Huang <kai.huang@intel.com> wrote:
->=20
-> > On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
-> > > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > >=20
-> > > Unlike default VMs, confidential VMs (Intel TDX and AMD SEV-ES) don't=
- allow
-> > > some operations (e.g., memory read/write, register state access, etc)=
-.
-> > >=20
-> > > Introduce vm_type to track the type of the VM to x86 KVM.  Other arch=
- KVMs
-> > > already use vm_type, KVM_INIT_VM accepts vm_type, and x86 KVM callbac=
-k
-> > > vm_init accepts vm_type.  So follow them.  Further, a different polic=
-y can
-> > > be made based on vm_type.  Define KVM_X86_DEFAULT_VM for default VM a=
-s
-> > > default and define KVM_X86_TDX_VM for Intel TDX VM.  The wrapper func=
-tion
-> > > will be defined as "bool is_td(kvm) { return vm_type =3D=3D VM_TYPE_T=
-DX; }"
-> > >=20
-> > > Add a capability KVM_CAP_VM_TYPES to effectively allow device model,
-> > > e.g. qemu, to query what VM types are supported by KVM.  This (introd=
-uce a
-> > > new capability and add vm_type) is chosen to align with other arch KV=
-Ms
-> > > that have VM types already.  Other arch KVMs uses different name to q=
-uery
-> > > supported vm types and there is no common name for it, so new name wa=
-s
-> > > chosen.
-> > >=20
-> > > Co-developed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > > Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> > > ---
-> > >  Documentation/virt/kvm/api.rst        | 21 +++++++++++++++++++++
-> > >  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
-> > >  arch/x86/include/asm/kvm_host.h       |  2 ++
-> > >  arch/x86/include/uapi/asm/kvm.h       |  3 +++
-> > >  arch/x86/kvm/svm/svm.c                |  6 ++++++
-> > >  arch/x86/kvm/vmx/main.c               |  1 +
-> > >  arch/x86/kvm/vmx/tdx.h                |  6 +-----
-> > >  arch/x86/kvm/vmx/vmx.c                |  5 +++++
-> > >  arch/x86/kvm/vmx/x86_ops.h            |  1 +
-> > >  arch/x86/kvm/x86.c                    |  9 ++++++++-
-> > >  include/uapi/linux/kvm.h              |  1 +
-> > >  tools/arch/x86/include/uapi/asm/kvm.h |  3 +++
-> > >  tools/include/uapi/linux/kvm.h        |  1 +
-> > >  13 files changed, 54 insertions(+), 6 deletions(-)
-> > >=20
-> > > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/=
-api.rst
-> > > index 9cbbfdb663b6..b9ab598883b2 100644
-> > > --- a/Documentation/virt/kvm/api.rst
-> > > +++ b/Documentation/virt/kvm/api.rst
-> > > @@ -147,10 +147,31 @@ described as 'basic' will be available.
-> > >  The new VM has no virtual cpus and no memory.
-> > >  You probably want to use 0 as machine type.
-> > > =20
-> > > +X86:
-> > > +^^^^
-> > > +
-> > > +Supported vm type can be queried from KVM_CAP_VM_TYPES, which return=
-s the
-> > > +bitmap of supported vm types. The 1-setting of bit @n means vm type =
-with
-> > > +value @n is supported.
-> >=20
-> >=20
-> > Perhaps I am missing something, but I don't understand how the below ch=
-anges
-> > (except the x86 part above) in Documentation are related to this patch.
->=20
-> This is to summarize divergence of archs.  Those archs (s390, mips, and
-> arm64) introduce essentially same KVM capabilities, but different names. =
-This
-> patch makes things worse.  So I thought it's good idea to summarize it. P=
-robably
-> this documentation part can be split out into its own patch. thoughts?
+We should not be passing synthetic events (such as autorepeat events)
+out of order with the events coming from the hardware device, but rather
+add them to pending events and flush them all at once.
 
-I will leave to maintainers here.  Thought personally I would split differe=
-nt
-things into different patches.
+This also fixes an issue with timestamps for key release events carrying
+stale data from the previous autorepeat event.
 
->=20
->=20
-> > > diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> > > index 54d7a26ed9ee..2f43db5bbefb 100644
-> > > --- a/arch/x86/kvm/vmx/tdx.h
-> > > +++ b/arch/x86/kvm/vmx/tdx.h
-> > > @@ -17,11 +17,7 @@ struct vcpu_tdx {
-> > > =20
-> > >  static inline bool is_td(struct kvm *kvm)
-> > >  {
-> > > -	/*
-> > > -	 * TDX VM type isn't defined yet.
-> > > -	 * return kvm->arch.vm_type =3D=3D KVM_X86_TDX_VM;
-> > > -	 */
-> > > -	return false;
-> > > +	return kvm->arch.vm_type =3D=3D KVM_X86_TDX_VM;
-> > >  }
-> >=20
-> > If you put this patch before patch:
-> >=20
-> > 	[PATCH v7 009/102] KVM: TDX: Add placeholders for TDX VM/vcpu structur=
-e
-> >=20
-> > Then you don't need to introduce this chunk in above patch and then rem=
-ove it
-> > here, which is unnecessary and ugly.
-> >=20
-> > And you can even only introduce KVM_X86_DEFAULT_VM but not KVM_X86_TDX_=
-VM in
-> > this patch, so you can make this patch as a infrastructural patch to re=
-port VM
-> > type.  The KVM_X86_TDX_VM can come with the patch where is_td() is intr=
-oduced
-> > (in your above patch 9). =C2=A0
-> >=20
-> > To me, it's more clean way to write patch.  For instance, this infrastr=
-uctural
-> > patch can be theoretically used by other series if they have similar th=
-ing to
-> > support, but doesn't need to carry is_td() and KVM_X86_TDX_VM burden th=
-at you
-> > made.
->=20
-> There are two choices. One is to put this patch before 9 as you suggested=
-, other
-> is to  put it here right before the patch 13 that uses vm_type_supported(=
-).
->=20
-> Thanks,
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/input/input.c | 125 +++++++++++++++++++++---------------------
+ 1 file changed, 63 insertions(+), 62 deletions(-)
 
-To me this belongs to category of "infrastructural patch", which does "Add =
-new
-ABI to support reporting VM types".  It can originally support default VM o=
-nly.
-TDX VM can come later.  But will leave to maintainers.
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index 1365c9dfb5f2..2c24e92fd64a 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -174,44 +174,6 @@ static void input_pass_values(struct input_dev *dev,
+ 	}
+ }
+ 
+-static void input_pass_event(struct input_dev *dev,
+-			     unsigned int type, unsigned int code, int value)
+-{
+-	struct input_value vals[] = { { type, code, value } };
+-
+-	input_pass_values(dev, vals, ARRAY_SIZE(vals));
+-}
+-
+-/*
+- * Generate software autorepeat event. Note that we take
+- * dev->event_lock here to avoid racing with input_event
+- * which may cause keys get "stuck".
+- */
+-static void input_repeat_key(struct timer_list *t)
+-{
+-	struct input_dev *dev = from_timer(dev, t, timer);
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&dev->event_lock, flags);
+-
+-	if (test_bit(dev->repeat_key, dev->key) &&
+-	    is_event_supported(dev->repeat_key, dev->keybit, KEY_MAX)) {
+-		struct input_value vals[] =  {
+-			{ EV_KEY, dev->repeat_key, 2 },
+-			input_value_sync
+-		};
+-
+-		input_set_timestamp(dev, ktime_get());
+-		input_pass_values(dev, vals, ARRAY_SIZE(vals));
+-
+-		if (dev->rep[REP_PERIOD])
+-			mod_timer(&dev->timer, jiffies +
+-					msecs_to_jiffies(dev->rep[REP_PERIOD]));
+-	}
+-
+-	spin_unlock_irqrestore(&dev->event_lock, flags);
+-}
+-
+ #define INPUT_IGNORE_EVENT	0
+ #define INPUT_PASS_TO_HANDLERS	1
+ #define INPUT_PASS_TO_DEVICE	2
+@@ -275,6 +237,10 @@ static int input_get_disposition(struct input_dev *dev,
+ 	int disposition = INPUT_IGNORE_EVENT;
+ 	int value = *pval;
+ 
++	/* filter-out events from inhibited devices */
++	if (dev->inhibited)
++		return INPUT_IGNORE_EVENT;
++
+ 	switch (type) {
+ 
+ 	case EV_SYN:
+@@ -375,19 +341,9 @@ static int input_get_disposition(struct input_dev *dev,
+ 	return disposition;
+ }
+ 
+-static void input_handle_event(struct input_dev *dev,
+-			       unsigned int type, unsigned int code, int value)
++static void input_event_dispose(struct input_dev *dev, int disposition,
++			        unsigned int type, unsigned int code, int value)
+ {
+-	int disposition;
+-
+-	/* filter-out events from inhibited devices */
+-	if (dev->inhibited)
+-		return;
+-
+-	disposition = input_get_disposition(dev, type, code, &value);
+-	if (disposition != INPUT_IGNORE_EVENT && type != EV_SYN)
+-		add_input_randomness(type, code, value);
+-
+ 	if ((disposition & INPUT_PASS_TO_DEVICE) && dev->event)
+ 		dev->event(dev, type, code, value);
+ 
+@@ -426,7 +382,22 @@ static void input_handle_event(struct input_dev *dev,
+ 		input_pass_values(dev, dev->vals, dev->num_vals);
+ 		dev->num_vals = 0;
+ 	}
++}
++
++static void input_handle_event(struct input_dev *dev,
++			       unsigned int type, unsigned int code, int value)
++{
++	int disposition;
++
++	lockdep_assert_held(&dev->event_lock);
++
++	disposition = input_get_disposition(dev, type, code, &value);
++	if (disposition != INPUT_IGNORE_EVENT) {
++		if (type != EV_SYN)
++			add_input_randomness(type, code, value);
+ 
++		input_event_dispose(dev, disposition, type, code, value);
++	}
+ }
+ 
+ /**
+@@ -613,7 +584,7 @@ static void __input_release_device(struct input_handle *handle)
+ 					    lockdep_is_held(&dev->mutex));
+ 	if (grabber == handle) {
+ 		rcu_assign_pointer(dev->grab, NULL);
+-		/* Make sure input_pass_event() notices that grab is gone */
++		/* Make sure input_pass_values() notices that grab is gone */
+ 		synchronize_rcu();
+ 
+ 		list_for_each_entry(handle, &dev->h_list, d_node)
+@@ -736,7 +707,7 @@ void input_close_device(struct input_handle *handle)
+ 
+ 	if (!--handle->open) {
+ 		/*
+-		 * synchronize_rcu() makes sure that input_pass_event()
++		 * synchronize_rcu() makes sure that input_pass_values()
+ 		 * completed and that no more input events are delivered
+ 		 * through this handle
+ 		 */
+@@ -758,14 +729,12 @@ static void input_dev_release_keys(struct input_dev *dev)
+ 
+ 	if (is_event_supported(EV_KEY, dev->evbit, EV_MAX)) {
+ 		for_each_set_bit(code, dev->key, KEY_CNT) {
+-			input_pass_event(dev, EV_KEY, code, 0);
++			input_handle_event(dev, EV_KEY, code, 0);
+ 			need_sync = true;
+ 		}
+ 
+ 		if (need_sync)
+-			input_pass_event(dev, EV_SYN, SYN_REPORT, 1);
+-
+-		memset(dev->key, 0, sizeof(dev->key));
++			input_handle_event(dev, EV_SYN, SYN_REPORT, 1);
+ 	}
+ }
+ 
+@@ -1004,12 +973,16 @@ int input_set_keycode(struct input_dev *dev,
+ 	} else if (test_bit(EV_KEY, dev->evbit) &&
+ 		   !is_event_supported(old_keycode, dev->keybit, KEY_MAX) &&
+ 		   __test_and_clear_bit(old_keycode, dev->key)) {
+-		struct input_value vals[] =  {
+-			{ EV_KEY, old_keycode, 0 },
+-			input_value_sync
+-		};
+-
+-		input_pass_values(dev, vals, ARRAY_SIZE(vals));
++		/*
++		 * We have to use input_event_dispose() here directly instead
++		 * of input_handle_event() because the key we want to release
++		 * here is considered no longer supported by the device and
++		 * input_handle_event() will ignore it.
++		 */
++		input_event_dispose(dev, INPUT_PASS_TO_HANDLERS,
++				    EV_KEY, old_keycode, 0);
++		input_event_dispose(dev, INPUT_PASS_TO_HANDLERS | INPUT_FLUSH,
++				    EV_SYN, SYN_REPORT, 1);
+ 	}
+ 
+  out:
+@@ -2259,6 +2232,34 @@ static void devm_input_device_unregister(struct device *dev, void *res)
+ 	__input_unregister_device(input);
+ }
+ 
++/*
++ * Generate software autorepeat event. Note that we take
++ * dev->event_lock here to avoid racing with input_event
++ * which may cause keys get "stuck".
++ */
++static void input_repeat_key(struct timer_list *t)
++{
++	struct input_dev *dev = from_timer(dev, t, timer);
++	unsigned long flags;
++
++	spin_lock_irqsave(&dev->event_lock, flags);
++
++	if (!dev->inhibited &&
++	    test_bit(dev->repeat_key, dev->key) &&
++	    is_event_supported(dev->repeat_key, dev->keybit, KEY_MAX)) {
++
++		input_set_timestamp(dev, ktime_get());
++		input_handle_event(dev, EV_KEY, dev->repeat_key, 2);
++		input_handle_event(dev, EV_SYN, SYN_REPORT, 1);
++
++		if (dev->rep[REP_PERIOD])
++			mod_timer(&dev->timer, jiffies +
++					msecs_to_jiffies(dev->rep[REP_PERIOD]));
++	}
++
++	spin_unlock_irqrestore(&dev->event_lock, flags);
++}
++
+ /**
+  * input_enable_softrepeat - enable software autorepeat
+  * @dev: input device
+-- 
+2.37.0.144.g8ac04bfd2-goog
 
 
-
+-- 
+Dmitry

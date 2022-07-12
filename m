@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FBC5726E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5A95726F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbiGLUDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S230110AbiGLUFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiGLUDV (ORCPT
+        with ESMTP id S231408AbiGLUFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:03:21 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19DB3E74B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:03:20 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:58916)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oBM6F-008snJ-KZ; Tue, 12 Jul 2022 14:03:15 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38716 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oBM6B-00EgHA-UL; Tue, 12 Jul 2022 14:03:14 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Keno Fischer <keno@juliacomputing.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mingo@kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        "Robert O'Callahan" <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Oleg Nesterov <oleg@redhat.com>
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <87r13gd4xy.fsf_-_@email.froward.int.ebiederm.org>
-        <87edyvgs2s.fsf@email.froward.int.ebiederm.org>
-        <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
-Date:   Tue, 12 Jul 2022 15:03:04 -0500
-In-Reply-To: <CABV8kRxQNPUzLaJ1tFF8H-E_iqCkz0+Ac5rPBurnmA3GcofMmQ@mail.gmail.com>
-        (Keno Fischer's message of "Fri, 8 Jul 2022 19:22:01 -0400")
-Message-ID: <875yk22j5z.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 12 Jul 2022 16:05:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F94FB31E0;
+        Tue, 12 Jul 2022 13:05:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFBD061A18;
+        Tue, 12 Jul 2022 20:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF412C3411C;
+        Tue, 12 Jul 2022 20:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657656329;
+        bh=NVC3O1+3jbEWbsQSOefVDw/Rq43RuVITkdHYb2LaSng=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lc0KZQVP7KjHF67Qx928PqPGvSzFrJp6trF9oLHwu/FGj8Q1OxR33uhz8kgT7WPC9
+         V6mhck2Na8An/iJAtDh+acFZLHqSGv/aDbFsLqKpnzyY7jtBPtpwJCUMuHL2+cI7FX
+         zTBzxKwHqVjew/C5D6/pZB/ElhMwWaql7hJ5wwEuCKbWE8ZKSQxWjTZP4aDqWS10ZQ
+         TZmazZW5Rg+k7RrMdjeloPooiZbtmcvy67MpWCniwY5zGWamfVUAZzIKgbQe/TNaXI
+         SFTnjq923fVDgeUKXGKc1f/2fpOmuNDMptw0sSNeAuf1mzPH6umKpoD0VVh6xqBX7q
+         ssbpu6xOaX1jw==
+Date:   Tue, 12 Jul 2022 15:05:27 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, kw@linux.com,
+        bhelgaas@google.com, jdmason@kudzu.us, Frank.Li@nxp.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI: endpoint: pci-epf-vntb: reduce several globals
+ to statics
+Message-ID: <20220712200527.GA791291@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oBM6B-00EgHA-UL;;;mid=<875yk22j5z.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+YkQubfrIv1qgyoUMDuaCP6iHCuoPdSL4=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220704132559.2859918-1-trix@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Keno Fischer <keno@juliacomputing.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 2022 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 17 (0.8%), b_tie_ro: 16 (0.8%), parse: 1.56
-        (0.1%), extract_message_metadata: 36 (1.8%), get_uri_detail_list: 1.78
-        (0.1%), tests_pri_-1000: 22 (1.1%), tests_pri_-950: 2.1 (0.1%),
-        tests_pri_-900: 1.46 (0.1%), tests_pri_-90: 306 (15.2%), check_bayes:
-        222 (11.0%), b_tokenize: 23 (1.1%), b_tok_get_all: 8 (0.4%),
-        b_comp_prob: 14 (0.7%), b_tok_touch_all: 135 (6.7%), b_finish: 6
-        (0.3%), tests_pri_0: 1573 (77.8%), check_dkim_signature: 1.22 (0.1%),
-        check_dkim_adsp: 40 (2.0%), poll_dns_idle: 35 (1.7%), tests_pri_10:
-        4.1 (0.2%), tests_pri_500: 53 (2.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] ptrace: Stop supporting SIGKILL for PTRACE_EVENT_EXIT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keno Fischer <keno@juliacomputing.com> writes:
+On Mon, Jul 04, 2022 at 09:25:59AM -0400, Tom Rix wrote:
+> sparse reports
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:956:10: warning: symbol 'pci_space' was not declared. Should it be static?
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: symbol 'pci_read' was not declared. Should it be static?
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: symbol 'pci_write' was not declared. Should it be static?
+> drivers/pci/endpoint/functions/pci-epf-vntb.c:989:16: warning: symbol 'vpci_ops' was not declared. Should it be static?
+> 
+> These functions and variables are only used in pci-epf-vntb.c, so their storage
+> class specifiers should be static.
+> 
+> Fixes: ff32fac00d97 ("NTB: EPF: support NTB transfer between PCI RC and EP connection")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-> Hi Eric,
->
-> On Fri, Jul 8, 2022 at 6:25 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->> > Recently I had a conversation where it was pointed out to me that
->> > SIGKILL sent to a tracee stropped in PTRACE_EVENT_EXIT is quite
->> > difficult for a tracer to handle.
->> >
->>
->> RR folks any comments?
->>
->> Did I properly understand what Keno Fischer was asking for when we
->> talked in person?
->
-> Yes, this is indeed what I had in mind. I have not yet had the opportunity
-> to try out your patch series (sorry), but from visual inspection, it does indeed
-> do what I wanted, which is to make sure that a tracee stays in
-> PTRACE_EVENT_EXIT for the tracer to inspect, even if there is another
-> SIGKILL incoming simultaneously (since otherwise it may be impossible
-> for the tracer to observe the PTRACE_EVENT_EXIT if two SIGKILLs
-> come in rapid succession). I will try to take this series for a proper spin
-> shortly.
+Handled via Jon, I guess?
 
-Thanks,
+I'm unclear on the future direction of pci-epf-vntb.c.  Jon, are you
+signing up to maintain this?  MAINTAINERS doesn't seem to reflect
+that, even in next-20220712, so you're not being copied on everything.
 
-I haven't yet figured out how to get the rr test suite to run
-successfully.  Something about my test machine and lack of perf counters
-seems to be causing problems.  So if you can perform the testing on your
-side that would be fantastic.
+If you are planning to merge and maintain this file, it would be
+helpful to me if you acknowledge patches you merge so I know to ignore
+them.
 
-Eric
+> ---
+> v2,3 : Change commit prefix
+> 
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-vntb.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> index ebf7e243eefa..6f0775b1fec3 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> @@ -953,7 +953,7 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
+>  
+>  #define VPCI_BUS_NUM 0x10
+>  
+> -uint32_t pci_space[] = {
+> +static uint32_t pci_space[] = {
+>  	(VNTB_VID | (VNTB_PID << 16)),	//DeviceID, Vendor ID
+>  	0,		// status, Command
+>  	0xffffffff,	// Class code, subclass, prog if, revision id
+> @@ -972,7 +972,7 @@ uint32_t pci_space[] = {
+>  	0,		//Max Lat, Min Gnt, interrupt pin, interrupt line
+>  };
+>  
+> -int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
+> +static int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *val)
+>  {
+>  	if (devfn == 0) {
+>  		memcpy(val, ((uint8_t *)pci_space) + where, size);
+> @@ -981,12 +981,12 @@ int pci_read(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 *
+>  	return -1;
+>  }
+>  
+> -int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
+> +static int pci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
+>  {
+>  	return 0;
+>  }
+>  
+> -struct pci_ops vpci_ops = {
+> +static struct pci_ops vpci_ops = {
+>  	.read = pci_read,
+>  	.write = pci_write,
+>  };
+> -- 
+> 2.27.0
+> 

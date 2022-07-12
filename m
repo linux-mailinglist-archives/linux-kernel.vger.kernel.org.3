@@ -2,148 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D602C571E53
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81037571E58
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbiGLPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S233975AbiGLPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbiGLPGw (ORCPT
+        with ESMTP id S234040AbiGLPHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:06:52 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A4AC54A4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:01:16 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id o12so7691247pfp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:01:16 -0700 (PDT)
+        Tue, 12 Jul 2022 11:07:37 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69AFFC5946;
+        Tue, 12 Jul 2022 08:01:22 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q5-20020a17090a304500b001efcc885cc4so8283746pjl.4;
+        Tue, 12 Jul 2022 08:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=C6szfa/YFuVli7Zl8D3g07FtZCaBqKl0sr0C3s801fw=;
-        b=wvGh1LaGBDR/G4joma/N0cvbJnBEIUQnqZL1xqzrAx2II/seQanvVrR3VC/+z7Zjld
-         zVpL3S1Sbap6Qr3EziCQwuz57jjlFSyqAIG//PrF57ckKsOjYnNA74IslrVRV8nnnvRN
-         3wVRUsNjq8E8LfWdZImw+6t4uy2qdxEczsZkafnLIRX6/tVcYH4YdvtrreW/yTwotczk
-         0N6jnX5GZaEEOxdbD89BmI2kjEa6YY8NeG+QQlMPkGzOPlGhGFtT53OgEj7W2CYR3byM
-         LQOFNKZQ1nRsJMbeAYgWlG0zgQMstkobCqEuCJ2MiVopQxFfrxJf8bduX6B6jN534ryq
-         abmw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j10ZK7k9+wF3AscGA6+W1rhOqE5GdVtkwRkExfLXfZ4=;
+        b=WeoWE9V9PYJdymyMogplFBkFW4R+6l9/9KvDaMhkpHhFUAdCLABYlaekMAM+pRaEF9
+         Xe3A+kOfie5snVOrc4wi9nG4QufoAoiD822nU75R8rMmqX73bFMzPOaFKp82PK9clU8M
+         ITpMWG+vYJwCiY2Gq+xdrL6QavZuiudT2XvqU+Go0LHfqyW7kKJiHBMnv3XVdoqi+bVf
+         O2BJuoC1iCcLSpE5mMk/8Wc2Sl7Wbq9QvpevZBmRZf8CYASUpHS7X02jmO9qixqgUMmt
+         Mm5fXRENwfVpXROW9rsKDQcm65DhUFHb3H7z8CnSWqODy6T2SJMqRgVi1TMFmonZxHvh
+         ymDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C6szfa/YFuVli7Zl8D3g07FtZCaBqKl0sr0C3s801fw=;
-        b=OTwjFh+MOPcyOmGSvoHs/OWoEeIqfwNe3KhI9XfAkjcvvdtzDxKncvvWDgZxccPp8y
-         nCw9tqSMkVYXWk2zlxNu+JpOnqXlGVHq7XK/IWQavmS/eH0MdztvWc66YRK/KSxe/dEV
-         6BM68FhVMk2pcjrPIzxiXXTY7/IWBcEArLUhakR1RrvGDKB5lIv5DBlnZFyL7pICKJ+7
-         ZVd5uooUd2YG2LIpkDelX0DLLD08GSp0MnLdSFPfAwKdCci+L710vbV4pbvw31U6f+/S
-         MwwGNzIxDwLWcDrTl6YSLz3P0GyVsTVL6RlVFAYPdTil2cfOsXdWVRD//LVma/o3cISM
-         +krA==
-X-Gm-Message-State: AJIora9RdQTMAGb54aMstEJcQMFw8WNGlqlN1jUmzqC2LBRmWgCNw5Kp
-        dyK6mbK27EQ1cEVo24b9rk82Og==
-X-Google-Smtp-Source: AGRyM1uF2yZ0fhTWiRIzaCuJhrMoYd2YKnjhN3avJPfSwtQ8ASEEXv5DvqmJeYAEZYa99COktBhysA==
-X-Received: by 2002:a63:9752:0:b0:3c6:5a7a:5bd6 with SMTP id d18-20020a639752000000b003c65a7a5bd6mr21070507pgo.390.1657638073175;
-        Tue, 12 Jul 2022 08:01:13 -0700 (PDT)
-Received: from [10.4.113.6] ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170902f68100b0016bfbd99f64sm6892899plg.118.2022.07.12.08.00.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 08:01:12 -0700 (PDT)
-Message-ID: <6f6a2257-3b60-e312-3ee3-fb08b972dbf2@bytedance.com>
-Date:   Tue, 12 Jul 2022 23:00:55 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j10ZK7k9+wF3AscGA6+W1rhOqE5GdVtkwRkExfLXfZ4=;
+        b=QvWTGSIR3Ths+NLsxrMLqjx9Jcs6wqc3MyOfaSrAZjOE7X/GtF0rNiq4Lhw1ADFZ/B
+         S6O8FZWmPJA8VMt8tGpGuiq/G3OUIoNpH78Ys4wHpJG3JRe8OpxZf8A6jEoWxoq4PBD5
+         Rd9SESXCTwleuleneH58UvaJVsjmvNtHt74nicBIp2IKQO+e5TROhFEES4yAX3z48LcY
+         5Lr8rMNuHWiNR3m+UVoJR/K3qBTqIto34v+0eOjFLFKuBh6WgtHBJgQ8qQquO0bX1/SE
+         d/wqogGd7MB16QRLpkVhE9U+OfwwNCIxdbQSXpihIkMWDhzib7kMrWtQqr6HxiBCNlSJ
+         HrRw==
+X-Gm-Message-State: AJIora+ArsWNf+7EEEzmfT//H+9NHqr1d0N7HVFMFEyTfh6a11aTNU47
+        vRvyzDjCuKws5LuZoVYEhsjUgmLWM6rWlcoGK18=
+X-Google-Smtp-Source: AGRyM1tN7SRJdAb69G47W1dJ+dAaV/v0vDfzIyKkOIwse6mSLgMHdIi43XV7cMpjHY2T0qz2ZkWd72NcfPHzal4/3lA=
+X-Received: by 2002:a17:902:cecb:b0:16c:40a8:88ff with SMTP id
+ d11-20020a170902cecb00b0016c40a888ffmr13155485plg.33.1657638077402; Tue, 12
+ Jul 2022 08:01:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 0/5] mm, oom: Introduce per numa node oom for
- CONSTRAINT_{MEMORY_POLICY,CPUSET}
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Gang Li <ligang.bdlg@bytedance.com>, akpm@linux-foundation.org,
-        surenb@google.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, keescook@chromium.org, rostedt@goodmis.org,
-        mingo@redhat.com, peterz@infradead.org, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, david@redhat.com,
-        imbrenda@linux.ibm.com, adobriyan@gmail.com,
-        yang.yang29@zte.com.cn, brauner@kernel.org,
-        stephen.s.brennan@oracle.com, zhengqi.arch@bytedance.com,
-        haolee.swjtu@gmail.com, xu.xin16@zte.com.cn,
-        Liam.Howlett@oracle.com, ohoono.kwon@samsung.com,
-        peterx@redhat.com, arnd@arndb.de, shy828301@gmail.com,
-        alex.sierra@amd.com, xianting.tian@linux.alibaba.com,
-        willy@infradead.org, ccross@google.com, vbabka@suse.cz,
-        sujiaxun@uniontech.com, sfr@canb.auug.org.au,
-        vasily.averin@linux.dev, mgorman@suse.de, vvghjk1234@gmail.com,
-        tglx@linutronix.de, luto@kernel.org, bigeasy@linutronix.de,
-        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        hezhongkun.hzk@bytedance.com
-References: <20220708082129.80115-1-ligang.bdlg@bytedance.com>
- <YsfwyTHE/5py1kHC@dhcp22.suse.cz>
- <41ae31a7-6998-be88-858c-744e31a76b2a@bytedance.com>
- <Ys14oIHL85d/T7s+@dhcp22.suse.cz>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <Ys14oIHL85d/T7s+@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220712142040.12021-1-v.v.mitrofanov@yadro.com>
+In-Reply-To: <20220712142040.12021-1-v.v.mitrofanov@yadro.com>
+From:   Emil Renner Berthing <emil.renner.berthing@gmail.com>
+Date:   Tue, 12 Jul 2022 17:01:06 +0200
+Message-ID: <CANBLGcwXLNpbmCaqvBWbZLZ2-n4B+dJkStTKcrxsyvjHO756QA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: dts: fu740: Add PDMA node
+To:     Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
+Cc:     linux@yadro.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Boyd <sboyd@kernel.org>, Zong Li <zong.li@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Viacheslav,
 
-On 7/12/22 9:35 PM, Michal Hocko Wrote:
-> On Tue 12-07-22 19:12:18, Abel Wu wrote:
-> [...]
->> I was just going through the mail list and happen to see this. There
->> is another usecase for us about per-numa memory usage.
->>
->> Say we have several important latency-critical services sitting inside
->> different NUMA nodes without intersection. The need for memory of these
->> LC services varies, so the free memory of each node is also different.
->> Then we launch several background containers without cpuset constrains
->> to eat the left resources. Now the problem is that there doesn't seem
->> like a proper memory policy available to balance the usage between the
->> nodes, which could lead to memory-heavy LC services suffer from high
->> memory pressure and fails to meet the SLOs.
-> 
-> I do agree that cpusets would be rather clumsy if usable at all in a
-> scenario when you are trying to mix NUMA bound workloads with those
-> that do not have any NUMA proferences. Could you be more specific about
-> requirements here though?
+Thanks for your patch! I have a comment below.
 
-Yes, these LC services are highly sensitive to memory access latency
-and bandwidth, so they are provisioned by NUMA node granule to meet
-their performance requirements. While on the other hand, they usually
-do not make full use of cpu/mem resources which increases the TCO of
-our IDCs, so we have to co-locate them with background tasks.
+On Tue, 12 Jul 2022 at 16:22, Viacheslav Mitrofanov
+<v.v.mitrofanov@yadro.com> wrote:
+>
+> HiFive unmatched supports PDMA but is not implemented in DT.
+>
+> Add the PDMA node in SiFive FU740 soc-specific DT file.
+>
+> Signed-off-by: Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
+> ---
+>  arch/riscv/boot/dts/sifive/fu740-c000.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+> index 7b77c13496d8..4bd670d8632f 100644
+> --- a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+> +++ b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+> @@ -161,6 +161,14 @@ prci: clock-controller@10000000 {
+>                         #clock-cells = <1>;
+>                         #reset-cells = <1>;
+>                 };
+> +               dma: dma-controller@3000000 {
+> +                       compatible = "sifive,pdma0";
 
-Some of these LC services are memory-bound but leave much of cpu's
-capacity unused. In this case we hope the co-located background tasks
-to consume some leftover without introducing obvious mm overhead to
-the LC services.
+I think this should be
 
-> 
-> Let's say you run those latency critical services with "simple" memory
-> policies and mix them with the other workload without any policies in
-> place so they compete over memory. It is not really clear to me how can
-> you achieve any reasonable QoS in such an environment. Your latency
-> critical servises will be more constrained than the non-critical ones
-> yet they are more demanding AFAIU.
+compatible = "sifive,fu740-c000-pdma", "sifive,pdma0";
 
-Yes, the QoS over memory is the biggest block in the way (the other
-resources are relatively easier). For now, we hacked a new mpol to
-achieve weighted-interleave behavior to balance the memory usage across
-NUMA nodes, and only set memcg protections to the LC services. If the
-memory pressure is still high, the background tasks will be killed.
-Ideas? Thanks!
+..but before adding that you'll also need a separate patch to
 
-Abel
+Documentation/devicetree/bindings/dma/sifive,fu540-c000-pdma.yaml
+
+..adding the new compatible string. Otherwise this will complain
+
+make ARCH=riscv
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/dma/sifive,fu540-c000-pdma.yaml
+dtbs_check
+
+/Emil
+> +                       reg = <0x0 0x3000000 0x0 0x8000>;
+> +                       interrupt-parent = <&plic0>;
+> +                       interrupts = <11 12 13 14 15 16 17 18>;
+> +                       dma-channels = <4>;
+> +                       #dma-cells = <1>;
+> +               };
+>                 uart0: serial@10010000 {
+>                         compatible = "sifive,fu740-c000-uart", "sifive,uart0";
+>                         reg = <0x0 0x10010000 0x0 0x1000>;
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

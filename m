@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26F25715BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFE15715C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiGLJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S232311AbiGLJbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiGLJaH (ORCPT
+        with ESMTP id S229621AbiGLJbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:30:07 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8639E442;
-        Tue, 12 Jul 2022 02:30:06 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id v7so4944528pfb.0;
-        Tue, 12 Jul 2022 02:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LlZwokCCRr1//JcjppZSf7dBePHepe4POxaFRYgWkT0=;
-        b=ob3lUCfgB/mcNHXQj7p4ewgx3PXsnSrUnRlo8/SpYNZkG7VWGANbKgQ71iTzhHvrTG
-         AD+TtVCsHaBx5iXjEkgzmTyaFh5V9zx1r8mzZRsWLcymvKQLCj5vig9U4NVWgSy02pBE
-         Tgs+HG5j+Jg5XNFmBb5gPZpluVKNA2MECu8Umci8h6Myi0OiJH99Q/j21eK5x01WBADj
-         og47+6TOW02Y/hRoUzFJ/ofyPdLywRTPm48cKYEJCWFEFdmqHlMgb83WwJps7awFg+VT
-         CgSSNRGAnBITgVbET5hp6WWp0oKLWtG4pGbmMZ4vQQaZMigvf3DUj6akMe8TBGB5P1JY
-         z2RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LlZwokCCRr1//JcjppZSf7dBePHepe4POxaFRYgWkT0=;
-        b=DW7mdy2FztFSSl1RKuE8FanhEra5SamRy5N/GsIP/1VmfItFx5K6pnyi9dqsszAm9t
-         wuTJzV0qxl/zpqIgWbtZJXr5zcE4On1+wFtA/xTB58zRFEqKtRrnHiyG50U6t53RV0xY
-         dIiT3/aZtjGN9l+ucdPN+jZq35lomKs/V/cunvnppxMaB763w4Q+R1S2Qv8xT1mVgnXX
-         ExzwKw04dva0JrlZmGdfHQUiJcvNkqALWxZ5EOhNheiFXKVevOfpz+icCrv0RA1BAea8
-         BZAOQw7kguvYhKfQfpKsOc+PpZlkCvv/E916uCWwabtwUEuNnbO8S1PvdySpIVd+7aDC
-         7JLg==
-X-Gm-Message-State: AJIora8jqInxb8eKz1M5aHDKNv3er+zgyJv56pzCQDdeTkRb61I3jTq+
-        3eWfF/Nh4wFd6CyTBo1k8QE=
-X-Google-Smtp-Source: AGRyM1sWIISpls1J5deVQlnkYWta8ucsGjsLXdTSKCq7iycbn1xeAQ0VrAm6PQJjkMKZUyT4ZYSZRA==
-X-Received: by 2002:a65:41ca:0:b0:408:aa25:5026 with SMTP id b10-20020a6541ca000000b00408aa255026mr20603164pgq.96.1657618205823;
-        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id 77-20020a630650000000b0041299ef533csm5616514pgg.41.2022.07.12.02.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 02:30:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 01C16103970; Tue, 12 Jul 2022 16:29:59 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH next 3/3] Documentation: kvm: extend KVM_S390_ZPCI_OP subheading underline
-Date:   Tue, 12 Jul 2022 16:29:54 +0700
-Message-Id: <20220712092954.142027-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712092954.142027-1-bagasdotme@gmail.com>
-References: <20220712092954.142027-1-bagasdotme@gmail.com>
+        Tue, 12 Jul 2022 05:31:31 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB159CE2A;
+        Tue, 12 Jul 2022 02:31:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1657618275; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=esepyqqENhbUHssqbm3w5bD5cdhGO5fi2Rhz8vN7REpruv8h5AblXGWeHGMfA9CuPc0LxktiSlmHc0n4RDO4uc3GXuGbn6b+1ZOlqZqOk5xdCrVt/1P8fB3E60rphH+ZAQ9FWeikvWSzzHJeDKmtyixozeQOWMblbKccAnnARuo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1657618275; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=0D684KlQxe15o6oPTlLFmpWsKQgQVLQH0JtURWns8cw=; 
+        b=gWxrPwEeg3nDSUhtbtH0/Xo5toBJDzLtgUCngbwwy7b/qXsE91WtAXt+TMZl3FJNpVMTJh5ZUSTUSYE1dPOHCodPK2lIZntIx8qU2b+eI470DkAvCIOBArmKXmHnz7nI2BzmEB4ett02PWa53oNf4dBfVNQu0l1aeWv1r2pkYB4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657618275;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=0D684KlQxe15o6oPTlLFmpWsKQgQVLQH0JtURWns8cw=;
+        b=nYbhbFyMB24s2IBlrQPVHYwrZ0Qx9G5U6vygHoQ12UM8PR/GHKdFKyhPLy5IxZRu
+        Lv/ipEBG63JcgQ4nBhmUF1XfXqu8jHsKWgaMUE5AFqXcjfZOVrM17A7Up2J9hMXOWnc
+        3ggyzk4gH9y4h1PMtH/FTkJIJvHwaEsYCPibLvgA=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1657618273698671.8295056333932; Tue, 12 Jul 2022 02:31:13 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 17:31:13 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "David Hildenbrand" <david@redhat.com>
+Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Li Chen" <lchen@ambarella.com>,
+        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "devicetree" <devicetree@vger.kernel.org>,
+        "linux-mm" <linux-mm@kvack.org>
+Message-ID: <181f1bf9584.f463724e580236.5502316582440422915@linux.beauty>
+In-Reply-To: <4cf14bde-fb4c-99d9-58ce-a788a700d5f3@redhat.com>
+References: <20220711122459.13773-1-me@linux.beauty>
+ <20220711122459.13773-3-me@linux.beauty>
+ <c2d4c6ac-fad7-d5b3-8cbf-f62a7db5b998@redhat.com>
+ <181f0a5f2a5.cf94ce78513585.4158910057206462182@linux.beauty> <4cf14bde-fb4c-99d9-58ce-a788a700d5f3@redhat.com>
+Subject: Re: [PATCH 2/4] mm/sparse: skip no-map memblock check when
+ fill_subsection_map
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell reported the htmldocs warning:
+Hi David,
+ ---- On Tue, 12 Jul 2022 15:31:08 +0800  David Hildenbrand <david@redhat.com> wrote --- 
+ > On 12.07.22 06:23, Li Chen wrote:
+ > > Hi David,
+ > >  ---- On Mon, 11 Jul 2022 22:53:36 +0800  David Hildenbrand <david@redhat.com> wrote --- 
+ > >  > On 11.07.22 14:24, Li Chen wrote:
+ > >  > > From: Li Chen <lchen@ambarella.com>
+ > >  > > 
+ > >  > > When mhp use sparse_add_section, don't check no-map region,
+ > >  > > so that to allow no-map reserved memory to get struct page
+ > >  > > support.
+ > >  > > 
+ > >  > > Signed-off-by: Li Chen <lchen@ambarella.com>
+ > >  > > Change-Id: I0d2673cec1b66adf695251037a00c240976b226f
+ > >  > > ---
+ > >  > >  mm/sparse.c | 4 +++-
+ > >  > >  1 file changed, 3 insertions(+), 1 deletion(-)
+ > >  > > 
+ > >  > > diff --git a/mm/sparse.c b/mm/sparse.c
+ > >  > > index 120bc8ea5293..a29cd1e7014f 100644
+ > >  > > --- a/mm/sparse.c
+ > >  > > +++ b/mm/sparse.c
+ > >  > > @@ -690,7 +690,9 @@ static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
+ > >  > >  
+ > >  > >      if (bitmap_empty(map, SUBSECTIONS_PER_SECTION))
+ > >  > >          rc = -EINVAL;
+ > >  > > -    else if (bitmap_intersects(map, subsection_map, SUBSECTIONS_PER_SECTION))
+ > >  > > +    else if (memblock_is_map_memory(PFN_PHYS(pfn)) &&
+ > >  > > +         bitmap_intersects(map, subsection_map,
+ > >  > > +                   SUBSECTIONS_PER_SECTION))
+ > >  > >          rc = -EEXIST;
+ > >  > >      else
+ > >  > >          bitmap_or(subsection_map, map, subsection_map,
+ > >  > 
+ > >  > I'm not sure I follow completely what you are trying to achieve. But if
+ > >  > you have to add memblock hacks into mm/sparse.c you're most probably
+ > >  > doing something wrong.
+ > >  > 
+ > >  > Please explain why that change is necessary, and why it is safe.
+ > > 
+ > > In the current sparse memory model, free_area_init will insert all memblock.memory into subsection_map and no-map rmem is also a 
+ > > memblock.memory. So, without this change, fill_subsection_map will return -EEXIST.
+ > > 
+ > > I would say it's not a good idea to insert no-map memblock into subsection_map, and I have no idea why sparse do this.
+ > > So, I simply skip no-map region here.
+ > 
+ > The thing is:
+ > 
+ > if the subsection map is set, then there already *is* a memmap and you
+ > would simply be ignoring it (and overwriting a memmap in e.g.,
+ > ZONE_NORMAL to be in ZONE_DEVICE suddenly, which is wrong).
+ > 
+ > 
+ > Reading memblock_mark_nomap():
+ > 
+ > "The memory regions marked with %MEMBLOCK_NOMAP will not be added to the
+ > direct mapping of the physical memory. These regions will still be
+ > covered by the memory map. The struct page representing NOMAP memory
+ > frames in the memory map will be PageReserved()"
+ > 
+ > 
+ > So having a memmap for these ranges is expected, and a direct map is not
+ > desired. What you propose is a hack. You either have to reuse the
+ > existing memmap (which is !ZONE_DEVICE -- not sure if that's a problem)
+ > or we'd have to look into teaching init code to not allocate a memmap
+ > for sub-sections that are fully nomap.
+ > 
+ > But not sure who depends on the existing memmap for nomap memory.
 
-Documentation/virt/kvm/api.rst:5959: WARNING: Title underline too short.
+ Points taken, thanks! I will try to dig into it.
 
-4.137 KVM_S390_ZPCI_OP
---------------------
-
-The warning is due to subheading underline on KVM_S390_ZPCI_OP section is
-short of 2 dashes.
-
-Extend the underline to fix the warning.
-
-Link: https://lore.kernel.org/linux-next/20220711205557.183c3b14@canb.auug.org.au/
-Fixes: a0c4d1109d6cc5 ("KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devices")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Pierre Morel <pmorel@linux.ibm.com>
-Cc: Thomas Huth <thuth@redhat.com>
-Cc: Matthew Rosato <mjrosato@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Janosch Frank <frankja@linux.ibm.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/virt/kvm/api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 1ae3508d51c537..e6bd6c6dbd13ec 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5956,7 +5956,7 @@ KVM_PV_DUMP_CPU
-   The length of the returned data is provided by uv_info.guest_cpu_stor_len.
- 
- 4.137 KVM_S390_ZPCI_OP
----------------------
-+----------------------
- 
- :Capability: KVM_CAP_S390_ZPCI_OP
- :Architectures: s390
--- 
-An old man doll... just what I always wanted! - Clara
-
+Regards,
+Li
+ > > 
+ > > As for safety:
+ > > 1. The caller of fill_subsection_map are mhp and *_memremap_pages functions, no-map regions are not related to them, so existing codes won't be broken.
+ > > 2. This change doesn't change memblock and subsection_map.
+ > > 
+ > 
+ > Sorry, but AFAIKT it's a hack and we need a clean way to deal with nomap
+ > memory that already has a memmap instead.
+ > 
+ > 
+ > -- 
+ > Thanks,
+ > 
+ > David / dhildenb
+ > 
+ > 

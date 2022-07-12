@@ -2,47 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F97571029
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ACF571033
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiGLC1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S230370AbiGLC2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbiGLC04 (ORCPT
+        with ESMTP id S229952AbiGLC2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:26:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8578E1EF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:26:49 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lhl2y4VCbzlVtk;
-        Tue, 12 Jul 2022 10:25:14 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 10:26:47 +0800
-Subject: Re: [PATCH] mm/compaction: fix set skip in fast_find_migrateblock
-To:     Zhou Chuyi <zhouchuyi@bytedance.com>, <linux-mm@kvack.org>
-References: <20220711123213.66068-1-zhouchuyi@bytedance.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8af11329-93d4-3bbd-fe4c-343663c00a1b@huawei.com>
-Date:   Tue, 12 Jul 2022 10:26:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 11 Jul 2022 22:28:17 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6E87358C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:28:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VJ6Ep2C_1657592888;
+Received: from localhost.localdomain(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VJ6Ep2C_1657592888)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Jul 2022 10:28:10 +0800
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org, vbabka@suse.cz, 42.hyeyoo@gmail.com,
+        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
+        rientjes@google.com, penberg@kernel.org, cl@gentwo.de
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] mm/slub: fix the race between validate_slab and slab_free
+Date:   Tue, 12 Jul 2022 10:28:05 +0800
+Message-Id: <20220712022807.44113-1-rongwei.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220711123213.66068-1-zhouchuyi@bytedance.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,36 +40,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Cc Andrew and linux-kernel email list.
+In use cases where allocating and freeing slab frequently, some
+error messages, such as "Left Redzone overwritten", "First byte
+0xbb instead of 0xcc" would be printed when validating slabs.
+That's because an object has been filled with SLAB_RED_INACTIVE,
+but has not been added to slab's freelist. And between these
+two states, the behaviour of validating slab is likely to occur.
 
-On 2022/7/11 20:32, Zhou Chuyi wrote:
-> From: zhouchuyi <zhouchuyi@bytedance.com>
-> 
-> When we successfully find a pageblock in fast_find_migrateblock(), the block will be set skip-flag through set_pageblock_skip(). However, when entering isolate_migratepages_block(), the whole pageblock will be skipped due to the branch 'if (!valid_page && IS_ALIGNED(low_pfn, pageblock_nr_pages))'. Eventually we will goto isolate_abort and isolate nothing.
-> Signed-off-by: zhouchuyi <zhouchuyi@bytedance.com>
+Actually, it doesn't mean the slab can not work stably. But, these
+confusing messages will disturb slab debugging more or less.
 
-It seems we should tweak the commit log to satisfy the checkpatch.pl first.
+Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+---
+ mm/slub.c | 43 +++++++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
 
-> ---
->  mm/compaction.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 1f89b969c..a1a2b50c8 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -1852,7 +1852,6 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
->  					pfn = cc->zone->zone_start_pfn;
->  				cc->fast_search_fail = 0;
->  				found_block = true;
-> -				set_pageblock_skip(freepage);
-
-This looks like a real problem. Should we add a Fixes tag here? What's the runtime effect of it?
-
-Thanks for your patch!
-
->  				break;
->  			}
->  		}
-> 
+diff --git a/mm/slub.c b/mm/slub.c
+index b1281b8654bd..e950d8df8380 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1391,18 +1391,16 @@ static noinline int free_debug_processing(
+ 	void *head, void *tail, int bulk_cnt,
+ 	unsigned long addr)
+ {
+-	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+ 	void *object = head;
+ 	int cnt = 0;
+-	unsigned long flags, flags2;
++	unsigned long flags;
+ 	int ret = 0;
+ 	depot_stack_handle_t handle = 0;
+ 
+ 	if (s->flags & SLAB_STORE_USER)
+ 		handle = set_track_prepare();
+ 
+-	spin_lock_irqsave(&n->list_lock, flags);
+-	slab_lock(slab, &flags2);
++	slab_lock(slab, &flags);
+ 
+ 	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+ 		if (!check_slab(s, slab))
+@@ -1435,8 +1433,7 @@ static noinline int free_debug_processing(
+ 		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
+ 			 bulk_cnt, cnt);
+ 
+-	slab_unlock(slab, &flags2);
+-	spin_unlock_irqrestore(&n->list_lock, flags);
++	slab_unlock(slab, &flags);
+ 	if (!ret)
+ 		slab_fix(s, "Object at 0x%p not freed", object);
+ 	return ret;
+@@ -3330,7 +3327,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 
+ {
+ 	void *prior;
+-	int was_frozen;
++	int was_frozen, to_take_off = 0;
+ 	struct slab new;
+ 	unsigned long counters;
+ 	struct kmem_cache_node *n = NULL;
+@@ -3341,14 +3338,23 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 	if (kfence_free(head))
+ 		return;
+ 
+-	if (kmem_cache_debug(s) &&
+-	    !free_debug_processing(s, slab, head, tail, cnt, addr))
+-		return;
++	n = get_node(s, slab_nid(slab));
++	if (kmem_cache_debug(s)) {
++		int ret;
+ 
+-	do {
+-		if (unlikely(n)) {
++		spin_lock_irqsave(&n->list_lock, flags);
++		ret = free_debug_processing(s, slab, head, tail, cnt, addr);
++		if (!ret) {
+ 			spin_unlock_irqrestore(&n->list_lock, flags);
+-			n = NULL;
++			return;
++		}
++	}
++
++	do {
++		if (unlikely(to_take_off)) {
++			if (!kmem_cache_debug(s))
++				spin_unlock_irqrestore(&n->list_lock, flags);
++			to_take_off = 0;
+ 		}
+ 		prior = slab->freelist;
+ 		counters = slab->counters;
+@@ -3369,8 +3375,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 				new.frozen = 1;
+ 
+ 			} else { /* Needs to be taken off a list */
+-
+-				n = get_node(s, slab_nid(slab));
+ 				/*
+ 				 * Speculatively acquire the list_lock.
+ 				 * If the cmpxchg does not succeed then we may
+@@ -3379,8 +3383,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 				 * Otherwise the list_lock will synchronize with
+ 				 * other processors updating the list of slabs.
+ 				 */
+-				spin_lock_irqsave(&n->list_lock, flags);
++				if (!kmem_cache_debug(s))
++					spin_lock_irqsave(&n->list_lock, flags);
+ 
++				to_take_off = 1;
+ 			}
+ 		}
+ 
+@@ -3389,8 +3395,9 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 		head, new.counters,
+ 		"__slab_free"));
+ 
+-	if (likely(!n)) {
+-
++	if (likely(!to_take_off)) {
++		if (kmem_cache_debug(s))
++			spin_unlock_irqrestore(&n->list_lock, flags);
+ 		if (likely(was_frozen)) {
+ 			/*
+ 			 * The list lock was not taken therefore no list
+-- 
+2.27.0
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E54572548
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1600D57249B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbiGLTPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S235501AbiGLTFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236165AbiGLTOd (ORCPT
+        with ESMTP id S235604AbiGLTEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:14:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4EDAB9F;
-        Tue, 12 Jul 2022 11:54:19 -0700 (PDT)
+        Tue, 12 Jul 2022 15:04:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF7AE2A02;
+        Tue, 12 Jul 2022 11:50:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6267DB81BAB;
-        Tue, 12 Jul 2022 18:54:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49C7C3411C;
-        Tue, 12 Jul 2022 18:54:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E4561123;
+        Tue, 12 Jul 2022 18:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BEDC3411C;
+        Tue, 12 Jul 2022 18:50:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657652057;
-        bh=afUNIL8EugqzhYqa1lgD+Lbf2agMvsyXkNXYavc+OXY=;
+        s=korg; t=1657651838;
+        bh=Cq8kwYR3M3xSpGQFndrKuZbXxfEqHHm+eKh1HLi6Fxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N4L9D/pxQbCTy4790c8XRJFJZM+TRQfwreilb8XHHSJuPZje6lokl6kOkwoJYzfEL
-         Q0ATODNYaRz8OzG6VaZSIHM2fJEzgUP30v4Z46Yz7D1FTQSQNGc/An6pQLAG7VuCkl
-         qUAXzWSOO0Q6+URUX/+6cV6qHWOnwmRFEyf8GnVM=
+        b=iKyKY2RRB4se7W7B0K0e5F+vxMB43xLylTpxmn4DpuhFgcJov9YHgQZDbmaVTvMbX
+         hdBaxcWegd5uBOjVG9f46qPdpgclKpISeZyAOLjakwSu6Umt2DRD+x4JT2PUZ2qX6u
+         sSFOYIV7Fgv34wYjsfKGNdxJ4AZIVMXoPwL1Y6vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         Borislav Petkov <bp@suse.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 45/61] x86/speculation: Remove x86_spec_ctrl_mask
-Date:   Tue, 12 Jul 2022 20:39:42 +0200
-Message-Id: <20220712183238.753910078@linuxfoundation.org>
+Subject: [PATCH 5.15 73/78] x86/bugs: Add Cannon lake to RETBleed affected CPU list
+Date:   Tue, 12 Jul 2022 20:39:43 +0200
+Message-Id: <20220712183241.841806219@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,87 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit acac5e98ef8d638a411cfa2ee676c87e1973f126 upstream.
+commit f54d45372c6ac9c993451de5e51312485f7d10bc upstream.
 
-This mask has been made redundant by kvm_spec_ctrl_test_value().  And it
-doesn't even work when MSR interception is disabled, as the guest can
-just write to SPEC_CTRL directly.
+Cannon lake is also affected by RETBleed, add it to the list.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: 6ad0ad2bf8a6 ("x86/bugs: Report Intel retbleed vulnerability")
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |   31 +------------------------------
- 1 file changed, 1 insertion(+), 30 deletions(-)
+ arch/x86/kernel/cpu/common.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -86,12 +86,6 @@ u64 spec_ctrl_current(void)
- EXPORT_SYMBOL_GPL(spec_ctrl_current);
- 
- /*
-- * The vendor and possibly platform specific bits which can be modified in
-- * x86_spec_ctrl_base.
-- */
--static u64 __ro_after_init x86_spec_ctrl_mask = SPEC_CTRL_IBRS;
--
--/*
-  * AMD specific MSR info for Speculative Store Bypass control.
-  * x86_amd_ls_cfg_ssbd_mask is initialized in identify_boot_cpu().
-  */
-@@ -146,10 +140,6 @@ void __init check_bugs(void)
- 	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
- 		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
- 
--	/* Allow STIBP in MSR_SPEC_CTRL if supported */
--	if (boot_cpu_has(X86_FEATURE_STIBP))
--		x86_spec_ctrl_mask |= SPEC_CTRL_STIBP;
--
- 	/* Select the proper CPU mitigations before patching alternatives: */
- 	spectre_v1_select_mitigation();
- 	spectre_v2_select_mitigation();
-@@ -208,19 +198,10 @@ void __init check_bugs(void)
- void
- x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool setguest)
- {
--	u64 msrval, guestval, hostval = spec_ctrl_current();
-+	u64 msrval, guestval = guest_spec_ctrl, hostval = spec_ctrl_current();
- 	struct thread_info *ti = current_thread_info();
- 
--	/* Is MSR_SPEC_CTRL implemented ? */
- 	if (static_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
--		/*
--		 * Restrict guest_spec_ctrl to supported values. Clear the
--		 * modifiable bits in the host base value and or the
--		 * modifiable bits from the guest value.
--		 */
--		guestval = hostval & ~x86_spec_ctrl_mask;
--		guestval |= guest_spec_ctrl & x86_spec_ctrl_mask;
--
- 		if (hostval != guestval) {
- 			msrval = setguest ? guestval : hostval;
- 			wrmsrl(MSR_IA32_SPEC_CTRL, msrval);
-@@ -1659,16 +1640,6 @@ static enum ssb_mitigation __init __ssb_
- 	}
- 
- 	/*
--	 * If SSBD is controlled by the SPEC_CTRL MSR, then set the proper
--	 * bit in the mask to allow guests to use the mitigation even in the
--	 * case where the host does not enable it.
--	 */
--	if (static_cpu_has(X86_FEATURE_SPEC_CTRL_SSBD) ||
--	    static_cpu_has(X86_FEATURE_AMD_SSBD)) {
--		x86_spec_ctrl_mask |= SPEC_CTRL_SSBD;
--	}
--
--	/*
- 	 * We have three CPU feature flags that are in play here:
- 	 *  - X86_BUG_SPEC_STORE_BYPASS - CPU is susceptible.
- 	 *  - X86_FEATURE_SSBD - CPU is able to turn off speculative store bypass
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1132,6 +1132,7 @@ static const struct x86_cpu_id cpu_vuln_
+ 	VULNBL_INTEL_STEPPINGS(SKYLAKE,		X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE_L,	X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE,	X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
++	VULNBL_INTEL_STEPPINGS(CANNONLAKE_L,	X86_STEPPING_ANY,		RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_L,	X86_STEPPING_ANY,		MMIO | MMIO_SBDS | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_D,	X86_STEPPING_ANY,		MMIO),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_X,	X86_STEPPING_ANY,		MMIO),
 
 

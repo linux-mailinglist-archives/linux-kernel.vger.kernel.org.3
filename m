@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C245723AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79AC57251A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiGLSwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S235610AbiGLTHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbiGLSvp (ORCPT
+        with ESMTP id S235459AbiGLTGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:51:45 -0400
+        Tue, 12 Jul 2022 15:06:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDD5E5872;
-        Tue, 12 Jul 2022 11:44:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC469FB8C2;
+        Tue, 12 Jul 2022 11:51:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE34760C8E;
-        Tue, 12 Jul 2022 18:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE70C3411C;
-        Tue, 12 Jul 2022 18:44:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A6861491;
+        Tue, 12 Jul 2022 18:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A974FC3411C;
+        Tue, 12 Jul 2022 18:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651489;
-        bh=ufygdNxYvRwqap/gxVvpqhpvRh4OFs5NCTipEhRPTSI=;
+        s=korg; t=1657651880;
+        bh=shRat7IUwl93UZ/ixdmyAqfcSvEzlZjfd1rUIGGZm38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rStUrVlBc3ijqqF9VovYcCCkxlva4lemUKoiG2NqlvWIArQmd4JmKp1738HhPHdVJ
-         onNuFbBtB72+Iqe29kU1hTKwQtUYcUZ3Dq3kq9Pe8oiJhoQXhkW74poeIZLw5hHIu2
-         KzIoagKChIBF8U7qWyYCVKqrsCJ6kZbIAUkP1gKI=
+        b=NxSogrnFqyfqhYwsMFHJDLbiwjBQ6lbs5pX8UComBPM0pOVA349r9rzZTSNF4V3jX
+         +pa+2pjKIUJwAADzVtGGCpNc7P7yrYo5kJGSgRoFhEWy7scENU9GhJ8fwXkIVIxwGf
+         aCbu+xkL1jS1fVwPnhuOPvDFc0x7mXHu1Lb8MsZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.10 092/130] x86/sev: Avoid using __x86_return_thunk
-Date:   Tue, 12 Jul 2022 20:38:58 +0200
-Message-Id: <20220712183250.703955200@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.18 02/61] x86/entry: Switch the stack after error_entry() returns
+Date:   Tue, 12 Jul 2022 20:38:59 +0200
+Message-Id: <20220712183237.044146273@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
-References: <20220712183246.394947160@linuxfoundation.org>
+In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
+References: <20220712183236.931648980@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,48 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kim Phillips <kim.phillips@amd.com>
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-commit 0ee9073000e8791f8b134a8ded31bcc767f7f232 upstream.
+commit 520a7e80c96d655fbe4650d9cc985bd9d0443389 upstream.
 
-Specifically, it's because __enc_copy() encrypts the kernel after
-being relocated outside the kernel in sme_encrypt_execute(), and the
-RET macro's jmp offset isn't amended prior to execution.
+error_entry() calls fixup_bad_iret() before sync_regs() if it is a fault
+from a bad IRET, to copy pt_regs to the kernel stack. It switches to the
+kernel stack directly after sync_regs().
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+But error_entry() itself is also a function call, so it has to stash
+the address it is going to return to, in %r12 which is unnecessarily
+complicated.
+
+Move the stack switching after error_entry() and get rid of the need to
+handle the return address.
+
+  [ bp: Massage commit message. ]
+
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220503032107.680190-3-jiangshanlai@gmail.com
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/mm/mem_encrypt_boot.S |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/x86/entry/entry_64.S |   16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
---- a/arch/x86/mm/mem_encrypt_boot.S
-+++ b/arch/x86/mm/mem_encrypt_boot.S
-@@ -65,7 +65,9 @@ SYM_FUNC_START(sme_encrypt_execute)
- 	movq	%rbp, %rsp		/* Restore original stack pointer */
- 	pop	%rbp
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -326,6 +326,8 @@ SYM_CODE_END(ret_from_fork)
+ .macro idtentry_body cfunc has_error_code:req
  
--	RET
-+	/* Offset to __x86_return_thunk would be wrong here */
-+	ret
-+	int3
- SYM_FUNC_END(sme_encrypt_execute)
+ 	call	error_entry
++	movq	%rax, %rsp			/* switch to the task stack if from userspace */
++	ENCODE_FRAME_POINTER
+ 	UNWIND_HINT_REGS
  
- SYM_FUNC_START(__enc_copy)
-@@ -151,6 +153,8 @@ SYM_FUNC_START(__enc_copy)
- 	pop	%r12
- 	pop	%r15
+ 	movq	%rsp, %rdi			/* pt_regs pointer into 1st argument*/
+@@ -1003,14 +1005,10 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	/* We have user CR3.  Change to kernel CR3. */
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
  
--	RET
-+	/* Offset to __x86_return_thunk would be wrong here */
-+	ret
-+	int3
- .L__enc_copy_end:
- SYM_FUNC_END(__enc_copy)
++	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+ .Lerror_entry_from_usermode_after_swapgs:
+ 	/* Put us onto the real thread stack. */
+-	popq	%r12				/* save return addr in %12 */
+-	movq	%rsp, %rdi			/* arg0 = pt_regs pointer */
+ 	call	sync_regs
+-	movq	%rax, %rsp			/* switch stack */
+-	ENCODE_FRAME_POINTER
+-	pushq	%r12
+ 	RET
+ 
+ 	/*
+@@ -1042,6 +1040,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	 */
+ .Lerror_entry_done_lfence:
+ 	FENCE_SWAPGS_KERNEL_ENTRY
++	leaq	8(%rsp), %rax			/* return pt_regs pointer */
+ 	RET
+ 
+ .Lbstep_iret:
+@@ -1062,12 +1061,9 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	 * Pretend that the exception came from user mode: set up pt_regs
+ 	 * as if we faulted immediately after IRET.
+ 	 */
+-	popq	%r12				/* save return addr in %12 */
+-	movq	%rsp, %rdi			/* arg0 = pt_regs pointer */
++	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+ 	call	fixup_bad_iret
+-	mov	%rax, %rsp
+-	ENCODE_FRAME_POINTER
+-	pushq	%r12
++	mov	%rax, %rdi
+ 	jmp	.Lerror_entry_from_usermode_after_swapgs
+ SYM_CODE_END(error_entry)
+ 
 
 

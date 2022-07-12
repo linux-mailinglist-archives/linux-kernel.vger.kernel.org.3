@@ -2,196 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E2C571B74
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5441571B78
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbiGLNiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S233148AbiGLNj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiGLNiF (ORCPT
+        with ESMTP id S230198AbiGLNjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:38:05 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B735B6D8E;
-        Tue, 12 Jul 2022 06:38:03 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C9Fa5x002441;
-        Tue, 12 Jul 2022 15:37:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=h4xD17V7DTR/YNErBVRjs3G7RJZlt2Jn4LyRZD6px+4=;
- b=FJAxMZeSr66ZY5WN87Yvn3qR9Bemn1VfFdpQ5//MFtocWtSe/WNGaytc90QqANxrAOmV
- sVNWVMUxdB0Qp3jJtUYNOaRtnzjlLv2XEsfQpqJi6ahJ5RcZmfLewH9GhOvz8Tvv4PDW
- FRXQQ9z/REk2wuTE60sKbb1YQrJ3t5YIXIg/Xvr3O1yFYbOCn9rCebilXSMTKT2yq909
- sCmudFgylUs+nXKUme55+ptXcb9LliRuGoTgNcp2IFT/BBwb3uBtdtwq6z8Izc0Vhk3E
- hvljL3gcXV617KkptqhybuOqqKw7eanAvWgvjJD0Y98xpTaF5Gr17xDtmFYnR1wZQXKB 5w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h9173k3qb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 15:37:45 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 30356100034;
-        Tue, 12 Jul 2022 15:37:44 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2179321FEBB;
-        Tue, 12 Jul 2022 15:37:44 +0200 (CEST)
-Received: from [10.211.14.207] (10.75.127.45) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Jul
- 2022 15:37:42 +0200
-Message-ID: <e51bed47-b3fd-a328-a545-2810072e2bb8@foss.st.com>
-Date:   Tue, 12 Jul 2022 15:37:41 +0200
+        Tue, 12 Jul 2022 09:39:54 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B43B5D29
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:39:53 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id c15so2446448pla.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GSCdzrG/hG5dXXM78OyhYj2dNDOwSiS9CiVXPuQBexc=;
+        b=LSTVZAHfNUMVWow5R6+aLV7Og05WP08vNp+X1p1NTHhlYv2oyWpjSx/nvgBcRI0zvw
+         YbSVAnS/ogdSUOeZG56fFF4jvbabU7vhupE1oM3cxJQ17pQhUSwtAeRBPM/SXb4ND1t2
+         2Sd99chJJOUXg4ZAiYhl56bLrhWtmxSy++fCRax+3fHBTdv72DE7NnYSQviJPpcaTUcz
+         IZe/E0NIfYAfl0jzeg17+8hgIQ92bjiXqpS/0YQR4facTTZPIO4Ftzuk4M4JCJen6PMe
+         CTygIUm9W/0OlEIoEdIEgVPtxQcZLd5oJEm/gqsYX+0GWj7AkWBMo1SNmpc1z91o4qJ9
+         RSgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GSCdzrG/hG5dXXM78OyhYj2dNDOwSiS9CiVXPuQBexc=;
+        b=RwaaD7c61XZZhNum0I2qaJdrKQL7eBnx++wKDmBM2jCa0o1tywIJ8TV9Ii17yRh4Dl
+         0AXbWD16m3hY59kLTxbiXDbWRPvWa8sOrfdt0qMBejg0T3Hixyr1c0nqeCq+9PLIxPIc
+         rmcJxukHTJOLyjvOgzBmaYIF7ZZRYWkQpmP9UCeJ0ELsDdGUDcF9DhR2o9ixA44LOGlP
+         Fxdek5KPSd+aIhksnnjJy/o9KLScHIUu79v0ejYN+6BjHZ6BF+hNYHt6phjyPI3omEHu
+         vjNl28kLchb4uA5Gja44b3E+ZqOvjdhYlL7VDPzXGRk3Cf1SXjY8TufEFPP9bI+k8oOB
+         dd3A==
+X-Gm-Message-State: AJIora/W14hCfddcgT3GEpPpZ1a44KZ7nuQ7MyYC6VmaKU0tsVplIJs7
+        zA1eu07RXDhAQRwjgz68rRI=
+X-Google-Smtp-Source: AGRyM1tR+Dra7PTDlJiULAt8/wFsye/iHU0JtuXduu4TSjMjAram+B9ATptMXy1oMKjLZ4Gsd8CfhQ==
+X-Received: by 2002:a17:902:7582:b0:16a:307a:5965 with SMTP id j2-20020a170902758200b0016a307a5965mr23812640pll.159.1657633192640;
+        Tue, 12 Jul 2022 06:39:52 -0700 (PDT)
+Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-75-15-180.ap-northeast-1.compute.amazonaws.com. [35.75.15.180])
+        by smtp.gmail.com with ESMTPSA id r6-20020aa79886000000b0052ae3bcb807sm1947178pfl.188.2022.07.12.06.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 06:39:51 -0700 (PDT)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 00/15] common kmalloc v3
+Date:   Tue, 12 Jul 2022 13:39:30 +0000
+Message-Id: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/4] docs: arm: stm32: introduce STM32 DMA-MDMA chaining
- feature
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
-References: <20220711084703.268481-1-amelie.delaunay@foss.st.com>
- <20220711084703.268481-2-amelie.delaunay@foss.st.com>
- <87a69ffzvk.fsf@meer.lwn.net>
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-In-Reply-To: <87a69ffzvk.fsf@meer.lwn.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is v3 of common kmalloc series.
 
+This series generalize most of kmalloc functions and move its
+implementation into mm/slab_common.c.
 
-On 7/11/22 17:11, Jonathan Corbet wrote:
-> Amelie Delaunay <amelie.delaunay@foss.st.com> writes:
-> 
->> STM32 DMA-MDMA chaining feature is available on STM32 SoCs which embed
->> STM32 DMAMUX, DMA and MDMA controllers. It is the case on STM32MP1 SoCs but
->> also on STM32H7 SoCs. But focus is on STM32MP1 SoCs, using DDR.
->> This documentation aims to explain how to use STM32 DMA-MDMA chaining
->> feature in drivers of STM32 peripheral having request lines on STM32 DMA.
->>
->> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
->> ---
->>   .../arm/stm32/stm32-dma-mdma-chaining.rst     | 365 ++++++++++++++++++
->>   1 file changed, 365 insertions(+)
->>   create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> 
-> When you add a new RST file you also need to add it to index.rst
-> somewhere so that it becomes part of the docs build.
-> 
+I believe this series give better maintainability of code for SLAB and SLUB.
+Please consider applying.
 
-Thanks for you review.
+This series is based on slab/for-next and also available at
+https://github.com/hygoni/linux/tree/slab-common-v3r0
 
-I'll add it to index.rst, with other stm32 documentations.
+Any feedbacks/reviews will be appreciated.
 
->> diff --git a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
->> new file mode 100644
->> index 000000000000..bfbbadc45aa7
->> --- /dev/null
->> +++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
->> @@ -0,0 +1,365 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +=======================
->> +STM32 DMA-MDMA chaining
->> +=======================
->> +
->> +
->> +Introduction
->> +------------
->> +
->> +  This document describes the STM32 DMA-MDMA chaining feature. But before going further, let's
->> +  introduce the peripherals involved.
-> 
-> Please keep to the 80-column limit for documentation, it makes it easier
-> to read.
-> 
+v2->v3:
+	- Now this series does not unify tracepoints between kmalloc and
+	  kmem_cache_alloc(). And does not print its name.
+	  Instead, it implements common alloc/free function without
+	  tracepoint.
+	
+	- Dropped UMA version of tracepoints and removed _node suffix
+	  for NUMA version. (Vlastimil Babka)
 
-OK, I prepare a v2 with a 80-column limit for the documentation patch.
+	- Split kmem_alloc event class and defined kmem_cache_alloc and
+	  kmalloc events using TRACE_EVENT() macro. And avoided
+	  dereferencing fields of struct kmem_cache when not using
+	  tracepoints. (Vlastimil Babka) 
 
->> +  To offload data transfers from the CPU, STM32 microprocessors (MPUs) embed direct memory access
->> +  controllers (DMA).
->> +
->> +  STM32MP1 SoCs embed both STM32 DMA and STM32 MDMA controllers. STM32 DMA request routing
->> +  capabilities are enhanced by a DMA request multiplexer (STM32 DMAMUX).
->> +
->> +  **STM32 DMAMUX**
->> +
->> +  STM32 DMAMUX routes any DMA request from a given peripheral to any STM32 DMA controller (STM32MP1
->> +  counts two STM32 DMA controllers) channels.
->> +
->> +  **STM32 DMA**
->> +
->> +  STM32 DMA is mainly used to implement central data buffer storage (usually in the system SRAM) for
->> +  different peripheral. It can access external RAMs but without the ability to generate convenient
->> +  burst transfer ensuring the best load of the AXI.
->> +
->> +  **STM32 MDMA**
->> +
->> +  STM32 MDMA (Master DMA) is mainly used to manage direct data transfers between RAM data buffers
->> +  without CPU intervention. It can also be used in a hierarchical structure that uses STM32 DMA as
->> +  first level data buffer interfaces for AHB peripherals, while the STM32 MDMA acts as a second
->> +  level DMA with better performance. As a AXI/AHB master, STM32 MDMA can take control of the AXI/AHB
->> +  bus.
->> +
->> +
->> +Principles
->> +----------
->> +
->> +  STM32 DMA-MDMA chaining feature relies on the strengths of STM32 DMA and STM32 MDMA controllers.
->> +
->> +  STM32 DMA has a circular Double Buffer Mode (DBM). At each end of transaction (when DMA data
->> +  counter - DMA_SxNDTR - reaches 0), the memory pointers (configured with DMA_SxSM0AR and
->> +  DMA_SxM1AR) are swapped and the DMA data counter is automatically reloaded. This allows the SW or
->> +  the STM32 MDMA to process one memory area while the second memory area is being filled/used by the
->> +  STM32 DMA transfer.
->> +
->> +  With STM32 MDMA linked-list mode, a single request initiates the data array (collection of nodes)
->> +  to be transferred until the linked-list pointer for the channel is null. The channel transfer
->> +  complete of the last node is the end of transfer, unless first and last nodes are linked to each
->> +  other, in such a case, the linked-list loops on to create a circular MDMA transfer.
->> +
->> +  STM32 MDMA has direct connections with STM32 DMA. This enables autonomous communication and
->> +  synchronization between peripherals, thus saving CPU resources and bus congestion. Transfer
->> +  Complete signal of STM32 DMA channel can triggers STM32 MDMA transfer. STM32 MDMA can clear the
->> +  request generated by the STM32 DMA by writing to its Interrupt Clear register (whose address is
->> +  stored in MDMA_CxMAR, and bit mask in MDMA_CxMDR).
->> +
->> +  .. csv-table:: STM32 MDMA interconnect table with STM32 DMA
->> +        :header: "STM32 DMAMUX channels", "STM32 DMA controllers channels",
->> +                 "STM32 DMA Transfer Complete signal", "STM32 MDMA request"
-> 
-> If at all possible, please use simple tables; that makes the plain text
-> documentation much easier to read.
-> 
+	- Dropped patches cleaning up kmalloc() to avoid increasing size of
+	  kernel image. (Joe Perches)
 
-It is possible, with some extra lines. I'll update it in v2 coming soon.
+	- Tried to avoid affecting inlined kmalloc calls
+	  and kmem_cache_alloc varients.
+	
+	- Fixed uninitialized variable bug in SLAB with NUMA.
 
-> [...]
-> 
-> Thanks,
-> 
-> jon
+	- Fixed an issue printing useless caller in
+	  kmalloc_node_track_caller() when it calls kmalloc_large_node().
 
-Regards,
-Amelie
+	- call WARN_ON() when __ksize() returns zero. (Christoph Lameter)
+
+	- Adjusted feedbacks from Vlastimil Babka.
+	  (Coding Style, patch organization, etc.)
+
+Thank you all for feedback :)
+
+===== sequence of patches =====
+
+patch 1-2 make slab_alloc_node() available for non-NUMA
+configurations for generalization.
+
+patch 3-5 remove duplicate code in common kmalloc functions.
+
+patch 6-10 move implementation of kmalloc_large{,_node}()
+to slab_common.c and make SLAB pass requests larger than
+order-1 page to page allocator. (like SLUB)
+
+patch 11-12 generalize most of kmalloc functions.
+
+patch 13 drops kmem_alloc event class and rename
+kmem_alloc_node to kmem_alloc. and remove _node suffix
+for its events.
+
+patch 14 drop kmem_alloc event class and then define
+kmalloc and kmem_cache_alloc events using TRACE_EVENT() macro.
+It also avoids dereferencing fields when not using tracepoints.
+
+patch 15-16 are small improvements of __ksize(). They are
+not part of generalization but depends on this series.
+
+  mm/slab: move NUMA-related code to __do_cache_alloc()
+  mm/slab: cleanup slab_alloc() and slab_alloc_node()
+  mm/slab_common: remove CONFIG_NUMA ifdefs for common kmalloc functions
+  mm/slab_common: cleanup kmalloc_track_caller()
+  mm/sl[au]b: factor out __do_kmalloc_node()
+  mm/sl[auo]b: fold kmalloc_order_trace() into kmalloc_large()
+  mm/slub: move kmalloc_large_node() to slab_common.c
+  mm/slab_common: kmalloc_node: pass large requests to page allocator
+  mm/slab_common: cleanup kmalloc_large()
+  mm/slab: kmalloc: pass requests larger than order-1 page to page
+    allocator
+  mm/sl[au]b: introduce common alloc/free functions without tracepoint
+  mm/sl[au]b: generalize kmalloc subsystem
+  mm/slab_common: unify NUMA and UMA version of tracepoints
+  mm/slab_common: drop kmem_alloc & avoid dereferencing fields when not
+    using
+  mm/sl[auo]b: move definition of __ksize() to mm/slab.h
+  mm/sl[au]b: check if large object is valid in __ksize()
+
+ include/linux/slab.h        | 117 +++++----------
+ include/trace/events/kmem.h |  68 +++------
+ mm/slab.c                   | 290 ++++++++++--------------------------
+ mm/slab.h                   |  11 ++
+ mm/slab_common.c            | 176 +++++++++++++++++++---
+ mm/slob.c                   |  28 +---
+ mm/slub.c                   | 218 +++------------------------
+ 7 files changed, 320 insertions(+), 588 deletions(-)
+
+-- 
+2.34.1
+

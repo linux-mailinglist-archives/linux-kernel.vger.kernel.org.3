@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C868572189
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56530572194
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiGLRFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 13:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S233152AbiGLRJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 13:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiGLRF2 (ORCPT
+        with ESMTP id S230015AbiGLRJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 13:05:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1A4BDBAC
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657645527; x=1689181527;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U/LXGy7z+UX9UqdYooR6+SHEaSx51YHHs9OChHxVj9k=;
-  b=ZFehXT8BnmOuMQ/a2RzT5fIlsUtooQ5ANOh6KvxqNHHhP0fDwsg1UTJN
-   SDeU3S9o7kPV2Z2YgPjuGg3mFaZSXHq9SwNNLNMxYWwORN19S6pgSElAb
-   DZ2/g+yxqTRhiG8ChfkbKrTuikvO9Xo/XxQuFgjYk0KZDZ4IurAK/Vvr4
-   kb5z8qmnbKx3AAtoXx9qHSCS8ThNaUQb6NyiYbN+W/IsrIwx1bdLuGo4O
-   0GQYJHuMmkscwgzz0rhIEQ4NdZ6AbOicsbdLeexvcymqyZt/yYbqoOV0s
-   Dd/jS8d+Af6/R2u3RFssXnwfeZYusnmP7Mq9oh8smwrDMqyAzxOEqZdwF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286120842"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="286120842"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 10:05:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="771946030"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Jul 2022 10:05:26 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBJK9-0002Tt-RU;
-        Tue, 12 Jul 2022 17:05:25 +0000
-Date:   Wed, 13 Jul 2022 01:04:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [martinetd:9p-next 11/11] net/9p/trans_fd.c:275:12: warning:
- 'failme' defined but not used
-Message-ID: <202207130129.m6d1HPhz-lkp@intel.com>
+        Tue, 12 Jul 2022 13:09:40 -0400
+X-Greylist: delayed 158 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 10:09:38 PDT
+Received: from pb-smtp2.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A310A26AF9;
+        Tue, 12 Jul 2022 10:09:38 -0700 (PDT)
+Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 5B8DC13C9FE;
+        Tue, 12 Jul 2022 13:06:59 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
+        :subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=sasl; bh=w0UKyYdQ1A+V1udZfVAXLlWWc
+        FkkGbvbz51v1rTX1/k=; b=RE3OnpXVoYq5NOlkZEVfSBiZlV93QbcG1Apn9xzvs
+        CchKu5jUf5S2JHPNLp7MJpIdjTA7sPyZcDm/dXcOp9RiEtQevy6cx1iHkfZnHBFS
+        z1Ba6MRhCkh9eVZfh/OX0a4b8FeywLSBfY7qqLqkFY5q63nYGRIbtZRfjgnyF9Dp
+        uY=
+Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 521B313C9FD;
+        Tue, 12 Jul 2022 13:06:59 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+Received: from pobox.com (unknown [34.83.92.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id AED7B13C9FC;
+        Tue, 12 Jul 2022 13:06:58 -0400 (EDT)
+        (envelope-from junio@pobox.com)
+From:   Junio C Hamano <gitster@pobox.com>
+To:     git@vger.kernel.org
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        git-packagers@googlegroups.com
+Subject: [ANNOUNCE] Git v2.37.1 and others
+Date:   Tue, 12 Jul 2022 10:06:57 -0700
+Message-ID: <xmqqv8s2fefi.fsf@gitster.g>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+X-Pobox-Relay-ID: 0A2F8064-0205-11ED-AA91-CB998F0A682E-77302942!pb-smtp2.pobox.com
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/martinetd/linux.git 9p-next
-head:   c249fb4f91931b9f010849134e95d33e388c375b
-commit: c249fb4f91931b9f010849134e95d33e388c375b [11/11] 9p: roll p9_tag_remove into p9_req_put
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20220713/202207130129.m6d1HPhz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/martinetd/linux/commit/c249fb4f91931b9f010849134e95d33e388c375b
-        git remote add martinetd https://github.com/martinetd/linux.git
-        git fetch --no-tags martinetd 9p-next
-        git checkout c249fb4f91931b9f010849134e95d33e388c375b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/9p/
+Git v2.37.1, together with v2.30.5, v2.31.4, v2.32.3, v2.33.4,
+v2.34.4, v2.35.4, and v2.36.2 for older maintenance tracks, are now
+available at the usual places.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+These are to address CVE-2022-29187, where the fixes in v2.36.1 and
+below to address CVE-2022-24765 released earlier may not have been
+complete.
 
-All warnings (new ones prefixed by >>):
+The tarballs are found at:
 
->> net/9p/trans_fd.c:275:12: warning: 'failme' defined but not used [-Wunused-variable]
-     275 | static int failme;
-         |            ^~~~~~
+    https://www.kernel.org/pub/software/scm/git/
 
+The following public repositories all have a copy of the 'v2.37.1'
+tag and other tags for older maintenance tracks.
 
-vim +/failme +275 net/9p/trans_fd.c
+  url =3D https://git.kernel.org/pub/scm/git/git
+  url =3D https://kernel.googlesource.com/pub/scm/git/git
+  url =3D git://repo.or.cz/alt-git.git
+  url =3D https://github.com/gitster/git
 
-   268	
-   269	/**
-   270	 * p9_read_work - called when there is some data to be read from a transport
-   271	 * @work: container of work to be done
-   272	 *
-   273	 */
-   274	
- > 275	static int failme;
-   276	
+----------------------------------------------------------------
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Git 2.37.1 Release Notes
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This release merges up the fixes that appear in v2.30.5, v2.31.4,
+v2.32.3, v2.33.4, v2.34.4, v2.35.4, and v2.36.2 to address the
+security issue CVE-2022-29187; see the release notes for these
+versions for details.
+
+Fixes since Git 2.37
+--------------------
+
+ * Rewrite of "git add -i" in C that appeared in Git 2.25 didn't
+   correctly record a removed file to the index, which is an old
+   regression but has become widely known because the C version has
+   become the default in the latest release.
+
+ * Fix for CVE-2022-29187.
+
+----------------------------------------------------------------
+
+Git v2.30.5 Release Notes
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This release contains minor fix-ups for the changes that went into
+Git 2.30.3 and 2.30.4, addressing CVE-2022-29187.
+
+ * The safety check that verifies a safe ownership of the Git
+   worktree is now extended to also cover the ownership of the Git
+   directory (and the `.git` file, if there is any).
+
+Carlo Marcelo Arenas Bel=C3=B3n (1):
+      setup: tighten ownership checks post CVE-2022-24765

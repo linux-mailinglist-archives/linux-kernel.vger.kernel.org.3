@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3342571D44
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3734C571D42
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbiGLOty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S233725AbiGLOtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiGLOtv (ORCPT
+        with ESMTP id S230256AbiGLOt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:49:51 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3237B326D7;
-        Tue, 12 Jul 2022 07:49:51 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 136so14322338ybl.5;
-        Tue, 12 Jul 2022 07:49:51 -0700 (PDT)
+        Tue, 12 Jul 2022 10:49:28 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A714E636
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:49:27 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w12so9682798edd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7iVcCSNEDPVXZO7KkmaQ6UWTAKgIuOoWOIi+ZoUvMiI=;
-        b=kB6ipQhwRymVgL6MecvMix0v5bVQaqPiDDELB6uuhqJCgucni9ofmwnblXQsmy4Dwp
-         YXT3QO3CX1F8odY9GwupzSdxv5lK8H8UceT/jiFlEyBKGMJgMLh1fIyDjp9Y9XV04xZm
-         K0LZB3pZFNu9hBabtegxj9/z6ijGHSq0EarHW5ckbO65k2vp1ixBaIduwMSGx0NnuGEW
-         m6K2YeamWHz+dlBWaOfTXUH5xG4qe/LemopGUnmCsaCZ4z5wjj74NOuniXI0tPkc06wX
-         Xje/3nicZylu9l/L9bA2b6YRKBncHict54Or5qKgVT1KEsvFEAF4BqAGcdHaQBtk05gA
-         w+Cw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FWdXKqvBEPZJ3mA635VvLTJkZo44UTBm15/9rGxOhDg=;
+        b=q4cwR0kOaupYQ2Qpj3mF7Dk/O6g0HtRaBJZu4k2L11VBZhgn4mHMUmuPv0orUZ5yeK
+         rA+adQOu8Wv1YRm3Kx4zTJisfru2GG0teDHbrgY+VZFdLA1iEMYjUSiX3HF5bQWSDEWz
+         ZeV50FkMJlJJIN9EraEFGXXw3zvJ+mQyXAE50+Ah0dipM0Xy0+9lABmW0ANikFf3AqRp
+         S8ln76No2VnP+k6BQ91wP5jf1SBIE+KMsFyqpWYg88cLBxWkv/QxyiVNVL0+P29fXDsm
+         7oxL2nRJVXbFN/mCRKwstsGEXIpQlLQuhruRFEE0gohSqoUpW5lpYCrX1ReKE9cd+GV0
+         U9AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7iVcCSNEDPVXZO7KkmaQ6UWTAKgIuOoWOIi+ZoUvMiI=;
-        b=T7vT0xC5gYJc68YSTmnCefSk+7SZMCUeO5Tl6lQ1s1alG2sLQp9HMQJEf33Rth23ek
-         33yOkX1D8dPemuDkw0dGSn8kVxa3u2FdBbsMO6BPNRcEanajba4HX1svZJ/Rsu8LT108
-         AdUF9O1oE2lwv5zu+56RtEWL9whjc2/A118LQ44imyhjLAgtCQ9z8p7PTOTwyAUPUvue
-         tU6cDp2JurKNBIKQueUtg4sr1M+j/WoT1Y3iC6Ks5qg1jJsRgoVigP5ij373oLq5270g
-         djh0p9lkTmJpIOdD6Qi7xaT2IxRiXphn2jWLF48BjQziV/6Iowj1nNnckKAZit5YbHDN
-         w3GQ==
-X-Gm-Message-State: AJIora/aAAOnSbV/s4QLyRafb4JWl7VFJsFO9pFakBLQuIqJ5bxuIAdN
-        zOwiyY5Oz29nMNMwC/vxScm98fC26Y6HYGn0OyY=
-X-Google-Smtp-Source: AGRyM1u8xxquE10f6yTO7C4T8Li18XfMHlXCfwSUMfAeX5wy3klYVBZK3dXatnRZC6nKrV1LWitwOC3d3GqqLff+8ck=
-X-Received: by 2002:a05:6902:10c9:b0:668:e27c:8f7 with SMTP id
- w9-20020a05690210c900b00668e27c08f7mr22824445ybu.128.1657637390435; Tue, 12
- Jul 2022 07:49:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FWdXKqvBEPZJ3mA635VvLTJkZo44UTBm15/9rGxOhDg=;
+        b=rPHX36v6QMn25V1qd3MYpwYBCYGbvKGCBOdfT8sdqAmY+SzSjvAldTq3NTbtMa+7JT
+         4gpBB3oUTO6gzGOgjaSGe6/e//2RtMZhxkYUHaR0BIpUZBfhldMTy/UM0Sqwfeqob0aP
+         UhvjcfEu03CKdYn1wAsycCEoKnpztqN4Gb5TuFFhaP7Cc1F1VObl9J4MS+jjqhAjo5tO
+         qZZpU3cIAd6/PpMJYS61hRCZNqNtCkTpCcghFYEyBfscamNR7U3sMttGdZfhxWPsDoDl
+         9kA4PILFPmWfk4c+VGaQeZNUQcvIsPjDE1EYCsA+ynLq5GzQv2kxNguih6oMFznIwhvM
+         Ybfg==
+X-Gm-Message-State: AJIora9NPVbbgolEy1BJLk7iWCFL/KZ5+0HUH67P71ubYUsT8ALsdxSv
+        FBQI8QE9ANeflp+OAn0YB0yvhrID/uo=
+X-Google-Smtp-Source: AGRyM1skbHcyY88e6nPbA+JG6pCwg62++rGrFzZrfFhkvJ/IaMIzhiHP4OvJRmKp8sILsTZq2OsSzw==
+X-Received: by 2002:aa7:cc03:0:b0:435:5574:bf30 with SMTP id q3-20020aa7cc03000000b004355574bf30mr32358760edt.15.1657637365492;
+        Tue, 12 Jul 2022 07:49:25 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id b4-20020aa7d484000000b0043a46f5fb82sm6120579edr.73.2022.07.12.07.49.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:49:25 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>
+Subject: [PATCH] llist: Use try_cmpxchg in llist_add_batch and llist_del_first
+Date:   Tue, 12 Jul 2022 16:49:17 +0200
+Message-Id: <20220712144917.4497-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220712143237.13992-1-henning.schild@siemens.com> <20220712143237.13992-2-henning.schild@siemens.com>
-In-Reply-To: <20220712143237.13992-2-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 12 Jul 2022 16:49:13 +0200
-Message-ID: <CAHp75VfCDRRS+WdyN-s5h+C7wnpFOpxOp7DU9_X5rpkL32M45g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] gpio: nct6116d: add new driver for several Nuvoton
- super io chips
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Kuan-Wei Ho <cwho@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,59 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:32 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> This patch adds gpio support for several Nuvoton NCTXXX chips. These
-> Super-I/O chips offer multiple functions of which several already have
-> drivers in the kernel, i.e. hwmon and watchdog.
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+llist_add_batch and llist_del_first. x86 CMPXCHG instruction returns
+success in ZF flag, so this change saves a compare after cmpxchg.
 
-...
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when
+cmpxchg fails, enabling further code simplifications.
 
-> +#include <linux/gpio/driver.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
+No functional change intended.
 
-+ bits.h
-+ types.h.
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ lib/llist.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-...
-
-> +static inline int superio_enter(int base)
-> +{
-> +       /* Don't step on other drivers' I/O space by accident. */
-> +       if (!request_muxed_region(base, 2, KBUILD_MODNAME)) {
-> +               pr_err("I/O address 0x%04x already in use\n", base);
-> +               return -EBUSY;
-> +       }
-> +
-> +       /* According to the datasheet the key must be send twice. */
-
-sent
-
-> +       outb(SIO_UNLOCK_KEY, base);
-> +       outb(SIO_UNLOCK_KEY, base);
-> +
-> +       return 0;
-> +}
-
-...
-
-> +#define gpio_dir(base) ((base) + 0)
-> +#define gpio_data(base) ((base) + 1)
-
-Dunno, why haven't you changed this? It might be a hidden mine for the
-future GPIO library development. I recommend using namespace whenever
-it feels right, and here it's exactly the case.
-
-> +       if (dir & 1 << offset)
-
-Another ignored comment... BIT(offset)
-
-I'm stopping here to let you double check what version you have sent.
-
+diff --git a/lib/llist.c b/lib/llist.c
+index 611ce4881a87..7d78b736e8af 100644
+--- a/lib/llist.c
++++ b/lib/llist.c
+@@ -30,7 +30,7 @@ bool llist_add_batch(struct llist_node *new_first, struct llist_node *new_last,
+ 
+ 	do {
+ 		new_last->next = first = READ_ONCE(head->first);
+-	} while (cmpxchg(&head->first, first, new_first) != first);
++	} while (!try_cmpxchg(&head->first, &first, new_first));
+ 
+ 	return !first;
+ }
+@@ -52,18 +52,14 @@ EXPORT_SYMBOL_GPL(llist_add_batch);
+  */
+ struct llist_node *llist_del_first(struct llist_head *head)
+ {
+-	struct llist_node *entry, *old_entry, *next;
++	struct llist_node *entry, *next;
+ 
+ 	entry = smp_load_acquire(&head->first);
+-	for (;;) {
++	do {
+ 		if (entry == NULL)
+ 			return NULL;
+-		old_entry = entry;
+ 		next = READ_ONCE(entry->next);
+-		entry = cmpxchg(&head->first, old_entry, next);
+-		if (entry == old_entry)
+-			break;
+-	}
++	} while (!try_cmpxchg(&head->first, &entry, next));
+ 
+ 	return entry;
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.3
+

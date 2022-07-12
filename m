@@ -2,146 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0A7571CDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C0E571CD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiGLOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S233620AbiGLOfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbiGLOgB (ORCPT
+        with ESMTP id S233499AbiGLOfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:36:01 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1E3BA384
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:59 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id b2so7409275plx.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=GeUfY6Tn/Q9ioj3wHa1IQnm+34PkJWvBAjhW7FXaij8=;
-        b=FFQ3ZoI38S7htoLyXPyrs8plraXqTTr8yHOFDxdU1PsAkwG0XPngF9GF1Tlfqttg2P
-         ziAgp5Pz/14MkxsLy8N4uxnR43jNUHndWEuYY93g77XUSGXNs6XbSpEbtMb8eXhjZdzB
-         0n3SA8nqrbl5Do5PJsLHI2hkToFAK8s2ZVxiGR1Yfr5xNYQkSV+mJPfZcoPeL17Z6l8D
-         iFueEOHC67SJKFNfs1o+sOQsxaiSllwJRMQmmnbFrNFg1/npr4D3nb/hriKURG6xeVPJ
-         xNFETLZNqFxxGGEU1++4arL5s1FdE1YlrBFMEsoWMRueYTGjO5RN2t+7two8YBDXw9Yv
-         wnQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=GeUfY6Tn/Q9ioj3wHa1IQnm+34PkJWvBAjhW7FXaij8=;
-        b=F5a5OPXqYHs7Ol0Fkk+fZvFhWXT+ehWzEvE8mlWD1UxDT4Ch9AOluSxBH1is6SkQoU
-         i1GxrRUs3cKBo0pZItXxhu0sEBoVC8ECZkDA+0Gux2F8PaT9LTgYkon0TVKoF/x2hQks
-         ylPAGvMwzOuGMv+6MyME7lV5R4RnCzC3IHH9hpLgJSe1u+LUCruvgi7w3HNfA6z91I66
-         EQSHKvRZTPljoh4hDwRM/oZSuhqUSvetMTC6z4ZJi4H/spP1Q+yb0HdunwlhmohgneB0
-         pMev8UA3ZPPDs9ZPbqIzDznq+7NLcy3Ps2QJ5GRNIQk+BWO3pQaHq7kmy4bFrFJX+obG
-         i+Zg==
-X-Gm-Message-State: AJIora8I1Y5Y+ERA5qGGQhe8K3gKMGbCLeBCxKor0rsaHiKbgtAr31Cp
-        R1OL2XXsVjmQ9OQSmTCbo2wAXaECARLymA==
-X-Google-Smtp-Source: AGRyM1ujG6w5ps9GriP+SnnUbvp+k2fcL96y5EjeY3XqpOFzffJQt14d+s4va4cHCFiFduFwFdYjpg==
-X-Received: by 2002:a17:90b:1c12:b0:1f0:2836:7799 with SMTP id oc18-20020a17090b1c1200b001f028367799mr4821591pjb.139.1657636558973;
-        Tue, 12 Jul 2022 07:35:58 -0700 (PDT)
-Received: from ArchLinux (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id b13-20020a621b0d000000b005252ab25363sm6878600pfb.206.2022.07.12.07.35.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:35:58 -0700 (PDT)
-References: <20220712013125.623338-1-schspa@gmail.com>
- <20220712013125.623338-2-schspa@gmail.com>
- <20220712102953.02d4a3bd@gandalf.local.home>
-User-agent: mu4e 1.7.5; emacs 28.1
-From:   Schspa Shi <schspa@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] sched/rt: Trying to push current task when
- target disable migrating
-Date:   Tue, 12 Jul 2022 22:34:40 +0800
-In-reply-to: <20220712102953.02d4a3bd@gandalf.local.home>
-Message-ID: <m2fsj6flfk.fsf@gmail.com>
+        Tue, 12 Jul 2022 10:35:09 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150F4B31F5;
+        Tue, 12 Jul 2022 07:34:59 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:57756)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oBGyX-00B32U-U5; Tue, 12 Jul 2022 08:34:57 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:46192 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oBGyW-00Dghw-Qt; Tue, 12 Jul 2022 08:34:57 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Christian Brauner <brauner@kernel.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <YrShFXRLtRt6T/j+@risky>
+        <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
+        <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
+        <YsyHMVLuT5U6mm+I@netflix>
+        <877d4jbabb.fsf@email.froward.int.ebiederm.org>
+        <Ysyp8Kbl8FzhApUb@netflix>
+        <87zghf6yhe.fsf@email.froward.int.ebiederm.org>
+        <Ys16l6+iotX2JE33@netflix>
+Date:   Tue, 12 Jul 2022 09:34:50 -0500
+In-Reply-To: <Ys16l6+iotX2JE33@netflix> (Tycho Andersen's message of "Tue, 12
+        Jul 2022 07:43:51 -0600")
+Message-ID: <87sfn62yd1.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1oBGyW-00Dghw-Qt;;;mid=<87sfn62yd1.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19GFtaSVDwPoTYZnHwdRxtgbEun6enaSZ4=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Tycho Andersen <tycho@tycho.pizza>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 527 ms - load_scoreonly_sql: 0.09 (0.0%),
+        signal_user_changed: 12 (2.2%), b_tie_ro: 10 (1.8%), parse: 1.29
+        (0.2%), extract_message_metadata: 14 (2.7%), get_uri_detail_list: 2.7
+        (0.5%), tests_pri_-1000: 14 (2.7%), tests_pri_-950: 1.46 (0.3%),
+        tests_pri_-900: 1.02 (0.2%), tests_pri_-90: 98 (18.5%), check_bayes:
+        95 (18.0%), b_tokenize: 10 (1.9%), b_tok_get_all: 10 (1.9%),
+        b_comp_prob: 3.4 (0.6%), b_tok_touch_all: 68 (12.8%), b_finish: 0.99
+        (0.2%), tests_pri_0: 368 (69.8%), check_dkim_signature: 0.78 (0.1%),
+        check_dkim_adsp: 2.8 (0.5%), poll_dns_idle: 0.56 (0.1%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 12 (2.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: strange interaction between fuse + pidns
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Tycho Andersen <tycho@tycho.pizza> writes:
 
-Steven Rostedt <rostedt@goodmis.org> writes:
-
-> On Tue, 12 Jul 2022 09:31:25 +0800
-> Schspa Shi <schspa@gmail.com> wrote:
+> On Mon, Jul 11, 2022 at 06:06:21PM -0500, Eric W. Biederman wrote:
+>> Tycho Andersen <tycho@tycho.pizza> writes:
+>> It is not different enough to change the semantics.  What I am aiming
+>> for is having a dedicated flag indicating a task will exit, that
+>> fatal_signal_pending can check.  And I intend to make that flag one way
+>> so that once it is set it will never be cleared.
 >
->> When the task to push disable migration, retry to push the current
->> running task on this CPU away, instead doing nothing for this migrate
->> disabled task.
->> 
->> Signed-off-by: Schspa Shi <schspa@gmail.com>
->> ---
->>  kernel/sched/core.c | 6 +++++-
->>  kernel/sched/rt.c   | 6 ++++++
->>  2 files changed, 11 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index da0bf6fe9ecdc..0b1fefd97d874 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2509,8 +2509,12 @@ int push_cpu_stop(void *arg)
->>  	if (p->sched_class->find_lock_rq)
->>  		lowest_rq = p->sched_class->find_lock_rq(p, rq);
->>  
->> -	if (!lowest_rq)
->> +	if (!lowest_rq) {
+> Ok - how far out is that? I'd like to try to convince Miklos to land
+> the fuse part of this fix now, but without the "look at shared signals
+> too" patch, that fix is useless. I'm not married to my patch, but I
+> would like to get this fixed somehow soon.
+
+My point is that we need to figure out why you need the look at shared
+signals.
+
+If I can get everything reviewed my changes will be in the next merge
+window (it unfortunately always takes longer to get the code reviewed
+than I would like).
+
+However when my changes land does not matter.  What you are trying to
+solve is orthogonal of my on-going work.
+
+The problem is that looking at shared signals is fundamentally broken.
+A case in point is that kernel threads can have a pending SIGKILL that
+is not a fatal signal.  As kernel threads are allowed to ignore or even
+handle SIGKILL.
+
+If you want to change fatal_signal_pending to include PF_EXITING I would
+need to double check the implications but I think that would work, and
+would not have the problems including the shared pending state of
+SIGKILL.
+
+>> The other thing I have played with that might be relevant was removing
+>> the explicit wait in zap_pid_ns_processes and simply not allowing wait
+>> to reap the pid namespace init until all it's children had been reaped.
+>> Essentially how we deal with the thread group leader for ordinary
+>> processes.  Does that sound like it might help in the fuse case?
 >
-> Probably should add a comment reminding us that the find_lock() function
-> above could have released the rq lock and allow p to schedule and be
-> preempted again, and that lowest_rq could be NULL because p now has the
-> migrate_disable flag set and not because it could not find the lowest rq.
->
+> No, the problem is that the wait code doesn't know to look in the
+> right place, so waiting later still won't help.
 
-OK, it will be better.
+I was suggesting to modify the kernel so that zap_pid_ns_processes would
+not wait for the zapped processes.  Instead I was proposing that
+delay_group_leader called from wait_consider_task would simply refuse to
+allow the init process of a pid namespace to be reaped until every other
+process of that pid namespace had exited.
 
-Let me upload a v6 patch for that.
+You can prototype how that would affect the deadlock by simply removing
+the waiting from zap_pid_ns_processes.
 
-> -- Steve
->
->
->> +		if (unlikely(is_migration_disabled(p)))
->> +			p->migration_flags |= MDF_PUSH;
->> +
->>  		goto out_unlock;
->> +	}
->>  
->>  	// XXX validate p is still the highest prio task
->>  	if (task_rq(p) == rq) {
->> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->> index 7c32ba51b6d85..877380e465b7a 100644
->> --- a/kernel/sched/rt.c
->> +++ b/kernel/sched/rt.c
->> @@ -2136,6 +2136,12 @@ static int push_rt_task(struct rq *rq, bool pull)
->>  		 */
->>  		task = pick_next_pushable_task(rq);
->>  		if (task == next_task) {
->> +			/*
->> +			 * If next task has now disabled migrating, see if we
->> +			 * can push the current task.
->> +			 */
->> +			if (unlikely(is_migration_disabled(task)))
->> +				goto retry;
->>  			/*
->>  			 * The task hasn't migrated, and is still the next
->>  			 * eligible task, but we failed to find a run-queue
+I suggest that simply because that has the potential to remove some of
+the strange pid namespace cases.
 
+I don't understand the problematic interaction between pid namespace
+shutdown and the fuse daemon, so I am merely suggesting a possibility
+that I know can simplify pid namespace shutdown.
 
--- 
-BRs
-Schspa Shi
+Something like:
+
+diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+index f4f8cb0435b4..d22a30b0b0cf 100644
+--- a/kernel/pid_namespace.c
++++ b/kernel/pid_namespace.c
+@@ -207,47 +207,6 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
+ 	read_unlock(&tasklist_lock);
+ 	rcu_read_unlock();
+ 
+-	/*
+-	 * Reap the EXIT_ZOMBIE children we had before we ignored SIGCHLD.
+-	 * kernel_wait4() will also block until our children traced from the
+-	 * parent namespace are detached and become EXIT_DEAD.
+-	 */
+-	do {
+-		clear_thread_flag(TIF_SIGPENDING);
+-		rc = kernel_wait4(-1, NULL, __WALL, NULL);
+-	} while (rc != -ECHILD);
+-
+-	/*
+-	 * kernel_wait4() misses EXIT_DEAD children, and EXIT_ZOMBIE
+-	 * process whose parents processes are outside of the pid
+-	 * namespace.  Such processes are created with setns()+fork().
+-	 *
+-	 * If those EXIT_ZOMBIE processes are not reaped by their
+-	 * parents before their parents exit, they will be reparented
+-	 * to pid_ns->child_reaper.  Thus pidns->child_reaper needs to
+-	 * stay valid until they all go away.
+-	 *
+-	 * The code relies on the pid_ns->child_reaper ignoring
+-	 * SIGCHILD to cause those EXIT_ZOMBIE processes to be
+-	 * autoreaped if reparented.
+-	 *
+-	 * Semantically it is also desirable to wait for EXIT_ZOMBIE
+-	 * processes before allowing the child_reaper to be reaped, as
+-	 * that gives the invariant that when the init process of a
+-	 * pid namespace is reaped all of the processes in the pid
+-	 * namespace are gone.
+-	 *
+-	 * Once all of the other tasks are gone from the pid_namespace
+-	 * free_pid() will awaken this task.
+-	 */
+-	for (;;) {
+-		set_current_state(TASK_INTERRUPTIBLE);
+-		if (pid_ns->pid_allocated == init_pids)
+-			break;
+-		schedule();
+-	}
+-	__set_current_state(TASK_RUNNING);
+-
+ 	if (pid_ns->reboot)
+ 		current->signal->group_exit_code = pid_ns->reboot;
+ 
+
+Eric

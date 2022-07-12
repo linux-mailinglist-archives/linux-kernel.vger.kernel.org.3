@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632B45710BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31A95710B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiGLDRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 23:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S230190AbiGLDP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiGLDRb (ORCPT
+        with ESMTP id S229806AbiGLDPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:17:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119E68FD7E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:17:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86DEB61716
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1A4C34115;
-        Tue, 12 Jul 2022 03:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657595842;
-        bh=pJZwIkZ8d/iC0FwubEOjyhKFFCOrbXxtTAMZJdtPyTo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FRI10TJMayIxzm0DK/SF54vPHxcSJF4ng0Y875nqKyU/93VneHNsvfKJGHciOt8fd
-         mtUKqFEq2WGPnnJ8iDOXL16bdL8PGz88wlHUmEwZtMuvIcbUWXCnsztWJi04JJD10W
-         Zp+DHemKT78QQ4BjYEQIIGmPsLebvg/0z/zGtbpFm/mNlwu1XNotvuJXtKrQGabwxD
-         6yc5af56XEnp6hKgjIwisxOXXXijom/7RoeP5lDGCuEbEtF34BbD54F3Gbddx6Un6j
-         uZcA9yU95J+fIho9wXmBqi8IsKAs1/dbFoMZ8eTKllg9PmKqccOFtXmeF5JzomilBN
-         yRKnGZWQr4A1Q==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: fix to check inline_data during compressed inode conversion
-Date:   Tue, 12 Jul 2022 11:17:15 +0800
-Message-Id: <20220712031715.355222-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 23:15:54 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C578629C94
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:15:53 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id f62-20020a9d03c4000000b0061c2c94ab8dso5296398otf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UVDIcINsQJnKJYIRtkCuzxiTw7KBm8Z9B1RHvtk5i8c=;
+        b=i7xpI24WNCDADdLCeL/TvU5A44AH+8W00ReHGgyKsUoakbiBPqmYfEVurhRlWBhVHH
+         CTDFf7PPvZ7sJBtUDZwBM2is0s4AP+UtCYWbOLH3eUQqbe43YgwKCVn24JlxGqmtJ6La
+         Jz5HNuBiRRescpgLyMuYFKTT7r1Ywxt+9AMpyJoERwj33pBweFHd35280CecSzZ+QB5U
+         6I+qQlfZbm6yo7pWfzAiMwilT6TCx8wntuQy70gxD8ZfS8MiP1Vc0RZPnWAZzDxcO13d
+         I4RlklpWFKEXReO0mbOL+ul7cdu4pQOVbOFYwJxoP6Gka3pKphDbbyGBQjgRrhHJuCHa
+         MHFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UVDIcINsQJnKJYIRtkCuzxiTw7KBm8Z9B1RHvtk5i8c=;
+        b=5vWpjfAd8FTNAsS7CqPWD7qhoZTWFwSSnUSUXugENMrS/IqYXIXn+4x51iqZrez1d+
+         kQsqKf5+NS9iRCf5M7TEEEjzh5vt7RtiLVfwNoP4QJTJtYWOS7sZIS1OFiTYQUzKr8qX
+         BvMHqpoXo7JEtXsv/SSlq9Q2WScXK00O8a3tZKOKvqnmWUd5UV5RPw9D3FB8RoWNilzU
+         tM5BGzsHHAkxZoqFzrpDpaP8jIhgrNhhME3WXpyAy0QVnf9BpWHG3y5qsEVa4X4FUtoR
+         YEFu/mWJDcA8f57Q/9sEYmxDqXhhtz+xydqTHLLgEd3NnRlrrRZ3+1AtKjSRPP9FzqzL
+         TMSw==
+X-Gm-Message-State: AJIora8n6rWbl+XFIMqph69s7X2DbiM4IL/+un/VDIwSEAyG843JW/nl
+        RXrcAXw6NfU9zDUiewShf2ebkw==
+X-Google-Smtp-Source: AGRyM1vVstm/QF12x/kk9cleXO/AFfCPa0MpB3OnAy7UeKAAd2M9UY6MrETdiam/5aZrZsD7NivCDQ==
+X-Received: by 2002:a05:6830:9c9:b0:60b:b628:3ed2 with SMTP id y9-20020a05683009c900b0060bb6283ed2mr8405899ott.122.1657595753120;
+        Mon, 11 Jul 2022 20:15:53 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k17-20020a056870149100b0010c60ec553esm3987539oab.44.2022.07.11.20.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 20:15:52 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] arm64: defconfig: Demote Qualcomm USB PHYs to modules
+Date:   Mon, 11 Jul 2022 20:18:21 -0700
+Message-Id: <20220712031821.4134712-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,28 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When converting inode to compressed one via ioctl, it needs to check
-inline_data, since inline_data flag and compressed flag are incompatible.
+The Qualcomm USB PHYs are not critical for reaching the ramdisk to load
+modules, so they can be demoted to be built as such instead of builtin.
 
-Fixes: 4c8ff7095bef ("f2fs: support data compression")
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- fs/f2fs/f2fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/configs/defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 1d97d06e0d87..60508a949dda 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -4417,7 +4417,7 @@ static inline bool f2fs_low_mem_mode(struct f2fs_sb_info *sbi)
- static inline bool f2fs_may_compress(struct inode *inode)
- {
- 	if (IS_SWAPFILE(inode) || f2fs_is_pinned_file(inode) ||
--				f2fs_is_atomic_file(inode))
-+		f2fs_is_atomic_file(inode) || f2fs_has_inline_data(inode))
- 		return false;
- 	return S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode);
- }
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d3ad1cb2f5eb..7424c19dd1c3 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1208,10 +1208,10 @@ CONFIG_PHY_MTK_TPHY=y
+ CONFIG_PHY_QCOM_PCIE2=m
+ CONFIG_PHY_QCOM_QMP=m
+ CONFIG_PHY_QCOM_QUSB2=m
+-CONFIG_PHY_QCOM_USB_HS=y
+-CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y
+-CONFIG_PHY_QCOM_USB_HS_28NM=y
+-CONFIG_PHY_QCOM_USB_SS=y
++CONFIG_PHY_QCOM_USB_HS=m
++CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=m
++CONFIG_PHY_QCOM_USB_HS_28NM=m
++CONFIG_PHY_QCOM_USB_SS=m
+ CONFIG_PHY_RCAR_GEN3_PCIE=y
+ CONFIG_PHY_RCAR_GEN3_USB2=y
+ CONFIG_PHY_RCAR_GEN3_USB3=m
 -- 
-2.25.1
+2.35.1
 

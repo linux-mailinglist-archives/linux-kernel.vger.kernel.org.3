@@ -2,236 +2,514 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90544570F05
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FF8570F0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiGLAma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S231963AbiGLAo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiGLAm2 (ORCPT
+        with ESMTP id S231607AbiGLAox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:42:28 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D78F2DA9B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:42:27 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h17so9105107wrx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=68mkDNBCkeJpX+q116C9yWsW5XjBLSxGi+xt71TSQ28=;
-        b=pXcUEGlIhOHDWFHvDN9rRDLyJeDZML22bbC8eiEGLCy/l4q3ub47IwesxJKljkqfb8
-         nHo/r/cp9kyG8mZVZTNOAx4hzS3GaEjcvicCDoe02fE9FolqPAKFuY8Yz4hOx4lEEI+B
-         vs5VuZWfB+WFXaL8jLSq4cjzTVtlNJI1bco7XI+5d7o+6Nrc35e3zlx/La0iy33o4aQB
-         s4CD0WymQMmITSwJOIiWAIaFjB08hdaj5K8yBVWYxR1oYSeGBMLeY66fr2CPeR5SUtQz
-         FqjKBS1ff2f/3D3pFF/1j0RLdvML2qQgm8bFuhL1eit5NdIkvBO5vNiChDWEJL0ialM5
-         ooNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=68mkDNBCkeJpX+q116C9yWsW5XjBLSxGi+xt71TSQ28=;
-        b=V9HP3xFAMBh99H38QTAlRtoj7AqSlrcqYC6yfTvOWKnzsT7Yi8P0b5OCDXk16uOKAu
-         ijyyzjQqFPDjGiWHtlsUXgEG/I/UbpyaZZ+FGWA8ThPyCOL6aK6v++3OJTvBeELvH6Mr
-         ey+CkttX11cFISi8i9Jq8eAtEy7/w65xppC7Ah0BaVbradWagn+IVSd7UatNETlwfmUl
-         cNHGvaBUJQgvjkf8ik6eyXI++ztxXwT911PBM7JpuJPrPaZVhpRs30hCgBXX5NMm9XJI
-         hWW1OtFzOd9vdy8cms701sieCfyo9ToCvyLABrGvpDDC8a3EmuZtnR8tPu08M100r5ME
-         RumA==
-X-Gm-Message-State: AJIora8COg4d8oliOb8anTo/e45A1LwxM3gHV2w2PGYefIuaDlgFmfX6
-        g/gOTc//evGMuhQoELjGzRh7sra5Fv0B5PMgSRgS1A==
-X-Google-Smtp-Source: AGRyM1vG+ARZBV1wm38rCAdOILOvGSx+zc1YknhjkS5MwV6FG/E/u1kTVqKLbrKORItVEO9bU5e9GK6Ocet1qyOUDBs=
-X-Received: by 2002:a5d:59a8:0:b0:21d:8a9d:732b with SMTP id
- p8-20020a5d59a8000000b0021d8a9d732bmr19203014wrr.28.1657586546036; Mon, 11
- Jul 2022 17:42:26 -0700 (PDT)
+        Mon, 11 Jul 2022 20:44:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF3D22281
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657586691; x=1689122691;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YbDhhw0+O4IzuQgTHPbqBXBKPnl7K3467aw6SoRp1ws=;
+  b=L71SJ3gegh4/d+UxUfc+3Nwiy21Rb+VquTaY/SNFKX+6tjBku3e+fcJc
+   qO2Jy+vckJfNL/tHU9tVo98ioyjwaw57JCDjDKktDzGC4bawdGHlZUfMY
+   cM3g13JKxY0FvfZx7ejkEAKqjPD4ZWSvr2C678u7gSfykKlmE4vJ1hkVs
+   YfVxQqLnvziFQvz8k8lv7xGjRxne4CQAobdOc/Dz1GTLMe3rw2OjWtEBu
+   qCVeoTTT3R5SS9X4F1I3cZWMtHkugAT2+2M2+BFkenBJJ/Pw8W+CCRaci
+   IXocXaNt9hOQ85040MtgEatv35EFRUiEkdvGG1WvNX1mxzjDMV9tlaJTi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="283559434"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="283559434"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 17:44:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="569988437"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Jul 2022 17:44:48 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oB41A-0001RH-1X;
+        Tue, 12 Jul 2022 00:44:48 +0000
+Date:   Tue, 12 Jul 2022 08:44:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mugilraj Dhavachelvan <dmugil2000@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: drivers/iio/potentiometer/ad5110.c:59:8: warning: Excessive padding
+ in 'struct ad5110_data' (107 padding bytes, where 43 is optimal). Optimal
+ fields order: buf, tol, client, cfg, lock, enable, consider reordering the
+ fields or adding explicit padding memb...
+Message-ID: <202207120820.CgmP4eFQ-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220709000439.243271-1-yosryahmed@google.com>
- <20220709000439.243271-5-yosryahmed@google.com> <370cb480-a427-4d93-37d9-3c6acd73b967@fb.com>
- <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com>
-In-Reply-To: <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 11 Jul 2022 17:42:14 -0700
-Message-ID: <CA+khW7gmVmXMg4YP4fxTtgqNyAr4mQqnXbP=z0nUeQ8=hfGC3g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/8] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 4:20 PM Yonghong Song <yhs@fb.com> wrote:
->
-> On 7/10/22 5:19 PM, Yonghong Song wrote:
-> >
-> >
-[...]
-> >> +
-> >>   union bpf_iter_link_info {
-> >>       struct {
-> >>           __u32    map_fd;
-> >>       } map;
-> >> +
-> >> +    /* cgroup_iter walks either the live descendants of a cgroup
-> >> subtree, or the ancestors
-> >> +     * of a given cgroup.
-> >> +     */
-> >> +    struct {
-> >> +        /* Cgroup file descriptor. This is root of the subtree if for
-> >> walking the
-> >> +         * descendants; this is the starting cgroup if for walking
-> >> the ancestors.
-> >
-> > Adding comment that cgroup_fd 0 means starting from root cgroup?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5a29232d870d9e63fe5ff30b081be6ea7cc2465d
+commit: d03a74bfaccefcf271bf8e889c31229aa521cd66 iio: potentiometer: Add driver support for AD5110
+date:   11 months ago
+config: arm-randconfig-c002-20220702 (https://download.01.org/0day-ci/archive/20220712/202207120820.CgmP4eFQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f7a80c3d08d4821e621fc88d6a2e435291f82dff)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d03a74bfaccefcf271bf8e889c31229aa521cd66
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d03a74bfaccefcf271bf8e889c31229aa521cd66
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm clang-analyzer 
 
-Sure.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Also, if I understand correctly, cgroup v1 is also supported here,
-> > right? If this is the case, for cgroup v1 which root cgroup will be
-> > used for cgroup_fd? It would be good to clarify here too.
-> >
 
-IMO, the case of cgroup_fd = 0 combined with cgroup v1 should return
-errors. It's an invalid case. If anyone wants to use cgroup_iter on
-cgroup v1 hierarchy, they could explicitly open the subsystems' root
-directory and pass the fd. With that said, Yosry and I will test and
-confirm the behavior in this situation and clarify in the comment.
-Thanks for pointing this out.
+clang-analyzer warnings: (new ones prefixed by >>)
+   sound/core/control.c:2197:13: note: Loop condition is false.  Exiting loop
+                   control = snd_kcontrol(card->controls.next);
+                             ^
+   include/sound/control.h:87:25: note: expanded from macro 'snd_kcontrol'
+   #define snd_kcontrol(n) list_entry(n, struct snd_kcontrol, list)
+                           ^
+   include/linux/list.h:511:2: note: expanded from macro 'list_entry'
+           container_of(ptr, type, member)
+           ^
+   include/linux/kernel.h:495:2: note: expanded from macro 'container_of'
+           BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&   \
+           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:328:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:316:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:306:2: note: expanded from macro '__compiletime_assert'
+           do {                                                            \
+           ^
+   sound/core/control.c:2198:3: note: Use of memory after it is freed
+                   snd_ctl_remove(card, control);
+                   ^                    ~~~~~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (16 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (16 in non-user code, 1 with check filters).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   drivers/iio/accel/sca3000.c:163:8: warning: Excessive padding in 'struct sca3000_state' (94 padding bytes, where 30 is optimal). Optimal fields order: tx, last_timestamp, us, info, mo_det_use_count, lock, rx, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct sca3000_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   drivers/iio/accel/sca3000.c:163:8: note: Excessive padding in 'struct sca3000_state' (94 padding bytes, where 30 is optimal). Optimal fields order: tx, last_timestamp, us, info, mo_det_use_count, lock, rx, consider reordering the fields or adding explicit padding members
+   struct sca3000_state {
+   ~~~~~~~^~~~~~~~~~~~~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (17 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (17 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   drivers/iio/magnetometer/yamaha-yas530.c:680:29: warning: Value stored to 'c' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct yas5xx_calibration *c = &yas5xx->calibration;
+                                      ^   ~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/magnetometer/yamaha-yas530.c:680:29: note: Value stored to 'c' during its initialization is never read
+           struct yas5xx_calibration *c = &yas5xx->calibration;
+                                      ^   ~~~~~~~~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/iio/potentiometer/ad5110.c:59:8: warning: Excessive padding in 'struct ad5110_data' (107 padding bytes, where 43 is optimal). Optimal fields order: buf, tol, client, cfg, lock, enable, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad5110_data {
+   ~~~~~~~^~~~~~~~~~~~~
+   drivers/iio/potentiometer/ad5110.c:59:8: note: Excessive padding in 'struct ad5110_data' (107 padding bytes, where 43 is optimal). Optimal fields order: buf, tol, client, cfg, lock, enable, consider reordering the fields or adding explicit padding members
+   struct ad5110_data {
+   ~~~~~~~^~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   drivers/mtd/devices/phram.c:231:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
+           strcpy(str, val);
+           ^~~~~~
+   drivers/mtd/devices/phram.c:231:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
+           strcpy(str, val);
+           ^~~~~~
+   drivers/mtd/devices/phram.c:315:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
+           strcpy(phram_paramline, val);
+           ^~~~~~
+   drivers/mtd/devices/phram.c:315:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
+           strcpy(phram_paramline, val);
+           ^~~~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   sound/core/seq/seq_prioq.c:292:16: warning: Access to field 'next' results in a dereference of a null pointer (loaded from variable 'prev') [clang-analyzer-core.NullDereference]
+                                   prev->next = cell->next;
+                                   ~~~~       ^
+   sound/core/seq/seq_prioq.c:279:2: note: 'prev' initialized to a null pointer value
+           struct snd_seq_event_cell *prev = NULL;
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/core/seq/seq_prioq.c:283:2: note: Loop condition is false.  Exiting loop
+           spin_lock_irqsave(&f->lock, flags);
+           ^
+   include/linux/spinlock.h:384:2: note: expanded from macro 'spin_lock_irqsave'
+           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
+           ^
+   include/linux/spinlock.h:250:2: note: expanded from macro 'raw_spin_lock_irqsave'
+           do {                                            \
+           ^
+   sound/core/seq/seq_prioq.c:283:2: note: Loop condition is false.  Exiting loop
+           spin_lock_irqsave(&f->lock, flags);
+           ^
+   include/linux/spinlock.h:382:43: note: expanded from macro 'spin_lock_irqsave'
+   #define spin_lock_irqsave(lock, flags)                          \
+                                                                   ^
+   sound/core/seq/seq_prioq.c:285:2: note: Loop condition is true.  Entering loop body
+           while (cell) {
+           ^
+   sound/core/seq/seq_prioq.c:287:3: note: Taking true branch
+                   if (prioq_match(cell, client, timestamp)) {
+                   ^
+   sound/core/seq/seq_prioq.c:289:8: note: 'cell' is equal to field 'head'
+                           if (cell == f->head) {
+                               ^~~~
+   sound/core/seq/seq_prioq.c:289:4: note: Taking true branch
+                           if (cell == f->head) {
+                           ^
+   sound/core/seq/seq_prioq.c:294:8: note: Assuming 'cell' is not equal to field 'tail'
+                           if (cell == f->tail)
+                               ^~~~~~~~~~~~~~~
+   sound/core/seq/seq_prioq.c:294:4: note: Taking false branch
+                           if (cell == f->tail)
+                           ^
+   sound/core/seq/seq_prioq.c:299:8: note: 'freefirst' is equal to NULL
+                           if (freefirst == NULL) {
+                               ^~~~~~~~~
+   sound/core/seq/seq_prioq.c:299:4: note: Taking true branch
+                           if (freefirst == NULL) {
+                           ^
+   sound/core/seq/seq_prioq.c:285:2: note: Loop condition is true.  Entering loop body
+           while (cell) {
+           ^
+   sound/core/seq/seq_prioq.c:287:3: note: Taking true branch
+                   if (prioq_match(cell, client, timestamp)) {
+                   ^
+   sound/core/seq/seq_prioq.c:289:8: note: 'cell' is equal to field 'head'
+                           if (cell == f->head) {
+                               ^~~~
+   sound/core/seq/seq_prioq.c:289:4: note: Taking true branch
+                           if (cell == f->head) {
+--
+                   ^               ~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   drivers/iio/adc/hi8435.c:43:8: warning: Excessive padding in 'struct hi8435_priv' (89 padding bytes, where 25 is optimal). Optimal fields order: reg_buffer, spi, event_scan_mask, event_prev_val, threshold_lo, threshold_hi, lock, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct hi8435_priv {
+   ~~~~~~~^~~~~~~~~~~~~
+   drivers/iio/adc/hi8435.c:43:8: note: Excessive padding in 'struct hi8435_priv' (89 padding bytes, where 25 is optimal). Optimal fields order: reg_buffer, spi, event_scan_mask, event_prev_val, threshold_lo, threshold_hi, lock, consider reordering the fields or adding explicit padding members
+   struct hi8435_priv {
+   ~~~~~~~^~~~~~~~~~~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   drivers/power/supply/bq256xx_charger.c:1521:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+           ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/bq256xx_charger.c:1521:2: note: Value stored to 'ret' is never read
+           ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   drivers/power/supply/sc2731_charger.c:450:14: warning: Assigned value is garbage or undefined [clang-analyzer-core.uninitialized.Assign]
+           info->limit = min;
+                       ^ ~~~
+   drivers/power/supply/sc2731_charger.c:439:15: note: 'min' declared without an initial value
+           unsigned int min, max;
+                        ^~~
+   drivers/power/supply/sc2731_charger.c:446:6: note: Assuming field 'chg_state' is equal to USB_CHARGER_PRESENT
+           if (info->usb_phy->chg_state != USB_CHARGER_PRESENT)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:446:2: note: Taking false branch
+           if (info->usb_phy->chg_state != USB_CHARGER_PRESENT)
+           ^
+   drivers/power/supply/sc2731_charger.c:449:2: note: Calling 'usb_phy_get_charger_current'
+           usb_phy_get_charger_current(info->usb_phy, &min, &max);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/usb/phy.h:279:1: note: Returning without writing to '*min'
+   }
+   ^
+   drivers/power/supply/sc2731_charger.c:449:2: note: Returning from 'usb_phy_get_charger_current'
+           usb_phy_get_charger_current(info->usb_phy, &min, &max);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/power/supply/sc2731_charger.c:450:14: note: Assigned value is garbage or undefined
+           info->limit = min;
+                       ^ ~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   Suppressed 17 warnings (17 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   15 warnings generated.
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+   drivers/iio/magnetometer/yamaha-yas530.c:680:29: warning: Value stored to 'c' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
+           struct yas5xx_calibration *c = &yas5xx->calibration;
+                                      ^   ~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/magnetometer/yamaha-yas530.c:680:29: note: Value stored to 'c' during its initialization is never read
+           struct yas5xx_calibration *c = &yas5xx->calibration;
+                                      ^   ~~~~~~~~~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   17 warnings generated.
+>> drivers/iio/potentiometer/ad5110.c:59:8: warning: Excessive padding in 'struct ad5110_data' (107 padding bytes, where 43 is optimal). Optimal fields order: buf, tol, client, cfg, lock, enable, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct ad5110_data {
+   ~~~~~~~^~~~~~~~~~~~~
+   drivers/iio/potentiometer/ad5110.c:59:8: note: Excessive padding in 'struct ad5110_data' (107 padding bytes, where 43 is optimal). Optimal fields order: buf, tol, client, cfg, lock, enable, consider reordering the fields or adding explicit padding members
+   struct ad5110_data {
+   ~~~~~~~^~~~~~~~~~~~~
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   drivers/iio/potentiometer/max5481.c:44:8: warning: Excessive padding in 'struct max5481_data' (117 padding bytes, where 53 is optimal). Optimal fields order: msg, spi, cfg, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
+   struct max5481_data {
+   ~~~~~~~^~~~~~~~~~~~~~
+   drivers/iio/potentiometer/max5481.c:44:8: note: Excessive padding in 'struct max5481_data' (117 padding bytes, where 53 is optimal). Optimal fields order: msg, spi, cfg, consider reordering the fields or adding explicit padding members
+   struct max5481_data {
+   ~~~~~~~^~~~~~~~~~~~~~
+   Suppressed 15 warnings (15 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   16 warnings generated.
+   Suppressed 16 warnings (16 in non-user code).
+   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+   25 warnings generated.
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:148:15: warning: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
+                           temp[i][0] |= (value & 0x00ff) >> 0;
+                           ~~~~~~~~~~ ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:118:34: note: Assuming 'type' is not equal to PERIODIC_TRAINING_UPDATE
+           bool periodic_training_update = type == PERIODIC_TRAINING_UPDATE;
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:123:21: note: Assuming 'type' is not equal to DVFS_UPDATE
+           bool dvfs_update = type == DVFS_UPDATE;
+                              ^~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:125:18: note: Assuming 'type' is equal to DVFS_PT1
+           bool dvfs_pt1 = type == DVFS_PT1;
+                           ^~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:133:6: note: 'dvfs_pt1' is true
+           if (dvfs_pt1 || periodic_training_update) {
+               ^~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:133:15: note: Left side of '||' is true
+           if (dvfs_pt1 || periodic_training_update) {
+                        ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:136:15: note: Assuming 'i' is >= field 'num_channels'
+                   for (i = 0; i < emc->num_channels; i++) {
+                               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:136:3: note: Loop condition is false. Execution continues on line 145
+                   for (i = 0; i < emc->num_channels; i++) {
+                   ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:147:15: note: Assuming 'i' is < field 'num_channels'
+                   for (i = 0; i < emc->num_channels; i++) {
+                               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:147:3: note: Loop condition is true.  Entering loop body
+                   for (i = 0; i < emc->num_channels; i++) {
+                   ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:148:15: note: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage
+                           temp[i][0] |= (value & 0x00ff) >> 0;
+                           ~~~~~~~~~~ ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:157:36: warning: The right operand of '*' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
+                   cval /= last_timing_rate_mhz * 2 * temp[0][0];
+                                                    ^ ~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:118:34: note: Assuming 'type' is not equal to PERIODIC_TRAINING_UPDATE
+           bool periodic_training_update = type == PERIODIC_TRAINING_UPDATE;
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:123:21: note: Assuming 'type' is not equal to DVFS_UPDATE
+           bool dvfs_update = type == DVFS_UPDATE;
+                              ^~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:125:18: note: Assuming 'type' is equal to DVFS_PT1
+           bool dvfs_pt1 = type == DVFS_PT1;
+                           ^~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:133:6: note: 'dvfs_pt1' is true
+           if (dvfs_pt1 || periodic_training_update) {
+               ^~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:133:15: note: Left side of '||' is true
+           if (dvfs_pt1 || periodic_training_update) {
+                        ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:136:15: note: Assuming 'i' is >= field 'num_channels'
+                   for (i = 0; i < emc->num_channels; i++) {
+                               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:136:3: note: Loop condition is false. Execution continues on line 145
+                   for (i = 0; i < emc->num_channels; i++) {
+                   ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:147:15: note: Assuming 'i' is >= field 'num_channels'
+                   for (i = 0; i < emc->num_channels; i++) {
+                               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:147:3: note: Loop condition is false. Execution continues on line 154
+                   for (i = 0; i < emc->num_channels; i++) {
+                   ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:154:6: note: 'dvfs_pt1' is true
+           if (dvfs_pt1 || periodic_training_update) {
+               ^~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:154:15: note: Left side of '||' is true
+           if (dvfs_pt1 || periodic_training_update) {
+                        ^
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:157:36: note: The right operand of '*' is a garbage value
+                   cval /= last_timing_rate_mhz * 2 * temp[0][0];
+                                                    ^ ~~~~~~~~~~
+   drivers/memory/tegra/tegra210-emc-cc-r21021.c:283:15: warning: The left expression of the compound assignment is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
+                           temp[i][0] |= (value & 0x00ff) >> 0;
 
-> >> +         */
-> >> +        __u32    cgroup_fd;
-> >> +        __u32    traversal_order;
-> >> +    } cgroup;
-> >>   };
-> >>   /* BPF syscall commands, see bpf(2) man-page for more details. */
-> >> @@ -6134,6 +6151,10 @@ struct bpf_link_info {
-> >>                   struct {
-> >>                       __u32 map_id;
-> >>                   } map;
-> >> +                struct {
-> >> +                    __u32 traversal_order;
-> >> +                    __aligned_u64 cgroup_id;
-> >> +                } cgroup;
-> >
-> > We actually has a problem here although I don't have a solution yet.
-> >
-[...]
-> >
-> > There is a 4 byte hole after member 'target_name_len'. So map_id will
-> > have a offset 16 from the start of structure 'iter'.
-> >
-> >
-> > This will break uapi. We probably won't be able to change the existing
-> > uapi with adding a ':32' after member 'target_name_len'. I don't have
-> > a good solution yet, but any suggestion is welcome.
-> >
-> > Also, for '__aligned_u64 cgroup_id', '__u64 cgroup_id' is enough.
-> > '__aligned_u64' mostly used for pointers.
->
-> Briefly discussed with Alexei, the following structure iter definition
-> should work. Later on, if we need to addition fields for other iter's,
-> for a single __u32, the field can be added to either the first or the
-> second union. If fields are more than __u32, they can be placed
-> in the second union.
->
->                  struct {
->                          __aligned_u64 target_name; /* in/out:
-> target_name buffer ptr */
->                          __u32 target_name_len;     /* in/out:
-> target_name buffer len */
->                          union {
->                                  struct {
->                                          __u32 map_id;
->                                  } map;
->                          };
->                          union {
->                                  struct {
->                                          __u64 cgroup_id;
->                                          __u32 traversal_order;
->                                  } cgroup;
->                          };
->                  } iter;
->
+vim +59 drivers/iio/potentiometer/ad5110.c
 
-Thanks Yonghong for seeking the solution here. The solution looks
-good. I'm going to put your heads-up as comments there. One thing I'd
-like to confirm, when we query bpf_link_info for cgroup iter, do we
-also need to zero those fields for map_elem?
+    58	
+  > 59	struct ad5110_data {
+    60		struct i2c_client       *client;
+    61		s16			tol;		/* resistor tolerance */
+    62		bool			enable;
+    63		struct mutex            lock;
+    64		const struct ad5110_cfg	*cfg;
+    65		/*
+    66		 * DMA (thus cache coherency maintenance) requires the
+    67		 * transfer buffers to live in their own cache lines.
+    68		 */
+    69		u8			buf[2] ____cacheline_aligned;
+    70	};
+    71	
 
->
-> >
-> >
-> >>               };
-> >>           } iter;
-> >>           struct  {
-[...]
-> >> +
-> >> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> >> +{
-> >> +    struct cgroup_iter_priv *p = seq->private;
-> >> +
-> >> +    mutex_lock(&cgroup_mutex);
-> >> +
-> >> +    /* support only one session */
-> >> +    if (*pos > 0)
-> >> +        return NULL;
-> >
-> > This might be okay. But want to check what is
-> > the practical upper limit for cgroups in a system
-> > and whether we may miss some cgroups. If this
-> > happens, it will be a surprise to the user.
-> >
-
-Ok. What's the max number of items supported in a single session?
-
-> >> +
-> >> +    ++*pos;
-> >> +    p->terminate = false;
-> >> +    if (p->order == BPF_ITER_CGROUP_PRE)
-> >> +        return css_next_descendant_pre(NULL, p->start_css);
-> >> +    else if (p->order == BPF_ITER_CGROUP_POST)
-> >> +        return css_next_descendant_post(NULL, p->start_css);
-> >> +    else /* BPF_ITER_CGROUP_PARENT_UP */
-> >> +        return p->start_css;
-> >> +}
-> >> +
-> >> +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> >> +                  struct cgroup_subsys_state *css, int in_stop);
-> >> +
-> >> +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
-> >> +{
-> >> +    /* pass NULL to the prog for post-processing */
-> >> +    if (!v)
-> >> +        __cgroup_iter_seq_show(seq, NULL, true);
-> >> +    mutex_unlock(&cgroup_mutex);
-> >> +}
-> >> +
-> > [...]
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

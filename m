@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1C3572944
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3C1572948
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbiGLWZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S233276AbiGLW0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbiGLWY7 (ORCPT
+        with ESMTP id S231600AbiGLW0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:24:59 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 951C29E47C;
-        Tue, 12 Jul 2022 15:24:58 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 7C7FA62C731;
-        Wed, 13 Jul 2022 08:24:57 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oBOJK-000A9E-NE; Wed, 13 Jul 2022 08:24:54 +1000
-Date:   Wed, 13 Jul 2022 08:24:54 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-xfs@vger.kernel.org, lkp@lists.01.org
-Subject: Re: [xfs]  65cf4eb83e: xfstests.xfs.011.fail
-Message-ID: <20220712222454.GN3861211@dread.disaster.area>
-References: <20220708015558.1134330-9-david@fromorbit.com>
- <Ys0wxcjQa7ehVuXz@xsang-OptiPlex-9020>
+        Tue, 12 Jul 2022 18:26:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410E6AA83D;
+        Tue, 12 Jul 2022 15:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657664809;
+        bh=6vgHIYo307C+wMr3Dqy/LXRmGc5jwOOtlylqnpb0aPk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=gR7Rwvo+QeoUYj6i0k4VV1PvVRj6XRQEuRdNRUewU3CpNnvVDaAaEfRbSqCED8tmQ
+         oVU+mjPePszaeyKxBuH3kS4HXMxTK1AJpYynT4PUcOuHEeRlGc5pECBe0Wa5ftGhkY
+         hsnRZWC3pK+26QvQlFId/kCCxq0vB6jy97C9V7Cc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.68]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5VHG-1nVtjP2KNe-016sv4; Wed, 13
+ Jul 2022 00:26:49 +0200
+Message-ID: <6094fba0-5089-914a-f8b2-14bb9d68a4eb@gmx.de>
+Date:   Wed, 13 Jul 2022 00:26:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys0wxcjQa7ehVuXz@xsang-OptiPlex-9020>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62cdf4b9
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=RgO8CyIxsXoA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
-        a=7-415B0cAAAA:8 a=QyXUC8HyAAAA:8 a=LhnTwE4SJcGP-2LhAFgA:9
-        a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:LdFRrNaXODKuu0Z8A/dOku3q8qzRA2ciDxpQHr/0UqXn3n+PCxP
+ tamROs4PvCFqLOQM7YP0Ku0fU/UK0DjQA3W1IwD36zzcsdcDyNJ9OeSnr616X0+WMUpNbkp
+ nMti9m+EdShYtZf3rb0dIR0VhV8mEL7mN2T1NRaiR7OkRIOJVEeTior1FYsGySINJ3nHRXl
+ U5xyzYE4R9Inn19mPJZNw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tiB0EXPRBR8=:KcnIoaEysKi1Iy21AgVNNG
+ PVrwuYaQhpcCmb/oYA7Lu7yZn+Mng56BskhZKDWI/Bh5tzrwK9GWTOq1K5FGgJ9gip/cQ234d
+ 7v2eysEp12EuUZsiDeGrnanUU80EKkHoJE+QZUIwZWifTqyEkp2KG0GlkMlsxz915vqt6jpFF
+ Tx2qH5Cj50j7uQmjss9DTgkS5OHLtKKBmx2BCl7SZYAe3QpQIJFhoiSOJErcRebk8NRWxjv+I
+ 6CVU2Jd88ZEEYRCa5sgdfNHI/V68vJwf56SBrdcVjfFN6B322gmJQz3UZXHnmmwqndnE1bk3S
+ ubqBXJTsFzsn/bOBj96lZ/B2UctpBjc5YTA9AlShRf3zFP/6LwbOOAwiKJTwNAQC+qKrglNPE
+ C858qzW8i6h0gDZ8jZRcLKAXgyso/1w+WnYjcz/1JE4MeymKnY2fu0CnZFt+l5F91wOwalVgB
+ uhS3k88kTZJlGY75ZypIdqEKzNf8P9T5fQsUnGhaSrz5w0XG5mXUu/dpcUQvUBjktMjtHOFqI
+ 9hEy5kleqep+dNbM1zhZmKtHr28ovuM9u9+yMf9lzmfEgJ4UBpEDQR71fVM/BCA+BSIyBjkSv
+ aGPvoSN9n7+DhqugywTsw3qa6sjcfh8YGgQ0jU4SslLtEvfw8w0MezmU7eJyEmtuOKE1SKzrs
+ ypxG+tzY9W1zkjI4XeIec5kxMJ49T8C6D8z8EKoX6NTobgpL6ect+4E1/iJ2B9FFtNisI5+wR
+ snJcd+UFqpE6b+7/ZSMIDvixl7mi71VfMpFOK/WfD4AoS1Bfx2WklkKfmRLxXmocNOLWPFohf
+ Cj6WLs/sVcM+fPAh/5u0ipd0361AWMHy4QuwNiZxsNggKx6tfd0VQY476PxOV5auSFMV8AtKA
+ F9A9L5QiBsrCI4sX/RBYfuLCpH2MMb+3oN2wACkyW1+bnz/eFC44nVUxv8iTlLAun8L1LHlqj
+ BzLXuclzIMBR9WMnqd/JIqmXbmI2RvM+tTtmF9A49J5gDcFPhab81EsSVaU+waR1uLB1HlsNa
+ NKTOdogwiRZv52otyq1JYbFzJurZqA17M7q3y7M0ZTHW2wZzGlvBMxAY5nU8EHezQRkCg6oSA
+ 6HWRla+b0FpoK+iV2daAbh1n+qdTPU67peh
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,61 +69,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:28:53PM +0800, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 65cf4eb83e2179b565c7943fd685ddb93d2b146a ("[PATCH 8/8] xfs: grant heads track byte counts, not LSNs")
-> url: https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/xfs-byte-base-grant-head-reservation-tracking/20220708-095642
-> base: https://git.kernel.org/cgit/fs/xfs/xfs-linux.git for-next
-> patch link: https://lore.kernel.org/linux-xfs/20220708015558.1134330-9-david@fromorbit.com
-> 
-> in testcase: xfstests
-> version: xfstests-x86_64-c1144bf-1_20220704
-> with following parameters:
-> 
-> 	disk: 4HDD
-> 	fs: xfs
-> 	test: xfs-group-01
-> 	ucode: 0x21
-> 
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> 
-> on test machine: 4 threads 1 sockets Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> 
-> 
-> xfs/011       - output mismatch (see /lkp/benchmarks/xfstests/results//xfs/011.out.bad)
->     --- tests/xfs/011.out	2022-07-04 16:34:35.000000000 +0000
->     +++ /lkp/benchmarks/xfstests/results//xfs/011.out.bad	2022-07-11 12:33:58.535910570 +0000
->     @@ -1,2 +1,14 @@
->      QA output created by 011
->      Silence is golden.
->     +reserve_grant_head (4096:) does not match log_head_lsn (1:8192), possible leak detected.
->     +write_grant_head (4096:) does not match log_head_lsn (1:8192), possible leak detected.
->     +reserve_grant_head (4096:) does not match log_head_lsn (1:446464), possible leak detected.
->     +write_grant_head (4096:) does not match log_head_lsn (1:446464), possible leak detected.
->     +reserve_grant_head (4096:) does not match log_head_lsn (1:991232), possible leak detected.
+hallo Greg
 
-Yes, this commit changes the structure of the write and reserve
-grant heads and the output of the relevant sysfs files, so the test
-will need fixing (or removing) as the leak detection debug
-information has changed.
+5.18.12-rc1
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
+
+

@@ -2,180 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5244571922
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93C57192A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbiGLLzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S232991AbiGLLzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiGLLyl (ORCPT
+        with ESMTP id S230482AbiGLLzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:54:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF4B5B521D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657626857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K/Y45MWLvtRZQAQMme1NWCA15wADRq0pOspGW9SWYbc=;
-        b=JvlkMhTpI6Qo8JKmSPvk/lfydowUSFpIrCwzd9TglBkMAf9Myr0G3h+Cq4uCEACrB1pIC3
-        ewRra4sOz9aKfVECOtsy/oC+ZQbE85fMSMCr4r6IgM1bfCRIxtr1qOhDkpwrHB5t9k7wyC
-        Lk351XqcClr59F/OLx/Ac9OGHaBtHBY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-YpJng0QZM9KNts20wq2Svg-1; Tue, 12 Jul 2022 07:54:16 -0400
-X-MC-Unique: YpJng0QZM9KNts20wq2Svg-1
-Received: by mail-qk1-f199.google.com with SMTP id t203-20020a3746d4000000b006af1d3e8068so7611363qka.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:54:16 -0700 (PDT)
+        Tue, 12 Jul 2022 07:55:11 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0E4B520A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:55:00 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 6so13514693ybc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OUm36JXbn2cFfASaBApIenl9AkY8jJt+kU3h2jjV/Do=;
+        b=mlIxG6kQ1nJjyT6pnefCQ3hYABDyxXfo8vj7QqVR4W0A7RKYEtOLZa9MbrvvnIeMWR
+         dfsXALkc0WEOD7PXmqQLiwLJ9xEBAysuby6yJKxj6646dvxPucmvvsZeyGqyiHsjL/GL
+         /wqk0M7810Tm+4Nl/pBaBDlgMG3r6FU/a8y7b8hFbCrk8MOi8ARKr2IZ+H4FK9kdgidm
+         o1sBcXYQMiH7/P2fq0YEUeWiPFgmGDtd/4ONHw7keEK/SPKD6yLtwB38/r44hQur7j9n
+         zibhzt/o3QqDmHI8n+D5RAyIxVzPcB2S7X6hhOZi6r94M7FaOv56m0+LfqlZv8xH8OQO
+         bNJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=K/Y45MWLvtRZQAQMme1NWCA15wADRq0pOspGW9SWYbc=;
-        b=vI3TpfySB1JZ0Q88ITytnpmmcxEv/gd4IzdvVOFj/J0XxYQU7kUckheND3SFH/ei6g
-         kI3eGsrrnh0gPyrtcbawV4Y1Z/n55pkVICUI0aucszlMil1Ep/T6chrmkxcR1zFiDsri
-         j9GbVivjPcS7w0B2jGlNkqg7sz8rdbrCD5ZvsFzqn1l21iEoEATsT/b/uqvPCu4V9SOy
-         lcOnmLOOtWdphKXkZP0uVQEFM9tWY85PPYMBG6s3ZrSIhTsXxdv1CxRJTXfffOnqUxiC
-         Lhlh5XiHBblIqDheLDWkqyR3JvHr/WRQ2cIAN6ZYbHCf231/LLZxnj6vC5ouhuSS/4dw
-         ir+g==
-X-Gm-Message-State: AJIora+wNbvUwTke5Eto6vc7tDHtA9nw3FepBQWEbzs+FlfVZnIHUr77
-        8SpMQ8syQ7zyVyuf26JhGcTVRzxsddw2ON0wUfFPfB5XedmEuOQF/BjT+HrqwyTH2paLpP2sqa2
-        WQUBgf35iKCbtrmNirzdgYdwJ
-X-Received: by 2002:a05:620a:2991:b0:6b5:9921:6bb6 with SMTP id r17-20020a05620a299100b006b599216bb6mr3861379qkp.553.1657626856318;
-        Tue, 12 Jul 2022 04:54:16 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uttgtgZ9z3Hy3T6ZIJ02RXN1KbaDIKXQ51OXBaCi+NRy80KGVyzDnRNPyv/kz+rtPXo5jpVw==
-X-Received: by 2002:a05:620a:2991:b0:6b5:9921:6bb6 with SMTP id r17-20020a05620a299100b006b599216bb6mr3861367qkp.553.1657626856113;
-        Tue, 12 Jul 2022 04:54:16 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id v24-20020a05622a189800b0031e99798d70sm7529905qtc.29.2022.07.12.04.54.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:54:15 -0700 (PDT)
-Message-ID: <c3cf37f3dd115286db53df6fa175d7ee729610d4.camel@redhat.com>
-Subject: Re: [PATCH v3 10/25] KVM: selftests: Enable TSC scaling in evmcs
- selftest
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:54:11 +0300
-In-Reply-To: <20220708144223.610080-11-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-11-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OUm36JXbn2cFfASaBApIenl9AkY8jJt+kU3h2jjV/Do=;
+        b=D0IFP1KiJiROdD1jb4qRH91Gim4IjvbWgCAkDeEdxcFgV3QYA/b3wBaOe/XBw5Qv0G
+         P0wSRU91jzoZCnU6ewwmzAwpz0UEt4CzbXwx0HtlpHkPoBUQNY2fNF942NgK5c2SONcR
+         zP3iRZIyFsj8A7jAt2lY12OOQkyzY2FKp8oB1v9gEDcstEY2x7T9Nq2FyTTDBnRaNDjF
+         sPn0UE/698jvWKStHR/xnW28HTcD4bcaFjKyCFKl+J46cQaaP4ReLMv4gZqNy9390qJT
+         ZoLa3Jfj+ovtUmU4mfTHNPjWiQOSRx00Nr1wVXQ/Z0QFeE6fZmU6M6DprHZX04ma+lit
+         /erA==
+X-Gm-Message-State: AJIora9qgVOalVKO5u9poTjrOHYkSaz+tgJ7haDvHn7dBsgB+iv6qoSc
+        nIe6yboDgcHZtwqFw0vLpx0fIAAxOzH/4JhQr4zv8A==
+X-Google-Smtp-Source: AGRyM1ubexV4ZZio45G9VEs9ZwCCiwvszuvc+5DyA79Fo6d49h5TUMvqOxyRyX7e7kpx2hjZfwJJQpUJOqnmCD99wfo=
+X-Received: by 2002:a25:2d59:0:b0:66e:32d3:7653 with SMTP id
+ s25-20020a252d59000000b0066e32d37653mr21902834ybe.625.1657626899153; Tue, 12
+ Jul 2022 04:54:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-13-glider@google.com>
+In-Reply-To: <20220701142310.2188015-13-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Jul 2022 13:54:23 +0200
+Message-ID: <CANpmjNMjAzYtTOkc7m2j1qypjU6zYigKHwAcrHOJpRu0HCbKQA@mail.gmail.com>
+Subject: Re: [PATCH v4 12/45] kmsan: disable instrumentation of unsupported
+ common kernel code
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> The updated Enlightened VMCS v1 definition enables TSC scaling, test
-> that SECONDARY_EXEC_TSC_SCALING can now be enabled.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
+>
+> EFI stub cannot be linked with KMSAN runtime, so we disable
+> instrumentation for it.
+>
+> Instrumenting kcov, stackdepot or lockdep leads to infinite recursion
+> caused by instrumentation hooks calling instrumented code again.
+>
+> This patch was previously part of "kmsan: disable KMSAN instrumentation
+> for certain kernel parts", but was split away per Mark Rutland's
+> request.
+
+The "This patch..." paragraph feels out of place, and feels like it
+should be part of a v4 changelog below ---.
+
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+
+Otherwise,
+
+Reviewed-by: Marco Elver <elver@google.com>
+
 > ---
->  .../testing/selftests/kvm/x86_64/evmcs_test.c | 31 +++++++++++++++++--
->  1 file changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-> index 8dda527cc080..80135b98dc3b 100644
-> --- a/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/evmcs_test.c
-> @@ -18,6 +18,9 @@
->  
->  #include "vmx.h"
->  
-> +/* Test flags */
-> +#define HOST_HAS_TSC_SCALING BIT(0)
-> +
->  static int ud_count;
->  
->  static void guest_ud_handler(struct ex_regs *regs)
-> @@ -64,11 +67,14 @@ void l2_guest_code(void)
->         vmcall();
->         rdmsr_gs_base(); /* intercepted */
->  
-> +       /* TSC scaling */
-> +       vmcall();
-> +
->         /* Done, exit to L1 and never come back.  */
->         vmcall();
->  }
->  
-> -void guest_code(struct vmx_pages *vmx_pages)
-> +void guest_code(struct vmx_pages *vmx_pages, u64 test_flags)
->  {
->  #define L2_GUEST_STACK_SIZE 64
->         unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-> @@ -150,6 +156,18 @@ void guest_code(struct vmx_pages *vmx_pages)
->         GUEST_ASSERT(vmreadz(VM_EXIT_REASON) == EXIT_REASON_VMCALL);
->         GUEST_SYNC(11);
->  
-> +       if (test_flags & HOST_HAS_TSC_SCALING) {
-> +               GUEST_ASSERT((rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2) >> 32) &
-> +                            SECONDARY_EXEC_TSC_SCALING);
-> +               /* Try enabling TSC scaling */
-> +               vmwrite(SECONDARY_VM_EXEC_CONTROL, vmreadz(SECONDARY_VM_EXEC_CONTROL) |
-> +                       SECONDARY_EXEC_TSC_SCALING);
-> +               vmwrite(TSC_MULTIPLIER, 1);
-> +       }
-> +       GUEST_ASSERT(!vmresume());
-> +       GUEST_ASSERT(vmreadz(VM_EXIT_REASON) == EXIT_REASON_VMCALL);
-> +       GUEST_SYNC(12);
-> +
->         /* Try enlightened vmptrld with an incorrect GPA */
->         evmcs_vmptrld(0xdeadbeef, vmx_pages->enlightened_vmcs);
->         GUEST_ASSERT(vmlaunch());
-> @@ -204,6 +222,7 @@ int main(int argc, char *argv[])
->         struct kvm_vm *vm;
->         struct kvm_run *run;
->         struct ucall uc;
-> +       u64 test_flags = 0;
->         int stage;
->  
->         vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> @@ -212,11 +231,19 @@ int main(int argc, char *argv[])
->         TEST_REQUIRE(kvm_has_cap(KVM_CAP_NESTED_STATE));
->         TEST_REQUIRE(kvm_has_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS));
->  
-> +       if ((kvm_get_feature_msr(MSR_IA32_VMX_PROCBASED_CTLS2) >> 32) &
-> +           SECONDARY_EXEC_TSC_SCALING) {
-> +               test_flags |= HOST_HAS_TSC_SCALING;
-> +               pr_info("TSC scaling is supported, adding to test\n");
-> +       } else {
-> +               pr_info("TSC scaling is not supported\n");
-> +       }
-> +
->         vcpu_set_hv_cpuid(vcpu);
->         vcpu_enable_evmcs(vcpu);
->  
->         vcpu_alloc_vmx(vm, &vmx_pages_gva);
-> -       vcpu_args_set(vcpu, 1, vmx_pages_gva);
-> +       vcpu_args_set(vcpu, 2, vmx_pages_gva, test_flags);
->  
->         vm_init_descriptor_tables(vm);
->         vcpu_init_descriptor_tables(vcpu);
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
-
-
+> Link: https://linux-review.googlesource.com/id/I41ae706bd3474f074f6a870bfc3f0f90e9c720f7
+> ---
+>  drivers/firmware/efi/libstub/Makefile | 1 +
+>  kernel/Makefile                       | 1 +
+>  kernel/locking/Makefile               | 3 ++-
+>  lib/Makefile                          | 1 +
+>  4 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> index d0537573501e9..81432d0c904b1 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -46,6 +46,7 @@ GCOV_PROFILE                  := n
+>  # Sanitizer runtimes are unavailable and cannot be linked here.
+>  KASAN_SANITIZE                 := n
+>  KCSAN_SANITIZE                 := n
+> +KMSAN_SANITIZE                 := n
+>  UBSAN_SANITIZE                 := n
+>  OBJECT_FILES_NON_STANDARD      := y
+>
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index a7e1f49ab2b3b..e47f0526c987f 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -38,6 +38,7 @@ KCOV_INSTRUMENT_kcov.o := n
+>  KASAN_SANITIZE_kcov.o := n
+>  KCSAN_SANITIZE_kcov.o := n
+>  UBSAN_SANITIZE_kcov.o := n
+> +KMSAN_SANITIZE_kcov.o := n
+>  CFLAGS_kcov.o := $(call cc-option, -fno-conserve-stack) -fno-stack-protector
+>
+>  # Don't instrument error handlers
+> diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+> index d51cabf28f382..ea925731fa40f 100644
+> --- a/kernel/locking/Makefile
+> +++ b/kernel/locking/Makefile
+> @@ -5,8 +5,9 @@ KCOV_INSTRUMENT         := n
+>
+>  obj-y += mutex.o semaphore.o rwsem.o percpu-rwsem.o
+>
+> -# Avoid recursion lockdep -> KCSAN -> ... -> lockdep.
+> +# Avoid recursion lockdep -> sanitizer -> ... -> lockdep.
+>  KCSAN_SANITIZE_lockdep.o := n
+> +KMSAN_SANITIZE_lockdep.o := n
+>
+>  ifdef CONFIG_FUNCTION_TRACER
+>  CFLAGS_REMOVE_lockdep.o = $(CC_FLAGS_FTRACE)
+> diff --git a/lib/Makefile b/lib/Makefile
+> index f99bf61f8bbc6..5056769d00bb6 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -272,6 +272,7 @@ obj-$(CONFIG_POLYNOMIAL) += polynomial.o
+>  CFLAGS_stackdepot.o += -fno-builtin
+>  obj-$(CONFIG_STACKDEPOT) += stackdepot.o
+>  KASAN_SANITIZE_stackdepot.o := n
+> +KMSAN_SANITIZE_stackdepot.o := n
+>  KCOV_INSTRUMENT_stackdepot.o := n
+>
+>  obj-$(CONFIG_REF_TRACKER) += ref_tracker.o
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

@@ -2,201 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B816E571990
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A483C5719A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiGLMOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S233110AbiGLMPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbiGLMON (ORCPT
+        with ESMTP id S231160AbiGLMPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:14:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80BF045059
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657628051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WAxGI00yNn9GNFeh9dlU/4akmeOA8R+tofyDowtvI5A=;
-        b=dbNwqZpZrFlT1bP01S+mzLK5MbEs5D9UP64vjQaPVXzd8+3Fbn4w/dNSyN7NWavMWG2equ
-        t8r2VRhynq0Nq/B+XaRfTRrdXNC8T71MMmHC6vkmqwsDQxl+a+g16fkPXriCchaPlpz46e
-        4AA/OYb8cphUOzw9aWMOhi6R5X1KGWI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-SAap4GI_M9uSoNJxwLwYHQ-1; Tue, 12 Jul 2022 08:14:10 -0400
-X-MC-Unique: SAap4GI_M9uSoNJxwLwYHQ-1
-Received: by mail-wm1-f71.google.com with SMTP id p21-20020a05600c1d9500b003a2d6c2b643so635957wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:14:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=WAxGI00yNn9GNFeh9dlU/4akmeOA8R+tofyDowtvI5A=;
-        b=Yco1UC+ew8Muj8VFCOcOOaJx8Tl35YEi6vk8t24VClEE8rnn974k0KNNxl0WEaEYMn
-         vHDQzWabAylEKi2ncVegcgH7gjAhX71RKc3JO4PpiHZT84r0uH7Kf93quQ/vjX9lbJgX
-         tMfuYMjUoxs+lBM2SSmoNQb+/QiVHsZZj6RpHIFBEWNvGLX75v+zrIz0dNb4sUGIILqR
-         PPsFEozXLeBxalxkkiO/TWq6LOeQhyhuBaDAE7azqR5+leDP3b9tHsIO+MPS3YgCqWnq
-         uvRQ0OuRzObvXbpfm4rgRfg2q5nV4D3eIROGEoQpRz9Wx1AwJ5Bp3J0VP0Fa9oBolkR1
-         4U7g==
-X-Gm-Message-State: AJIora84OZ3iE3TKEWDHjvK9TxIGVCgYBAMtsU0eJ71WWQ9o3RGjEeWa
-        GDXzshuUQDd9uiKvUG2uFsNPA3R8Rbjwd8veyoXzNYYXWbWek62XCUQefe42u06st39OQ/KZQ3u
-        cDFg7i2N/t3x19uoDk6NBaYe+
-X-Received: by 2002:a05:600c:a02:b0:39c:97cc:82e3 with SMTP id z2-20020a05600c0a0200b0039c97cc82e3mr3631774wmp.97.1657628049102;
-        Tue, 12 Jul 2022 05:14:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vJr7AKZGM9mihE37deXYF43Gq0ysHz0r6eaHk1Fd0fSvJKJonKBW6zwaLCeWi3o7tRipBdtg==
-X-Received: by 2002:a05:600c:a02:b0:39c:97cc:82e3 with SMTP id z2-20020a05600c0a0200b0039c97cc82e3mr3631744wmp.97.1657628048818;
-        Tue, 12 Jul 2022 05:14:08 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id bg32-20020a05600c3ca000b003a04d19dab3sm2256602wmb.3.2022.07.12.05.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 05:14:07 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v3 11/25] KVM: VMX: Get rid of eVMCS specific VMX
- controls sanitization
-In-Reply-To: <f1d030d7db4aaf3075fe625799b99ae335fc9f60.camel@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
- <20220708144223.610080-12-vkuznets@redhat.com>
- <f1d030d7db4aaf3075fe625799b99ae335fc9f60.camel@redhat.com>
-Date:   Tue, 12 Jul 2022 14:14:06 +0200
-Message-ID: <877d4iplyp.fsf@redhat.com>
+        Tue, 12 Jul 2022 08:15:13 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3FE04504D;
+        Tue, 12 Jul 2022 05:15:08 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id EB0E2BB3;
+        Tue, 12 Jul 2022 15:17:00 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com EB0E2BB3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1657628221;
+        bh=vTNXFUpVx00DDtSVL5pc6HSVokyFOnKRJHJeh3N+jBs=;
+        h=From:To:CC:Subject:Date:From;
+        b=fWFeooGpy/yPNPGW/LFhjm+YHfCKTnh7EaiHIImklB2/HRWagXRl0soIcECVQB3Fi
+         jVIgO1MzHFIfc7Avv2XMvMmbnHgcp0wpY+cizoozz7z9nK9o6fKx7A/aj2822iRbfC
+         V8ijE65p9DGNzITxVuUyHmZffyb8I3b7DwYPLGAY=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 12 Jul 2022 15:15:06 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/7] clk/resets: baikal-t1: Add DDR/PCIe resets and xGMAC/SATA fixes
+Date:   Tue, 12 Jul 2022 15:14:58 +0300
+Message-ID: <20220712121505.5671-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim Levitsky <mlevitsk@redhat.com> writes:
+Folks! It has been over four months since the first series submission for
+review. Please merge it in.
 
-> On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
->> With the updated eVMCSv1 definition, there's no known 'problematic'
->> controls which are exposed in VMX control MSRs but are not present in
->> eVMCSv1. Get rid of VMX control MSRs filtering for KVM on Hyper-V.
->
-> If I understand correctly we are taking about running KVM as a nested gue=
-st of Hyper-V here:
->
-> Don't we need to check the new CPUID bit and only then use the new fields=
- of eVMCS,
-> aka check that the 'cpu' supports the updated eVMCS version?
->
+Short summary regarding this patchset. The series starts from fixing of
+the clocks glitching cause by the Renesas 5P49V6901 chip in some
+circumstances. Afterwards a few more modifications are introduced to
+finally finish the Baikal-T1 CCU unit support up and prepare the code
+before adding the Baikal-T1 PCIe/xGMAC support. First of all it turned out
+I specified wrong DW xGMAC PTP reference clock divider in my initial
+patches. It must be 8, not 10. Secondly I was wrong to add a joint xGMAC
+Ref and PTP clock instead of having them separately defined.  The SoC
+manual describes these clocks as separate fixed clock wrappers. Finally
+in order to close the SoC clock/reset support up we need to add the DDR
+and PCIe interfaces reset controls support. It's done in two steps. First
+I've moved the reset-controls-related code into a dedicated module. Then
+the DDR/PCIe reset-control functionality is added. As the series
+finalization we've decided to convert the Baikal-T1 clock/reset source
+drivers to mainly being the platform device driver and pre-initialize the
+basic clocks only at the early kernel boot stages.
 
-I've checked various Hyper-V versions available around and it seems
-there's no need for that: these new features are exposed in VMX control
-MSRs only when the updated eVMCS is supported.
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Resubmit the series with adding @Philipp to the list of the recipients.
 
-We can, in theory, preserve the filtering for non-updated eVMCS verison
-but I'd vote for putting a WARN_ON() or something around: we can
-eventually get rid of it in case we don't get any reports.
+Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- No comments. Just resend the series.
+- Rebased from v5.17 onto v5.18-rc3.
 
-> Best regards,
-> 	Maxim Levitsky
->
->
->
->>=20
->> Note: VMX control MSRs filtering for Hyper-V on KVM
->> (nested_evmcs_filter_control_msr()) stays as even the updated eVMCSv1
->> definition doesn't have all the features implemented by KVM and some
->> fields are still missing. Moreover, nested_evmcs_filter_control_msr()
->> has to support the original eVMCSv1 version when VMM wishes so.
->>=20
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->> =C2=A0arch/x86/kvm/vmx/evmcs.c | 13 -------------
->> =C2=A0arch/x86/kvm/vmx/evmcs.h |=C2=A0 1 -
->> =C2=A0arch/x86/kvm/vmx/vmx.c=C2=A0=C2=A0 |=C2=A0 5 -----
->> =C2=A03 files changed, 19 deletions(-)
->>=20
->> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
->> index 52a53debd806..b5cfbf7d487b 100644
->> --- a/arch/x86/kvm/vmx/evmcs.c
->> +++ b/arch/x86/kvm/vmx/evmcs.c
->> @@ -320,19 +320,6 @@ const struct evmcs_field vmcs_field_to_evmcs_1[] =
-=3D {
->> =C2=A0};
->> =C2=A0const unsigned int nr_evmcs_1_fields =3D ARRAY_SIZE(vmcs_field_to_=
-evmcs_1);
->> =C2=A0
->> -#if IS_ENABLED(CONFIG_HYPERV)
->> -__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
->> -{
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->cpu_based_exec_ctr=
-l &=3D ~EVMCS1_UNSUPPORTED_EXEC_CTRL;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->pin_based_exec_ctr=
-l &=3D ~EVMCS1_UNSUPPORTED_PINCTRL;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->cpu_based_2nd_exec=
-_ctrl &=3D ~EVMCS1_UNSUPPORTED_2NDEXEC;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->cpu_based_3rd_exec=
-_ctrl =3D 0;
->> -
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->vmexit_ctrl &=3D ~=
-EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->vmentry_ctrl &=3D =
-~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
->> -}
->> -#endif
->> -
->> =C2=A0bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_=
-gpa)
->> =C2=A0{
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct hv_vp_assist_page=
- assist_page;
->> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
->> index 4b809c79ae63..0feac101cce4 100644
->> --- a/arch/x86/kvm/vmx/evmcs.h
->> +++ b/arch/x86/kvm/vmx/evmcs.h
->> @@ -203,7 +203,6 @@ static inline void evmcs_load(u64 phys_addr)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vp_ap->enlighten_vmentry=
- =3D 1;
->> =C2=A0}
->> =C2=A0
->> -__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf);
->> =C2=A0#else /* !IS_ENABLED(CONFIG_HYPERV) */
->> =C2=A0static __always_inline void evmcs_write64(unsigned long field, u64=
- value) {}
->> =C2=A0static inline void evmcs_write32(unsigned long field, u32 value) {}
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index b4915d841357..dd905ad72637 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2689,11 +2689,6 @@ static __init int setup_vmcs_config(struct vmcs_c=
-onfig *vmcs_conf,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->vmexit_ctrl=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D _vmexit_control;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vmcs_conf->vmentry_ctrl=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D _vmentry_control;
->> =C2=A0
->> -#if IS_ENABLED(CONFIG_HYPERV)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (enlightened_vmcs)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0evmcs_sanitize_exec_ctrls(vmcs_conf);
->> -#endif
->> -
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
->> =C2=A0}
->> =C2=A0
->
->
+Link: https://lore.kernel.org/linux-clk/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Completely split the CCU Dividers and Resets functionality up. (@Stephen)
+- Add a new fixes patch: "clk: baikal-t1: Actually enable SATA internal
+  ref clock".
+- Add a new fixes patch: "reset: Fix devm bulk optional exclusive control
+  getter".
+- Add a new fixes patch: "clk: vc5: Fix 5P49V6901 outputs disabling when
+  enabling FOD".
+- Add a new feagure patch: "clk: baikal-t1: Convert to platform device
+  driver".
+- Change the internal clock ID to the XGMAC-referred name.
+- Rebase onto the kernel v5.18.
 
---=20
-Vitaly
+Link: https://lore.kernel.org/lkml/20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Just resend.
+- Rebase onto the kernel v5.19-rcX.
+
+Link: https://lore.kernel.org/linux-clk/20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Drop the patch
+  [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive control getter
+  since it has already been accepted by @Philipp.
+- Refactor the reset-control code to support the linear reset IDs only.
+  (@Philipp)
+- Combine the reset-related code into a single file. (@Philipp)
+- Drop CCU_DIV_RST_MAP() macro. It's no longer used.
+
+Link: https://lore.kernel.org/linux-clk/20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v7:
+- Fix "Alignment should match open parenthesis" warning for the
+  pr_err() method invocations. (@Philipp)
+- Drop empty line from the sys_rst_info structure initialization block.
+  (@Philipp)
+
+Link: https://lore.kernel.org/linux-clk/20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v8:
+- Fix "sef-deasserted" spelling in the CLK_BT1_CCU_RST config help
+  text. (@Randy)
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
+  clk: baikal-t1: Add SATA internal ref clock buffer
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+  clk: baikal-t1: Convert to platform device driver
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |  84 +++++++--
+ drivers/clk/baikal-t1/ccu-div.h     |  17 +-
+ drivers/clk/baikal-t1/ccu-pll.h     |   8 +
+ drivers/clk/baikal-t1/ccu-rst.c     | 217 +++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  67 +++++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 263 ++++++++++++++++------------
+ drivers/clk/baikal-t1/clk-ccu-pll.c | 128 +++++++++++---
+ drivers/clk/clk-versaclock5.c       |   2 +-
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ 11 files changed, 647 insertions(+), 161 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+
+-- 
+2.35.1
 

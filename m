@@ -2,95 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89701570F4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87806570F4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiGLBNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S230447AbiGLBNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiGLBNF (ORCPT
+        with ESMTP id S231350AbiGLBNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:13:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D00532EFC;
-        Mon, 11 Jul 2022 18:13:05 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b8so4870388pjo.5;
-        Mon, 11 Jul 2022 18:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9pb8vi/EgdoQwZNmcDLPeKQRD0JtOlWn3RShifpijWo=;
-        b=doL7MGyG9s/wGgwPiJfM0TJ6oHwLnszllo5lD5tR2AMuDPWhdB2pm/mwMiYrIBKpJT
-         H02TTkY3UKYtxJQlVYNLb2k920SWDt7MChjp7LKg0q7akVpWze0TGmPbTpikJ8yFHrgV
-         wx02Bf5MkSVQnoDGeMnigPdL8XwPC6Gw13RhU1cTR+Q7H8tRuSMiIi7ujaIyO+7N4aIV
-         MHfH/bp6OYAlDQcK4jYAIX4DFrJLC0G939XY+byw9NY3TWfIINyOw6NeHzd0LSbMTYQS
-         lTNFL3H+bor7YIjog3qZX4k7wlMm4EFLxPYKaesuVNzfgomCdwbsZdJbiCEmzXiaXZ3e
-         X7DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9pb8vi/EgdoQwZNmcDLPeKQRD0JtOlWn3RShifpijWo=;
-        b=EW4OmY3yyV21bdgnW030/c4rWD/km2atYoNNakSVQHTwUICFt4f2XPVjGNSX5j06dd
-         1mtzHpgIM5vFVMF2GIicn1ixNAIq2XfuTFx/5ZfQooihuS0UKWgyAJeJFwGvBqNcMh4f
-         6QMCeEX9lvyKhnfLBPBhIXh0zL7RyvQSIwL4A5vmgQ/zYEpWeQ9+BbcDkIkWvBMlgXeR
-         HqRWfXN1g3JuQkdi6kcKkMhvmRjGPYUw8y+ZppYZVbnKSjnUR2qkXPdC93a1+LtEhiym
-         flgvYgRJbiHtluk9ODvJIaaSEbKtRFWja6CRyaMA9OC6xWobDuSQ0fwycqyrJFPWRPDB
-         bnMg==
-X-Gm-Message-State: AJIora/t0OPhWf6Ir9y9xXd5voZIa3XZBQdXu7XdBWq5sp/GioAkc8RJ
-        roNJgTI/Gt/5Pi4ydwn0qZk=
-X-Google-Smtp-Source: AGRyM1sQ7PDuuwWPaClMeUjKUuvww0jYmfkPrjMHgqYEoGHS6GdJ/4gbFOGFUbjmrteiuH/7keBa0Q==
-X-Received: by 2002:a17:902:ec91:b0:16c:29d7:5e90 with SMTP id x17-20020a170902ec9100b0016c29d75e90mr19188723plg.114.1657588384551;
-        Mon, 11 Jul 2022 18:13:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u15-20020a17090341cf00b0016a6cd546d6sm406657ple.251.2022.07.11.18.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:13:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 11 Jul 2022 18:13:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/112] 5.18.11-rc1 review
-Message-ID: <20220712011303.GF2305683@roeck-us.net>
-References: <20220711090549.543317027@linuxfoundation.org>
+        Mon, 11 Jul 2022 21:13:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07F9509E0;
+        Mon, 11 Jul 2022 18:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657588394; x=1689124394;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=T2p2PDep+Jk58poJbivNq6gYM425mMNK9DXK1/lNMbk=;
+  b=O1klND3sQ5G+JenV/YWfV4N6Zx0By/DRQn4SSIKsqguUwg0WAQhSasN6
+   SaBNilchfloBHcFUdd+Gm81FlzA2CifhTvcmdJ2TVDHSLn/HZdL82x/fI
+   wckOX8y/0M38LTUJ0vQ/h4+rt+WVfU6jnQrr8EpkiJV2p4CT1cN5mbd4S
+   0Vdo9PDFd9KMc2rO6QRzZO3NntN+bfE+XIDnjSJPxluGZUtR6IBkH2OwK
+   gz4VMNdfoMdq8IG4LLrP/XrfniYK50MtdFPsUG8kJg+3N2WBySAFd9zIH
+   CWg4eU91E8u+Ieepa1Njwx+V8kWCYUkSvSxAVGzD58eq0/gaS9hHnKCNs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="267848276"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="267848276"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:13:14 -0700
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="595103198"
+Received: from snaskant-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.60.27])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:13:12 -0700
+Message-ID: <d495a777f31df86271f1c4511b2f521adfa867d1.camel@intel.com>
+Subject: Re: [PATCH v7 011/102] KVM: TDX: Initialize TDX module when loading
+ kvm_intel.ko
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Tue, 12 Jul 2022 13:13:10 +1200
+In-Reply-To: <20220712004640.GD1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+         <d933e5f16ff8cb58020f1479b7af35196f0ef61e.1656366338.git.isaku.yamahata@intel.com>
+         <81ea5068b890400ca4064781f7d2221826701020.camel@intel.com>
+         <20220712004640.GD1379820@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 11:06:00AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.11 release.
-> There are 112 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
-> 
+On Mon, 2022-07-11 at 17:46 -0700, Isaku Yamahata wrote:
+> On Tue, Jun 28, 2022 at 04:31:35PM +1200,
+> Kai Huang <kai.huang@intel.com> wrote:
+>=20
+> > On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > >=20
+> > > To use TDX functionality, TDX module needs to be loaded and initializ=
+ed.
+> > > A TDX host patch series[1] implements the detection of the TDX module=
+,
+> > > tdx_detect() and its initialization, tdx_init().
+> >=20
+> > "A TDX host patch series[1]" really isn't a commit message material.  Y=
+ou can
+> > put it to the cover letter, but not here.
+> >=20
+> > Also tdx_detect() is removed in latest code.
+>=20
+> How about the followings?
+>=20
+>     KVM: TDX: Initialize TDX module when loading kvm_intel.ko
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+Personally don't like kvm_intel.ko in title (or changelog), but will leave =
+to
+maintainers.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+>    =20
+>     To use TDX functionality, TDX module needs to be loaded and initializ=
+ed.
+>     This patch is to call a function, tdx_init(), when loading kvm_intel.=
+ko.
 
-Guenter
+Could you add explain why we need to init TDX module when loading KVM modul=
+e?
+
+You don't have to say "call a function, tdx_init()", which can be easily se=
+en in
+the code. =20
+
+>    =20
+>     Add a hook, kvm_arch_post_hardware_enable_setup, to module initializa=
+tion
+>     while hardware is enabled, i.e. after hardware_enable_all() and befor=
+e
+>     hardware_disable_all().  Because TDX requires all present CPUs to ena=
+ble
+>     VMX (VMXON).
+
+Please explicitly say it is a replacement of the default __weak version, so
+people can know there's already a default one.  Otherwise people may wonder=
+ why
+this isn't called in this patch (i.e. I skipped patch 03 as it looks not
+directly related to TDX).
+
+That being said, why cannot you send out that patch separately but have to
+include it into TDX series?
+
+Looking at it, the only thing that is related to TDX is an empty
+kvm_arch_post_hardware_enable_setup() with a comment saying TDX needs to do
+something there.  This logic has nothing to do with the actual job in that
+patch.=20
+
+So why cannot we introduce that __weak version in this patch, so that the r=
+est
+of it can be non-TDX related at all and can be upstreamed separately?
+
+>=20
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index 30af2bd0b4d5..fb7a33fbc136 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -11792,6 +11792,14 @@ int kvm_arch_hardware_setup(void *opaque)
+> > >  	return 0;
+> > >  }
+> > > =20
+> > > +int kvm_arch_post_hardware_enable_setup(void *opaque)
+> > > +{
+> > > +	struct kvm_x86_init_ops *ops =3D opaque;
+> > > +	if (ops->post_hardware_enable_setup)
+> > > +		return ops->post_hardware_enable_setup();
+> > > +	return 0;
+> > > +}
+> > > +
+> >=20
+> > Where is this kvm_arch_post_hardware_enable_setup() called?
+> >=20
+> > Shouldn't the code change which calls it be part of this patch?
+>=20
+> The patch of "4/102 KVM: Refactor CPU compatibility check on module
+> initialiization" introduces it.  Because the patch affects multiple archs
+> (mips, x86, poerpc, s390, and arm), I deliberately put it in early.
+
+It's patch 03, but not 04.  And see above.

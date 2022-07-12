@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC2C571B4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0F2571B51
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiGLNbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S233046AbiGLNbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiGLNbe (ORCPT
+        with ESMTP id S232992AbiGLNbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:31:34 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E66B6294
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:31:32 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id m16so10093490edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=hPJjqua15ah0sn3T7jWS+IFyxkya2Msc4Z32Nn2kGoc=;
-        b=rg5QfwIufOpJub8XP1Do/yDFjwLo/4t6z3t0MVStmetmWBYwLZdVZFAfcHoRgYuULQ
-         dhca7EmYKW/nyw6Emq5yMl47pmsCvL5eqqRyQjI6t+cTZL46Rqp67OGPqy7T1nBYdMAc
-         EjhvJ817SyhMg+YYsqMuMFZA3gyJyQl0gJC3o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=hPJjqua15ah0sn3T7jWS+IFyxkya2Msc4Z32Nn2kGoc=;
-        b=UeMs5y9ghnfoAOugICFIVJ2n0cwb1rvbrKmmGBMgl6p9LEUbqLVMNz9l0YiF1cpXSa
-         iTbge4VhX0r1NFc33ycV3UGu3OGT/AHVRZXlU82MNmTjqg6sWyeBCbaq57nqdACX9dD/
-         trh3dumJWjE8NHgeSOWl7DjgXNDjg6x710VFL0xEPvMMqFHPTFwP+Sf0VncHufoJ3Zp7
-         mqJeEMMglZPumgmKzXYtxyCrA7Wzj6UdW9VRp095vFxcdZONXuw8qlApbAxf9rqk3ajY
-         ujoQBRGYsS0PDWlcN0fMStLLvSNAaNArDRxb3EVpRBWIKLLIffMwWjbqyY4+QWbeHEUc
-         r2SA==
-X-Gm-Message-State: AJIora9zzkyo+xiG8ihRYEaglSVwiQsPqGjJUIszYXweMlOepPAVszKL
-        IQbAqNbW6bqqZt9JJKDhmKSTIQ==
-X-Google-Smtp-Source: AGRyM1usO+07EFR5sCIZbvQcc/IsObDEBI0KLY3SELHUhBKsdOKF7QwU9BBoz3qsp+Ku7g593e0m5A==
-X-Received: by 2002:a05:6402:5201:b0:43a:d797:b9c with SMTP id s1-20020a056402520100b0043ad7970b9cmr13125486edd.343.1657632690892;
-        Tue, 12 Jul 2022 06:31:30 -0700 (PDT)
-Received: from miu.piliscsaba.redhat.com (82-144-177-44.pool.digikabel.hu. [82.144.177.44])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709063d3200b0072af3c59354sm3850822ejf.146.2022.07.12.06.31.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 06:31:30 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 15:31:24 +0200
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: [GIT PULL] overlayfs fixes for 5.19-rc7
-Message-ID: <Ys13gTA+irEuI+OA@miu.piliscsaba.redhat.com>
+        Tue, 12 Jul 2022 09:31:47 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481A1B62A4;
+        Tue, 12 Jul 2022 06:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=JaJl3AgDn2VAYBI+dRS8tej3gYsLkQ/9hedEWeQ4VQk=; b=ZTu3PkoLHP3nfvt90STODSdGIe
+        0k81CXqOMdupSjRLoUzuk9Ep36uh9JDm6Al1xo03hRrKfmbc+cJZ+w3mfmtv8ouEUnU/aGXkW6yXE
+        68KP3dIjZwZsBKI9OO2hQnfpGrNjyyNh/NVa04Wh872NsQh1pT/EKhjIeMhI+rmRELg0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oBFzF-00A3NI-EY; Tue, 12 Jul 2022 15:31:37 +0200
+Date:   Tue, 12 Jul 2022 15:31:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/4] net: phy: mxl-gpy: cache PHY firmware
+ version
+Message-ID: <Ys13uYROxwffdzuN@lunn.ch>
+References: <20220712131554.2737792-1-michael@walle.cc>
+ <20220712131554.2737792-3-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220712131554.2737792-3-michael@walle.cc>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Jul 12, 2022 at 03:15:52PM +0200, Michael Walle wrote:
+> Cache the firmware version during probe. There is no need to read the
+> firmware version on every autonegotiation.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Please pull from:
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git tags/ovl-fixes-5.19-rc7
-
-Add a temporary fix for posix acls on idmapped mounts introduced in this
-cycle.  Proper fix will be added in the next cycle.
-
-Thanks,
-Miklos
-
----
-Christian Brauner (1):
-      ovl: turn of SB_POSIXACL with idmapped layers temporarily
-
----
- Documentation/filesystems/overlayfs.rst |  4 ++++
- fs/overlayfs/super.c                    | 25 ++++++++++++++++++++++++-
- 2 files changed, 28 insertions(+), 1 deletion(-)
+    Andrew

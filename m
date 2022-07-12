@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC31572630
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30EB57262E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbiGLToG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S235472AbiGLToL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234930AbiGLTni (ORCPT
+        with ESMTP id S234952AbiGLTni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Jul 2022 15:43:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CE9DF7F;
-        Tue, 12 Jul 2022 12:26:14 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05022E7;
+        Tue, 12 Jul 2022 12:26:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52792615E4;
-        Tue, 12 Jul 2022 19:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA9DC3411C;
-        Tue, 12 Jul 2022 19:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657653973;
-        bh=KofZy0gS7enXRLvK5w5s70pOuM52suAS0d4+pv9phsg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C+JpUI7Hlc73b9zL/pC97stcYKxyVPA2NzaJTw5CDhNHAWTdGQPl4eSAY2DrMC4yZ
-         4w5E3PHJwulm6Ys1IlHBPmCC+2Opm/xQnuZWr6p5ofmoxTUPqlxmpimVKTnLXUxJwp
-         P0Ur70+AdZXROv+Az3KlC8DmWNqTme9x8yRZX0c4=
-Date:   Tue, 12 Jul 2022 21:26:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chuck Zmudzinski <brchuckz@netscape.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/PAT: Report PAT on CPUs that support PAT without MTRR
-Message-ID: <Ys3K0oS9QLx778Lb@kroah.com>
-References: <2885cdcaccffd287ef69c7509056ddf183a38a0e.1657647656.git.brchuckz.ref@aol.com>
- <2885cdcaccffd287ef69c7509056ddf183a38a0e.1657647656.git.brchuckz@aol.com>
- <Ys2/Lho9vQO33RZc@kroah.com>
- <a9efcbf3-3b34-53b7-0fa8-55a5ed3a17b4@netscape.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D8EF617D6;
+        Tue, 12 Jul 2022 19:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE05C3411C;
+        Tue, 12 Jul 2022 19:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657653977;
+        bh=Dl1Pbbf4nopDVy3CXbIsWo5vkYq+vL0gOkvpMdkCOqU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Oe28BriMJpstGaTaoz77v1U25xR+k9/ve4jnVrdEpfHETLLa5zBNvfNYq5Pby5O16
+         Hk+ejdhPOpiPtAFq+xIcEsQNZ5VVbu0Vi7YRtF6FDaMrSP7y7qVZjY8clqahlprYU6
+         uOlc/KfwV/1iU4u3/uPb74DcRfUxvPQ6u2keImFS3IZjbQ1Xl4DldVyQ7WngPS1Dmg
+         YLc82jHu9HnlcC0ckRn2MAgfGLGjJj6fvr03akEu1qi2oKkrNwnECfr+/8hROhLhap
+         +rEmSV5eG961/JNVg7fEgm9zzsrH02yRNHxM0a5gcZbOc3kOzv5s++KSphM+5UV+aN
+         jZDNB7tAm5Z8Q==
+Date:   Tue, 12 Jul 2022 14:26:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [RFC 1/2] PCI: imx6: Make sure the DBI register can be changed
+Message-ID: <20220712192616.GA787788@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a9efcbf3-3b34-53b7-0fa8-55a5ed3a17b4@netscape.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB8676FA05BEEE264A9FE1F6538C869@AS8PR04MB8676.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,55 +62,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:16:01PM -0400, Chuck Zmudzinski wrote:
-> On 7/12/22 2:36 PM, Greg KH wrote:
-> > On Tue, Jul 12, 2022 at 02:20:37PM -0400, Chuck Zmudzinski wrote:
-> > > The commit 99c13b8c8896d7bcb92753bf
-> > > ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-> > > incorrectly failed to account for the case in init_cache_modes() when
-> > > CPUs do support PAT and falsely reported PAT to be disabled when in
-> > > fact PAT is enabled. In some environments, notably in Xen PV domains,
-> > > MTRR is disabled but PAT is still enabled, and that is the case
-> > > that the aforementioned commit failed to account for.
-> > > 
-> > > As an unfortunate consequnce, the pat_enabled() function currently does
-> > > not correctly report that PAT is enabled in such environments. The fix
-> > > is implemented in init_cache_modes() by setting pat_bp_enabled to true
-> > > in init_cache_modes() for the case that commit 99c13b8c8896d7bcb92753bf
-> > > ("x86/mm/pat: Don't report PAT on CPUs that don't support it") failed
-> > > to account for.
-> > > 
-> > > This patch fixes a regression that some users are experiencing with
-> > > Linux as a Xen Dom0 driving particular Intel graphics devices by
-> > > correctly reporting to the Intel i915 driver that PAT is enabled where
-> > > previously it was falsely reporting that PAT is disabled.
-> > > 
-> > > Fixes: 99c13b8c8896d7bcb92753bf ("x86/mm/pat: Don't report PAT on CPUs that don't support it")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Chuck Zmudzinski <brchuckz@aol.com>
+On Tue, Jul 12, 2022 at 01:30:02AM +0000, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: 2022年7月12日 6:17
+> > To: Hongxing Zhu <hongxing.zhu@nxp.com>
+> > Cc: l.stach@pengutronix.de; bhelgaas@google.com;
+> > lorenzo.pieralisi@arm.com; festevam@gmail.com; linux-pci@vger.kernel.org;
+> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: Re: [RFC 1/2] PCI: imx6: Make sure the DBI register can be changed
+> > 
+> > Hi Richard,
+> > 
+> > On Wed, May 18, 2022 at 05:35:27PM +0800, Richard Zhu wrote:
+> > > The PCIE_DBI_RO_WR_EN bit should be set when write some DBI registers.
+> > > To make sure that the DBI registers are writable, set the
+> > > PCIE_DBI_RO_WR_EN properly when touch the DBI registers.
+> > >
+> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
 > > > ---
-> > > Reminder: This patch is a regression fix that is needed on stable
-> > > versions 5.17 and later.
-> >
-> > Then why are you saying it fixes a commit that is in 4.4.y and newer?
-> >
-> > confused,
-> >
-> > greg k-h
-> 
-> It is true the erroneous reporting of PAT goes back to 4.4.y. But it
-> was not until 5.17.y when the i915 driver was patched with a commit
-> that started using pat_enabled() instead of boot_cpu_has(X86_FEATURE_PAT)
-> and that is when a regression that started annoying users appeared
-> in the kernel. I presume that we only backport patches to stable that
-> fix regressions that are really bothering users, so even though the
-> problem dates to 4.4.y, there is no need to backport before 5.17.y
-> which is when the problem manifested in a way that started
-> bothering users.
+> > >  drivers/pci/controller/dwc/pci-imx6.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > > b/drivers/pci/controller/dwc/pci-imx6.c
+> > > index 6619e3caffe2..30641d2dda14 100644
+> > > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > > @@ -797,10 +797,12 @@ static int imx6_pcie_start_link(struct dw_pcie
+> > *pci)
+> > >  	 * started in Gen2 mode, there is a possibility the devices on the
+> > >  	 * bus will not be detected at all.  This happens with PCIe switches.
+> > >  	 */
+> > > +	dw_pcie_dbi_ro_wr_en(pci);
+> > 
+> > What's the status of this patch?  I don't see this change included in your v14
+> > series [1].  That series has a lot of imx6 updates, so I would have thought
+> > you'd include this change in it.  Or maybe this change turned out not to be
+> > needed?
+> Hi Bjorn:
+> Thanks for your kindly help.
+> The v14 series[1] had been reviewing for a quite time. I'm afraid that
+>  this series might miss the L5.20 merge window if I add new patch
+>  into it from time to time.
+> If you don't think so, I can merge the first one, and re-issue the v15 a
+> moment later.
+> > 
+> > What about the 2/2 patch?
+> i.MX8MP PCIe supports the PCIe GEN3 speed, the second patch is used to extend
+>  the link speed support capability, and prepared for i.MX8MP PCIe support.
+> I assumed that these two patches can be contained in i.MX8MP PCIe support
+> patch-set before.
 
-If it needs to go back to 4.9.y or so, let's take it all the way back to
-be consistent everywhere.
+I applied both these patches on pci/ctrl/imx6 for v5.20, thanks!
 
-thanks,
-
-greg k-h
+Bjorn

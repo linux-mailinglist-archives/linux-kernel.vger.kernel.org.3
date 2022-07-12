@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269E3571411
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FD8571415
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbiGLILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S232491AbiGLIML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiGLILa (ORCPT
+        with ESMTP id S231814AbiGLIMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:11:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4984733E2C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:11:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id b11so12899919eju.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:11:29 -0700 (PDT)
+        Tue, 12 Jul 2022 04:12:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBF152E6A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:12:07 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e15so9104377edj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BAblE0VfQqsX2FhEhlmNF0MI2SNQOD6qrUOnSLVyV4g=;
-        b=ivBDfg89ttyBXF2y7cPm4jaQbb5003PCxWgf/aXnVIOQ9lzVlgUx8hxJcF0Y2lofFb
-         IoYC1WixKj5jb1Qtb5pnd5zf5XWP8aX8nB0+EeB8+a3Em//uQzGCekpcVs1xfW6bIspz
-         LbuOl2j+9jaUiWi/OLV1vPeyr7bpMr7ddoEiXMjOQi93z872tZSI+oqqd4xW+Ni/9aMj
-         wDM3OZJel9JhH32s2ZyzmLkBH/hq0oCXYiGi0ZvfOXsMUOy7TNssIHWM0E6oPYr4BOmP
-         v6q49mCdkkhPd22DO+bkd6S5JHJ2hVqf2rT7ALMj4Qsn6V3ATUhsTs05bwWkW2peG7s6
-         +CIA==
+        bh=owNGXTG6trvHPmdErnbDiIfwqp/UAMQF528p+GbC9XU=;
+        b=U+hnbQfWIDaw1K825D2TgYJS1lfVHB59AiGRORo//U6OpdXRqxyLW5Rw95DiruSuZo
+         6bZKjdQHk8ceVGjQt0KM+0ZfqGLo6lst+Vw8g1pLKiPasESmqAhwd2AoH2aXSamOV4HE
+         vtTYYXDydZGgphpwzJ3WsRSx/lOopLf8s39CTdFdIZBk2WTZ9Iq+25m7/n8a3+qls8fx
+         OTc6pk57nEQmyB96mD00jWPq06fIv61cUfWVlCUHqUEOEbcxn7unugdeShPeVCf0h8h9
+         +FuLetynE0KBn67nmMw60xEY0iW9bHd08AZhMXff39fLnk+4y4vv++8RRFvNR8D3C5Nc
+         yTTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BAblE0VfQqsX2FhEhlmNF0MI2SNQOD6qrUOnSLVyV4g=;
-        b=B/rc0v8B0fP9GJUk5wDuTfTxF8NaaPY0mOYO+kevAotZjAgqFf/KBJ7S2ji4tWsRT7
-         PUQqk6ZC5JkRgnbY2I4yTj3T+y5h/iTu+Ww/GqmLTQgkJTI7f0GF1YO+ONiyAjHC8OzX
-         sH8L+rRTyDg6+65O3BocDAuej4lOwtZQ83j9SAlek8VE+TXIoMc1vdFT/b5Eu1JznGqq
-         vpqwaUo4Hgy0JmuA1O/xVwUyWssER9dyRHTtnEWGpyUMn9PoqwEeJCt4mPYfaJcD7tPr
-         UO2hkRjmeCErtt/EbUGFqQ+3y+Ya0zBdGH4NaJMikJC4wfymQG2jSeVYPSbnQ0FyQKww
-         V44w==
-X-Gm-Message-State: AJIora+THI5YjEppfIcqBg7gZ3lScYl+1qHjjqJcx3dAHf80w7h+0l9M
-        7dfrw4WgrrcITTBfKf2TSwA/d5lbiwoekhPkBekrqg==
-X-Google-Smtp-Source: AGRyM1st+UXUXVEvgt9xRYT2K1rCAEH/fZJxbA0Cs3nrka+3T4iORaEJGfNcv/HymDNnr2RLU0RJCvmYznMipIPgX5s=
-X-Received: by 2002:a17:907:7b87:b0:726:c868:cf38 with SMTP id
- ne7-20020a1709077b8700b00726c868cf38mr22365650ejc.580.1657613487777; Tue, 12
- Jul 2022 01:11:27 -0700 (PDT)
+        bh=owNGXTG6trvHPmdErnbDiIfwqp/UAMQF528p+GbC9XU=;
+        b=f5aMHC62+HZOHU95e+Xs1qTddQ1RMkbMZOLvHNt4tb9kapNXN01zZmehDpQn61iMTr
+         jS6nP4FJEyHEq0SH2eOF1gcmQ/Ub9EHfNba26oZfjj2vRLt1yW02N1p2JhLfn32/HMpj
+         ivrdrxRzSe0V8gCzFa75SDmpRL3UTNzZl1dUqpne7q46cWu5KcthDqbEZk5s/Q5EvbGV
+         Al91IojIjHttFzwpmZRgntixYkh35p7NMsapnxdCHMV2o9o67UuzYbdpk6ykx4siqTCg
+         7tdCyQ3TT3pUTthVIPOekLkF0v0axoQRcgdxhxWtvcH357v5gA7V/5EbJgn0mXOmqW+f
+         S8GA==
+X-Gm-Message-State: AJIora9xbCHdG75MiQgBNTEQeTzhty+NvsCUoJaVfL1lHROg+91CZ+eS
+        QnSCpDiHwAmwe7bH2R4JxCZ2PsqKGK4zfGMCZtmsDg==
+X-Google-Smtp-Source: AGRyM1vqyL53pvPNDSVY/fjYfQk+M6LcnvEXWRndS70v9DT/ZldD8MPoIla+vkJA0XBR8teURKSoxNhXBZo4qymOEHY=
+X-Received: by 2002:aa7:cdc2:0:b0:43a:7255:5274 with SMTP id
+ h2-20020aa7cdc2000000b0043a72555274mr30566286edw.159.1657613525708; Tue, 12
+ Jul 2022 01:12:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707080600.49041-1-allen.chen@ite.com.tw> <20220707080600.49041-3-allen.chen@ite.com.tw>
-In-Reply-To: <20220707080600.49041-3-allen.chen@ite.com.tw>
+References: <20220707080600.49041-1-allen.chen@ite.com.tw> <20220707080600.49041-4-allen.chen@ite.com.tw>
+In-Reply-To: <20220707080600.49041-4-allen.chen@ite.com.tw>
 From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 12 Jul 2022 10:11:16 +0200
-Message-ID: <CAG3jFyuz-9fDXXziRzZBhGQ2NC3R2nFW=aeimghTZXGCraPbuw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm/bridge: it6505: Add i2c api power on check
+Date:   Tue, 12 Jul 2022 10:11:54 +0200
+Message-ID: <CAG3jFytTh3gso+B8+O+UXB0u+F3-o0qVdYVF3sn8O6XxfTShzw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] drm/bridge: it6505: Modified video clock calculation
+ and video debug message
 To:     allen <allen.chen@ite.com.tw>
 Cc:     Pin-yen Lin <treapking@google.com>,
         Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
@@ -82,75 +83,49 @@ On Thu, 7 Jul 2022 at 10:06, allen <allen.chen@ite.com.tw> wrote:
 >
 > From: allen chen <allen.chen@ite.com.tw>
 >
-> Use i2c bus to read/write when it6505 power off will occure i2c error.
-
-^^^ typ-o
-Change occure to occur.
-
-This is an issue that would have been caught by running checkpatch
---strict, please try to run it on all patches before submission.
-
-> Add this check will prevent i2c error when it6505 power off.
+> Speed up video clock calculation and remove redundant video debug message.
 >
 > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
 > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
 >
 > ---
->  drivers/gpu/drm/bridge/ite-it6505.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/bridge/ite-it6505.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index aa5e0aa1af85..cfd2c3275dc5 100644
+> index cfd2c3275dc5..11a34ddb60a1 100644
 > --- a/drivers/gpu/drm/bridge/ite-it6505.c
 > +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -518,6 +518,9 @@ static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
->         int err;
->         struct device *dev = &it6505->client->dev;
+> @@ -703,7 +703,7 @@ static void it6505_calc_video_info(struct it6505 *it6505)
+>         DRM_DEV_DEBUG_DRIVER(dev, "hactive_start:%d, vactive_start:%d",
+>                              hdes, vdes);
 >
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_read(it6505->regmap, reg_addr, &value);
->         if (err < 0) {
->                 dev_err(dev, "read failed reg[0x%x] err: %d", reg_addr, err);
-> @@ -533,6 +536,9 @@ static int it6505_write(struct it6505 *it6505, unsigned int reg_addr,
->         int err;
->         struct device *dev = &it6505->client->dev;
->
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_write(it6505->regmap, reg_addr, reg_val);
->
->         if (err < 0) {
-> @@ -550,6 +556,9 @@ static int it6505_set_bits(struct it6505 *it6505, unsigned int reg,
->         int err;
->         struct device *dev = &it6505->client->dev;
->
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_update_bits(it6505->regmap, reg, mask, value);
->         if (err < 0) {
->                 dev_err(dev, "write reg[0x%x] = 0x%x mask = 0x%x failed err %d",
-> @@ -2553,13 +2562,12 @@ static int it6505_poweron(struct it6505 *it6505)
->                 usleep_range(10000, 20000);
+> -       for (i = 0; i < 10; i++) {
+> +       for (i = 0; i < 3; i++) {
+>                 it6505_set_bits(it6505, REG_DATA_CTRL0, ENABLE_PCLK_COUNTER,
+>                                 ENABLE_PCLK_COUNTER);
+>                 usleep_range(10000, 15000);
+> @@ -720,7 +720,7 @@ static void it6505_calc_video_info(struct it6505 *it6505)
+>                 return;
 >         }
 >
-> +       it6505->powered = true;
->         it6505_reset_logic(it6505);
->         it6505_int_mask_enable(it6505);
->         it6505_init(it6505);
->         it6505_lane_off(it6505);
+> -       sum /= 10;
+> +       sum /= 3;
+>         pclk = 13500 * 2048 / sum;
+>         it6505->video_info.clock = pclk;
+>         it6505->video_info.hdisplay = hdew;
+> @@ -2344,8 +2344,6 @@ static void it6505_irq_hpd(struct it6505 *it6505)
 >
-> -       it6505->powered = true;
+>                 if (!it6505_get_video_status(it6505))
+>                         it6505_video_reset(it6505);
 > -
->         return 0;
->  }
+> -               it6505_calc_video_info(it6505);
+>         } else {
+>                 memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
 >
 > --
 > 2.25.1
 >
 
-With that fixed:
+
 Reviewed-by: Robert Foss <robert.foss@linaro.org>

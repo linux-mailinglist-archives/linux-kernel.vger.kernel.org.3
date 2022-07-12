@@ -2,207 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2713E571B5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DDE571B61
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiGLNdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S232808AbiGLNeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiGLNdV (ORCPT
+        with ESMTP id S233054AbiGLNeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:33:21 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AB6B62A5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:33:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id o4so11213498wrh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:33:17 -0700 (PDT)
+        Tue, 12 Jul 2022 09:34:11 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20375723B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:34:09 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id nd6so2538323qvb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1FNQrGGLfgdOgMRKiUwsbzE3SGEjtGBgzxsXljwQUHE=;
-        b=hTDsqLoXRixjt/Sxz4pnsbxPZ2ChVkl5G3Efink/BugEruXacu1c14dFTFwKa0c3gY
-         o/+eryoGjW9zyuyJ7wemDQirD4D04/nXfYPkHa1G3NtRldyCDQ/2zs/zyzMfMEI8HTWr
-         iYlsUd6VZ1BdSYB6OpRejTRfbS/3+NfNcv56pt8/W3na5GXCHJ5oq4VO25FksgV9cQFP
-         OOzwUmFoXuLhNwWST4eb5B14ImeEhE4+FdqOm1DF6nMbC5rCYGWDPXDwqd7SkScILR7N
-         gec2/C7+2gfE3s/eAraUC8ItcbP1D33rLOfkl66gtcp/BtJDaEyGPr/I+63MxweebsQZ
-         wKaQ==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=ACcVEjWAl0l8BCPeGNEBMR96Vi6sSgqEYdNkLpYgsf0=;
+        b=xb8y8B0q4vFneb5wFxkhbTICKHFpaId6bsu7EZunPzwvjN9/LBwV+lPsydD5Eup8/h
+         Dc5K0R2CZA/NVLTSUrnTQ0Qkpj61Q+aZvVZsI3RRq/d7o1EOS4w8mqlWpqv4N6+1RO43
+         JziY3aVKbKZsF90XTDGFL1B3gyi07L3sYO2jzy04MbLdYtB3m08o1ZU9HCTYVS8DvGS5
+         ljgMNkIuxbJWs6lvwRx5NWv6vKsZY+B8D7LxuZZNLgTbCl7Li3YO8QHcXkXC9k5Yzc2Q
+         JUWu5eXkMFyraSVFKSQQ8DApGZlPNiqOq9iePUdnCCca3csa69dzwRDQF03OzC11abb5
+         sjiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1FNQrGGLfgdOgMRKiUwsbzE3SGEjtGBgzxsXljwQUHE=;
-        b=LROqf3fHzzGcNN75y/lIteRMmEBJP5qHrUhsUlhwgKglAnx2oOV6/bsdS8Zp16WQ1p
-         nj7BEfHkeXtGKbs1s1l1S/aIiVkFTpvQ6vb5hl/bOTWr7z4DooXKRF6yzW/CS8nYsRMN
-         z39XaB5Hr5U63O1NoB6v6imDHTKsDNkmn+PSHOvywvXeN0CbQVMgRrM2C/B9iGdM6uto
-         CFzrBnhbc5lP1z35zklGGARW0a78DGLkb0CC8RwvW8lPyi1EfWLOQjaFMYDiC4vvV80o
-         NkVULTLNugRRsGTpGBjO1frGhdufqVf2Wha8FmgpUudU5gySNcrNHCvBRZ5kbkz97R0h
-         GQWA==
-X-Gm-Message-State: AJIora+C9QDz4+Y1gk3GvklvM5ZsTobstTKcSFadMsWpbOdTkCZaq0T1
-        9Cz5HVQHCr5PDvekzXv5SWXwmA==
-X-Google-Smtp-Source: AGRyM1tDxqUM6cVCSs98mVzMblL7DYw1ebw4b5m50i0FuBi3jTzjyS1F+201+kxSFQ4/IZUzwFtrpw==
-X-Received: by 2002:a05:6000:178c:b0:21d:b6d0:11a8 with SMTP id e12-20020a056000178c00b0021db6d011a8mr1741057wrg.547.1657632795572;
-        Tue, 12 Jul 2022 06:33:15 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g4-20020adff404000000b0021d87798237sm8320371wro.20.2022.07.12.06.33.14
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=ACcVEjWAl0l8BCPeGNEBMR96Vi6sSgqEYdNkLpYgsf0=;
+        b=5AouMoJeR+QYeeLj6kDffF4CY7TxLnegbCW+ah2QgeX5zq/vhKrR7uPI6PGPKrgDuC
+         UvVNbB42aRiu7TEJaY7PpYM9PT9mJyoCEIL1VxOavMxONSOju7qfDXnY4oKb/uBuJAvH
+         QyJcb02PASnLFdOHM4KJOjIIChykE2llF00rbo0mkAjD7KkywW+L6lZhR8SgxnI8H1ni
+         eBBrjXI3ly6gsYVThCqVUc4j1RDF9NCzNfqL4+hi43Ju3VfZjJr4e2cU2dENwuWgEzPg
+         X8+Fi6rqHBwzxFqQV/UgvTPlZ2Q+LMytMWNippcy/jdc4tIxV9EsOqd/u1Wl3oHKsZuC
+         nFqw==
+X-Gm-Message-State: AJIora8cZnWIGkfIOVPMgTqsRDatrgvKlUe6Vz3wAWZEkiP9pIOlqJBo
+        wxlnyMgE7GWXmD8Q8En936eM1A==
+X-Google-Smtp-Source: AGRyM1tR9QQjMICvEvriS3rUrQeRvEnCkxrSDR9p9b3QC/NKJyXkOuzupjLq2xmjuWFbvpwWCe4AvA==
+X-Received: by 2002:a0c:f3ce:0:b0:473:3c5:d378 with SMTP id f14-20020a0cf3ce000000b0047303c5d378mr17519526qvm.48.1657632848339;
+        Tue, 12 Jul 2022 06:34:08 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05620a40c700b006b1490619cdsm9354056qko.99.2022.07.12.06.34.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 06:33:14 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 14:33:13 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1 1/4] mfd: stmpe: Probe sub-function by compatible
-Message-ID: <Ys14GboRr4+GVMX1@google.com>
-References: <20220712110232.329164-1-francesco.dolcini@toradex.com>
- <20220712110232.329164-2-francesco.dolcini@toradex.com>
+        Tue, 12 Jul 2022 06:34:07 -0700 (PDT)
+Message-ID: <b06c71d090ae7eaa3cd047bb0067f566371bac3a.camel@ndufresne.ca>
+Subject: Re: [PATCH 1/7] venus : Add default values for the control
+ V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Viswanath Boma <quic_vboma@quicinc.com>,
+        video.upstream.external@qti.qualcomm.com,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 09:34:06 -0400
+In-Reply-To: <20220712122347.6781-1-quic_vboma@quicinc.com>
+References: <20220712122347.6781-1-quic_vboma@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220712110232.329164-2-francesco.dolcini@toradex.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022, Francesco Dolcini wrote:
+Le mardi 12 juillet 2022 =C3=A0 17:53 +0530, Viswanath Boma a =C3=A9crit=C2=
+=A0:
+> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>=20
+>  V4l2 encoder compliance expecting default values of colormetry for the c=
+ontrol.
 
-> Use sub-function of_compatible during probe, instead of using the node
-> name. The code should not rely on the node names during probe, in
-> addition to that the previously hard-coded node names are not compliant
-> to the latest naming convention (they are not generic and they use
-> underscores), and it was broken by mistake already once [1].
-> 
-> While doing this change `rotator` entry was removed, it is not
-> used in any device tree file, there is no cell defined, it's just dead
-> non-working code with no of_compatible for it.
-> 
-> [1] commit 56086b5e804f ("ARM: dts: imx6qdl-apalis: Avoid underscore in node name")
-> 
-> Suggested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+nit: colormetry -> colorimetry
+
+>=20
+> Change-Id: I1db0d4940b54e033d646ce39d60dc488afba8d58
+> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
 > ---
->  drivers/mfd/stmpe.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/mfd/stmpe.c b/drivers/mfd/stmpe.c
-> index aeb9ea55f97d..90a07a94455f 100644
-> --- a/drivers/mfd/stmpe.c
-> +++ b/drivers/mfd/stmpe.c
-> @@ -23,6 +23,12 @@
->  #include <linux/regulator/consumer.h>
->  #include "stmpe.h"
->  
-> +#define STMPE_GPIO_COMPATIBLE   "st,stmpe-gpio"
-> +#define STMPE_KEYPAD_COMPATIBLE "st,stmpe-keypad"
-> +#define STMPE_PWM_COMPATIBLE    "st,stmpe-pwm"
-> +#define STMPE_TS_COMPATIBLE     "st,stmpe-ts"
-> +#define STMPE_ADC_COMPATIBLE    "st,stmpe-adc"
+>  drivers/media/platform/qcom/venus/venc_ctrls.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/med=
+ia/platform/qcom/venus/venc_ctrls.c
+> index ea5805e71c143..37ba7d97f99b2 100644
+> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
+> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> @@ -352,6 +352,8 @@ static const struct v4l2_ctrl_ops venc_ctrl_ops =3D {
+>  int venc_ctrl_init(struct venus_inst *inst)
+>  {
+>  	int ret;
+> +	struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering =3D { {34000=
+, 13250, 7500 },
+> +	{ 16000, 34500, 3000 }, 15635,	16450, 10000000, 500 };
 
-This is horrible.
+What is the origin of these values ? Should this be done in the control
+framework instead ?
 
-Please refrain from defining device/compatible strings.
+> =20
+>  	ret =3D v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
+>  	if (ret)
+> @@ -580,7 +582,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+> =20
+>  	v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
+>  				   V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY,
+> -				   v4l2_ctrl_ptr_create(NULL));
+> +				   v4l2_ctrl_ptr_create((void *)&p_hdr10_mastering));
+> =20
+>  	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+>  			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
 
->  /**
->   * struct stmpe_platform_data - STMPE platform data
->   * @id: device id to distinguish between multiple STMPEs on the same board
-> @@ -321,14 +327,14 @@ static struct resource stmpe_gpio_resources[] = {
->  
->  static const struct mfd_cell stmpe_gpio_cell = {
->  	.name		= "stmpe-gpio",
-> -	.of_compatible	= "st,stmpe-gpio",
-> +	.of_compatible	= STMPE_GPIO_COMPATIBLE,
->  	.resources	= stmpe_gpio_resources,
->  	.num_resources	= ARRAY_SIZE(stmpe_gpio_resources),
->  };
->  
->  static const struct mfd_cell stmpe_gpio_cell_noirq = {
->  	.name		= "stmpe-gpio",
-> -	.of_compatible	= "st,stmpe-gpio",
-> +	.of_compatible	= STMPE_GPIO_COMPATIBLE,
->  	/* gpio cell resources consist of an irq only so no resources here */
->  };
->  
-> @@ -350,7 +356,7 @@ static struct resource stmpe_keypad_resources[] = {
->  
->  static const struct mfd_cell stmpe_keypad_cell = {
->  	.name		= "stmpe-keypad",
-> -	.of_compatible  = "st,stmpe-keypad",
-> +	.of_compatible  = STMPE_KEYPAD_COMPATIBLE,
->  	.resources	= stmpe_keypad_resources,
->  	.num_resources	= ARRAY_SIZE(stmpe_keypad_resources),
->  };
-> @@ -376,7 +382,7 @@ static struct resource stmpe_pwm_resources[] = {
->  
->  static const struct mfd_cell stmpe_pwm_cell = {
->  	.name		= "stmpe-pwm",
-> -	.of_compatible  = "st,stmpe-pwm",
-> +	.of_compatible  = STMPE_PWM_COMPATIBLE,
->  	.resources	= stmpe_pwm_resources,
->  	.num_resources	= ARRAY_SIZE(stmpe_pwm_resources),
->  };
-> @@ -461,7 +467,7 @@ static struct resource stmpe_ts_resources[] = {
->  
->  static const struct mfd_cell stmpe_ts_cell = {
->  	.name		= "stmpe-ts",
-> -	.of_compatible	= "st,stmpe-ts",
-> +	.of_compatible	= STMPE_TS_COMPATIBLE,
->  	.resources	= stmpe_ts_resources,
->  	.num_resources	= ARRAY_SIZE(stmpe_ts_resources),
->  };
-> @@ -484,7 +490,7 @@ static struct resource stmpe_adc_resources[] = {
->  
->  static const struct mfd_cell stmpe_adc_cell = {
->  	.name		= "stmpe-adc",
-> -	.of_compatible	= "st,stmpe-adc",
-> +	.of_compatible	= STMPE_ADC_COMPATIBLE,
->  	.resources	= stmpe_adc_resources,
->  	.num_resources	= ARRAY_SIZE(stmpe_adc_resources),
->  };
-> @@ -1362,19 +1368,16 @@ static void stmpe_of_probe(struct stmpe_platform_data *pdata,
->  	pdata->autosleep = (pdata->autosleep_timeout) ? true : false;
->  
->  	for_each_available_child_of_node(np, child) {
-> -		if (of_node_name_eq(child, "stmpe_gpio")) {
-> +		if (of_device_is_compatible(child, STMPE_GPIO_COMPATIBLE))
->  			pdata->blocks |= STMPE_BLOCK_GPIO;
-> -		} else if (of_node_name_eq(child, "stmpe_keypad")) {
-> +		else if (of_device_is_compatible(child, STMPE_KEYPAD_COMPATIBLE))
->  			pdata->blocks |= STMPE_BLOCK_KEYPAD;
-> -		} else if (of_node_name_eq(child, "stmpe_touchscreen")) {
-> +		else if (of_device_is_compatible(child, STMPE_TS_COMPATIBLE))
->  			pdata->blocks |= STMPE_BLOCK_TOUCHSCREEN;
-> -		} else if (of_node_name_eq(child, "stmpe_adc")) {
-> +		else if (of_device_is_compatible(child, STMPE_ADC_COMPATIBLE))
->  			pdata->blocks |= STMPE_BLOCK_ADC;
-> -		} else if (of_node_name_eq(child, "stmpe_pwm")) {
-> +		else if (of_device_is_compatible(child, STMPE_PWM_COMPATIBLE))
->  			pdata->blocks |= STMPE_BLOCK_PWM;
-> -		} else if (of_node_name_eq(child, "stmpe_rotator")) {
-> -			pdata->blocks |= STMPE_BLOCK_ROTATOR;
-> -		}
-
-This should be a separate patch.
-
->  	}
->  }
->  
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

@@ -2,228 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106BF571CF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5B9571CF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbiGLOjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S233442AbiGLOjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiGLOjN (ORCPT
+        with ESMTP id S229976AbiGLOjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:39:13 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D492495E;
-        Tue, 12 Jul 2022 07:39:12 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id mf4so13509996ejc.3;
-        Tue, 12 Jul 2022 07:39:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=MkimO/JYfFEWErwwRlGZI0yEI3KTdQ++omf5SZxftc4=;
-        b=kBVAhs7SuDDu7URHr0MlshT8v64mj4buHFbV/4Rbh3RrmSkwTHDt/+porNaTfhjeFR
-         xQOmNyrpXOnrt8deh+kv+2VUxxwjT+BKXdjUI8+V4u3t+40qiOkj5c/o/twvWDLnuDPL
-         mD1BhRtPWDZ4ZqOHWJHDqSLGcdP+R5rjEH0bxu8I4uaAmrxonjwyid8CLhkI3RbjPeF8
-         fBke5NR6KZUfvlPwGMJHOUFx9Y7v20jN+kibypMCu8Mt/RMIwavyux3ZxxnsuIQw/XW5
-         Augm2qz4Ec/06nsrp5NMYBbRDmHDyzIG+65HY5RehskEXxqmsOPLbLzi2Z0/TFKdocI3
-         zrTg==
+        Tue, 12 Jul 2022 10:39:41 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564712496F;
+        Tue, 12 Jul 2022 07:39:40 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31c8bb90d09so83060147b3.8;
+        Tue, 12 Jul 2022 07:39:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=MkimO/JYfFEWErwwRlGZI0yEI3KTdQ++omf5SZxftc4=;
-        b=WYG/PCHS51lHr1DFIMdNVTgZ/YOL7CsTtX9I46/RMBqXxT5R2XYyktMZgIAaIHHX03
-         r8DP9JhpU4EWrxrUDylsc5XKYG5+Rrec2z7d/ws7QIUCapOlswxuYJELHUx8mEwEqJqD
-         OW87unmtyydtMW2jmPi3OeOYPVWPYwj7WY9+hRrd6t35eyHwGibrsmGkaeBtbYzF4zHc
-         rh7ixEFjqVuRk1WXt3z/S0gk0qs7fHq1DOHaWexx5zGsjpFzZapFOMZ/oBFXDtww3hxy
-         seqUXA/CP0LBREP2em0SXRhQYun2i2z7vOonHong2DYhGsASD1UH8khx6f3d2KJlOquR
-         Z2yg==
-X-Gm-Message-State: AJIora/1rKolZ8GEdCfnMtK8jKnhIgcXtNCdEmg7Xvfzlxh9k3PjS2b7
-        exeOWHPzr8T6VSkg9SAv7A==
-X-Google-Smtp-Source: AGRyM1sFrjxb8Xrs4zv78FZe/7YJyrbgXHAoRlUjqwvCnWRK+PDXIDo+aqby0XL2zc8NS68689prlw==
-X-Received: by 2002:a17:906:7b82:b0:6f3:ee8d:b959 with SMTP id s2-20020a1709067b8200b006f3ee8db959mr24608884ejo.458.1657636750966;
-        Tue, 12 Jul 2022 07:39:10 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.253.195])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b006feec47dae9sm3861670ejt.157.2022.07.12.07.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:39:09 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 17:39:07 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, dylanbhatch@google.com,
-        skhan@linuxfoundation.org
-Subject: [PATCH] proc: fix test for "vsyscall=xonly" boot option
-Message-ID: <Ys2Hi3Ps933B6IsE@localhost.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PC86xMGUfSnwU1wUnbuH+oo/JpYi0LOJ0j1avSTctkQ=;
+        b=49tUINXn/QYV9ue6R5pzbBm14aQue7KHtywG32+w6coBbVe+Ou8W4fz4lgpViBpfkJ
+         1aQp7jed18dC476wLzbfk250VB6P/JYGF9iKvc9XkUpGRyPLCKVu2GmRAYzGXfVaCXqr
+         HtRz1TTxbxRd4yQ7uEDtcbgtLCC5UlwHX8aXoor0ESsb13mP2hanOCgwgZwOFBbO4OER
+         6xgFZMCUhGMO7LTYQ5+CYV3iy+rNjjN2Gqc3eU4nI/TZJuF7vwYFvu1qfA6KyqUDOdwQ
+         16v6wKjCsvpqD+ETrpyehLzg35mool5l2QQVHpp1IewtOw/IZcjlV39un+/+zurAdN3Q
+         Gotg==
+X-Gm-Message-State: AJIora+5KscHJzHWOca4iaawPDNKUeMUHkfB/IshYFUt31SaqRqbyn/p
+        aTCM7y7YCbE13sv/rygEzgXgXBNql+Vq5JNwSCR9GzCsbxc=
+X-Google-Smtp-Source: AGRyM1v/Pvr2a1+guMYqIWCRQro8zrJa0Io2m5481K1W8RgdZFu+NYSafudYKYGO8r8yUk1u+yyW7faKYF8JpPhYVnc=
+X-Received: by 2002:a0d:f247:0:b0:31d:68b1:5a16 with SMTP id
+ b68-20020a0df247000000b0031d68b15a16mr13513324ywf.191.1657636779504; Tue, 12
+ Jul 2022 07:39:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220708181235.4104943-1-frank.jungclaus@esd.eu> <20220708181235.4104943-5-frank.jungclaus@esd.eu>
+In-Reply-To: <20220708181235.4104943-5-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 12 Jul 2022 23:39:28 +0900
+Message-ID: <CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com>
+Subject: Re: [PATCH 4/6] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (3)
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Booting with vsyscall=xonly results in the "--xp" vsyscall VMA:
+On Tue. 9 Jul. 2022 at 03:15, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Started a rework initiated by Vincents remark about "You should not
+> report the greatest of txerr and rxerr but the one which actually
+> increased." Now setting CAN_ERR_CRTL_[RT]X_WARNING and
+> CAN_ERR_CRTL_[RT]X_PASSIVE depending on REC and TEC
+>
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> ---
+>  drivers/net/can/usb/esd_usb.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index 0a402a23d7ac..588caba1453b 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -304,11 +304,17 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                         /* Store error in CAN protocol (location) in data[3] */
+>                         cf->data[3] = ecc & SJA1000_ECC_SEG;
+>
+> -                       if (priv->can.state == CAN_STATE_ERROR_WARNING ||
+> -                           priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+> -                               cf->data[1] = (txerr > rxerr) ?
+> -                                       CAN_ERR_CRTL_TX_PASSIVE :
+> -                                       CAN_ERR_CRTL_RX_PASSIVE;
+> +                       /* Store error status of CAN-controller in data[1] */
+> +                       if (priv->can.state == CAN_STATE_ERROR_WARNING) {
+> +                               if (txerr >= 96)
+> +                                       cf->data[1] |= CAN_ERR_CRTL_TX_WARNING;
 
-	ffffffffff600000-ffffffffff601000 --xp ... [vsyscall]\n
+As far as I understand, those flags should be set only when the
+threshold is *reached*:
+https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L69
 
-Test does read from fixed vsyscall address to determine if kernel
-supports vsyscall page but it doesn't work with vsyscall=xonly
-because, well, vsyscall page is execute only.
+I don't think you should set it if the error state does not change.
 
-Fix test by trying to execute from the first byte of the page
-(which contains gettimeofday() stub). This should work because vsyscall
-entry points themselves have stable addresses by design.
+Here, you probably want to compare the new value  with the previous
+one (stored in struct can_berr_counter) to decide whether or not the
+flags should be set.
 
-	Alexey, avoiding parsing .config, /proc/config.gz and
-	/proc/cmdline at all costs.
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
-	I'm not sure who reported what, so please add tested-by and
-	reported-by lines.
-
- tools/testing/selftests/proc/proc-pid-vm.c |   75 ++++++++++++++++++++++++++---
- 1 file changed, 68 insertions(+), 7 deletions(-)
-
---- a/tools/testing/selftests/proc/proc-pid-vm.c
-+++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -211,10 +211,19 @@ static int make_exe(const uint8_t *payload, size_t len)
- }
- #endif
- 
--static bool g_vsyscall = false;
-+/*
-+ * 0: vsyscall VMA doesn't exist	vsyscall=none
-+ * 1: vsyscall VMA is r-xp		vsyscall=emulate
-+ * 2: vsyscall VMA is --xp		vsyscall=xonly
-+ */
-+static int g_vsyscall;
-+static const char *str_vsyscall;
- 
--static const char str_vsyscall[] =
-+static const char str_vsyscall_0[] = "";
-+static const char str_vsyscall_1[] =
- "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
-+static const char str_vsyscall_2[] =
-+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
- 
- #ifdef __x86_64__
- static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
-@@ -223,13 +232,47 @@ static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
- }
- 
- /*
-- * vsyscall page can't be unmapped, probe it with memory load.
-+ * vsyscall page can't be unmapped, probe it directly.
-  */
- static void vsyscall(void)
- {
- 	pid_t pid;
- 	int wstatus;
- 
-+	pid = fork();
-+	if (pid < 0) {
-+		fprintf(stderr, "fork, errno %d\n", errno);
-+		exit(1);
-+	}
-+	if (pid == 0) {
-+		struct rlimit rlim = {0, 0};
-+		(void)setrlimit(RLIMIT_CORE, &rlim);
-+
-+		/* Hide "segfault at ffffffffff600000" messages. */
-+		struct sigaction act;
-+		memset(&act, 0, sizeof(struct sigaction));
-+		act.sa_flags = SA_SIGINFO;
-+		act.sa_sigaction = sigaction_SIGSEGV;
-+		(void)sigaction(SIGSEGV, &act, NULL);
-+
-+		/* gettimeofday(NULL, NULL); */
-+		asm volatile (
-+			"call %P0"
-+			:
-+			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
-+			: "rax"
-+		);
-+		exit(0);
-+	}
-+	waitpid(pid, &wstatus, 0);
-+	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
-+		/* vsyscall page exists and is executable. */
-+	} else {
-+		/* vsyscall page doesn't exist. */
-+		g_vsyscall = 0;
-+		return;
-+	}
-+
- 	pid = fork();
- 	if (pid < 0) {
- 		fprintf(stderr, "fork, errno %d\n", errno);
-@@ -251,8 +294,13 @@ static void vsyscall(void)
- 	}
- 	waitpid(pid, &wstatus, 0);
- 	if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
--		g_vsyscall = true;
-+		/* vsyscall page is readable and executable. */
-+		g_vsyscall = 1;
-+		return;
- 	}
-+
-+	/* vsyscall page is executable but unreadable. */
-+	g_vsyscall = 2;
- }
- 
- int main(void)
-@@ -261,6 +309,19 @@ int main(void)
- 	int exec_fd;
- 
- 	vsyscall();
-+	switch (g_vsyscall) {
-+	case 0:
-+		str_vsyscall = str_vsyscall_0;
-+		break;
-+	case 1:
-+		str_vsyscall = str_vsyscall_1;
-+		break;
-+	case 2:
-+		str_vsyscall = str_vsyscall_2;
-+		break;
-+	default:
-+		abort();
-+	}
- 
- 	atexit(ate);
- 
-@@ -314,7 +375,7 @@ int main(void)
- 
- 	/* Test /proc/$PID/maps */
- 	{
--		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
-+		const size_t len = strlen(buf0) + strlen(str_vsyscall);
- 		char buf[256];
- 		ssize_t rv;
- 		int fd;
-@@ -327,7 +388,7 @@ int main(void)
- 		rv = read(fd, buf, sizeof(buf));
- 		assert(rv == len);
- 		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
--		if (g_vsyscall) {
-+		if (g_vsyscall > 0) {
- 			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
- 		}
- 	}
-@@ -374,7 +435,7 @@ int main(void)
- 			assert(memmem(buf, rv, S[i], strlen(S[i])));
- 		}
- 
--		if (g_vsyscall) {
-+		if (g_vsyscall > 0) {
- 			assert(memmem(buf, rv, str_vsyscall, strlen(str_vsyscall)));
- 		}
- 	}
+> +                               if (rxerr >= 96)
+> +                                       cf->data[1] |= CAN_ERR_CRTL_RX_WARNING;
+> +                       } else if (priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+> +                               if (txerr >= 128)
+> +                                       cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
+> +                               if (rxerr >= 128)
+> +                                       cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
+>                         }
+>
+>                         cf->data[6] = txerr;
+> --
+> 2.25.1
+>

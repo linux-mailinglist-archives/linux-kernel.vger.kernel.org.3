@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8930571696
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AF057169D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiGLKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S232798AbiGLKIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiGLKHm (ORCPT
+        with ESMTP id S232734AbiGLKId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:07:42 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C78AB68E;
-        Tue, 12 Jul 2022 03:07:40 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t3so9204313edd.0;
-        Tue, 12 Jul 2022 03:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
-        b=j+7XQV2J1dvTbZpa/Qhzqdb5dvUbDMSITE7NK+nJ05nRbIyW2HOb1z8ONEJBotPGrc
-         Axg6CPGNl3V53glbEhCLpWZVH3fY34rxCtQvg7J9IoCNGwJbkiLaK7g8rutEFVpDa675
-         bRtxHCbQl5bF8neunMcUi2tMDl94hGvx03sxZmNgFzc2kMAInovQoX4tWTjteRsRQna7
-         LNaRCyE/zXJDS9OTWxy9kbCMDWdk8jQqIckNfuAW0eKysKLJsLjEz3BJo55lJd15Jy1/
-         yFxkkOtpdB8S04LeXobipJ+i9RINdNUvv4lfmNyCJ4SidOWDgqgemSvuS6XzRywDf2Ha
-         2GMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
-        b=to0FhJ3sYu5VIXOvSFt5x4s4far+exSoZtThmu79nRvY3J+uNDU7r1/WhGbbfgHvOZ
-         iJ8o7Oo2D689KRk9loY9Yvb7TlRHAnP6HKZ7bji8xmILg11fC+LyV+mXlYZ0G4TimlOl
-         BSad8xE5lL6EPdxBWEfgtcVZciBeMwcGtHp9QClnsnzsR8PFrVsVSH3Rs+nYKbcwd5o8
-         gMqna225EsiS/A2QSWPKbyfCpo2pZCEy7i8EFnqyG3SatrtKX/SQLsmjj1JhS0NzDdbd
-         sP4V0fHtfZIdodMAIawqqbcRLuLbNmwK50W1c4f/q/4Qvk7TWegt0Uo7BVCohBxxfWce
-         bbeg==
-X-Gm-Message-State: AJIora8LdgXVBxAjQrAnzGCA5b4vMhrFx5UFGLB0QrBEWIK3uOOsHlav
-        6x4unpqnu5rjwwQ0haIzitM=
-X-Google-Smtp-Source: AGRyM1tmEqvblkLPuM3cKpX2kKeFRSezIsUBldJxUuJeEfON3wJh7LyGr0QnX2GZ5affre2rf11Zdg==
-X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id i19-20020a05640242d300b004352c49313dmr30051549edc.86.1657620459423;
-        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-104.zg.cable.xnet.hr. [94.253.165.104])
-        by smtp.googlemail.com with ESMTPSA id bd27-20020a056402207b00b0043a21e3b4a5sm5799675edb.40.2022.07.12.03.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v8 4/4] arm64: dts: ipq8074: add APCS support
-Date:   Tue, 12 Jul 2022 12:07:33 +0200
-Message-Id: <20220712100733.34261-4-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220712100733.34261-1-robimarko@gmail.com>
-References: <20220712100733.34261-1-robimarko@gmail.com>
+        Tue, 12 Jul 2022 06:08:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CBFAB6A5;
+        Tue, 12 Jul 2022 03:08:30 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N95Rn-1nWubb3jkt-016BfD; Tue, 12 Jul 2022 12:08:29 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31cf1adbf92so75818957b3.4;
+        Tue, 12 Jul 2022 03:08:28 -0700 (PDT)
+X-Gm-Message-State: AJIora9+AI63I3LjNh7KOVK/ZJk/GkVX8OLiQHJ85sJek45pCnLlxBEx
+        rgwm6yipqrSCLBX79OASXUHEDLaNibLkF/s4tc4=
+X-Google-Smtp-Source: AGRyM1ui9OD5Yq2i+fMABdKkpuy4vEqlHosTHEJwDtBO6zr/PICh/tVPzUKIAjwAJEvX5GVRaRGjEc5xOSy7/jhlaqc=
+X-Received: by 2002:a81:1914:0:b0:31c:e12a:f33a with SMTP id
+ 20-20020a811914000000b0031ce12af33amr24610715ywz.209.1657620507572; Tue, 12
+ Jul 2022 03:08:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
+ <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
+ <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
+ <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com> <181f1d88b64.e2eb2601586551.453778983551010212@linux.beauty>
+In-Reply-To: <181f1d88b64.e2eb2601586551.453778983551010212@linux.beauty>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 12 Jul 2022 12:08:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3gX-JMh6E2X3rH+U37zhkA6b0+AJDtXCJfdZiMocxLjg@mail.gmail.com>
+Message-ID: <CAK8P3a3gX-JMh6E2X3rH+U37zhkA6b0+AJDtXCJfdZiMocxLjg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
+ page and dio support to no-map rmem
+To:     Li Chen <me@linux.beauty>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Li Chen <lchen@ambarella.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Pnojn1jCOJfUaOK/YyrDsJCc2p4gM9GmSs9xBtBbrAKJfsYznNF
+ DrvfNt9PKvSA9vZCtHG20w1N7bLQV01zQdNEYmr6a0WO8/adPZtUlmx+WBgyWBdkVxczuAD
+ 13xvlxQUfyssiiOXH4KgqwjYAGwyGmXXWWy8rDPPaGaOyfYAwVaSUaiaOK0r8ed724uqhhT
+ Os0jG00RotVlGVAhL2fiQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nbUa4DFy3kc=:2M8dSRt9xoxJ5LTzynVMzU
+ gDj1R7IM0E3AA8ub/eJpmAoi9uKOBfb3kSgGp2TBaTUDkyEY0CFCq5azAmLztgy2HU+2n3vx7
+ XZlsxFiEAZL91dNtpcWZze0Zkgowd7PFFKf5UAag8Aj2uc1xlHnixdKlHx7oJdrCLUy7Wfv7W
+ sIV1xsVzi98HXsG6NsgJcZjf5wzsmQcSL1FxxsRNl3C/jEpmDw4KBDSd0EqJ50Jlw/1cyQOHX
+ XqHYdtg6BJ2aNoBBdqKE8pz2jsoKWtBdcLIweQk+wNYr6FmWKbPmcIXbWPBeeKIoAFJAk9S26
+ bvMa+ntaMhutUoqTpiVA0SFkkamfu62sg7nDKL/XS/zRueHJvFi11sSGLIWcGRZp5eCfPBD2d
+ CeWsgnznUBp30bwww/+PV9aeJd1XSGD8i51MxqRM1tkcjF/lih2/oD1PmCLAf1Alz7jh2Vr1n
+ lCuF+Bv+kdkbZ9W5aTFoSxYIVWlRt/ZfMnq/A2lBiODFSKtMsMBhheZ8QXWUK1PSf2zUOpZrd
+ CevwmKU5HYczhjoZmrycRh/WdpMVg8KcFhnGPLSrKdY1siASTu4Br94o+H4ykkZRZqJTXldUv
+ SRuRhcpdImygwXJ1Vj5AH1NAdfiOUS24+QMbAimdu3cU5/Ray0vjRMvLzxz5L5bB0kb5RG/VN
+ LnMYUaXyN7prw0AB3ASw+HU4it36F7TxUuTb5/sI7wbfinFwmypy/89h/bqDhdVg286zWCrLO
+ uU+53NynfW8U01hyngURKIDqWSu6PN2ZbQQAbSSjGovPx2ZOIACRYqILs3dcbZPLoBYcI8i7J
+ s7pVk1IHjcpHe4wQKCe8QP1QxDK3nNJfytQlsFkrPDdfwrdxgXWy/Fh59p0mW77ARF0IYRVdZ
+ Q3ZWIydaWZzkbk36iBJyrsSXxlFw3bv0ViShZFdxM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APCS now has support for providing the APSS clocks as the child device
-for IPQ8074.
+On Tue, Jul 12, 2022 at 11:58 AM Li Chen <me@linux.beauty> wrote:
+>  > On Tue, Jul 12, 2022 at 2:26 AM Li Chen <me@linux.beauty> wrote:
+>  > >  ---- On Mon, 11 Jul 2022 21:28:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote ---
+>  > >  > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
+>  > >  > The problem here is that the DT is meant to describe the platform in an OS
+>  > >  > independent way, so having a binding that just corresponds to a user space
+>  > >  > interface is not a good abstraction.
+>  > >
+>  > > Gotcha, but IMO dts + rmem is the only choice for our use case. In our real
+>  > > case, we use reg instead of size to specify the physical address, so
+>  > > memremap cannot be used.
+>  >
+>  > Does your hardware require a fixed address for the buffer? If it can be
+>  > anywhere in memory (or at least within a certain range) but just has to
+>  > be physically contiguous, the normal way would be to use a CMA area
+>  > to allocate from, which gives you 'struct page' backed pages.
+>
+> The limitation is our DSP can only access 32bit memory, but total dram is > 4G, so I cannot use
+> "size = <...>" in our real case (it might get memory above 4G). I'm not sure if other vendors' DSP also has
+> this limitation, if so, how do they deal with it if throughput matters.
 
-So, add the required DT node for APCS and A53PLL which feeds it the PLL
-clock for APSS, since APSS will be used for CPU frequency scaling.
+This is a common limitation that gets handled automatically by setting
+the dma_mask of the device through the dma-ranges property in DT.
+When the driver does dma_alloc_coherent() or similar to gets its buffer,
+it will then allocate pages below this boundary.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
-Changes in v7:
-* Drop review tag due to significant changes
-* Add A53PLL node
-* Add clocks to APCS node
+If you need a large contiguous memory area, then using CMA allows
+you to specify a region of memory that is kept reserved for DMA
+allocations, so a call to dma_alloc_coherent() on your device will
+get contiguous pages from that area, and move other data in those
+pages elsewhere if necessary. non-movable data is allocated from
+pages outside of the CMA reserved area in this case.
 
-Changes in v3:
-* Node does not currently exist in the upstream kernel, so add it instead
-of modifying.
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 080796555809..6a13bd3ead55 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -879,6 +879,23 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
- 				      "axi_m_sticky";
- 			status = "disabled";
- 		};
-+
-+		apcs_glb: mailbox@b111000 {
-+			compatible = "qcom,ipq8074-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&a53pll>, <&xo>;
-+			clock-names = "pll", "xo";
-+			#mbox-cells = <1>;
-+		};
-+
-+		a53pll: clock@b116000 {
-+			compatible = "qcom,ipq8074-a53pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
- 	};
- 
- 	timer {
--- 
-2.36.1
-
+          Arnd

@@ -2,231 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6129C571982
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC3A571987
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbiGLMLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S233055AbiGLML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiGLMLc (ORCPT
+        with ESMTP id S233067AbiGLMLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:11:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB28E820CA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657627889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1d1EI4RPv3WfZytQuTN6gTWHuo0sJr7AFWE0PA+Qos=;
-        b=H5CSMwHDPbKLaRHFszmEjycFCTbFGfSteWvR1/Asu0yigMQvs54+LSMATUW/eVIDBHx2H+
-        jPA1FEbICDbwQB+Km8NAgFxhOVQGAGPbt8qNfjrqbwdH6UmUYem60KdtKIXd52rjWfr/JN
-        UiBzc+TcXLez8RTf+BA7oYHY37HxUr4=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131--f4C1ha4PgiBjf1Eoqe1eg-1; Tue, 12 Jul 2022 08:11:28 -0400
-X-MC-Unique: -f4C1ha4PgiBjf1Eoqe1eg-1
-Received: by mail-qt1-f200.google.com with SMTP id d4-20020ac851c4000000b0031eb2c46a9bso4731330qtn.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:11:28 -0700 (PDT)
+        Tue, 12 Jul 2022 08:11:52 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400EAA2EFD;
+        Tue, 12 Jul 2022 05:11:51 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bp15so3667654ejb.6;
+        Tue, 12 Jul 2022 05:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VUup2uDXZ8o0p1sWQoMcoPhfIwXCF5ZE26LejT9YLSI=;
+        b=L01G/T8HvUDMaO5oB3F7fjPfeCZcHuQ87OMVJ5n5Z7U+PRPu6Afna1h7Y9DH2C/LkF
+         30nQ0GpWPRXviqZ6N7EvWZvZZVvuyZhRzbBjY+h42xIFEKMFseb0BcSZvAsGRQJb8jYT
+         B4S+yspb9IA94KnJ+i4Y4Ld4xQmoFhGg0N3omjLf13yxgg01lbvz59yGnW5E6QxPaTq9
+         1vkGK2bgVvwiVaBm1RXa/elbPFSXntWFsBt8yXAxGJW1K4Q/MLmhZVvJHLAT/Ej/gfuK
+         /mimE2QW9y89PSnKRUhdeW4w7U8UHKRtpElE1MQAoRZezYtqbnGtdb4mK9Fu5wTmjQbS
+         35Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=z1d1EI4RPv3WfZytQuTN6gTWHuo0sJr7AFWE0PA+Qos=;
-        b=T8gQFNv5msto9RTirNOFLm35yEb4/Rwf1Sqe67SqsxFvEKuUSUR71YN/dEz1cEOXNa
-         pidHYRvQymMmPEVwzeZCRbYoizWKlENOoXcUPbXcoJrJczQB41jeo6fD2rIZgNtUrEvU
-         p7N7qugntwMDaaJPoKnaG69EMP9QBhG7keBMocBdQ11hfnbon36OJWftR8jmd7t8YTJh
-         /boEdoknJMpzsop8kpwGHuqDQh3S4nvigMRBBOSMbUobHTVOxQ6Rjnl2IDxrIXPCu3mf
-         +jw9GNBIiPAtfiwBYBhrX8TCDg89dOhPD7DBHxRXFSIdjJKSChaRpVMqLagXPuz/a2Ig
-         qIGQ==
-X-Gm-Message-State: AJIora8VvtI3BKAxz0J9jGlnyGvqUu85nPKnfX9LYDD38gveZvZ2In3f
-        5NBZSBdg/1uuMtx9KwpDuMNhuK9GbfJkv1LHw0/cTjRfuSRd97ffY5s4MvH02itPdwow1LRjHcU
-        xqHnX7/TzqJ5vshmC7qyOZlDN
-X-Received: by 2002:a05:620a:28cc:b0:6b2:1baa:4aa3 with SMTP id l12-20020a05620a28cc00b006b21baa4aa3mr14859717qkp.461.1657627887933;
-        Tue, 12 Jul 2022 05:11:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v2dft7Ct2toOJxAojsYmuaA9UTV25aFGUAmHsh4bCGh1VhkUbMn//M3O/M8SYPO+NCgOsWgw==
-X-Received: by 2002:a05:620a:28cc:b0:6b2:1baa:4aa3 with SMTP id l12-20020a05620a28cc00b006b21baa4aa3mr14859692qkp.461.1657627887606;
-        Tue, 12 Jul 2022 05:11:27 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05620a415200b006b5905999easm4647391qko.121.2022.07.12.05.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 05:11:27 -0700 (PDT)
-Message-ID: <b9523b41105fb3405f770b428921bfc932ad6fef.camel@redhat.com>
-Subject: Re: [PATCH v3 23/25] KVM: nVMX: Use sanitized allowed-1 bits for
- VMX control MSRs
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 15:11:23 +0300
-In-Reply-To: <20220708144223.610080-24-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-24-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VUup2uDXZ8o0p1sWQoMcoPhfIwXCF5ZE26LejT9YLSI=;
+        b=mOqcdj7VwAaoImxiexh1yC3pbfan3eNjLaHTyPdFirCmI0bfEp6f2QoryLeensNBu1
+         f3uZgCVyHf2XrPIVscKoWlFAo0Bov3qksRbXWSNGwvzafYEi+bzjVIfkP0mQNbxBY26g
+         kr3AyeK5T/wlCYRw1BgMAw7vUcHLn4tk+46shaaepX2iEFasnuumyzC8w1lXFcu7Q9QR
+         SSmYsPDHCbsFZNdrShS34ETryzNjptkxQBbQebLwi1umjMBKlumHHW5fI15GbaSIZ+8Q
+         yE1HfxwFFWpoj842ilsWReWiqqtqo/LuHqiHWOaJoRgnRRxBwTDpyy6yUEtxnnm007M8
+         wdAw==
+X-Gm-Message-State: AJIora+/5ZAriMyUlnjQgGwWOpGsQsssB4SxqC95RAhFPIfj4eX5EfLR
+        Q/zyOx+cFmAvx6kqFc8m0F1ZI2SJ5Bgzd/kfkUw=
+X-Google-Smtp-Source: AGRyM1sSFVDbDH06DtJDlcsIYdLZJAcNINyNcdyUrh6tJPGsBlmIB44bi9Qwv4B+3NVBe7/GScLQREPobt/sEFSXyeQ=
+X-Received: by 2002:a17:906:6d91:b0:715:7d4e:84a2 with SMTP id
+ h17-20020a1709066d9100b007157d4e84a2mr22498321ejt.504.1657627909594; Tue, 12
+ Jul 2022 05:11:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220712082146.1192215-1-peng.fan@oss.nxp.com> <20220712082146.1192215-3-peng.fan@oss.nxp.com>
+In-Reply-To: <20220712082146.1192215-3-peng.fan@oss.nxp.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Tue, 12 Jul 2022 07:11:38 -0500
+Message-ID: <CAHCN7xLhSKQa3-ueiOz4ptg7Sp1vF3rmN5JRzqA+euVKYbZoOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marek Vasut <marex@denx.de>, paul.elder@ideasonboard.com,
+        Markus.Niebel@ew.tq-group.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> Using raw host MSR values for setting up nested VMX control MSRs is
-> incorrect as some features need to disabled, e.g. when KVM runs as
-> a nested hypervisor on Hyper-V and uses Enlightened VMCS or when a
-> workaround for IA32_PERF_GLOBAL_CTRL is applied. For non-nested VMX, this
-> is done in setup_vmcs_config() and the result is stored in vmcs_config.
-> Use it for setting up allowed-1 bits in nested VMX MSRs too.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+On Tue, Jul 12, 2022 at 3:20 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> i.MX8MP VPU blk ctrl module has similar design as i.MX8MM, so reuse
+> the i.MX8MM VPU blk ctrl yaml file.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  arch/x86/kvm/vmx/nested.c | 30 ++++++++++++------------------
->  arch/x86/kvm/vmx/nested.h |  2 +-
->  arch/x86/kvm/vmx/vmx.c    |  5 ++---
->  3 files changed, 15 insertions(+), 22 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 09654d5c2144..3d386c663fac 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -6565,8 +6565,10 @@ static u64 nested_vmx_calc_vmcs_enum_msr(void)
->   * bit in the high half is on if the corresponding bit in the control field
->   * may be on. See also vmx_control_verify().
->   */
-> -void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
-> +void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
->  {
-> +       struct nested_vmx_msrs *msrs = &vmcs_conf->nested;
+>  .../soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml        | 17 ++++++++++++++---
+>  include/dt-bindings/power/imx8mp-power.h        |  4 ++++
+>  2 files changed, 18 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
+> index 26487daa64d9..edbd267cdd67 100644
+> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
+> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml
+> @@ -4,20 +4,22 @@
+>  $id: http://devicetree.org/schemas/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>
+> -title: NXP i.MX8MM VPU blk-ctrl
+> +title: NXP i.MX8MM/P VPU blk-ctrl
+>
+>  maintainers:
+>    - Lucas Stach <l.stach@pengutronix.de>
+>
+>  description:
+> -  The i.MX8MM VPU blk-ctrl is a top-level peripheral providing access to
+> +  The i.MX8MM/P VPU blk-ctrl is a top-level peripheral providing access to
+>    the NoC and ensuring proper power sequencing of the VPU peripherals
+>    located in the VPU domain of the SoC.
+>
+>  properties:
+>    compatible:
+>      items:
+> -      - const: fsl,imx8mm-vpu-blk-ctrl
+> +      - enum:
+> +          - fsl,imx8mm-vpu-blk-ctrl
+> +          - fsl,imx8mp-vpu-blk-ctrl
+>        - const: syscon
+>
+>    reg:
+> @@ -47,6 +49,15 @@ properties:
+>        - const: g2
+>        - const: h1
+>
+> +  interconnects:
+> +    maxItems: 3
 > +
->         /*
->          * Note that as a general rule, the high half of the MSRs (bits in
->          * the control fields which may be 1) should be initialized by the
-> @@ -6583,11 +6585,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->          */
->  
->         /* pin-based controls */
-> -       rdmsr(MSR_IA32_VMX_PINBASED_CTLS,
-> -               msrs->pinbased_ctls_low,
-> -               msrs->pinbased_ctls_high);
->         msrs->pinbased_ctls_low =
->                 PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
+> +  interconnect-names:
+> +    items:
+> +      - const: g1
+> +      - const: g2
+> +      - const: h1
 > +
-> +       msrs->pinbased_ctls_high = vmcs_conf->pin_based_exec_ctrl;
->         msrs->pinbased_ctls_high &=
->                 PIN_BASED_EXT_INTR_MASK |
->                 PIN_BASED_NMI_EXITING |
-> @@ -6598,12 +6599,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->                 PIN_BASED_VMX_PREEMPTION_TIMER;
->  
->         /* exit controls */
-> -       rdmsr(MSR_IA32_VMX_EXIT_CTLS,
-> -               msrs->exit_ctls_low,
-> -               msrs->exit_ctls_high);
->         msrs->exit_ctls_low =
->                 VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
->  
-> +       msrs->exit_ctls_high = vmcs_conf->vmexit_ctrl;
->         msrs->exit_ctls_high &=
->  #ifdef CONFIG_X86_64
->                 VM_EXIT_HOST_ADDR_SPACE_SIZE |
-> @@ -6619,11 +6618,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->         msrs->exit_ctls_low &= ~VM_EXIT_SAVE_DEBUG_CONTROLS;
->  
->         /* entry controls */
-> -       rdmsr(MSR_IA32_VMX_ENTRY_CTLS,
-> -               msrs->entry_ctls_low,
-> -               msrs->entry_ctls_high);
->         msrs->entry_ctls_low =
->                 VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
-> +
-> +       msrs->entry_ctls_high = vmcs_conf->vmentry_ctrl;
->         msrs->entry_ctls_high &=
->  #ifdef CONFIG_X86_64
->                 VM_ENTRY_IA32E_MODE |
-> @@ -6637,11 +6635,10 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->         msrs->entry_ctls_low &= ~VM_ENTRY_LOAD_DEBUG_CONTROLS;
->  
->         /* cpu-based controls */
-> -       rdmsr(MSR_IA32_VMX_PROCBASED_CTLS,
-> -               msrs->procbased_ctls_low,
-> -               msrs->procbased_ctls_high);
->         msrs->procbased_ctls_low =
->                 CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
-> +
-> +       msrs->procbased_ctls_high = vmcs_conf->cpu_based_exec_ctrl;
->         msrs->procbased_ctls_high &=
->                 CPU_BASED_INTR_WINDOW_EXITING |
->                 CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETTING |
-> @@ -6675,12 +6672,9 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
->          * depend on CPUID bits, they are added later by
->          * vmx_vcpu_after_set_cpuid.
->          */
-> -       if (msrs->procbased_ctls_high & CPU_BASED_ACTIVATE_SECONDARY_CONTROLS)
-> -               rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
-> -                     msrs->secondary_ctls_low,
-> -                     msrs->secondary_ctls_high);
-> -
->         msrs->secondary_ctls_low = 0;
-> +
-> +       msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
->         msrs->secondary_ctls_high &=
->                 SECONDARY_EXEC_DESC |
->                 SECONDARY_EXEC_ENABLE_RDTSCP |
-> diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
-> index c92cea0b8ccc..fae047c6204b 100644
-> --- a/arch/x86/kvm/vmx/nested.h
-> +++ b/arch/x86/kvm/vmx/nested.h
-> @@ -17,7 +17,7 @@ enum nvmx_vmentry_status {
->  };
->  
->  void vmx_leave_nested(struct kvm_vcpu *vcpu);
-> -void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps);
-> +void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps);
->  void nested_vmx_hardware_unsetup(void);
->  __init int nested_vmx_hardware_setup(int (*exit_handlers[])(struct kvm_vcpu *));
->  void nested_vmx_set_vmcs_shadowing_bitmap(void);
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index e462e5b9c0a1..35285109856f 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7306,7 +7306,7 @@ static int __init vmx_check_processor_compat(void)
->         if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0)
->                 return -EIO;
->         if (nested)
-> -               nested_vmx_setup_ctls_msrs(&vmcs_conf.nested, vmx_cap.ept);
-> +               nested_vmx_setup_ctls_msrs(&vmcs_conf, vmx_cap.ept);
->         if (memcmp(&vmcs_config, &vmcs_conf, sizeof(struct vmcs_config)) != 0) {
->                 printk(KERN_ERR "kvm: CPU %d feature inconsistency!\n",
->                                 smp_processor_id());
-> @@ -8281,8 +8281,7 @@ static __init int hardware_setup(void)
->         setup_default_sgx_lepubkeyhash();
->  
->         if (nested) {
-> -               nested_vmx_setup_ctls_msrs(&vmcs_config.nested,
-> -                                          vmx_capability.ept);
-> +               nested_vmx_setup_ctls_msrs(&vmcs_config, vmx_capability.ept);
->  
->                 r = nested_vmx_hardware_setup(kvm_vmx_exit_handlers);
->                 if (r)
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/include/dt-bindings/power/imx8mp-power.h b/include/dt-bindings/power/imx8mp-power.h
+> index 14b9c5ac9c82..11d43fc7a18e 100644
+> --- a/include/dt-bindings/power/imx8mp-power.h
+> +++ b/include/dt-bindings/power/imx8mp-power.h
+> @@ -52,4 +52,8 @@
+>  #define IMX8MP_HDMIBLK_PD_HDCP                         7
+>  #define IMX8MP_HDMIBLK_PD_HRV                          8
+>
+> +#define IMX8MP_VPUBLK_PD_G1                            0
+> +#define IMX8MP_VPUBLK_PD_G2                            1
+> +#define IMX8MP_VPUBLK_PD_H1                            2
 
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+Is H1 even correct for 8MP? The TRM calls the encoder a VC800E.  Since
+the Encoder on the 8MM is a Hantro H1, this might add confusion if
+people start thinking they are the same.
+> +
+>  #endif
+> --
+> 2.25.1
+>

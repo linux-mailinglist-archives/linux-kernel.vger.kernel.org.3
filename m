@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BD3571223
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318E557122B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiGLGKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S231795AbiGLGPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGLGKD (ORCPT
+        with ESMTP id S229515AbiGLGPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:10:03 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE250422EF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:10:01 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id v185so6908126ioe.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=m7VnoSWJT9RJBnDpFfYHT4OawmKA68NFYkt7w8TDwQQ=;
-        b=IyAogoFazuz0UkBu4VDNvrJyFOcMzfraVZJ07l5DECCrYicxIU5u7MopaDo8GIqOZf
-         zUQ4nqvcuM3h0Xj+Ura9c9abRRZCfb/jxWcykD96oFFQ9SI7Ee613kzvLT/2Drq/dG3R
-         mQ4Zo1n7nw7Vdk6Kevoj5M+O0K4j4WuOWGxReVyvGdFRADeWNZ5qRIUpCu6RyjK4BWDQ
-         3doLdlsjUuYx0Zpa5UmtfH3zePnvzZwEGQv2tA9xcADdLZILJQs42+uzEgjWth/0+y3X
-         2cv18OXlkNGtTiTiQB5XyUrPiMHk/yb7fFO+lxWGuThw5OujMFuEq+miyW7x8Wz85xUO
-         KKxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m7VnoSWJT9RJBnDpFfYHT4OawmKA68NFYkt7w8TDwQQ=;
-        b=YQfkGsinUbhWxxk77KRVvHdxDZ+Z63f+Rr4FxPcxJBoZYbfrQDObN9hKeUlPcf+p1r
-         8mdiiL0+X06aGIjgx0wvmMyOKYa5Pm1Gkw/cYs5cZ8glziTr2ZMvJ1tTWUyONeY/CtQ7
-         4NEvHqqTDLdVO6JurAxyMdhIhiVHYEaoWBK1OWQHPOVlccWp/NW/RParStMwRyTzVpny
-         4BOa00JlRMnVHwKUqAuxf/pp6IN/7lnb/fyOQuCg9HwMGbKob89JfLJ7ml37UCJIJnT/
-         H7YiYQ4KN9yQZcYdTOjadnunpYvr8Bb//1ITeLbQHl6BG/+LeaJVAkHlE+o3FhKKTsef
-         BCQA==
-X-Gm-Message-State: AJIora8Fx5C0fxadjyXEu32NXLRvkb0xhw7jEb78zuH8xZZcLGjsdTjn
-        hYjUqs7Sf6xAN4SL9umP5/iUcbET3PkHd1lp50MlNR9m8B/lSw==
-X-Google-Smtp-Source: AGRyM1uyqwLnSEwYJEiteciR1TN2aShzRZR4i9bjhcSZi4srcpnJZvC1JvvJEIfNIiWywfb3zEWGLhvxpm1X5+x+vik=
-X-Received: by 2002:a05:6602:14d4:b0:67b:8670:9b86 with SMTP id
- b20-20020a05660214d400b0067b86709b86mr6241505iow.70.1657606201179; Mon, 11
- Jul 2022 23:10:01 -0700 (PDT)
+        Tue, 12 Jul 2022 02:15:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5356381482;
+        Mon, 11 Jul 2022 23:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657606506; x=1689142506;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e8t4m3KSkmOMZJqJPmnwIUB4x8PWpY13C+jIK4OpPdk=;
+  b=Bj4lOYyS8/pHcS3o6u0RNabm8fWNib0glCPlLCyC/20bkyxhzQk9q7pj
+   C3ipmiJZqC7Y74N2j7sG2lUV0v7pvfCH0bVhy6/wDE/5UiNaQC0FPfn/U
+   JofedWty7gdu59OR+Yu5NPe1rY/wbaummpn09NHJ92ySX0vFUzo2eocIN
+   0Sm2ZppPFGV0hR4a+Ob4+2fLfVnFGxqR6OyB0+uv9V+hNLwjvjPm+saFT
+   ZKmi7k0xezKJDQV17FJ2C8jcNfCEdW+FkjgLTwBzXQuR1UfvQE5owqcVY
+   FRc+rG3g4hWLQqgWwfCEpApnZBIlxpcxcvJhMjS5jPjMxI/EjGmYKk6wc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="371157329"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="371157329"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:15:05 -0700
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="622378386"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:15:03 -0700
+Date:   Tue, 12 Jul 2022 14:14:45 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 053/102] KVM: TDX: don't request
+ KVM_REQ_APIC_PAGE_RELOAD
+Message-ID: <20220712061439.GA28707@gao-cwp>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <bcdcc4175321ff570a198aa55f8ac035de2add1f.1656366338.git.isaku.yamahata@intel.com>
+ <20220712034743.glrfvpx54ja6jrzg@yy-desk-7060>
 MIME-Version: 1.0
-References: <20220711090537.841305347@linuxfoundation.org>
-In-Reply-To: <20220711090537.841305347@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 12 Jul 2022 11:39:50 +0530
-Message-ID: <CA+G9fYsxKWneorr043z63eg5_ODFnWxJK8QgiPkWiBOFq2g6gg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/31] 4.19.252-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712034743.glrfvpx54ja6jrzg@yy-desk-7060>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,114 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 14:39, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Jul 12, 2022 at 11:47:43AM +0800, Yuan Yao wrote:
+>On Mon, Jun 27, 2022 at 02:53:45PM -0700, isaku.yamahata@intel.com wrote:
+>> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>>
+>> TDX doesn't need APIC page depending on vapic and its callback is
+>> WARN_ON_ONCE(is_tdx).  To avoid unnecessary overhead and WARN_ON_ONCE(),
+>> skip requesting KVM_REQ_APIC_PAGE_RELOAD when TD.
+
+!kvm_gfn_shared_mask() doesn't ensure the VM is a TD. Right?
+
+>>
+>>
+>> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+>> ---
+>>  arch/x86/kvm/x86.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 8f57dfb2a8c9..c90ec611de2f 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -10042,7 +10042,8 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+>>  	 * Update it when it becomes invalid.
+>>  	 */
+>>  	apic_address = gfn_to_hva(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
+>> -	if (start <= apic_address && apic_address < end)
+>> +	if (start <= apic_address && apic_address < end &&
+>> +	    !kvm_gfn_shared_mask(kvm))
 >
-> This is the start of the stable review cycle for the 4.19.252 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>Minor: please condier to check kvm_gfn_shared_mask(kvm) before range,
+>means firstly check is or not, then suitable or not.
 >
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.252-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.19.252-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 72d6154340a122052ef914485fa4176f1c50464d
-* git describe: v4.19.251-32-g72d6154340a1
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.251-32-g72d6154340a1
-
-## Test Regressions (compared to v4.19.251)
-No test regressions found.
-
-## Metric Regressions (compared to v4.19.251)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.251)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.251)
-No metric fixes found.
-
-## Test result summary
-total: 109848, pass: 97331, fail: 268, skip: 11146, xfail: 1103
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 286 passed, 5 failed
-* arm64: 58 total, 57 passed, 1 failed
-* i386: 26 total, 23 passed, 3 failed
-* mips: 38 total, 38 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 52 total, 51 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>>  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+>>  }
+>>
+>> --
+>> 2.25.1
+>>

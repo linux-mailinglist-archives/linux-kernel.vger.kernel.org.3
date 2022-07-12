@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22BE572987
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757E5572990
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiGLWx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S233472AbiGLW60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiGLWxx (ORCPT
+        with ESMTP id S230104AbiGLW6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:53:53 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123D324968
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:53:53 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 70so8714619pfx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HWyKOm/lcyOl8O084SO+nkGRnokYrR/9NGWVH+hUDX4=;
-        b=h4tI4WQeJW4ZlggcTTxIV2rlia7CgUC+TlJS2Qn7HRmeUb6ioW4RQ+jAnFKRBDw3WD
-         Tny5mKocjRuYN89ZNEv2dLFBqcRyeBVd7dfE2a5a1QSMGSytubKQYebtGc9q5Ph/LOIg
-         bx76WIHxmOHQMtE0Aq0NmlLxSvSfWz2kvi+VTLmoo5CdsczV8sfwxM/EeD2e99t74vRS
-         nEz0MpWixLmPkVsEIDaIceoLD0Xkbot2rf5EHLW/pye25u7lADX2BeiCVUcpkhP3Y2wC
-         nt800T6U6m/S7IMp9MLELHxODFKkBFaeJmekb6Czx+L65wglqHqxneQ2p8FAr9VKEem5
-         k8iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HWyKOm/lcyOl8O084SO+nkGRnokYrR/9NGWVH+hUDX4=;
-        b=YB43FxX64aj4gugf7nzb9QM7rRAveofWdCvx/51AD1NLMQ3rTW1CXfeFKdvLXVBHh+
-         FzSQ/FfEpuVOASogGZOUNO1Oo7uv2Fg4fyszocM2dM123WuityPzTdrTeyil4X/sPs0u
-         ksEjMKL2zg0I6dsQ6UNe0siZ9qc1PtaxdlvfIqnxHqOcVszH6KIIxCBGNCQ6PYVEDT8y
-         Gw+hsq2Bjx00+RnaX3JTT98V5dQkkkFg9SW2boN5dnCW7O+SMj7kkavqW2nGxe2ES182
-         ZAIS04cghmxY3Hd9XpH2Yk5y1eo+xaLBPRJexcsTlNA9hHxFgfwN9ZYCLrj2S0bXHxML
-         yuzw==
-X-Gm-Message-State: AJIora+1Q4ORlUZuevUnAEP2JJi9og2DZqTWDUjAx+6rGZHmp2E4TrhO
-        BBCUNbAXUuRzRD9NIXAcmBwZ9ZFx2Z5Sew==
-X-Google-Smtp-Source: AGRyM1tUNzl8R21w5j4v3UwvX46aUMLMnpea0GKpu/4WmjWWElzK+uGAo21woDWYSl9jIPcvxCwQHA==
-X-Received: by 2002:a63:ea45:0:b0:415:fa9a:ae71 with SMTP id l5-20020a63ea45000000b00415fa9aae71mr437116pgk.285.1657666432444;
-        Tue, 12 Jul 2022 15:53:52 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id n30-20020aa7985e000000b00528d41a998csm7532065pfq.15.2022.07.12.15.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 15:53:52 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 22:53:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] KVM: x86/mmu: Shrink pte_list_desc size when KVM is
- using TDP
-Message-ID: <Ys37fNK6uQ+YTcBh@google.com>
-References: <20220624232735.3090056-1-seanjc@google.com>
- <20220624232735.3090056-4-seanjc@google.com>
- <Ys33RtxeDz0egEM0@xz-m1.local>
+        Tue, 12 Jul 2022 18:58:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439E5A439F;
+        Tue, 12 Jul 2022 15:58:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D11BB61734;
+        Tue, 12 Jul 2022 22:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B07C3411C;
+        Tue, 12 Jul 2022 22:58:22 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 18:58:20 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: [PATCH v2] tracing: devlink: Use static array for string in
+ devlink_trap_report even
+Message-ID: <20220712185820.002d9fb5@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys33RtxeDz0egEM0@xz-m1.local>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022, Peter Xu wrote:
-> On Fri, Jun 24, 2022 at 11:27:34PM +0000, Sean Christopherson wrote:
-> > Dynamically size struct pte_list_desc's array of sptes based on whether
-> > or not KVM is using TDP.  Commit dc1cff969101 ("KVM: X86: MMU: Tune
-> > PTE_LIST_EXT to be bigger") bumped the number of entries in order to
-> > improve performance when using shadow paging, but its analysis that the
-> > larger size would not affect TDP was wrong.  Consuming pte_list_desc
-> > objects for nested TDP is indeed rare, but _allocating_ objects is not,
-> > as KVM allocates 40 objects for each per-vCPU cache.  Reducing the size
-> > from 128 bytes to 32 bytes reduces that per-vCPU cost from 5120 bytes to
-> > 1280, and also provides similar savings when eager page splitting for
-> > nested MMUs kicks in.
-> > 
-> > The per-vCPU overhead could be further reduced by using a custom, smaller
-> > capacity for the per-vCPU caches, but that's more of an "and" than
-> > an "or" change, e.g. it wouldn't help the eager page split use case.
-> > 
-> > Set the list size to the bare minimum without completely defeating the
-> > purpose of an array (and because pte_list_add() assumes the array is at
-> > least two entries deep).  A larger size, e.g. 4, would reduce the number
-> > of "allocations", but those "allocations" only become allocations in
-> > truth if a single vCPU depletes its cache to where a topup is needed,
-> > i.e. if a single vCPU "allocates" 30+ lists.  Conversely, those 2 extra
-> > entries consume 16 bytes * 40 * nr_vcpus in the caches the instant nested
-> > TDP is used.
-> > 
-> > In the unlikely event that performance of aliased gfns for nested TDP
-> > really is (or becomes) a priority for oddball workloads, KVM could add a
-> > knob to let the admin tune the array size for their environment.
-> > 
-> > Note, KVM also unnecessarily tops up the per-vCPU caches even when not
-> > using rmaps; this can also be addressed separately.
-> 
-> The only possible way of using pte_list_desc when tdp=1 is when the
-> hypervisor tries to map the same host pages with different GPAs?
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Yes, if by "host pages" you mean L1 GPAs.  It happens if the L1 VMM maps multiple
-L2 GFNs to a single L1 GFN, in which case KVM's nTDP shadow MMU needs to rmap
-that single L1 GFN to multiple L2 GFNs.
+The trace event devlink_trap_report uses the __dynamic_array() macro to
+determine the size of the input_dev_name field. This is because it needs
+to test the dev field for NULL, and will use "NULL" if it is. But it also
+has the size of the dynamic array as a fixed IFNAMSIZ bytes. This defeats
+the purpose of the dynamic array, as this will reserve that amount of
+bytes on the ring buffer, and to make matters worse, it will even save
+that size in the event as the event expects it to be dynamic (for which it
+is not).
 
-> And we don't really have a real use case of that, or.. do we?
+Since IFNAMSIZ is just 16 bytes, just make it a static array and this will
+remove the meta data from the event that records the size.
 
-QEMU does it during boot/pre-boot when BIOS remaps the flash region into the lower
-1mb, i.e. aliases high GPAs to low GPAs.
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Jiri Pirko <jiri@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ Changes since v1: https://lkml.kernel.org/r/20220703111809.40cd1c3f@rorschach.local.home
 
-> Sorry to start with asking questions, it's just that if we know that
-> pte_list_desc is probably not gonna be used then could we simply skip the
-> cache layer as a whole?  IOW, we don't make the "array size of pte list
-> desc" dynamic, instead we make the whole "pte list desc cache layer"
-> dynamic.  Is it possible?
+   - The old version tried to do the same logic in the __dynamic_array() to
+     calculate the size of the string, but actually failed to by not using
+     the correct variable. Just use __array() instead, as IFNAMSIZ is just
+     16 bytes anyway.
 
-Not really?  It's theoretically possible, but it'd require pre-checking that aren't
-aliases, and to do that race free we'd have to do it under mmu_lock, which means
-having to support bailing from the page fault to topup the cache.  The memory
-overhead for the cache isn't so significant that it's worth that level of complexity.
+   - Cc'd more maintainers by running get_maintainers.pl from the call of
+     the tracepoint and not just the include/trace/events file.
+
+ include/trace/events/devlink.h | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/include/trace/events/devlink.h b/include/trace/events/devlink.h
+index 2814f188d98c..24969184c534 100644
+--- a/include/trace/events/devlink.h
++++ b/include/trace/events/devlink.h
+@@ -186,7 +186,7 @@ TRACE_EVENT(devlink_trap_report,
+ 		__string(driver_name, devlink_to_dev(devlink)->driver->name)
+ 		__string(trap_name, metadata->trap_name)
+ 		__string(trap_group_name, metadata->trap_group_name)
+-		__dynamic_array(char, input_dev_name, IFNAMSIZ)
++		__array(char, input_dev_name, IFNAMSIZ)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -197,15 +197,14 @@ TRACE_EVENT(devlink_trap_report,
+ 		__assign_str(driver_name, devlink_to_dev(devlink)->driver->name);
+ 		__assign_str(trap_name, metadata->trap_name);
+ 		__assign_str(trap_group_name, metadata->trap_group_name);
+-		__assign_str(input_dev_name,
+-			     (input_dev ? input_dev->name : "NULL"));
++		strscpy(__entry->input_dev_name, input_dev ? input_dev->name : "NULL", IFNAMSIZ);
+ 	),
+ 
+ 	TP_printk("bus_name=%s dev_name=%s driver_name=%s trap_name=%s "
+ 		  "trap_group_name=%s input_dev_name=%s", __get_str(bus_name),
+ 		  __get_str(dev_name), __get_str(driver_name),
+ 		  __get_str(trap_name), __get_str(trap_group_name),
+-		  __get_str(input_dev_name))
++		  __entry->input_dev_name)
+ );
+ 
+ #endif /* _TRACE_DEVLINK_H */
+-- 
+2.35.1
+

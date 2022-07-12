@@ -2,70 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6D35710A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AD55710A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiGLDGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 23:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S230493AbiGLDHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiGLDGL (ORCPT
+        with ESMTP id S231847AbiGLDGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:06:11 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8D93692;
-        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id g4so6444245pgc.1;
-        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XHe/kvvVGFhgWQMCPO6zbNMWlQyc0h0nxCqB63k2dO4=;
-        b=bAWZXTicAiKioBs6p5Qo1FSct9sDAC0hraQxZCh9BgHlV/O/575wDQGaEkxGcAnSdh
-         wJqNHTuP9kXSGQjJraTvmBRhw1BS/fJJh/3+o3zd7fggr3Jt8SuoBjt8QkDTyt7DioGo
-         S844dJWTrEMBNnS7KlBTR6VvtHXMcPb1hhQdmKs/JboEVB8olz+detHL64JCxPaqHbYz
-         sFSB4Kr6QaG/6mWTaE5ltHeglPEg+QVdPbcVUGxjO92ABBS3pmKrKctC46P4OjsCkiNR
-         cfBnZ/al7e5hGFQRyMfeGnJQX/AmGw82IF9HxzkuT2a9MD1K8Ib5BvJFIJI2IXooiKZN
-         xbqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XHe/kvvVGFhgWQMCPO6zbNMWlQyc0h0nxCqB63k2dO4=;
-        b=qog9zQtWnh506oglI3buRPiBbfA5qBs+61pBtmjJqFUy7EL/0CzVqO4L8oRJGks+ZK
-         TWTsE4MvXWdqnYfIcK+fcPTyJdcY1ggiv9Jd2ZHfV+yzYoQsPVY3WkiyDJ5t7wRgSf0x
-         QXtDqp2xNzSrWtoxPlJF/ooRnAYZyJsVorcqGCSQYGDYNe2rrY9thaWII0RvJGFGcGKF
-         0HYP1o/dyfxUOA7PbRlDqh5sXVCBbTJt4goUMJKAiGKkPOZjSnfjtt3gOFJ7E/L8h1Qn
-         8wwP2wj/CmNFGrzcBmoNfpCQNSguX5KqnfgvhujMudcCRIm1QXEZkv/36x1Tzeuyu39+
-         U42A==
-X-Gm-Message-State: AJIora+EEpsAUcbxmuFA5elmz6NTfJdkiAFqiBOXEMGGA/kYFgiLMvFR
-        YqwX1yh0IjGbicDSUItAAIM=
-X-Google-Smtp-Source: AGRyM1uwmc4DGL3IXgwmiDmeLyj/RE6oQFxI7IzUnnuOZfjA5+wGBZWRK/IuSVbpUu3eXXzrKnPo0g==
-X-Received: by 2002:a05:6a00:1d26:b0:528:31c2:5243 with SMTP id a38-20020a056a001d2600b0052831c25243mr20881620pfx.28.1657595156158;
-        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170903024e00b0016a5384071bsm5534076plh.1.2022.07.11.20.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 20:05:55 -0700 (PDT)
-From:   xu xin <cgel.zte@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     xu.xin16@zte.com.cn, anton@tuxera.com
-Cc:     linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Songyi Zhang <zhang.songyi@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Zhang wenya <zhang.wenya1@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v3] fs/ntfs: fix BUG_ON of ntfs_read_block()
-Date:   Tue, 12 Jul 2022 03:05:32 +0000
-Message-Id: <20220712030532.1312455-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Jul 2022 23:06:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3146A509CB;
+        Mon, 11 Jul 2022 20:06:32 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LhltJ6L45zVfhN;
+        Tue, 12 Jul 2022 11:02:48 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 11:06:17 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 11:06:16 +0800
+Subject: Re: [PATCH v4] proc: Fix a dentry lock race between release_task and
+ lookup
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <ebiederm@xmission.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <yukuai3@huawei.com>, Matthew Wilcox <willy@infradead.org>,
+        <bhe@redhat.com>, <bfoster@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <kaleshsingh@google.com>
+References: <20220601062332.232439-1-chengzhihao1@huawei.com>
+ <6e47d9b8-6b6e-e350-d688-1576f68211ed@huawei.com>
+Message-ID: <b7df85db-8e02-8a0f-000f-b36eccf4505e@huawei.com>
+Date:   Tue, 12 Jul 2022 11:06:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <6e47d9b8-6b6e-e350-d688-1576f68211ed@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the bug description at
-https://lore.kernel.org/lkml/20220623033635.973929-1-xu.xin16@zte.com.cn/
-attckers can use this bug to crash the system.
-
-So to avoid panic, remove the BUG_ON, and use ntfs_warning to output a
-warning to the syslog and return ERR.
-
-Cc: stable@vger.kernel.org
-Cc: Songyi Zhang <zhang.songyi@zte.com.cn>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: Jiang Xuexin<jiang.xuexin@zte.com.cn>
-Cc: Zhang wenya<zhang.wenya1@zte.com.cn>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
-
-Changelog for v3:
-- Use IS_ERR_OR_NULL to check runlist.rl in ntfs_read_block
-- Modify ntfs error log.
-
-Changelog for v2:
-- Use ntfs_warning instead of WARN().
-- Add the tag Cc: stable@vger.kernel.org.
-
----
- fs/ntfs/aops.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ntfs/aops.c b/fs/ntfs/aops.c
-index 5f4fb6ca6f2e..b9421552686a 100644
---- a/fs/ntfs/aops.c
-+++ b/fs/ntfs/aops.c
-@@ -183,7 +183,14 @@ static int ntfs_read_block(struct page *page)
- 	vol = ni->vol;
- 
- 	/* $MFT/$DATA must have its complete runlist in memory at all times. */
--	BUG_ON(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni));
-+	if (IS_ERR_OR_NULL(ni->runlist.rl) && !ni->mft_no && !NInoAttr(ni)) {
-+		ntfs_error(vol->sb, "Runlist of $MFT/$DATA is not cached. "
-+				    "$MFT is corrupt.");
-+		unlock_page(page);
-+		if (IS_ERR(ni->runlist.rl))
-+			return PTR_ERR(ni->runlist.rl);
-+		return -EFAULT;
-+	}
- 
- 	blocksize = vol->sb->s_blocksize;
- 	blocksize_bits = vol->sb->s_blocksize_bits;
--- 
-2.25.1
+在 2022/6/10 16:09, Zhihao Cheng 写道:
+> 在 2022/6/1 14:23, Zhihao Cheng 写道:
+ping again.
+> friendly ping
+>> Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+>> moved proc_flush_task() behind __exit_signal(). Then, process systemd
+>> can take long period high cpu usage during releasing task in following
+>> concurrent processes:
+>>
+>>    systemd                                 ps
+>> kernel_waitid                 stat(/proc/tgid)
+>>    do_wait                       filename_lookup
+>>      wait_consider_task            lookup_fast
+>>        release_task
+>>          __exit_signal
+>>            __unhash_process
+>>              detach_pid
+>>                __change_pid // remove task->pid_links
+>>                                       d_revalidate -> pid_revalidate  
+>> // 0
+>>                                       d_invalidate(/proc/tgid)
+>>                                         shrink_dcache_parent(/proc/tgid)
+>>                                           d_walk(/proc/tgid)
+>>                                             
+>> spin_lock_nested(/proc/tgid/fd)
+>>                                             // iterating opened fd
+>>          proc_flush_pid                                    |
+>>             d_invalidate (/proc/tgid/fd)                   |
+>>                shrink_dcache_parent(/proc/tgid/fd)         |
+>>                  shrink_dentry_list(subdirs)               ↓
+>>                    shrink_lock_dentry(/proc/tgid/fd) --> race on 
+>> dentry lock
+>>
+>> Function d_invalidate() will remove dentry from hash firstly, but why 
+>> does
+>> proc_flush_pid() process dentry '/proc/tgid/fd' before dentry 
+>> '/proc/tgid'?
+>> That's because proc_pid_make_inode() adds proc inode in reverse order by
+>> invoking hlist_add_head_rcu(). But proc should not add any inodes under
+>> '/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
+>> 'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
+>>
+>> Performance regression:
+>> Create 200 tasks, each task open one file for 50,000 times. Kill all
+>> tasks when opened files exceed 10,000,000 (cat /proc/sys/fs/file-nr).
+>>
+> 
+> .
 

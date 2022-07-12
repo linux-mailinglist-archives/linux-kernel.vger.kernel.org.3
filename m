@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C21E57251B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2D35724C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbiGLTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S235535AbiGLTGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235604AbiGLTIQ (ORCPT
+        with ESMTP id S235657AbiGLTEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:08:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF05FC9BC;
-        Tue, 12 Jul 2022 11:51:49 -0700 (PDT)
+        Tue, 12 Jul 2022 15:04:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A25FE2A2F;
+        Tue, 12 Jul 2022 11:50:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D6B8B81BAB;
-        Tue, 12 Jul 2022 18:51:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC51C3411C;
-        Tue, 12 Jul 2022 18:51:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C35CE60765;
+        Tue, 12 Jul 2022 18:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60F8C3411C;
+        Tue, 12 Jul 2022 18:50:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651907;
-        bh=6H9Lyl9oIAdqchAN6Gj+v6lW5keext/SAPl2qXlkcwg=;
+        s=korg; t=1657651844;
+        bh=JgYoJmUEvMCQp3wVGkXNOVscGyOdnsYBbM5Q/taqYHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hBToac92b3ATsuHJ8QD6lsvzQJCtysTmnozd/xZKhCwhb9vSuM/YNixEa4r4A7Z4C
-         92scNqpIflUNcf/ER2AJX1OiYrc33vM+M6InZ9Qjqicbknlm7G5axTNHJ4bXfMZ5Jz
-         lSzwSDGip7gYA4hxONoNBeMxhNds889fdfK8WyAQ=
+        b=iw+dvLfjwK+Z+3BmQzqKIbjbmV15lGm7j2T+v4j7pSI2E4fa6peIRcpob6I292S3/
+         m5IuoCiv485mauakwfsMOUF/Z9Eq0d0rhWFC1zB+otUkSmC/z14ff+DqN6zuEh2B61
+         sgthg2oeJ80NTb8xknALQiHwQ33b+hlgpIfMLGms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
+        stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 19/61] x86/sev: Avoid using __x86_return_thunk
+Subject: [PATCH 5.15 46/78] x86/entry: Add kernel IBRS implementation
 Date:   Tue, 12 Jul 2022 20:39:16 +0200
-Message-Id: <20220712183237.721323452@linuxfoundation.org>
+Message-Id: <20220712183240.715967716@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +57,353 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kim Phillips <kim.phillips@amd.com>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit 0ee9073000e8791f8b134a8ded31bcc767f7f232 upstream.
+commit 2dbb887e875b1de3ca8f40ddf26bcfe55798c609 upstream.
 
-Specifically, it's because __enc_copy() encrypts the kernel after
-being relocated outside the kernel in sme_encrypt_execute(), and the
-RET macro's jmp offset isn't amended prior to execution.
+Implement Kernel IBRS - currently the only known option to mitigate RSB
+underflow speculation issues on Skylake hardware.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+Note: since IBRS_ENTER requires fuller context established than
+UNTRAIN_RET, it must be placed after it. However, since UNTRAIN_RET
+itself implies a RET, it must come after IBRS_ENTER. This means
+IBRS_ENTER needs to also move UNTRAIN_RET.
+
+Note 2: KERNEL_IBRS is sub-optimal for XenPV.
+
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+[cascardo: conflict at arch/x86/entry/entry_64_compat.S]
+[cascardo: conflict fixups, no ANNOTATE_NOENDBR]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/mm/mem_encrypt_boot.S |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/x86/entry/calling.h           |   58 +++++++++++++++++++++++++++++++++++++
+ arch/x86/entry/entry_64.S          |   44 ++++++++++++++++++++++++----
+ arch/x86/entry/entry_64_compat.S   |   17 ++++++++--
+ arch/x86/include/asm/cpufeatures.h |    2 -
+ 4 files changed, 111 insertions(+), 10 deletions(-)
 
---- a/arch/x86/mm/mem_encrypt_boot.S
-+++ b/arch/x86/mm/mem_encrypt_boot.S
-@@ -65,7 +65,9 @@ SYM_FUNC_START(sme_encrypt_execute)
- 	movq	%rbp, %rsp		/* Restore original stack pointer */
- 	pop	%rbp
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -7,6 +7,8 @@
+ #include <asm/asm-offsets.h>
+ #include <asm/processor-flags.h>
+ #include <asm/ptrace-abi.h>
++#include <asm/msr.h>
++#include <asm/nospec-branch.h>
  
+ /*
+ 
+@@ -282,6 +284,62 @@ For 32-bit we have the following convent
+ #endif
+ 
+ /*
++ * IBRS kernel mitigation for Spectre_v2.
++ *
++ * Assumes full context is established (PUSH_REGS, CR3 and GS) and it clobbers
++ * the regs it uses (AX, CX, DX). Must be called before the first RET
++ * instruction (NOTE! UNTRAIN_RET includes a RET instruction)
++ *
++ * The optional argument is used to save/restore the current value,
++ * which is used on the paranoid paths.
++ *
++ * Assumes x86_spec_ctrl_{base,current} to have SPEC_CTRL_IBRS set.
++ */
++.macro IBRS_ENTER save_reg
++	ALTERNATIVE "jmp .Lend_\@", "", X86_FEATURE_KERNEL_IBRS
++	movl	$MSR_IA32_SPEC_CTRL, %ecx
++
++.ifnb \save_reg
++	rdmsr
++	shl	$32, %rdx
++	or	%rdx, %rax
++	mov	%rax, \save_reg
++	test	$SPEC_CTRL_IBRS, %eax
++	jz	.Ldo_wrmsr_\@
++	lfence
++	jmp	.Lend_\@
++.Ldo_wrmsr_\@:
++.endif
++
++	movq	PER_CPU_VAR(x86_spec_ctrl_current), %rdx
++	movl	%edx, %eax
++	shr	$32, %rdx
++	wrmsr
++.Lend_\@:
++.endm
++
++/*
++ * Similar to IBRS_ENTER, requires KERNEL GS,CR3 and clobbers (AX, CX, DX)
++ * regs. Must be called after the last RET.
++ */
++.macro IBRS_EXIT save_reg
++	ALTERNATIVE "jmp .Lend_\@", "", X86_FEATURE_KERNEL_IBRS
++	movl	$MSR_IA32_SPEC_CTRL, %ecx
++
++.ifnb \save_reg
++	mov	\save_reg, %rdx
++.else
++	movq	PER_CPU_VAR(x86_spec_ctrl_current), %rdx
++	andl	$(~SPEC_CTRL_IBRS), %edx
++.endif
++
++	movl	%edx, %eax
++	shr	$32, %rdx
++	wrmsr
++.Lend_\@:
++.endm
++
++/*
+  * Mitigate Spectre v1 for conditional swapgs code paths.
+  *
+  * FENCE_SWAPGS_USER_ENTRY is used in the user entry swapgs code path, to
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -94,7 +94,6 @@ SYM_CODE_START(entry_SYSCALL_64)
+ 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+ 
+ SYM_INNER_LABEL(entry_SYSCALL_64_safe_stack, SYM_L_GLOBAL)
+-	UNTRAIN_RET
+ 
+ 	/* Construct struct pt_regs on stack */
+ 	pushq	$__USER_DS				/* pt_regs->ss */
+@@ -111,6 +110,11 @@ SYM_INNER_LABEL(entry_SYSCALL_64_after_h
+ 	movq	%rsp, %rdi
+ 	/* Sign extend the lower 32bit as syscall numbers are treated as int */
+ 	movslq	%eax, %rsi
++
++	/* clobbers %rax, make sure it is after saving the syscall nr */
++	IBRS_ENTER
++	UNTRAIN_RET
++
+ 	call	do_syscall_64		/* returns with IRQs disabled */
+ 
+ 	/*
+@@ -190,6 +194,7 @@ SYM_INNER_LABEL(entry_SYSCALL_64_after_h
+ 	 * perf profiles. Nothing jumps here.
+ 	 */
+ syscall_return_via_sysret:
++	IBRS_EXIT
+ 	POP_REGS pop_rdi=0
+ 
+ 	/*
+@@ -582,6 +587,7 @@ __irqentry_text_end:
+ 
+ SYM_CODE_START_LOCAL(common_interrupt_return)
+ SYM_INNER_LABEL(swapgs_restore_regs_and_return_to_usermode, SYM_L_GLOBAL)
++	IBRS_EXIT
+ #ifdef CONFIG_DEBUG_ENTRY
+ 	/* Assert that pt_regs indicates user mode. */
+ 	testb	$3, CS(%rsp)
+@@ -861,6 +867,9 @@ SYM_CODE_END(xen_failsafe_callback)
+  *              1 -> no SWAPGS on exit
+  *
+  *     Y        GSBASE value at entry, must be restored in paranoid_exit
++ *
++ * R14 - old CR3
++ * R15 - old SPEC_CTRL
+  */
+ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	UNWIND_HINT_FUNC
+@@ -884,7 +893,6 @@ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	 * be retrieved from a kernel internal table.
+ 	 */
+ 	SAVE_AND_SWITCH_TO_KERNEL_CR3 scratch_reg=%rax save_reg=%r14
+-	UNTRAIN_RET
+ 
+ 	/*
+ 	 * Handling GSBASE depends on the availability of FSGSBASE.
+@@ -906,7 +914,7 @@ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	 * is needed here.
+ 	 */
+ 	SAVE_AND_SET_GSBASE scratch_reg=%rax save_reg=%rbx
 -	RET
-+	/* Offset to __x86_return_thunk would be wrong here */
-+	ret
-+	int3
- SYM_FUNC_END(sme_encrypt_execute)
++	jmp .Lparanoid_gsbase_done
  
- SYM_FUNC_START(__enc_copy)
-@@ -151,6 +153,8 @@ SYM_FUNC_START(__enc_copy)
- 	pop	%r12
- 	pop	%r15
+ .Lparanoid_entry_checkgs:
+ 	/* EBX = 1 -> kernel GSBASE active, no restore required */
+@@ -925,8 +933,16 @@ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	xorl	%ebx, %ebx
+ 	swapgs
+ .Lparanoid_kernel_gsbase:
+-
+ 	FENCE_SWAPGS_KERNEL_ENTRY
++.Lparanoid_gsbase_done:
++
++	/*
++	 * Once we have CR3 and %GS setup save and set SPEC_CTRL. Just like
++	 * CR3 above, keep the old value in a callee saved register.
++	 */
++	IBRS_ENTER save_reg=%r15
++	UNTRAIN_RET
++
+ 	RET
+ SYM_CODE_END(paranoid_entry)
  
--	RET
-+	/* Offset to __x86_return_thunk would be wrong here */
-+	ret
-+	int3
- .L__enc_copy_end:
- SYM_FUNC_END(__enc_copy)
+@@ -948,9 +964,19 @@ SYM_CODE_END(paranoid_entry)
+  *              1 -> no SWAPGS on exit
+  *
+  *     Y        User space GSBASE, must be restored unconditionally
++ *
++ * R14 - old CR3
++ * R15 - old SPEC_CTRL
+  */
+ SYM_CODE_START_LOCAL(paranoid_exit)
+ 	UNWIND_HINT_REGS
++
++	/*
++	 * Must restore IBRS state before both CR3 and %GS since we need access
++	 * to the per-CPU x86_spec_ctrl_shadow variable.
++	 */
++	IBRS_EXIT save_reg=%r15
++
+ 	/*
+ 	 * The order of operations is important. RESTORE_CR3 requires
+ 	 * kernel GSBASE.
+@@ -995,10 +1021,12 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	/* We have user CR3.  Change to kernel CR3. */
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
++	IBRS_ENTER
+ 	UNTRAIN_RET
+ 
+ 	leaq	8(%rsp), %rdi			/* arg0 = pt_regs pointer */
+ .Lerror_entry_from_usermode_after_swapgs:
++
+ 	/* Put us onto the real thread stack. */
+ 	call	sync_regs
+ 	RET
+@@ -1048,6 +1076,7 @@ SYM_CODE_START_LOCAL(error_entry)
+ 	SWAPGS
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
++	IBRS_ENTER
+ 	UNTRAIN_RET
+ 
+ 	/*
+@@ -1143,7 +1172,6 @@ SYM_CODE_START(asm_exc_nmi)
+ 	movq	%rsp, %rdx
+ 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+ 	UNWIND_HINT_IRET_REGS base=%rdx offset=8
+-	UNTRAIN_RET
+ 	pushq	5*8(%rdx)	/* pt_regs->ss */
+ 	pushq	4*8(%rdx)	/* pt_regs->rsp */
+ 	pushq	3*8(%rdx)	/* pt_regs->flags */
+@@ -1154,6 +1182,9 @@ SYM_CODE_START(asm_exc_nmi)
+ 	PUSH_AND_CLEAR_REGS rdx=(%rdx)
+ 	ENCODE_FRAME_POINTER
+ 
++	IBRS_ENTER
++	UNTRAIN_RET
++
+ 	/*
+ 	 * At this point we no longer need to worry about stack damage
+ 	 * due to nesting -- we're on the normal thread stack and we're
+@@ -1376,6 +1407,9 @@ end_repeat_nmi:
+ 	movq	$-1, %rsi
+ 	call	exc_nmi
+ 
++	/* Always restore stashed SPEC_CTRL value (see paranoid_entry) */
++	IBRS_EXIT save_reg=%r15
++
+ 	/* Always restore stashed CR3 value (see paranoid_entry) */
+ 	RESTORE_CR3 scratch_reg=%r15 save_reg=%r14
+ 
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -4,7 +4,6 @@
+  *
+  * Copyright 2000-2002 Andi Kleen, SuSE Labs.
+  */
+-#include "calling.h"
+ #include <asm/asm-offsets.h>
+ #include <asm/current.h>
+ #include <asm/errno.h>
+@@ -18,6 +17,8 @@
+ #include <linux/linkage.h>
+ #include <linux/err.h>
+ 
++#include "calling.h"
++
+ 	.section .entry.text, "ax"
+ 
+ /*
+@@ -72,7 +73,6 @@ SYM_CODE_START(entry_SYSENTER_compat)
+ 	pushq	$__USER32_CS		/* pt_regs->cs */
+ 	pushq	$0			/* pt_regs->ip = 0 (placeholder) */
+ SYM_INNER_LABEL(entry_SYSENTER_compat_after_hwframe, SYM_L_GLOBAL)
+-	UNTRAIN_RET
+ 
+ 	/*
+ 	 * User tracing code (ptrace or signal handlers) might assume that
+@@ -114,6 +114,9 @@ SYM_INNER_LABEL(entry_SYSENTER_compat_af
+ 
+ 	cld
+ 
++	IBRS_ENTER
++	UNTRAIN_RET
++
+ 	/*
+ 	 * SYSENTER doesn't filter flags, so we need to clear NT and AC
+ 	 * ourselves.  To save a few cycles, we can check whether
+@@ -213,7 +216,6 @@ SYM_CODE_START(entry_SYSCALL_compat)
+ 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+ 
+ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
+-	UNTRAIN_RET
+ 
+ 	/* Construct struct pt_regs on stack */
+ 	pushq	$__USER32_DS		/* pt_regs->ss */
+@@ -255,6 +257,9 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_aft
+ 
+ 	UNWIND_HINT_REGS
+ 
++	IBRS_ENTER
++	UNTRAIN_RET
++
+ 	movq	%rsp, %rdi
+ 	call	do_fast_syscall_32
+ 	/* XEN PV guests always use IRET path */
+@@ -269,6 +274,8 @@ sysret32_from_system_call:
+ 	 */
+ 	STACKLEAK_ERASE
+ 
++	IBRS_EXIT
++
+ 	movq	RBX(%rsp), %rbx		/* pt_regs->rbx */
+ 	movq	RBP(%rsp), %rbp		/* pt_regs->rbp */
+ 	movq	EFLAGS(%rsp), %r11	/* pt_regs->flags (in r11) */
+@@ -380,7 +387,6 @@ SYM_CODE_START(entry_INT80_compat)
+ 	pushq	(%rdi)			/* pt_regs->di */
+ .Lint80_keep_stack:
+ 
+-	UNTRAIN_RET
+ 	pushq	%rsi			/* pt_regs->si */
+ 	xorl	%esi, %esi		/* nospec   si */
+ 	pushq	%rdx			/* pt_regs->dx */
+@@ -413,6 +419,9 @@ SYM_CODE_START(entry_INT80_compat)
+ 
+ 	cld
+ 
++	IBRS_ENTER
++	UNTRAIN_RET
++
+ 	movq	%rsp, %rdi
+ 	call	do_int80_syscall_32
+ 	jmp	swapgs_restore_regs_and_return_to_usermode
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -203,7 +203,7 @@
+ #define X86_FEATURE_PROC_FEEDBACK	( 7*32+ 9) /* AMD ProcFeedbackInterface */
+ /* FREE!                                ( 7*32+10) */
+ #define X86_FEATURE_PTI			( 7*32+11) /* Kernel Page Table Isolation enabled */
+-/* FREE!				( 7*32+12) */
++#define X86_FEATURE_KERNEL_IBRS		( 7*32+12) /* "" Set/clear IBRS on kernel entry/exit */
+ /* FREE!				( 7*32+13) */
+ #define X86_FEATURE_INTEL_PPIN		( 7*32+14) /* Intel Processor Inventory Number */
+ #define X86_FEATURE_CDP_L2		( 7*32+15) /* Code and Data Prioritization L2 */
 
 

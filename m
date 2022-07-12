@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9C957276B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43434572774
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiGLUiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S232545AbiGLUjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiGLUiY (ORCPT
+        with ESMTP id S232746AbiGLUjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:38:24 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37C1B968F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:38:23 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id v1so5560476ilg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gtA9X+fkjEw/LyXx7cshYRPvYgSQ7aQHvwyjYuYISkY=;
-        b=n9RIa554dycPGIKBOybZCxXvgE7O3FOURYuK5Rnd/mSxb6YmPx4NecnpLLC17ZO13g
-         z2A3RBDfsGBdtTvmzt3QWmSQZahjAWF62t9H+KbGXH2iBNkyI5TTBHickAHetTgp+gm1
-         e4d5G7Qu0bfcSaX20DM9iU8hk1RtRpOgraFK+HU4nkHoRbsXkTby588r0/xTUbYX5TZP
-         ICqKI5uM6ndDxfDavEceu3s5Zc1Twx7qSiApci11ooZBvr9YqtCX+qyTmfm58kk8k6j7
-         PaAQFdD2y9HOeCmn3N+DOd1eVwAM76SIKI9tEIkKwUIFXBkiVg1Njzo9F2A+S8HSvhkc
-         Imrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gtA9X+fkjEw/LyXx7cshYRPvYgSQ7aQHvwyjYuYISkY=;
-        b=ZPu1UGrM6B+VHDLyPlsI8DeuoxSn3DlSPZZhwoEsTfEMFEsxZTzTu1g/9af4U6ZP4I
-         iIKk6BTdVNZ4PvTIM052+t+VAp4o3qBWUmihg2XxSHhxOar5/gDKURKtIF1HmgtPWn2l
-         9J1Dn9OAGbMiCmJetsBHb8HT2uf95Lt4FXn0Oonnj+wwMn870cfAR0qURHNEA8EoA4bw
-         umIw5ZbIryPKCbHteMKqnGs/B4bEndB/gV/N7U1lLoJ/mRmRiOv66Nc5XuJuf0pjMc8u
-         6BcNBh7dxBDCtZG4oF+/C/a9+TqK/Kl5spu0wYKOoEb3Smt48japRwCf6cZ+fv9vZ7mk
-         M/Ww==
-X-Gm-Message-State: AJIora8bArJyhVHwNsJTdum11XOQQbzjpv3aDXEh0ZmiBahsllENL/sV
-        bX+UH79OPrWPzlH4th/W6FsSdsT1eRNMJ3W6XIE=
-X-Google-Smtp-Source: AGRyM1sVN9YSYB7R1dSBnm2ETFni6QgUDtN1HElitlfGihAv/kBYE0FaXotZOZQmmTStA3kvphxi9Y1pG9MpCrbFaDE=
-X-Received: by 2002:a92:c562:0:b0:2dc:7ca1:a54c with SMTP id
- b2-20020a92c562000000b002dc7ca1a54cmr15605ilj.28.1657658303138; Tue, 12 Jul
- 2022 13:38:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1655150842.git.andreyknvl@google.com> <f7f5cfc5eb8f1a1f849665641b9dd2cfb4a62c3c.1655150842.git.andreyknvl@google.com>
- <5949bc710889be1324d5dada995a263fd3c29cb5.camel@mediatek.com>
-In-Reply-To: <5949bc710889be1324d5dada995a263fd3c29cb5.camel@mediatek.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 12 Jul 2022 22:38:12 +0200
-Message-ID: <CA+fCnZd2tND0CN1kVXt2ZpqtypDuQba8gXVMyL-XnLd+61X1cQ@mail.gmail.com>
-Subject: Re: [PATCH 21/32] kasan: simplify invalid-free reporting
-To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Cc:     "andrey.konovalov@linux.dev" <andrey.konovalov@linux.dev>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 16:39:04 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595E1FD13;
+        Tue, 12 Jul 2022 13:39:01 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 61707C01D; Tue, 12 Jul 2022 22:38:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657658339; bh=xoIWT0+MGU+XdIrhk6lVq1lEsSSRx8pWavkPy8XPrhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ESwoFOV316NhH0R9hOku2o0Bv1JXDoxMNFNlEvvRNmPtkOIKPtoifOHWnBmPMSG1H
+         sQuiZNdjPK41hGT5j6xd3vLuvdbxV60GAO5SGLpx55rwCoKLo5EJncytk/FBiijncl
+         XjCLjOPDKP81lY2LQcRcB2B8Z/sBsLgjZVc6vXGiQNqXWXWi99nZB4akvi8AB+91zv
+         rXKuD1bvt4T6Izsjswxn4oWgf67mHj7yxrgy1GntzyHB/gYy1g+nMN6nxoeqRNbbeH
+         CXabD/kGDAGulEBIp+qtaVDPUWJJSdy9OcOTgNGGsFjTewNiP834hnS322EqSKw7u7
+         efofqaeojbX0g==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id BA27CC009;
+        Tue, 12 Jul 2022 22:38:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657658337; bh=xoIWT0+MGU+XdIrhk6lVq1lEsSSRx8pWavkPy8XPrhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hYL5aJsYK2K6nSHFdG4wihmfLZ2pKaJNYRNn9/sRs9KgdPw0WLHjBL6IyvyCSoqu6
+         ovIy4KNGT2pknVIw2waXODhEQufmtk2X97AiyQx0KjQyD376bfgsnDjyR6lUks0FHt
+         x/XWxDAQ2NLOsEct8O5WQo5miBCXSYVIJVJzyoMMwvPj70x3SB/k5HAlC6fzXHhhXL
+         j/9JrkXz3XAybJDUuTXed/jCsrFkzOEWcdn8gTODyzAu7oIGsZ8UBg2r3fJmWTsh+u
+         BMCVMc65maV7GhMn+uRpwdVs5SfNcWz63tPFgiuxgMawK+kycCftFu3/xtoNYeP82X
+         m7/1QJ0ZYBZLQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 436c2c9e;
+        Tue, 12 Jul 2022 20:38:53 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 05:38:38 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [PATCH v5 07/11] net/9p: limit 'msize' to KMALLOC_MAX_SIZE for
+ all transports
+Message-ID: <Ys3bzjuDgseOliUW@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+ <2506fd2ed484f688826cdc33c177c467e2b0506c.1657636554.git.linux_oss@crudebyte.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2506fd2ed484f688826cdc33c177c467e2b0506c.1657636554.git.linux_oss@crudebyte.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 9:17 AM Kuan-Ying Lee
-<Kuan-Ying.Lee@mediatek.com> wrote:
->
-> On Tue, 2022-06-14 at 04:14 +0800, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > Right now, KASAN uses the kasan_report_type enum to describe report
-> > types.
-> >
-> > As this enum only has two options, replace it with a bool variable.
-> >
-> > Also, unify printing report header for invalid-free and other bug
-> > types
-> > in print_error_description().
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  mm/kasan/kasan.h  |  7 +------
-> >  mm/kasan/report.c | 16 +++++++---------
-> >  2 files changed, 8 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> > index e8329935fbfb..f696d50b09fb 100644
-> > --- a/mm/kasan/kasan.h
-> > +++ b/mm/kasan/kasan.h
-> > @@ -146,16 +146,11 @@ static inline bool kasan_requires_meta(void)
-> >  #define META_MEM_BYTES_PER_ROW (META_BYTES_PER_ROW *
-> > KASAN_GRANULE_SIZE)
-> >  #define META_ROWS_AROUND_ADDR 2
-> >
-> > -enum kasan_report_type {
-> > -       KASAN_REPORT_ACCESS,
-> > -       KASAN_REPORT_INVALID_FREE,
-> > -};
-> > -
-> >  struct kasan_report_info {
-> > -       enum kasan_report_type type;
-> >         void *access_addr;
-> >         void *first_bad_addr;
-> >         size_t access_size;
-> > +       bool is_free;
-> >         bool is_write;
-> >         unsigned long ip;
-> >  };
-> > diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> > index f951fd39db74..7269b6249488 100644
-> > --- a/mm/kasan/report.c
-> > +++ b/mm/kasan/report.c
-> > @@ -175,14 +175,12 @@ static void end_report(unsigned long *flags,
-> > void *addr)
-> >
->
-> Hi Andrey,
->
-> Do we need to distinguish "double free" case from "invalid free" or
-> we just print "double-free or invalid-free"?
->
-> I sent a patch[1] to separate double free case from invalid
-> free last week and I saw it has been merged into akpm tree.
->
-> [1]
-> https://lore.kernel.org/linux-mm/20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com/
+Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:26PM +0200:
+> This 9p client implementation is yet using linear message buffers for
+> most message types, i.e. they use kmalloc() et al. for allocating
+> continuous physical memory pages, which is usually limited to 4MB
+> buffers. Use KMALLOC_MAX_SIZE though instead of a hard coded 4MB for
+> constraining this more safely.
+> 
+> Unfortunately we cannot simply replace the existing kmalloc() calls by
+> vmalloc() ones, because that would yield in non-logical kernel addresses
+> (for any vmalloc(>4MB) that is) which are in general not accessible by
+> hosts like QEMU.
+> 
+> In future we would replace those linear buffers by scatter/gather lists
+> to eventually get rid of this limit (struct p9_fcall's sdata member by
+> p9_fcall_init() and struct p9_fid's rdir member by
+> v9fs_alloc_rdir_buf()).
+> 
+> Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> ---
+> 
+> Hmm, that's a bit too simple, as we also need a bit of headroom for
+> transport specific overhead. So maybe this has to be handled by each
+> transport appropriately instead?
 
-Hi Kuan-Ying,
+hm yes I'd say it's redundant with each transports max size already --
+let's just keep appropriate max values in each transport.
 
-Yes, thank you for the patch! I will rebase my series onto it.
-
-Thanks!
+> 
+>  net/9p/client.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index 20054addd81b..fab939541c81 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -1042,6 +1042,17 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
+>  	p9_debug(P9_DEBUG_MUX, "clnt %p trans %p msize %d protocol %d\n",
+>  		 clnt, clnt->trans_mod, clnt->msize, clnt->proto_version);
+>  
+> +	/*
+> +	 * due to linear message buffers being used by client ATM
+> +	 */
+> +	if (clnt->msize > KMALLOC_MAX_SIZE) {
+> +		clnt->msize = KMALLOC_MAX_SIZE;
+> +		pr_info("Limiting 'msize' to %zu as this is the maximum "
+> +			"supported by this client version.\n",
+> +			(size_t) KMALLOC_MAX_SIZE
+> +		);
+> +	}
+> +
+>  	err = clnt->trans_mod->create(clnt, dev_name, options);
+>  	if (err)
+>  		goto put_trans;

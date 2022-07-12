@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9575728DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF13B5728E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiGLV4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S230351AbiGLV6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiGLV4e (ORCPT
+        with ESMTP id S229962AbiGLV6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:56:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8705A49B57
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657662991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s/3T4vxNFVONPISbNOnbcOQJiMW1pUHoPXX64SqOHNQ=;
-        b=YJyEoWoUEyPhKwnS91fBy/Aeiaxn95j1fQeV3i0F6vTCaaNNcBbLBm3jlgVQ/lx0mN9Qr3
-        MNYHOc3K0fF8OW7ORqiETaDe8JkhYOwa9Q9tw3x8yAL15/o7Lg807x34tqX+x8S7UCDs64
-        muVyBDD1RCT9vvmL4uCt2GoOV4ktBqA=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-YhmgqhUjMbC1THjfYwF2bQ-1; Tue, 12 Jul 2022 17:56:30 -0400
-X-MC-Unique: YhmgqhUjMbC1THjfYwF2bQ-1
-Received: by mail-qk1-f199.google.com with SMTP id br43-20020a05620a462b00b006b5833f8132so6348221qkb.22
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:56:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s/3T4vxNFVONPISbNOnbcOQJiMW1pUHoPXX64SqOHNQ=;
-        b=PkugZqieU04CqX13VJUxA7h6TjGFZQFMMguQDFEHhOhtFIff5wFfUWk9geY9rDxTT3
-         Hhj8fcRPH8LBErGX5DN/Ic3O2FJZZG1FC4xcVsreuS/QsgWND3u9ziINrf9j6SFsG8kC
-         0MeA90un6bUw9Mv2wCe6PDE3Wm1yMDP4qsY+SBp6FIVAXq7EWxj0udreCTjYHM5aVQNv
-         LH+elKUGY+hPMNvipfBJuE/omfiDrt9G0EEIs6FfkiWuXHvDImXJnDfU8ngLTi2lvc5w
-         jWDB262npKY2AWpFwBJw4IcLsM4Tvc/UwwIN4ar6VLQrApZiI1e7q1HBSsqD3Y49Lo5+
-         GxKQ==
-X-Gm-Message-State: AJIora86ggo08N82dtupgpTyY3WscDBemXx+KOWYk2q+RfDIKDVJ4dir
-        yqt/qhU/LBfpl7szgUb0pAXhylsFCEdg9oUntcv8DDIriMOQ4ai4v7FwAnQT2jFG9vEp6OO1uXO
-        faKO+QH8w53oDjkKBilbvY7Rf
-X-Received: by 2002:ac8:4e94:0:b0:31b:f600:b59f with SMTP id 20-20020ac84e94000000b0031bf600b59fmr79258qtp.527.1657662990012;
-        Tue, 12 Jul 2022 14:56:30 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vLwHaf4xn2tp3fYNXeTJIBe+MYbyQyS/7FEmpJ8XMqS+OfIe5Kxxt5cbR0Cnx3qgruuFWobw==
-X-Received: by 2002:ac8:4e94:0:b0:31b:f600:b59f with SMTP id 20-20020ac84e94000000b0031bf600b59fmr79250qtp.527.1657662989829;
-        Tue, 12 Jul 2022 14:56:29 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id cm23-20020a05622a251700b0031bed25394csm8390535qtb.3.2022.07.12.14.56.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:56:29 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 17:56:28 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: x86/mmu: Defer "full" MMU setup until after
- vendor hardware_setup()
-Message-ID: <Ys3uDJ90dBeFFbka@xz-m1.local>
-References: <20220624232735.3090056-1-seanjc@google.com>
- <20220624232735.3090056-3-seanjc@google.com>
+        Tue, 12 Jul 2022 17:58:41 -0400
+Received: from sonic302-28.consmr.mail.ne1.yahoo.com (sonic302-28.consmr.mail.ne1.yahoo.com [66.163.186.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3A6A182
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657663118; bh=kxbYYDVzkDm+0qKaNjdrPV1fsG7Mixqy9QIqgCOhzxw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ovuiV7212TVTZZj+mJFRHqEbIloIuWJQG9L7MRvJe78jMqwW+o0yCvbkwvM1gClnu/hCdUqAlJ+4OIcD60XX3RSOZL0U1dUOQO5V3eQrKXE2rrIIsZ26ZbDJzG5w4luCoTxODC0CkrnT0ActQ/ZZwpxTrW8Jzfr5TuExU9vh1PJWu8XDFs91YoHXYESnngM5ufKJD1yDk8wJlwEDXAJmIv6XaPYzJFcUvNQT38ILBFogvTmKIUkaUVPYaG6YuBpvbmaHkOq8FjHeumaQ9I4/3e10TOsRfv3YkT0G4JFDJOboOFojBZVzIYv7TGNsVjA7zGbqSEdWk4bYDAHUo8mdEw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1657663118; bh=vMtm3knwl8FuSNtV8coCan4p4lnRSBW/SGD6OIDuNQM=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=iVm957K1acjI1jubbeR/Mrf+yVlRF+OnfZuUrVGx0KecKd+g6aOsEoYfaCAjBsPIa/RTZ9ztFYO5qFVfzx90gblpNskS1OKuVBLJhrafZY6McdzExKZG9FRvafQaHubzsexVezrr3WrAoYAEUlj/xe+7QmtR91G4Tz8AKZnUFAXQFO4F4hfcseKn1DsW58H+lXxDu+RQaQ2ASlgs/VGsVQVHiBMKWt2aNpKjwffbVvQZHVCOnLtRNW+Lsb5R6koQsYledLyFzj+MX+Wx8j1X4wj71wp8soqJLeI4p1wkxAZBLjXlZ6YiScN+PRgPSVDm/VOasFoxuGWA/SpLkOn5QA==
+X-YMail-OSG: Oi.EETMVM1m5phQ7qVKWgCZ5oxFF975C7ntLaVE5DOebGnXBED9ZYsNTLi84dwb
+ 8ETv3wwruoDTSO1G5E4LWCQpr6Hh0pTKjBzZH8yEFVxJ0ZlvoYQjVyqidWEQcGlD7oqMBA3B6V3X
+ jpO8ttGlFSqyPj03CTK.WJPlWoC3V7mekqjXabI3rh8Xy2z1EogqpGn.jkJ__wlQ9mhSyXiP2nI1
+ _nxvghME57setAQZICcC6Qj9gze4hPCBsulQ2OI8Bzgap2cl_xJWM7QRp0pCGjniFmRl53bKmi7d
+ LoltQ1s9hk84m4Nqjmu23PJtU13yj7vzOjyRegXDeig_NTDdfrQIOApQ5b4BwpqFHlVmj4Jc6M9N
+ 4JCsZEf74BJJ2foJ6GQ0gORmbc5nsv_ZBC_qHrmCpof7w4maof.rWT41g5rLfts0fu8kcNjlOeUB
+ O8P3nJxGPHHkjAUK1ai6XfzdyGgR9eOVSOsVL3C537mVmj_9AOLF.SlcgHT7aFKnLh1rahG9_DGS
+ tG3rPTdWTdG4_a678FBJOM6yu87ZW7AZcQDB50HiNz6HVSzU.Y1gVM.Y5ZfiXxlawwL5IKV2Yze9
+ oxBQhnpskog9Ckoj0G0OkRarNMw5Rzt57By6wW0m0L_OAT6HeX8shEDsdg4VplpxAbaInHtPREax
+ Ilm90DgtzWgtAtkEBJpurlVFdUpV3zJmhmU7AG55BsKT0a4MQq_VAhTRda6msg9a5WwipN2zKhMG
+ _A5ul01x99w0jcvF7ktz6_i9XdXkpHkz9nPY88Wr2VRm.cmaYfqi0IibWobxC_lUEmFJzJrqjq4W
+ KRwn8tKG9dtHXYlGLo1OrDbUdvX29IF5a2014b.9WM97cZhVjpN0XUmmEFU6xT3dwNidtdqb8qav
+ Fh5J1Ou9td8RT5DDYw1H19JByEMyEUQXaERmL2LpwtWzPgbT8KKy_aTRxDFHVGguAWZgrcKjkEAw
+ T6ftNRbhnI25u3qw71KdFJWW3KabJrrwC6bWtxmzrDqVDit1E3HREp3B5O_zmO9uAPTW5p7nV3w1
+ AHypka7RDxZ_xEfUl4MXbKRjtBQLDaRi5erbm9jUcqHmQjwFfP4x5JmwfTCNeAR2hE1OMcyrRXqA
+ 5LfKTsfeSmbFeYaqAjuYOduZvyuytbyj1EkEnBnjvr6TEYlPey2_PILJXOwb84sKpZLLTYhqxI_1
+ X6vfboAdAJ6zQrcAnnYPIoFDNS5za_mJ_DIL.21nW9jygn8duBUyyD_lFFom8BIBMqtfFHLNcR8Q
+ d39Vyt9pFp28QCEX6pi9OAWQ2HwXV7s3u82Z4McZNLaPzIxc0JIOS1AOWPZLwXSsEq5bHe_TC4ZT
+ 8Rm06vsFJrzTpGdIE0zBiayCxqlNyg3TjGgAcNGCNOgE1GFyFbQBG_IL.XHcghO1fqphvsvvG_Yg
+ nu.obAVHyRLUHcf_30YMw9XcU4TS7VvrlyfUBSb.b.wAkx9vq5JL5t0JQ340Ykd_QuuYIMWEre.k
+ 6eK.OalNlTNJMPbMM1pWG5uOrH9ZJJrfntIi6GyQXZcLZDbQs1BpiOKL3yD_Pi3gQaBLqC8WBBGl
+ mIXz7I1j2bP5SEqfXoa0sA6PYwn_thRFDyqWy6NcWODrjEF.WdU_eZO9p4IDBi4E37UPwOn0wUao
+ gj_.T3kXWsh9wOanL.1akr9RkFxdHaQgpR6ihwpD0fyobe83MhwrjGQFyxVuXD5G18uxI3QbQON.
+ F3_LH391cJBJcaqd3fBk.vqEU_pbpY0vl8xPku.Ln2zj1Hn7ItFelVKPHc52OX.9MAdRO9DFTaY3
+ rMF7VgMJbKc7uYOthn3DXwDtWj3Ef9e6AaXLpi.HRnlKx8kTDdLs1bGOQqqpGIsu.s8uEVKQWqEk
+ I_aeuwqRI.iM_oKDnuOWAgOJCI_.b8wHP0_nf1RW4Gn8ZK0IEy3FtyWPaMq1WlrhOgoRQEO2DksX
+ LYyyPvguc.HjGmcKZtNpc7yszM.tudoXIwygs.Mz54uDstffqDIozIh7ypwoR7_MoQVI9l8U32pu
+ HIe1.n0o.d1b.zZ419ZbH4WOP6d121yn.RUMv_IbfNsNgpAM0R0L9q0DAd1P9ibBdWkai.OtI9Cn
+ nGkDW2tJkWKUjnOo4EYI0OVLa1O5CME5Q0fpBlwgkg7TdQDE14LNOOczOfzPyElWzY2svkFXQ.pv
+ UB.2r5I2fbeEb3F4KToOranoFtuMKpqPgH7jBb7nCi8ON4LOe5Ss9IXhtWY9Z2fklqDthrdYgvpQ
+ 9hAyzYfZA_svd_gOie_EZGlQtctApA8I6Vm65WuZ9TEgVAEXSkylR31Tym3HodHOVaiQtIokkXMS
+ MeWeUtALRLszLzyQ-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 12 Jul 2022 21:58:38 +0000
+Received: by hermes--production-gq1-56bb98dbc7-b6h6x (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f4844076e4ed28c5f9c2d52b5baf81cd;
+          Tue, 12 Jul 2022 21:58:32 +0000 (UTC)
+Message-ID: <aff6b556-7cc9-be2d-e1d2-ddfaae665210@schaufler-ca.com>
+Date:   Tue, 12 Jul 2022 14:58:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220624232735.3090056-3-seanjc@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v37 00/33] LSM: Module stacking for AppArmor
+Content-Language: en-US
+To:     John Johansen <john.johansen@canonical.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     linux-audit@redhat.com, keescook@chromium.org,
+        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        casey@schaufler-ca.com
+References: <20220628005611.13106-1-casey.ref@schaufler-ca.com>
+ <20220628005611.13106-1-casey@schaufler-ca.com>
+ <92d0f7cb-f565-38ad-37e8-54e04189f558@canonical.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <92d0f7cb-f565-38ad-37e8-54e04189f558@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:27:33PM +0000, Sean Christopherson wrote:
-> @@ -11937,6 +11932,10 @@ int kvm_arch_hardware_setup(void *opaque)
->  
->  	kvm_ops_update(ops);
->  
-> +	r = kvm_mmu_hardware_setup();
-> +	if (r)
-> +		goto out_unsetup;
-> +
->  	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
->  
->  	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
-> @@ -11960,12 +11959,18 @@ int kvm_arch_hardware_setup(void *opaque)
->  	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
->  	kvm_init_msr_list();
->  	return 0;
-> +
-> +out_unsetup:
-> +	static_call(kvm_x86_hardware_unsetup)();
+On 7/12/2022 2:42 PM, John Johansen wrote:
+> On 6/27/22 17:55, Casey Schaufler wrote:
+>> This patchset provides the changes required for
+>> the AppArmor security module to stack safely with any other.
+>> There are additional changes required for SELinux and Smack
+>> to coexist. These are primarily in the networking code and
+>> will be addressed after these changes are upstream.
+>>
+>> v37: Rebase to 5.19-rc3
+>>       - Audit changes should be complete, all comments have been
+>>         addressed.
+>>       - Address indexing an empty array for the case where no
+>>         built in security modules require data in struct lsmblob.
+>>       - Fix a few checkpatch complaints.
+>> v36: Rebase to 5.19-rc1
+>>       - Yet another rework of the audit changes. Rearranging how the
+>>         timestamp is managed allows auxiliary records to be generated
+>>         correctly with a minimum of fuss.
+>>       - In the end no LSM interface scaffolding remains. Secids have
+>>         been replaced with lsmblob structures in all cases, including
+>>         IMA and NetLabel.
+>
+> <<snip>>
+>
+>> https://github.com/cschaufler/lsm-stacking.git#stack-5.19-rc3-v37
+>>
+>
+> hey Casey,
+>
+> I am not finding v37 in your public github tree, the newest I see is v36
+> and v36-a both based on 5.19-rc1. Can you make sure v37 is pushed?
 
-Should this be kvm_mmu_hardware_unsetup()?  Or did I miss something?..
+Whoops. v37 hadn't gotten pushed. It has been now. Thanks for
+your interest! And subsequent reviews, of course.
 
--- 
-Peter Xu
 
+>
+> thanks
+> john
+>

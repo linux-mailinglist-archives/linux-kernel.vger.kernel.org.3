@@ -2,165 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1595571A10
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75340571A13
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiGLMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S232680AbiGLMeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbiGLMdG (ORCPT
+        with ESMTP id S229691AbiGLMeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:33:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17012B197D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:33:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F16D91516;
-        Tue, 12 Jul 2022 05:33:04 -0700 (PDT)
-Received: from [10.163.46.183] (unknown [10.163.46.183])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42F383F70D;
-        Tue, 12 Jul 2022 05:33:01 -0700 (PDT)
-Message-ID: <5fd2d4b1-3b79-41e9-5e84-5b8d70baf145@arm.com>
-Date:   Tue, 12 Jul 2022 18:02:59 +0530
+        Tue, 12 Jul 2022 08:34:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803405FB4;
+        Tue, 12 Jul 2022 05:34:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1754C616AF;
+        Tue, 12 Jul 2022 12:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14B1C341C8;
+        Tue, 12 Jul 2022 12:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657629240;
+        bh=9DjX9o6ibssfN2gVfTH2pbVMipRj/UkB3PPyZA75DLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XCdKNUuRGjW9rRR0xnr8jYvOUe05Iuaci0Az7i0qa/N7392kbXhDQcOTEWElhi5jE
+         6HK6icZCWNZCpC4q3LQ1iT2ud7LV14A/VOLk7SOoNTEW+FLFU5rl1J/GPOF1scyQKr
+         CQaJO8PtaGbulZdGcLg1SB75oPB6jvgVZk+CydYqVg6jiDP1IgRQf2xDgDMLPnchsV
+         6oxB9FpN/ZqFq8Ffx6uybtcggIDqvya5PUeFGfE6dG2diC/tD35aFY+N9qoQrMsX8T
+         41aU/Gl0mawE3ShnsZtjXC4GfXVxG15vJkbXBPCTmqHlS0d5H/ljEasTJbEtpSAGzS
+         8Ahr0dc6hjxmw==
+Date:   Tue, 12 Jul 2022 15:33:57 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 41/49] KVM: SVM: Add support to handle the RMP
+ nested page fault
+Message-ID: <Ys1qNQNqek5MdG3v@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <d7decd3cb48d962da086afb65feb94a124e5c537.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drivers/perf: arm_spe: Fix consistency of
- SYS_PMSCR_EL1.CX
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     german.gomez@arm.com, james.clark@arm.com,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20220712051404.2546851-1-anshuman.khandual@arm.com>
- <cb5bd640-cb53-4926-fe32-bbcf41e8632a@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <cb5bd640-cb53-4926-fe32-bbcf41e8632a@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7decd3cb48d962da086afb65feb94a124e5c537.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/12/22 15:18, Suzuki K Poulose wrote:
-> On 12/07/2022 06:14, Anshuman Khandual wrote:
->> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
->> packets into the traces, if the owner of the perf event runs with required
->> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
->>
->> The value of this bit is computed in the arm_spe_event_to_pmscr() function
->> but the check for capabilities happens in the pmu event init callback i.e
->> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
->> remain consistent for the duration of the perf session.
->>
->> However, the function arm_spe_event_to_pmscr() may be called later during
->> the event start callback i.e arm_spe_pmu_start() when the "current" process
->> is not the owner of the perf session, hence the CX bit setting is currently
->> not consistent.
->>
->> One way to fix this, is by caching the required value of the CX bit during
->> the initialization of the PMU event, so that it remains consistent for the
->> duration of the session. It uses currently unused 'event->hw.flags' element
->> to cache perfmon_capable() value, which can be referred during event start
->> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
->> of context packets in the trace as per event owner capabilities.
->>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> This applies on v5.19-rc6 and built on an earlier version posted by German
->> https://lore.kernel.org/all/20220117124432.3119132-1-german.gomez@arm.com/
->>
->>   drivers/perf/arm_spe_pmu.c | 25 +++++++++++++++++++++++--
->>   1 file changed, 23 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
->> index db670b265897..011e98428233 100644
->> --- a/drivers/perf/arm_spe_pmu.c
->> +++ b/drivers/perf/arm_spe_pmu.c
->> @@ -39,6 +39,26 @@
->>   #include <asm/mmu.h>
->>   #include <asm/sysreg.h>
->>   +/*
->> + * event.hw.flags remain unused for events created for this
->> + * PMU driver. A single bit there i.e BIT(0), could be used
->> + * to remember initiating process's perfmon_capable() value
->> + * which can be subsequently used to enable SYS_PMSCR_EL.CX
->> + * thus enabling context information in the trace.
+On Mon, Jun 20, 2022 at 11:13:03PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
-> Please could we rephrase this :
+> When SEV-SNP is enabled in the guest, the hardware places restrictions on
+> all memory accesses based on the contents of the RMP table. When hardware
+> encounters RMP check failure caused by the guest memory access it raises
+> the #NPF. The error code contains additional information on the access
+> type. See the APM volume 2 for additional information.
 > 
->  /*
->   * Cache if the event is allowed to trace Context information.
->   * This allows us to perform the check, i.e, perfmon_capable(),
->   * in the context of the event owner, once, during the event_init().
->   */
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 76 ++++++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/svm/svm.c | 14 +++++---
+>  2 files changed, 86 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 4ed90331bca0..7fc0fad87054 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -4009,3 +4009,79 @@ void sev_post_unmap_gfn(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn)
+>  
+>  	spin_unlock(&sev->psc_lock);
+>  }
+> +
+> +void handle_rmp_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u64 error_code)
+> +{
+> +	int rmp_level, npt_level, rc, assigned;
+> +	struct kvm *kvm = vcpu->kvm;
+> +	gfn_t gfn = gpa_to_gfn(gpa);
+> +	bool need_psc = false;
+> +	enum psc_op psc_op;
+> +	kvm_pfn_t pfn;
+> +	bool private;
+> +
+> +	write_lock(&kvm->mmu_lock);
+> +
+> +	if (unlikely(!kvm_mmu_get_tdp_walk(vcpu, gpa, &pfn, &npt_level)))
 
-Sure, will change.
+This function does not exist. Should it be kvm_mmu_get_tdp_page?
 
-> 
->> + */
->> +#define SPE_PMU_HW_FLAGS_CX            BIT(0)
->> +
->> +static void event_hw_flags_set_cx(struct perf_event *event)
->> +{
->> +    if (perfmon_capable())
->> +        event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
->> +}
->> +
->> +static bool event_hw_flags_has_cx(struct perf_event *event)
->> +{
->> +    return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
->> +}
->> +
-> 
-> super minor nit:
-> 
->     set_event_has_cx();
->     get_event_has_cx();
+BR, Jarkko
 
-Might be better to add '_spe_' which will highlight that CX caching
-is only applicable for perf events here in the SPE driver ?
-
-set_spe_event_has_cx()
-spe_event_has_cx()
-
-?
-
-> ?
-> 
-> Also, please could we fold the CONFIG_PID_IN_CONTEXTIDR check
-> into the helpers ?
-
-Yes, could do that.
-
-> 
->>   #define ARM_SPE_BUF_PAD_BYTE            0
->>     struct arm_spe_pmu_buf {
->> @@ -272,7 +292,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
->>       if (!attr->exclude_kernel)
->>           reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
->>   -    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
->> +    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && event_hw_flags_has_cx(event))
->>           reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
-> 
-> i.e,
->     if (event_has_cx(event))
->         ....
-> 
-> Otherwise looks good to me.
-> 
-> Suzuki

@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECD7571B3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73382571B43
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiGLN3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S232642AbiGLNaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiGLN3v (ORCPT
+        with ESMTP id S232937AbiGLNaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:29:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF80AA75F;
-        Tue, 12 Jul 2022 06:29:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 892F86177E;
-        Tue, 12 Jul 2022 13:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B57CC3411C;
-        Tue, 12 Jul 2022 13:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657632589;
-        bh=OteWyXRmEDrtCukLkgYjbqtZlLf11Y3mWdBSSl/so9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DGvm3Ool1qxrx0dzCNGSFxJGec2YRKpv0Ve0b4l2DnSTKQgT+ZY+X82rlDKMe7R1b
-         3XaT/B0M9sQcUQ6Yzq+VvB8O88VjVhXpQEZeum1B4z+0bcB0SJYuTloA6HHulMLGL7
-         KZPqLPRGbaO4qKSVahkG2pZIFHvC2863hJERd+/DuqNlKGIpXz3NXIaJHBA5vYL0OR
-         ZkAFaAIQR/WhS5DNfm8ZZLbH71TGG8B+uoXcGt3nk9aSwpV+PID14TEaLUCbC6Jkzu
-         8SG4Ewa4Ox4lb0f2ZXuytv6xQGS2/J0Viht6pW30swpCoZtjaOh5qhfpgTa9cl8ce9
-         btJ96Lr29sjww==
-Date:   Tue, 12 Jul 2022 15:29:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Message-ID: <Ys13SB17LKU0y/tU@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220620230109.986298-1-dinguyen@kernel.org>
- <YrI6EeVkkWVMNPFY@shikoro>
- <928b2996-b2e7-d847-0e20-7e19df3cbf03@kernel.org>
- <YrN2lxvlP4cWfelY@kunai>
- <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
+        Tue, 12 Jul 2022 09:30:14 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D121BB6289
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:30:07 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso776142wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c/sYXMoiNTcLP4oKia5QR42veWinE4cNjWYJuUyBSyg=;
+        b=A0HZ3XRjr20kgR1tWrM1jW4cvR2su5kDxMBHTSH67PN2hoL56wN/CnYJXUFc8GHaDu
+         7ASpMkJfV9Lc/ylHpcVrju+tH7J3uPDWYhRv8KrEQPbyW7dPWYouM1EhxWOtG45W/+8O
+         CaLQm7S3ItQjOLfUts32q9xTtEOVfEPcDbk/C1sQDNOj8NzmDTlc/l5naxoqPWFUtzSc
+         bSrp1iq/8tyaWpAv2dRwhY3xA87xtgx45LVWvAl6WrCR90C+/OQ/yAHgPj/hyOW/jjrq
+         0OA46fBk/pA5xaU2BhGQNcuzHmVvWVTf1VYBVjJx/vW0GQuZhGgIRXA95sp/y2A+cZaf
+         ndRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c/sYXMoiNTcLP4oKia5QR42veWinE4cNjWYJuUyBSyg=;
+        b=3MJMsIAiLz+pTE6rTXZtUGJhSy9kK47RyKIkJFo7zbxi59PoLFajFYfdQRu/RTapda
+         ejNoa6oygfJQbWMl45KyeckbBQz3c+qx9PHX/PmM3WD/4qGb0H5Lr4gR7r/4Ds9Rsnr+
+         2RpWtLFj6vVplhH3NYsYSQXE4j6e9p+m+eGMVCoXj66WD/f6tYoRLDCfOKTovRI8dgvq
+         mTicj2EineszpFXTDpAPObjqavgNAMgRnh2gE1ibT/ZGlDKP1NqEMuo2ZZwEbc7wOUPj
+         AEuJksThlJRTq2rPYPtUgXA4I2ae7ptxe6rjRNNyebeB3pD9zn+nN9jdMHWpdpvSEjFC
+         3nIw==
+X-Gm-Message-State: AJIora9cmTS6KjBdiolAkf1ug9l1MZampXmc4l8VUGXJis2U/eRHXbPI
+        qmArJ+YHXvTdQaArz8OJ73hErrzAJgnGrWmE8hL6iQ==
+X-Google-Smtp-Source: AGRyM1vu7DcsXuBkpabZhgZFZXQozrTIgb+hGPIn/6EIEiTTb8/vCysY8izu1qDoJ1sCT0R8dJds1BGPr7eCu4jH/qg=
+X-Received: by 2002:a05:600c:4fc8:b0:3a1:99cf:800 with SMTP id
+ o8-20020a05600c4fc800b003a199cf0800mr3853176wmq.60.1657632606217; Tue, 12 Jul
+ 2022 06:30:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ffCZFUTnErNAuRc0"
-Content-Disposition: inline
-In-Reply-To: <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202207101328.ASjx88yj-lkp@intel.com>
+In-Reply-To: <202207101328.ASjx88yj-lkp@intel.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 12 Jul 2022 21:29:55 +0800
+Message-ID: <CABVgOSmvU1tOHBQDOr9vT-SSaM1k--mjck1-T-M_vWnDtWecDA@mail.gmail.com>
+Subject: Re: [ammarfaizi2-block:shuah/linux-kselftest/kunit 4/16]
+ lib/kunit/executor.c:78 kunit_filter_tests() warn: possible memory leak of 'copy'
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, Daniel Latypov <dlatypov@google.com>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 12, 2022 at 8:51 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> tree:   https://github.com/ammarfaizi2/linux-block shuah/linux-kselftest/kunit
+> head:   7635778bac7e46458392c1261e3916e8e9e86860
+> commit: d2fbdde838f270377de4fc20e919aac3941ea55f [4/16] kunit: use kmemdup in kunit_filter_tests(), take suite as const
+> config: arc-randconfig-m031-20220707 (https://download.01.org/0day-ci/archive/20220710/202207101328.ASjx88yj-lkp@intel.com/config)
+> compiler: arc-elf-gcc (GCC) 11.3.0
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> smatch warnings:
+> lib/kunit/executor.c:78 kunit_filter_tests() warn: possible memory leak of 'copy'
+>
+> vim +/copy +78 lib/kunit/executor.c
 
---ffCZFUTnErNAuRc0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks: clang-analyzer also picked this up here:
+https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
 
-Hi Dinh,
+(... snip ...)
 
-> This is recovery of the master and not the slave.  We have a customer that
+> a127b154a8f2317 Daniel Latypov 2021-09-14  76   filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+> a02353f491622e4 Daniel Latypov 2022-05-11  77   if (!filtered)
+> a02353f491622e4 Daniel Latypov 2022-05-11 @78           return ERR_PTR(-ENOMEM);
+>
+> kfree(copy)?  Is the burden of random devs looking at this warning
+> forever more than the burden of adding a kfree()?  Hard to measure.
+>
 
-This is a different issue then. bus_recovery_info is only for stuck
-clients, as I mentioned before. Resetting the controller can be done
-anytime inside the driver by calling some reset routine. You don't need
-an I2C core framework for that.
+I mean, it's the burden of not only adding a kfree(), but also a
+couple of {}s. :-)
 
-But when to do this reset, and how this relates to real bus recovery,
-that you need to deal with the designware maintainers. I don't know the
-HW at all.
+Regardless, this patch should add them:
+https://lore.kernel.org/linux-kselftest/20220712095627.1770312-1-davidgow@google.com/
 
-All the best,
+> a127b154a8f2317 Daniel Latypov 2021-09-14  79
+> a127b154a8f2317 Daniel Latypov 2021-09-14  80   n = 0;
+> a127b154a8f2317 Daniel Latypov 2021-09-14  81   kunit_suite_for_each_test_case(suite, test_case) {
+> a127b154a8f2317 Daniel Latypov 2021-09-14  82           if (!test_glob || glob_match(test_glob, test_case->name))
+> a127b154a8f2317 Daniel Latypov 2021-09-14  83                   filtered[n++] = *test_case;
+> a127b154a8f2317 Daniel Latypov 2021-09-14  84   }
+> a127b154a8f2317 Daniel Latypov 2021-09-14  85
+> a127b154a8f2317 Daniel Latypov 2021-09-14  86   copy->test_cases = filtered;
+> a127b154a8f2317 Daniel Latypov 2021-09-14  87   return copy;
+> a127b154a8f2317 Daniel Latypov 2021-09-14  88  }
+>
 
-   Wolfram
-
-
---ffCZFUTnErNAuRc0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLNd0QACgkQFA3kzBSg
-KbZ3vhAAlY7TUZYPDqjBIuPN5DGi1+ND4S8/owutDwF0LD9/1T+VBbXygTzM4UPg
-aA7suygd1ZCp6/pv7hGpT6qVga+bS6yW7d8G/ESj0/ex4Bp80t+kVnUx452WM7wW
-K9hBZ1RK3/AnMKnsDoAL3+EJgEQUNtcLLiNiHkjU5wN13jJ1TE2W+E1nEAey3rh3
-Kn4elufiwT8vJ9/bll6GXrs2yPPzRMAV9nj87ktMpB5mgV14IyvZi8mF8y4nBoem
-ynZ2nlHj+TflsdmLOXxinpN/vNOqp5KJE1bVSx7YlT1vggePkhaZXTZ9P1Wefa07
-+N0+ttiTJ86nVFUcePMqMsADRVNBI2CoVhhNeVdUvc/tcrFFz7UDgMpG5zx/GzWn
-9uI3bQtbsGZo4hcvI+NSDxFVkfx7mjutMNGTuvGAOgSDdG+6XySHQ6kSk5aJQ7PT
-KmLD5fLifxa0c2wLMdn37cBRcZCXazHrvJ5y6L2wRp2vwwyCfDVOcjBHVqLUltI0
-gFN0loGxVyT0BF3MY318i44Ir37NoL/SQnkThqWXRZ5yGLrJtJGbgD0GH85lyLzo
-6wiuzYfEeC7gLlfQtGbAxjRb7GTNhMDLzM5mCAD0vlqmI7YIPZffJRYlTJH57+gQ
-RAKub4mMnEbnE8Dy/4ICoMFUhT+PpRvB2f0gLF/8w/aib4LV7SY=
-=GOXF
------END PGP SIGNATURE-----
-
---ffCZFUTnErNAuRc0--
+Cheers,
+-- David

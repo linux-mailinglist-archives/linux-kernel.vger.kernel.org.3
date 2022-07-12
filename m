@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1735957253A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D8E5723ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiGLTML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S234829AbiGLSys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235620AbiGLTKe (ORCPT
+        with ESMTP id S234769AbiGLSxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:10:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C7C102081;
-        Tue, 12 Jul 2022 11:52:53 -0700 (PDT)
+        Tue, 12 Jul 2022 14:53:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708CEE7AE6;
+        Tue, 12 Jul 2022 11:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7750C60765;
-        Tue, 12 Jul 2022 18:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4FFC3411C;
-        Tue, 12 Jul 2022 18:52:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08699B81BBC;
+        Tue, 12 Jul 2022 18:45:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FB9C3411C;
+        Tue, 12 Jul 2022 18:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651971;
-        bh=LcmL7A4xGcUiPi7IxZ5DfrFD9qmxQRA2uRcQDnvpRuc=;
+        s=korg; t=1657651524;
+        bh=2pGZJtOLIxxXgJY9pcGVlt7LN9hTnd6QKofUs3FJ3cI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0Ht89E27NY51QMdtrCWBB56Wrt+DCoZT9RZNY1kbRnrFONZnGpvUNys0nVoBHmtw
-         H2mfnjjjeazj2VTvbYqaUzSJ+la5Ixl+NqA7QUuwN5zdnSkm1UWrxl9xuxBsJIQ/74
-         XQxtABmROzA2MZdmt9Zok2TgoTb+c5vt0Ea9enk4=
+        b=w3rt22HfnbMrRAxnpNbPceqn5ABPUlw7DCbwZFXFrCN4zpOWbX/QsPlcnyveBZGyr
+         VrNOiP3O8PjaIiNDOhiNbZt5l5C4c9mkBxDVqfxNuWDvpFeUh/rNuUZzv3jQUtiIZX
+         hH7owyMDhErmHUUEGhsstN9IIVsnm5SB8GSfrJdU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 10/61] x86/retpoline: Use -mfunction-return
-Date:   Tue, 12 Jul 2022 20:39:07 +0200
-Message-Id: <20220712183237.359715627@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 102/130] x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
+Date:   Tue, 12 Jul 2022 20:39:08 +0200
+Message-Id: <20220712183251.175405459@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,77 +59,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 0b53c374b9eff2255a386f1f1cfb9a928e52a5ae upstream.
+commit 7c693f54c873691a4b7da05c7e0f74e67745d144 upstream.
 
-Utilize -mfunction-return=thunk-extern when available to have the
-compiler replace RET instructions with direct JMPs to the symbol
-__x86_return_thunk. This does not affect assembler (.S) sources, only C
-sources.
+Extend spectre_v2= boot option with Kernel IBRS.
 
--mfunction-return=thunk-extern has been available since gcc 7.3 and
-clang 15.
+  [jpoimboe: no STIBP with IBRS]
 
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/Makefile                    |    2 ++
- arch/x86/include/asm/nospec-branch.h |    2 ++
- arch/x86/lib/retpoline.S             |   13 +++++++++++++
- 3 files changed, 17 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt |    1 
+ arch/x86/include/asm/nospec-branch.h            |    1 
+ arch/x86/kernel/cpu/bugs.c                      |   66 ++++++++++++++++++------
+ 3 files changed, 54 insertions(+), 14 deletions(-)
 
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -15,11 +15,13 @@ endif
- ifdef CONFIG_CC_IS_GCC
- RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
- RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
-+RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
- RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
- endif
- ifdef CONFIG_CC_IS_CLANG
- RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
- RETPOLINE_VDSO_CFLAGS	:= -mretpoline
-+RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
- endif
- export RETPOLINE_CFLAGS
- export RETPOLINE_VDSO_CFLAGS
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5026,6 +5026,7 @@
+ 			eibrs		  - enhanced IBRS
+ 			eibrs,retpoline   - enhanced IBRS + Retpolines
+ 			eibrs,lfence      - enhanced IBRS + LFENCE
++			ibrs		  - use IBRS to protect kernel
+ 
+ 			Not specifying this option is equivalent to
+ 			spectre_v2=auto.
 --- a/arch/x86/include/asm/nospec-branch.h
 +++ b/arch/x86/include/asm/nospec-branch.h
-@@ -123,6 +123,8 @@
- typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
- extern retpoline_thunk_t __x86_indirect_thunk_array[];
+@@ -212,6 +212,7 @@ enum spectre_v2_mitigation {
+ 	SPECTRE_V2_EIBRS,
+ 	SPECTRE_V2_EIBRS_RETPOLINE,
+ 	SPECTRE_V2_EIBRS_LFENCE,
++	SPECTRE_V2_IBRS,
+ };
  
-+extern void __x86_return_thunk(void);
-+
- #ifdef CONFIG_RETPOLINE
+ /* The indirect branch speculation control variants */
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -928,6 +928,7 @@ enum spectre_v2_mitigation_cmd {
+ 	SPECTRE_V2_CMD_EIBRS,
+ 	SPECTRE_V2_CMD_EIBRS_RETPOLINE,
+ 	SPECTRE_V2_CMD_EIBRS_LFENCE,
++	SPECTRE_V2_CMD_IBRS,
+ };
  
- #define GEN(reg) \
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -67,3 +67,16 @@ SYM_CODE_END(__x86_indirect_thunk_array)
- #define GEN(reg) EXPORT_THUNK(reg)
- #include <asm/GEN-for-each-reg.h>
- #undef GEN
+ enum spectre_v2_user_cmd {
+@@ -1000,11 +1001,12 @@ spectre_v2_parse_user_cmdline(enum spect
+ 	return SPECTRE_V2_USER_CMD_AUTO;
+ }
+ 
+-static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
++static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
+ {
+-	return (mode == SPECTRE_V2_EIBRS ||
+-		mode == SPECTRE_V2_EIBRS_RETPOLINE ||
+-		mode == SPECTRE_V2_EIBRS_LFENCE);
++	return mode == SPECTRE_V2_IBRS ||
++	       mode == SPECTRE_V2_EIBRS ||
++	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
++	       mode == SPECTRE_V2_EIBRS_LFENCE;
+ }
+ 
+ static void __init
+@@ -1069,12 +1071,12 @@ spectre_v2_user_select_mitigation(enum s
+ 	}
+ 
+ 	/*
+-	 * If no STIBP, enhanced IBRS is enabled or SMT impossible, STIBP is not
+-	 * required.
++	 * If no STIBP, IBRS or enhanced IBRS is enabled, or SMT impossible,
++	 * STIBP is not required.
+ 	 */
+ 	if (!boot_cpu_has(X86_FEATURE_STIBP) ||
+ 	    !smt_possible ||
+-	    spectre_v2_in_eibrs_mode(spectre_v2_enabled))
++	    spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+ 		return;
+ 
+ 	/*
+@@ -1106,6 +1108,7 @@ static const char * const spectre_v2_str
+ 	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
+ 	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
+ 	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
++	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
+ };
+ 
+ static const struct {
+@@ -1123,6 +1126,7 @@ static const struct {
+ 	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
+ 	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
+ 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
++	{ "ibrs",		SPECTRE_V2_CMD_IBRS,              false },
+ };
+ 
+ static void __init spec_v2_print_cond(const char *reason, bool secure)
+@@ -1185,6 +1189,24 @@ static enum spectre_v2_mitigation_cmd __
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+ 
++	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_data.x86_vendor != X86_VENDOR_INTEL) {
++		pr_err("%s selected but not Intel CPU. Switching to AUTO select\n",
++		       mitigation_options[i].option);
++		return SPECTRE_V2_CMD_AUTO;
++	}
 +
-+/*
-+ * This function name is magical and is used by -mfunction-return=thunk-extern
-+ * for the compiler to generate JMPs to it.
-+ */
-+SYM_CODE_START(__x86_return_thunk)
-+	UNWIND_HINT_EMPTY
-+	ANNOTATE_NOENDBR
-+	ret
-+	int3
-+SYM_CODE_END(__x86_return_thunk)
++	if (cmd == SPECTRE_V2_CMD_IBRS && !boot_cpu_has(X86_FEATURE_IBRS)) {
++		pr_err("%s selected but CPU doesn't have IBRS. Switching to AUTO select\n",
++		       mitigation_options[i].option);
++		return SPECTRE_V2_CMD_AUTO;
++	}
 +
-+__EXPORT_THUNK(__x86_return_thunk)
++	if (cmd == SPECTRE_V2_CMD_IBRS && boot_cpu_has(X86_FEATURE_XENPV)) {
++		pr_err("%s selected but running as XenPV guest. Switching to AUTO select\n",
++		       mitigation_options[i].option);
++		return SPECTRE_V2_CMD_AUTO;
++	}
++
+ 	spec_v2_print_cond(mitigation_options[i].option,
+ 			   mitigation_options[i].secure);
+ 	return cmd;
+@@ -1224,6 +1246,14 @@ static void __init spectre_v2_select_mit
+ 			break;
+ 		}
+ 
++		if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
++		    retbleed_cmd != RETBLEED_CMD_OFF &&
++		    boot_cpu_has(X86_FEATURE_IBRS) &&
++		    boot_cpu_data.x86_vendor == X86_VENDOR_INTEL) {
++			mode = SPECTRE_V2_IBRS;
++			break;
++		}
++
+ 		mode = spectre_v2_select_retpoline();
+ 		break;
+ 
+@@ -1240,6 +1270,10 @@ static void __init spectre_v2_select_mit
+ 		mode = spectre_v2_select_retpoline();
+ 		break;
+ 
++	case SPECTRE_V2_CMD_IBRS:
++		mode = SPECTRE_V2_IBRS;
++		break;
++
+ 	case SPECTRE_V2_CMD_EIBRS:
+ 		mode = SPECTRE_V2_EIBRS;
+ 		break;
+@@ -1256,7 +1290,7 @@ static void __init spectre_v2_select_mit
+ 	if (mode == SPECTRE_V2_EIBRS && unprivileged_ebpf_enabled())
+ 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+ 
+-	if (spectre_v2_in_eibrs_mode(mode)) {
++	if (spectre_v2_in_ibrs_mode(mode)) {
+ 		/* Force it so VMEXIT will restore correctly */
+ 		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
+ 		write_spec_ctrl_current(x86_spec_ctrl_base, true);
+@@ -1267,6 +1301,10 @@ static void __init spectre_v2_select_mit
+ 	case SPECTRE_V2_EIBRS:
+ 		break;
+ 
++	case SPECTRE_V2_IBRS:
++		setup_force_cpu_cap(X86_FEATURE_KERNEL_IBRS);
++		break;
++
+ 	case SPECTRE_V2_LFENCE:
+ 	case SPECTRE_V2_EIBRS_LFENCE:
+ 		setup_force_cpu_cap(X86_FEATURE_RETPOLINE_LFENCE);
+@@ -1293,17 +1331,17 @@ static void __init spectre_v2_select_mit
+ 	pr_info("Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch\n");
+ 
+ 	/*
+-	 * Retpoline means the kernel is safe because it has no indirect
+-	 * branches. Enhanced IBRS protects firmware too, so, enable restricted
+-	 * speculation around firmware calls only when Enhanced IBRS isn't
+-	 * supported.
++	 * Retpoline protects the kernel, but doesn't protect firmware.  IBRS
++	 * and Enhanced IBRS protect firmware too, so enable IBRS around
++	 * firmware calls only when IBRS / Enhanced IBRS aren't otherwise
++	 * enabled.
+ 	 *
+ 	 * Use "mode" to check Enhanced IBRS instead of boot_cpu_has(), because
+ 	 * the user might select retpoline on the kernel command line and if
+ 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
+ 	 * enable IBRS around firmware calls.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_eibrs_mode(mode)) {
++	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
+ 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
+ 		pr_info("Enabling Restricted Speculation for firmware calls\n");
+ 	}
+@@ -2012,7 +2050,7 @@ static ssize_t mmio_stale_data_show_stat
+ 
+ static char *stibp_state(void)
+ {
+-	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled))
++	if (spectre_v2_in_ibrs_mode(spectre_v2_enabled))
+ 		return "";
+ 
+ 	switch (spectre_v2_user_stibp) {
 
 

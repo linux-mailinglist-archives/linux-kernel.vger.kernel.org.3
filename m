@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB82A572457
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF9157247A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbiGLTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
+        id S235192AbiGLTBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235375AbiGLS7i (ORCPT
+        with ESMTP id S235369AbiGLS7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:59:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CAAF4235;
-        Tue, 12 Jul 2022 11:48:21 -0700 (PDT)
+        Tue, 12 Jul 2022 14:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABB2F4239;
+        Tue, 12 Jul 2022 11:48:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 61BC1CE1D62;
-        Tue, 12 Jul 2022 18:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE7EC3411E;
-        Tue, 12 Jul 2022 18:48:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6970260A5A;
+        Tue, 12 Jul 2022 18:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581A4C3411C;
+        Tue, 12 Jul 2022 18:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651696;
-        bh=PGRmaAe/AdS2PihBF4QvoD0vhgDljbzkBc5aceuTT1M=;
+        s=korg; t=1657651699;
+        bh=Lb9QWk96WPTUHtVIDQUUvFBZ7ad51b1dDmFNTdktXKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ycwZuGQ2IEJnyRW0DM+oHSFGAza6XNB1+8qXsHS44h8wA6U/uGSBabMzVWznEQgng
-         UJ42aX87fqzLjbctt+DDZz4Ybgcfx7sgoQxajLX2g8TrDdDNKIoxMGNBhcA18FeJY/
-         7o8avfvl2uB4meSQ9f3pdtWiF/bzP+MQP6Iwujh0=
+        b=tm9+oXXdw20XKg5UIC5GyI1+mXJq9HKr7f1sIUkWqGmyOrJ4YxWQM6TBQaRjE+3iM
+         S8IRbXTa0BZu/fhkuITjznLDhAP339iiF7TLw49qR6n5ZfAfXSjllBCC6vmDelLBEw
+         HCGg1bmC0vXITFHmYpaW+qmjpDf3iZ42N+yqjFR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 27/78] x86/retpoline: Swizzle retpoline thunk
-Date:   Tue, 12 Jul 2022 20:38:57 +0200
-Message-Id: <20220712183239.899777384@linuxfoundation.org>
+Subject: [PATCH 5.15 28/78] x86/retpoline: Use -mfunction-return
+Date:   Tue, 12 Jul 2022 20:38:58 +0200
+Message-Id: <20220712183239.940184256@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
 References: <20220712183238.844813653@linuxfoundation.org>
@@ -59,38 +60,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit 00e1533325fd1fb5459229fe37f235462649f668 upstream.
+commit 0b53c374b9eff2255a386f1f1cfb9a928e52a5ae upstream.
 
-Put the actual retpoline thunk as the original code so that it can
-become more complicated. Specifically, it allows RET to be a JMP,
-which can't be .altinstr_replacement since that doesn't do relocations
-(except for the very first instruction).
+Utilize -mfunction-return=thunk-extern when available to have the
+compiler replace RET instructions with direct JMPs to the symbol
+__x86_return_thunk. This does not affect assembler (.S) sources, only C
+sources.
+
+-mfunction-return=thunk-extern has been available since gcc 7.3 and
+clang 15.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+[cascardo: RETPOLINE_CFLAGS is at Makefile]
+[cascardo: remove ANNOTATE_NOENDBR from __x86_return_thunk]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/lib/retpoline.S |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Makefile                             |    2 ++
+ arch/x86/include/asm/nospec-branch.h |    2 ++
+ arch/x86/lib/retpoline.S             |   12 ++++++++++++
+ 3 files changed, 16 insertions(+)
 
+--- a/Makefile
++++ b/Makefile
+@@ -687,11 +687,13 @@ endif
+ 
+ ifdef CONFIG_CC_IS_GCC
+ RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
++RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
+ RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
+ endif
+ ifdef CONFIG_CC_IS_CLANG
+ RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+ RETPOLINE_VDSO_CFLAGS	:= -mretpoline
++RETPOLINE_CFLAGS	+= $(call cc-option,-mfunction-return=thunk-extern)
+ endif
+ export RETPOLINE_CFLAGS
+ export RETPOLINE_VDSO_CFLAGS
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -120,6 +120,8 @@
+ 	_ASM_PTR " 999b\n\t"					\
+ 	".popsection\n\t"
+ 
++extern void __x86_return_thunk(void);
++
+ #ifdef CONFIG_RETPOLINE
+ 
+ typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
 --- a/arch/x86/lib/retpoline.S
 +++ b/arch/x86/lib/retpoline.S
-@@ -32,9 +32,9 @@
- SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
- 	UNWIND_HINT_EMPTY
- 
--	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
--		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
--		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE
-+	ALTERNATIVE_2 __stringify(RETPOLINE \reg), \
-+		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE, \
-+		      __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), ALT_NOT(X86_FEATURE_RETPOLINE)
- 
- .endm
- 
+@@ -66,3 +66,15 @@ SYM_CODE_END(__x86_indirect_thunk_array)
+ #define GEN(reg) EXPORT_THUNK(reg)
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
++
++/*
++ * This function name is magical and is used by -mfunction-return=thunk-extern
++ * for the compiler to generate JMPs to it.
++ */
++SYM_CODE_START(__x86_return_thunk)
++	UNWIND_HINT_EMPTY
++	ret
++	int3
++SYM_CODE_END(__x86_return_thunk)
++
++__EXPORT_THUNK(__x86_return_thunk)
 
 

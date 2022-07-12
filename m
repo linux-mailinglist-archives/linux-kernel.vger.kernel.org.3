@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96325718B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F075718BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiGLLki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S232505AbiGLLk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGLLkf (ORCPT
+        with ESMTP id S230176AbiGLLk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:40:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE87AD869;
-        Tue, 12 Jul 2022 04:40:34 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CAcNIh010433;
-        Tue, 12 Jul 2022 11:40:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=uxRmJ+Q3UusrkgxXc/qHV1tSW/A5revJxU/n8Y2w+io=;
- b=WUr9odpv5yiJALYlB2iVDmm5NbKKrU2SeLgcRW2ZhdQZ+ul7mBwERvUiQxSPtJHxdEB0
- bnWsm908X3XUM0b742/HRV0H5dtRY7OZlU4lZ776T9lpKSyzyWwWJPL5hvBXZVZuQzmo
- 0I7zLdefMbl0xJCzTEOKYgTFi8X2qeMLkY9JRDTAY2gOZCA/+JW1KImB/lL3imUxOR5I
- 1R/V9BjF6Iz2jYuYQpnwRHnCwrzF+vUo4MXm5ik7VvZoXqAQtwY84ssesDE/xrTi98DG
- ZRX8lHHmZnAaAqsih5egAh1LW3KL+nVMZpWoRnnEtoux9MY/ABlqsa2u6PCr903mUQhs AQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h96qfaemj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 11:40:26 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CAlMNh012943;
-        Tue, 12 Jul 2022 11:40:25 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h96qfaekf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 11:40:25 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CBaEmW007672;
-        Tue, 12 Jul 2022 11:40:23 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn116k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 11:40:23 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CBeLus23462380
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 11:40:21 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 535F8A405F;
-        Tue, 12 Jul 2022 11:40:21 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 606F3A405B;
-        Tue, 12 Jul 2022 11:40:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.147.132])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 11:40:19 +0000 (GMT)
-Message-ID: <7dd513fba6c248327a9118e8dafe628d13dde495.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima/evm: Fix potential memory leak in
- ima_init_crypto()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 07:40:18 -0400
-In-Reply-To: <20220712011037.2328591-1-niejianglei2021@163.com>
-References: <20220712011037.2328591-1-niejianglei2021@163.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cgH4NewqkjZ0UwAHxoC8ycYRGNQfhzme
-X-Proofpoint-GUID: 1ZyU6QD20WvAe1586bMQmGtYfhUJH0m5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015
- suspectscore=0 mlxscore=0 mlxlogscore=700 phishscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 07:40:56 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DEAADD55;
+        Tue, 12 Jul 2022 04:40:54 -0700 (PDT)
+X-UUID: eca9d4edfe584716b73a5dfbf7b8d069-20220712
+X-CID-P-RULE: Spam_GS6885AD
+X-CID-O-INFO: VERSION:1.1.8,REQID:09c501d6-9bcb-4616-b4d6-2ffcbdec1127,OB:10,L
+        OB:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS6885AD
+        ,ACTION:quarantine,TS:120
+X-CID-INFO: VERSION:1.1.8,REQID:09c501d6-9bcb-4616-b4d6-2ffcbdec1127,OB:10,LOB
+        :0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:120
+X-CID-META: VersionHash:0f94e32,CLOUDID:edeb1364-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:fff0d761844a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: eca9d4edfe584716b73a5dfbf7b8d069-20220712
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1310813838; Tue, 12 Jul 2022 19:40:49 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 12 Jul 2022 19:40:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 12 Jul 2022 19:40:48 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3 0/5] Complete driver nodes for MT8192 SoC
+Date:   Tue, 12 Jul 2022 19:40:41 +0800
+Message-ID: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-12 at 09:10 +0800, Jianglei Nie wrote:
-> On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
-> without freeing the ima_algo_array. Add the missing kfree() for
-> ima_algo_array to avoid the potential memory leak.
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+This series are based on matthias.bgg/linux.git, for-next.
 
-Thanks, Jianglei.  This patch is now queued in next-integrity/next-
-integrity-testing.
+I remove vcodec lat and core nodes PATCH from series and will comfirm
+clocks usage then resend PATCH.
 
-Mimi
+Also should reference below PATCH for dsi in chunkuang.hu/linux.git
+dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+
+changes since v2:
+ - add mmsys #reset-cells PATCH
+ - add missing fallback compatible
+ - add display aliases
+ - remove vcodec lat and core nodes PATCH
+
+changes since v1:
+ - add Reviewed-by Tag
+ - rename dsi-phy from dsi-dphy
+ - add missing power-domains in disp mutex
+ - Add remove mt8192 display rdma compatible PATCH in series
+ - use "mediatek,mt8183-disp-rdma" as fallback
+ - remove mediatek,larb from rdma node
+ - remove syscon-dsi and add power-domains in dsi
+ - add reset property in dsi and mt8192-resets.h
+ - correct Typo: s/ndoe/node in commit message
+
+Allen-KH Cheng (5):
+  arm64: dts: mt8192: Add pwm node
+  arm64: dts: mt8192: Add mipi_tx node
+  arm64: dts: mediatek: Add mmsys #reset-cells property for mt8192
+  arm64: dts: mt8192: Add display nodes
+  arm64: dts: mt8192: Add dsi node
+
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 188 +++++++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+
+-- 
+2.18.0
 

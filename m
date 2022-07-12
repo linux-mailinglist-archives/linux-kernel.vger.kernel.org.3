@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E138557286D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112B657287C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbiGLVVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S233171AbiGLVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiGLVVA (ORCPT
+        with ESMTP id S231734AbiGLVXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:21:00 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A603BBE0F7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:20:59 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id k1so5644194ilu.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:20:59 -0700 (PDT)
+        Tue, 12 Jul 2022 17:23:09 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEE6CC7B3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:23:07 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bn33so11339195ljb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oN+PnrpImRr83fapsEh2XTJmU59JYHB3bffToNIUqeE=;
-        b=DWzCGXIHTB9AKYsk4ACS5kbXpt1fGKzZVTDa9lFMBp73kOoYamNJu48tclZu7BTjfU
-         kryZiW1kwaWhj9wyAXGjgjLFCJTvNYDss+9sl5jZSQZVhFiAyrU6Gk0WrueFBRQFY7Lq
-         7oFrbiGDtgAvkwDHRVQNUpR1LISK2w9fGDwO0=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n1ZO8TXDHj3NsRlYlgOrOAr4N9XXMzuVm8SErIjEja0=;
+        b=G0DVQSIdqHZsCsaIpwrgBp9xO7Z9fBrXqTnXm35zly+Y2omB3PNW30Df/fy2YCFNzT
+         hDPe9xQaP9GAZYOzC6trs+pVFPhnJuPDS17m5GnLbbfCp96wTbij+KYWAWpxfvmAgO3F
+         6BnO7GKZsa9/gEqXo61az4GaB97Sa2Fa8OyfME3TKqNdrE9CyPTj534e66EuEdqyEgoF
+         bjkiggsOtqz2/vVvh/w3DGXsJCBvVabmzSQ91yA7OA7hzq9139Aa3ex79AWBfXGo2xX1
+         Xl9/OzyAK2m7y5/pevJmeJQ6y5s3F95Quew8QXi/JAPW3PH1UKgakCHrNQZRzQSmJjNR
+         ew5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=oN+PnrpImRr83fapsEh2XTJmU59JYHB3bffToNIUqeE=;
-        b=wGV5S2TF3Ftb9TJTykRtdBx2ug4zOJK6LEXQXzz+/nshhyQO1wRzFH9IPY7rY0taQI
-         9/xwJ4/zCqndrNucA8evagXuD+qxqLCZo0iRwTm51GExYJW9/ET/rkzNYUx7yFrSQ5HC
-         K4gdy/eKO4pSX1iCZTu6+9seAq9OaEGbr+iLisCbJlmSFoL0TBTIfiqfjBN9rZ/jpMsG
-         joklmfDrrmblZRp0Me3HboDjvK5LU1Hc5lduWgFsueENrxtprspR1hfyA4giBxC8SItF
-         epvS5hiMOeVKBZbrGICvAZkzDSinok7QvJFWnUS2OVlAbKZarW7BsdYzU+CJE6Btd+pu
-         Rd5Q==
-X-Gm-Message-State: AJIora9rNbnnRqz2t8yZElUlT0ndVuKAjzqgThp1pk+2ASjuh+flRKDm
-        UwD+0BPQPUEM+CJu4UraNo5Ywg==
-X-Google-Smtp-Source: AGRyM1tpjBU+Ay8SKYCP9IICT3V0RoFnA7tVo2wPCLumGhPRLs1NIYbetHvJnLR1N3G8/2l2FNCThg==
-X-Received: by 2002:a92:da4e:0:b0:2d6:6554:a33b with SMTP id p14-20020a92da4e000000b002d66554a33bmr108100ilq.10.1657660859021;
-        Tue, 12 Jul 2022 14:20:59 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d66-20020a026245000000b00339e158bd3esm4415557jac.38.2022.07.12.14.20.57
+        bh=n1ZO8TXDHj3NsRlYlgOrOAr4N9XXMzuVm8SErIjEja0=;
+        b=JfNECUr199mRIqtJ1ykpMNU+O4bUKw5m74Q0BtrsxkvZUmeu0EvAZyXjKKlhG100Yd
+         JKKIfnD9PdxqPpVdKAzHHaBlZJDC7lV62fGw9tdvm2/J2MKBha6WDkfowJr9YffDBg+i
+         nMWi5d1yDq5H4ZPfboq0U6Rz1d64Z++WwBNPo7k21WkuPcrp0QElT2FvY2hqtaLI73gQ
+         P/q4XQLqwvOF1MaC9NxEUCA21f/dH4uo9Da0D0uO8Yq8KXw5JonVVPGPGbDaBCrPKq06
+         SQ3qgTbKZKMHUmunJHruxWOlM4N88f1usqV6EczADD9MYdcu0mKzvGapwGefOxv6w1NC
+         hE9Q==
+X-Gm-Message-State: AJIora/QAkSWolW5lE7NkFte3FRd289+WLbU4Uo5pnQBUVV7nEbA+RF3
+        z7jASqrgjm9ocP3KKGM9wUkENw==
+X-Google-Smtp-Source: AGRyM1to15pqtVLZPOLGpxX3l4iWMrE8kKqgE4uwbm35HVvBXfvAgzeYWcrKDc9+GtNgEUnP+M8V2w==
+X-Received: by 2002:a2e:bc18:0:b0:25d:735c:b57f with SMTP id b24-20020a2ebc18000000b0025d735cb57fmr11742ljf.118.1657660985757;
+        Tue, 12 Jul 2022 14:23:05 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id z18-20020a056512371200b00489da512f5asm1770549lfr.86.2022.07.12.14.23.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 14:20:58 -0700 (PDT)
-Subject: Re: [PATCH] MMIO should have more priority then IO
-To:     Matthew Wilcox <willy@infradead.org>, Nadav Amit <namit@vmware.com>
-Cc:     Ajay Kaher <akaher@vmware.com>, Bjorn Helgaas <helgaas@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Srivatsa Bhat <srivatsab@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Anish Swaminathan <anishs@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>,
-        "conduct@kernel.org" <conduct@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1656433761-9163-1-git-send-email-akaher@vmware.com>
- <20220628180919.GA1850423@bhelgaas>
- <25F843ED-7EB4-4D00-96CB-7DE1AC886460@vmware.com>
- <YsgplrrJnk5Ly19z@casper.infradead.org>
- <96D533E5-F3AF-4062-B095-8C143C307E37@vmware.com>
- <YshvnodeqmJV6uIJ@casper.infradead.org>
- <1A0FA5B7-39E8-4CAE-90DD-E260937F14E1@vmware.com>
- <Ysh63kRVGMFJMNfG@casper.infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0fac9918-2848-d01c-ee19-96a0cfd7b370@linuxfoundation.org>
-Date:   Tue, 12 Jul 2022 15:20:57 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 12 Jul 2022 14:23:05 -0700 (PDT)
+Message-ID: <7aca3568-aeea-478b-caa5-d1a7d9e72f3d@linaro.org>
+Date:   Tue, 12 Jul 2022 23:23:02 +0200
 MIME-Version: 1.0
-In-Reply-To: <Ysh63kRVGMFJMNfG@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/5] dt-bindings: gpio: stmpe: Remove node name
+ requirement
 Content-Language: en-US
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220712163345.445811-1-francesco.dolcini@toradex.com>
+ <20220712163345.445811-4-francesco.dolcini@toradex.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220712163345.445811-4-francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
-
-On 7/8/22 12:43 PM, Matthew Wilcox wrote:
-> On Fri, Jul 08, 2022 at 06:35:48PM +0000, Nadav Amit wrote:
->> On Jul 8, 2022, at 10:55 AM, Matthew Wilcox <willy@infradead.org> wrote:
->>
+On 12/07/2022 18:33, Francesco Dolcini wrote:
+> STMPE driver does not require a specific node name anymore, only the
+> compatible is checked, update binding according to this.
 > 
-> Just because I don't use your terminology, you think I have
-> "misconceptions"?  Fuck you, you condescending piece of shit.
-> 
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-This is clearly unacceptable and violates the Code of Conduct.
 
-Others including the person this was directed at already called out
-the violation:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-https://lore.kernel.org/all/85071FE5-E37A-44CF-9EF7-CB80C116A876@vmware.com/
-https://lore.kernel.org/all/880aac01-9c78-34f7-8a11-d48179e1635c@redhat.com/
 
-You should be well aware that this type of language and personal attack is a
-clear violation of the Linux kernel Contributor Covenant Code of Conduct as
-outlined in the following:
-
-https://www.kernel.org/doc/html/latest/process/code-of-conduct.html
-
-Refer to the Code of Conduct and refrain from violating the Code of Conduct
-in the future.
-
-thanks,
--- Shuah (On behalf of the Code of Conduct Committee)
-
+Best regards,
+Krzysztof

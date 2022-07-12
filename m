@@ -2,192 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2223571C13
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3655A571C19
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbiGLORF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S233201AbiGLORZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiGLOQv (ORCPT
+        with ESMTP id S229683AbiGLOQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:16:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55830B418A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657635400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U0E800OOqW5ckhgP7sOdw5kGbfjGB1H4nNWnEL28pNs=;
-        b=VjxO6nZA2z27c4BWucxDFgyC/q9jFHSr0ADPvL6ft13byi5OvBk1u/Q/gowjgkssr6mHc0
-        SYA6oJN8yaH3vKQUyqjYxfKw6IPCeAqkzQgj/MwGF8fVnzOy7ZU3lF3NUZ7lMQpvT8ohil
-        VstIOm3+pCbj22QiSR0uS4AQJ1lpUUc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-209-bOl8jFemMRmaSl7QFRkhtw-1; Tue, 12 Jul 2022 10:16:33 -0400
-X-MC-Unique: bOl8jFemMRmaSl7QFRkhtw-1
-Received: by mail-qk1-f200.google.com with SMTP id l189-20020a37bbc6000000b006af2596c5e8so7925666qkf.14
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:16:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=U0E800OOqW5ckhgP7sOdw5kGbfjGB1H4nNWnEL28pNs=;
-        b=VGRI8Eb7MkNW4BxdWRrSEGgGYD6p+/qg55nSpdxutJdjz0m1di/elqm6jAQ+XRe8NJ
-         DoSB+pmYMb4Bq4NiA/w87F3ZQ/C5iW6uk1OS+/NRezLHQI4OyKb+8gLuKrlg4KHIHBnc
-         aH3hdRx9SGR3bo1up1fGfJXUvzVYpX9FpQdu8n/54Khyilr+k9HyNwb6j5rtxhaQjz3M
-         WXjGcDhO28ailv9NpDgWAp9Q/cqNK3Z9f8YfB/oyMOA8LEnr024VLdcTKPSlgJRA+nmU
-         nejaXA1IGh790EpxTkTJyAe8P4bwlr8jwr7qd4IqafPtZr7lvLkgIL/P44UIY+ZaftC/
-         zcaA==
-X-Gm-Message-State: AJIora8cCgTmPpttvkLfNEPD19QL1hHYwNAct0mzMHfJWwIdg+8vhRuu
-        sDYEXNCbLnJZ7O0itxMa4+O3Su9zI5hy3vXANg7wc4Rf5dcOz6B8vmM2fJbdzogr4yGq4nL4Obt
-        kNPvOIBpgb6ghyNoIf96ZPOUA
-X-Received: by 2002:a05:620a:16d3:b0:6b5:76f3:4f8e with SMTP id a19-20020a05620a16d300b006b576f34f8emr10386987qkn.473.1657635392040;
-        Tue, 12 Jul 2022 07:16:32 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tQdkvIRVXScoSRWjvtDqqmO0XeFQEDUJFQ6nwxHO07gf4piqkM62wZH6UFM1CoQhp+9r9GyQ==
-X-Received: by 2002:a05:620a:16d3:b0:6b5:76f3:4f8e with SMTP id a19-20020a05620a16d300b006b576f34f8emr10386955qkn.473.1657635391661;
-        Tue, 12 Jul 2022 07:16:31 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id fp6-20020a05622a508600b0031eb0bb5c3csm6020743qtb.28.2022.07.12.07.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:16:31 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 10:16:28 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v4] proc: Fix a dentry lock race between release_task and
- lookup
-Message-ID: <Ys2CPO4FodMlAqRR@bfoster>
-References: <20220601062332.232439-1-chengzhihao1@huawei.com>
+        Tue, 12 Jul 2022 10:16:58 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D641A72EF1;
+        Tue, 12 Jul 2022 07:16:57 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:52280)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oBGh6-00HHYh-JG; Tue, 12 Jul 2022 08:16:56 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:44978 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oBGh5-00Dcz6-D8; Tue, 12 Jul 2022 08:16:56 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Benjamin Coddington <bcodding@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>, linux-kernel@vger.kernel.org,
+        Ian Kent <raven@themaw.net>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linux Containers <containers@lists.linux.dev>
+References: <cover.1657624639.git.bcodding@redhat.com>
+Date:   Tue, 12 Jul 2022 09:16:31 -0500
+In-Reply-To: <cover.1657624639.git.bcodding@redhat.com> (Benjamin Coddington's
+        message of "Tue, 12 Jul 2022 08:35:19 -0400")
+Message-ID: <875yk25scg.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220601062332.232439-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oBGh5-00Dcz6-D8;;;mid=<875yk25scg.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19JAGcodrl2XslC9iLjx2+NewTf7WBi7Ko=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Benjamin Coddington <bcodding@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 607 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (1.8%), b_tie_ro: 9 (1.6%), parse: 1.02 (0.2%),
+         extract_message_metadata: 5 (0.9%), get_uri_detail_list: 2.8 (0.5%),
+        tests_pri_-1000: 4.0 (0.7%), tests_pri_-950: 1.28 (0.2%),
+        tests_pri_-900: 1.04 (0.2%), tests_pri_-90: 178 (29.3%), check_bayes:
+        176 (28.9%), b_tokenize: 9 (1.5%), b_tok_get_all: 11 (1.8%),
+        b_comp_prob: 3.6 (0.6%), b_tok_touch_all: 147 (24.2%), b_finish: 1.33
+        (0.2%), tests_pri_0: 380 (62.6%), check_dkim_signature: 0.67 (0.1%),
+        check_dkim_adsp: 3.1 (0.5%), poll_dns_idle: 1.07 (0.2%), tests_pri_10:
+        4.5 (0.7%), tests_pri_500: 13 (2.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC PATCH 0/2] Keyagents: another call_usermodehelper approach
+ for namespaces
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:23:32PM +0800, Zhihao Cheng wrote:
-> Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-> moved proc_flush_task() behind __exit_signal(). Then, process systemd
-> can take long period high cpu usage during releasing task in following
-> concurrent processes:
-> 
->   systemd                                 ps
-> kernel_waitid                 stat(/proc/tgid)
->   do_wait                       filename_lookup
->     wait_consider_task            lookup_fast
->       release_task
->         __exit_signal
->           __unhash_process
->             detach_pid
->               __change_pid // remove task->pid_links
->                                      d_revalidate -> pid_revalidate  // 0
->                                      d_invalidate(/proc/tgid)
->                                        shrink_dcache_parent(/proc/tgid)
->                                          d_walk(/proc/tgid)
->                                            spin_lock_nested(/proc/tgid/fd)
->                                            // iterating opened fd
->         proc_flush_pid                                    |
->            d_invalidate (/proc/tgid/fd)                   |
->               shrink_dcache_parent(/proc/tgid/fd)         |
->                 shrink_dentry_list(subdirs)               ↓
->                   shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
-> 
 
-Curious... can this same sort of thing happen with /proc/<tgid>/task if
-that dir similarly has a lot of dentries?
+Adding the containers list to the discussion so more interested people
+have a chance of seeing this.
 
-...
-> Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-> ---
->  v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
-> 	 work of adding to the pid->list.
->  v2->v3: Add performance regression in commit message.
->  v3->v4: Make proc_pid_make_base_inode() static
->  fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
->  1 file changed, 26 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index c1031843cc6a..d884933950fd 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-...
-> @@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
->  	return NULL;
->  }
->  
-> +static struct inode *proc_pid_make_base_inode(struct super_block *sb,
-> +				struct task_struct *task, umode_t mode)
-> +{
-> +	struct inode *inode;
-> +	struct proc_inode *ei;
-> +	struct pid *pid;
-> +
-> +	inode = proc_pid_make_inode(sb, task, mode);
-> +	if (!inode)
-> +		return NULL;
-> +
-> +	/* Let proc_flush_pid find this directory inode */
-> +	ei = PROC_I(inode);
-> +	pid = ei->pid;
-> +	spin_lock(&pid->lock);
-> +	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
-> +	spin_unlock(&pid->lock);
-> +
-> +	return inode;
-> +}
-> +
+Benjamin Coddington <bcodding@redhat.com> writes:
 
-Somewhat related to the question above.. it would be nice if this
-wrapper had a line or two comment above it that explained when it should
-or shouldn't be used over the underlying function (for example, why or
-why not include /proc/<tgid>/task?). Otherwise the patch overall seems
-reasonable to me..
+> A persistent unsolved problem exists: how can the kernel find and/or create
+> the appropriate "container" within which to execute a userspace program to
+> construct keys or satisfy users of call_usermodehelper()?
+>
+> I believe the latest serious attempt to solve this problem was David's "Make
+> containers kernel objects":
+> https://lore.kernel.org/lkml/149547014649.10599.12025037906646164347.stgit@warthog.procyon.org.uk/
+>
+> Over in NFS' space, we've most recently pondered this issue while looking at
+> ways to pass a kernel socket to userspace in order to handle TLS events:
+> https://lore.kernel.org/linux-nfs/E2BF9CFF-9361-400B-BDEE-CF5E0AFDCA63@redhat.com/
+>
+> The problem is that containers are not kernel objects, rather a collection
+> of namespaces, cgroups, etc.  Attempts at making the kernel aware of
+> containers have been mired in discussion and problems.  It has been
+> suggested that the best representation of a "container" from the kernel's
+> perspective is a process.
+>
+> Keyagents are processes represented by a key.  If a keyagent's key is linked
+> to a session_keyring, it can be sent a realtime signal when a calling
+> process requests a matching key_type.  That signal will dispatch the process
+> to construct the desired key within the keyagent process context.  Keyagents
+> are similar to ssh-agents.  To use a keyagent, one must execute a keyagent
+> process in the desired context, and then link the keyagent's key onto other
+> process' session_keyrings.
+>
+> This method of linking keyagent keys to session_keyrings can be used to
+> construct the various mappings of callers to keyagents that containers may
+> need.  A single keyagent process can answer request-key upcalls across
+> container boundaries, or upcalls can be restricted to specific containers.
+>
+> I'm aware that building on realtime signals may not be a popular choice, but
+> using realtime signals makes this work simple and ensures delivery.  Realtime
+> signals are able to convey everything needed to construct keys in userspace:
+> the under-construction key's serial number.
+>
+> This work is not complete; it has security implications, it needs
+> documentation, it has not been reviewed by anyone.  Thanks for reading this
+> RFC.  I wish to collect criticism and validate this approach.
 
-Brian
+At a high level I do agree that we need to send a message to a userspace
+process and that message should contain enough information to start the
+user mode helper.
 
->  int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
->  		struct kstat *stat, u32 request_mask, unsigned int query_flags)
->  {
-> @@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
->  {
->  	struct inode *inode;
->  
-> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-> +					 S_IFDIR | S_IRUGO | S_IXUGO);
->  	if (!inode)
->  		return ERR_PTR(-ENOENT);
->  
-> @@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
->  	struct task_struct *task, const void *ptr)
->  {
->  	struct inode *inode;
-> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
-> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
-> +					 S_IFDIR | S_IRUGO | S_IXUGO);
->  	if (!inode)
->  		return ERR_PTR(-ENOENT);
->  
-> -- 
-> 2.31.1
-> 
+Then a daemon or possibly the container init can receive the message
+and dispatch the user mode helper.
 
+Fundamentally that design solves all of the container issues, and I
+think solves a few of the user mode helper issues as well.
+
+The challenge with this design is that it requires someone standing up a
+daemon to receive the messages and call a user mode helper to retain
+compatibility with current systems.
+
+
+
+I would prefer to see a file descriptor rather than a signal used to
+deliver the message.  Signals suck for many many reasons and a file
+descriptor based notification potentially can be much simpler.
+
+One of those many reasons is that by not following the common pattern
+for filling in kernel_siginfo you have left uninitialized padding in
+your structure that will be copied to userspace thus creating a kernel
+information leak.  Similarly your code doesn't fill in about half the
+fields that are present in the siginfo union for the _rt case.
+
+
+I think a file descriptor based design could additionally address the
+back and forth your design needs with keys to figure out what event has
+happened and what user mode helper to invoke.
+
+
+
+Ideally I would also like to see a design less tied to keys.  So that we
+could use this for the other user mode helper cases as well.   That said
+solving request_key appears to be the truly important part, there aren't
+many other user mode helpers.  Still it would be nice if in theory the
+design could be used to dispatch the coredump helper as well.
+
+Eric

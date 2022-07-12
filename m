@@ -2,189 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C59572142
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99289572146
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiGLQoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S231395AbiGLQo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiGLQnl (ORCPT
+        with ESMTP id S231192AbiGLQoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:43:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C3FCA6CA;
-        Tue, 12 Jul 2022 09:43:25 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CGXJGg006733;
-        Tue, 12 Jul 2022 16:43:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=PCNpx8EVKCaEh4fq9MuvoS+aL3z8TQbPhHD6h27q/cw=;
- b=sm5DiobrR7leqKwlcVjJJO//8Yg4U4/zjlc4xrDMUdHSw7hhbWpGIEf2cQ39Aw5UmIXQ
- JhJoRl3kpHviTPNO5gqUwu+sOVgDLr+HwmulO+FX0mmJERQvDmWX3DOWMoRR4QaEDxwQ
- 7G/yzS1mlr7jPt448yfn0g5+Zg6oDOanVROFmTbUYoeFOFRhP/b93WXrvhaFESvQijuZ
- 7zTIcPzp87NaZWTz1yPciUNpn6+ZpZLQ5lWMRMuoBNVCOMKPa2i6h/oxbfsIIv7AuKCH
- RASe7k/Z0DnoSd0Xz2lHG/nUwLQxBA6cDmZhegJpwTb6ql1KGAvKNKAwmfBkcQigdrs+ AQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h997u6pay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 16:43:18 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CEx9GA014966;
-        Tue, 12 Jul 2022 16:43:17 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h997u6pa4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 16:43:17 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CGLN40007730;
-        Tue, 12 Jul 2022 16:43:15 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3h71a8kr1x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 16:43:15 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CGhNoF30605626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 16:43:23 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A052411C04C;
-        Tue, 12 Jul 2022 16:43:12 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F37C811C04A;
-        Tue, 12 Jul 2022 16:43:11 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 16:43:11 +0000 (GMT)
-Received: from [9.43.200.237] (unknown [9.43.200.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 9505060307;
-        Wed, 13 Jul 2022 02:43:00 +1000 (AEST)
-Message-ID: <44d580dab2836bbb8679067b25c8702447c498e2.camel@linux.ibm.com>
-Subject: Re: [PATCH 1/2] cxl: Use the bitmap API to allocate bitmaps
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Date:   Wed, 13 Jul 2022 02:42:57 +1000
-In-Reply-To: <59010cc7c62443030c69cb1ce0b2b62c5d47e064.1657566849.git.christophe.jaillet@wanadoo.fr>
-References: <59010cc7c62443030c69cb1ce0b2b62c5d47e064.1657566849.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 12 Jul 2022 12:44:23 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA02E111B;
+        Tue, 12 Jul 2022 09:44:20 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so5153639wmb.3;
+        Tue, 12 Jul 2022 09:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ifJdjMfhd2iKk/La1sz317DTxpZaVFErLsB8EAQCqWU=;
+        b=buHV1961ijmLk+EpDYD/b3kQlIAzwXwGHkrSa+qr3YJD8K0JOQTBH18npKu2UAxJI9
+         if6nRVZTEsq/N1LXwqAzDW3chSsMT76XzXAV3nIoNRlEvtaMnYamL/Th/dLMoQ/+FKgy
+         DuD2ZFZKJ0h6Vk6nl/30AkDRlp+myyLiNQ5J7bbsbS977XiH38IjxU2IBB9+idJTNIlK
+         eorXwQ+wZXNQBzGP7DTp0ICtHSXHz2LbwPYgpmC5WYZcErPp4UFOjrr6ZA6k/ncGseGj
+         mhc0m97E9Jcq8Z+LwxTMT/NTS3QBA8gVrwg6F685n7+WmKsLURlmnXGApQ8LEn/Bsi+X
+         BgBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ifJdjMfhd2iKk/La1sz317DTxpZaVFErLsB8EAQCqWU=;
+        b=pHnV+E5fq58gaP03JMiP6YxP7RHD6ewQ883kLEOpVJJBkLKwLCickek5w7qqtz30r9
+         7wQcNvN7Jvq9DU7bhDEB2zUsTUlZBZ/Hf8KwYuJtGNkmq67kdL/W+MdhS86pJpuMTUlM
+         SNKuafkrmlHQrK1oRFnVww5h8BuxoxonTYdk6AssyP78ajN5dV+oDJ4k5FHOaQu9CzHF
+         galRGTr//rF/J7LmnOgJMS+91MYWD3Ro8YQoV8XO3Yq4gKe37u/i1MKONJ2Z+CiU4EZT
+         N9O1CP4DqZZXn2JcWVjsPL+FNY3z94U+/NZ5yKRLx90dfOC66/gwHjDdI2vCTY+z7VYq
+         FvbA==
+X-Gm-Message-State: AJIora9cWIvXO4ccSUwrMX2sL2FPU9wdALcOvlGtB7NAwA4bnfqRgKAr
+        d5RO9vruf/GqAUY6KL909RNHpFZwj5/60ah6tmY=
+X-Google-Smtp-Source: AGRyM1uF+nw1gsr9kC8U/QPMlY+svjw4dZlywScEVKJHQeUujCWzemXKgKo0sXo6LZbNZ/jGNbp/rV8RVM2souj65kk=
+X-Received: by 2002:a05:600c:4f83:b0:3a1:7310:62e7 with SMTP id
+ n3-20020a05600c4f8300b003a1731062e7mr5133866wmq.84.1657644258936; Tue, 12 Jul
+ 2022 09:44:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3WBbq7UcLn3rymRqn3IykH5F0GqYZ9yl
-X-Proofpoint-ORIG-GUID: Owctm63FHLYZW1Jq5eIyHN4ti1QtVrYN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_10,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 bulkscore=0
- mlxscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
+ <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com> <1299312f-e614-e4e2-72cb-fd7fb99922ce@quicinc.com>
+In-Reply-To: <1299312f-e614-e4e2-72cb-fd7fb99922ce@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 12 Jul 2022 09:44:35 -0700
+Message-ID: <CAF6AEGvjD3LRm40mPr4n+jzx71WmwYpVWizUDLct9cgafjFRyw@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v2 3/7] drm/msm: Fix cx collapse issue during recovery
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Doug Anderson <dianders@chromium.org>, Sean Paul <sean@poorly.run>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 21:14 +0200, Christophe JAILLET wrote:
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
-> 
-> It is less verbose and it improves the semantic.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Mon, Jul 11, 2022 at 10:05 PM Akhil P Oommen
+<quic_akhilpo@quicinc.com> wrote:
+>
+> On 7/12/2022 4:52 AM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+> >> There are some hardware logic under CX domain. For a successful
+> >> recovery, we should ensure cx headswitch collapses to ensure all the
+> >> stale states are cleard out. This is especially true to for a6xx family
+> >> where we can GMU co-processor.
+> >>
+> >> Currently, cx doesn't collapse due to a devlink between gpu and its
+> >> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
+> >> that the iommu driver removes its vote on cx gdsc.
+> >>
+> >> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> >> ---
+> >>
+> >> (no changes since v1)
+> >>
+> >>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 16 ++++++++++++++--
+> >>   drivers/gpu/drm/msm/msm_gpu.c         |  2 --
+> >>   2 files changed, 14 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> >> index 4d50110..7ed347c 100644
+> >> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> >> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> >> @@ -1278,8 +1278,20 @@ static void a6xx_recover(struct msm_gpu *gpu)
+> >>           */
+> >>          gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+> >>
+> >> -       gpu->funcs->pm_suspend(gpu);
+> >> -       gpu->funcs->pm_resume(gpu);
+> >> +       /*
+> >> +        * Now drop all the pm_runtime usage count to allow cx gdsc to collapse.
+> >> +        * First drop the usage count from all active submits
+> >> +        */
+> >> +       for (i = gpu->active_submits; i > 0; i--)
+> >> +               pm_runtime_put(&gpu->pdev->dev);
+> >> +
+> >> +       /* And the final one from recover worker */
+> >> +       pm_runtime_put_sync(&gpu->pdev->dev);
+> >> +
+> >> +       for (i = gpu->active_submits; i > 0; i--)
+> >> +               pm_runtime_get(&gpu->pdev->dev);
+> >> +
+> >> +       pm_runtime_get_sync(&gpu->pdev->dev);
+> > In response to v1, Rob suggested pm_runtime_force_suspend/resume().
+> > Those seem like they would work to me, too. Why not use them?
+> Quoting my previous response which I seem to have sent only to Freedreno
+> list:
+>
+> "I believe it is supposed to be used only during system sleep state
+> transitions. Btw, we don't want pm_runtime_get() calls from elsewhere to
+> fail by disabling RPM here."
 
-Thanks!
+The comment about not wanting other runpm calls to fail is valid.. but
+that is also solveable, ie. by holding a lock around runpm calls.
+Which I think we need to do anyways, otherwise looping over
+gpu->active_submits is racey..
 
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
+I think pm_runtime_force_suspend/resume() is the least-bad option.. or
+at least I'm not seeing any obvious alternative that is better
 
-> ---
->  drivers/misc/cxl/context.c | 2 +-
->  drivers/misc/cxl/guest.c   | 2 +-
->  drivers/misc/cxl/irq.c     | 3 +--
->  drivers/misc/cxl/of.c      | 5 ++---
->  4 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/misc/cxl/context.c b/drivers/misc/cxl/context.c
-> index e627b4056623..acaa44809c58 100644
-> --- a/drivers/misc/cxl/context.c
-> +++ b/drivers/misc/cxl/context.c
-> @@ -331,7 +331,7 @@ static void reclaim_ctx(struct rcu_head *rcu)
->                 __free_page(ctx->ff_page);
->         ctx->sstp = NULL;
->  
-> -       kfree(ctx->irq_bitmap);
-> +       bitmap_free(ctx->irq_bitmap);
->  
->         /* Drop ref to the afu device taken during cxl_context_init
-> */
->         cxl_afu_put(ctx->afu);
-> diff --git a/drivers/misc/cxl/guest.c b/drivers/misc/cxl/guest.c
-> index 3321c014913c..375f692ae9d6 100644
-> --- a/drivers/misc/cxl/guest.c
-> +++ b/drivers/misc/cxl/guest.c
-> @@ -1053,7 +1053,7 @@ static void free_adapter(struct cxl *adapter)
->                 if (adapter->guest->irq_avail) {
->                         for (i = 0; i < adapter->guest->irq_nranges;
-> i++) {
->                                 cur = &adapter->guest->irq_avail[i];
-> -                               kfree(cur->bitmap);
-> +                               bitmap_free(cur->bitmap);
->                         }
->                         kfree(adapter->guest->irq_avail);
->                 }
-> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
-> index 5f0e2dcebb34..0ce91d99aead 100644
-> --- a/drivers/misc/cxl/irq.c
-> +++ b/drivers/misc/cxl/irq.c
-> @@ -319,8 +319,7 @@ int afu_allocate_irqs(struct cxl_context *ctx,
-> u32 count)
->         }
->  
->         ctx->irq_count = count;
-> -       ctx->irq_bitmap = kcalloc(BITS_TO_LONGS(count),
-> -                                 sizeof(*ctx->irq_bitmap),
-> GFP_KERNEL);
-> +       ctx->irq_bitmap = bitmap_zalloc(count, GFP_KERNEL);
->         if (!ctx->irq_bitmap)
->                 goto out;
->  
-> diff --git a/drivers/misc/cxl/of.c b/drivers/misc/cxl/of.c
-> index 1cfecba42d01..25ce725035e7 100644
-> --- a/drivers/misc/cxl/of.c
-> +++ b/drivers/misc/cxl/of.c
-> @@ -308,8 +308,7 @@ static int read_adapter_irq_config(struct cxl
-> *adapter, struct device_node *np)
->                 cur = &adapter->guest->irq_avail[i];
->                 cur->offset = be32_to_cpu(ranges[i * 2]);
->                 cur->range  = be32_to_cpu(ranges[i * 2 + 1]);
-> -               cur->bitmap = kcalloc(BITS_TO_LONGS(cur->range),
-> -                               sizeof(*cur->bitmap), GFP_KERNEL);
-> +               cur->bitmap = bitmap_zalloc(cur->range, GFP_KERNEL);
->                 if (cur->bitmap == NULL)
->                         goto err;
->                 if (cur->offset < adapter->guest->irq_base_offset)
-> @@ -326,7 +325,7 @@ static int read_adapter_irq_config(struct cxl
-> *adapter, struct device_node *np)
->  err:
->         for (i--; i >= 0; i--) {
->                 cur = &adapter->guest->irq_avail[i];
-> -               kfree(cur->bitmap);
-> +               bitmap_free(cur->bitmap);
->         }
->         kfree(adapter->guest->irq_avail);
->         adapter->guest->irq_avail = NULL;
-
-
+BR,
+-R

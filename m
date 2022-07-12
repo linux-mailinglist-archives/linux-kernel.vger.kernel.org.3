@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4985720CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5F45720D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiGLQ1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S233053AbiGLQ2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiGLQ0e (ORCPT
+        with ESMTP id S232400AbiGLQ2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:26:34 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF708CC019
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:26:22 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id i186so8306088vsc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:26:22 -0700 (PDT)
+        Tue, 12 Jul 2022 12:28:08 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92C3CB458;
+        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p9so8171567pjd.3;
+        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yc6YXnNVL61q+QUGaIhVOre8jSccirUVb8sqMkVrX9c=;
-        b=LsNq0warVVX+8zijyaGLKwZxd85OPS4s3YIqFk6/bKfHtq2L8GpADGvZXQbEzXVLFa
-         8GQrzzldl95+RP0pUe3GMAovzJDZJ1JzMbO1Hm0y0xg5fA8pLddlxuCSG8V7p0oLBdmo
-         xXydF2rMyI86OJOOE18GDMBH/EksdlSu81br8Kz7TmsseXRnbyHcwADSKxpQHD6Ag8GM
-         I3M4AWtZwHPxOQLRzVK4Lj7Te+Ay62avCHlyU1BQqGqVEzTxUB1cQLWVffjzrMIptqc3
-         chmh/AkHlD95aE893qAKY13CpXWGVCkL9tQrI0nmVX88nfC9vMPCb6mIEqsKMs9BnCBo
-         AgGg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=crFxvZBUeNdiMcKsNl1tCyBaKxqrHCwq98wDUXGAXHQ=;
+        b=n/Lu8ESbMmF1p4SAf0ZpXbdAg5QeJld8BqIuFkEveqkWvIBhbSjGtpUToCacuWMSJO
+         ir+p19zBiY1LCaqkTHPlINgm41iDtIkPYXekdhf7d4iLGZNv/spNiz0teQ9NaXwDoO1/
+         ib09iREDJScvy0z0kNzcrVC4AE+8ofhWAsRtyIGyLXLKWDjRagEqrYhan0JHrkOYmrx1
+         a9G2fpapPeHbafDFrIBSfU6JRysxr09uXay07dVqUBIBwSCe4rYCOIoSbKabxntm/JyY
+         k1w86Aww4TIUscOrUfuZEa6JUQUtwHYBqYdKOj+K+FafGE4D33nHrI4rJBeLedHXc5AE
+         9SZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yc6YXnNVL61q+QUGaIhVOre8jSccirUVb8sqMkVrX9c=;
-        b=X+1TXWILo4rmL5uDIyQFTSv2oEQenFF3yaSER0d0516lBFzIxRdO0RudnEDMBFL72M
-         e+BHwzW20CnenX9LNOqJWEkPC8eSvcDn8QE2N1ikmo1Co/dVXgKDDjjDB+Ro1HcgfdFw
-         uqXbZU2E/3mUgImS/3ItvL/UDUug5yYx3tD3Qaw2C9xyR7KsB32rSYNZ77SJy7p4HJXS
-         z11JJvb7sQxNG2j/JwCMuu6fe8YD02EofMhpScIg2CsQJm48l9itQnYHq4iO4ZiDRfQD
-         1oie2DeFfv7+R+kgiYJlaT1Z/fv0DECOR/CnH5fxbcltxieeXynEQLendbtV3zxJODaV
-         9R1w==
-X-Gm-Message-State: AJIora/0FDFkCdpy9F+DX2y51ZTQ1oXjP1zdT2C18RR+eg95zv/vlBYQ
-        9xk0D89G3ZdFCM+sAmdHOHbFmhmqK8sMS5KSv6M=
-X-Google-Smtp-Source: AGRyM1sn55QtslIMX6fUep3gArNIJ8Ftpa4qLDEde2Q9HFgL1X88NxObWCITye/Xgr3rtG6yRvbKqXfvoSY46bxHceY=
-X-Received: by 2002:a67:df04:0:b0:356:f32d:148d with SMTP id
- s4-20020a67df04000000b00356f32d148dmr9226267vsk.60.1657643181852; Tue, 12 Jul
- 2022 09:26:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=crFxvZBUeNdiMcKsNl1tCyBaKxqrHCwq98wDUXGAXHQ=;
+        b=VaEav7M1+yulL/jG6fCDYHFqONUT5dfPl0P2SWNWIdLbZbcJRi+NFqFj+jUwstpq7h
+         KzfTqQl4d1ri4bGSM6GR8yBeix0KY+wbuzzKqEmbNNz1ngLixiBzitObSwdBq0J6lQg0
+         aTJdSSE3bzRlavoBXG49H6zgsu4iUUGPmb98omA1WN/t9lrlSHC7eNCZ35X6vKhWE9fZ
+         VCbi1dykagRjWPA/wTK6j9sLwqrfbcdrsjgq1AXg2lNXdXgSyynapftSdEaMV2l3XwsT
+         vi06jBGz45EhgvBeIQ7p6EAfRsw9LK4B+hsoMaqWS3Tsnh+MBi0KMbv9/bJ0vHJORCeU
+         H3iA==
+X-Gm-Message-State: AJIora9iQb/TBC3+2CMtEqGJSmAnmixeGz1qlBfwAH4s72W1uqRfhibV
+        gNGPUEjGm4deXYa1PmBzn5BlPwj6Vlc=
+X-Google-Smtp-Source: AGRyM1v1RP/gA8qxjpoMj4J4scGE56YoViiod55ezbdPizAI1jMFBuUbLNAIMwGUECe/3U98NU0kMQ==
+X-Received: by 2002:a17:902:7e8f:b0:16c:eb4:a52a with SMTP id z15-20020a1709027e8f00b0016c0eb4a52amr24837698pla.19.1657643285396;
+        Tue, 12 Jul 2022 09:28:05 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d21-20020a63fd15000000b0040ca587fe0fsm6289487pgh.63.2022.07.12.09.28.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 09:28:04 -0700 (PDT)
+Message-ID: <a6d8fc0f-38bd-6afe-ef45-42ce3ee6c136@gmail.com>
+Date:   Tue, 12 Jul 2022 09:28:02 -0700
 MIME-Version: 1.0
-References: <20220711044711.466822-1-yury.norov@gmail.com> <CAHp75Vf8EhRYWdQN6Oc79GzWCvo-sRJDvy7_Aek_Z63GCu2dMQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vf8EhRYWdQN6Oc79GzWCvo-sRJDvy7_Aek_Z63GCu2dMQ@mail.gmail.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Tue, 12 Jul 2022 09:26:10 -0700
-Message-ID: <CAAH8bW_RYG_Tbpip=BkSFAymDm2y3jJBqTi0PJWA=H-a-L_3tg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] lib/find: add find_nth_bit()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MIPS: Fixed __debug_virt_addr_valid()
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     linux-mips@vger.kernel.org, gerg@kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220707215237.1730283-1-f.fainelli@gmail.com>
+ <20220708115851.ejsooiilxcopkoei@mobilestation>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220708115851.ejsooiilxcopkoei@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,47 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 1:55 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jul 11, 2022 at 6:51 AM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > Kernel lacks for a function that searches for Nth bit in a bitmap.
-> > Usually people do it like this:
-> >         for_each_set_bit(bit, mask, size)
-> >                 if (--n == 0)
-> >                         return bit;
-> >
-> > Which is not so elegant, and very slow.
-> >
-> > This series adds fast routines for this task, and applies them where
-> > appropriate.
-> >
-> > While here, move thin wrappers around find_bit() in nodemask.c to a
-> > corresponding header, and because nodemask.c is empty after that,
-> > remove it.
-> >
-> > v1: https://lore.kernel.org/lkml/20220706182300.70862-4-yury.norov@gmail.com/T/
-> > v2: - count Nth bit from 0 (was 1);
-> >     - use 'invert' trick in _find_nth_bit(), as in _find_next_bit();
-> >     - cleanup comments;
-> >     - fns() is kept inline - looking at __ffs() generic implementation,
-> >       I decided to keep it untouched.
->
-> Two observations:
-> 1) your patches are not versioned (hint: use `git format-patch
-> --thread -vX --cover-letter ...`, where X is a version you want to
-> give);
+On 7/8/22 04:58, Serge Semin wrote:
+> On Thu, Jul 07, 2022 at 02:52:36PM -0700, Florian Fainelli wrote:
+>> It is permissible for kernel code to call virt_to_phys() against virtual
+>> addresses that are in KSEG0 or KSEG1 and we need to be dealing with both
+>> types. Add a final condition that ensures that the virtual address is
+>> below KSEG2.
+>>
+>> Fixes: dfad83cb7193 ("MIPS: Add support for CONFIG_DEBUG_VIRTUAL")
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>   arch/mips/mm/physaddr.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
+>> index a1ced5e44951..a82f8f57a652 100644
+>> --- a/arch/mips/mm/physaddr.c
+>> +++ b/arch/mips/mm/physaddr.c
+>> @@ -5,6 +5,7 @@
+>>   #include <linux/mmdebug.h>
+>>   #include <linux/mm.h>
+>>   
+>> +#include <asm/addrspace.h>
+>>   #include <asm/sections.h>
+>>   #include <asm/io.h>
+>>   #include <asm/page.h>
+>> @@ -30,7 +31,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
+>>   	if (x == MAX_DMA_ADDRESS)
+>>   		return true;
+>>   
+> 
+>> -	return false;
+>> +	return KSEGX(x) < KSEG2;
+> 
+> With this do we really need the high_memory-based conditionals in this
+> method?
+> 
+> If the line above is the only way to take the uncached segment into
+> account then can we reduce the whole method to:
+> static inline bool __debug_virt_addr_valid {
+> 	return x >= PAGE_OFFSET && KSEGX(x) < KSEG2;
+> }
+> ?
+> 
+> Though this still may be invalid for EVA systems, like malta (see
+> arch/mips/include/asm/mach-malta/spaces.h).
+> 
+> Note AFAICS if EVA is enabled, highmem is implied to be disabled (see
+> the CPU_MIPS32_3_5_EVA config utilization and HIGHMEM config
+> dependencies). Thus all the memory is supposed to be linearly mapped
+> in that case.
 
-OK
+OK, so if all of the memory is linearly mapped, then I am not too sure 
+what we will be able to check, which is in essence pretty similar to 
+what happens on MIPS64, right?
 
-> 2) fns() is not good abbreviation, because among ffs (First) and fls
-> (Last), fns would be read as Next, which is misleading, I'm not sure
-> fnths(), which is correct, is good for readers.
-
-I agree that fns() may be confusing, but fnths() is even worse to me.
-I expect that it will be mostly used indirectly via find_nth_bit(), and
-will not create a lot of confusion for users.
-
-Thanks,
-Yury
+Maybe DEBUG_VIRTUAL should depend on !EVA as well?
+-- 
+Florian

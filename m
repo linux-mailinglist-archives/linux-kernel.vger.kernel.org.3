@@ -2,41 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F8657200B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1BF571CDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiGLPzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S232170AbiGLOhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiGLPzj (ORCPT
+        with ESMTP id S233358AbiGLOgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:55:39 -0400
-X-Greylist: delayed 2333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 08:55:36 PDT
-Received: from lizzy.crudebyte.com (lizzy.crudebyte.com [91.194.90.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B18C54A7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=lizzy; h=Cc:To:Subject:Date:From:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Content-ID:
-        Content-Description; bh=DR3HV1SiIkmW4IR/q6IEoMYBeifoU6ydrhuDi/6K044=; b=JLWBp
-        gHkHeaKR9uoySe7mI5RXdMk5eM3CvX4kJVb2YrdP9Twm3QzZ6S+Y6wVFRAp7WWQFdtJ3BuwtWhWN6
-        8wRfR0767mXO3VYp73AtO09kpTLimCxsrF/3/ZCxz36rMROSaL+yvUVGgXHon14kaFFxQbsd8TwxP
-        UyBbL+8DGTfAto/gBpbuFDXy84qAP2ebfuh3uMDTAewXMmwDdeITuhrWWBnWwP8ozOdyW2x8yNdhM
-        wIv7Or4GdQneIDuoeaDlaIdmZQvathN7kMCPiIg+BoyOF+60uWcuIezRHxkAlxOzrjl9/omsM6awR
-        M5jCAFZ1uohM1amebgFDe2AlMpaxA==;
-Message-Id: <cover.1657636554.git.linux_oss@crudebyte.com>
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-Date:   Tue, 12 Jul 2022 16:35:54 +0200
-Subject: [PATCH v5 00/11] remove msize limit in virtio transport
-To:     v9fs-developer@lists.sourceforge.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        Tue, 12 Jul 2022 10:36:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CC5BA386
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:36:42 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CDC7r7012013;
+        Tue, 12 Jul 2022 14:36:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=790MkQcJxYna5ILBe0ZbAjCXOj4DIU0QiKAhG//8tVw=;
+ b=aeqgb+XZfG1MnjuyA4ncTulK3VXmKb0zzvdJrkpIu8V19cl/MBZDB838hlgMF5u2CRUG
+ 2gVARetwi/1Z/iBl+U7oDYzUKOk9Pdfsl33LX4OXYzg43r+rYyVm8yz/hzBywB/3m5lA
+ bsidBH1WSaePjmhvvIn09sYtlgYvTA889z4pMcG54XfrQJ97n0rxQfSHXBwoOK9tFwK2
+ oN57z/LmmD0LZWSwfQCCnjN1isRvsqf9rnDHBtGEsR2blQtEsL09ioLB6VK0vUUyxBMH
+ oy+yxylhbO963aPh9B/ur0trapXELbnTkUnlwXAb+jb5pVbRORq2tsslCuB1lwBh6+9X zw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h98jvm5ys-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:36:32 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CEZulG007859;
+        Tue, 12 Jul 2022 14:36:31 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncngds1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:36:30 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CEYxHw23724416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 14:34:59 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A303CA405B;
+        Tue, 12 Jul 2022 14:36:28 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38A00A4054;
+        Tue, 12 Jul 2022 14:36:28 +0000 (GMT)
+Received: from sig-9-145-145-217.de.ibm.com (unknown [9.145.145.217])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 14:36:28 +0000 (GMT)
+Message-ID: <ff46adb9be9df70f6906e86c5e9220adf50842fd.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/1] nvme-pci: fix hang during error recovery when the
+ PCI device is isolated
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Stefan Roese <sr@denx.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 16:36:27 +0200
+In-Reply-To: <Ys2CeIqv//5ZGJTM@kbusch-mbp>
+References: <20220712124453.2227362-1-schnelle@linux.ibm.com>
+         <20220712124453.2227362-2-schnelle@linux.ibm.com>
+         <Ys2CeIqv//5ZGJTM@kbusch-mbp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 08SCBWmOnqCeDLIk72GnqSbgz8WUgCCw
+X-Proofpoint-ORIG-GUID: 08SCBWmOnqCeDLIk72GnqSbgz8WUgCCw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ impostorscore=0 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,139 +88,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series aims to get get rid of the current 500k 'msize' limitation in
-the 9p virtio transport, which is currently a bottleneck for performance
-of 9p mounts.
+On Tue, 2022-07-12 at 08:17 -0600, Keith Busch wrote:
+> On Tue, Jul 12, 2022 at 02:44:53PM +0200, Niklas Schnelle wrote:
+> > On s390 and powerpc PCI devices are isolated when an error is detected
+> > and driver->err_handler->error_detected is called with an inaccessible
+> > PCI device and PCI channel state set to pci_channel_io_frozen
+> > (see Step 1 in Documentation/PCI/pci-error-recovery.rst).
+> > 
+> > In the case of NVMe devices nvme_error_detected() then calls
+> > nvme_dev_disable(dev, false) and requests a reset. After a successful
+> > reset the device is accessible again and nvme_slot_reset() resets the
+> > controller and queues nvme_reset_work() which then recovers the
+> > controller.
+> > 
+> > Since commit b98235d3a471 ("nvme-pci: harden drive presence detect in
+> > nvme_dev_disable()") however nvme_dev_disable() no longer freezes the
+> > queues if pci_device_is_present() returns false. This is the case for an
+> > isolated PCI device. In principle this makes sense as there are no
+> > accessible hardware queues to run. The problem though is that for
+> > a previously live reset controller with online queues nvme_reset_work()
+> > calls nvme_wait_freeze() which, without the freeze having been
+> > initiated, then hangs forever. Fix this by starting the freeze in
+> > nvme_slot_reset() which is the earliest point where we know the device
+> > should be accessible again.
+> > 
+> > Fixes: b98235d3a471 ("nvme-pci: harden drive presence detect in nvme_dev_disable()")
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> 
+> Oh, we've messed up the expected sequence. The mistaken assumption is a device
+> not present means we're about to unbind from it, but it could appear that way
+> just for normal error handling and reset, so we need to preserve the previous
+> handling.
+> 
+> The offending commit really just wants to avoid the register access (which we
+> shouldn't have to do, but hey, broken hardware...). So let's keep the sequence
+> the same as before and just skip the register read. Does this work for you?
 
-To avoid confusion: it does remove the msize limit for the virtio transport,
-on 9p client level though the anticipated milestone for this series is now
-a max. 'msize' of 4 MB. See patch 7 for reason why.
+Ah thanks for the explanation! I had actually tested a similar patch
+but wasn't sure if nvme_start_freeze() also does register access for
+starting the HW queues and if it makes sense on a dead/isolated device
+at all. On the other hand this code very explicitly handles dead
+devices so I guess this was kept in mind.
 
-This is a follow-up of the following series and discussion:
-https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
+So yes the below patch works for me.
 
-Latest version of this series:
-https://github.com/cschoenebeck/linux/commits/9p-virtio-drop-msize-cap
+> 
+> ---
+> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+> index fdfee3e590db..c40e82cee735 100644
+> --- a/drivers/nvme/host/pci.c
+> +++ b/drivers/nvme/host/pci.c
+>  static void nvme_dev_remove_admin(struct nvme_dev *dev)
+> @@ -2690,9 +2772,11 @@ static void nvme_dev_disable(struct nvme_dev *dev, bool shutdown)
+>  	struct pci_dev *pdev = to_pci_dev(dev->dev);
+>  
+>  	mutex_lock(&dev->shutdown_lock);
+> -	if (pci_device_is_present(pdev) && pci_is_enabled(pdev)) {
+> -		u32 csts = readl(dev->bar + NVME_REG_CSTS);
+> +	if (pci_is_enabled(pdev)) {
+> +		u32 csts = ~0;
+>  
+> +		if (pci_device_is_present(pdev))
+> +			csts = readl(dev->bar + NVME_REG_CSTS);
+>  		if (dev->ctrl.state == NVME_CTRL_LIVE ||
+>  		    dev->ctrl.state == NVME_CTRL_RESETTING) {
+>  			freeze = true;
+> --
 
-
-OVERVIEW OF PATCHES:
-
-* Patches 1..6 remove the msize limitation from the 'virtio' transport
-  (i.e. the 9p 'virtio' transport itself actually supports >4MB now, tested
-  successfully with an experimental QEMU version and some dirty 9p Linux
-  client hacks up to msize=128MB).
-
-* Patch 7 limits msize for all transports to 4 MB for now as >4MB would need
-  more work on 9p client level (see commit log of patch 7 for details).
-
-* Patches 8..11 tremendously reduce unnecessarily huge 9p message sizes and
-  therefore provide performance gain as well. So far, almost all 9p messages
-  simply allocated message buffers exactly msize large, even for messages
-  that actually just needed few bytes. So these patches make sense by
-  themselves, independent of this overall series, however for this series
-  even more, because the larger msize, the more this issue would have hurt
-  otherwise.
-
-
-PREREQUISITES:
-
-If you are testing with QEMU then please either use QEMU 6.2 or higher, or
-at least apply the following patch on QEMU side:
-
-  https://lore.kernel.org/qemu-devel/E1mT2Js-0000DW-OH@lizzy.crudebyte.com/
-
-That QEMU patch is required if you are using a user space app that
-automatically retrieves an optimum I/O block size by obeying stat's
-st_blksize, which 'cat' for instance is doing, e.g.:
-
-	time cat test_rnd.dat > /dev/null
-
-Otherwise please use a user space app for performance testing that allows
-you to force a large block size and to avoid that QEMU issue, like 'dd'
-for instance, in that case you don't need to patch QEMU.
-
-
-KNOWN LIMITATION:
-
-With this series applied I can run
-
-  QEMU host <-> 9P virtio <-> Linux guest
-
-with up to slightly below 4 MB msize [4186112 = (1024-2) * 4096]. If I try
-to run it with exactly 4 MB (4194304) it currently hits a limitation on
-QEMU side:
-
-  qemu-system-x86_64: virtio: too many write descriptors in indirect table
-
-That's because QEMU currently has a hard coded limit of max. 1024 virtio
-descriptors per vring slot (i.e. per virtio message), see to do (1.) below.
-
-
-STILL TO DO:
-
-  1. Negotiating virtio "Queue Indirect Size" (MANDATORY):
-
-    The QEMU issue described above must be addressed by negotiating the
-    maximum length of virtio indirect descriptor tables on virtio device
-    initialization. This would not only avoid the QEMU error above, but would
-    also allow msize of >4MB in future. Before that change can be done on
-    Linux and QEMU sides though, it first requires a change to the virtio
-    specs. Work on that on the virtio specs is in progress:
-
-    https://github.com/oasis-tcs/virtio-spec/issues/122
-
-    This is not really an issue for testing this series. Just stick to max.
-    msize=4186112 as described above and you will be fine. However for the
-    final PR this should obviously be addressed in a clean way.
-
-  2. Reduce readdir buffer sizes (optional - maybe later):
-
-    This series already reduced the message buffers for most 9p message
-    types. This does not include Treaddir though yet, which is still simply
-    using msize. It would make sense to benchmark first whether this is
-    actually an issue that hurts. If it does, then one might use already
-    existing vfs knowledge to estimate the Treaddir size, or starting with
-    some reasonable hard coded small Treaddir size first and then increasing
-    it just on the 2nd Treaddir request if there are more directory entries
-    to fetch.
-
-  3. Add more buffer caches (optional - maybe later):
-
-    p9_fcall_init() uses kmem_cache_alloc() instead of kmalloc() for very
-    large buffers to reduce latency waiting for memory allocation to
-    complete. Currently it does that only if the requested buffer size is
-    exactly msize large. As patch 10 already divided the 9p message types
-    into few message size categories, maybe it would make sense to use e.g.
-    4 separate caches for those memory category (e.g. 4k, 8k, msize/2,
-    msize). Might be worth a benchmark test.
-
-Testing and feedback appreciated!
-
-v4 -> v5:
-
-  * Exclude RDMA transport from buffer size reduction. [patch 11]
-
-Christian Schoenebeck (11):
-  9p/trans_virtio: separate allocation of scatter gather list
-  9p/trans_virtio: turn amount of sg lists into runtime info
-  9p/trans_virtio: introduce struct virtqueue_sg
-  net/9p: add trans_maxsize to struct p9_client
-  9p/trans_virtio: support larger msize values
-  9p/trans_virtio: resize sg lists to whatever is possible
-  net/9p: limit 'msize' to KMALLOC_MAX_SIZE for all transports
-  net/9p: split message size argument into 't_size' and 'r_size' pair
-  9p: add P9_ERRMAX for 9p2000 and 9p2000.u
-  net/9p: add p9_msg_buf_size()
-  net/9p: allocate appropriate reduced message buffers
-
- include/net/9p/9p.h     |   3 +
- include/net/9p/client.h |   2 +
- net/9p/client.c         |  68 +++++++--
- net/9p/protocol.c       | 154 ++++++++++++++++++++
- net/9p/protocol.h       |   2 +
- net/9p/trans_virtio.c   | 304 +++++++++++++++++++++++++++++++++++-----
- 6 files changed, 484 insertions(+), 49 deletions(-)
-
--- 
-2.30.2
 

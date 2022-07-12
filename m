@@ -2,133 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B4E572022
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25480572028
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiGLQAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S233217AbiGLQAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiGLQAA (ORCPT
+        with ESMTP id S229813AbiGLQAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:00:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A586FBFADF;
-        Tue, 12 Jul 2022 08:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Noa21biYShxdCO0+5k8GjeB31+A2tADbHyxeUmcBaPQ=; b=mAbVR09UJuICbVejnpNHu9anjz
-        4xDWtKlUnRWqYzVFx1kiXoDrvTHfX2JSZneJq4xmpZ54lAoq+TRnohAU3bT7+zCN2tcU3ygzA+qxr
-        ozPCs+zDx4P3HPpeCG+c5Bz7sYqBu7Ys0dfcYjPn+B5/MvobDiT2Z41ifMa05Fk14LMuJ+WswZEwz
-        M2Ajzx5wML8Ktabp6d3m6y20QNp6mt3WY4Ei1FH7toHS2JD08Li3Gd8WvICWmvrXRGyp3Iwah6c95
-        fagtxJwzXPtJ3aeYFPjLVqnGdf9VYU8E19apu6e3llTFWqOEemIg1GGr+5xnZIb1UklfA9xTc9Z/B
-        4rAhcdmw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33306)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oBIIk-00032t-Mn; Tue, 12 Jul 2022 16:59:54 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oBIIj-0004oF-5z; Tue, 12 Jul 2022 16:59:53 +0100
-Date:   Tue, 12 Jul 2022 16:59:53 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH net-next 2/9] dt-bindings: net: Expand pcs-handle to
- an array
-Message-ID: <Ys2aeRBGGv6ajMZ5@shell.armlinux.org.uk>
-References: <20220711160519.741990-1-sean.anderson@seco.com>
- <20220711160519.741990-3-sean.anderson@seco.com>
- <ecaf9d0f-6ddb-5842-790e-3d5ee80e2a77@linaro.org>
- <fdd34075-4e5e-a617-696d-15c5ac6e9bfe@seco.com>
- <d84899e7-06f7-1a20-964f-90b6f0ff96fd@linaro.org>
+        Tue, 12 Jul 2022 12:00:43 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E579C54AD;
+        Tue, 12 Jul 2022 09:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657641642; x=1689177642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AnwCkEUuxJLCRx7GhtMQk+FLBhJzxZJHbxYHUOLgTl8=;
+  b=P27IVRQNKzmaG2d+TwGBLUdc3yLbidOE8HrVpX4Tex8v3nKDhDDZaLEC
+   y9Y37xDBmVIklq0VyedAFDvj3AIH2NAMezk5ZkREzjE7y2ItwRrO6zaWV
+   eBzbnsIG6tqAP//h2UplzKn8iKxNGVDO2K6B2okAClg+uM2JYBOLxrm2P
+   jsk1az1TxX0LgMpQ9rSPQRjZy79yWTGjxgSFTPpdVkNk1c1THX8qeaodj
+   RhZ7Q5uoNj9Zz1YIj/duwRKBKHYxCe/5IkNUzMj+1ALvEHyX+YtbBzulc
+   kgiM2Vavg1k8zJNqbxMnckeyXA8PcShfOPSyvyIG8m13RG7cNkQRWeGm/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265386478"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="265386478"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:00:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="841430869"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:00:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oBIJP-001Bb2-1l;
+        Tue, 12 Jul 2022 19:00:35 +0300
+Date:   Tue, 12 Jul 2022 19:00:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Suresh Siddha <suresh.b.siddha@intel.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        iommu@lists.linux.dev, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/vt-d: avoid invalid memory access via
+ node_online(NUMA_NO_NODE)
+Message-ID: <Ys2aoyVn7lc9VIUO@smile.fi.intel.com>
+References: <20220712153836.41599-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d84899e7-06f7-1a20-964f-90b6f0ff96fd@linaro.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220712153836.41599-1-alexandr.lobakin@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:18:05PM +0200, Krzysztof Kozlowski wrote:
-> On 12/07/2022 17:06, Sean Anderson wrote:
-> > Hi Krzysztof,
-> > 
-> > On 7/12/22 4:51 AM, Krzysztof Kozlowski wrote:
-> >> On 11/07/2022 18:05, Sean Anderson wrote:
-> >>> This allows multiple phandles to be specified for pcs-handle, such as
-> >>> when multiple PCSs are present for a single MAC. To differentiate
-> >>> between them, also add a pcs-names property.
-> >>>
-> >>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> >>> ---
-> >>>
-> >>>  .../devicetree/bindings/net/ethernet-controller.yaml       | 7 ++++++-
-> >>>  1 file changed, 6 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> >>> index 4f15463611f8..c033e536f869 100644
-> >>> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> >>> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> >>> @@ -107,11 +107,16 @@ properties:
-> >>>      $ref: "#/properties/phy-connection-type"
-> >>>  
-> >>>    pcs-handle:
-> >>> -    $ref: /schemas/types.yaml#/definitions/phandle
-> >>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> >>>      description:
-> >>>        Specifies a reference to a node representing a PCS PHY device on a MDIO
-> >>>        bus to link with an external PHY (phy-handle) if exists.
-> >>
-> >> You need to update all existing bindings and add maxItems:1.
-> >>
-> >>>  
-> >>> +  pcs-names:
-> >>
-> >> To be consistent with other properties this should be "pcs-handle-names"
-> >> and the other "pcs-handles"... and then actually drop the "handle".
-> > 
-> > Sorry, I'm not sure what you're recommending in the second half here.
+On Tue, Jul 12, 2022 at 05:38:36PM +0200, Alexander Lobakin wrote:
+> KASAN reports:
 > 
-> I would be happy to see consistent naming with other xxxs/xxx-names
-> properties, therefore I recommend to:
-> 1. deprecate pcs-handle because anyway the naming is encoding DT spec
-> into the name ("handle"),
-> 2. add new property 'pcs' or 'pcss' (the 's' at the end like clocks but
-> maybe that's too much) with pcs-names.
+> [ 4.668325][ T0] BUG: KASAN: wild-memory-access in dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
+> [    4.676149][    T0] Read of size 8 at addr 1fffffff85115558 by task swapper/0/0
+> [    4.683454][    T0]
+> [    4.685638][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc3-00004-g0e862838f290 #1
+> [    4.694331][    T0] Hardware name: Supermicro SYS-5018D-FN4T/X10SDV-8C-TLN4F, BIOS 1.1 03/02/2016
+> [    4.703196][    T0] Call Trace:
+> [    4.706334][    T0]  <TASK>
+> [ 4.709133][ T0] ? dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
 > 
-> However before implementing this, please wait for more feedback. Maybe
-> Rob or net folks will have different opinions.
+> after converting the type of the first argument (@nr, bit number)
+> of arch_test_bit() from `long` to `unsigned long`[0].
+> 
+> Under certain conditions (for example, when ACPI NUMA is disabled
+> via command line), pxm_to_node() can return %NUMA_NO_NODE (-1).
+> It is valid 'magic' number of NUMA node, but not valid bit number
+> to use in bitops.
+> node_online() eventually descends to test_bit() without checking
+> for the input, assuming it's on caller side (which might be good
+> for perf-critical tasks). There, -1 becomes %ULONG_MAX which leads
+> to an insane array index when calculating bit position in memory.
+> 
+> For now, add an explicit check for @node being not %NUMA_NO_NODE
+> before calling test_bit(). The actual logics didn't change here
+> at all.
 
-We decided on "pcs-handle" for PCS for several drivers, to be consistent
-with the situation for network PHYs (which are "phy-handle", settled on
-after we also had "phy" and "phy-device" and decided to deprecate these
-two.
+Yes, and bitops performance is critical, so it's caller's responsibility to
+supply correct bit number.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Surely we should have consistency within the net code - so either "phy"
-and "pcs" or "phy-handle" and "pcs-handle" but not a mixture of both?
+> Fixes: ee34b32d8c29 ("dmar: support for parsing Remapping Hardware Static Affinity structure")
+> Cc: stable@vger.kernel.org # 2.6.33+
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
+>  drivers/iommu/intel/dmar.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+> index 9699ca101c62..64b14ac4c7b0 100644
+> --- a/drivers/iommu/intel/dmar.c
+> +++ b/drivers/iommu/intel/dmar.c
+> @@ -494,7 +494,7 @@ static int dmar_parse_one_rhsa(struct acpi_dmar_header *header, void *arg)
+>  		if (drhd->reg_base_addr == rhsa->base_address) {
+>  			int node = pxm_to_node(rhsa->proximity_domain);
+>  
+> -			if (!node_online(node))
+> +			if (node != NUMA_NO_NODE && !node_online(node))
+>  				node = NUMA_NO_NODE;
+>  			drhd->iommu->node = node;
+>  			return 0;
+> -- 
+> 2.36.1
+> 
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+

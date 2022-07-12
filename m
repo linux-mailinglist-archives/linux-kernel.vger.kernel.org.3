@@ -2,227 +2,582 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACAE571BE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FF9571BED
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiGLODt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S230301AbiGLOF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGLODp (ORCPT
+        with ESMTP id S229510AbiGLOFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:03:45 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10402E02B;
-        Tue, 12 Jul 2022 07:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657634622; x=1689170622;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=2B6a7B27j6G+mG48B/lmx6CJCZOTJ2qKLHvnCQwLwiA=;
-  b=gR6V1ORGJFFDTF3u3LsjX3g+IvOuOYOfmXtFc5tLEcsOr5HACvV1G1QA
-   +Hnzi6rpZZM6pQ/CHYZUK6RnOb+jMtSkHtCMbn1L5HINNW3v61JNJXVJu
-   0ga9UjWdfotsoR1kQTgscyvbQgd+5z/ZomMi4fW8+8SaKR9wr4oZ7SbSo
-   SHg33C5DQszYpLkvgW0mh0nd9966FVWjsBVGO4RNt9tx/Q/nmUPuJbv/s
-   jxXe2kmTZyXs3XtjJ05KjawAo3v5NFn4CMvcND9vX45RcUw/9u31ZQVqT
-   stZ4CI6ERRBtpWvGdTGeMLDkCZQvyJ0WgYt4FXjZgdgXAh1fJspt7Exai
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="171767958"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2022 07:03:41 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 12 Jul 2022 07:03:40 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 12 Jul 2022 07:03:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h6ZQI7JKheXm3/el5IrTOtvYXztM6dN9RrgGTe9uGOkcdro1mEHbvGsO8EDGI0lEOrV9j7z0CSeQEw86NsDE2UE5mya2K9XLpc3gqPkYkraMZQ/ZE+So1QMlh3ZkLnQEiMPd/RElQjvyeuA3y7MvfeHGn+gMmwa8bgCeqpnleq9SJ6mdAOVQZFQWU1bC8rU7p5GzxPwL0ztu9EvhNWklApgxC2nS3rDaaFyeELeHKYJygtyYcVrUCzGNmbZGVJLTPlMmAvjml1jopv6cm1SWkq6+eI7H4gMmXOi5cE+8bU8vNNOkRJJHrmKGX0bb+tAz1DKcD/oXR1ZCw5Zd6zxFgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2B6a7B27j6G+mG48B/lmx6CJCZOTJ2qKLHvnCQwLwiA=;
- b=ksPsV06Kq4HaYUrBiO84yp+jEnwcwOfCVb5bh2xOsAdQULw0RAw9gpUUd19Vdf6Tfm9V+P2nOnj23TPbwmRLPxAeMOM4+LMbymFVY8ytA++ZbnnB/t3CQqF37gYiR0tvb1T+RBWn9mT27UfTZWR/mhYaQ35n3veFsOEebz3QXYRJOogkQqdLqEm4+OPWescm3N1Tw9rdvC88Bz5B30/vLdVPNuI/hn3sxTJotIwyGXRottKWQ4HRSuK0OBSNA8OWuRsjc/k/DZ1aL+zkPwgetKHNOzh4wRgEhL+ra4s7ECt+RAO+aTQgzwMrk+uT6OMI860qq9TRbbXVr/598UEeeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Tue, 12 Jul 2022 10:05:51 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E0525C7D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:05:49 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 136so14102853ybl.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:05:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2B6a7B27j6G+mG48B/lmx6CJCZOTJ2qKLHvnCQwLwiA=;
- b=AgUc0T8AoGkctcwXhTyF9ABSEdaa5bMN0kVEF94MSYk0wrCRdcWe74u4//93poMeHiKNCWmdSEp5W7eDzIuEK0mWljxjl9TqbAlXwK9c/ES71V7JWc2hXiCGH1lLIar8JXheOfqyl5zVFkhHUxpCUISfXLOUaxnEjGAQog/CyEY=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by BN6PR11MB1492.namprd11.prod.outlook.com (2603:10b6:405:b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
- 2022 14:03:34 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::8d4a:1681:398d:9714]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::8d4a:1681:398d:9714%5]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 14:03:33 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <yangyingliang@huawei.com>
-CC:     <Daire.McNamara@microchip.com>, <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH -next 2/2] spi: microchip-core: switch to use
- devm_spi_alloc_master()
-Thread-Topic: [PATCH -next 2/2] spi: microchip-core: switch to use
- devm_spi_alloc_master()
-Thread-Index: AQHYlfWKEaKO0rADDkGuzfTu66tTVK16xHiA
-Date:   Tue, 12 Jul 2022 14:03:33 +0000
-Message-ID: <87581e76-ceb7-9efa-d6dd-5ad4fe66111a@microchip.com>
-References: <20220712135357.918997-1-yangyingliang@huawei.com>
- <20220712135357.918997-2-yangyingliang@huawei.com>
-In-Reply-To: <20220712135357.918997-2-yangyingliang@huawei.com>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a1a28cc6-c6e5-4b61-fe23-08da640f4ef3
-x-ms-traffictypediagnostic: BN6PR11MB1492:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zcxViPA+mq8DtMjvq7nL1QaopzshXMLf917KlQZp4W0kyiU3TSqKBbRL+pd/mhM697x5JCpxieE+eYQlUoBFq63b3TfO9y+XCm9bMQBUK0yyWgmXyP5+DMNJPMpqqH7cWfpRYca+5WPxJr9pkQmHzrK8eYc16zJzgjJ1iBkiEaAoiEPqBSfmrH3N6aFmAnzsh6PPFifACTFL6TRQnS0acByasagxNvmNZajNUztZWZezH5Fjkxqsv3/Rb7VjdyJ/N7Nb2CDqKY2+OSi7t9CEMp2ncJg1MqdJ1iuSiUOsWIrmMoSJcHed8pSDTC7bj2vNqJSwDbvXNtS+dQEZv0eiCXHvbNMygZY5eUJAV7/PKEyUeq1xnyvzN/6x3ibvQVFlfBY/Ucgef0SZ+5kXkOX+RCcswfyh17rCfer7QaVkgmn2LrWbFDNvZJKPgSoGWQEh7lj5Qz9QOVUKasLuFAeVel6vGpbtaboV3A6O6wLkBH84Iq7ZOSYl+sTAbQav4MBVbnk3CkQ5p+olHrXl/DVuK6gLQjxmzoikob0vfQvcALdtAI6RaTl7iDKlob0RbHeWT4eYD2Ks/H7YdJAz5vydl/P33SAqPiFCKErD9gsWp84yCsGv4latPcS9M8e6yDE+M05cg6ZFJIIH+NpJ5RyMJ0SLMux1qV1ruxw7KnFon3Wye5OHBGVIBASnoE1hzzzARLdA4mAx+cw/8czZAkqualeln/Vm7foSBxW8QJz5Q16G5LfM1dkFrNvbeB6ctwsmm9occooeDhl8c9GSCSkj2e8YD9sRYVosF+kmZycUWQle037hK9dywqqYatyZCd3N+1UBgm9FZn0yj32kzs2VTqXN/ohL239hlTBLLxWGxl7k6+9OonkyXkRxjZ2rgtUb
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(376002)(136003)(346002)(39860400002)(41300700001)(2906002)(86362001)(316002)(38100700002)(478600001)(31696002)(6506007)(6512007)(53546011)(26005)(966005)(71200400001)(38070700005)(6486002)(122000001)(5660300002)(54906003)(6916009)(66446008)(66476007)(8676002)(31686004)(64756008)(36756003)(83380400001)(66556008)(91956017)(8936002)(186003)(2616005)(66946007)(4326008)(76116006)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?THlxcTQ4akM1Yk1OcnpkNkd3SHljYUxYVXpZMzRqbU5ZVklHSzA2b3FKVFRF?=
- =?utf-8?B?SDZCYkpQTmxtTVJzYWhKMzFLNDZ6Tk5Hb0h3QVhGOHM4aGllWXVSNjdYc05u?=
- =?utf-8?B?NjA4ZWN2eW95cnRoeWZZTXBQQndGVENsYzNpZkh3aEI1SWRVUVR0WXQ2V3Z0?=
- =?utf-8?B?UzVuUkVnalVaVmRrSzNWSDhRb1NrMzhNMHNyYVo2NERKdzMrTzh5S1p4NEZw?=
- =?utf-8?B?VGV2OW53dFpaenNaRFQxeWZlK2NCYzlpNVJTYXRndEhnTlA4SUtnbU9UT3Qx?=
- =?utf-8?B?Y0Nhem13TzRlSUxUZUFOOWszdlBEUlNPOHJHblFHWStsSjJTTmlaeTMrUG1R?=
- =?utf-8?B?c1hVZjdaRi96YkJ4WDVUODh3RUFQTVUrdXh5MVJ4NlM1Y0VZQTRsK2d6VVRk?=
- =?utf-8?B?TFdmTEsrYXowMy9ZZE16VWIzNGZMaXZEZTNEUUpha2dMbWJYNVF1N0J1MUxy?=
- =?utf-8?B?aUJHUHFXTUR4K0owUjhOMXRKMkJCQ0VsUlUxdm1xNWZXbEp4cDZDZmlIK0Mx?=
- =?utf-8?B?cGVmS2daOHcyY2FrYm82VitvOGg3L0ZOZEZHWks2R1hOWDFzRCtDL1l1ank5?=
- =?utf-8?B?MHlqbmZOTFYzbGNmckg4WUk4c3NCaEZHcDJGcnZGTWs5Um0zSnVkL1BQTlNt?=
- =?utf-8?B?SWJlUUFSZWhCZzVYUXhPMlZsWS9GLzczRDRiT1dDZEdSTEs2QWxLVTA0SURy?=
- =?utf-8?B?aWRCUUY2bHpxN0plNHhoWlRkYUxtWEk2ekRLdXlPcnNQMFR4SGZJY2krTWU5?=
- =?utf-8?B?U2JFT3hqRXUwV3BPdEtSYnFhMTg0Q1luR3oweFJQc0JzTER2UEZjcnBzeTFS?=
- =?utf-8?B?Sk1FZG9FVWVQQmhrejNqaWE3TFJYZWtuS2dHR3JkbmxQS0RHSXAxamhNbHNO?=
- =?utf-8?B?QjZRZmRkMmk1Tk9MSGdORTlCaTlMbkloUUlDTFM3UkVxSzJ4WmIvWTBWa09a?=
- =?utf-8?B?VTR0d0htWGNRSFlPTnprVXZYOTRRcVA2aUNvRFpQbWhxSHowOG12aDQ3N3p1?=
- =?utf-8?B?SXJONC9IaDZFWFMxUjVhdmY2M1NNVnptSlFLbERHTm1FUHR5cWo3cEErTHdX?=
- =?utf-8?B?NnZiNWNTbkh4MXFkY2ZhOU1KT1h4Vk5VN01idkdGcTNRb0tTb2pzcUFuajBs?=
- =?utf-8?B?WU9qTkU0OFlGVjVVNkZjV0Q1N1YrSHhCUHg5dHI4eG52NnYzVGJQS01FWFRQ?=
- =?utf-8?B?UXZ4akVYcVVYSVVZd2dMaXI2UFNEcmxLMlUzMThveG5LZVFUR2N5RGFSOUpm?=
- =?utf-8?B?NDBFK2VoZFVpUk5kUzNGM2dqaEF6ODFxMHNnUk41dkEzQ0JaandmWDdaa2w4?=
- =?utf-8?B?dHZRMXNQY3JVZGJnWENJNWFNTFhVQ3RHVUZYWFovYTQvRCtyNTVaMERTakZD?=
- =?utf-8?B?d1hTSTMxMGoycFhSKzhEY2pnN0hkL09pS1psN0NnSmprTHVyazJOTHRGUnZa?=
- =?utf-8?B?WmFMVHRSRFJLSDFTSFE3SDZ0N0Ztd3hxM2tTOWxkZ0hESHNxUk9ZMHFsQTdE?=
- =?utf-8?B?V1JabWpwbTM4ajdKTzRtY3p5TC9yYjNwN3lWdm10cHJCRWtPTVltb0NjcUNH?=
- =?utf-8?B?dVRWUnEwRWU4dk1CWXdxeENqOVJ0OTNubVRvSkJzTUJtTEdNNkdkQ2tONEZy?=
- =?utf-8?B?Myt1V3VMOHozWnZVTlpnNzB3eXB0YlBBWGdNZ2RRQ1YwZU1waHgwdnljaGg0?=
- =?utf-8?B?V2lOQm5vSHBicHJ1QW80SnM2dkg5cXlVMHlZcWxvOWZCTVpuSlJyNEYzc3My?=
- =?utf-8?B?eVpVdXlYK2FYVW9iR2VNcnZTeTlyQnlJTHVPUEEyRTZORmk1OVl3M0hwa2pL?=
- =?utf-8?B?MHRjWVR4dm9KN2R4OVZGUHFqODVWKzFJZDAra0VKMTlCYWJNL3dCWkh3Q0Nl?=
- =?utf-8?B?L2pWNjFPWEp1WUxPQjh4MVMveUFWeFZ3SVV2SEg3c1FYYlFHdkxQWitBSUda?=
- =?utf-8?B?YWI0eU1WUDVwdGJrdUhkeVUwR2R2MUhuQUk0cTZFOWxMN2hreU90ZEFwUUVr?=
- =?utf-8?B?eHJFdEd3RWpCcGQ2R3JtS3FVQW1lQmxmeGJnb3BWN0xWOHZzUFJhbWp3UjQ3?=
- =?utf-8?B?Qi9rWFh3aWNodGVEa2FLeFpZVE15WHRUL25tRHM5MWVKZjNtYmxRRzZDN2d1?=
- =?utf-8?Q?UkcgchvmOYNGJAcs9FyFAHFyE?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <995BD8C15AFB924C9930BBCC7BF1FD8C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vd6O28VewSFhRewX03WzTG5J3zTXvR/VFa5UjMf0N0Y=;
+        b=DMb/e8q7BilTtBK6TcH0Icoa+OQ9V23OddPj/UTUljSXrHATwM5NnL+b48BuN9sTuJ
+         Kdp+sb6v+Ii23lFFq3IyCJDJPUiHADCxxhyS9B1+IlrWiuOXh56fp9J4+lytmKMa2bD9
+         aeAlh0GXmi+VkbgRPW85vOh5sAlzG5Bi1a2pTpl1BwSEwvgu9tUaAvVH63YW6SMrC1HC
+         WD/ZP+Qdj/VL0iN/yQNa/HJJIYwGRzmRosgPFeITfudEwKDtklhZIg+19s2PPCQj1nWp
+         Qp+chRUBI+ndDYu9wdo5ajOQuo9+3m6yUc7WRIPAA522/z0e3wn8IDnvpb249D3X8ZV0
+         HTrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vd6O28VewSFhRewX03WzTG5J3zTXvR/VFa5UjMf0N0Y=;
+        b=rEbVVFrIakGIZhrTTt0mO9vF9NtARSU1pPJFd9rhVIcxH7c9u0+ER7wNKvc1pBR4o5
+         WZZ26V7h1EUYZLOsNxnv0191ox8cw+xIy/68Cu9d7IPPRebJo3rwZ5pxxO9R+MPxv5FG
+         xBHUvopv4rsF1Kqsyq8bhbIP/DOMkIubF9zp1SY1whWRcCmusJh09DTyAxHEsj8v3GQP
+         kSq80F0lVQ4E9gnFIExfNZuVFLPoG/j9/ObZMXttK98OukLNpWwyDR8RyXFls98TLGeE
+         pmWJjQfYh633Lvw4erEX2iFLE+6lWNgHM2jJXrwNWBmVSYCyhpwxPuDb1ow9pdfZ6jTw
+         EHXA==
+X-Gm-Message-State: AJIora/f5ha2p2DK6e3B7IGxg4vYXYALch/tiI7trTzXu4+OqL96APVG
+        JVI/7QHPT7f639qhz4JqWPtwzzjYjpr4wvpvKAzmhw==
+X-Google-Smtp-Source: AGRyM1sIdaaewDnYDsIY69yIIAARIn16hCjK2BDekzfJa1VZ/Yqru1jWpYd6rRMAV+WPY3g3N3sAGB/at3CBMYCLLQI=
+X-Received: by 2002:a25:94a:0:b0:668:df94:fdf4 with SMTP id
+ u10-20020a25094a000000b00668df94fdf4mr21754860ybm.425.1657634748762; Tue, 12
+ Jul 2022 07:05:48 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1a28cc6-c6e5-4b61-fe23-08da640f4ef3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 14:03:33.7778
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /Kp+3uDrv4tRCnuAT2c/3QRadxvL/EMKVpXqa2f2EwD2xtNX18w+8qONJISKS/0yhyi1j/6IYsI4Q9QiJW2S07ZUtovv6TYj94JSPLN+jcQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1492
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-18-glider@google.com>
+In-Reply-To: <20220701142310.2188015-18-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Jul 2022 16:05:12 +0200
+Message-ID: <CANpmjNNh0SP53s0kg_Lj2HUVnY_9k_grm==q4w6Bbq4hLmKtHA@mail.gmail.com>
+Subject: Re: [PATCH v4 17/45] init: kmsan: call KMSAN initialization routines
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTIvMDcvMjAyMiAxNDo1MywgWWFuZyBZaW5nbGlhbmcgd3JvdGU6DQo+IFtTb21lIHBlb3Bs
-ZSB3aG8gcmVjZWl2ZWQgdGhpcyBtZXNzYWdlIGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIHlh
-bmd5aW5nbGlhbmdAaHVhd2VpLmNvbS4gTGVhcm4gd2h5IHRoaXMgaXMgaW1wb3J0YW50IGF0IGh0
-dHBzOi8vYWthLm1zL0xlYXJuQWJvdXRTZW5kZXJJZGVudGlmaWNhdGlvbiBdDQo+IA0KPiBFWFRF
-Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFN3aXRjaCB0byB1c2UgZGV2bV9z
-cGlfYWxsb2NfbWFzdGVyKCkgdG8gc2ltcGlmeSBlcnJvciBwYXRoLg0KDQpIZXkgWWFuZywNClRo
-YW5rcyBmb3IgdHJ5aW5nIHRvIGZpeCBteSBtaXN0YWtlcyENCg0KRm9yZ2l2ZSBteSBpbm5vY2Vu
-Y2UgaGVyZSwgYnV0IHdoeSBpcyBpdCBva2F5IHRvIHJlbW92ZSB0aGUNCnNwaV9tYXN0ZXJfcHV0
-KCkgaW4gcmVtb3ZlKCkgYnV0IG5vdCB0aGUgb25lIGluIHRoZSBlcnJvciBwYXRoIG9mDQp0aGUg
-cHJvYmUgZnVuY3Rpb24/DQoNCklmIHRoZSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQoKSBpbiBk
-ZXZtX3NwaV9yZWdpc3Rlcl9jb250cm9sbGVyKCkNCmZhaWxzIHdvbid0IHRoZSBzYW1lIHRoaW5n
-IGFwcGx5IHRvIHRoZSBwcm9iZSBlcnJvciBwYXRoPw0KDQpJT1csIEkgdGhpbmsgdGhpcyBwYXRj
-aCBuZWVkcyBhIGZpeGVzIHRhZyB0b28gYi9jIGl0IGFsc28gZml4ZXMgYQ0KcmVmY291bnQgdW5k
-ZXJmbG93LiBQbGVhc2UgY29ycmVjdCBtZSBpZiBJIGFtIG1pc3VuZGVyc3RhbmRpbmcuDQoNCk9u
-ZSBvdGhlciBjb21tZW50IGJlbG93Lg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5nIFlpbmds
-aWFuZyA8eWFuZ3lpbmdsaWFuZ0BodWF3ZWkuY29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL3NwaS9z
-cGktbWljcm9jaGlwLWNvcmUuYyB8IDIwICsrKysrKystLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxl
-IGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMTMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9zcGkvc3BpLW1pY3JvY2hpcC1jb3JlLmMgYi9kcml2ZXJzL3NwaS9zcGkt
-bWljcm9jaGlwLWNvcmUuYw0KPiBpbmRleCBjMjY3NjczNDMxNzYuLjFhMjRlNDdmODMwNSAxMDA2
-NDQNCj4gLS0tIGEvZHJpdmVycy9zcGkvc3BpLW1pY3JvY2hpcC1jb3JlLmMNCj4gKysrIGIvZHJp
-dmVycy9zcGkvc3BpLW1pY3JvY2hpcC1jb3JlLmMNCj4gQEAgLTUxMyw3ICs1MTMsNyBAQCBzdGF0
-aWMgaW50IG1jaHBfY29yZXNwaV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-PiAgICAgICAgICB1MzIgbnVtX2NzOw0KPiAgICAgICAgICBpbnQgcmV0ID0gMDsNCj4gDQo+IC0g
-ICAgICAgbWFzdGVyID0gc3BpX2FsbG9jX21hc3RlcigmcGRldi0+ZGV2LCBzaXplb2YoKnNwaSkp
-Ow0KPiArICAgICAgIG1hc3RlciA9IGRldm1fc3BpX2FsbG9jX21hc3RlcigmcGRldi0+ZGV2LCBz
-aXplb2YoKnNwaSkpOw0KPiAgICAgICAgICBpZiAoIW1hc3RlcikNCj4gICAgICAgICAgICAgICAg
-ICByZXR1cm4gZGV2X2Vycl9wcm9iZSgmcGRldi0+ZGV2LCAtRU5PTUVNLA0KPiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICJ1bmFibGUgdG8gYWxsb2NhdGUgbWFzdGVyIGZv
-ciBTUEkgY29udHJvbGxlclxuIik7DQo+IEBAIC01MzUsMzYgKzUzNSwzMiBAQCBzdGF0aWMgaW50
-IG1jaHBfY29yZXNwaV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgICAg
-ICAgICBzcGkgPSBzcGlfbWFzdGVyX2dldF9kZXZkYXRhKG1hc3Rlcik7DQo+IA0KPiAgICAgICAg
-ICBzcGktPnJlZ3MgPSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZShwZGV2
-LCAwLCAmcmVzKTsNCj4gLSAgICAgICBpZiAoSVNfRVJSKHNwaS0+cmVncykpIHsNCj4gLSAgICAg
-ICAgICAgICAgIHJldCA9IFBUUl9FUlIoc3BpLT5yZWdzKTsNCj4gLSAgICAgICAgICAgICAgIGdv
-dG8gZXJyb3JfcmVsZWFzZV9tYXN0ZXI7DQo+IC0gICAgICAgfQ0KPiArICAgICAgIGlmIChJU19F
-UlIoc3BpLT5yZWdzKSkNCj4gKyAgICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKHNwaS0+cmVn
-cyk7DQo+IA0KPiAgICAgICAgICBzcGktPmlycSA9IHBsYXRmb3JtX2dldF9pcnEocGRldiwgMCk7
-DQo+ICAgICAgICAgIGlmIChzcGktPmlycSA8PSAwKSB7DQo+ICAgICAgICAgICAgICAgICAgZGV2
-X2VycigmcGRldi0+ZGV2LCAiaW52YWxpZCBJUlEgJWQgZm9yIFNQSSBjb250cm9sbGVyXG4iLCBz
-cGktPmlycSk7DQo+IC0gICAgICAgICAgICAgICByZXQgPSAtRU5YSU87DQo+IC0gICAgICAgICAg
-ICAgICBnb3RvIGVycm9yX3JlbGVhc2VfbWFzdGVyOw0KPiArICAgICAgICAgICAgICAgcmV0dXJu
-IC1FTlhJTzsNCg0KQWxzbyB0aGVzZSBjYW4gbm93IGJlY29tZSBkZXZfZXJyX3Byb2JlIGZvciBm
-dXJ0aGVyIHNpbXBsaWZpY2F0aW9uPw0KVGhhbmtzLA0KQ29ub3IuDQoNCj4gICAgICAgICAgfQ0K
-PiANCj4gICAgICAgICAgcmV0ID0gZGV2bV9yZXF1ZXN0X2lycSgmcGRldi0+ZGV2LCBzcGktPmly
-cSwgbWNocF9jb3Jlc3BpX2ludGVycnVwdCwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBJUlFGX1NIQVJFRCwgZGV2X25hbWUoJnBkZXYtPmRldiksIG1hc3Rlcik7DQo+ICAgICAg
-ICAgIGlmIChyZXQpIHsNCj4gICAgICAgICAgICAgICAgICBkZXZfZXJyKCZwZGV2LT5kZXYsICJj
-b3VsZCBub3QgcmVxdWVzdCBpcnE6ICVkXG4iLCByZXQpOw0KPiAtICAgICAgICAgICAgICAgZ290
-byBlcnJvcl9yZWxlYXNlX21hc3RlcjsNCj4gKyAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+
-ICAgICAgICAgIH0NCj4gDQo+ICAgICAgICAgIHNwaS0+Y2xrID0gZGV2bV9jbGtfZ2V0KCZwZGV2
-LT5kZXYsIE5VTEwpOw0KPiAgICAgICAgICBpZiAoSVNfRVJSKHNwaS0+Y2xrKSkgew0KPiAtICAg
-ICAgICAgICAgICAgcmV0ID0gUFRSX0VSUihzcGktPmNsayk7DQo+ICAgICAgICAgICAgICAgICAg
-ZGV2X2VycigmcGRldi0+ZGV2LCAiY291bGQgbm90IGdldCBjbGs6ICVkXG4iLCByZXQpOw0KPiAt
-ICAgICAgICAgICAgICAgZ290byBlcnJvcl9yZWxlYXNlX21hc3RlcjsNCj4gKyAgICAgICAgICAg
-ICAgIHJldHVybiBQVFJfRVJSKHNwaS0+Y2xrKTsNCj4gICAgICAgICAgfQ0KPiANCj4gICAgICAg
-ICAgcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKHNwaS0+Y2xrKTsNCj4gICAgICAgICAgaWYgKHJl
-dCkgew0KPiAgICAgICAgICAgICAgICAgIGRldl9lcnIoJnBkZXYtPmRldiwgImZhaWxlZCB0byBl
-bmFibGUgY2xvY2tcbiIpOw0KPiAtICAgICAgICAgICAgICAgZ290byBlcnJvcl9yZWxlYXNlX21h
-c3RlcjsNCj4gKyAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ICAgICAgICAgIH0NCj4gDQo+
-ICAgICAgICAgIG1jaHBfY29yZXNwaV9pbml0KG1hc3Rlciwgc3BpKTsNCj4gQEAgLTU4Myw4ICs1
-NzksNiBAQCBzdGF0aWMgaW50IG1jaHBfY29yZXNwaV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
-aWNlICpwZGV2KQ0KPiAgIGVycm9yX3JlbGVhc2VfaGFyZHdhcmU6DQo+ICAgICAgICAgIG1jaHBf
-Y29yZXNwaV9kaXNhYmxlKHNwaSk7DQo+ICAgICAgICAgIGNsa19kaXNhYmxlX3VucHJlcGFyZShz
-cGktPmNsayk7DQo+IC1lcnJvcl9yZWxlYXNlX21hc3RlcjoNCj4gLSAgICAgICBzcGlfbWFzdGVy
-X3B1dChtYXN0ZXIpOw0KPiANCj4gICAgICAgICAgcmV0dXJuIHJldDsNCj4gICB9DQo+IC0tDQo+
-IDIuMjUuMQ0KPiANCg0K
+On Fri, 1 Jul 2022 at 16:24, Alexander Potapenko <glider@google.com> wrote:
+>
+> kmsan_init_shadow() scans the mappings created at boot time and creates
+> metadata pages for those mappings.
+>
+> When the memblock allocator returns pages to pagealloc, we reserve 2/3
+> of those pages and use them as metadata for the remaining 1/3. Once KMSAN
+> starts, every page allocated by pagealloc has its associated shadow and
+> origin pages.
+>
+> kmsan_initialize() initializes the bookkeeping for init_task and enables
+> KMSAN.
+>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> v2:
+>  -- move mm/kmsan/init.c and kmsan_memblock_free_pages() to this patch
+>  -- print a warning that KMSAN is a debugging tool (per Greg K-H's
+>     request)
+>
+> v4:
+>  -- change sizeof(type) to sizeof(*ptr)
+>  -- replace occurrences of |var| with @var
+>  -- swap init: and kmsan: in the subject
+>  -- do not export __init functions
+>
+> Link: https://linux-review.googlesource.com/id/I7bc53706141275914326df2345881ffe0cdd16bd
+> ---
+>  include/linux/kmsan.h |  48 +++++++++
+>  init/main.c           |   3 +
+>  mm/kmsan/Makefile     |   3 +-
+>  mm/kmsan/init.c       | 238 ++++++++++++++++++++++++++++++++++++++++++
+>  mm/kmsan/kmsan.h      |   3 +
+>  mm/kmsan/shadow.c     |  36 +++++++
+>  mm/page_alloc.c       |   3 +
+>  7 files changed, 333 insertions(+), 1 deletion(-)
+>  create mode 100644 mm/kmsan/init.c
+>
+> diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
+> index b71e2032222e9..82fd564cc72e7 100644
+> --- a/include/linux/kmsan.h
+> +++ b/include/linux/kmsan.h
+> @@ -51,6 +51,40 @@ void kmsan_task_create(struct task_struct *task);
+>   */
+>  void kmsan_task_exit(struct task_struct *task);
+>
+> +/**
+> + * kmsan_init_shadow() - Initialize KMSAN shadow at boot time.
+> + *
+> + * Allocate and initialize KMSAN metadata for early allocations.
+> + */
+> +void __init kmsan_init_shadow(void);
+> +
+> +/**
+> + * kmsan_init_runtime() - Initialize KMSAN state and enable KMSAN.
+> + */
+> +void __init kmsan_init_runtime(void);
+> +
+> +/**
+> + * kmsan_memblock_free_pages() - handle freeing of memblock pages.
+> + * @page:      struct page to free.
+> + * @order:     order of @page.
+> + *
+> + * Freed pages are either returned to buddy allocator or held back to be used
+> + * as metadata pages.
+> + */
+> +bool __init kmsan_memblock_free_pages(struct page *page, unsigned int order);
+> +
+> +/**
+> + * kmsan_task_create() - Initialize KMSAN state for the task.
+> + * @task: task to initialize.
+> + */
+> +void kmsan_task_create(struct task_struct *task);
+> +
+> +/**
+> + * kmsan_task_exit() - Notify KMSAN that a task has exited.
+> + * @task: task about to finish.
+> + */
+> +void kmsan_task_exit(struct task_struct *task);
+
+Something went wrong with patch shuffling here I think,
+kmsan_task_create + kmsan_task_exit decls are duplicated by this
+patch.
+
+>  /**
+>   * kmsan_alloc_page() - Notify KMSAN about an alloc_pages() call.
+>   * @page:  struct page pointer returned by alloc_pages().
+> @@ -172,6 +206,20 @@ void kmsan_iounmap_page_range(unsigned long start, unsigned long end);
+>
+>  #else
+>
+> +static inline void kmsan_init_shadow(void)
+> +{
+> +}
+> +
+> +static inline void kmsan_init_runtime(void)
+> +{
+> +}
+> +
+> +static inline bool kmsan_memblock_free_pages(struct page *page,
+> +                                            unsigned int order)
+> +{
+> +       return true;
+> +}
+> +
+>  static inline void kmsan_task_create(struct task_struct *task)
+>  {
+>  }
+> diff --git a/init/main.c b/init/main.c
+> index 0ee39cdcfcac9..7ba48a9ff1d53 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/percpu.h>
+>  #include <linux/kmod.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/kmsan.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/kernel_stat.h>
+>  #include <linux/start_kernel.h>
+> @@ -835,6 +836,7 @@ static void __init mm_init(void)
+>         init_mem_debugging_and_hardening();
+>         kfence_alloc_pool();
+>         report_meminit();
+> +       kmsan_init_shadow();
+>         stack_depot_early_init();
+>         mem_init();
+>         mem_init_print_info();
+> @@ -852,6 +854,7 @@ static void __init mm_init(void)
+>         init_espfix_bsp();
+>         /* Should be run after espfix64 is set up. */
+>         pti_init();
+> +       kmsan_init_runtime();
+>  }
+>
+>  #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+> diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
+> index 550ad8625e4f9..401acb1a491ce 100644
+> --- a/mm/kmsan/Makefile
+> +++ b/mm/kmsan/Makefile
+> @@ -3,7 +3,7 @@
+>  # Makefile for KernelMemorySanitizer (KMSAN).
+>  #
+>  #
+> -obj-y := core.o instrumentation.o hooks.o report.o shadow.o
+> +obj-y := core.o instrumentation.o init.o hooks.o report.o shadow.o
+>
+>  KMSAN_SANITIZE := n
+>  KCOV_INSTRUMENT := n
+> @@ -18,6 +18,7 @@ CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
+>
+>  CFLAGS_core.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_hooks.o := $(CC_FLAGS_KMSAN_RUNTIME)
+> +CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_instrumentation.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_report.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_shadow.o := $(CC_FLAGS_KMSAN_RUNTIME)
+> diff --git a/mm/kmsan/init.c b/mm/kmsan/init.c
+> new file mode 100644
+> index 0000000000000..abbf595a1e359
+> --- /dev/null
+> +++ b/mm/kmsan/init.c
+> @@ -0,0 +1,238 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KMSAN initialization routines.
+> + *
+> + * Copyright (C) 2017-2021 Google LLC
+> + * Author: Alexander Potapenko <glider@google.com>
+> + *
+> + */
+> +
+> +#include "kmsan.h"
+> +
+> +#include <asm/sections.h>
+> +#include <linux/mm.h>
+> +#include <linux/memblock.h>
+> +
+> +#include "../internal.h"
+> +
+> +#define NUM_FUTURE_RANGES 128
+> +struct start_end_pair {
+> +       u64 start, end;
+> +};
+> +
+> +static struct start_end_pair start_end_pairs[NUM_FUTURE_RANGES] __initdata;
+> +static int future_index __initdata;
+> +
+> +/*
+> + * Record a range of memory for which the metadata pages will be created once
+> + * the page allocator becomes available.
+> + */
+> +static void __init kmsan_record_future_shadow_range(void *start, void *end)
+> +{
+> +       u64 nstart = (u64)start, nend = (u64)end, cstart, cend;
+> +       bool merged = false;
+> +       int i;
+> +
+> +       KMSAN_WARN_ON(future_index == NUM_FUTURE_RANGES);
+> +       KMSAN_WARN_ON((nstart >= nend) || !nstart || !nend);
+> +       nstart = ALIGN_DOWN(nstart, PAGE_SIZE);
+> +       nend = ALIGN(nend, PAGE_SIZE);
+> +
+> +       /*
+> +        * Scan the existing ranges to see if any of them overlaps with
+> +        * [start, end). In that case, merge the two ranges instead of
+> +        * creating a new one.
+> +        * The number of ranges is less than 20, so there is no need to organize
+> +        * them into a more intelligent data structure.
+> +        */
+> +       for (i = 0; i < future_index; i++) {
+> +               cstart = start_end_pairs[i].start;
+> +               cend = start_end_pairs[i].end;
+> +               if ((cstart < nstart && cend < nstart) ||
+> +                   (cstart > nend && cend > nend))
+> +                       /* ranges are disjoint - do not merge */
+> +                       continue;
+> +               start_end_pairs[i].start = min(nstart, cstart);
+> +               start_end_pairs[i].end = max(nend, cend);
+> +               merged = true;
+> +               break;
+> +       }
+> +       if (merged)
+> +               return;
+> +       start_end_pairs[future_index].start = nstart;
+> +       start_end_pairs[future_index].end = nend;
+> +       future_index++;
+> +}
+> +
+> +/*
+> + * Initialize the shadow for existing mappings during kernel initialization.
+> + * These include kernel text/data sections, NODE_DATA and future ranges
+> + * registered while creating other data (e.g. percpu).
+> + *
+> + * Allocations via memblock can be only done before slab is initialized.
+> + */
+> +void __init kmsan_init_shadow(void)
+> +{
+> +       const size_t nd_size = roundup(sizeof(pg_data_t), PAGE_SIZE);
+> +       phys_addr_t p_start, p_end;
+> +       int nid;
+> +       u64 i;
+> +
+> +       for_each_reserved_mem_range(i, &p_start, &p_end)
+> +               kmsan_record_future_shadow_range(phys_to_virt(p_start),
+> +                                                phys_to_virt(p_end));
+> +       /* Allocate shadow for .data */
+> +       kmsan_record_future_shadow_range(_sdata, _edata);
+> +
+> +       for_each_online_node(nid)
+> +               kmsan_record_future_shadow_range(
+> +                       NODE_DATA(nid), (char *)NODE_DATA(nid) + nd_size);
+> +
+> +       for (i = 0; i < future_index; i++)
+> +               kmsan_init_alloc_meta_for_range(
+> +                       (void *)start_end_pairs[i].start,
+> +                       (void *)start_end_pairs[i].end);
+> +}
+> +
+> +struct page_pair {
+
+'struct shadow_origin_pages' for a more descriptive name?
+
+> +       struct page *shadow, *origin;
+> +};
+> +static struct page_pair held_back[MAX_ORDER] __initdata;
+> +
+> +/*
+> + * Eager metadata allocation. When the memblock allocator is freeing pages to
+> + * pagealloc, we use 2/3 of them as metadata for the remaining 1/3.
+> + * We store the pointers to the returned blocks of pages in held_back[] grouped
+> + * by their order: when kmsan_memblock_free_pages() is called for the first
+> + * time with a certain order, it is reserved as a shadow block, for the second
+> + * time - as an origin block. On the third time the incoming block receives its
+> + * shadow and origin ranges from the previously saved shadow and origin blocks,
+> + * after which held_back[order] can be used again.
+> + *
+> + * At the very end there may be leftover blocks in held_back[]. They are
+> + * collected later by kmsan_memblock_discard().
+> + */
+> +bool kmsan_memblock_free_pages(struct page *page, unsigned int order)
+> +{
+> +       struct page *shadow, *origin;
+
+Can this just be 'struct page_pair'?
+
+> +       if (!held_back[order].shadow) {
+> +               held_back[order].shadow = page;
+> +               return false;
+> +       }
+> +       if (!held_back[order].origin) {
+> +               held_back[order].origin = page;
+> +               return false;
+> +       }
+> +       shadow = held_back[order].shadow;
+> +       origin = held_back[order].origin;
+> +       kmsan_setup_meta(page, shadow, origin, order);
+> +
+> +       held_back[order].shadow = NULL;
+> +       held_back[order].origin = NULL;
+> +       return true;
+> +}
+> +
+> +#define MAX_BLOCKS 8
+> +struct smallstack {
+> +       struct page *items[MAX_BLOCKS];
+> +       int index;
+> +       int order;
+> +};
+> +
+> +static struct smallstack collect = {
+> +       .index = 0,
+> +       .order = MAX_ORDER,
+> +};
+> +
+> +static void smallstack_push(struct smallstack *stack, struct page *pages)
+> +{
+> +       KMSAN_WARN_ON(stack->index == MAX_BLOCKS);
+> +       stack->items[stack->index] = pages;
+> +       stack->index++;
+> +}
+> +#undef MAX_BLOCKS
+> +
+> +static struct page *smallstack_pop(struct smallstack *stack)
+> +{
+> +       struct page *ret;
+> +
+> +       KMSAN_WARN_ON(stack->index == 0);
+> +       stack->index--;
+> +       ret = stack->items[stack->index];
+> +       stack->items[stack->index] = NULL;
+> +       return ret;
+> +}
+> +
+> +static void do_collection(void)
+> +{
+> +       struct page *page, *shadow, *origin;
+> +
+> +       while (collect.index >= 3) {
+> +               page = smallstack_pop(&collect);
+> +               shadow = smallstack_pop(&collect);
+> +               origin = smallstack_pop(&collect);
+> +               kmsan_setup_meta(page, shadow, origin, collect.order);
+> +               __free_pages_core(page, collect.order);
+> +       }
+> +}
+> +
+> +static void collect_split(void)
+> +{
+> +       struct smallstack tmp = {
+> +               .order = collect.order - 1,
+> +               .index = 0,
+> +       };
+> +       struct page *page;
+> +
+> +       if (!collect.order)
+> +               return;
+> +       while (collect.index) {
+> +               page = smallstack_pop(&collect);
+> +               smallstack_push(&tmp, &page[0]);
+> +               smallstack_push(&tmp, &page[1 << tmp.order]);
+> +       }
+> +       __memcpy(&collect, &tmp, sizeof(tmp));
+> +}
+> +
+> +/*
+> + * Memblock is about to go away. Split the page blocks left over in held_back[]
+> + * and return 1/3 of that memory to the system.
+> + */
+> +static void kmsan_memblock_discard(void)
+> +{
+> +       int i;
+> +
+> +       /*
+> +        * For each order=N:
+> +        *  - push held_back[N].shadow and .origin to @collect;
+> +        *  - while there are >= 3 elements in @collect, do garbage collection:
+> +        *    - pop 3 ranges from @collect;
+> +        *    - use two of them as shadow and origin for the third one;
+> +        *    - repeat;
+> +        *  - split each remaining element from @collect into 2 ranges of
+> +        *    order=N-1,
+> +        *  - repeat.
+> +        */
+> +       collect.order = MAX_ORDER - 1;
+> +       for (i = MAX_ORDER - 1; i >= 0; i--) {
+> +               if (held_back[i].shadow)
+> +                       smallstack_push(&collect, held_back[i].shadow);
+> +               if (held_back[i].origin)
+> +                       smallstack_push(&collect, held_back[i].origin);
+> +               held_back[i].shadow = NULL;
+> +               held_back[i].origin = NULL;
+> +               do_collection();
+> +               collect_split();
+> +       }
+> +}
+> +
+> +void __init kmsan_init_runtime(void)
+> +{
+> +       /* Assuming current is init_task */
+> +       kmsan_internal_task_create(current);
+> +       kmsan_memblock_discard();
+> +       pr_info("Starting KernelMemorySanitizer\n");
+> +       pr_info("ATTENTION: KMSAN is a debugging tool! Do not use it on production machines!\n");
+> +       kmsan_enabled = true;
+> +}
+> diff --git a/mm/kmsan/kmsan.h b/mm/kmsan/kmsan.h
+> index c7fb8666607e2..2f17912ef863f 100644
+> --- a/mm/kmsan/kmsan.h
+> +++ b/mm/kmsan/kmsan.h
+> @@ -66,6 +66,7 @@ struct shadow_origin_ptr {
+>  struct shadow_origin_ptr kmsan_get_shadow_origin_ptr(void *addr, u64 size,
+>                                                      bool store);
+>  void *kmsan_get_metadata(void *addr, bool is_origin);
+> +void __init kmsan_init_alloc_meta_for_range(void *start, void *end);
+>
+>  enum kmsan_bug_reason {
+>         REASON_ANY,
+> @@ -188,5 +189,7 @@ bool kmsan_internal_is_module_addr(void *vaddr);
+>  bool kmsan_internal_is_vmalloc_addr(void *addr);
+>
+>  struct page *kmsan_vmalloc_to_page_or_null(void *vaddr);
+> +void kmsan_setup_meta(struct page *page, struct page *shadow,
+> +                     struct page *origin, int order);
+>
+>  #endif /* __MM_KMSAN_KMSAN_H */
+> diff --git a/mm/kmsan/shadow.c b/mm/kmsan/shadow.c
+> index 416cb85487a1a..7b254c30d42cc 100644
+> --- a/mm/kmsan/shadow.c
+> +++ b/mm/kmsan/shadow.c
+> @@ -259,3 +259,39 @@ void kmsan_vmap_pages_range_noflush(unsigned long start, unsigned long end,
+>         kfree(s_pages);
+>         kfree(o_pages);
+>  }
+> +
+> +/* Allocate metadata for pages allocated at boot time. */
+> +void __init kmsan_init_alloc_meta_for_range(void *start, void *end)
+> +{
+> +       struct page *shadow_p, *origin_p;
+> +       void *shadow, *origin;
+> +       struct page *page;
+> +       u64 addr, size;
+> +
+> +       start = (void *)ALIGN_DOWN((u64)start, PAGE_SIZE);
+> +       size = ALIGN((u64)end - (u64)start, PAGE_SIZE);
+> +       shadow = memblock_alloc(size, PAGE_SIZE);
+> +       origin = memblock_alloc(size, PAGE_SIZE);
+> +       for (addr = 0; addr < size; addr += PAGE_SIZE) {
+> +               page = virt_to_page_or_null((char *)start + addr);
+> +               shadow_p = virt_to_page_or_null((char *)shadow + addr);
+> +               set_no_shadow_origin_page(shadow_p);
+> +               shadow_page_for(page) = shadow_p;
+> +               origin_p = virt_to_page_or_null((char *)origin + addr);
+> +               set_no_shadow_origin_page(origin_p);
+> +               origin_page_for(page) = origin_p;
+> +       }
+> +}
+> +
+> +void kmsan_setup_meta(struct page *page, struct page *shadow,
+> +                     struct page *origin, int order)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < (1 << order); i++) {
+
+Noticed this in many places, but we can just make these "for (int i =.." now.
+
+> +               set_no_shadow_origin_page(&shadow[i]);
+> +               set_no_shadow_origin_page(&origin[i]);
+> +               shadow_page_for(&page[i]) = &shadow[i];
+> +               origin_page_for(&page[i]) = &origin[i];
+> +       }
+> +}
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 785459251145e..e8d5a0b2a3264 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1731,6 +1731,9 @@ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+>  {
+>         if (early_page_uninitialised(pfn))
+>                 return;
+> +       if (!kmsan_memblock_free_pages(page, order))
+> +               /* KMSAN will take care of these pages. */
+> +               return;
+
+Add {} because the then-statement is not right below the if.

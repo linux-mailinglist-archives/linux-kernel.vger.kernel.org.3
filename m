@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9F3571498
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60E757149F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiGLIaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S232323AbiGLIbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiGLI3z (ORCPT
+        with ESMTP id S229542AbiGLIbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:29:55 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565FC3343E;
-        Tue, 12 Jul 2022 01:29:54 -0700 (PDT)
-Received: from tincan.cable.virginm.net (cpc108961-cmbg20-2-0-cust263.5-4.cable.virginm.net [80.5.129.8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFCF56601A26;
-        Tue, 12 Jul 2022 09:29:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657614593;
-        bh=W5Q1v87fyB0A366f2I2tzc5CLo3PwdH3SN2IW0yxyhk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O9Ga2esdxkz4imSvls++aKrvdD1wmv7+HfZXAMvRBnSngoZ4Hhsam5RQCgTuHLrJV
-         /srv2T9lLFk0I+vTuzPzAgccnIdG3Gd6l9PlDCcaLcJTgSbNXkhNyF2u3VcKTnPnj2
-         0rl2RQSdj/WR/PsHj9AOw8sAr7TRv6JNe2RKbbZzKriGsGtGRclbxJjNz3WqM78eLG
-         nRZTSxivptW7RFa+Gce37yP8jd6PzZ4U2rZbt+dZAsWx+9eL1j1+dtXqLSbU4+YOzY
-         +B3Qm2YPr3XInF2TYGoGyYcuSklVy8mdRjm1rMhzR4MHmZYWTp0gEmHURwdVZkLpX0
-         BdJZQpe4LgMCQ==
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] Makefile: add headers to kselftest targets
-Date:   Tue, 12 Jul 2022 09:29:48 +0100
-Message-Id: <745d1921a4d048ea25d262e33b40aad5ee470614.1657614127.git.guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1657614127.git.guillaume.tucker@collabora.com>
-References: <cover.1657614127.git.guillaume.tucker@collabora.com>
+        Tue, 12 Jul 2022 04:31:41 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CE245F7B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:31:40 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bp17so4873836lfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2Qek6UIHQ+bbCaaLnSaW6r64q6VM+tLrxNDw9LwIzw0=;
+        b=q5JieP0nD1nb1WONStATLcRP5Gl7TEysSwqRsbz16Aa1NA0dPPjSljZkAAgT6/tRhG
+         6VLQfc5B7FqJF2WtL15C0h/Z8c5syWmEvZ4sFc2rr9Lfe/+uZW+Uy4oI9CB/+RCex592
+         IeRL4hDjn42wtoAo0/CsI07N4JDEadx3YRCjHc8R+E4Tvp4EQQw1B3vn2taMHjthwum8
+         AyjosCfNoI9A4MM2ln8XfIFNWM6oX94V+NgXFJiJfwLGzHxgM4y2OaUjGEqGOenQ3kuK
+         kuoZghny1QSUNlTQ++hfreBwu6Zf8PC1HuPtBKR4dhSfCWbYRHvPUpamjO9wY2TICf4P
+         n3Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2Qek6UIHQ+bbCaaLnSaW6r64q6VM+tLrxNDw9LwIzw0=;
+        b=w3PVb80VUO53tNkKx081z3f9bfKNhG0yMOmwLINbWmeSmf42V0XSxSEvbrKrWaX+iF
+         TjY+CdHsMIwj0N6LehTpIV9lXi3iemCajyBpr60w8DMC9sMgwnBbi/CTHn+fgOvQqs85
+         wKXRs6Og8Yuqm+JQVdFm+nAD28Yq4YlZ97NQBp1kLamEleak1kNgA/hRmtG9oYnPuoBK
+         sFFeWBhDT6MAn9KwA+weqbDWL4TgoHHU7dqsSe9LzFXY+0oMMNt+24OvD4LgFDzne5+y
+         Aoj015fI4nVo0AbDw5hMj+SUCrGn6CSlI+W2zaUoPW7GG4Cn1BqKLfL3wlFQW0xzLI4i
+         ruBA==
+X-Gm-Message-State: AJIora+SH1CXHK80FAMf8citOhh/+lzVka7HflO3nKoDwNLtNn194CFR
+        0CvY/1Zdybd3l0aU2KFrOawNIQ==
+X-Google-Smtp-Source: AGRyM1sErvlK54KDfmiepBO87G/PzDDHBO3xqVuq4WopTZAFMkYpJG4tiwF07DITvORCx+p1AxegEQ==
+X-Received: by 2002:a05:6512:12c9:b0:489:fa6e:d371 with SMTP id p9-20020a05651212c900b00489fa6ed371mr374610lfg.37.1657614698997;
+        Tue, 12 Jul 2022 01:31:38 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id c19-20020ac25f73000000b0048759bc6c1asm2052737lfc.203.2022.07.12.01.31.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 01:31:38 -0700 (PDT)
+Message-ID: <68d60eb6-605d-153b-3074-37d1777ea6d8@linaro.org>
+Date:   Tue, 12 Jul 2022 10:31:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] dt-bindings: power: mediatek: Document phandle to
+ SCPSYS syscon node
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
+        mbrugger@suse.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        nfraprado@collabora.com
+References: <20220711122503.286743-1-angelogioacchino.delregno@collabora.com>
+ <20220711122503.286743-2-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220711122503.286743-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add headers as a dependency to kselftest targets so that they can be
-run directly from the top of the tree.  The kselftest Makefile used to
-try to call headers_install "backwards" but failed due to the relative
-path not being consistent.
+On 11/07/2022 14:25, AngeloGioacchino Del Regno wrote:
+> Add a phandle to the syscon block providing access to SCPSYS registers:
+> this allows us to avoid using simple-mfd for the SCPSYS node and
+> nesting the System Power Manager node inside.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/power/mediatek,power-controller.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> index 135c6f722091..848fdff7c9d8 100644
+> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
+> @@ -39,6 +39,11 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  syscon:
 
-Now we can either run this directly:
+This is not a generic property. You need vendor prefix and property name
+(can be followed by -syscon).
 
-  $ make O=build kselftest-all
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the syscon block providing access to SCPSYS registers
+> +
+>  patternProperties:
+>    "^power-domain@[0-9a-f]+$":
+>      type: object
 
-or this:
 
-  $ make O=build headers
-  $ make O=build -C tools/testing/selftests all
-
-The same commands work as well when building directly in the source
-tree (no O=) or any arbitrary path (relative or absolute).
-
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
----
-
-Notes:
-    v2: replace headers_install with headers
-
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 1a6678d817bd..02502cc4ced5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1347,10 +1347,10 @@ tools/%: FORCE
- # Kernel selftest
- 
- PHONY += kselftest
--kselftest:
-+kselftest: headers
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
- 
--kselftest-%: FORCE
-+kselftest-%: headers FORCE
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
- 
- PHONY += kselftest-merge
--- 
-2.30.2
-
+Best regards,
+Krzysztof

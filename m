@@ -2,70 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84000571D31
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6307D571D35
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbiGLOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S233695AbiGLOpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbiGLOpE (ORCPT
+        with ESMTP id S233699AbiGLOpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:45:04 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CF325C7F;
-        Tue, 12 Jul 2022 07:45:02 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v14so11497840wra.5;
-        Tue, 12 Jul 2022 07:45:02 -0700 (PDT)
+        Tue, 12 Jul 2022 10:45:33 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CB42735
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:45:31 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t1so10790306lft.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Sa6iY3pzwir6onyo2+3SEdO5IslImquHb/B2ephjWNA=;
-        b=LEESkbTjEcOU7bUoY8h448YndDqAvOl5l7XJabm8Ky5wETpujsDs2To2eLk/OT56a8
-         bhuKg+K4NgHXhY8ZEf3EDlkZ1WWgwMle85E6unzgzKAyqYOwB3v+FD5w9CMywRY2PZv7
-         PW5YkKBbuMNMSHpdc/SztIQHLluvga2JuHXZFyrFD3+gZ8jnC9wZjxnF1PGukc2KJodo
-         1HgZFMSgqjgBqrDdYAD1Nc6t3Pyb8mmCm8db40asy3ZlnWWz673zGAhBoWThCZjf0afl
-         NsXvdoq+uK91mgSGYizB5Yb5ZXoVhN0BiJshuK3jdcN0P0TRHRhODGTnGwJupXNDuNoi
-         xZQw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Nsh70CDuTz6nymq/Aq/whTzK7x/oeKxt1w/vVgLpJB8=;
+        b=d6kJSkKHZ1XmZiSD2xZ2+ZUO8U6tly4xce6EUsqYoobWB45jyqSqEgyCzbCCSnK1vx
+         duoNKCMJEExeOkEbElM0SuXLpxcnuQQW84rZu30wZblW9sbFxgtST/rBgQGytP7Lmf37
+         8Cfdns9+0C1WZdpQ6AXCL+zsjJWfNri8CxS3opAWhkPsQT0KPGVgz0vbXpqr0F56buuC
+         C8IwZ3efp29FWDR3fB8Jjqj/yD3BjHa4acTwHrupwww1Yhyl4veBtTuaSAOaW04+HG1X
+         NpaXfEwQpcLUAVGl0VE7hAGFlfNn0FHtrHwLC8zXjTG7OH4dw1+YlU95m/mbnRd1XPFE
+         XYvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Sa6iY3pzwir6onyo2+3SEdO5IslImquHb/B2ephjWNA=;
-        b=v0MNUL/On6JuX0pOTQYN+ef/0h02lzYKPug2Ppkd3Y59Si3udWdYI8XdY8M0/jMohI
-         tqlezLz9xTI2gTfacnsfzznUSkir93o9Z3vmu23mTSLHiUjZl3wiDC/8u3JL/wsD/vfF
-         t+ig/2va3zRAs4CP68P7OLwG8EP4G7dHNLgHj73lIDWQLndKw5xibU+yq9RmUP6R7ltA
-         QEmCnCrpg6QzCCVnkpoGUUOcKK1KQ/BkN955LiUdqsEhsUmnhzYzs4cIRM3hZHNEZpHN
-         n086ZW3wpOLFzuQNlEBzc4f7p7AtCd5xzBJX9UWa78GWa9yUY2PLBzMhXSdyNWmtv/9S
-         yDbw==
-X-Gm-Message-State: AJIora9+KIh0vX50b5jWChVXgBosBLDOQc6mmL2e3+Kyhm9Vpu2QYp99
-        mPbMWLfX8LznUh35sU1OyRw=
-X-Google-Smtp-Source: AGRyM1u9IqTISr1wyRgga0Wj5eYmfortujWr+8ZL/NhFS8z4Uf+MK9ThLDEiwzSF6wcgo4Oq15bSmw==
-X-Received: by 2002:a5d:58cc:0:b0:21d:6919:7daf with SMTP id o12-20020a5d58cc000000b0021d69197dafmr22544454wrf.434.1657637101303;
-        Tue, 12 Jul 2022 07:45:01 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id m4-20020a5d6244000000b0021d6e917442sm10180708wrv.72.2022.07.12.07.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:45:00 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 15:44:59 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/55] 5.10.130-rc1 review
-Message-ID: <Ys2I6x4PlN6APY54@debian>
-References: <20220711090541.764895984@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Nsh70CDuTz6nymq/Aq/whTzK7x/oeKxt1w/vVgLpJB8=;
+        b=ywkpBBicYQ1ypQFhG8XIDI1pYpkbrNmSQwT1u7r6B0zvMvGommnYg8fBUMfk8bWGKN
+         eLI+vvBaEWqDv/D3oZA7AQZ7AGHu+IREDW9/zYiehopyXkqBs1u9pSaf1y2plPCkmyTA
+         DnH8xQkG4x6xrJlL8ObMw2wBHPP+UJ59KFNi2oBgB3uIjV/C2QrNCaWee1bnTRbH9VDo
+         eXfns13EwUwdWevOIMKEOCVg6jBb54oNjPVjuNzC9UMs6Oz1YOca2b0ztL+kqxWihMaG
+         wD4BJRO0OxjHmt7J45KvYpqi2KkcNxjLBTa1LCmG4mj/11/hVdHE4tPi+ID32bWLRLZL
+         +sFA==
+X-Gm-Message-State: AJIora9fd4xBwGPAC67HCcShE64rGoEEM4XJmTuWeMEoacQxjm265+hr
+        0DU2bL/ucYxWN0aQsyNpt1hjGwpY9IZLFB61xJqRjQ==
+X-Google-Smtp-Source: AGRyM1sCO7xey4g490fNvKLe/V6ld5tqO+f24a8WZxnW+d8T1nfbiqvw9BOh9iWoT0SemRpaF2zoauHiFINf2/zLsPo=
+X-Received: by 2002:a05:6512:44c:b0:489:f71a:a34e with SMTP id
+ y12-20020a056512044c00b00489f71aa34emr1736044lfk.402.1657637129877; Tue, 12
+ Jul 2022 07:45:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <cover.1655761627.git.ashish.kalra@amd.com> <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6obGwyiJh7J34Vt8tC+XXMNm8YPrv4gV=TVoF2Xga5GjQ@mail.gmail.com> <SN6PR12MB27672AA31E96179256235C338E879@SN6PR12MB2767.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB27672AA31E96179256235C338E879@SN6PR12MB2767.namprd12.prod.outlook.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 12 Jul 2022 08:45:18 -0600
+Message-ID: <CAMkAt6ryLr6a5iQnwZQT3hqwEpZpb7bn-T8SDY6=5zYs_5NBow@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 28/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH command
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,39 +100,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Jul 11, 2022 at 4:41 PM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+> Hello Peter,
+>
+> >> The KVM_SEV_SNP_LAUNCH_FINISH finalize the cryptographic digest and
+> >> stores it as the measurement of the guest at launch.
+> >>
+> >> While finalizing the launch flow, it also issues the LAUNCH_UPDATE
+> >> command to encrypt the VMSA pages.
+>
+> >Given the guest uses the SNP NAE AP boot protocol we were expecting that=
+ there would be some option to add vCPUs to the VM but mark them as "pendin=
+g AP boot creation protocol" state. This would allow the LaunchDigest of a =
+VM doesn't change >just because its vCPU count changes. Would it be possibl=
+e to add a new add an argument to KVM_SNP_LAUNCH_FINISH to tell it which vC=
+PUs to LAUNCH_UPDATE VMSA pages for or similarly a new argument for KVM_CRE=
+ATE_VCPU?
+>
+> But don't we want/need to measure all vCPUs using LAUNCH_UPDATE_VMSA befo=
+re we issue SNP_LAUNCH_FINISH command ?
+>
+> If we are going to add vCPUs and mark them as "pending AP boot creation" =
+state then how are we going to do LAUNCH_UPDATE_VMSAs for them after SNP_LA=
+UNCH_FINISH ?
 
-On Mon, Jul 11, 2022 at 11:06:48AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.130 release.
-> There are 55 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
+If I understand correctly we don't need or even want the APs to be
+LAUNCH_UPDATE_VMSA'd. LAUNCH_UPDATEing all the VMSAs causes VMs with
+different numbers of vCPUs to have different launch digests. Its my
+understanding the SNP AP Creation protocol was to solve this so that
+VMs with different vcpu counts have the same launch digest.
 
-Build test (gcc version 11.3.1 20220706):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1486
-[2]. https://openqa.qa.codethink.co.uk/tests/1496
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Looking at patch "[Part2,v6,44/49] KVM: SVM: Support SEV-SNP AP
+Creation NAE event" and section "4.1.9 SNP AP Creation" of the GHCB
+spec. There is no need to mark the LAUNCH_UPDATE the AP's VMSA or mark
+the vCPUs runnable. Instead we can do that only for the BSP. Then in
+the guest UEFI the BSP can: create new VMSAs from guest pages,
+RMPADJUST them into the RMP state VMSA, then use the SNP AP Creation
+NAE to get the hypervisor to mark them runnable. I believe this is all
+setup in the UEFI patch:
+https://www.mail-archive.com/devel@edk2.groups.io/msg38460.html.

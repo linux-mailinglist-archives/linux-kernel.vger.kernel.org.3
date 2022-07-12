@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9817C571643
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E2A571646
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiGLJ4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S232365AbiGLJ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiGLJ4L (ORCPT
+        with ESMTP id S229780AbiGLJ4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:56:11 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053DBAA835;
-        Tue, 12 Jul 2022 02:56:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VJ7lbUe_1657619766;
-Received: from 30.43.105.186(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VJ7lbUe_1657619766)
-          by smtp.aliyun-inc.com;
-          Tue, 12 Jul 2022 17:56:07 +0800
-Message-ID: <820bc0be-d044-ef52-3255-26b973b04cf4@linux.alibaba.com>
-Date:   Tue, 12 Jul 2022 17:56:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Kai Shen <kaishen@linux.alibaba.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
- <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
- <20220712090110.GL2338@kadam>
-From:   Cheng Xu <chengyou@linux.alibaba.com>
-In-Reply-To: <20220712090110.GL2338@kadam>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Jul 2022 05:56:42 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F979AA836
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:56:40 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id j23-20020a17090a061700b001e89529d397so4765317pjj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=x/kle2uksxTcc6x66ftiegZgKc2BrTGOuQ67dMnzc4Y=;
+        b=kwkTWMMQwkkHAKjVLJeMpSK64OpdmOgu236oC0XBqrX0D7J98KaB6ERHvVIsxhbZCI
+         IjZbLhv6i+RjBhueyuRc2z89NREHndLUI7P+1cS2M3rofdySIBUefE8Zx/tKIC62tGPb
+         sBLF+iClr+Zn5Bm0RSvEka+eTWzazkVC/3O2ZFBL8jIT9WJLQsAfwBZSbJkQMZTIfI89
+         cORewAgFlyPdAdlkPiW7xz3O8SKElU7ZpBuFMq87gGR/aTiD/l0R19PUxl4Rt6t5Q2Qx
+         4aT5W6gW5nD0vJVxsHCUz3+2p5cFeMveFo94NEWcVBwoseoOsr7S11L+fg9cG/HfuMvd
+         wVwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=x/kle2uksxTcc6x66ftiegZgKc2BrTGOuQ67dMnzc4Y=;
+        b=ToBS4QDaQ8XSM8wonRDTiC1vlEXIKS8cjSLwsH2ORjh9liXAUdrdagcWcBO0Y3OhoU
+         gpTPijvbCV4Knj8lhEWCFPxpheOFYhOpcLevMXfO7h1M0eOfW8/hFZmqlija3QvOSSmO
+         bu5H1B50+QyhqrQohhuBi0/lSvGHAz/GXJMTSNF5xiv+q2vEF1UNyamYfkTZluEm6EP0
+         nmNZDN3QnsjMxk/TkTH0xiuth6KyP5TTeXLNNH/JRKiE61f5zeT0XcMJ0LuCCc9sLCJz
+         POLOPfkxqZhdXtAhiUO+FfC2k7voerqPFVoLlo8Mhg8xChNRokepQaX7wBm/ezETI9Jb
+         lj+Q==
+X-Gm-Message-State: AJIora8Ip08oOddzyo6jb+Kn9Fdv7xtEnxp7+T7YwDgABaXY7QpAT2XP
+        satdpjC2GEF5RRoFCpWzVflTSyUT/Ur7QQ==
+X-Google-Smtp-Source: AGRyM1vvm3ysCBRhKyHvAVl7sjPZJlrlsNeD8k0D/UrZt0He9duZpcfV3smERgIMPPYL1yRGLfEhOGf5c4KqDg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr120662pje.0.1657619799129; Tue, 12 Jul
+ 2022 02:56:39 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 17:56:27 +0800
+Message-Id: <20220712095627.1770312-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, kernel test robot <yujie.liu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It's possible that memory allocation for the copy will fail, but for the
+copy of the suite to succeed. In this case, the copy could be leaked.
 
+Properly free 'copy' in the error case for the allocation of 'filtered'
+failing.
 
-On 7/12/22 5:01 PM, Dan Carpenter wrote:
-> On Mon, Jul 11, 2022 at 03:34:56PM +0800, Cheng Xu wrote:
->>
->>
->> On 7/9/22 1:37 AM, Christophe JAILLET wrote:
->>> Use [devm_]bitmap_zalloc()/bitmap_free() instead of hand-writing them.
->>>
->>> It is less verbose and it improves the semantic.
->>>
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->>> ---
->>>  drivers/infiniband/hw/erdma/erdma_cmdq.c | 7 +++----
->>>  drivers/infiniband/hw/erdma/erdma_main.c | 9 ++++-----
->>>  2 files changed, 7 insertions(+), 9 deletions(-)
->>>
->>
->> Hi Christophe,
->>
->> Thanks for your two patches of erdma.
->>
->> The erdma code your got is our first upstreaming code, so I would like to squash your
->> changes into the relevant commit in our next patchset to make the commit history cleaner.
->>
->> BTW, the coding style in the patches is OK, but has a little differences with clang-format's
->> result. I will use the format from clang-format to minimize manual adjustments.
->>  
-> 
-> Best not to use any auto-formatting tools.  They are all bad.
-> 
-I understand your worry. Tool is not prefect but it's useful to handle large amounts of code in
-our first upstream, and helps us avoiding style mistakes.
+Note that there may also have been a similar issue in
+kunit_filter_subsuites, before it was removed in "kunit: flatten
+kunit_suite*** to kunit_suite** in .kunit_test_suites".
 
-While using the clang-format with the config in kernel tree, we also checked all the modifications
-made by the tool carefully. We won't rely on tools too much with small changes in the future.
+This was reported by clang-analyzer via the kernel test robot, here:
+https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
 
-Thanks,
-Cheng Xu
+Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/executor.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 6c489d6c5e5d..5e223327196a 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -74,8 +74,10 @@ kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+-	if (!filtered)
++	if (!filtered) {
++		kfree(copy);
+ 		return ERR_PTR(-ENOMEM);
++	}
+ 
+ 	n = 0;
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-- 
+2.37.0.144.g8ac04bfd2-goog
 

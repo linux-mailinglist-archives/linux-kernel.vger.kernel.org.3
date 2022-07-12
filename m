@@ -2,101 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCD95715A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845B55715A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiGLJZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S232749AbiGLJZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiGLJZn (ORCPT
+        with ESMTP id S232694AbiGLJZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:25:43 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F47974BF
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:42 -0700 (PDT)
-Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQvH5-1nxDWt3mi7-00NxMc for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022
- 11:25:41 +0200
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3137316bb69so74506687b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:40 -0700 (PDT)
-X-Gm-Message-State: AJIora9kQ8VYUrZW6wgniFlaqssyQIZJBGVz03HERZIC8uD0KwX1Bit7
-        ZEPrTDSkUouVZgux/rqRWQeREwFkKGSABqUp5n4=
-X-Google-Smtp-Source: AGRyM1sEvCvtuGItLbrpA1VpebWGWsR5cNoZW28n/u9RX1e8XBtI1GwbK/xotjuMsYJrasNN0eno1FlYJcE8JfnEywY=
-X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
- 141-20020a810d93000000b0031cd32d4d76mr26115654ywn.135.1657617939736; Tue, 12
- Jul 2022 02:25:39 -0700 (PDT)
+        Tue, 12 Jul 2022 05:25:56 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268397D57
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:54 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 64so12922229ybt.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d1s8GrTnsNja2UVMETHzEYbNsXWuG59DZYYujxZ0uNM=;
+        b=E7s9MG7R2vyOdYv+DyJTyP9qvDF861Hg8UVSKuu7fPfKiJcUf0T4+5rqWBOAwiFT5m
+         s71YczqnCk9QoXFJsxY2iPajEPVHRKjzLDLNfN78+HPcOlx5GCAg4lTAcA9AQpp1P7ks
+         xOvaswgiroGepfMq6tz8Iodj/oB/xEYuKHK/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d1s8GrTnsNja2UVMETHzEYbNsXWuG59DZYYujxZ0uNM=;
+        b=sVT5Htth+Cj88tVomhV7MaCJXnVUJEznC0rCpSamaGm71q30jfm0ARkIl60RuWX0Qx
+         s/PiaKcAF9/Kr2fGbQY53f+PCGTHsH5Pk3cwRcA6FvXJk2jk/hmcT/nb2sBJR9tTQk8Q
+         F6Mm6TZN72iOwUQ15Z1K1OjIFqa4bGEmdYlq8M8KKOzrACAt4q8Gj8N/tD2cJIB21/0G
+         38fiMegX/1PFKuCadbHWZdPxK67Mqi6Bd5/r9YJufkNpvVeohI8kQceTTapL4Qi/pSpY
+         yQAfgS8zNGcKgstOkik89Fs+TE8vgRUiyjK/qHHurJaAYe8aZfp4WVEnx6KO+XZtRmEt
+         naUw==
+X-Gm-Message-State: AJIora8zjySZZd6+/ho2I93b7AKHHjGl8zLcIF8680Tgzui2JVTtx7YG
+        WML4cUof5YZYd9XE9QTC3icLGWW3331cE2V7AGUKMA==
+X-Google-Smtp-Source: AGRyM1s+8nCq65TcIOsDHs7Q7KKeErUSUAooT/HwPjUkoNu7g19Wcn3E28+svjZ6gcqJgvvsQ3k/cHQJeodj0Uih8+Q=
+X-Received: by 2002:a25:81c5:0:b0:66d:55b5:d250 with SMTP id
+ n5-20020a2581c5000000b0066d55b5d250mr20396849ybm.501.1657617954174; Tue, 12
+ Jul 2022 02:25:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20220712091922epcas2p34d7c89f02780afa58950b103a62eb59a@epcas2p3.samsung.com>
- <20220712094715.2918823-1-youngmin.nam@samsung.com>
-In-Reply-To: <20220712094715.2918823-1-youngmin.nam@samsung.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 12 Jul 2022 11:25:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a17d1J7gu0W-0ojxjz8W6C+Pg+xQW8ai=Qw_q94SJAOdQ@mail.gmail.com>
-Message-ID: <CAK8P3a17d1J7gu0W-0ojxjz8W6C+Pg+xQW8ai=Qw_q94SJAOdQ@mail.gmail.com>
-Subject: Re: [PATCH] time: correct the prototype of ns_to_kernel_old_timeval
- and ns_to_timespec64
-To:     Youngmin Nam <youngmin.nam@samsung.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        hajun.sung@samsung.com, hosung0.kim@samsung.com,
-        d7271.choe@samsung.com
+References: <20220711130522.401551-1-alexandru.elisei@arm.com>
+ <CAGXv+5HyD63MSmnNSoHX6euR2qpnqh-Fn9rdRYRYz4Ci90+w8Q@mail.gmail.com> <Ys00vczqcIGzOadV@monolith.localdoman>
+In-Reply-To: <Ys00vczqcIGzOadV@monolith.localdoman>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 12 Jul 2022 17:25:43 +0800
+Message-ID: <CAGXv+5G=YvDkm8a=Wyui4mqSskqPq-kQJfU4HGNXSGzz0hXiqw@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix NULL pointer dereference when
+ pinctrl is not found
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, heiko@sntech.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, judyhsiao@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:nXcf3ikYZUC1IvVYXY2mi58CgFtPvCb9/aZ+xH2J7Ldwom2XWrN
- JjfTPGXEn2PvKg1khUq5nS6j88gq+VpAECO2fl0r9EaPCSpUWeKXVPjfDtb498S8+BAYrxs
- bPIHdGtWzh3dOWXi2Cxc3+tqqXdJ+HXWT5WwAjL5YncFbVO3ooDnJ7Kczy31SnRckUGi9XK
- y9mBITeKDP2Opph5Fe4Vg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2Vz78sk0Wgk=:V7NOQT6J5FHXDx6eKxaRkA
- ZzH5C6fUZstqfy/8zPiTJsZIt1Gko2oDhozgKMY6OK3uwqhxktmr4sOtEbxjdhNV4ssAhgzpZ
- yh8QzIrcczz9ZldCbBLtJKKsUJkmJtGW0E1HttIjeWrL5MSSM0FZAVqcPhR2HZEB60gQLBQDi
- +3RhU0ittURz7aBiwAH94zEhmIoV4UbTwgIwoTZcFxgBfcStsexyALbcMiANZm+7otAe2uRTy
- GFPwvmiry+TMLurDXb5gGCvUrtqDJQW4gmXLhdqKv58jABDmZOxU1bYjUEWQMwwmBNJz1CMq2
- kYRIe7CH3+fuJJcsnIjyVjEtt4xnHLfLJ130o27KUJQI8bARKoqVv2j57RKgw3iF1/tRy9Lvi
- CXkLyDGpVl/Tkyzm+uK/oA3rImz5RNlAuy0MhXnXEPKRQ4lPZvi+GQL2bqT3vJQvenFJAdqWx
- z1nQVZyn03cUZzZqmTWMCknfdvsz+R8uBcT0ob5aekET8nRuIepwfX6BkFPOSmE6E98Sf3sfK
- JAHkbu9ru38pE3wSK4sVb6hC6cnru7TcbrQSaRvYKVrlqNwvytZbC5HeifyAOj3QyNl3eBiVF
- etg0h0hC6I7+d5vQBHMzdRXUzwLfQxlBZ5ricc+DjRq0qusmyjwwlysQ9mvqqza32j954nDny
- lKWewfOlbWJ8W2u9nP0jwCjXR1uYfxaxVtwXEz1P2EBOV3EevE5bZxi3xgRu16CcBCQvImCBz
- +PKH+Sa9ofJ1hSZTzhkrq3GQHEx8XYmGCO2DdAJJpqt2QlP9wE69lHCNVOBvgOTLhCERHX6cB
- mmlZhLGS10M8NxhUYiO51gvri/0wwLhJzhPqP8ruq43Gi3jLj/8evevG+UCE2YXSJhb8IBbSY
- T29jK30jJs4laR4KC43g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 11:47 AM Youngmin Nam <youngmin.nam@samsung.com> wrote:
+On Tue, Jul 12, 2022 at 4:53 PM Alexandru Elisei
+<alexandru.elisei@arm.com> wrote:
 >
-> In ns_to_kernel_old_timeval() definition,
-> the function argument is defined with const identifier in kernel/time/time.c,
-> but the prototype in include/linux/time32.h looks different.
+> Hi ChenYu,
 >
-> - The function is defined in kernel/time/time.c as below:
-> struct __kernel_old_timeval ns_to_kernel_old_timeval(const s64 nsec)
+> On Tue, Jul 12, 2022 at 02:17:32PM +0800, Chen-Yu Tsai wrote:
+> > On Mon, Jul 11, 2022 at 9:06 PM Alexandru Elisei
+> > <alexandru.elisei@arm.com> wrote:
+> > >
+> > > Commit a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO") switched
+> > > BCLK to GPIO functions when probing the i2s bus interface, but missed
+> > > adding a check for when devm_pinctrl_get() returns an error.  This can lead
+> > > to the following NULL pointer dereference on a rockpro64-v2 if there are no
+> > > "pinctrl" properties in the i2s device tree node:
+> > >
+> > > [    0.658381] rockchip-i2s ff880000.i2s: failed to find i2s default state
+> > > [    0.658993] rockchip-i2s ff880000.i2s: failed to find i2s gpio state
+> > > [    0.660072] rockchip-i2s ff890000.i2s: failed to find i2s default state
+> > > [    0.660670] rockchip-i2s ff890000.i2s: failed to find i2s gpio state
+> > > [    0.661716] rockchip-i2s ff8a0000.i2s: failed to find i2s pinctrl
+> > > [    0.662276] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000005
+> > > [    0.663061] Mem abort info:
+> > > [    0.663317]   ESR = 0x0000000096000004
+> > > [    0.663658]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > > [    0.664136]   SET = 0, FnV = 0
+> > > [    0.664171] mmc2: SDHCI controller on fe330000.mmc [fe330000.mmc] using ADMA
+> > > [    0.664409]   EA = 0, S1PTW = 0
+> > > [    0.664415]   FSC = 0x04: level 0 translation fault
+> > > [    0.664421] Data abort info:
+> > > [    0.666050]   ISV = 0, ISS = 0x00000004
+> > > [    0.666399]   CM = 0, WnR = 0
+> > > [    0.666671] [0000000000000005] user address but active_mm is swapper
+> > > [    0.667240] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> > > [    0.667742] Modules linked in:
+> > > [    0.668028] CPU: 5 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc6 #300
+> > > [    0.668608] Hardware name: Pine64 RockPro64 v2.0 (DT)
+> > > [    0.669062] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [    0.669689] pc : pinctrl_lookup_state+0x20/0xc0
+> > > [    0.670110] lr : rockchip_i2s_probe+0x1a8/0x54c
+> > > [    0.670527] sp : ffff80000a17bb30
+> > > [    0.670829] x29: ffff80000a17bb30 x28: 0000000000000000 x27: ffff8000097c04c8
+> > > [    0.671480] x26: ffff800009871060 x25: ffff800009871078 x24: ffff000001c11368
+> > > [    0.672129] x23: ffff8000092dc850 x22: ffffffffffffffed x21: ffff8000096f7e98
+> > > [    0.672776] x20: ffffffffffffffed x19: ffff000001d92480 x18: ffffffffffffffff
+> > > [    0.673423] x17: 000000040044ffff x16: ffff0000f77db2d0 x15: 0764076e07690766
+> > > [    0.674070] x14: 0720076f07740720 x13: ffff800009e129f0 x12: 000000000000038d
+> > > [    0.674717] x11: 000000000000012f x10: ffff800009e6a9f0 x9 : ffff800009e129f0
+> > > [    0.675364] x8 : 00000000ffffefff x7 : ffff800009e6a9f0 x6 : 80000000fffff000
+> > > [    0.676011] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> > > [    0.676657] x2 : 0000000000000000 x1 : ffff8000096f7e98 x0 : ffffffffffffffed
+> > > [    0.677304] Call trace:
+> > > [    0.677531]  pinctrl_lookup_state+0x20/0xc0
+> > > [    0.677914]  rockchip_i2s_probe+0x1a8/0x54c
+> > > [    0.678297]  platform_probe+0x68/0xc0
+> > > [    0.678638]  really_probe.part.0+0x9c/0x2ac
+> > > [    0.679027]  __driver_probe_device+0x98/0x144
+> > > [    0.679429]  driver_probe_device+0xac/0x140
+> > > [    0.679814]  __driver_attach+0xf8/0x184
+> > > [    0.680169]  bus_for_each_dev+0x70/0xd0
+> > > [    0.680524]  driver_attach+0x24/0x30
+> > > [    0.680856]  bus_add_driver+0x150/0x200
+> > > [    0.681210]  driver_register+0x78/0x130
+> > > [    0.681560]  __platform_driver_register+0x28/0x34
+> > > [    0.681988]  rockchip_i2s_driver_init+0x1c/0x28
+> > > [    0.682407]  do_one_initcall+0x50/0x1c0
+> > > [    0.682760]  kernel_init_freeable+0x204/0x288
+> > > [    0.683160]  kernel_init+0x28/0x13c
+> > > [    0.683482]  ret_from_fork+0x10/0x20
+> > > [    0.683816] Code: aa0003f4 a9025bf5 aa0003f6 aa0103f5 (f8418e93)
+> > > [    0.684365] ---[ end trace 0000000000000000 ]---
+> > > [    0.684813] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> > > [    0.685500] SMP: stopping secondary CPUs
+> > > [    0.685995] Kernel Offset: disabled
+> > > [    0.686310] CPU features: 0x800,00105811,00001086
+> > > [    0.686736] Memory Limit: none
+> > > [    0.687021] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> > >
+> > > Check that i2s->pinctrl is valid before attempting to search for the
+> > > bclk_on and bclk_off pinctrl states.
+> > >
+> > > Fixes: a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO")
+> > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> > > ---
+> > >
+> > > Full log at [1], config at [2] (pastebins expire after 6 months).
+> > >
+> > > I'm not familiar with this part of the kernel, I did my best to come up
+> > > with an explanation and a fix for the panic.
+> > >
+> > > Read Documentation/devicetree/bindings/sound/rockchip-i2s.yaml, which has the
+> > > definition for the i2s nodes with the same compatible string as the i2s@ff8a0000
+> > > that is causing the panic (which is, "rockchip,rk3399-i2s"
+> > > "rockchip,rk3066-i2s"). There's no mention there of a "pinctrl" property, maybe
+> > > I'm reading the docs wrong, or maybe the board devicetree also needs fixing.
+> > >
+> > > [1] https://pastebin.com/vuRVDsKk
+> > > [2] https://pastebin.com/3yDMF7YE
+> > >
+> > >  sound/soc/rockchip/rockchip_i2s.c | 5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
+> > > index 99a128a666fb..c9fedf6eb2e6 100644
+> > > --- a/sound/soc/rockchip/rockchip_i2s.c
+> > > +++ b/sound/soc/rockchip/rockchip_i2s.c
+> > > @@ -808,8 +808,11 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
+> > >
+> > >         i2s->bclk_ratio = 64;
+> > >         i2s->pinctrl = devm_pinctrl_get(&pdev->dev);
+> > > -       if (IS_ERR(i2s->pinctrl))
+> > > +       if (IS_ERR(i2s->pinctrl)) {
+> > >                 dev_err(&pdev->dev, "failed to find i2s pinctrl\n");
+> > > +               ret = PTR_ERR(i2s->pinctrl);
+> > > +               goto err_clk;
+> > > +       }
+> >
+> > This would break audio for HDMI audio, which uses an I2S interface
+> > to feed the HDMI controller and does not need or have pinctrl, but
+> > here you make pinctrl a requirement.
+> >
+> > See https://lore.kernel.org/alsa-devel/20220621185747.2782-1-wens@kernel.org/
+> > for my fix, which is merged for 5.20.
 >
-> - The function is decalared in include/linux/time32.h as below:
-> extern struct __kernel_old_timeval ns_to_kernel_old_timeval(s64 nsec);
->
-> Because the variable of arithmethic types isn't modified in the calling scope,
-> there's no need to mark arguments as const.
-> And there is a review in Link[1] why it was omitted during review stage,
-> so they should be matched.
->
-> Likewise, we can remove the "const" keyword in both definition and declaration
-> of ns_to_timespec64() as it was metentined below Link[2] and Link[3].
->
-> Link[1]: https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1637458.html
-> Link[2]: https://lore.kernel.org/all/20220531064346.51677-1-chanho61.park@samsung.com/T/
-> Link[3]: https://lore.kernel.org/lkml/CAK8P3a3nknJgEDESGdJH91jMj6R_xydFqWASd8r5BbesdvMBgA@mail.gmail.com
-> Fixes: a84d1169164b ("y2038: Introduce struct __kernel_old_timeval")
-> Signed-off-by: Youngmin Nam <youngmin.nam@samsung.com>
+> For what it's worth, I've tested the fix and the board boots just fine.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Check if your HDMI audio card probed correctly or not?
+
+ChenYu
+
+> Thanks,
+> Alex
+>
+> >
+> > Maybe your patch (which Mark already applied) and commit a5450aba737d
+> > ("ASoC: rockchip: i2s: switch BCLK to GPIO") should just be reverted from
+> > the for-5.19?
+> >
+> > Mark?
+> >
+> >
+> > Regards
+> > ChenYu
+> >
+> > >
+> > >         i2s->bclk_on = pinctrl_lookup_state(i2s->pinctrl,
+> > >                                    "bclk_on");
+> > > --
+> > > 2.37.0
+> > >
+> > >
+> > > _______________________________________________
+> > > Linux-rockchip mailing list
+> > > Linux-rockchip@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-rockchip

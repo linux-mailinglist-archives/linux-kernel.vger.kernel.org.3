@@ -2,121 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A1A571F10
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F975571F17
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiGLP0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S233351AbiGLP1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbiGLP0L (ORCPT
+        with ESMTP id S233425AbiGLP1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:26:11 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC2C2714F;
-        Tue, 12 Jul 2022 08:26:09 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6FEC822239;
-        Tue, 12 Jul 2022 17:26:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657639567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gftElsBm8J9qrT2o/GCtvW399nDzpiAV9w2nv9s38GI=;
-        b=XMEYTzH3F3lGOsK1XmdL/baZvICiN7qlvTH14zCuNdjLI2h8orV8Uytnfd7P/KboHEjhmc
-        ionFbA5bECLCbrVeK6v4gPoRKIKgCy4wM3N0YVWw8xe6LSe/7Mh3hjtvdy+I2zlR/2XpP7
-        HDe41RUjCRxqHhXZfjwHOOVOGiGKc40=
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] NFC: nxp-nci: fix deadlock during firmware update
-Date:   Tue, 12 Jul 2022 17:25:54 +0200
-Message-Id: <20220712152554.2909224-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Tue, 12 Jul 2022 11:27:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D441026101
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:26:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F331B1596;
+        Tue, 12 Jul 2022 08:26:59 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D190D3F73D;
+        Tue, 12 Jul 2022 08:26:57 -0700 (PDT)
+Message-ID: <c1db7f31-82e1-eac4-bd49-212859727cb2@arm.com>
+Date:   Tue, 12 Jul 2022 17:26:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 1/2] sched/rt: fix bad task migration for rt tasks
+Content-Language: en-US
+To:     Schspa Shi <schspa@gmail.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai
+References: <20220712150506.632304-1-schspa@gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20220712150506.632304-1-schspa@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During firmware update, both nxp_nci_i2c_irq_thread_fn() and
-nxp_nci_fw_work() will hold the info_lock mutex and one will wait
-for the other via a completion:
+On 12/07/2022 17:05, Schspa Shi wrote:
+> Commit 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+> allow find_lock_lowest_rq to pick a task with migration disabled.
+> This commit is intended to push the current running task on this CPU
+> away.
+> 
+> There is a race scenarios, which allows a migration disabled task to
+> be migrated to another CPU.
+> 
+> When there is a RT task with higher priority, rt sched class was
+> intended to migrate higher priority task to lowest rq via push_rt_tasks,
+> this BUG will happen here.
+> 
+> With the system running on PREEMPT_RT, rt_spin_lock will disable
+> migration, this will make the problem easier to reproduce.
+> 
+> I have seen this crash on PREEMPT_RT, from the logs, there is a race
+> when trying to migrate higher priority tasks to the lowest rq.
+> 
+> Please refer to the following scenarios.
+> 
+>            CPU0                                  CPU1
+> ------------------------------------------------------------------
+> push_rt_task
+>   check is_migration_disabled(next_task)
+>                                         task not running and
+>                                         migration_disabled == 0
+>   find_lock_lowest_rq(next_task, rq);
+>     _double_lock_balance(this_rq, busiest);
+>       raw_spin_rq_unlock(this_rq);
+>       double_rq_lock(this_rq, busiest);
+>         <<wait for busiest rq>>
+>                                             <wakeup>
+>                                         task become running
+>                                         migrate_disable();
+>                                           <context out>
+>   deactivate_task(rq, next_task, 0);
+>   set_task_cpu(next_task, lowest_rq->cpu);
+>     WARN_ON_ONCE(is_migration_disabled(p));
+>       ---------OOPS-------------
+> 
+> Crash logs as fellowing:
+> [123671.996430] WARNING: CPU: 2 PID: 13470 at kernel/sched/core.c:2485
 
-nxp_nci_fw_work()
-  mutex_lock(info_lock)
-  nxp_nci_fw_send()
-    wait_for_completion(cmd_completion)
-  mutex_unlock(info_lock)
+What code-base is this?
 
-nxp_nci_i2c_irq_thread_fn()
-  mutex_lock(info_lock)
-    nxp_nci_fw_recv_frame()
-      complete(cmd_completion)
-  mutex_unlock(info_lock)
+IMHO, currently this `WARN_ON_ONCE(is_migration_disabled(p))` in
+set_task_cpu() is at > line 3000.
 
-This will result in a -ETIMEDOUT error during firmware update (note
-that the wait_for_completion() above is a variant with a timeout).
+> set_task_cpu+0x8c/0x108
+> [123671.996800] pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
+> [123671.996811] pc : set_task_cpu+0x8c/0x108
+> [123671.996820] lr : set_task_cpu+0x7c/0x108
+> [123671.996828] sp : ffff80001268bd30
+> [123671.996832] pmr_save: 00000060
+> [123671.996835] x29: ffff80001268bd30 x28: ffff0001a3d68e80
+> [123671.996844] x27: ffff80001225f4a8 x26: ffff800010ab62cb
+> [123671.996854] x25: ffff80026d95e000 x24: 0000000000000005
+> [123671.996864] x23: ffff00019746c1b0 x22: 0000000000000000
+> [123671.996873] x21: ffff00027ee33a80 x20: 0000000000000000
+> [123671.996882] x19: ffff00019746ba00 x18: 0000000000000000
+> [123671.996890] x17: 0000000000000000 x16: 0000000000000000
+> [123671.996899] x15: 000000000000000a x14: 000000000000349e
+> [123671.996908] x13: ffff800012f4503d x12: 0000000000000001
+> [123671.996916] x11: 0000000000000000 x10: 0000000000000000
+> [123671.996925] x9 : 00000000000c0000 x8 : ffff00027ee58700
+> [123671.996933] x7 : ffff00027ee8da80 x6 : ffff00027ee8e580
+> [123671.996942] x5 : ffff00027ee8dcc0 x4 : 0000000000000005
+> [123671.996951] x3 : ffff00027ee8e338 x2 : 0000000000000000
+> [123671.996959] x1 : 00000000000000ff x0 : 0000000000000002
+> [123671.996969] Call trace:
+> [123671.996975]  set_task_cpu+0x8c/0x108
+> [123671.996984]  push_rt_task.part.0+0x144/0x184
+> [123671.996995]  push_rt_tasks+0x28/0x3c
+> [123671.997002]  task_woken_rt+0x58/0x68
+> [123671.997009]  ttwu_do_wakeup+0x5c/0xd0
+> [123671.997019]  ttwu_do_activate+0xc0/0xd4
+> [123671.997028]  try_to_wake_up+0x244/0x288
+> [123671.997036]  wake_up_process+0x18/0x24
+> [123671.997045]  __irq_wake_thread+0x64/0x80
+> [123671.997056]  __handle_irq_event_percpu+0x110/0x124
+> [123671.997064]  handle_irq_event_percpu+0x50/0xac
+> [123671.997072]  handle_irq_event+0x84/0xfc
+> 
 
-Drop the lock in nxp_nci_fw_work() and instead take it after the
-work is done in nxp_nci_fw_work_complete() when the NFC controller mode
-is switched and the info structure is updated.
+[...]
 
-Fixes: dece45855a8b ("NFC: nxp-nci: Add support for NXP NCI chips")
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/nfc/nxp-nci/firmware.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index 8c9ed96648409..7bd3e6ecbe45e 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
+>  			 * the mean time, task could have
+>  			 * migrated already or had its affinity changed.
+>  			 * Also make sure that it wasn't scheduled on its rq.
+> +			 * It is possible the task was scheduled, set
+> +			 * "migrate_disabled" and then got preempted, so we must
+> +			 * check the task migration disable flag here too.
+>  			 */
+>  			if (unlikely(task_rq(task) != rq ||
+>  				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
+>  				     task_running(rq, task) ||
+>  				     !rt_task(task) ||
+> +				     is_migration_disabled(task) ||
 
-diff --git a/drivers/nfc/nxp-nci/firmware.c b/drivers/nfc/nxp-nci/firmware.c
-index 119bf305c642..6a4d4aa7239f 100644
---- a/drivers/nfc/nxp-nci/firmware.c
-+++ b/drivers/nfc/nxp-nci/firmware.c
-@@ -54,6 +54,7 @@ void nxp_nci_fw_work_complete(struct nxp_nci_info *info, int result)
- 	struct nxp_nci_fw_info *fw_info = &info->fw_info;
- 	int r;
- 
-+	mutex_lock(&info->info_lock);
- 	if (info->phy_ops->set_mode) {
- 		r = info->phy_ops->set_mode(info->phy_id, NXP_NCI_MODE_COLD);
- 		if (r < 0 && result == 0)
-@@ -66,6 +67,7 @@ void nxp_nci_fw_work_complete(struct nxp_nci_info *info, int result)
- 		release_firmware(fw_info->fw);
- 		fw_info->fw = NULL;
- 	}
-+	mutex_unlock(&info->info_lock);
- 
- 	nfc_fw_download_done(info->ndev->nfc_dev, fw_info->name, (u32) -result);
- }
-@@ -172,8 +174,6 @@ void nxp_nci_fw_work(struct work_struct *work)
- 	fw_info = container_of(work, struct nxp_nci_fw_info, work);
- 	info = container_of(fw_info, struct nxp_nci_info, fw_info);
- 
--	mutex_lock(&info->info_lock);
--
- 	r = fw_info->cmd_result;
- 	if (r < 0)
- 		goto exit_work;
-@@ -190,7 +190,6 @@ void nxp_nci_fw_work(struct work_struct *work)
- exit_work:
- 	if (r < 0 || fw_info->size == 0)
- 		nxp_nci_fw_work_complete(info, r);
--	mutex_unlock(&info->info_lock);
- }
- 
- int nxp_nci_fw_download(struct nci_dev *ndev, const char *firmware_name)
--- 
-2.30.2
+I wonder why this isn't covered by `task_rq(task) != rq` in this condition?
 
+[...]

@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12B65712A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB93D5712A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbiGLG7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S232239AbiGLHCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGLG73 (ORCPT
+        with ESMTP id S232178AbiGLHCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:59:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35518CC87
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:59:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657609167; x=1689145167;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=cSwQsOVestWoujXYp9TAzAFZEkDehjIWirxENp9l0nk=;
-  b=LVsDuNLtZe3uiJb1zktbtY9zpABOyed8VzO/L42YeBiGVvRS7WJpYV4H
-   TFymn79F3Pf+PrCnB6VBc7u1TJ+I4JP5MeJ5T2X4zPsdUi8zYaJ/hwxHI
-   mC/N7l1Z4pE5m6IDeD7ZpBGnKcXFbjG4kBDfnqTvxDB3sWqHCe5v44c4u
-   vQjsTG2bafQ7uX0IsfUmBn2jtllsdd68QcQPcyhDZEFo5o0l+vUAOg186
-   MYzUFu9NQW5NjmRrsOXKit+hWGpUSKya7dViRzNSmRmZHIVThGMbsMLyk
-   FxHQ7UIncOoFCpF4BYzgyWIPKdAE8v2adRKmNEW74J3abYc3vw3/P89OA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="284882665"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="284882665"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:59:27 -0700
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="922087558"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:59:24 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
-References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
-        <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
-        <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
-Date:   Tue, 12 Jul 2022 14:59:13 +0800
-In-Reply-To: <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Tue, 12 Jul 2022 10:12:17 +0530")
-Message-ID: <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 12 Jul 2022 03:02:05 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4FE8CC8D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t1so8856296lft.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
+        b=uv2LG7gzP10xj/mheaKVtOSrTN+X0UgE93fZG1uQNEpadxp50LH8Wy6Nb+ABdxSpFm
+         B4ik9P6lWDr3pkePBdZ5WVfIHNQJB1iZdsDBFbuKkGmwpvwVYB1mQ7TlzJreqpP/7y6q
+         Hpa3hqo05U29UPqt2oLIG4BsnlwCiJiPZtr/u1WI29lQpVbeGTgyyM5hVCiVpjX1yiZs
+         Q4NIrluD9usVxYsfHc9sGHN0SS1C7ElIyyy8ySmBekz5t4ckAnHO5F/8Nn3J06LO3FYz
+         ugCpqa4Ff8QbFTsnd1J0VBqMGRmvUbnYwJfz4hjJIstdQHANHF9OQPUcaRxCV7AWMPTc
+         eaKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rR4EvPz2QTL/uIlV/7u9u2k3BsIB6Cd/Y2fmLLbm+6Q=;
+        b=M5wTcCK3km9cBJputMkCqN9V3YxShHKw3D7iePTZcnqRf4ETEjfF0QOkgTjMC2ZkyB
+         aSiYpT+TFIMrJecPp02a1co1IRBzxXC3JjDVykmcR5hpMoNG354NxmwmOa0nMlQTgLaC
+         81PJH1SV70MgF5K1mWE9XCSqNqi96Nb5Vl6kBBWPgTEClIVeG8iAZ4EnMov40z2Thd7w
+         203n2WluOCZ6ZzUdlaKaYaAnZxaO07h3iahFke/+Gk58qMRV7EA6rS7gabd+Bn/7AR0T
+         HhFNCcoc/OuSMMAfA6m1/p6p+IWTZcqhsnM51XKUcLA97eSrTHOW+tL9TSNzF4IYCDSO
+         V5Lw==
+X-Gm-Message-State: AJIora+/JllCfzzc1rjR3nDyFCL4O0W/9BiL/bmAka8QqPUeFjjy9fa5
+        PlYR8KgQoBcS00Y6XOZC5ONLDw==
+X-Google-Smtp-Source: AGRyM1v8I7FEdMPilvPTeX/T5acQuHUvYJJlCGQqXlGNHZ8ieSAEOmPjfUgENxvwkU4d+kyg3znBVA==
+X-Received: by 2002:a19:520f:0:b0:489:dc56:df68 with SMTP id m15-20020a19520f000000b00489dc56df68mr6534018lfb.295.1657609322071;
+        Tue, 12 Jul 2022 00:02:02 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b00489da32ec80sm1387629lfr.238.2022.07.12.00.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 00:02:01 -0700 (PDT)
+Message-ID: <69e8195e-8d2b-3df0-0783-269f9aef1a83@linaro.org>
+Date:   Tue, 12 Jul 2022 09:01:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 2/3] dt-binding: power: power-domain: add
+ power-supply-needs-irq
+Content-Language: en-US
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220711094549.3445566-1-martin.kepplinger@puri.sm>
+ <20220711094549.3445566-2-martin.kepplinger@puri.sm>
+ <c68e4ae9-c435-c74e-91cd-b153be6de92f@linaro.org>
+ <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f2142a9816095eca504c464a6221a96a0cbd6b54.camel@puri.sm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,212 +83,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-
-> On 7/12/22 6:46 AM, Huang, Ying wrote:
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> On 7/5/22 9:59 AM, Huang, Ying wrote:
->>>> Hi, Aneesh,
->>>>
->>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>
->>>>> The current kernel has the basic memory tiering support: Inactive
->>>>> pages on a higher tier NUMA node can be migrated (demoted) to a lower
->>>>> tier NUMA node to make room for new allocations on the higher tier
->>>>> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
->>>>> migrated (promoted) to a higher tier NUMA node to improve the
->>>>> performance.
->>>>>
->>>>> In the current kernel, memory tiers are defined implicitly via a
->>>>> demotion path relationship between NUMA nodes, which is created during
->>>>> the kernel initialization and updated when a NUMA node is hot-added or
->>>>> hot-removed.  The current implementation puts all nodes with CPU into
->>>>> the top tier, and builds the tier hierarchy tier-by-tier by establishing
->>>>> the per-node demotion targets based on the distances between nodes.
->>>>>
->>>>> This current memory tier kernel interface needs to be improved for
->>>>> several important use cases:
->>>>>
->>>>> * The current tier initialization code always initializes
->>>>>   each memory-only NUMA node into a lower tier.  But a memory-only
->>>>>   NUMA node may have a high performance memory device (e.g. a DRAM
->>>>>   device attached via CXL.mem or a DRAM-backed memory-only node on
->>>>>   a virtual machine) and should be put into a higher tier.
->>>>>
->>>>> * The current tier hierarchy always puts CPU nodes into the top
->>>>>   tier. But on a system with HBM (e.g. GPU memory) devices, these
->>>>>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
->>>>>   with CPUs are better to be placed into the next lower tier.
->>>>>
->>>>> * Also because the current tier hierarchy always puts CPU nodes
->>>>>   into the top tier, when a CPU is hot-added (or hot-removed) and
->>>>>   triggers a memory node from CPU-less into a CPU node (or vice
->>>>>   versa), the memory tier hierarchy gets changed, even though no
->>>>>   memory node is added or removed.  This can make the tier
->>>>>   hierarchy unstable and make it difficult to support tier-based
->>>>>   memory accounting.
->>>>>
->>>>> * A higher tier node can only be demoted to selected nodes on the
->>>>>   next lower tier as defined by the demotion path, not any other
->>>>>   node from any lower tier.  This strict, hard-coded demotion order
->>>>>   does not work in all use cases (e.g. some use cases may want to
->>>>>   allow cross-socket demotion to another node in the same demotion
->>>>>   tier as a fallback when the preferred demotion node is out of
->>>>>   space), and has resulted in the feature request for an interface to
->>>>>   override the system-wide, per-node demotion order from the
->>>>>   userspace.  This demotion order is also inconsistent with the page
->>>>>   allocation fallback order when all the nodes in a higher tier are
->>>>>   out of space: The page allocation can fall back to any node from
->>>>>   any lower tier, whereas the demotion order doesn't allow that.
->>>>>
->>>>> * There are no interfaces for the userspace to learn about the memory
->>>>>   tier hierarchy in order to optimize its memory allocations.
->>>>>
->>>>> This patch series make the creation of memory tiers explicit under
->>>>> the control of userspace or device driver.
->>>>>
->>>>> Memory Tier Initialization
->>>>> ==========================
->>>>>
->>>>> By default, all memory nodes are assigned to the default tier with
->>>>> tier ID value 200.
->>>>>
->>>>> A device driver can move up or down its memory nodes from the default
->>>>> tier.  For example, PMEM can move down its memory nodes below the
->>>>> default tier, whereas GPU can move up its memory nodes above the
->>>>> default tier.
->>>>>
->>>>> The kernel initialization code makes the decision on which exact tier
->>>>> a memory node should be assigned to based on the requests from the
->>>>> device drivers as well as the memory device hardware information
->>>>> provided by the firmware.
->>>>>
->>>>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
->>>>>
->>>>> Memory Allocation for Demotion
->>>>> ==============================
->>>>> This patch series keep the demotion target page allocation logic same.
->>>>> The demotion page allocation pick the closest NUMA node in the
->>>>> next lower tier to the current NUMA node allocating pages from.
->>>>>
->>>>> This will be later improved to use the same page allocation strategy
->>>>> using fallback list.
->>>>>
->>>>> Sysfs Interface:
->>>>> -------------
->>>>> Listing current list of memory tiers details:
->>>>>
->>>>> :/sys/devices/system/memtier$ ls
->>>>> default_tier max_tier  memtier1  power  uevent
->>>>> :/sys/devices/system/memtier$ cat default_tier
->>>>> memtier200
->>>>> :/sys/devices/system/memtier$ cat max_tier 
->>>>> 400
->>>>> :/sys/devices/system/memtier$ 
->>>>>
->>>>> Per node memory tier details:
->>>>>
->>>>> For a cpu only NUMA node:
->>>>>
->>>>> :/sys/devices/system/node# cat node0/memtier 
->>>>> :/sys/devices/system/node# echo 1 > node0/memtier 
->>>>> :/sys/devices/system/node# cat node0/memtier 
->>>>> :/sys/devices/system/node# 
->>>>>
->>>>> For a NUMA node with memory:
->>>>> :/sys/devices/system/node# cat node1/memtier 
->>>>> 1
->>>>> :/sys/devices/system/node# ls ../memtier/
->>>>> default_tier  max_tier  memtier1  power  uevent
->>>>> :/sys/devices/system/node# echo 2 > node1/memtier 
->>>>> :/sys/devices/system/node# 
->>>>> :/sys/devices/system/node# ls ../memtier/
->>>>> default_tier  max_tier  memtier1  memtier2  power  uevent
->>>>> :/sys/devices/system/node# cat node1/memtier 
->>>>> 2
->>>>> :/sys/devices/system/node# 
->>>>>
->>>>> Removing a memory tier
->>>>> :/sys/devices/system/node# cat node1/memtier 
->>>>> 2
->>>>> :/sys/devices/system/node# echo 1 > node1/memtier
->>>>
->>>> Thanks a lot for your patchset.
->>>>
->>>> Per my understanding, we haven't reach consensus on
->>>>
->>>> - how to create the default memory tiers in kernel (via abstract
->>>>   distance provided by drivers?  Or use SLIT as the first step?)
->>>>
->>>> - how to override the default memory tiers from user space
->>>>
->>>> As in the following thread and email,
->>>>
->>>> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
->>>>
->>>> I think that we need to finalized on that firstly?
+On 11/07/2022 15:17, Martin Kepplinger wrote:
+> Am Montag, dem 11.07.2022 um 12:38 +0200 schrieb Krzysztof Kozlowski:
+>> On 11/07/2022 11:45, Martin Kepplinger wrote:
+>>> Add the power-supply-needs-irq board description property for power
+>>> domains.
+>>
+>> Where is a board description here? I think you just meant
+>> "power-supply-needs-irq property"?
 >>>
->>> I did list the proposal here 
+>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+>>> ---
+>>>  .../devicetree/bindings/power/power-domain.yaml        | 10
+>>> ++++++++++
+>>>  1 file changed, 10 insertions(+)
 >>>
->>> https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
->>>
->>> So both the kernel default and driver-specific default tiers now become kernel parameters that can be updated
->>> if the user wants a different tier topology. 
->>>
->>> All memory that is not managed by a driver gets added to default_memory_tier which got a default value of 200
->>>
->>> For now, the only driver that is updated is dax kmem, which adds the memory it manages to memory tier 100.
->>> Later as we learn more about the device attributes (HMAT or something similar) that we might want to use
->>> to control the tier assignment this can be a range of memory tiers. 
->>>
->>> Based on the above, I guess we can merge what is posted in this series and later fine-tune/update
->>> the memory tier assignment based on device attributes.
->> 
->> Sorry for late reply.
->> 
->> As the first step, it may be better to skip the parts that we haven't
->> reached consensus yet, for example, the user space interface to override
->> the default memory tiers.  And we can use 0, 1, 2 as the default memory
->> tier IDs.  We can refine/revise the in-kernel implementation, but we
->> cannot change the user space ABI.
->> 
->
-> Can you help list the use case that will be broken by using tierID as outlined in this series?
-> One of the details that were mentioned earlier was the need to track top-tier memory usage in a
-> memcg and IIUC the patchset posted https://lore.kernel.org/linux-mm/cover.1655242024.git.tim.c.chen@linux.intel.com
-> can work with tier IDs too. Let me know if you think otherwise. So at this point
-> I am not sure which area we are still debating w.r.t the userspace interface.
+>>> diff --git a/Documentation/devicetree/bindings/power/power-
+>>> domain.yaml b/Documentation/devicetree/bindings/power/power-
+>>> domain.yaml
+>>> index 889091b9814f..e82c2f7ccb97 100644
+>>> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+>>> @@ -70,6 +70,16 @@ properties:
+>>>        by the given provider should be subdomains of the domain
+>>> specified
+>>>        by this binding.
+>>>  
+>>> +  power-supply: true
+>>
+>> This is a new property not described in the commit msg.
+> 
+> true, I think it's missing and could be added as a separate patch.
+> 
+>>
+>>> +
+>>> +  power-supply-needs-irq:
+>>> +    type: boolean
+>>> +    description:
+>>> +      A power-supply can link for example to a regulator
+>>> controlled via
+>>> +      i2c or otherwise needing interrupts enabled to be able to
+>>> enable and
+>>> +      disable. 
+>>
+>> Not really a property of power domain. How the regulator supply works
+>> is
+>> entirely up to regulator. Otherwise such property should appear for
+>> every device.
+> 
+> you're right. The power-domain driver could read the power-supply
+> regulator node directly. Still, I think then a new regulator property
+> is needed instead, or is it?
 
-In
+In case of regulator, I am not so sure it needs a dedicated property of
+DT. If it is I2C regulator - the parent node is I2C bus and regulator
+device is some child of I2C controller (could be via a MFD device), so
+no need for dedicated property.
 
-https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+If it uses interrupts, then:
+1. The presence of interrupts is already known - "interrupts" property.
+2. The actual use of interrupts is DT independent and only driver knows it.
 
-per my understanding, Johannes suggested to override the kernel default
-memory tiers with "abstract distance" via drivers implementing memory
-devices.  As you said in another email, that is related to [7/12] of the
-series.  And we can table it for future.
-
-And per my understanding, he also suggested to make memory tier IDs
-dynamic.  For example, after the "abstract distance" of a driver is
-overridden by users, the total number of memory tiers may be changed,
-and the memory tier ID of some nodes may be changed too.  This will make
-memory tier ID easier to be understood, but more unstable.  For example,
-this will make it harder to specify the per-memory-tier memory partition
-for a cgroup.
-
-> I will still keep the default tier IDs with a large range between them. That will allow
-> us to go back to tierID based demotion order if we can. That is much simpler than using tierID and rank
-> together. If we still want to go back to rank based approach the tierID value won't have much
-> meaning anyway.
-
-I agree to get rid of "rank".
-
-> Any feedback on patches 1 - 5, so that I can request Andrew to merge
-> them?
-
-I hope that we can discuss with Johannes firstly.  But it appears that
-he is busy recently.
-
-Best Regards,
-Huang, Ying
+Best regards,
+Krzysztof

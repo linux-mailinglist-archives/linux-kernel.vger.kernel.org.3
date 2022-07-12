@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E70570F36
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8343570F3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbiGLBHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S232085AbiGLBLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGLBHv (ORCPT
+        with ESMTP id S231867AbiGLBLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:07:51 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCE827FFF;
-        Mon, 11 Jul 2022 18:07:50 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fz10so6270120pjb.2;
-        Mon, 11 Jul 2022 18:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ypHMFXn2YcaaY0AHuBIgk51BYFs/v71Cwy5/0gPeK/s=;
-        b=dprawehKM255mpHjv2LvRV9r7DqT89cmjcUNjBYT50xteRnjmIoWBNBWamqcfPSZDo
-         UUGpiMlUY835A7PsSGcfBOtRNVoOjyTQgXradmnDPaBTla0uzAfxF9Zhd1pNAmaSYyTH
-         KcCnbTzkHSuAhrPmqoIBWQi7JkX7jsS4ntfcUdEnVu36rD2FL1ZPe3oXFAhnV8dsNEQ3
-         6LMjH52IhekqLnIXq7vv0JR6nobm/XLYMckYVaIi8CW2TuTDEzXPM2/B2VFnhpeJIXEF
-         pXQrABnnJAMGOYBtPOgdvqnvcVUsgIcOJGJdEup1Jwmxk/bTNGfgTnodTgySbbHpS9NT
-         YNMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ypHMFXn2YcaaY0AHuBIgk51BYFs/v71Cwy5/0gPeK/s=;
-        b=vrAGd9fhr99VNXYBws6eLZVcsrAoZQzalzPaJAMmbPZTcbbRYugbpuxXc6GZo2XquH
-         57rgq2E+Kdn/uToxSGNGMnb3CSvSYPtylDJhCcxZ7JEfLzUBuzdnAqqClJPlPBZV4I9e
-         9cazbvAzEKbjHM4stM7Qxk3hQ98lDMmEH++4cnsLQuZEli171PaitympLou8JNxhrw2V
-         Z8AXqNh8EwYGW437bv0KntKIbY8YaJFIMUs5EZmaaNJjnUG6068Jv1sLDhxhgsX3RLxt
-         OPRtfFbdOw5M2EpYbLVY8hLVXlWtXcKZBqMEy5oYCyYK0Vv7Vt/9qtskRO/8ygQukuag
-         4s5w==
-X-Gm-Message-State: AJIora8FLoFo24fXp0JBhgZY3vXcpsfUcaDi9cpldrC+DlxhchPUtIwG
-        pH5eahA6PSRe/VDJYpSqho0=
-X-Google-Smtp-Source: AGRyM1tuySMa992JVPAaBz05oHL2gAY/HgT/wzJjOIpgpZ5baQPIPETMaeVDHZGpChmgXF3RgHDfRA==
-X-Received: by 2002:a17:90b:4a90:b0:1f0:4059:b2e5 with SMTP id lp16-20020a17090b4a9000b001f04059b2e5mr1231262pjb.241.1657588069342;
-        Mon, 11 Jul 2022 18:07:49 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id q11-20020aa7982b000000b005289fad1bbesm5546838pfl.94.2022.07.11.18.07.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 11 Jul 2022 18:07:48 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH 0/3] KVM: x86: Fix fault-related bugs in LTR/LLDT
- emulation
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220711232750.1092012-1-seanjc@google.com>
-Date:   Mon, 11 Jul 2022 18:07:47 -0700
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Mon, 11 Jul 2022 21:11:15 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E79D2E685;
+        Mon, 11 Jul 2022 18:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KSCsx
+        S2NdmSWWyRj4KxVCEpGTrIOLyeLRya+rvx2MKY=; b=ODEGnA0fZHxJX9fD3rh2i
+        AZHpqjEcXbpFvxIvoebZR96iMenRDPOg9mbGPp/zl1AfsxIDxFcu0MoM4QtaW8L+
+        Jtmhzm4+dynmWF8Geom2M0qg8Q7W+Hnnppgq//jG2Emc2ijSdFfnfMYlZvRCeraw
+        6nhuhC0fO+kWT7tZMwQ5kU=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp4 (Coremail) with SMTP id HNxpCgCnkdkQysxil69dOA--.12930S4;
+        Tue, 12 Jul 2022 09:10:55 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <103BF4B8-2ABE-4CB1-9361-F386D820E554@gmail.com>
-References: <20220711232750.1092012-1-seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH v2] ima/evm: Fix potential memory leak in ima_init_crypto()
+Date:   Tue, 12 Jul 2022 09:10:37 +0800
+Message-Id: <20220712011037.2328591-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgCnkdkQysxil69dOA--.12930S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jry8WF4UtF18ur15GFyfJFb_yoW3WwcE9a
+        s0934xXw17Zan5XayjvFZ7ZF4vgrZ5XFyFgryaywnrua43Cr45XFy7Xrs3JFy8uryUtF4q
+        gws8JFW2kwnF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREF1vPUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiQxA8jFc7ajzTIAAAsq
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 11, 2022, at 4:27 PM, Sean Christopherson <seanjc@google.com> =
-wrote:
+On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
+without freeing the ima_algo_array. Add the missing kfree() for
+ima_algo_array to avoid the potential memory leak.
 
-> Patch 1 fixes a bug found by syzkaller where KVM attempts to set the
-> TSS.busy bit during LTR before checking that the new TSS.base is =
-valid.
->=20
-> Patch 2 fixes a bug found by inspection (when reading the APM to =
-verify
-> the non-canonical logic is correct) where KVM doesn't provide the =
-correct
-> error code if the new TSS.base is non-canonical.
->=20
-> Patch 3 makes the "dangling userspace I/O" WARN_ON two separate =
-WARN_ON_ONCE
-> so that a KVM bug doesn't spam the kernel log (keeping the WARN is =
-desirable
-> specifically to detect these types of bugs).
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ security/integrity/ima/ima_crypto.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi Sean,
-
-If/when you find that I screwed up, would you be kind enough to cc me?
-
-Very likely I won=E2=80=99t be able to assist too much in fixing the =
-bugs under my
-current affiliation, but it is always interesting to see the escapees of
-Intel=E2=80=99s validation tools=E2=80=A6 ;-)
-
-Only if you can.
-
-Thanks,
-Nadav
-
-[ p.s. - please use my gmail account for the matter ]
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index a7206cc1d7d1..64499056648a 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -205,6 +205,7 @@ int __init ima_init_crypto(void)
+ 
+ 		crypto_free_shash(ima_algo_array[i].tfm);
+ 	}
++	kfree(ima_algo_array);
+ out:
+ 	crypto_free_shash(ima_shash_tfm);
+ 	return rc;
+-- 
+2.25.1
 

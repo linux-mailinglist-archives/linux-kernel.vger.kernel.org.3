@@ -2,210 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085DD571D77
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB72571DB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiGLO6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S233844AbiGLPBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbiGLO6q (ORCPT
+        with ESMTP id S233852AbiGLPAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:58:46 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132563EA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:58:44 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id h200so8043745iof.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=n8VJkx0UohrHUcfROik699gEfwwdc0SDpII8DJF6C8s=;
-        b=Oak10QNvZgMB7/UKrDYLWKdMeoxUzqKUF3rSNzKHrqxJ1iS9Sgo1duF4JPHtxMsuZL
-         utvW26G04zusV8xskL22aeSChqvVcnzpNfbapVcrXTBO3oMVfm8W4KPiReYoUZynv2uD
-         oKhbR8iJh+lKj7Pu5pUeE1FqXCWR+Rt1IYoNZmqryiNw3onhtWc7Tt7UOGgCoouOrPi0
-         jGsrVhTa7Kf23vhLbiIp9/EyUxUwsk/sNgQRlkqubrReB4F5sPqEBZKpDDfOcYOSAN21
-         BM64FZqhBpZhUe/RvMXRcpr4X9OHFssw56m9LldNto/w1+uxKazQwLA8CAAtM0UL6xgU
-         /iAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=n8VJkx0UohrHUcfROik699gEfwwdc0SDpII8DJF6C8s=;
-        b=Mr7DNE4irXc9qe6QcleTcybT76rJarIYxECd7sjnanFWX0s9wNZO18HKarphV+5N0y
-         9q+bcXHcG7Q81X6+fZIJfwNked76Jp5aMoGYKVJJNq5jLbjHQ3WQ9VZETiAMyXXL8xeM
-         xIQIxeEutjEVGWIrGLqnRbVzvg06wJa55jrVWyArFsmNWHHkGXxVpeHPJyfiBi1oFzWh
-         rWyvtT8gMuwaLFu6MJAbw1Tugci0qTshFiX+NXPqQcB+uBLzxlZAtiNHl7SNqf+fNsP3
-         LZxP7QA7najV8vZI6nc90zq1Q4MZH5zGXEQyu7N72jFnPFi+TdUHiEX4FOmv+aNvgaZK
-         6jjg==
-X-Gm-Message-State: AJIora8CqPf4faBDyztmDf9+prbFitHXK2nqFT3atIdvGwX1VIb5T+vG
-        U5zqJDJpX1OEvNtlMLtFRuBfLGV6ifG4fDpVLWA=
-X-Google-Smtp-Source: AGRyM1u3ECrix1ihvS3lPIRW2TSqVAMmFrHahV+S27hy0ug9xr2n6Xd3HUx6RGShCH+WQqtO5vuAmpP/GG0Fy4KT0IA=
-X-Received: by 2002:a05:6602:2b14:b0:67b:8976:2945 with SMTP id
- p20-20020a0566022b1400b0067b89762945mr6442734iov.82.1657637924305; Tue, 12
- Jul 2022 07:58:44 -0700 (PDT)
+        Tue, 12 Jul 2022 11:00:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA8FDBE6A1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657637968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E3SQXmPM9gpjU/ECDq2xrd0FpowC3nFhR3ZobqZq6q0=;
+        b=W3dU48ztCzZiX/EZlUSBdalLiRSTwYlq7xB22zuQhl4QOxyt9IXClLImd7WP7nVEY745en
+        r+A3Oo85+dxr0hsQY+YJ3s87VwgRbsXdpbt1UCQ48eK3XuC9PQXFy5Bv/FbWMl2BFe7bGG
+        vw8d3oslL1XTXVY9UKDnU6PiSL7EyOA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467---2eCvZvPI6dlz6yKl4nrg-1; Tue, 12 Jul 2022 10:59:23 -0400
+X-MC-Unique: --2eCvZvPI6dlz6yKl4nrg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E40C61035347;
+        Tue, 12 Jul 2022 14:59:21 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.195.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B3B6D2166B26;
+        Tue, 12 Jul 2022 14:59:17 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 05/23] bpf/verifier: allow kfunc to return an allocated mem
+Date:   Tue, 12 Jul 2022 16:58:32 +0200
+Message-Id: <20220712145850.599666-6-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com> <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
- <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com> <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
-In-Reply-To: <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
-From:   Yu-Jen Chang <arthurchang09@gmail.com>
-Date:   Tue, 12 Jul 2022 22:58:32 +0800
-Message-ID: <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
-To:     Andrey Semashev <andrey.semashev@gmail.com>
-Cc:     andy@kernel.org, akinobu.mita@gmail.com,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
-=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A11:00=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On 7/11/22 17:52, Yu-Jen Chang wrote:
-> > Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
-=9C=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E5=87=8C=E6=99=A84:01=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> >>
-> >> On 7/10/22 17:28, Yu-Jen Chang wrote:
-> >>> The original version of memchr() is implemented with the byte-wise
-> >>> comparing technique, which does not fully use 64-bits or 32-bits
-> >>> registers in CPU. We use word-wide comparing so that 8 characters
-> >>> can be compared at the same time on CPU. This code is base on
-> >>> David Laight's implementation.
-> >>>
-> >>> We create two files to measure the performance. The first file
-> >>> contains on average 10 characters ahead the target character.
-> >>> The second file contains at least 1000 characters ahead the
-> >>> target character. Our implementation of =E2=80=9Cmemchr()=E2=80=9D is=
- slightly
-> >>> better in the first test and nearly 4x faster than the orginal
-> >>> implementation in the second test.
-> >>>
-> >>> Signed-off-by: Yu-Jen Chang <arthurchang09@gmail.com>
-> >>> Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
-> >>> ---
-> >>>  lib/string.c | 28 +++++++++++++++++++++-------
-> >>>  1 file changed, 21 insertions(+), 7 deletions(-)
-> >>>
-> >>> diff --git a/lib/string.c b/lib/string.c
-> >>> index 80469e6c3..8ca965431 100644
-> >>> --- a/lib/string.c
-> >>> +++ b/lib/string.c
-> >>> @@ -905,21 +905,35 @@ EXPORT_SYMBOL(strnstr);
-> >>>  #ifndef __HAVE_ARCH_MEMCHR
-> >>>  /**
-> >>>   * memchr - Find a character in an area of memory.
-> >>> - * @s: The memory area
-> >>> + * @p: The memory area
-> >>>   * @c: The byte to search for
-> >>> - * @n: The size of the area.
-> >>> + * @length: The size of the area.
-> >>>   *
-> >>>   * returns the address of the first occurrence of @c, or %NULL
-> >>>   * if @c is not found
-> >>>   */
-> >>> -void *memchr(const void *s, int c, size_t n)
-> >>> +void *memchr(const void *p, int c, unsigned long length)
->
-> I didn't comment on this initially, but is the change of length type
-> intentional? Why?
+When a kfunc is not returning a pointer to a struct but to a plain type,
+we can consider it is a valid allocated memory assuming that:
+- one of the arguments is either called rdonly_buf_size or
+  rdwr_buf_size
+- and this argument is a const from the caller point of view
 
-It is my mistake. I will change the type back to size_t.
+We can then use this parameter as the size of the allocated memory.
 
->
-> >>>  {
-> >>> -     const unsigned char *p =3D s;
-> >>> -     while (n-- !=3D 0) {
-> >>> -             if ((unsigned char)c =3D=3D *p++) {
-> >>> -                     return (void *)(p - 1);
-> >>> +     u64 mask, val;
-> >>> +     const void *end =3D p + length;
-> >>> +
-> >>> +     c &=3D 0xff;
-> >>> +     if (p <=3D end - 8) {
-> >>> +             mask =3D c;
-> >>> +             MEMCHR_MASK_GEN(mask);
-> >>> +
-> >>> +             for (; p <=3D end - 8; p +=3D 8) {
-> >>> +                     val =3D *(u64 *)p ^ mask;
-> >>
-> >> What if p is not aligned to 8 (or 4 on 32-bit targets) bytes? Not all
-> >> targets support (efficient) unaligned loads, do they?
-> >
-> > I think it works if p is not aligned to 8 or 4 bytes.
-> >
-> > Let's say the string is 10 bytes. The for loop here will search the fir=
-st
-> > 8 bytes. If the target character is in the last 2 bytes, the second for
-> > loop will find it. It also work like this on 32-bit machine.
->
-> I think you're missing the point. Loads at unaligned addresses may not
-> be allowed by hardware using conventional load instructions or may be
-> inefficient. Given that this memchr implementation is used as a fallback
-> when no hardware-specific version is available, you should be
-> conservative wrt. hardware capabilities and behavior. You should
-> probably have a pre-alignment loop.
+The memory is either read-only or read-write based on the name
+of the size parameter.
 
-Got it. I add  pre-alignment loop. It aligns the address to 8 or 4bytes.
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-void *memchr(const void *p, int c, size_t length)
-{
-    u64 mask, val;
-    const void *end =3D p + length;
-    c &=3D 0xff;
-    while ((long ) p & (sizeof(long) - 1)) {
-        if (p >=3D end)
-            return NULL;
-        if (*(unsigned char *)p =3D=3D c)
-            return (void *) p;
-        p++;
-    }
-    if (p <=3D end - 8) {
-        mask =3D c;
-        MEMCHR_MASK_GEN(mask);
+---
 
-        for (; p <=3D end - 8; p +=3D 8) {
-            val =3D *(u64*)p ^ mask;
-            if ((val + 0xfefefefefefefeffull)
-& (~val & 0x8080808080808080ull))
-                break;
-        }
-    }
+changes in v6:
+- code review from Kartikeya:
+  - remove comment change that had no reasons to be
+  - remove handling of PTR_TO_MEM with kfunc releases
+  - introduce struct bpf_kfunc_arg_meta
+  - do rdonly/rdwr_buf_size check in btf_check_kfunc_arg_match
+  - reverted most of the changes in verifier.c
+  - make sure kfunc acquire is using a struct pointer, not just a plain
+    pointer
+  - also forward ref_obj_id to PTR_TO_MEM in kfunc to not use after free
+    the allocated memory
 
-    for (; p < end; p++)
-        if (*(unsigned char *)p =3D=3D c)
-            return (void *)p;
+changes in v5:
+- updated PTR_TO_MEM comment in btf.c to match upstream
+- make it read-only or read-write based on the name of size
 
-    return NULL;
-}
+new in v4
+---
+ include/linux/bpf.h   | 10 ++++++-
+ include/linux/btf.h   | 12 ++++++++
+ kernel/bpf/btf.c      | 67 ++++++++++++++++++++++++++++++++++++++++---
+ kernel/bpf/verifier.c | 49 +++++++++++++++++++++++--------
+ 4 files changed, 121 insertions(+), 17 deletions(-)
 
->
-> >>
-> >>> +                     if ((val + 0xfefefefefefefeffu) &
-> >>> +                         (~val & 0x8080808080808080u))
-> >>> +                             break;
-> >>>               }
-> >>>       }
-> >>> +
-> >>> +     for (; p < end; p++)
-> >>> +             if (*(unsigned char *)p =3D=3D c)
-> >>> +                     return (void *)p;
-> >>> +
-> >>>       return NULL;
-> >>>  }
-> >>>  EXPORT_SYMBOL(memchr);
-> >>
->
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2b21f2a3452f..5b8eadb6e7bc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1916,12 +1916,20 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ 			   const char *func_name,
+ 			   struct btf_func_model *m);
+ 
++struct bpf_kfunc_arg_meta {
++	u64 r0_size;
++	bool r0_rdonly;
++	int ref_obj_id;
++	bool multiple_ref_obj_id;
++};
++
+ struct bpf_reg_state;
+ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 				struct bpf_reg_state *regs);
+ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      const struct btf *btf, u32 func_id,
+-			      struct bpf_reg_state *regs);
++			      struct bpf_reg_state *regs,
++			      struct bpf_kfunc_arg_meta *meta);
+ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+ 			  struct bpf_reg_state *reg);
+ int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 1bfed7fa0428..31da4273c2ec 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -420,4 +420,16 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
+ }
+ #endif
+ 
++static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
++{
++	/* t comes in already as a pointer */
++	t = btf_type_by_id(btf, t->type);
++
++	/* allow const */
++	if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
++		t = btf_type_by_id(btf, t->type);
++
++	return btf_type_is_struct(t);
++}
++
+ #endif
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4423045b8ff3..552d7bc05a0c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6168,10 +6168,36 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
+ 	return true;
+ }
+ 
++static bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
++				      const struct btf_param *arg,
++				      const struct bpf_reg_state *reg,
++				      const char *name)
++{
++	int len, target_len = strlen(name);
++	const struct btf_type *t;
++	const char *param_name;
++
++	t = btf_type_skip_modifiers(btf, arg->type, NULL);
++	if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
++		return false;
++
++	param_name = btf_name_by_offset(btf, arg->name_off);
++	if (str_is_empty(param_name))
++		return false;
++	len = strlen(param_name);
++	if (len != target_len)
++		return false;
++	if (strncmp(param_name, name, target_len))
++		return false;
++
++	return true;
++}
++
+ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				    const struct btf *btf, u32 func_id,
+ 				    struct bpf_reg_state *regs,
+-				    bool ptr_to_mem_ok)
++				    bool ptr_to_mem_ok,
++				    struct bpf_kfunc_arg_meta *kfunc_meta)
+ {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 	struct bpf_verifier_log *log = &env->log;
+@@ -6225,6 +6251,30 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 
+ 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+ 		if (btf_type_is_scalar(t)) {
++			if (is_kfunc && kfunc_meta) {
++				bool is_buf_size = false;
++
++				/* check for any const scalar parameter of name "rdonly_buf_size"
++				 * or "rdwr_buf_size"
++				 */
++				if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
++							      "rdonly_buf_size")) {
++					kfunc_meta->r0_rdonly = true;
++					is_buf_size = true;
++				} else if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
++								     "rdwr_buf_size"))
++					is_buf_size = true;
++
++				if (is_buf_size) {
++					if (kfunc_meta->r0_size) {
++						bpf_log(log, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
++						return -EINVAL;
++					}
++
++					kfunc_meta->r0_size = reg->var_off.value;
++				}
++			}
++
+ 			if (reg->type == SCALAR_VALUE)
+ 				continue;
+ 			bpf_log(log, "R%d is not a scalar\n", regno);
+@@ -6246,6 +6296,14 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 		if (ret < 0)
+ 			return ret;
+ 
++		/* kptr_get is only valid for kfunc */
++		if (kfunc_meta && reg->ref_obj_id) {
++			/* check for any one ref_obj_id to keep track of memory */
++			if (kfunc_meta->ref_obj_id)
++				kfunc_meta->multiple_ref_obj_id = true;
++			kfunc_meta->ref_obj_id = reg->ref_obj_id;
++		}
++
+ 		/* kptr_get is only true for kfunc */
+ 		if (i == 0 && kptr_get) {
+ 			struct bpf_map_value_off_desc *off_desc;
+@@ -6441,7 +6499,7 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 		return -EINVAL;
+ 
+ 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+-	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
++	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, NULL);
+ 
+ 	/* Compiler optimizations can remove arguments from static functions
+ 	 * or mismatched type can be passed into a global function.
+@@ -6454,9 +6512,10 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 
+ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      const struct btf *btf, u32 func_id,
+-			      struct bpf_reg_state *regs)
++			      struct bpf_reg_state *regs,
++			      struct bpf_kfunc_arg_meta *meta)
+ {
+-	return btf_check_func_arg_match(env, btf, func_id, regs, true);
++	return btf_check_func_arg_match(env, btf, func_id, regs, true, meta);
+ }
+ 
+ /* Convert BTF of a function into bpf_reg_state if possible
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3adcc0d123af..77556132db15 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7561,6 +7561,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ {
+ 	const struct btf_type *t, *func, *func_proto, *ptr_type;
+ 	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_kfunc_arg_meta meta = { 0 };
+ 	const char *func_name, *ptr_type_name;
+ 	u32 i, nargs, func_id, ptr_type_id;
+ 	int err, insn_idx = *insn_idx_p;
+@@ -7592,7 +7593,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 					BTF_KFUNC_TYPE_ACQUIRE, func_id);
+ 
+ 	/* Check the arguments */
+-	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs);
++	err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
+ 	if (err < 0)
+ 		return err;
+ 	/* In case of release function, we get register number of refcounted
+@@ -7613,7 +7614,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	/* Check return type */
+ 	t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+ 
+-	if (acq && !btf_type_is_ptr(t)) {
++	if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
+ 		verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
+ 		return -EINVAL;
+ 	}
+@@ -7625,17 +7626,41 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
+ 						   &ptr_type_id);
+ 		if (!btf_type_is_struct(ptr_type)) {
+-			ptr_type_name = btf_name_by_offset(desc_btf,
+-							   ptr_type->name_off);
+-			verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
+-				func_name, btf_type_str(ptr_type),
+-				ptr_type_name);
+-			return -EINVAL;
++			if (!meta.r0_size) {
++				ptr_type_name = btf_name_by_offset(desc_btf,
++								   ptr_type->name_off);
++				verbose(env,
++					"kernel function %s returns pointer type %s %s is not supported\n",
++					func_name,
++					btf_type_str(ptr_type),
++					ptr_type_name);
++				return -EINVAL;
++			}
++
++			if (meta.multiple_ref_obj_id) {
++				verbose(env,
++					"kernel function %s has multiple memory tracked objects\n",
++					func_name);
++				return -EINVAL;
++			}
++
++			mark_reg_known_zero(env, regs, BPF_REG_0);
++			regs[BPF_REG_0].type = PTR_TO_MEM;
++			regs[BPF_REG_0].mem_size = meta.r0_size;
++
++			if (meta.r0_rdonly)
++				regs[BPF_REG_0].type |= MEM_RDONLY;
++
++			/* Ensures we don't access the memory after a release_reference() */
++			if (meta.ref_obj_id)
++				regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
++		} else {
++			mark_reg_known_zero(env, regs, BPF_REG_0);
++			regs[BPF_REG_0].btf = desc_btf;
++			regs[BPF_REG_0].type = PTR_TO_BTF_ID;
++			regs[BPF_REG_0].btf_id = ptr_type_id;
+ 		}
+-		mark_reg_known_zero(env, regs, BPF_REG_0);
+-		regs[BPF_REG_0].btf = desc_btf;
+-		regs[BPF_REG_0].type = PTR_TO_BTF_ID;
+-		regs[BPF_REG_0].btf_id = ptr_type_id;
++
+ 		if (btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog),
+ 					      BTF_KFUNC_TYPE_RET_NULL, func_id)) {
+ 			regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
+-- 
+2.36.1
+

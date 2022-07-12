@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520805726B9
+	by mail.lfdr.de (Postfix) with ESMTP id 09EA55726B8
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbiGLTwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S235322AbiGLTww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiGLTwb (ORCPT
+        with ESMTP id S233311AbiGLTwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:52:31 -0400
+        Tue, 12 Jul 2022 15:52:32 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDA4B4193;
-        Tue, 12 Jul 2022 12:46:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D2B38D8;
+        Tue, 12 Jul 2022 12:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657655215; x=1689191215;
+  t=1657655217; x=1689191217;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4Hl/1T40hBIjqDu7ciJH/b1AJwjNy7VbHbKe6R82Rp4=;
-  b=MuwBI7AOrnRDCxJ5i/W2/Sao0JQuf0oTR0ZOAV6c+7O1Bs9pdNnQ1+mE
-   kJgbaXVU17p83ijt87LZakVtt8P4BIGSsS/ZsFjbl1JOoXXDouNyHKaRf
-   ZE4154NSf+0kl310WSNRhLrrMymbHXcbnFZ3t03ZFv4EGARx6P6oL9KCe
-   UsSFgRlyApdFM3eRA0LlL0E1CUc4+WGirHLBC0d250QrCoA2ZEo9Jfv+i
-   u2800vLx72PynSlIusLKz+ME5cTt8S7WYQpEdGKzLk5EzSkXqYOngGXcz
-   1ldAWwbSHkkqDH1UYCAtoi+GqzXYzr2PGL6c8Y2JAsM0uvCWSj1Jzzh9d
+  bh=o6Smb2LVrKinxr1kedwUxtMmyszMdP7k3W+zKSv/R04=;
+  b=QgUY620m5q8A226FaopbPUrd3+VkirkxaN93Zap8hHOB6wVxzmkUsafR
+   Ys9BrHggpOqFee0eOBkMLjoAy9duaKUwXeZWBs60qPG6MFuOhVwS41cuu
+   /EniF1EVAFOonOWWxGeT9YrnRd7MrLCJoqeBP1p2GeD0zjmwoNz8FBfic
+   nyUMfJO1QGJ+Sw9p9eF6srxA18ZF76V7INiNoBuzjStoSz5BURtmE8ZPt
+   SIKBsZjhZeveS1hT2XuFHZ6VlBuPOhNeKp+KewYX2J3x8TTiRX3PYhx5I
+   2s+rJIlMmEe/4vUA/ZmwxaL5+4lX52w3uu5TqNGsBg68ORPLzziMldHjp
    w==;
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="167525928"
+   d="scan'208";a="167525930"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2022 12:46:54 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2022 12:46:55 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 12 Jul 2022 12:46:52 -0700
+ 15.1.2375.17; Tue, 12 Jul 2022 12:46:55 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 12 Jul 2022 12:46:49 -0700
+ 15.1.2375.17 via Frontend Transport; Tue, 12 Jul 2022 12:46:52 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>,
@@ -47,9 +47,9 @@ CC:     <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>,
         <maxime.chevallier@bootlin.com>, <michael@walle.cc>,
         <andy.shevchenko@gmail.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH v4 1/2] pinctrl: ocelot: Fix pincfg for lan966x
-Date:   Tue, 12 Jul 2022 21:50:42 +0200
-Message-ID: <20220712195043.3842081-2-horatiu.vultur@microchip.com>
+Subject: [PATCH v4 2/2] pinctrl: ocelot: Fix pincfg
+Date:   Tue, 12 Jul 2022 21:50:43 +0200
+Message-ID: <20220712195043.3842081-3-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220712195043.3842081-1-horatiu.vultur@microchip.com>
 References: <20220712195043.3842081-1-horatiu.vultur@microchip.com>
@@ -66,354 +66,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The blamed commit introduce support for lan966x which use the same
-pinconf_ops as sparx5. The problem is that pinconf_ops is specific to
-sparx5. More precisely the offset of the bits in the pincfg register are
-different and also lan966x doesn't have support for
-PIN_CONFIG_INPUT_SCHMITT_ENABLE.
+The blamed commit changed to use regmaps instead of __iomem. But it
+didn't update the register offsets to be at word offset, so it uses byte
+offset.
+Another issue with the same commit is that it has a limit of 32 registers
+which is incorrect. The sparx5 has 64 while lan966x has 77.
 
-Fix this by making pinconf_ops more generic such that it can be also
-used by lan966x. This is done by introducing 'ocelot_pincfg_data' which
-contains the offset and what is supported for each SOC.
-
-Fixes: 531d6ab36571 ("pinctrl: ocelot: Extend support for lan966x")
+Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/pinctrl/pinctrl-ocelot.c | 194 ++++++++++++++++++++-----------
- 1 file changed, 123 insertions(+), 71 deletions(-)
+ drivers/pinctrl/pinctrl-ocelot.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 5f4a8c5c6650..873bba245522 100644
+index 873bba245522..c5a9f87f0c49 100644
 --- a/drivers/pinctrl/pinctrl-ocelot.c
 +++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -29,19 +29,12 @@
- #define ocelot_clrsetbits(addr, clear, set) \
- 	writel((readl(addr) & ~(clear)) | (set), (addr))
- 
--/* PINCONFIG bits (sparx5 only) */
- enum {
- 	PINCONF_BIAS,
- 	PINCONF_SCHMITT,
- 	PINCONF_DRIVE_STRENGTH,
- };
- 
--#define BIAS_PD_BIT BIT(4)
--#define BIAS_PU_BIT BIT(3)
--#define BIAS_BITS   (BIAS_PD_BIT|BIAS_PU_BIT)
--#define SCHMITT_BIT BIT(2)
--#define DRIVE_BITS  GENMASK(1, 0)
--
- /* GPIO standard registers */
- #define OCELOT_GPIO_OUT_SET	0x0
- #define OCELOT_GPIO_OUT_CLR	0x4
-@@ -321,6 +314,13 @@ struct ocelot_pin_caps {
- 	unsigned char a_functions[OCELOT_FUNC_PER_PIN];	/* Additional functions */
- };
- 
-+struct ocelot_pincfg_data {
-+	u8 pd_bit;
-+	u8 pu_bit;
-+	u8 drive_bits;
-+	u8 schmitt_bit;
-+};
-+
- struct ocelot_pinctrl {
- 	struct device *dev;
- 	struct pinctrl_dev *pctl;
-@@ -328,10 +328,16 @@ struct ocelot_pinctrl {
- 	struct regmap *map;
- 	struct regmap *pincfg;
- 	struct pinctrl_desc *desc;
-+	const struct ocelot_pincfg_data *pincfg_data;
- 	struct ocelot_pmx_func func[FUNC_MAX];
- 	u8 stride;
- };
- 
-+struct ocelot_match_data {
-+	struct pinctrl_desc desc;
-+	struct ocelot_pincfg_data pincfg_data;
-+};
-+
- #define LUTON_P(p, f0, f1)						\
- static struct ocelot_pin_caps luton_pin_##p = {				\
- 	.pin = p,							\
-@@ -1325,6 +1331,7 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
- 	int ret = -EOPNOTSUPP;
- 
- 	if (info->pincfg) {
-+		const struct ocelot_pincfg_data *opd = info->pincfg_data;
+@@ -1334,7 +1334,9 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
+ 		const struct ocelot_pincfg_data *opd = info->pincfg_data;
  		u32 regcfg;
  
- 		ret = regmap_read(info->pincfg, pin, &regcfg);
-@@ -1334,15 +1341,15 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
- 		ret = 0;
- 		switch (reg) {
- 		case PINCONF_BIAS:
--			*val = regcfg & BIAS_BITS;
-+			*val = regcfg & (opd->pd_bit | opd->pu_bit);
- 			break;
+-		ret = regmap_read(info->pincfg, pin, &regcfg);
++		ret = regmap_read(info->pincfg,
++				  pin * regmap_get_reg_stride(info->pincfg),
++				  &regcfg);
+ 		if (ret)
+ 			return ret;
  
- 		case PINCONF_SCHMITT:
--			*val = regcfg & SCHMITT_BIT;
-+			*val = regcfg & opd->schmitt_bit;
- 			break;
+@@ -1366,14 +1368,18 @@ static int ocelot_pincfg_clrsetbits(struct ocelot_pinctrl *info, u32 regaddr,
+ 	u32 val;
+ 	int ret;
  
- 		case PINCONF_DRIVE_STRENGTH:
--			*val = regcfg & DRIVE_BITS;
-+			*val = regcfg & opd->drive_bits;
- 			break;
+-	ret = regmap_read(info->pincfg, regaddr, &val);
++	ret = regmap_read(info->pincfg,
++			  regaddr * regmap_get_reg_stride(info->pincfg),
++			  &val);
+ 	if (ret)
+ 		return ret;
  
- 		default:
-@@ -1379,23 +1386,27 @@ static int ocelot_hw_set_value(struct ocelot_pinctrl *info,
- 	int ret = -EOPNOTSUPP;
+ 	val &= ~clrbits;
+ 	val |= setbits;
  
- 	if (info->pincfg) {
-+		const struct ocelot_pincfg_data *opd = info->pincfg_data;
+-	ret = regmap_write(info->pincfg, regaddr, val);
++	ret = regmap_write(info->pincfg,
++			   regaddr * regmap_get_reg_stride(info->pincfg),
++			   val);
  
- 		ret = 0;
- 		switch (reg) {
- 		case PINCONF_BIAS:
--			ret = ocelot_pincfg_clrsetbits(info, pin, BIAS_BITS,
-+			ret = ocelot_pincfg_clrsetbits(info, pin,
-+						       opd->pd_bit | opd->pu_bit,
- 						       val);
- 			break;
- 
- 		case PINCONF_SCHMITT:
--			ret = ocelot_pincfg_clrsetbits(info, pin, SCHMITT_BIT,
-+			ret = ocelot_pincfg_clrsetbits(info, pin,
-+						       opd->schmitt_bit,
- 						       val);
- 			break;
- 
- 		case PINCONF_DRIVE_STRENGTH:
- 			if (val <= 3)
- 				ret = ocelot_pincfg_clrsetbits(info, pin,
--							       DRIVE_BITS, val);
-+							       opd->drive_bits,
-+							       val);
- 			else
- 				ret = -EINVAL;
- 			break;
-@@ -1425,17 +1436,20 @@ static int ocelot_pinconf_get(struct pinctrl_dev *pctldev,
- 		if (param == PIN_CONFIG_BIAS_DISABLE)
- 			val = (val == 0);
- 		else if (param == PIN_CONFIG_BIAS_PULL_DOWN)
--			val = (val & BIAS_PD_BIT ? true : false);
-+			val = !!(val & info->pincfg_data->pd_bit);
- 		else    /* PIN_CONFIG_BIAS_PULL_UP */
--			val = (val & BIAS_PU_BIT ? true : false);
-+			val = !!(val & info->pincfg_data->pu_bit);
- 		break;
- 
- 	case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
-+		if (!info->pincfg_data->schmitt_bit)
-+			return -EOPNOTSUPP;
-+
- 		err = ocelot_hw_get_value(info, pin, PINCONF_SCHMITT, &val);
- 		if (err)
- 			return err;
- 
--		val = (val & SCHMITT_BIT ? true : false);
-+		val = !!(val & info->pincfg_data->schmitt_bit);
- 		break;
- 
- 	case PIN_CONFIG_DRIVE_STRENGTH:
-@@ -1491,8 +1505,8 @@ static int ocelot_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 		case PIN_CONFIG_BIAS_PULL_UP:
- 		case PIN_CONFIG_BIAS_PULL_DOWN:
- 			arg = (param == PIN_CONFIG_BIAS_DISABLE) ? 0 :
--			(param == PIN_CONFIG_BIAS_PULL_UP) ? BIAS_PU_BIT :
--			BIAS_PD_BIT;
-+			(param == PIN_CONFIG_BIAS_PULL_UP) ? info->pincfg_data->pu_bit :
-+			info->pincfg_data->pd_bit;
- 
- 			err = ocelot_hw_set_value(info, pin, PINCONF_BIAS, arg);
- 			if (err)
-@@ -1501,7 +1515,10 @@ static int ocelot_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			break;
- 
- 		case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
--			arg = arg ? SCHMITT_BIT : 0;
-+			if (!info->pincfg_data->schmitt_bit)
-+				return -EOPNOTSUPP;
-+
-+			arg = arg ? info->pincfg_data->schmitt_bit : 0;
- 			err = ocelot_hw_set_value(info, pin, PINCONF_SCHMITT,
- 						  arg);
- 			if (err)
-@@ -1562,69 +1579,94 @@ static const struct pinctrl_ops ocelot_pctl_ops = {
- 	.dt_free_map = pinconf_generic_dt_free_map,
+ 	return ret;
+ }
+@@ -1932,7 +1938,8 @@ static const struct of_device_id ocelot_pinctrl_of_match[] = {
+ 	{},
  };
  
--static struct pinctrl_desc luton_desc = {
--	.name = "luton-pinctrl",
--	.pins = luton_pins,
--	.npins = ARRAY_SIZE(luton_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data luton_desc = {
-+	.desc = {
-+		.name = "luton-pinctrl",
-+		.pins = luton_pins,
-+		.npins = ARRAY_SIZE(luton_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.owner = THIS_MODULE,
-+	},
- };
- 
--static struct pinctrl_desc serval_desc = {
--	.name = "serval-pinctrl",
--	.pins = serval_pins,
--	.npins = ARRAY_SIZE(serval_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data serval_desc = {
-+	.desc = {
-+		.name = "serval-pinctrl",
-+		.pins = serval_pins,
-+		.npins = ARRAY_SIZE(serval_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.owner = THIS_MODULE,
-+	},
- };
- 
--static struct pinctrl_desc ocelot_desc = {
--	.name = "ocelot-pinctrl",
--	.pins = ocelot_pins,
--	.npins = ARRAY_SIZE(ocelot_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data ocelot_desc = {
-+	.desc = {
-+		.name = "ocelot-pinctrl",
-+		.pins = ocelot_pins,
-+		.npins = ARRAY_SIZE(ocelot_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.owner = THIS_MODULE,
-+	},
- };
- 
--static struct pinctrl_desc jaguar2_desc = {
--	.name = "jaguar2-pinctrl",
--	.pins = jaguar2_pins,
--	.npins = ARRAY_SIZE(jaguar2_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data jaguar2_desc = {
-+	.desc = {
-+		.name = "jaguar2-pinctrl",
-+		.pins = jaguar2_pins,
-+		.npins = ARRAY_SIZE(jaguar2_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.owner = THIS_MODULE,
-+	},
- };
- 
--static struct pinctrl_desc servalt_desc = {
--	.name = "servalt-pinctrl",
--	.pins = servalt_pins,
--	.npins = ARRAY_SIZE(servalt_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data servalt_desc = {
-+	.desc = {
-+		.name = "servalt-pinctrl",
-+		.pins = servalt_pins,
-+		.npins = ARRAY_SIZE(servalt_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.owner = THIS_MODULE,
-+	},
- };
- 
--static struct pinctrl_desc sparx5_desc = {
--	.name = "sparx5-pinctrl",
--	.pins = sparx5_pins,
--	.npins = ARRAY_SIZE(sparx5_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &ocelot_pmx_ops,
--	.confops = &ocelot_confops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data sparx5_desc = {
-+	.desc = {
-+		.name = "sparx5-pinctrl",
-+		.pins = sparx5_pins,
-+		.npins = ARRAY_SIZE(sparx5_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &ocelot_pmx_ops,
-+		.confops = &ocelot_confops,
-+		.owner = THIS_MODULE,
-+	},
-+	.pincfg_data = {
-+		.pd_bit = BIT(4),
-+		.pu_bit = BIT(3),
-+		.drive_bits = GENMASK(1, 0),
-+		.schmitt_bit = BIT(2),
-+	},
- };
- 
--static struct pinctrl_desc lan966x_desc = {
--	.name = "lan966x-pinctrl",
--	.pins = lan966x_pins,
--	.npins = ARRAY_SIZE(lan966x_pins),
--	.pctlops = &ocelot_pctl_ops,
--	.pmxops = &lan966x_pmx_ops,
--	.confops = &ocelot_confops,
--	.owner = THIS_MODULE,
-+static struct ocelot_match_data lan966x_desc = {
-+	.desc = {
-+		.name = "lan966x-pinctrl",
-+		.pins = lan966x_pins,
-+		.npins = ARRAY_SIZE(lan966x_pins),
-+		.pctlops = &ocelot_pctl_ops,
-+		.pmxops = &lan966x_pmx_ops,
-+		.confops = &ocelot_confops,
-+		.owner = THIS_MODULE,
-+	},
-+	.pincfg_data = {
-+		.pd_bit = BIT(3),
-+		.pu_bit = BIT(2),
-+		.drive_bits = GENMASK(1, 0),
-+	},
- };
- 
- static int ocelot_create_group_func_map(struct device *dev,
-@@ -1913,6 +1955,7 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
- 
- static int ocelot_pinctrl_probe(struct platform_device *pdev)
+-static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
++static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev,
++						   const struct ocelot_pinctrl *info)
  {
-+	const struct ocelot_match_data *data;
- 	struct device *dev = &pdev->dev;
- 	struct ocelot_pinctrl *info;
- 	struct reset_control *reset;
-@@ -1929,7 +1972,16 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
- 	if (!info)
- 		return -ENOMEM;
+ 	void __iomem *base;
  
--	info->desc = (struct pinctrl_desc *)device_get_match_data(dev);
-+	data = device_get_match_data(dev);
-+	if (!data)
-+		return -EINVAL;
-+
-+	info->desc = devm_kmemdup(dev, &data->desc, sizeof(*info->desc),
-+				  GFP_KERNEL);
-+	if (!info->desc)
-+		return -ENOMEM;
-+
-+	info->pincfg_data = &data->pincfg_data;
+@@ -1940,7 +1947,7 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
+ 		.reg_bits = 32,
+ 		.val_bits = 32,
+ 		.reg_stride = 4,
+-		.max_register = 32,
++		.max_register = info->desc->npins * 4,
+ 		.name = "pincfg",
+ 	};
  
- 	reset = devm_reset_control_get_optional_shared(dev, "switch");
- 	if (IS_ERR(reset))
+@@ -2008,7 +2015,7 @@ static int ocelot_pinctrl_probe(struct platform_device *pdev)
+ 
+ 	/* Pinconf registers */
+ 	if (info->desc->confops) {
+-		pincfg = ocelot_pinctrl_create_pincfg(pdev);
++		pincfg = ocelot_pinctrl_create_pincfg(pdev, info);
+ 		if (IS_ERR(pincfg))
+ 			dev_dbg(dev, "Failed to create pincfg regmap\n");
+ 		else
 -- 
 2.33.0
 

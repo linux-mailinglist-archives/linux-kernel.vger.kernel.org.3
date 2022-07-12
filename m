@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B46557221B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D68C572218
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiGLSCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S232968AbiGLSCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbiGLSCD (ORCPT
+        with ESMTP id S229813AbiGLSCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:02:03 -0400
+        Tue, 12 Jul 2022 14:02:02 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7305C595D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:01:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96511B9681
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657648918;
+        s=mimecast20190719; t=1657648917;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j0PXG4DHt3OX0/LlUePdx+5WwZT67OQtdeBafIuSrsc=;
-        b=NwltBbHAEJNyKfJSYiJiu/L5T0Heb/tF8GsejSxXrRcCPwBPiJZ9UyL0DY4qBc5Cs/QMoz
-        gagryq9LwuMVXUMsxOVvaEwJbdGwqZLYwb15sIErNjPwbt9modRUDT8RS1Sjtrur/xjQnw
-        1vPjWL/M0wvtriH22y/YmEELreWDuVU=
+        bh=C5OGZ54BkukpL4sAN9zdgjqecv26RItadgoQAxP4YCk=;
+        b=VDzlyk8FQIbpH8aHVt427AcsEq/TqhN3qrjy/D9JYWjuj1LLjSZSXkSmhVlJUNqkrGaPtc
+        OgHTds5pK7EXnF2falmRaXLpbpflvMx+ho44ipS2dGK+CwXzUX3t3mZs9AA3efPbMpWtOb
+        Di7FR36C5A8Ht+TvBcksFEwvj7o6XgY=
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
  [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-OH6s5ejdMo-T2NKWzJ_GNg-1; Tue, 12 Jul 2022 14:01:50 -0400
-X-MC-Unique: OH6s5ejdMo-T2NKWzJ_GNg-1
-Received: by mail-ed1-f70.google.com with SMTP id y18-20020a056402441200b0043564cdf765so6668464eda.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:01:50 -0700 (PDT)
+ us-mta-244-XMpWrarmNvW4fabS6xk66Q-1; Tue, 12 Jul 2022 14:01:56 -0400
+X-MC-Unique: XMpWrarmNvW4fabS6xk66Q-1
+Received: by mail-ed1-f70.google.com with SMTP id y21-20020a056402359500b0043adf65d1a0so3330452edc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:01:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j0PXG4DHt3OX0/LlUePdx+5WwZT67OQtdeBafIuSrsc=;
-        b=csU3waUgqnHh0dub0gmH7ogDcP8l6RRU5VLKTYtUBpUwJTBVTvO+MwWyMHc8fv7lRM
-         Uf1RbWk4gV9n0cs6cqstURuijAjhrc/zVDkmku86uOaXnbEPXMRuhUoy8VnUHLFVKjeU
-         gETeqr3dztHgrE5RxIGsCYs5EZacUa+Optz/lVjh91lRwkprDDMGvo7jUykvhXt/a7ox
-         xTm3/6tBS82soRvmMSHnB9xEvjnsdtUxlKwYR6Gp4Yt0qLNMNuD/tWIeGh6LOmmLN2kc
-         FaJpo99g+4xGDGoww7ItBDEKINmE7wtIi1q43Soah73rKhwCdtwQi+TXLkGrOon2j+PY
-         n2iA==
-X-Gm-Message-State: AJIora/PrbKFAnb4pk3AtFKIOzckfDzQIwrkbNGNyANa9ZVxpItKO1my
-        n8sTaJehfdvoiO6YsUyCNI0ZyneGSYjgZfn2tD+A70ZyD2BMG7a8TCnVMK3YvrM7i9gaZKAzT8D
-        hpWxI7h1yGA6g0+n1C3ECId6N
-X-Received: by 2002:a05:6402:4016:b0:43a:f310:9522 with SMTP id d22-20020a056402401600b0043af3109522mr4350138eda.200.1657648908530;
-        Tue, 12 Jul 2022 11:01:48 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t54Q94mpxONjgYvuUZqNtwv/0mD6y76/fWDVPQwhVdGQgV6DeBDWFTJYd2kG+NpDecGiGdpw==
-X-Received: by 2002:a05:6402:4016:b0:43a:f310:9522 with SMTP id d22-20020a056402401600b0043af3109522mr4350057eda.200.1657648907750;
-        Tue, 12 Jul 2022 11:01:47 -0700 (PDT)
+        bh=C5OGZ54BkukpL4sAN9zdgjqecv26RItadgoQAxP4YCk=;
+        b=qxz1MppQ9A+9MQpH8Xtn6FCvHyQ4+7Tr+63AOkSQisGFg6AjnQFwaZdoSa1VpDMaPe
+         2Tcvq9Vp0sUBq3kiZwcVk58H8rS6f6NtbxpKoZ3eXdDvEkcZyxPcD7ir9NwFvmDG0WgZ
+         cxuWe+6LGzbQa2QmKCdvnqHdEcmV4J24IvD826p/RPQR35Z4qGHF8u9qY2WZbiMcsFiw
+         IXKFM1XzOW09ITJYJM7RYzlevD90gglhth17cx+eWGc1srCuQY8KyTRiR55L/r+CFMiu
+         d0/YaShVqbQJo+CGvc11d89hKGLNVgkDJRPbbW2uXGBx3qt2uAZEE8cEDK/LIfMue2Bn
+         lhUQ==
+X-Gm-Message-State: AJIora/MphqB96H2JgFno9QBufn+SFX/tMl1oIJQZ4UC7SzzJJgHb1Ye
+        LjebBtOYhvSsQ2dVozd9XGFK+qYWogjXk4blnHAH4A6tF/e18zQ+LYLgZc711nropv+XREFSPbu
+        LJ7q8+YsDXCO+z3OM5sJMFTS0
+X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id b10-20020a056402084a00b00426262d967emr32669163edz.286.1657648913629;
+        Tue, 12 Jul 2022 11:01:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tSZKaugVspWHi8401WA4aNhu4MK80wmcE70XZ/PjDNG4mBqhg1yChb50Gxnz4DgNLv3Ta4vA==
+X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id b10-20020a056402084a00b00426262d967emr32669081edz.286.1657648913145;
+        Tue, 12 Jul 2022 11:01:53 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id gx16-20020a170906f1d000b0072b1bb3cc08sm4028352ejb.120.2022.07.12.11.01.46
+        by smtp.gmail.com with ESMTPSA id gx16-20020a170906f1d000b0072b1bb3cc08sm4028352ejb.120.2022.07.12.11.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 11:01:47 -0700 (PDT)
+        Tue, 12 Jul 2022 11:01:52 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
         airlied@linux.ie, tzimmermann@suse.de
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v4 1/4] drm/fb: rename FB CMA helpers to FB DMA helpers
-Date:   Tue, 12 Jul 2022 20:01:36 +0200
-Message-Id: <20220712180139.1886590-2-dakr@redhat.com>
+Subject: [PATCH drm-misc-next v4 3/4] drm/gem: rename struct drm_gem_dma_object.{paddr => dma_addr}
+Date:   Tue, 12 Jul 2022 20:01:38 +0200
+Message-Id: <20220712180139.1886590-4-dakr@redhat.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220712180139.1886590-1-dakr@redhat.com>
 References: <20220712180139.1886590-1-dakr@redhat.com>
@@ -78,2014 +78,1205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename "FB CMA" helpers to "FB DMA" helpers - considering the hierarchy
-of APIs (mm/cma -> dma -> fb dma) calling them "FB DMA" seems to be
-more applicable.
+The field paddr of struct drm_gem_dma_object holds a DMA address, which
+might actually be a physical address. However, depending on the platform,
+it can also be a bus address or a virtual address managed by an IOMMU.
 
-Besides that, commit e57924d4ae80 ("drm/doc: Task to rename CMA helpers")
-requests to rename the CMA helpers and implies that people seem to be
-confused about the naming.
+Hence, rename the field to dma_addr, which is more applicable.
 
-In order to do this renaming the following script was used:
+In order to do this renaming the following coccinelle script was used:
 
 ```
-	#!/bin/bash
+	@@
+	struct drm_gem_dma_object *gem;
+	@@
 
-	DIRS="drivers/gpu include/drm Documentation/gpu"
+	- gem->paddr
+	+ gem->dma_addr
 
-	REGEX_SYM_UPPER="[0-9A-Z_\-]"
-	REGEX_SYM_LOWER="[0-9a-z_\-]"
+	@@
+	struct drm_gem_dma_object gem;
+	@@
 
-	REGEX_GREP_UPPER="(${REGEX_SYM_UPPER}*)(FB)_CMA_(${REGEX_SYM_UPPER}*)"
-	REGEX_GREP_LOWER="(${REGEX_SYM_LOWER}*)(fb)_cma_(${REGEX_SYM_LOWER}*)"
+	- gem.paddr
+	+ gem.dma_addr
 
-	REGEX_SED_UPPER="s/${REGEX_GREP_UPPER}/\1\2_DMA_\3/g"
-	REGEX_SED_LOWER="s/${REGEX_GREP_LOWER}/\1\2_dma_\3/g"
+	@exists@
+	typedef dma_addr_t;
+	symbol paddr;
+	@@
 
-	# Find all upper case 'CMA' symbols and replace them with 'DMA'.
-	for ff in $(grep -REHl "${REGEX_GREP_UPPER}" $DIRS)
-	do
-	       sed -i -E "$REGEX_SED_UPPER" $ff
-	done
+	dma_addr_t paddr;
+	<...
+	- paddr
+	+ dma_addr
+	...>
 
-	# Find all lower case 'cma' symbols and replace them with 'dma'.
-	for ff in $(grep -REHl "${REGEX_GREP_LOWER}" $DIRS)
-	do
-	       sed -i -E "$REGEX_SED_LOWER" $ff
-	done
+	@@
+	symbol paddr;
+	@@
+	dma_addr_t
+	- paddr
+	+ dma_addr
+	;
 
-	# Replace all occurrences of 'CMA' / 'cma' in comments and
-	# documentation files with 'DMA' / 'dma'.
-	for ff in $(grep -RiHl " cma " $DIRS)
-	do
-		sed -i -E "s/ cma / dma /g" $ff
-		sed -i -E "s/ CMA / DMA /g" $ff
-	done
 ```
 
-Only a few more manual modifications were needed, e.g. reverting the
-following modifications in some DRM Kconfig files
+This patch is compile-time tested with:
 
-    -       select CMA if HAVE_DMA_CONTIGUOUS
-    +       select DMA if HAVE_DMA_CONTIGUOUS
+```
+	make ARCH={x86_64,arm,arm64} allyesconfig
+	make ARCH={x86_64,arm,arm64} drivers/gpu/drm`
+```
 
-as well as manually picking the occurrences of 'CMA'/'cma' in comments and
-documentation which relate to "FB CMA", but not "GEM CMA".
-
-This patch is compile-time tested building a x86_64 kernel with
-`make allyesconfig && make drivers/gpu/drm`.
-
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- Documentation/gpu/drm-kms-helpers.rst         |  8 ++--
- drivers/gpu/drm/Makefile                      |  2 +-
- .../arm/display/komeda/komeda_framebuffer.c   |  4 +-
- drivers/gpu/drm/arm/hdlcd_crtc.c              |  4 +-
- drivers/gpu/drm/arm/hdlcd_drv.c               |  2 +-
- drivers/gpu/drm/arm/malidp_drv.c              |  2 +-
- drivers/gpu/drm/arm/malidp_mw.c               |  4 +-
- drivers/gpu/drm/arm/malidp_planes.c           |  8 ++--
- drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c      |  4 +-
- drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |  2 +-
- .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   |  4 +-
- ...rm_fb_cma_helper.c => drm_fb_dma_helper.c} | 43 +++++++++++--------
- drivers/gpu/drm/drm_format_helper.c           |  4 +-
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |  2 +-
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c     |  2 +-
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c   |  4 +-
- .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  4 +-
- .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  2 +-
- drivers/gpu/drm/imx/dcss/dcss-plane.c         |  6 +--
- drivers/gpu/drm/imx/imx-drm-core.c            |  2 +-
- drivers/gpu/drm/imx/ipuv3-crtc.c              |  2 +-
- drivers/gpu/drm/imx/ipuv3-plane.c             |  8 ++--
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  6 +--
- drivers/gpu/drm/ingenic/ingenic-ipu.c         | 10 ++---
- drivers/gpu/drm/kmb/kmb_plane.c               |  8 ++--
- drivers/gpu/drm/logicvc/logicvc_layer.c       |  6 +--
- drivers/gpu/drm/logicvc/logicvc_mode.c        |  2 +-
- drivers/gpu/drm/mcde/mcde_display.c           |  6 +--
- drivers/gpu/drm/mcde/mcde_drv.c               |  4 +-
- drivers/gpu/drm/meson/meson_overlay.c         |  8 ++--
- drivers/gpu/drm/meson/meson_plane.c           |  4 +-
- drivers/gpu/drm/mxsfb/lcdif_kms.c             |  6 +--
- drivers/gpu/drm/mxsfb/mxsfb_kms.c             |  8 ++--
- drivers/gpu/drm/pl111/pl111_display.c         |  6 +--
- drivers/gpu/drm/pl111/pl111_drv.c             |  2 +-
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |  2 +-
- drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  2 +-
+ .../arm/display/komeda/komeda_framebuffer.c   |  4 +--
+ drivers/gpu/drm/arm/malidp_mw.c               |  2 +-
+ drivers/gpu/drm/arm/malidp_planes.c           | 12 ++++----
+ drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c      |  2 +-
+ .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   |  2 +-
+ drivers/gpu/drm/drm_fb_dma_helper.c           | 10 +++----
+ drivers/gpu/drm/drm_gem_dma_helper.c          | 23 +++++++-------
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c   |  2 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  4 +--
+ drivers/gpu/drm/imx/dcss/dcss-plane.c         |  6 ++--
+ drivers/gpu/drm/imx/ipuv3-plane.c             |  6 ++--
+ drivers/gpu/drm/meson/meson_overlay.c         |  6 ++--
+ drivers/gpu/drm/meson/meson_plane.c           |  2 +-
+ drivers/gpu/drm/mxsfb/mxsfb_kms.c             | 30 +++++++++----------
  drivers/gpu/drm/rcar-du/rcar_du_kms.c         |  2 +-
- drivers/gpu/drm/rcar-du/rcar_du_plane.c       |  4 +-
- drivers/gpu/drm/rcar-du/rcar_du_vsp.c         |  4 +-
- drivers/gpu/drm/shmobile/shmob_drm_crtc.c     |  6 +--
- drivers/gpu/drm/shmobile/shmob_drm_kms.c      |  2 +-
- drivers/gpu/drm/shmobile/shmob_drm_plane.c    |  6 +--
- drivers/gpu/drm/solomon/ssd130x.c             |  2 +-
- drivers/gpu/drm/sprd/sprd_dpu.c               |  4 +-
- drivers/gpu/drm/sti/sti_cursor.c              |  6 +--
- drivers/gpu/drm/sti/sti_drv.c                 |  2 +-
- drivers/gpu/drm/sti/sti_gdp.c                 |  6 +--
- drivers/gpu/drm/sti/sti_hqvdp.c               |  6 +--
- drivers/gpu/drm/sti/sti_plane.c               |  2 +-
- drivers/gpu/drm/stm/drv.c                     |  2 +-
- drivers/gpu/drm/stm/ltdc.c                    | 14 +++---
- drivers/gpu/drm/sun4i/sun4i_backend.c         |  4 +-
- drivers/gpu/drm/sun4i/sun4i_drv.c             |  2 +-
- drivers/gpu/drm/sun4i/sun4i_frontend.c        |  8 ++--
- drivers/gpu/drm/sun4i/sun8i_mixer.c           |  2 +-
- drivers/gpu/drm/sun4i/sun8i_ui_layer.c        |  4 +-
- drivers/gpu/drm/sun4i/sun8i_vi_layer.c        |  4 +-
- drivers/gpu/drm/tegra/fb.c                    |  2 +-
- drivers/gpu/drm/tidss/tidss_crtc.c            |  2 +-
- drivers/gpu/drm/tidss/tidss_dispc.c           |  6 +--
- drivers/gpu/drm/tidss/tidss_kms.c             |  2 +-
- drivers/gpu/drm/tidss/tidss_plane.c           |  2 +-
- drivers/gpu/drm/tilcdc/tilcdc_crtc.c          |  4 +-
- drivers/gpu/drm/tiny/arcpgu.c                 |  4 +-
- drivers/gpu/drm/tiny/ili9225.c                |  4 +-
- drivers/gpu/drm/tiny/repaper.c                |  4 +-
- drivers/gpu/drm/tiny/st7586.c                 |  4 +-
- drivers/gpu/drm/tve200/tve200_display.c       | 10 ++---
- drivers/gpu/drm/tve200/tve200_drv.c           |  2 +-
- drivers/gpu/drm/v3d/v3d_drv.c                 |  2 +-
- drivers/gpu/drm/vc4/vc4_crtc.c                |  6 +--
- drivers/gpu/drm/vc4/vc4_drv.c                 |  2 +-
- drivers/gpu/drm/vc4/vc4_plane.c               | 10 ++---
- drivers/gpu/drm/vc4/vc4_txp.c                 |  4 +-
- drivers/gpu/drm/xlnx/zynqmp_disp.c            |  4 +-
- ...rm_fb_cma_helper.h => drm_fb_dma_helper.h} | 10 ++---
- 77 files changed, 192 insertions(+), 187 deletions(-)
- rename drivers/gpu/drm/{drm_fb_cma_helper.c => drm_fb_dma_helper.c} (70%)
- rename include/drm/{drm_fb_cma_helper.h => drm_fb_dma_helper.h} (56%)
+ drivers/gpu/drm/rcar-du/rcar_du_plane.c       |  2 +-
+ drivers/gpu/drm/rcar-du/rcar_du_vsp.c         |  2 +-
+ drivers/gpu/drm/shmobile/shmob_drm_crtc.c     |  4 +--
+ drivers/gpu/drm/shmobile/shmob_drm_plane.c    |  4 +--
+ drivers/gpu/drm/sprd/sprd_dpu.c               |  2 +-
+ drivers/gpu/drm/sti/sti_gdp.c                 |  6 ++--
+ drivers/gpu/drm/sti/sti_hqvdp.c               |  6 ++--
+ drivers/gpu/drm/sun4i/sun4i_backend.c         | 12 ++++----
+ drivers/gpu/drm/sun4i/sun4i_frontend.c        | 22 +++++++-------
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c        | 14 ++++-----
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c        | 14 ++++-----
+ drivers/gpu/drm/tidss/tidss_dispc.c           | 16 +++++-----
+ drivers/gpu/drm/tilcdc/tilcdc_crtc.c          |  2 +-
+ drivers/gpu/drm/tiny/arcpgu.c                 |  2 +-
+ drivers/gpu/drm/vc4/vc4_bo.c                  |  2 +-
+ drivers/gpu/drm/vc4/vc4_gem.c                 |  8 ++---
+ drivers/gpu/drm/vc4/vc4_irq.c                 |  2 +-
+ drivers/gpu/drm/vc4/vc4_plane.c               |  4 +--
+ drivers/gpu/drm/vc4/vc4_render_cl.c           | 14 ++++-----
+ drivers/gpu/drm/vc4/vc4_txp.c                 |  2 +-
+ drivers/gpu/drm/vc4/vc4_v3d.c                 |  4 +--
+ drivers/gpu/drm/vc4/vc4_validate.c            | 12 ++++----
+ drivers/gpu/drm/xlnx/zynqmp_disp.c            |  6 ++--
+ include/drm/drm_gem_dma_helper.h              |  4 +--
+ 39 files changed, 142 insertions(+), 137 deletions(-)
 
-diff --git a/Documentation/gpu/drm-kms-helpers.rst b/Documentation/gpu/drm-kms-helpers.rst
-index 2d473bc64c9f..dbc85fd7a971 100644
---- a/Documentation/gpu/drm-kms-helpers.rst
-+++ b/Documentation/gpu/drm-kms-helpers.rst
-@@ -122,13 +122,13 @@ format Helper Functions Reference
- .. kernel-doc:: drivers/gpu/drm/drm_format_helper.c
-    :export:
- 
--Framebuffer CMA Helper Functions Reference
-+Framebuffer DMA Helper Functions Reference
- ==========================================
- 
--.. kernel-doc:: drivers/gpu/drm/drm_fb_cma_helper.c
--   :doc: framebuffer cma helper functions
-+.. kernel-doc:: drivers/gpu/drm/drm_fb_dma_helper.c
-+   :doc: framebuffer dma helper functions
- 
--.. kernel-doc:: drivers/gpu/drm/drm_fb_cma_helper.c
-+.. kernel-doc:: drivers/gpu/drm/drm_fb_dma_helper.c
-    :export:
- 
- Framebuffer GEM Helper Reference
-diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 25016dcab55e..1d6e4f672b59 100644
---- a/drivers/gpu/drm/Makefile
-+++ b/drivers/gpu/drm/Makefile
-@@ -41,7 +41,7 @@ obj-$(CONFIG_DRM_PANEL_ORIENTATION_QUIRKS) += drm_panel_orientation_quirks.o
- obj-$(CONFIG_DRM_BUDDY) += drm_buddy.o
- 
- drm_cma_helper-y := drm_gem_cma_helper.o
--drm_cma_helper-$(CONFIG_DRM_KMS_HELPER) += drm_fb_cma_helper.o
-+drm_cma_helper-$(CONFIG_DRM_KMS_HELPER) += drm_fb_dma_helper.o
- obj-$(CONFIG_DRM_GEM_CMA_HELPER) += drm_cma_helper.o
- 
- drm_shmem_helper-y := drm_gem_shmem_helper.o
 diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.c b/drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.c
-index 3c372d2deb0a..ea45da663dfb 100644
+index f1b27db5dad5..df5da5a44755 100644
 --- a/drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.c
 +++ b/drivers/gpu/drm/arm/display/komeda/komeda_framebuffer.c
-@@ -5,7 +5,7 @@
-  *
-  */
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-@@ -247,7 +247,7 @@ komeda_fb_get_pixel_addr(struct komeda_fb *kfb, int x, int y, int plane)
- 		return -EINVAL;
+@@ -137,7 +137,7 @@ komeda_fb_none_afbc_size_check(struct komeda_dev *mdev, struct komeda_fb *kfb,
+ 		}
+ 
+ 		min_size = komeda_fb_get_pixel_addr(kfb, 0, fb->height, i)
+-			 - to_drm_gem_dma_obj(obj)->paddr;
++			 - to_drm_gem_dma_obj(obj)->dma_addr;
+ 		if (obj->size < min_size) {
+ 			DRM_DEBUG_KMS("The fb->obj[%d] size: 0x%zx lower than the minimum requirement: 0x%llx.\n",
+ 				      i, obj->size, min_size);
+@@ -260,7 +260,7 @@ komeda_fb_get_pixel_addr(struct komeda_fb *kfb, int x, int y, int plane)
+ 			+ plane_y * fb->pitches[plane];
  	}
  
--	obj = drm_fb_cma_get_gem_obj(fb, plane);
-+	obj = drm_fb_dma_get_gem_obj(fb, plane);
+-	return obj->paddr + offset;
++	return obj->dma_addr + offset;
+ }
  
- 	offset = fb->offsets[plane];
- 	if (!fb->modifier) {
-diff --git a/drivers/gpu/drm/arm/hdlcd_crtc.c b/drivers/gpu/drm/arm/hdlcd_crtc.c
-index afc9cd856501..3413ddbaec30 100644
---- a/drivers/gpu/drm/arm/hdlcd_crtc.c
-+++ b/drivers/gpu/drm/arm/hdlcd_crtc.c
-@@ -18,7 +18,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -274,7 +274,7 @@ static void hdlcd_plane_atomic_update(struct drm_plane *plane,
- 		return;
- 
- 	dest_h = drm_rect_height(&new_plane_state->dst);
--	scanout_start = drm_fb_cma_get_gem_addr(fb, new_plane_state, 0);
-+	scanout_start = drm_fb_dma_get_gem_addr(fb, new_plane_state, 0);
- 
- 	hdlcd = plane->dev->dev_private;
- 	hdlcd_write(hdlcd, HDLCD_REG_FB_LINE_LENGTH, fb->pitches[0]);
-diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
-index e89ae0ec60eb..fab18135f12b 100644
---- a/drivers/gpu/drm/arm/hdlcd_drv.c
-+++ b/drivers/gpu/drm/arm/hdlcd_drv.c
-@@ -25,7 +25,7 @@
- #include <drm/drm_crtc.h>
- #include <drm/drm_debugfs.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
-index d5aef21426cf..4e78a64c5d37 100644
---- a/drivers/gpu/drm/arm/malidp_drv.c
-+++ b/drivers/gpu/drm/arm/malidp_drv.c
-@@ -19,7 +19,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_gem_cma_helper.h>
+ /* if the fb can be supported by a specific layer */
 diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
-index b66ca5b33a7f..7a9c900626ec 100644
+index cefae03f1bcc..ef76d0e6ee2f 100644
 --- a/drivers/gpu/drm/arm/malidp_mw.c
 +++ b/drivers/gpu/drm/arm/malidp_mw.c
-@@ -10,7 +10,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_edid.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -160,7 +160,7 @@ malidp_mw_encoder_atomic_check(struct drm_encoder *encoder,
- 
- 	n_planes = fb->format->num_planes;
- 	for (i = 0; i < n_planes; i++) {
--		struct drm_gem_cma_object *obj = drm_fb_cma_get_gem_obj(fb, i);
-+		struct drm_gem_cma_object *obj = drm_fb_dma_get_gem_obj(fb, i);
- 		/* memory write buffers are never rotated */
- 		u8 alignment = malidp_hw_get_pitch_align(malidp->dev, 0);
+@@ -170,7 +170,7 @@ malidp_mw_encoder_atomic_check(struct drm_encoder *encoder,
+ 			return -EINVAL;
+ 		}
+ 		mw_state->pitches[i] = fb->pitches[i];
+-		mw_state->addrs[i] = obj->paddr + fb->offsets[i];
++		mw_state->addrs[i] = obj->dma_addr + fb->offsets[i];
+ 	}
+ 	mw_state->n_planes = n_planes;
  
 diff --git a/drivers/gpu/drm/arm/malidp_planes.c b/drivers/gpu/drm/arm/malidp_planes.c
-index 8a9562642d16..fd6172f433d5 100644
+index 898b15d3bd70..1e0ef40f78db 100644
 --- a/drivers/gpu/drm/arm/malidp_planes.c
 +++ b/drivers/gpu/drm/arm/malidp_planes.c
-@@ -13,7 +13,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -723,19 +723,19 @@ static void malidp_set_plane_base_addr(struct drm_framebuffer *fb,
- 	ptr = mp->layer->ptr + (plane_index << 4);
- 
- 	/*
--	 * drm_fb_cma_get_gem_addr() alters the physical base address of the
-+	 * drm_fb_dma_get_gem_addr() alters the physical base address of the
- 	 * framebuffer as per the plane's src_x, src_y co-ordinates (ie to
- 	 * take care of source cropping).
- 	 * For AFBC, this is not needed as the cropping is handled by _AD_CROP_H
+@@ -715,7 +715,7 @@ static void malidp_set_plane_base_addr(struct drm_framebuffer *fb,
+ 				       struct malidp_plane *mp,
+ 				       int plane_index)
+ {
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	u16 ptr;
+ 	struct drm_plane *plane = &mp->base;
+ 	bool afbc = fb->modifier ? true : false;
+@@ -730,8 +730,8 @@ static void malidp_set_plane_base_addr(struct drm_framebuffer *fb,
  	 * and _AD_CROP_V registers.
  	 */
  	if (!afbc) {
--		paddr = drm_fb_cma_get_gem_addr(fb, plane->state,
-+		paddr = drm_fb_dma_get_gem_addr(fb, plane->state,
- 						plane_index);
+-		paddr = drm_fb_dma_get_gem_addr(fb, plane->state,
+-						plane_index);
++		dma_addr = drm_fb_dma_get_gem_addr(fb, plane->state,
++						   plane_index);
  	} else {
- 		struct drm_gem_cma_object *obj;
+ 		struct drm_gem_dma_object *obj;
  
--		obj = drm_fb_cma_get_gem_obj(fb, plane_index);
-+		obj = drm_fb_dma_get_gem_obj(fb, plane_index);
+@@ -739,11 +739,11 @@ static void malidp_set_plane_base_addr(struct drm_framebuffer *fb,
  
  		if (WARN_ON(!obj))
  			return;
+-		paddr = obj->paddr;
++		dma_addr = obj->dma_addr;
+ 	}
+ 
+-	malidp_hw_write(mp->hwdev, lower_32_bits(paddr), ptr);
+-	malidp_hw_write(mp->hwdev, upper_32_bits(paddr), ptr + 4);
++	malidp_hw_write(mp->hwdev, lower_32_bits(dma_addr), ptr);
++	malidp_hw_write(mp->hwdev, upper_32_bits(dma_addr), ptr + 4);
+ }
+ 
+ static void malidp_de_set_plane_afbc(struct drm_plane *plane)
 diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c b/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
-index f3788d7d82d6..cc4d0fa6262c 100644
+index 996b03bac87f..55a3444a51d8 100644
 --- a/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
 +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
-@@ -7,7 +7,7 @@
- 
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -185,7 +185,7 @@ static void aspeed_gfx_pipe_update(struct drm_simple_display_pipe *pipe,
- 	if (!fb)
- 		return;
- 
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
+@@ -188,7 +188,7 @@ static void aspeed_gfx_pipe_update(struct drm_simple_display_pipe *pipe,
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
  	if (!gem)
  		return;
- 	writel(gem->paddr, priv->base + CRT_ADDR);
-diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-index 7780b72de9e8..ff2cfc622072 100644
---- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-+++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
-@@ -16,7 +16,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
+-	writel(gem->paddr, priv->base + CRT_ADDR);
++	writel(gem->dma_addr, priv->base + CRT_ADDR);
+ }
+ 
+ static int aspeed_gfx_enable_vblank(struct drm_simple_display_pipe *pipe)
 diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
-index 2306ceb3e999..f9b0c81944bf 100644
+index 733101031e86..57ea569d5d2b 100644
 --- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
 +++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
-@@ -12,7 +12,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -449,7 +449,7 @@ static void atmel_hlcdc_plane_update_buffers(struct atmel_hlcdc_plane *plane,
- 	sr = atmel_hlcdc_layer_read_reg(&plane->layer, ATMEL_HLCDC_LAYER_CHSR);
- 
+@@ -451,7 +451,7 @@ static void atmel_hlcdc_plane_update_buffers(struct atmel_hlcdc_plane *plane,
  	for (i = 0; i < state->nplanes; i++) {
--		struct drm_gem_cma_object *gem = drm_fb_cma_get_gem_obj(fb, i);
-+		struct drm_gem_cma_object *gem = drm_fb_dma_get_gem_obj(fb, i);
+ 		struct drm_gem_dma_object *gem = drm_fb_dma_get_gem_obj(fb, i);
  
- 		state->dscrs[i]->addr = gem->paddr + state->offsets[i];
+-		state->dscrs[i]->addr = gem->paddr + state->offsets[i];
++		state->dscrs[i]->addr = gem->dma_addr + state->offsets[i];
  
-diff --git a/drivers/gpu/drm/drm_fb_cma_helper.c b/drivers/gpu/drm/drm_fb_dma_helper.c
-similarity index 70%
-rename from drivers/gpu/drm/drm_fb_cma_helper.c
-rename to drivers/gpu/drm/drm_fb_dma_helper.c
-index 69c57273b184..85fd21cd9dda 100644
---- a/drivers/gpu/drm/drm_fb_cma_helper.c
+ 		atmel_hlcdc_layer_write_reg(&plane->layer,
+ 					    ATMEL_HLCDC_LAYER_PLANE_HEAD(i),
+diff --git a/drivers/gpu/drm/drm_fb_dma_helper.c b/drivers/gpu/drm/drm_fb_dma_helper.c
+index b601073c22de..3b535ad1b07c 100644
+--- a/drivers/gpu/drm/drm_fb_dma_helper.c
 +++ b/drivers/gpu/drm/drm_fb_dma_helper.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * drm kms/fb cma (contiguous memory allocator) helper functions
-+ * drm kms/fb dma helper functions
-  *
-  * Copyright (C) 2012 Analog Devices Inc.
-  *   Author: Lars-Peter Clausen <lars@metafoo.de>
-@@ -10,7 +10,7 @@
-  */
- 
- #include <drm/drm_damage_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -20,17 +20,22 @@
- #include <linux/module.h>
- 
- /**
-- * DOC: framebuffer cma helper functions
-+ * DOC: framebuffer dma helper functions
-  *
-- * Provides helper functions for creating a cma (contiguous memory allocator)
-- * backed framebuffer.
-+ * Provides helper functions for creating a DMA-contiguous framebuffer.
-+ *
-+ * Depending on the platform, the buffers may be physically non-contiguous and
-+ * mapped through an IOMMU or a similar mechanism, or allocated from
-+ * physically-contiguous memory (using, for instance, CMA or a pool of memory
-+ * reserved at early boot). This is handled behind the scenes by the DMA mapping
-+ * API.
-  *
-  * drm_gem_fb_create() is used in the &drm_mode_config_funcs.fb_create
-- * callback function to create a cma backed framebuffer.
-+ * callback function to create a DMA-contiguous framebuffer.
-  */
- 
- /**
-- * drm_fb_cma_get_gem_obj() - Get CMA GEM object for framebuffer
-+ * drm_fb_dma_get_gem_obj() - Get CMA GEM object for framebuffer
-  * @fb: The framebuffer
-  * @plane: Which plane
-  *
-@@ -38,7 +43,7 @@
-  *
-  * This function will usually be called from the CRTC callback functions.
-  */
--struct drm_gem_cma_object *drm_fb_cma_get_gem_obj(struct drm_framebuffer *fb,
-+struct drm_gem_cma_object *drm_fb_dma_get_gem_obj(struct drm_framebuffer *fb,
- 						  unsigned int plane)
- {
- 	struct drm_gem_object *gem;
-@@ -49,20 +54,20 @@ struct drm_gem_cma_object *drm_fb_cma_get_gem_obj(struct drm_framebuffer *fb,
- 
- 	return to_drm_gem_cma_obj(gem);
- }
--EXPORT_SYMBOL_GPL(drm_fb_cma_get_gem_obj);
-+EXPORT_SYMBOL_GPL(drm_fb_dma_get_gem_obj);
- 
- /**
-- * drm_fb_cma_get_gem_addr() - Get physical address for framebuffer, for pixel
-+ * drm_fb_dma_get_gem_addr() - Get DMA (bus) address for framebuffer, for pixel
-  * formats where values are grouped in blocks this will get you the beginning of
-  * the block
-  * @fb: The framebuffer
-  * @state: Which state of drm plane
-  * @plane: Which plane
-- * Return the CMA GEM address for given framebuffer.
-+ * Return the DMA GEM address for given framebuffer.
-  *
-  * This function will usually be called from the PLANE callback functions.
-  */
--dma_addr_t drm_fb_cma_get_gem_addr(struct drm_framebuffer *fb,
-+dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
- 				   struct drm_plane_state *state,
+@@ -72,7 +72,7 @@ dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
  				   unsigned int plane)
  {
-@@ -77,7 +82,7 @@ dma_addr_t drm_fb_cma_get_gem_addr(struct drm_framebuffer *fb,
- 	u32 block_start_y;
- 	u32 num_hblocks;
- 
--	obj = drm_fb_cma_get_gem_obj(fb, plane);
-+	obj = drm_fb_dma_get_gem_obj(fb, plane);
+ 	struct drm_gem_dma_object *obj;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	u8 h_div = 1, v_div = 1;
+ 	u32 block_w = drm_format_info_block_width(fb->format, plane);
+ 	u32 block_h = drm_format_info_block_height(fb->format, plane);
+@@ -86,7 +86,7 @@ dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
  	if (!obj)
  		return 0;
  
-@@ -98,10 +103,10 @@ dma_addr_t drm_fb_cma_get_gem_addr(struct drm_framebuffer *fb,
+-	paddr = obj->paddr + fb->offsets[plane];
++	dma_addr = obj->dma_addr + fb->offsets[plane];
  
- 	return paddr;
+ 	if (plane > 0) {
+ 		h_div = fb->format->hsub;
+@@ -98,10 +98,10 @@ dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
+ 	block_start_y = (sample_y / block_h) * block_h;
+ 	num_hblocks = sample_x / block_w;
+ 
+-	paddr += fb->pitches[plane] * block_start_y;
+-	paddr += block_size * num_hblocks;
++	dma_addr += fb->pitches[plane] * block_start_y;
++	dma_addr += block_size * num_hblocks;
+ 
+-	return paddr;
++	return dma_addr;
  }
--EXPORT_SYMBOL_GPL(drm_fb_cma_get_gem_addr);
-+EXPORT_SYMBOL_GPL(drm_fb_dma_get_gem_addr);
+ EXPORT_SYMBOL_GPL(drm_fb_dma_get_gem_addr);
  
- /**
-- * drm_fb_cma_sync_non_coherent - Sync GEM object to non-coherent backing
-+ * drm_fb_dma_sync_non_coherent - Sync GEM object to non-coherent backing
-  *	memory
-  * @drm: DRM device
-  * @old_state: Old plane state
-@@ -112,7 +117,7 @@ EXPORT_SYMBOL_GPL(drm_fb_cma_get_gem_addr);
-  * in a plane's .atomic_update ensures that all the data in the backing
-  * memory have been written to RAM.
-  */
--void drm_fb_cma_sync_non_coherent(struct drm_device *drm,
-+void drm_fb_dma_sync_non_coherent(struct drm_device *drm,
- 				  struct drm_plane_state *old_state,
- 				  struct drm_plane_state *state)
- {
-@@ -125,11 +130,11 @@ void drm_fb_cma_sync_non_coherent(struct drm_device *drm,
- 	size_t nb_bytes;
+diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c b/drivers/gpu/drm/drm_gem_dma_helper.c
+index f1780c01c928..f6901ff97bbb 100644
+--- a/drivers/gpu/drm/drm_gem_dma_helper.c
++++ b/drivers/gpu/drm/drm_gem_dma_helper.c
+@@ -145,11 +145,12 @@ struct drm_gem_dma_object *drm_gem_dma_create(struct drm_device *drm,
  
- 	for (i = 0; i < finfo->num_planes; i++) {
--		cma_obj = drm_fb_cma_get_gem_obj(state->fb, i);
-+		cma_obj = drm_fb_dma_get_gem_obj(state->fb, i);
- 		if (!cma_obj->map_noncoherent)
- 			continue;
- 
--		daddr = drm_fb_cma_get_gem_addr(state->fb, state, i);
-+		daddr = drm_fb_dma_get_gem_addr(state->fb, state, i);
- 		drm_atomic_helper_damage_iter_init(&iter, old_state, state);
- 
- 		drm_atomic_for_each_plane_damage(&iter, &clip) {
-@@ -142,4 +147,4 @@ void drm_fb_cma_sync_non_coherent(struct drm_device *drm,
- 		}
+ 	if (dma_obj->map_noncoherent) {
+ 		dma_obj->vaddr = dma_alloc_noncoherent(drm->dev, size,
+-						       &dma_obj->paddr,
++						       &dma_obj->dma_addr,
+ 						       DMA_TO_DEVICE,
+ 						       GFP_KERNEL | __GFP_NOWARN);
+ 	} else {
+-		dma_obj->vaddr = dma_alloc_wc(drm->dev, size, &dma_obj->paddr,
++		dma_obj->vaddr = dma_alloc_wc(drm->dev, size,
++					      &dma_obj->dma_addr,
+ 					      GFP_KERNEL | __GFP_NOWARN);
  	}
- }
--EXPORT_SYMBOL_GPL(drm_fb_cma_sync_non_coherent);
-+EXPORT_SYMBOL_GPL(drm_fb_dma_sync_non_coherent);
-diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
-index a3ccd8bc966f..3d2a590b35ec 100644
---- a/drivers/gpu/drm/drm_format_helper.c
-+++ b/drivers/gpu/drm/drm_format_helper.c
-@@ -54,7 +54,7 @@ static int drm_fb_xfrm(void *dst, unsigned long dst_pitch, unsigned long dst_pix
- 	const void *sbuf;
+ 	if (!dma_obj->vaddr) {
+@@ -234,11 +235,11 @@ void drm_gem_dma_free(struct drm_gem_dma_object *dma_obj)
+ 	} else if (dma_obj->vaddr) {
+ 		if (dma_obj->map_noncoherent)
+ 			dma_free_noncoherent(gem_obj->dev->dev, dma_obj->base.size,
+-					     dma_obj->vaddr, dma_obj->paddr,
++					     dma_obj->vaddr, dma_obj->dma_addr,
+ 					     DMA_TO_DEVICE);
+ 		else
+ 			dma_free_wc(gem_obj->dev->dev, dma_obj->base.size,
+-				    dma_obj->vaddr, dma_obj->paddr);
++				    dma_obj->vaddr, dma_obj->dma_addr);
+ 	}
  
- 	/*
--	 * Some source buffers, such as CMA memory, use write-combine
-+	 * Some source buffers, such as DMA memory, use write-combine
- 	 * caching, so reads are uncached. Speed up access by fetching
- 	 * one line at a time.
- 	 */
-@@ -664,7 +664,7 @@ void drm_fb_xrgb8888_to_mono(void *dst, unsigned int dst_pitch, const void *vadd
- 		dst_pitch = DIV_ROUND_UP(linepixels, 8);
- 
- 	/*
--	 * The cma memory is write-combined so reads are uncached.
-+	 * The dma memory is write-combined so reads are uncached.
- 	 * Speed up by fetching one line at a time.
- 	 *
- 	 * Also, format conversion from XR24 to monochrome are done
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-index 7a503bf08d0f..58c69206414b 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
-@@ -20,7 +20,7 @@
- 
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_modeset_helper.h>
-diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
-index d763f53f480c..17cbe1afc263 100644
---- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
-+++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
-@@ -6,7 +6,7 @@
+ 	drm_gem_object_release(gem_obj);
+@@ -396,12 +397,12 @@ EXPORT_SYMBOL_GPL(drm_gem_dma_get_unmapped_area);
+  * @p: DRM printer
+  * @indent: Tab indentation level
+  *
+- * This function prints paddr and vaddr for use in e.g. debugfs output.
++ * This function prints dma_addr and vaddr for use in e.g. debugfs output.
   */
+ void drm_gem_dma_print_info(const struct drm_gem_dma_object *dma_obj,
+ 			    struct drm_printer *p, unsigned int indent)
+ {
+-	drm_printf_indent(p, indent, "paddr=%pad\n", &dma_obj->paddr);
++	drm_printf_indent(p, indent, "dma_addr=%pad\n", &dma_obj->dma_addr);
+ 	drm_printf_indent(p, indent, "vaddr=%p\n", dma_obj->vaddr);
+ }
+ EXPORT_SYMBOL(drm_gem_dma_print_info);
+@@ -428,7 +429,7 @@ struct sg_table *drm_gem_dma_get_sg_table(struct drm_gem_dma_object *dma_obj)
+ 		return ERR_PTR(-ENOMEM);
  
- #include <drm/drm_atomic_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_probe_helper.h>
+ 	ret = dma_get_sgtable(obj->dev->dev, sgt, dma_obj->vaddr,
+-			      dma_obj->paddr, obj->size);
++			      dma_obj->dma_addr, obj->size);
+ 	if (ret < 0)
+ 		goto out;
  
+@@ -473,10 +474,11 @@ drm_gem_dma_prime_import_sg_table(struct drm_device *dev,
+ 	if (IS_ERR(dma_obj))
+ 		return ERR_CAST(dma_obj);
+ 
+-	dma_obj->paddr = sg_dma_address(sgt->sgl);
++	dma_obj->dma_addr = sg_dma_address(sgt->sgl);
+ 	dma_obj->sgt = sgt;
+ 
+-	DRM_DEBUG_PRIME("dma_addr = %pad, size = %zu\n", &dma_obj->paddr, attach->dmabuf->size);
++	DRM_DEBUG_PRIME("dma_addr = %pad, size = %zu\n", &dma_obj->dma_addr,
++			attach->dmabuf->size);
+ 
+ 	return &dma_obj->base;
+ }
+@@ -539,7 +541,8 @@ int drm_gem_dma_mmap(struct drm_gem_dma_object *dma_obj, struct vm_area_struct *
+ 				     virt_to_page(dma_obj->vaddr));
+ 	} else {
+ 		ret = dma_mmap_wc(dma_obj->base.dev->dev, vma, dma_obj->vaddr,
+-				  dma_obj->paddr, vma->vm_end - vma->vm_start);
++				  dma_obj->dma_addr,
++				  vma->vm_end - vma->vm_start);
+ 	}
+ 	if (ret)
+ 		drm_gem_vm_close(vma);
 diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-index 0cd527f0c146..8f2bf26ec87a 100644
+index dd58b3f491dc..4176c32fa70f 100644
 --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
 +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c
-@@ -10,7 +10,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -95,7 +95,7 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
- 	if (index < 0)
- 		return;
- 
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
- 
- 	switch (fb->format->format) {
- 	case DRM_FORMAT_RGB565:
+@@ -136,7 +136,7 @@ static void fsl_dcu_drm_plane_atomic_update(struct drm_plane *plane,
+ 		     DCU_LAYER_POSY(new_state->crtc_y) |
+ 		     DCU_LAYER_POSX(new_state->crtc_x));
+ 	regmap_write(fsl_dev->regmap,
+-		     DCU_CTRLDESCLN(index, 3), gem->paddr);
++		     DCU_CTRLDESCLN(index, 3), gem->dma_addr);
+ 	regmap_write(fsl_dev->regmap, DCU_CTRLDESCLN(index, 4),
+ 		     DCU_LAYER_EN |
+ 		     DCU_LAYER_TRANS(0xff) |
 diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_ade.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_ade.c
-index 61c29c2834e6..80d8d175b8c7 100644
+index 49d93a020a62..96dd06c1e2f9 100644
 --- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_ade.c
 +++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_ade.c
-@@ -24,7 +24,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -549,7 +549,7 @@ static const struct drm_crtc_funcs ade_crtc_funcs = {
- static void ade_rdma_set(void __iomem *base, struct drm_framebuffer *fb,
- 			 u32 ch, u32 y, u32 in_h, u32 fmt)
- {
--	struct drm_gem_cma_object *obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *obj = drm_fb_dma_get_gem_obj(fb, 0);
+@@ -552,10 +552,10 @@ static void ade_rdma_set(void __iomem *base, struct drm_framebuffer *fb,
+ 	struct drm_gem_dma_object *obj = drm_fb_dma_get_gem_obj(fb, 0);
  	u32 reg_ctrl, reg_addr, reg_size, reg_stride, reg_space, reg_en;
  	u32 stride = fb->pitches[0];
- 	u32 addr = (u32)obj->paddr + y * stride;
-diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
-index 2af51df6dca7..d16f9a69cf0c 100644
---- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
-+++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
-@@ -19,7 +19,7 @@
+-	u32 addr = (u32)obj->paddr + y * stride;
++	u32 addr = (u32) obj->dma_addr + y * stride;
  
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
+ 	DRM_DEBUG_DRIVER("rdma%d: (y=%d, height=%d), stride=%d, paddr=0x%x\n",
+-			 ch + 1, y, in_h, stride, (u32)obj->paddr);
++			 ch + 1, y, in_h, stride, (u32) obj->dma_addr);
+ 	DRM_DEBUG_DRIVER("addr=0x%x, fb:%dx%d, pixel_format=%d(%p4cc)\n",
+ 			 addr, fb->width, fb->height, fmt,
+ 			 &fb->format->format);
 diff --git a/drivers/gpu/drm/imx/dcss/dcss-plane.c b/drivers/gpu/drm/imx/dcss/dcss-plane.c
-index c29f343f33e5..a333c13c9ebc 100644
+index 4c41c93ac900..ab6d32bad756 100644
 --- a/drivers/gpu/drm/imx/dcss/dcss-plane.c
 +++ b/drivers/gpu/drm/imx/dcss/dcss-plane.c
-@@ -6,7 +6,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -156,7 +156,7 @@ static int dcss_plane_atomic_check(struct drm_plane *plane,
- 	if (!fb || !new_plane_state->crtc)
- 		return 0;
- 
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 	WARN_ON(!cma_obj);
- 
- 	crtc_state = drm_atomic_get_existing_crtc_state(state,
-@@ -218,7 +218,7 @@ static void dcss_plane_atomic_set_base(struct dcss_plane *dcss_plane)
- 	struct dcss_dev *dcss = plane->dev->dev_private;
- 	struct drm_framebuffer *fb = state->fb;
- 	const struct drm_format_info *format = fb->format;
--	struct drm_gem_cma_object *cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 	unsigned long p1_ba = 0, p2_ba = 0;
- 
+@@ -224,20 +224,20 @@ static void dcss_plane_atomic_set_base(struct dcss_plane *dcss_plane)
  	if (!format->is_yuv ||
-diff --git a/drivers/gpu/drm/imx/imx-drm-core.c b/drivers/gpu/drm/imx/imx-drm-core.c
-index a57812ec36b1..5923e8e42fd4 100644
---- a/drivers/gpu/drm/imx/imx-drm-core.c
-+++ b/drivers/gpu/drm/imx/imx-drm-core.c
-@@ -16,7 +16,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
-index f7863d6dea80..38121f3a0f18 100644
---- a/drivers/gpu/drm/imx/ipuv3-crtc.c
-+++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
-@@ -18,7 +18,7 @@
+ 	    format->format == DRM_FORMAT_NV12 ||
+ 	    format->format == DRM_FORMAT_NV21)
+-		p1_ba = dma_obj->paddr + fb->offsets[0] +
++		p1_ba = dma_obj->dma_addr + fb->offsets[0] +
+ 			fb->pitches[0] * (state->src.y1 >> 16) +
+ 			format->char_per_block[0] * (state->src.x1 >> 16);
+ 	else if (format->format == DRM_FORMAT_UYVY ||
+ 		 format->format == DRM_FORMAT_VYUY ||
+ 		 format->format == DRM_FORMAT_YUYV ||
+ 		 format->format == DRM_FORMAT_YVYU)
+-		p1_ba = dma_obj->paddr + fb->offsets[0] +
++		p1_ba = dma_obj->dma_addr + fb->offsets[0] +
+ 			fb->pitches[0] * (state->src.y1 >> 16) +
+ 			2 * format->char_per_block[0] * (state->src.x1 >> 17);
  
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_managed.h>
- #include <drm/drm_probe_helper.h>
+ 	if (format->format == DRM_FORMAT_NV12 ||
+ 	    format->format == DRM_FORMAT_NV21)
+-		p2_ba = dma_obj->paddr + fb->offsets[1] +
++		p2_ba = dma_obj->dma_addr + fb->offsets[1] +
+ 			(((fb->pitches[1] >> 1) * (state->src.y1 >> 17) +
+ 			(state->src.x1 >> 17)) << 1);
+ 
 diff --git a/drivers/gpu/drm/imx/ipuv3-plane.c b/drivers/gpu/drm/imx/ipuv3-plane.c
-index ea5f594955df..40db9287b5f1 100644
+index 82a7524b11e7..2954248122cc 100644
 --- a/drivers/gpu/drm/imx/ipuv3-plane.c
 +++ b/drivers/gpu/drm/imx/ipuv3-plane.c
-@@ -8,7 +8,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -130,7 +130,7 @@ drm_plane_state_to_eba(struct drm_plane_state *state, int plane)
- 	int x = state->src.x1 >> 16;
- 	int y = state->src.y1 >> 16;
+@@ -133,7 +133,7 @@ drm_plane_state_to_eba(struct drm_plane_state *state, int plane)
+ 	dma_obj = drm_fb_dma_get_gem_obj(fb, plane);
+ 	BUG_ON(!dma_obj);
  
--	cma_obj = drm_fb_cma_get_gem_obj(fb, plane);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, plane);
- 	BUG_ON(!cma_obj);
+-	return dma_obj->paddr + fb->offsets[plane] + fb->pitches[plane] * y +
++	return dma_obj->dma_addr + fb->offsets[plane] + fb->pitches[plane] * y +
+ 	       fb->format->cpp[plane] * x;
+ }
  
- 	return cma_obj->paddr + fb->offsets[plane] + fb->pitches[plane] * y +
-@@ -146,7 +146,7 @@ drm_plane_state_to_ubo(struct drm_plane_state *state)
- 	int x = state->src.x1 >> 16;
- 	int y = state->src.y1 >> 16;
- 
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 1);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 1);
- 	BUG_ON(!cma_obj);
- 
+@@ -152,7 +152,7 @@ drm_plane_state_to_ubo(struct drm_plane_state *state)
  	x /= fb->format->hsub;
-@@ -165,7 +165,7 @@ drm_plane_state_to_vbo(struct drm_plane_state *state)
- 	int x = state->src.x1 >> 16;
- 	int y = state->src.y1 >> 16;
+ 	y /= fb->format->vsub;
  
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 2);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 2);
- 	BUG_ON(!cma_obj);
+-	return dma_obj->paddr + fb->offsets[1] + fb->pitches[1] * y +
++	return dma_obj->dma_addr + fb->offsets[1] + fb->pitches[1] * y +
+ 	       fb->format->cpp[1] * x - eba;
+ }
  
+@@ -171,7 +171,7 @@ drm_plane_state_to_vbo(struct drm_plane_state *state)
  	x /= fb->format->hsub;
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 4de729bbf152..1850d7225e22 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -31,7 +31,7 @@
- #include <drm/drm_drv.h>
- #include <drm/drm_encoder.h>
- #include <drm/drm_gem_cma_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
-@@ -670,12 +670,12 @@ static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
+ 	y /= fb->format->vsub;
  
- 	if (newstate && newstate->fb) {
- 		if (priv->soc_info->map_noncoherent)
--			drm_fb_cma_sync_non_coherent(&priv->drm, oldstate, newstate);
-+			drm_fb_dma_sync_non_coherent(&priv->drm, oldstate, newstate);
+-	return dma_obj->paddr + fb->offsets[2] + fb->pitches[2] * y +
++	return dma_obj->dma_addr + fb->offsets[2] + fb->pitches[2] * y +
+ 	       fb->format->cpp[2] * x - eba;
+ }
  
- 		crtc_state = newstate->crtc->state;
- 		plane_id = !!(priv->soc_info->has_osd && plane != &priv->f0);
- 
--		addr = drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
-+		addr = drm_fb_dma_get_gem_addr(newstate->fb, newstate, 0);
- 		width = newstate->src_w >> 16;
- 		height = newstate->src_h >> 16;
- 		cpp = newstate->fb->format->cpp[0];
-diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-index d13f58ad4769..adbfd00b4dd5 100644
---- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-@@ -22,7 +22,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -363,15 +363,15 @@ static void ingenic_ipu_plane_atomic_update(struct drm_plane *plane,
- 	}
- 
- 	if (ingenic_drm_map_noncoherent(ipu->master))
--		drm_fb_cma_sync_non_coherent(ipu->drm, oldstate, newstate);
-+		drm_fb_dma_sync_non_coherent(ipu->drm, oldstate, newstate);
- 
- 	/* New addresses will be committed in vblank handler... */
--	ipu->addr_y = drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
-+	ipu->addr_y = drm_fb_dma_get_gem_addr(newstate->fb, newstate, 0);
- 	if (finfo->num_planes > 1)
--		ipu->addr_u = drm_fb_cma_get_gem_addr(newstate->fb, newstate,
-+		ipu->addr_u = drm_fb_dma_get_gem_addr(newstate->fb, newstate,
- 						      1);
- 	if (finfo->num_planes > 2)
--		ipu->addr_v = drm_fb_cma_get_gem_addr(newstate->fb, newstate,
-+		ipu->addr_v = drm_fb_dma_get_gem_addr(newstate->fb, newstate,
- 						      2);
- 
- 	if (!needs_modeset)
-diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plane.c
-index 89d055a089a6..2b7deb4cb75d 100644
---- a/drivers/gpu/drm/kmb/kmb_plane.c
-+++ b/drivers/gpu/drm/kmb/kmb_plane.c
-@@ -8,7 +8,7 @@
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
-@@ -404,7 +404,7 @@ static void kmb_plane_atomic_update(struct drm_plane *plane,
- 	kmb_write_lcd(kmb, LCD_LAYERn_DMA_LINE_WIDTH(plane_id),
- 		      (width * fb->format->cpp[0]));
- 
--	addr[Y_PLANE] = drm_fb_cma_get_gem_addr(fb, new_plane_state, 0);
-+	addr[Y_PLANE] = drm_fb_dma_get_gem_addr(fb, new_plane_state, 0);
- 	kmb_write_lcd(kmb, LCD_LAYERn_DMA_START_ADDR(plane_id),
- 		      addr[Y_PLANE] + fb->offsets[0]);
- 	val = get_pixel_format(fb->format->format);
-@@ -416,7 +416,7 @@ static void kmb_plane_atomic_update(struct drm_plane *plane,
- 		kmb_write_lcd(kmb, LCD_LAYERn_DMA_CB_LINE_WIDTH(plane_id),
- 			      (width * fb->format->cpp[0]));
- 
--		addr[U_PLANE] = drm_fb_cma_get_gem_addr(fb, new_plane_state,
-+		addr[U_PLANE] = drm_fb_dma_get_gem_addr(fb, new_plane_state,
- 							U_PLANE);
- 		/* check if Cb/Cr is swapped*/
- 		if (num_planes == 3 && (val & LCD_LAYER_CRCB_ORDER))
-@@ -437,7 +437,7 @@ static void kmb_plane_atomic_update(struct drm_plane *plane,
- 				      LCD_LAYERn_DMA_CR_LINE_WIDTH(plane_id),
- 				      ((width) * fb->format->cpp[0]));
- 
--			addr[V_PLANE] = drm_fb_cma_get_gem_addr(fb,
-+			addr[V_PLANE] = drm_fb_dma_get_gem_addr(fb,
- 								new_plane_state,
- 								V_PLANE);
- 
-diff --git a/drivers/gpu/drm/logicvc/logicvc_layer.c b/drivers/gpu/drm/logicvc/logicvc_layer.c
-index 441e3cfce4cf..f100bb7e35a8 100644
---- a/drivers/gpu/drm/logicvc/logicvc_layer.c
-+++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
-@@ -10,7 +10,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_plane.h>
-@@ -158,7 +158,7 @@ static void logicvc_plane_atomic_update(struct drm_plane *drm_plane,
- 		     new_state->crtc_h - 1);
- 
- 	if (logicvc->caps->layer_address) {
--		phys_addr_t fb_addr = drm_fb_cma_get_gem_addr(fb, new_state, 0);
-+		phys_addr_t fb_addr = drm_fb_dma_get_gem_addr(fb, new_state, 0);
- 
- 		regmap_write(logicvc->regmap, LOGICVC_LAYER_ADDRESS_REG(index),
- 			     fb_addr);
-@@ -281,7 +281,7 @@ int logicvc_layer_buffer_find_setup(struct logicvc_drm *logicvc,
- 		return -ENOMEM;
- 	}
- 
--	fb_addr = drm_fb_cma_get_gem_addr(fb, state, 0);
-+	fb_addr = drm_fb_dma_get_gem_addr(fb, state, 0);
- 	if (fb_addr < logicvc->reserved_mem_base) {
- 		drm_err(drm_dev,
- 			"Framebuffer memory below reserved memory base!\n");
-diff --git a/drivers/gpu/drm/logicvc/logicvc_mode.c b/drivers/gpu/drm/logicvc/logicvc_mode.c
-index 11940704f644..96b9ce0e2f63 100644
---- a/drivers/gpu/drm/logicvc/logicvc_mode.c
-+++ b/drivers/gpu/drm/logicvc/logicvc_mode.c
-@@ -10,7 +10,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-diff --git a/drivers/gpu/drm/mcde/mcde_display.c b/drivers/gpu/drm/mcde/mcde_display.c
-index 4df477540d07..9247da47f0cf 100644
---- a/drivers/gpu/drm/mcde/mcde_display.c
-+++ b/drivers/gpu/drm/mcde/mcde_display.c
-@@ -11,7 +11,7 @@
- #include <linux/media-bus-format.h>
- 
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -165,7 +165,7 @@ static int mcde_display_check(struct drm_simple_display_pipe *pipe,
- 	struct drm_framebuffer *fb = pstate->fb;
- 
- 	if (fb) {
--		u32 offset = drm_fb_cma_get_gem_addr(fb, pstate, 0);
-+		u32 offset = drm_fb_dma_get_gem_addr(fb, pstate, 0);
- 
- 		/* FB base address must be dword aligned. */
- 		if (offset & 3) {
-@@ -1424,7 +1424,7 @@ static void mcde_display_update(struct drm_simple_display_pipe *pipe,
- 	 * from the DRM core before the display is enabled.
- 	 */
- 	if (fb) {
--		mcde_set_extsrc(mcde, drm_fb_cma_get_gem_addr(fb, pstate, 0));
-+		mcde_set_extsrc(mcde, drm_fb_dma_get_gem_addr(fb, pstate, 0));
- 		dev_info_once(mcde->dev, "first update of display contents\n");
- 		/*
- 		 * Usually the flow is already active, unless we are in
-diff --git a/drivers/gpu/drm/mcde/mcde_drv.c b/drivers/gpu/drm/mcde/mcde_drv.c
-index e601baa87e55..509c2b03bc42 100644
---- a/drivers/gpu/drm/mcde/mcde_drv.c
-+++ b/drivers/gpu/drm/mcde/mcde_drv.c
-@@ -37,7 +37,7 @@
-  * (effectively using channels 0..3) for concurrent use.
-  *
-  * In the current DRM/KMS setup, we use one external source, one overlay,
-- * one FIFO and one formatter which we connect to the simple CMA framebuffer
-+ * one FIFO and one formatter which we connect to the simple DMA framebuffer
-  * helpers. We then provide a bridge to the DSI port, and on the DSI port
-  * bridge we connect hang a panel bridge or other bridge. This may be subject
-  * to change as we exploit more of the hardware capabilities.
-@@ -68,7 +68,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem.h>
- #include <drm/drm_gem_cma_helper.h>
 diff --git a/drivers/gpu/drm/meson/meson_overlay.c b/drivers/gpu/drm/meson/meson_overlay.c
-index b4a0518c1028..796ff5e395b3 100644
+index 187d8337455c..c04dc1a8d47a 100644
 --- a/drivers/gpu/drm/meson/meson_overlay.c
 +++ b/drivers/gpu/drm/meson/meson_overlay.c
-@@ -11,7 +11,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -651,7 +651,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
- 
+@@ -652,7 +652,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
  	switch (priv->viu.vd1_planes) {
  	case 3:
--		gem = drm_fb_cma_get_gem_obj(fb, 2);
-+		gem = drm_fb_dma_get_gem_obj(fb, 2);
- 		priv->viu.vd1_addr2 = gem->paddr + fb->offsets[2];
+ 		gem = drm_fb_dma_get_gem_obj(fb, 2);
+-		priv->viu.vd1_addr2 = gem->paddr + fb->offsets[2];
++		priv->viu.vd1_addr2 = gem->dma_addr + fb->offsets[2];
  		priv->viu.vd1_stride2 = fb->pitches[2];
  		priv->viu.vd1_height2 =
-@@ -663,7 +663,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
- 			 priv->viu.vd1_height2);
+ 			drm_format_info_plane_height(fb->format,
+@@ -664,7 +664,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
  		fallthrough;
  	case 2:
--		gem = drm_fb_cma_get_gem_obj(fb, 1);
-+		gem = drm_fb_dma_get_gem_obj(fb, 1);
- 		priv->viu.vd1_addr1 = gem->paddr + fb->offsets[1];
+ 		gem = drm_fb_dma_get_gem_obj(fb, 1);
+-		priv->viu.vd1_addr1 = gem->paddr + fb->offsets[1];
++		priv->viu.vd1_addr1 = gem->dma_addr + fb->offsets[1];
  		priv->viu.vd1_stride1 = fb->pitches[1];
  		priv->viu.vd1_height1 =
-@@ -675,7 +675,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
- 			 priv->viu.vd1_height1);
+ 			drm_format_info_plane_height(fb->format,
+@@ -676,7 +676,7 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
  		fallthrough;
  	case 1:
--		gem = drm_fb_cma_get_gem_obj(fb, 0);
-+		gem = drm_fb_dma_get_gem_obj(fb, 0);
- 		priv->viu.vd1_addr0 = gem->paddr + fb->offsets[0];
+ 		gem = drm_fb_dma_get_gem_obj(fb, 0);
+-		priv->viu.vd1_addr0 = gem->paddr + fb->offsets[0];
++		priv->viu.vd1_addr0 = gem->dma_addr + fb->offsets[0];
  		priv->viu.vd1_stride0 = fb->pitches[0];
  		priv->viu.vd1_height0 =
+ 			drm_format_info_plane_height(fb->format,
 diff --git a/drivers/gpu/drm/meson/meson_plane.c b/drivers/gpu/drm/meson/meson_plane.c
-index b9ac932af8d0..691673ab0983 100644
+index cadfb3c0603b..554afa1bb1c1 100644
 --- a/drivers/gpu/drm/meson/meson_plane.c
 +++ b/drivers/gpu/drm/meson/meson_plane.c
-@@ -15,7 +15,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -366,7 +366,7 @@ static void meson_plane_atomic_update(struct drm_plane *plane,
- 	}
- 
+@@ -368,7 +368,7 @@ static void meson_plane_atomic_update(struct drm_plane *plane,
  	/* Update Canvas with buffer address */
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
  
- 	priv->viu.osd1_addr = gem->paddr;
+-	priv->viu.osd1_addr = gem->paddr;
++	priv->viu.osd1_addr = gem->dma_addr;
  	priv->viu.osd1_stride = fb->pitches[0];
-diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-index 1bec1279c8b5..4c257c34d8ff 100644
---- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-+++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-@@ -18,7 +18,7 @@
- #include <drm/drm_crtc.h>
- #include <drm/drm_encoder.h>
- #include <drm/drm_framebuffer.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -297,7 +297,7 @@ static void lcdif_crtc_atomic_enable(struct drm_crtc *crtc,
- 	lcdif_crtc_mode_set_nofb(lcdif, bridge_state, bus_format);
- 
- 	/* Write cur_buf as well to avoid an initial corrupt frame */
--	paddr = drm_fb_cma_get_gem_addr(new_pstate->fb, new_pstate, 0);
-+	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
- 	if (paddr) {
- 		writel(lower_32_bits(paddr),
- 		       lcdif->base + LCDC_V8_CTRLDESCL_LOW0_4);
-@@ -406,7 +406,7 @@ static void lcdif_plane_primary_atomic_update(struct drm_plane *plane,
- 									    plane);
- 	dma_addr_t paddr;
- 
--	paddr = drm_fb_cma_get_gem_addr(new_pstate->fb, new_pstate, 0);
-+	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
- 	if (paddr) {
- 		writel(lower_32_bits(paddr),
- 		       lcdif->base + LCDC_V8_CTRLDESCL_LOW0_4);
+ 	priv->viu.osd1_height = fb->height;
+ 	priv->viu.osd1_width = fb->width;
 diff --git a/drivers/gpu/drm/mxsfb/mxsfb_kms.c b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
-index e38ce5737a5f..34e9ce4de65b 100644
+index d9955f849692..ae90911c4347 100644
 --- a/drivers/gpu/drm/mxsfb/mxsfb_kms.c
 +++ b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
-@@ -20,7 +20,7 @@
- #include <drm/drm_bridge.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_encoder.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -389,7 +389,7 @@ static void mxsfb_crtc_atomic_enable(struct drm_crtc *crtc,
+@@ -353,7 +353,7 @@ static void mxsfb_crtc_atomic_enable(struct drm_crtc *crtc,
+ 	struct drm_bridge_state *bridge_state = NULL;
+ 	struct drm_device *drm = mxsfb->drm;
+ 	u32 bus_format = 0;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 
+ 	pm_runtime_get_sync(drm->dev);
+ 	mxsfb_enable_axi_clk(mxsfb);
+@@ -389,10 +389,10 @@ static void mxsfb_crtc_atomic_enable(struct drm_crtc *crtc,
  	mxsfb_crtc_mode_set_nofb(mxsfb, bridge_state, bus_format);
  
  	/* Write cur_buf as well to avoid an initial corrupt frame */
--	paddr = drm_fb_cma_get_gem_addr(new_pstate->fb, new_pstate, 0);
-+	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
- 	if (paddr) {
- 		writel(paddr, mxsfb->base + mxsfb->devdata->cur_buf);
- 		writel(paddr, mxsfb->base + mxsfb->devdata->next_buf);
-@@ -544,7 +544,7 @@ static void mxsfb_plane_primary_atomic_update(struct drm_plane *plane,
- 									    plane);
- 	dma_addr_t paddr;
+-	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
+-	if (paddr) {
+-		writel(paddr, mxsfb->base + mxsfb->devdata->cur_buf);
+-		writel(paddr, mxsfb->base + mxsfb->devdata->next_buf);
++	dma_addr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
++	if (dma_addr) {
++		writel(dma_addr, mxsfb->base + mxsfb->devdata->cur_buf);
++		writel(dma_addr, mxsfb->base + mxsfb->devdata->next_buf);
+ 	}
  
--	paddr = drm_fb_cma_get_gem_addr(new_pstate->fb, new_pstate, 0);
-+	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
- 	if (paddr)
- 		writel(paddr, mxsfb->base + mxsfb->devdata->next_buf);
+ 	mxsfb_enable_controller(mxsfb);
+@@ -542,11 +542,11 @@ static void mxsfb_plane_primary_atomic_update(struct drm_plane *plane,
+ 	struct mxsfb_drm_private *mxsfb = to_mxsfb_drm_private(plane->dev);
+ 	struct drm_plane_state *new_pstate = drm_atomic_get_new_plane_state(state,
+ 									    plane);
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 
+-	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
+-	if (paddr)
+-		writel(paddr, mxsfb->base + mxsfb->devdata->next_buf);
++	dma_addr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
++	if (dma_addr)
++		writel(dma_addr, mxsfb->base + mxsfb->devdata->next_buf);
  }
-@@ -560,7 +560,7 @@ static void mxsfb_plane_overlay_atomic_update(struct drm_plane *plane,
- 	dma_addr_t paddr;
+ 
+ static void mxsfb_plane_overlay_atomic_update(struct drm_plane *plane,
+@@ -557,11 +557,11 @@ static void mxsfb_plane_overlay_atomic_update(struct drm_plane *plane,
+ 	struct mxsfb_drm_private *mxsfb = to_mxsfb_drm_private(plane->dev);
+ 	struct drm_plane_state *new_pstate = drm_atomic_get_new_plane_state(state,
+ 									    plane);
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
  	u32 ctrl;
  
--	paddr = drm_fb_cma_get_gem_addr(new_pstate->fb, new_pstate, 0);
-+	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
- 	if (!paddr) {
+-	paddr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
+-	if (!paddr) {
++	dma_addr = drm_fb_dma_get_gem_addr(new_pstate->fb, new_pstate, 0);
++	if (!dma_addr) {
  		writel(0, mxsfb->base + LCDC_AS_CTRL);
  		return;
-diff --git a/drivers/gpu/drm/pl111/pl111_display.c b/drivers/gpu/drm/pl111/pl111_display.c
-index 6263346f24c6..5f2429c3633e 100644
---- a/drivers/gpu/drm/pl111/pl111_display.c
-+++ b/drivers/gpu/drm/pl111/pl111_display.c
-@@ -15,7 +15,7 @@
- #include <linux/media-bus-format.h>
- #include <linux/of_graph.h>
- 
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -94,7 +94,7 @@ static int pl111_display_check(struct drm_simple_display_pipe *pipe,
- 		return -EINVAL;
- 
- 	if (fb) {
--		u32 offset = drm_fb_cma_get_gem_addr(fb, pstate, 0);
-+		u32 offset = drm_fb_dma_get_gem_addr(fb, pstate, 0);
- 
- 		/* FB base address must be dword aligned. */
- 		if (offset & 3)
-@@ -398,7 +398,7 @@ static void pl111_display_update(struct drm_simple_display_pipe *pipe,
- 	struct drm_framebuffer *fb = pstate->fb;
- 
- 	if (fb) {
--		u32 addr = drm_fb_cma_get_gem_addr(fb, pstate, 0);
-+		u32 addr = drm_fb_dma_get_gem_addr(fb, pstate, 0);
- 
- 		writel(addr, priv->regs + CLCD_UBAS);
  	}
-diff --git a/drivers/gpu/drm/pl111/pl111_drv.c b/drivers/gpu/drm/pl111/pl111_drv.c
-index 19a4324bd356..57490c3a72d9 100644
---- a/drivers/gpu/drm/pl111/pl111_drv.c
-+++ b/drivers/gpu/drm/pl111/pl111_drv.c
-@@ -48,7 +48,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_gem_cma_helper.h>
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-index f361a604337f..9404dc32668e 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-@@ -17,7 +17,7 @@
- #include <drm/drm_bridge.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_vblank.h>
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-index 957ea97541d5..3d8f6e9cfb3c 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-@@ -20,7 +20,7 @@
+@@ -572,16 +572,16 @@ static void mxsfb_plane_overlay_atomic_update(struct drm_plane *plane,
+ 	 * is understood, live with the 16 initial invalid pixels on the first
+ 	 * line and start 64 bytes within the framebuffer.
+ 	 */
+-	paddr += 64;
++	dma_addr += 64;
  
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_managed.h>
+-	writel(paddr, mxsfb->base + LCDC_AS_NEXT_BUF);
++	writel(dma_addr, mxsfb->base + LCDC_AS_NEXT_BUF);
+ 
+ 	/*
+ 	 * If the plane was previously disabled, write LCDC_AS_BUF as well to
+ 	 * provide the first buffer.
+ 	 */
+ 	if (!old_pstate->fb)
+-		writel(paddr, mxsfb->base + LCDC_AS_BUF);
++		writel(dma_addr, mxsfb->base + LCDC_AS_BUF);
+ 
+ 	ctrl = AS_CTRL_AS_ENABLE | AS_CTRL_ALPHA(255);
+ 
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 0f09e1ee0390..a1fe6f53e358 100644
+index 3cd01f3829db..2032127cc015 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -11,7 +11,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
+@@ -366,7 +366,7 @@ struct drm_gem_object *rcar_du_gem_prime_import_sg_table(struct drm_device *dev,
+ 		return ERR_PTR(ret);
+ 	}
+ 
+-	dma_obj->paddr = 0;
++	dma_obj->dma_addr = 0;
+ 	dma_obj->sgt = sgt;
+ 
+ 	return gem_obj;
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_plane.c b/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-index e98b76db703a..8f62bc3b2a76 100644
+index 155bd4fadbd8..fb4a1cec183c 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_plane.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-@@ -12,7 +12,7 @@
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -351,7 +351,7 @@ static void rcar_du_plane_setup_scanout(struct rcar_du_group *rgrp,
- 			pitch = fb->pitches[0] * 8 / state->format->bpp;
+@@ -352,7 +352,7 @@ static void rcar_du_plane_setup_scanout(struct rcar_du_group *rgrp,
  
  		for (i = 0; i < state->format->planes; ++i) {
--			gem = drm_fb_cma_get_gem_obj(fb, i);
-+			gem = drm_fb_dma_get_gem_obj(fb, i);
- 			dma[i] = gem->paddr + fb->offsets[i];
+ 			gem = drm_fb_dma_get_gem_obj(fb, i);
+-			dma[i] = gem->paddr + fb->offsets[i];
++			dma[i] = gem->dma_addr + fb->offsets[i];
  		}
  	} else {
+ 		pitch = drm_rect_width(&state->state.src) >> 16;
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-index e778fd52f890..bc0be6aa71d3 100644
+index fc8715d68957..ce3908348309 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-@@ -11,7 +11,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -184,7 +184,7 @@ int rcar_du_vsp_map_fb(struct rcar_du_vsp *vsp, struct drm_framebuffer *fb,
- 	int ret;
- 
- 	for (i = 0; i < fb->format->num_planes; ++i) {
--		struct drm_gem_cma_object *gem = drm_fb_cma_get_gem_obj(fb, i);
-+		struct drm_gem_cma_object *gem = drm_fb_dma_get_gem_obj(fb, i);
- 		struct sg_table *sgt = &sg_tables[i];
- 
- 		if (gem->sgt) {
+@@ -213,7 +213,7 @@ int rcar_du_vsp_map_fb(struct rcar_du_vsp *vsp, struct drm_framebuffer *fb,
+ 			}
+ 		} else {
+ 			ret = dma_get_sgtable(rcdu->dev, sgt, gem->vaddr,
+-					      gem->paddr, gem->base.size);
++					      gem->dma_addr, gem->base.size);
+ 			if (ret)
+ 				goto fail;
+ 		}
 diff --git a/drivers/gpu/drm/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
-index 071a929e9fe3..d2c82f2a822e 100644
+index fdadea7d4793..dad1998720af 100644
 --- a/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
 +++ b/drivers/gpu/drm/shmobile/shmob_drm_crtc.c
-@@ -12,7 +12,7 @@
- 
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -293,13 +293,13 @@ static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
- 	unsigned int bpp;
+@@ -294,13 +294,13 @@ static void shmob_drm_crtc_compute_base(struct shmob_drm_crtc *scrtc,
  
  	bpp = scrtc->format->yuv ? 8 : scrtc->format->bpp;
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
- 	scrtc->dma[0] = gem->paddr + fb->offsets[0]
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
+-	scrtc->dma[0] = gem->paddr + fb->offsets[0]
++	scrtc->dma[0] = gem->dma_addr + fb->offsets[0]
  		      + y * fb->pitches[0] + x * bpp / 8;
  
  	if (scrtc->format->yuv) {
  		bpp = scrtc->format->bpp - 8;
--		gem = drm_fb_cma_get_gem_obj(fb, 1);
-+		gem = drm_fb_dma_get_gem_obj(fb, 1);
- 		scrtc->dma[1] = gem->paddr + fb->offsets[1]
+ 		gem = drm_fb_dma_get_gem_obj(fb, 1);
+-		scrtc->dma[1] = gem->paddr + fb->offsets[1]
++		scrtc->dma[1] = gem->dma_addr + fb->offsets[1]
  			      + y / (bpp == 4 ? 2 : 1) * fb->pitches[1]
  			      + x * (bpp == 16 ? 2 : 1);
-diff --git a/drivers/gpu/drm/shmobile/shmob_drm_kms.c b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
-index 68d21be784aa..7fa407adf677 100644
---- a/drivers/gpu/drm/shmobile/shmob_drm_kms.c
-+++ b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
-@@ -9,7 +9,7 @@
- 
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
+ 	}
 diff --git a/drivers/gpu/drm/shmobile/shmob_drm_plane.c b/drivers/gpu/drm/shmobile/shmob_drm_plane.c
-index 4763ea8e1af0..6fa64bce0c91 100644
+index 6d167e858d86..54228424793a 100644
 --- a/drivers/gpu/drm/shmobile/shmob_drm_plane.c
 +++ b/drivers/gpu/drm/shmobile/shmob_drm_plane.c
-@@ -9,7 +9,7 @@
- 
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -45,13 +45,13 @@ static void shmob_drm_plane_compute_base(struct shmob_drm_plane *splane,
- 	unsigned int bpp;
+@@ -46,13 +46,13 @@ static void shmob_drm_plane_compute_base(struct shmob_drm_plane *splane,
  
  	bpp = splane->format->yuv ? 8 : splane->format->bpp;
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
- 	splane->dma[0] = gem->paddr + fb->offsets[0]
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
+-	splane->dma[0] = gem->paddr + fb->offsets[0]
++	splane->dma[0] = gem->dma_addr + fb->offsets[0]
  		       + y * fb->pitches[0] + x * bpp / 8;
  
  	if (splane->format->yuv) {
  		bpp = splane->format->bpp - 8;
--		gem = drm_fb_cma_get_gem_obj(fb, 1);
-+		gem = drm_fb_dma_get_gem_obj(fb, 1);
- 		splane->dma[1] = gem->paddr + fb->offsets[1]
+ 		gem = drm_fb_dma_get_gem_obj(fb, 1);
+-		splane->dma[1] = gem->paddr + fb->offsets[1]
++		splane->dma[1] = gem->dma_addr + fb->offsets[1]
  			       + y / (bpp == 4 ? 2 : 1) * fb->pitches[1]
  			       + x * (bpp == 16 ? 2 : 1);
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index 77f80b0d3a5e..eb5a0662ce06 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -21,7 +21,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_edid.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_format_helper.h>
- #include <drm/drm_framebuffer.h>
+ 	}
 diff --git a/drivers/gpu/drm/sprd/sprd_dpu.c b/drivers/gpu/drm/sprd/sprd_dpu.c
-index 3664089b6983..fb23b2f34e44 100644
+index d9ed71a14478..63b4172e6d11 100644
 --- a/drivers/gpu/drm/sprd/sprd_dpu.c
 +++ b/drivers/gpu/drm/sprd/sprd_dpu.c
-@@ -19,7 +19,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-@@ -341,7 +341,7 @@ static void sprd_dpu_layer(struct sprd_dpu *dpu, struct drm_plane_state *state)
- 	size = (src_w & 0xffff) | (src_h << 16);
+@@ -342,7 +342,7 @@ static void sprd_dpu_layer(struct sprd_dpu *dpu, struct drm_plane_state *state)
  
  	for (i = 0; i < fb->format->num_planes; i++) {
--		cma_obj = drm_fb_cma_get_gem_obj(fb, i);
-+		cma_obj = drm_fb_dma_get_gem_obj(fb, i);
- 		addr = cma_obj->paddr + fb->offsets[i];
+ 		dma_obj = drm_fb_dma_get_gem_obj(fb, i);
+-		addr = dma_obj->paddr + fb->offsets[i];
++		addr = dma_obj->dma_addr + fb->offsets[i];
  
  		if (i == 0)
-diff --git a/drivers/gpu/drm/sti/sti_cursor.c b/drivers/gpu/drm/sti/sti_cursor.c
-index 1e9bd4241f10..d374fa50be60 100644
---- a/drivers/gpu/drm/sti/sti_cursor.c
-+++ b/drivers/gpu/drm/sti/sti_cursor.c
-@@ -11,7 +11,7 @@
- 
- #include <drm/drm_atomic.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
- 
-@@ -243,7 +243,7 @@ static int sti_cursor_atomic_check(struct drm_plane *drm_plane,
- 		}
- 	}
- 
--	if (!drm_fb_cma_get_gem_obj(fb, 0)) {
-+	if (!drm_fb_dma_get_gem_obj(fb, 0)) {
- 		DRM_ERROR("Can't get CMA GEM object for fb\n");
- 		return -EINVAL;
- 	}
-@@ -278,7 +278,7 @@ static void sti_cursor_atomic_update(struct drm_plane *drm_plane,
- 	dst_x = newstate->crtc_x;
- 	dst_y = newstate->crtc_y;
- 
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 
- 	/* Convert ARGB8888 to CLUT8 */
- 	sti_cursor_argb8888_to_clut8(cursor, (u32 *)cma_obj->vaddr);
-diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
-index d858209cf8de..d5528d53ecdd 100644
---- a/drivers/gpu/drm/sti/sti_drv.c
-+++ b/drivers/gpu/drm/sti/sti_drv.c
-@@ -14,7 +14,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_debugfs.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
+ 			layer_reg_wr(ctx, REG_LAY_BASE_ADDR0, addr, index);
 diff --git a/drivers/gpu/drm/sti/sti_gdp.c b/drivers/gpu/drm/sti/sti_gdp.c
-index af783f599306..623a09163f9f 100644
+index 3ce9d4992176..43c72c2604a0 100644
 --- a/drivers/gpu/drm/sti/sti_gdp.c
 +++ b/drivers/gpu/drm/sti/sti_gdp.c
-@@ -12,7 +12,7 @@
- 
- #include <drm/drm_atomic.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -658,7 +658,7 @@ static int sti_gdp_atomic_check(struct drm_plane *drm_plane,
- 		return -EINVAL;
- 	}
- 
--	if (!drm_fb_cma_get_gem_obj(fb, 0)) {
-+	if (!drm_fb_dma_get_gem_obj(fb, 0)) {
- 		DRM_ERROR("Can't get CMA GEM object for fb\n");
- 		return -EINVAL;
- 	}
-@@ -778,7 +778,7 @@ static void sti_gdp_atomic_update(struct drm_plane *drm_plane,
- 	top_field->gam_gdp_ctl |= sti_gdp_get_alpharange(format);
- 	top_field->gam_gdp_ppt &= ~GAM_GDP_PPT_IGNORE;
- 
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
+@@ -782,11 +782,11 @@ static void sti_gdp_atomic_update(struct drm_plane *drm_plane,
  
  	DRM_DEBUG_DRIVER("drm FB:%d format:%.4s phys@:0x%lx\n", fb->base.id,
  			 (char *)&fb->format->format,
+-			 (unsigned long)dma_obj->paddr);
++			 (unsigned long) dma_obj->dma_addr);
+ 
+ 	/* pixel memory location */
+ 	bpp = fb->format->cpp[0];
+-	top_field->gam_gdp_pml = (u32)dma_obj->paddr + fb->offsets[0];
++	top_field->gam_gdp_pml = (u32) dma_obj->dma_addr + fb->offsets[0];
+ 	top_field->gam_gdp_pml += src_x * bpp;
+ 	top_field->gam_gdp_pml += src_y * fb->pitches[0];
+ 
+@@ -831,7 +831,7 @@ static void sti_gdp_atomic_update(struct drm_plane *drm_plane,
+ 	dev_dbg(gdp->dev, "Current NVN:0x%X\n",
+ 		readl(gdp->regs + GAM_GDP_NVN_OFFSET));
+ 	dev_dbg(gdp->dev, "Posted buff: %lx current buff: %x\n",
+-		(unsigned long)dma_obj->paddr,
++		(unsigned long) dma_obj->dma_addr,
+ 		readl(gdp->regs + GAM_GDP_PML_OFFSET));
+ 
+ 	if (!curr_list) {
 diff --git a/drivers/gpu/drm/sti/sti_hqvdp.c b/drivers/gpu/drm/sti/sti_hqvdp.c
-index 271982080437..26284c5f5b22 100644
+index ee274140274d..02b77279f6e4 100644
 --- a/drivers/gpu/drm/sti/sti_hqvdp.c
 +++ b/drivers/gpu/drm/sti/sti_hqvdp.c
-@@ -16,7 +16,7 @@
- 
- #include <drm/drm_atomic.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -1055,7 +1055,7 @@ static int sti_hqvdp_atomic_check(struct drm_plane *drm_plane,
- 		return -EINVAL;
- 	}
- 
--	if (!drm_fb_cma_get_gem_obj(fb, 0)) {
-+	if (!drm_fb_dma_get_gem_obj(fb, 0)) {
- 		DRM_ERROR("Can't get CMA GEM object for fb\n");
- 		return -EINVAL;
- 	}
-@@ -1178,7 +1178,7 @@ static void sti_hqvdp_atomic_update(struct drm_plane *drm_plane,
- 	cmd->iqi.sat_gain = IQI_SAT_GAIN_DFLT;
- 	cmd->iqi.pxf_conf = IQI_PXF_CONF_DFLT;
- 
--	cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
+@@ -1182,11 +1182,11 @@ static void sti_hqvdp_atomic_update(struct drm_plane *drm_plane,
  
  	DRM_DEBUG_DRIVER("drm FB:%d format:%.4s phys@:0x%lx\n", fb->base.id,
  			 (char *)&fb->format->format,
-diff --git a/drivers/gpu/drm/sti/sti_plane.c b/drivers/gpu/drm/sti/sti_plane.c
-index c74b524663ab..10d8081a550e 100644
---- a/drivers/gpu/drm/sti/sti_plane.c
-+++ b/drivers/gpu/drm/sti/sti_plane.c
-@@ -9,7 +9,7 @@
- #include <linux/types.h>
+-			 (unsigned long)dma_obj->paddr);
++			 (unsigned long) dma_obj->dma_addr);
  
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index c63945dc2260..c6377fab2179 100644
---- a/drivers/gpu/drm/stm/drv.c
-+++ b/drivers/gpu/drm/stm/drv.c
-@@ -18,7 +18,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index da7a0a183b27..344c072acb6b 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -28,7 +28,7 @@
- #include <drm/drm_bridge.h>
- #include <drm/drm_device.h>
- #include <drm/drm_edid.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -1347,7 +1347,7 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 	}
+ 	/* Buffer planes address */
+-	cmd->top.current_luma = (u32)dma_obj->paddr + fb->offsets[0];
+-	cmd->top.current_chroma = (u32)dma_obj->paddr + fb->offsets[1];
++	cmd->top.current_luma = (u32) dma_obj->dma_addr + fb->offsets[0];
++	cmd->top.current_chroma = (u32) dma_obj->dma_addr + fb->offsets[1];
  
- 	/* Sets the FB address */
--	paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 0);
-+	paddr = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 0);
- 
- 	if (newstate->rotation & DRM_MODE_REFLECT_X)
- 		paddr += (fb->format->cpp[0] * (x1 - x0 + 1)) - 1;
-@@ -1381,7 +1381,7 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 			case DRM_FORMAT_NV12:
- 			case DRM_FORMAT_NV21:
- 			/* Configure the auxiliary frame buffer address 0 */
--			paddr1 = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
-+			paddr1 = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 1);
- 
- 			if (newstate->rotation & DRM_MODE_REFLECT_X)
- 				paddr1 += ((fb->format->cpp[1] * (x1 - x0 + 1)) >> 1) - 1;
-@@ -1393,8 +1393,8 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 			break;
- 			case DRM_FORMAT_YUV420:
- 			/* Configure the auxiliary frame buffer address 0 & 1 */
--			paddr1 = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
--			paddr2 = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 2);
-+			paddr1 = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 1);
-+			paddr2 = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 2);
- 
- 			if (newstate->rotation & DRM_MODE_REFLECT_X) {
- 				paddr1 += ((fb->format->cpp[1] * (x1 - x0 + 1)) >> 1) - 1;
-@@ -1411,8 +1411,8 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 			break;
- 			case DRM_FORMAT_YVU420:
- 			/* Configure the auxiliary frame buffer address 0 & 1 */
--			paddr1 = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 2);
--			paddr2 = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
-+			paddr1 = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 2);
-+			paddr2 = (u32)drm_fb_dma_get_gem_addr(fb, newstate, 1);
- 
- 			if (newstate->rotation & DRM_MODE_REFLECT_X) {
- 				paddr1 += ((fb->format->cpp[1] * (x1 - x0 + 1)) >> 1) - 1;
+ 	/* Pitches */
+ 	cmd->top.luma_processed_pitch = fb->pitches[0];
 diff --git a/drivers/gpu/drm/sun4i/sun4i_backend.c b/drivers/gpu/drm/sun4i/sun4i_backend.c
-index 287e8c4bbaea..9deda9591b04 100644
+index 1fffb9568317..b75ccbaa5002 100644
 --- a/drivers/gpu/drm/sun4i/sun4i_backend.c
 +++ b/drivers/gpu/drm/sun4i/sun4i_backend.c
-@@ -19,7 +19,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -339,7 +339,7 @@ int sun4i_backend_update_layer_buffer(struct sun4i_backend *backend,
+@@ -330,7 +330,7 @@ int sun4i_backend_update_layer_buffer(struct sun4i_backend *backend,
+ 	struct drm_plane_state *state = plane->state;
+ 	struct drm_framebuffer *fb = state->fb;
+ 	u32 lo_paddr, hi_paddr;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 
+ 	/* Set the line width */
+ 	DRM_DEBUG_DRIVER("Layer line width: %d bits\n", fb->pitches[0] * 8);
+@@ -339,21 +339,21 @@ int sun4i_backend_update_layer_buffer(struct sun4i_backend *backend,
  		     fb->pitches[0] * 8);
  
  	/* Get the start of the displayed memory */
--	paddr = drm_fb_cma_get_gem_addr(fb, state, 0);
-+	paddr = drm_fb_dma_get_gem_addr(fb, state, 0);
- 	DRM_DEBUG_DRIVER("Setting buffer address to %pad\n", &paddr);
+-	paddr = drm_fb_dma_get_gem_addr(fb, state, 0);
+-	DRM_DEBUG_DRIVER("Setting buffer address to %pad\n", &paddr);
++	dma_addr = drm_fb_dma_get_gem_addr(fb, state, 0);
++	DRM_DEBUG_DRIVER("Setting buffer address to %pad\n", &dma_addr);
  
  	if (fb->format->is_yuv)
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 275f7e4a03ae..8df3efa5a6c5 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -16,7 +16,7 @@
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_module.h>
+-		return sun4i_backend_update_yuv_buffer(backend, fb, paddr);
++		return sun4i_backend_update_yuv_buffer(backend, fb, dma_addr);
+ 
+ 	/* Write the 32 lower bits of the address (in bits) */
+-	lo_paddr = paddr << 3;
++	lo_paddr = dma_addr << 3;
+ 	DRM_DEBUG_DRIVER("Setting address lower bits to 0x%x\n", lo_paddr);
+ 	regmap_write(backend->engine.regs,
+ 		     SUN4I_BACKEND_LAYFB_L32ADD_REG(layer),
+ 		     lo_paddr);
+ 
+ 	/* And the upper bits */
+-	hi_paddr = paddr >> 29;
++	hi_paddr = dma_addr >> 29;
+ 	DRM_DEBUG_DRIVER("Setting address high bits to 0x%x\n", hi_paddr);
+ 	regmap_update_bits(backend->engine.regs, SUN4I_BACKEND_LAYFB_H4ADD_REG,
+ 			   SUN4I_BACKEND_LAYFB_H4ADD_MSK(layer),
 diff --git a/drivers/gpu/drm/sun4i/sun4i_frontend.c b/drivers/gpu/drm/sun4i/sun4i_frontend.c
-index 462fae73eae9..4a811e803dac 100644
+index baeeda04691f..799ab7460ae5 100644
 --- a/drivers/gpu/drm/sun4i/sun4i_frontend.c
 +++ b/drivers/gpu/drm/sun4i/sun4i_frontend.c
-@@ -14,7 +14,7 @@
- #include <linux/reset.h>
+@@ -160,7 +160,7 @@ void sun4i_frontend_update_buffer(struct sun4i_frontend *frontend,
+ 	struct drm_framebuffer *fb = state->fb;
+ 	unsigned int strides[3] = {};
  
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -221,19 +221,19 @@ void sun4i_frontend_update_buffer(struct sun4i_frontend *frontend,
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	bool swap;
+ 
+ 	if (fb->modifier == DRM_FORMAT_MOD_ALLWINNER_TILED) {
+@@ -221,22 +221,24 @@ void sun4i_frontend_update_buffer(struct sun4i_frontend *frontend,
  	swap = sun4i_frontend_format_chroma_requires_swap(fb->format->format);
  
  	/* Set the physical address of the buffer in memory */
--	paddr = drm_fb_cma_get_gem_addr(fb, state, 0);
-+	paddr = drm_fb_dma_get_gem_addr(fb, state, 0);
- 	DRM_DEBUG_DRIVER("Setting buffer #0 address to %pad\n", &paddr);
- 	regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR0_REG, paddr);
+-	paddr = drm_fb_dma_get_gem_addr(fb, state, 0);
+-	DRM_DEBUG_DRIVER("Setting buffer #0 address to %pad\n", &paddr);
+-	regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR0_REG, paddr);
++	dma_addr = drm_fb_dma_get_gem_addr(fb, state, 0);
++	DRM_DEBUG_DRIVER("Setting buffer #0 address to %pad\n", &dma_addr);
++	regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR0_REG, dma_addr);
  
  	if (fb->format->num_planes > 1) {
--		paddr = drm_fb_cma_get_gem_addr(fb, state, swap ? 2 : 1);
-+		paddr = drm_fb_dma_get_gem_addr(fb, state, swap ? 2 : 1);
- 		DRM_DEBUG_DRIVER("Setting buffer #1 address to %pad\n", &paddr);
+-		paddr = drm_fb_dma_get_gem_addr(fb, state, swap ? 2 : 1);
+-		DRM_DEBUG_DRIVER("Setting buffer #1 address to %pad\n", &paddr);
++		dma_addr = drm_fb_dma_get_gem_addr(fb, state, swap ? 2 : 1);
++		DRM_DEBUG_DRIVER("Setting buffer #1 address to %pad\n",
++				 &dma_addr);
  		regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR1_REG,
- 			     paddr);
+-			     paddr);
++			     dma_addr);
  	}
  
  	if (fb->format->num_planes > 2) {
--		paddr = drm_fb_cma_get_gem_addr(fb, state, swap ? 1 : 2);
-+		paddr = drm_fb_dma_get_gem_addr(fb, state, swap ? 1 : 2);
- 		DRM_DEBUG_DRIVER("Setting buffer #2 address to %pad\n", &paddr);
+-		paddr = drm_fb_dma_get_gem_addr(fb, state, swap ? 1 : 2);
+-		DRM_DEBUG_DRIVER("Setting buffer #2 address to %pad\n", &paddr);
++		dma_addr = drm_fb_dma_get_gem_addr(fb, state, swap ? 1 : 2);
++		DRM_DEBUG_DRIVER("Setting buffer #2 address to %pad\n",
++				 &dma_addr);
  		regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR2_REG,
- 			     paddr);
-diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-index 648b38a73066..cda2c9b9cbf3 100644
---- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-@@ -16,7 +16,7 @@
- 
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_plane_helper.h>
+-			     paddr);
++			     dma_addr);
+ 	}
+ }
+ EXPORT_SYMBOL(sun4i_frontend_update_buffer);
 diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-index 36da962de394..de0f999fec01 100644
+index 7d05809bbbce..e2a0675bb49e 100644
 --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
 +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-@@ -13,7 +13,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -201,7 +201,7 @@ static int sun8i_ui_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
- 	ch_base = sun8i_channel_base(mixer, channel);
+@@ -194,7 +194,7 @@ static int sun8i_ui_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+ 	struct drm_plane_state *state = plane->state;
+ 	struct drm_framebuffer *fb = state->fb;
+ 	struct drm_gem_dma_object *gem;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	u32 ch_base;
+ 	int bpp;
  
+@@ -203,15 +203,15 @@ static int sun8i_ui_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
  	/* Get the physical address of the buffer in memory */
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
  
- 	DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->paddr);
+-	DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->paddr);
++	DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->dma_addr);
  
+ 	/* Compute the start of the displayed memory */
+ 	bpp = fb->format->cpp[0];
+-	paddr = gem->paddr + fb->offsets[0];
++	dma_addr = gem->dma_addr + fb->offsets[0];
+ 
+ 	/* Fixup framebuffer address for src coordinates */
+-	paddr += (state->src.x1 >> 16) * bpp;
+-	paddr += (state->src.y1 >> 16) * fb->pitches[0];
++	dma_addr += (state->src.x1 >> 16) * bpp;
++	dma_addr += (state->src.y1 >> 16) * fb->pitches[0];
+ 
+ 	/* Set the line width */
+ 	DRM_DEBUG_DRIVER("Layer line width: %d bytes\n", fb->pitches[0]);
+@@ -219,11 +219,11 @@ static int sun8i_ui_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+ 		     SUN8I_MIXER_CHAN_UI_LAYER_PITCH(ch_base, overlay),
+ 		     fb->pitches[0]);
+ 
+-	DRM_DEBUG_DRIVER("Setting buffer address to %pad\n", &paddr);
++	DRM_DEBUG_DRIVER("Setting buffer address to %pad\n", &dma_addr);
+ 
+ 	regmap_write(mixer->engine.regs,
+ 		     SUN8I_MIXER_CHAN_UI_LAYER_TOP_LADDR(ch_base, overlay),
+-		     lower_32_bits(paddr));
++		     lower_32_bits(dma_addr));
+ 
+ 	return 0;
+ }
 diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-index 1fee6499bdd3..16f8120f5471 100644
+index 84cc96302e69..385069f6f247 100644
 --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
 +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-@@ -7,7 +7,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -323,7 +323,7 @@ static int sun8i_vi_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+@@ -311,7 +311,7 @@ static int sun8i_vi_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+ 	const struct drm_format_info *format = fb->format;
+ 	struct drm_gem_dma_object *gem;
+ 	u32 dx, dy, src_x, src_y;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	u32 ch_base;
+ 	int i;
  
- 	for (i = 0; i < format->num_planes; i++) {
+@@ -325,10 +325,10 @@ static int sun8i_vi_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
  		/* Get the physical address of the buffer in memory */
--		gem = drm_fb_cma_get_gem_obj(fb, i);
-+		gem = drm_fb_dma_get_gem_obj(fb, i);
+ 		gem = drm_fb_dma_get_gem_obj(fb, i);
  
- 		DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->paddr);
+-		DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->paddr);
++		DRM_DEBUG_DRIVER("Using GEM @ %pad\n", &gem->dma_addr);
  
-diff --git a/drivers/gpu/drm/tegra/fb.c b/drivers/gpu/drm/tegra/fb.c
-index ed828de5ac01..9291209154a7 100644
---- a/drivers/gpu/drm/tegra/fb.c
-+++ b/drivers/gpu/drm/tegra/fb.c
-@@ -3,7 +3,7 @@
-  * Copyright (C) 2012-2013 Avionic Design GmbH
-  * Copyright (C) 2012 NVIDIA CORPORATION.  All rights reserved.
-  *
-- * Based on the KMS/FB CMA helpers
-+ * Based on the KMS/FB DMA helpers
-  *   Copyright (C) 2012 Analog Devices Inc.
-  */
+ 		/* Compute the start of the displayed memory */
+-		paddr = gem->paddr + fb->offsets[i];
++		dma_addr = gem->dma_addr + fb->offsets[i];
  
-diff --git a/drivers/gpu/drm/tidss/tidss_crtc.c b/drivers/gpu/drm/tidss/tidss_crtc.c
-index 2218da3b3ca3..87b9b7633e77 100644
---- a/drivers/gpu/drm/tidss/tidss_crtc.c
-+++ b/drivers/gpu/drm/tidss/tidss_crtc.c
-@@ -8,7 +8,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_vblank.h>
+ 		dx = src_x;
+ 		dy = src_y;
+@@ -339,8 +339,8 @@ static int sun8i_vi_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+ 		}
+ 
+ 		/* Fixup framebuffer address for src coordinates */
+-		paddr += dx * format->cpp[i];
+-		paddr += dy * fb->pitches[i];
++		dma_addr += dx * format->cpp[i];
++		dma_addr += dy * fb->pitches[i];
+ 
+ 		/* Set the line width */
+ 		DRM_DEBUG_DRIVER("Layer %d. line width: %d bytes\n",
+@@ -351,12 +351,12 @@ static int sun8i_vi_layer_update_buffer(struct sun8i_mixer *mixer, int channel,
+ 			     fb->pitches[i]);
+ 
+ 		DRM_DEBUG_DRIVER("Setting %d. buffer address to %pad\n",
+-				 i + 1, &paddr);
++				 i + 1, &dma_addr);
+ 
+ 		regmap_write(mixer->engine.regs,
+ 			     SUN8I_MIXER_CHAN_VI_LAYER_TOP_LADDR(ch_base,
+ 								 overlay, i),
+-			     lower_32_bits(paddr));
++			     lower_32_bits(dma_addr));
+ 	}
+ 
+ 	return 0;
 diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-index dd3c6a606ae2..cdd9a64f9736 100644
+index 6f3fa37b9ca0..ad93acc9abd2 100644
 --- a/drivers/gpu/drm/tidss/tidss_dispc.c
 +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-@@ -24,7 +24,7 @@
+@@ -1954,7 +1954,7 @@ int dispc_plane_check(struct dispc_device *dispc, u32 hw_plane,
+ }
  
- #include <drm/drm_blend.h>
- #include <drm/drm_fourcc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_panel.h>
-@@ -1961,7 +1961,7 @@ dma_addr_t dispc_plane_state_paddr(const struct drm_plane_state *state)
- 	u32 x = state->src_x >> 16;
- 	u32 y = state->src_y >> 16;
+ static
+-dma_addr_t dispc_plane_state_paddr(const struct drm_plane_state *state)
++dma_addr_t dispc_plane_state_dma_addr(const struct drm_plane_state *state)
+ {
+ 	struct drm_framebuffer *fb = state->fb;
+ 	struct drm_gem_dma_object *gem;
+@@ -1963,7 +1963,7 @@ dma_addr_t dispc_plane_state_paddr(const struct drm_plane_state *state)
  
--	gem = drm_fb_cma_get_gem_obj(state->fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(state->fb, 0);
+ 	gem = drm_fb_dma_get_gem_obj(state->fb, 0);
  
- 	return gem->paddr + fb->offsets[0] + x * fb->format->cpp[0] +
+-	return gem->paddr + fb->offsets[0] + x * fb->format->cpp[0] +
++	return gem->dma_addr + fb->offsets[0] + x * fb->format->cpp[0] +
  		y * fb->pitches[0];
-@@ -1978,7 +1978,7 @@ dma_addr_t dispc_plane_state_p_uv_addr(const struct drm_plane_state *state)
- 	if (WARN_ON(state->fb->format->num_planes != 2))
- 		return 0;
+ }
  
--	gem = drm_fb_cma_get_gem_obj(fb, 1);
-+	gem = drm_fb_dma_get_gem_obj(fb, 1);
+@@ -1980,7 +1980,7 @@ dma_addr_t dispc_plane_state_p_uv_addr(const struct drm_plane_state *state)
  
- 	return gem->paddr + fb->offsets[1] +
+ 	gem = drm_fb_dma_get_gem_obj(fb, 1);
+ 
+-	return gem->paddr + fb->offsets[1] +
++	return gem->dma_addr + fb->offsets[1] +
  		(x * fb->format->cpp[1] / fb->format->hsub) +
-diff --git a/drivers/gpu/drm/tidss/tidss_kms.c b/drivers/gpu/drm/tidss/tidss_kms.c
-index 666e527a0acf..8b9dd5e90021 100644
---- a/drivers/gpu/drm/tidss/tidss_kms.c
-+++ b/drivers/gpu/drm/tidss/tidss_kms.c
-@@ -10,7 +10,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
- #include <drm/drm_crtc_helper.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_of.h>
-diff --git a/drivers/gpu/drm/tidss/tidss_plane.c b/drivers/gpu/drm/tidss/tidss_plane.c
-index 68a85a94ffcb..162c32e97ea5 100644
---- a/drivers/gpu/drm/tidss/tidss_plane.c
-+++ b/drivers/gpu/drm/tidss/tidss_plane.c
-@@ -11,7 +11,7 @@
- #include <drm/drm_crtc_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_gem_atomic_helper.h>
+ 		(y * fb->pitches[1] / fb->format->vsub);
+ }
+@@ -1993,17 +1993,17 @@ int dispc_plane_setup(struct dispc_device *dispc, u32 hw_plane,
+ 	u32 fourcc = state->fb->format->format;
+ 	u16 cpp = state->fb->format->cpp[0];
+ 	u32 fb_width = state->fb->pitches[0] / cpp;
+-	dma_addr_t paddr = dispc_plane_state_paddr(state);
++	dma_addr_t dma_addr = dispc_plane_state_dma_addr(state);
+ 	struct dispc_scaling_params scale;
  
- #include "tidss_crtc.h"
+ 	dispc_vid_calc_scaling(dispc, state, &scale, lite);
+ 
+ 	dispc_plane_set_pixel_format(dispc, hw_plane, fourcc);
+ 
+-	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_0, paddr & 0xffffffff);
+-	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_EXT_0, (u64)paddr >> 32);
+-	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_1, paddr & 0xffffffff);
+-	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_EXT_1, (u64)paddr >> 32);
++	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_0, dma_addr & 0xffffffff);
++	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_EXT_0, (u64)dma_addr >> 32);
++	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_1, dma_addr & 0xffffffff);
++	dispc_vid_write(dispc, hw_plane, DISPC_VID_BA_EXT_1, (u64)dma_addr >> 32);
+ 
+ 	dispc_vid_write(dispc, hw_plane, DISPC_VID_PICTURE_SIZE,
+ 			(scale.in_w - 1) | ((scale.in_h - 1) << 16));
 diff --git a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
-index 509fbae8c9a6..bd4f52242c0a 100644
+index 9034b9778539..b5f60b2b2d0e 100644
 --- a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
 +++ b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
-@@ -12,7 +12,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_crtc.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -68,7 +68,7 @@ static void set_scanout(struct drm_crtc *crtc, struct drm_framebuffer *fb)
- 	dma_addr_t start, end;
- 	u64 dma_base_and_ceiling;
+@@ -70,7 +70,7 @@ static void set_scanout(struct drm_crtc *crtc, struct drm_framebuffer *fb)
  
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
  
- 	start = gem->paddr + fb->offsets[0] +
+-	start = gem->paddr + fb->offsets[0] +
++	start = gem->dma_addr + fb->offsets[0] +
  		crtc->y * fb->pitches[0] +
+ 		crtc->x * fb->format->cpp[0];
+ 
 diff --git a/drivers/gpu/drm/tiny/arcpgu.c b/drivers/gpu/drm/tiny/arcpgu.c
-index 7461cb401407..cdf320c547fb 100644
+index 21d9e0bd67ba..bb302a3fd6b5 100644
 --- a/drivers/gpu/drm/tiny/arcpgu.c
 +++ b/drivers/gpu/drm/tiny/arcpgu.c
-@@ -11,7 +11,7 @@
- #include <drm/drm_device.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_edid.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
-@@ -226,7 +226,7 @@ static void arc_pgu_update(struct drm_simple_display_pipe *pipe,
- 		return;
+@@ -227,7 +227,7 @@ static void arc_pgu_update(struct drm_simple_display_pipe *pipe,
  
  	arcpgu = pipe_to_arcpgu_priv(pipe);
--	gem = drm_fb_cma_get_gem_obj(pipe->plane.state->fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(pipe->plane.state->fb, 0);
- 	arc_pgu_write(arcpgu, ARCPGU_REG_BUF0_ADDR, gem->paddr);
+ 	gem = drm_fb_dma_get_gem_obj(pipe->plane.state->fb, 0);
+-	arc_pgu_write(arcpgu, ARCPGU_REG_BUF0_ADDR, gem->paddr);
++	arc_pgu_write(arcpgu, ARCPGU_REG_BUF0_ADDR, gem->dma_addr);
  }
  
-diff --git a/drivers/gpu/drm/tiny/ili9225.c b/drivers/gpu/drm/tiny/ili9225.c
-index 8d686eecd5f4..fc73ffa46a19 100644
---- a/drivers/gpu/drm/tiny/ili9225.c
-+++ b/drivers/gpu/drm/tiny/ili9225.c
-@@ -19,7 +19,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
-@@ -78,7 +78,7 @@ static inline int ili9225_command(struct mipi_dbi *dbi, u8 cmd, u16 data)
+ static const struct drm_simple_display_pipe_funcs arc_pgu_pipe_funcs = {
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index 93af99de397f..d17272889727 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -297,7 +297,7 @@ static void vc4_bo_purge(struct drm_gem_object *obj)
  
- static void ili9225_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect)
- {
--	struct drm_gem_cma_object *cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 	struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(fb->dev);
- 	unsigned int height = rect->y2 - rect->y1;
- 	unsigned int width = rect->x2 - rect->x1;
-diff --git a/drivers/gpu/drm/tiny/repaper.c b/drivers/gpu/drm/tiny/repaper.c
-index 013790c45d0a..6d3b5b3cb955 100644
---- a/drivers/gpu/drm/tiny/repaper.c
-+++ b/drivers/gpu/drm/tiny/repaper.c
-@@ -25,7 +25,7 @@
- #include <drm/drm_connector.h>
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_format_helper.h>
- #include <drm/drm_framebuffer.h>
-@@ -511,7 +511,7 @@ static void repaper_get_temperature(struct repaper_epd *epd)
+ 	drm_vma_node_unmap(&obj->vma_node, dev->anon_inode->i_mapping);
  
- static int repaper_fb_dirty(struct drm_framebuffer *fb)
- {
--	struct drm_gem_cma_object *cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 	struct repaper_epd *epd = drm_to_epd(fb->dev);
- 	struct drm_rect clip;
- 	int idx, ret = 0;
-diff --git a/drivers/gpu/drm/tiny/st7586.c b/drivers/gpu/drm/tiny/st7586.c
-index 8eddb020c43e..b1584b362c79 100644
---- a/drivers/gpu/drm/tiny/st7586.c
-+++ b/drivers/gpu/drm/tiny/st7586.c
-@@ -15,7 +15,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_format_helper.h>
- #include <drm/drm_framebuffer.h>
-@@ -92,7 +92,7 @@ static void st7586_xrgb8888_to_gray332(u8 *dst, void *vaddr,
- static int st7586_buf_copy(void *dst, struct drm_framebuffer *fb,
- 			   struct drm_rect *clip)
- {
--	struct drm_gem_cma_object *cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *cma_obj = drm_fb_dma_get_gem_obj(fb, 0);
- 	void *src = cma_obj->vaddr;
- 	int ret = 0;
- 
-diff --git a/drivers/gpu/drm/tve200/tve200_display.c b/drivers/gpu/drm/tve200/tve200_display.c
-index 771bad881714..6647aab8a25e 100644
---- a/drivers/gpu/drm/tve200/tve200_display.c
-+++ b/drivers/gpu/drm/tve200/tve200_display.c
-@@ -15,7 +15,7 @@
- #include <linux/of_graph.h>
- #include <linux/delay.h>
- 
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -90,7 +90,7 @@ static int tve200_display_check(struct drm_simple_display_pipe *pipe,
- 	}
- 
- 	if (fb) {
--		u32 offset = drm_fb_cma_get_gem_addr(fb, pstate, 0);
-+		u32 offset = drm_fb_dma_get_gem_addr(fb, pstate, 0);
- 
- 		/* FB base address must be dword aligned. */
- 		if (offset & 3) {
-@@ -267,14 +267,14 @@ static void tve200_display_update(struct drm_simple_display_pipe *pipe,
- 
- 	if (fb) {
- 		/* For RGB, the Y component is used as base address */
--		writel(drm_fb_cma_get_gem_addr(fb, pstate, 0),
-+		writel(drm_fb_dma_get_gem_addr(fb, pstate, 0),
- 		       priv->regs + TVE200_Y_FRAME_BASE_ADDR);
- 
- 		/* For three plane YUV we need two more addresses */
- 		if (fb->format->format == DRM_FORMAT_YUV420) {
--			writel(drm_fb_cma_get_gem_addr(fb, pstate, 1),
-+			writel(drm_fb_dma_get_gem_addr(fb, pstate, 1),
- 			       priv->regs + TVE200_U_FRAME_BASE_ADDR);
--			writel(drm_fb_cma_get_gem_addr(fb, pstate, 2),
-+			writel(drm_fb_dma_get_gem_addr(fb, pstate, 2),
- 			       priv->regs + TVE200_V_FRAME_BASE_ADDR);
+-	dma_free_wc(dev->dev, obj->size, bo->base.vaddr, bo->base.paddr);
++	dma_free_wc(dev->dev, obj->size, bo->base.vaddr, bo->base.dma_addr);
+ 	bo->base.vaddr = NULL;
+ 	bo->madv = __VC4_MADV_PURGED;
+ }
+diff --git a/drivers/gpu/drm/vc4/vc4_gem.c b/drivers/gpu/drm/vc4/vc4_gem.c
+index d9a19204e944..950f799ba605 100644
+--- a/drivers/gpu/drm/vc4/vc4_gem.c
++++ b/drivers/gpu/drm/vc4/vc4_gem.c
+@@ -123,7 +123,7 @@ vc4_get_hang_state_ioctl(struct drm_device *dev, void *data,
+ 			goto err_delete_handle;
  		}
+ 		bo_state[i].handle = handle;
+-		bo_state[i].paddr = vc4_bo->base.paddr;
++		bo_state[i].paddr = vc4_bo->base.dma_addr;
+ 		bo_state[i].size = vc4_bo->base.base.size;
  	}
-diff --git a/drivers/gpu/drm/tve200/tve200_drv.c b/drivers/gpu/drm/tve200/tve200_drv.c
-index 6d9d2921abf4..db8129c9ade8 100644
---- a/drivers/gpu/drm/tve200/tve200_drv.c
-+++ b/drivers/gpu/drm/tve200/tve200_drv.c
-@@ -39,7 +39,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
-index 8c7f910daa28..1e7bb1583953 100644
---- a/drivers/gpu/drm/v3d/v3d_drv.c
-+++ b/drivers/gpu/drm/v3d/v3d_drv.c
-@@ -22,7 +22,7 @@
- #include <linux/reset.h>
  
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_managed.h>
- #include <uapi/drm/v3d_drm.h>
-diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
-index fb95ed1e3515..8fd0b93c3457 100644
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -37,7 +37,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_atomic_uapi.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_print.h>
- #include <drm/drm_probe_helper.h>
-@@ -817,7 +817,7 @@ vc4_async_page_flip_complete(struct vc4_seqno_cb *cb)
- 		struct drm_gem_cma_object *cma_bo;
- 		struct vc4_bo *bo;
+@@ -902,16 +902,16 @@ vc4_get_bcl(struct drm_device *dev, struct vc4_exec_info *exec)
+ 	list_add_tail(&to_vc4_bo(&exec->exec_bo->base)->unref_head,
+ 		      &exec->unref_list);
  
--		cma_bo = drm_fb_cma_get_gem_obj(flip_state->old_fb, 0);
-+		cma_bo = drm_fb_dma_get_gem_obj(flip_state->old_fb, 0);
- 		bo = to_vc4_bo(&cma_bo->base);
- 		vc4_bo_dec_usecnt(bo);
- 		drm_framebuffer_put(flip_state->old_fb);
-@@ -841,7 +841,7 @@ static int vc4_async_page_flip(struct drm_crtc *crtc,
- 	struct drm_plane *plane = crtc->primary;
- 	int ret = 0;
- 	struct vc4_async_flip_state *flip_state;
--	struct drm_gem_cma_object *cma_bo = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *cma_bo = drm_fb_dma_get_gem_obj(fb, 0);
- 	struct vc4_bo *bo = to_vc4_bo(&cma_bo->base);
+-	exec->ct0ca = exec->exec_bo->paddr + bin_offset;
++	exec->ct0ca = exec->exec_bo->dma_addr + bin_offset;
  
- 	/* Increment the BO usecnt here, so that we never end up with an
-diff --git a/drivers/gpu/drm/vc4/vc4_drv.c b/drivers/gpu/drm/vc4/vc4_drv.c
-index 680eaef7287f..2c789fe8e7ad 100644
---- a/drivers/gpu/drm/vc4/vc4_drv.c
-+++ b/drivers/gpu/drm/vc4/vc4_drv.c
-@@ -33,7 +33,7 @@
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_drv.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_vblank.h>
+ 	exec->bin_u = bin;
  
+ 	exec->shader_rec_v = exec->exec_bo->vaddr + shader_rec_offset;
+-	exec->shader_rec_p = exec->exec_bo->paddr + shader_rec_offset;
++	exec->shader_rec_p = exec->exec_bo->dma_addr + shader_rec_offset;
+ 	exec->shader_rec_size = args->shader_rec_size;
+ 
+ 	exec->uniforms_v = exec->exec_bo->vaddr + uniforms_offset;
+-	exec->uniforms_p = exec->exec_bo->paddr + uniforms_offset;
++	exec->uniforms_p = exec->exec_bo->dma_addr + uniforms_offset;
+ 	exec->uniforms_size = args->uniforms_size;
+ 
+ 	ret = vc4_validate_bin_cl(dev,
+diff --git a/drivers/gpu/drm/vc4/vc4_irq.c b/drivers/gpu/drm/vc4/vc4_irq.c
+index 4342fb43e8c1..f3a71932736d 100644
+--- a/drivers/gpu/drm/vc4/vc4_irq.c
++++ b/drivers/gpu/drm/vc4/vc4_irq.c
+@@ -105,7 +105,7 @@ vc4_overflow_mem_work(struct work_struct *work)
+ 	}
+ 	vc4->bin_alloc_overflow = BIT(bin_bo_slot);
+ 
+-	V3D_WRITE(V3D_BPOA, bo->base.paddr + bin_bo_slot * vc4->bin_alloc_size);
++	V3D_WRITE(V3D_BPOA, bo->base.dma_addr + bin_bo_slot * vc4->bin_alloc_size);
+ 	V3D_WRITE(V3D_BPOS, bo->base.base.size);
+ 	V3D_WRITE(V3D_INTCTL, V3D_INT_OUTOMEM);
+ 	V3D_WRITE(V3D_INTENA, V3D_INT_OUTOMEM);
 diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index 5507f2cd7a27..75b07e6b3103 100644
+index ad188cbf213d..fb9fcde28b72 100644
 --- a/drivers/gpu/drm/vc4/vc4_plane.c
 +++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -19,7 +19,7 @@
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_atomic_uapi.h>
- #include <drm/drm_blend.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_gem_atomic_helper.h>
-@@ -340,7 +340,7 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
+@@ -360,7 +360,7 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
+ 		return ret;
+ 
+ 	for (i = 0; i < num_planes; i++)
+-		vc4_state->offsets[i] = bo->paddr + fb->offsets[i];
++		vc4_state->offsets[i] = bo->dma_addr + fb->offsets[i];
+ 
+ 	/*
+ 	 * We don't support subpixel source positioning for scaling,
+@@ -1251,7 +1251,7 @@ void vc4_plane_async_set_fb(struct drm_plane *plane, struct drm_framebuffer *fb)
+ 	 * because this is only called on the primary plane.
+ 	 */
+ 	WARN_ON_ONCE(plane->state->crtc_x < 0 || plane->state->crtc_y < 0);
+-	addr = bo->paddr + fb->offsets[0];
++	addr = bo->dma_addr + fb->offsets[0];
+ 
+ 	/* Write the new address into the hardware immediately.  The
+ 	 * scanout will start from this address as soon as the FIFO
+diff --git a/drivers/gpu/drm/vc4/vc4_render_cl.c b/drivers/gpu/drm/vc4/vc4_render_cl.c
+index de1c6425513d..e69c6d1d9185 100644
+--- a/drivers/gpu/drm/vc4/vc4_render_cl.c
++++ b/drivers/gpu/drm/vc4/vc4_render_cl.c
+@@ -101,7 +101,7 @@ static uint32_t vc4_full_res_offset(struct vc4_exec_info *exec,
+ 				    struct drm_vc4_submit_rcl_surface *surf,
+ 				    uint8_t x, uint8_t y)
  {
- 	struct vc4_plane_state *vc4_state = to_vc4_plane_state(state);
- 	struct drm_framebuffer *fb = state->fb;
--	struct drm_gem_cma_object *bo = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *bo = drm_fb_dma_get_gem_obj(fb, 0);
- 	int num_planes = fb->format->num_planes;
- 	struct drm_crtc_state *crtc_state;
- 	u32 h_subsample = fb->format->hsub;
-@@ -1244,7 +1244,7 @@ u32 vc4_plane_dlist_size(const struct drm_plane_state *state)
- void vc4_plane_async_set_fb(struct drm_plane *plane, struct drm_framebuffer *fb)
- {
- 	struct vc4_plane_state *vc4_state = to_vc4_plane_state(plane->state);
--	struct drm_gem_cma_object *bo = drm_fb_cma_get_gem_obj(fb, 0);
-+	struct drm_gem_cma_object *bo = drm_fb_dma_get_gem_obj(fb, 0);
- 	uint32_t addr;
- 
- 	/* We're skipping the address adjustment for negative origin,
-@@ -1384,7 +1384,7 @@ static int vc4_prepare_fb(struct drm_plane *plane,
- 	if (!state->fb)
- 		return 0;
- 
--	bo = to_vc4_bo(&drm_fb_cma_get_gem_obj(state->fb, 0)->base);
-+	bo = to_vc4_bo(&drm_fb_dma_get_gem_obj(state->fb, 0)->base);
- 
- 	drm_gem_plane_helper_prepare_fb(plane, state);
- 
-@@ -1402,7 +1402,7 @@ static void vc4_cleanup_fb(struct drm_plane *plane,
- 	if (plane->state->fb == state->fb || !state->fb)
- 		return;
- 
--	bo = to_vc4_bo(&drm_fb_cma_get_gem_obj(state->fb, 0)->base);
-+	bo = to_vc4_bo(&drm_fb_dma_get_gem_obj(state->fb, 0)->base);
- 	vc4_bo_dec_usecnt(bo);
+-	return bo->paddr + surf->offset + VC4_TILE_BUFFER_SIZE *
++	return bo->dma_addr + surf->offset + VC4_TILE_BUFFER_SIZE *
+ 		(DIV_ROUND_UP(exec->args->width, 32) * y + x);
  }
  
+@@ -142,7 +142,7 @@ static void emit_tile(struct vc4_exec_info *exec,
+ 		} else {
+ 			rcl_u8(setup, VC4_PACKET_LOAD_TILE_BUFFER_GENERAL);
+ 			rcl_u16(setup, args->color_read.bits);
+-			rcl_u32(setup, setup->color_read->paddr +
++			rcl_u32(setup, setup->color_read->dma_addr +
+ 				args->color_read.offset);
+ 		}
+ 	}
+@@ -164,7 +164,7 @@ static void emit_tile(struct vc4_exec_info *exec,
+ 		} else {
+ 			rcl_u8(setup, VC4_PACKET_LOAD_TILE_BUFFER_GENERAL);
+ 			rcl_u16(setup, args->zs_read.bits);
+-			rcl_u32(setup, setup->zs_read->paddr +
++			rcl_u32(setup, setup->zs_read->dma_addr +
+ 				args->zs_read.offset);
+ 		}
+ 	}
+@@ -232,7 +232,7 @@ static void emit_tile(struct vc4_exec_info *exec,
+ 			(last_tile_write ?
+ 			 0 : VC4_STORE_TILE_BUFFER_DISABLE_COLOR_CLEAR));
+ 		rcl_u32(setup,
+-			(setup->zs_write->paddr + args->zs_write.offset) |
++			(setup->zs_write->dma_addr + args->zs_write.offset) |
+ 			((last && last_tile_write) ?
+ 			 VC4_LOADSTORE_TILE_BUFFER_EOF : 0));
+ 	}
+@@ -355,7 +355,7 @@ static int vc4_create_rcl_bo(struct drm_device *dev, struct vc4_exec_info *exec,
+ 
+ 	rcl_u8(setup, VC4_PACKET_TILE_RENDERING_MODE_CONFIG);
+ 	rcl_u32(setup,
+-		(setup->color_write ? (setup->color_write->paddr +
++		(setup->color_write ? (setup->color_write->dma_addr +
+ 				       args->color_write.offset) :
+ 		 0));
+ 	rcl_u16(setup, args->width);
+@@ -374,8 +374,8 @@ static int vc4_create_rcl_bo(struct drm_device *dev, struct vc4_exec_info *exec,
+ 	}
+ 
+ 	BUG_ON(setup->next_offset != size);
+-	exec->ct1ca = setup->rcl->paddr;
+-	exec->ct1ea = setup->rcl->paddr + setup->next_offset;
++	exec->ct1ca = setup->rcl->dma_addr;
++	exec->ct1ea = setup->rcl->dma_addr + setup->next_offset;
+ 
+ 	return 0;
+ }
 diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
-index d20b0bc51a18..51c7c729e211 100644
+index c96a7bf18c60..36e79864ba6c 100644
 --- a/drivers/gpu/drm/vc4/vc4_txp.c
 +++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -16,7 +16,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_edid.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_panel.h>
-@@ -312,7 +312,7 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
- 		 */
+@@ -313,7 +313,7 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
  		ctrl |= TXP_ALPHA_INVERT;
  
--	gem = drm_fb_cma_get_gem_obj(fb, 0);
-+	gem = drm_fb_dma_get_gem_obj(fb, 0);
- 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
+ 	gem = drm_fb_dma_get_gem_obj(fb, 0);
+-	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
++	TXP_WRITE(TXP_DST_PTR, gem->dma_addr + fb->offsets[0]);
  	TXP_WRITE(TXP_DST_PITCH, fb->pitches[0]);
  	TXP_WRITE(TXP_DIM,
+ 		  VC4_SET_FIELD(mode->hdisplay, TXP_WIDTH) |
+diff --git a/drivers/gpu/drm/vc4/vc4_v3d.c b/drivers/gpu/drm/vc4/vc4_v3d.c
+index 7976aa10aff6..1864c92f3c85 100644
+--- a/drivers/gpu/drm/vc4/vc4_v3d.c
++++ b/drivers/gpu/drm/vc4/vc4_v3d.c
+@@ -259,8 +259,8 @@ static int bin_bo_alloc(struct vc4_dev *vc4)
+ 		}
+ 
+ 		/* Check if this BO won't trigger the addressing bug. */
+-		if ((bo->base.paddr & 0xf0000000) ==
+-		    ((bo->base.paddr + bo->base.base.size - 1) & 0xf0000000)) {
++		if ((bo->base.dma_addr & 0xf0000000) ==
++		    ((bo->base.dma_addr + bo->base.base.size - 1) & 0xf0000000)) {
+ 			vc4->bin_bo = bo;
+ 
+ 			/* Set up for allocating 512KB chunks of
+diff --git a/drivers/gpu/drm/vc4/vc4_validate.c b/drivers/gpu/drm/vc4/vc4_validate.c
+index f016615d4dbc..fdefcd7c1117 100644
+--- a/drivers/gpu/drm/vc4/vc4_validate.c
++++ b/drivers/gpu/drm/vc4/vc4_validate.c
+@@ -286,7 +286,7 @@ validate_indexed_prim_list(VALIDATE_ARGS)
+ 		return -EINVAL;
+ 	}
+ 
+-	*(uint32_t *)(validated + 5) = ib->paddr + offset;
++	*(uint32_t *)(validated + 5) = ib->dma_addr + offset;
+ 
+ 	return 0;
+ }
+@@ -392,7 +392,7 @@ validate_tile_binning_config(VALIDATE_ARGS)
+ 	 * free when the job completes rendering.
+ 	 */
+ 	exec->bin_slots |= BIT(bin_slot);
+-	bin_addr = vc4->bin_bo->base.paddr + bin_slot * vc4->bin_alloc_size;
++	bin_addr = vc4->bin_bo->base.dma_addr + bin_slot * vc4->bin_alloc_size;
+ 
+ 	/* The tile state data array is 48 bytes per tile, and we put it at
+ 	 * the start of a BO containing both it and the tile alloc.
+@@ -596,7 +596,7 @@ reloc_tex(struct vc4_exec_info *exec,
+ 				  "outside of UBO\n");
+ 			goto fail;
+ 		}
+-		*validated_p0 = tex->paddr + p0;
++		*validated_p0 = tex->dma_addr + p0;
+ 		return true;
+ 	}
+ 
+@@ -724,7 +724,7 @@ reloc_tex(struct vc4_exec_info *exec,
+ 		offset -= level_size;
+ 	}
+ 
+-	*validated_p0 = tex->paddr + p0;
++	*validated_p0 = tex->dma_addr + p0;
+ 
+ 	if (is_cs) {
+ 		exec->bin_dep_seqno = max(exec->bin_dep_seqno,
+@@ -828,7 +828,7 @@ validate_gl_shader_rec(struct drm_device *dev,
+ 		void *uniform_data_u;
+ 		uint32_t tex, uni;
+ 
+-		*(uint32_t *)(pkt_v + o) = bo[i]->paddr + src_offset;
++		*(uint32_t *)(pkt_v + o) = bo[i]->dma_addr + src_offset;
+ 
+ 		if (src_offset != 0) {
+ 			DRM_DEBUG("Shaders must be at offset 0 of "
+@@ -916,7 +916,7 @@ validate_gl_shader_rec(struct drm_device *dev,
+ 			}
+ 		}
+ 
+-		*(uint32_t *)(pkt_v + o) = vbo->paddr + offset;
++		*(uint32_t *)(pkt_v + o) = vbo->dma_addr + offset;
+ 	}
+ 
+ 	return 0;
 diff --git a/drivers/gpu/drm/xlnx/zynqmp_disp.c b/drivers/gpu/drm/xlnx/zynqmp_disp.c
-index cc32aa89cf8f..3d93f0985ea8 100644
+index 3d93f0985ea8..f0bb3c0e4123 100644
 --- a/drivers/gpu/drm/xlnx/zynqmp_disp.c
 +++ b/drivers/gpu/drm/xlnx/zynqmp_disp.c
-@@ -15,7 +15,7 @@
- #include <drm/drm_blend.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_device.h>
--#include <drm/drm_fb_cma_helper.h>
-+#include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_framebuffer.h>
- #include <drm/drm_managed.h>
-@@ -1101,7 +1101,7 @@ static int zynqmp_disp_layer_update(struct zynqmp_disp_layer *layer,
+@@ -1099,14 +1099,14 @@ static int zynqmp_disp_layer_update(struct zynqmp_disp_layer *layer,
+ 		unsigned int height = state->crtc_h / (i ? info->vsub : 1);
+ 		struct zynqmp_disp_layer_dma *dma = &layer->dmas[i];
  		struct dma_async_tx_descriptor *desc;
- 		dma_addr_t paddr;
+-		dma_addr_t paddr;
++		dma_addr_t dma_addr;
  
--		paddr = drm_fb_cma_get_gem_addr(state->fb, state, i);
-+		paddr = drm_fb_dma_get_gem_addr(state->fb, state, i);
+-		paddr = drm_fb_dma_get_gem_addr(state->fb, state, i);
++		dma_addr = drm_fb_dma_get_gem_addr(state->fb, state, i);
  
  		dma->xt.numf = height;
  		dma->sgl.size = width * info->cpp[i];
-diff --git a/include/drm/drm_fb_cma_helper.h b/include/drm/drm_fb_dma_helper.h
-similarity index 56%
-rename from include/drm/drm_fb_cma_helper.h
-rename to include/drm/drm_fb_dma_helper.h
-index 6447e34528f8..05f657363b30 100644
---- a/include/drm/drm_fb_cma_helper.h
-+++ b/include/drm/drm_fb_dma_helper.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __DRM_FB_CMA_HELPER_H__
--#define __DRM_FB_CMA_HELPER_H__
-+#ifndef __DRM_FB_DMA_HELPER_H__
-+#define __DRM_FB_DMA_HELPER_H__
+ 		dma->sgl.icg = state->fb->pitches[i] - dma->sgl.size;
+-		dma->xt.src_start = paddr;
++		dma->xt.src_start = dma_addr;
+ 		dma->xt.frame_size = 1;
+ 		dma->xt.dir = DMA_MEM_TO_DEV;
+ 		dma->xt.src_sgl = true;
+diff --git a/include/drm/drm_gem_dma_helper.h b/include/drm/drm_gem_dma_helper.h
+index 82805069b37a..8a043235dad8 100644
+--- a/include/drm/drm_gem_dma_helper.h
++++ b/include/drm/drm_gem_dma_helper.h
+@@ -11,7 +11,7 @@ struct drm_mode_create_dumb;
+ /**
+  * struct drm_gem_dma_object - GEM object backed by DMA memory allocations
+  * @base: base GEM object
+- * @paddr: DMA address of the backing memory
++ * @dma_addr: DMA address of the backing memory
+  * @sgt: scatter/gather table for imported PRIME buffers. The table can have
+  *       more than one entry but they are guaranteed to have contiguous
+  *       DMA addresses.
+@@ -20,7 +20,7 @@ struct drm_mode_create_dumb;
+  */
+ struct drm_gem_dma_object {
+ 	struct drm_gem_object base;
+-	dma_addr_t paddr;
++	dma_addr_t dma_addr;
+ 	struct sg_table *sgt;
  
- #include <linux/types.h>
- 
-@@ -8,14 +8,14 @@ struct drm_device;
- struct drm_framebuffer;
- struct drm_plane_state;
- 
--struct drm_gem_cma_object *drm_fb_cma_get_gem_obj(struct drm_framebuffer *fb,
-+struct drm_gem_cma_object *drm_fb_dma_get_gem_obj(struct drm_framebuffer *fb,
- 	unsigned int plane);
- 
--dma_addr_t drm_fb_cma_get_gem_addr(struct drm_framebuffer *fb,
-+dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
- 				   struct drm_plane_state *state,
- 				   unsigned int plane);
- 
--void drm_fb_cma_sync_non_coherent(struct drm_device *drm,
-+void drm_fb_dma_sync_non_coherent(struct drm_device *drm,
- 				  struct drm_plane_state *old_state,
- 				  struct drm_plane_state *state);
- 
+ 	/* For objects with DMA memory allocated by GEM DMA */
 -- 
 2.36.1
 

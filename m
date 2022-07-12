@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559D257296B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3557296F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiGLWl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S233713AbiGLWmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiGLWl4 (ORCPT
+        with ESMTP id S230502AbiGLWmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:41:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A132AC9107;
-        Tue, 12 Jul 2022 15:41:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F07B0B81C02;
-        Tue, 12 Jul 2022 22:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62AFC3411C;
-        Tue, 12 Jul 2022 22:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657665712;
-        bh=gcpS5IjNq7vPIAW2z9IP0oEJtHOCjjqDUGD6XXcRb4I=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=R+hd0m4+30tYLrDZDH9CrNlEFC5lAhUQyLS7wjMyl8XzQ92GbiAxaNxPUQnsv2UY4
-         gPLU/KDMTI9XRD7tzSVbBGBBZr9KC/Yszy4Ru7ITXq+nunbdc/ldb0v6OJtUiGaPN5
-         oq67o1iKNe0E3zHP7vpe5pAPPFjnzqIzNDxqnKQlJ2aCWA1KQWVOTMSS9ndIieQA68
-         soC5ONAQKzjNjvdIWFfASZ0w6aCEVwt5u80EjhPhLMERerlRJV4lPMQUKVAeGis0pa
-         HucyIeO3o/OVuHSddP+Mv5COpsSXUgQMtz+6nQ5T6/Zgt7dh/q+yHyqb44WctXxg3c
-         VZAo+ARZ1wrdg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3C0C25C08C7; Tue, 12 Jul 2022 15:41:52 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 15:41:52 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
-Message-ID: <20220712224152.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-3-joel@joelfernandes.org>
- <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <Yso4690g+lI/8eJS@google.com>
- <20220710160330.GI1790663@paulmck-ThinkPad-P17-Gen-1>
- <aef0f8a6-cde6-18f3-16ab-7e07a4413f31@joelfernandes.org>
- <20220712210406.GF1790663@paulmck-ThinkPad-P17-Gen-1>
- <8441c152-2953-3cb1-c585-b3b0d48a363f@joelfernandes.org>
+        Tue, 12 Jul 2022 18:42:51 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE28C9120
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:42:51 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y9so8658173pff.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EOQK1yQsd3sxXf3ifqolSQDmS565G3PBpmyW4cpx2HA=;
+        b=MSBeQK///1NrBGbw7DV7tnTXdkZYNFjowCKH7HWWo6GHJtRs2JBzAZOUS8wJPeS3uB
+         FdmbaYtn+hTpf1LGNZgEyeUWRG1cVzTz/1oEyLDknyKU4hUPvpIGJ+X4vRY3nURrKaay
+         11uzpc4OgaK1zQf7vNDHPl0glTe00vOyLDwPjtJLPoJSgRslvY7XqKtECfR51PBum7Vz
+         +hrGteaVNQuO34sksAm9/YBxtGc0pA3exzkgYaL3hFnNKNEJn3y4DsWBEdU8q+fmIgR9
+         0JZlBNgeX/nc44836d3Gy6EyMmJKZyLrer3qSJ861OHV3LL6WQVB1FeqbxasQjhsatFy
+         ILTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=EOQK1yQsd3sxXf3ifqolSQDmS565G3PBpmyW4cpx2HA=;
+        b=oUoRbbde5feQ8zxo9d4Xz+szrS/JDXxBBgdjJ8Y0P+ym/JGqZldPShDBkCiSnY3ZTP
+         2uewqZc+zXSQseCWjYcKhcGuDZtyqUvdiOPokCKu+FtsnXzLAmbg7X0avDixh+Lcrbsm
+         cHQrf0nY7Hxu6sH/H1hhoDom7r7c10h8Pou+AjWXN8EDiYLnzCCpMxmHIxEdsYjyAMl6
+         0IpKqS+4JQ1pv0GyiPUUW2rqZy0P6T+p2FhQD9dHdvjWFO8Pf/7lGZRYYbfMBGyYuuTo
+         XpsxleQ+1ZC9Z1lehF00hOwVsMVcRyMuLRp2XiB2CIR30p6DgY7o6b86LuyLud/S878d
+         08qw==
+X-Gm-Message-State: AJIora84NxEfdEgd5NhlyAK0pXvIDL4d9IfyA2EWHkqxeAxJ9k9Ih3IR
+        rduZ9ao7WhQkuSnNPxAS5FY=
+X-Google-Smtp-Source: AGRyM1tLJIcznWizk9iJQMKwRvzQyZlrxC0AQCyjI0CRaOuIOSRtFl2r3Pu3cEB73Omx8SddXOOy/g==
+X-Received: by 2002:a63:6c42:0:b0:3fe:465:7a71 with SMTP id h63-20020a636c42000000b003fe04657a71mr398029pgc.101.1657665770859;
+        Tue, 12 Jul 2022 15:42:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 6-20020a631446000000b00415fcde23a4sm4552956pgu.27.2022.07.12.15.42.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 15:42:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Leo Li <sunpeng.li@amd.com>
+Subject: [PATCH] drm/amd/display: Enable building new display engine with KCOV enabled
+Date:   Tue, 12 Jul 2022 15:42:47 -0700
+Message-Id: <20220712224247.1950273-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8441c152-2953-3cb1-c585-b3b0d48a363f@joelfernandes.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:10:41PM -0400, Joel Fernandes wrote:
-> 
-> 
-> On 7/12/2022 5:04 PM, Paul E. McKenney wrote:
-> > On Tue, Jul 12, 2022 at 04:53:48PM -0400, Joel Fernandes wrote:
-> >>
-> >> On 7/10/2022 12:03 PM, Paul E. McKenney wrote:
-> >> [..]
-> >>>>>> +	// Note that if the bypass list has lazy CBs, and the main list is
-> >>>>>> +	// empty, and rhp happens to be non-lazy, then we end up flushing all
-> >>>>>> +	// the lazy CBs to the main list as well. That's the right thing to do,
-> >>>>>> +	// since we are kick-starting RCU GP processing anyway for the non-lazy
-> >>>>>> +	// one, we can just reuse that GP for the already queued-up lazy ones.
-> >>>>>> +	if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
-> >>>>>> +	    (lazy && n_lazy_cbs >= qhimark)) {
-> >>>>>>  		rcu_nocb_lock(rdp);
-> >>>>>>  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-> >>>>>>  		if (*was_alldone)
-> >>>>>>  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-> >>>>>> -					    TPS("FirstQ"));
-> >>>>>> -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
-> >>>>>> +					    lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
-> >>>>>> +		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
-> >>>>>
-> >>>>> The "false" here instead of "lazy" is because the caller is to do the
-> >>>>> enqueuing, correct?
-> >>>>
-> >>>> There is no difference between using false or lazy here, because the bypass
-> >>>> flush is not also enqueuing the lazy callback, right?
-> >>>>
-> >>>> We can also pass lazy instead of false if that's less confusing.
-> >>>>
-> >>>> Or maybe I missed the issue you're raising?
-> >>>
-> >>> I am mostly checking up on your intended meaning of "lazy" in various
-> >>> contexts.  It could mean only that the caller requested laziness, or in
-> >>> some cases it could mean that the callback actually will be lazy.
-> >>>
-> >>> I can rationalize the "false" above as a "don't care" in this case
-> >>> because (as you say) there is not callback.  In which case this code
-> >>> is OK as is, as long as the header comment for rcu_nocb_flush_bypass()
-> >>> clearly states that this parameter has meaning only when there really
-> >>> is a callback being queued.
-> >>
-> >> I decided to change this and the below to "lazy" variable instead of
-> >> true/false, as the code is cleaner and less confusing IMO. It makes
-> >> sense to me and in my testing it works fine. Hope that's Ok with you.
-> > 
-> > Sounds plausible.
-> > 
-> >> About changing the lazy length count to a flag, one drawback of doing
-> >> that is, say if there are some non-lazy CBs in the bypass list, then the
-> >> lazy shrinker will end up reporting an inaccurate count. Also
-> >> considering that it might be harder to add the count back later say if
-> >> we need it for tracing, I would say lets leave it as is. I will keep the
-> >> counter for v3 and we can discuss. Does that sound good to you?
-> > 
-> > You lost me on this one.  If there are any non-lazy callbacks, the whole
-> > bypass list is already being treated as non-lazy, right?  If so, then
-> > the lazy shrinker should report the full count if all callbacks are lazy,
-> > and should report none otherwise.  Or am I missing something here?
-> > 
-> 
-> That's one way to interpret it, another way is say there were a 1000
-> lazy CBs, and now 1 non-lazy came in. The shrinker could report the lazy
-> count as 0 per your interpretation. Yes its true they will get flushed
-> out in the next jiffie, but for that time instant, the number of lazy
-> CBs in the list is not zero! :) Yeah OK its a weak argument, still an
-> argument! ;-)
-> 
-> In any case, we saw the need for the length of the segcb lists to figure
-> out things via tracing, so I suspect we may need this in the future as
-> well, its a small cost so I would rather keep it if that's Ok with you! :)
+The new display engine uses floating point math, which is not supported
+by KCOV. Commit 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov
+is enabled") tried to work around the problem by disabling
+CONFIG_DRM_AMD_DC_DCN if KCOV_INSTRUMENT_ALL and KCOV_ENABLE_COMPARISONS
+are enabled. The result is that KCOV can not be enabled on systems which
+require this display engine. A much simpler and less invasive solution is
+to disable KCOV selectively when compiling the display enagine while
+keeping it enabled for the rest of the kernel.
 
-OK, being needed for tracing/diagnostics is a somewhat less weak argument...
+Fixes: 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov is enabled")
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Leo Li <sunpeng.li@amd.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/gpu/drm/amd/display/Kconfig     | 2 +-
+ drivers/gpu/drm/amd/display/dc/Makefile | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-Let's see what v3 looks like.
+diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+index b4029c0d5d8c..96cbc87f7b6b 100644
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@ -6,7 +6,7 @@ config DRM_AMD_DC
+ 	bool "AMD DC - Enable new display engine"
+ 	default y
+ 	select SND_HDA_COMPONENT if SND_HDA_CORE
+-	select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
++	select DRM_AMD_DC_DCN if (X86 || PPC64)
+ 	help
+ 	  Choose this option if you want to use the new display engine
+ 	  support for AMDGPU. This adds required support for Vega and
+diff --git a/drivers/gpu/drm/amd/display/dc/Makefile b/drivers/gpu/drm/amd/display/dc/Makefile
+index b4eca0236435..b801973749d2 100644
+--- a/drivers/gpu/drm/amd/display/dc/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/Makefile
+@@ -26,6 +26,9 @@
+ DC_LIBS = basics bios dml clk_mgr dce gpio irq link virtual
+ 
+ ifdef CONFIG_DRM_AMD_DC_DCN
++
++KCOV_INSTRUMENT := n
++
+ DC_LIBS += dcn20
+ DC_LIBS += dsc
+ DC_LIBS += dcn10
+-- 
+2.35.1
 
-							Thanx, Paul

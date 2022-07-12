@@ -2,121 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06C570EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F397E570EF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiGLA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S231166AbiGLA3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiGLA0a (ORCPT
+        with ESMTP id S229690AbiGLA31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:26:30 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395F22DA85;
-        Mon, 11 Jul 2022 17:26:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657585576; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mtb8jFe3/4+KkVb5dM6qz1JRAB7qefaldXT89p6pXK6rdhAIRyC5ZqAWeOEKLZ1IWKCuEgkZi2zBDUe12Nhfr/JdzYaBcjAFKVPqdnTntFyAB6XUgp3BQxG8saRVwkU4Lih2mFTYKjRBmKYTu+dhShXWYpPOt2KUY3j8OHAdaWo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657585576; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=jFBczO4Z9TfDcxdB0ArqJHoDxH8ici/TI/3XLJb7X3M=; 
-        b=cdZcTbIsOwFaXI2jkalL2uFsW/IBksDLq9RALhunhNE69mFkn9TliQ7HZ2QNcanWnH/JzCon1YZK5cvBziPhu5Cqn72ZPd7q4640LwIRQNaXeTbBXOII0RXZkOiRh3qoxftIyFp4r905dQntTSvMQEMi0gsD0kAz7sp9dJGUS/Q=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657585576;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=jFBczO4Z9TfDcxdB0ArqJHoDxH8ici/TI/3XLJb7X3M=;
-        b=Qxdai5D/7eund7w0ApVgHQPm3iT1PEKhQUQr/EKe6+bZWVe6dGmw46m7vQzLluIt
-        KqVJkuBBUm+pEf0bNY/sg1MtjYSuEEev22U45PkSvtEbg4YwgfUVkOrqR0rfLZFGusa
-        3/CwneaPhUp564pkpdxcZkMdvtNdwWP9q9ZmqKFI=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1657585575627718.8384328597048; Mon, 11 Jul 2022 17:26:15 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 08:26:15 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Li Chen" <lchen@ambarella.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "DTML" <devicetree@vger.kernel.org>,
-        "Linux-MM" <linux-mm@kvack.org>
-Message-ID: <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
-In-Reply-To: <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty> <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
+        Mon, 11 Jul 2022 20:29:27 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB771D0D1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:29:25 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 72so6207198pge.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=9GFp9h11aOkbojWfJpga+bds+Y2urkX7Qh7rwq4YdJ8=;
+        b=AvYoV9N/BrwgpVrmMKqQu4TgFuA8otd1znqn/8TtezU0dUFWFlcqv0EvFHsd7UuYW5
+         ZXOLYYEoBNi2y8+vIubPs7H5h7fHyUiiP2B9fV4E7SzGz11PS/3q8B+AbjwiAefGZf3+
+         VUxNMd/E8+mNMlqcmeAh+GNLRFnYf5He7aRPkPQmnjV1+BuKOVz9YXYOsVhWmLjSpY0M
+         2hJ8twcB4s/ZtEKT1WVCog5S5Weu2nEaEMSaDKN8SQk+VGBXYt7zSYCP2g+/qkpdMKep
+         yQITdgNhpT3yXxeUTa8S5B7XOQIgXYUWIbJuNSWVZscR0BTKzidzj2EF4naPVM/gOMlD
+         qKzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=9GFp9h11aOkbojWfJpga+bds+Y2urkX7Qh7rwq4YdJ8=;
+        b=DK7R+AKO6gMBnl+JZRFhdQ6NdKLVDOO/OudgaPrgLnD4M7Q+75QCiY2b8Ohhyb3UX3
+         UkHknFKFB1fCr6Vj2VPhuPKxToM+J9TCQ9DoxLkdiKkR4gZiS1j3I2Pwk1D6hh5NuYvp
+         6HX8fxtT/BirfXngfy/nFOqCHs8/rBCI3chp6yDI1csRgspbkiMp45pXH6rm5LRZDQut
+         QVfk432mfPEIT2VcSHgls5knCidTmDG8emgPsAp7fD8V544K9W5zpWM8BNnW5znDWecT
+         iNXuRh1ONwAtgU5OLCgqIhLzcN4PC2QFutJLU+NtcygVIG5G99z0PJgh97VKlHpZswcJ
+         kd+w==
+X-Gm-Message-State: AJIora9TvBcOa2SbD0JBTB5iGex7CZQySgtLpiujWHcqxYs1vcHvPh5v
+        MxVkTiuDMUl8mnlgqhylEy4=
+X-Google-Smtp-Source: AGRyM1ukt0IDQWhVWbx87FRx/BiL+piSZQ9XZnDPA0UIwsm42drnEjTsm3jHbZPg41AcC+CCrfRP/A==
+X-Received: by 2002:a63:5cd:0:b0:412:b163:b7e1 with SMTP id 196-20020a6305cd000000b00412b163b7e1mr18448789pgf.451.1657585764946;
+        Mon, 11 Jul 2022 17:29:24 -0700 (PDT)
+Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
+        by smtp.gmail.com with ESMTPSA id gd18-20020a17090b0fd200b001efb45d6209sm5518402pjb.20.2022.07.11.17.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 17:29:24 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:29:17 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 05/13] locking/qspinlock: be less clever with the
+ preprocessor
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <20220704143820.3071004-1-npiggin@gmail.com>
+        <20220704143820.3071004-6-npiggin@gmail.com>
+        <YsRwJdjJqpXEFTnO@worktop.programming.kicks-ass.net>
+In-Reply-To: <YsRwJdjJqpXEFTnO@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Message-Id: <1657585289.3ylf8n6zpa.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
- ---- On Mon, 11 Jul 2022 21:28:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote --- 
- > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
- > >
- > > From: Li Chen <lchen@ambarella.com>
- > >
- > > This sample driver shows how to build struct pages support to no-map rmem.
- > >
- > > Signed-off-by: Li Chen <lchen@ambarella.com>
- > 
- > Not sure what a sample driver helps here if there are no actual users in-tree.
- > 
- > It would make more sense to merge the driver that wants to actually use this
- > first, and then add the additional feature.
+Excerpts from Peter Zijlstra's message of July 6, 2022 3:08 am:
+> On Tue, Jul 05, 2022 at 12:38:12AM +1000, Nicholas Piggin wrote:
+>> Stop qspinlock.c including itself and avoid most of the function
+>> renaming with the preprocessor.
+>>=20
+>> This is mostly done by having the common slowpath code take a 'bool
+>> paravirt' argument and adjusting code based on that.
+>=20
+> What does code-gen do? Is it clever enough to constant fold the lot?
+>=20
+> Should we be using __always_inline to ensure the compiler doesn't decide
+> against inlining because $raisin and then emitting extra condtionals?
+>=20
 
-Totally agree, but we plan to start rewriting our video driver in a long time, it has many legacy codes and I need to rewrite a lot of codes to migrate to v4l2.
-That's why I also submit a sample driver here: to make the review progress easier and don't need reviewers to read video driver codes.
+It seems to fold it. Code is just different enough to make it hard
+to follow what the asm differences are exactly but doesn't seem to
+pass 'paravirt' anywhere.
 
- > > +/*
- > > + * dts example
- > > + * rmem: rmem@1 {
- > > + *                     compatible = "shared-dma-pool";
- > > + *                     no-map;
- > > + *                     size = <0x0 0x20000000>;
- > > + *             };
- > > + * perf {
- > > + *             compatible = "example,rmem";
- > > + *             memory-region = <&rmem>;
- > > + *     };
- > 
- > The problem here is that the DT is meant to describe the platform in an OS
- > independent way, so having a binding that just corresponds to a user space
- > interface is not a good abstraction.
+Yes it does need __always_inline certainly. Only one path will ever
+be used at runtime so any icache sharing decision by the compiler
+would be wrong (and we don't care about image size very much).
 
-Gotcha, but IMO dts + rmem is the only choice for our use case. In our real case, we use reg instead of size to specify the physical address, so memremap cannot be used.
-
- > 
- > > +       vaddr = reserved_mem_memremap_pages(dev, rmem);
- > > +       if (IS_ERR_OR_NULL(vaddr))
- > > +               return PTR_ERR(vaddr);
- > 
- >  Using IS_ERR_OR_NULL() is usually an indication of a bad interface.
- > 
- > For the reserved_mem_memremap_pages(), you should decide whether to return
- > NULL on error or an error pointer, but not both.
-
-Thanks, will fix in v2.
-
- > 
- >        Arnd
- > 
+Thanks,
+Nick

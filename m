@@ -2,114 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A96571B4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEC1571B4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiGLNbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S232985AbiGLNb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiGLNbD (ORCPT
+        with ESMTP id S231881AbiGLNbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:31:03 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848ABB5D14
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:31:01 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t1so10416516lft.8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:31:01 -0700 (PDT)
+        Tue, 12 Jul 2022 09:31:25 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0893B5D08;
+        Tue, 12 Jul 2022 06:31:24 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 5so7249041plk.9;
+        Tue, 12 Jul 2022 06:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IXccb145xbl9bZhb8fRE6pZvNgKdIysmieigHeIfmZo=;
-        b=K+cxKClQT+nal2Ss/wSUwNnUruBN00qnV6lGjcHmhKsfL4g1trgVLYIAwWkJpMJ/jb
-         I9RHCUfxN8RN+wqPu13MlDp9p7p5OiQEUDOMS17jHgLTjcPzOsAdINmszGICLTYx8AAs
-         9e0onp1pHq69byA37r+scqmt8RukZqPUKFKZnWnxJQzum0Od/eSryRJJXsCxQgHVqaw+
-         93IzQQENvGMVzpffb3bJvK5bMi376UDDnc9zd9cwUl/TZKfQtBLpuElEoqjhtY0TMw4y
-         riWZusM8mkxeEwWhdZU9qVrfTF3tDXJO80PH5xBUvDe2cz2EKARRLCeNre0yFkZBvPHZ
-         MlEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=IXccb145xbl9bZhb8fRE6pZvNgKdIysmieigHeIfmZo=;
-        b=fNAyRjPRoDmLPl8BB/ajoLU6qg4M9yftmaA26XoDdAjQsGgtxwbHL6n+0nDIqTgb9q
-         lp2dz0x7bSnyKq4CrBYA9aUodHydGLTOU1rRY4Jl+mFOx9IQQ5+UUXu2kxcub6+RCmZG
-         oJcH/87G4GwCUa+fZAlgLdTqYAHayKKYgIISr6CEXey7OR2lqlTADSKYfiUSyf8whSUO
-         BMAjI3Fuavi8b1rzuvNyU0E8eG0t0TK07P4L3TyP3WhapqXrkhsb7ntEjvJneA1NwMjH
-         HMzkuHrZS+atJgfBc16EWgn+VweUKBFXInemURUJwicweI7Bzpvij94v6M9zhwTO9lPe
-         DW9Q==
-X-Gm-Message-State: AJIora+QGXFqR42HGk3dhqFBKAateF+JWCAv51EfiqFq9RL23IvNa6tU
-        dLMZ+BHmSR0pP8+lx9gAzQwf2A==
-X-Google-Smtp-Source: AGRyM1vMk2is/L2k4CTCicsaSu7ob3Bblj9cJOjz7rVfS0kLH+Eqq7Q53d+A5Jqs36ZWxIETg1pngQ==
-X-Received: by 2002:a05:6512:1381:b0:489:cd0b:3a03 with SMTP id p1-20020a056512138100b00489cd0b3a03mr10959222lfa.583.1657632659774;
-        Tue, 12 Jul 2022 06:30:59 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id f19-20020ac25333000000b00478fe690207sm2180771lfh.286.2022.07.12.06.30.57
+        bh=B3aaFPCS7vGOHjN5dK09gzi8+XKJwlcyQXccy2uYk8o=;
+        b=ZCXktgbeDUwYBalguqqfZgziscEy8VsThdXbtTHirW6covpv2JWFMPBq+F3C2G+FoQ
+         qtye4zLPApS0xJHWJiC7J7ml9RRNIVGwBDLY17IAcR9bgzk0iemU3KZ1hxb3wbgEnnFu
+         tHzlGBkNWUIxWWMF7IbRnWDdX+wAuq62BmfUEwFVfRVjvESRQIInTguaIeO/ymRMDwb+
+         tB0uwlWyB6kjjf5/PX7y/RIP9iTxEKKDgu8bvB1kOq6UdGdZW92OpyYWaNW6XRRrtZDc
+         1R8Zf3qxHSJTWYoNxdM7n5CQGNMFe/PDxo4yL+i+0UBteTxYBCaAoCfX+Nc3iP9fapPr
+         RUNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B3aaFPCS7vGOHjN5dK09gzi8+XKJwlcyQXccy2uYk8o=;
+        b=a9x/tKiDU3l2VpgdWeLDBjVupriG2dXL2nMUEkzFJcRXc+HKIjQWtTwy2zCIfub6Hn
+         t2dJcMloOxaxG6dOD69PlSBndjBUku801i1AqUOvVzzAzhplt3BMUqeJvj8V9yF0BSn7
+         eHp1UHXi7/P2Fg07JVPZCFwpbx8PAVwqRJKWonJyhzcp/HmNywcj/PmN8tFIvaqdkY4Y
+         dUhq77lkBEy1dNbT65bQUnG9KWufIj7QZZNL9ZKjmGiMsqqirw2jqVJmCveoUCKjGhjT
+         YpD2/mFh0gx2Qx5sHWooF03Akca6Q5KQ3wGlxGwpKPBlU03J0sXPCD5JqxFhcYCw+5pl
+         3+xg==
+X-Gm-Message-State: AJIora/geYgLvRTK+9k2R/U74o0lK1Ec4khUNqkLFTh0GxAf6Kq3LBF4
+        OzBSfwYO8bbirWasv139bTg=
+X-Google-Smtp-Source: AGRyM1vre6tOG2CNXGX+k+r6JDaJUdz2zNMZpOP4Z1D8JN26SxhyeaXI4mTwdOquYkzRpHSUvcIUbQ==
+X-Received: by 2002:a17:902:e841:b0:16c:3053:c7e6 with SMTP id t1-20020a170902e84100b0016c3053c7e6mr18781277plg.163.1657632684220;
+        Tue, 12 Jul 2022 06:31:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c204-20020a624ed5000000b00528c4c770c5sm6757058pfb.77.2022.07.12.06.31.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 06:30:59 -0700 (PDT)
-Message-ID: <f7eee4e8-05fa-4c83-9168-64e5ea4c510f@linaro.org>
-Date:   Tue, 12 Jul 2022 15:30:50 +0200
+        Tue, 12 Jul 2022 06:31:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0bd85140-f006-8b29-0a43-500733f1654c@roeck-us.net>
+Date:   Tue, 12 Jul 2022 06:31:22 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v16 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+To:     Xin Ji <xji@analogixsemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-9-tinghan.shen@mediatek.com>
- <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
- <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
- <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
- <b6523c64-dfe2-13b0-db60-fb4f53ed1e31@collabora.com>
- <1eb212ea-c5a9-b06f-606f-1271ac52adf9@linaro.org>
- <c243bc9c-0862-450d-6bff-00ec5591e791@collabora.com>
- <d8bc3b20-45db-a869-2aff-9cda8e0fca92@linaro.org>
- <83162e4f-a31f-79cf-ba01-58b45fd4f62e@collabora.com>
- <410cf9aa-471b-644c-9540-9bc0b89b8fd9@linaro.org>
- <0ca0e46d-0685-8228-4d26-c6cf20d7a9fc@collabora.com>
- <4795d9a8-3a57-ffe5-c0e5-9877860f5107@linaro.org>
- <4810356c-29bb-7732-c180-943c5a41b49a@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4810356c-29bb-7732-c180-943c5a41b49a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+        linux-mediatek@lists.infradead.org
+References: <20220712090534.2783494-1-xji@analogixsemi.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220712090534.2783494-1-xji@analogixsemi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 15:03, AngeloGioacchino Del Regno wrote:
->> and you keep telling me that it is a power domain provider and MFD and
->> something more.
->>
->> Anyway neither syscon nor simple-mfd can be without specific compatible.
->>
+On 7/12/22 02:05, Xin Ji wrote:
+> USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+> and a port controller (TCPC) - may require that the driver for the PD
+> controller accesses directly also the on-chip port controller in some cases.
 > 
-> I believe, at this point, that adding a compatible like "mediatek,scpsys" in
-> mfd/syscon.yaml should do?
+> Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> 
+> ---
+> V9 -> V10: Rebase on the latest code
+> V8 -> V9 : Add more commit message
+> V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
 
-Yes. Or dedicated file, like other mediatek syscons.
+We are now at v16. The change log has not been updated since v10,
+making it all but worthless.
 
+Guenter
 
-Best regards,
-Krzysztof
+> ---
+>   drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+>   drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+>   {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+>   5 files changed, 5 insertions(+), 7 deletions(-)
+>   rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index f33e08eb7670..812784702d53 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -13,11 +13,10 @@
+>   #include <linux/property.h>
+>   #include <linux/regmap.h>
+>   #include <linux/usb/pd.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/usb/typec.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define	PD_RETRY_COUNT_DEFAULT			3
+>   #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+>   #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index df2505570f07..4b6705f3d7b7 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -11,11 +11,10 @@
+>   #include <linux/module.h>
+>   #include <linux/regmap.h>
+>   #include <linux/usb/pd.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/usb/typec.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define PD_ACTIVITY_TIMEOUT_MS				10000
+>   
+>   #define TCPC_VENDOR_ALERT				0x80
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> index 8a952eaf9016..1b7c31278ebb 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+> @@ -11,10 +11,9 @@
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/regmap.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   
+> -#include "tcpci.h"
+> -
+>   #define MT6360_REG_PHYCTRL1	0x80
+>   #define MT6360_REG_PHYCTRL3	0x82
+>   #define MT6360_REG_PHYCTRL7	0x86
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index b56a0880a044..3291ca4948da 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -10,9 +10,9 @@
+>   #include <linux/i2c.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/gpio/consumer.h>
+> +#include <linux/usb/tcpci.h>
+>   #include <linux/usb/tcpm.h>
+>   #include <linux/regmap.h>
+> -#include "tcpci.h"
+>   
+>   #define RT1711H_VID		0x29CF
+>   #define RT1711H_PID		0x1711
+> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+> similarity index 99%
+> rename from drivers/usb/typec/tcpm/tcpci.h
+> rename to include/linux/usb/tcpci.h
+> index b2edd45f13c6..20c0bedb8ec8 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -9,6 +9,7 @@
+>   #define __LINUX_USB_TCPCI_H
+>   
+>   #include <linux/usb/typec.h>
+> +#include <linux/usb/tcpm.h>
+>   
+>   #define TCPC_VENDOR_ID			0x0
+>   #define TCPC_PRODUCT_ID			0x2
+

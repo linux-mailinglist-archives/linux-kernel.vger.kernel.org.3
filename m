@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4E957229E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193975722A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbiGLS2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S233633AbiGLS3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiGLS2f (ORCPT
+        with ESMTP id S229590AbiGLS3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:28:35 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EDAC3A;
-        Tue, 12 Jul 2022 11:28:34 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id k1so5374905ilu.1;
-        Tue, 12 Jul 2022 11:28:34 -0700 (PDT)
+        Tue, 12 Jul 2022 14:29:20 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDB42A43A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:29:19 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e69so15414532ybh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5+CRJwxgr3RwmxsPLFpAzp9LSqC6LpBVUE2YrUJJqMY=;
+        b=TPBVw3zPRpaWQdE/I24xJe12PNP366ffMUe9ZbJElSALxDd5JacyM1b2cCueFFbj+g
+         bbtng71YJ1cJZV1sZVsXrp9Zn8Ci5bV4SMwpHEreeMrFmzY7rAxmbhfA3jYxbQfgGulj
+         OxWY/fcecG1mWpF7gSs04GPjg2xOb+qorrbjRwrlV8vF5S6lxm6AZTlAaOR2rI15FYGM
+         rzPDUSt/vZ12PzHBEAx1OQhmWX+FOaFTBEY5+1t5bxsmQihDf8/eYzVpb5d5ItIvx0Pa
+         LAu4IVDl1pExZdUOBLSVnUQy0RbffgzMWisIHALOy0+YMex7Y5yANJz1RAL36ISjAfVt
+         YTbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6W8B6L9eDM4m8/MJ0avbA+DgywTO7XdB8xPvfv0PlGg=;
-        b=1wbdy2i8SlMUxxaqW+Y+8EUofUwOygMa/V8td+FfunEA0+eaheWADD4YuDkEMZB02J
-         8CYyLE68aWyEAHpZc1cRjwju6jbtmbYZ9nTGz52hE70ItdssARk3G9sZE1wP/h1qZrp7
-         8497cNBh0uxmwCNl50I9crma197EVLIrKJ6wT5YwHQDo1ez4bQGVS4PSUIX/lqxeA7ng
-         eOMKTRTsOtD5NAtprk0TrUP0uxT/jR+FRGfSrk00Z9wAbvjQqSzE5iQySVTUP+rZALuy
-         VxWcNa0yPBRIBFZuGMCeJAl0vjRbgDdkZnvkCDEbValVA904X5Y3GF80I/bT9F0UHx52
-         /6vQ==
-X-Gm-Message-State: AJIora90/Gww1wAWGI23I9qpMFFcgLLumrgRKdWQ2l2kq66XJ9H0y9GE
-        t0HQpxtxmKEmmrj2HMi2wxTB+Jim4g==
-X-Google-Smtp-Source: AGRyM1tqayz6OkehiOObvstt1flcNF/02sFSRVCz/33Rytko2Q7ZxfWFu+sRlacCZZQZ5KGAvFw0Yw==
-X-Received: by 2002:a92:c242:0:b0:2dc:2df2:a3d1 with SMTP id k2-20020a92c242000000b002dc2df2a3d1mr13172826ilo.111.1657650513726;
-        Tue, 12 Jul 2022 11:28:33 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o17-20020a92d4d1000000b002dbee570531sm3992059ilm.18.2022.07.12.11.28.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 11:28:33 -0700 (PDT)
-Received: (nullmailer pid 2143588 invoked by uid 1000);
-        Tue, 12 Jul 2022 18:28:32 -0000
-Date:   Tue, 12 Jul 2022 12:28:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kabel@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
-Message-ID: <20220712182832.GJ1823936-robh@kernel.org>
-References: <20220705001023.14660-1-pali@kernel.org>
- <20220706150726.GA40600-robh@kernel.org>
- <20220707122730.45jtopop5cj7beni@pali>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5+CRJwxgr3RwmxsPLFpAzp9LSqC6LpBVUE2YrUJJqMY=;
+        b=nNdvyrsD1qoqNg+6yRBhQhAoHeGUT8LfGfhYeswEXRMVbaO5PwT7L7vOWgHW2X47CL
+         xvR65jsfPgQKlv6oDkVxwkpLartwo4zOjXH1OcYRdOfR90EuZ2GIjJk2bm3mu0kxfW83
+         FAgfe8ygDt5iQZ7X4x8xsEDRZKZF+PeywQ3iHumg4R7zg8R6T2CetHGJLBSMn77Q6aCv
+         50h48hq714F9h8CD+6yJQ9LKgHsE2Vl+jfhojfUHwloNrX2O9QVr6rsOoB5eeFq+bfrR
+         DOCrAHQZZbEjuOUerCGosW4zwBX43Pq5tzcSTBH7/+5pwoGsc6F0PT8ELZMe311ojBO/
+         Nqow==
+X-Gm-Message-State: AJIora8VCDfxyd7RXTg8fYeV30vpu2hz2baKPGP5enfrL8/rIP1nsR4L
+        6yI9dCLZrLiYVPcbT8CLWc29WcNQ0Mt6lR1JMso=
+X-Google-Smtp-Source: AGRyM1ux9OgeLzuxTR55QshLROCaEjHiQDqJCNscE9F1xFr4KKwTnM06+wSR36yyOJgCmItJKILESkAGmJs9INp/FzE=
+X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
+ b198-20020a25cbcf000000b0066e8893a02cmr24480407ybg.460.1657650558734; Tue, 12
+ Jul 2022 11:29:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220707122730.45jtopop5cj7beni@pali>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220711044711.466822-1-yury.norov@gmail.com> <CAHp75Vf8EhRYWdQN6Oc79GzWCvo-sRJDvy7_Aek_Z63GCu2dMQ@mail.gmail.com>
+ <CAAH8bW_RYG_Tbpip=BkSFAymDm2y3jJBqTi0PJWA=H-a-L_3tg@mail.gmail.com>
+In-Reply-To: <CAAH8bW_RYG_Tbpip=BkSFAymDm2y3jJBqTi0PJWA=H-a-L_3tg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 12 Jul 2022 20:28:42 +0200
+Message-ID: <CAHp75VcQq3wmwmpaDtu6HC2yrK4rWp+4HOcqMaOHQ3EQQ0c=DA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] lib/find: add find_nth_bit()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 02:27:30PM +0200, Pali Rohár wrote:
-> On Wednesday 06 July 2022 09:07:26 Rob Herring wrote:
-> > On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
-> > > GPIO is optional and used for WDI logic.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > > Changes in v3:
-> > > * Extend description
-> > > ---
-> > >  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > > index ab9641e845db..a0cf9e6c371d 100644
-> > > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > > @@ -27,6 +27,10 @@ properties:
-> > >      description: This is a 1-byte memory-mapped address
-> > >      maxItems: 1
-> > >  
-> > > +  gpios:
-> > 
-> > As I said before, add a name prefix: wdi-gpios
-> 
-> So gpio with output direction should be really named that is input?
+On Tue, Jul 12, 2022 at 6:26 PM Yury Norov <yury.norov@gmail.com> wrote:
+> On Mon, Jul 11, 2022 at 1:55 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Mon, Jul 11, 2022 at 6:51 AM Yury Norov <yury.norov@gmail.com> wrote:
 
-Names are based on the pins they connect to, so yes. The flags cell will 
-make it clear it is a GPIO output.
+...
 
-> I really do not understand this kind of thinking and making every device
-> tree description totally illogical and inconsistent with all other.
+> > 2) fns() is not good abbreviation, because among ffs (First) and fls
+> > (Last), fns would be read as Next, which is misleading, I'm not sure
+> > fnths(), which is correct, is good for readers.
+>
+> I agree that fns() may be confusing, but fnths() is even worse to me.
 
-I don't understand what you mean.
+I also think it's not the best choice.
 
-When there is a 2nd GPIO used for this binding, what do we call it? 
-'gpios' doesn't scale.
+> I expect that it will be mostly used indirectly via find_nth_bit(), and
+> will not create a lot of confusion for users.
 
-> > > +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
+Perhaps in that case we can survive with something else? Naming is hard...
 
-Look at it this way, why do I have to find and read the description here 
-to know what 'gpios' is for when instead, it can be self-describing when 
-I look at the datasheet and the DT to see this is the GPIO connection 
-to WDI signal.
-
-Rob
+-- 
+With Best Regards,
+Andy Shevchenko

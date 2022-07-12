@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F96571891
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE32571897
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbiGLLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S232380AbiGLLcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiGLLcE (ORCPT
+        with ESMTP id S232599AbiGLLc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:32:04 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F8620F61;
-        Tue, 12 Jul 2022 04:32:03 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lhz8p39RLzFpxp;
-        Tue, 12 Jul 2022 19:31:06 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 19:32:00 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 19:32:00 +0800
-Subject: Re: [PATCH bpf-next 1/3] samples: bpf: Fix cross-compiling error by
- using bootstrap bpftool
-To:     Quentin Monnet <quentin@isovalent.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220712030813.865410-1-pulehui@huawei.com>
- <20220712030813.865410-2-pulehui@huawei.com>
- <e1dd40cd-647c-10b4-53f9-a313e509474e@isovalent.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <0c8f6067-0d5b-c1f7-2048-0ed4add76e73@huawei.com>
-Date:   Tue, 12 Jul 2022 19:32:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 12 Jul 2022 07:32:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3699C279;
+        Tue, 12 Jul 2022 04:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657625545; x=1689161545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eyKlkKRUb/bfXr6lL9b0D9L6TwSjNtrZFvzJIx/FLHQ=;
+  b=LHH9cG5RWNP18fgMxRmluBtHr/sBL+eEBZSxbJQnsjXx87HsNxfr0gmM
+   ZBf/VOKXYuUAvrR8EzBdQcZf68Pe0IYW1bHTXPRmq7tQmkX1l+DG3g6Dn
+   7xgJiw5SyyrlEctUUkFKJiya9m/tqCuEoVVBMta92WnCncb0t5y2U5qYy
+   0Ee4g8lvFjd+FPTDwVc4H6JDPrd8wUoWCrOEPb0Ljc+uF+FgL5SVYGZZo
+   A27n5mz5Zl2/wg6UAOF5ThnsbcSzvVtM5hrJE/BjGY7QHNX/k9Z4E7VD2
+   Vr9WhrNqlL8GbjWd5LRhY0Bm2cNcEkJ8t115aFQdq/0VWy/x+HKyQKlu0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="283662020"
+X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
+   d="scan'208";a="283662020"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 04:32:24 -0700
+X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
+   d="scan'208";a="622472632"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 04:32:21 -0700
+Date:   Tue, 12 Jul 2022 12:32:14 +0100
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Adam Guerin <adam.guerin@intel.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vladis Dronov <vdronov@redhat.com>,
+        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next 1/3] Documentation: qat: Use code block for qat
+ sysfs example
+Message-ID: <Ys1bvhGnpz+GiJCB@silpixa00400314>
+References: <20220712092954.142027-1-bagasdotme@gmail.com>
+ <20220712092954.142027-2-bagasdotme@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <e1dd40cd-647c-10b4-53f9-a313e509474e@isovalent.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712092954.142027-2-bagasdotme@gmail.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/7/12 18:11, Quentin Monnet wrote:
-> On 12/07/2022 04:08, Pu Lehui wrote:
->> Currently, when cross compiling bpf samples, the host side cannot
->> use arch-specific bpftool to generate vmlinux.h or skeleton. Since
->> samples/bpf use bpftool for vmlinux.h, skeleton, and static linking
->> only, we can use lightweight bootstrap version of bpftool to handle
->> these, and it's always host-native.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
->> ---
->>   samples/bpf/Makefile | 16 +++++++++++-----
->>   1 file changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
->> index 5002a5b9a7da..57012b8259d2 100644
->> --- a/samples/bpf/Makefile
->> +++ b/samples/bpf/Makefile
->> @@ -282,12 +282,18 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
->>   
->>   BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
->>   BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
->> -BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
->> +BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
->> +ifeq ($(CROSS_COMPILE),)
->>   $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
->> -	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
->> -		OUTPUT=$(BPFTOOL_OUTPUT)/ \
->> -		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
->> -		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
->> +	$(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../		\
->> +		OUTPUT=$(BPFTOOL_OUTPUT)/ 					\
->> +		LIBBPF_BOOTSTRAP_OUTPUT=$(LIBBPF_OUTPUT)/ 			\
->> +		LIBBPF_BOOTSTRAP_DESTDIR=$(LIBBPF_DESTDIR)/ bootstrap
->> +else
->> +$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
+On Tue, Jul 12, 2022 at 04:29:52PM +0700, Bagas Sanjaya wrote:
+> kernel test robot and Stephen Rothwell reported htmldocs warning:
 > 
-> Thanks for this! Just trying to fully understand the details here. When
-> cross-compiling, you leave aside the dependency on target-arch-libbpf,
-> so that "make -C <bpftool-dir> bootstrap" rebuilds its own host-arch
-> libbpf, is this correct?
+> Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentation.
 > 
+> The warning isn't caused by Date: field pointed by the warning, but rather
+> by sysfs example that isn't in literal code block.
+> 
+> Add the code block marker.
+> 
+> Link: https://lore.kernel.org/linux-next/20220711204932.333379b4@canb.auug.org.au/
+> Link: https://lore.kernel.org/linux-doc/202207090803.TEGI95qw-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: d4cfb144f60551 ("crypto: qat - expose device config through sysfs for 4xxx")
+> Cc: Wojciech Ziemba <wojciech.ziemba@intel.com>
+> Cc: Adam Guerin <adam.guerin@intel.com>
+> Cc: Fiona Trahe <fiona.trahe@intel.com>
+> Cc: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Vladis Dronov <vdronov@redhat.com>
+> Cc: Tomasz Kowallik <tomaszx.kowalik@intel.com>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Acked-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 
-You're right. libbpf may does get out-of-sync. So the best way is to 
-compile both arch-specific libbpf simultaneously, and then attach to 
-bpftool. But it will make this job more complicated. Could we just add 
-back $(LIBBPF) to handle this?
-
->> +	$(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ 		\
->> +		OUTPUT=$(BPFTOOL_OUTPUT)/ bootstrap
->> +endif
->>   
->>   $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
->>   	$(call msg,MKDIR,$@)
-> 
-> .
-> 
+-- 
+Giovanni

@@ -2,68 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246BA572104
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413E2572101
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiGLQen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S233622AbiGLQea convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 12 Jul 2022 12:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiGLQeL (ORCPT
+        with ESMTP id S233465AbiGLQd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:34:11 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8459629CAA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:34:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z12so11939137wrq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jE26kz8uLkTSQmG0BFSrQuTDJo25o/aqMTxY60BA87o=;
-        b=QIfK3LMHQAAiBrxqfYZoLMYn/I5LnR167Bvk75Kzzm7glu3CnnWflBthGnVxpPXsvH
-         FFfLtZAyQwe2pG5VFkQpCwcSxURi5nBhsT8qDQLaf6eMIB/7/VzHvmrdIjRzanLAdbvf
-         rt3yuhRvb3ftn70UVam1VUAFAyr8Kus6HFgko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jE26kz8uLkTSQmG0BFSrQuTDJo25o/aqMTxY60BA87o=;
-        b=Hw9Zn/MVSBBewH+S2J9ccqLmhtp4L2CIoMih/MAuGdSMsonMUNbumy8XRvj+DAqbag
-         TB9YmSF1yQMOkNqz3bvEWjreMrzyjhrqhznQyV7UXLVd1dub0hGwfTj6wmYek0DM0fBa
-         nk1IkNjXrsH2ae6U0KKd4e/GNUkxZ4VEXm266AgYppTkZnZctEgF4H1LhLqU+mDhdZmM
-         /IT5ABbM33jf/0QuRGtEqXEpD/3beAtuqI1THw8/CSWnGotvAk2imxu/41/tI6cLNzSw
-         BTcVKFgtZqdLL2UwAnHEnIvAFkk1CTz3k5TkBt4KxfCk43Y21UMsIS+afEA6axnhCMg/
-         x4dA==
-X-Gm-Message-State: AJIora9g/BKIpuyix15ngoQ9Iil8GpF81iIw2SDTGUcEvI7sOkuxWgpG
-        9MDJkRH3V4Hx8QkBV3YAg9csZA==
-X-Google-Smtp-Source: AGRyM1sX8eiouGb/oS1nfMSYyiXaIM3ieUoYGxmHF38hDy0MP1i/e/1eQdLeCX05rJW2O55lFT8ICg==
-X-Received: by 2002:a5d:6149:0:b0:21d:6ba7:6095 with SMTP id y9-20020a5d6149000000b0021d6ba76095mr22466762wrt.680.1657643647530;
-        Tue, 12 Jul 2022 09:34:07 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-214.cust.vodafonedsl.it. [188.217.53.214])
-        by smtp.gmail.com with ESMTPSA id j16-20020a5d6050000000b0021db2dcd0aasm2321052wrt.108.2022.07.12.09.34.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 09:34:07 -0700 (PDT)
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     tommaso.merciai@amarulasolutions.com
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 1/6] media: ov5693: count num_supplies using array_size
-Date:   Tue, 12 Jul 2022 18:33:44 +0200
-Message-Id: <20220712163349.1308540-2-tommaso.merciai@amarulasolutions.com>
+        Tue, 12 Jul 2022 12:33:59 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E63825C77
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:33:56 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-22-YhE3n9sQNaiEuQ0SLJnAOw-6; Tue, 12 Jul 2022 18:33:54 +0200
+X-MC-Unique: YhE3n9sQNaiEuQ0SLJnAOw-6
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0173.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2c::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.15; Tue, 12 Jul 2022 16:33:49 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95%7]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 16:33:48 +0000
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-input@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: [PATCH v2 5/5] dt-bindings: input: touchscreen: stmpe: Remove node name requirement
+Date:   Tue, 12 Jul 2022 18:33:45 +0200
+Message-ID: <20220712163345.445811-6-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com>
-References: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com>
+In-Reply-To: <20220712163345.445811-1-francesco.dolcini@toradex.com>
+References: <20220712163345.445811-1-francesco.dolcini@toradex.com>
+X-ClientProxiedBy: MR2P264CA0141.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::33) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef14eb12-6841-4609-3fbc-08da64244c09
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0173:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: +OHKvMfKQtyjN5h7PV139KkarzLijwAPlwtrwS1sbqVXNLpqDN49j9REc9dx7F2HB6O3AFHY/RQyz1bcNKH/RV9Ws3am9/f/c7tI6TUxKflKq+Kx1R0KWJa8O+FXq79a8mve8XLQX+FUlSrIi8o21BCVHL3fQXIfpeGNt4Rm3wd+XzsHT6guJFMonHia5Vdx1cmOAi1Ft+Y0WWPviR1HRvlC6o6hCQ80jx9tVn6aKBscR4T/JQFypMZSO+spNNd+s4/ixxUqrtinl5z694XEZbOVOakXTe2/DWvi8iWkOPAYm6Wq3DILYmu8d4oVKxmYan/MBfc4/CV0BBJWKCUjv2uR3UD5DIJvuu5VrHHR8xz4V+jrXNcHCqJw9Habpljtdg8qnH+i961lxmUh9dxAO3xrtjpswVDyZXgThnLSaqk+pA3zfK7VUj6G3iZfKfeUZ5jM1F3Nf/IeIR5aNV1LTZERBZzN7JZnJNfrt9a36mMgk6Q0B2N13uIweDke+g+8B29Rrni7i0nHxE+/vvkZtCmNjnpGDHvEyntQdblZrdXVLitCTITUq/cUwDotKIpVcGJyiJCDaF/rniGVxoklEjQfXjM3ydL3J/dQ/umGRJkPl+GI7DVxw79NExyuWsBSc2H8xOwJONF2WhBYo5TLaqkow1YDkkYLpqmHfjTCRwcfjgpm01o2My+N52cTwYvojgeWDfL1SKD6dNfSu/XWUd2bRgszS0yzj2zaT6D3OvxXiqnLoWiQ9VYlJKZ4GKTcgUNyPQq5BEu2cnz+ccQMA6uBvz+o1ZoEQlmfBSRxmPjRnN7WYUwTSJONaxSNgfKe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(376002)(346002)(366004)(396003)(136003)(478600001)(44832011)(6666004)(36756003)(6486002)(8936002)(41300700001)(83380400001)(7416002)(110136005)(316002)(5660300002)(2616005)(66946007)(26005)(1076003)(66556008)(8676002)(6512007)(186003)(52116002)(4326008)(66476007)(2906002)(38350700002)(6506007)(38100700002)(86362001);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NjPpBsTfWm/r3Y8NOlP30kSyZmEZn2nvlVWSvxOiCCnI3/sPbOZ+SwAdUP5k?=
+ =?us-ascii?Q?1plglscyLOSj++6N/HQ/ZJSLkANS3yYwiBVQLTwqRVf6XM2BNRX2LX8NqUOn?=
+ =?us-ascii?Q?SKhFrWdxcOuuF+L0gKLmgYRG+1nvpX78+uneQnsW39r5gHltvj4PQ6IXDiPb?=
+ =?us-ascii?Q?vJqUa3EFDfq7UMlrTqeUbT5vmlk5r8wF2h8R5mWd5IQcpQLHvl9bKldn8AOU?=
+ =?us-ascii?Q?oLLEPYoW9hezc4DFaVpyQIOylunKsFS0evNZXmCab4IZXBrpsXnEFc1ZV5n3?=
+ =?us-ascii?Q?nSfb/AR0+XmECv3XNbB1Ng+NGEC7SAyRBfHinNCZ/5jF0HU31jZiVLDnKitc?=
+ =?us-ascii?Q?uWpN5aKhMJwASCJQjttXWndK3BFfnrPIlJ5EmdUOr+spt0hHyuguiKjlVSUb?=
+ =?us-ascii?Q?5Ncf3pP2ktfR4PlI/ixCn6Q96CPcURwmm2rxxV1YyIn9tKNl6p8XD1G6wxtU?=
+ =?us-ascii?Q?CIjhUdZEB49MwRRDUOgAM/UVhCE770PcuqSwN/mIEMrqoO/S+ARM7jawz+XS?=
+ =?us-ascii?Q?EMFQyGKFhMtZ7Sy4Mi/P1ss8M1wXfa2D6q3LAYLtd6jIIJh4eqTJELqpdr3M?=
+ =?us-ascii?Q?0ca6cavq2zDNaT8I+NX8bkXvw402hGyc4VOkkdh5CNk9A9vB13z5HwKtpO8P?=
+ =?us-ascii?Q?nmdxX/lcGgq28RLZtHvVZvjTMKQV4npPvthTB6gSlTboAJdnMRN/J1lZMx9w?=
+ =?us-ascii?Q?d5i2PEY4NqOMuvwsmAW+mLmqACzLjq2LfIBI1GvFRIj+pVNg7Wt3VwXPM7vy?=
+ =?us-ascii?Q?5VfYXEAOZOOBOazchbWCEl72JqzxkBOBx1bqf0e2NO3wI4N/mFzpbngLZ596?=
+ =?us-ascii?Q?U66Mp26DoFiP6rmcWHRq+y1GyzUxINQQgNHF4fnXbxioNFZ/T5dTiLlFKaJW?=
+ =?us-ascii?Q?l/sDIHClXV1HON4r3eVqY8poJHSRbkJyYIJjaw6FBHPBl/7vRA+EOURf6RN8?=
+ =?us-ascii?Q?2XgiTaaGpzL8Ho+hcUD3rAcgnew6it5IxBF6tNDYoZQoTXv0T75o2xxn2iHv?=
+ =?us-ascii?Q?3GQaPHn/lxgOp+RQu+PhLfEMCBtFkMZkUXyMymXyUcDM54EVqK+MsOVGvAtY?=
+ =?us-ascii?Q?zB9UrnRGs3l8eITUps+aZBzzchEDr/qBu1YjAXvv6BM+O1nlu96xU+dTqsdr?=
+ =?us-ascii?Q?qymWkOIxReEd7lT1a/Q516Kt5Yx7rtjtujC7W0DcqeXx7pUKo+sOJ+9Oplm1?=
+ =?us-ascii?Q?w1pjjo4oOj0qoGAqcgKFkTFsT8PDxhHRmFhP5XejwA47LmG42Gs12gEQ0cxr?=
+ =?us-ascii?Q?FzLdAsvuLcP5TyOtedGGGKGC2TOkPVlEIQce/oOxRxLM9y6rbK680BO6MdsC?=
+ =?us-ascii?Q?uIv6D7uStDc7UihgtPIYFu7wYnwmW3kl4HxJCg/UZx6Vq0J6KRBqEXBEBmD4?=
+ =?us-ascii?Q?KBfFj2tVn/mDfx2VsL1/MmGCLqB4NuvxR2vCXfKgFskzfv83pDz1cao10OwB?=
+ =?us-ascii?Q?um8VdPl2WJKxi4NyBIp6Hd1kJ4RZwbQHpNdQOayWHpSqHJsu5UHvYnXjC4+e?=
+ =?us-ascii?Q?rV03eDHA2u6hR247O/qOL0aU0a/+ptDSdWtz50/wquW/p/B9Kzit4M/WRNXb?=
+ =?us-ascii?Q?/fvthzRzVcG8bGpAXacXzNFPY4RqgEvVo+XT4pd4HBFtl6Y9lHe06FnLCZZo?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef14eb12-6841-4609-3fbc-08da64244c09
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 16:33:48.4694
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: guYmCgSURjfA0WIhFTUIQbHbynKZCpkPMWD1SUNOSzi5EWLZ9+ASIXj7Jrwdrxgjik2whORtIFOhfFDUCoGRwwXdS7txJt8U5WluN1Bugco=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0173
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,58 +115,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of hardcode OV5693_NUM_SUPPLIES in a define is better use
-ARRAY_SIZE function to count the number of supplies from
-ov5693_supply_names array
+STMPE driver does not require a specific node name anymore, only the
+compatible is checked, update binding according to this.
 
-Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Daniel Scally <djrscally@gmail.com>
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
-Changes since v3:
- - Add reviewed-by tag, suggested by Jacopo, Krzysztof
+ Documentation/devicetree/bindings/input/touchscreen/stmpe.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Changes since v4:
- - Add Daniel reviewed-by tag
-
- drivers/media/i2c/ov5693.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index 117ff5403312..f410333c4c67 100644
---- a/drivers/media/i2c/ov5693.c
-+++ b/drivers/media/i2c/ov5693.c
-@@ -127,11 +127,15 @@
- #define OV5693_LINK_FREQ_419_2MHZ		419200000
- #define OV5693_PIXEL_RATE			167680000
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt b/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
+index c549924603d2..238b51555c04 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
++++ b/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
+@@ -54,8 +54,7 @@ Optional properties common with MFD (deprecated):
+ 				1 -> 3.25 MHz
+ 				2 || 3 -> 6.5 MHz
  
--/* Miscellaneous */
--#define OV5693_NUM_SUPPLIES			2
--
- #define to_ov5693_sensor(x) container_of(x, struct ov5693_device, sd)
+-Node name must be stmpe_touchscreen and should be child node of stmpe node to
+-which it belongs.
++Node should be child node of stmpe node to which it belongs.
  
-+static const char * const ov5693_supply_names[] = {
-+	"avdd",		/* Analog power */
-+	"dovdd",	/* Digital I/O power */
-+};
-+
-+#define OV5693_NUM_SUPPLIES	ARRAY_SIZE(ov5693_supply_names)
-+
- struct ov5693_reg {
- 	u32 reg;
- 	u8 val;
-@@ -352,11 +356,6 @@ static const s64 link_freq_menu_items[] = {
- 	OV5693_LINK_FREQ_419_2MHZ
- };
- 
--static const char * const ov5693_supply_names[] = {
--	"avdd",
--	"dovdd",
--};
--
- static const char * const ov5693_test_pattern_menu[] = {
- 	"Disabled",
- 	"Random Data",
+ Note that common ADC settings of stmpe_touchscreen (child) will take precedence
+ over the settings done in MFD.
 -- 
 2.25.1
 

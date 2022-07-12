@@ -2,92 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32200571A2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09DF571A2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiGLMjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S232599AbiGLMkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiGLMjF (ORCPT
+        with ESMTP id S229572AbiGLMki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:39:05 -0400
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5674F19A;
-        Tue, 12 Jul 2022 05:39:04 -0700 (PDT)
-Received: by mail-pg1-f193.google.com with SMTP id bh13so7449638pgb.4;
-        Tue, 12 Jul 2022 05:39:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=asdqH+VTqD8An65Icv4mO0/09GyJU+rORHfaAe937t0=;
-        b=txraCPwWGiYW4cSb53IbxwSNn8F/RkjE6Xu/j2QqQj66AkJd6kYpMHlvdZnyuRZs+3
-         QDZzJnU1qyF4O9lSHY2csbzeP11E/ZirJxbaP1P0+MqfJCCV9BibIHYHKDueA0/eMM90
-         wQ8pyj8h2of3rOrAM5Wb37amukSHjzggqY7fXxst9agUHlwV4woXuiRoxdc11biEURnE
-         rCe+r+CygH5Tm6VD065lrjnNKDE+2ORBSuMk1Uv2X/Li69BgJyTQy2o+yYzEL/x8IzRs
-         OtF6s9Tvt+8fvxkQWwCXwNZ4zLAlqwFbxk9wNzDqiJGmDv/eYCfZPBHSk4bRJH8GMENr
-         NC0A==
-X-Gm-Message-State: AJIora+nFdHVe8C5sLUmFOQxpFhmU/rxJvXZIYJpVcoVm1qD+6ZB1cbF
-        V3X/lzIuZlL/3dcOzVw3BA==
-X-Google-Smtp-Source: AGRyM1ti6PNvouBhgW1RNcNJ+7mZ35PPBsjfKc236dVWR2wqGNshfsSu1F44vHecs93QS92q84964g==
-X-Received: by 2002:a63:fd0b:0:b0:415:f76b:a2cd with SMTP id d11-20020a63fd0b000000b00415f76ba2cdmr9995874pgh.440.1657629544226;
-        Tue, 12 Jul 2022 05:39:04 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.53.107])
-        by smtp.gmail.com with ESMTPSA id t20-20020a62d154000000b0052850947cf8sm6921302pfl.171.2022.07.12.05.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 05:39:04 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     hch@lst.de, djwong@kernel.org, dchinner@redhat.com
-Cc:     sunliming@kylinos.cn, kelulanainsley@gmail.com,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] xfs: fix for variable set but not used warning
-Date:   Tue, 12 Jul 2022 20:38:52 +0800
-Message-Id: <20220712123852.813904-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Jul 2022 08:40:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCEE653D11;
+        Tue, 12 Jul 2022 05:40:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06F481516;
+        Tue, 12 Jul 2022 05:40:38 -0700 (PDT)
+Received: from [10.57.13.42] (unknown [10.57.13.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45F143F70D;
+        Tue, 12 Jul 2022 05:40:36 -0700 (PDT)
+Message-ID: <5d513646-a917-b969-b2d2-9d5f4e0e6f4d@arm.com>
+Date:   Tue, 12 Jul 2022 13:40:34 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/3] thermal/core: Fix thermal trip cross point
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>, rafael@kernel.org
+References: <20220708183210.1334839-1-daniel.lezcano@linaro.org>
+ <20220708183210.1334839-3-daniel.lezcano@linaro.org>
+ <6ce87fbb-1460-503b-f1f1-8cf53e702cdf@arm.com>
+ <2d680cd9-9e97-e06c-55c2-2a3a1504488e@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2d680cd9-9e97-e06c-55c2-2a3a1504488e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix below kernel warning:
 
-fs/xfs/scrub/repair.c:539:19: warning: variable 'agno' set but not used [-Wunused-but-set-variable]
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- fs/xfs/scrub/repair.c | 3 ---
- 1 file changed, 3 deletions(-)
+On 7/12/22 13:30, Daniel Lezcano wrote:
+> On 12/07/2022 13:29, Lukasz Luba wrote:
+> 
+> [ ... ]
+> 
+>>> @@ -511,8 +528,13 @@ void thermal_zone_device_update(struct 
+>>> thermal_zone_device *tz,
+>>>       tz->notify_event = event;
+>>> -    for (count = 0; count < tz->trips; count++)
+>>> -        handle_thermal_trip(tz, count);
+>>> +    if (tz->last_temperature <= tz->temperature) {
+>>> +        for (count = 0; count < tz->trips; count++)
+>>> +            handle_thermal_trip(tz, count);
+>>> +    } else {
+>>> +        for (count = tz->prev_trip; count >= 0; count--)
+>>> +            handle_thermal_trip(tz, count);
+>>> +    }
+>>
+>> In general the code look good. I have one question, though:
+>> Is it always true that these trip points coming from the DT
+>> and parsed in thermal_of_build_thermal_zone() populated by
+>>      for_each_child_of_node(child, gchild) {
+>>           thermal_of_populate_trip(gchild, &tz->trips[i++]);
+>>
+>> are always defined in right order in DT?
+> 
+> Hmm, that is a good question. Even if the convention is to put the trip 
+> point in the ascending order, I don't find any documentation telling it 
+> is mandatory. Given that I don't feel particularly comfortable to assume 
+> that is the case.
+> 
+> Perhaps, it would make more sense to build a map of indexes telling the 
+> order in the trip points and work with it instead.
+> 
+> 
 
-diff --git a/fs/xfs/scrub/repair.c b/fs/xfs/scrub/repair.c
-index a02ec8fbc8ac..2c8d7e7ef9af 100644
---- a/fs/xfs/scrub/repair.c
-+++ b/fs/xfs/scrub/repair.c
-@@ -533,14 +533,11 @@ xrep_reap_block(
- {
- 	struct xfs_btree_cur		*cur;
- 	struct xfs_buf			*agf_bp = NULL;
--	xfs_agnumber_t			agno;
- 	xfs_agblock_t			agbno;
- 	bool				has_other_rmap;
- 	int				error;
- 
--	agno = XFS_FSB_TO_AGNO(sc->mp, fsbno);
- 	agbno = XFS_FSB_TO_AGBNO(sc->mp, fsbno);
--	ASSERT(agno == sc->sa.pag->pag_agno);
- 
- 	/*
- 	 * If we are repairing per-inode metadata, we need to read in the AGF
--- 
-2.25.1
-
+Sounds a reliable way to move forward. Maybe you could just sort in the
+right order those trip points in the thermal_of_build_thermal_zone()
+in an additional patch to this series?
+Than this patch could stay as is, because it looks good.

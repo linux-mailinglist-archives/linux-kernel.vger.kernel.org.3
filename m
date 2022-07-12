@@ -2,199 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D29572069
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F54572080
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiGLQJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S234309AbiGLQNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234281AbiGLQJp (ORCPT
+        with ESMTP id S234305AbiGLQNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:09:45 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A11EBA176
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:09:41 -0700 (PDT)
-Received: from localhost.localdomain (abxj14.neoplus.adsl.tpnet.pl [83.9.3.14])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id EB5681F65E;
-        Tue, 12 Jul 2022 18:09:33 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
-Date:   Tue, 12 Jul 2022 18:09:19 +0200
-Message-Id: <20220712160919.740878-2-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712160919.740878-1-konrad.dybcio@somainline.org>
-References: <20220712160919.740878-1-konrad.dybcio@somainline.org>
+        Tue, 12 Jul 2022 12:13:44 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DCE2F3B0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657642423; x=1689178423;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c7Iz6RHMVKPXdsiWGS1iCkYOkcfyRfnOC1COzQRedNg=;
+  b=aEEao6grFvIxM3q5AZ1f9wVDw+0gOdvO/Nxagj8TnkFCUMW6ghO7lbWz
+   ed1B7D2khGzTBEgsQ0am7e+DjM4WnG9kUGaOkQegvEiHGqg8Yqbl/Ncva
+   nTmqsD58anBEJ2LfFkGd/QcfOe0gz+cjRyP18DdQuP4PAq/Ih4SHC2RDz
+   yBeLBpjHXqIxsajkQc3w1e2jbf0jxA1jLgDkrDVHMI9zjZD6CKaPu7a6r
+   Hr1MK0R8bhA54FRm1I5eVlwxaFdmdDuhyH6UE29CcxY7kOMw1LKVVcHIK
+   yWCoBTXWWDcmBbeB+HzFyCM6W9P/6DPr2W9srbVKTXoNdH6ESgYK70gv0
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="310600739"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="310600739"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:11:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="652975426"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jul 2022 09:11:23 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBITq-0002O7-Mb;
+        Tue, 12 Jul 2022 16:11:22 +0000
+Date:   Wed, 13 Jul 2022 00:10:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lama Kayal <lkayal@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: [saeed:mlx5-queue 40/68]
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable
+ 'err' is uninitialized when used here
+Message-ID: <202207130003.SL9fRJbu-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for A7-A11 SoCs by if-ing out some features only present on
-A12 & newer (UNCORE2 registers) or M1 & newer (EL2 registers - the
-older SoCs don't implement EL2).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git mlx5-queue
+head:   a78a596e3e1e4b584883b0a6f58d8f9c61943fb1
+commit: 4d121fe4ec12681d4948420ee172eb9d325df533 [40/68] net/mlx5e: Convert mlx5e_flow_steering member of mlx5e_priv to pointer
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220713/202207130003.SL9fRJbu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=4d121fe4ec12681d4948420ee172eb9d325df533
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed mlx5-queue
+        git checkout 4d121fe4ec12681d4948420ee172eb9d325df533
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
 
-Also, annotate IPI regs support (A11 and newer*) so that the driver can
-tell whether the SoC supports these (they are written to even if fast
-IPI is disabled, when the registers are there of course).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-*A11 is supposed to use this feature, but it is currently not working.
-That said, it is not yet necessary, especially with only one core up,
-and it works a-ok using the same featureset as earlier SoCs.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/irqchip/irq-apple-aic.c | 54 +++++++++++++++++++++++----------
- 1 file changed, 38 insertions(+), 16 deletions(-)
+>> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+                   mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
+                                                                         ^~~
+   drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h:67:11: note: expanded from macro 'mlx5_core_err'
+                  ##__VA_ARGS__)
+                    ^~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5006:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
 
-diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 12dd48727a15..36f4b52addc2 100644
---- a/drivers/irqchip/irq-apple-aic.c
-+++ b/drivers/irqchip/irq-apple-aic.c
-@@ -245,7 +245,10 @@ struct aic_info {
- 	u32 die_stride;
- 
- 	/* Features */
-+	bool el2_regs;
- 	bool fast_ipi;
-+	bool ipi_regs;
-+	bool uncore2_regs;
- };
- 
- static const struct aic_info aic1_info = {
-@@ -261,7 +264,10 @@ static const struct aic_info aic1_fipi_info = {
- 	.event		= AIC_EVENT,
- 	.target_cpu	= AIC_TARGET_CPU,
- 
-+	.el2_regs	= true,
- 	.fast_ipi	= true,
-+	.ipi_regs	= true,
-+	.uncore2_regs	= true,
- };
- 
- static const struct aic_info aic2_info = {
-@@ -269,7 +275,10 @@ static const struct aic_info aic2_info = {
- 
- 	.irq_cfg	= AIC2_IRQ_CFG,
- 
-+	.el2_regs	= true,
- 	.fast_ipi	= true,
-+	.ipi_regs	= true,
-+	.uncore2_regs	= true,
- };
- 
- static const struct of_device_id aic_info_match[] = {
-@@ -452,6 +461,9 @@ static unsigned long aic_fiq_get_idx(struct irq_data *d)
- 
- static void aic_fiq_set_mask(struct irq_data *d)
- {
-+	if (!aic_irqc->info.el2_regs)
-+		return;
-+
- 	/* Only the guest timers have real mask bits, unfortunately. */
- 	switch (aic_fiq_get_idx(d)) {
- 	case AIC_TMR_EL02_PHYS:
-@@ -469,6 +481,9 @@ static void aic_fiq_set_mask(struct irq_data *d)
- 
- static void aic_fiq_clear_mask(struct irq_data *d)
- {
-+	if (!aic_irqc->info.el2_regs)
-+		return;
-+
- 	switch (aic_fiq_get_idx(d)) {
- 	case AIC_TMR_EL02_PHYS:
- 		sysreg_clear_set_s(SYS_IMP_APL_VM_TMR_FIQ_ENA_EL2, 0, VM_TMR_FIQ_ENABLE_P);
-@@ -524,12 +539,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 	 * we check for everything here, even things we don't support yet.
- 	 */
- 
--	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
--		if (static_branch_likely(&use_fast_ipi)) {
--			aic_handle_ipi(regs);
--		} else {
--			pr_err_ratelimited("Fast IPI fired. Acking.\n");
--			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+	if (aic_irqc->info.ipi_regs) {
-+		if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
-+			if (static_branch_likely(&use_fast_ipi)) {
-+				aic_handle_ipi(regs);
-+			} else {
-+				pr_err_ratelimited("Fast IPI fired. Acking.\n");
-+				write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+			}
- 		}
- 	}
- 
-@@ -566,12 +583,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 					  AIC_FIQ_HWIRQ(irq));
- 	}
- 
--	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
--			(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
--		/* Same story with uncore PMCs */
--		pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
--		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
--				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-+	if (aic_irqc->info.uncore2_regs) {
-+		if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
-+				(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
-+			/* Same story with uncore PMCs */
-+			pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
-+			sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-+					FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-+		}
- 	}
- }
- 
-@@ -676,7 +695,8 @@ static int aic_irq_domain_translate(struct irq_domain *id,
- 				break;
- 			case AIC_TMR_HV_PHYS:
- 			case AIC_TMR_HV_VIRT:
--				return -ENOENT;
-+				if (aic_irqc->info.el2_regs)
-+					return -ENOENT;
- 			default:
- 				break;
- 			}
-@@ -944,7 +964,8 @@ static int aic_init_cpu(unsigned int cpu)
- 	/* Mask all hard-wired per-CPU IRQ/FIQ sources */
- 
- 	/* Pending Fast IPI FIQs */
--	write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
-+	if (aic_irqc->info.ipi_regs)
-+		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
- 
- 	/* Timer FIQs */
- 	sysreg_clear_set(cntp_ctl_el0, 0, ARCH_TIMER_CTRL_IT_MASK);
-@@ -965,8 +986,9 @@ static int aic_init_cpu(unsigned int cpu)
- 			   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
- 
- 	/* Uncore PMC FIQ */
--	sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
--			   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
-+	if (aic_irqc->info.uncore2_regs)
-+		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
-+				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
- 
- 	/* Commit all of the above */
- 	isb();
+
+vim +/err +5015 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+
+593cf33829adfd Rana Shahout    2016-04-20  5000  
+182570b26223de Feras Daoud     2018-10-02  5001  static int mlx5e_nic_init(struct mlx5_core_dev *mdev,
+3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5002  			  struct net_device *netdev)
+6bfd390ba54666 Hadar Hen Zion  2016-07-01  5003  {
+6bfd390ba54666 Hadar Hen Zion  2016-07-01  5004  	struct mlx5e_priv *priv = netdev_priv(netdev);
+4d121fe4ec1268 Lama Kayal      2022-01-09  5005  	struct mlx5e_flow_steering *fs;
+547eede070eb98 Ilan Tayari     2017-04-18  5006  	int err;
+6bfd390ba54666 Hadar Hen Zion  2016-07-01  5007  
+3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5008  	mlx5e_build_nic_params(priv, &priv->xsk, netdev->mtu);
+84db6612471416 Roi Dayan       2020-09-16  5009  	mlx5e_vxlan_set_netdev_info(priv);
+519a0bf5b20c37 Saeed Mahameed  2018-09-12  5010  
+519a0bf5b20c37 Saeed Mahameed  2018-09-12  5011  	mlx5e_timestamp_init(priv);
+519a0bf5b20c37 Saeed Mahameed  2018-09-12  5012  
+4d121fe4ec1268 Lama Kayal      2022-01-09  5013  	fs = mlx5e_fs_init(priv->profile);
+4d121fe4ec1268 Lama Kayal      2022-01-09  5014  	if (!fs) {
+68e66e1a69cd94 Moshe Shemesh   2021-10-02 @5015  		mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
+4d121fe4ec1268 Lama Kayal      2022-01-09  5016  		return -ENOMEM;
+68e66e1a69cd94 Moshe Shemesh   2021-10-02  5017  	}
+4d121fe4ec1268 Lama Kayal      2022-01-09  5018  	priv->fs = fs;
+68e66e1a69cd94 Moshe Shemesh   2021-10-02  5019  
+547eede070eb98 Ilan Tayari     2017-04-18  5020  	err = mlx5e_ipsec_init(priv);
+547eede070eb98 Ilan Tayari     2017-04-18  5021  	if (err)
+547eede070eb98 Ilan Tayari     2017-04-18  5022  		mlx5_core_err(mdev, "IPSec initialization failed, %d\n", err);
+3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5023  
+943aa7bda37301 Leon Romanovsky 2022-04-04  5024  	err = mlx5e_ktls_init(priv);
+43585a41bd8949 Ilya Lesokhin   2018-04-30  5025  	if (err)
+43585a41bd8949 Ilya Lesokhin   2018-04-30  5026  		mlx5_core_err(mdev, "TLS initialization failed, %d\n", err);
+3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5027  
+11af6a6d09e9a9 Aya Levin       2019-07-11  5028  	mlx5e_health_create_reporters(priv);
+182570b26223de Feras Daoud     2018-10-02  5029  	return 0;
+6bfd390ba54666 Hadar Hen Zion  2016-07-01  5030  }
+6bfd390ba54666 Hadar Hen Zion  2016-07-01  5031  
+
+:::::: The code at line 5015 was first introduced by commit
+:::::: 68e66e1a69cd94f934522348ab232af49863452a net/mlx5e: Fix vlan data lost during suspend flow
+
+:::::: TO: Moshe Shemesh <moshe@nvidia.com>
+:::::: CC: Saeed Mahameed <saeedm@nvidia.com>
+
 -- 
-2.37.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

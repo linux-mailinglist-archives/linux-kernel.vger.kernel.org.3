@@ -2,514 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1154D571250
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F28571255
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiGLGio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S230474AbiGLGla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiGLGik (ORCPT
+        with ESMTP id S229476AbiGLGl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:38:40 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788321BF;
-        Mon, 11 Jul 2022 23:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657607916; x=1689143916;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rtBaUfJHZvcoGqLKJRHooq9VaG8tFF3nTGQ07JsqrFk=;
-  b=MqdM3bYGNZFLlxtEIsAPWpzIV3WPdhzSrba8tRcr3EcnLG4jrT8BXeyv
-   GgnJuaPatXc7GTQtL75TTv+reaBBB7NqFsjLJyuI3itDVsZRAAIF7OE3C
-   F7umUn6h+7f8M6wGElyYvRKBzgMrNGEOkxD2qlX54pFz29GiEnueiDbyE
-   3avoiF5InYrh8i41lLItiCqoiJRmfLuHm9BnW8e+njOGjLUEt0BsBLBQy
-   g6pOUGHlECxxeYJ1IqEJab1SSnXyFiodCjYfyR98K59lf8HjGw2dYRzAO
-   Q50KQL4Jq+MoIQ7ueSAfxjRWn6lTCA9oWju1jZcU7ylkdgMHCQKwM3Ik0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="310466867"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="310466867"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:38:36 -0700
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="570074826"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.169.11]) ([10.249.169.11])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:38:34 -0700
-Message-ID: <6023f513-1d28-43b4-d48a-db67f0b9ca00@intel.com>
-Date:   Tue, 12 Jul 2022 14:38:31 +0800
+        Tue, 12 Jul 2022 02:41:27 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2125.outbound.protection.outlook.com [40.107.220.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC04528A5;
+        Mon, 11 Jul 2022 23:41:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JPjovSZpcyqoh7Kql6qTrLWS753Om8Ye7CJ6VQWFlgBg5prVCp143S2tOQDn6owfkOtciSbhyO+3w1LDiInXMZP7sQPR0QPzRT06nEK5lkceVfpK8H46lUi5UmZW/1D+yjhXv6tWD3LokA+MagODXFwlQOkSkn5a3jc/upJfGwyeNyr5lRCBQIF0GzF/3Ft6NoinRVtBrTX79OGf402O09/WjN5tgA6OCT4Hn8I1CeYx4wzpC87HLlQS55q7BJaBLdJE2swivc6QGTFXgFxD/49sosp+IEAJkFKhZUjVcHNR1NNeHgxzFVFenUx5tJJkHHx/G6hUSL18Oh29yoITkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7OrNlacPEv/vCIDmcNrp3k4RuoYFPiHnnnIw4QQW+2U=;
+ b=Qu8Nqfesxh7ESkgW3qIG2jgJReyr6Dg3N4nRBBciLUE4ylFcvs0AFAKMu2F47b87O5JvzXSBS0Q7hIttaphFst1pRP6mdKVJVV372oPs34h+Fr/Ui/MQDPL6y7XC24v5S/N916NZnZ+BnpCBsfSMt6c97Oa7JnanlR2cRhVewXTDh5Ztt8pU74lzIhBHId2goDQf6goLjghrwUvNuCzf9y0bBE3We4JF0uDepNI5qi/QP+dqOTUoWPek7VjQARrv1ahr9bBmRM390LlhA4J1UK/quguD6AsMhBiC3kQEUXqBkQGgo0MENeBqXJz1LDazsmlm8YclLgPWXVFkNCaZOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7OrNlacPEv/vCIDmcNrp3k4RuoYFPiHnnnIw4QQW+2U=;
+ b=2wVosbO9Ntcd+quU9mq6LWkxuejzVp+04mGnH0CvkA8rKy408oR/MjIGrfPuNAshGoa1ymy08POEZ+yL+Zg4Xn6vUgd5lhkKu49MgobJ/fVMdLc2hWxeLi+3sR1BU8X5AQ+gvBN2trwaC31bDlBIyDBzm2RhNEZjTdb7wYZaEPM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by CH2PR04MB7095.namprd04.prod.outlook.com (2603:10b6:610:9e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
+ 2022 06:41:23 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b%5]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 06:41:23 +0000
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Xin Ji <xji@analogixsemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v15 1/3] usb: typec: tcpci: move tcpci.h to include/linux/usb/
+Date:   Tue, 12 Jul 2022 14:41:09 +0800
+Message-Id: <20220712064111.2782861-1-xji@analogixsemi.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWP286CA0024.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:262::9) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2] KVM: x86: Add dedicated helper to get CPUID entry with
- significant index
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220712000645.1144186-1-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20220712000645.1144186-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 97d2509b-e1c2-41e7-d200-08da63d1897d
+X-MS-TrafficTypeDiagnostic: CH2PR04MB7095:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zoeXBhfgnHqBf1vaPW5wTxJPJuVw+gceCZFByD70R8kPr1L5/Tg5kbKjHbDKKET3VnhCOlqOA+pvqdxy5KM3yZdliEsjPP129nYFC0SXzJVHv+2ylDPTz80DIZyA4oG8ZpLH9XT8tzCeqJ3627r3mlrv72rDb+kpt+n60TIv+LNVSX5qXD/dGMU0c1uWUy8BT69zKkJBJmHQD3RE9GEJNks834DqTcSvBqgzB9twvUvT8Nt03RELb3eG0bCnMstd52fgoEBp0XzgNtkgM3ceQQHsuhzPlepyAW/zmWeRtbrw34KbGxgmOSuwaUZd1BvX6af7tVwgJYkYRXHOEY+1/B6yj1yXabrZSb2eFHQnZPv59idG+yoGBxUn4J9+OmMPlMPzeVISIoueL69UaoJC6ujjM3OGahYwxm/NhlKpC1LoTmMLmmHcRZp6ArA+lgAaxuU3A1JFC5BWS9GJp6FIHf9VST1Me049FIB3Vzd9YJKOSf4+gD85to/abOw4D+3hE3U919o0FbpQgYbrgetwmgtEkj2ZzU9OX4zAu7kOSoKJ8Jcwm4AVrxWwsS9tYsb4wRSEQtDWYsLL2tIGHh1sJuZtlRQd9xAE7M3CwhsQwWaA4D/4fYyUdzI0Qe/H6FxAik87zvNQ9eXGvAMsaHdg5JVbDwVnLqMFCr7Zz+Ik7OpYKIadw/7eoAPNutoiJJUYl9/S1Y0I1P+QEqDFSYbdD2XSg7FNqqRoTxwS+hnxGG2mekwORNRjpGeKqZ04OIje/EPN78QLisWTrQzErLetYlynJI/MtJ2Kx07n81RqBw/QTZ/cY5I1CzGX5pUK0dLk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(39850400004)(396003)(376002)(136003)(186003)(1076003)(6512007)(52116002)(55236004)(2616005)(83380400001)(2906002)(36756003)(6666004)(38100700002)(38350700002)(6506007)(110136005)(478600001)(8936002)(5660300002)(4326008)(6486002)(8676002)(26005)(66556008)(66946007)(66476007)(41300700001)(316002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dSFqrT/uuKGt/3DambHug7TNnjUBKJ00lR0r3hL19e5sjHxSQ9V6ArKQaJIM?=
+ =?us-ascii?Q?sukF6EYcSEalA3aunMDkD81IwhDOmu5ZCNwaOQP9AI2WROgVOUm2DVU9akjO?=
+ =?us-ascii?Q?tRP7EOP3T4yUZpQOXBLHk1Bpp9TE/AGfFImHEegJW+wO5iYA7L0pmd/xHkKM?=
+ =?us-ascii?Q?BHrqWUG//mY/Ck2i4qcSPoIyFDYqKg2UpbWKGOzwyv2tvRYGg+4aG4ZMtxyE?=
+ =?us-ascii?Q?HhgNxSGn1IaqWQ8zhIQQd/oG1cubNSvrbMrkjU6fbTH/TffeKjWByASUzWC5?=
+ =?us-ascii?Q?ZpnlJTRRwKfge+mesWV2oIbyH3yBujFGJ2QUCl9hdaCy4WHNdq21g3lqpvwY?=
+ =?us-ascii?Q?gMuTAucdxRQcON1FJz45MngtitcIPdyAukDxA7X8xRo947FMM4KK1DB3O3mc?=
+ =?us-ascii?Q?d7qw5dLL3tE+jIGwwYNPYVOsUV10dpgKV1FG1TqHGJJP/Zjra7BeRcZsNF2S?=
+ =?us-ascii?Q?t+c9YHSJ5RGsHv5BhL3gwKVsu5GGEGTmVWjQviKo/YhK5XBn/aR1n6Ihd4hW?=
+ =?us-ascii?Q?3FdppO8qGHJ0jK03Ysor67IIk+dSMX0rLPKWaBuXwtaLuVdrgcmBmj4fjmGc?=
+ =?us-ascii?Q?CWXoJW/5Eb1SWALHJMDAHJZVA1d5Kpokz3SH6aiuO8zMGgeS4XaySRZonvLD?=
+ =?us-ascii?Q?45+iTzMnYc4bBLtAbEkApHXt0md1AASbvtNdm28AU5oFhrm2MPHPktPVATyz?=
+ =?us-ascii?Q?nD7502zyBLHxXswu1vTyZ+tS3EHVhvrC5aAlExTuzK0OHqrs/QGXnm/QVIo/?=
+ =?us-ascii?Q?rwUjpMcOCHzZ9BijBP4sEYxY0Z5Ud7dgI8zvlL2u9ZNov12nT8s+5OM/P1s/?=
+ =?us-ascii?Q?0608l11LFxfiHVQDVVKw4aeRvZ1HeI2wRPKSG0h9KBeeafwXQ2wLht1gXGZm?=
+ =?us-ascii?Q?2jn7kVQWj7UmRanxTGpYV99/H7Ip6b+oJmzeDy7p8T+nlXZDZwOptyJsdoXc?=
+ =?us-ascii?Q?HopykeaEjKUy/+bE1D+0St7Qxq00gC2YfX5++PX1l98SIj17SvsS5Lisovgm?=
+ =?us-ascii?Q?JHtKmxXnctwW0OSTQ9sruq77rZyhHoVPDkzRrI1vOgVnR7hfJfeapvJLh9YH?=
+ =?us-ascii?Q?gnXUmKAP9p2p5FDY9GL7CIB8SAR4Mem/oPZXY28Kf8hREb30Y+6onbE68vuj?=
+ =?us-ascii?Q?mt7u5nsZAHoT1CzTyzpGUlnJXVpigJLa4geTyNwSE8xtQoeOrROTSjps+4hn?=
+ =?us-ascii?Q?1WWbRfKt3UtgDXPGsSqXSn33642rrr1/tU+t73rI51W1Zln3vsWZGIxjj+4z?=
+ =?us-ascii?Q?kpeoPkv/I9JwnPOG/6tsEUhhUOh+wKC84mKT+ZPY5cQ+TgwINgpj80pH6a/E?=
+ =?us-ascii?Q?1bBvaDdvYynj8hw88Hu8rK7p3o32So4XYyKuDHcfnQpqohHlDIxMEQNk9hjP?=
+ =?us-ascii?Q?k/Vcew/LRy9WnjWEmDQSiWEqXabjFsXoEKb989EBTcRPkmtFpjzcFEJpUfBx?=
+ =?us-ascii?Q?bR8tsU8horzHFR3Oe5J9tLrl11wvFW/qRz5yuxxph2BRQuPG7jFRtdVMVJFF?=
+ =?us-ascii?Q?WKyn7fV53ReKFgXZNh+niwHXeAMNtmhNhbltHwy+Amz8SXg9WJjK3UafM+7S?=
+ =?us-ascii?Q?qA0nU9hjxr5eU7m5CtVUn0uQK4putnx7Eu+8Zz1B?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97d2509b-e1c2-41e7-d200-08da63d1897d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 06:41:23.4584
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ct3KtlVpKsmh6qNuT/42Datrznf+wJuagSFe8PVjq1xtYn1eVX5mWkFY+426VaKOvvX5n/MkX1xKDLnF43rFdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB7095
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/2022 8:06 AM, Sean Christopherson wrote:
-> Add a second CPUID helper, kvm_find_cpuid_entry_index(), to handle KVM
-> queries for CPUID leaves whose index _may_ be significant, and drop the
-> index param from the existing kvm_find_cpuid_entry().  Add a WARN in the
-> inner helper, cpuid_entry2_find(), to detect attempts to retrieve a CPUID
-> entry whose index is significant without explicitly providing an index.
-> 
-> Using an explicit magic number and letting callers omit the index avoids
-> confusion by eliminating the myriad cases where KVM specifies '0' as a
-> dummy value.
-> 
+USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+and a port controller (TCPC) - may require that the driver for the PD
+controller accesses directly also the on-chip port controller in some cases.
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
 
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-> 
-> v2: Rebased to kvm/queue.
-> 
-> v1: https://lore.kernel.org/all/20211022002006.1425701-1-seanjc@google.com
-> 
->   arch/x86/kvm/cpuid.c         | 71 ++++++++++++++++++++++++++----------
->   arch/x86/kvm/cpuid.h         | 16 ++++----
->   arch/x86/kvm/hyperv.c        |  8 ++--
->   arch/x86/kvm/svm/svm.c       |  2 +-
->   arch/x86/kvm/vmx/pmu_intel.c |  4 +-
->   arch/x86/kvm/vmx/sgx.c       |  8 ++--
->   arch/x86/kvm/vmx/vmx.c       |  6 +--
->   arch/x86/kvm/x86.c           |  2 +-
->   8 files changed, 75 insertions(+), 42 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index d47222ab8e6e..10247528b59b 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -67,9 +67,17 @@ u32 xstate_required_size(u64 xstate_bv, bool compacted)
->   #define F feature_bit
->   #define SF(name) (boot_cpu_has(X86_FEATURE_##name) ? F(name) : 0)
->   
-> +/*
-> + * Magic value used by KVM when querying userspace-provided CPUID entries and
-> + * doesn't care about the CPIUD index because the index of the function in
-> + * question is not significant.  Note, this magic value must have at least one
-> + * bit set in bits[63:32] and must be consumed as a u64 by cpuid_entry2_find()
-> + * to avoid false positives when processing guest CPUID input.
-> + */
-> +#define KVM_CPUID_INDEX_NOT_SIGNIFICANT -1ull
->   
->   static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
-> -	struct kvm_cpuid_entry2 *entries, int nent, u32 function, u32 index)
-> +	struct kvm_cpuid_entry2 *entries, int nent, u32 function, u64 index)
->   {
->   	struct kvm_cpuid_entry2 *e;
->   	int i;
-> @@ -77,9 +85,22 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
->   	for (i = 0; i < nent; i++) {
->   		e = &entries[i];
->   
-> -		if (e->function == function &&
-> -		    (!(e->flags & KVM_CPUID_FLAG_SIGNIFCANT_INDEX) || e->index == index))
-> +		if (e->function != function)
-> +			continue;
-> +
-> +		/*
-> +		 * If the index isn't significant, use the first entry with a
-> +		 * matching function.  It's userspace's responsibilty to not
-> +		 * provide "duplicate" entries in all cases.
-> +		 */
-> +		if (!(e->flags & KVM_CPUID_FLAG_SIGNIFCANT_INDEX) || e->index == index)
->   			return e;
-> +
-> +		/*
-> +		 * Function matches and index is significant; not specifying an
-> +		 * exact index in this case is a KVM bug.
-> +		 */
-> +		WARN_ON_ONCE(index == KVM_CPUID_INDEX_NOT_SIGNIFICANT);
->   	}
->   
->   	return NULL;
-> @@ -96,7 +117,8 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
->   	 * The existing code assumes virtual address is 48-bit or 57-bit in the
->   	 * canonical address checks; exit if it is ever changed.
->   	 */
-> -	best = cpuid_entry2_find(entries, nent, 0x80000008, 0);
-> +	best = cpuid_entry2_find(entries, nent, 0x80000008,
-> +				 KVM_CPUID_INDEX_NOT_SIGNIFICANT);
->   	if (best) {
->   		int vaddr_bits = (best->eax & 0xff00) >> 8;
->   
-> @@ -151,7 +173,7 @@ static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
->   	vcpu->arch.kvm_cpuid_base = 0;
->   
->   	for_each_possible_hypervisor_cpuid_base(function) {
-> -		entry = kvm_find_cpuid_entry(vcpu, function, 0);
-> +		entry = kvm_find_cpuid_entry(vcpu, function);
->   
->   		if (entry) {
->   			u32 signature[3];
-> @@ -177,7 +199,8 @@ static struct kvm_cpuid_entry2 *__kvm_find_kvm_cpuid_features(struct kvm_vcpu *v
->   	if (!base)
->   		return NULL;
->   
-> -	return cpuid_entry2_find(entries, nent, base | KVM_CPUID_FEATURES, 0);
-> +	return cpuid_entry2_find(entries, nent, base | KVM_CPUID_FEATURES,
-> +				 KVM_CPUID_INDEX_NOT_SIGNIFICANT);
->   }
->   
->   static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu)
-> @@ -219,7 +242,7 @@ static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_e
->   	struct kvm_cpuid_entry2 *best;
->   	u64 guest_supported_xcr0 = cpuid_get_supported_xcr0(entries, nent);
->   
-> -	best = cpuid_entry2_find(entries, nent, 1, 0);
-> +	best = cpuid_entry2_find(entries, nent, 1, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
->   	if (best) {
->   		/* Update OSXSAVE bit */
->   		if (boot_cpu_has(X86_FEATURE_XSAVE))
-> @@ -250,7 +273,7 @@ static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_e
->   		best->eax &= ~(1 << KVM_FEATURE_PV_UNHALT);
->   
->   	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT)) {
-> -		best = cpuid_entry2_find(entries, nent, 0x1, 0);
-> +		best = cpuid_entry2_find(entries, nent, 0x1, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
->   		if (best)
->   			cpuid_entry_change(best, X86_FEATURE_MWAIT,
->   					   vcpu->arch.ia32_misc_enable_msr &
-> @@ -285,7 +308,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   	struct kvm_cpuid_entry2 *best;
->   	u64 guest_supported_xcr0;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 1, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 1);
->   	if (best && apic) {
->   		if (cpuid_entry_has(best, X86_FEATURE_TSC_DEADLINE_TIMER))
->   			apic->lapic_timer.timer_mode_mask = 3 << 17;
-> @@ -325,10 +348,10 @@ int cpuid_query_maxphyaddr(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0x80000000, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0x80000000);
->   	if (!best || best->eax < 0x80000008)
->   		goto not_found;
-> -	best = kvm_find_cpuid_entry(vcpu, 0x80000008, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0x80000008);
->   	if (best)
->   		return best->eax & 0xff;
->   not_found:
-> @@ -1302,12 +1325,20 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
->   	return r;
->   }
->   
-> -struct kvm_cpuid_entry2 *kvm_find_cpuid_entry(struct kvm_vcpu *vcpu,
-> -					      u32 function, u32 index)
-> +struct kvm_cpuid_entry2 *kvm_find_cpuid_entry_index(struct kvm_vcpu *vcpu,
-> +						    u32 function, u32 index)
->   {
->   	return cpuid_entry2_find(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
->   				 function, index);
->   }
-> +EXPORT_SYMBOL_GPL(kvm_find_cpuid_entry_index);
-> +
-> +struct kvm_cpuid_entry2 *kvm_find_cpuid_entry(struct kvm_vcpu *vcpu,
-> +					      u32 function)
-> +{
-> +	return cpuid_entry2_find(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent,
-> +				 function, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
-> +}
->   EXPORT_SYMBOL_GPL(kvm_find_cpuid_entry);
->   
->   /*
-> @@ -1344,7 +1375,7 @@ get_out_of_range_cpuid_entry(struct kvm_vcpu *vcpu, u32 *fn_ptr, u32 index)
->   	struct kvm_cpuid_entry2 *basic, *class;
->   	u32 function = *fn_ptr;
->   
-> -	basic = kvm_find_cpuid_entry(vcpu, 0, 0);
-> +	basic = kvm_find_cpuid_entry(vcpu, 0);
->   	if (!basic)
->   		return NULL;
->   
-> @@ -1353,11 +1384,11 @@ get_out_of_range_cpuid_entry(struct kvm_vcpu *vcpu, u32 *fn_ptr, u32 index)
->   		return NULL;
->   
->   	if (function >= 0x40000000 && function <= 0x4fffffff)
-> -		class = kvm_find_cpuid_entry(vcpu, function & 0xffffff00, 0);
-> +		class = kvm_find_cpuid_entry(vcpu, function & 0xffffff00);
->   	else if (function >= 0xc0000000)
-> -		class = kvm_find_cpuid_entry(vcpu, 0xc0000000, 0);
-> +		class = kvm_find_cpuid_entry(vcpu, 0xc0000000);
->   	else
-> -		class = kvm_find_cpuid_entry(vcpu, function & 0x80000000, 0);
-> +		class = kvm_find_cpuid_entry(vcpu, function & 0x80000000);
->   
->   	if (class && function <= class->eax)
->   		return NULL;
-> @@ -1375,7 +1406,7 @@ get_out_of_range_cpuid_entry(struct kvm_vcpu *vcpu, u32 *fn_ptr, u32 index)
->   	 * the effective CPUID entry is the max basic leaf.  Note, the index of
->   	 * the original requested leaf is observed!
->   	 */
-> -	return kvm_find_cpuid_entry(vcpu, basic->eax, index);
-> +	return kvm_find_cpuid_entry_index(vcpu, basic->eax, index);
->   }
->   
->   bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
-> @@ -1385,7 +1416,7 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
->   	struct kvm_cpuid_entry2 *entry;
->   	bool exact, used_max_basic = false;
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, function, index);
-> +	entry = kvm_find_cpuid_entry_index(vcpu, function, index);
->   	exact = !!entry;
->   
->   	if (!entry && !exact_only) {
-> @@ -1414,7 +1445,7 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
->   		 * exists. EDX can be copied from any existing index.
->   		 */
->   		if (function == 0xb || function == 0x1f) {
-> -			entry = kvm_find_cpuid_entry(vcpu, function, 1);
-> +			entry = kvm_find_cpuid_entry_index(vcpu, function, 1);
->   			if (entry) {
->   				*ecx = index & 0xff;
->   				*edx = entry->edx;
-> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> index ac72aabba981..b1658c0de847 100644
-> --- a/arch/x86/kvm/cpuid.h
-> +++ b/arch/x86/kvm/cpuid.h
-> @@ -13,8 +13,10 @@ void kvm_set_cpu_caps(void);
->   
->   void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu);
->   void kvm_update_pv_runtime(struct kvm_vcpu *vcpu);
-> +struct kvm_cpuid_entry2 *kvm_find_cpuid_entry_index(struct kvm_vcpu *vcpu,
-> +						    u32 function, u32 index);
->   struct kvm_cpuid_entry2 *kvm_find_cpuid_entry(struct kvm_vcpu *vcpu,
-> -					      u32 function, u32 index);
-> +					      u32 function);
->   int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
->   			    struct kvm_cpuid_entry2 __user *entries,
->   			    unsigned int type);
-> @@ -76,7 +78,7 @@ static __always_inline u32 *guest_cpuid_get_register(struct kvm_vcpu *vcpu,
->   	const struct cpuid_reg cpuid = x86_feature_cpuid(x86_feature);
->   	struct kvm_cpuid_entry2 *entry;
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, cpuid.function, cpuid.index);
-> +	entry = kvm_find_cpuid_entry_index(vcpu, cpuid.function, cpuid.index);
->   	if (!entry)
->   		return NULL;
->   
-> @@ -109,7 +111,7 @@ static inline bool guest_cpuid_is_amd_or_hygon(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0);
->   	return best &&
->   	       (is_guest_vendor_amd(best->ebx, best->ecx, best->edx) ||
->   		is_guest_vendor_hygon(best->ebx, best->ecx, best->edx));
-> @@ -119,7 +121,7 @@ static inline bool guest_cpuid_is_intel(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0);
->   	return best && is_guest_vendor_intel(best->ebx, best->ecx, best->edx);
->   }
->   
-> @@ -127,7 +129,7 @@ static inline int guest_cpuid_family(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0x1, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0x1);
->   	if (!best)
->   		return -1;
->   
-> @@ -138,7 +140,7 @@ static inline int guest_cpuid_model(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0x1, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0x1);
->   	if (!best)
->   		return -1;
->   
-> @@ -154,7 +156,7 @@ static inline int guest_cpuid_stepping(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_cpuid_entry2 *best;
->   
-> -	best = kvm_find_cpuid_entry(vcpu, 0x1, 0);
-> +	best = kvm_find_cpuid_entry(vcpu, 0x1);
->   	if (!best)
->   		return -1;
->   
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index e2e95a6fccfd..ed804447589c 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1992,7 +1992,7 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
->   	struct kvm_cpuid_entry2 *entry;
->   	struct kvm_vcpu_hv *hv_vcpu;
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_INTERFACE, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_INTERFACE);
->   	if (entry && entry->eax == HYPERV_CPUID_SIGNATURE_EAX) {
->   		vcpu->arch.hyperv_enabled = true;
->   	} else {
-> @@ -2005,7 +2005,7 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
->   
->   	hv_vcpu = to_hv_vcpu(vcpu);
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_FEATURES, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_FEATURES);
->   	if (entry) {
->   		hv_vcpu->cpuid_cache.features_eax = entry->eax;
->   		hv_vcpu->cpuid_cache.features_ebx = entry->ebx;
-> @@ -2016,7 +2016,7 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
->   		hv_vcpu->cpuid_cache.features_edx = 0;
->   	}
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_ENLIGHTMENT_INFO, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_ENLIGHTMENT_INFO);
->   	if (entry) {
->   		hv_vcpu->cpuid_cache.enlightenments_eax = entry->eax;
->   		hv_vcpu->cpuid_cache.enlightenments_ebx = entry->ebx;
-> @@ -2025,7 +2025,7 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
->   		hv_vcpu->cpuid_cache.enlightenments_ebx = 0;
->   	}
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES);
->   	if (entry)
->   		hv_vcpu->cpuid_cache.syndbg_cap_eax = entry->eax;
->   	else
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 37ce061dfc76..d2fa008b04ad 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4193,7 +4193,7 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   
->   	/* For sev guests, the memory encryption bit is not reserved in CR3.  */
->   	if (sev_guest(vcpu->kvm)) {
-> -		best = kvm_find_cpuid_entry(vcpu, 0x8000001F, 0);
-> +		best = kvm_find_cpuid_entry(vcpu, 0x8000001F);
->   		if (best)
->   			vcpu->arch.reserved_gpa_bits &= ~(1UL << (best->ebx & 0x3f));
->   	}
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index 53ccba896e77..4bc098fbec31 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -531,7 +531,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   	pmu->pebs_enable_mask = ~0ull;
->   	pmu->pebs_data_cfg_mask = ~0ull;
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, 0xa);
->   	if (!entry || !vcpu->kvm->arch.enable_pmu)
->   		return;
->   	eax.full = entry->eax;
-> @@ -577,7 +577,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   		pmu->global_ovf_ctrl_mask &=
->   				~MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI;
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, 7, 0);
-> +	entry = kvm_find_cpuid_entry_index(vcpu, 7, 0);
->   	if (entry &&
->   	    (boot_cpu_has(X86_FEATURE_HLE) || boot_cpu_has(X86_FEATURE_RTM)) &&
->   	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM))) {
-> diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-> index 35e7ec91ae86..d1cc7244bede 100644
-> --- a/arch/x86/kvm/vmx/sgx.c
-> +++ b/arch/x86/kvm/vmx/sgx.c
-> @@ -148,8 +148,8 @@ static int __handle_encls_ecreate(struct kvm_vcpu *vcpu,
->   	u8 max_size_log2;
->   	int trapnr, ret;
->   
-> -	sgx_12_0 = kvm_find_cpuid_entry(vcpu, 0x12, 0);
-> -	sgx_12_1 = kvm_find_cpuid_entry(vcpu, 0x12, 1);
-> +	sgx_12_0 = kvm_find_cpuid_entry_index(vcpu, 0x12, 0);
-> +	sgx_12_1 = kvm_find_cpuid_entry_index(vcpu, 0x12, 1);
->   	if (!sgx_12_0 || !sgx_12_1) {
->   		kvm_prepare_emulation_failure_exit(vcpu);
->   		return 0;
-> @@ -431,7 +431,7 @@ static bool sgx_intercept_encls_ecreate(struct kvm_vcpu *vcpu)
->   	if (!vcpu->kvm->arch.sgx_provisioning_allowed)
->   		return true;
->   
-> -	guest_cpuid = kvm_find_cpuid_entry(vcpu, 0x12, 0);
-> +	guest_cpuid = kvm_find_cpuid_entry_index(vcpu, 0x12, 0);
->   	if (!guest_cpuid)
->   		return true;
->   
-> @@ -439,7 +439,7 @@ static bool sgx_intercept_encls_ecreate(struct kvm_vcpu *vcpu)
->   	if (guest_cpuid->ebx != ebx || guest_cpuid->edx != edx)
->   		return true;
->   
-> -	guest_cpuid = kvm_find_cpuid_entry(vcpu, 0x12, 1);
-> +	guest_cpuid = kvm_find_cpuid_entry_index(vcpu, 0x12, 1);
->   	if (!guest_cpuid)
->   		return true;
->   
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c30115b9cb33..74ca64e97643 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7428,7 +7428,7 @@ static void nested_vmx_cr_fixed1_bits_update(struct kvm_vcpu *vcpu)
->   		vmx->nested.msrs.cr4_fixed1 |= (_cr4_mask);	\
->   } while (0)
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, 0x1, 0);
-> +	entry = kvm_find_cpuid_entry(vcpu, 0x1);
->   	cr4_fixed1_update(X86_CR4_VME,        edx, feature_bit(VME));
->   	cr4_fixed1_update(X86_CR4_PVI,        edx, feature_bit(VME));
->   	cr4_fixed1_update(X86_CR4_TSD,        edx, feature_bit(TSC));
-> @@ -7444,7 +7444,7 @@ static void nested_vmx_cr_fixed1_bits_update(struct kvm_vcpu *vcpu)
->   	cr4_fixed1_update(X86_CR4_PCIDE,      ecx, feature_bit(PCID));
->   	cr4_fixed1_update(X86_CR4_OSXSAVE,    ecx, feature_bit(XSAVE));
->   
-> -	entry = kvm_find_cpuid_entry(vcpu, 0x7, 0);
-> +	entry = kvm_find_cpuid_entry_index(vcpu, 0x7, 0);
->   	cr4_fixed1_update(X86_CR4_FSGSBASE,   ebx, feature_bit(FSGSBASE));
->   	cr4_fixed1_update(X86_CR4_SMEP,       ebx, feature_bit(SMEP));
->   	cr4_fixed1_update(X86_CR4_SMAP,       ebx, feature_bit(SMAP));
-> @@ -7479,7 +7479,7 @@ static void update_intel_pt_cfg(struct kvm_vcpu *vcpu)
->   	int i;
->   
->   	for (i = 0; i < PT_CPUID_LEAVES; i++) {
-> -		best = kvm_find_cpuid_entry(vcpu, 0x14, i);
-> +		best = kvm_find_cpuid_entry_index(vcpu, 0x14, i);
->   		if (!best)
->   			return;
->   		vmx->pt_desc.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM] = best->eax;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 567d13405445..329875d2ccf2 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11731,7 +11731,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->   	 * i.e. it's impossible for kvm_find_cpuid_entry() to find a valid entry
->   	 * on RESET.  But, go through the motions in case that's ever remedied.
->   	 */
-> -	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
-> +	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1);
->   	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
->   
->   	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
-> 
-> base-commit: b9b71f43683ae9d76b0989249607bbe8c9eb6c5c
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
+
+---
+V9 -> V10: Rebase on the latest code
+V8 -> V9 : Add more commit message
+V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+---
+ drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+ drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+ drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+ {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+ 5 files changed, 5 insertions(+), 7 deletions(-)
+ rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index f33e08eb7670..812784702d53 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -13,11 +13,10 @@
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define	PD_RETRY_COUNT_DEFAULT			3
+ #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+ #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+index df2505570f07..4b6705f3d7b7 100644
+--- a/drivers/usb/typec/tcpm/tcpci_maxim.c
++++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+@@ -11,11 +11,10 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define PD_ACTIVITY_TIMEOUT_MS				10000
+ 
+ #define TCPC_VENDOR_ALERT				0x80
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+index 8a952eaf9016..1b7c31278ebb 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+@@ -11,10 +11,9 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ 
+-#include "tcpci.h"
+-
+ #define MT6360_REG_PHYCTRL1	0x80
+ #define MT6360_REG_PHYCTRL3	0x82
+ #define MT6360_REG_PHYCTRL7	0x86
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index b56a0880a044..3291ca4948da 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -10,9 +10,9 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/regmap.h>
+-#include "tcpci.h"
+ 
+ #define RT1711H_VID		0x29CF
+ #define RT1711H_PID		0x1711
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+similarity index 99%
+rename from drivers/usb/typec/tcpm/tcpci.h
+rename to include/linux/usb/tcpci.h
+index b2edd45f13c6..20c0bedb8ec8 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/include/linux/usb/tcpci.h
+@@ -9,6 +9,7 @@
+ #define __LINUX_USB_TCPCI_H
+ 
+ #include <linux/usb/typec.h>
++#include <linux/usb/tcpm.h>
+ 
+ #define TCPC_VENDOR_ID			0x0
+ #define TCPC_PRODUCT_ID			0x2
+-- 
+2.25.1
 

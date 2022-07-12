@@ -2,471 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2317D572754
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A817857275E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiGLUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S230449AbiGLUft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiGLUeC (ORCPT
+        with ESMTP id S229681AbiGLUfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:34:02 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999FE21E1F;
-        Tue, 12 Jul 2022 13:33:59 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 64A09C01E; Tue, 12 Jul 2022 22:33:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657658038; bh=C5F3rSQ7GqIANd5Bt9J8Do3iD0oialhIYzeN1rNK98U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=plKCc2lAwLbjXpJUqFL+6wGMu3chpxMzhwvfY+4LijSlom5q1ZFpCApPBOSr0V5Qg
-         0mk36G/jHorbMrqivl8Hcxqy9p8QkbrCRY7qaFPQUTGK5svaY4RPAu3aRNB5zKyJtF
-         qCUTVKU+1p3lzzA5SLForMdgvdGyOC9/fEublQ9jAsGwp9tp3WzgpTcWnpIdMH6GmF
-         kmwJbgFEPFmV4IGG6KSDu3/SBqMxoHutzhS2j2GiRILS8hejVbcrDwptUnkj2el67r
-         bJtcHoyIxUSO7WZaNzg22n16CMG31acQ109IgpV13Ar/SxIULh0dPpDKVuNxmrwQkj
-         fK27SDtGKTPow==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 4371EC009;
-        Tue, 12 Jul 2022 22:33:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1657658035; bh=C5F3rSQ7GqIANd5Bt9J8Do3iD0oialhIYzeN1rNK98U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sxXn7Tn63jw18ZRLEkuGV7tM/0hbMBT6Gekzbju/A01d2VYBufV+pY6ncXc1TDYn0
-         0B9T6Ne7AXuswTSeDgYifyuX6RiBSk8JZsp6k7qD2iZ9DpFQCHV5kl0087ggW8Wnr8
-         P38QC++nxtZH8O9/8+HEh5K5NNP7YDRZC0NwoDwggrbX4mXnLahhaCWVbZ7NnQ9hr7
-         BRaJ3uPASF9c4jaYTU5q1zP+L6rCYOuREkDxIO5oJFVewhBXIAQDgTbbtHAUomw9kV
-         9Kzzj9UJu+FcyTf5eVsb6ROqj1MpCkpp/nfdqd9EwNCEBx99AqkrTLS7XBktiN9jHz
-         uaRLZyb123oug==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c1db48ba;
-        Tue, 12 Jul 2022 20:33:49 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 05:33:34 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-Subject: Re: [PATCH v5 03/11] 9p/trans_virtio: introduce struct virtqueue_sg
-Message-ID: <Ys3antr+zrP5eQ1Z@codewreck.org>
-References: <cover.1657636554.git.linux_oss@crudebyte.com>
- <862eef0d6d4b14faaea0d2aab982a3c8dfd8056b.1657636554.git.linux_oss@crudebyte.com>
+        Tue, 12 Jul 2022 16:35:47 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B065FA58D3;
+        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r186so1398915pgr.2;
+        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dsj65B36SHPt1jY+YKCsF4AuEiEfb/4USf5ig8Q6FVI=;
+        b=NJGklDrevQF1++hLN9JDPGMlqEzdKsU4Peytf0ZZzfqMs6sNclbuhwaOtG4jXAXHvo
+         mFiUc0qGy4UZ5Q53GbZCfhZJEDrI2q97Q6YuNudNLrYulDhc+dq9pXbrkxvMv2VUftWy
+         w+o+Bu9wFUXcbDemgk8dc68ZQqp9kn0Wqv+JKu9EyTxj3Fg4l/7KcmGQ1pw4DEQpcV8C
+         R/JGB5ZeQa+RbFWGTfKMJ4rxIyx4g+x7KnVkeAdgoz9HuD0nHYDO7oJRaJeEllhTwKmr
+         aKT6EWDJINf/xtf569hyKTMXVrog1fUamgpdCeMbYaDOVummSChk3Ap4YLnNK00uvsm6
+         ZPeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dsj65B36SHPt1jY+YKCsF4AuEiEfb/4USf5ig8Q6FVI=;
+        b=S9puBipwVGmx+GzDQwnByAtw54sLqJFmeGfSiVbWwkMpOL7sm/PA9L+oryX4VSNCPi
+         C8yLYZfwwkvbS7iD10RCJGkst/RvxEISH8kATcnwjdB5SQD6kvv3eNqmeRzKZmlxzvG1
+         MPAp7mxnn3zLVie8H23ID/ivV8pqnmy7Ae0LMDJa0HRxSGMz71wwJKswQeMpMrbXrvmo
+         UlykO1XiSxqSGlIRARIk0I6H/jFepuIZ78hKFWAcu4WPHlgdBglZBbAyWfD67beQK5Zs
+         75UtHrW83e+sNwtt0Q6PEkVgethLA2GlZYHGe/t1msjDP21j3NaLt3ie/PDKtDkwKvcm
+         4DGA==
+X-Gm-Message-State: AJIora9Z8rRYSbMk/PNA9Q88q0ydBF+ixjLV410Obph48r5F6yRbX9F2
+        vvmggI88uVGxyjlWqBNKqyFNKjl2nqg=
+X-Google-Smtp-Source: AGRyM1vkrAwfzqqqFig6+mSzDiboUBQemdM5KezzgflIeKQTAkuvA5GgVeO8La6fgwwfxp5v8r1pPw==
+X-Received: by 2002:a63:6c06:0:b0:40d:e2a0:278c with SMTP id h6-20020a636c06000000b0040de2a0278cmr58333pgc.328.1657658146056;
+        Tue, 12 Jul 2022 13:35:46 -0700 (PDT)
+Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
+        by smtp.gmail.com with ESMTPSA id d3-20020a17090ae28300b001ef8ab65052sm20883pjz.11.2022.07.12.13.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 13:35:44 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 13:35:42 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v7 030/102] KVM: TDX: Do TDX specific vcpu initialization
+Message-ID: <20220712203542.GN1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <e05ce01e400f80437803146564d4c351bf1df047.1656366338.git.isaku.yamahata@intel.com>
+ <20220708021443.v4frmpcqgbk23hkp@yy-desk-7060>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <862eef0d6d4b14faaea0d2aab982a3c8dfd8056b.1657636554.git.linux_oss@crudebyte.com>
+In-Reply-To: <20220708021443.v4frmpcqgbk23hkp@yy-desk-7060>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:16PM +0200:
-> The amount of elements in a scatter/gather list is limited to
-> approximately 128 elements. To allow going beyond that limit
-> with subsequent patches, pave the way by turning the one-
-> dimensional sg list array into a two-dimensional array, i.e:
-> 
->   sg[128]
-> 
-> becomes
-> 
->   sgl[nsgl][SG_MAX_SINGLE_ALLOC]
-> 
-> As the value of 'nsgl' is exactly (still) 1 in this commit
-> and the compile-time (compiler and architecture dependent)
-> value of 'SG_MAX_SINGLE_ALLOC' equals approximately the
-> previous hard coded 128 elements, this commit is therefore
-> more of a preparatory refactoring then actual behaviour
-> change.
-> 
-> A custom struct virtqueue_sg is defined instead of using
-> shared API struct sg_table, because the latter would not
-> allow to resize the table after allocation. sg_append_table
-> API OTOH would not fit either, because it requires a list
-> of pages beforehand upon allocation. And both APIs only
-> support all-or-nothing allocation.
-> 
-> Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-> ---
-> 
-> The question is whether that should really become 9p specifc SG list
-> code, or whether it should rather be squeezed into shared SG list code
-> base. Opinions by maintainers needed.
+On Fri, Jul 08, 2022 at 10:14:43AM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
 
-hmm from the 9p side I'd say the type is simple enough that we can just
-keep it here; most people don't want to resize these lists...
-
-How much do you care about the all-or-nothing case you described in this
-commit message? From the look of it, patch 6 -- at what point did you
-actually see this being useful?
-
->  net/9p/trans_virtio.c | 193 ++++++++++++++++++++++++++++++++----------
->  1 file changed, 147 insertions(+), 46 deletions(-)
+> On Mon, Jun 27, 2022 at 02:53:22PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> >
+> > TD guest vcpu need to be configured before ready to run which requests
+> > addtional information from Device model (e.g. qemu), one 64bit value is
+> > passed to vcpu's RCX as an initial value.  Repurpose KVM_MEMORY_ENCRYPT_OP
+> > to vcpu-scope and add new sub-commands KVM_TDX_INIT_VCPU under it for such
+> > additional vcpu configuration.
+> >
+> > Add callback for kvm vCPU-scoped operations of KVM_MEMORY_ENCRYPT_OP and
+> > add a new subcommand, KVM_TDX_INIT_VCPU, for further vcpu initialization.
+> >
+> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm-x86-ops.h    |  1 +
+> >  arch/x86/include/asm/kvm_host.h       |  1 +
+> >  arch/x86/include/uapi/asm/kvm.h       |  1 +
+> >  arch/x86/kvm/vmx/main.c               |  9 +++++++
+> >  arch/x86/kvm/vmx/tdx.c                | 36 +++++++++++++++++++++++++++
+> >  arch/x86/kvm/vmx/tdx.h                |  4 +++
+> >  arch/x86/kvm/vmx/x86_ops.h            |  2 ++
+> >  arch/x86/kvm/x86.c                    |  6 +++++
+> >  tools/arch/x86/include/uapi/asm/kvm.h |  1 +
+> >  9 files changed, 61 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index 3677a5015a4f..32a6df784ea6 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -119,6 +119,7 @@ KVM_X86_OP(leave_smm)
+> >  KVM_X86_OP(enable_smi_window)
+> >  KVM_X86_OP_OPTIONAL(dev_mem_enc_ioctl)
+> >  KVM_X86_OP_OPTIONAL(mem_enc_ioctl)
+> > +KVM_X86_OP_OPTIONAL(vcpu_mem_enc_ioctl)
+> >  KVM_X86_OP_OPTIONAL(mem_enc_register_region)
+> >  KVM_X86_OP_OPTIONAL(mem_enc_unregister_region)
+> >  KVM_X86_OP_OPTIONAL(vm_copy_enc_context_from)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 81638987cdb9..e5d4e5b60fdc 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1595,6 +1595,7 @@ struct kvm_x86_ops {
+> >
+> >  	int (*dev_mem_enc_ioctl)(void __user *argp);
+> >  	int (*mem_enc_ioctl)(struct kvm *kvm, void __user *argp);
+> > +	int (*vcpu_mem_enc_ioctl)(struct kvm_vcpu *vcpu, void __user *argp);
+> >  	int (*mem_enc_register_region)(struct kvm *kvm, struct kvm_enc_region *argp);
+> >  	int (*mem_enc_unregister_region)(struct kvm *kvm, struct kvm_enc_region *argp);
+> >  	int (*vm_copy_enc_context_from)(struct kvm *kvm, unsigned int source_fd);
+> > diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+> > index f89774ccd4ae..399c28b2f4f5 100644
+> > --- a/arch/x86/include/uapi/asm/kvm.h
+> > +++ b/arch/x86/include/uapi/asm/kvm.h
+> > @@ -538,6 +538,7 @@ struct kvm_pmu_event_filter {
+> >  enum kvm_tdx_cmd_id {
+> >  	KVM_TDX_CAPABILITIES = 0,
+> >  	KVM_TDX_INIT_VM,
+> > +	KVM_TDX_INIT_VCPU,
+> >
+> >  	KVM_TDX_CMD_NR_MAX,
+> >  };
+> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> > index 4f4ed4ad65a7..ce12cc8276ef 100644
+> > --- a/arch/x86/kvm/vmx/main.c
+> > +++ b/arch/x86/kvm/vmx/main.c
+> > @@ -113,6 +113,14 @@ static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+> >  	return tdx_vm_ioctl(kvm, argp);
+> >  }
+> >
+> > +static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
+> > +{
+> > +	if (!is_td_vcpu(vcpu))
+> > +		return -EINVAL;
+> > +
+> > +	return tdx_vcpu_ioctl(vcpu, argp);
+> > +}
+> > +
+> >  struct kvm_x86_ops vt_x86_ops __initdata = {
+> >  	.name = "kvm_intel",
+> >
+> > @@ -255,6 +263,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+> >
+> >  	.dev_mem_enc_ioctl = tdx_dev_ioctl,
+> >  	.mem_enc_ioctl = vt_mem_enc_ioctl,
+> > +	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
+> >  };
+> >
+> >  struct kvm_x86_init_ops vt_init_ops __initdata = {
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index d9fe3f6463c3..2772775457b0 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -83,6 +83,11 @@ static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
+> >  	return kvm_tdx->hkid > 0;
+> >  }
+> >
+> > +static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
+> > +{
+> > +	return kvm_tdx->finalized;
+> > +}
+> > +
+> >  static void tdx_clear_page(unsigned long page)
+> >  {
+> >  	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> > @@ -805,6 +810,37 @@ int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
+> >  	return r;
+> >  }
+> >
+> > +int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
+> > +{
+> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
+> > +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> > +	struct kvm_tdx_cmd cmd;
+> > +	u64 err;
+> > +
+> > +	if (tdx->initialized)
 > 
-> diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
-> index 18bdfa64b934..f63cd1b08bca 100644
-> --- a/net/9p/trans_virtio.c
-> +++ b/net/9p/trans_virtio.c
-> @@ -36,7 +36,31 @@
->  #include <linux/virtio_9p.h>
->  #include "trans_common.h"
->  
-> -#define VIRTQUEUE_DEFAULT_NUM	128
-> +/**
-> + * struct virtqueue_sg - (chained) scatter gather lists for virtqueue data
-> + * transmission
-> + * @nsgl: amount of elements (in first dimension) of array field @sgl
-> + * @sgl: two-dimensional array, i.e. sgl[nsgl][SG_MAX_SINGLE_ALLOC]
-> + */
-> +struct virtqueue_sg {
-> +	unsigned int nsgl;
-> +	struct scatterlist *sgl[];
-> +};
-> +
-> +/*
-> + * Default value for field nsgl in struct virtqueue_sg, which defines the
-> + * initial virtio data transmission capacity when this virtio transport is
-> + * probed.
-> + */
-> +#define VIRTQUEUE_SG_NSGL_DEFAULT 1
-> +
-> +/* maximum value for field nsgl in struct virtqueue_sg */
-> +#define VIRTQUEUE_SG_NSGL_MAX						\
-> +	((PAGE_SIZE - sizeof(struct virtqueue_sg)) /			\
-> +	sizeof(struct scatterlist *))					\
-> +
-> +/* last entry per sg list is used for chaining (pointer to next list) */
-> +#define SG_USER_PAGES_PER_LIST	(SG_MAX_SINGLE_ALLOC - 1)
->  
->  /* a single mutex to manage channel initialization and attachment */
->  static DEFINE_MUTEX(virtio_9p_lock);
-> @@ -53,8 +77,7 @@ static atomic_t vp_pinned = ATOMIC_INIT(0);
->   * @ring_bufs_avail: flag to indicate there is some available in the ring buf
->   * @vc_wq: wait queue for waiting for thing to be added to ring buf
->   * @p9_max_pages: maximum number of pinned pages
-> - * @sg: scatter gather list which is used to pack a request (protected?)
-> - * @sg_n: amount of elements in sg array
-> + * @vq_sg: table of scatter gather lists, which are used to pack a request
->   * @chan_list: linked list of channels
->   *
->   * We keep all per-channel information in a structure.
-> @@ -77,9 +100,7 @@ struct virtio_chan {
->  	 * will be placing it in each channel.
->  	 */
->  	unsigned long p9_max_pages;
-> -	/* Scatterlist: can be too big for stack. */
-> -	struct scatterlist *sg;
-> -	size_t sg_n;
-> +	struct virtqueue_sg *vq_sg;
->  	/**
->  	 * @tag: name to identify a mount null terminated
->  	 */
-> @@ -96,6 +117,92 @@ static unsigned int rest_of_page(void *data)
->  	return PAGE_SIZE - offset_in_page(data);
->  }
->  
-> +/**
-> + * vq_sg_page - returns user page for given page index
-> + * @vq_sg: scatter gather lists used by this transport
-> + * @page: user page index across all scatter gather lists
-> + */
-> +static struct scatterlist *vq_sg_page(struct virtqueue_sg *vq_sg, size_t page)
-> +{
-> +	unsigned int node = page / SG_USER_PAGES_PER_LIST;
-> +	unsigned int leaf = page % SG_USER_PAGES_PER_LIST;
-> +	BUG_ON(node >= VIRTQUEUE_SG_NSGL_MAX);
+> Minor: How about "tdx_vcpu->initialized" ? there's
+> "is_td_initialized()" below, the "tdx" here may lead guys to treat it
+> as whole td vm until they confirmed it's type again.
 
-probably awnt to check with vq_sg->sg_n instead?
-(we already check sg_n <= MAX on alloc)
-
-
-> +	return &vq_sg->sgl[node][leaf];
-> +}
-> +
-> +/**
-> + * vq_sg_npages - returns total number of individual user pages in passed
-> + * scatter gather lists
-> + * @vq_sg: scatter gather lists to be counted
-> + */
-> +static size_t vq_sg_npages(struct virtqueue_sg *vq_sg)
-> +{
-> +	return vq_sg->nsgl * SG_USER_PAGES_PER_LIST;
-> +}
-> +
-> +/**
-> + * vq_sg_free - free all memory previously allocated for @vq_sg
-> + * @vq_sg: scatter gather lists to be freed
-> + */
-> +static void vq_sg_free(struct virtqueue_sg *vq_sg)
-> +{
-> +	unsigned int i;
-> +
-> +	if (!vq_sg)
-> +		return;
-> +
-> +	for (i = 0; i < vq_sg->nsgl; ++i) {
-> +		kfree(vq_sg->sgl[i]);
-> +	}
-> +	kfree(vq_sg);
-> +}
-> +
-> +/**
-> + * vq_sg_alloc - allocates and returns @nsgl scatter gather lists
-> + * @nsgl: amount of scatter gather lists to be allocated
-> + * If @nsgl is larger than one then chained lists are used if supported by
-> + * architecture.
-> + */
-> +static struct virtqueue_sg *vq_sg_alloc(unsigned int nsgl)
-> +{
-> +	struct virtqueue_sg *vq_sg;
-> +	unsigned int i;
-> +
-> +	BUG_ON(!nsgl || nsgl > VIRTQUEUE_SG_NSGL_MAX);
-> +#ifdef CONFIG_ARCH_NO_SG_CHAIN
-> +	if (WARN_ON_ONCE(nsgl > 1))
-> +		return NULL;
-> +#endif
-> +
-> +	vq_sg = kzalloc(sizeof(struct virtqueue_sg) +
-> +			nsgl * sizeof(struct scatterlist *),
-> +			GFP_KERNEL);
-> +
-> +	if (!vq_sg)
-> +		return NULL;
-> +
-> +	vq_sg->nsgl = nsgl;
-> +
-> +	for (i = 0; i < nsgl; ++i) {
-> +		vq_sg->sgl[i] = kmalloc_array(
-> +			SG_MAX_SINGLE_ALLOC, sizeof(struct scatterlist),
-> +			GFP_KERNEL
-> +		);
-> +		if (!vq_sg->sgl[i]) {
-> +			vq_sg_free(vq_sg);
-> +			return NULL;
-> +		}
-> +		sg_init_table(vq_sg->sgl[i], SG_MAX_SINGLE_ALLOC);
-> +		if (i) {
-> +			/* chain the lists */
-> +			sg_chain(vq_sg->sgl[i - 1], SG_MAX_SINGLE_ALLOC,
-> +				 vq_sg->sgl[i]);
-> +		}
-> +	}
-> +	sg_mark_end(&vq_sg->sgl[nsgl - 1][SG_MAX_SINGLE_ALLOC - 1]);
-> +	return vq_sg;
-> +}
-> +
->  /**
->   * p9_virtio_close - reclaim resources of a channel
->   * @client: client instance
-> @@ -158,9 +265,8 @@ static void req_done(struct virtqueue *vq)
->  
->  /**
->   * pack_sg_list - pack a scatter gather list from a linear buffer
-> - * @sg: scatter/gather list to pack into
-> + * @vq_sg: scatter/gather lists to pack into
->   * @start: which segment of the sg_list to start at
-> - * @limit: maximum segment to pack data to
->   * @data: data to pack into scatter/gather list
->   * @count: amount of data to pack into the scatter/gather list
->   *
-> @@ -170,11 +276,12 @@ static void req_done(struct virtqueue *vq)
->   *
->   */
->  
-> -static int pack_sg_list(struct scatterlist *sg, int start,
-> -			int limit, char *data, int count)
-> +static int pack_sg_list(struct virtqueue_sg *vq_sg, int start,
-> +			char *data, int count)
->  {
->  	int s;
->  	int index = start;
-> +	size_t limit = vq_sg_npages(vq_sg);
->  
->  	while (count) {
->  		s = rest_of_page(data);
-> @@ -182,13 +289,13 @@ static int pack_sg_list(struct scatterlist *sg, int start,
->  			s = count;
->  		BUG_ON(index >= limit);
->  		/* Make sure we don't terminate early. */
-> -		sg_unmark_end(&sg[index]);
-> -		sg_set_buf(&sg[index++], data, s);
-> +		sg_unmark_end(vq_sg_page(vq_sg, index));
-> +		sg_set_buf(vq_sg_page(vq_sg, index++), data, s);
->  		count -= s;
->  		data += s;
->  	}
->  	if (index-start)
-> -		sg_mark_end(&sg[index - 1]);
-> +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
->  	return index-start;
->  }
->  
-> @@ -208,21 +315,21 @@ static int p9_virtio_cancelled(struct p9_client *client, struct p9_req_t *req)
->  /**
->   * pack_sg_list_p - Just like pack_sg_list. Instead of taking a buffer,
->   * this takes a list of pages.
-> - * @sg: scatter/gather list to pack into
-> + * @vq_sg: scatter/gather lists to pack into
->   * @start: which segment of the sg_list to start at
-> - * @limit: maximum number of pages in sg list.
->   * @pdata: a list of pages to add into sg.
->   * @nr_pages: number of pages to pack into the scatter/gather list
->   * @offs: amount of data in the beginning of first page _not_ to pack
->   * @count: amount of data to pack into the scatter/gather list
->   */
->  static int
-> -pack_sg_list_p(struct scatterlist *sg, int start, int limit,
-> +pack_sg_list_p(struct virtqueue_sg *vq_sg, int start,
->  	       struct page **pdata, int nr_pages, size_t offs, int count)
->  {
->  	int i = 0, s;
->  	int data_off = offs;
->  	int index = start;
-> +	size_t limit = vq_sg_npages(vq_sg);
->  
->  	BUG_ON(nr_pages > (limit - start));
->  	/*
-> @@ -235,15 +342,16 @@ pack_sg_list_p(struct scatterlist *sg, int start, int limit,
->  			s = count;
->  		BUG_ON(index >= limit);
->  		/* Make sure we don't terminate early. */
-> -		sg_unmark_end(&sg[index]);
-> -		sg_set_page(&sg[index++], pdata[i++], s, data_off);
-> +		sg_unmark_end(vq_sg_page(vq_sg, index));
-> +		sg_set_page(vq_sg_page(vq_sg, index++), pdata[i++], s,
-> +			    data_off);
->  		data_off = 0;
->  		count -= s;
->  		nr_pages--;
->  	}
->  
->  	if (index-start)
-> -		sg_mark_end(&sg[index - 1]);
-> +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
->  	return index - start;
->  }
->  
-> @@ -271,15 +379,13 @@ p9_virtio_request(struct p9_client *client, struct p9_req_t *req)
->  
->  	out_sgs = in_sgs = 0;
->  	/* Handle out VirtIO ring buffers */
-> -	out = pack_sg_list(chan->sg, 0,
-> -			   chan->sg_n, req->tc.sdata, req->tc.size);
-> +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
->  	if (out)
-> -		sgs[out_sgs++] = chan->sg;
-> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
->  
-> -	in = pack_sg_list(chan->sg, out,
-> -			  chan->sg_n, req->rc.sdata, req->rc.capacity);
-> +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, req->rc.capacity);
->  	if (in)
-> -		sgs[out_sgs + in_sgs++] = chan->sg + out;
-> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
->  
->  	err = virtqueue_add_sgs(chan->vq, sgs, out_sgs, in_sgs, req,
->  				GFP_ATOMIC);
-> @@ -448,16 +554,15 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
->  	out_sgs = in_sgs = 0;
->  
->  	/* out data */
-> -	out = pack_sg_list(chan->sg, 0,
-> -			   chan->sg_n, req->tc.sdata, req->tc.size);
-> +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
->  
->  	if (out)
-> -		sgs[out_sgs++] = chan->sg;
-> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
->  
->  	if (out_pages) {
-> -		sgs[out_sgs++] = chan->sg + out;
-> -		out += pack_sg_list_p(chan->sg, out, chan->sg_n,
-> -				      out_pages, out_nr_pages, offs, outlen);
-> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, out);
-> +		out += pack_sg_list_p(chan->vq_sg, out, out_pages,
-> +				      out_nr_pages, offs, outlen);
->  	}
->  
->  	/*
-> @@ -467,15 +572,14 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
->  	 * Arrange in such a way that server places header in the
->  	 * allocated memory and payload onto the user buffer.
->  	 */
-> -	in = pack_sg_list(chan->sg, out,
-> -			  chan->sg_n, req->rc.sdata, in_hdr_len);
-> +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, in_hdr_len);
->  	if (in)
-> -		sgs[out_sgs + in_sgs++] = chan->sg + out;
-> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
->  
->  	if (in_pages) {
-> -		sgs[out_sgs + in_sgs++] = chan->sg + out + in;
-> -		in += pack_sg_list_p(chan->sg, out + in, chan->sg_n,
-> -				     in_pages, in_nr_pages, offs, inlen);
-> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out + in);
-> +		in += pack_sg_list_p(chan->vq_sg, out + in, in_pages,
-> +				     in_nr_pages, offs, inlen);
->  	}
->  
->  	BUG_ON(out_sgs + in_sgs > ARRAY_SIZE(sgs));
-> @@ -576,14 +680,12 @@ static int p9_virtio_probe(struct virtio_device *vdev)
->  		goto fail;
->  	}
->  
-> -	chan->sg = kmalloc_array(VIRTQUEUE_DEFAULT_NUM,
-> -				 sizeof(struct scatterlist), GFP_KERNEL);
-> -	if (!chan->sg) {
-> +	chan->vq_sg = vq_sg_alloc(VIRTQUEUE_SG_NSGL_DEFAULT);
-> +	if (!chan->vq_sg) {
->  		pr_err("Failed to allocate virtio 9P channel\n");
->  		err = -ENOMEM;
->  		goto out_free_chan_shallow;
->  	}
-> -	chan->sg_n = VIRTQUEUE_DEFAULT_NUM;
->  
->  	chan->vdev = vdev;
->  
-> @@ -596,8 +698,6 @@ static int p9_virtio_probe(struct virtio_device *vdev)
->  	chan->vq->vdev->priv = chan;
->  	spin_lock_init(&chan->lock);
->  
-> -	sg_init_table(chan->sg, chan->sg_n);
-> -
->  	chan->inuse = false;
->  	if (virtio_has_feature(vdev, VIRTIO_9P_MOUNT_TAG)) {
->  		virtio_cread(vdev, struct virtio_9p_config, tag_len, &tag_len);
-> @@ -646,7 +746,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
->  out_free_vq:
->  	vdev->config->del_vqs(vdev);
->  out_free_chan:
-> -	kfree(chan->sg);
-> +	vq_sg_free(chan->vq_sg);
->  out_free_chan_shallow:
->  	kfree(chan);
->  fail:
-> @@ -741,7 +841,7 @@ static void p9_virtio_remove(struct virtio_device *vdev)
->  	kobject_uevent(&(vdev->dev.kobj), KOBJ_CHANGE);
->  	kfree(chan->tag);
->  	kfree(chan->vc_wq);
-> -	kfree(chan->sg);
-> +	vq_sg_free(chan->vq_sg);
->  	kfree(chan);
->  
->  }
-> @@ -780,7 +880,8 @@ static struct p9_trans_module p9_virtio_trans = {
->  	 * that are not at page boundary, that can result in an extra
->  	 * page in zero copy.
->  	 */
-> -	.maxsize = PAGE_SIZE * (VIRTQUEUE_DEFAULT_NUM - 3),
-> +	.maxsize = PAGE_SIZE *
-> +		((VIRTQUEUE_SG_NSGL_DEFAULT * SG_USER_PAGES_PER_LIST) - 3),
->  	.def = 1,
->  	.owner = THIS_MODULE,
->  };
+I think you man tdx->vcpu_initialized.  If so, makes sense. I'll rename it.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

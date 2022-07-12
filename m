@@ -2,113 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B335725AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02E75725AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbiGLTfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
+        id S231644AbiGLThq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiGLTer (ORCPT
+        with ESMTP id S231548AbiGLTh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:34:47 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B19104024
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:11:00 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso9495143pjo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1Kx2yFOxzNDMjpBzKe/G+nv6YKHvbcis123ack/xGb8=;
-        b=HGlxE9Rz4W0J6kVtnkAh8fcUr/Nk/Uqp1oaw5BT+iq1uOc7rsVlbH3FukGyC6+WbHk
-         TXK+occhAfQ6mxrZCbfEaxbg0/f3dSDjkANb8N5Aih4ImLN0GQk4EF+r3APirlfzqGcc
-         +eHQjCk0EoovEQPi1w473gD5JVDcRHCTqzoVHuQxBoOrlqma2o/curvEOaJSttYp3cVm
-         vxQsIFQtKBT1uK/e77ZMwnL8xlMfkhe+ZnfhIqc9JkIQYF1veJ0orcI+KfXeG1QMwqb4
-         NjkrnrfTIadvbCH8yDVpgbePBJRnkMotsmBOhYLlfZjCIshqdJwR8fMhVz2B4U5Lx4LM
-         chsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Kx2yFOxzNDMjpBzKe/G+nv6YKHvbcis123ack/xGb8=;
-        b=Jv6XYAGj60sHd/gHP0IG2Q1OxpPb0p0t6zezrjZluerA3DwrXAGuYGT9e8IXhmHmbu
-         HKe6VebipcdWSbkf4V0BJ8L6HAIiyDdPxCq8R2/o9F+6N4JYt9SBVonD/OgzkK4762+x
-         kmUephdzohQyFOMAdqTIhuCDh9C1gL4jj8DjLwzOV35RrQL311wiIpXKyhevfHVcxzjH
-         RQoZ8XnUREzFX+J0+Bd8v6qU49Bl5m/wvvzK4Zhaa0T9iujzcevjigyfRo/vOvHZjMQu
-         UiQ2iU936yG6QewXzhx+kDy3GDQU/mi1C+j2UNnRcNGlJHKKNpMtmTbimlIJNlSGSZDC
-         uVLQ==
-X-Gm-Message-State: AJIora+lmfi3G9wFWZtyw2fdcl78JMzkSXoEgvfrKdJBjYdkMBEHuHce
-        7E2aZ1RJHqEYBWwkHaWpMCprSw==
-X-Google-Smtp-Source: AGRyM1urLDiZlzyBakk+qZSDiXiE8047kWogHiKlJjZOIslbpuen/Xm89HrUvGCqP2lwOOjujkGNpw==
-X-Received: by 2002:a17:902:d5c7:b0:16c:131:7409 with SMTP id g7-20020a170902d5c700b0016c01317409mr25057483plh.80.1657653060211;
-        Tue, 12 Jul 2022 12:11:00 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902e88c00b0016bdc520f8bsm7233414plg.299.2022.07.12.12.10.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 12:10:59 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 19:10:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: nVMX: Always enable TSC scaling for L2 when it was
- enabled for L1
-Message-ID: <Ys3HQDuAO63uOV3f@google.com>
-References: <20220712135009.952805-1-vkuznets@redhat.com>
- <ee479e42605d3ed3276b66da69179dbfbcb05dbc.camel@redhat.com>
- <871quqpcq4.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871quqpcq4.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 15:37:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC542D9E03
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:13:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1CD2B81B94
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75292C3411C;
+        Tue, 12 Jul 2022 19:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657653181;
+        bh=ZIS/W9+EcBxTcwwCNOkmZaezeeu47J9Ag4z+xMYPzZk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p5+XnZNmy/Fis86PPOjXFmRJSgFbCZW0te1mtLqxaHH51R8J4BM5mPwvW5/SrVNUL
+         FNUc9M8DIWso6mAY5Ujt3M3EdbzD4Wh0ot+namTh+CR8+8idQDG5q+UrjTkyHDrNVO
+         fbOKZn9b+7g4oh9eodt6UNWyplN8TfFimm2NuhhHtn+DzqkFvH8WKmRV14XQyJSR+z
+         sSZ+Txdi2Tv2HgDGk/C7/Qcl/kYmxOycWnyKsBofwP4hhDH3sFYEf9MnuR7gL48vD2
+         5ibN9UqkTZpHC+XH/u9+W9kcQ5SPHl2hIIjsXy2wJ4i8lvYr3K1JoxAVLaFDbRfoLR
+         trZgwxK9gyBuA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oBLJb-0072xT-1p;
+        Tue, 12 Jul 2022 20:12:59 +0100
+Date:   Tue, 12 Jul 2022 20:12:58 +0100
+Message-ID: <87a69e16x1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
+In-Reply-To: <20220712160919.740878-2-konrad.dybcio@somainline.org>
+References: <20220712160919.740878-1-konrad.dybcio@somainline.org>
+        <20220712160919.740878-2-konrad.dybcio@somainline.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: konrad.dybcio@somainline.org, ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org, angelogioacchino.delregno@somainline.org, marijn.suijten@somainline.org, jamipkettunen@somainline.org, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022, Vitaly Kuznetsov wrote:
-> Maxim Levitsky <mlevitsk@redhat.com> writes:
-> 
-> > On Tue, 2022-07-12 at 15:50 +0200, Vitaly Kuznetsov wrote:
-> >> Windows 10/11 guests with Hyper-V role (WSL2) enabled are observed to
-> >> hang upon boot or shortly after when a non-default TSC frequency was
-> >> set for L1. The issue is observed on a host where TSC scaling is
-> >> supported. The problem appears to be that Windows doesn't use TSC
-> >> frequency
-> 
-> ^^^ scaling ^^^
-> 
-> >> for its guests even when the feature is advertised and KVM
-> >> filters SECONDARY_EXEC_TSC_SCALING out when creating L2 controls from
-> >> L1's. This leads to L2 running with the default frequency (matching
-> >> host's) while L1 is running with an altered one.
-> >
-> > Ouch.
-> >
-> > I guess that needs a Fixes tag?
-> >
-> > Fixes: d041b5ea93352b ("KVM: nVMX: Enable nested TSC scaling")
-> >
-> 
-> I dismissed that because prior to d041b5ea93352b SECONDARY_EXEC_TSC_SCALING
-> was filtered out in nested_vmx_setup_ctls_msrs() but now I think I was
-> wrong, SECONDARY_EXEC_TSC_SCALING was likely kept in VMCS02 regardless
-> of that. Will add in v2.
+Hi Konrad,
 
-Yep, it would have been kept in vmcs02 even though the feature wasn't advertised
-to the L1 VMM.  A Cc for stable is warranted as well.
+Please add a cover letter when sending more than a single patch.
 
-I added this (with the tags and s/frequency/scaling) to the queue of patches for
-5.20 I have lined up for Paolo to consume on his return.  Paolo and I haven't
-hashed out how we'll actually manage anything, i.e. my list is speculative, but
-unless you hear otherwise, no need to send a v2.
+On Tue, 12 Jul 2022 17:09:19 +0100,
+Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
+> 
+> Add support for A7-A11 SoCs by if-ing out some features only present on
+> A12 & newer (UNCORE2 registers) or M1 & newer (EL2 registers - the
+> older SoCs don't implement EL2).
+> 
+> Also, annotate IPI regs support (A11 and newer*) so that the driver can
+> tell whether the SoC supports these (they are written to even if fast
+> IPI is disabled, when the registers are there of course).
+> 
+> *A11 is supposed to use this feature, but it is currently not working.
+> That said, it is not yet necessary, especially with only one core up,
+> and it works a-ok using the same featureset as earlier SoCs.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>  drivers/irqchip/irq-apple-aic.c | 54 +++++++++++++++++++++++----------
+>  1 file changed, 38 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> index 12dd48727a15..36f4b52addc2 100644
+> --- a/drivers/irqchip/irq-apple-aic.c
+> +++ b/drivers/irqchip/irq-apple-aic.c
+> @@ -245,7 +245,10 @@ struct aic_info {
+>  	u32 die_stride;
+>  
+>  	/* Features */
+> +	bool el2_regs;
+>  	bool fast_ipi;
+> +	bool ipi_regs;
+> +	bool uncore2_regs;
+>  };
+>  
+>  static const struct aic_info aic1_info = {
+> @@ -261,7 +264,10 @@ static const struct aic_info aic1_fipi_info = {
+>  	.event		= AIC_EVENT,
+>  	.target_cpu	= AIC_TARGET_CPU,
+>  
+> +	.el2_regs	= true,
+>  	.fast_ipi	= true,
+> +	.ipi_regs	= true,
+> +	.uncore2_regs	= true,
+>  };
+>  
+>  static const struct aic_info aic2_info = {
+> @@ -269,7 +275,10 @@ static const struct aic_info aic2_info = {
+>  
+>  	.irq_cfg	= AIC2_IRQ_CFG,
+>  
+> +	.el2_regs	= true,
+>  	.fast_ipi	= true,
+> +	.ipi_regs	= true,
+> +	.uncore2_regs	= true,
+
+So to sum it up, all recent cores have all the cool features, and the
+older ones have none of them. Surely we can do better than adding 3
+fields that have the same value. Turn 'fast_ipi' into something that
+means 'full_fat', and key everything on that.
+
+And if this is meant to evolve into a more differentiated set of
+features, the usual idiom is to have a set of flags as part of an
+unsigned long instead of a set of booleans.
+
+>  };
+>  
+>  static const struct of_device_id aic_info_match[] = {
+> @@ -452,6 +461,9 @@ static unsigned long aic_fiq_get_idx(struct irq_data *d)
+>  
+>  static void aic_fiq_set_mask(struct irq_data *d)
+>  {
+> +	if (!aic_irqc->info.el2_regs)
+> +		return;
+
+Why? AIC_TMR_EL02_PHYS is defined as the interrupt that fires in the
+context of a guest. There is no guest here (no EL2 either), so what
+you should have as interrupt number is AIC_TMR_EL0_{PHYS,VIRT}, and
+this change becomes irrelevant (nothing to mask). Which is also what
+happens when running an M1 under the m1n1 hypervisor.
+
+> +
+>  	/* Only the guest timers have real mask bits, unfortunately. */
+>  	switch (aic_fiq_get_idx(d)) {
+>  	case AIC_TMR_EL02_PHYS:
+> @@ -469,6 +481,9 @@ static void aic_fiq_set_mask(struct irq_data *d)
+>  
+>  static void aic_fiq_clear_mask(struct irq_data *d)
+>  {
+> +	if (!aic_irqc->info.el2_regs)
+> +		return;
+> +
+>  	switch (aic_fiq_get_idx(d)) {
+>  	case AIC_TMR_EL02_PHYS:
+>  		sysreg_clear_set_s(SYS_IMP_APL_VM_TMR_FIQ_ENA_EL2, 0, VM_TMR_FIQ_ENABLE_P);
+> @@ -524,12 +539,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+>  	 * we check for everything here, even things we don't support yet.
+>  	 */
+>  
+> -	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> -		if (static_branch_likely(&use_fast_ipi)) {
+> -			aic_handle_ipi(regs);
+> -		} else {
+> -			pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> -			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +	if (aic_irqc->info.ipi_regs) {
+
+This is probably the hottest path in the whole kernel. Do we want an
+extra read here? Absolutely not. At the very least, this should be a
+static key.
+
+> +		if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> +			if (static_branch_likely(&use_fast_ipi)) {
+> +				aic_handle_ipi(regs);
+> +			} else {
+> +				pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> +				write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +			}
+>  		}
+>  	}
+>  
+> @@ -566,12 +583,14 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
+>  					  AIC_FIQ_HWIRQ(irq));
+>  	}
+>  
+> -	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
+> -			(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
+> -		/* Same story with uncore PMCs */
+> -		pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> -		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> -				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +	if (aic_irqc->info.uncore2_regs) {
+
+Same thing.
+
+> +		if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
+> +				(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
+> +			/* Same story with uncore PMCs */
+> +			pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> +			sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> +					FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +		}
+>  	}
+>  }
+>  
+> @@ -676,7 +695,8 @@ static int aic_irq_domain_translate(struct irq_domain *id,
+>  				break;
+>  			case AIC_TMR_HV_PHYS:
+>  			case AIC_TMR_HV_VIRT:
+> -				return -ENOENT;
+> +				if (aic_irqc->info.el2_regs)
+> +					return -ENOENT;
+
+See my comment above about the use of these interrupt numbers.
+
+>  			default:
+>  				break;
+>  			}
+> @@ -944,7 +964,8 @@ static int aic_init_cpu(unsigned int cpu)
+>  	/* Mask all hard-wired per-CPU IRQ/FIQ sources */
+>  
+>  	/* Pending Fast IPI FIQs */
+> -	write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> +	if (aic_irqc->info.ipi_regs)
+> +		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+>  
+>  	/* Timer FIQs */
+>  	sysreg_clear_set(cntp_ctl_el0, 0, ARCH_TIMER_CTRL_IT_MASK);
+> @@ -965,8 +986,9 @@ static int aic_init_cpu(unsigned int cpu)
+>  			   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
+>  
+>  	/* Uncore PMC FIQ */
+> -	sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> -			   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> +	if (aic_irqc->info.uncore2_regs)
+> +		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> +				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+>  
+>  	/* Commit all of the above */
+>  	isb();
+
+I must be missing something though. Where is the code that actually
+enables support for the SoCs mentioned in $SUBJECT?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

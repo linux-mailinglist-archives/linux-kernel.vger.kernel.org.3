@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102E25715BC
+	by mail.lfdr.de (Postfix) with ESMTP id A26F25715BE
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiGLJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S232816AbiGLJaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiGLJaH (ORCPT
+        with ESMTP id S232674AbiGLJaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Jul 2022 05:30:07 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7D99CE2A;
-        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id b2so6768221plx.7;
-        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8639E442;
+        Tue, 12 Jul 2022 02:30:06 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id v7so4944528pfb.0;
+        Tue, 12 Jul 2022 02:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ogaV0SYnrdX6FcjsOyjMMkS0LUdBefdv3VdWOCo6cxw=;
-        b=fZte5SOlOznJUDLkQ6hulO2D8dqJY6/fRaRa5Eo3RhJbZ/H9WzZiZA0gCzMyc9hKrs
-         TW6486xwTqvHniUKUCRwKMB81AmjPOkrvDE9UOGpHmiEPgPrtmL2BxHQkd+BxVBSHSEM
-         8FfR89fkydTW3QGirPQN9hp6wZqSijVeXjy83Vn7GSUs/so47r3lMpzfVL8kY79fRMqh
-         fwTuRfO0VDPLoEOiTdzYMSJtN2MSN95Acrtt/jfQE5hbt4wdRV1vKYNf2S6WQjQY6Vkq
-         j5/qS80Y4LaX4uTrHuoqHTbC+W1vUy+FjCmKdjSxW/Yq/vn2T6tV3KzKUaYJX/YGeMf2
-         d/IQ==
+        bh=LlZwokCCRr1//JcjppZSf7dBePHepe4POxaFRYgWkT0=;
+        b=ob3lUCfgB/mcNHXQj7p4ewgx3PXsnSrUnRlo8/SpYNZkG7VWGANbKgQ71iTzhHvrTG
+         AD+TtVCsHaBx5iXjEkgzmTyaFh5V9zx1r8mzZRsWLcymvKQLCj5vig9U4NVWgSy02pBE
+         Tgs+HG5j+Jg5XNFmBb5gPZpluVKNA2MECu8Umci8h6Myi0OiJH99Q/j21eK5x01WBADj
+         og47+6TOW02Y/hRoUzFJ/ofyPdLywRTPm48cKYEJCWFEFdmqHlMgb83WwJps7awFg+VT
+         CgSSNRGAnBITgVbET5hp6WWp0oKLWtG4pGbmMZ4vQQaZMigvf3DUj6akMe8TBGB5P1JY
+         z2RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ogaV0SYnrdX6FcjsOyjMMkS0LUdBefdv3VdWOCo6cxw=;
-        b=saMAg07K9+7TCky74nnn2bRm4AdzYNTUwGK01Z2SbuEdfJbCz+7JX0aom9OGwP5Zpr
-         74bNQD5XRmjJPKBqTgUQIYoj+19+9UfnIU5yICSG3P9trJqm1BVn8FoK/HEx3HI1YiyO
-         aXa+xTDaPqhF2tc2fkkVddpGqz4lVB7FZE3iDq2pxTtM+Q0zMCpCKX4POnx0WjPhArCM
-         tKQBXrC8UnRnyDXXQ+t/Qe7BNNPgNY9Q6mjzowNktLFYls1O9HJnd6gvINZUYdVzHWdb
-         NFvAK0Pgj39X8J3XMTtaUWId247tjvrbgJSP5vt7nARsl/muNEoMowPMWywGN0/iIJDU
-         ZnkA==
-X-Gm-Message-State: AJIora+tZIAGP3boFIhM5QJnWGuh18InY6ljs3ERnM2WKql/hoom0Cue
-        AH+dHu/4A1Mujcyj0HTa+4k=
-X-Google-Smtp-Source: AGRyM1vQcBeLg1mqQLb8HAGKTgppY9Auvl7T5br0Ioaq//7gU4WFIVXXGe9OGZXrkwWc4kY59Hx1kQ==
-X-Received: by 2002:a17:902:b186:b0:16b:d762:6d81 with SMTP id s6-20020a170902b18600b0016bd7626d81mr23175273plr.88.1657618204997;
-        Tue, 12 Jul 2022 02:30:04 -0700 (PDT)
+        bh=LlZwokCCRr1//JcjppZSf7dBePHepe4POxaFRYgWkT0=;
+        b=DW7mdy2FztFSSl1RKuE8FanhEra5SamRy5N/GsIP/1VmfItFx5K6pnyi9dqsszAm9t
+         wuTJzV0qxl/zpqIgWbtZJXr5zcE4On1+wFtA/xTB58zRFEqKtRrnHiyG50U6t53RV0xY
+         dIiT3/aZtjGN9l+ucdPN+jZq35lomKs/V/cunvnppxMaB763w4Q+R1S2Qv8xT1mVgnXX
+         ExzwKw04dva0JrlZmGdfHQUiJcvNkqALWxZ5EOhNheiFXKVevOfpz+icCrv0RA1BAea8
+         BZAOQw7kguvYhKfQfpKsOc+PpZlkCvv/E916uCWwabtwUEuNnbO8S1PvdySpIVd+7aDC
+         7JLg==
+X-Gm-Message-State: AJIora8jqInxb8eKz1M5aHDKNv3er+zgyJv56pzCQDdeTkRb61I3jTq+
+        3eWfF/Nh4wFd6CyTBo1k8QE=
+X-Google-Smtp-Source: AGRyM1sWIISpls1J5deVQlnkYWta8ucsGjsLXdTSKCq7iycbn1xeAQ0VrAm6PQJjkMKZUyT4ZYSZRA==
+X-Received: by 2002:a65:41ca:0:b0:408:aa25:5026 with SMTP id b10-20020a6541ca000000b00408aa255026mr20603164pgq.96.1657618205823;
+        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id s6-20020a63f046000000b003fba1a97c49sm5535236pgj.61.2022.07.12.02.30.04
+        by smtp.gmail.com with ESMTPSA id 77-20020a630650000000b0041299ef533csm5616514pgg.41.2022.07.12.02.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 12 Jul 2022 02:30:04 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 77E341038FF; Tue, 12 Jul 2022 16:29:58 +0700 (WIB)
+        id 01C16103970; Tue, 12 Jul 2022 16:29:59 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH next 2/3] Documentation: qat: rewrite description
-Date:   Tue, 12 Jul 2022 16:29:53 +0700
-Message-Id: <20220712092954.142027-3-bagasdotme@gmail.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH next 3/3] Documentation: kvm: extend KVM_S390_ZPCI_OP subheading underline
+Date:   Tue, 12 Jul 2022 16:29:54 +0700
+Message-Id: <20220712092954.142027-4-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220712092954.142027-1-bagasdotme@gmail.com>
 References: <20220712092954.142027-1-bagasdotme@gmail.com>
@@ -77,78 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sysfs description contains redundancy on returned and allowed values
-list, due to the described sysfs is read-write. Rewrite.
+Stephen Rothwell reported the htmldocs warning:
 
-Cc: Adam Guerin <adam.guerin@intel.com>
-Cc: Tomasz Kowallik <tomaszx.kowalik@intel.com>
-Cc: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Cc: Wojciech Ziemba <wojciech.ziemba@intel.com>
-Cc: Fiona Trahe <fiona.trahe@intel.com>
-Cc: linux-crypto@vger.kernel.org
+Documentation/virt/kvm/api.rst:5959: WARNING: Title underline too short.
+
+4.137 KVM_S390_ZPCI_OP
+--------------------
+
+The warning is due to subheading underline on KVM_S390_ZPCI_OP section is
+short of 2 dashes.
+
+Extend the underline to fix the warning.
+
+Link: https://lore.kernel.org/linux-next/20220711205557.183c3b14@canb.auug.org.au/
+Fixes: a0c4d1109d6cc5 ("KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devices")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Pierre Morel <pmorel@linux.ibm.com>
+Cc: Thomas Huth <thuth@redhat.com>
+Cc: Matthew Rosato <mjrosato@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/ABI/testing/sysfs-driver-qat | 34 +++++++---------------
- 1 file changed, 11 insertions(+), 23 deletions(-)
+ Documentation/virt/kvm/api.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-qat b/Documentation/ABI/testing/sysfs-driver-qat
-index 43e081ec22cc4a..be6c200abd783c 100644
---- a/Documentation/ABI/testing/sysfs-driver-qat
-+++ b/Documentation/ABI/testing/sysfs-driver-qat
-@@ -2,18 +2,14 @@ What:		/sys/bus/pci/devices/<BDF>/qat/state
- Date:		June 2022
- KernelVersion:	5.20
- Contact:	qat-linux@intel.com
--Description:	Reports the current state of the QAT device and allows to
--		change it.
-+Description:	(RW) Reports the current state of the QAT device. Write to
-+		the file to initalize and start the device or to stop it.
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 1ae3508d51c537..e6bd6c6dbd13ec 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -5956,7 +5956,7 @@ KVM_PV_DUMP_CPU
+   The length of the returned data is provided by uv_info.guest_cpu_stor_len.
  
--		This attribute is RW.
-+		The values are:
+ 4.137 KVM_S390_ZPCI_OP
+---------------------
++----------------------
  
--		Returned values:
--			up: the device is up and running
--			down: the device is down
-+		* up: the device is up and running
-+		* down: the device is down
- 
--		Allowed values:
--			up: initialize and start the device
--			down: stop the device and bring it down
- 
- 		It is possible to transition the device from up to down only
- 		if the device is up and vice versa.
-@@ -24,22 +20,14 @@ What:		/sys/bus/pci/devices/<BDF>/qat/cfg_services
- Date:		June 2022
- KernelVersion:	5.20
- Contact:	qat-linux@intel.com
--Description:	Reports the current configuration of the QAT device and allows
--		to change it.
-+Description:	(RW) Reports the current configuration of the QAT device.
-+		Write to the file to change the configured services.
- 
--		This attribute is RW.
-+		The values are:
- 
--		Returned values:
--			sym;asym:	the device is configured for running
--					crypto services
--			dc:		the device is configured for running
--					compression services
--
--		Allowed values:
--			sym;asym:	configure the device for running
--					crypto services
--			dc:		configure the device for running
--					compression services
-+		* sym;asym: the device is configured for running crypto
-+		  services
-+		* dc: the device is configured for running compression services
- 
- 		It is possible to set the configuration only if the device
- 		is in the `down` state (see /sys/bus/pci/devices/<BDF>/qat/state)
+ :Capability: KVM_CAP_S390_ZPCI_OP
+ :Architectures: s390
 -- 
 An old man doll... just what I always wanted! - Clara
 

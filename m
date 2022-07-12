@@ -2,103 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42896572A16
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C6A572A1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiGLXwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S231230AbiGLX4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGLXwU (ORCPT
+        with ESMTP id S229692AbiGLX4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:52:20 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A496C1FEE;
-        Tue, 12 Jul 2022 16:52:20 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id o12so8791987pfp.5;
-        Tue, 12 Jul 2022 16:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WcUK13ArPvOKPa7YPG08W3GgydZkwmrN2WpRmgaVZqg=;
-        b=UdYjYnL5jl2vwQXQ6jhEHNQL6SEPmEpJ/8dvCT/RayBDlI5kF9cDAZMOdWzFqO2vZz
-         R4Aa0pR1RoEXPh2YL0ywcWW0RkhimvC/Uh/81PrcCWbRd0FGGiteTxPUo2J4SGj74TmD
-         IL+TtSIzDCfy4UeEF/bJDFOAWlhgmlSS9MpY6392vly/McZ0mCFUlHyuv1n+60DR+Usj
-         +6AlbOBlmhBEuBKOkSQUkAv0zg2IJz16XKT1lVf7dX5PvWEgfXwratK8CFVcTfSkGA0j
-         W96bmqvqI5afZNJmtekvCngXr6rHn3YllpSBtNNJSPrAzzBGLaQS9yPV4XUCjohNFebn
-         b+9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WcUK13ArPvOKPa7YPG08W3GgydZkwmrN2WpRmgaVZqg=;
-        b=qyXpLbdmEcpp5ZhqtjW9KsXbblwpi2dAqCUNddKjg78YLzI4Wx8U44SrS+/WaahCZX
-         intUvJ5iVgf7YCVeVDPpmMJEqlfm1Irzgfd+TkV476Fq11LBQUjxdrwt3Z2RJR6JIh1/
-         9eVLqlkE6GoPankc8avuXaeVmBTy0TYRANnv0dYBPcm2KVk/Qr0d362y9kPaVTa0oGcp
-         0v4fpcuMip05gPLAb6SEoMe6r6RmUUj4Xa3j2zK3fyzm4XQkRTrzUIX3n1kspUyip4pC
-         4brvS3DlZaE+M49l9nD3++jzu8aEzCdtedEEvMhFUDL7vDrbo6juNcIW5bKG6pxq5/06
-         Mk2A==
-X-Gm-Message-State: AJIora+MMEB+2RRFA6KL+ONlkjTbOJbH8ib4mQTZO5XCOAbvDxF4o0sM
-        xx6AP63vgumgrH3Yf73lnl4=
-X-Google-Smtp-Source: AGRyM1uckNbQJLW35RcZ3BcyUMhJnBhxic9wep+cBSqeeT+0uPfGbLU5BdvV19H3LFiEr+dlvyX/1g==
-X-Received: by 2002:a62:1508:0:b0:528:be70:2f69 with SMTP id 8-20020a621508000000b00528be702f69mr412868pfv.42.1657669939720;
-        Tue, 12 Jul 2022 16:52:19 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d26-20020aa797ba000000b0052ab8525893sm7588470pfq.142.2022.07.12.16.52.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 16:52:19 -0700 (PDT)
-Message-ID: <0426f5ff-d254-c009-3ae4-29efc362ad95@gmail.com>
-Date:   Tue, 12 Jul 2022 16:52:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220712183236.931648980@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 19:56:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E53C74BE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:55:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33B7A617AD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F9BEC3411C;
+        Tue, 12 Jul 2022 23:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657670158;
+        bh=3hJ8/C85jgbVxR+f5lw/ZOaerum8unCV/7pu+PwD4Rw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=n3AH7DjS2QVkFD4aJZ9Z7A2eQ634Y9MUg+am8iXnkFbmk9Q8bujLKTBL1E0zg5Axn
+         ADOCJkF/0z3nEU9o3J01rUsZs/mW9XFhaPNFUKeQjTR29cADHvs2Q53u892WVj2MH4
+         yumBsFMaB1F6btAzgridjwPIZAZhXWJkuS1kvRK5VYB2emruGWheach++Brv4Pj3zP
+         CUywWzbRvXUaqWq5nsaB7FVeDf7ec3/aACBfmUMj4m7D35G3q2gSAk/+ESLT/dvcRQ
+         sAreW3QafTmTzZyt78sc9vW+6hsmlqtqKl0P6WlWCNVlbAL5JAWEDDqr5sShC4wxIg
+         pQpQA5hBAOPxg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B1F9E45224;
+        Tue, 12 Jul 2022 23:55:58 +0000 (UTC)
+Subject: Re: [GIT PULL] tracing: Fixes and minor cleanups for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220712190947.055042b4@gandalf.local.home>
+References: <20220712190947.055042b4@gandalf.local.home>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220712190947.055042b4@gandalf.local.home>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.19-rc5
+X-PR-Tracked-Commit-Id: 1e1fb420fe68d9d938db360fec700dfd230cc22a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b047602d579b4fb028128a525f056bbdc890e7f0
+Message-Id: <165767015849.4125.13689875996362786698.pr-tracker-bot@kernel.org>
+Date:   Tue, 12 Jul 2022 23:55:58 +0000
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Li kunyu <kunyu@nfschina.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        sunliming <sunliming@kylinos.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 11:38, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.12 release.
-> There are 61 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The pull request you sent on Tue, 12 Jul 2022 19:09:47 -0400:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.19-rc5
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b047602d579b4fb028128a525f056bbdc890e7f0
+
+Thank you!
+
 -- 
-Florian
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

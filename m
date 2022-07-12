@@ -2,387 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D4E5714BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629785714C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiGLIhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S232512AbiGLIh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiGLIh3 (ORCPT
+        with ESMTP id S232454AbiGLIhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:37:29 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220505071A;
-        Tue, 12 Jul 2022 01:37:28 -0700 (PDT)
+        Tue, 12 Jul 2022 04:37:53 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE3CA44FD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:37:50 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a39so9042381ljq.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1657615047; x=1689151047;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=56fb1kGCypchDcbHSpub023hR1OiGEKMXvxgJ3v2G1M=;
-  b=m6r8ikRmXmVDdYQtriq7VpH6IrKoD6NeUqp2ic91xfbcPE9yRofzGh6e
-   1sfQuGrbTm5QaAN/lIyr1CR7p894TrYVHh2MZTqH+GmwEfZAgBfvNAJJB
-   0Hq13FQZ7Hg40P9LXiVa6Lt0GsalDUOCq7LzuYrPEBSgZE3qNSzQzlkwm
-   8=;
-X-IronPort-AV: E=Sophos;i="5.92,265,1650931200"; 
-   d="scan'208";a="1033119265"
-Subject: RE: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Thread-Topic: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 12 Jul 2022 08:37:10 +0000
-Received: from EX13D32EUC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id 6D21A42D31;
-        Tue, 12 Jul 2022 08:37:10 +0000 (UTC)
-Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
- EX13D32EUC002.ant.amazon.com (10.43.164.94) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Tue, 12 Jul 2022 08:37:09 +0000
-Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
- EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
- Tue, 12 Jul 2022 08:37:09 +0000
-From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Thread-Index: AQHYlXfZ7mCZjdwoh0Oy8SwBeicg4K16ZByA
-Date:   Tue, 12 Jul 2022 08:37:09 +0000
-Message-ID: <369c3e9e02f947e2a2b0c093cbddc99c@EX13D32EUC003.ant.amazon.com>
-References: <20220629130514.15780-1-pdurrant@amazon.com>
- <YsynoyUb4zrMBhRU@google.com>
-In-Reply-To: <YsynoyUb4zrMBhRU@google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.165.192]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CenrAMUhuy7No5JoRejBvuvAOSnjGpy/yDxPGevvI6w=;
+        b=TNiGyZvtDjh/rLQpYxoih0/HM/mJIDIXidnoQkzLB8nJx3KN27Wmq2fwspjkk0jJIY
+         Sipgh3cMsW0pY0S1027VqXD52CaN6ht7b+EbZZune4iCXpgIJG2pgyOh4rlccMmICvsm
+         ziubgm7D8MfSzruhCUhTUu2TGu9vqSZOEblP2UGvbRSoUj9Ue2WHKyceiw9KtK9D7IrO
+         NU9D9k8Odkt4+8K0nv66yS2ifBcOSAt3Na0XGohYpU4sNpgMVmIvefGP6xm4+QoQtvMy
+         j3A+GyGgjNcKsddivpyyZ/vbXWXWN3yHYcIBm6nH+jZsoPM8fMXOdGXmXUiymyI69seA
+         tOoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CenrAMUhuy7No5JoRejBvuvAOSnjGpy/yDxPGevvI6w=;
+        b=ZWj0jR3A6Zainu169H8cVBYCjjlS61dUoAgXOqDuGBj//yTNZILfPclCRp3mrzJLJJ
+         qVpvG8fn93/p1tb8oH0EBhTUGyFDa/xv112IRn4yNJRNcPyx2FicPczkFwO+HMavctE0
+         UVqN9CHylOWjGlvggp/d1Ww5/OjPIkrjZKhH9hi3yMLmnWw9yZkzDY7VDqMAbYn3MYy1
+         8YdQIFtGmKq7tZPjDkJcXFl1RfIqspiSAXLROOD6t77z6xQnHMkPWj4qNMWLxN3PE7kt
+         mQrWRVBqvqqbjPICvfpQp5PPbdJ4ZrDc5z8n18prmnznr65SvVMOYKJ94RLd+GwMckLz
+         ov2Q==
+X-Gm-Message-State: AJIora/ASZDIqEjO9YeZVqkranyFNWAA+Aw1kBnsdYLT7NtF4/9DALie
+        b6nhIvBlao+b+mZWFsqA/98psQ==
+X-Google-Smtp-Source: AGRyM1vJVOlhps4ABBcnniF1AYWAiwD0akYFf+tbCizI9CmKnyi4+od3r3nmnLJoJHB3N2pNUSj7Ug==
+X-Received: by 2002:a05:651c:1542:b0:249:a87f:8a34 with SMTP id y2-20020a05651c154200b00249a87f8a34mr12385394ljp.442.1657615068373;
+        Tue, 12 Jul 2022 01:37:48 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id g7-20020a056512118700b0047f647414efsm2056015lfr.190.2022.07.12.01.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 01:37:47 -0700 (PDT)
+Message-ID: <1eb212ea-c5a9-b06f-606f-1271ac52adf9@linaro.org>
+Date:   Tue, 12 Jul 2022 10:37:44 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-9-tinghan.shen@mediatek.com>
+ <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
+ <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
+ <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
+ <b6523c64-dfe2-13b0-db60-fb4f53ed1e31@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b6523c64-dfe2-13b0-db60-fb4f53ed1e31@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Christopherson <seanjc@google.com>
-> Sent: 12 July 2022 00:44
-> To: Durrant, Paul <pdurrant@amazon.co.uk>
-> Cc: x86@kernel.org; kvm@vger.kernel.org; linux-kernel@vger.kernel.org; Da=
-vid Woodhouse
-> <dwmw2@infradead.org>; Paolo Bonzini <pbonzini@redhat.com>; Vitaly Kuznet=
-sov <vkuznets@redhat.com>;
-> Wanpeng Li <wanpengli@tencent.com>; Jim Mattson <jmattson@google.com>; Jo=
-erg Roedel <joro@8bytes.org>;
-> Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Bor=
-islav Petkov <bp@alien8.de>;
-> Dave Hansen <dave.hansen@linux.intel.com>; H. Peter Anvin <hpa@zytor.com>
-> Subject: RE: [EXTERNAL][PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (=
-tsc info) sub-leaves, if
-> present
->=20
-> CAUTION: This email originated from outside of the organization. Do not c=
-lick links or open
-> attachments unless you can confirm the sender and know the content is saf=
-e.
->=20
->=20
->=20
-> On Wed, Jun 29, 2022, Paul Durrant wrote:
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index 88a3026ee163..abb0a39f60eb 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -638,6 +638,7 @@ struct kvm_vcpu_xen {
-> >       struct hrtimer timer;
-> >       int poll_evtchn;
-> >       struct timer_list poll_timer;
-> > +     u32 cpuid_tsc_info;
->=20
-> I would prefer to follow vcpu->arch.kvm_cpuid_base and capture the base C=
-PUID
-> function.  I have a hard time believing this will be the only case where =
-KVM needs
-> to query XEN CPUID leafs.  And cpuid_tsc_info is a confusing name given t=
-he helper
-> kvm_xen_setup_tsc_info(); it's odd to see a "setup" helper immediately co=
-nsume a
-> variable with the same name.
+On 12/07/2022 10:17, AngeloGioacchino Del Regno wrote:
+> Il 06/07/22 17:18, Krzysztof Kozlowski ha scritto:
+>> On 06/07/2022 14:00, Tinghan Shen wrote:
+>>> Hi Krzysztof,
+>>>
+>>> After discussing your message with our power team,
+>>> we realized that we need your help to ensure we fully understand you.
+>>>
+>>> On Mon, 2022-07-04 at 14:38 +0200, Krzysztof Kozlowski wrote:
+>>>> On 04/07/2022 12:00, Tinghan Shen wrote:
+>>>>> Add power domains controller node for mt8195.
+>>>>>
+>>>>> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+>>>>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+>>>>> ---
+>>>>>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 327 +++++++++++++++++++++++
+>>>>>   1 file changed, 327 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>>> index 8d59a7da3271..d52e140d9271 100644
+>>>>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>>> @@ -10,6 +10,7 @@
+>>>>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>>>>   #include <dt-bindings/phy/phy.h>
+>>>>>   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+>>>>> +#include <dt-bindings/power/mt8195-power.h>
+>>>>>   
+>>>>>   / {
+>>>>>   	compatible = "mediatek,mt8195";
+>>>>> @@ -338,6 +339,332 @@
+>>>>>   			#interrupt-cells = <2>;
+>>>>>   		};
+>>>>>   
+>>>>> +		scpsys: syscon@10006000 {
+>>>>> +			compatible = "syscon", "simple-mfd";
+>>>>
+>>>> These compatibles cannot be alone.
+>>>
+>>> the scpsys sub node has the compatible of the power domain driver.
+>>> do you suggest that the compatible in the sub node should move to here?
+>>
+>> Not necessarily, depends. You have here device node representing system
+>> registers. They need they own compatibles, just like everywhere in the
+>> kernel (except the broken cases...).
+>>
+>> Whether this should be compatible of power-domain driver, it depends
+>> what this device node is. I don't know, I don't have your datasheets or
+>> your architecture diagrams...
+>>
+>>>
+>>>>> +			reg = <0 0x10006000 0 0x1000>;
+>>>>> +			#power-domain-cells = <1>;
+>>>>
+>>>> If it is simple MFD, then probably it is not a power domain provider.
+>>>> Decide.
+>>>
+>>> this MFD device is the power controller on mt8195.
+>>
+>> Then it is not a simple MFD but a power controller. Do not use
+>> "simple-mfd" compatible.
+>>
+>>> Some features need
+>>> to do some operations on registers in this node. We think that implement
+>>> the operation of these registers as the MFD device can provide flexibility
+>>> for future use. We want to clarify if you're saying that an MFD device
+>>> cannot be a power domain provider.
+>>
+>> MFD device is Linuxism, so it has nothing to do here. I am talking only
+>> about simple-mfd. simple-mfd is a simple device only instantiating
+>> children and not providing anything to anyone. Neither to children. This
+>>   the most important part. The children do not depend on anything from
+>> simple-mfd device. For example simple-mfd device can be shut down
+>> (gated) and children should still operate. Being a power domain
+>> controller, contradicts this usually.
+>>
+> 
+> If my interpretation of this issue is right, I have pushed a solution for it.
+> Krzysztof, Matthias, can you please check [1] and give feedback, so that
+> Tinghan can rewrite this commit ASAP?
+> 
+> Reason is - I need the MT8195 devicetree to be complete to push the remaining
+> pieces for Tomato Chromebooks, of course.
+> 
+> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=658527
 
-Sure. It is rather shrink-to-fit at the moment... no problem with capturing=
- the base.
+I have two or three similar discussions, so maybe I lost the context,
+but I don't understand how your fix is matching real hardware.
 
->=20
-> It'll incur another CPUID lookup in the update path to check the limit, b=
-ut again
-> that should be a rare operation so it doesn't seem too onerous.
->=20
+In the patchset here, Tinghan claimed that power domain controller is a
+child of 10006000. 10006000 is also a power domain controller. This was
+explicitly described by the DTS code.
 
-We could capture the limit leaf in the general case. It's not Xen-specific =
-after all.
+Now you abandon this hierarchy in favor of syscon. If the hierarchy was
+correct, your patchset does not match the hardware, so it's a no-go.
+Describe the hardware.
 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 031678eff28e..29ed665c51db 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -3110,6 +3110,7 @@ static int kvm_guest_time_update(struct kvm_vcpu =
-*v)
-> >                                  &vcpu->hv_clock.tsc_shift,
-> >                                  &vcpu->hv_clock.tsc_to_system_mul);
-> >               vcpu->hw_tsc_khz =3D tgt_tsc_khz;
-> > +             kvm_xen_setup_tsc_info(v);
->=20
-> Any objection to s/setup/update?  KVM Xen uses "setup" for things like co=
-nfiguring
-> the event channel using userspace input, whereas this is purely updating =
-existing
-> data structures.
->=20
+However maybe this patch did not make any sense and there is no
+relationship parent-child... so what do you guys send here? Bunch of
+hacks and work-arounds?
 
-Sure.
+Your DTS should reflect the hardware, not some hacks.
 
-> >       }
-> >
-> >       vcpu->hv_clock.tsc_timestamp =3D tsc_timestamp;
-> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > index 610beba35907..c84424d5c8b6 100644
-> > --- a/arch/x86/kvm/xen.c
-> > +++ b/arch/x86/kvm/xen.c
-> > @@ -10,6 +10,9 @@
-> >  #include "xen.h"
-> >  #include "hyperv.h"
-> >  #include "lapic.h"
-> > +#include "cpuid.h"
-> > +
-> > +#include <asm/xen/cpuid.h>
-> >
-> >  #include <linux/eventfd.h>
-> >  #include <linux/kvm_host.h>
-> > @@ -1855,3 +1858,51 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
-> >       if (kvm->arch.xen_hvm_config.msr)
-> >               static_branch_slow_dec_deferred(&kvm_xen_enabled);
-> >  }
-> > +
-> > +void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > +{
-> > +     u32 base =3D 0;
-> > +     u32 limit;
-> > +     u32 function;
-> > +
-> > +     vcpu->arch.xen.cpuid_tsc_info =3D 0;
-> > +
-> > +     for_each_possible_hypervisor_cpuid_base(function) {
-> > +             struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_entry(v=
-cpu, function, 0);
-> > +
-> > +             if (entry &&
-> > +                 entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
-> > +                 entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
-> > +                 entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
-> > +                     base =3D function;
-> > +                     limit =3D entry->eax;
-> > +                     break;
-> > +             }
-> > +     }
-> > +     if (!base)
-> > +             return;
->=20
-> Rather than open code a variant of kvm_update_kvm_cpuid_base(), that help=
-er can
-> be tweaked to take a signature.  Along with a patch to provide a #define =
-for Xen's
-> signature as a string, this entire function becomes a one-liner.
->=20
-
-Sure, but as said above, we could make capturing the limit part of the gene=
-ral function too. It could even be extended to capture the Hyper-V base/lim=
-it too.
-As for defining the sig as a string... I guess it would be neater to use th=
-e values from the Xen header, but it'll probably make the code more ugly so=
- a secondary definition is reasonable.
-
-> If the below looks ok (won't compile, needs prep patches), I'll test and =
-post a
-> proper mini-series.
-
-Ok. Thanks,
-
-  Paul
-
->=20
-> ---
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/cpuid.c            |  2 ++
->  arch/x86/kvm/x86.c              |  1 +
->  arch/x86/kvm/xen.c              | 30 ++++++++++++++++++++++++++++++
->  arch/x86/kvm/xen.h              | 22 +++++++++++++++++++++-
->  5 files changed, 55 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index de5a149d0971..b2565d05fc86 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -638,6 +638,7 @@ struct kvm_vcpu_xen {
->         struct hrtimer timer;
->         int poll_evtchn;
->         struct timer_list poll_timer;
-> +       u32 cpuid_base;
->  };
->=20
->  struct kvm_vcpu_arch {
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0abe3adc9ae3..54ed51799b8d 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -25,6 +25,7 @@
->  #include "mmu.h"
->  #include "trace.h"
->  #include "pmu.h"
-> +#include "xen.h"
->=20
->  /*
->   * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need=
- to be
-> @@ -309,6 +310,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu =
-*vcpu)
->             __cr4_reserved_bits(guest_cpuid_has, vcpu);
->=20
->         kvm_hv_set_cpuid(vcpu);
-> +       kvm_xen_after_set_cpuid(vcpu);
->=20
->         /* Invoke the vendor callback only after the above state is updat=
-ed. */
->         static_call(kvm_x86_vcpu_after_set_cpuid)(vcpu);
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 567d13405445..a624293c66c8 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3110,6 +3110,7 @@ static int kvm_guest_time_update(struct kvm_vcpu *v=
-)
->                                    &vcpu->hv_clock.tsc_shift,
->                                    &vcpu->hv_clock.tsc_to_system_mul);
->                 vcpu->hw_tsc_khz =3D tgt_tsc_khz;
-> +               kvm_xen_update_tsc_info(v);
->         }
->=20
->         vcpu->hv_clock.tsc_timestamp =3D tsc_timestamp;
-> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> index 610beba35907..3fc0c194b813 100644
-> --- a/arch/x86/kvm/xen.c
-> +++ b/arch/x86/kvm/xen.c
-> @@ -10,6 +10,9 @@
->  #include "xen.h"
->  #include "hyperv.h"
->  #include "lapic.h"
-> +#include "cpuid.h"
-> +
-> +#include <asm/xen/cpuid.h>
->=20
->  #include <linux/eventfd.h>
->  #include <linux/kvm_host.h>
-> @@ -1855,3 +1858,30 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
->         if (kvm->arch.xen_hvm_config.msr)
->                 static_branch_slow_dec_deferred(&kvm_xen_enabled);
->  }
-> +
-> +void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_cpuid_entry2 *entry;
-> +       u32 function;
-> +
-> +       if (!vcpu->arch.xen.cpuid_base)
-> +               return;
-> +
-> +       entry =3D kvm_find_cpuid_entry(vcpu, vcpu->arch.xen.cpuid_base, 0=
-);
-> +       if (WARN_ON_ONCE(!entry))
-> +               return;
-> +
-> +       function =3D vcpu->arch.xen.cpuid_base | XEN_CPUID_LEAF(3);
-> +       if (function > entry->eax)
-> +               return;
-> +
-> +       entry =3D kvm_find_cpuid_entry(vcpu, function, 1);
-> +       if (entry) {
-> +               entry->ecx =3D vcpu->arch.hv_clock.tsc_to_system_mul;
-> +               entry->edx =3D vcpu->arch.hv_clock.tsc_shift;
-> +       }
-> +
-> +       entry =3D kvm_find_cpuid_entry(vcpu, function, 2);
-> +       if (entry)
-> +               entry->eax =3D vcpu->arch.hw_tsc_khz;
-> +}
-> diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h
-> index 532a535a9e99..b8161b99b82a 100644
-> --- a/arch/x86/kvm/xen.h
-> +++ b/arch/x86/kvm/xen.h
-> @@ -9,9 +9,14 @@
->  #ifndef __ARCH_X86_KVM_XEN_H__
->  #define __ARCH_X86_KVM_XEN_H__
->=20
-> -#ifdef CONFIG_KVM_XEN
->  #include <linux/jump_label_ratelimit.h>
->=20
-> +#include <asm/xen/cpuid.h>
-> +
-> +#include "cpuid.h"
-> +
-> +#ifdef CONFIG_KVM_XEN
-> +
->  extern struct static_key_false_deferred kvm_xen_enabled;
->=20
->  int __kvm_xen_has_interrupt(struct kvm_vcpu *vcpu);
-> @@ -32,6 +37,13 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe,
->  int kvm_xen_setup_evtchn(struct kvm *kvm,
->                          struct kvm_kernel_irq_routing_entry *e,
->                          const struct kvm_irq_routing_entry *ue);
-> +void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu);
-> +
-> +static inline void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
-> +{
-> +       vcpu->arch.xen.cpuid_base =3D
-> +               kvm_get_hypervisor_cpuid_base(vcpu, XEN_CPUID_SIGNATURE);
-> +}
->=20
->  static inline bool kvm_xen_msr_enabled(struct kvm *kvm)
->  {
-> @@ -135,6 +147,14 @@ static inline bool kvm_xen_timer_enabled(struct kvm_=
-vcpu *vcpu)
->  {
->         return false;
->  }
-> +
-> +static inline void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
-> +{
-> +}
-> +
-> +static inline void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu)
-> +{
-> +}
->  #endif
->=20
->  int kvm_xen_hypercall(struct kvm_vcpu *vcpu);
->=20
-> base-commit: b08b2f54c49d8f96a22107c444d500dff73ec2a6
-> --
-
+Best regards,
+Krzysztof

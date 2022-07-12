@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E982C5729CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B71D5729CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiGLXTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S233989AbiGLXUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbiGLXTM (ORCPT
+        with ESMTP id S229788AbiGLXUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:19:12 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19AFACF74
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:19:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id t1so1223528ejd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bezpQ51vOd+O4bzkMY2t3j2Rv2TPtQX5p0hq3zFqsUM=;
-        b=cTZwLp2+j6r2TZspzI55cCZMgP/2Dn3ankHT4oU4p4uf4a48bva4ZPD/ewzJ15dL/c
-         rOA8n6e77oyNXz8Lpd3R550AXLrBeM0nhGXa7uc1DJjECWzOhHCKo4mPPxindjPxQ2PF
-         r36qMHxws+wCOFKie4yLLVKFrNU0fCEhndnGfELF/EpQ5M5ifhKSN/11J5M6FIg6Sz8N
-         3oyEI9Zl9KdT1vKrvZivegp/G6PdTnUodRBAK0EuZaJUmTC7CsHThHxt/ZlCWx4JV3v7
-         qPT/jamS55NlMBNFqf8Jn/mQ/HAM7r78SLnuzLTK6XuZ8b2e19ZUGpw/Mb30EzX6NF4f
-         ebGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bezpQ51vOd+O4bzkMY2t3j2Rv2TPtQX5p0hq3zFqsUM=;
-        b=LkG7RsBJIam2OARIUTkN98p/QwCOqCeApPoPcekdifYfILbg7wPR3neQjcyluB4PNv
-         1XKWN4aHMjefXRP2KoJQ62W54iuAUrc5/7/ppqauA+zFL8GpCJ4b2CHrr/nZW4EObQi1
-         Q6RW57Fmd5gYD0fI4/VZgjrrLRanDeocYbTfqhjnk60RQ6kTLIShsphdLOQxpX3qnB+N
-         vbLnv9NLtpuf2sWaoOzIBo9VpfzZXytvrSV0Eh6sw1Zhfm12Ecm7P5sUJ3L7fjK1rsve
-         TlPbqZQA6oPuQli9p6TWxVMz7eyqaeup3A2SQSzlDx2NytcEjq92b+muYVCYsjJRRFed
-         NPCg==
-X-Gm-Message-State: AJIora+Sa+Utf1aTdm64MyMJxNvFUtgWMVe7Pr3RE+8kQhDuTpvTmKmB
-        Dql6icmfWktixwRZBF/ZrvTSa9CH+/EmqUmsGj4=
-X-Google-Smtp-Source: AGRyM1uYbQeFwBsfeH9KFr8QzdvFZLkdNk38Lsf6onm0pL3CC+fjdfv62VB4tA/6ScEZSiR3BZKKkkIhHcc3t50xkWM=
-X-Received: by 2002:a17:907:9810:b0:722:f204:b409 with SMTP id
- ji16-20020a170907981000b00722f204b409mr472431ejc.457.1657667950265; Tue, 12
- Jul 2022 16:19:10 -0700 (PDT)
+        Tue, 12 Jul 2022 19:20:40 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546E7AD84D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657668039; x=1689204039;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GeM6siKXMKOwgExJy3MLzaCB06SDeVqIDzPx02dIK3k=;
+  b=Am06oqIvhWnAWL/31EufL5Qgcm8QsBFzRfkZXlwkXeS9EYi8zqivtE3r
+   ksMQMdHnySr0JCEedt0H+vqdPs/5ThT9QKubOlbw6fhRUJ1BV0vrwx7fB
+   BL6jxQzH5m83nvLce+LiiICstKqigfEGcJYulpet81VUtsxpIFDruOzyx
+   zRp/HhrLex/hu1IhtibUIEJky0k3uVz/ScodWaCywUEKnsWQzLgD/R8oT
+   d2k7wF+IN/1x/i3hYSUcVPaIFKsQZgGOW2+j60PjOmSkyRYw57kqY0Gwh
+   FY+LRxe7xfwQPZUGKaZyKEN3MoBwE45Dku03LgTsolDNBMqtlPMZH9YWH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285091558"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="285091558"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:20:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="622697874"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jul 2022 16:20:37 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBPBE-0002oF-UP;
+        Tue, 12 Jul 2022 23:20:36 +0000
+Date:   Wed, 13 Jul 2022 07:20:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/110-smc 4/18]
+ include/linux/compiler_types.h:354:45: error: call to
+ '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask
+ is not constant
+Message-ID: <202207130754.W1o2Pjaw-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220712214301.809967-1-pauld@redhat.com>
-In-Reply-To: <20220712214301.809967-1-pauld@redhat.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 13 Jul 2022 11:18:59 +1200
-Message-ID: <CAGsJ_4xG0az1-g8DWL-mEv_cF3ZBMe6j87m_cxeL9abvxGNW=g@mail.gmail.com>
-Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
- bin_attributes for cpumap and cpulist
-To:     Phil Auld <pauld@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki : --cc=" <rafael@kernel.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Barry Song <song.bao.hua@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +63,266 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 9:58 AM Phil Auld <pauld@redhat.com> wrote:
->
-> Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> This breaks userspace code that retrieves the size before reading the file. Rather
-> than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-> max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960.
-> In order to get near that you'd need a system with every other CPU on one node or
-> something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE
-> to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
->
-> On an 80 cpu 4-node system (NR_CPUS == 8192)
->
-> before:
->
-> -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
-> -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
+tree:   https://github.com/AsahiLinux/linux bits/110-smc
+head:   b76dc0fdf51c9227cd04d9d3648a5555d9c61fa8
+commit: 092d508daf53fa9e5ba7fb7c0163a125753054c3 [4/18] platform/apple: Add new Apple Mac SMC driver
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220713/202207130754.W1o2Pjaw-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/092d508daf53fa9e5ba7fb7c0163a125753054c3
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/110-smc
+        git checkout 092d508daf53fa9e5ba7fb7c0163a125753054c3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-it is a fundamental problem of bin_attr, isn't it? when we don't know the
-exact size of an attribute, and this size might become more than one
-PAGE_SIZE, we use bin_attr to break the limitation. but the fact is that
-we really don't know or it is really hard to know the actual size of the
-attribute.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> after:
->
-> -r--r--r--. 1 root root 40960 Jul 12 16:48 /sys/devices/system/node/node0/cpulist
-> -r--r--r--. 1 root root  4096 Jul 12 15:50 /sys/devices/system/node/node0/cpumap
+All errors (new ones prefixed by >>):
 
-if we finally set a size which might be improper, it seems we defeat the
-purpose we start to move to bin_attr?
+                    from arch/mips/include/asm/smp-ops.h:16,
+                    from arch/mips/include/asm/smp.h:21,
+                    from include/linux/smp.h:113,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/delay.h:23,
+                    from drivers/platform/apple/smc_rtkit.c:8:
+   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bitfield.h:129:44: note: in definition of macro 'FIELD_GET'
+     129 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                            ^~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
+      30 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                                       ^~~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bitfield.h:129:44: note: in definition of macro 'FIELD_GET'
+     129 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                            ^~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
+      30 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                                       ^~~~~~~~
+   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                             ^~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
+      30 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                                       ^~~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                             ^~~~~~~~~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
+      30 | #define SMC_DATA                        GENMASK(63, 32)
+         |                                         ^~~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                                       ^~~~~~~~
+   In file included from <command-line>:
+   include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_409' declared with attribute error: FIELD_GET: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:128:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     128 |                 __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
+     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
+         |                                             ^~~~~~~~~
+   In function 'apple_smc_cmd',
+       inlined from 'apple_smc_rtkit_get_key_info' at drivers/platform/apple/smc_rtkit.c:224:8:
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
+     125 |                FIELD_PREP(SMC_DATA, arg));
+         |                ^~~~~~~~~~
+   In function 'apple_smc_cmd',
+       inlined from 'apple_smc_rtkit_get_key_by_index' at drivers/platform/apple/smc_rtkit.c:212:8:
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
+     125 |                FIELD_PREP(SMC_DATA, arg));
+         |                ^~~~~~~~~~
+   In function 'apple_smc_cmd',
+       inlined from '_apple_smc_rtkit_read_key.isra' at drivers/platform/apple/smc_rtkit.c:167:8:
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
+     125 |                FIELD_PREP(SMC_DATA, arg));
+         |                ^~~~~~~~~~
+   In function 'apple_smc_cmd',
+       inlined from 'apple_smc_rtkit_write_key' at drivers/platform/apple/smc_rtkit.c:192:9:
+>> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
+     125 |                FIELD_PREP(SMC_DATA, arg));
+         |                ^~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c: In function 'apple_smc_rtkit_write_key_atomic':
+   include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_324' declared with attribute error: FIELD_PREP: mask is not constant
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
+     335 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
+     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+         |                 ^~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
+     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~
+   drivers/platform/apple/smc_rtkit.c:77:16: note: in expansion of macro 'FIELD_PREP'
+      77 |                FIELD_PREP(SMC_DATA, key));
+         |                ^~~~~~~~~~
 
->
-> Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> ---
->  drivers/base/node.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> index 0ac6376ef7a1..291c69671f23 100644
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
->         return n;
->  }
->
-> -static BIN_ATTR_RO(cpumap, 0);
-> +static BIN_ATTR_RO(cpumap, PAGE_SIZE);
 
-PAGE_SIZE is probably big enough, will we still calculate to get it rather than
-hard coding?
+vim +/__compiletime_assert_369 +354 include/linux/compiler_types.h
 
->
->  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
->                                    struct bin_attribute *attr, char *buf,
-> @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
->         return n;
->  }
->
-> -static BIN_ATTR_RO(cpulist, 0);
-> +static BIN_ATTR_RO(cpulist, (((NR_CPUS * 5) > PAGE_SIZE) ? NR_CPUS *5 : PAGE_SIZE));
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
 
-I am still not sure why it is NR_CPUS * 5. Is 5 bytes big enough to
-describe the number
-of cpu id? technically it seems not,  for example,  for cpuid=100000,
-we need at least 6
-bytes.
+:::::: The code at line 354 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
 
-BTW, my silly question is that what if we set the size to MAXIMUM int?
-Will it fix
-the userspace fsstat?
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
 
->
->  /**
->   * struct node_access_nodes - Access class device to hold user visible
-> --
-> 2.31.1
->
-
-Thanks
-Barry
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

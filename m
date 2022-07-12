@@ -2,42 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754B257200C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C14571CB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiGLP4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S233051AbiGLOcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiGLPzp (ORCPT
+        with ESMTP id S231804AbiGLOcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:55:45 -0400
-Received: from lizzy.crudebyte.com (lizzy.crudebyte.com [91.194.90.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2DCBA39F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=lizzy; h=Cc:To:Subject:Date:From:References:In-Reply-To:
-        Message-Id:Content-Type:Content-Transfer-Encoding:MIME-Version:Content-ID:
-        Content-Description; bh=H+YFkN5zYmDJB9nb0gMFBm80RECXkAIY9geDJBmYEKU=; b=DbZR6
-        6mJVSSQo4/g7zVqMaYjlTGpl1wkQbuLWnGu5dQ1AUY02znx2Q3nB0G48axQ8Wlw8Iyk4jAmS0mted
-        cGN77eCvebPdm2P4yjm3sg2qpjvsw2zPdfG/x41MX1a1fO+tCX0SN+KpkJ14ebxXKhGx/TOHAsrz7
-        Pp9VNjBXX1XVIDm8XdVAFW1GKYPbIjLyowx0h6pTeA1Wg8OnxgN1kPmwSayhpbEf6FFlj2APT9rwm
-        1CJX/tuCZGPJscwAVjC3Ktt+vppMSiivzms7KYa2DQg8IsHkxyyEIfG8rpqSoPLe36S6zkkgoDA2r
-        kp1zJzTLD1cID6P+7XEfZqZ03UdUg==;
-Message-Id: <5fb0bcc402e032cbc0779f428be5797cddfd291c.1657636554.git.linux_oss@crudebyte.com>
-In-Reply-To: <cover.1657636554.git.linux_oss@crudebyte.com>
-References: <cover.1657636554.git.linux_oss@crudebyte.com>
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-Date:   Tue, 12 Jul 2022 16:31:36 +0200
-Subject: [PATCH v5 11/11] net/9p: allocate appropriate reduced message buffers
-To:     v9fs-developer@lists.sourceforge.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Nikolay Kichukov <nikolay@oldum.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        Tue, 12 Jul 2022 10:32:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E524975;
+        Tue, 12 Jul 2022 07:32:35 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CDma9B004466;
+        Tue, 12 Jul 2022 14:32:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=h1BR0t+GW1FabNOu8DeCdTYCLSEeOu2dr7VoXB7G/5k=;
+ b=RMtp6NltEQ/oJ0a/xnrieRN7TwVIZcaAKBNKbjqH/bZdn7kzuva5pHDTmLTCgvWEMNdA
+ D6dyAehOGALwubHc8XwMRCTShB6vRH1cWP419CLv5gZo75iif2dQVKc8al0gDD1bDG3R
+ Xdag0zrxGiJ7qbvDi88FzpbJE3j0wlT058N78ggCrO1ukmL1DMj5yyPUvsbUM1vWSMBw
+ GWcVtmv43umcPA1pT0UjQpKwQ2nZetgD1VfuzVQ7dSbPjYnYPKroftARKuTkFpw/5RTf
+ yqwrhMgEr0C0uqKEE+DdY7ivDnvCjiwnlAvDMxedBKSA9SBLtZHpmJc4AUUll8mgM6Lv 3Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9a5vs821-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:07 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CDnTjF008428;
+        Tue, 12 Jul 2022 14:32:07 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9a5vs819-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:07 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CELkKr027662;
+        Tue, 12 Jul 2022 14:32:05 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn17jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:05 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CEW3qX15335740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 14:32:03 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A28CA4054;
+        Tue, 12 Jul 2022 14:32:03 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AFB5A405B;
+        Tue, 12 Jul 2022 14:32:02 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 14:32:02 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
+Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v4 0/4] Extending NMI watchdog during LPM
+Date:   Tue, 12 Jul 2022 16:31:58 +0200
+Message-Id: <20220712143202.23144-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.37.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N7AHu3hsE37M-VEPRTo0ViCcX-XjZ2s4
+X-Proofpoint-GUID: PeLenaXmoPxOwkOxTHIgyjFrY_3D_XvQ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=938 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,108 +90,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So far 'msize' was simply used for all 9p message types, which is far
-too much and slowed down performance tremendously with large values
-for user configurable 'msize' option.
+When a partition is transferred, once it arrives at the destination node,
+the partition is active but much of its memory must be transferred from the
+start node.
 
-Let's stop this waste by using the new p9_msg_buf_size() function for
-allocating more appropriate, smaller buffers according to what is
-actually sent over the wire.
+It depends on the activity in the partition, but the more CPU the partition
+has, the more memory to be transferred is likely to be. This causes latency
+when accessing pages that need to be transferred, and often, for large
+partitions, it triggers the NMI watchdog.
 
-Only exception: RDMA transport is currently excluded from this, as
-it would not cope with it. [1]
+The NMI watchdog causes the CPU stack to dump where it appears to be
+stuck. In this case, it does not bring much information since it can happen
+during any memory access of the kernel.
 
-Link: https://lore.kernel.org/all/YkmVI6pqTuMD8dVi@codewreck.org/ [1]
-Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
----
+In addition, the NMI interrupt mechanism is not secure and can generate a
+dump system in the event that the interruption is taken while MSR[RI]=0.
 
-Is the !strcmp(c->trans_mod->name, "rdma") check in this patch maybe a bit
-too hack-ish? Should there rather be transport API extension instead?
+Depending on the LPAR size and load, it may be interesting to extend the
+NMI watchdog timer during the LPM.
 
- net/9p/client.c | 39 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+That's configurable through sysctl with the new introduced variable
+(specific to powerpc) nmi_watchdog_factor. This value represents the
+percentage added to watchdog_tresh to set the NMI watchdog timeout during a
+LPM.
 
-diff --git a/net/9p/client.c b/net/9p/client.c
-index 56be1658870d..dc1a7b26fab4 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -255,19 +255,35 @@ static struct kmem_cache *p9_req_cache;
-  * p9_tag_alloc - Allocate a new request.
-  * @c: Client session.
-  * @type: Transaction type.
-- * @t_size: Buffer size for holding this request.
-- * @r_size: Buffer size for holding server's reply on this request.
-+ * @t_size: Buffer size for holding this request
-+ * (automatic calculation by format template if 0).
-+ * @r_size: Buffer size for holding server's reply on this request
-+ * (automatic calculation by format template if 0).
-+ * @fmt: Format template for assembling 9p request message
-+ * (see p9pdu_vwritef).
-+ * @ap: Variable arguments to be fed to passed format template
-+ * (see p9pdu_vwritef).
-  *
-  * Context: Process context.
-  * Return: Pointer to new request.
-  */
- static struct p9_req_t *
--p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size)
-+p9_tag_alloc(struct p9_client *c, int8_t type, uint t_size, uint r_size,
-+	      const char *fmt, va_list ap)
- {
- 	struct p9_req_t *req = kmem_cache_alloc(p9_req_cache, GFP_NOFS);
--	int alloc_tsize = min(c->msize, t_size);
--	int alloc_rsize = min(c->msize, r_size);
-+	int alloc_tsize;
-+	int alloc_rsize;
- 	int tag;
-+	va_list apc;
-+
-+	va_copy(apc, ap);
-+	alloc_tsize = min_t(size_t, c->msize,
-+			    t_size ?: p9_msg_buf_size(c, type, fmt, apc));
-+	va_end(apc);
-+
-+	alloc_rsize = min_t(size_t, c->msize,
-+			    r_size ?: p9_msg_buf_size(c, type + 1, fmt, ap));
- 
- 	if (!req)
- 		return ERR_PTR(-ENOMEM);
-@@ -685,6 +701,7 @@ static struct p9_req_t *p9_client_prepare_req(struct p9_client *c,
- {
- 	int err;
- 	struct p9_req_t *req;
-+	va_list apc;
- 
- 	p9_debug(P9_DEBUG_MUX, "client %p op %d\n", c, type);
- 
-@@ -696,7 +713,9 @@ static struct p9_req_t *p9_client_prepare_req(struct p9_client *c,
- 	if (c->status == BeginDisconnect && type != P9_TCLUNK)
- 		return ERR_PTR(-EIO);
- 
--	req = p9_tag_alloc(c, type, t_size, r_size);
-+	va_copy(apc, ap);
-+	req = p9_tag_alloc(c, type, t_size, r_size, fmt, apc);
-+	va_end(apc);
- 	if (IS_ERR(req))
- 		return req;
- 
-@@ -731,9 +750,15 @@ p9_client_rpc(struct p9_client *c, int8_t type, const char *fmt, ...)
- 	int sigpending, err;
- 	unsigned long flags;
- 	struct p9_req_t *req;
-+	/* Passing zero to p9_client_prepare_req() tells it to auto determine an
-+	 * appropriate (small) request/response size according to actual message
-+	 * data being sent. Currently RDMA transport is excluded from this message
-+	 * size optimization, as it would not be able to cope with it.
-+	 */
-+	const uint max_size = !strcmp(c->trans_mod->name, "rdma") ? c->msize : 0;
- 
- 	va_start(ap, fmt);
--	req = p9_client_prepare_req(c, type, c->msize, c->msize, fmt, ap);
-+	req = p9_client_prepare_req(c, type, max_size, max_size, fmt, ap);
- 	va_end(ap);
- 	if (IS_ERR(req))
- 		return req;
+Changes in v4 (no functional changes in this version):
+ - Patch 1/4 :fix typo and add a comment in pseries_migrate_partition()
+ - Patch 3/4: rename new variables and functions as Nick requested.
+ - Patch 4/4: rename the called new function
+
+v2:
+https://lore.kernel.org/linuxppc-dev/121217bb-6a34-8ccb-9819-f82806d6f47c@linux.ibm.com/
+
+Laurent Dufour (4):
+  powerpc/mobility: wait for memory transfer to complete
+  watchdog: export lockup_detector_reconfigure
+  powerpc/watchdog: introduce a NMI watchdog's factor
+  pseries/mobility: set NMI watchdog factor during LPM
+
+ Documentation/admin-guide/sysctl/kernel.rst | 12 +++
+ arch/powerpc/include/asm/nmi.h              |  2 +
+ arch/powerpc/kernel/watchdog.c              | 21 ++++-
+ arch/powerpc/platforms/pseries/mobility.c   | 91 ++++++++++++++++++++-
+ include/linux/nmi.h                         |  2 +
+ kernel/watchdog.c                           | 21 +++--
+ 6 files changed, 141 insertions(+), 8 deletions(-)
+
 -- 
-2.30.2
+2.37.0
 

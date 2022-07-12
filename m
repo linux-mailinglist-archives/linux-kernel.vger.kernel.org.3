@@ -2,200 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463C6572762
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4C557276C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiGLUgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S231847AbiGLUim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiGLUgw (ORCPT
+        with ESMTP id S232350AbiGLUig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:36:52 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96710A58D8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:36:51 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id n7so9045998ioo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y/kf7WpiJhpV7S8Lv6B6nSloUE3ZIK760tIURsCB2pw=;
-        b=HK+0DWTz7CWIFl+SYCiY0c1eT23V1rfCJ2QRHvfA8bSUNlP5B7cbxj+fSAo0QWdQZF
-         L4916vyqIJ6hBECNHpwM9VpomRkI9oU7ux781zK8Ag6wUNbvi0zH1theP+ClUZe+WfHY
-         bB29E+meNCNUo/BX9CrmNicvZbvo7Dsb1noCwXeeg8uBLkIOTzOd2JFGDmLPi5Fxrwdh
-         pVPnnhlFhQXWdSntoI9CvaNMVywddCOqtSosLlEXuaU9ngzuYPqFAR4H3H3Z9UHakffi
-         K5w8ACxyuEOxAhWUkNEfCxymzEHp020sUAC2tCxdWfJj6r37lwRMsOlfEC07Le2qsU6U
-         hBRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y/kf7WpiJhpV7S8Lv6B6nSloUE3ZIK760tIURsCB2pw=;
-        b=ZACTWIqoIrGxxCXnE5CO38vmbknvpXVDBoEi7nJNYgOIz8eotO6Q7LbMkdZNgQnhxs
-         T8QxO/g95gtjXfCt2cp3UhlSIw0HW7sb3WVEAbibaWn/AWgEWhCiDQhW1suc22XmZwjq
-         axGx0j71JXaOp5yrAjk3bnQXfe6g9Hf7FpBYKKd42a8hh+dkhHy3Q8TMOo9MGG/JSpEL
-         k19vlZ7FBQwb3TAqzJ4QyK5YDG1alsO8EwrGefKSIwPdYWuFhWhg3n3ac8BUKKiF/Hzk
-         ULwEn1uz75vOs4drtjyIBv/jR+TZdZl41Gw1ToqwKCXW+lH63K9g8MFZBJmMTY1FOKbu
-         EN5w==
-X-Gm-Message-State: AJIora8vGGxaxGLLMCrWzU2NaW4WoYRMtMBYkUdIN2fqR88I3ldPf90Y
-        8KthZMgBwyuGJ55BR2djyc689eP9xV+hatYtHYwUfV/R
-X-Google-Smtp-Source: AGRyM1vcVt7E6J7CXFHWcDWieOMzcW12/B3aaLXom2LHjUZJ7rjCMBYmaxd73fcDTKZ0bf0NWkgwf+myIsxTC/h2scA=
-X-Received: by 2002:a05:6638:3812:b0:33f:4a06:ad48 with SMTP id
- i18-20020a056638381200b0033f4a06ad48mr9488946jav.71.1657658210925; Tue, 12
- Jul 2022 13:36:50 -0700 (PDT)
+        Tue, 12 Jul 2022 16:38:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBDF5F4D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657658315; x=1689194315;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sDqUMNOCl+pBJGMmuUHlrvnXfXOlOt0p9VGdzPjfPHg=;
+  b=BpXtFk+N9iKxRIlbeVJbRqImLX3v5VPY1GFxppDq7bTlcRdMMX0eGcdh
+   VWvjKdEMhsHISzs90gP37Bv2wEepAXC5h/S4sk/ascY60bSRA+2N01BLg
+   pxTawcAjlqICtN2Cq6MdqeFDUNNKEoRgOZgS99QymCaQeKlrofe0oOmV3
+   34HF8jb6p4SSHDCmMU7KCXOIIJSP4ofu+r0Ukbqfkh/9NYuoR2a/MmtZF
+   CnEAlUeD2lDVe1uMAxZtu0FMEWEwAKstWbErNDlnIMA5BSUTHuUC86Zlm
+   oOSo1/O9jDvDphiEMV1bfoJTPMxCD29/xzACnouZZDLWVGGi+eOkufZwv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265449767"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="265449767"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 13:38:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="622654605"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jul 2022 13:38:33 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBMeO-0002g3-Hh;
+        Tue, 12 Jul 2022 20:38:32 +0000
+Date:   Wed, 13 Jul 2022 04:37:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-omap1/devices.c:230:24: sparse: sparse: symbol
+ 'omap_spi1' was not declared. Should it be static?
+Message-ID: <202207130452.LSMR6iix-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com>
-In-Reply-To: <20220615062219.22618-1-Kuan-Ying.Lee@mediatek.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 12 Jul 2022 22:36:40 +0200
-Message-ID: <CA+fCnZc_sqfp4NOZPMWig9t01-yz2HOswoesTVfzGubrvqECDw@mail.gmail.com>
-Subject: Re: [PATCH] kasan: separate double free case from invalid free
-To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chinwen Chang <chinwen.chang@mediatek.com>,
-        =?UTF-8?B?WWVlIExlZSAo5p2O5bu66Kq8KQ==?= <yee.lee@mediatek.com>,
-        casper.li@mediatek.com, Andrew Yang <andrew.yang@mediatek.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 8:22 AM 'Kuan-Ying Lee' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> Currently, KASAN describes all invalid-free/double-free bugs as
-> "double-free or invalid-free". This is ambiguous.
->
-> KASAN should report "double-free" when a double-free is a more
-> likely cause (the address points to the start of an object) and
-> report "invalid-free" otherwise [1].
->
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=212193
->
-> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-> ---
->  mm/kasan/common.c |  8 ++++----
->  mm/kasan/kasan.h  |  3 ++-
->  mm/kasan/report.c | 12 ++++++++----
->  3 files changed, 14 insertions(+), 9 deletions(-)
->
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index c40c0e7b3b5f..707c3a527fcb 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -343,7 +343,7 @@ static inline bool ____kasan_slab_free(struct kmem_cache *cache, void *object,
->
->         if (unlikely(nearest_obj(cache, virt_to_slab(object), object) !=
->             object)) {
-> -               kasan_report_invalid_free(tagged_object, ip);
-> +               kasan_report_invalid_free(tagged_object, ip, KASAN_REPORT_INVALID_FREE);
->                 return true;
->         }
->
-> @@ -352,7 +352,7 @@ static inline bool ____kasan_slab_free(struct kmem_cache *cache, void *object,
->                 return false;
->
->         if (!kasan_byte_accessible(tagged_object)) {
-> -               kasan_report_invalid_free(tagged_object, ip);
-> +               kasan_report_invalid_free(tagged_object, ip, KASAN_REPORT_DOUBLE_FREE);
->                 return true;
->         }
->
-> @@ -377,12 +377,12 @@ bool __kasan_slab_free(struct kmem_cache *cache, void *object,
->  static inline bool ____kasan_kfree_large(void *ptr, unsigned long ip)
->  {
->         if (ptr != page_address(virt_to_head_page(ptr))) {
-> -               kasan_report_invalid_free(ptr, ip);
-> +               kasan_report_invalid_free(ptr, ip, KASAN_REPORT_INVALID_FREE);
->                 return true;
->         }
->
->         if (!kasan_byte_accessible(ptr)) {
-> -               kasan_report_invalid_free(ptr, ip);
-> +               kasan_report_invalid_free(ptr, ip, KASAN_REPORT_DOUBLE_FREE);
->                 return true;
->         }
->
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index 610d60d6e5b8..01c03e45acd4 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -125,6 +125,7 @@ static inline bool kasan_sync_fault_possible(void)
->  enum kasan_report_type {
->         KASAN_REPORT_ACCESS,
->         KASAN_REPORT_INVALID_FREE,
-> +       KASAN_REPORT_DOUBLE_FREE,
->  };
->
->  struct kasan_report_info {
-> @@ -277,7 +278,7 @@ static inline void kasan_print_address_stack_frame(const void *addr) { }
->
->  bool kasan_report(unsigned long addr, size_t size,
->                 bool is_write, unsigned long ip);
-> -void kasan_report_invalid_free(void *object, unsigned long ip);
-> +void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report_type type);
->
->  struct page *kasan_addr_to_page(const void *addr);
->  struct slab *kasan_addr_to_slab(const void *addr);
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index b341a191651d..fe3f606b3a98 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -176,8 +176,12 @@ static void end_report(unsigned long *flags, void *addr)
->  static void print_error_description(struct kasan_report_info *info)
->  {
->         if (info->type == KASAN_REPORT_INVALID_FREE) {
-> -               pr_err("BUG: KASAN: double-free or invalid-free in %pS\n",
-> -                      (void *)info->ip);
-> +               pr_err("BUG: KASAN: invalid-free in %pS\n", (void *)info->ip);
-> +               return;
-> +       }
-> +
-> +       if (info->type == KASAN_REPORT_DOUBLE_FREE) {
-> +               pr_err("BUG: KASAN: double-free in %pS\n", (void *)info->ip);
->                 return;
->         }
->
-> @@ -433,7 +437,7 @@ static void print_report(struct kasan_report_info *info)
->         }
->  }
->
-> -void kasan_report_invalid_free(void *ptr, unsigned long ip)
-> +void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_type type)
->  {
->         unsigned long flags;
->         struct kasan_report_info info;
-> @@ -448,7 +452,7 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip)
->
->         start_report(&flags, true);
->
-> -       info.type = KASAN_REPORT_INVALID_FREE;
-> +       info.type = type;
->         info.access_addr = ptr;
->         info.first_bad_addr = kasan_reset_tag(ptr);
->         info.access_size = 0;
-> --
-> 2.18.0
+Hi Stephen,
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+First bad commit (maybe != root cause):
 
-Thanks for the patch!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   72a8e05d4f66b5af7854df4490e3135168694b6b
+commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+date:   9 weeks ago
+config: arm-randconfig-s031-20220712 (https://download.01.org/0day-ci/archive/20220713/202207130452.LSMR6iix-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-iop32x/ arch/arm/mach-mmp/ arch/arm/mach-mv78xx0/ arch/arm/mach-omap1/ arch/arm/mach-orion5x/ arch/arm/mach-spear/ arch/arm/mm/ drivers/clk/spear/ drivers/isdn/hardware/mISDN/ drivers/net/ethernet/google/gve/ drivers/scsi/ drivers/usb/host/ sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-omap1/devices.c:230:24: sparse: sparse: symbol 'omap_spi1' was not declared. Should it be static?
+>> arch/arm/mach-omap1/devices.c:235:24: sparse: sparse: symbol 'omap_spi2' was not declared. Should it be static?
+>> arch/arm/mach-omap1/devices.c:245:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[addressable] [toplevel] platform_data @@     got void [noderef] __iomem * @@
+   arch/arm/mach-omap1/devices.c:245:37: sparse:     expected void *[addressable] [toplevel] platform_data
+   arch/arm/mach-omap1/devices.c:245:37: sparse:     got void [noderef] __iomem *
+   arch/arm/mach-omap1/devices.c:249:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[addressable] [toplevel] platform_data @@     got void [noderef] __iomem * @@
+   arch/arm/mach-omap1/devices.c:249:37: sparse:     expected void *[addressable] [toplevel] platform_data
+   arch/arm/mach-omap1/devices.c:249:37: sparse:     got void [noderef] __iomem *
+--
+>> arch/arm/mach-omap1/mcbsp.c:94:17: sparse: sparse: symbol 'omap7xx_mcbsp_res' was not declared. Should it be static?
+   arch/arm/mach-omap1/mcbsp.c:171:17: sparse: sparse: symbol 'omap15xx_mcbsp_res' was not declared. Should it be static?
+>> arch/arm/mach-omap1/mcbsp.c:278:17: sparse: sparse: symbol 'omap16xx_mcbsp_res' was not declared. Should it be static?
+--
+>> drivers/usb/host/ohci-omap.c:231:31: sparse: sparse: Using plain integer as NULL pointer
+   drivers/usb/host/ohci-omap.c:353:56: sparse: sparse: Using plain integer as NULL pointer
+
+vim +/omap_spi1 +230 arch/arm/mach-omap1/devices.c
+
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  229  
+c5c4dce45d7538 Cory Maccarrone 2010-01-08 @230  struct platform_device omap_spi1 = {
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  231  	.name           = "omap1_spi100k",
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  232  	.id             = 1,
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  233  };
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  234  
+c5c4dce45d7538 Cory Maccarrone 2010-01-08 @235  struct platform_device omap_spi2 = {
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  236  	.name           = "omap1_spi100k",
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  237  	.id             = 2,
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  238  };
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  239  
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  240  static void omap_init_spi100k(void)
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  241  {
+028baad5221e5f Aaro Koskinen   2018-11-19  242  	if (!cpu_is_omap7xx())
+028baad5221e5f Aaro Koskinen   2018-11-19  243  		return;
+028baad5221e5f Aaro Koskinen   2018-11-19  244  
+c5c4dce45d7538 Cory Maccarrone 2010-01-08 @245  	omap_spi1.dev.platform_data = ioremap(OMAP7XX_SPI1_BASE, 0x7ff);
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  246  	if (omap_spi1.dev.platform_data)
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  247  		platform_device_register(&omap_spi1);
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  248  
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  249  	omap_spi2.dev.platform_data = ioremap(OMAP7XX_SPI2_BASE, 0x7ff);
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  250  	if (omap_spi2.dev.platform_data)
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  251  		platform_device_register(&omap_spi2);
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  252  }
+c5c4dce45d7538 Cory Maccarrone 2010-01-08  253  
+
+:::::: The code at line 230 was first introduced by commit
+:::::: c5c4dce45d7538ada6e9aac4cdb2909bc1cb28f6 omap1: Add 7xx clocks and pin muxes for SPI
+
+:::::: TO: Cory Maccarrone <darkstar6262@gmail.com>
+:::::: CC: Tony Lindgren <tony@atomide.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A8E5712D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71665712E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiGLHME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S232265AbiGLHOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiGLHMC (ORCPT
+        with ESMTP id S229529AbiGLHON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:12:02 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 284E52AE2D;
-        Tue, 12 Jul 2022 00:12:02 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 9CD0880B5;
-        Tue, 12 Jul 2022 07:06:20 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 10:12:00 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of
- driver_deferred_probe_check_state()
-Message-ID: <Ys0ewNYFB25RWNju@atomide.com>
-References: <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
- <Yrlz/P6Un2fACG98@atomide.com>
- <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
- <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
- <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
- <Yr6HQOtS4ctUYm9m@atomide.com>
- <Yr6QUzdoFWv/eAI6@atomide.com>
- <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
- <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
- <Yr7wA8d4J7xtjwsH@atomide.com>
+        Tue, 12 Jul 2022 03:14:13 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E13E52E7E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bSYm9
+        C5OeuYbDhENBAdXq4HRvNSPczwQvj64WhMLeyk=; b=KB5xRyB0ILL9VqILcLd4a
+        S83vIxTAf0E3sDLh+IaFKKo9mFY/+zguQaYmpGa8ukqNu1zJ6iBn0SZUzUWirtFI
+        YOPnaQnz31qw+8WWU4+DTiL5vZ1KRhfduBZ7fTcYXBcj04mzReko0ehU+D5Ejw7G
+        XSo8sbf8UrMi8lwLxqseb8=
+Received: from localhost.localdomain (unknown [111.48.58.12])
+        by smtp11 (Coremail) with SMTP id D8CowAAHffomH81i5anSMQ--.64515S2;
+        Tue, 12 Jul 2022 15:13:44 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] component: replace ternary operator with min()
+Date:   Tue, 12 Jul 2022 15:12:23 +0800
+Message-Id: <20220712071223.301160-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr7wA8d4J7xtjwsH@atomide.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowAAHffomH81i5anSMQ--.64515S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKw4kXF4DJw4UAry8WFWrAFb_yoWkCFc_Cr
+        nruas7Cr1fCrWrZr12vwsIyryvqayj9F1jqFnagr1fG34UZan2gFykZryrt348Cr1Yg3Zr
+        Gr1qyry2yr4IkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnc_-DUUUUU==
+X-Originating-IP: [111.48.58.12]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizQg8+1c7NeZ7AgAAsE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [220701 16:00]:
-> Also, looks like both with the initcall change for prm, and the patch
-> below, there seems to be also another problem where my test devices no
-> longer properly idle somehow compared to reverting the your two patches
-> in next.
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Sorry looks like was a wrong conclusion. While trying to track down this
-issue, I cannot reproduce it. So I don't see issues idling with either
-the initcall change or your test patch.
+Fix the following coccicheck warning:
 
-Not sure what caused my earlier tests to fail though. Maybe a config
-change to enable more debugging, or possibly some kind of warm reset vs
-cold reset type issue.
+drivers/base/component.c:544: WARNING opportunity for min().
+drivers/base/component.c:740: WARNING opportunity for min().
 
-Regards,
+min() macro is defined in include/linux/minmax.h. It avoids
+multiple evaluations of the arguments when non-constant and performs
+strict type-checking.
 
-Tony
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ drivers/base/component.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/component.c b/drivers/base/component.c
+index 5eadeac6c532..349c54694481 100644
+--- a/drivers/base/component.c
++++ b/drivers/base/component.c
+@@ -541,7 +541,7 @@ int component_master_add_with_match(struct device *parent,
+ 
+ 	mutex_unlock(&component_mutex);
+ 
+-	return ret < 0 ? ret : 0;
++	return min(ret, 0);
+ }
+ EXPORT_SYMBOL_GPL(component_master_add_with_match);
+ 
+@@ -737,7 +737,7 @@ static int __component_add(struct device *dev, const struct component_ops *ops,
+ 	}
+ 	mutex_unlock(&component_mutex);
+ 
+-	return ret < 0 ? ret : 0;
++	return min(ret, 0);
+ }
+ 
+ /**
+-- 
+2.25.1
+

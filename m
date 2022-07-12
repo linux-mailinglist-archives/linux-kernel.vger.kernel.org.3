@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36464571560
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEB8571563
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbiGLJJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S232447AbiGLJJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbiGLJJB (ORCPT
+        with ESMTP id S232129AbiGLJJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:09:01 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43BF1A83C;
-        Tue, 12 Jul 2022 02:08:55 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 7so2180665vkq.0;
-        Tue, 12 Jul 2022 02:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8LCnmqawoxVB9pxtCcgy2mIAwh3oOWcQhV+5PBd2TbI=;
-        b=enqrt2lHLNU6D6nQ9VF2kaC4miDYEOanWmFv4N80cBCOxeLlgW1IG5ADsfmSM5q3lf
-         0QjRDockErrhscAvix2Fh0/eUqtaRlN5yWHn+IHyMpVj1si1Abebe1hz2XxOkC0CAY1j
-         ozgSgxHnaBfna3vODMxnR+FAS6neU1lDjdCAwxkuHyiTILTOqEc9QJTDRjYXEpuE2JGG
-         TjPhsRBx4eWZrMvrLROpp7s4Jdj0xkImd0p5Cbog3ZuDle4ohPluXh1uMAog2lNjD/7b
-         x7PiNsVOWg1reZIIFLxjuOoan0BcjjZhmQ//s9hvDElOGabvrza0p+EOivVVJJsdwUW/
-         7mjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8LCnmqawoxVB9pxtCcgy2mIAwh3oOWcQhV+5PBd2TbI=;
-        b=yMqnfEVxcfaYiHk6DjGwUp4udUPLkUTLvFEDwnO6mIWWuxjEc+QAsvihArnSgR68s1
-         42UhMPTzn/HhfYtU9AqtoKyfxgMYG/NXBB558WpIXuLlADi3z/1QNv4j9QmFuw138+4v
-         8r6IBo6OyuVnZf9oCHYoxApdpI2Stmi+efgVRovfMw3jXgfFChIo7FaYIjdQCELtNfnu
-         p+Q4mSG0Xpzh9i7gi+ziuJ47WiBCVROLGUDObhQYzKYp2iWdfQRtG2CZTB+Wf6sPWhxH
-         lTeKEKvRmxpHk/GUMlGEc49LuQ8S2lD+7cquR75dpNsUbxAh5DTPz7efXUIrHP/ivjkP
-         9Fnw==
-X-Gm-Message-State: AJIora90gFdsEsrb9bVMiPMm21ezrKOY490mfy+qcwIDHFCiLDI/ZNrb
-        7CVLkW1U409DyVa+Sbu9cBVzq6sRNn7OGBs29lwgNFVMfyuRgZWGWPw=
-X-Google-Smtp-Source: AGRyM1s7DoUrXJ3UCbxk29LSvgF6KCyVjntLOc/ifHlk282ATGGUjKAX0if60sD5fn1JEfua2KT0kPziS6VKLLaH3a8=
-X-Received: by 2002:a1f:340f:0:b0:374:7b8a:378 with SMTP id
- b15-20020a1f340f000000b003747b8a0378mr6995690vka.37.1657616934836; Tue, 12
- Jul 2022 02:08:54 -0700 (PDT)
+        Tue, 12 Jul 2022 05:09:32 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B0218398;
+        Tue, 12 Jul 2022 02:09:30 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Lhw1M0SN3z9sWv;
+        Tue, 12 Jul 2022 11:09:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1657616967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7pHn6da070NlLkNZyZhpM0wryZYoHPMUzmHUsDvJrHQ=;
+        b=ghsPRor69eTJP+6phIDt2wvIhwsbI8k+gAvUSsPResTnnCv3++NheO6kAXVnwf1L9XqzD0
+        jx5wXwS5XWpxtQPwTQ8jRpzb4hLxe28Y7E0qWzu6PPrSoPJ6jC47qLDVRc7bMfam6rvKjL
+        hLUSNY/MAWepi3kpcD66XN0/8EwwBnS4dwzaWBeS4XJQNKn4BsZgFhz3Xn2Ga7ApaIgIn3
+        BCLMsEzbHPvE87AsUQrmwf5hbrZAYtKzlIlNoxtv6lTqhr7vl/MtYtu0V36uAmr9opMVUv
+        SgEr5IobDwRyqMLIA7ShmmaaT5j9PIg+tiJriGG3b7JM0e/AST2gGX6lI+j+kQ==
+Message-ID: <69a6aac7-0d48-7361-9750-8f242d374d60@mailbox.org>
+Date:   Tue, 12 Jul 2022 11:09:25 +0200
 MIME-Version: 1.0
-References: <20220712075255.1345991-1-chenhuacai@loongson.cn>
- <20220712075255.1345991-3-chenhuacai@loongson.cn> <CAMuHMdUazqHLbc80vpZ+Msg9A3j5aPJ3fx+CdCG3kuWDSf8WSw@mail.gmail.com>
- <CAAhV-H775jXMbcR9j=oLBuHo1PfFziZSUQWttJAEw20sUt+GAA@mail.gmail.com> <CAMuHMdUHbepd974u5iox3BcOyo_Q2ZgT-znruk+WCt+HMQ_Lgw@mail.gmail.com>
-In-Reply-To: <CAMuHMdUHbepd974u5iox3BcOyo_Q2ZgT-znruk+WCt+HMQ_Lgw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 12 Jul 2022 17:08:42 +0800
-Message-ID: <CAAhV-H78Fi0aE-h5MOgRa5L+Jt7D0wG0nLcYzx45jVney8T1BQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] M68K: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michal Simek <monstr@monstr.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+Subject: Re: [PATCH 1/3] drm/fourcc: Add missing big-endian XRGB1555 and
+ RGB565 formats
+Content-Language: en-CA
+To:     Gerd Hoffmann <kraxel@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+References: <cover.1657300532.git.geert@linux-m68k.org>
+ <0744671ac096a12f0d538906bd324efa71b11400.1657300532.git.geert@linux-m68k.org>
+ <96a87833-d878-dde9-e335-9ea51a4ba406@mailbox.org>
+ <CAMuHMdUgdbZeoFLFL8+Hm-6fG9cg5Wzq++JED3KR5P9YZtRQ4A@mail.gmail.com>
+ <20220712074715.kopstlvz4q6npaye@sirius.home.kraxel.org>
+ <CAMuHMdVrf7fgzumcSnZJ3OMGqA34YExXcF3O15YXYpA1ykgKyQ@mail.gmail.com>
+ <20220712083907.3ic7bltstaskz72n@sirius.home.kraxel.org>
+ <CAMuHMdVhxE9aayG8qRMwUuBryiR_ng08m63_+GY8htFCSmUiWg@mail.gmail.com>
+ <20220712090305.44jq3olwhwypisoc@sirius.home.kraxel.org>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <20220712090305.44jq3olwhwypisoc@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 9d87deff0c8c81f488c
+X-MBO-RS-META: 6fgaontf1ee3mo7o7bdra4eb1ym4h8t3
+X-Rspamd-Queue-Id: 4Lhw1M0SN3z9sWv
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Geert,
+On 2022-07-12 11:03, Gerd Hoffmann wrote:
+>>> As described above DRM_FORMAT_HOST_RGB565 means bigendian on bigendian
+>>> hosts and little endian on little endian hosts.  Which is not correct
+>>> when your hardware does big endian no matter what.
+>>
+>> But (a) drm_driver_legacy_fb_format() uses DRM_FORMAT_HOST_RGB565
+>> if quirk_addfb_prefer_host_byte_order is set,
+> 
+> Ah, right.  Missed that in 'git grep' output.  Given that traditional
+> fbdev behavior is to expect native byte order using
+> DRM_FORMAT_HOST_RGB565 there makes sense indeed.
+> 
+> Scratch my comment about it being unused then ;)
 
-On Tue, Jul 12, 2022 at 5:01 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Huacai,
->
-> On Tue, Jul 12, 2022 at 10:53 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > On Tue, Jul 12, 2022 at 4:33 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, Jul 12, 2022 at 9:53 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> > >
-> > > DEBUG_PER_CPU_MAPS depends on SMP, which is not supported on m68k,
-> > > and thus cannot be enabled.
-> > This patch is derived from MIPS and LoongArch, I search all
-> > architectures and change those that look the same as MIPS and
-> > LoongArch.
-> > And the warning message below is also a copy-paste from LoongArch, sorry.
-> >
-> > Since M68K doesn't support SMP, then this patch seems to make no
-> > difference, but does it make sense to keep consistency across all
-> > architectures?
->
-> Yes, having consistency is good.  But that should be mentioned in the
-> patch description, instead of a scary warning CCed to stable ;-)
->
-> BTW, you probably want to update the other copy of c_start() in
-> arch/m68k/kernel/setup_mm.c, too.
-For no-SMP architectures, it seems c_start() in
-arch/m68k/kernel/setup_mm.c is more reasonable (just use 1, neither
-NR_CPUS, nor nr_cpu_ids)?
+DRM_FORMAT_RGB565 | DRM_FORMAT_BIG_ENDIAN is still what the driver should use conceptually, and should match DRM_FORMAT_HOST_RGB565 in drm_driver_legacy_fb_format on a big endian host (which is presumably always the case for the atari driver).
 
-Huacai
->
-> Thanks!
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer

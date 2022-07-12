@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1774757169C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E705716B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232818AbiGLKIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S232083AbiGLKJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbiGLKI2 (ORCPT
+        with ESMTP id S232787AbiGLKJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:08:28 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C036FAB6AB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:08:26 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y11so6572493lfs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9tmI5itLo+az2NBT8yzH/XgEsrNR0rdSvtFYImf7rvM=;
-        b=jGL3yWUVHDyLo2mditJsLo9eZwQRwOlRMs1BOzwXgQgMl9VZKiWusZB3OL6+6pe1T3
-         1/kprO7Bg7O0JkhTVP7syWIF3fjkfFipAOfKIwsyREqj+gEs++uY4I0EC3riNWSg7M6+
-         wJpFMibQKKtpc2ChIZY33TAZyZekuEStAadNkqP0WmUB9+8kFaHVZnWgkhH3deTvqAnL
-         +LgiC3Fo2/ThdhQrS7xXtyUVhEFsjxNqdx0oAfDe+QL/gmUNMtTrINMQ6jSep5gtwNNx
-         S39Kw2Dp3bBW9Q8PGyofZ4rtXUpXOWvys+Ylgd6faJUOluLru5+mTt8DhZD9NlgbdtTj
-         bvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9tmI5itLo+az2NBT8yzH/XgEsrNR0rdSvtFYImf7rvM=;
-        b=g6abZyYZvfdFXkSIKd9sf35jz812ZxZkobBKZcdUAzXgHymDDAv+DTeDh1XEexO5WK
-         weJ1+vJy/l0MCaNavTbsc0xYvYt8Ia9XtFRsqYbAomjSfq/9x9loFap6NkyAui/gEeQ0
-         MvTCGihFCMjQDIFUL7l4kgzG4id+iXL9Wn+EI6Se6UcJSRvBi7vgR6YteXqof9d820L4
-         /e4WjSD3DbdmmjUYOYimonB6fcad+7QurrOHJvir4HQCEHmGEnNcMhrVzlH6dUnTEXJB
-         LQdM0XLNhcLQjQaMHZ0/VC1HOkSCfmblERwJPRthcGwiYWpv4nEkFGMJPofxLgxZK5gO
-         2m+A==
-X-Gm-Message-State: AJIora8Xyic8YJMMVZtdG9KHkjIUUnni6vuOa/QfJjOXggXNHGwRrpQz
-        7LJ/EtCEmoZUDhau4nHjW9lSoA==
-X-Google-Smtp-Source: AGRyM1v7YtW6PNha688Ly/qRMtHWf8J90QekegU41aq4ftRdp8UQi3tEPZqQDVm+oefoOtinVjYqVg==
-X-Received: by 2002:a05:6512:33d2:b0:489:ce1a:fb2a with SMTP id d18-20020a05651233d200b00489ce1afb2amr11046939lfg.558.1657620505091;
-        Tue, 12 Jul 2022 03:08:25 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id u2-20020a2e9f02000000b0025a67779931sm2339204ljk.57.2022.07.12.03.08.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 03:08:24 -0700 (PDT)
-Message-ID: <fdef31b4-9c27-ddda-f1e5-ee881812aa4e@linaro.org>
-Date:   Tue, 12 Jul 2022 12:08:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Content-Language: en-US
-To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
+        Tue, 12 Jul 2022 06:09:26 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD06833A22;
+        Tue, 12 Jul 2022 03:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+        t=1657620535; bh=SJje1dcWCv/G8FpBckYdZrcvEa/vz+8nzhfkgvQz4vA=;
+        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+         MIME-Version:Content-Transfer-Encoding;
+        b=WOi1t895EE6OkJH/S8lHwdFiJZPqwQ+EGmcD2pBlhADcMmGoBOONSIDyAcJKdIK+O
+         vZqgTKsuXXQ3sblbdZc6WAuqE5LcU4vs9zZTN+N+TrDt91mB0WogjBW9a9tWFMyytc
+         e0nwwZEjZp+3MgYb0gU6SN5Ty32y9/AuIPQfI+3M=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.207]
+        Tue, 12 Jul 2022 12:08:55 +0200 (CEST)
+X-EA-Auth: Lakzq13SKui5FfDufYWDeNSfEIECaxJ6n+eBDRF27oEEL78YZNvjGq0P7tqY24Pz1f4tfRG71KDJLGd9kZ+vDSsBlN38KK595l0gppqhmNA=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220712100113.569042-4-ben.dooks@sifive.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        hns@goldelico.com
+Subject: [PATCH v5 00/12] leds: Fix/Add is31fl319{0,1,3} support
+Date:   Tue, 12 Jul 2022 12:08:26 +0200
+Message-Id: <20220712100841.1538395-1-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 12:01, Ben Dooks wrote:
-> The dwc pwm controller can be used in non-PCI systems, so allow
-> either platform or OF based probing.
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
->  .../devicetree/bindings/pwm/pwm-synposys.yaml | 40 ++++++++++++++
+v5:
+- added and tested Andy' series which converts driver to use
+  device properties, dev_err_probe, devm_add_action_or_reset
+  and simple i2c probe_new:
+  https://lore.kernel.org/linux-leds/20220711213524.3587-1-andriy.shevchenko@linux.intel.com/
 
-Bindings must be a separate patch. Preferably first in the series. Use
-proper subject prefix matching the subsystem.
+v4:
+- took Andy's comments into account
+- add patch 7 for cleanup and formatting fixes
 
-Best regards,
-Krzysztof
+v3:
+- pick up Rob's R-b for patches 1 and 2
+- reinstate bindings docs license and maintainer
+  changes with Nikolaus agreement
+- took Andy's comments on patch 4 into account
+
+v2:
+- keep original bindings license and maintainer/owner (Rob)
+- squash bindings patches 2 & 4 (Krzysztof)
+
+v1-resend:
+- no change, resending after configuring git to accomodate
+  for smtp provider limit of 5 emails per batch
+- just change cover-letter to mention si-en chip for idol347
+
+
+The is31fl3190, is31fl3191 and is31fl3193 chips (1 or 3 PWM channels)
+cannot be handled the same as is31fl3196 and is31fl3199,
+if only because the register map is different.
+Also:
+- the software shutdown bit is reversed
+- and additional field needs to be set to enable all channels
+- the led-max-microamp current values and setting are not the same
+
+Datasheets:
+https://lumissil.com/assets/pdf/core/IS31FL3190_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3191_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3193_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3196_DS.pdf
+https://lumissil.com/assets/pdf/core/IS31FL3199_DS.pdf
+
+This series:
+
+- converts dt-bindings to dtschema, adding all si-en compatibles
+  for convenience and consistency, and adding constraints on
+  supported values for eg. reg address and led-max-microamp
+
+- changes vars, structs and defines to not use 319X suffix
+  but 3190 for 319{0,1,3} and 3196 for 319{6,9}
+
+- adds fields in chipdef struct for chip-specific values
+
+- only in patch 6, adds is31fl319{0,1,3} specific values
+  so those chips can work.
+
+- patch 7 cleanups parts non touched in previous patches
+
+- patches 8 to 12 are Andy's to modernize the driver
+
+Tested on msm8916-alcatel-idol347, which probably has an
+si-en,sn3190 or si-en,sn3191 (only one white led indicator).
+
+Andy Shevchenko (5):
+  leds: is31fl319x: Make use of device properties
+  leds: is31fl319x: Make use of dev_err_probe()
+  leds: is31fl319x: Fix devm vs. non-devm ordering
+  leds: is31fl319x: use simple i2c probe function
+  leds: is31fl319x: sort header inclusion alphabetically
+
+Vincent Knecht (7):
+  dt-bindings: leds: Convert is31fl319x to dtschema
+  dt-bindings: leds: is31fl319x: Document variants specificities
+  leds: is31fl319x: Add missing si-en compatibles
+  leds: is31fl319x: Use non-wildcard names for vars, structs and defines
+  leds: is31fl319x: Move chipset-specific values in chipdef struct
+  leds: is31fl319x: Add support for is31fl319{0,1,3} chips
+  leds: is31fl319x: Cleanup formatting and dev_dbg calls
+
+ .../bindings/leds/issi,is31fl319x.yaml        | 193 +++++++
+ .../bindings/leds/leds-is31fl319x.txt         |  61 --
+ drivers/leds/Kconfig                          |   2 +-
+ drivers/leds/leds-is31fl319x.c                | 533 +++++++++++-------
+ 4 files changed, 537 insertions(+), 252 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
+
+-- 
+2.35.3
+
+
+

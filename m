@@ -2,74 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BBB571BB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0249571BB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiGLNtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S232989AbiGLNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiGLNtc (ORCPT
+        with ESMTP id S232947AbiGLNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:49:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FE5B5D2C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:49:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 12 Jul 2022 09:50:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390B69B1A5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657633815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SFVSLqrYrgkusctV+2V73g8BNKpJLh23Sh2hGgmwXNY=;
+        b=Pi6Vq40e7BKfVKvej9pkXIRC1thXmDi9sKTr3UUn2jitcFw92SdaJhoguFAKt0ROG+y8Rk
+        d1xB8LgvgU1qaKB15p/C+rG+iyFlIpvecaI/c+aJUVtgqCsnfsT/YzK/gFebquYmdFOy3i
+        ULDRmznKHukdd+sT1aE/osRlx5GZG/o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-XmcgN4WfNkSfqll6zDHypw-1; Tue, 12 Jul 2022 09:50:12 -0400
+X-MC-Unique: XmcgN4WfNkSfqll6zDHypw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 13E331FDBD;
-        Tue, 12 Jul 2022 13:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657633770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QmmuKKNiBdQ0KUbG3pIPy3TfmXEz0wNIU60P6m34nmE=;
-        b=BGeN7IcAxMHk4hL1SWY5FBLhqoHvxraIGKwcRVtW60lLobLt6LbZb9ci/wMoAS1hldPOB4
-        5o6xBRzXLzy4JRD3jT9aepUvWNeWF6APjlBc9LJXS6UQUrfXCp8LbdXKnIguVi7oNkt63g
-        dZzMQoDNcuypwWo97T6NLCdb/mfNnsQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657633770;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QmmuKKNiBdQ0KUbG3pIPy3TfmXEz0wNIU60P6m34nmE=;
-        b=QQhIj2Meq9t87wCox/tOvvqyZq5wygS2bcI1vemCROaPgRxtyC4sDXW6rODz5fN5cFwBma
-        HmwY5nBqFtjAcwAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC22313A94;
-        Tue, 12 Jul 2022 13:49:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ft/YNOl7zWLsTQAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 12 Jul 2022 13:49:29 +0000
-Message-ID: <39098f08-696d-db4c-36ac-1199da95bc7c@suse.de>
-Date:   Tue, 12 Jul 2022 15:49:29 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B338F185A7BA;
+        Tue, 12 Jul 2022 13:50:11 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 346DB9D7F;
+        Tue, 12 Jul 2022 13:50:10 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: nVMX: Always enable TSC scaling for L2 when it was enabled for L1
+Date:   Tue, 12 Jul 2022 15:50:09 +0200
+Message-Id: <20220712135009.952805-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/1] nvme-pci: fix hang during error recovery when the PCI
- device is isolated
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>
-Cc:     Stefan Roese <sr@denx.de>, Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220712124453.2227362-1-schnelle@linux.ibm.com>
- <20220712124453.2227362-2-schnelle@linux.ibm.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220712124453.2227362-2-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,52 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 14:44, Niklas Schnelle wrote:
-> On s390 and powerpc PCI devices are isolated when an error is detected
-> and driver->err_handler->error_detected is called with an inaccessible
-> PCI device and PCI channel state set to pci_channel_io_frozen
-> (see Step 1 in Documentation/PCI/pci-error-recovery.rst).
-> 
-> In the case of NVMe devices nvme_error_detected() then calls
-> nvme_dev_disable(dev, false) and requests a reset. After a successful
-> reset the device is accessible again and nvme_slot_reset() resets the
-> controller and queues nvme_reset_work() which then recovers the
-> controller.
-> 
-> Since commit b98235d3a471 ("nvme-pci: harden drive presence detect in
-> nvme_dev_disable()") however nvme_dev_disable() no longer freezes the
-> queues if pci_device_is_present() returns false. This is the case for an
-> isolated PCI device. In principle this makes sense as there are no
-> accessible hardware queues to run. The problem though is that for
-> a previously live reset controller with online queues nvme_reset_work()
-> calls nvme_wait_freeze() which, without the freeze having been
-> initiated, then hangs forever. Fix this by starting the freeze in
-> nvme_slot_reset() which is the earliest point where we know the device
-> should be accessible again.
-> 
-> Fixes: b98235d3a471 ("nvme-pci: harden drive presence detect in nvme_dev_disable()")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->   drivers/nvme/host/pci.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index 193b44755662..7c0c61b74c30 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -3399,6 +3399,7 @@ static pci_ers_result_t nvme_slot_reset(struct pci_dev *pdev)
->   	dev_info(dev->ctrl.device, "restart after slot reset\n");
->   	pci_restore_state(pdev);
->   	nvme_reset_ctrl(&dev->ctrl);
-> +	nvme_start_freeze(&dev->ctrl);
->   	return PCI_ERS_RESULT_RECOVERED;
->   }
->   
-I am not sure if that's the right fix.
- From your description the hang occurs as nvme_reset_ctrl() is calling 
-nvme_wait_freeze() without an corresponding nvme_start_freeze().
-So why are you calling it _after_ the call to nvme_reset_ctrl()?
+Windows 10/11 guests with Hyper-V role (WSL2) enabled are observed to
+hang upon boot or shortly after when a non-default TSC frequency was
+set for L1. The issue is observed on a host where TSC scaling is
+supported. The problem appears to be that Windows doesn't use TSC
+frequency for its guests even when the feature is advertised and KVM
+filters SECONDARY_EXEC_TSC_SCALING out when creating L2 controls from
+L1's. This leads to L2 running with the default frequency (matching
+host's) while L1 is running with an altered one.
 
-Cheers,
+Keep SECONDARY_EXEC_TSC_SCALING in secondary exec controls for L2 when
+it was set for L1. TSC_MULTIPLIER is already correctly computed and
+written by prepare_vmcs02().
 
-Hannes
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/vmx/nested.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 778f82015f03..bfa366938c49 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2284,7 +2284,6 @@ static void prepare_vmcs02_early(struct vcpu_vmx *vmx, struct loaded_vmcs *vmcs0
+ 				  SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY |
+ 				  SECONDARY_EXEC_APIC_REGISTER_VIRT |
+ 				  SECONDARY_EXEC_ENABLE_VMFUNC |
+-				  SECONDARY_EXEC_TSC_SCALING |
+ 				  SECONDARY_EXEC_DESC);
+ 
+ 		if (nested_cpu_has(vmcs12,
+-- 
+2.35.3
+

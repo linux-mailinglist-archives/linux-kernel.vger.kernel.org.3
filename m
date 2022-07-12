@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828B9571347
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213C557134A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiGLHlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S232381AbiGLHly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbiGLHlZ (ORCPT
+        with ESMTP id S232190AbiGLHlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:41:25 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E431A9B562
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:41:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d12so12513706lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:41:22 -0700 (PDT)
+        Tue, 12 Jul 2022 03:41:49 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9959B9C5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:41:48 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id b11so12782901eju.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:41:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n4cgbC+MIUp7gq2F/f93AMQT43MDyPz48ScZFytg3Ks=;
-        b=jTZAol4P/nP6j0TBCz7/xV4ECPoEbnP1ahVh2DKMQsTro9hRGyHT9fZY3Y1DIyVJsw
-         ZFgCF1ldvrMt1AL0cezxjWCDvLvUWdoRTkeXG83BrojT68CYJfdxHGkgFwZFvHeKwjnV
-         JAYhlV5/1YGZa448BglA3qAjWpeMdjziUeGUc1adgC01Q8lsQ2pm7JeTW3AP8jhKXi0F
-         /ufqPTidkqzjsCi2QTUwga0ylGoqG+bzvnRE4vlSwszKQZ+PMR0k5SUX/kTgms+qOClV
-         sFYFpmSet3WMB4g3d3rxoQgwna8afnSJOE8V5vvp7Dr0ZJpat6ryye2mLev5XNCPnn9S
-         gsGw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NSrNMqUgWaYuH+mTVW1bDRg+I5uODANEes06ggGuCQ8=;
+        b=hSinwd2+o7s7Z5GqAva/JbWo3c3bbU31+fz4J9bmDcla74i63981XKzdYwltOdOu1s
+         2jTGjN6+qb5wlVV+hkl0h60UYgDH8kFDFL2aVikT8YCXbwim0ernZtNOJWgcZbcLbb2i
+         PdZr11THsg6zAbwfwDrRoSIduA+KV9lUAknSTADM1h0faJPFYZo/mf86nSUbWkClq5Mp
+         52rUpSHWGHvwV/UJ1DbTRI/iEgEA0ZuaV0I/zwH8xzq5VaxPhbdIqHoWScSbZ4olJSPO
+         CfUTV8fs2HWp92EhfeTstC8tbHSSCX/trZxM0SQybm5vscnXl8h0QEebFp1UHZlMj3zm
+         xCQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n4cgbC+MIUp7gq2F/f93AMQT43MDyPz48ScZFytg3Ks=;
-        b=oZmivInml6QFOK0/d2t26koRQRd2lqvrXWmEgcicCHAEYDCLkCxXOsDRwJqrQApF8O
-         6JVhMOMFdlg5qye1rBoZO7nVexpdG6NIVy7GkYHxHahU/vT1+wEc5N9ysecUKO4hHBwf
-         8kZRy2DeoaO0l9iRaqFhbjDN9px00qxhoi61uKOHZEs5Yl9j3j1Z7TZpyJ6/at26WaKp
-         IdTfqMKb0ZxICMbS6/3n7eNQfHKgYcyINzxdR2WQrN7z5pN4UrQvYJeUtC73k3maq9Fe
-         Or1fbAcqvzLKcDCKA+UzA+ax6G3Hz0kyVspCwrn0grzbCVP+IbmYwp1ch2R3R5H/g0Lc
-         GDEQ==
-X-Gm-Message-State: AJIora+Ahi6/3g6tIGrbkiUjsQznYlpJa0bE0sBnHu+jpdd4LpZ136+t
-        eDufF7muuxK2dRKSi7J+4c+VCJlcoDzJlgZ/
-X-Google-Smtp-Source: AGRyM1s0xY1Dvk7h/HYdb9BXURZKQnSJCJYxJBXRDES3lOvN80m7bKKond3YBXlKBW066BtrzIjZQg==
-X-Received: by 2002:a05:6512:128f:b0:47f:879b:dc9c with SMTP id u15-20020a056512128f00b0047f879bdc9cmr15109909lfs.478.1657611681308;
-        Tue, 12 Jul 2022 00:41:21 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id e12-20020ac25cac000000b00478772eb18esm2032237lfq.92.2022.07.12.00.41.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:41:20 -0700 (PDT)
-Message-ID: <3b839a00-d660-7deb-4935-f986ff78d662@linaro.org>
-Date:   Tue, 12 Jul 2022 09:41:19 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NSrNMqUgWaYuH+mTVW1bDRg+I5uODANEes06ggGuCQ8=;
+        b=O336idSVP6qiAelHRB16jGff57gZ4e1BtUpspQnm+2Dp11IxAF/dQ20G9UniYb/BWo
+         NihC77NUdJi99bIGk8N+I12WqPg/R6jgUCWbdhqskAfHHtwCR5t4pjseMinNTU1bYDqW
+         N+9/jPjry+yel3T8bOdDSWx+haJ+RUU9NDlFbKvSr4edKwc9WBfqVkf/JDqoA2WzeI4+
+         OcOkkUwew6YzxU21bi8DN5Z3UAqQqFBjGFzMCRseVJavVncUUndL8UFSsdmUelYtZiQl
+         6WM88CN6ZTjoghbmuSnn5dqmKQkTW7/VcV0tNq3c1jbU8XDckqEshf9JW4fI1VU2sDCg
+         J75w==
+X-Gm-Message-State: AJIora/AV1723u1YSG6OUJ0VqBFeKx3sqocxwMfqzcSF8b0J/h6G4De9
+        UlzCA75oholsta0BskVOdLzxQcXiRXKQw4ho8deK+w==
+X-Google-Smtp-Source: AGRyM1t1jqeS/pkiVbY2dvEmVvi4l4xwSga9AY8LFBsQiNHxBtdvWIBVEBlrrfH6Dh4ib0IVtklOMMyO9OTHI3qY87c=
+X-Received: by 2002:a17:907:cc14:b0:726:3555:ac63 with SMTP id
+ uo20-20020a170907cc1400b007263555ac63mr21853308ejc.697.1657611706834; Tue, 12
+ Jul 2022 00:41:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: arm: fsl: Add Moxa UC8210/8220 series
-Content-Language: en-US
-To:     Jimmy Chen <u7702045@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Cc:     Jimmy Chen <jimmy.chen@moxa.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220712045505.4500-1-jimmy.chen@moxa.com>
- <20220712045505.4500-2-jimmy.chen@moxa.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220712045505.4500-2-jimmy.chen@moxa.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220711173418.91709-1-brgl@bgdev.pl> <20220712023714.GA9406@sol>
+In-Reply-To: <20220712023714.GA9406@sol>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 12 Jul 2022 09:41:36 +0200
+Message-ID: <CAMRc=McJjcOo2_xcU0CgoQMO9PJH3t_dWeSyS8QX3wYaxeufhA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: sim: fix the chip_name configfs item
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 06:55, Jimmy Chen wrote:
-> Moxa UC8210/8220 use Freescale i.MX7d CPU
-> 
-> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
-> ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index ef524378d449..0746801aeb27 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -767,6 +767,9 @@ properties:
->                - toradex,colibri-imx7d-emmc    # Colibri iMX7D 1GB (eMMC) Module
->                - zii,imx7d-rmu2            # ZII RMU2 Board
->                - zii,imx7d-rpu2            # ZII RPU2 Board
-> +              - moxa,uc-8210              # MOXA UC-8210 board
-> +              - moxa,uc-8220              # MOXA UC-8220 board
+On Tue, Jul 12, 2022 at 4:37 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> On Mon, Jul 11, 2022 at 07:34:18PM +0200, Bartosz Golaszewski wrote:
+> > The chip_name configs attribute always displays the device name of the
+> > first GPIO bank because the logic of the relevant function is simply
+> > wrong.
+> >
+> > Fix it by correctly comparing the bank's swnode against the GPIO
+> > device's children.
+> >
+>
+> That works for me, so thanks for that.
+>
+> Not totally convinced by Andy's suggestion to rename swnode to fwnode.
+> Variables should be named for what they represent, not their type, and
+> you use swnode extensively elsewhere in the module, so either change it
+> everywhere or not at all, and such a sweeping change is beyond the scope
+> this patch.
+>
+> Though it may make his other suggestion to use device_match_fwnode()
+> read a little better.  No issue with that suggestion.
+>
+> Cheers,
+> Kent.
 
-Keep existing order, do not introduce differences.
+I agree on device_match_fwnode() and disagree on the swnode rename. v2 sent out.
 
-> +
-
-Why adding this blank line?
-
->            - const: fsl,imx7d
->  
->        - description: TQ-Systems TQMa7D SoM on MBa7x board
-
-
-Best regards,
-Krzysztof
+Bart

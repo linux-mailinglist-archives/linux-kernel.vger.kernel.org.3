@@ -2,100 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65D457173B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632FB571747
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbiGLKYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S232394AbiGLK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbiGLKYK (ORCPT
+        with ESMTP id S229752AbiGLK0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:24:10 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9DFADD46
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:24:09 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r6so9483128edd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:24:09 -0700 (PDT)
+        Tue, 12 Jul 2022 06:26:08 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009DFADD78
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:25:59 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z25so13195887lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AmO51byIMiOVb4cRzs66BBjupIjrQQmBiHJH/wAWMQk=;
-        b=XHFr5hfGXn/Nw+Hxav30NPiwSpMaSjFeRW9xeebgnEQ65ddoHX9DWUhNvWEALbShXa
-         ULAkHZt5gG1cIDI+nYcgk78l0H3rbtOxmAIOfSy8FFK9hsBA9JicQQ/rqsDbFV0jkrFa
-         jUOUgSiUKw0IFQspJSHe/iDrMde884XlxPwnhA8J5oX6NSdsfzDjzx1fEolBzTB7xjyR
-         MKFaZgFYwDUA46seOv6Jf/tEoB8hOabMXW5lZWz3HrI8Shku/GmsDuBPB8sX0pvERUD6
-         TtGDjmW1gqjhLGYu4DPZreadxaEh4Kodll7jAT8xAMy3HB57R3P9fIMBAHVRKZGZXpfH
-         htwg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yWy18Lynv1Yzq+NCbZJ0I3w7Y+py7fFlGQHV4YYmBEA=;
+        b=YhUrQS7CDO/km6iLR9MKy/Th+0vO3y95kmZmpo9YfWSZCWrtTYqhGUt22TJf0sgNF/
+         C+JiOOuBHD21fxx+xrndL2Oi6YlOy+vTCzh4BZ+hEF9CnS0AvbM9RiybI1P5Z6mNJpyC
+         mOunPrv+UkIIZ14k9OKlCL0cx21CVlegXaM8bv0AfXrgDNd78ssPwLfSGpbeBp57Pjtc
+         mQWG4UQm+xHtL+37DvflFUdlfnDkueQ3S1dHSlfvJ10j/T7f3hANdx6LdvY4iYj2OZLX
+         IQ+JQQXwG13HZnxxo5KJ6Fqatq6Qw/fwBQnZMiDG4b47Qa5QpIxFbnK21hnZbv1RgkaP
+         /lFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AmO51byIMiOVb4cRzs66BBjupIjrQQmBiHJH/wAWMQk=;
-        b=FtV+6RIEkXsndhxImLRt20yxbT+xRelNUWPQ3z5MM6mpe2zUmngSOzD2m6sGII11UU
-         JEMBv2IXKFpp0LUUNEGkYUpY3Cnsf5RwltpieZtAWwOW+yXUDs/YnbF1FPXQB1tZED1u
-         YnOz9vadhq3GDpYUonfQsTZ9/Y/r8Ox/BjhHsmrzxDQQN8foEHq8PRWB71yDyxlXxR/6
-         6CJom/TZ0Hxx5wvxFlZVbb8pablm6/ENlqgnZKWrybXzUryftdd/PeeC+WXu/BcTdzHW
-         iutRniIU6pPfRTzopBFLNyig2rvEnprlR0wYdBnVzbk6zgp0yU+/481CqaO2+V3a4qXJ
-         Dl8Q==
-X-Gm-Message-State: AJIora8h7+LXTLgXzIgVKCSV2jn6oRI/NiWkznxxtS8ii0JJuIvfHQff
-        oXrN5wy5+FZcc8WbT39pElASUqSnCduaRu/G/r+I2g==
-X-Google-Smtp-Source: AGRyM1srkG0qvmIar6mDAAoHm0Gh7RSLqulhEcDlDx31EiT1+eqj12pqGn4VbkGhRUeqL0umg3iSuQc62JdtTBJGhTc=
-X-Received: by 2002:a05:6402:150:b0:437:b93c:3a9 with SMTP id
- s16-20020a056402015000b00437b93c03a9mr29626324edu.82.1657621447950; Tue, 12
- Jul 2022 03:24:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yWy18Lynv1Yzq+NCbZJ0I3w7Y+py7fFlGQHV4YYmBEA=;
+        b=ZSvTUKKv/2Kq3myBmPLttzLIHivpxY3C6+LXIEHetM7TcPQ5wOLSXd3fqDEkdSJikh
+         T1ZdYk6gfCANnwpkZDHHzFsYrFCjX8YgpDk2I6vMLx4l+pArMuwVzcAxiZzHR7Thry2C
+         nhsYKsz3JHjoCNkrb2MEw90BdQVgAj0vBPTiqwcnQsOhANICJBWME149xmwds4lAE6wG
+         Uki8crGISeoOJbw+I+D2l1Qc6HufRWAdoygAUhfwSKLApcVBowrwaTJ1c5sw1tKknSaz
+         hKkZxhaEaLFPaZ8BMHPyRmb43wv1bXNXt+3pGuakAlzmxIM7BGK49QyoyLv2cCrwjU50
+         pRJA==
+X-Gm-Message-State: AJIora99CJcEgcLiTRvhweWqQUKLOLfuX9Rsb+q7PJ5d9HcmmuflzH+6
+        /O0Xrmeif1tdhEj4hv5K5+uaiQ==
+X-Google-Smtp-Source: AGRyM1vwP52r+DOrP+7+sPj3gLT+i3nLFiVYE70VJk0djpZK0MJCR7EkLpOI5uCX9GWZwUWm0oTzKg==
+X-Received: by 2002:a05:6512:2030:b0:489:c8bf:3f29 with SMTP id s16-20020a056512203000b00489c8bf3f29mr12284746lfs.274.1657621558363;
+        Tue, 12 Jul 2022 03:25:58 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056512078300b00485e55192a3sm2097839lfr.72.2022.07.12.03.25.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 03:25:57 -0700 (PDT)
+Message-ID: <d28ea0ac-ff1b-5394-4c76-1561353ab7ce@linaro.org>
+Date:   Tue, 12 Jul 2022 12:25:54 +0200
 MIME-Version: 1.0
-References: <9996cb86818d2e935494d6b414d549432f91797a.1657528504.git.geert+renesas@glider.be>
-In-Reply-To: <9996cb86818d2e935494d6b414d549432f91797a.1657528504.git.geert+renesas@glider.be>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 12 Jul 2022 12:23:57 +0200
-Message-ID: <CAMRc=MdDp+Pwqifp0xCkFic+DO65RL=qOw3Prrze9WoyKkV8fQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: GPIO_SAMA5D2_PIOBU should depend on ARCH_AT91
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dt-bindings: irqchip: imx mu work as msi controller
+Content-Language: en-US
+To:     Frank Li <Frank.Li@nxp.com>, tglx@linutronix.de, maz@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com,
+        jdmason@kudzu.us
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev
+References: <20220707210238.917477-1-Frank.Li@nxp.com>
+ <20220707210238.917477-2-Frank.Li@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707210238.917477-2-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 12:27 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> The SAMA5D2 PIOBU is only present on some AT91/Microchip SoCs.  Hence
-> add a dependency on ARCH_AT91, to prevent asking the user about this
-> driver when configuring a kernel without AT91/Microchip SoC support.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 07/07/2022 23:02, Frank Li wrote:
+> imx mu support generate irq by write a register.
+> provide msi controller support so other driver
+> can use it by standard msi interface.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->  drivers/gpio/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 63a89ff7865e374f..1852656d5eb248f6 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -553,6 +553,7 @@ config GPIO_SAMA5D2_PIOBU
->         tristate "SAMA5D2 PIOBU GPIO support"
->         depends on MFD_SYSCON
->         depends on OF_GPIO
-> +       depends on ARCH_AT91 || COMPILE_TEST
->         select GPIO_SYSCON
->         help
->           Say yes here to use the PIOBU pins as GPIOs.
-> --
-> 2.25.1
->
+>  .../interrupt-controller/fsl,mu-msi.yaml      | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+> new file mode 100644
+> index 0000000000000..b4ac583f60227
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/fsl,mu-msi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX Messaging Unit (MU)
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +description: |
+> +  The Messaging Unit module enables two processors within the SoC to
+> +  communicate and coordinate by passing messages (e.g. data, status
+> +  and control) through the MU interface. The MU also provides the ability
+> +  for one processor to signal the other processor using interrupts.
+> +
+> +  Because the MU manages the messaging between processors, the MU uses
+> +  different clocks (from each side of the different peripheral buses).
+> +  Therefore, the MU must synchronize the accesses from one side to the
+> +  other. The MU accomplishes synchronization using two sets of matching
+> +  registers (Processor A-facing, Processor B-facing).
+> +
+> +  MU can work as msi interrupt controller to do doorbell
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: fsl,imx6sx-mu-msi
+> +      - const: fsl,imx7ulp-mu-msi
+> +      - const: fsl,imx8ulp-mu-msi
+> +      - const: fsl,imx8-mu-msi
+> +      - const: fsl,imx8ulp-mu-msi-s4
 
-Applied, thanks!
+Use enum
 
-Bart
+> +      - items:
+> +          - const: fsl,imx8ulp-mu-msi
+
+Single item... why?
+
+> +      - items:
+> +          - enum:
+> +              - fsl,imx7s-mu-msi
+> +              - fsl,imx8mq-mu-msi
+> +              - fsl,imx8mm-mu-msi
+> +              - fsl,imx8mn-mu-msi
+> +              - fsl,imx8mp-mu-msi
+> +              - fsl,imx8qm-mu-msi
+
+Why qm is here not compatible with qxp? It's already mentioned in
+section below.
+
+> +              - fsl,imx8qxp-mu-msi
+> +          - const: fsl,imx6sx-mu-msi
+> +      - description: MU work as msi controller
+> +        items:
+> +          - enum:
+> +              - fsl,imx8qm-mu-msi
+> +              - fsl,imx8qxp-mu-msi
+> +          - const: fsl,imx6sx-mu-msi
+> +  reg:
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+
+Instead describe the items.
+
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - msi-controller
+
+How this end up here?
+
+Aren't you missing allOf with a reference to msi-controller?
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    lsio_mu12: msi@5d270000 {
+> +               compatible = "fsl,imx6sx-mu-msi-db";
+
+???
+
+> +               msi-controller;
+> +               interrupt-controller;
+
+??? How this appeared here
+
+Also fix your indentation like in example-schema.
+
+> +               reg = <0x5d270000 0x10000>,     /* A side */
+> +                     <0x5d300000 0x10000>;     /* B side */
+> +               reg-names = "a", "b";
+> +               interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
+> +               power-domains = <&pd IMX_SC_R_MU_12A>,
+> +                               <&pd IMX_SC_R_MU_12B>;
+
+Please do not send untested bindings. It's a waste of our time.
+
+Really two items here? You just said only one is allowed.
+
+> +               power-domain-names = "a", "b";
+
+Sorry, this patch looks really poor. a/b is not a descriptive name and
+they are not allowed by your own bindings. Please perform some internal
+reviews...
+
+> +    };
+
+
+Best regards,
+Krzysztof

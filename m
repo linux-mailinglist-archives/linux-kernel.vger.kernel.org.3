@@ -2,189 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0CE571BD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2AE571BDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbiGLOBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S229629AbiGLOBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiGLOAy (ORCPT
+        with ESMTP id S233516AbiGLOAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Jul 2022 10:00:54 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B7CE0D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:00:32 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id i14so14086713yba.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sYY6nXCKD6t30QeXZzY/iyGlqBqf+vc2z0phNL/Eg5g=;
-        b=k8HJGhE9i7B3f6fXvhZ3P0HZBKpKwDS1pIja6IaScsD/R4cHnW/TfG0WC2C/yGAR0H
-         lW83iJwH0EyDvfLzP9E+VKMVCEnWEEoR6GrJPtGn1utXHOoX/4ADJariDHDERwoniiOc
-         DWPMIjXUca8RrVQceMUeI0KBsTI7oMAo1XuXoMuLCD4KixLFKsePYP1wwfQY2xo6EE2w
-         vxBSuUpmkDFV+WgLqc45N1VfEAtHfARRedGII5h4s5EmWfwGUi4X++V4U30TJr1tHb1K
-         sabpmRyvwLsIPOS8Zjpcxwg9t5NckJil5NJcITxrM0cCE/f95Z+wi15uKyCcWybfjaCS
-         Wo+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sYY6nXCKD6t30QeXZzY/iyGlqBqf+vc2z0phNL/Eg5g=;
-        b=iTUUorcn5cPTrSyV2arXD8WmcE8jNp9z7PNfp7iUMPMLbHmDXM13dpdff0hZLD+Thu
-         0yeMJIabRyu1hjKG8COGMk/QC998jJxok/XJ/jytTEQ7n33cGAuB5NTMhvaVkeQ9Hh4v
-         0VApSQIF09grGMTf2UhOnNZUVwWl83xwvZVhYM3jRZvPfFwbXsPzfgfdkE7PupRVXpJ0
-         03T6/vFyU95kVqudIt2gMvI3sgT5KAEl8l+sJRJT+B7Zr84IYhO7FbzBCjejJ9KOIQVi
-         Setl9RGO24HfuKJN0+YEDT8uSUOMDoVtw2DfzL8FwWokihQY11F0LomsbokHzKnBJlG2
-         /BPA==
-X-Gm-Message-State: AJIora/DdFS8/XyKezXrf/zZJQr/7xv1UXAuCrIFw4P959Z4yudUIeE4
-        J9UDv8izWkM+FSLVqc7G+vQMEPdGoV4SOCa7WHM=
-X-Google-Smtp-Source: AGRyM1vQ/Z4slZe3IQ0KDjUeluH6AIisNX0us5ZbdFvcLrNpwdlkbv9EzKh42yNUn6me2yh2cb0KyBpRhi8gL8FLkMY=
-X-Received: by 2002:a05:6902:686:b0:66e:627f:4d29 with SMTP id
- i6-20020a056902068600b0066e627f4d29mr21041851ybt.385.1657634432032; Tue, 12
- Jul 2022 07:00:32 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEA3E02B;
+        Tue, 12 Jul 2022 07:00:17 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 13E0B66016F8;
+        Tue, 12 Jul 2022 15:00:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657634415;
+        bh=mbcA91S5p6wcOQpchlxMqQs99CbpqYRQB8T7w4Nci6I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZJoOAEjRo3DgflaYetEXXTahyQ9YbJxeMhcsLOru17+VQSWm9crnflya6zAuO169F
+         PNDsaEQuwqqiFB1VNtKUVJcj0YtMGihuCBjJI4vA9cMWj4XT94jEaQWzqUB3IiUidy
+         SIWEei97AJus7Ya3q2UC3HRAuFhK7iAImVhCf+C3+m9SHKJbiXTKuM5NvrXIc1bcTN
+         3jLhUWa6zb7yjqru4RzRLzkt1aWIhr3fE1cA/c5rjSpsF0tgwT/0cQYJFLL8m00bow
+         woUWTYKMRB/Ad+/KIX962tsD1G5jnbxDqG1VGF+E6g64HOPDRv4pLMimjAJlfdDAXT
+         VWZ/kAd0IUP2Q==
+Date:   Tue, 12 Jul 2022 10:00:10 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
+        kernel@collabora.com, Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ran Jianping <ran.jianping@zte.com.cn>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] clk: mediatek: Don't check HW status for mt8192/5's
+ imp_iic_wrap clocks
+Message-ID: <20220712140010.nfxo42td3zzy3iqp@notapiano>
+References: <20220711205733.203963-1-nfraprado@collabora.com>
+ <CAGXv+5Enkz20o8BLXmnCUBmB930sH+20U=XvTWA82neaiqqc2A@mail.gmail.com>
+ <473aa749-fcfe-bd38-0d83-95375aeef8a3@collabora.com>
+ <CAGXv+5E+HVi2kxkRrwhWhq2XgbmfCxj+ZywPT4orBXTxtJ7X1Q@mail.gmail.com>
+ <9102680e-2c4c-6c62-0255-5f3f669dd16c@collabora.com>
 MIME-Version: 1.0
-References: <CAHp75VceKBoxXVPP4dRYb8LQqHMMDHFp6-E2iuZ-h2RTK8PWQQ@mail.gmail.com>
- <e0c7d254-ace3-625c-cc83-52ca0b45e9fc@intel.com> <CAHp75VckU2ZraLJ-frjWXjUu9pFW+-XmWgTbYqUXOUNAD-1HGA@mail.gmail.com>
- <6c8e4104-2239-a188-649d-585f059cabdd@intel.com> <YsgjdKEtE7pMDTnZ@smile.fi.intel.com>
- <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com> <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
- <e2fe6351-f9ee-48eb-ad7f-280249f7f3f7@intel.com> <CAHp75VfvN-iJTpgg6JeKhOqJLhtYSieo7d7SOCBoUu-81FtSqg@mail.gmail.com>
- <c19ed4a6-6a96-b4a4-0f5a-7ca1dba925d1@intel.com> <YsnoH64cKCT7gndw@smile.fi.intel.com>
- <2c6a4a61-e6c8-0487-8d29-dc3fbb90bbe2@intel.com>
-In-Reply-To: <2c6a4a61-e6c8-0487-8d29-dc3fbb90bbe2@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 12 Jul 2022 15:59:54 +0200
-Message-ID: <CAHp75VejUSXoGsvCP6Mrf9Ypi4f93-fWLr_AwsOu-0=fvZ8eYg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        amadeuszx.slawinski@linux.intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9102680e-2c4c-6c62-0255-5f3f669dd16c@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 3:51 PM Cezary Rojewski
-<cezary.rojewski@intel.com> wrote:
-> On 2022-07-09 10:42 PM, Andy Shevchenko wrote:
-> > On Sat, Jul 09, 2022 at 10:45:49AM +0200, Cezary Rojewski wrote:
-> >> On 2022-07-08 6:49 PM, Andy Shevchenko wrote:
-> >>> On Fri, Jul 8, 2022 at 6:32 PM Cezary Rojewski
-> >>> <cezary.rojewski@intel.com> wrote:
-> >>>> On 2022-07-08 5:25 PM, Andy Shevchenko wrote:
-> >>>>> On Fri, Jul 8, 2022 at 2:34 PM P=C3=A9ter Ujfalusi
-> >>>>> <peter.ujfalusi@linux.intel.com> wrote:
+On Tue, Jul 12, 2022 at 12:57:47PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 12/07/22 12:56, Chen-Yu Tsai ha scritto:
+> > On Tue, Jul 12, 2022 at 6:55 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> > > 
+> > > Il 12/07/22 12:44, Chen-Yu Tsai ha scritto:
+> > > > Hi,
+> > > > 
+> > > > On Tue, Jul 12, 2022 at 4:57 AM Nícolas F. R. A. Prado
+> > > > <nfraprado@collabora.com> wrote:
+> > > > > 
+> > > > > The imp_iic_wrap clocks on mt8192/mt8195 require that the i2c_sel parent
+> > > > > clock be enabled before their hardware status can be checked. Since this
+> > > > > wasn't taken into account, reading from the clk_summary debugfs file
+> > > > > would cause the system to completely freeze.
+> > > > > 
+> > > > > Assuming that this clock is managed only by the kernel, and not by any
+> > > > > firmware, simply drop the is_enabled() optional callback and instead
+> > > > > rely on the enable count for the imp_iic_wrap clocks.
+> > > > 
+> > > > That's the wrong way to go about it.
+> > > > 
+> > > > The I2C clocks already have the CLK_OPS_PARENT_ENABLE flag set. So the
+> > > > issue is that somewhere in the clk core, a piece of code is not honoring
+> > > > that flag.
+> > > > 
+> > > > And it seems that's in more than one place.
+> > > > 
+> > > 
+> > > Uhm, you're right. I gave my Tested-by, but not a Reviewed-by because I
+> > > wasn't really convinced about this solution being the best.
+> > > 
+> > > Now that I think of it, the solution may be as simple as:
+> > > 
+> > > clk.c
+> > > 
+> > > static bool clk_core_is_enabled(struct clk_core *core)
+> > > {
+> > >          bool ret = false;
+> > > 
+> > >          /*
+> > >           * If this clock needs parent enabled, but its parent is
+> > >           * off, we directly return false for two reasons:
+> > >           * 1. This clock being enabled would be impossible
+> > >           * 2. The platform may crash for unclocked access while
+> > >           *    reading the status of this clock (where a .is_enabled
+> > >           *    callback is provided).
+> > >           */
+> > >          if (core->flags & CLK_OPS_PARENT_ENABLE &&
+> > >              !clk_core_is_enabled(core->parent))
+> > >                  return false;
+> > > 
+> > >          ... etc etc etc ...
+> > > }
+> > > 
+> > > Nícolas, did you try this approach?
 
-...
+From reading the core clock code, it's mentioned that CLK_OPS_PARENT_ENABLE is
+used "during gate/ungate, set rate and re-parent", there's no mention of
+"checking the gate state", so I assumed this operation was intentionally not
+handled by this flag. That's why I went for this solution.
 
-> >>>> A long shot, but what if we were to modify get_options() so it takes
-> >>>> additional element-size parameter instead?
-> >>>
-> >>> But why? int / unsigned int, u32 / s32  are all compatible in the cur=
-rent cases.
-> >>
-> >> I'd like to avoid any additional operations, so that the retrieved pay=
-load
-> >> can be provided to the IPC handler directly. The IPC handlers for Audi=
-oDSP
-> >> drivers are expecting payload in u32s.
-> >>
-> >> // u32 **tkns, size_t *num_tkns as foo() arguments
-> >> // u32 *ints, int nints as locals
-> >>
-> >>      get_options(buf, 0, &nints);
-> >>      if (!nints) {
-> >>              ret =3D -ENOENT;
-> >>              goto free_buf;
-> >>      }
-> >>
-> >>      ints =3D kcalloc(nints + 1, sizeof(*ints), GFP_KERNEL);
-> >>      if (!ints) {
-> >>              ret =3D -ENOMEM;
-> >>              goto free_buf;
-> >>      }
-> >>
-> >>      get_num_options(buf, nints + 1, ints, sizeof(*ints));
-> >>
-> >>      *tkns =3D ints;
-> >>      *num_tkns =3D nints;
-> >>
-> >> No additional operations in between. The intermediate IPC handler can =
-later
-> >> refer to the actual payload via &tkns[1] before passing it to the gene=
-ric
-> >> one.
-> >>
-> >> Casting int array into u32 array does not feel right, or perhaps I'm m=
-issing
-> >> something like in the doc case.
-> >
-> > C standard.
-> >
-> > int to unsigned int is not promoted. And standard says that "The rank o=
-f any
-> > unsigned integer type shall equal the rank of the corresponding signed =
-integer
-> > type, if any."
-> >
-> > I don't know why one needs to have an additional churn here. int and un=
-signed
-> > int are interoperable with the adjustment to the sign when the other ar=
-gument
-> > is signed or lesser rank of.
->
-> I still believe that casting blindly is not the way to go. I did
-> explicitly ask about int vs u32,
+But from the discussion sounds like the flag should indeed be caring about the
+is_enabled() operation as well, so let's go with Chen-Yu's patch.
 
-There is no such type in the C standard.
+Thanks,
+Nícolas
 
-> not int vs unsigned int. Please note
-> that these values are later passed to the IPC handlers, and this changes
-> the context a bit. If hw expects u32, then u32 it shall be.
-
-H/W doesn't expect u32, HW expects bytes or group of bytes with:
-1) dedicated address alignment (if required);
-2) dedicated byte order;
-3) dedicated padding (if required).
-
-Correct me if I'm wrong.
-
-> Please correct me if I'm wrong, but there is no guarantee that int is
-> always 32bits long.
-
-There is no guarantee by the C standard, indeed, but there is an upper
-level guarantee, by the Linux kernel.
-
-> What is guaranteed though, is that int holds at
-> least -/+ 32,767. Also, values larger than INT_MAX are allowed in the
-> IPC payload.
-
-Yeah... this is binary protocol, right? So, what limits are you
-talking about here if they are not applicable there anyway. It's
-simply different dimension of limits (i.e. bytes and bits and not C
-language types).
-
---=20
-With Best Regards,
-Andy Shevchenko
+> > 
+> > I have a patch ready, but I got distracted by other stuff today.
+> > 
+> 
+> Let's just wait for your patch then, seems like being the most sensible option.
+> 
+> Cheers!

@@ -2,103 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CD6571F08
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5BD571F0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiGLPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S229903AbiGLPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiGLPZk (ORCPT
+        with ESMTP id S233061AbiGLPZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:25:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4A6559D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:25:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C2C0F20376;
-        Tue, 12 Jul 2022 15:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1657639537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qcyer2EH2yI36zcPfaFnFi1V+ng6GsSBGVzj7hzaLxc=;
-        b=mymcslXCFrN4gh6OovUMdzpLtxOBGs4AibdjOzh/Pz4CWKWbTZvGSRDswQOBzk4YLGmuCa
-        fF8j66U0T+AZrRiDNU9E8Lw+P+/cSKxoUAfBgh3X86QhdfFPzkM8IYSDTbgfW3JCMAVr1I
-        nd1HD2AuULDddg3p2hTDx7ovXMvkLRg=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 64EAD2C141;
-        Tue, 12 Jul 2022 15:25:37 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 17:25:37 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
-Message-ID: <20220712152536.GA2737@pathway.suse.cz>
-References: <20220503073844.4148944-1-elver@google.com>
- <20220711182918.338f000f@gandalf.local.home>
- <20220712002128.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220711205319.1aa0d875@gandalf.local.home>
- <20220712025701.GS1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220712114954.GA3870114@paulmck-ThinkPad-P17-Gen-1>
- <20220712093940.45012e47@gandalf.local.home>
- <20220712134916.GT1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220712105353.08358450@gandalf.local.home>
+        Tue, 12 Jul 2022 11:25:48 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F009FEE;
+        Tue, 12 Jul 2022 08:25:46 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5E1C22000F;
+        Tue, 12 Jul 2022 15:25:40 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 17:25:38 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/6] media: dt-bindings: ov5693: document YAML binding
+Message-ID: <20220712152538.jh4ufxik7icllox6@uno.localdomain>
+References: <20220630134835.592521-1-tommaso.merciai@amarulasolutions.com>
+ <20220630134835.592521-6-tommaso.merciai@amarulasolutions.com>
+ <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220712105353.08358450@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-07-12 10:53:53, Steven Rostedt wrote:
-> On Tue, 12 Jul 2022 06:49:16 -0700
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> 
-> > > I guess the question is, can we have printk() in such a place? Because this
-> > > tracepoint is attached to printk and where ever printk is done so is this
-> > > tracepoint.  
-> > 
-> > As I understand it, code in such a place should be labeled noinstr.
-> > Then the call to printk() would be complained about as an illegal
-> > noinstr-to-non-noinstr call.
-> > 
-> > But where exactly is that printk()?
-> 
-> Perhaps the fix is to remove the _rcuidle() from trace_console_rcuidle().
-> If printk() can never be called from noinstr (aka RCU not watching).
+Hi Krzysztof
+   could you have a look at the below question ?
 
-Good point!
+If no need to resend from Tommaso I think the series could be
+collected for v5.20.
 
-My understanding is that printk() should not get called when rcu
-is not watching. But it might need to reduce the scope of the code
-when rcu is not watching.
+On Mon, Jul 11, 2022 at 11:37:05AM +0200, Jacopo Mondi wrote:
+> Hi Tommaso, Krzysztof,
+>
+>    This has been reviewed by Krzysztof already, so I guess it's fine,
+> but let me ask anyway
+>
+> On Thu, Jun 30, 2022 at 03:48:34PM +0200, Tommaso Merciai wrote:
+> > Add documentation of device tree in YAML schema for the OV5693
+> > CMOS image sensor from Omnivision
+> >
+> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > Changes since v1:
+> >  - Fix allOf position as suggested by Krzysztof
+> >  - Remove port description as suggested by Krzysztof
+> >  - Fix EOF as suggested by Krzysztof
+> >
+> > Changes since v2:
+> >  - Fix commit body as suggested by Krzysztof
+> >
+> > Changes since v3:
+> >  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+> >
+> > Changes since v4:
+> >  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
+> >
+> >  .../bindings/media/i2c/ovti,ov5693.yaml       | 106 ++++++++++++++++++
+> >  MAINTAINERS                                   |   1 +
+> >  2 files changed, 107 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > new file mode 100644
+> > index 000000000000..b83c9fc04023
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> > @@ -0,0 +1,106 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (c) 2022 Amarulasolutions
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Omnivision OV5693 CMOS Sensor
+> > +
+> > +maintainers:
+> > +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > +
+> > +description: |
+> > +  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
+> > +  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
+> > +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
+> > +  Serial Camera Control Bus (SCCB) interface.
+> > +
+> > +  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (SCCB).
+> > +  The sensor output is available via CSI-2 serial data output (up to 2-lane).
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: ovti,ov5693
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description:
+> > +      System input clock (aka XVCLK). From 6 to 27 MHz.
+> > +    maxItems: 1
+> > +
+> > +  dovdd-supply:
+> > +    description:
+> > +      Digital I/O voltage supply, 1.8V.
+> > +
+> > +  avdd-supply:
+> > +    description:
+> > +      Analog voltage supply, 2.8V.
+> > +
+> > +  dvdd-supply:
+> > +    description:
+> > +      Digital core voltage supply, 1.2V.
+> > +
+> > +  reset-gpios:
+> > +    description:
+> > +      The phandle and specifier for the GPIO that controls sensor reset.
+> > +      This corresponds to the hardware pin XSHUTDN which is physically
+> > +      active low.
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - dovdd-supply
+> > +  - avdd-supply
+> > +  - dvdd-supply
+>
+> Should supplies be made mandatory ? Sensors are often powered by fixed
+> rails. Do we want DTS writers to create "fixed-regulators" for all of
+> them ? The fact the regulator framework creates dummies if there's no
+> entry in .dts for a regulator makes me think it's fine to have them
+> optional, but I understand how Linux works should not be an indication
+> of how a bindings should look like.
+>
 
-PeterZ actually removed _rcuidle() in this trace a patchset,
-see https://lore.kernel.org/r/20220608144517.444659212@infradead.org.
+This question ^ :)
 
-Adding Peter into Cc.
+Thanks
+  j
 
-Best Regards,
-Petr
+> > +  - port
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/px30-cru.h>
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    #include <dt-bindings/pinctrl/rockchip.h>
+> > +
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        ov5693: camera@36 {
+> > +            compatible = "ovti,ov5693";
+> > +            reg = <0x36>;
+> > +
+> > +            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
+> > +            pinctrl-names = "default";
+> > +            pinctrl-0 = <&cif_clkout_m0>;
+> > +
+> > +            clocks = <&cru SCLK_CIF_OUT>;
+> > +            assigned-clocks = <&cru SCLK_CIF_OUT>;
+> > +            assigned-clock-rates = <19200000>;
+> > +
+> > +            avdd-supply = <&vcc_1v8>;
+> > +            dvdd-supply = <&vcc_1v2>;
+> > +            dovdd-supply = <&vcc_2v8>;
+> > +
+> > +            rotation = <90>;
+> > +            orientation = <0>;
+> > +
+> > +            port {
+> > +                ucam_out: endpoint {
+> > +                    remote-endpoint = <&mipi_in_ucam>;
+> > +                    data-lanes = <1 2>;
+> > +                    link-frequencies = /bits/ 64 <450000000>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +...
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 1fc9ead83d2a..844307cb20c4 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -14719,6 +14719,7 @@ M:	Daniel Scally <djrscally@gmail.com>
+> >  L:	linux-media@vger.kernel.org
+> >  S:	Maintained
+> >  T:	git git://linuxtv.org/media_tree.git
+> > +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> >  F:	drivers/media/i2c/ov5693.c
+> >
+> >  OMNIVISION OV5695 SENSOR DRIVER
+> > --
+> > 2.25.1
+> >

@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285B257296A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559D257296B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiGLWlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S233694AbiGLWl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiGLWlI (ORCPT
+        with ESMTP id S230502AbiGLWl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53510C9102;
-        Tue, 12 Jul 2022 15:41:08 -0700 (PDT)
+        Tue, 12 Jul 2022 18:41:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A132AC9107;
+        Tue, 12 Jul 2022 15:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E267261703;
-        Tue, 12 Jul 2022 22:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435A0C3411C;
-        Tue, 12 Jul 2022 22:41:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F07B0B81C02;
+        Tue, 12 Jul 2022 22:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62AFC3411C;
+        Tue, 12 Jul 2022 22:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657665667;
-        bh=7OTxsiidUcUG+GGmeb2s3C1z19nIXcHCMhWXxtklkRw=;
+        s=k20201202; t=1657665712;
+        bh=gcpS5IjNq7vPIAW2z9IP0oEJtHOCjjqDUGD6XXcRb4I=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=V/PRfSbtA6gw4BSNqnTIqp+kht6zI3yIsYRdrtYGaFFiXxxi0FuqGuilZEUF5TbMv
-         UpsaN378KDaUuk8i1vGbe9EbbNwSSHbfZQxzg3ZSSVPhxQI5esNeB1yuuW4BzhMB1L
-         ktwI8Kz1kAhdu/YEc9UfIIjvrc2tjTxjOJie+8rwm22PQRiqsBqKNoiQxOqwoeM+WC
-         jwZzPSYaOh06g2RBR2FGdLaqAKsqXuvJADyIp6LxIZwywdnRAnvYNXt2UfUMpCYN//
-         /2v4YszbXzw137f22loVrP31+mczuxlREbdFRb01NxCUPD5n0XgoaX3qpScOpZIjwo
-         YHYnf7XvWBRDA==
+        b=R+hd0m4+30tYLrDZDH9CrNlEFC5lAhUQyLS7wjMyl8XzQ92GbiAxaNxPUQnsv2UY4
+         gPLU/KDMTI9XRD7tzSVbBGBBZr9KC/Yszy4Ru7ITXq+nunbdc/ldb0v6OJtUiGaPN5
+         oq67o1iKNe0E3zHP7vpe5pAPPFjnzqIzNDxqnKQlJ2aCWA1KQWVOTMSS9ndIieQA68
+         soC5ONAQKzjNjvdIWFfASZ0w6aCEVwt5u80EjhPhLMERerlRJV4lPMQUKVAeGis0pa
+         HucyIeO3o/OVuHSddP+Mv5COpsSXUgQMtz+6nQ5T6/Zgt7dh/q+yHyqb44WctXxg3c
+         VZAo+ARZ1wrdg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E23E65C08C7; Tue, 12 Jul 2022 15:41:06 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 15:41:06 -0700
+        id 3C0C25C08C7; Tue, 12 Jul 2022 15:41:52 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 15:41:52 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to
- emulate kfree_rcu()
-Message-ID: <20220712224106.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
+Message-ID: <20220712224152.GI1790663@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
 References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-8-joel@joelfernandes.org>
- <20220626041327.GN1790663@paulmck-ThinkPad-P17-Gen-1>
- <YsexpcG2iaplKPIs@google.com>
- <20220708230600.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YS8hrT78JG_2uQX38oaF5TEGz-M3EgJ2PWjx8g+cfmhBw@mail.gmail.com>
- <20220712205854.GE1790663@paulmck-ThinkPad-P17-Gen-1>
- <dc5b3c63-7c95-79aa-75ec-1e8d1b3315f1@joelfernandes.org>
+ <20220622225102.2112026-3-joel@joelfernandes.org>
+ <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <Yso4690g+lI/8eJS@google.com>
+ <20220710160330.GI1790663@paulmck-ThinkPad-P17-Gen-1>
+ <aef0f8a6-cde6-18f3-16ab-7e07a4413f31@joelfernandes.org>
+ <20220712210406.GF1790663@paulmck-ThinkPad-P17-Gen-1>
+ <8441c152-2953-3cb1-c585-b3b0d48a363f@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dc5b3c63-7c95-79aa-75ec-1e8d1b3315f1@joelfernandes.org>
+In-Reply-To: <8441c152-2953-3cb1-c585-b3b0d48a363f@joelfernandes.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,85 +66,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:15:23PM -0400, Joel Fernandes wrote:
+On Tue, Jul 12, 2022 at 05:10:41PM -0400, Joel Fernandes wrote:
 > 
 > 
-> On 7/12/2022 4:58 PM, Paul E. McKenney wrote:
-> > On Tue, Jul 12, 2022 at 04:27:05PM -0400, Joel Fernandes wrote:
-> >> Ah, with all the threads, I missed this one :(. Sorry about that.
-> > 
-> > I know that feeling...
-> > 
-> >> On Fri, Jul 8, 2022 at 7:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> On 7/12/2022 5:04 PM, Paul E. McKenney wrote:
+> > On Tue, Jul 12, 2022 at 04:53:48PM -0400, Joel Fernandes wrote:
 > >>
-> >>>> Currently I added a test like the following which adds a new torture type, my
-> >>>> thought was to stress the new code to make sure nothing crashed or hung the
-> >>>> kernel. That is working well except I don't exactly understand the total-gps
-> >>>> print showing 0, which the other print shows 1188 GPs. I'll go dig into that
-> >>>> tomorrow.. thanks!
+> >> On 7/10/2022 12:03 PM, Paul E. McKenney wrote:
+> >> [..]
+> >>>>>> +	// Note that if the bypass list has lazy CBs, and the main list is
+> >>>>>> +	// empty, and rhp happens to be non-lazy, then we end up flushing all
+> >>>>>> +	// the lazy CBs to the main list as well. That's the right thing to do,
+> >>>>>> +	// since we are kick-starting RCU GP processing anyway for the non-lazy
+> >>>>>> +	// one, we can just reuse that GP for the already queued-up lazy ones.
+> >>>>>> +	if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
+> >>>>>> +	    (lazy && n_lazy_cbs >= qhimark)) {
+> >>>>>>  		rcu_nocb_lock(rdp);
+> >>>>>>  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+> >>>>>>  		if (*was_alldone)
+> >>>>>>  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+> >>>>>> -					    TPS("FirstQ"));
+> >>>>>> -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
+> >>>>>> +					    lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
+> >>>>>> +		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
+> >>>>>
+> >>>>> The "false" here instead of "lazy" is because the caller is to do the
+> >>>>> enqueuing, correct?
 > >>>>
-> >>>> The print shows
-> >>>> TREE11 ------- 1474 GPs (12.2833/s) [rcu_lazy: g0 f0x0 total-gps=0]
-> >>>> TREE11 no success message, 7 successful version messages
+> >>>> There is no difference between using false or lazy here, because the bypass
+> >>>> flush is not also enqueuing the lazy callback, right?
+> >>>>
+> >>>> We can also pass lazy instead of false if that's less confusing.
+> >>>>
+> >>>> Or maybe I missed the issue you're raising?
 > >>>
-> >>> Nice!!!  It is very good to see you correctly using the rcu_torture_ops
-> >>> facility correctly!
+> >>> I am mostly checking up on your intended meaning of "lazy" in various
+> >>> contexts.  It could mean only that the caller requested laziness, or in
+> >>> some cases it could mean that the callback actually will be lazy.
 > >>>
-> >>> And this could be good for your own testing, and I am happy to pull it
-> >>> in for that purpose (given it being fixed, having a good commit log,
-> >>> and so on).  After all, TREE10 is quite similar -- not part of CFLIST,
-> >>> but useful for certain types of focused testing.
-> >>>
-> >>> However, it would be very good to get call_rcu_lazy() testing going
-> >>> more generally, and in particular in TREE01 where offloading changes
-> >>> dynamically.  A good way to do this is to add a .call_lazy() component
-> >>> to the rcu_torture_ops structure, and check for it in a manner similar
-> >>> to that done for the .deferred_free() component.  Including adding a
-> >>> gp_normal_lazy module parameter.  This would allow habitual testing
-> >>> on a few scenarios and focused lazy testing on all of them via the
-> >>> --bootargs parameter.
+> >>> I can rationalize the "false" above as a "don't care" in this case
+> >>> because (as you say) there is not callback.  In which case this code
+> >>> is OK as is, as long as the header comment for rcu_nocb_flush_bypass()
+> >>> clearly states that this parameter has meaning only when there really
+> >>> is a callback being queued.
 > >>
-> >> Ok, if you don't mind I will make this particular enhancement to the
-> >> torture test in a future patchset, since I kind of decided on doing v3
-> >> with just fixes to what I have and more testing. Certainly happy to
-> >> enhance these tests in a future version.
+> >> I decided to change this and the below to "lazy" variable instead of
+> >> true/false, as the code is cleaner and less confusing IMO. It makes
+> >> sense to me and in my testing it works fine. Hope that's Ok with you.
 > > 
-> > No need to gate v3 on those tests.
+> > Sounds plausible.
 > > 
-> >>> On the total-gps=0, the usual suspicion would be that the lazy callbacks
-> >>> never got invoked.  It looks like you were doing about a two-minute run,
-> >>> so maybe a longer run?  Though weren't they supposed to kick in at 15
-> >>> seconds or so?  Or did this value of zero come about because this run
-> >>> used exactly 300 grace periods?
-> >>
-> >> It was zero because it required the RCU_FLAVOR torture type, where as
-> >> my torture type was lazy. Adding RCU_LAZY_FLAVOR to the list fixed it
-> >> :)
+> >> About changing the lazy length count to a flag, one drawback of doing
+> >> that is, say if there are some non-lazy CBs in the bypass list, then the
+> >> lazy shrinker will end up reporting an inaccurate count. Also
+> >> considering that it might be harder to add the count back later say if
+> >> we need it for tracing, I would say lets leave it as is. I will keep the
+> >> counter for v3 and we can discuss. Does that sound good to you?
 > > 
-> > Heh!  Then it didn't actually do any testing.  Done that as well!
+> > You lost me on this one.  If there are any non-lazy callbacks, the whole
+> > bypass list is already being treated as non-lazy, right?  If so, then
+> > the lazy shrinker should report the full count if all callbacks are lazy,
+> > and should report none otherwise.  Or am I missing something here?
+> > 
 > 
-> Sorry to not be clear, I meant the switch-case list below, not the
-> torture list in rcutorture.c! It was in the rcutorture.c so was being
-> tested, just reporting zero gp_seq as I pointed.
+> That's one way to interpret it, another way is say there were a 1000
+> lazy CBs, and now 1 non-lazy came in. The shrinker could report the lazy
+> count as 0 per your interpretation. Yes its true they will get flushed
+> out in the next jiffie, but for that time instant, the number of lazy
+> CBs in the list is not zero! :) Yeah OK its a weak argument, still an
+> argument! ;-)
 > 
-> /*
->  * Send along grace-period-related data for rcutorture diagnostics.
->  */
-> void rcutorture_get_gp_data(enum rcutorture_type test_type, int *flags,
->                             unsigned long *gp_seq)
-> {
->         switch (test_type) {
->         case RCU_FLAVOR:
->         case RCU_LAZY_FLAVOR:
->                 *flags = READ_ONCE(rcu_state.gp_flags);
->                 *gp_seq = rcu_seq_current(&rcu_state.gp_seq);
->                 break;
->         default:
->                 break;
->         }
-> }
-> EXPORT_SYMBOL_GPL(rcutorture_get_gp_data);
+> In any case, we saw the need for the length of the segcb lists to figure
+> out things via tracing, so I suspect we may need this in the future as
+> well, its a small cost so I would rather keep it if that's Ok with you! :)
 
-Ah, that would do it!  Thank you for the clarification.
+OK, being needed for tracing/diagnostics is a somewhat less weak argument...
+
+Let's see what v3 looks like.
 
 							Thanx, Paul

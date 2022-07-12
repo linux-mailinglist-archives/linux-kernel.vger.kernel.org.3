@@ -2,80 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0A65729AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB2E5729AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiGLXIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
+        id S231354AbiGLXJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiGLXIk (ORCPT
+        with ESMTP id S229514AbiGLXJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:08:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BA0645A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657667318; x=1689203318;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PVqTNIAp+lc24rMsgXbL56W/LS11GiDcSpu24HAnK+M=;
-  b=C+kNR9JCZJDdXMI6gKe3lRYtMIhLwHgqs2xCUavS24urtOzHMvlb+hB2
-   o3b5/BXG+HZGRQ8LKJmmd6LxzMJO9s9MkSrb1+wFw/yYN2gXEvJrRbCWn
-   hTFFcQyHqzlhmAKkSySiiZrpmVfMsy24zk//ENTxct97scaszyTv4Jb0N
-   dl/GaPA8vkHKCKwYvLi8zgRdb7U8LdOb/m5vtdpSiYTHDWZOFnXlc6vXX
-   cF9Ns6gahQi/A42g3gVUhgGFZcFZ+XJWSUC0znZnYoOHhYHzgCuj+JS//
-   hygQEmcs2uQExIfad1X6pVb0za0Rs2pEo5+CGBOrTbKqQ4CTbLhdTZQVp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="283818255"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="283818255"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:08:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="545611921"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jul 2022 16:08:33 -0700
-Received: from [10.252.208.254] (kliang2-mobl1.ccr.corp.intel.com [10.252.208.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 12 Jul 2022 19:09:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58EB9B1A9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:09:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 93C315805BD;
-        Tue, 12 Jul 2022 16:08:25 -0700 (PDT)
-Message-ID: <0e3b3e6e-53b9-b426-71cd-911d3ecbfc24@linux.intel.com>
-Date:   Tue, 12 Jul 2022 19:08:24 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4270C61740
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:09:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38BEC3411E;
+        Tue, 12 Jul 2022 23:09:48 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 19:09:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Li kunyu <kunyu@nfschina.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        sunliming <sunliming@kylinos.cn>
+Subject: [GIT PULL] tracing: Fixes and minor cleanups for 5.19
+Message-ID: <20220712190947.055042b4@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
- intel_pmu_lbr_restore
-Content-Language: en-US
-To:     Vince Weaver <vincent.weaver@maine.edu>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu>
- <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu>
- <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com>
- <20220711221658.4gpkizopmftpnav6@guptapa-desk>
- <32ccdda1-63bf-746e-48fb-935fa58285b1@maine.edu>
- <20220712204830.kvblayj37s3udt4b@guptapa-desk>
- <487465e6-b034-f08-907-de37a0a173b5@maine.edu>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <487465e6-b034-f08-907-de37a0a173b5@maine.edu>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,59 +49,180 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Linus,
 
-On 2022-07-12 5:26 p.m., Vince Weaver wrote:
-> On Tue, 12 Jul 2022, Pawan Gupta wrote:
-> 
->> On Tue, Jul 12, 2022 at 03:39:56PM -0400, Vince Weaver wrote:
->> It appears this CPU does not support TSX feature (or disabling TSX). If
->> the bug is easy to reproduce, bisecting can help.
-> 
-> I thought TSX was disabled via firmware update for all Haswell machines?
-> 
-> In any case, the fuzzer is triggering the
-> 	unchecked MSR access error: WRMSR to 0x689
-> in intel_pmu_lbr_restore.  So either this is a false error and should be 
-> disabled, or else it's a real issue and should be fixed.
-> 
+Fixes and minor clean ups for tracing:
 
-Could you please double check if the quirk can fix the issue on your
-machine?
+ - Fix memory leak by reverting what was thought to be a double free.
+   A static tool had gave a false positive that a double free was
+   possible in the error path, but it was actually a different location
+   that confused the static analyzer (and those of us that reviewed it).
 
-#Try write the exact same value from the error log to 0x689. The write
-should fail.
-wrmsr -p 0 0x689 0x1fffffff8101349e
+ - Move use of static buffers by ftrace_dump() to a location that can
+   be used by kgdb's ftdump(), as it needs it for the same reasons.
 
-#The quirk copy bits 59:60 to bits 61:62. The below write should succeed.
-wrmsr -p 0 0x689 0x7fffffff8101349e
+ - Clarify in the Kconfig description that function tracing has negligible
+   impact on x86, but may have a bit bigger impact on other architectures.
 
-> Unfortunately the fuzzer can take up to a few days to trigger the message 
-> (it's not easily repeatable) so doing a kernel bisect would take a very 
-> long time.
-> 
+ - Remove unnecessary extra semicolon in trace event.
 
-The lbr_from_signext_quirk_needed() is only invoked at boot time. Maybe
-we can dump some logs to understand which variable is not expected.
+ - Make a local variable static that is used in the fprobes sample
 
-Could you please apply the below patch, reboot to the patched kernel and
-share the dmesg log?
+ - Use KSYM_NAME_LEN for length of function in kprobe sample and get
+   rid of unneeded macro for the same purpose.
 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 13179f31fe10..50435ab627ad 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -300,6 +300,9 @@ static inline bool lbr_from_signext_quirk_needed(void)
- 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
- 			   boot_cpu_has(X86_FEATURE_RTM);
 
-+	pr_info("%s %s. LBR has tsx %d\n", boot_cpu_has(X86_FEATURE_HLE) ?
-"HLE" : "NO HLE",
-+			boot_cpu_has(X86_FEATURE_RTM) ? "RTM" : "NO RTM",
-+			x86_pmu.lbr_has_tsx);
- 	return !tsx_support && x86_pmu.lbr_has_tsx;
+Please pull the latest trace-v5.19-rc5 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-v5.19-rc5
+
+Tag SHA1: f64990a1b4d1e153bcb18e40634f008ce23cfbfd
+Head SHA1: 1e1fb420fe68d9d938db360fec700dfd230cc22a
+
+
+Douglas Anderson (1):
+      tracing: Fix sleeping while atomic in kdb ftdump
+
+Li kunyu (1):
+      blk-iocost: tracing: atomic64_read(&ioc->vtime_rate) is assigned an extra semicolon
+
+Steven Rostedt (Google) (1):
+      ftrace: Be more specific about arch impact when function tracer is enabled
+
+Tiezhu Yang (1):
+      samples: Use KSYM_NAME_LEN for kprobes
+
+Zheng Yejian (1):
+      tracing/histograms: Fix memory leak problem
+
+sunliming (1):
+      fprobe/samples: Make sample_probe static
+
+----
+ include/trace/events/iocost.h       |  2 +-
+ kernel/trace/Kconfig                |  3 ++-
+ kernel/trace/trace.c                | 11 ++++++-----
+ kernel/trace/trace_events_hist.c    |  2 ++
+ samples/fprobe/fprobe_example.c     |  2 +-
+ samples/kprobes/kprobe_example.c    |  5 ++---
+ samples/kprobes/kretprobe_example.c |  5 ++---
+ 7 files changed, 16 insertions(+), 14 deletions(-)
+---------------------------
+diff --git a/include/trace/events/iocost.h b/include/trace/events/iocost.h
+index e282ce02fa2d..6d1626e7a4ce 100644
+--- a/include/trace/events/iocost.h
++++ b/include/trace/events/iocost.h
+@@ -160,7 +160,7 @@ TRACE_EVENT(iocost_ioc_vrate_adj,
+ 
+ 	TP_fast_assign(
+ 		__assign_str(devname, ioc_name(ioc));
+-		__entry->old_vrate = atomic64_read(&ioc->vtime_rate);;
++		__entry->old_vrate = atomic64_read(&ioc->vtime_rate);
+ 		__entry->new_vrate = new_vrate;
+ 		__entry->busy_level = ioc->busy_level;
+ 		__entry->read_missed_ppm = missed_ppm[READ];
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index debbbb083286..ccd6a5ade3e9 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -194,7 +194,8 @@ config FUNCTION_TRACER
+ 	  sequence is then dynamically patched into a tracer call when
+ 	  tracing is enabled by the administrator. If it's runtime disabled
+ 	  (the bootup default), then the overhead of the instructions is very
+-	  small and not measurable even in micro-benchmarks.
++	  small and not measurable even in micro-benchmarks (at least on
++	  x86, but may have impact on other architectures).
+ 
+ config FUNCTION_GRAPH_TRACER
+ 	bool "Kernel Function Graph Tracer"
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index a8cfac0611bc..b8dd54627075 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -9864,6 +9864,12 @@ void trace_init_global_iter(struct trace_iterator *iter)
+ 	/* Output in nanoseconds only if we are using a clock in nanoseconds. */
+ 	if (trace_clocks[iter->tr->clock_id].in_ns)
+ 		iter->iter_flags |= TRACE_FILE_TIME_IN_NS;
++
++	/* Can not use kmalloc for iter.temp and iter.fmt */
++	iter->temp = static_temp_buf;
++	iter->temp_size = STATIC_TEMP_BUF_SIZE;
++	iter->fmt = static_fmt_buf;
++	iter->fmt_size = STATIC_FMT_BUF_SIZE;
  }
-
-
-Thanks,
-Kan
-
+ 
+ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
+@@ -9896,11 +9902,6 @@ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
+ 
+ 	/* Simulate the iterator */
+ 	trace_init_global_iter(&iter);
+-	/* Can not use kmalloc for iter.temp and iter.fmt */
+-	iter.temp = static_temp_buf;
+-	iter.temp_size = STATIC_TEMP_BUF_SIZE;
+-	iter.fmt = static_fmt_buf;
+-	iter.fmt_size = STATIC_FMT_BUF_SIZE;
+ 
+ 	for_each_tracing_cpu(cpu) {
+ 		atomic_inc(&per_cpu_ptr(iter.array_buffer->data, cpu)->disabled);
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 48e82e141d54..e87a46794079 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -4430,6 +4430,8 @@ static int parse_var_defs(struct hist_trigger_data *hist_data)
+ 
+ 			s = kstrdup(field_str, GFP_KERNEL);
+ 			if (!s) {
++				kfree(hist_data->attrs->var_defs.name[n_vars]);
++				hist_data->attrs->var_defs.name[n_vars] = NULL;
+ 				ret = -ENOMEM;
+ 				goto free;
+ 			}
+diff --git a/samples/fprobe/fprobe_example.c b/samples/fprobe/fprobe_example.c
+index 01ee6c8c8382..58f6e8358e97 100644
+--- a/samples/fprobe/fprobe_example.c
++++ b/samples/fprobe/fprobe_example.c
+@@ -20,7 +20,7 @@
+ 
+ #define BACKTRACE_DEPTH 16
+ #define MAX_SYMBOL_LEN 4096
+-struct fprobe sample_probe;
++static struct fprobe sample_probe;
+ static unsigned long nhit;
+ 
+ static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
+diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
+index f991a66b5b02..fd346f58ddba 100644
+--- a/samples/kprobes/kprobe_example.c
++++ b/samples/kprobes/kprobe_example.c
+@@ -16,9 +16,8 @@
+ #include <linux/module.h>
+ #include <linux/kprobes.h>
+ 
+-#define MAX_SYMBOL_LEN	64
+-static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
+-module_param_string(symbol, symbol, sizeof(symbol), 0644);
++static char symbol[KSYM_NAME_LEN] = "kernel_clone";
++module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
+ 
+ /* For each probe you need to allocate a kprobe structure */
+ static struct kprobe kp = {
+diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
+index 228321ecb161..cbf16542d84e 100644
+--- a/samples/kprobes/kretprobe_example.c
++++ b/samples/kprobes/kretprobe_example.c
+@@ -23,11 +23,10 @@
+ #include <linux/module.h>
+ #include <linux/kprobes.h>
+ #include <linux/ktime.h>
+-#include <linux/limits.h>
+ #include <linux/sched.h>
+ 
+-static char func_name[NAME_MAX] = "kernel_clone";
+-module_param_string(func, func_name, NAME_MAX, S_IRUGO);
++static char func_name[KSYM_NAME_LEN] = "kernel_clone";
++module_param_string(func, func_name, KSYM_NAME_LEN, 0644);
+ MODULE_PARM_DESC(func, "Function to kretprobe; this module will report the"
+ 			" function's execution time");
+ 

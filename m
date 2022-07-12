@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7921C5718DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E105718DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiGLLtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S231961AbiGLLuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiGLLtQ (ORCPT
+        with ESMTP id S229634AbiGLLt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:49:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D7221C923
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657626554;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MhycE2vEwnb9k/UxKYsjDnSNw/br2B5mjJJO+OCBKJk=;
-        b=ehznDEmkGM2ONKd+Uo0Q2cYNEmIOn7L4pWRFrjSH8CKPBqZ2+VOipBsrBdDVUJnpaoteTg
-        WjS0y7jKt3UYrfamVO59A4CNa03rnvwBExy8hzorTVbVHvQQwQeDLMtfcK9pC8P2mShHF9
-        C4uP9QtM9oWBhA87sLLyqtJtNg/MitE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-362-zrXtPKR1N4KhJBhxvH0Wqw-1; Tue, 12 Jul 2022 07:49:13 -0400
-X-MC-Unique: zrXtPKR1N4KhJBhxvH0Wqw-1
-Received: by mail-qk1-f200.google.com with SMTP id bj31-20020a05620a191f00b006b5a69786fcso813610qkb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:49:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=MhycE2vEwnb9k/UxKYsjDnSNw/br2B5mjJJO+OCBKJk=;
-        b=P5dn1IBytmmg10WY/BUfhNOA86diuXiuBIedcGKSZwEyLnrXfgI44H285S0h9dsgk7
-         ec1JU0kvt9VTQPL7FAQGRiAtpn/YAzBH6tJ5fb1+fnVrSS5IGPBz+IoVJkSIxD2JCe0I
-         ljDcvsSrYTFZuaSEoGQad6fdlGrfh6dJcs55jpAbgZQ2WMLfOJ+htO4KraXrgfW09NRm
-         CDyG82uRw5EzmYWUbRXKxdXx+DJl2INVh88ImbP75DJDa6n+70SgB0BZL8rXhrRIKXfA
-         eiWfSsmxWBcDIvVS/aeADKGNphiCO/XD5ptSrCIyLCRIHCC/48T8jLj0zag1rs2iMgLX
-         7A3w==
-X-Gm-Message-State: AJIora+FhNuVTOFO5+k1omwL5JUlote2TV8/nc9OMh9F0pW6Y7ljUo8W
-        wZLff1LHSJY+J9gVDBIbloarLU3Ap0JZQQ40Ssm6D5gtl+NLg0nCMlfWy+7daarkRdLLFcDPuTn
-        b0NRQkdrTCuZWxM3DViWX7ml+
-X-Received: by 2002:a05:622a:1a1b:b0:31e:b7c8:b6cb with SMTP id f27-20020a05622a1a1b00b0031eb7c8b6cbmr5750537qtb.175.1657626552900;
-        Tue, 12 Jul 2022 04:49:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s34OKcGuKrWbIoEXwTK/WXOI2GkPYpqBLQQTkv+ldrVvzF+HzU3Am9Cir8DCWD7cHNtNoTFQ==
-X-Received: by 2002:a05:622a:1a1b:b0:31e:b7c8:b6cb with SMTP id f27-20020a05622a1a1b00b0031eb7c8b6cbmr5750518qtb.175.1657626552708;
-        Tue, 12 Jul 2022 04:49:12 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id m6-20020a05620a290600b006a758ce2ae1sm9729262qkp.104.2022.07.12.04.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:49:12 -0700 (PDT)
-Message-ID: <6a92c7b3ab9932ebfb459841021f2cc1de03b5e1.camel@redhat.com>
-Subject: Re: [PATCH v3 01/25] KVM: x86: hyper-v: Expose access to debug MSRs
- in the partition privilege flags
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:49:08 +0300
-In-Reply-To: <20220708144223.610080-2-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-2-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Tue, 12 Jul 2022 07:49:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A048C2FFE2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:49:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 566B7B817D2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:49:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2802C3411C;
+        Tue, 12 Jul 2022 11:49:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657626595;
+        bh=3b0WCs5NkbNyewUFwXa549tB9KrigCsgEgy6Xxb+HJ0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BeSmurLa9s+72aKovvscNxc5PL25jwHy920jXUM0/7zgHDudue7zUIFLMCVlhOxTd
+         WL70UjJuMof+V+OcCzzxS89PGNJK3USvQCqnucuzljOEUSDjt1Fa45kBldF7XpBRhv
+         dgPbkyU7d0Q63CMuVtJQ1zLvZw6htIlPJ/5tcOll8kKdmkGEBr+VhEqbSlIwCrOm3S
+         v7DOxtbi24jklHmVa2gTBMRWLjROBfMm4wEZn7vXN6Kp3ETBMOXTanefPhC5BoaLfo
+         IoCJqwcuQIzni/5msSiWw8+TxMBkxX3BX1t3jJsgoETD3eoP0JaOZ/We0isgllcTVx
+         mFYErHDR9lIbg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8C3DC5C0516; Tue, 12 Jul 2022 04:49:54 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 04:49:54 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Marco Elver <elver@google.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
+Message-ID: <20220712114954.GA3870114@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220503073844.4148944-1-elver@google.com>
+ <20220711182918.338f000f@gandalf.local.home>
+ <20220712002128.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220711205319.1aa0d875@gandalf.local.home>
+ <20220712025701.GS1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712025701.GS1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,53 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:41 +0200, Vitaly Kuznetsov wrote:
-> For some features, Hyper-V spec defines two separate CPUID bits: one
-> listing whether the feature is supported or not and another one showing
-> whether guest partition was granted access to the feature ("partition
-> privilege mask"). 'Debug MSRs available' is one of such features. Add
-> the missing 'access' bit.
+On Mon, Jul 11, 2022 at 07:57:01PM -0700, Paul E. McKenney wrote:
+> On Mon, Jul 11, 2022 at 08:53:19PM -0400, Steven Rostedt wrote:
+> > On Mon, 11 Jul 2022 17:21:28 -0700
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > 
+> > > On x86, both srcu_read_lock() and srcu_read_unlock() should be OK from
+> > > NMI context, give or take their use of lockdep.  Which is why we have
+> > > srcu_read_lock_notrace() and srcu_read_unlock_notrace(), which do not
+> > > use lockdep.  Which __DO_TRACE() does in fact invoke.  Ah, but you have
+> > > this: "WARN_ON_ONCE(rcuidle && in_nmi())".
+> > > 
+> > > Because all the world is not an x86.
+> > 
+> > But since NMIs are architecture specific, we could change that to:
+> > 
+> > 	WARN_ON_ONCE(!srcu_nmi_safe && rcuidle && in_nmi());
+> > 
+> > and add a srcu_nmi_safe constant or macro that is 1 on architectures that
+> > srcu is safe in NMI and 0 otherwise.
+> > 
+> > Or do we care if a tracepoint happens in those architectures where it is
+> > not safe. We could then just do:
+> > 
+> > 	if (!srcu_nmi_safe && rcuidle && in_nmi())
+> > 		return;
+> > 
+> > and just skip tracepoints that are marked rcu_idle and happen within NMI.
 > 
-> Fixes: f97f5a56f597 ("x86/kvm/hyper-v: Add support for synthetic debugger interface")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c             | 1 +
->  include/asm-generic/hyperv-tlfs.h | 2 ++
->  2 files changed, 3 insertions(+)
+> More generally, this is this_cpu_nmi_safe rather than just SRCU.  Or could
+> be, depending on what the architecture guys would like to guarantee.
+> SRCU is just passing through the this_cpu*() NMI-safety property.
 > 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index e2e95a6fccfd..e08189211d9a 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2496,6 +2496,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->  			ent->eax |= HV_MSR_RESET_AVAILABLE;
->  			ent->eax |= HV_MSR_REFERENCE_TSC_AVAILABLE;
->  			ent->eax |= HV_ACCESS_FREQUENCY_MSRS;
-> +			ent->eax |= HV_ACCESS_DEBUG_MSRS;
->  			ent->eax |= HV_ACCESS_REENLIGHTENMENT;
->  
->  			ent->ebx |= HV_POST_MESSAGES;
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index fdce7a4cfc6f..1d99dd296a76 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -70,6 +70,8 @@
->  #define HV_MSR_GUEST_IDLE_AVAILABLE		BIT(10)
->  /* Partition local APIC and TSC frequency registers available */
->  #define HV_ACCESS_FREQUENCY_MSRS		BIT(11)
-> +/* Debug MSRs available */
-> +#define HV_ACCESS_DEBUG_MSRS			BIT(12)
->  /* AccessReenlightenmentControls privilege */
->  #define HV_ACCESS_REENLIGHTENMENT		BIT(13)
->  /* AccessTscInvariantControls privilege */
+> And in addition to in_nmi(), there is the HAVE_NMI Kconfig option:
+> 
+> 	$ git grep -w HAVE_NMI
+> 	arch/Kconfig:config HAVE_NMI
+> 	arch/Kconfig:	depends on HAVE_NMI
+> 	arch/arm/Kconfig:	select HAVE_NMI
+> 	arch/arm64/Kconfig:	select HAVE_NMI
+> 	arch/loongarch/Kconfig:	select HAVE_NMI
+> 	arch/mips/Kconfig:	select HAVE_NMI
+> 	arch/powerpc/Kconfig:	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
+> 	arch/s390/Kconfig:	select HAVE_NMI
+> 	arch/sh/Kconfig:	select HAVE_NMI
+> 	arch/sparc/Kconfig:	select HAVE_NMI
+> 	arch/x86/Kconfig:	select HAVE_NMI
+> 
+> So if I understand correctly, arm, loongarch, mips, powerpc, sh, and
+> sparc are the ones that have NMIs but don't have NMI-safe this_cpu*()
+> operations.  These are the ones that would need !srcu_nmi_safe.
+> 
+> Or, longer term, I could make HAVE_NMI && !srcu_safe_nmi cause SRCU to use
+> explicit atomics for srcu_read_lock_trace() and srcu_read_unlock_trace().
+> I am assuming that any NMI handler executing srcu_read_lock_trace()
+> also executes the matching srcu_read_unlock_trace().  (Silly me, I know!)
+> This assumption means that srcu_read_lock() and srcu_read_unlock() can
+> continue with their non-atomic this_cpu_inc() ways.
+> 
+> But a quick fix that stopped the bleeding and allowed printk() to
+> progress would be useful in the short term, regardless of whether or
+> not in the longer term it makes sense to make srcu_read_lock_trace()
+> and srcu_read_unlock_trace() NMI-safe.
 
+Except that doesn't rcuidle && in_nmi() imply a misplaced trace event?
 
-I guess you mean HV_FEATURE_DEBUG_MSRS_AVAILABLE and the new HV_ACCESS_DEBUG_MSRS
+Isn't it still the case that you are not supposed to have trace events
+in NMI handlers before RCU is watching or after it is no longer watching,
+just as for entry/exit code in general?  Once in the body of the handler,
+rcuidle should be false and all should be well.
 
-I checked the spec and the bits match, so I guess:
+Or am I missing something here?
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+							Thanx, Paul

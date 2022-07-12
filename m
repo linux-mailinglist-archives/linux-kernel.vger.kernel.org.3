@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF5F571695
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8930571696
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbiGLKHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S232540AbiGLKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbiGLKHl (ORCPT
+        with ESMTP id S232783AbiGLKHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:07:41 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8253AAB38;
-        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eq6so9464372edb.6;
-        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
+        Tue, 12 Jul 2022 06:07:42 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C78AB68E;
+        Tue, 12 Jul 2022 03:07:40 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t3so9204313edd.0;
+        Tue, 12 Jul 2022 03:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ddZjIbYll5j1xU/Makkx5ivXMXtzYaZP4m3U3y8uUKo=;
-        b=NzskHhXO51lXDBi6AdCQr9mBok7tmEQ1LHlNiZSLQiAOymWKp6RapyCR0Y4XHTk+wm
-         /ii0vY1vbEHv2opZIpBrPlBPpJk/xX/u/Xd2w+4oq/Km8l4XJXwJBXxtJp7xTHiIXBfC
-         kZC0e2tkUi6xAeEiJOHYRmayt4OYMjg7XGJgUiF+h7VEqemA18nT2vqDN//X0HO/eMBB
-         RVIEfngvoRJ/Mtd08EM/ueMhiYl09JNGFslshhafLuQol0SMHv+gnsPjKf7TrIt3O4n5
-         ASgt3VoSC4gWB9tbuAwjVKBKOKsuMXF2SybJBR+TJ5E//h/yaKp3Jb6nE2vDSQiQETsG
-         yqrA==
+        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
+        b=j+7XQV2J1dvTbZpa/Qhzqdb5dvUbDMSITE7NK+nJ05nRbIyW2HOb1z8ONEJBotPGrc
+         Axg6CPGNl3V53glbEhCLpWZVH3fY34rxCtQvg7J9IoCNGwJbkiLaK7g8rutEFVpDa675
+         bRtxHCbQl5bF8neunMcUi2tMDl94hGvx03sxZmNgFzc2kMAInovQoX4tWTjteRsRQna7
+         LNaRCyE/zXJDS9OTWxy9kbCMDWdk8jQqIckNfuAW0eKysKLJsLjEz3BJo55lJd15Jy1/
+         yFxkkOtpdB8S04LeXobipJ+i9RINdNUvv4lfmNyCJ4SidOWDgqgemSvuS6XzRywDf2Ha
+         2GMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ddZjIbYll5j1xU/Makkx5ivXMXtzYaZP4m3U3y8uUKo=;
-        b=w5bUV1mZHrzWRglH9Z+s+FQflnIv/w5C+erq1nW4K/Vgz2pOWDSbIZQ+kDQk1n4tCR
-         SzEZ59zs4et99URum+p5ZdByKczO3si4Sc78h2oXBMxxs4mlXUjpVwwg44Taa1wBF5E7
-         53RKcLauUfO4lDU/O4kxfpahEq6+bqhKIi5psiiSv+efo5CGc2tq58EYuhDIdjeEiUCy
-         aSkcvdgrfLfOM22eQTc3zcB5roYtwQjj6FieKGZ8NC096x50TA4MCu705UqWZiKRakyB
-         cXiJQfMRHEy+Aq+/afEdhPXGFPUcZ9ztEpcpbgbM49/Luk1245ehTjT3Bo7SFzhYnpuL
-         zblw==
-X-Gm-Message-State: AJIora9fbKICUFAMHxr8xntgQwNRopF/sKsGKIBxgE64G8bmnpnZRCQW
-        Q8FDR7SoInQSJhhIMkrW8WA=
-X-Google-Smtp-Source: AGRyM1u8t/MUsOEkf/rCSRi9bfIxxrCIMu4Ad6ddi60UTU7OB4bh0FFaMndqUpZYZCBziExmKvih5A==
-X-Received: by 2002:a05:6402:2743:b0:43a:7f92:8e30 with SMTP id z3-20020a056402274300b0043a7f928e30mr29838578edd.168.1657620458496;
-        Tue, 12 Jul 2022 03:07:38 -0700 (PDT)
+        bh=XbujW824CNr3VEPvbgVSYfLKtCakKHejuLWKhEvhbjo=;
+        b=to0FhJ3sYu5VIXOvSFt5x4s4far+exSoZtThmu79nRvY3J+uNDU7r1/WhGbbfgHvOZ
+         iJ8o7Oo2D689KRk9loY9Yvb7TlRHAnP6HKZ7bji8xmILg11fC+LyV+mXlYZ0G4TimlOl
+         BSad8xE5lL6EPdxBWEfgtcVZciBeMwcGtHp9QClnsnzsR8PFrVsVSH3Rs+nYKbcwd5o8
+         gMqna225EsiS/A2QSWPKbyfCpo2pZCEy7i8EFnqyG3SatrtKX/SQLsmjj1JhS0NzDdbd
+         sP4V0fHtfZIdodMAIawqqbcRLuLbNmwK50W1c4f/q/4Qvk7TWegt0Uo7BVCohBxxfWce
+         bbeg==
+X-Gm-Message-State: AJIora8LdgXVBxAjQrAnzGCA5b4vMhrFx5UFGLB0QrBEWIK3uOOsHlav
+        6x4unpqnu5rjwwQ0haIzitM=
+X-Google-Smtp-Source: AGRyM1tmEqvblkLPuM3cKpX2kKeFRSezIsUBldJxUuJeEfON3wJh7LyGr0QnX2GZ5affre2rf11Zdg==
+X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id i19-20020a05640242d300b004352c49313dmr30051549edc.86.1657620459423;
+        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-104.zg.cable.xnet.hr. [94.253.165.104])
-        by smtp.googlemail.com with ESMTPSA id bd27-20020a056402207b00b0043a21e3b4a5sm5799675edb.40.2022.07.12.03.07.37
+        by smtp.googlemail.com with ESMTPSA id bd27-20020a056402207b00b0043a21e3b4a5sm5799675edb.40.2022.07.12.03.07.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 03:07:38 -0700 (PDT)
+        Tue, 12 Jul 2022 03:07:39 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, jassisinghbrar@gmail.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v8 3/4] mailbox: qcom-apcs-ipc: add IPQ8074 APSS clock support
-Date:   Tue, 12 Jul 2022 12:07:32 +0200
-Message-Id: <20220712100733.34261-3-robimarko@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v8 4/4] arm64: dts: ipq8074: add APCS support
+Date:   Tue, 12 Jul 2022 12:07:33 +0200
+Message-Id: <20220712100733.34261-4-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220712100733.34261-1-robimarko@gmail.com>
 References: <20220712100733.34261-1-robimarko@gmail.com>
@@ -74,41 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ8074 has the APSS clock controller utilizing the same register space as
-the APCS, so provide access to the APSS utilizing a child device like
-IPQ6018.
+APCS now has support for providing the APSS clocks as the child device
+for IPQ8074.
 
-IPQ6018 and IPQ8074 use the same controller and driver, so just utilize
-IPQ6018 match data for IPQ8074.
+So, add the required DT node for APCS and A53PLL which feeds it the PLL
+clock for APSS, since APSS will be used for CPU frequency scaling.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
 Changes in v7:
-* Dont max_register modifications
-* Drop custom IPQ8074 match data and use IPQ6018 one as they share the
-controller and driver
+* Drop review tag due to significant changes
+* Add A53PLL node
+* Add clocks to APCS node
 
-Changes in v5:
-* Use lower case hex for max_register
-* Update the APSS clock name to match the new one without commas
+Changes in v3:
+* Node does not currently exist in the upstream kernel, so add it instead
+of modifying.
 ---
- drivers/mailbox/qcom-apcs-ipc-mailbox.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-index 80a54d81412e..f1f0e87a79e6 100644
---- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-+++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-@@ -142,7 +142,7 @@ static int qcom_apcs_ipc_remove(struct platform_device *pdev)
- /* .data is the offset of the ipc register within the global block */
- static const struct of_device_id qcom_apcs_ipc_of_match[] = {
- 	{ .compatible = "qcom,ipq6018-apcs-apps-global", .data = &ipq6018_apcs_data },
--	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = &msm8994_apcs_data },
-+	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = &ipq6018_apcs_data },
- 	{ .compatible = "qcom,msm8916-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8939-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8953-apcs-kpss-global", .data = &msm8994_apcs_data },
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index 080796555809..6a13bd3ead55 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -879,6 +879,23 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+ 				      "axi_m_sticky";
+ 			status = "disabled";
+ 		};
++
++		apcs_glb: mailbox@b111000 {
++			compatible = "qcom,ipq8074-apcs-apps-global";
++			reg = <0x0b111000 0x1000>;
++			#clock-cells = <1>;
++			clocks = <&a53pll>, <&xo>;
++			clock-names = "pll", "xo";
++			#mbox-cells = <1>;
++		};
++
++		a53pll: clock@b116000 {
++			compatible = "qcom,ipq8074-a53pll";
++			reg = <0x0b116000 0x40>;
++			#clock-cells = <0>;
++			clocks = <&xo>;
++			clock-names = "xo";
++		};
+ 	};
+ 
+ 	timer {
 -- 
 2.36.1
 

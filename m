@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83D4572131
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E351D57212C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiGLQlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S233847AbiGLQlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbiGLQle (ORCPT
+        with ESMTP id S233505AbiGLQld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:41:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C01C3AFE;
-        Tue, 12 Jul 2022 09:41:30 -0700 (PDT)
+        Tue, 12 Jul 2022 12:41:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F3BFAF8;
+        Tue, 12 Jul 2022 09:41:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23BDBCE1C9F;
-        Tue, 12 Jul 2022 16:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC12C341CD;
-        Tue, 12 Jul 2022 16:41:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A906195C;
+        Tue, 12 Jul 2022 16:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8492C3411C;
+        Tue, 12 Jul 2022 16:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657644086;
-        bh=17y76lSzSc7hAMgtMuJKp71vtfM+9WHafoK+k81GIYQ=;
+        s=k20201202; t=1657644088;
+        bh=4WKRmL2FykAWdl6pWbOT0riuyr9bUPG1WRMUEVP7bOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tBRkSUxYGpA/O42WOco2Rp4+DQ6ckIV3Q16e+CXlKF9Ut6HYNBVhglsDz+VF4UAvZ
-         gAP0chkaOTZWAQU+iEaUZRfIx7Y2U5r3uuklCDK/qZjShWv/fNV3dpFeXbsouq5rIG
-         /xfoA+F/iRrTYBRumksXlmt6ekkz35EaRB5VgQpRs7UtWZbkvz0f42xdAV/t3iIlFB
-         /NavUXhHrwZsvk1KE1mV4Xq08KceoO/ZiD0q5RWxm73tUra7KHtW/OffEbElvGgqBP
-         FUV/aKEG5rHqJSz0tBKNNfBgdD5qPUs1oVdTGsOE3mE0AR970i1c7hU2JXAVZNPyEx
-         vmHyJ47o4RvlA==
+        b=M3skOuSd2Sc04Rbu1+S1nWNQei+a1ejS/mKXw67mkTfekp5zp7inI+2+2pqCaUCim
+         KBVfhYIYR020Vpzb9Y0+vS9x7zMPtx7rKB9sjtHv+NTE4BFREoWnuG11bQQCVfKfDV
+         F7duUvZCxLq/IAVyr3xMaCaw8v6O9GUxPEYfjQ1Saw4QcSEbfxhIju/HWvtNB5neRm
+         /vqn0CNu9ixJ0ayI3gEHGD1BUMmBbu5N6MUCOHAhesHEh9oL71a2lvcr89fopasrZI
+         3tZg6eJqpRQv3d1xBDMrqOTbYpfbgBYg+LJKzR3F6ncuEq7uiWwEaStXtZNEas/OLf
+         bA10SEHlgILVg==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
@@ -41,9 +41,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v2 06/10] ARM: dts: armada-xp-mv78260.dtsi: Add definitions for PCIe legacy INTx interrupts
-Date:   Tue, 12 Jul 2022 18:41:04 +0200
-Message-Id: <20220712164108.30262-7-kabel@kernel.org>
+Subject: [PATCH v2 07/10] ARM: dts: armada-xp-mv78460.dtsi: Add definitions for PCIe legacy INTx interrupts
+Date:   Tue, 12 Jul 2022 18:41:05 +0200
+Message-Id: <20220712164108.30262-8-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220712164108.30262-1-kabel@kernel.org>
 References: <20220712164108.30262-1-kabel@kernel.org>
@@ -72,14 +72,14 @@ requested only one of them.
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- arch/arm/boot/dts/armada-xp-mv78260.dtsi | 126 +++++++++++++++++++----
- 1 file changed, 108 insertions(+), 18 deletions(-)
+ arch/arm/boot/dts/armada-xp-mv78460.dtsi | 140 +++++++++++++++++++----
+ 1 file changed, 120 insertions(+), 20 deletions(-)
 
-diff --git a/arch/arm/boot/dts/armada-xp-mv78260.dtsi b/arch/arm/boot/dts/armada-xp-mv78260.dtsi
-index 2d85fe8ac327..0714af52e607 100644
---- a/arch/arm/boot/dts/armada-xp-mv78260.dtsi
-+++ b/arch/arm/boot/dts/armada-xp-mv78260.dtsi
-@@ -98,16 +98,26 @@ pcie1: pcie@1,0 {
+diff --git a/arch/arm/boot/dts/armada-xp-mv78460.dtsi b/arch/arm/boot/dts/armada-xp-mv78460.dtsi
+index 230a3fd36b30..16185edf9aa5 100644
+--- a/arch/arm/boot/dts/armada-xp-mv78460.dtsi
++++ b/arch/arm/boot/dts/armada-xp-mv78460.dtsi
+@@ -119,16 +119,26 @@ pcie1: pcie@1,0 {
  				reg = <0x0800 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -108,7 +108,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie2: pcie@2,0 {
-@@ -116,16 +126,26 @@ pcie2: pcie@2,0 {
+@@ -137,16 +147,26 @@ pcie2: pcie@2,0 {
  				reg = <0x1000 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -137,7 +137,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie3: pcie@3,0 {
-@@ -134,16 +154,26 @@ pcie3: pcie@3,0 {
+@@ -155,16 +175,26 @@ pcie3: pcie@3,0 {
  				reg = <0x1800 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -166,7 +166,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie4: pcie@4,0 {
-@@ -152,16 +182,26 @@ pcie4: pcie@4,0 {
+@@ -173,16 +203,26 @@ pcie4: pcie@4,0 {
  				reg = <0x2000 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -195,7 +195,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie5: pcie@5,0 {
-@@ -170,16 +210,26 @@ pcie5: pcie@5,0 {
+@@ -191,16 +231,26 @@ pcie5: pcie@5,0 {
  				reg = <0x2800 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -224,7 +224,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie6: pcie@6,0 {
-@@ -188,16 +238,26 @@ pcie6: pcie@6,0 {
+@@ -209,16 +259,26 @@ pcie6: pcie@6,0 {
  				reg = <0x3000 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -253,7 +253,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie7: pcie@7,0 {
-@@ -206,16 +266,26 @@ pcie7: pcie@7,0 {
+@@ -227,16 +287,26 @@ pcie7: pcie@7,0 {
  				reg = <0x3800 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -282,7 +282,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie8: pcie@8,0 {
-@@ -224,16 +294,26 @@ pcie8: pcie@8,0 {
+@@ -245,16 +315,26 @@ pcie8: pcie@8,0 {
  				reg = <0x4000 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -311,7 +311,7 @@ index 2d85fe8ac327..0714af52e607 100644
  			};
  
  			pcie9: pcie@9,0 {
-@@ -242,16 +322,26 @@ pcie9: pcie@9,0 {
+@@ -263,16 +343,26 @@ pcie9: pcie@9,0 {
  				reg = <0x4800 0 0 0 0>;
  				#address-cells = <3>;
  				#size-cells = <2>;
@@ -334,6 +334,35 @@ index 2d85fe8ac327..0714af52e607 100644
  				status = "disabled";
 +
 +				pcie9_intc: interrupt-controller {
++					interrupt-controller;
++					#interrupt-cells = <1>;
++				};
+ 			};
+ 
+ 			pcie10: pcie@a,0 {
+@@ -281,16 +371,26 @@ pcie10: pcie@a,0 {
+ 				reg = <0x5000 0 0 0 0>;
+ 				#address-cells = <3>;
+ 				#size-cells = <2>;
++				interrupt-names = "intx";
++				interrupts-extended = <&mpic 103>;
+ 				#interrupt-cells = <1>;
+ 				ranges = <0x82000000 0 0 0x82000000 0xa 0 1 0
+ 					  0x81000000 0 0 0x81000000 0xa 0 1 0>;
+ 				bus-range = <0x00 0xff>;
+-				interrupt-map-mask = <0 0 0 0>;
+-				interrupt-map = <0 0 0 0 &mpic 103>;
++				interrupt-map-mask = <0 0 0 7>;
++				interrupt-map = <0 0 0 1 &pcie10_intc 0>,
++						<0 0 0 2 &pcie10_intc 1>,
++						<0 0 0 3 &pcie10_intc 2>,
++						<0 0 0 4 &pcie10_intc 3>;
+ 				marvell,pcie-port = <3>;
+ 				marvell,pcie-lane = <0>;
+ 				clocks = <&gateclk 27>;
+ 				status = "disabled";
++
++				pcie10_intc: interrupt-controller {
 +					interrupt-controller;
 +					#interrupt-cells = <1>;
 +				};

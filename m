@@ -2,80 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9475713F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6F35713FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiGLII1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S232587AbiGLIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiGLII0 (ORCPT
+        with ESMTP id S232584AbiGLIJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:08:26 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7193D9D535
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:08:24 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id o7so12617959lfq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=k4u80oyQWraiYKs1p1yWtuiMFtevIh0v4pzoGfxTAqQ=;
-        b=W9uGNhVc44uelBQurw06DsGn/hKUXEcItN3tp1TJd1Rp6nUF1iDIwlj+tMOSJfU78f
-         Yciq7vpqxRJ1aB7m9UEdRdyVOlfixGoY7X6bb83JKA9/Ywnkwb1AZq8W4pkdwVJpumaI
-         ZWGy21evol+66hAir2gINGQSX6rC0iCGRHhO25K2QAKD+iTbu8eLvtW3wVZd2Q5oW/kW
-         uEG3Yohr1S6ShM8CP4kCOXaAeXwaQueOYwpDft/nnBZKNj+jJMgk5VGpti9eZ1ENcTay
-         M8binu2lB8SMGH3gtnegrmH+B5LI7OG3XEZp5luJWesxL3y4YNMfpdvXUJ7IX6Oz8lbE
-         TBbA==
+        Tue, 12 Jul 2022 04:09:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8FC252E46
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657613350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJcskA/Zg+I54A7KxLAxiRGb8qrTlBqKeeRMZ0ymcfk=;
+        b=NF3TB8hXvcEVSErbhcA45YJ3KCRdcJ1zJl4uQgvg40NzZMrKwNVxZxWATPNXtUdgF6zKmE
+        2QTGTC56SraZollrrs3/AzVo5c2yUDfYyzOpTvE+ekbdzOozO3FOuqrrsmRUz2bUz/6c1I
+        B82n9j/DeF1ccBByYVfW+0nBY49q/Xs=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-kFXOKvSrO_uAbE0wFqjWRQ-1; Tue, 12 Jul 2022 04:09:09 -0400
+X-MC-Unique: kFXOKvSrO_uAbE0wFqjWRQ-1
+Received: by mail-lj1-f200.google.com with SMTP id m16-20020a2e8710000000b0025d46f0cfb1so892409lji.16
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=k4u80oyQWraiYKs1p1yWtuiMFtevIh0v4pzoGfxTAqQ=;
-        b=7vx3BfFwy8+k8ot/n+/up1dQaFgZ05JaiEr4sLiV9hQQ6WR/TbjSlTSgqQ4HyP59fW
-         X0P7PI3JpE+363XgAsEk9YJjfSMlHRIM+QOunbgUsv9yUKcPcNNE6XSDHQnkD6ZAkR+1
-         Tr615Th43Pbv2e7mXsbFy3MrgSwAf/gBw1EFkmm22cmUCX6zJVVnV90j0GtHHEgkmKTC
-         D/Tpm6DuS9FCgUQAiIzLHVoXIeZ99W12+EiE2KkktPCOGy9+KkslpO8X9A/p1g7H1qjb
-         VRjmh6SQPiqwnnmdk3TNUlvKEgLqA38l1EgrtvorsiGG/MJyhrWaamyXYTbrYvwfLvsJ
-         abtA==
-X-Gm-Message-State: AJIora+9m5/4cUGhZaEsODIjxc5RGolLTdKlBKuvf1rCyJzb5iHOUOzg
-        pK8gqKFrnubNRylG8YJjgrCeJQ==
-X-Google-Smtp-Source: AGRyM1ssF5+WPVrq7/S87s3pxBfIZb7FXFrYx2wYNxOFqmtgwcim48AU819T+sIke0XAGnWtfqS3Sw==
-X-Received: by 2002:a05:6512:1523:b0:489:db27:c171 with SMTP id bq35-20020a056512152300b00489db27c171mr6724319lfb.58.1657613302851;
-        Tue, 12 Jul 2022 01:08:22 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id q2-20020a2eb4a2000000b0025bd293ed8csm2285759ljm.2.2022.07.12.01.08.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 01:08:22 -0700 (PDT)
-Message-ID: <78824cf6-fe30-239a-db66-63d2ee19c1f0@linaro.org>
-Date:   Tue, 12 Jul 2022 10:08:20 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rJcskA/Zg+I54A7KxLAxiRGb8qrTlBqKeeRMZ0ymcfk=;
+        b=Vf6pzKYyOTH1/SJ5gL/UxgN6DMvopd63I6oBfWHIX+DcnPt2vlvcNrkH6qgJLoQvIy
+         WxxlpH0SD3dj0yR/qix1a39AZRadltULlHD9d0jmuYhmigRsgzVmDHxFVsXWoXYk+skH
+         MRI16OZldPozzbRftgebSfnGADJ60R1iDblzjDSVrPid6YgVDvEURDMq3QGMKWsUh1oH
+         WMzUkrC6f0cYDUSR2/NiUzth/ANNKFItN1zpTIfQk2f9vFvJKuXoi1e2JVq7uAkMe2Oe
+         6CnBb0xbqtQF1/xXxLddPWzRh4dlxthje3KyuOMIq2Ag2jyN6hxnKTKoCdO8vZWl+puW
+         ekjw==
+X-Gm-Message-State: AJIora/6+4J8QSNQp9EqQRJPupmucCUZYEpQhT2KeT6YH4aCab/Jeww1
+        khvGPMhLilcP7A3/+W49k3DH+NKI+ZziNiRSuxXrF90M8EBEpTgIT/SXwzjAJUbzqPUpUoPzutn
+        0wRxfhw2t+7RfA3TfnRBD+jeDjb79O4xvofg7x9BE
+X-Received: by 2002:ac2:50d1:0:b0:489:fb36:cde1 with SMTP id h17-20020ac250d1000000b00489fb36cde1mr264115lfm.411.1657613347826;
+        Tue, 12 Jul 2022 01:09:07 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vjIfYeHw/U8j+flo57s9r09p+WpV9Mywo429Jk8FiV/6lmU1F4kq5TwCDtQJDxdvwRs4LWoN08HBHaUIS+RT0=
+X-Received: by 2002:ac2:50d1:0:b0:489:fb36:cde1 with SMTP id
+ h17-20020ac250d1000000b00489fb36cde1mr264103lfm.411.1657613347609; Tue, 12
+ Jul 2022 01:09:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: riscv: document the sifive e24
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220711184325.1367393-1-mail@conchuod.ie>
- <20220711184325.1367393-2-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220711184325.1367393-2-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-4-eperezma@redhat.com>
+ <CACGkMEt6YQvtyYwkYVxmZ01pZJK9PMFM2oPTVttPZ_kZDY-9Jw@mail.gmail.com> <CAJaqyWfGXu8k7JN1gCPdUXS2_Dct73w4wS_SdB3aLqVCWJqJQg@mail.gmail.com>
+In-Reply-To: <CAJaqyWfGXu8k7JN1gCPdUXS2_Dct73w4wS_SdB3aLqVCWJqJQg@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 12 Jul 2022 16:08:56 +0800
+Message-ID: <CACGkMEv0W=CYduTV44R71knWwyoEd9VAth0eHuwEFa9T4Njhhg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] vhost-vdpa: uAPI to suspend the device
+To:     Eugenio Perez Martin <eperezma@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Cindy Lu <lulu@redhat.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,16 +98,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 20:43, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The SiFive E24 is a 32 bit monitor core present on the JH7100.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Jul 8, 2022 at 7:53 PM Eugenio Perez Martin <eperezma@redhat.com> w=
+rote:
+>
+> On Wed, Jun 29, 2022 at 6:16 AM Jason Wang <jasowang@redhat.com> wrote:
+> >
+> > On Fri, Jun 24, 2022 at 12:08 AM Eugenio P=C3=A9rez <eperezma@redhat.co=
+m> wrote:
+> > >
+> > > The ioctl adds support for suspending the device from userspace.
+> > >
+> > > This is a must before getting virtqueue indexes (base) for live migra=
+tion,
+> > > since the device could modify them after userland gets them. There ar=
+e
+> > > individual ways to perform that action for some devices
+> > > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was n=
+o
+> > > way to perform it for any vhost device (and, in particular, vhost-vdp=
+a).
+> > >
+> > > After a successful return of the ioctl call the device must not proce=
+ss
+> > > more virtqueue descriptors. The device can answer to read or writes o=
+f
+> > > config fields as if it were not suspended. In particular, writing to
+> > > "queue_enable" with a value of 1 will not make the device start
+> > > processing buffers of the virtqueue.
+> > >
+> > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > ---
+> > >  drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
+> > >  include/uapi/linux/vhost.h | 14 ++++++++++++++
+> > >  2 files changed, 33 insertions(+)
+> > >
+> > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > > index 3d636e192061..7fa671ac4bdf 100644
+> > > --- a/drivers/vhost/vdpa.c
+> > > +++ b/drivers/vhost/vdpa.c
+> > > @@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhos=
+t_vdpa *v, u32 __user *argp)
+> > >         return 0;
+> > >  }
+> > >
+> > > +/* After a successful return of ioctl the device must not process mo=
+re
+> > > + * virtqueue descriptors. The device can answer to read or writes of=
+ config
+> > > + * fields as if it were not suspended. In particular, writing to "qu=
+eue_enable"
+> > > + * with a value of 1 will not make the device start processing buffe=
+rs.
+> > > + */
+> > > +static long vhost_vdpa_suspend(struct vhost_vdpa *v)
+> > > +{
+> > > +       struct vdpa_device *vdpa =3D v->vdpa;
+> > > +       const struct vdpa_config_ops *ops =3D vdpa->config;
+> > > +
+> > > +       if (!ops->suspend)
+> > > +               return -EOPNOTSUPP;
+> > > +
+> > > +       return ops->suspend(vdpa);
+> > > +}
+> > > +
+> > >  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned in=
+t cmd,
+> > >                                    void __user *argp)
+> > >  {
+> > > @@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file=
+ *filep,
+> > >         case VHOST_VDPA_GET_VQS_COUNT:
+> > >                 r =3D vhost_vdpa_get_vqs_count(v, argp);
+> > >                 break;
+> > > +       case VHOST_VDPA_SUSPEND:
+> > > +               r =3D vhost_vdpa_suspend(v);
+> > > +               break;
+> > >         default:
+> > >                 r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
+> > >                 if (r =3D=3D -ENOIOCTLCMD)
+> > > diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> > > index cab645d4a645..6d9f45163155 100644
+> > > --- a/include/uapi/linux/vhost.h
+> > > +++ b/include/uapi/linux/vhost.h
+> > > @@ -171,4 +171,18 @@
+> > >  #define VHOST_VDPA_SET_GROUP_ASID      _IOW(VHOST_VIRTIO, 0x7C, \
+> > >                                              struct vhost_vring_state=
+)
+> > >
+> > > +/* Suspend or resume a device so it does not process virtqueue reque=
+sts anymore
+> > > + *
+> > > + * After the return of ioctl with suspend !=3D 0, the device must fi=
+nish any
+> > > + * pending operations like in flight requests.
+> >
+> > I'm not sure we should mandate the flush here. This probably blocks us
+> > from adding inflight descriptor reporting in the future.
+> >
+>
+> That's right. Maybe we should add a flags argument to allow not to
+> flush in flight descriptors in the future? Or maybe the right solution
+> is to discard that requirement and to mandate in_order to be
+> migratable at the moment?
 
+I think it's better not to limit the device behaviour like flush or
+in_order here. This may simplify the work for adding inflight
+descriptor support.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For the device that doesn't care about the inflight descriptor, this
+patch is sufficient for doing live migration.
+For the device that requires an inflight descriptor, this patch is
+insufficient, it requires future extension to get those descriptors.
+In this case, device has the flexibility to flush or not so:
 
+1) if we don't get any inflight descriptors, the device may do the flush be=
+fore
+2) if we get inflight descriptors, we need to restore them
 
-Best regards,
-Krzysztof
+Thanks
+
+>
+> Thanks!
+>
+> > Thanks
+> >
+> > It must also preserve all the
+> > > + * necessary state (the virtqueue vring base plus the possible devic=
+e specific
+> > > + * states) that is required for restoring in the future. The device =
+must not
+> > > + * change its configuration after that point.
+> > > + *
+> > > + * After the return of ioctl with suspend =3D=3D 0, the device can c=
+ontinue
+> > > + * processing buffers as long as typical conditions are met (vq is e=
+nabled,
+> > > + * DRIVER_OK status bit is enabled, etc).
+> > > + */
+> > > +#define VHOST_VDPA_SUSPEND             _IOW(VHOST_VIRTIO, 0x7D, int)
+> > > +
+> > >  #endif
+> > > --
+> > > 2.31.1
+> > >
+> >
+>
+

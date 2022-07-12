@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9525726DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E555726E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiGLT6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S233971AbiGLUAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiGLT6g (ORCPT
+        with ESMTP id S230050AbiGLUAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:58:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A032BE9;
-        Tue, 12 Jul 2022 12:58:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01FD861764;
-        Tue, 12 Jul 2022 19:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2778AC3411E;
-        Tue, 12 Jul 2022 19:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657655912;
-        bh=hCy5lLxfGKLFkUwDOvKrekJ8LJ+EmLaIlit4nCjzajQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dn+sv7liPJQ4Pjj71MPVG9akwaxaGkGlrEt6ELc/5qVpNz8Zi1DMP1Q6YHwQKuv6i
-         0CWw4XAbZ3jJaemHxESaolPULXlv1+rUSjGW7Pfm05zdQN5lMJnwAgTfRmLL+8s1/a
-         hxijc/eSpsocaHtO9IlJ0Pi1N8OKOjnQaDvU5OgDb2BTDr0P1qf/wMxkwG1wk7boQV
-         ibHI864MvxvErSIibR/SjJeKraBSvn8rQQet2NvnX4EtrPdHVxW3BwGnCnlh6xSaQf
-         SO4zOpfOaq/oZLLduRg+ioy/RlfrfckYWk1amAU0T6xGL2yEnea+T1ljYXNxg2kOev
-         UVzof9xCHJ9eA==
-Date:   Tue, 12 Jul 2022 14:58:30 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Jon Mason <jdmason@kudzu.us>, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH 05/12] docs: PCI: pci-vntb-howto.rst: fix a title markup
-Message-ID: <20220712195830.GA791058@bhelgaas>
+        Tue, 12 Jul 2022 16:00:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825283E74B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:00:32 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBM3Q-0006FU-SA; Tue, 12 Jul 2022 22:00:20 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBM3L-000ZR4-3x; Tue, 12 Jul 2022 22:00:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oBM3K-004mxU-9S; Tue, 12 Jul 2022 22:00:14 +0200
+Date:   Tue, 12 Jul 2022 22:00:10 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, olivia@selenic.com,
+        paul.gortmaker@windriver.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH] MAINTAINERS: Change mentions of mpm to olivia
+Message-ID: <20220712200010.kbx24o2nxobrhmey@pengutronix.de>
+References: <20220712185419.45487-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3ugdib3frsqf57yr"
 Content-Disposition: inline
-In-Reply-To: <47ae1b19414346e6b07d57dbaf68a2b4cb273ccb.1656759989.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220712185419.45487-1-f.fainelli@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,37 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Jon, Frank]
 
-On Sat, Jul 02, 2022 at 12:07:37PM +0100, Mauro Carvalho Chehab wrote:
-> As warned by Sphinx:
-> 	Documentation/PCI/endpoint/pci-vntb-howto.rst:131: WARNING: Title underline too short.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+--3ugdib3frsqf57yr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Another for Jon.
-
+On Tue, Jul 12, 2022 at 11:54:19AM -0700, Florian Fainelli wrote:
+> Following this mercurial changeset:
+> https://www.mercurial-scm.org/repo/hg-stable/rev/d4ba4d51f85f
+>=20
+> update the MAINTAINERS entry to replace the now obsolete identity.
+>=20
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
-> 
->  Documentation/PCI/endpoint/pci-vntb-howto.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/PCI/endpoint/pci-vntb-howto.rst b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-> index b4a679144692..31a0bae868f9 100644
-> --- a/Documentation/PCI/endpoint/pci-vntb-howto.rst
-> +++ b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-> @@ -128,7 +128,7 @@ RootComplex Device
->  ==================
->  
->  lspci Output at Host side
-> -------------------------
-> +-------------------------
->  
->  Note that the devices listed here correspond to the values populated in
->  "Creating pci-epf-ntb Device" section above::
-> -- 
-> 2.36.1
-> 
+> This was first submitted by Uwe:
+>=20
+> https://lore.kernel.org/lkml/20210920080635.253826-1-u.kleine-koenig@peng=
+utronix.de/
+
+My variant was to drop Matt/Olivia. Given that we didn't get any
+feedback from them, that's still what I would favour.
+
+Without any feedback (and committment?) from Olivia, I tend to nack this
+patch.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3ugdib3frsqf57yr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLN0scACgkQwfwUeK3K
+7AnREAf+PlSlT47//PJVYU31Gt4GNAV4v2o/8joQSsAof8dic1OI0hclbKS7IOGG
+w4DveYc5FjsI6/u0tO4+q2bdTS1Ehnj3L3RUmpOlsKJ386Pkv9ztnCn9fblY8b27
+fbZCpPmPAwveg4rXLfGeFVaQ6GiJpmggU0k9RC/7wBsu29P7RVir/R8gA7Nm+bj3
+B+3J1F/iwPCYufbmfpLLiGD+h5//FnkBjG/2eM6hcvLDf2pV9d86tXZkfH3JyUyc
+lG6+s5bSvISc5Gd5a/FDJreHAJqkBBrntK+odt17xlpYGUcu3Z5OWQXgW2EXZCSU
+OMRs+d1GEHHw1ftHLWcTVhV+eZ5xIA==
+=O8jQ
+-----END PGP SIGNATURE-----
+
+--3ugdib3frsqf57yr--

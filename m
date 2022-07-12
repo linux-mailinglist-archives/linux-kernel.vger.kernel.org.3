@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D025F57284B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40650572845
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiGLVNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S230011AbiGLVMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiGLVNJ (ORCPT
+        with ESMTP id S229568AbiGLVMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:13:09 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A87037FB1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:13:08 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id cw12so3501805qvb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kZcVDwWPHTQfTjMoqKy5WY6hg7zcTdUaNPrz0DE0+wg=;
-        b=mFt3Kqx+cl8tHXR1iv5wb2gIO7oc0ywY85DklmItz6he6SNAyGvByShJFVqgZUcyhS
-         Mze5ut9JTI8cdXILTIv3TO4AL45F9j1++OpBThYUpaj1Qd8S0lc766iwHHvHNtEaas/t
-         12zSUlBTS6IjL3TFsfc8sySjc8Rp3I8DmGYPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kZcVDwWPHTQfTjMoqKy5WY6hg7zcTdUaNPrz0DE0+wg=;
-        b=2eyb7xfPAfqtW/x8dMi4CRlLAVrwM119CBGAICijMcX59z1vFVVkf6qQ6PemXagYzR
-         8nuMf8b2Xu8TlMiDhm2O440qi0d3lZhbasRlse39iyUw3CveoD7jZLn6IJgfYqPsDt+j
-         3WmiApPPfGFesb4iMRgFojmxOqRN9WPVTXLOjQSWeZHdk6NO2nXkvmxwCT97qZ+eirI7
-         vSR/37m9z6d10USRLHZpWmQA4jmTBaBiiw6wPPcYXpaKHm9nr56qp/gFdsHUPNuw4+JW
-         m0wlYqoKdgW25gG803Jfq/vMib5rPkKpJkg9tZEaEqbt7U8kPItHRzizC+8w7Zn9wabv
-         OuoQ==
-X-Gm-Message-State: AJIora9G5iLV7XLIKcd9GNqYPYQVBJS1ZyKuWTEsOVPcGlJbYtYBwNzq
-        RP1Xcivhg7cbrV58ZQsB8mhBig==
-X-Google-Smtp-Source: AGRyM1tTu6pfLmvZ/icZP3G7UAhhSDtYABLXSGk2pLXY3sAjaJBFm11q4T3wSwvQfCIFd7SZn3jUcg==
-X-Received: by 2002:a05:6214:1cc7:b0:470:5371:26ff with SMTP id g7-20020a0562141cc700b00470537126ffmr19292095qvd.9.1657660387207;
-        Tue, 12 Jul 2022 14:13:07 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b006a6d74f8fc9sm11062857qko.127.2022.07.12.14.13.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 14:13:06 -0700 (PDT)
-Message-ID: <8441c152-2953-3cb1-c585-b3b0d48a363f@joelfernandes.org>
-Date:   Tue, 12 Jul 2022 17:10:41 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH v2 1/8] rcu: Introduce call_rcu_lazy() API implementation
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-3-joel@joelfernandes.org>
- <20220626040019.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <Yso4690g+lI/8eJS@google.com>
- <20220710160330.GI1790663@paulmck-ThinkPad-P17-Gen-1>
- <aef0f8a6-cde6-18f3-16ab-7e07a4413f31@joelfernandes.org>
- <20220712210406.GF1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220712210406.GF1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 17:12:05 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF3313AC;
+        Tue, 12 Jul 2022 14:12:04 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 64E54C01D; Tue, 12 Jul 2022 23:12:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657660323; bh=eiN+XhbOvX8WghrfI1OIJHzddrvBj7ZBjjDv3Q3CGk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EUZ32aVlw1e2tAzktlNuxLyX5X7B0FmXxoJ46QPUd+4bpVojHcKUQRxrD0j4Af2Jw
+         RTO7MEoyUQL0qFx7eYDhzWa3BHvUcjGVoe2z53IppjBvEN0K9FdyLbzfmvPpvIRZcr
+         uj6y/M2AYkeRYaOoBUNTbUz2Qvsh/WQw6h2ih7bOLijgP1v1CQs5Y+05LPuNm3Rs2c
+         Icd2/LOVkGQh74GHI6hHz4fWfPBMQn9QdxKSNhyv1g7qw23o72SjGUiM1jifswSHVL
+         PjDryJ2mDz2uP6XZrzoZx+CVl8ALGIoX9Tk7QHD7SHU5QZnv2fP5r64fBdWSfL5Hvh
+         sSU7c63Y56/ng==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id B6C96C009;
+        Tue, 12 Jul 2022 23:12:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657660322; bh=eiN+XhbOvX8WghrfI1OIJHzddrvBj7ZBjjDv3Q3CGk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=whF+2hsQE5IlwguKvo69lZPFa4ZLhnyjqMZIdisEC8g3LQ6IyW+TiitL7m1wqEKlu
+         t1Rc2Ybd6E6c8CTcAxWG6wkFcp5uItE1W8JTMtlnN1yJiHQe3XPhcgS7RXBRAUi0uT
+         ijufJiLZT95CD4cBAu4fc2MLW5ABqaeAkgQMVbokubiSv7EU2v/4hRR99xKbg868RO
+         XPLbH2NvOaKd2aii5tU6dgHXTDdpKZ5RmRqmd19v2D+QVFMTfpJMr77ekkLIenLl6P
+         GlcOuoslEFMGyjxWrYlZ0YgedIkvQ5r8iznbvJpeq3cv6lCXPiWpvPcg1bYIvwwtsW
+         4Ux4mGteDf3TQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 0c84a27d;
+        Tue, 12 Jul 2022 21:11:57 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 06:11:42 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Latchesar Ionkov <lucho@ionkov.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [V9fs-developer] [PATCH v5 11/11] net/9p: allocate appropriate
+ reduced message buffers
+Message-ID: <Ys3jjg52EIyITPua@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+ <5fb0bcc402e032cbc0779f428be5797cddfd291c.1657636554.git.linux_oss@crudebyte.com>
+ <Ys3Mj+SgWLzhQGWK@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ys3Mj+SgWLzhQGWK@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dominique Martinet wrote on Wed, Jul 13, 2022 at 04:33:35AM +0900:
+> Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:36PM +0200:
+> > So far 'msize' was simply used for all 9p message types, which is far
+> > too much and slowed down performance tremendously with large values
+> > for user configurable 'msize' option.
+> > 
+> > Let's stop this waste by using the new p9_msg_buf_size() function for
+> > allocating more appropriate, smaller buffers according to what is
+> > actually sent over the wire.
+> > 
+> > Only exception: RDMA transport is currently excluded from this, as
+> > it would not cope with it. [1]
 
+Thinking back on RDMA:
+- vs. one or two buffers as discussed in another thread, rdma will still
+require two buffers, we post the receive buffer before sending as we
+could otherwise be raced (reply from server during the time it'd take to
+recycle the send buffer)
+In practice the recv buffers should act liks a fifo and we might be able
+to post the buffer we're about to send for recv before sending it and it
+shouldn't be overwritten until it's sent, but that doesn't look quite good.
 
-On 7/12/2022 5:04 PM, Paul E. McKenney wrote:
-> On Tue, Jul 12, 2022 at 04:53:48PM -0400, Joel Fernandes wrote:
->>
->> On 7/10/2022 12:03 PM, Paul E. McKenney wrote:
->> [..]
->>>>>> +	// Note that if the bypass list has lazy CBs, and the main list is
->>>>>> +	// empty, and rhp happens to be non-lazy, then we end up flushing all
->>>>>> +	// the lazy CBs to the main list as well. That's the right thing to do,
->>>>>> +	// since we are kick-starting RCU GP processing anyway for the non-lazy
->>>>>> +	// one, we can just reuse that GP for the already queued-up lazy ones.
->>>>>> +	if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
->>>>>> +	    (lazy && n_lazy_cbs >= qhimark)) {
->>>>>>  		rcu_nocb_lock(rdp);
->>>>>>  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
->>>>>>  		if (*was_alldone)
->>>>>>  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->>>>>> -					    TPS("FirstQ"));
->>>>>> -		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
->>>>>> +					    lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
->>>>>> +		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, false));
->>>>>
->>>>> The "false" here instead of "lazy" is because the caller is to do the
->>>>> enqueuing, correct?
->>>>
->>>> There is no difference between using false or lazy here, because the bypass
->>>> flush is not also enqueuing the lazy callback, right?
->>>>
->>>> We can also pass lazy instead of false if that's less confusing.
->>>>
->>>> Or maybe I missed the issue you're raising?
->>>
->>> I am mostly checking up on your intended meaning of "lazy" in various
->>> contexts.  It could mean only that the caller requested laziness, or in
->>> some cases it could mean that the callback actually will be lazy.
->>>
->>> I can rationalize the "false" above as a "don't care" in this case
->>> because (as you say) there is not callback.  In which case this code
->>> is OK as is, as long as the header comment for rcu_nocb_flush_bypass()
->>> clearly states that this parameter has meaning only when there really
->>> is a callback being queued.
->>
->> I decided to change this and the below to "lazy" variable instead of
->> true/false, as the code is cleaner and less confusing IMO. It makes
->> sense to me and in my testing it works fine. Hope that's Ok with you.
-> 
-> Sounds plausible.
-> 
->> About changing the lazy length count to a flag, one drawback of doing
->> that is, say if there are some non-lazy CBs in the bypass list, then the
->> lazy shrinker will end up reporting an inaccurate count. Also
->> considering that it might be harder to add the count back later say if
->> we need it for tracing, I would say lets leave it as is. I will keep the
->> counter for v3 and we can discuss. Does that sound good to you?
-> 
-> You lost me on this one.  If there are any non-lazy callbacks, the whole
-> bypass list is already being treated as non-lazy, right?  If so, then
-> the lazy shrinker should report the full count if all callbacks are lazy,
-> and should report none otherwise.  Or am I missing something here?
-> 
+- for this particular patch, we can still allocate smaller short buffers
+for requests, so we should probably keep tsize to 0.
+rsize there really isn't much we can do without a protocol change
+though...
 
-That's one way to interpret it, another way is say there were a 1000
-lazy CBs, and now 1 non-lazy came in. The shrinker could report the lazy
-count as 0 per your interpretation. Yes its true they will get flushed
-out in the next jiffie, but for that time instant, the number of lazy
-CBs in the list is not zero! :) Yeah OK its a weak argument, still an
-argument! ;-)
-
-In any case, we saw the need for the length of the segcb lists to figure
-out things via tracing, so I suspect we may need this in the future as
-well, its a small cost so I would rather keep it if that's Ok with you! :)
-
-Thanks,
-
-- Joel
-
+--
+Dominique

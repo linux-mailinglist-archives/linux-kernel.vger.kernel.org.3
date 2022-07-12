@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D6C570F15
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342C7570F16
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiGLAug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S231392AbiGLAvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiGLAue (ORCPT
+        with ESMTP id S229616AbiGLAve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:50:34 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FA9248E1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:50:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id z1so5890812plb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:50:34 -0700 (PDT)
+        Mon, 11 Jul 2022 20:51:34 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB8225EA2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:51:34 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id r6so3443490plg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=nq5VDTxnZLTeB3sMypNbVikOvabvDzmucjQyVWV8Mbw=;
-        b=ZNcOdc0oHW7mvchFZZ3WG4YtzPiUj5LGAp3PVmSX1JTAaQkK0VocOEHQRn0ioDkAD/
-         LVQm28xLDyvplVuV4zehdCLo55A51S6LbFI6BCPsI6EGdUtipoMv+Jvpy+Zg2jLfpbZQ
-         lMjyxEmlGl0xfAN4ErdnVKzoHLpNTSfyXSdUvo33XocZAtAScDVZQm02ircDLxCxZ/rL
-         6l51AKmZ6YR3TS/qtUyvKt49EZHaXXq0LWJaQy2NjkP6k07C9PcUykxzRvNqhHadE7uH
-         8j02N3ms/F03A+wWHaxpTllOl7u2Pj1Vy690icO6TvwCfHl2HiCS6yr2k1mDgxQWVxd6
-         DYYA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZIiHxradpyRYFVkHEHYMXg9bXCfFv6LWZEN40HiW4gw=;
+        b=NmuqzOIDXIPbnxeJIKJZ7D1X0LQMhceO9hImK61h5ksZl9HNStwLP8CbgGDK75G5hf
+         usVlZbdXLc4PtKvCpWXNwMIzA4Un2ZNuqphOa95znjKkYSDcyO5p/hECMkG8ufCIsWVX
+         1z3bJs24eHIGnA+8hcBgjQI+2rdQ+A/OBmPJ4NPtZ38defj1NPpk7GK1kA/x4GG/4FqT
+         xv03YVXVcvFj5HjYWvI9z/Z9FFBWoTvrhA9veFG+xTC09mbNp8EA5VcESd/NDm967klY
+         Tr2hmX6QVsGXM1yb9Ek5sOszIQIzrxzWwDE4WUN4JRbaEUiiw9PIv/TTwgqP2aZd8VQS
+         wDaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=nq5VDTxnZLTeB3sMypNbVikOvabvDzmucjQyVWV8Mbw=;
-        b=qBgb1SEWE6jPHxwtMD9RoyGz9Z2jhil/uB3wGOD7uMao/gfUWq3RNTuoUUolDJWyPM
-         ChTa9Ii8/4iiTEhTiUfqea9B4T0Hr4rOqQVIPxX5srut5rPWM0iRPEWdPldvm4txnAvQ
-         ZhRA326jfJX0kA5BaOb9/ae436B7d9FE4YCi8qC6Bbs7ZQINX+redQl3z7KRyuQsPdP+
-         feVqqmSXVO57czGf95LxW8ei0QTHnBUyuUOPDcAoHZR8M84ODmcMcE3jP+fWlb29n6gV
-         vuHfK/tkHfOAr3h5IC9RRzfSLGAWKYoO5ZxmQV759DsYaIC4ljSdq6U+NbJSl0FhX2ch
-         L4zg==
-X-Gm-Message-State: AJIora+gHI8DaWHZAqdj2wFgrzSaCGg0435nmYgJoOAIJWxHM0ApX8dj
-        VXMXT3U0faMiGy67Hq8n1uQ=
-X-Google-Smtp-Source: AGRyM1sEEa926e/qwc78doygaREQbplTVW9CcC3PGLsudg2YHFDq9IlA2rYG7qhcIPCSCSpNd1pnIQ==
-X-Received: by 2002:a17:903:1c4:b0:16c:4e45:38a3 with SMTP id e4-20020a17090301c400b0016c4e4538a3mr6635115plh.41.1657587033798;
-        Mon, 11 Jul 2022 17:50:33 -0700 (PDT)
-Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id i14-20020a170902c94e00b0016c4331e61csm3314982pla.137.2022.07.11.17.50.32
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZIiHxradpyRYFVkHEHYMXg9bXCfFv6LWZEN40HiW4gw=;
+        b=lb4RyHy+cRl3wctVaiJ3oMGL60JXovzQkwtJ4e1hfVc9uNyI9f8m/v1uMAnavsao1i
+         mZ9nZdgnQ8iI2FR1A3rUwWJRutW42X3GF7MCdWf6EsA9+dEdmeU8XFGcR/1zMTpPO/dz
+         UlvMwBLpGxvBgsa4O5fP4Mck1LAHZV94P0uHt4udGXKuT+6hmsXwtQrZPVrc1c0r6P/M
+         BVRkGYB2LdChGwNeZo+seWT8ox3YF/FvTlZ3jqwWkGx6CuN3o1MK6QFe1kzvaUBpQ1Ls
+         Yx9Y9fDQETCsvHAZjlLJH4ANh/eojMlM37MH0AVHbsJw5emAhpY2LUG+fNBtRQwLD/hc
+         BxBA==
+X-Gm-Message-State: AJIora+YqvvBYNV4xlamPuP4bzpguEbHUW7Lf/uNleKjH4xQPUZ+RfEf
+        7Tgw+r5XK0DYRaSymRGXeAA9DA==
+X-Google-Smtp-Source: AGRyM1uqvogoFlL80/Fy8YMtQFJlzbnLA0POR6/8bfGpezSoVCdf+NDuikCEb28kNbZDLEO5E1R/hQ==
+X-Received: by 2002:a17:90b:3e8a:b0:1f0:4157:daf8 with SMTP id rj10-20020a17090b3e8a00b001f04157daf8mr1183521pjb.222.1657587093474;
+        Mon, 11 Jul 2022 17:51:33 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id v2-20020a626102000000b00529a0667ff9sm5370309pfb.126.2022.07.11.17.51.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 17:50:33 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 10:50:28 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 12/13] locking/qspinlock: separate pv_wait_node from the
- non-paravirt path
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <20220704143820.3071004-1-npiggin@gmail.com>
-        <20220704143820.3071004-13-npiggin@gmail.com>
-        <YsR2IQsnqAOgDxXu@worktop.programming.kicks-ass.net>
-In-Reply-To: <YsR2IQsnqAOgDxXu@worktop.programming.kicks-ass.net>
+        Mon, 11 Jul 2022 17:51:33 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 00:51:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, kirill.shutemov@linux.intel.com,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com
+Subject: Re: [PATCH v2] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
+ disabled by BIOS
+Message-ID: <YszFkTZ7RtXS1rd7@google.com>
+References: <20220704142250.1512726-1-martin.fernandez@eclypsium.com>
+ <8d2a3175be8a3aff1d3fc535dd9ab6217cfe1e66.camel@intel.com>
+ <CAKgze5azQG1mnOASbpcrs9jTejdXGkXYmezz9bTKuWQoZp5EFg@mail.gmail.com>
+ <YsxZKGxVUY61zPEt@google.com>
+ <ba321fad38d5f96a240f1e88a11943cea16bb4dd.camel@intel.com>
 MIME-Version: 1.0
-Message-Id: <1657586928.uawdad42k7.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba321fad38d5f96a240f1e88a11943cea16bb4dd.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,56 +80,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 6, 2022 3:34 am:
-> On Tue, Jul 05, 2022 at 12:38:19AM +1000, Nicholas Piggin wrote:
->> pv_wait_node waits until node->locked is non-zero, no need for the
->> pv case to wait again by also executing the !pv code path.
->>=20
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->>  kernel/locking/qspinlock.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
->> index 9db168753124..19e2f286be0a 100644
->> --- a/kernel/locking/qspinlock.c
->> +++ b/kernel/locking/qspinlock.c
->> @@ -862,10 +862,11 @@ static inline void queued_spin_lock_mcs_queue(stru=
-ct qspinlock *lock, bool parav
->>  		/* Link @node into the waitqueue. */
->>  		WRITE_ONCE(prev->next, node);
->> =20
->> +		/* Wait for mcs node lock to be released */
->>  		if (paravirt)
->>  			pv_wait_node(node, prev);
->> -		/* Wait for mcs node lock to be released */
->> -		smp_cond_load_acquire(&node->locked, VAL);
->> +		else
->> +			smp_cond_load_acquire(&node->locked, VAL);
->> =20
->=20
-> (from patch #6):
->=20
-> +static void pv_wait_node(struct qnode *node, struct qnode *prev)
-> +{
-> +       int loop;
-> +       bool wait_early;
-> +
-> 	...
-> +
-> +       /*
-> +        * By now our node->locked should be 1 and our caller will not ac=
-tually
-> +        * spin-wait for it. We do however rely on our caller to do a
-> +        * load-acquire for us.
-> +        */
-> +}
->=20
->=20
+On Tue, Jul 12, 2022, Kai Huang wrote:
+> On Mon, 2022-07-11 at 17:08 +0000, Sean Christopherson wrote:
+> > On Tue, Jul 05, 2022, Martin Fernandez wrote:
+> > > On 7/5/22, Kai Huang <kai.huang@intel.com> wrote:
+> > > > On Mon, 2022-07-04 at 11:22 -0300, Martin Fernandez wrote:
+> > > > > Changelog since v1
+> > > > > 
+> > > > > Clear the flag not only for BSP but for every cpu in the system.
+> > 
+> > ...
+> > 
+> > > > > ---
+> > > > >  arch/x86/kernel/cpu/intel.c | 1 +
+> > > > >  1 file changed, 1 insertion(+)
+> > > > > 
+> > > > > diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> > > > > index fd5dead8371c..17f23e23f911 100644
+> > > > > --- a/arch/x86/kernel/cpu/intel.c
+> > > > > +++ b/arch/x86/kernel/cpu/intel.c
+> > > > > @@ -570,6 +570,7 @@ static void detect_tme(struct cpuinfo_x86 *c)
+> > > > > 
+> > > > >  	if (!TME_ACTIVATE_LOCKED(tme_activate) ||
+> > > > > !TME_ACTIVATE_ENABLED(tme_activate)) {
+> > > > >  		pr_info_once("x86/tme: not enabled by BIOS\n");
+> > > > > +		clear_cpu_cap(c, X86_FEATURE_TME);
+> > 
+> > This misses the case where the TME_ACTIVATE_KEYID_BITS() is zero.  AFAICT, that's
+> > allowed, i.e. won't #GP on WRMSR.  TME_ACTIVATE_KEYID_BITS() can't be non-zero if
+> > TME_ACTIVATE_ENABLED() is false, but the reverse is allowed.
+> 
+> But this logic applies to "whether MKTME is enabled",  but not "TME is enabled",
+> right?
 
-Oh good catch, thanks so much that's a dumb bug. I'll add a=20
-smp_load_acquire at the end of pv_wait_node where that comment
-is.
+Ah, right, duh.
 
-Thanks,
-Nick
+> > IMO, this entire function needs to be reworked to have a cohesive strategy for
+> > enumerting TME; not just enumerating to userspace, but internal to the kernel as
+> > well.
+> > 
+> > E.g. forcing "mktme_status = MKTME_DISABLED" on an AP is nonsensical.  If an AP's
+> > basic MKTME enabling doesn't align with the BSP (activate, algorithm, and keyid0
+> > bypass settings match), then there's no way an AP is going to reach detect_tme().
+> > Any discrepancy in encryption for keyid0 will cause the AP will read garbage on
+> > wakeup, and barring a miracle, will triple fault and never call in.
+> > 
+> > Conversely, if basic enabling matches but something else mismatches, e.g. an AP
+> > was configured with fewer keys, then forcing "mktme_status = MKTME_DISABLED" may
+> > be misleading as MKTME may be fully enabled and in use for keyid0, it just won't
+> > be used for keyid!=0.  But that's a moot point because as is, the kernel _never_
+> > uses keyid!=0.
+> > 
+> > And this code is also bogus.  Just because the kernel doesn't know the encryption
+> > algorithm doesn't magically turn off encryption for keyid0.  Again, mktme_status
+> > confuses "memory is encrypted" with "MKTME is theoretically usable for keyid!=0".
+> > 
+> > 	tme_crypto_algs = TME_ACTIVATE_CRYPTO_ALGS(tme_activate);
+> > 	if (!(tme_crypto_algs & TME_ACTIVATE_CRYPTO_AES_XTS_128)) {
+> > 		pr_err("x86/mktme: No known encryption algorithm is supported: %#llx\n",
+> > 				tme_crypto_algs);
+> > 		mktme_status = MKTME_DISABLED;
+> > 	}
+> > 
+> > The mktme_status variable seems completely pointless.  It's not used anywhere
+> > except to detect that CPU0 vs. APs.
+> 
+> I think your above saying makes sense, but this is a different topic and should
+> be in a separate patch IMHO.
+
+Yeah, definitely need multiple patches.
+
+> This patch basically tries to fix the issue that TME flag isn't cleared when TME
+> is disabled by BIOS.  And fir this purpose, the code change in this patch looks
+> reasonable to me.  Unless I am mistaken, detect_tme() will be called for all
+> cpus if TME is supported in CPUID but isn't enabled by BIOS (either LOCKED or
+> ENABLED bit isn't set).
+
+But this patch doesn't handle the bypass bit, which _does_ effectively disable
+TME when set.  E.g. the MKTME spec says:
+
+ Software must inspect the Hardware Encryption Enable (bit 1) and TME Encryption
+ Bypass Enable (bit 31) to determine if TME encryption is enabled.

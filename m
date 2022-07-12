@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CF55728D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9575728DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbiGLVzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S231430AbiGLV4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbiGLVzO (ORCPT
+        with ESMTP id S229881AbiGLV4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:55:14 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A69550709
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:55:12 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 02324F92620;
-        Tue, 12 Jul 2022 23:55:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1657662907;
+        Tue, 12 Jul 2022 17:56:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8705A49B57
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657662991;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aPbSpp/ipo3YS/Xfdmee6X2Ppr9vPQwAusfYqW6orH0=;
-        b=XgYe4cf5/Gr/94EthsKyiSMm2wJUNbiqaTErGeVBrcqrRkMkLw6ahb9oj4lIbvkjMIAH3/
-        WSDyYFOXFd0kviH4zCkHxvfro2EYXM5SdkRSAtpV0N05MzecuJAV5NwTjYXa80JcVkZ1fu
-        6pyT/gCgg+xy3s741UMT75/EVc4Xogs=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [REGRESSION] amd-pstate doesn't work since v5.18.11
-Date:   Tue, 12 Jul 2022 23:55:05 +0200
-Message-ID: <6967031.z0QvQKZeIK@natalenko.name>
-In-Reply-To: <4c9e3a4c-40b2-3ce9-da88-ad507769658b@amd.com>
-References: <3559249.JlDtxWtqDm@natalenko.name> <2414945.NDPYyZybsh@natalenko.name> <4c9e3a4c-40b2-3ce9-da88-ad507769658b@amd.com>
+        bh=s/3T4vxNFVONPISbNOnbcOQJiMW1pUHoPXX64SqOHNQ=;
+        b=YJyEoWoUEyPhKwnS91fBy/Aeiaxn95j1fQeV3i0F6vTCaaNNcBbLBm3jlgVQ/lx0mN9Qr3
+        MNYHOc3K0fF8OW7ORqiETaDe8JkhYOwa9Q9tw3x8yAL15/o7Lg807x34tqX+x8S7UCDs64
+        muVyBDD1RCT9vvmL4uCt2GoOV4ktBqA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-YhmgqhUjMbC1THjfYwF2bQ-1; Tue, 12 Jul 2022 17:56:30 -0400
+X-MC-Unique: YhmgqhUjMbC1THjfYwF2bQ-1
+Received: by mail-qk1-f199.google.com with SMTP id br43-20020a05620a462b00b006b5833f8132so6348221qkb.22
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:56:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=s/3T4vxNFVONPISbNOnbcOQJiMW1pUHoPXX64SqOHNQ=;
+        b=PkugZqieU04CqX13VJUxA7h6TjGFZQFMMguQDFEHhOhtFIff5wFfUWk9geY9rDxTT3
+         Hhj8fcRPH8LBErGX5DN/Ic3O2FJZZG1FC4xcVsreuS/QsgWND3u9ziINrf9j6SFsG8kC
+         0MeA90un6bUw9Mv2wCe6PDE3Wm1yMDP4qsY+SBp6FIVAXq7EWxj0udreCTjYHM5aVQNv
+         LH+elKUGY+hPMNvipfBJuE/omfiDrt9G0EEIs6FfkiWuXHvDImXJnDfU8ngLTi2lvc5w
+         jWDB262npKY2AWpFwBJw4IcLsM4Tvc/UwwIN4ar6VLQrApZiI1e7q1HBSsqD3Y49Lo5+
+         GxKQ==
+X-Gm-Message-State: AJIora86ggo08N82dtupgpTyY3WscDBemXx+KOWYk2q+RfDIKDVJ4dir
+        yqt/qhU/LBfpl7szgUb0pAXhylsFCEdg9oUntcv8DDIriMOQ4ai4v7FwAnQT2jFG9vEp6OO1uXO
+        faKO+QH8w53oDjkKBilbvY7Rf
+X-Received: by 2002:ac8:4e94:0:b0:31b:f600:b59f with SMTP id 20-20020ac84e94000000b0031bf600b59fmr79258qtp.527.1657662990012;
+        Tue, 12 Jul 2022 14:56:30 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vLwHaf4xn2tp3fYNXeTJIBe+MYbyQyS/7FEmpJ8XMqS+OfIe5Kxxt5cbR0Cnx3qgruuFWobw==
+X-Received: by 2002:ac8:4e94:0:b0:31b:f600:b59f with SMTP id 20-20020ac84e94000000b0031bf600b59fmr79250qtp.527.1657662989829;
+        Tue, 12 Jul 2022 14:56:29 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id cm23-20020a05622a251700b0031bed25394csm8390535qtb.3.2022.07.12.14.56.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 14:56:29 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 17:56:28 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Defer "full" MMU setup until after
+ vendor hardware_setup()
+Message-ID: <Ys3uDJ90dBeFFbka@xz-m1.local>
+References: <20220624232735.3090056-1-seanjc@google.com>
+ <20220624232735.3090056-3-seanjc@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220624232735.3090056-3-seanjc@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Fri, Jun 24, 2022 at 11:27:33PM +0000, Sean Christopherson wrote:
+> @@ -11937,6 +11932,10 @@ int kvm_arch_hardware_setup(void *opaque)
+>  
+>  	kvm_ops_update(ops);
+>  
+> +	r = kvm_mmu_hardware_setup();
+> +	if (r)
+> +		goto out_unsetup;
+> +
+>  	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
+>  
+>  	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
+> @@ -11960,12 +11959,18 @@ int kvm_arch_hardware_setup(void *opaque)
+>  	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
+>  	kvm_init_msr_list();
+>  	return 0;
+> +
+> +out_unsetup:
+> +	static_call(kvm_x86_hardware_unsetup)();
 
-On =C3=BAter=C3=BD 12. =C4=8Dervence 2022 22:07:15 CEST Limonciello, Mario =
-wrote:
-> See if this helps out:
->=20
-> diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-> index 734b96454896..88a81e6b9228 100644
-> --- a/arch/x86/kernel/acpi/cppc.c
-> +++ b/arch/x86/kernel/acpi/cppc.c
-> @@ -16,6 +16,13 @@ bool cpc_supported_by_cpu(void)
->          switch (boot_cpu_data.x86_vendor) {
->          case X86_VENDOR_AMD:
->          case X86_VENDOR_HYGON:
-> +               if (boot_cpu_data.x86 =3D=3D 0x19 &&
-> +                   ((boot_cpu_data.x86_model >=3D 0x00 &&=20
-> boot_cpu_data.x86_model <=3D 0x0f) ||
-> +                   (boot_cpu_data.x86_model >=3D 0x20 &&=20
-> boot_cpu_data.x86_model <=3D 0x2f)))
-> +                       return true;
-> +               else if (boot_cpu_data.x86 =3D=3D 0x17 &&
-> +                        boot_cpu_data.x86_model >=3D 0x70 &&=20
-> boot_cpu_data.x86_model <=3D 0x7f)
-> +                       return true;
->                  return boot_cpu_has(X86_FEATURE_CPPC);
->          }
->          return false;
->=20
-> If that works and no one has a better idea how to do it for these=20
-> systems I'll send out a proper proper patch tomorrow.
+Should this be kvm_mmu_hardware_unsetup()?  Or did I miss something?..
 
-This patch (also mirrored here [1]) works for me, thanks.
-
-[1] https://codeberg.org/pf-kernel/linux/commit/cc5c57b8c349c85b81b44cf5fe2=
-d2577b947a7de
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
+-- 
+Peter Xu
 

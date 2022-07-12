@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5B9571CF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB58571CF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiGLOjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S233464AbiGLOkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiGLOjl (ORCPT
+        with ESMTP id S230305AbiGLOkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:39:41 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564712496F;
-        Tue, 12 Jul 2022 07:39:40 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31c8bb90d09so83060147b3.8;
-        Tue, 12 Jul 2022 07:39:40 -0700 (PDT)
+        Tue, 12 Jul 2022 10:40:31 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D9ABA3A7;
+        Tue, 12 Jul 2022 07:40:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id o4so11492146wrh.3;
+        Tue, 12 Jul 2022 07:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZvNiAKDIQcW/Wy4B2m62fb0bwKFRVyZdcz+LTYmntTk=;
+        b=aNnTKanesMbIhxJCc17TDVXy1iLPUmcZAeRwYKQoBKDSPA03NZAbbo+sFxFZKi+ihg
+         KqeS/EcGdOvsVmlS/tdURIizAGY5bLKTgPsefTrRnUj662RxLUHC/L9eAMyZhFOss/O9
+         jtv3oNU1k+ryIs8U7sNfas90IrRK19mcgJb9Mn1E3FQgrjiwfunbKtfQgTtrehPyn6m1
+         Y/G+4yXtMWiRkatuNH/IcZbGhXcWegTcXzkY0P6Izzea7U2M66JGsPptz17X5e1zK+v8
+         3H0eDuN3a2oe5wZIWOiJ7TO4NHCH0xkPZ4fCBALOnii86Z1gJ3QY9QO3qlTPDbY/7OZI
+         iwkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PC86xMGUfSnwU1wUnbuH+oo/JpYi0LOJ0j1avSTctkQ=;
-        b=49tUINXn/QYV9ue6R5pzbBm14aQue7KHtywG32+w6coBbVe+Ou8W4fz4lgpViBpfkJ
-         1aQp7jed18dC476wLzbfk250VB6P/JYGF9iKvc9XkUpGRyPLCKVu2GmRAYzGXfVaCXqr
-         HtRz1TTxbxRd4yQ7uEDtcbgtLCC5UlwHX8aXoor0ESsb13mP2hanOCgwgZwOFBbO4OER
-         6xgFZMCUhGMO7LTYQ5+CYV3iy+rNjjN2Gqc3eU4nI/TZJuF7vwYFvu1qfA6KyqUDOdwQ
-         16v6wKjCsvpqD+ETrpyehLzg35mool5l2QQVHpp1IewtOw/IZcjlV39un+/+zurAdN3Q
-         Gotg==
-X-Gm-Message-State: AJIora+5KscHJzHWOca4iaawPDNKUeMUHkfB/IshYFUt31SaqRqbyn/p
-        aTCM7y7YCbE13sv/rygEzgXgXBNql+Vq5JNwSCR9GzCsbxc=
-X-Google-Smtp-Source: AGRyM1v/Pvr2a1+guMYqIWCRQro8zrJa0Io2m5481K1W8RgdZFu+NYSafudYKYGO8r8yUk1u+yyW7faKYF8JpPhYVnc=
-X-Received: by 2002:a0d:f247:0:b0:31d:68b1:5a16 with SMTP id
- b68-20020a0df247000000b0031d68b15a16mr13513324ywf.191.1657636779504; Tue, 12
- Jul 2022 07:39:39 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZvNiAKDIQcW/Wy4B2m62fb0bwKFRVyZdcz+LTYmntTk=;
+        b=4wyI9woTO0WRf2/OWSubWCSr40NqwcasiLeGm3uGQI4Tl2ocydr+Q8ozyBA6ZLA6qA
+         C+nYigHM9hOWt3VC1g58t9INdVTvRIQ2cWSu6rYIA8yY87g3Sal6LmQX8Q5DCXSwTjpx
+         44yKKXQVySQXQ+NILb6Y1vvpPL5x80sF7S6bxefAsVph02z6T8/9ZgEy06MwwoBWZr44
+         K/6ocR1vh2d1f8eg5fSFJljooAxH8Wx1AqcpP0pvJ3TYvBE5pa4cR4WaewZkCQXnGuQw
+         9fFIl1Pd6OBL09VwX5TeDdxnPBL6i3uCPHNO5OSzl4W07PPYIUmtZ+QzSf7StqQ3Bqod
+         b2QA==
+X-Gm-Message-State: AJIora+VdoASQfE4X2xjKkIqkYNLunbSyuj/FNX59NE+z6G0Z/Jkmwib
+        MLzNhdYf5RjHdG4+yLSeJHQ=
+X-Google-Smtp-Source: AGRyM1vdJCCZFYk4+FhTJMbat37kbEAJUlU0VhJTCVhWuwoYe23aCJRMosWxSoZgFwe8hqE4S9/jCg==
+X-Received: by 2002:a5d:4a0c:0:b0:21d:78c9:c5d3 with SMTP id m12-20020a5d4a0c000000b0021d78c9c5d3mr22238478wrq.42.1657636827074;
+        Tue, 12 Jul 2022 07:40:27 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id j27-20020a05600c1c1b00b0039c4ba160absm3662115wms.2.2022.07.12.07.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:40:26 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 15:40:24 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/112] 5.18.11-rc1 review
+Message-ID: <Ys2H2JzLD7VRtO3k@debian>
+References: <20220711090549.543317027@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220708181235.4104943-1-frank.jungclaus@esd.eu> <20220708181235.4104943-5-frank.jungclaus@esd.eu>
-In-Reply-To: <20220708181235.4104943-5-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 12 Jul 2022 23:39:28 +0900
-Message-ID: <CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
- event (3)
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711090549.543317027@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 9 Jul. 2022 at 03:15, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
-> Started a rework initiated by Vincents remark about "You should not
-> report the greatest of txerr and rxerr but the one which actually
-> increased." Now setting CAN_ERR_CRTL_[RT]X_WARNING and
-> CAN_ERR_CRTL_[RT]X_PASSIVE depending on REC and TEC
->
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index 0a402a23d7ac..588caba1453b 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -304,11 +304,17 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                         /* Store error in CAN protocol (location) in data[3] */
->                         cf->data[3] = ecc & SJA1000_ECC_SEG;
->
-> -                       if (priv->can.state == CAN_STATE_ERROR_WARNING ||
-> -                           priv->can.state == CAN_STATE_ERROR_PASSIVE) {
-> -                               cf->data[1] = (txerr > rxerr) ?
-> -                                       CAN_ERR_CRTL_TX_PASSIVE :
-> -                                       CAN_ERR_CRTL_RX_PASSIVE;
-> +                       /* Store error status of CAN-controller in data[1] */
-> +                       if (priv->can.state == CAN_STATE_ERROR_WARNING) {
-> +                               if (txerr >= 96)
-> +                                       cf->data[1] |= CAN_ERR_CRTL_TX_WARNING;
+Hi Greg,
 
-As far as I understand, those flags should be set only when the
-threshold is *reached*:
-https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L69
+On Mon, Jul 11, 2022 at 11:06:00AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.11 release.
+> There are 112 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
+> Anything received after that time might be too late.
 
-I don't think you should set it if the error state does not change.
+Build test (gcc version 12.1.1 20220706):
+mips: 59 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Here, you probably want to compare the new value  with the previous
-one (stored in struct can_berr_counter) to decide whether or not the
-flags should be set.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
+[1]. https://openqa.qa.codethink.co.uk/tests/1492
+[2]. https://openqa.qa.codethink.co.uk/tests/1499
+[3]. https://openqa.qa.codethink.co.uk/tests/1501
 
-> +                               if (rxerr >= 96)
-> +                                       cf->data[1] |= CAN_ERR_CRTL_RX_WARNING;
-> +                       } else if (priv->can.state == CAN_STATE_ERROR_PASSIVE) {
-> +                               if (txerr >= 128)
-> +                                       cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
-> +                               if (rxerr >= 128)
-> +                                       cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
->                         }
->
->                         cf->data[6] = txerr;
-> --
-> 2.25.1
->
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

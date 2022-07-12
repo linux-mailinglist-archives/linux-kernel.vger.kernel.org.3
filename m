@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE83457166A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8F357165B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbiGLKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
+        id S232440AbiGLKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiGLKBV (ORCPT
+        with ESMTP id S229962AbiGLKBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:01:21 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61165AAB12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:01:19 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so4481507wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3SdKoJam1KKdYl+ZS8hBn9qpHaB89KQkUoXzOnMw6QQ=;
-        b=lV+xkoO3XvuZqxuUx+8KA5Xdc4YNeiFJMsqgHefyH9kDbZM2XA/UczHrvF/TP4zVBM
-         SM6WPuvKI5XL8tLbc7bZ3A3TI2V+Fvy8lGc3PMcGL+NnUqTOxx/fP8JjUummq3OVCx3T
-         W7TmEaR76GXZlqcTMffTcVQQXLZcasYQh2jNQYf68RRP2TNeToFFOVt7Zv/C9uLRlrlk
-         23IL3R9HOy8UuQaiIF6/0BNh4NkI4sKVfdlNLr72y3q0uke9wKmsix6bBXGkpFb+U5gh
-         v2hrWbv9qFHNgNm0FJeKHarvu/I57yNPIxvML4eUqzdI9GkoSnARVJsN9a6id30ElKjT
-         YZcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3SdKoJam1KKdYl+ZS8hBn9qpHaB89KQkUoXzOnMw6QQ=;
-        b=rK0sAkXfeqMwtfsSdSmJFtdMtQoT0H0OgRRWFmYWm4D5qQAJq8hANW5hTet21JdNBv
-         oUwHujVfLs8GJpl842wc1OKeC/BOuuR0d5nZ+E7Rq/3UiAMb3bZMU/Td0kzbFa3ztFox
-         o624nYpidzJUr+HBH6Qre89TLJxhYYgpvtXoebmHfbjfCAI4k0NrcR59VD6hfrE5Dtma
-         ftygmTI5gZb+Fk8gAf7XtEnW+Q0uKkWkRlJwaIjbjlAEc45GRPliLV8ibOBL4+DoKmsT
-         zCXcwkuSVc3aX7Q9SNtQ09unQba0suAATDcGXW2LzBsPTsGAL0wgGk9BLowXs9HWN2cw
-         1KuA==
-X-Gm-Message-State: AJIora/6euU4gH/2yD6kNOK74xLm8mOxAlZdAEnkM19sGLA+0MBtELRB
-        AH/1srjJdtkFYJFlSwl5owd/7Q==
-X-Google-Smtp-Source: AGRyM1tJxquk043k0mzYGxhVyIEZ3mYiqG6prO/A2PEsCT8YJX2j4n4MebzwFHD2rQNNKrlIhgA5DA==
-X-Received: by 2002:a7b:c381:0:b0:3a2:aef9:8df4 with SMTP id s1-20020a7bc381000000b003a2aef98df4mr2971359wmj.7.1657620077777;
-        Tue, 12 Jul 2022 03:01:17 -0700 (PDT)
-Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id u9-20020a7bc049000000b0039747cf8354sm8895314wmc.39.2022.07.12.03.01.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 03:01:17 -0700 (PDT)
-From:   Ben Dooks <ben.dooks@sifive.com>
-To:     linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH 2/7] pwm: move dwc memory alloc to own function
-Date:   Tue, 12 Jul 2022 11:01:08 +0100
-Message-Id: <20220712100113.569042-3-ben.dooks@sifive.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220712100113.569042-1-ben.dooks@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
+        Tue, 12 Jul 2022 06:01:11 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD672B63D;
+        Tue, 12 Jul 2022 03:01:09 -0700 (PDT)
+Received: from [10.180.13.185] (unknown [10.180.13.185])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxCeFkRs1iBggZAA--.55841S3;
+        Tue, 12 Jul 2022 18:01:08 +0800 (CST)
+Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
+ <20220707092206.GA9894@alpha.franken.de>
+ <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
+Message-ID: <0fd4e823-493f-07f0-08d5-f4a22491b602@loongson.cn>
+Date:   Tue, 12 Jul 2022 18:01:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf9AxCeFkRs1iBggZAA--.55841S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ary8Zw4xZrW7JrW7Gw48WFg_yoW8Xr4xpF
+        y0yF48JrWDtFn7Gr4xtr1DJFyYyw15tw15Grn8JFyUAay8Xr92qr4UX3yq93y7JF48Wr15
+        JF4aqFW7Zw1UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWU
+        AwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xUgg_TUUUUU
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,62 +61,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for adding other bus support, move the allocation
-of the pwm struct out of the main driver code.
+On 2022/7/7 下午7:12, Hongchen Zhang wrote:
+> On 2022/7/7 下午5:22, Thomas Bogendoerfer wrote:
+>> On Thu, Jul 07, 2022 at 04:11:35PM +0800, Hongchen Zhang wrote:
+>>> When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
+>>> return true.
+>>> So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
+>>> present but invalidated by pmd_mkinvalid.
+>>
+>> What problem are you trying to fix ? What are the symptoms ?
+>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> the test robot showed problems with your last version of the patch,
+>> which hasn't been integrated into at least the MIPS tree, so no
+>> need to that.
+>>
+>> Thomas.
+>>
+> 
+> Hi Thomas,
+>    The idea come from the commit:
+>    b65399f6111b(arm64/mm: Change THP helpers to comply with generic MM 
+>   semantics).
+>    There is an problem now:
+>          CPU 0        CPU 1
+>      pmdp_invalidate        do_page_fault
+>      ...              __handle_mm_fault
+>                      is_swap_pmd == true
+>                      trigger VM_BUG_ON() ?
+>      set_pmd_at
+>    the reason is that pmd_present return true,after this commit
+>    pmd_present will return false,and the VM_BUG_ON will not be triggered.
+>    Like arm64 does,we can introduce a new bit to fix this.
+> 
+> Thanks.
+Hi Thomas,
+  Is there problem of this patch? What's your opinion of this patch?
 
-Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
----
- drivers/pwm/pwm-dwc.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-index c706ef9a7ba1..61f11e0a9319 100644
---- a/drivers/pwm/pwm-dwc.c
-+++ b/drivers/pwm/pwm-dwc.c
-@@ -196,13 +196,29 @@ static const struct pwm_ops dwc_pwm_ops = {
- 	.owner = THIS_MODULE,
- };
- 
-+static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
-+{
-+	struct dwc_pwm *dwc;
-+
-+	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
-+	if (!dwc)
-+		return NULL;
-+
-+	dwc->chip.dev = dev;
-+	dwc->chip.ops = &dwc_pwm_ops;
-+	dwc->chip.npwm = DWC_TIMERS_TOTAL;
-+
-+	dev_set_drvdata(dev, dwc);
-+	return dwc;
-+}
-+
- static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_device_id *id)
- {
- 	struct device *dev = &pci->dev;
- 	struct dwc_pwm *dwc;
- 	int ret;
- 
--	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
-+	dwc = dwc_pwm_alloc(dev);
- 	if (!dwc)
- 		return -ENOMEM;
- 
-@@ -226,12 +242,6 @@ static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 		return -ENOMEM;
- 	}
- 
--	pci_set_drvdata(pci, dwc);
--
--	dwc->chip.dev = dev;
--	dwc->chip.ops = &dwc_pwm_ops;
--	dwc->chip.npwm = DWC_TIMERS_TOTAL;
--
- 	ret = pwmchip_add(&dwc->chip);
- 	if (ret)
- 		return ret;
--- 
-2.35.1
+Thanks
 

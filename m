@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135B957136C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F45E57136B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbiGLHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S232438AbiGLHtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbiGLHtk (ORCPT
+        with ESMTP id S232431AbiGLHtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:49:40 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E92F9CE04
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:49:36 -0700 (PDT)
-Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id C577B802CE4D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:49:25 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 6FC7710047DA9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:48:54 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id BAdaod6jCgTLJBAdaoRJcs; Tue, 12 Jul 2022 07:48:54 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=XKL19StE c=1 sm=1 tr=0 ts=62cd2766
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IGmYStlPXvYheIXF0BTxVIf6r1W3G7BS2Y1q6e79HC0=; b=H/zk5DII5PbU2FVImwyg/WQ/Wd
-        dMM+ZsHLQwKP18SrO8BedghF/Iav/XyRq6Zo6zGheAPu8IA4NYxlkMwEzUssC8WE5S99CWbcbctYW
-        OGLCtN2WDqu9DmwSqjLeUAStsCAAySqwajzExKOGozPP3vZ9B22yrXV4H5JGUIvTNBf2RiyprEFHO
-        h+ZSwPhTWgMQQ4wfS3flGFscIIWuzsQ8m5lhCUlskW5sW+VDWEf+mYXHlQtJf+RKMGh10PA1EPp/R
-        +0e4iYl7te8cNbkV7/fLWwJrQRcPtti1WIip3m08rYcBEi25WqSbTPCCmAlZIUUOYnYXbaUOSd1Pv
-        9T/T/U+w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35512 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oBAdY-002PpQ-Vu;
-        Tue, 12 Jul 2022 01:48:53 -0600
-Subject: Re: [PATCH 5.15 000/229] 5.15.54-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220711145306.494277196@linuxfoundation.org>
-In-Reply-To: <20220711145306.494277196@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <31adc8fc-e210-947b-5a25-ecd12df5a6cb@w6rz.net>
-Date:   Tue, 12 Jul 2022 00:48:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+        Tue, 12 Jul 2022 03:49:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 839ED9B562
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:49:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B30A21516;
+        Tue, 12 Jul 2022 00:49:29 -0700 (PDT)
+Received: from [10.1.29.134] (e127744.cambridge.arm.com [10.1.29.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 885A93F73D;
+        Tue, 12 Jul 2022 00:49:27 -0700 (PDT)
+Subject: Re: [PATCH] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     james.clark@arm.com, suzuki.poulose@arm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, Leo Yan <leo.yan@linaro.org>
+References: <20220712051404.2546851-1-anshuman.khandual@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <42caa18b-6287-0cfe-90c6-e47ec1709154@arm.com>
+Date:   Tue, 12 Jul 2022 08:49:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20220712051404.2546851-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oBAdY-002PpQ-Vu
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:35512
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 7:54 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.54 release.
-> There are 229 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 13 Jul 2022 14:51:35 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.54-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Thanks for reworking the patch, Anshuman,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+On 12/07/2022 06:14, Anshuman Khandual wrote:
+> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+> packets into the traces, if the owner of the perf event runs with required
+> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+>
+> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+> but the check for capabilities happens in the pmu event init callback i.e
+> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+> remain consistent for the duration of the perf session.
+>
+> However, the function arm_spe_event_to_pmscr() may be called later during
+> the event start callback i.e arm_spe_pmu_start() when the "current" process
+> is not the owner of the perf session, hence the CX bit setting is currently
+> not consistent.
+>
+> One way to fix this, is by caching the required value of the CX bit during
+> the initialization of the PMU event, so that it remains consistent for the
+> duration of the session. It uses currently unused 'event->hw.flags' element
+> to cache perfmon_capable() value, which can be referred during event start
+> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+> of context packets in the trace as per event owner capabilities.
+>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Tested-by: Ron Economos <re@w6rz.net>
+I'll add the Fixes tag, which I forgot to add in the prev version (I think it's the right one :)
 
+Fixed: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+
+> ---
+> This applies on v5.19-rc6 and built on an earlier version posted by German
+> https://lore.kernel.org/all/20220117124432.3119132-1-german.gomez@arm.com/
+>
+>  drivers/perf/arm_spe_pmu.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> index db670b265897..011e98428233 100644
+> --- a/drivers/perf/arm_spe_pmu.c
+> +++ b/drivers/perf/arm_spe_pmu.c
+> @@ -39,6 +39,26 @@
+>  #include <asm/mmu.h>
+>  #include <asm/sysreg.h>
+>  
+> +/*
+> + * event.hw.flags remain unused for events created for this
+> + * PMU driver. A single bit there i.e BIT(0), could be used
+> + * to remember initiating process's perfmon_capable() value
+> + * which can be subsequently used to enable SYS_PMSCR_EL.CX
+> + * thus enabling context information in the trace.
+> + */
+> +#define SPE_PMU_HW_FLAGS_CX			BIT(0)
+> +
+> +static void event_hw_flags_set_cx(struct perf_event *event)
+> +{
+> +	if (perfmon_capable())
+> +		event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+> +}
+> +
+> +static bool event_hw_flags_has_cx(struct perf_event *event)
+> +{
+> +	return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+> +}
+> +
+>  #define ARM_SPE_BUF_PAD_BYTE			0
+>  
+>  struct arm_spe_pmu_buf {
+> @@ -272,7 +292,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>  	if (!attr->exclude_kernel)
+>  		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>  
+> -	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+> +	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && event_hw_flags_has_cx(event))
+>  		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>  
+>  	return reg;
+> @@ -710,7 +730,8 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>  		return -EOPNOTSUPP;
+>  
+>  	reg = arm_spe_event_to_pmscr(event);
+> -	if (!perfmon_capable() &&
+> +	event_hw_flags_set_cx(event);
+> +	if (!event_hw_flags_has_cx(event) &&
+>  	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+>  		    BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+>  		    BIT(SYS_PMSCR_EL1_PCT_SHIFT))))

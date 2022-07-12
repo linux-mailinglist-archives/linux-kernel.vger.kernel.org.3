@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE23657194D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAA3571952
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiGLL7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S232414AbiGLL74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiGLL7U (ORCPT
+        with ESMTP id S233225AbiGLL71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:59:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 133C14F66C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657627135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U7QIDSxZFUYXNY6pVprVvC57ag3whDjnsY/JfggEm9w=;
-        b=Wk3XclE4RrSc9s6Fwr5u4UR9W1HQcbLIwNoQLa0m45yBvnGXJ0BrVMc/R1pFnqYX4t2GhQ
-        0ZEcM3f01SI4MUNTiJb/NInbQvxOApxNP5y2aCIcJ8jS2pZxc/E0uDI0IfwL7WfSGDmzdw
-        X1SaMIyiV2zitLWTJmg+DN1yIHc5oDg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-8cYwD3g1NGaYn30Z1CO1Kw-1; Tue, 12 Jul 2022 07:58:54 -0400
-X-MC-Unique: 8cYwD3g1NGaYn30Z1CO1Kw-1
-Received: by mail-qk1-f199.google.com with SMTP id o13-20020a05620a2a0d00b006b46c5414b0so7688700qkp.23
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:58:54 -0700 (PDT)
+        Tue, 12 Jul 2022 07:59:27 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E2587F68;
+        Tue, 12 Jul 2022 04:59:15 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu42so13607750lfb.0;
+        Tue, 12 Jul 2022 04:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KZ3KYMTVveHo2jJXRt9lg02K2HAgxM3VDqKDTiz5L5I=;
+        b=f4WI/5p+hFmynH5Occ846McURQkcxkHB4J3bqBpiJfC465TR9kctYpctRlCNmUXucc
+         0JcBPKmqgTTFHJ2KGH4H4l+jEUUpHQZDOI90HDkVOVzV3R6F+1gzKEx5m/JnHLbIloPs
+         GeSj5k37Ep6g7cwDCW5L6aM6AFFUvY7XMr7c5SB1Tt6sBYmUiOrJJUrYvelxAoR5ERc3
+         h2K7VjWYttoB96xFjr9dW9txnDbuRY4JBLNxYrjXqpewHPd5ljBrAFVE7xP6xa7RebWY
+         qcDk+RmwoJjGmwL9LJAYqbPEgsYkicRgj1p8tdiHFzhjiIbvstm+JixNlLwl7dzwfrLu
+         Sx/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=U7QIDSxZFUYXNY6pVprVvC57ag3whDjnsY/JfggEm9w=;
-        b=BWX7YPF6qSSYtx+IeuMc+9kNRf8NVjxmvjTLvfcoRk6G/lVbvaOFeuOrUEu0ZmEwAX
-         xx9vEHFiJkUIHgo9ux1ltUgzR7Dq342/rIkF5UIV3JHxPukJMGS3QT6nQQyPIL7ua5XY
-         3iw7o/YZlEQAk4OlJr/bqKoL+fOjcYpoZHCgZ7vUSs+GuJKYjBDv0TeosI+BDVTvaXBd
-         8GOeai6TWpHMvXMFCAhdCvjGN3Gbd5OOT/uOmtZ8BRX7piChH0MO13vwcRbIr5LeGuS5
-         Pn36NzxjiAhLv5cVCDSI5GIrrQXR3IneaHELlJmBE4lWSb4VL94qpl2NVfXwRWRyDydi
-         zCmg==
-X-Gm-Message-State: AJIora8ljzbgnvMJ1Bef6lPqR2TGP5ejskGITKFHBXhBm+Ci2JhW3GGT
-        dLLvaLupmt0pDuURFAFQhFBSkpNpDzVE47r/YVpkFsXQaZ04dryEYNSrVrvyfl/UVxtYdaE1xXP
-        ENAE7DC4ERu8oYY8yzQfA6zIU
-X-Received: by 2002:a05:622a:1482:b0:31e:9c01:ed76 with SMTP id t2-20020a05622a148200b0031e9c01ed76mr17567954qtx.547.1657627132202;
-        Tue, 12 Jul 2022 04:58:52 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tksyjUqV7B20gdvMOv4LZE1LenmZxesRu/qi13zSNQNrALL51hn8UahTbmHqtcAR2R0Kuekg==
-X-Received: by 2002:a05:622a:1482:b0:31e:9c01:ed76 with SMTP id t2-20020a05622a148200b0031e9c01ed76mr17567880qtx.547.1657627130522;
-        Tue, 12 Jul 2022 04:58:50 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05620a415200b006b5905999easm4619740qko.121.2022.07.12.04.58.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KZ3KYMTVveHo2jJXRt9lg02K2HAgxM3VDqKDTiz5L5I=;
+        b=B6JKlZWv3DRdUMZhaiESwPIr4Ae9fevztkZqjXVH6t+FtLTevhcPojfF0BxSZl0yvK
+         R0LGMgCx1A7Ou32U5nm4YjfILfCVFAVID0PHWWgOkMaZ63rBgTNZZh+VMvOfSH9L2Aty
+         g030OMngv9MbBaFeBi/Ak5CHBTe9Ims+19TvwnTtdx3xI3t9JkzXpEHvbVFjGVBsyXZi
+         +OQpvsuNs/AZju4wBt/eZM6tqDexyHdP37FWQjarTUwyzBTGAOWfyjWF03pZ0joE2FBY
+         48QRwqFCJvNco1ahI6AgNmHf9xnYoOdmZj7BSYvlv3CelC/uo8CYwRPjDH1U02udCbvj
+         Xksw==
+X-Gm-Message-State: AJIora8yKTNjO03mKZ/WL0BFDn98auyn6cmznm9YQ6Nt9zHih1IiMIAl
+        wI2N+UwrlRGEe+YHG3LBewE=
+X-Google-Smtp-Source: AGRyM1uxGzrwOXK7F+VLwKbnuNSNO/dZWDvqwZ4Xyy1lLukXMCfbiEcxHbkrYomd6t3kf8k1QNJ65Q==
+X-Received: by 2002:a05:6512:2823:b0:485:6312:2a07 with SMTP id cf35-20020a056512282300b0048563122a07mr14636413lfb.525.1657627153506;
+        Tue, 12 Jul 2022 04:59:13 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id f2-20020ac24982000000b00489c5e840d4sm2137853lfl.227.2022.07.12.04.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:58:49 -0700 (PDT)
-Message-ID: <0a17abb673be4042ab06eb999fe5676519b4101c.camel@redhat.com>
-Subject: Re: [PATCH v3 20/25] KVM: x86: VMX: Replace some Intel model
- numbers with mnemonics
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:58:46 +0300
-In-Reply-To: <20220708144223.610080-21-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-21-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Tue, 12 Jul 2022 04:59:13 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 14:59:11 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 5/7] clk: baikal-t1: Move reset-controls code into a
+ dedicated module
+Message-ID: <20220712115911.jbmkikaugpvtdt65@mobilestation>
+References: <20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru>
+ <20220711154433.15415-6-Sergey.Semin@baikalelectronics.ru>
+ <af5f882f-e7f8-ca49-020d-0dab3f2cc145@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af5f882f-e7f8-ca49-020d-0dab3f2cc145@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> From: Jim Mattson <jmattson@google.com>
+On Mon, Jul 11, 2022 at 02:39:51PM -0700, Randy Dunlap wrote:
 > 
-> Intel processor code names are more familiar to many readers than
-> their decimal model numbers.
 > 
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> On 7/11/22 08:44, Serge Semin wrote:
+> > diff --git a/drivers/clk/baikal-t1/Kconfig b/drivers/clk/baikal-t1/Kconfig
+> > index 03102f1094bc..56a4ff1d8bf0 100644
+> > --- a/drivers/clk/baikal-t1/Kconfig
+> > +++ b/drivers/clk/baikal-t1/Kconfig
+> > @@ -29,7 +29,6 @@ config CLK_BT1_CCU_PLL
+> >  
+> >  config CLK_BT1_CCU_DIV
+> >  	bool "Baikal-T1 CCU Dividers support"
+> > -	select RESET_CONTROLLER
+> >  	select MFD_SYSCON
+> >  	default MIPS_BAIKAL_T1
+> >  	help
+> > @@ -39,4 +38,15 @@ config CLK_BT1_CCU_DIV
+> >  	  either gateable or ungateable. Some of the CCU dividers can be as well
+> >  	  used to reset the domains they're supplying clock to.
+> >  
+> > +config CLK_BT1_CCU_RST
+> > +	bool "Baikal-T1 CCU Resets support"
+> > +	select RESET_CONTROLLER
+> > +	select MFD_SYSCON
+> > +	default MIPS_BAIKAL_T1
+> > +	help
+> > +	  Enable this to support the CCU reset blocks responsible for the
+> > +	  AXI-bus and some subsystems reset. These are mainly the
+> > +	  sef-deasserted reset controls but there are several lines which
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index eca6875d6732..2dff5b94c535 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2580,11 +2580,11 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->          */
->         if (boot_cpu_data.x86 == 0x6) {
->                 switch (boot_cpu_data.x86_model) {
-> -               case 26: /* AAK155 */
-> -               case 30: /* AAP115 */
-> -               case 37: /* AAT100 */
-> -               case 44: /* BC86,AAY89,BD102 */
-> -               case 46: /* BA97 */
-> +               case INTEL_FAM6_NEHALEM_EP:     /* AAK155 */
-> +               case INTEL_FAM6_NEHALEM:        /* AAP115 */
-> +               case INTEL_FAM6_WESTMERE:       /* AAT100 */
-> +               case INTEL_FAM6_WESTMERE_EP:    /* BC86,AAY89,BD102 */
-> +               case INTEL_FAM6_NEHALEM_EX:     /* BA97 */
->                         _vmentry_control &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
->                         _vmexit_control &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
->                         pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
 
-I cross checked the values, seems correct.
+> 	  self-deasserted
+> ?
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Right. Thanks.
 
-Best regards,
-	Maxim Levitsky
+-Serge(y)
 
+> 
+> > +	  can be directly asserted/de-asserted (PCIe and DDR sub-domains).
+> 
+> -- 
+> ~Randy

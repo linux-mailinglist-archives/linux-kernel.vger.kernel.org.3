@@ -2,117 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E185714ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468BD5714F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiGLInu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S232159AbiGLIoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGLInq (ORCPT
+        with ESMTP id S232202AbiGLIoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:43:46 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA4D24BE9;
-        Tue, 12 Jul 2022 01:43:44 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id o26so5734655qkl.6;
-        Tue, 12 Jul 2022 01:43:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nIOsMFmyfqmDsFlj2kK4zCMOMz4/ro5ji3cUAa947/A=;
-        b=SRvR+9u3aXIvCDfNlkPnceQWo7fFBdEEyxI61KaP20bbV6b8tJUMZstE+86zDdTxUw
-         szC9R5cqKYfnsOI4Gi+ANufhl19aVjBECEdzqSA82JIGOq1GQCCkh835uJEsuYlrXScR
-         v6OokCKKmgLWfdFidwr/tkhPzRJ4WGVCXGTUYxK5bsH/tkXGtnRgbLBh/w8WyvweF57R
-         emspji9BJcVZw0Ot9QcDQL6LBmMnRhcJJFhpXTkr14Vac5ko76xzKXIx9C+DliHXobfM
-         ZooEzJfEvOFR9WPmShk5wrA6rNMrI0Jbt/9A4IV/987ia4XhMmRBxGgxPHdHOQOuNqEJ
-         jvNA==
-X-Gm-Message-State: AJIora9lFShCowVJAogZFyFfbemYFlDY9UwGBELMKjaO7gLSPK3GBTU9
-        IJpIqP2wPiSRN6lDW1n00M817LCUYTYQuw==
-X-Google-Smtp-Source: AGRyM1usyet0a2SMnzg2Fap1mTVdOBaiWONW7DbLPa8pRwT4dAPjvGkcPc9oKdO9suXHSuMe/Qaxtw==
-X-Received: by 2002:a05:620a:44c6:b0:6b5:6b78:cc0a with SMTP id y6-20020a05620a44c600b006b56b78cc0amr12721169qkp.607.1657615423879;
-        Tue, 12 Jul 2022 01:43:43 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id m12-20020ac8444c000000b0031ea9aa916bsm6925429qtn.95.2022.07.12.01.43.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 01:43:36 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id e69so12813851ybh.2;
-        Tue, 12 Jul 2022 01:43:29 -0700 (PDT)
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr21692729ybh.36.1657615408662; Tue, 12
- Jul 2022 01:43:28 -0700 (PDT)
+        Tue, 12 Jul 2022 04:44:10 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EEEA43BE;
+        Tue, 12 Jul 2022 01:44:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJ7X6Pa_1657615443;
+Received: from 30.227.94.73(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VJ7X6Pa_1657615443)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Jul 2022 16:44:04 +0800
+Message-ID: <0697cae5-f366-6f69-be39-96f060d8c586@linux.alibaba.com>
+Date:   Tue, 12 Jul 2022 16:44:03 +0800
 MIME-Version: 1.0
-References: <cover.1657300532.git.geert@linux-m68k.org> <0744671ac096a12f0d538906bd324efa71b11400.1657300532.git.geert@linux-m68k.org>
- <96a87833-d878-dde9-e335-9ea51a4ba406@mailbox.org> <CAMuHMdUgdbZeoFLFL8+Hm-6fG9cg5Wzq++JED3KR5P9YZtRQ4A@mail.gmail.com>
- <20220712074715.kopstlvz4q6npaye@sirius.home.kraxel.org> <CAMuHMdVrf7fgzumcSnZJ3OMGqA34YExXcF3O15YXYpA1ykgKyQ@mail.gmail.com>
- <20220712083907.3ic7bltstaskz72n@sirius.home.kraxel.org>
-In-Reply-To: <20220712083907.3ic7bltstaskz72n@sirius.home.kraxel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Jul 2022 10:43:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVhxE9aayG8qRMwUuBryiR_ng08m63_+GY8htFCSmUiWg@mail.gmail.com>
-Message-ID: <CAMuHMdVhxE9aayG8qRMwUuBryiR_ng08m63_+GY8htFCSmUiWg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/fourcc: Add missing big-endian XRGB1555 and
- RGB565 formats
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH V4 0/2] ublk: add io_uring based userspace block driver
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+References: <20220711022024.217163-1-ming.lei@redhat.com>
+ <c8e593e6-105f-7a69-857f-5b91ecd3b801@linux.alibaba.com>
+ <YswtwnJuWG+55NM1@T590>
+From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+In-Reply-To: <YswtwnJuWG+55NM1@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gerd,
+Hello Ming,
 
-On Tue, Jul 12, 2022 at 10:39 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> On Tue, Jul 12, 2022 at 10:01:15AM +0200, Geert Uytterhoeven wrote:
-> > > It IMHO is not applicable to any physical hardware.  It's used by
-> > > virtio-gpu where the supported format depends on the byte order
-> > > (it is argb8888 in native byte order).  Only virtual hardware can
-> > > have that kind of behavior.
-> > >
-> > > And we can probably drop the DRM_FORMAT_HOST_* variants for 1555 and
-> > > 565, they are not used anywhere.
-> >
-> > Atari DRM supports (big-endian) RGB565, so it uses
-> > DRM_FORMAT_HOST_RGB565.
+> Hi Xiaoguang,
 >
-> Fixed big endian should use 'DRM_FORMAT_RGB565 | DRM_FORMAT_BIG_ENDIAN'.
+> On Mon, Jul 11, 2022 at 07:32:19PM +0800, Xiaoguang Wang wrote:
+> Please take a look at v4 patches or cover letter at least before asking
+> this question.
+Yeah, I should be, really sorry.
+>
+> V4 adds one new command of REFETCH for supporting to build ublk driver
+> as module, you can allocate buffer when receiving REFETCH command
+> in userspace target code by adding one pair of callbacks.
+>
+> Also the latest ublkserver adds callback for target code to pre-allocate
+> buffer, then if you have pre-allocated io buffer, the buffer can be passed
+> to driver via FETCH command during setting up queue.
+Now my concern about io buffer management has gone, thanks.
 
-True.
+>
+> Actually I have implemented pinning page during the whole io lifetime,
+> then the pre-allocated io buffers can be reclaimed without needing
+> swapout by kernel when io is completed:
+>
+> https://github.com/ming1/linux/commits/ubd-master
+>
+> So the preallocation is just allocation on virtual memory space, and
+> the pages are pinned actually when io is handled. After io handling is
+> done, kernel can reclaim pages at will without needing swapout on
+> these io pages.
+OK, I'll learn codes later.
 
-> As described above DRM_FORMAT_HOST_RGB565 means bigendian on bigendian
-> hosts and little endian on little endian hosts.  Which is not correct
-> when your hardware does big endian no matter what.
+>
+>> 2) complicated ublk user-space
+>> First forgive me :) I think current ublk user-space codes looks somewhat
+>> complicated:
+> Please just look at libublksrv code, and example of demo_null.c &
+> demo_event.c.
+OK.
 
-But (a) drm_driver_legacy_fb_format() uses DRM_FORMAT_HOST_RGB565
-if quirk_addfb_prefer_host_byte_order is set, and (b)
-quirk_addfb_prefer_host_byte_order must be set on big-endian as
-per commit eae06120f1974e1a ("drm: refuse ADDFB2 ioctl for broken
-bigendian drivers").
+>
+>
+> Of course we have to wait until all IO commands are issued to driver,
+> since block IO can come to /dev/ublkbN after UBLK_CMD_START_DEV returns,
+> and /dev/ublkbN is exposed to userspace in running UBLK_CMD_START_DEV.
+>
+> What is the matter of this kind of handling?
+>
+> Also with libublksrv, you can do everything just in single task context,
+> see:
+>
+> https://github.com/ming1/ubdsrv/blob/master/demo_null.c
+No, indeed I don't mean that there are something wrong with your
+implementation. I just try to see whether I can simplify it a bit.
 
-Gr{oetje,eeting}s,
+If we adopt to pass one io_uring fd per queue when starting device,
+blk-mq's queue_rq() will get corresponding io_uring file for this queue and
+use it to generate cqes directly to notify new io commands inserted,
+then UBLK_CMD_START_DEV doesn't need to wait, and can be in the
+same thread with ublksrv_queue_init or ublksrv_process_io.
+Seems that for demo_null.c, they are still in different threads.
 
-                        Geert
+For current io_uring implementation, one sqe may generate one or more
+cqes, but indeed, we can generate cqes without submitting sqes, just
+fill one event to io_uring ctx.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Just suggestions :)
+>
+>>   2. mixed getting ublk command and target io handle in one io_uring instance
+>> I'm not sure it's a good design, see ublksrv_handle_cqe(), which contains
+> io_uring is supposed to be bound with context, and serves all IOs
+> issued from this context. That is exactly typical AIO use pattern,
+> please look at example of t/io_uring.c in fio project, which can accept
+> lots of files in command line, then handle IOs to all these files in one
+> single io_uring context. Here /dev/ublkcN is just one file, we handle
+> IOs to other files and /dev/ublkcN in single io_uring/context, then
+> all of them can be handled at batching, then each single syscall can
+> handle more IOs, that is one important reason why io_uring performs so well.
+Yeah, I understand that you're doing your best to improve ublk performance,
+and I'm a early developer of io_uring and know how it works :)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+It maybe just because of my poor design poor taste, I think put
+io command descriptors acquire and io command handling together
+seem not decouple well.
+>
+>> many flag handle work and is_target_io() check, I think the data flow is not
+>> that clear for me at least :)
+> /* 
+>  * this flag is set if we need to tell ublk driver to fetch io req only,
+>  * just needed in setup stage.  
+>  */
+> #define UBLKSRV_NEED_FETCH_RQ		(1UL << 0)
+>
+> /* when one io is handled, we set this flag for committing io result */
+> #define UBLKSRV_NEED_COMMIT_RQ_COMP	(1UL << 1)
+>
+> /*
+>  * this flag is set in case the command slot is free to issue new command;
+>  * cleared when io command is issued to driver.
+>  */
+> #define UBLKSRV_IO_FREE			(1UL << 2)
+>
+> /*
+>  * added in v4, set in case UBLK_IO_RES_REFETCH is returned from driver,
+>  * so REFETCH command is issued to driver
+>  */
+> #define UBLKSRV_NEED_REFETCH_RQ		(1UL << 3)
+>
+> Note, the flags are just for handling io commands.
+>
+>>   3. helper like tcmulib_get_next_command()
+>> I wonder whether current ublk user-space can offer similar helper which
+>> will return a set of io commands to backstore easily.
+> No, io command is supposed to use by libublksrv internal use, and target
+> code should _not_ deal with any io command.
+Seems different from design ideas of tcmu.
+
+>
+> The target code should just focus on implementing ->handle_io_async() in
+> which one new io command is received from driver, same with
+> ->target_io_done() which is called when one target io is completed by
+> io_uring.
+>
+> If target code doesn't use io_uring to handle io, please refer to
+> example of demo_event.c, in which ->handle_event() is required for
+> supporting to handle io in another contexts by either io_uring or libaio
+> or whatever. ->handle_event() is called when io_uring(for issuing io
+> command) is waken up by eventfd, which is triggered by target code
+> itself(two eventfd APIs).
+OK.
+
+>
+>> I'd like to suggest:
+>> 1. When starting ublk dev, pass io_uring fd for every queue, then in
+>> blk-mq->queue_rq(), it'll generate one cqe for every coming request,
+>> not need to issue fetch sqes command in advance, kernel codes would
+> Why do you think it isn't good to issue fetch sqes in advance? It costs
+> nothing, meantime userspace can get io request pretty fast.
+>
+> Actually you are suggesting one fundamental change to io_uring given
+> the current io_uring use model is that userspace issues io via sqe, and
+> kernel(io_uring) completes io via cqe, and sqe and cqe are in two rings
+> actually.
+>
+> That current io_uring doesn't support to complete cqe to userspace without
+> issuing any sqe, also not see any benefit we can get in this way. If you
+> have, please explain it in details.
+Hard to say it's one fundamental change, io_uring can easily add such
+a helper which generates cqes but needs not to submit sqes, which contains
+  allocate one cqe, with user_data, res
+  io_commit_cqring(ctx);
+
+As I said before, there maybe such benefits:
+1. may decouple io command descriptor acquire and io command handling well.
+At least helper like tcmulib_get_next_command maybe added easily. I'm not sure, some
+applications based on tcmu previously may need this helper.
+
+2. UBLK_CMD_START_DEV won't need to wait another thread context to submit
+number of queue depth of sqes firstly, but I admit that it's not a big issue.
+
+>
+>
+>> simplify a bit,  UBLK_IO_FLAG_ACTIVE may be discarded. And helper
+>> like returning a set of io command would be added easily. Note these
+>> io_uring fd would be just used for notifying io command generated.
+>>
+>> 2. We use another io_uring fd per queue to handle GET_DATA or
+>> COMMIT_REQ command. Indeed, if we can support synchronous ioctl
+>> interface to do GET_DATA and COMMIT_REQ, we may make libublk
+>> really simple.
+> IMO that won't be good idea. One important reason why io_uring is so
+> efficient is that batching issue/completion in single syscall. And using
+> ioctl to handle io can be too slow.
+>
+>>
+>> Here I'd like to describe how we use tcmu. A main thread call
+>> tcmulib_get_next_command() to get a set of io commands, then
+>> it dispatches them to user-space io wokers. Take write requests as
+>> example, io worker use ioctl(2) to get data from bios, and send
+>> data to distributed fs, finally call ioctl(2) to commit req. Multiple
+> Hammm, not mentioning pthread communication, it takes at least 3 syscalls
+> for handling one io, how can you expect this way to work efficiently?
+I admit batch will be good, and syscalls userspace and kernel context switch
+introduce overhead. But for big io requests, batch in one context is not good. In
+the example of read requests, if io request is big, say 1MB, io_uring will do
+commit req sequentially, which indeed mainly do memcpy work. But if users
+can choose to issue multiple ioctls which do commit req concurrently, I think
+user may get higher io throughput.
+
+And in this case, user may not care userspace and kernel context switch overhead at all.
+
+Or to put it another way, should libublk offer synchronous programming interface ?
+
+>
+> With ublk, usually we handle dozens or even more than hundred of IOs in
+> single io_uring_enter() syscall.
+>
+>> io workers can run concurrently. Since GET_DATA(write request)
+>> or COMMIT_REQ(read request) mainly do memcpy work, one
+>> io_uring instance will just do these jobs sequentially, which may
+>> not take advantage of multi-cpu.
+> IMO you can implement target code to handle io in other pthreads against
+> current libublksrv design, see demo_event.c. Or if you think it is still
+> enough, please just share with us what the problem is. Without
+> understanding the problem, I won't try to figure out any solution or
+> change.
+I need to read your ublk userspace codes carefully, if I made
+some noises, sorry.
+>
+> Again, the goal of ublk aims at implementing high performance & generic
+> userspace user space block driver.
+Yeah, sure, thanks for this work again.
+
+Regards,
+Xiaoguang Wang
+>
+>
+>
+> Thanks,
+> Ming
+

@@ -2,211 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BCA5715E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77745715E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiGLJjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S232561AbiGLJjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiGLJjX (ORCPT
+        with ESMTP id S232467AbiGLJiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:39:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E87C1C912;
-        Tue, 12 Jul 2022 02:39:22 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C8hwah016743;
-        Tue, 12 Jul 2022 09:38:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qk1ofYEcashXPyp+CEb/2pdcw933tEZ/rPjXONA7U7I=;
- b=W56yctbMr+6bZ5eMhwtUPf/zig59CWdqbBkxLn3cp4jNPh+Te+kf/e9hO+3AtAhvFMLM
- ZeBSMd/EzX12Vj5EKk9iFigCU4jYVGpDAIM1W0HXoN62stbIfzR96FaLMpAHqYOkMjXX
- bRV30qD/AijJykjcOBACrrq1s4r1f5jyL9D1I33Q8qx7mBf/n4zxa1GmYBDZGyvIwgMf
- s9c1MHw0+ADdHyCRl4Tl9PQMA/a3OeIxccqU0yfcQ/lz4+VawIUW/YXqAk2dbgjuLGDh
- rM1hqdaH88NmMn9r2oTRjRKMCidJ0CYQErKz9kfi+ayzURsheNYJEWdyZElTLgCZN1nb 8g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95puhejt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 09:38:49 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26C9R3KZ000819;
-        Tue, 12 Jul 2022 09:38:48 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95puheht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 09:38:48 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26C9MYFL019806;
-        Tue, 12 Jul 2022 09:38:46 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3h71a8ty46-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 09:38:46 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26C9ciqd22741340
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 09:38:44 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72533AE051;
-        Tue, 12 Jul 2022 09:38:44 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBE4FAE045;
-        Tue, 12 Jul 2022 09:38:43 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 09:38:43 +0000 (GMT)
-Message-ID: <b820274e-56fe-501b-0d1d-41703fbe6b48@linux.ibm.com>
-Date:   Tue, 12 Jul 2022 11:38:43 +0200
+        Tue, 12 Jul 2022 05:38:54 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EC2644
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:38:52 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id p6so6408184ljc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DPmmhi+2J1rxKC4UbiQ/cFtEMBdLVlyhY+s/IdsukL0=;
+        b=Gh3DmoyEfQ/kog6KzHV6sC/jLz88DNk+G8JpIZFTDJfrqZu2ZFpy8kJhfvW5pZDwNp
+         6pgPlBNjjCn/Tk+L35mpODgdbYUXDBm4W2UpqNRhfMuVXdEfHOQap2hyqnvgnPl9Rv59
+         xrcieOWOfa+DPq76bL5fE5+gX6dREG7jjJY/fwgl3yHr+G+/peSzHtXN7MJgAKaY1qv7
+         pXuHWua24lARqSOa6xuzXuPxPfeltvG6ji7abBeocfrdnkntNAa5Wdec1Bg08HFnm25K
+         3qfXsBfmQ+k/VJTcnbEtLrZRk8YGeZEqTDY3EY9UXLFnCdv82/gc2xxRS5IHLz/kN+Wu
+         DBrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DPmmhi+2J1rxKC4UbiQ/cFtEMBdLVlyhY+s/IdsukL0=;
+        b=OTTEzoIJe/Q/nrjbaO4yIa5Ud1FzH/eZRkbflku7AD9ML4HuFOr3yUAhOT907EvJTQ
+         MCQ67mUNlGMN27UwJBNhg8pqEZvxGhOuAAP/SsCrBMUduvJO2bR+C3m8x6kKYc5e1973
+         7aZ9zzgMxMMHoF0CqgEb08jaz1JRQIP/EANKEVOIkxf4AuY+f8fbXynZy9ve5KKgzFXH
+         OP2fTz7NhiiKNwU6g9sgJotZbD4ku/pWipyLx2JB6HrOYxAy9AdIz4Pz3zjWi3Rj78JQ
+         yDfTsgR3pUL9863ZHX+KF9C8pgt4x2oDpMim8ZezR0jIA24dXVfdeQDGtlP/0rSoY352
+         J46g==
+X-Gm-Message-State: AJIora/O3mkmdfAgaT2nV9W50o9kLcRmEwdAS26/ZN6LvudSpt8EskcE
+        moVl9Sh+y4JBV2rzNSdPsA7q1w==
+X-Google-Smtp-Source: AGRyM1tchxD7VKZTXRAYOEvY2VFhTArisZH6aNEblZI+hYGxn8HJ7tYZDZ9eGchgeZadyJEiJhI9HA==
+X-Received: by 2002:a2e:131a:0:b0:25d:68eb:cf6 with SMTP id 26-20020a2e131a000000b0025d68eb0cf6mr6071967ljt.267.1657618731025;
+        Tue, 12 Jul 2022 02:38:51 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id q18-20020a056512211200b00489db87cb7csm1362314lfr.280.2022.07.12.02.38.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 02:38:50 -0700 (PDT)
+Message-ID: <a281de26-0900-94b1-c139-f7af27a57d42@linaro.org>
+Date:   Tue, 12 Jul 2022 11:38:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.1
-Subject: Re: [PATCH v3 1/4] powerpc/mobility: wait for memory transfer to
- complete
-Content-Language: fr
-To:     Nicholas Piggin <npiggin@gmail.com>, benh@kernel.crashing.org,
-        haren@linux.vnet.ibm.com, linux@roeck-us.net, mpe@ellerman.id.au,
-        nathanl@linux.ibm.com, paulus@samba.org, wim@linux-watchdog.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org
-References: <20220627135347.32624-1-ldufour@linux.ibm.com>
- <20220627135347.32624-2-ldufour@linux.ibm.com>
- <1657588908.mis26ebam4.astroid@bobo.none>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <1657588908.mis26ebam4.astroid@bobo.none>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v16 2/3] dt-bindings: usb: Add analogix anx7411 PD binding
+Content-Language: en-US
+To:     Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220712090534.2783494-1-xji@analogixsemi.com>
+ <20220712090534.2783494-2-xji@analogixsemi.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220712090534.2783494-2-xji@analogixsemi.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gGeqaXoIfANwKkwvyYrnJDbG_fiXd63x
-X-Proofpoint-ORIG-GUID: F_80hR8xTapnMRjaIvF7lke68QdSPRLi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
- mlxscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207120035
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 12/07/2022 à 03:33, Nicholas Piggin a écrit :
-> Excerpts from Laurent Dufour's message of June 27, 2022 11:53 pm:
->> In pseries_migration_partition(), loop until the memory transfer is
->> complete. This way the calling drmgr process will not exit earlier,
->> allowing callbacks to be run only once the migration is fully completed.
->>
->> If reading the VASI state is done after the hypervisor has completed the
->> migration, the HCALL is returning H_PARAMETER. We can safely assume that
->> the memory transfer is achieved if this happens.
->>
->> This will also allow to manage the NMI watchdog state in the next commits.
->>
->> Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
->> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->> ---
->>  arch/powerpc/platforms/pseries/mobility.c | 42 +++++++++++++++++++++--
->>  1 file changed, 40 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
->> index 78f3f74c7056..907a779074d6 100644
->> --- a/arch/powerpc/platforms/pseries/mobility.c
->> +++ b/arch/powerpc/platforms/pseries/mobility.c
->> @@ -427,6 +427,43 @@ static int wait_for_vasi_session_suspending(u64 handle)
->>  	return ret;
->>  }
->>  
->> +static void wait_for_vasi_session_completed(u64 handle)
->> +{
->> +	unsigned long state = 0;
->> +	int ret;
->> +
->> +	pr_info("waiting for memory transfert to complete...\n");
+On 12/07/2022 11:05, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
 > 
->                                             ^ extra t (also below)
-
-I tried to push one French word, but you caught it ;)
-Will fix that and the other ones.
-
->> +
->> +	/*
->> +	 * Wait for transition from H_VASI_RESUMED to H_VASI_COMPLETED.
->> +	 */
->> +	while (true) {
->> +		ret = poll_vasi_state(handle, &state);
->> +
->> +		/*
->> +		 * If the memory transfer is already complete and the migration
->> +		 * has been cleaned up by the hypervisor, H_PARAMETER is return,
->> +		 * which is translate in EINVAL by poll_vasi_state().
->> +		 */
->> +		if (ret == -EINVAL || (!ret && state == H_VASI_COMPLETED)) {
->> +			pr_info("memory transfert completed.\n");
->> +			break;
->> +		}
->> +
->> +		if (ret) {
->> +			pr_err("H_VASI_STATE return error (%d)\n", ret);
->> +			break;
->> +		}
->> +
->> +		if (state != H_VASI_RESUMED) {
->> +			pr_err("unexpected H_VASI_STATE result %lu\n", state);
->> +			break;
->> +		}
->> +
->> +		msleep(500);
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
 > 
-> Is 500 specified anywhere? Another caller uses 1000, and the other one 
-> uses some backoff interval starting at 1ms...
+> ---
+> v13 -> v14 :
+>     1. Fix Robot compile error. Fix node name not correct.
 
-This is a bit empiric, the idea is to wait for the overall memory transfer
-to be done. There is no real need to interact immediately after the
-operation is terminated, so I pick that value to not make too many Hcalls
-just for that. From the test I did, that seems to be a reasonable choice.
+Node name is still not correct.
 
+>     2. Change HEX to lowercase.
+>     3. Use "ports" property.
+> v12 -> v13 :
+>     1. Drop the quotes for "$id" and "$schema"
+>     2. Remove "allOf" label
+>     3. Change node name from "i2c1" to "i2c"
+>     4. Change node name from "typec" to "usb-typec"
 > 
->> +	}
->> +}
->> +
->>  static void prod_single(unsigned int target_cpu)
->>  {
->>  	long hvrc;
->> @@ -673,9 +710,10 @@ static int pseries_migrate_partition(u64 handle)
->>  	vas_migration_handler(VAS_SUSPEND);
->>  
->>  	ret = pseries_suspend(handle);
->> -	if (ret == 0)
->> +	if (ret == 0) {
->>  		post_mobility_fixup();
->> -	else
->> +		wait_for_vasi_session_completed(handle);
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> ---
+>  .../bindings/usb/analogix,anx7411.yaml        | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
 > 
-> If this wasn't required until later patches, maybe a comment about why 
-> it's here? Could call it wait_for_migration() or similar too.
-> 
-> Looks okay though from my basic reading of PAPR.
-> 
-> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+> diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> new file mode 100644
+> index 000000000000..bbd071ba338f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/analogix,anx7411.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analogix ANX7411 Type-C controller bindings
+> +
+> +maintainers:
+> +  - Xin Ji <xji@analogixsemi.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - analogix,anx7411
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  connector:
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml
+> +    description:
+> +      Properties for usb c connector.
+> +
+> +    properties:
+> +      compatible:
+> +        const: usb-c-connector
+> +
+> +      power-role: true
+> +
+> +      data-role: true
+> +
+> +      try-power-role: true
+> +
+> +    required:
+> +      - compatible
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - connector
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        anx7411@2c {
 
-Thanks Nick for reviewing this series.
+Use generic node name:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-> 
->> +	} else
->>  		pseries_cancel_migration(handle, ret);
->>  
->>  	vas_migration_handler(VAS_RESUME);
->> -- 
->> 2.36.1
->>
->>
+> +            compatible = "analogix,anx7411";
+> +            reg = <0x2c>;
+> +            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-parent = <&gpio0>;
+> +
+> +            typec_con: connector {
+> +                compatible = "usb-c-connector";
+> +                power-role = "dual";
+> +                data-role = "dual";
+> +                try-power-role = "source";
+> +
+> +                ports {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +                    port@0 {
+> +                        reg = <0>;
+> +                        typec_con_ep: endpoint {
+> +                            remote-endpoint = <&usbotg_hs_ep>;
+> +                        };
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
 
+
+Best regards,
+Krzysztof

@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5E357291B
+	by mail.lfdr.de (Postfix) with ESMTP id A0E7D57291D
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiGLWPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S232454AbiGLWPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiGLWPl (ORCPT
+        with ESMTP id S229614AbiGLWPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:15:41 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DFDB0F92;
-        Tue, 12 Jul 2022 15:15:40 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id sz17so16760721ejc.9;
-        Tue, 12 Jul 2022 15:15:40 -0700 (PDT)
+        Tue, 12 Jul 2022 18:15:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305CFB0F92;
+        Tue, 12 Jul 2022 15:15:44 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so545976pjl.5;
+        Tue, 12 Jul 2022 15:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ce9EbG1/r2mPoib1PqC7ad2wqeNTOryA+tq46J/Zn/Y=;
-        b=d2U9AN/1kRnlu3pMxoWN6MrYOl39nfb6Hz/V/0RaqPeKLJJnxkT4BrvKYaivISg2Ol
-         H4roundp97p5LDgxQB8+YyY1Xz7TWmtiyaZ1x63d2KIRMDWAQ6un2Sp86+0KaGhU9Dh2
-         caXqzqyTDTC0JGb9Ia7s6+k0XgF0SPB1EBiBLahchr/ovFOLDajbARThIDrpxM6BNkw1
-         0wdMtZDAfJ/qpERnCYGyeYtHcD62NIVbltGG1H/71tekoCKJctQj02y/cbT4J3hxfh2f
-         HdOfVmucz/FREg3HWPvQcqV/AeA8ZeYauw+ot8sJ6XF+jY9VSAtbqYM3Z5Wo6JXIWj2o
-         fIaA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VNSOvMf1wiS65CVMi1hnE71txPGZzIrKVk/LaP0yIA0=;
+        b=P8IIfyb/MMaIGhr3xcwikcGvUINrer798RJJFZbDHsBd1B+vvlbJ7QP3GLwUp/3g4+
+         f8gYimNdJUamewuiN7h6Yc6NaU6TFiSpWLGiU4jt5DWooj0J7DBMYOR6Rhy8qmlvqhjE
+         6K2t9ba7X1BWCgH40iLSutIuekOS1z3CrjiN5OO+YGafRztQzHP6VbrX769srKNHOn80
+         r2ixaOL6CPQuRNgzyL1/xvHukMwIkWTxZSei6nMSj7uCOJU/hQvrkVwVH3G/Ni2ySMOc
+         G4E99EQ4r4ZfonZmu1T+jirF2HKF5mqT0VWTvjLex2T4YB9fhNDb79y28JIMd4hTYpoP
+         +hnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ce9EbG1/r2mPoib1PqC7ad2wqeNTOryA+tq46J/Zn/Y=;
-        b=Czu9hvj4QxiBBy/ZYxSOJAOdY0omQPrBlgBB81ljBHzMeHWyGnbRsI1GkVcKDLP1DJ
-         8ElmQfSjN87EGJ3YXT9rTSPYH2CsY3Sms7VlXMgU+WLFxwvrJK3yxNrsCyZxoMpV6PYC
-         JOxjgpHwPB/vFKHOyDsrAzp+5Sow5AypaLmrGEVPE8yuAzcixN6ZPobx2I+TwqA50y+t
-         omDcmyTDobIOdClsaI8mJ5xmvqQJWXJVfH/PZZVRkldKIbPjFDLQ4HI8kjOyioKjToQT
-         QpRdw+12aCy0lKPxmShUN7Wm4cYqWbhvf3yBXTTj7j1zuMx4AJPWeC9Q+/cX0mDoPjzS
-         65ZA==
-X-Gm-Message-State: AJIora/s3/iTpncvyWQYvNC22z20Hm0h3FP3aTizENpEnp2sXKuvQobO
-        96x3Vxw/9m9xIR7Xcr7oew2c9vURrLRkpCSgiOs=
-X-Google-Smtp-Source: AGRyM1uC3iFdS9P/O2GTnrzey/faWWqRLs7XS8GCjaeq7gTi1aFfPe85q9TlTqB4PP+IhASqSmVfDXbVELNOtY5qQIc=
-X-Received: by 2002:a17:906:9bdd:b0:72b:3cab:eade with SMTP id
- de29-20020a1709069bdd00b0072b3cabeademr310951ejc.58.1657664138953; Tue, 12
- Jul 2022 15:15:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VNSOvMf1wiS65CVMi1hnE71txPGZzIrKVk/LaP0yIA0=;
+        b=wtzADRKmOpofxNrLWT7HclfFrf+r3p4fFoXTAWvjVw9Bavp7S5m5/AQBMZ/OYpqW/V
+         5+IPdhi0A+wSN4+5HNuvhX8FqGFiOICtMn1C8GioK6WBYQIm8y/YNhaFlhxJcKGMBdaE
+         PZ6+xTAGmZyo8uIWALMn0kcIOfF5JZuoEPJ0/OIEeEvSaPESUgeHk+NNQwZMjIVee1cT
+         zU4MAoDwSkbu33kUO/3cYttIoLLLjPJGRgLEh1Sl1/cJbsiQLEImBcPGkdRE6uBHTBpn
+         XzMvLriL5BsRO38kn3CaUwc5GsSUwR8BiK4Ten4nzCrj4b0L7UkNpVyMCCjLJFDb7yMP
+         cfYw==
+X-Gm-Message-State: AJIora/ie2/xAyKfRVHcmVA06GewaKsOeffDOoaX4RWaQAOAEq2IYWUG
+        IrXho3ZlRMCOhvFXx4njE1rRVkHFWw0=
+X-Google-Smtp-Source: AGRyM1uer6hihTFeglZMipJB6cNWERL/KN0RAAkXs4nl+RhH248E9OeUoUsgLJAOpdzlDHHY0vukrA==
+X-Received: by 2002:a17:90b:1811:b0:1ef:d453:9539 with SMTP id lw17-20020a17090b181100b001efd4539539mr6676405pjb.170.1657664143538;
+        Tue, 12 Jul 2022 15:15:43 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bn19-20020a17090b0a9300b001e29ddf9f4fsm97287pjb.3.2022.07.12.15.15.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 15:15:42 -0700 (PDT)
+Message-ID: <036b6113-d6a1-ca82-5033-98bc9caa7255@gmail.com>
+Date:   Tue, 12 Jul 2022 15:15:41 -0700
 MIME-Version: 1.0
-References: <20220711162827.184743-1-roman.gushchin@linux.dev>
- <CAADnVQ+2Az23WLHj_1pQWYXdd8CbeKooCLrkT_GnzKXV7Yp8hw@mail.gmail.com> <CALvZod5uPV9cNKCMjs3HmadVnF--fum5BgG-Zcv1vTM_Bak8hw@mail.gmail.com>
-In-Reply-To: <CALvZod5uPV9cNKCMjs3HmadVnF--fum5BgG-Zcv1vTM_Bak8hw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 12 Jul 2022 15:15:27 -0700
-Message-ID: <CAADnVQJPm13Mu_XMyzsYk40eW-4CPKWF52LkwwJTJhA6OyJT+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: reparent bpf maps on memcg offlining
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] MAINTAINERS: Change mentions of mpm to olivia
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, olivia@selenic.com,
+        paul.gortmaker@windriver.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        gregkh@linuxfoundation.org
+References: <20220712185419.45487-1-f.fainelli@gmail.com>
+ <20220712200010.kbx24o2nxobrhmey@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220712200010.kbx24o2nxobrhmey@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,111 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 3:11 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Tue, Jul 12, 2022 at 2:49 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 9:28 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> > >
-> > > The memory consumed by a mpf map is always accounted to the memory
-> > > cgroup of the process which created the map. The map can outlive
-> > > the memory cgroup if it's used by processes in other cgroups or
-> > > is pinned on bpffs. In this case the map pins the original cgroup
-> > > in the dying state.
-> > >
-> > > For other types of objects (slab objects, non-slab kernel allocations,
-> > > percpu objects and recently LRU pages) there is a reparenting process
-> > > implemented: on cgroup offlining charged objects are getting
-> > > reassigned to the parent cgroup. Because all charges and statistics
-> > > are fully recursive it's a fairly cheap operation.
-> > >
-> > > For efficiency and consistency with other types of objects, let's do
-> > > the same for bpf maps. Fortunately thanks to the objcg API, the
-> > > required changes are minimal.
-> > >
-> > > Please, note that individual allocations (slabs, percpu and large
-> > > kmallocs) already have the reparenting mechanism. This commit adds
-> > > it to the saved map->memcg pointer by replacing it to map->objcg.
-> > > Because dying cgroups are not visible for a user and all charges are
-> > > recursive, this commit doesn't bring any behavior changes for a user.
-> > >
-> > > v2:
-> > >   added a missing const qualifier
-> > >
-> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > > Reviewed-by: Shakeel Butt <shakeelb@google.com>
-> > > ---
-> > >  include/linux/bpf.h  |  2 +-
-> > >  kernel/bpf/syscall.c | 35 +++++++++++++++++++++++++++--------
-> > >  2 files changed, 28 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > index 2b21f2a3452f..85a4db3e0536 100644
-> > > --- a/include/linux/bpf.h
-> > > +++ b/include/linux/bpf.h
-> > > @@ -221,7 +221,7 @@ struct bpf_map {
-> > >         u32 btf_vmlinux_value_type_id;
-> > >         struct btf *btf;
-> > >  #ifdef CONFIG_MEMCG_KMEM
-> > > -       struct mem_cgroup *memcg;
-> > > +       struct obj_cgroup *objcg;
-> > >  #endif
-> > >         char name[BPF_OBJ_NAME_LEN];
-> > >         struct bpf_map_off_arr *off_arr;
-> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > index ab688d85b2c6..ef60dbc21b17 100644
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -419,35 +419,52 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
-> > >  #ifdef CONFIG_MEMCG_KMEM
-> > >  static void bpf_map_save_memcg(struct bpf_map *map)
-> > >  {
-> > > -       map->memcg = get_mem_cgroup_from_mm(current->mm);
-> > > +       /* Currently if a map is created by a process belonging to the root
-> > > +        * memory cgroup, get_obj_cgroup_from_current() will return NULL.
-> > > +        * So we have to check map->objcg for being NULL each time it's
-> > > +        * being used.
-> > > +        */
-> > > +       map->objcg = get_obj_cgroup_from_current();
-> > >  }
-> > >
-> > >  static void bpf_map_release_memcg(struct bpf_map *map)
-> > >  {
-> > > -       mem_cgroup_put(map->memcg);
-> > > +       if (map->objcg)
-> > > +               obj_cgroup_put(map->objcg);
-> > > +}
-> > > +
-> > > +static struct mem_cgroup *bpf_map_get_memcg(const struct bpf_map *map) {
-> > > +       if (map->objcg)
-> > > +               return get_mem_cgroup_from_objcg(map->objcg);
-> > > +
-> > > +       return root_mem_cgroup;
-> > >  }
-> > >
-> > >  void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
-> > >                            int node)
-> > >  {
-> > > -       struct mem_cgroup *old_memcg;
-> > > +       struct mem_cgroup *memcg, *old_memcg;
-> > >         void *ptr;
-> > >
-> > > -       old_memcg = set_active_memcg(map->memcg);
-> > > +       memcg = bpf_map_get_memcg(map);
-> > > +       old_memcg = set_active_memcg(memcg);
-> > >         ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
-> > >         set_active_memcg(old_memcg);
-> > > +       mem_cgroup_put(memcg);
-> >
-> > Here we might css_put root_mem_cgroup.
-> > Should we css_get it when returning or
-> > it's marked as CSS_NO_REF ?
-> > But mem_cgroup_alloc() doesn't seem to be doing that marking.
-> > I'm lost at that code.
->
-> CSS_NO_REF is set for root_mem_cgroup in cgroup_init_subsys().
+On 7/12/22 13:00, Uwe Kleine-König wrote:
+> On Tue, Jul 12, 2022 at 11:54:19AM -0700, Florian Fainelli wrote:
+>> Following this mercurial changeset:
+>> https://www.mercurial-scm.org/repo/hg-stable/rev/d4ba4d51f85f
+>>
+>> update the MAINTAINERS entry to replace the now obsolete identity.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>> This was first submitted by Uwe:
+>>
+>> https://lore.kernel.org/lkml/20210920080635.253826-1-u.kleine-koenig@pengutronix.de/
+> 
+> My variant was to drop Matt/Olivia. Given that we didn't get any
+> feedback from them, that's still what I would favour.
+> 
+> Without any feedback (and committment?) from Olivia, I tend to nack this
+> patch.
 
-Ahh. I see that
-css = ss->css_alloc(NULL); css->flags |= CSS_NO_REF; now.
-Thanks.
+I do not care either way, by explicitly CC'ing Olivia we give a fighting 
+chance of seeing one's identify continue to be listed under MAINTAINERS. 
+Now without any recent commits in the past 12 years, one could argue 
+that removal is long due.
+
+Either way is fine as long as we stop getting SMTP server bounces which 
+is just extremely annoying...
+-- 
+Florian

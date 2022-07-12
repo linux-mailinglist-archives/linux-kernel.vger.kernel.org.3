@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2919A5721A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC295721A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiGLRUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 13:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S232922AbiGLRW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 13:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiGLRUP (ORCPT
+        with ESMTP id S231402AbiGLRWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 13:20:15 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B5967C81
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:20:12 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id d12so15053255lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:20:12 -0700 (PDT)
+        Tue, 12 Jul 2022 13:22:54 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E6A7FE71;
+        Tue, 12 Jul 2022 10:22:53 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o15so8406442pjh.1;
+        Tue, 12 Jul 2022 10:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ibrUHnlGz87syZWBzvYZCl2iDjwrLt5IxsZ/+T6H5Kk=;
-        b=LKapj/7eKcH3Ctl0xLFhsHrioyJ2DRfd8EH69UtRZl8yDlKgnJU/i5wG+H7SaVVYjF
-         1/+fCuNEwfB8Df87JbtOiS1YHhVYLPvwSWtdiKFDJljv4fYaR8HScOgqK1fb1svFnAUu
-         NqoEVjX2rZPj90rE+JjAt/7BvdepDYNW7bwldQVTvpr8M4JLpSAYt42iaX+61GtVIcTa
-         3Od0RJSgItJlic/n5ypdpsuhC/CuT/hyexCfQGrSnw7dwoygyhRJBtA+QX9L2sZ4tG6N
-         01Ii3o+98GrbVlEZxHHM5WeTLsFeE+BTNFhZjap7o9NT9FpV64jK595ilhgduNMscK1C
-         UCeg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wn44vmZF7ZCsPiLqV7Yl4fs8sVOrgYJYOCwEWGHZPts=;
+        b=O0aDBxAxZu9L3eRQ8FAC63FmGRfZyGx6gwPpk7RBdvQV2DExJSgMY9dWoLvG9Y9UGG
+         QMHo66Y6rseSS6qMeFCfW2elkCeyML3hgus3rAQmoLmX4qvgCBEsG4jxfulgAqdLodKV
+         qlZVej+ub0vqHMWC6vlyTI3sFxoy7fCfy9u5qUgariNxVh73r376fqPP4LXV8EXLWsEt
+         SprMEBOmQhyuAjnCZdLlflwX7o+jyeTQXAwNQEcM6hyJiLNmz1UHSzcYUGAsbhxZU/bh
+         HwOGH8volOEj9rqHc8oBz6i3ArjFtFCt+K9uPmPWc0oD1fxO/oShlqHgbtJ9KAUuIt1S
+         RTNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ibrUHnlGz87syZWBzvYZCl2iDjwrLt5IxsZ/+T6H5Kk=;
-        b=MZmmbmLpXGjhPEvtErPqf6VnsSiw5rIxQZphKXH/iHEyqDPneML3JRGai6ag6p6IEC
-         lz3/oIJx3w+w9wQJlYiOJM8yo0Z8Of+6R+ocBVqsuxqzJQVvS+tdVstVedfLFh/B53vj
-         82itykHu8uhR2VHARpe8itcUscIjo7Gkuzjo55HI5iu8Oz26aQZ0+rwI5KN7AhTUwVXe
-         KTYRasgPD2eLHNfjiJYpfHdnZ3+m0GSqSzreFeII/ZsStqpRNYnzpF8uGd2x03tr0liL
-         Jvhh5hA5i2Y73NpHROunkR1Jn8qa6oRLYbLzIU5QEEXLrY/Li1Ui7Nizd5ub7y/rOHqC
-         gUhQ==
-X-Gm-Message-State: AJIora+TumHdz5nXxLXs/fh/QOdzb2adHtyB/KnmFOCyUgZTWgGbZ4q0
-        o0S/jpJsjg9TCbF1DoIeyvzPp4jg/3Uoo7Bia0b/uA==
-X-Google-Smtp-Source: AGRyM1sAh9uywucDWtlWxMee+W8CJDTIEAdUt5aFrGoVFJdcm32kcNTvUU60L8KP6MWXbwXkjeM/a8fSk7y6Hqk3/jk=
-X-Received: by 2002:a05:6512:1523:b0:489:db27:c171 with SMTP id
- bq35-20020a056512152300b00489db27c171mr8262355lfb.58.1657646410942; Tue, 12
- Jul 2022 10:20:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wn44vmZF7ZCsPiLqV7Yl4fs8sVOrgYJYOCwEWGHZPts=;
+        b=k2keG4xaGy9TPsvxPs1CAl/xCvJF2e8F4qhrGr1cPNGfkMlf57I5FWRY++ddt6CZP0
+         E8/8XwBRQHRtsA/npLxhQu9HzWhl1kyh8SlROQlEe4UlAy7IGER+XR9pUHZ2TRNFfTJM
+         tjI3FqHLFrKGK1kHwYuHPwLAugchrPv2bFTwaVLBYhv58CaOPso9sK80mfe0duF5wwdK
+         /aOByE8fSxbwzgI/0vbsd4bAHMWC/qEwkWd6voKaqT49f+XBOtMTzX4U6NgcZb+1EjFy
+         vvIHXC0AoHTsbVpwugX3XilqCFZRXj3IzKj/PCQZem5VCoe67uLXVl6GPlvAmLjZ0Frr
+         EjqA==
+X-Gm-Message-State: AJIora/c8t2pJsg/4xaPvGnfZfFOsfxpbDTdplWG/u6jUlgWiqtAfEDi
+        51UriEnQRCLCl8lKrodpYPnfJ6RKvuA=
+X-Google-Smtp-Source: AGRyM1tEPokrF+nMxiPARKUgDBDQTPHDmjWtprRbWD60JdcasBSdEgQwUmi3SYv2oJmO4j4D5Q9k0g==
+X-Received: by 2002:a17:90b:1488:b0:1ef:82bb:5f08 with SMTP id js8-20020a17090b148800b001ef82bb5f08mr5573929pjb.214.1657646572881;
+        Tue, 12 Jul 2022 10:22:52 -0700 (PDT)
+Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
+        by smtp.gmail.com with ESMTPSA id t6-20020a632246000000b0041296135280sm1926788pgm.88.2022.07.12.10.22.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 10:22:51 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:22:50 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        chao.p.peng@intel.com
+Subject: Re: [PATCH v7 000/102] KVM TDX basic feature support
+Message-ID: <20220712172250.GJ1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <20220711151701.GA1375147@ls.amr.corp.intel.com>
+ <20220712050714.GA26573@gao-cwp>
+ <20220712105419.GB2805143@chaop.bj.intel.com>
 MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-20-jthoughton@google.com> <Ysy1EySRmjxl2TmQ@monkey>
-In-Reply-To: <Ysy1EySRmjxl2TmQ@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 12 Jul 2022 10:19:59 -0700
-Message-ID: <CADrL8HVimb9qx8fjhgFMfj2hWwD3+6_ZY7W=gHbf6as6qbiLYQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 19/26] hugetlb: add HGM support for copy_hugetlb_page_range
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712105419.GB2805143@chaop.bj.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +76,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 4:41 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 06/24/22 17:36, James Houghton wrote:
-> > This allows fork() to work with high-granularity mappings. The page
-> > table structure is copied such that partially mapped regions will remain
-> > partially mapped in the same way for the new process.
-> >
-> > Signed-off-by: James Houghton <jthoughton@google.com>
-> > ---
-> >  mm/hugetlb.c | 74 +++++++++++++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 59 insertions(+), 15 deletions(-)
->
-> FYI -
-> With https://lore.kernel.org/linux-mm/20220621235620.291305-5-mike.kravetz@oracle.com/
-> copy_hugetlb_page_range() should never be called for shared mappings.
-> Since HGM only works on shared mappings, code in this patch will never
-> be executed.
->
-> I have a TODO to remove shared mapping support from copy_hugetlb_page_range.
+On Tue, Jul 12, 2022 at 06:54:19PM +0800,
+Chao Peng <chao.p.peng@linux.intel.com> wrote:
 
-Thanks Mike. If I understand things correctly, it seems like I don't
-have to do anything to support fork() then; we just don't copy the
-page table structure from the old VMA to the new one. That is, as
-opposed to having the same bits of the old VMA being mapped in the new
-one, the new VMA will have an empty page table. This would slightly
-change how userfaultfd's behavior on the new VMA, but that seems fine
-to me.
+> On Tue, Jul 12, 2022 at 01:07:20PM +0800, Chao Gao wrote:
+> > On Mon, Jul 11, 2022 at 08:17:01AM -0700, Isaku Yamahata wrote:
+> > >Hi. Because my description on large page support was terse, I wrote up more
+> > >detailed one.  Any feedback/thoughts on large page support?
+> > >
+> > >TDP MMU large page support design
+> > >
+> > >Two main discussion points
+> > >* how to track page status. private vs shared, no-largepage vs can-be-largepage
+> > 
+> > ...
+> > 
+> > >
+> > >Tracking private/shared and large page mappable
+> > >-----------------------------------------------
+> > >VMM needs to track that page is mapped as private or shared at 4KB granularity.
+> > >For efficiency of EPT violation path (****), at 2MB and 1GB level, VMM should
+> > >track the page can be mapped as a large page (regarding private/shared).  VMM
+> > >updates it on MapGPA and references it on the EPT violation path. (****)
+> > 
+> > Isaku,
+> > 
+> > + Peng Chao
+> > 
+> > Doesn't UPM guarantee that 2MB/1GB large page in CR3 should be either all
+> > private or all shared?
+> > 
+> > KVM always retrieves the mapping level in CR3 and enforces that EPT's
+> > page level is not greater than that in CR3. My point is if UPM already enforces
+> > no mixed pages in a large page, then KVM needn't do that again (UPM can
+> > be trusted).
+> 
+> The backing store in the UMP can tell KVM which page level it can
+> support for a given private gpa, similar to host_pfn_mapping_level() for
+> shared address.
+>
+> However, this solely represents the backing store's capability, KVM
+> still needs additional info to decide whether that can be safely mapped
+> as 2M/1G, e.g. all the following pages in the 2M/1G range should be all
+> private, currently this is not something backing store can tell.
 
-- James
+This argument applies to shared GPA.  The shared pages is backed by normal file
+mapping with UPM.  When KVM is mapping shared GPA, the same check is needed.  So
+I think KVM has to track all private or all shared or no-largepage at 2MB/1GB
+level.  If UPM tracks shared-or-private at 4KB level, probably KVM may not need to
+track it at 4KB level.
 
-> --
-> Mike Kravetz
+
+> Actually, in UPM v7 we let KVM record this info so one possible solution
+> is making use of it.
+> 
+>   https://lkml.org/lkml/2022/7/6/259
+> 
+> Then to map a page as 2M, KVM needs to check:
+>   - Memory backing store support that level
+>   - All pages in 2M range are private as we recorded through
+>     KVM_MEMORY_ENCRYPT_{UN,}REG_REGION
+>   - No existing partial 4K map(s) in 2M range
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

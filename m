@@ -2,191 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1952257129F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596C85712A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiGLG52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S232131AbiGLG6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGLG5Y (ORCPT
+        with ESMTP id S229962AbiGLG54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:57:24 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CFC951CC;
-        Mon, 11 Jul 2022 23:57:22 -0700 (PDT)
-X-UUID: 098aa1e34f294927bc99f0d4833748ad-20220712
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:cfc356d1-53a1-4a27-8af5-3e9cd555aa1f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:7df7bb32-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 098aa1e34f294927bc99f0d4833748ad-20220712
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 558935923; Tue, 12 Jul 2022 14:57:17 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 12 Jul 2022 14:57:15 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Jul 2022 14:57:15 +0800
-Message-ID: <b30154d38b4c0216ddb6c587c1120846e2209335.camel@mediatek.com>
-Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
-        <LiangXu.Xu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 12 Jul 2022 14:57:15 +0800
-In-Reply-To: <6b4a4be9b5c93b1931cdbd5b009eac3bfa9badbe.camel@mediatek.com>
-References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
-         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
-         <6b4a4be9b5c93b1931cdbd5b009eac3bfa9badbe.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 12 Jul 2022 02:57:56 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DEA97485
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so10519070pjl.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wt7MycguGN5t84A6c+lbathd4HawDHnJrnlkQhSwpe0=;
+        b=CzwBC2T4Mqa2pzDTBcG633rO5N28nYTPP7bGlbVQV9ojiSG47PESlVsJEsYM6TYa5S
+         SCa0CD0atvUVv83Wz8vaUOz3hOwmRj39syMiymUzTjpC3L2X8BvaEEfVIEN4iWoYp7nM
+         nldD0Ks1sWeY09r68fIA5kMFBY+7HlaXGr+oEm+N41dA57mAoeUHiBpwotaR1W39JhUG
+         oqtRj1a0Jen39VzVZ06wqBa0sj9UEfZI100tVi0NAH1QzwCGP94mzFRTIOJBf9N/jp7K
+         999o1bKP8bC0uiCKD8z6aaMFLWRN8BseIEotNtKY+069sZtPalh3fH8RHq1wxFEIsfYb
+         crUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wt7MycguGN5t84A6c+lbathd4HawDHnJrnlkQhSwpe0=;
+        b=r5xU9SsxKAeDrnscXANntMLv4QNiyFPEUs0+XHMozlEr3PUO00rE1UiAt6RR5ci6zb
+         eWQG172O96R4PGPk6tmLK5y9OvUxx1FRIeoolncJUgmoEdpTlPpkFJI9UK+kmVVJBj3L
+         JKui/WqGkOzXf5m7XrFl0LYxtvmfxIpVhgWa9AK0Vpj7Ps+rX+BfVHFC6+Jy8YFHoC1D
+         y6mFa6pryTwMFKuQUAasu93QMZIkIkoBZQkRxjqFBTiD36Q+a4B+y02yag1caCI1NWir
+         2Vrior96Y5XXfg/XwO6B8/Z17j4EzWqxrvdJpunAb9Nl6iGr9VLZqvOWahevfk79nxzA
+         10Ow==
+X-Gm-Message-State: AJIora8ne6k/EsjR9ryDm3le9/cUaJ9KM8yFMY+Y9LSS5yuKl/swod20
+        xcakDa+8PJA0pnlqqOtrIBN5DA==
+X-Google-Smtp-Source: AGRyM1tbdv2oUxsRq8y9CVKh8tbYW++1GOJcDl6GNmh5W0CAyCZBUi4oZW4X6cLv2UUMsK0rBeIiVg==
+X-Received: by 2002:a17:903:1111:b0:16a:acf4:e951 with SMTP id n17-20020a170903111100b0016aacf4e951mr22284874plh.72.1657609075494;
+        Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
+Received: from [10.4.225.66] ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id p6-20020a17090a4f0600b001ef9114eb9dsm5910565pjh.42.2022.07.11.23.57.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
+Message-ID: <8c0e93e2-72e8-bd67-e5a4-c8e3bb888bfe@bytedance.com>
+Date:   Tue, 12 Jul 2022 14:57:48 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [PATCH v1 0/2] arm64: run softirqs on the per-CPU IRQ stack
+Content-Language: en-US
+To:     arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-07 at 13:14 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
+
+
+On 2022/7/8 17:49, Qi Zheng wrote:
+> Hi all,
 > 
-> On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a embedded displayport driver for the MediaTek
-> > mt8195
-> > SoC.
-> > 
-> > It supports the MT8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jitao shi <jitao.shi@mediatek.com>
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
+> Currently arm64 supports per-CPU IRQ stack, but softirqs are
+> still handled in the task context.
 > 
-> [snip]
+> Since any call to local_bh_enable() at any level in the task's
+> call stack may trigger a softirq processing run, which could
+> potentially cause a task stack overflow if the combined stack
+> footprints exceed the stack's size. And we did encounter this
+> situation in the real environment:
 > 
-> > +
-> > +static ssize_t mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
+> Call trace:
+>   dump_backtrace+0x0/0x1cc,
+>   show_stack+0x14/0x1c,
+>   dump_stack+0xc4/0xfc,
+>   panic+0x150/0x2c8,
+>   panic+0x0/0x2c8,
+>   handle_bad_stack+0x11c/0x130,
+>   __bad_stack+0x88/0x8c,
+>   vsnprintf+0x2c/0x524,
+>   vscnprintf+0x38/0x7c,
+>   scnprintf+0x6c/0x90,
+>   /* ... */
+>   __do_softirq+0x1e0/0x370,
+>   do_softirq+0x40/0x50,
+>   __local_bh_enable_ip+0x8c/0x90,
+>   _raw_spin_unlock_bh+0x1c/0x24,
+>   /* ... */
+>   process_one_work+0x1dc/0x3e4,
+>   worker_thread+0x260/0x360,
+>   kthread+0x118/0x128,
+>   ret_from_fork+0x10/0x18,
 > 
-> The caller never use the return value, so let this function to void.
+> So let's run these softirqs on the IRQ stack as well.
 > 
-> > +{
-> > +	ssize_t ret;
-> > +	u8 sink_count;
-> > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
-> > +	u32 link_status_reg = DP_LANE0_1_STATUS;
-> > +
-> > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
-> > &sink_count);
+> This series is based on next-20220707.
 > 
-> You read sink_count but never use it, so this read is redundant.
-> Remove
-> it.
+> Comments and suggestions are welcome.
+> 
+> Thanks,
+> Qi
+> 
+> RFC: https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
+> 
+> Changelog in RFC -> v1:
+>   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq stacks on PREEMPT_RT.")
+> 
+> Qi Zheng (2):
+>    arm64: run softirqs on the per-CPU IRQ stack
+>    arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> 
+>   arch/arm64/Kconfig                 |  2 ++
+>   arch/arm64/include/asm/exception.h |  4 +++-
+>   arch/arm64/kernel/entry-common.c   | 30 ++++++++++++++++++++----------
+>   arch/arm64/kernel/entry.S          |  6 ++++--
+>   arch/arm64/kernel/irq.c            | 14 ++++++++++++++
+>   5 files changed, 43 insertions(+), 13 deletions(-)
 > 
 
-Hello CK,
+Hi all,
 
-this is a pre-request for the following codes, so I think we need to
-keep this.
+Any other suggestions and comments for this patch set? If not, can
+this patch set be merged into some trees for testing? :)
 
-If we failed to read sink_count, we don't need to do the driver under
-this.
-
-> > +	if (ret < 1) {
-> > +		drm_err(mtk_dp->drm_dev, "Read sink count failed\n");
-> > +		return ret == 0 ? -EIO : ret;
-> > +	}
-> > +
-> > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> > link_status,
-> > +			       sizeof(link_status));
-> > +	if (!ret) {
-> > +		drm_err(mtk_dp->drm_dev, "Read link status failed\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	drm_dp_channel_eq_ok(link_status, mtk_dp-
-> > > train_info.lane_count);
-> 
-> This function just return true or false, and you does not process the
-> return value, so this is redundant. Remove it.
-> 
-
-I will handle this in next version.
-
-BRs,
-Bo-Chen
-
-> Regard,
-> CK
-> 
-> > +
-> > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-> > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> > DP_DEVICE_SERVICE_IRQ_VECTOR,
-> > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
-> > +
-> > +	return 0;
-> > +}
-> 
-> 
-
+Thanks,
+Qi

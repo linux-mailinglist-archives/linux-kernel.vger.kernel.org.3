@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC69571786
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D74457178A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiGLKp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S231761AbiGLKsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGLKp5 (ORCPT
+        with ESMTP id S229542AbiGLKss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:45:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9F5AD879;
-        Tue, 12 Jul 2022 03:45:56 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CAhB6p026384;
-        Tue, 12 Jul 2022 10:45:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=moa9v0DPAqYqbaHqt5FoLScyi4YMCELdoQ0BpuluAzk=;
- b=CTJkPoEnjD82mh1Om25UM3nJseag/1ojrLQCmLo0ooIYU5w8Fz9CMxOHH8mUeU85/Rfh
- 8nmV6WuAbLqkT6dVxiCqRtq9Q+BLmYPJuCV44aL3hFXGDgaSoech3ici31MDbXGLUc7v
- 53SOwIZ5Z+dYN4RNMHehs7xJOqcUxX5y8smHxb0b8mn6HQgnjIjRNRWgPXG0FvFIm6p9
- V7b1KA4gHUQgebZx7ErgGlypNQvLecZ++oO+t2LrM90UqnqZTQwmYVkCimk0F8ozym4g
- 7auO0S8lAhSBimGDhk9UgH1PHhVwYwosJ4IRmP0xVh0moUz0RytHSea76DUuMM0oclmS /A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h94wf4fu3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:45:54 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CATGVb008295;
-        Tue, 12 Jul 2022 10:45:54 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h94wf4ftv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:45:54 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CAapcG012120;
-        Tue, 12 Jul 2022 10:45:53 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02dal.us.ibm.com with ESMTP id 3h71a9tcc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:45:53 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CAjqnF6226548
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 10:45:52 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A45ABAC05F;
-        Tue, 12 Jul 2022 10:45:52 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7C2EBAC05B;
-        Tue, 12 Jul 2022 10:45:52 +0000 (GMT)
-Received: from amdrome3.watson.ibm.com (unknown [9.2.130.16])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 10:45:52 +0000 (GMT)
-From:   Dov Murik <dovmurik@linux.ibm.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Dov Murik <dovmurik@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: siphash: Fix typo in the name of offsetofend macro
-Date:   Tue, 12 Jul 2022 10:44:55 +0000
-Message-Id: <20220712104455.1408150-1-dovmurik@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Jul 2022 06:48:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0F989580
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:48:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC2781515;
+        Tue, 12 Jul 2022 03:48:46 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E9003F792;
+        Tue, 12 Jul 2022 03:48:44 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:48:43 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use
+ util_fits_cpu()
+Message-ID: <20220712104843.frbtkgkiftaovcon@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-3-qais.yousef@arm.com>
+ <CAKfTPtAxK=NGbpQkiW8-tx3kEwp-M7LAr1Rq_kdWDdsSq7Hd9A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jhl3QEua3AWARSZK74ikH1GMBdqqvKgq
-X-Proofpoint-ORIG-GUID: vNJNBBy_-KzZM-OsuoR89l9B3HH7KbpL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- suspectscore=0 malwarescore=0 mlxlogscore=800 priorityscore=1501
- phishscore=0 impostorscore=0 mlxscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAxK=NGbpQkiW8-tx3kEwp-M7LAr1Rq_kdWDdsSq7Hd9A@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The siphash documentation misspelled "offsetendof" instead of
-"offsetofend".
+On 07/11/22 15:09, Vincent Guittot wrote:
+> On Wed, 29 Jun 2022 at 21:48, Qais Yousef <qais.yousef@arm.com> wrote:
 
-Fixes: 2c956a60778cbb ("siphash: add cryptographically secure PRF")
-Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
----
- Documentation/security/siphash.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
 
-diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
-index a10380cb78e5..023bd95c74a5 100644
---- a/Documentation/security/siphash.rst
-+++ b/Documentation/security/siphash.rst
-@@ -85,7 +85,7 @@ Often times the XuY functions will not be large enough, and instead you'll
- want to pass a pre-filled struct to siphash. When doing this, it's important
- to always ensure the struct has no padding holes. The easiest way to do this
- is to simply arrange the members of the struct in descending order of size,
--and to use offsetendof() instead of sizeof() for getting the size. For
-+and to use offsetofend() instead of sizeof() for getting the size. For
- performance reasons, if possible, it's probably a good thing to align the
- struct to the right boundary. Here's an example::
- 
--- 
-2.25.1
+> > @@ -8502,15 +8504,16 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> >         trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+> >
+> >         sdg->sgc->capacity = capacity;
+> > -       sdg->sgc->min_capacity = capacity;
+> > -       sdg->sgc->max_capacity = capacity;
+> > +       sdg->sgc->min_capacity_cpu = cpu;
+> > +       sdg->sgc->max_capacity_cpu = cpu;
+> 
+> you make these fields useless. There is only one cpu per sched_group
+> at this level so you don't need to save the twice cpu number of the
+> nly cpu of this group
 
+Ah, so we can use group->asym_prefer_cpu then?
+
+I think I got confused and thought we could cover multiple capacity levels
+there.
+
+> >  }
+> >
+> >  void update_group_capacity(struct sched_domain *sd, int cpu)
+> >  {
+> > -       struct sched_domain *child = sd->child;
+> >         struct sched_group *group, *sdg = sd->groups;
+> > -       unsigned long capacity, min_capacity, max_capacity;
+> > +       struct sched_domain *child = sd->child;
+> > +       int min_capacity_cpu, max_capacity_cpu;
+> > +       unsigned long capacity;
+> >         unsigned long interval;
+> >
+> >         interval = msecs_to_jiffies(sd->balance_interval);
+> > @@ -8523,8 +8526,7 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+> >         }
+> >
+> >         capacity = 0;
+> > -       min_capacity = ULONG_MAX;
+> > -       max_capacity = 0;
+> > +       min_capacity_cpu = max_capacity_cpu = cpu;
+> >
+> >         if (child->flags & SD_OVERLAP) {
+> >                 /*
+> > @@ -8536,29 +8538,44 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+> >                         unsigned long cpu_cap = capacity_of(cpu);
+> >
+> >                         capacity += cpu_cap;
+> > -                       min_capacity = min(cpu_cap, min_capacity);
+> > -                       max_capacity = max(cpu_cap, max_capacity);
+> > +                       if (cpu_cap < capacity_of(min_capacity_cpu))
+> > +                               min_capacity_cpu = cpu;
+> > +
+> > +                       if (cpu_cap > capacity_of(max_capacity_cpu))
+> > +                               max_capacity_cpu = cpu;
+> >                 }
+> >         } else  {
+> >                 /*
+> >                  * !SD_OVERLAP domains can assume that child groups
+> >                  * span the current group.
+> >                  */
+> > +               unsigned long min_capacity = ULONG_MAX;
+> > +               unsigned long max_capacity = 0;
+> >
+> >                 group = child->groups;
+> >                 do {
+> >                         struct sched_group_capacity *sgc = group->sgc;
+> > +                       unsigned long cpu_cap_min = capacity_of(sgc->min_capacity_cpu);
+> > +                       unsigned long cpu_cap_max = capacity_of(sgc->max_capacity_cpu);
+> 
+> By replacing sgc->min_capacity with sgc->min_capacity_cpu, the
+> min_capacity is no more stable and can become > max_capacity
+
+Right.
+
+> 
+> >
+> >                         capacity += sgc->capacity;
+> > -                       min_capacity = min(sgc->min_capacity, min_capacity);
+> > -                       max_capacity = max(sgc->max_capacity, max_capacity);
+> > +                       if (cpu_cap_min < min_capacity) {
+> > +                               min_capacity = cpu_cap_min;
+> > +                               min_capacity_cpu = sgc->min_capacity_cpu;
+> > +                       }
+> > +
+> > +                       if (cpu_cap_max > max_capacity) {
+> > +                               max_capacity = cpu_cap_max;
+> > +                               max_capacity_cpu = sgc->max_capacity_cpu;
+> > +                       }
+> > +
+> >                         group = group->next;
+> >                 } while (group != child->groups);
+> >         }
+> >
+> >         sdg->sgc->capacity = capacity;
+> > -       sdg->sgc->min_capacity = min_capacity;
+> > -       sdg->sgc->max_capacity = max_capacity;
+> > +       sdg->sgc->min_capacity_cpu = min_capacity_cpu;
+> > +       sdg->sgc->max_capacity_cpu = max_capacity_cpu;
+> >  }
+> >
+> >  /*
+> > @@ -8902,7 +8919,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> >          * internally or be covered by avg_load imbalance (eventually).
+> >          */
+> >         if (sgs->group_type == group_misfit_task &&
+> > -           (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+> > +           (!capacity_greater(env->dst_cpu, sg->sgc->max_capacity_cpu) ||
+> >              sds->local_stat.group_type != group_has_spare))
+> >                 return false;
+> >
+> > @@ -8986,7 +9003,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> >          */
+> >         if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
+> >             (sgs->group_type <= group_fully_busy) &&
+> > -           (capacity_greater(sg->sgc->min_capacity, capacity_of(env->dst_cpu))))
+> > +           (capacity_greater(sg->sgc->min_capacity_cpu, env->dst_cpu)))
+> >                 return false;
+> >
+> >         return true;
+> > @@ -9108,7 +9125,7 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+> >
+> >         /* Check if task fits in the group */
+> >         if (sd->flags & SD_ASYM_CPUCAPACITY &&
+> > -           !task_fits_capacity(p, group->sgc->max_capacity)) {
+> > +           !task_fits_cpu(p, group->sgc->max_capacity_cpu)) {
+> 
+> All the changes and added complexity above for this line. Can't you
+> find another way ?
+
+You're right, I might have got carried away trying to keep the logic the same.
+
+Can we use group->asym_prefer_cpu or pick a cpu from group->sgc->cpumask
+instead?
+
+I'll dig more into it anyway and try to come up with simpler alternative.
+
+
+Thanks!
+
+--
+Qais Yousef

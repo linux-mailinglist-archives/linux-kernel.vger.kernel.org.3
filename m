@@ -2,108 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EC6571CA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81102571CA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiGLOaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
+        id S229778AbiGLOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiGLOaA (ORCPT
+        with ESMTP id S229829AbiGLO36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:30:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2394A0262
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:29:58 -0700 (PDT)
+        Tue, 12 Jul 2022 10:29:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018D22871F;
+        Tue, 12 Jul 2022 07:29:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7050EB816E1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D1DC3411C;
-        Tue, 12 Jul 2022 14:29:54 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 10:29:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        zhaohui.shi@horizon.ai
-Subject: Re: [PATCH v5 2/2] sched/rt: Trying to push current task when
- target disable migrating
-Message-ID: <20220712102953.02d4a3bd@gandalf.local.home>
-In-Reply-To: <20220712013125.623338-2-schspa@gmail.com>
-References: <20220712013125.623338-1-schspa@gmail.com>
-        <20220712013125.623338-2-schspa@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91A80618F8;
+        Tue, 12 Jul 2022 14:29:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB807C341C8;
+        Tue, 12 Jul 2022 14:29:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657636196;
+        bh=eD8CW9WNiJT8VXhu8zwAPpJ2nHI6u87NDwtq5Ro4Zkk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pT24m+7R6+CJHODdS4TaCZnUnta0iUdEIVJOWr7keb/BUm3h8P7woBbOS3bnGjyDG
+         H3mH8VlmYAOdfSrROvE1aHkFMIrbycy6ANEXqEhrJW/Ghrz44jlSwKPyBdILAs2wA5
+         dTcNFqENehXUrSK18juekpJWXSpPHviib7ngzjdlwddI71q7gznYGIbaAmWW+U2G8z
+         M5f1BeBaM1PtpaPkUS7tBWvBBD/0i7SHYyhqxoiuKn0pkMhz5sQ7X+GG/6nWvkREZi
+         JyK9eAkIQNR4bQKKM63DQCF2McAsV1jsJBarnKRktOrNLnYL0zGgJ7UELJG3t4trgV
+         Vs7l2LXgTXxcw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBGth-0001zS-P1; Tue, 12 Jul 2022 16:29:57 +0200
+Date:   Tue, 12 Jul 2022 16:29:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+ <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 09:31:25 +0800
-Schspa Shi <schspa@gmail.com> wrote:
-
-> When the task to push disable migration, retry to push the current
-> running task on this CPU away, instead doing nothing for this migrate
-> disabled task.
+On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
+> On 11-07-22, 18:40, Johan Hovold wrote:
+> > This break OPP parsing on SC8280XP and hence cpufreq and other things:
+> > 
+> > [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
+> > [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
+> > [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
+> > [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
+> > ...
+> > 
+> > I just did a rebase on next-20220708 and hit this.
+> > 
+> > I've narrowed it down to _read_rate() now returning -ENODEV since
+> > opp_table->clk_count is zero.
+> > 
+> > Similar to what was reported for tegra for v1:
+> > 
+> > 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
+> > 
+> > I don't have time to look at this any more today, but it would we nice
+> > if you could unbreak linux-next.
+> > 
+> > Perhaps Bjorn or Mani can help with further details, but this doesn't
+> > look like something that is specific to SC8280XP.
 > 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->  kernel/sched/core.c | 6 +++++-
->  kernel/sched/rt.c   | 6 ++++++
->  2 files changed, 11 insertions(+), 1 deletion(-)
+> It is actually. This is yet another corner case, Tegra had one as
+> well.
+
+I literally meant that it does not appear to be SC8280XP specific. Bjorn
+reported seeing similar problems on multiple Qualcomm SoCs.
+
+> I have tried to understand the Qcom code / setup to best of my
+> abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
+> provide a clk to the OPP core, which breaks it after the new updates
+> to the OPP core. I believe following will solve it. Can someone please
+> try this ? I will then merge it with the right commit.
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index da0bf6fe9ecdc..0b1fefd97d874 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2509,8 +2509,12 @@ int push_cpu_stop(void *arg)
->  	if (p->sched_class->find_lock_rq)
->  		lowest_rq = p->sched_class->find_lock_rq(p, rq);
->  
-> -	if (!lowest_rq)
-> +	if (!lowest_rq) {
-
-Probably should add a comment reminding us that the find_lock() function
-above could have released the rq lock and allow p to schedule and be
-preempted again, and that lowest_rq could be NULL because p now has the
-migrate_disable flag set and not because it could not find the lowest rq.
-
--- Steve
-
-
-> +		if (unlikely(is_migration_disabled(p)))
-> +			p->migration_flags |= MDF_PUSH;
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 666e1ebf91d1..4f4a285886fa 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+>         }
+> 
+>         if (ret == -ENOENT) {
+> +               /*
+> +                * There are few platforms which don't want the OPP core to
+> +                * manage device's clock settings. In such cases neither the
+> +                * platform provides the clks explicitly to us, nor the DT
+> +                * contains a valid clk entry. The OPP nodes in DT may still
+> +                * contain "opp-hz" property though, which we need to parse and
+> +                * allow the platform to find an OPP based on freq later on.
+> +                *
+> +                * This is a simple solution to take care of such corner cases,
+> +                * i.e. make the clk_count 1, which lets us allocate space for
+> +                * frequency in opp->rates and also parse the entries in DT.
+> +                */
+> +               opp_table->clk_count = 1;
 > +
->  		goto out_unlock;
-> +	}
->  
->  	// XXX validate p is still the highest prio task
->  	if (task_rq(p) == rq) {
-> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> index 7c32ba51b6d85..877380e465b7a 100644
-> --- a/kernel/sched/rt.c
-> +++ b/kernel/sched/rt.c
-> @@ -2136,6 +2136,12 @@ static int push_rt_task(struct rq *rq, bool pull)
->  		 */
->  		task = pick_next_pushable_task(rq);
->  		if (task == next_task) {
-> +			/*
-> +			 * If next task has now disabled migrating, see if we
-> +			 * can push the current task.
-> +			 */
-> +			if (unlikely(is_migration_disabled(task)))
-> +				goto retry;
->  			/*
->  			 * The task hasn't migrated, and is still the next
->  			 * eligible task, but we failed to find a run-queue
+>                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+>                 return opp_table;
+>         }
 
+This looks like a hack. And it also triggers a bunch of new warning when
+opp is trying to create debugfs entries for an entirely different table
+which now gets clk_count set to 1:
+
+[  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
+[  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000004] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+[  +0.000003] debugfs: Directory 'opp:0' with parent 'cx' already present!
+
+This is for the rpmhpd whose opp table does not have either opp-hz or
+clocks (just opp-level).
+
+The above unbreaks cpufreq though.
+
+Johan

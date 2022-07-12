@@ -2,92 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457EA5722B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11295722BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbiGLSeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        id S233324AbiGLSfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiGLSeC (ORCPT
+        with ESMTP id S230166AbiGLSfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:34:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF5BBDBB4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=fHgrQHCc655FJdPY9x1bi0PKduTmHmcw0it6E+N218Y=; b=XlC5k9uRWiremsaPvGS7ESW3hA
-        oNqmGAnAr7nNLazIs8RZvLUmArQgsfeI59rHHactAUdcpd3OHq2oNueDQeQ8WXeU4FowwzpgRSZ4E
-        dZKDCdlDTyqNcuIXThuSALyFAwTRw8QHxDe9f9WxXXbr3hVUaahOCBOjODw5ntjtJYn2C8iOeZhLG
-        XqBdDJURMP+XYKFykdbLqGTTFfkjMDoGyoVHXWI1UZm48sQWr04a7WDdask6S9akqJv3yjsur9z+L
-        TlCLmPH036fn5ycNN6M6APUq/jZdAkh/MhwRgQEDCTMymHj/YhIN/dwdrpYZ/C3uul3Q8XqM70mR7
-        O4VO/2VQ==;
-Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBKho-007C5w-3h; Tue, 12 Jul 2022 18:33:57 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH -next] ASoC: amd: fix Jadeite kconfig warning and build errors
-Date:   Tue, 12 Jul 2022 11:33:48 -0700
-Message-Id: <20220712183348.31046-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Jul 2022 14:35:04 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710F1BE680
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:35:03 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id c18-20020a17090a8d1200b001ef85196fb4so7950503pjo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=aTFa+EXvspcGAaBNVFKNjAnYDuS4P2vMVH5b6FohaN0=;
+        b=PxFEJSeldFwzWT/ph478MqOUHbaDyBkFP5YVbw2uC7i8ch7kIt7z2Kd13rfQsnd4J4
+         ihsTP3NXqEr3e1i+6fCQf9dAWOgqkbK92Xr+/BOwO+hxTGdCyztyA3XWWNTQSkkkpZEi
+         DKCnEk5o4jIqddeT3oqzM2ymhe8BRFGVQ6liu2WAnOJWGBD2AoIwosYw9zw61wZEgWtK
+         qkojML11B+F8ndVNJl82aFFeMPeQevywCc0Xk2YuUPPJhhiMNU5z3NVUbWzXFGLhZqbH
+         C+yG/gNVbNdkCO67Mfhi9qjzFMop9H+YTsCkfdbHDUAoko5638JvKH9nOV5FQpB3k5vc
+         KB+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=aTFa+EXvspcGAaBNVFKNjAnYDuS4P2vMVH5b6FohaN0=;
+        b=pUb9OZ8qkuxZfUbSUwAP9/wTOHyYuLzxMFy8/9PK75P386fWom7czXuomTMqWwz3Ka
+         l4o8wLwanuhBVXC4cl43h19lwP+ELk84CfeYVPpFHHMKEWuUXPJg4+1qCT++S9Hcct4g
+         7PMlOieixzZH4AUDibgWEcNd6cg8lIDI1TRxECQ5uKD/o4pEX379/UfRURy+FCcgG98Y
+         4TDrKUKlTmvPIJWCgSg/ydaP52vk7j802kEqh25HKM6PpIalfoZI8ffTfAe0+p7QTEJB
+         ncn7a59HhG0/0FMSctqAWP708x+AsrpishvyFB7GPPMrgUIz9ksZMb206myY7+F6U4Xz
+         jAEg==
+X-Gm-Message-State: AJIora8UQja/3a3Lm/lj4nuHX9KHc1JAw1o7Ep7h23/I0ze6X6Pbdv/F
+        7SE+1Q/oORg8CRYqqQBTSDww5iMgHyucWFWJUw==
+X-Google-Smtp-Source: AGRyM1u2jFGn06qwns9QwaUZtogt9vhqbc3XHrPa+A5/DP9jt5eA8c+8dgfFzOmuVTewki+898hLqu6jkozgkPoeVw==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:b1e8:210d:ae12:d0df])
+ (user=justinstitt job=sendgmr) by 2002:aa7:88d5:0:b0:52a:ea1f:50c6 with SMTP
+ id k21-20020aa788d5000000b0052aea1f50c6mr3988540pff.81.1657650903009; Tue, 12
+ Jul 2022 11:35:03 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:34:52 -0700
+In-Reply-To: <Ys0zZACWwGilTwHx@salvia>
+Message-Id: <20220712183452.2949361-1-justinstitt@google.com>
+Mime-Version: 1.0
+References: <Ys0zZACWwGilTwHx@salvia>
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] netfilter: xt_TPROXY: remove pr_debug invocations
+From:   Justin Stitt <justinstitt@google.com>
+To:     pablo@netfilter.org
+Cc:     coreteam@netfilter.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, justinstitt@google.com, kadlec@netfilter.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        pabeni@redhat.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since SND_SOC_ES8316 has a hard dependency on I2C and since 'select'
-does not follow any dependency chains, SND_SOC_AMD_ST_ES8336_MACH
-also needs to have a hard dependency on I2C.
+pr_debug calls are no longer needed in this file.
 
-Fixes a kconfig warning and subsequent build errors:
+Pablo suggested "a patch to remove these pr_debug calls". This patch has
+some other beneficial collateral as it also silences multiple Clang
+-Wformat warnings that were present in the pr_debug calls.
 
-WARNING: unmet direct dependencies detected for SND_SOC_ES8316
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=n]
-  Selected by [y]:
-  - SND_SOC_AMD_ST_ES8336_MACH [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_AMD_ACP [=y] && ACPI [=y] && (I2C [=n] || COMPILE_TEST [=y])
-
-sound/soc/codecs/es8316.c:866:1: warning: data definition has no type or storage class
-  866 | module_i2c_driver(es8316_i2c_driver);
-sound/soc/codecs/es8316.c:866:1: error: type defaults to ‘int’ in declaration of ‘module_i2c_driver’ [-Werror=implicit-int]
-sound/soc/codecs/es8316.c:866:1: warning: parameter names (without types) in function declaration
-sound/soc/codecs/es8316.c:857:26: warning: ‘es8316_i2c_driver’ defined but not used [-Wunused-variable]
-  857 | static struct i2c_driver es8316_i2c_driver = {
-
-Fixes: f94fa8405801 ("ASoC: amd: enable machine driver build for Jadeite platform")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: alsa-devel@alsa-project.org
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
+Suggested-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
- sound/soc/amd/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Suggestion here: https://lore.kernel.org/all/Ys0zZACWwGilTwHx@salvia/
 
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -28,7 +28,7 @@ config SND_SOC_AMD_ST_ES8336_MACH
- 	select SND_SOC_ACPI if ACPI
- 	select SND_SOC_ES8316
- 	depends on SND_SOC_AMD_ACP && ACPI
--	depends on I2C || COMPILE_TEST
-+	depends on I2C
- 	help
- 	 This option enables machine driver for Jadeite platform
- 	 using es8336 codec.
+ net/netfilter/xt_TPROXY.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
+
+diff --git a/net/netfilter/xt_TPROXY.c b/net/netfilter/xt_TPROXY.c
+index 459d0696c91a..dc7284e6357b 100644
+--- a/net/netfilter/xt_TPROXY.c
++++ b/net/netfilter/xt_TPROXY.c
+@@ -74,18 +74,10 @@ tproxy_tg4(struct net *net, struct sk_buff *skb, __be32 laddr, __be16 lport,
+ 		/* This should be in a separate target, but we don't do multiple
+ 		   targets on the same rule yet */
+ 		skb->mark = (skb->mark & ~mark_mask) ^ mark_value;
+-
+-		pr_debug("redirecting: proto %hhu %pI4:%hu -> %pI4:%hu, mark: %x\n",
+-			 iph->protocol, &iph->daddr, ntohs(hp->dest),
+-			 &laddr, ntohs(lport), skb->mark);
+-
+ 		nf_tproxy_assign_sock(skb, sk);
+ 		return NF_ACCEPT;
+ 	}
+ 
+-	pr_debug("no socket, dropping: proto %hhu %pI4:%hu -> %pI4:%hu, mark: %x\n",
+-		 iph->protocol, &iph->saddr, ntohs(hp->source),
+-		 &iph->daddr, ntohs(hp->dest), skb->mark);
+ 	return NF_DROP;
+ }
+ 
+@@ -123,13 +115,11 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+ 
+ 	tproto = ipv6_find_hdr(skb, &thoff, -1, NULL, NULL);
+ 	if (tproto < 0) {
+-		pr_debug("unable to find transport header in IPv6 packet, dropping\n");
+ 		return NF_DROP;
+ 	}
+ 
+ 	hp = skb_header_pointer(skb, thoff, sizeof(_hdr), &_hdr);
+ 	if (hp == NULL) {
+-		pr_debug("unable to grab transport header contents in IPv6 packet, dropping\n");
+ 		return NF_DROP;
+ 	}
+ 
+@@ -168,19 +158,10 @@ tproxy_tg6_v1(struct sk_buff *skb, const struct xt_action_param *par)
+ 		/* This should be in a separate target, but we don't do multiple
+ 		   targets on the same rule yet */
+ 		skb->mark = (skb->mark & ~tgi->mark_mask) ^ tgi->mark_value;
+-
+-		pr_debug("redirecting: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+-			 tproto, &iph->saddr, ntohs(hp->source),
+-			 laddr, ntohs(lport), skb->mark);
+-
+ 		nf_tproxy_assign_sock(skb, sk);
+ 		return NF_ACCEPT;
+ 	}
+ 
+-	pr_debug("no socket, dropping: proto %hhu %pI6:%hu -> %pI6:%hu, mark: %x\n",
+-		 tproto, &iph->saddr, ntohs(hp->source),
+-		 &iph->daddr, ntohs(hp->dest), skb->mark);
+-
+ 	return NF_DROP;
+ }
+ 
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

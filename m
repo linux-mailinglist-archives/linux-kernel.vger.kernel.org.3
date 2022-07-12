@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8652571925
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF225571926
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiGLLzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S233003AbiGLLzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiGLLyn (ORCPT
+        with ESMTP id S232954AbiGLLyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:54:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEDBB5D18;
-        Tue, 12 Jul 2022 04:54:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 970D0B817D2;
-        Tue, 12 Jul 2022 11:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB074C3411C;
-        Tue, 12 Jul 2022 11:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657626870;
-        bh=mk7BOWgJ4VH6FbDt+8GjApCsRZME6QDb/DCvbxMCmwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=geVNNb8SiNl6yby+AGrDRCjyNKcAxb1vEly3F4x6k8b1XjNvyszk995dC1oegUkEO
-         5Gm3hN0Zi0LiL3K3Uc+PbIn/prQqMZw9rE9b9iAc5QRS4zowQiaQJz+CnDdJUR0TL1
-         qtLQ/CiRCGnHUkmFBfi4MchtxkcMaC37xwjRoKmefJ5MKfAzv5hS7xXw9VljvA0T9a
-         gsMJnWbk9HP5UaDpzOWYx03FhAw8N18EO8L0vcAX0sB60Ch2AbbvRdvo7y92gPjeRc
-         fhPbs8WMu+sG/HTqdgbrSZkQGp4oktVcc28r3kLcELb9qAHfUuSswhHg+1ZeP9p4ar
-         TD31Y6jhV8fAg==
-Date:   Tue, 12 Jul 2022 12:54:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>
-Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
- error: Oops - BUG: 0
-Message-ID: <Ys1g8PH4M2W7Z50U@sirena.org.uk>
-References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+        Tue, 12 Jul 2022 07:54:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 062652DD6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657626880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dBB+ggTvG8bgWymIqeqLY8MHAoWQRWK8mCj36wPOc5Q=;
+        b=S5IzjSrZK2rweLo0Jb/MaoS7zhR6Bk5YfAvmFnzcil0a+0Q4dafIxWtnkdHSfr3h4jGCST
+        PMRNK/M8OKMtgq8pVRC3VOBZZQtJfIcCbRhVdPbKBGpJw9UwWJg5ZVO7eeCDAX/lGZrxgk
+        /cLVe5ypD+m/8+BPWo2YVE//6I7UHus=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-548-Hb9fNfZMNL6rnY-I58gUQQ-1; Tue, 12 Jul 2022 07:54:39 -0400
+X-MC-Unique: Hb9fNfZMNL6rnY-I58gUQQ-1
+Received: by mail-qk1-f198.google.com with SMTP id ay8-20020a05620a178800b006b57a178418so6274550qkb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:54:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=dBB+ggTvG8bgWymIqeqLY8MHAoWQRWK8mCj36wPOc5Q=;
+        b=fNsv+uYQ2RMrSDVS/MqhOZkjTaDArkuyYIyncK1rnoyx23eFqMGe+rncYFEph74twk
+         ZClnd8EgEBRrdNw6FxAm6qqWHdETJfmdVJbUpAm0I727DCAVaaNHG+OkQBLXWJazqw9i
+         7QWjSs3r6nFf9ikIgHTyK/YpzC/rHL+iyuxdHPMFGlUZgwwu7xEuG9GnNsL6UZ3cxXXs
+         VH2K99X0UtCHFhQdS8hp9QVr89z4pQT6s/kDRvcEfpNK7CEV2XekilSMXIE9FcMhDWjY
+         wJueH7HWWTZ01fHFbRwasij/54QuB/PklCgnOs/Dgic++b3Jnmqd6xPzDPe3oOCMiiAG
+         pp6Q==
+X-Gm-Message-State: AJIora/dSrPzbi6HYgYh4NP6qiauaNYFYWWP8d6Vs+m4Bh+5fbb8YgLT
+        QE6KBotY9/PARTmuSjZURSKfnK9zCSg/XiPTs3yx1h2N2I5zVFUFojT3G5dXHEk/Z+KRa++uNo2
+        j6/ZxE1/hgjg3Az+bvOVZ317O
+X-Received: by 2002:ac8:5d49:0:b0:31e:b4ca:d7a1 with SMTP id g9-20020ac85d49000000b0031eb4cad7a1mr7963201qtx.183.1657626878495;
+        Tue, 12 Jul 2022 04:54:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uy+F/s1E/ZaMXoJvWX9h7t+5AW9zAkUqz0BI9C066QS/bt2M1+1+lYEM8i39vLh6pXsFtAtA==
+X-Received: by 2002:ac8:5d49:0:b0:31e:b4ca:d7a1 with SMTP id g9-20020ac85d49000000b0031eb4cad7a1mr7963188qtx.183.1657626878309;
+        Tue, 12 Jul 2022 04:54:38 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id dt8-20020a05620a478800b006a91da2fc8dsm6242414qkb.0.2022.07.12.04.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 04:54:37 -0700 (PDT)
+Message-ID: <f1d030d7db4aaf3075fe625799b99ae335fc9f60.camel@redhat.com>
+Subject: Re: [PATCH v3 11/25] KVM: VMX: Get rid of eVMCS specific VMX
+ controls sanitization
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 14:54:34 +0300
+In-Reply-To: <20220708144223.610080-12-vkuznets@redhat.com>
+References: <20220708144223.610080-1-vkuznets@redhat.com>
+         <20220708144223.610080-12-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Svukf3kgPdM45YjX"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
-X-Cookie: I like your SNOOPY POSTER!!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,54 +84,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
+> With the updated eVMCSv1 definition, there's no known 'problematic'
+> controls which are exposed in VMX control MSRs but are not present in
+> eVMCSv1. Get rid of VMX control MSRs filtering for KVM on Hyper-V.
 
---Svukf3kgPdM45YjX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If I understand correctly we are taking about running KVM as a nested guest of Hyper-V here:
 
-On Tue, Jul 12, 2022 at 03:27:09PM +0530, Naresh Kamboju wrote:
+Don't we need to check the new CPUID bit and only then use the new fields of eVMCS,
+aka check that the 'cpu' supports the updated eVMCS version?
 
-> FVP boot failed with linux next 20220712.
+Best regards,
+	Maxim Levitsky
 
-I can't reproduce this, including with your kernel binary, which
-suggests that this an issue with your FVP usage and firmware.
 
-> Boot log:
-> Starting kernel ...
->=20
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd0f0]
-> [    0.000000] Linux version 5.19.0-rc6-next-20220711
 
-How are you invoking the FVP, what firmware are you using and how is it
-configured?
+> 
+> Note: VMX control MSRs filtering for Hyper-V on KVM
+> (nested_evmcs_filter_control_msr()) stays as even the updated eVMCSv1
+> definition doesn't have all the features implemented by KVM and some
+> fields are still missing. Moreover, nested_evmcs_filter_control_msr()
+> has to support the original eVMCSv1 version when VMM wishes so.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/evmcs.c | 13 -------------
+>  arch/x86/kvm/vmx/evmcs.h |  1 -
+>  arch/x86/kvm/vmx/vmx.c   |  5 -----
+>  3 files changed, 19 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index 52a53debd806..b5cfbf7d487b 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -320,19 +320,6 @@ const struct evmcs_field vmcs_field_to_evmcs_1[] = {
+>  };
+>  const unsigned int nr_evmcs_1_fields = ARRAY_SIZE(vmcs_field_to_evmcs_1);
+>  
+> -#if IS_ENABLED(CONFIG_HYPERV)
+> -__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
+> -{
+> -       vmcs_conf->cpu_based_exec_ctrl &= ~EVMCS1_UNSUPPORTED_EXEC_CTRL;
+> -       vmcs_conf->pin_based_exec_ctrl &= ~EVMCS1_UNSUPPORTED_PINCTRL;
+> -       vmcs_conf->cpu_based_2nd_exec_ctrl &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
+> -       vmcs_conf->cpu_based_3rd_exec_ctrl = 0;
+> -
+> -       vmcs_conf->vmexit_ctrl &= ~EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+> -       vmcs_conf->vmentry_ctrl &= ~EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+> -}
+> -#endif
+> -
+>  bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_gpa)
+>  {
+>         struct hv_vp_assist_page assist_page;
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 4b809c79ae63..0feac101cce4 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -203,7 +203,6 @@ static inline void evmcs_load(u64 phys_addr)
+>         vp_ap->enlighten_vmentry = 1;
+>  }
+>  
+> -__init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf);
+>  #else /* !IS_ENABLED(CONFIG_HYPERV) */
+>  static __always_inline void evmcs_write64(unsigned long field, u64 value) {}
+>  static inline void evmcs_write32(unsigned long field, u32 value) {}
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index b4915d841357..dd905ad72637 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2689,11 +2689,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>         vmcs_conf->vmexit_ctrl         = _vmexit_control;
+>         vmcs_conf->vmentry_ctrl        = _vmentry_control;
+>  
+> -#if IS_ENABLED(CONFIG_HYPERV)
+> -       if (enlightened_vmcs)
+> -               evmcs_sanitize_exec_ctrls(vmcs_conf);
+> -#endif
+> -
+>         return 0;
+>  }
+>  
 
-> [    0.500709] kernel BUG at arch/arm64/kernel/traps.c:497!
 
-This is an undefined instruction, my first thought there would be that
-you have some feature enabled for the kernel which requires enablement
-at EL3 but your EL3 firmware is not configured to enable it.
-
-> [    0.503562]  el1_undef+0x30/0x60
-> [    0.503709]  el1h_64_sync_handler+0x84/0xd0
-> [    0.503811]  el1h_64_sync+0x64/0x68
-> [    0.503909]  net_sysctl_init+0x8/0x7c
-
-This is where the undef came from.
-
---Svukf3kgPdM45YjX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLNYO8ACgkQJNaLcl1U
-h9A6fAf/QTcF4jp1qJO2RoVPJc4OP7G1PJumqwmdm6mricWR87xdE7cbOZyK6pc7
-G35LXMALDibQRhBd+tGJUQjAtka3IMIe0STZGVpbNp4H+1PyZASk3vLfgwtWVTMP
-WQZt3HXC4ryTH/91yWSjDvJjoJkGRZlEStyqEgMUueBDUa6Cq5YuVlaKzFZW9VZ/
-xbrs8tDLaFeI2uc6b1WkjldvDY8D3cahLxlkQ9myBuR2iDnr2ZvCmBiGzcpAAKAd
-+/HYI0Z9mlXz/dlcwxeoSkYqB8Cny7EevAQSCNMzhl3rUKVJ29RsqmChXLiIWtWd
-xOxOo0Nf1KT9hsIwn2GdAr3G/VSCGQ==
-=/ii2
------END PGP SIGNATURE-----
-
---Svukf3kgPdM45YjX--

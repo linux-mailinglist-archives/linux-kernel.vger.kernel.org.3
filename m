@@ -2,177 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1829C571322
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6606757132C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbiGLHbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S232367AbiGLHcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiGLHbQ (ORCPT
+        with ESMTP id S232351AbiGLHcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:31:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122089823A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657611074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JdO5MxAzmVOyjgWnn1pQedaEsg1HdPJj3a1oJOO8q64=;
-        b=JbtPsR71iqyPBrbbkf871/FxBajXvobX7r2J0WEifnEvqrZ8d+1f4zcdGwve5QnoDpQhz0
-        aQLVNXOmBVU0Xt6qUPW40kQtAZ2JxhKSljFMCmu6Cf0l/Y8OlH9fmhnfPy3ugeqTk29cPz
-        aQGCJcZ+lpDac8BttHEU6QZHDoBG/vo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-LoL4Sf0hO-Odt3d2-l7Aeg-1; Tue, 12 Jul 2022 03:31:11 -0400
-X-MC-Unique: LoL4Sf0hO-Odt3d2-l7Aeg-1
-Received: by mail-wr1-f69.google.com with SMTP id o1-20020adfba01000000b0021b90bd28d2so1136068wrg.14
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:31:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=JdO5MxAzmVOyjgWnn1pQedaEsg1HdPJj3a1oJOO8q64=;
-        b=d+7USC48X2N8tKtDxlKFyBNrKADYtg8XZZ8FpoSA/IdBy4tH3XZhblBqXMl+zCFwx7
-         Zqj36uit49r8kOMwVZIJ7EfIpA/N+4MlNjfhpftktAWhqfYY7FdCH5OJ5kY8fu2fJ5Fu
-         y0gzhGqx2R1zxOnOh7BHGENKANNjPb+iMXJdFQylHCKl/PtHKsvcLFOzVYlPghXjBjwV
-         dHPTu0e+GnQ+HTGDDOzTvlJLrfus0G/p73Wwek4SP/MSjIjxTumx7AwfJvuodBVyA6TX
-         Eh81T6uztfJrK6sDtlui05bVCyZorWY71ciB6/Zu7u/9UFegD90bZ6j+KgM7dmMRI/ME
-         9Log==
-X-Gm-Message-State: AJIora+aPPQFmH7D1q8EQrwXF5f3DLn5Umkc18HOCr4oRJPlHHmafVxP
-        M7EYac2VF2AbkIfBt7Tlkfqk/SwuSLJMwtHKDz2DH5KxOZpGawUYzvZQpH7LtmcGiybXwnvvm2D
-        vXt+Zl63vfJYW+HecyXubH7Cf
-X-Received: by 2002:a05:600c:15c7:b0:3a2:dd5d:2514 with SMTP id v7-20020a05600c15c700b003a2dd5d2514mr2325571wmf.31.1657611069945;
-        Tue, 12 Jul 2022 00:31:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tMaOvFB7ntQolPpHbs5LGtj2RVU3jED0+l76qVjzoYSHfm86bII08rLZtbYEYslh2Mv1KxIg==
-X-Received: by 2002:a05:600c:15c7:b0:3a2:dd5d:2514 with SMTP id v7-20020a05600c15c700b003a2dd5d2514mr2325544wmf.31.1657611069642;
-        Tue, 12 Jul 2022 00:31:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d900:a75d:cddc:d29f:bdb3? (p200300cbc703d900a75dcddcd29fbdb3.dip0.t-ipconnect.de. [2003:cb:c703:d900:a75d:cddc:d29f:bdb3])
-        by smtp.gmail.com with ESMTPSA id c9-20020adfed89000000b0021d9233e7e6sm9127869wro.54.2022.07.12.00.31.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:31:09 -0700 (PDT)
-Message-ID: <4cf14bde-fb4c-99d9-58ce-a788a700d5f3@redhat.com>
-Date:   Tue, 12 Jul 2022 09:31:08 +0200
-MIME-Version: 1.0
+        Tue, 12 Jul 2022 03:32:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1778399661
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:32:19 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C7Mb3w020365;
+        Tue, 12 Jul 2022 07:32:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=TIzFHU4x4fw5qHimqcHk3GVcd5/dC7Qk2/Nu7hgFKFk=;
+ b=oeu0y40elkjagKAlNPWOCUJhfzCFWTOI/P1FnnmI9u0dV8i+6TbrCKlmPkcgyuCr49gY
+ a6mRsnmJ4mME93ZMp6FzZHQ5F4GD4hzTbTHVljz4yp4nI+xYSATC28i1YgJam0EEFe6P
+ 5UpnFpQonOw+ELAoF7R74OKxjzDlk7bfMaidaXpV9qBnSgmpBgkRjIcYeY9VvdDBkbY/
+ R7YS379m9n2l69WMdi7aBArdvZnmkyCMiIhmozQegH9CZKDOZ8x0JAbHsfl9Ge0KAw9I
+ x/s/Fk9/eJM5nGS2WWhCMC3kdc/J2kP2NOhu+B9uTyrkKlJdX64FDVj0h8igV7EaLN1x mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h94gwg56f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 07:32:05 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26C7W4PJ025138;
+        Tue, 12 Jul 2022 07:32:04 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h94gwg507-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 07:32:04 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26C7LldZ029178;
+        Tue, 12 Jul 2022 07:31:44 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncng9s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 07:31:44 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26C7VfsO24904000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 07:31:41 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 979334C040;
+        Tue, 12 Jul 2022 07:31:41 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2CD94C044;
+        Tue, 12 Jul 2022 07:31:36 +0000 (GMT)
+Received: from [9.43.87.37] (unknown [9.43.87.37])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 07:31:36 +0000 (GMT)
+Message-ID: <fef35622-0bd4-f220-26bd-37d8e0112c4d@linux.ibm.com>
+Date:   Tue, 12 Jul 2022 13:01:35 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
 Content-Language: en-US
-To:     Li Chen <me@linux.beauty>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Li Chen <lchen@ambarella.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-References: <20220711122459.13773-1-me@linux.beauty>
- <20220711122459.13773-3-me@linux.beauty>
- <c2d4c6ac-fad7-d5b3-8cbf-f62a7db5b998@redhat.com>
- <181f0a5f2a5.cf94ce78513585.4158910057206462182@linux.beauty>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 2/4] mm/sparse: skip no-map memblock check when
- fill_subsection_map
-In-Reply-To: <181f0a5f2a5.cf94ce78513585.4158910057206462182@linux.beauty>
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>, jvgediya.oss@gmail.com
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+ <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+ <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
+ <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8-pas4vQxzqh7sola2riwU7q7sOzoIlk
+X-Proofpoint-ORIG-GUID: SsKFeIKR5LrsHhYEHD2OUeD98ovrqp0b
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_05,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207120030
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.07.22 06:23, Li Chen wrote:
-> Hi David,
->  ---- On Mon, 11 Jul 2022 22:53:36 +0800  David Hildenbrand <david@redhat.com> wrote --- 
->  > On 11.07.22 14:24, Li Chen wrote:
->  > > From: Li Chen <lchen@ambarella.com>
->  > > 
->  > > When mhp use sparse_add_section, don't check no-map region,
->  > > so that to allow no-map reserved memory to get struct page
->  > > support.
->  > > 
->  > > Signed-off-by: Li Chen <lchen@ambarella.com>
->  > > Change-Id: I0d2673cec1b66adf695251037a00c240976b226f
->  > > ---
->  > >  mm/sparse.c | 4 +++-
->  > >  1 file changed, 3 insertions(+), 1 deletion(-)
->  > > 
->  > > diff --git a/mm/sparse.c b/mm/sparse.c
->  > > index 120bc8ea5293..a29cd1e7014f 100644
->  > > --- a/mm/sparse.c
->  > > +++ b/mm/sparse.c
->  > > @@ -690,7 +690,9 @@ static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
->  > >  
->  > >      if (bitmap_empty(map, SUBSECTIONS_PER_SECTION))
->  > >          rc = -EINVAL;
->  > > -    else if (bitmap_intersects(map, subsection_map, SUBSECTIONS_PER_SECTION))
->  > > +    else if (memblock_is_map_memory(PFN_PHYS(pfn)) &&
->  > > +         bitmap_intersects(map, subsection_map,
->  > > +                   SUBSECTIONS_PER_SECTION))
->  > >          rc = -EEXIST;
->  > >      else
->  > >          bitmap_or(subsection_map, map, subsection_map,
->  > 
->  > I'm not sure I follow completely what you are trying to achieve. But if
->  > you have to add memblock hacks into mm/sparse.c you're most probably
->  > doing something wrong.
->  > 
->  > Please explain why that change is necessary, and why it is safe.
+On 7/12/22 12:29 PM, Huang, Ying wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 > 
-> In the current sparse memory model, free_area_init will insert all memblock.memory into subsection_map and no-map rmem is also a 
-> memblock.memory. So, without this change, fill_subsection_map will return -EEXIST.
+>> On 7/12/22 6:46 AM, Huang, Ying wrote:
+>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>>
+>>>> On 7/5/22 9:59 AM, Huang, Ying wrote:
+>>>>> Hi, Aneesh,
+>>>>>
+>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>>
+>>>>>> The current kernel has the basic memory tiering support: Inactive
+>>>>>> pages on a higher tier NUMA node can be migrated (demoted) to a lower
+>>>>>> tier NUMA node to make room for new allocations on the higher tier
+>>>>>> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+>>>>>> migrated (promoted) to a higher tier NUMA node to improve the
+>>>>>> performance.
+>>>>>>
+>>>>>> In the current kernel, memory tiers are defined implicitly via a
+>>>>>> demotion path relationship between NUMA nodes, which is created during
+>>>>>> the kernel initialization and updated when a NUMA node is hot-added or
+>>>>>> hot-removed.  The current implementation puts all nodes with CPU into
+>>>>>> the top tier, and builds the tier hierarchy tier-by-tier by establishing
+>>>>>> the per-node demotion targets based on the distances between nodes.
+>>>>>>
+>>>>>> This current memory tier kernel interface needs to be improved for
+>>>>>> several important use cases:
+>>>>>>
+>>>>>> * The current tier initialization code always initializes
+>>>>>>   each memory-only NUMA node into a lower tier.  But a memory-only
+>>>>>>   NUMA node may have a high performance memory device (e.g. a DRAM
+>>>>>>   device attached via CXL.mem or a DRAM-backed memory-only node on
+>>>>>>   a virtual machine) and should be put into a higher tier.
+>>>>>>
+>>>>>> * The current tier hierarchy always puts CPU nodes into the top
+>>>>>>   tier. But on a system with HBM (e.g. GPU memory) devices, these
+>>>>>>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+>>>>>>   with CPUs are better to be placed into the next lower tier.
+>>>>>>
+>>>>>> * Also because the current tier hierarchy always puts CPU nodes
+>>>>>>   into the top tier, when a CPU is hot-added (or hot-removed) and
+>>>>>>   triggers a memory node from CPU-less into a CPU node (or vice
+>>>>>>   versa), the memory tier hierarchy gets changed, even though no
+>>>>>>   memory node is added or removed.  This can make the tier
+>>>>>>   hierarchy unstable and make it difficult to support tier-based
+>>>>>>   memory accounting.
+>>>>>>
+>>>>>> * A higher tier node can only be demoted to selected nodes on the
+>>>>>>   next lower tier as defined by the demotion path, not any other
+>>>>>>   node from any lower tier.  This strict, hard-coded demotion order
+>>>>>>   does not work in all use cases (e.g. some use cases may want to
+>>>>>>   allow cross-socket demotion to another node in the same demotion
+>>>>>>   tier as a fallback when the preferred demotion node is out of
+>>>>>>   space), and has resulted in the feature request for an interface to
+>>>>>>   override the system-wide, per-node demotion order from the
+>>>>>>   userspace.  This demotion order is also inconsistent with the page
+>>>>>>   allocation fallback order when all the nodes in a higher tier are
+>>>>>>   out of space: The page allocation can fall back to any node from
+>>>>>>   any lower tier, whereas the demotion order doesn't allow that.
+>>>>>>
+>>>>>> * There are no interfaces for the userspace to learn about the memory
+>>>>>>   tier hierarchy in order to optimize its memory allocations.
+>>>>>>
+>>>>>> This patch series make the creation of memory tiers explicit under
+>>>>>> the control of userspace or device driver.
+>>>>>>
+>>>>>> Memory Tier Initialization
+>>>>>> ==========================
+>>>>>>
+>>>>>> By default, all memory nodes are assigned to the default tier with
+>>>>>> tier ID value 200.
+>>>>>>
+>>>>>> A device driver can move up or down its memory nodes from the default
+>>>>>> tier.  For example, PMEM can move down its memory nodes below the
+>>>>>> default tier, whereas GPU can move up its memory nodes above the
+>>>>>> default tier.
+>>>>>>
+>>>>>> The kernel initialization code makes the decision on which exact tier
+>>>>>> a memory node should be assigned to based on the requests from the
+>>>>>> device drivers as well as the memory device hardware information
+>>>>>> provided by the firmware.
+>>>>>>
+>>>>>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
+>>>>>>
+>>>>>> Memory Allocation for Demotion
+>>>>>> ==============================
+>>>>>> This patch series keep the demotion target page allocation logic same.
+>>>>>> The demotion page allocation pick the closest NUMA node in the
+>>>>>> next lower tier to the current NUMA node allocating pages from.
+>>>>>>
+>>>>>> This will be later improved to use the same page allocation strategy
+>>>>>> using fallback list.
+>>>>>>
+>>>>>> Sysfs Interface:
+>>>>>> -------------
+>>>>>> Listing current list of memory tiers details:
+>>>>>>
+>>>>>> :/sys/devices/system/memtier$ ls
+>>>>>> default_tier max_tier  memtier1  power  uevent
+>>>>>> :/sys/devices/system/memtier$ cat default_tier
+>>>>>> memtier200
+>>>>>> :/sys/devices/system/memtier$ cat max_tier 
+>>>>>> 400
+>>>>>> :/sys/devices/system/memtier$ 
+>>>>>>
+>>>>>> Per node memory tier details:
+>>>>>>
+>>>>>> For a cpu only NUMA node:
+>>>>>>
+>>>>>> :/sys/devices/system/node# cat node0/memtier 
+>>>>>> :/sys/devices/system/node# echo 1 > node0/memtier 
+>>>>>> :/sys/devices/system/node# cat node0/memtier 
+>>>>>> :/sys/devices/system/node# 
+>>>>>>
+>>>>>> For a NUMA node with memory:
+>>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>>> 1
+>>>>>> :/sys/devices/system/node# ls ../memtier/
+>>>>>> default_tier  max_tier  memtier1  power  uevent
+>>>>>> :/sys/devices/system/node# echo 2 > node1/memtier 
+>>>>>> :/sys/devices/system/node# 
+>>>>>> :/sys/devices/system/node# ls ../memtier/
+>>>>>> default_tier  max_tier  memtier1  memtier2  power  uevent
+>>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>>> 2
+>>>>>> :/sys/devices/system/node# 
+>>>>>>
+>>>>>> Removing a memory tier
+>>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>>> 2
+>>>>>> :/sys/devices/system/node# echo 1 > node1/memtier
+>>>>>
+>>>>> Thanks a lot for your patchset.
+>>>>>
+>>>>> Per my understanding, we haven't reach consensus on
+>>>>>
+>>>>> - how to create the default memory tiers in kernel (via abstract
+>>>>>   distance provided by drivers?  Or use SLIT as the first step?)
+>>>>>
+>>>>> - how to override the default memory tiers from user space
+>>>>>
+>>>>> As in the following thread and email,
+>>>>>
+>>>>> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+>>>>>
+>>>>> I think that we need to finalized on that firstly?
+>>>>
+>>>> I did list the proposal here 
+>>>>
+>>>> https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>>>>
+>>>> So both the kernel default and driver-specific default tiers now become kernel parameters that can be updated
+>>>> if the user wants a different tier topology. 
+>>>>
+>>>> All memory that is not managed by a driver gets added to default_memory_tier which got a default value of 200
+>>>>
+>>>> For now, the only driver that is updated is dax kmem, which adds the memory it manages to memory tier 100.
+>>>> Later as we learn more about the device attributes (HMAT or something similar) that we might want to use
+>>>> to control the tier assignment this can be a range of memory tiers. 
+>>>>
+>>>> Based on the above, I guess we can merge what is posted in this series and later fine-tune/update
+>>>> the memory tier assignment based on device attributes.
+>>>
+>>> Sorry for late reply.
+>>>
+>>> As the first step, it may be better to skip the parts that we haven't
+>>> reached consensus yet, for example, the user space interface to override
+>>> the default memory tiers.  And we can use 0, 1, 2 as the default memory
+>>> tier IDs.  We can refine/revise the in-kernel implementation, but we
+>>> cannot change the user space ABI.
+>>>
+>>
+>> Can you help list the use case that will be broken by using tierID as outlined in this series?
+>> One of the details that were mentioned earlier was the need to track top-tier memory usage in a
+>> memcg and IIUC the patchset posted https://lore.kernel.org/linux-mm/cover.1655242024.git.tim.c.chen@linux.intel.com
+>> can work with tier IDs too. Let me know if you think otherwise. So at this point
+>> I am not sure which area we are still debating w.r.t the userspace interface.
 > 
-> I would say it's not a good idea to insert no-map memblock into subsection_map, and I have no idea why sparse do this.
-> So, I simply skip no-map region here.
-
-The thing is:
-
-if the subsection map is set, then there already *is* a memmap and you
-would simply be ignoring it (and overwriting a memmap in e.g.,
-ZONE_NORMAL to be in ZONE_DEVICE suddenly, which is wrong).
-
-
-Reading memblock_mark_nomap():
-
-"The memory regions marked with %MEMBLOCK_NOMAP will not be added to the
-direct mapping of the physical memory. These regions will still be
-covered by the memory map. The struct page representing NOMAP memory
-frames in the memory map will be PageReserved()"
-
-
-So having a memmap for these ranges is expected, and a direct map is not
-desired. What you propose is a hack. You either have to reuse the
-existing memmap (which is !ZONE_DEVICE -- not sure if that's a problem)
-or we'd have to look into teaching init code to not allocate a memmap
-for sub-sections that are fully nomap.
-
-But not sure who depends on the existing memmap for nomap memory.
-
+> In
 > 
-> As for safety:
-> 1. The caller of fill_subsection_map are mhp and *_memremap_pages functions, no-map regions are not related to them, so existing codes won't be broken.
-> 2. This change doesn't change memblock and subsection_map.
+> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+> 
+> per my understanding, Johannes suggested to override the kernel default
+> memory tiers with "abstract distance" via drivers implementing memory
+> devices.  As you said in another email, that is related to [7/12] of the
+> series.  And we can table it for future.
+> 
+> And per my understanding, he also suggested to make memory tier IDs
+> dynamic.  For example, after the "abstract distance" of a driver is
+> overridden by users, the total number of memory tiers may be changed,
+> and the memory tier ID of some nodes may be changed too.  This will make
+> memory tier ID easier to be understood, but more unstable.  For example,
+> this will make it harder to specify the per-memory-tier memory partition
+> for a cgroup.
 > 
 
-Sorry, but AFAIKT it's a hack and we need a clean way to deal with nomap
-memory that already has a memmap instead.
+With all the approaches we discussed so far, a memory tier of a numa node can be changed.
+ie, pgdat->memtier can change anytime. The per memcg top tier mem usage tracking patches
+posted here https://lore.kernel.org/linux-mm/cefeb63173fa0fac7543315a2abbd4b5a1b25af8.1655242024.git.tim.c.chen@linux.intel.com/
+doesn't consider the node movement from one memory tier to another. If we need
+a stable pgdat->memtier we will have to prevent a node memory tier reassignment
+while we have pages from the memory tier charged to a cgroup. This patchset should not
+prevent such a restriction.
+
+There are 3 knobs provided in this patchset. 
+
+1. kernel parameter to change default memory tier. Changing this applies only to new memory that is
+ hotplugged. The existing node to memtier mapping remains the same.
+
+2. module parameter to change dax kmem memory tier. Same as above. 
+
+3. Ability to change node to memory tier mapping via /sys/devices/system/node/nodeN/memtier . We
+ should be able to add any restrictions w.r.t cgroup there. 
+
+Hence my observation is that the requirement for a stable node to memory tier mapping should not
+prevent the merging of this patch series.
 
 
--- 
-Thanks,
+>> I will still keep the default tier IDs with a large range between them. That will allow
+>> us to go back to tierID based demotion order if we can. That is much simpler than using tierID and rank
+>> together. If we still want to go back to rank based approach the tierID value won't have much
+>> meaning anyway.
+> 
+> I agree to get rid of "rank".
+> 
+>> Any feedback on patches 1 - 5, so that I can request Andrew to merge
+>> them?
+> 
+> I hope that we can discuss with Johannes firstly.  But it appears that
+> he is busy recently.
+> 
 
-David / dhildenb
 
+-aneesh

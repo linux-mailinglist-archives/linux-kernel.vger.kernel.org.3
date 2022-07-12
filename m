@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B43571970
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB6757197C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiGLMIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
+        id S232883AbiGLMLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiGLMIs (ORCPT
+        with ESMTP id S232693AbiGLMK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:08:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E87A658F;
-        Tue, 12 Jul 2022 05:08:45 -0700 (PDT)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9BLZM1iC0kZAA--.15930S3;
-        Tue, 12 Jul 2022 20:08:43 +0800 (CST)
-Subject: Re: [PATCH] MIPS: fix pmd_mkinvalid
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1657181495-33004-1-git-send-email-zhanghongchen@loongson.cn>
- <20220707092206.GA9894@alpha.franken.de>
- <bfb97f6b-7a39-8253-bc14-08f2f54ed312@loongson.cn>
- <0fd4e823-493f-07f0-08d5-f4a22491b602@loongson.cn>
- <20220712111917.GA10936@alpha.franken.de>
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-Message-ID: <b2e74ba2-b831-d300-92f6-c410673e72cc@loongson.cn>
-Date:   Tue, 12 Jul 2022 20:08:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 12 Jul 2022 08:10:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7BE599EF;
+        Tue, 12 Jul 2022 05:10:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81FF0B817DE;
+        Tue, 12 Jul 2022 12:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DD1C3411C;
+        Tue, 12 Jul 2022 12:10:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657627854;
+        bh=lgyRtw8slZQ2sV7mDz0Kn8deeG1+YLDoRErr4I3aKrI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GkzGBi1hxa6OwrnamglljV0O5Qll2+ofRFAPdULGXAlxe9j7g6znKEa2rpnvw3lL2
+         PhQzycja8l+YuE5eSJJxshavNrASZerqkCQiL9e//DE45DdzK+y/LiDhzZ3HqrqTAS
+         z1zn0aOjVYWBK/oA6hCp/RtNqCqrQLy6Modp5nNmqxSy/cTKselI2LkqNmKi9cK5NL
+         9REoBKjenh5eyEi0JPA/6oKBPNMncAEjtnLQgXv4xvVbLI1BS3Nbrngf3gY3Rm5i8L
+         arnuRrf1BHe9giV9U7pmpR78TwsJiOKzHhCW+cFtszzC/m1O3yaXJW0gpv0csgojPU
+         gCvkh4fcQWP8g==
+Date:   Tue, 12 Jul 2022 13:10:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Han Xu <han.xu@nxp.com>
+Cc:     haibo.chen@nxp.com, boris.brezillon@bootlin.com,
+        marek.vasut@gmail.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, miquel.raynal@bootlin.com
+Subject: Re: [PATCH] MAINTAINERS: change the NXP FSPI driver maintainer.
+Message-ID: <Ys1kyVPzxWIPSV/o@sirena.org.uk>
+References: <20220711160802.4938-1-han.xu@nxp.com>
+ <YsxkjTbXkWr/jMzS@sirena.org.uk>
+ <20220711215822.7ity2647z2hwecdv@umbrella>
 MIME-Version: 1.0
-In-Reply-To: <20220712111917.GA10936@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxv9BLZM1iC0kZAA--.15930S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar17XF15Ww1DCr18ury7GFg_yoW8tr47pF
-        Z5tF1UtFWDtrn7Jr18Kr18JFyYyw15tw15Wrn5JF1UA392qr1Iqr4UX390934UXF4kGr1U
-        tF45XasrZw1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv0b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkI
-        ecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
-        PpnJUUUUU==
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FQJfqEpZTdQmLjKn"
+Content-Disposition: inline
+In-Reply-To: <20220711215822.7ity2647z2hwecdv@umbrella>
+X-Cookie: I like your SNOOPY POSTER!!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,60 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/12 下午7:19, Thomas Bogendoerfer wrote:
-> On Tue, Jul 12, 2022 at 06:01:08PM +0800, Hongchen Zhang wrote:
->> On 2022/7/7 下午7:12, Hongchen Zhang wrote:
->>> On 2022/7/7 下午5:22, Thomas Bogendoerfer wrote:
->>>> On Thu, Jul 07, 2022 at 04:11:35PM +0800, Hongchen Zhang wrote:
->>>>> When a pmd entry is invalidated by pmd_mkinvalid,pmd_present should
->>>>> return true.
->>>>> So introduce a _PMD_PRESENT_INVALID_SHIFT bit to check if a pmd is
->>>>> present but invalidated by pmd_mkinvalid.
->>>>
->>>> What problem are you trying to fix ? What are the symptoms ?
->>>>
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> the test robot showed problems with your last version of the patch,
->>>> which hasn't been integrated into at least the MIPS tree, so no
->>>> need to that.
->>>>
->>>> Thomas.
->>>>
->>>
->>> Hi Thomas,
->>>     The idea come from the commit:
->>>     b65399f6111b(arm64/mm: Change THP helpers to comply with generic MM
->>>   semantics).
->>>     There is an problem now:
->>>           CPU 0        CPU 1
->>>       pmdp_invalidate        do_page_fault
->>>       ...              __handle_mm_fault
->>>                       is_swap_pmd == true
->>>                       trigger VM_BUG_ON() ?
->>>       set_pmd_at
->>>     the reason is that pmd_present return true,after this commit
->>>     pmd_present will return false,and the VM_BUG_ON will not be triggered.
->>>     Like arm64 does,we can introduce a new bit to fix this.
->>>
->>> Thanks.
->> Hi Thomas,
->>   Is there problem of this patch? What's your opinion of this patch?
-> 
-> I haven't dig deeper into it, but needing more page bits is a pain
-> for 32bit kernel and would make it nearly impossible to get huge
-> page support there. And the description you gave me, needs to be
-> in the commit description.
-> 
-> Thomas.
-> 
-Hi Thomas,
-  Thanks for your patiently review. For your question,
-   1. I think there may be problem when compile 32bit kernel with huge 
-page support,because _PAGE_HUGE_SHIFT is only defined for R4K now.
-   2. I will modify the commit as you said and make a v2 patch.
 
-Thanks.
-Hongchen Zhang
+--FQJfqEpZTdQmLjKn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jul 11, 2022 at 04:58:38PM -0500, Han Xu wrote:
+> On 22/07/11 06:57PM, Mark Brown wrote:
+> > On Mon, Jul 11, 2022 at 11:08:02AM -0500, Han Xu wrote:
+> > > Haibo Chen and me will take over the NXP FSPI driver maintainer role.
+> >=20
+> > Copying in Ashish just to make sure he's seen this.
+>=20
+> Ashish doesn't work for NXP any more.
 
+Yeah, I got the bounce - it'd have helped to say something about the why
+in the commit log.
+
+--FQJfqEpZTdQmLjKn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLNZMgACgkQJNaLcl1U
+h9CcHAf+LdJjBmXH8CdKrvcRQUmT5Q7tVrE8fZ2ixhA0bjTHGWWGNbYqPThjYQtk
+IKfecuT5Afocc00NOsBks0QTIxIo7Kr6Z9Fz0mlc1D2FbrVUgxbQy9QcCDcrCzJ/
+KGDGGEeOd40T1QNiqt798gtx6S+eB2zgS6e44T6bjMxiMZ+NCiwi/on0JwEgSDlU
+E/oKaqyH4aSkRRxkYnzGdNEJAvSM1veU2ALYUNAxK7AlINH4l5y0fWx3+e1/8bP9
+PbEQJmwFMU/T/E//RSxKwXzb8D53SgzcddG3WiQlzxU9de0O9kAuFryh0JP0NW2P
+7dhEBMlwivXUBg4ptdu46EWdkg1+wg==
+=9cL2
+-----END PGP SIGNATURE-----
+
+--FQJfqEpZTdQmLjKn--

@@ -2,103 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432665729E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A805729E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbiGLX0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S234118AbiGLX0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiGLX0R (ORCPT
+        with ESMTP id S232833AbiGLX0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:26:17 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FCBBBD10;
-        Tue, 12 Jul 2022 16:26:17 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id o18so8933134pgu.9;
-        Tue, 12 Jul 2022 16:26:16 -0700 (PDT)
+        Tue, 12 Jul 2022 19:26:12 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21714A850C;
+        Tue, 12 Jul 2022 16:26:12 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id p128so9421278iof.1;
+        Tue, 12 Jul 2022 16:26:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eI24J4ChaVZR0gULHqMoCFMyNBNbGxZS2LCNofyhVxs=;
-        b=mVB1nqzoohacCx2NJCNhc5ly+MEc+XGd8KdQyArYNG5pRR2NALHhfKQ6YqxlsA3vT2
-         557vFHlumuWgzTEpx6a1rhXPrF6OFcPANsKblWQgER0cn5DXyPQrYGym+cgsgNi7p8RZ
-         2e9mIxt30l5TzbOG2LhIauzYP6t4xkARttqTC9M2IRaHGl2IuN6CNey2cSvWCrJTT70O
-         i4GQ5gF3szL3tUSqg9MpVq+sjhrILMPxcoRIZfY30360QcjBXdwT+gUvdqO2MYyN0jKD
-         j3s3fhGJywuaG4RZccKx28OGaB325it5gUkDJ3BXrgh+uonvb5cT3k+fdXF4y01GpeB4
-         trGA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3YvOgvXOXgKJ9W7BKp/jkotIdUHeW5Mi6XOrIgvd1o=;
+        b=kJSM4FUJOFEyyoUlphbsiJKDF2fNs2Q+gA9Fkw7292mE0XgsScrHFuFpU6ZaG4FHoR
+         8jim+pM87JzYkIEcjbuYVe+HBhJyJVyRChTMGYD+s1rhfzt6Vs/gYwByIJSz5sKu9pXM
+         zB2z8LCeDF6vGQvLA2uw2+SC+Ga1W5AOEQ8hfWuCtu++Q3rEHbrcGXCFpNp2ctU6bkBv
+         ut0nnOg+/qJ3rMOoDwp/z6BntO0mnu0kbMy+W23h+qgP+uelv4SzTrRaAdwH8Dx1jVPL
+         HHJoeJeEA9qaZNwHxV+uKU9sAnU9H0CTrhfBW8LK2TZ1oSOf4aapoR4OJPGX5PEpbM21
+         dZ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=eI24J4ChaVZR0gULHqMoCFMyNBNbGxZS2LCNofyhVxs=;
-        b=5NB0nvzZi5R68OMMkDeARlcBCcXbz/VQEps1ERCgcL5Qpok7hxJ5BrfZgcBT36GeUR
-         827I0/tUp8Pan5wMfbzUm7t/XxEJgTaPD+DixvRDLnD2wdzHsx71Oo/8hWS8wS79IGgD
-         TFbKUz8NH6qzdqBkMkRW04fiItiZcGA2LSRuWIU+rrWq3yl+EYuVPWnsjfsV3weralLz
-         AIFgtfHTsfqZLw6ZDDXWIuN8P5uJ2R7zhpKyzK5xHYK3IVNelFvWN3MdMLhggNwNAlpT
-         EAC0mVtmwsq4e14Vh+o+l37yFWIyhOww+RsYVhKkMhJLyoBLGdoQuxIdQWuR+ao3EzEh
-         26GA==
-X-Gm-Message-State: AJIora/d9M/2hDD4WNUBMquz09W3u6mAUJrT91FKAnAmfsJ+cHr4xjOx
-        NXknvXgCh9+XJGZ9TuVjvCI=
-X-Google-Smtp-Source: AGRyM1tq3Q7vIq/a3BrKfQRriuC5poQUIs4bVhc+maWzVOjf/IVVZ8OAKAIpXaCXqd7Iw00L0RqW0w==
-X-Received: by 2002:a05:6a00:1992:b0:527:c201:ef52 with SMTP id d18-20020a056a00199200b00527c201ef52mr522582pfl.59.1657668376174;
-        Tue, 12 Jul 2022 16:26:16 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t10-20020a65554a000000b004126f1e48f4sm6706791pgr.20.2022.07.12.16.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 16:26:15 -0700 (PDT)
-Message-ID: <e3ed8fc7-e036-a1b9-8f73-e4be403f09d3@gmail.com>
-Date:   Tue, 12 Jul 2022 16:25:53 -0700
+        bh=d3YvOgvXOXgKJ9W7BKp/jkotIdUHeW5Mi6XOrIgvd1o=;
+        b=Q6D90a1P0MXm3L4Z2uKaobsrr6t5ScHnndXBe3HRGZxW2x5Yon3OtZpDuu0c83tjks
+         N36e0XBfZ5CpCbLw75csglkerjvLWYR2yaCmoC+zTV+kT4014okynM8AirNqpKHxFWNa
+         BB5IIVXuI9yYIwxyrsfSTx71/rt+u1cNmWKnfwcVzgyv2eatZrBB/HbG6JOjIKjpQZPp
+         XLntxycvSCUR4dt2OGM8PCUklMcouWv587pNbuckff7lAea9872OyJfj5aEQUbv+Npo3
+         3PxQVUL02+83Cms3ktojH994yU4duq+TzbXJ7iw9566Y0NvBzTzl/Em94TQHzpsSJKJ3
+         bsIQ==
+X-Gm-Message-State: AJIora9M3UhXcYnlJHHoA0bnRrFKxks1pcMjL3WQuUoAiEyCLGdqXbq0
+        SEL66AiUdNc2AEFokr7JomjAl/VDDNMyrNYn
+X-Google-Smtp-Source: AGRyM1saynzQkwGM+ob0Kfg8t62NJax3I9qIPugPBKcuk0nur2+1d9I6KibU7dK0bZ0KsICgPJcMuQ==
+X-Received: by 2002:a05:6638:134a:b0:33f:20b6:398b with SMTP id u10-20020a056638134a00b0033f20b6398bmr334606jad.301.1657668371297;
+        Tue, 12 Jul 2022 16:26:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-105-222.hlrn.qwest.net. [71.218.105.222])
+        by smtp.gmail.com with ESMTPSA id o17-20020a92d4d1000000b002dbee570531sm4194605ilm.18.2022.07.12.16.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 16:26:10 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH v3] bpf/scripts: Generate GCC compatible helpers
+Date:   Tue, 12 Jul 2022 17:25:56 -0600
+Message-Id: <20220712232556.248863-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220712183238.844813653@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 11:38, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.55 release.
-> There are 78 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.55-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The current bpf_helper_defs.h helpers are llvm specific and don't work
+correctly with gcc.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+GCC appears to required kernel helper funcs to have the following
+attribute set: __attribute__((kernel_helper(NUM)))
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Generate gcc compatible headers based on the format in bpf-helpers.h.
+
+This generates GCC/Clang compatible helpers, for example:
+	/* Helper macro for GCC/Clang compatibility */
+	#define NOARG
+	#if __GNUC__ && !__clang__
+	#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \
+	ret_type ret_star name(__VA_ARGS__) __attribute__((kernel_helper(num)));
+	#else
+	#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \
+	static ret_type ret_star(*name)(__VA_ARGS__) = (void *) num;
+	#endif
+
+	BPF_HELPER_DEF(1, *, void, bpf_map_lookup_elem, void *map, const void *key)
+
+	BPF_HELPER_DEF(2, NOARG, long, bpf_map_update_elem, void *map, const void *key, const void *value, __u64 flags)
+
+See:
+https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
+
+This fixes the following build error:
+error: indirect call in function, which are not supported by eBPF
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - use a conditional helper macro
+Changes v1 -> v2:
+  - more details in commit log
+---
+ scripts/bpf_doc.py | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index a0ec321469bd..45f51ff1318c 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -717,6 +717,16 @@ class PrinterHelpers(Printer):
+         header = '''\
+ /* This is auto-generated file. See bpf_doc.py for details. */
+ 
++/* Helper macro for GCC/Clang compatibility */
++#define NOARG
++#if __GNUC__ && !__clang__
++#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \\
++ret_type ret_star name(__VA_ARGS__) __attribute__((kernel_helper(num)));
++#else
++#define BPF_HELPER_DEF(num, ret_star, ret_type, name, ...) \\
++static ret_type ret_star(*name)(__VA_ARGS__) = (void *) num;
++#endif
++
+ /* Forward declarations of BPF structs */'''
+ 
+         print(header)
+@@ -746,6 +756,11 @@ class PrinterHelpers(Printer):
+             return
+         self.seen_helpers.add(proto['name'])
+ 
++        if proto['ret_star']:
++            ret_star = proto['ret_star']
++        else:
++            ret_star = 'NOARG'
++
+         print('/*')
+         print(" * %s" % proto['name'])
+         print(" *")
+@@ -762,8 +777,8 @@ class PrinterHelpers(Printer):
+                 print(' *{}{}'.format(' \t' if line else '', line))
+ 
+         print(' */')
+-        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type']),
+-                                      proto['ret_star'], proto['name']), end='')
++        print('BPF_HELPER_DEF(%d, %s, %s, %s, ' % (len(self.seen_helpers),
++            ret_star, self.map_type(proto['ret_type']), proto['name']), end='')
+         comma = ''
+         for i, a in enumerate(proto['args']):
+             t = a['type']
+@@ -781,7 +796,7 @@ class PrinterHelpers(Printer):
+             comma = ', '
+             print(one_arg, end='')
+ 
+-        print(') = (void *) %d;' % len(self.seen_helpers))
++        print(')')
+         print('')
+ 
+ ###############################################################################
 -- 
-Florian
+2.34.1
+

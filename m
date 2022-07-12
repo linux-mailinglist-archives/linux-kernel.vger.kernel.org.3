@@ -2,138 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3B8571B1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E0F571B20
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbiGLNZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S232858AbiGLNZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiGLNZW (ORCPT
+        with ESMTP id S232839AbiGLNZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:25:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A0361B07;
-        Tue, 12 Jul 2022 06:25:22 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CD5GUM002635;
-        Tue, 12 Jul 2022 13:25:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=YAEFtiMD5+u10/+PC1Fc0a9VR8y5YIWCiK8+QDE6278=;
- b=YQCXjN+zxjMWouvwYt0wSGdpTlAOYv62daxUtlavi8c2wXbU4HaE7cXBmXFhhv4neuKj
- IuLiUukqO6HSnQJcXyZKEU21BByKeh3ddRM0qTCnTk6BWuhMEx08/yo1YSvbShIWVLOf
- i6cu52ldc0XWvges4uJ/NiFIyIQh38ka8BZYXbxKQr+vXKv00eLL63v0f5ti14aqGALL
- noGYtkzRNoIoYCxr4/EDbepTFobko8Rb/KCCiB3hdWJPuPCDpDWSUl+r1jwuDfH1/1i8
- WKaHqiDJDLBIsiy7KUX2og7X+y58A1dPphySJKLB0FjapPvl5wBZfvjHrjYTCe8kDooW 4Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h99hh0pma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 13:25:04 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CD6E4V007126;
-        Tue, 12 Jul 2022 13:25:04 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h99hh0pkw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 13:25:04 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CDKX5e003548;
-        Tue, 12 Jul 2022 13:25:03 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma03dal.us.ibm.com with ESMTP id 3h71a9kae9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 13:25:03 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CDP19S13042006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 13:25:01 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4ADE78060;
-        Tue, 12 Jul 2022 13:25:01 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F31C278063;
-        Tue, 12 Jul 2022 13:25:00 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 13:25:00 +0000 (GMT)
-Message-ID: <3780329f-0197-0e47-81a1-22ceae28fd1c@linux.ibm.com>
-Date:   Tue, 12 Jul 2022 09:25:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v6 4/6] tpm: of: Make of-tree specific function commonly
- available
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, kexec@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20220707172026.831614-1-stefanb@linux.ibm.com>
- <20220707172026.831614-5-stefanb@linux.ibm.com>
- <9fc4f6dc2ee497a4d4998df17392ac73ebdf3d63.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <9fc4f6dc2ee497a4d4998df17392ac73ebdf3d63.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zfIXDZutaERNnJii3LMuF_IWJx2l4fhv
-X-Proofpoint-GUID: ywZSBDORtiUmK_Pr09djCcNdU0Gi5d3h
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 12 Jul 2022 09:25:32 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A68E4ED;
+        Tue, 12 Jul 2022 06:25:29 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Lj1gd1sHjzKHnx;
+        Tue, 12 Jul 2022 21:24:29 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgAHamlGds1iag20Ag--.36943S3;
+        Tue, 12 Jul 2022 21:25:27 +0800 (CST)
+Subject: Re: [PATCH RFC v3 1/3] sbitmap: fix that same waitqueue can be woken
+ up continuously
+To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, asml.silence@gmail.com, osandov@fb.com,
+        kbusch@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220710042200.20936-1-yukuai1@huaweicloud.com>
+ <20220710042200.20936-2-yukuai1@huaweicloud.com>
+ <20220711142009.jz2ilqrxjgtwuvq6@quack3.lan>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0369ea84-f9ac-4992-5f1e-4f44d373b65d@huaweicloud.com>
+Date:   Tue, 12 Jul 2022 21:25:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=953
- priorityscore=1501 clxscore=1015 spamscore=0 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120051
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220711142009.jz2ilqrxjgtwuvq6@quack3.lan>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgAHamlGds1iag20Ag--.36943S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw45tr1DKw1fGryxJF1UZFb_yoW5CF4Upa
+        1UWFyvyF48tFy2kws2qF1UAw1YkwnFgr9rGr4rK3WjkrnrKr4ftr9Y9rs8ur18ZFsrCay8
+        JF47tFZxWr4jqFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
+ÔÚ 2022/07/11 22:20, Jan Kara Ð´µÀ:
+> On Sun 10-07-22 12:21:58, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> __sbq_wake_up		__sbq_wake_up
+>>   sbq_wake_ptr -> assume	0
+>> 			 sbq_wake_ptr -> 0
+>>   atomic_dec_return
+>> 			atomic_dec_return
+>>   atomic_cmpxchg -> succeed
+>> 			 atomic_cmpxchg -> failed
+>> 			  return true
+>>
+>> 			__sbq_wake_up
+>> 			 sbq_wake_ptr
+>> 			  atomic_read(&sbq->wake_index) -> still 0
+>>   sbq_index_atomic_inc -> inc to 1
+>> 			  if (waitqueue_active(&ws->wait))
+>> 			   if (wake_index != atomic_read(&sbq->wake_index))
+>> 			    atomic_set -> reset from 1 to 0
+>>   wake_up_nr -> wake up first waitqueue
+>> 			    // continue to wake up in first waitqueue
+>>
+>> Fix the problem by using atomic_cmpxchg() instead of atomic_set()
+>> to update 'wake_index'.
+>>
+>> Fixes: 417232880c8a ("sbitmap: Replace cmpxchg with xchg")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> 
+> I don't think this patch is really needed after the following patches.  As
+> I see it, wake_index is just a performance optimization (plus a fairness
+> improvement) but in principle the code in sbq_wake_ptr() is always prone to
+> races as the waitqueue it returns needn't have any waiters by the time we
+> return. So for correctness the check-and-retry loop needs to happen at
+> higher level than inside sbq_wake_ptr() and occasional wrong setting of
+> wake_index will result only in a bit of unfairness and more scanning
+> looking for suitable waitqueue but I don't think that really justifies the
+> cost of atomic operations in cmpxchg loop...
 
-On 7/11/22 18:04, Mimi Zohar wrote:
-> Hi Stefan,
-> 
-> On Thu, 2022-07-07 at 13:20 -0400, Stefan Berger wrote:
->> -       /*
->> -        * For both vtpm/tpm, firmware has log addr and log size in big
->> -        * endian format. But in case of vtpm, there is a method called
->> -        * sml-handover which is run during kernel init even before
->> -        * device tree is setup. This sml-handover function takes care
->> -        * of endianness and writes to sml-base and sml-size in little
->> -        * endian format. For this reason, vtpm doesn't need conversion
->> -        * but physical tpm needs the conversion.
->> -        */
-> 
-> This comment is dropped.  Perhaps not in such detail, but shouldn't a
-> comment or function description exist in the new function.
+It's right this patch just improve fairness. However, in hevyload tests
+I found that the 'wrong setting of wake_index' can happen frequently,
+for consequence, some waitqueue can be empty while some waitqueue have
+a lot of waiters.
 
-I am adding back the comment in v7.
+There shoud be lots of work to fix unfairness throughly, I can remove
+this patch for now.
 
+Thanks,
+Kuai
 > 
-> Otherwise,
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> thanks,
-> 
-> Mimi
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
+> 								Honza
+>> ---
+>>   lib/sbitmap.c | 15 ++++++++++-----
+>>   1 file changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+>> index 29eb0484215a..b46fce1beb3a 100644
+>> --- a/lib/sbitmap.c
+>> +++ b/lib/sbitmap.c
+>> @@ -579,19 +579,24 @@ EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
+>>   
+>>   static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+>>   {
+>> -	int i, wake_index;
+>> +	int i, wake_index, old_wake_index;
+>>   
+>> +again:
+>>   	if (!atomic_read(&sbq->ws_active))
+>>   		return NULL;
+>>   
+>> -	wake_index = atomic_read(&sbq->wake_index);
+>> +	old_wake_index = wake_index = atomic_read(&sbq->wake_index);
+>>   	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>>   		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>>   
+>>   		if (waitqueue_active(&ws->wait)) {
+>> -			if (wake_index != atomic_read(&sbq->wake_index))
+>> -				atomic_set(&sbq->wake_index, wake_index);
+>> -			return ws;
+>> +			if (wake_index == old_wake_index)
+>> +				return ws;
+>> +
+>> +			if (atomic_cmpxchg(&sbq->wake_index, old_wake_index,
+>> +					   wake_index) == old_wake_index)
+>> +				return ws;
+>> +			goto again;
+>>   		}
+>>   
+>>   		wake_index = sbq_index_inc(wake_index);
+>> -- 
+>> 2.31.1
+>>
+

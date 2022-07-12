@@ -2,139 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB8C571934
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9948571939
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiGLL5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S233048AbiGLL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiGLL4t (ORCPT
+        with ESMTP id S232070AbiGLL5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:56:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E337E21BE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657626988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qfc1A89ED4fhg0R8xqH3w64VTj5vw+dyc3zkUFhfwYU=;
-        b=M6kD08EQMoCInTgq3WuvBAKYZrxMq33yV2/vl8i0zcISah7k3uHNwbKs9ZrNMvXMt6kciW
-        +nIcEOqweT4iYDVc7iapqpV4hE0VEIj2gKjU3oTL5+c6l5ybZz0lGsPOu1lfX010w+ond0
-        pexeKbbLDnrbQAi6a2TYwM3FdTlv8eM=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-ZbPLPYviOf--MEourZaV3g-1; Tue, 12 Jul 2022 07:56:26 -0400
-X-MC-Unique: ZbPLPYviOf--MEourZaV3g-1
-Received: by mail-qv1-f72.google.com with SMTP id ln2-20020a0562145a8200b0047301e9bc53so1647991qvb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:56:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=qfc1A89ED4fhg0R8xqH3w64VTj5vw+dyc3zkUFhfwYU=;
-        b=8JSFZyJ0IS4eWGgWbkPlsviPYc8ZorYxpVldA03FuMWhXaBGUXvyobkPjkH9QfYqIe
-         C8S3AuQwoGetZo7PPrnWAjZKSam7/5cUwPRHTeLU6E6fLq9TklUSc/iwCqekG88oYyyi
-         gJczbxoVz3Oxw9FvHchUYXuh6ZYX+gwib91nGtcIIUvZJBk7SSYrKIRNyyzbKjMTCn3n
-         spg/BTqgH8yhNvzBcpEHTPizgJnZ1D3puqztz9bv5B3h+oF8O2xqno78Ud8ormhAVdaz
-         nG96NfZhLWy21E83T7tmQQEHDWYJqip4pLbGK7pCAISpWeJKMPup/FcQQJgYeVDIv8mq
-         GbIQ==
-X-Gm-Message-State: AJIora+PHJPJSv6vsev+3loTAJeRBqrAmMrbsj1ThnlUpw7k6wa/nvEp
-        tGJ4//fgu0gw/hRLEHgkEGOoNAN2IHffjIPZ2ME1I+nvTIXhzTyYAMU2A55yaK8/zeqKnQeutnU
-        ePuDYlluwEjFAowWSC3uRKi5h
-X-Received: by 2002:ac8:5e46:0:b0:317:6146:6f05 with SMTP id i6-20020ac85e46000000b0031761466f05mr18139060qtx.490.1657626986469;
-        Tue, 12 Jul 2022 04:56:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1smwE8DmmPk8Zo8gZR1AzKKySTix/flcz8j70kP3A4KvDNHGomiSv4SWkOBMk2VnYq5OceaNQ==
-X-Received: by 2002:ac8:5e46:0:b0:317:6146:6f05 with SMTP id i6-20020ac85e46000000b0031761466f05mr18139039qtx.490.1657626986214;
-        Tue, 12 Jul 2022 04:56:26 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id w15-20020ac86b0f000000b0031eb00e6fc9sm6120884qts.32.2022.07.12.04.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:56:25 -0700 (PDT)
-Message-ID: <27bfdbc9ef7e7471fd20b18d697f6845fdceb388.camel@redhat.com>
-Subject: Re: [PATCH v3 14/25] KVM: VMX: Tweak the special handling of
- SECONDARY_EXEC_ENCLS_EXITING in setup_vmcs_config()
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:56:21 +0300
-In-Reply-To: <20220708144223.610080-15-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-15-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Tue, 12 Jul 2022 07:57:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533D4BFA;
+        Tue, 12 Jul 2022 04:56:46 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CBhTSI032402;
+        Tue, 12 Jul 2022 11:56:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xxM1sBw1RpcPmqSpO/GY77EKZByGzVx/ORbOWcO5qxo=;
+ b=f2cwwTTON7TEzct2RaDF32enwFddVe0lYbQ4CY/hjyGNhQuP+PQ84L8sEesvSVD7BIdj
+ Y2sbpiIodpjUYYKkr8KvtFTIlRx6YT+I5eR+z/nrQUDokv4KgVDnSKJCgtnz01u8FKJx
+ TyS0Ugx0kbw4lfczOY1U3xbbFAr5e5JGg9wRxVF7aJen3jxBQUiZKK6aksxVAj44mlaD
+ 3KLCRPSLshyOFQX+Tmm+49SKBcravGL/fhECHzf3uAD+yr3p2DuB/ZAcvQ6kyYG8kbdu
+ Ilf9Ywm1GIspNq7lwHlBi+hiXoidi5QSNBcQZphRthAb+rinfa8uhf/nluHPVky6Sqkx 3A== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9640ca4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 11:56:43 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CBpXu2000558;
+        Tue, 12 Jul 2022 11:56:41 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3h71a8kd68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 11:56:41 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CBucpD9371904
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 11:56:38 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 856D511C050;
+        Tue, 12 Jul 2022 11:56:38 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FEEE11C04C;
+        Tue, 12 Jul 2022 11:56:38 +0000 (GMT)
+Received: from [9.145.42.82] (unknown [9.145.42.82])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 11:56:38 +0000 (GMT)
+Message-ID: <367ea79f-293e-d93f-6c99-65c62c886e70@linux.ibm.com>
+Date:   Tue, 12 Jul 2022 13:56:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/3] s390/cpufeature: rework to allow more than only hwcap
+ bits
+Content-Language: en-US
+From:   Steffen Eiden <seiden@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     nrb@linux.ibm.com
+References: <20220712105220.325010-1-seiden@linux.ibm.com>
+ <20220712105220.325010-2-seiden@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20220712105220.325010-2-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NtT4heE-oEbzHjbZGKjMIswCE6v0lgmG
+X-Proofpoint-GUID: NtT4heE-oEbzHjbZGKjMIswCE6v0lgmG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ mlxlogscore=999 lowpriorityscore=0 impostorscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> SECONDARY_EXEC_ENCLS_EXITING is conditionally added to the 'optional'
-> checklist in setup_vmcs_config() but there's little value in doing so.
-> First, as the control is optional, we can always check for its
-> presence, no harm done. Second, the only real value cpu_has_sgx() check
-> gives is that on the CPUs which support SECONDARY_EXEC_ENCLS_EXITING but
-> don't support SGX, the control is not getting enabled. It's highly unlikely
-> such CPUs exist but it's possible that some hypervisors expose broken vCPU
-> models.
+
+
+On 7/12/22 12:52, Steffen Eiden wrote:
+> Rework cpufeature implementation to allow for various cpu feature
+> indications, which is not only limited to hwcap bits. This is achieved
+> by adding a sequential list of cpu feature numbers, where each of them
+> is mapped to an entry which indicates what this number is about.
 > 
-> Preserve cpu_has_sgx() check but filter the result of adjust_vmx_controls()
-> instead of the input.
+> Each entry contains a type member, which indicates what feature
+> name space to look into (e.g. hwcap, or cpu facility). If wanted this
+> allows also to automatically load modules only in e.g. z/VM
+> configurations.
 > 
-> Reviewed-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index ce54f13d8da1..566be73c6509 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2528,9 +2528,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                         SECONDARY_EXEC_PT_CONCEAL_VMX |
->                         SECONDARY_EXEC_ENABLE_VMFUNC |
->                         SECONDARY_EXEC_BUS_LOCK_DETECTION |
-> -                       SECONDARY_EXEC_NOTIFY_VM_EXITING;
-> -               if (cpu_has_sgx())
-> -                       opt2 |= SECONDARY_EXEC_ENCLS_EXITING;
-> +                       SECONDARY_EXEC_NOTIFY_VM_EXITING |
-> +                       SECONDARY_EXEC_ENCLS_EXITING;
-> +
->                 if (adjust_vmx_controls(min2, opt2,
->                                         MSR_IA32_VMX_PROCBASED_CTLS2,
->                                         &_cpu_based_2nd_exec_control) < 0)
-> @@ -2577,6 +2577,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->                 vmx_cap->vpid = 0;
->         }
->  
-> +       if (!cpu_has_sgx())
-> +               _cpu_based_2nd_exec_control &= ~SECONDARY_EXEC_ENCLS_EXITING;
-> +
->         if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
->                 u64 opt3 = TERTIARY_EXEC_IPI_VIRT;
->  
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 
+Sorry for the confusion. I modified a rfc from Heiko he sent to me.
+My amended modifications also changed the author to myself of that
+patch automatically.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
-
+Steffen

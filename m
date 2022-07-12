@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70956571B8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD0D571B89
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbiGLNmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S233384AbiGLNlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbiGLNlS (ORCPT
+        with ESMTP id S233349AbiGLNk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:41:18 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6F6B8E9E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so11433436pjm.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:48 -0700 (PDT)
+        Tue, 12 Jul 2022 09:40:56 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC73B8530
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:34 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c86fe1dddso81423847b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hHX6u+uuT0Qv/UMIRhleUO+BgcB2HGRMakbokCWE8Fs=;
-        b=Ihzm2rddLGzNKF4YXXSxlXjbHdCTscB0yqKGkiatFFI5tMV1MKKybwz46/gefAVWW/
-         uHag3srSoMJMC8+UcknJNrRV8FPVQfTKKnQ3pNaw44uEtgQUv7d/H/huqn8/BmtP3RK7
-         P0wt/gNUbftGkpGgJcCsY5IyXb5HuQKPSJS9+FSw/w86QbzAsw98x2+oC2UBgYgEgxqZ
-         cNXkhaobZ9JF9wYFAs8caGM4lZXYluwZpyF/f6Re6xczg3RD3pmVkFVYiKgLFMpCUqNH
-         DYPRdqfDhrsYLX2mUHikivQ6A0p02w+HPIBG02A8nDqyMUV9x/dhfmXIBhlSNTdTuKaJ
-         JJqg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ALyPmALyKUZN850RRfbsMebRjTXHId7O0aEtI7++nZc=;
+        b=LSt+DLU33Q6liALS8BuSSMkfOKSlRWDFuTo7po1O26Fv7bk7ore1ydtL7Hkh54hx5B
+         9uSRjCaDwCvwdfWSzS7lnufwTmWr2b2BeYWR5YFP9ZU8F9VUUXmk6Zu5giNcEj2YbgpC
+         uI4p1/JHiKYlEhx0fK1shW+TiQcG27FxZBVsXr+bZEYrVso0bpBwSBWJ2SnXgjmK3o2a
+         TljCQ3HgMAtH+5k9+nmdR7HTEIpmR3g8H3YU3v/0m4e+3pVXNggO7+TOdghExzxY46ET
+         DIp6u0LHdi2CFsZzjm9ZOB6D+HRRffEUqutrzlU2tzRGZr0L4jryw4F7HNyo/VTj61UD
+         CAVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hHX6u+uuT0Qv/UMIRhleUO+BgcB2HGRMakbokCWE8Fs=;
-        b=BZ+fJTbyh5sjQZjhHggumVeZHqjeTzzW0+WoKj06nOSbFVfHIFictbC8rVzjqQhjwj
-         Hgf6pRc1KCAjyrn9Tr6KpH17wwXrTo3lanLu4rWm/6AWm4Wv2w8pc+g7CuEWS4qnK0eS
-         LxzAYDfK7nIF96iMCx3ajMZG78G1Z0ICk/IKciy2eH+uwWydN1hYnHuuF4NObAea0GKb
-         wbWgBTOF4njYzvrvBY93xtXn/AVFIO2VWEFbTw7knatLeulORl3eBkwRLC3gfFVF7oG6
-         KYDGG9MXTh392tef4m6H+/bf9LJfMrVeXsnhARD/9hkIRJquYRQfP8hrAJ9wrs8FB8M+
-         iuLQ==
-X-Gm-Message-State: AJIora/RLbUi6MYAGVIWjMWYgEErV+vGO2RZk+gqFvEKm4kzknBLjTRp
-        vi37cjb4/HaKSaSPiLMQwCM=
-X-Google-Smtp-Source: AGRyM1tLVKYRqR/7FAuECqcy2MJ1lHFZ77GM2G7vH4DXeoiG1wAQZNcrfpbj6S8pBzGrN9YwT5/13g==
-X-Received: by 2002:a17:90b:17d1:b0:1f0:6f1:90d1 with SMTP id me17-20020a17090b17d100b001f006f190d1mr4367814pjb.221.1657633247691;
-        Tue, 12 Jul 2022 06:40:47 -0700 (PDT)
-Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-75-15-180.ap-northeast-1.compute.amazonaws.com. [35.75.15.180])
-        by smtp.gmail.com with ESMTPSA id r6-20020aa79886000000b0052ae3bcb807sm1947178pfl.188.2022.07.12.06.40.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 06:40:47 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 16/16] mm/sl[au]b: check if large object is valid in __ksize()
-Date:   Tue, 12 Jul 2022 13:39:46 +0000
-Message-Id: <20220712133946.307181-17-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220712133946.307181-1-42.hyeyoo@gmail.com>
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ALyPmALyKUZN850RRfbsMebRjTXHId7O0aEtI7++nZc=;
+        b=ad/s7U1yE3IjasSEsjIVEqwEFNmwRv86FPk7xCxMogqdUI9RQ3JPy4xHc9eqiRn8Cm
+         TELMT+ZuXI/sLDvx0x2Jte509GGZ0mhQ3y7iCp65+hQUMpxnhHQdBtanKqvhdhsk9ae8
+         y8HNjpLQOyhfaCzt3VKE6kbVA5mc/KqLjjPqA7wf8m4vlqdmT8z6ofrTU9GlzTpKEgvl
+         QSvTrqrWo8CxpnMrCXDhuwIR2InH/N5fIKJYzcuQSehqO57GF4dE5e37USjlwh7IOLCd
+         4e6gWkw+rAOD5oggVCwbaHDzK5ieLFcJS1PLaBEHCM97HDLfLBahF11kSpfZRVib9Zik
+         xmHQ==
+X-Gm-Message-State: AJIora8M6iMLLhcJ/uFL4KLiAx+e5XRRrSNHlMMvco01jt1uL+shFMlS
+        4egSL3i+lhlTPnMpgHVETK4l609Kvsu3822khHJAEQ==
+X-Google-Smtp-Source: AGRyM1vOJbA/kJ593A3ED5ZJMoh4prb03n/Kz2Y5PlZioljval/AgDFA11ABBXVIE5GqjlsCSBB2nghmV/bKBZoaO6Q=
+X-Received: by 2002:a81:98d:0:b0:31c:921c:9783 with SMTP id
+ 135-20020a81098d000000b0031c921c9783mr25237173ywj.316.1657633233606; Tue, 12
+ Jul 2022 06:40:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220704150514.48816-1-elver@google.com>
+In-Reply-To: <20220704150514.48816-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Jul 2022 15:39:57 +0200
+Message-ID: <CANpmjNP0hPuhXmZmkX1ytCDh56LOAmxJjf7RyfxOvoaem=2d8Q@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] perf/hw_breakpoint: Optimize for thousands of tasks
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ksize() returns size of objects allocated from slab allocator.
-When invalid object is passed to __ksize(), returning zero
-prevents further memory corruption and makes caller be able to
-check if there is an error.
+On Mon, 4 Jul 2022 at 17:05, Marco Elver <elver@google.com> wrote:
+>
+> The hw_breakpoint subsystem's code has seen little change in over 10
+> years. In that time, systems with >100s of CPUs have become common,
+> along with improvements to the perf subsystem: using breakpoints on
+> thousands of concurrent tasks should be a supported usecase.
+[...]
+> Marco Elver (14):
+>   perf/hw_breakpoint: Add KUnit test for constraints accounting
+>   perf/hw_breakpoint: Provide hw_breakpoint_is_used() and use in test
+>   perf/hw_breakpoint: Clean up headers
+>   perf/hw_breakpoint: Optimize list of per-task breakpoints
+>   perf/hw_breakpoint: Mark data __ro_after_init
+>   perf/hw_breakpoint: Optimize constant number of breakpoint slots
+>   perf/hw_breakpoint: Make hw_breakpoint_weight() inlinable
+>   perf/hw_breakpoint: Remove useless code related to flexible
+>     breakpoints
+>   powerpc/hw_breakpoint: Avoid relying on caller synchronization
+>   locking/percpu-rwsem: Add percpu_is_write_locked() and
+>     percpu_is_read_locked()
+>   perf/hw_breakpoint: Reduce contention with large number of tasks
+>   perf/hw_breakpoint: Introduce bp_slots_histogram
+>   perf/hw_breakpoint: Optimize max_bp_pinned_slots() for CPU-independent
+>     task targets
+>   perf/hw_breakpoint: Optimize toggle_bp_slot() for CPU-independent task
+>     targets
+[...]
 
-If address of large object is not beginning of folio or size of
-the folio is too small, it must be invalid. Return zero in such cases.
+This is ready from our side, and given the silence, assume it's ready
+to pick up and/or have a maintainer take a look. Since this is mostly
+kernel/events, would -tip/perf/core be appropriate?
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- mm/slab_common.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 1f8db7959366..0d6cbe9d7ad0 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1013,8 +1013,12 @@ size_t __ksize(const void *object)
- 
- 	folio = virt_to_folio(object);
- 
--	if (unlikely(!folio_test_slab(folio)))
-+	if (unlikely(!folio_test_slab(folio))) {
-+		if (WARN_ON(object != folio_address(folio) ||
-+				folio_size(folio) <= KMALLOC_MAX_CACHE_SIZE))
-+			return 0;
- 		return folio_size(folio);
-+	}
- 
- 	return slab_ksize(folio_slab(folio)->slab_cache);
- }
--- 
-2.34.1
-
+Thanks,
+-- Marco

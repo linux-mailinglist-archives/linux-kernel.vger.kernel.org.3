@@ -2,578 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB46572655
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0BD572661
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbiGLTr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
+        id S233366AbiGLTsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbiGLTrE (ORCPT
+        with ESMTP id S231594AbiGLTrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:47:04 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64142495D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:39:10 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31caffa4a45so92126557b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:39:10 -0700 (PDT)
+        Tue, 12 Jul 2022 15:47:24 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C644326F9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:40:02 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id l11so3319739qvu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KMTH7c3bOBkf5k+lAAqFxGZl7GaFgTM2gzeViHHvu7w=;
-        b=HwbluQfr0D7BK/i5AyJzWa52KDaIe0+lLTCj6xycbWNX/6Owzppqy2OkbVWnUUb7bz
-         BBXjVoUtQxS57PnlV4FrdU9k9Tbku2maV11ERWh1D6s/ALEH5PJleiOCusnliS54rTfP
-         zgm06BA9xQiCga0QmDAJg5Lb0UdPqilxT2ZQWdn4Oa36BiCRk4rekpqBwVlk6YosfqRl
-         bXprM34d7qG/w3TKL88qGbrxIRBAd1qUmaNwFAMxxGwVukOB/nE4RciqNcT+JmwucA2m
-         JFc3SJvmr93zgNHLcsJMjAQPLCLR7LhRuqY6L8MytAXOZgvpb0WGMnUyBlE6PzYXd5A8
-         hp8w==
+        d=maine.edu; s=google;
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=j8WAhKBpOc7wYs7Ko5g4Psu+Us9+b70bjp8g/dmZ0qY=;
+        b=MJh0B3YljS9BFRrx0KWFjiaypnfnVap1G2m/RMlRL9QDB/qYE/EPMoNenHcm9N+7h3
+         PLcBsWx31MaxdWtAsyTw0y9e4xckIMTNynhJkTVt7+ON2N7F7Cl6ozYtjRi4lIX/TbGD
+         UlmSoLUpaoi3/ZVKj+P6NJiJAV1eDdgwgYA04=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KMTH7c3bOBkf5k+lAAqFxGZl7GaFgTM2gzeViHHvu7w=;
-        b=xJmWi2061sd8OBpfaGm1xk+QK5qs+AXAsbJA3V9crM6vLWuzCtA3LxRyhHEdpd6XuE
-         O/lo0LvcFKQgUx6cjYwsUPf202bQQeds0R6mximVRjjQBXvQETpGcwBabRmRrwE1/FsI
-         uXrB2BwPlCuclfNQ/LDXkcwumkk9Z1IptVpR9qPzSU+J6V1Kqp+FDp0ACjh1lpgNp7Fc
-         DRiwVvaIgDmmeFjGwGCdDIqJyeVugJY7MuAWUomFKAW9mZBZ+SWAzmB7fr+9/P0EqXZr
-         0pfoaqTzvqtd5LHcP0I74OND1zG3gEQr8dStxgmEFQyw45ch/jtF4NyKP4TFbn4xTNIm
-         QdBQ==
-X-Gm-Message-State: AJIora+EvSW4CW57faHPHWDUSl7TYdogq+GMgaNXCyC3lpeXeFHLFMQ0
-        4v3seRWm6mTU8Qc8dyRD+UMf5UsIoWFYZb2rYTRm5YKRB2BX9g==
-X-Google-Smtp-Source: AGRyM1vfRDxyC+WQ+HD8MAWojb/7CBRUNw9+PG5Xh+TWrP86qp0MRxyMLZfAi1nBwFueV11QTTGHKYaWA7wSwbQxiIA=
-X-Received: by 2002:a81:920a:0:b0:31d:6b54:2ccc with SMTP id
- j10-20020a81920a000000b0031d6b542cccmr15342915ywg.518.1657654749631; Tue, 12
- Jul 2022 12:39:09 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=j8WAhKBpOc7wYs7Ko5g4Psu+Us9+b70bjp8g/dmZ0qY=;
+        b=kwKGnvpaYhIwlGTAlRCecXVlstNt2NtvT/a21DSiSLcVHD24t78TmyCdKuchHMpJzO
+         4LzlSoxE5XcMh8HN+yyW8YsGq+PENm4d4l0s9RM/tzkSmg03X7RTJEE7wr64mybGP+Pg
+         V1dnBAGADCTfHGEo3yJmCKTuPYBZ1pf54jO3/mAfv8BxdiZJFZiR/OzcoQnnti9t0jY7
+         G76xzem2e0Oyr9dJpESjZAGlGfj7ly60MKLGowB3rMF5oBOnp+6/ClAlI53u666uDic3
+         8dPkL98fWRomDze5WPWlbybU8rKT4f5BKawep7sZNr2ZqYFtUN88MufNGNYAtB3Pi11P
+         JpFg==
+X-Gm-Message-State: AJIora/qxBPBcQW7P8ZKHc4Y4gHhYt5LxDIL9x03tVkpe4LLbclYlBj3
+        oqThvM/aGJISDd5ctb7LfkuGP05qYoyXVA==
+X-Google-Smtp-Source: AGRyM1vBgwADc7/u+XrGr1/57R6Na1dl3N457lzCcnz5GD3A8Scdn98ZZjHWYbQHrcFIsV93BnlJAQ==
+X-Received: by 2002:ad4:4ee3:0:b0:472:f785:593e with SMTP id dv3-20020ad44ee3000000b00472f785593emr19510742qvb.51.1657654801488;
+        Tue, 12 Jul 2022 12:40:01 -0700 (PDT)
+Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
+        by smtp.gmail.com with ESMTPSA id cm23-20020a05622a251700b0031bed25394csm8165100qtb.3.2022.07.12.12.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 12:40:00 -0700 (PDT)
+From:   Vince Weaver <vincent.weaver@maine.edu>
+X-Google-Original-From: Vince Weaver <vince@maine.edu>
+Date:   Tue, 12 Jul 2022 15:39:56 -0400 (EDT)
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Vince Weaver <vincent.weaver@maine.edu>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
+ intel_pmu_lbr_restore
+In-Reply-To: <20220711221658.4gpkizopmftpnav6@guptapa-desk>
+Message-ID: <32ccdda1-63bf-746e-48fb-935fa58285b1@maine.edu>
+References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu> <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu> <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com> <20220711221658.4gpkizopmftpnav6@guptapa-desk>
 MIME-Version: 1.0
-References: <CGME20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5@eucas1p2.samsung.com>
- <20220705083934.3974140-1-saravanak@google.com> <7482d3af-4b02-4c1d-0386-b0a4ddf529da@samsung.com>
- <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com>
-In-Reply-To: <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 12 Jul 2022 12:38:33 -0700
-Message-ID: <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
-Subject: Re: [PATCH v4] amba: Remove deferred device addition
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 5:34 AM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Hi Saravana,
->
-> On 12.07.2022 14:25, Marek Szyprowski wrote:
-> > Hi Saravana,
-> >
-> > On 05.07.2022 10:39, Saravana Kannan wrote:
-> >> The uevents generated for an amba device need PID and CID information
-> >> that's available only when the amba device is powered on, clocked and
-> >> out of reset. So, if those resources aren't available, the information
-> >> can't be read to generate the uevents. To workaround this requirement,
-> >> if the resources weren't available, the device addition was deferred and
-> >> retried periodically.
-> >>
-> >> However, this deferred addition retry isn't based on resources becoming
-> >> available. Instead, it's retried every 5 seconds and causes arbitrary
-> >> probe delays for amba devices and their consumers.
-> >>
-> >> Also, maintaining a separate deferred-probe like mechanism is
-> >> maintenance headache.
-> >>
-> >> With this commit, instead of deferring the device addition, we simply
-> >> defer the generation of uevents for the device and probing of the device
-> >> (because drivers needs PID and CID to match) until the PID and CID
-> >> information can be read. This allows us to delete all the amba specific
-> >> deferring code and also avoid the arbitrary probing delays.
-> >>
-> >> Cc: Rob Herring <robh@kernel.org>
-> >> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> >> Cc: John Stultz <john.stultz@linaro.org>
-> >> Cc: Saravana Kannan <saravanak@google.com>
-> >> Cc: Linus Walleij <linus.walleij@linaro.org>
-> >> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> >> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> >> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> >> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> >> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-> >> Cc: Russell King <linux@armlinux.org.uk>
-> >> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> >> ---
-> >>
-> >> v1 -> v2:
-> >> - Dropped RFC tag
-> >> - Complete rewrite to not use stub devices.
-> >>
-> >> v2 -> v3:
-> >> - Flipped the if() condition for hard-coded periphids.
-> >> - Added a stub driver to handle the case where all amba drivers are
-> >>    modules loaded by uevents.
-> >> - Cc Marek after I realized I forgot to add him.
-> >>
-> >> v3 -> v4:
-> >> - Finally figured out and fixed the issue reported by Kefeng (bus match
-> >>    can't return an error other than -EPROBE_DEFER).
-> >> - I tested the patch on "V2P-CA15" on qemu
-> >> - Marek tested v3, but that was so long ago and the rebase wasn't clean,
-> >>    so I didn't include the tested-by.
-> >>
-> >> Marek/Kefeng,
-> >>
-> >> Mind giving a Tested-by?
-> >
-> >
-> > Yes, it looks that it still works fine.
-> >
-> > I've tested it by changing the Exynos power domain driver to
-> > initialize from late_initcall. This in turn lead me to a bug in
-> > generic pm_domains code in __genpd_dev_pm_attach(), which returns -2
-> > if the pm domain driver is not yet registered. After fixing that, I've
-> > successfully observed the deferred probe of PL330 driver on Exynos
-> > 4210 based boards both with this patch and without (with the old timer
-> > based code).
+On Mon, 11 Jul 2022, Pawan Gupta wrote:
 
-Thanks for testing it again Marek! I was hoping you'll hit the crash
-that Sudeep was hitting and it would give me some more clues.
+> Output of below would be helpful:
+> 
+> # grep "rtm\|hle" /proc/cpuinfo
 
-Sudeep,
+no results
 
-This makes me think the issue you are seeing is related to your
-hardware drivers. Can you look into those please? I'm leaning towards
-merging this amba clean up and adding delays (say 1ms) to your
-clock/power domain drivers to avoid the crash you are seeing. And then
-you can figure out the actual delays needed and update it.
+> ARCH_CAP
+> # rdmsr 0x10a
 
-> While preparing a fix for the above issue in genpd I found that it has
-> been introduced by your commit 5a46079a9645 ("PM: domains: Delete usage
-> of driver_deferred_probe_check_state()"). I didn't analyze it enough,
-> but it looks that something is missing there if we are trying to probe
-> amba device. I assume that returning -EPROBE_DEFER unconditionally there
-> is also not a valid solution?
+rdmsr: CPU 0 cannot read MSR 0x0000010a
 
-Yeah, the unconditionally returning -EPROBE_DEFER wouldn't work
-because if the supplier is optional but not present, the consumer
-driver would never stop waiting for it. I'm looking into issues
-similar to the one you saw in other threads [1]. The problem always
-boils down to the supplier device's DT node not having "compatible"
-property and therefore fw_devlink creating the device link between the
-consumer and the supplier's parent.
+> TSX_CTRL
+> # rdmsr 0x122
 
-Basically if the drivers/DT are implemented "properly", you would
-never get to the failure case (-2) if the driver is actually present.
-I have some other ideas on how to get these to work better (not sure
-if it'll be for 100% of the cases), but until I get those ideas sorted
-out, I might do a partial revert of the change you mentioned.
+rdmsr: CPU 0 cannot read MSR 0x00000122
 
-[1] - https://lore.kernel.org/lkml/4799738.LvFx2qVVIh@steina-w/
+> MCU_OPT_CTRL
+> # rdmsr 0x123
 
--Saravana
+0
+ 
+> TSX_FORCE_ABORT
+> # rdmsr 0x10f
 
->
->
-> >
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> >
-> >
-> >> -Saravana
-> >>
-> >>   drivers/amba/bus.c | 317 +++++++++++++++++++++------------------------
-> >>   1 file changed, 145 insertions(+), 172 deletions(-)
-> >>
-> >> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-> >> index 0e3ed5eb367b..9590c93b2aea 100644
-> >> --- a/drivers/amba/bus.c
-> >> +++ b/drivers/amba/bus.c
-> >> @@ -130,11 +130,100 @@ static struct attribute *amba_dev_attrs[] = {
-> >>   };
-> >>   ATTRIBUTE_GROUPS(amba_dev);
-> >>   +static int amba_read_periphid(struct amba_device *dev)
-> >> +{
-> >> +    struct reset_control *rstc;
-> >> +    u32 size, pid, cid;
-> >> +    void __iomem *tmp;
-> >> +    int i, ret;
-> >> +
-> >> +    ret = dev_pm_domain_attach(&dev->dev, true);
-> >> +    if (ret) {
-> >> +        dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
-> >> +        goto err_out;
-> >> +    }
-> >> +
-> >> +    ret = amba_get_enable_pclk(dev);
-> >> +    if (ret) {
-> >> +        dev_dbg(&dev->dev, "can't get pclk: %d\n", ret);
-> >> +        goto err_pm;
-> >> +    }
-> >> +
-> >> +    /*
-> >> +     * Find reset control(s) of the amba bus and de-assert them.
-> >> +     */
-> >> +    rstc =
-> >> of_reset_control_array_get_optional_shared(dev->dev.of_node);
-> >> +    if (IS_ERR(rstc)) {
-> >> +        ret = PTR_ERR(rstc);
-> >> +        if (ret != -EPROBE_DEFER)
-> >> +            dev_err(&dev->dev, "can't get reset: %d\n", ret);
-> >> +        goto err_clk;
-> >> +    }
-> >> +    reset_control_deassert(rstc);
-> >> +    reset_control_put(rstc);
-> >> +
-> >> +    size = resource_size(&dev->res);
-> >> +    tmp = ioremap(dev->res.start, size);
-> >> +    if (!tmp) {
-> >> +        ret = -ENOMEM;
-> >> +        goto err_clk;
-> >> +    }
-> >> +
-> >> +    /*
-> >> +     * Read pid and cid based on size of resource
-> >> +     * they are located at end of region
-> >> +     */
-> >> +    for (pid = 0, i = 0; i < 4; i++)
-> >> +        pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
-> >> +    for (cid = 0, i = 0; i < 4; i++)
-> >> +        cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
-> >> +
-> >> +    if (cid == CORESIGHT_CID) {
-> >> +        /* set the base to the start of the last 4k block */
-> >> +        void __iomem *csbase = tmp + size - 4096;
-> >> +
-> >> +        dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
-> >> +        dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) &
-> >> 0xff;
-> >> +    }
-> >> +
-> >> +    if (cid == AMBA_CID || cid == CORESIGHT_CID) {
-> >> +        dev->periphid = pid;
-> >> +        dev->cid = cid;
-> >> +    }
-> >> +
-> >> +    if (!dev->periphid)
-> >> +        ret = -ENODEV;
-> >> +
-> >> +    iounmap(tmp);
-> >> +
-> >> +err_clk:
-> >> +    amba_put_disable_pclk(dev);
-> >> +err_pm:
-> >> +    dev_pm_domain_detach(&dev->dev, true);
-> >> +err_out:
-> >> +    return ret;
-> >> +}
-> >> +
-> >>   static int amba_match(struct device *dev, struct device_driver *drv)
-> >>   {
-> >>       struct amba_device *pcdev = to_amba_device(dev);
-> >>       struct amba_driver *pcdrv = to_amba_driver(drv);
-> >>   +    if (!pcdev->periphid) {
-> >> +        int ret = amba_read_periphid(pcdev);
-> >> +
-> >> +        /*
-> >> +         * Returning any error other than -EPROBE_DEFER from bus match
-> >> +         * can cause driver registration failure. So, if there's a
-> >> +         * permanent failure in reading pid and cid, simply say that
-> >> +         * none of the drivers match.
-> >> +         */
-> >> +        if (ret)
-> >> +            return ret == -EPROBE_DEFER ? ret : 0;
-> >> +        dev_set_uevent_suppress(dev, false);
-> >> +        kobject_uevent(&dev->kobj, KOBJ_ADD);
-> >> +    }
-> >> +
-> >>       /* When driver_override is set, only bind to the matching
-> >> driver */
-> >>       if (pcdev->driver_override)
-> >>           return !strcmp(pcdev->driver_override, drv->name);
-> >> @@ -368,6 +457,42 @@ static int __init amba_init(void)
-> >>     postcore_initcall(amba_init);
-> >>   +static int amba_proxy_probe(struct amba_device *adev,
-> >> +                const struct amba_id *id)
-> >> +{
-> >> +    WARN(1, "Stub driver should never match any device.\n");
-> >> +    return -ENODEV;
-> >> +}
-> >> +
-> >> +static const struct amba_id amba_stub_drv_ids[] = {
-> >> +    { 0, 0 },
-> >> +};
-> >> +
-> >> +static struct amba_driver amba_proxy_drv = {
-> >> +    .drv = {
-> >> +        .name = "amba-proxy",
-> >> +    },
-> >> +    .probe = amba_proxy_probe,
-> >> +    .id_table = amba_stub_drv_ids,
-> >> +};
-> >> +
-> >> +static int __init amba_stub_drv_init(void)
-> >> +{
-> >> +    if (!IS_ENABLED(CONFIG_MODULES))
-> >> +        return 0;
-> >> +
-> >> +    /*
-> >> +     * The amba_match() function will get called only if there is at
-> >> least
-> >> +     * one amba driver registered. If all amba drivers are modules
-> >> and are
-> >> +     * only loaded based on uevents, then we'll hit a chicken-and-egg
-> >> +     * situation where amba_match() is waiting on drivers and
-> >> drivers are
-> >> +     * waiting on amba_match(). So, register a stub driver to make sure
-> >> +     * amba_match() is called even if no amba driver has been
-> >> registered.
-> >> +     */
-> >> +    return amba_driver_register(&amba_proxy_drv);
-> >> +}
-> >> +late_initcall_sync(amba_stub_drv_init);
-> >> +
-> >>   /**
-> >>    *    amba_driver_register - register an AMBA device driver
-> >>    *    @drv: amba device driver structure
-> >> @@ -410,160 +535,6 @@ static void amba_device_release(struct device
-> >> *dev)
-> >>       kfree(d);
-> >>   }
-> >>   -static int amba_read_periphid(struct amba_device *dev)
-> >> -{
-> >> -    struct reset_control *rstc;
-> >> -    u32 size, pid, cid;
-> >> -    void __iomem *tmp;
-> >> -    int i, ret;
-> >> -
-> >> -    ret = dev_pm_domain_attach(&dev->dev, true);
-> >> -    if (ret)
-> >> -        goto err_out;
-> >> -
-> >> -    ret = amba_get_enable_pclk(dev);
-> >> -    if (ret)
-> >> -        goto err_pm;
-> >> -
-> >> -    /*
-> >> -     * Find reset control(s) of the amba bus and de-assert them.
-> >> -     */
-> >> -    rstc =
-> >> of_reset_control_array_get_optional_shared(dev->dev.of_node);
-> >> -    if (IS_ERR(rstc)) {
-> >> -        ret = PTR_ERR(rstc);
-> >> -        if (ret != -EPROBE_DEFER)
-> >> -            dev_err(&dev->dev, "can't get reset: %d\n", ret);
-> >> -        goto err_clk;
-> >> -    }
-> >> -    reset_control_deassert(rstc);
-> >> -    reset_control_put(rstc);
-> >> -
-> >> -    size = resource_size(&dev->res);
-> >> -    tmp = ioremap(dev->res.start, size);
-> >> -    if (!tmp) {
-> >> -        ret = -ENOMEM;
-> >> -        goto err_clk;
-> >> -    }
-> >> -
-> >> -    /*
-> >> -     * Read pid and cid based on size of resource
-> >> -     * they are located at end of region
-> >> -     */
-> >> -    for (pid = 0, i = 0; i < 4; i++)
-> >> -        pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
-> >> -    for (cid = 0, i = 0; i < 4; i++)
-> >> -        cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
-> >> -
-> >> -    if (cid == CORESIGHT_CID) {
-> >> -        /* set the base to the start of the last 4k block */
-> >> -        void __iomem *csbase = tmp + size - 4096;
-> >> -
-> >> -        dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
-> >> -        dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) &
-> >> 0xff;
-> >> -    }
-> >> -
-> >> -    if (cid == AMBA_CID || cid == CORESIGHT_CID) {
-> >> -        dev->periphid = pid;
-> >> -        dev->cid = cid;
-> >> -    }
-> >> -
-> >> -    if (!dev->periphid)
-> >> -        ret = -ENODEV;
-> >> -
-> >> -    iounmap(tmp);
-> >> -
-> >> -err_clk:
-> >> -    amba_put_disable_pclk(dev);
-> >> -err_pm:
-> >> -    dev_pm_domain_detach(&dev->dev, true);
-> >> -err_out:
-> >> -    return ret;
-> >> -}
-> >> -
-> >> -static int amba_device_try_add(struct amba_device *dev, struct
-> >> resource *parent)
-> >> -{
-> >> -    int ret;
-> >> -
-> >> -    ret = request_resource(parent, &dev->res);
-> >> -    if (ret)
-> >> -        goto err_out;
-> >> -
-> >> -    /* Hard-coded primecell ID instead of plug-n-play */
-> >> -    if (dev->periphid != 0)
-> >> -        goto skip_probe;
-> >> -
-> >> -    ret = amba_read_periphid(dev);
-> >> -    if (ret) {
-> >> -        if (ret != -EPROBE_DEFER) {
-> >> -            amba_device_put(dev);
-> >> -            goto err_out;
-> >> -        }
-> >> -        goto err_release;
-> >> -    }
-> >> -
-> >> -skip_probe:
-> >> -    ret = device_add(&dev->dev);
-> >> -err_release:
-> >> -    if (ret)
-> >> -        release_resource(&dev->res);
-> >> -err_out:
-> >> -    return ret;
-> >> -}
-> >> -
-> >> -/*
-> >> - * Registration of AMBA device require reading its pid and cid
-> >> registers.
-> >> - * To do this, the device must be turned on (if it is a part of
-> >> power domain)
-> >> - * and have clocks enabled. However in some cases those resources
-> >> might not be
-> >> - * yet available. Returning EPROBE_DEFER is not a solution in such
-> >> case,
-> >> - * because callers don't handle this special error code. Instead
-> >> such devices
-> >> - * are added to the special list and their registration is retried from
-> >> - * periodic worker, until all resources are available and
-> >> registration succeeds.
-> >> - */
-> >> -struct deferred_device {
-> >> -    struct amba_device *dev;
-> >> -    struct resource *parent;
-> >> -    struct list_head node;
-> >> -};
-> >> -
-> >> -static LIST_HEAD(deferred_devices);
-> >> -static DEFINE_MUTEX(deferred_devices_lock);
-> >> -
-> >> -static void amba_deferred_retry_func(struct work_struct *dummy);
-> >> -static DECLARE_DELAYED_WORK(deferred_retry_work,
-> >> amba_deferred_retry_func);
-> >> -
-> >> -#define DEFERRED_DEVICE_TIMEOUT (msecs_to_jiffies(5 * 1000))
-> >> -
-> >> -static int amba_deferred_retry(void)
-> >> -{
-> >> -    struct deferred_device *ddev, *tmp;
-> >> -
-> >> -    mutex_lock(&deferred_devices_lock);
-> >> -
-> >> -    list_for_each_entry_safe(ddev, tmp, &deferred_devices, node) {
-> >> -        int ret = amba_device_try_add(ddev->dev, ddev->parent);
-> >> -
-> >> -        if (ret == -EPROBE_DEFER)
-> >> -            continue;
-> >> -
-> >> -        list_del_init(&ddev->node);
-> >> -        kfree(ddev);
-> >> -    }
-> >> -
-> >> -    mutex_unlock(&deferred_devices_lock);
-> >> -
-> >> -    return 0;
-> >> -}
-> >> -late_initcall(amba_deferred_retry);
-> >> -
-> >> -static void amba_deferred_retry_func(struct work_struct *dummy)
-> >> -{
-> >> -    amba_deferred_retry();
-> >> -
-> >> -    if (!list_empty(&deferred_devices))
-> >> -        schedule_delayed_work(&deferred_retry_work,
-> >> -                      DEFERRED_DEVICE_TIMEOUT);
-> >> -}
-> >> -
-> >>   /**
-> >>    *    amba_device_add - add a previously allocated AMBA device
-> >> structure
-> >>    *    @dev: AMBA device allocated by amba_device_alloc
-> >> @@ -575,28 +546,30 @@ static void amba_deferred_retry_func(struct
-> >> work_struct *dummy)
-> >>    */
-> >>   int amba_device_add(struct amba_device *dev, struct resource *parent)
-> >>   {
-> >> -    int ret = amba_device_try_add(dev, parent);
-> >> -
-> >> -    if (ret == -EPROBE_DEFER) {
-> >> -        struct deferred_device *ddev;
-> >> -
-> >> -        ddev = kmalloc(sizeof(*ddev), GFP_KERNEL);
-> >> -        if (!ddev)
-> >> -            return -ENOMEM;
-> >> +    int ret;
-> >>   -        ddev->dev = dev;
-> >> -        ddev->parent = parent;
-> >> -        ret = 0;
-> >> +    ret = request_resource(parent, &dev->res);
-> >> +    if (ret)
-> >> +        return ret;
-> >>   -        mutex_lock(&deferred_devices_lock);
-> >> +    /* If primecell ID isn't hard-coded, figure it out */
-> >> +    if (!dev->periphid) {
-> >> +        /*
-> >> +         * AMBA device uevents require reading its pid and cid
-> >> +         * registers.  To do this, the device must be on, clocked and
-> >> +         * out of reset.  However in some cases those resources might
-> >> +         * not yet be available.  If that's the case, we suppress the
-> >> +         * generation of uevents until we can read the pid and cid
-> >> +         * registers.  See also amba_match().
-> >> +         */
-> >> +        if (amba_read_periphid(dev))
-> >> +            dev_set_uevent_suppress(&dev->dev, true);
-> >> +    }
-> >>   -        if (list_empty(&deferred_devices))
-> >> -            schedule_delayed_work(&deferred_retry_work,
-> >> -                          DEFERRED_DEVICE_TIMEOUT);
-> >> -        list_add_tail(&ddev->node, &deferred_devices);
-> >> +    ret = device_add(&dev->dev);
-> >> +    if (ret)
-> >> +        release_resource(&dev->res);
-> >>   -        mutex_unlock(&deferred_devices_lock);
-> >> -    }
-> >>       return ret;
-> >>   }
-> >>   EXPORT_SYMBOL_GPL(amba_device_add);
-> >
-> > Best regards
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
+rdmsr: CPU 0 cannot read MSR 0x0000010f
+
+
+This is on a Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz
+Family model stepping: 6/60/3
+
+Vince

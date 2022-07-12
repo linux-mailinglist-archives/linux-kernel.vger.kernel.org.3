@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785F05718CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFC05718CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiGLLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S230176AbiGLLph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbiGLLmO (ORCPT
+        with ESMTP id S229572AbiGLLpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:42:14 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B92B1950;
-        Tue, 12 Jul 2022 04:42:12 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 7D98661D1; Tue, 12 Jul 2022 07:42:11 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 7D98661D1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1657626131;
-        bh=0Y9FMfwftkPOnmB93rdMLCL6Et7+YdNAuaMYJwinhvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kBm59xFl775N5od/lv83C+mUJaaeT9KS7HdBL/ooWznKjnmJQ8EfQXjaYNk3j6blM
-         rvrUupSNZfR7AW6vsOUTGB96kAB/F+rjQkOqX3+yBOh3X+7JTqhkRB07VIuJMNPiN5
-         /WiWjT+lmG1GlMABqVdM0BS1K5gdtO6rH5qdECSc=
-Date:   Tue, 12 Jul 2022 07:42:11 -0400
-From:   Bruce Fields <bfields@fieldses.org>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     Jeff Layton <jlayton@redhat.com>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-Message-ID: <20220712114211.GA29976@fieldses.org>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
- <20220710124344.36dfd857@redhat.com>
- <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
- <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
- <20220711181941.GC14184@fieldses.org>
- <20220712102746.5404e88a@redhat.com>
+        Tue, 12 Jul 2022 07:45:36 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F55ACF61
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:45:34 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31cf1adbf92so78108987b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=oslTq8Z7mBSpt+X5H9Q37Nxd1ONulQCEf83R9cxfg5c=;
+        b=GvyQMDr8kuHWKKnQu43mVwP3PFW+ufsZx4OSccq4s8TL68AqqTxluvQdDXvURx3qVE
+         Aui6kwcAMTS3303H8dMDpLdSVcNfdCT+7Jcvcrf2dLaLmcC1Prfvo5UAeIUe7Il34EW0
+         wirWuLEKagX/PmkV3ipny2IQyVGaXMbvCg204dKlvW0yfpOT1GOKZmgSa/Jyy6RkiScl
+         KT9ZuysMZ8y5Q6QU+4MG8vs3OneFywcL/W4olapfEq6KKxQYkUJwOS16V4f610HZSYKB
+         kNjnJo1tUkmeL8IEKMabzYJ/39RQ/aS9btBbO025/budPm/vocsH7BYLpHZlwqVqqVu5
+         8UHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=oslTq8Z7mBSpt+X5H9Q37Nxd1ONulQCEf83R9cxfg5c=;
+        b=sLedB7gN1DCk7nm5z9DJPXuOCmEglTZPLd4/DEXqBOYIMX9Hy1b4W6fockPSyOJYdi
+         Zik+Gx1f/z3frPKfBTjIkq2NCScGJ7gUk6xJQuDBKhSMfICbWMxsxM8ktk3amekS3HU5
+         2MIytnl0HPUgdvfLOTdMYVZ8O+1RgG6fDYGj0AsnP2RBlpJtI35wbOVrd3fxAkjjGuBX
+         oFhRLlcZgRHGaf20i1NHdk79MR2iY0kyoakZvbWeDv7YnHOe3QwjQ8xHnW38vYFUIVg0
+         bUjdo/PONH1tyT1+H68uQeLaDXkhFQuQlNDzGkqPZO7UgkfQCYYF7BrQqAw/yCSxoIvh
+         vW9g==
+X-Gm-Message-State: AJIora/0JI3l8BUip6J5QQv/j6CJxCZNVlft3MYnrSDnN1f6Rw0Xb9Yn
+        x16AG8DqZjRMqgMfh6CcRQS6BFi9+qSUVZBZs5s=
+X-Google-Smtp-Source: AGRyM1uZMs7VTMxVGUBZp7TylPJ7DyLIkuPBgim12M0wIAwcbHUewM7EvTEeeZ/JOkCRgUIQDpRXqU5eY3HAMnzIUKQ=
+X-Received: by 2002:a0d:dc42:0:b0:31c:7b70:1f31 with SMTP id
+ f63-20020a0ddc42000000b0031c7b701f31mr24479528ywe.513.1657626333935; Tue, 12
+ Jul 2022 04:45:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712102746.5404e88a@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: ireneraya0@gmail.com
+Received: by 2002:a05:7108:909f:0:0:0:0 with HTTP; Tue, 12 Jul 2022 04:45:33
+ -0700 (PDT)
+From:   Mrs Aisha Gaddafi <aishagaddafiaisha20@gmail.com>
+Date:   Tue, 12 Jul 2022 04:45:33 -0700
+X-Google-Sender-Auth: xMAc1A59nWVlaMTcF98747Tpro8
+Message-ID: <CAOGarBK1cSA+vUG_E07iZw=PAzdCE6M-0EPd8s55cPyrKfan9w@mail.gmail.com>
+Subject: ASSALAMU ALAIKUM FROM AISHA GADDAFI.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
+        MILLION_USD,MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1133 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9998]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 0.9998]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ireneraya0[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ireneraya0[at]gmail.com]
+        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:27:46AM +0200, Igor Mammedov wrote:
-> On Mon, 11 Jul 2022 14:19:41 -0400
-> Bruce Fields <bfields@fieldses.org> wrote:
-> 
-> > On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:
-> > > On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:  
-> > > > > This patch regressed clients that support TIME_CREATE attribute.
-> > > > > Starting with this patch client might think that server supports
-> > > > > TIME_CREATE and start sending this attribute in its requests.  
-> > > > 
-> > > > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> > > > attribute") does not include a change to nfsd4_decode_fattr4()
-> > > > that decodes the birth time attribute.
-> > > > 
-> > > > I don't immediately see another storage protocol stack in our
-> > > > kernel that supports a client setting the birth time, so NFSD
-> > > > might have to ignore the client-provided value.
-> > > >   
-> > > 
-> > > Cephfs allows this. My thinking at the time that I implemented it was
-> > > that it should be settable for backup purposes, but this was possibly a
-> > > mistake. On most filesystems, the btime seems to be equivalent to inode
-> > > creation time and is read-only.  
-> > 
-> > So supporting it as read-only seems reasonable.
-> > 
-> > Clearly, failing to decode the setattr attempt isn't the right way to do
-> > that.  I'm not sure what exactly it should be doing--some kind of
-> > permission error on any setattr containing TIME_CREATE?
-> 
-> erroring out on TIME_CREATE will break client that try to
-> set this attribute (legitimately). That's what by chance 
-> happening with current master (return error when TIME_CREATE
-> is present).
+May i use this medium to open a mutual communication with you seeking
+your acceptance towards investing in your country under your
+management as my partner, My name is Aisha  Gaddafi and presently
+living in Oman, i am a Widow and single Mother with three Children,
+the only biological Daughter of late Libyan President (Late Colonel
+Muammar Gaddafi) and presently i am under political asylum protection
+by the Omani Government.
 
-Hang on, now--our current server completely fails to decode any RPC
-including a SETATTR that attempts to set TIME_CREATE, which means it
-isn't able to return a useful error or tell the client which attribute
-was the problem.
+I have funds worth " Seven Million Five Hundred Thousand United State
+Dollars" -usd$7M.500.000.00 US Dollars which I want to entrust to you
+for investment projects in your country. If you are willing to handle
+this project on my behalf, kindly reply urgent to enable me provide
+you more details to start the transfer process, I shall appreciate
+your urgent response through my private email address below:
+aishagaddafiaisha20@gmail.com
 
-It's not too surprising that that would cause a problem for a client.
+You can know more through the BBC news links below:
 
-But failures to set supported attributes are completely normal, and if
-mounts are failing completely because of that, something is really very
-wrong with the client.
+http://www.bbc.com/news/world-africa-19966059
 
-Could you first retest with a server that's patched to at least decode
-the attribute correctly?  I suspect that may be enough.  If not, then
-the client in question has a more interesting problem on its hands.
 
---b.
+Thanks
+Yours Truly Aisha
+aishagaddafiaisha20@gmail.com

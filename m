@@ -2,103 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6605728C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759A25728CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiGLVr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S232706AbiGLVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiGLVrw (ORCPT
+        with ESMTP id S231402AbiGLVtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:47:52 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFC65B0FB8;
-        Tue, 12 Jul 2022 14:47:51 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id E17C262C671;
-        Wed, 13 Jul 2022 07:47:47 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oBNjN-0009ZB-QR; Wed, 13 Jul 2022 07:47:45 +1000
-Date:   Wed, 13 Jul 2022 07:47:45 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-xfs@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-Subject: Re: [xfs]  47a6df7cd3: Assertion_failed
-Message-ID: <20220712214745.GL3861211@dread.disaster.area>
-References: <Ys0gqOUcLr+2dle5@xsang-OptiPlex-9020>
+        Tue, 12 Jul 2022 17:49:08 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E033349;
+        Tue, 12 Jul 2022 14:49:07 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x91so11818753ede.1;
+        Tue, 12 Jul 2022 14:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UYcUu+Nac0EZ/s/dRYU8//7b3MQ6hceTXfmqbMGiXaI=;
+        b=UU910ZgfWPltn8ULdLJFeYyuVW172DNR+7v58YGsvAt+Fuh9/tREG9DVLbn8vrijO0
+         a5mUXTvSvDV9YP2D5HD5PtyqW/Xbl2wPuCRRO9DN91CE+TY+VfqbE/io/8ZY1ltIkBcU
+         98wU76x6GY9Hv3ho39pF/jSkrcLTnADdmoEttYCprWM+3J/x014hJpTjKjNEM07wuee/
+         w4YoT6DexJP3UgkCo7QRavu/Iw34UIJCJqTl11TeYIda8WaUj7tx+6ci4KbX400Yu+eX
+         MTehzQvy9C+Tzw8tkgUreII4SGAyufLnJ+5K54tvq+ZBVefqlhfN0/IXgMVd0DkZOuMR
+         70Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UYcUu+Nac0EZ/s/dRYU8//7b3MQ6hceTXfmqbMGiXaI=;
+        b=bu/LAeO3i66AIB5fcCsCvGF8w7h1uBe2FHn8bU/CuX1549yLoZ6nHyYuIzvp4aHRlq
+         +fVPbaZH5loK22X4vAR1861QkeRZh7AShZZch/Kmc958D3tamIhOutPfX8G728K0YR74
+         qbs11NkJlWwh8doxCd0EYGGyfXKPtPp4JKxnTrVvDhlGNysxCFZt0xIMUaCe8q63pMFm
+         zw6GZ+jFInkr6bKWGncEa8RAwqqbYimwuUUmkvAZ5d1gymbfDmr+jTCKQSbxtPVkR8R6
+         cIawnZfdc69IIrdkynyGoanIWyE2eGd+2/ZpXJu/a00NWkSV8qUp9a1HZ/Z8LQnZ3zIA
+         R/CQ==
+X-Gm-Message-State: AJIora8yx3vPeUbbDT+/7eOqJrXIYkAZRB13Gjj2BJ9xEew0YRJPbuqf
+        izPcX5u6E7Rh86qxaFThzjLMOdjX5MQCJu5ygcQ=
+X-Google-Smtp-Source: AGRyM1vw+y4X6f2u2kTWA81r9BYdIMNeGURE7ZMLBg4Z9+Q2ryd68bsUS/hQZYBur97iXSOKA9jXQr6RyXfzp1ehFso=
+X-Received: by 2002:a05:6402:350c:b0:43a:e25f:d73 with SMTP id
+ b12-20020a056402350c00b0043ae25f0d73mr318533edd.66.1657662545870; Tue, 12 Jul
+ 2022 14:49:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys0gqOUcLr+2dle5@xsang-OptiPlex-9020>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=62cdec06
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=kj9zAlcOel0A:10 a=RgO8CyIxsXoA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
-        a=7-415B0cAAAA:8 a=YwEIx2iJiV63Uv_QZbwA:9 a=CjuIK1q_8ugA:10
-        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220711162827.184743-1-roman.gushchin@linux.dev>
+In-Reply-To: <20220711162827.184743-1-roman.gushchin@linux.dev>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 12 Jul 2022 14:48:54 -0700
+Message-ID: <CAADnVQ+2Az23WLHj_1pQWYXdd8CbeKooCLrkT_GnzKXV7Yp8hw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: reparent bpf maps on memcg offlining
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     bpf <bpf@vger.kernel.org>, Shakeel Butt <shakeelb@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:20:08PM +0800, kernel test robot wrote:
-> 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 47a6df7cd3174b91c6c862eae0b8d4e13591df52 ("xfs: shut down filesystem if we xfs_trans_cancel with deferred work items")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> in testcase: xfstests
-> version: xfstests-x86_64-c1144bf-1_20220704
-> with following parameters:
-> 
-> 	disk: 4HDD
-> 	fs: xfs
-> 	test: xfs-group-07
-> 	ucode: 0x21
-> 
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> 
-> on test machine: 4 threads 1 sockets Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> 
-> [   94.271323][ T9089] XFS (sda5): Mounting V5 Filesystem
-> [   94.369992][ T9089] XFS (sda5): Ending clean mount
-> [   94.376046][ T9089] xfs filesystem being mounted at /fs/scratch supports timestamps until 2038 (0x7fffffff)
-> [  112.154792][  T311] xfs/076       IPMI BMC is not supported on this machine, skip bmc-watchdog setup!
-> [  112.154805][  T311]
-> [  161.426026][T29384] XFS: Assertion failed: xfs_is_shutdown(mp) || list_empty(&tp->t_dfops), file: fs/xfs/xfs_trans.c, line: 951
-> [  161.437713][T29384] ------------[ cut here ]------------
-> [  161.443155][T29384] kernel BUG at fs/xfs/xfs_message.c:110!
-> [  161.448854][T29384] invalid opcode: 0000 [#1] SMP KASAN PTI
-> [  161.454536][T29384] CPU: 1 PID: 29384 Comm: touch Not tainted 5.16.0-rc5-00001-g47a6df7cd317 #1
+On Mon, Jul 11, 2022 at 9:28 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>
+> The memory consumed by a mpf map is always accounted to the memory
+> cgroup of the process which created the map. The map can outlive
+> the memory cgroup if it's used by processes in other cgroups or
+> is pinned on bpffs. In this case the map pins the original cgroup
+> in the dying state.
+>
+> For other types of objects (slab objects, non-slab kernel allocations,
+> percpu objects and recently LRU pages) there is a reparenting process
+> implemented: on cgroup offlining charged objects are getting
+> reassigned to the parent cgroup. Because all charges and statistics
+> are fully recursive it's a fairly cheap operation.
+>
+> For efficiency and consistency with other types of objects, let's do
+> the same for bpf maps. Fortunately thanks to the objcg API, the
+> required changes are minimal.
+>
+> Please, note that individual allocations (slabs, percpu and large
+> kmallocs) already have the reparenting mechanism. This commit adds
+> it to the saved map->memcg pointer by replacing it to map->objcg.
+> Because dying cgroups are not visible for a user and all charges are
+> recursive, this commit doesn't bring any behavior changes for a user.
+>
+> v2:
+>   added a missing const qualifier
+>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> ---
+>  include/linux/bpf.h  |  2 +-
+>  kernel/bpf/syscall.c | 35 +++++++++++++++++++++++++++--------
+>  2 files changed, 28 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2b21f2a3452f..85a4db3e0536 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -221,7 +221,7 @@ struct bpf_map {
+>         u32 btf_vmlinux_value_type_id;
+>         struct btf *btf;
+>  #ifdef CONFIG_MEMCG_KMEM
+> -       struct mem_cgroup *memcg;
+> +       struct obj_cgroup *objcg;
+>  #endif
+>         char name[BPF_OBJ_NAME_LEN];
+>         struct bpf_map_off_arr *off_arr;
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index ab688d85b2c6..ef60dbc21b17 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -419,35 +419,52 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
+>  #ifdef CONFIG_MEMCG_KMEM
+>  static void bpf_map_save_memcg(struct bpf_map *map)
+>  {
+> -       map->memcg = get_mem_cgroup_from_mm(current->mm);
+> +       /* Currently if a map is created by a process belonging to the root
+> +        * memory cgroup, get_obj_cgroup_from_current() will return NULL.
+> +        * So we have to check map->objcg for being NULL each time it's
+> +        * being used.
+> +        */
+> +       map->objcg = get_obj_cgroup_from_current();
+>  }
+>
+>  static void bpf_map_release_memcg(struct bpf_map *map)
+>  {
+> -       mem_cgroup_put(map->memcg);
+> +       if (map->objcg)
+> +               obj_cgroup_put(map->objcg);
+> +}
+> +
+> +static struct mem_cgroup *bpf_map_get_memcg(const struct bpf_map *map) {
+> +       if (map->objcg)
+> +               return get_mem_cgroup_from_objcg(map->objcg);
+> +
+> +       return root_mem_cgroup;
+>  }
+>
+>  void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
+>                            int node)
+>  {
+> -       struct mem_cgroup *old_memcg;
+> +       struct mem_cgroup *memcg, *old_memcg;
+>         void *ptr;
+>
+> -       old_memcg = set_active_memcg(map->memcg);
+> +       memcg = bpf_map_get_memcg(map);
+> +       old_memcg = set_active_memcg(memcg);
+>         ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
+>         set_active_memcg(old_memcg);
+> +       mem_cgroup_put(memcg);
 
-5.16-rc5? Seems like a really old kernel to be testing....
-
-Does this reproduce on a current 5.19-rc6 kernel?
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Here we might css_put root_mem_cgroup.
+Should we css_get it when returning or
+it's marked as CSS_NO_REF ?
+But mem_cgroup_alloc() doesn't seem to be doing that marking.
+I'm lost at that code.

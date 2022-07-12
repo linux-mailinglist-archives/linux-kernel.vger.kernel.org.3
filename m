@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C785710DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854005710DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiGLD34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 23:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S231927AbiGLDaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiGLD3l (ORCPT
+        with ESMTP id S232133AbiGLD3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:29:41 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10D92A736
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:29:32 -0700 (PDT)
+        Mon, 11 Jul 2022 23:29:42 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECA9287A
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:29:36 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1657596570;
+        t=1657596574;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mngS+kTiovbtsXB//b2QGzKXTYrp5LAhgFn7ZgogYqU=;
-        b=KgYQFXSaKNPJG4sXxfYE3cjsRSVX/oFa7DAYQEF4HwMJpqxK880mZUofW40RnzfSqtt/cK
-        pS9yy2L61v7qC5Mu3ggD6YbW0dY8t17xiOoK9Qd89nehH4PQYBqH6GJY7v4dWixB3zkA9y
-        oy/2x7dfdgvyxRKTHa6QHIhOiJKqlBI=
+        bh=JJR7dULwsOIjRg//T0qlgKrx4YFTh/hs84EjZZCEhdE=;
+        b=vRXFw5cmieXxyqaeMPEA8Zvk2csvZYgjvfGPd4EdqNrkZKBZOZ4WVxVO0DfEd4GJnBreJ6
+        ijWzaeE9mtO4XbTu1cadYLWZEkZdcsQyOkQmvZpL+LU5U0CIo0Cm7isW4aXWbyIlVrp7tZ
+        hlIQPAfSEW3ZdPe2Mi6o4Wd14bPmaR0=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -38,19 +38,19 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [mm-unstable PATCH v6 5/8] mm, hwpoison: set PG_hwpoison for busy hugetlb pages
-Date:   Tue, 12 Jul 2022 12:28:55 +0900
-Message-Id: <20220712032858.170414-6-naoya.horiguchi@linux.dev>
+Subject: [mm-unstable PATCH v6 6/8] mm, hwpoison: make __page_handle_poison returns int
+Date:   Tue, 12 Jul 2022 12:28:56 +0900
+Message-Id: <20220712032858.170414-7-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220712032858.170414-1-naoya.horiguchi@linux.dev>
 References: <20220712032858.170414-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,68 +59,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-If memory_failure() fails to grab page refcount on a hugetlb page
-because it's busy, it returns without setting PG_hwpoison on it.
-This not only loses a chance of error containment, but breaks the rule
-that action_result() should be called only when memory_failure() do
-any of handling work (even if that's just setting PG_hwpoison).
-This inconsistency could harm code maintainability.
+__page_handle_poison() returns bool that shows whether
+take_page_off_buddy() has passed or not now.  But we will want to
+distinguish another case of "dissolve has passed but taking off failed"
+by its return value. So change the type of the return value.
+No functional change.
 
-So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
-
-Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- include/linux/mm.h  | 1 +
- mm/memory-failure.c | 8 ++++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+v2 -> v3:
+- move deleting "res = MF_FAILED" to the later patch. (by Miaohe)
+---
+ mm/memory-failure.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 4287bec50c28..7668831c919f 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3188,6 +3188,7 @@ enum mf_flags {
- 	MF_SOFT_OFFLINE = 1 << 3,
- 	MF_UNPOISON = 1 << 4,
- 	MF_SW_SIMULATED = 1 << 5,
-+	MF_NO_RETRY = 1 << 6,
- };
- int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
- 		      unsigned long count, int mf_flags);
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 56fd9d809013..e90a685e326b 100644
+index e90a685e326b..390cb7df2f4a 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1785,7 +1785,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
- 			count_increased = true;
- 	} else {
- 		ret = -EBUSY;
--		goto out;
-+		if (!(flags & MF_NO_RETRY))
-+			goto out;
- 	}
+@@ -71,7 +71,13 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
  
- 	if (hugetlb_set_page_hwpoison(head, page)) {
-@@ -1812,7 +1813,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 	struct page *p = pfn_to_page(pfn);
- 	struct page *head;
- 	unsigned long page_flags;
--	bool retry = true;
+ static bool hw_memory_failure __read_mostly = false;
  
- 	*hugetlb = 1;
- retry:
-@@ -1828,8 +1828,8 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+-static bool __page_handle_poison(struct page *page)
++/*
++ * Return values:
++ *   1:   the page is dissolved (if needed) and taken off from buddy,
++ *   0:   the page is dissolved (if needed) and not taken off from buddy,
++ *   < 0: failed to dissolve.
++ */
++static int __page_handle_poison(struct page *page)
+ {
+ 	int ret;
+ 
+@@ -81,7 +87,7 @@ static bool __page_handle_poison(struct page *page)
+ 		ret = take_page_off_buddy(page);
+ 	zone_pcp_enable(page_zone(page));
+ 
+-	return ret > 0;
++	return ret;
+ }
+ 
+ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
+@@ -91,7 +97,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
+ 		 * Doing this check for free pages is also fine since dissolve_free_huge_page
+ 		 * returns 0 for non-hugetlb pages as well.
+ 		 */
+-		if (!__page_handle_poison(page))
++		if (__page_handle_poison(page) <= 0)
+ 			/*
+ 			 * We could fail to take off the target page from buddy
+ 			 * for example due to racy page allocation, but that's
+@@ -1086,7 +1092,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+ 		 * subpages.
+ 		 */
+ 		put_page(hpage);
+-		if (__page_handle_poison(p)) {
++		if (__page_handle_poison(p) > 0) {
+ 			page_ref_inc(p);
+ 			res = MF_RECOVERED;
  		}
- 		return res;
- 	} else if (res == -EBUSY) {
--		if (retry) {
--			retry = false;
-+		if (!(flags & MF_NO_RETRY)) {
-+			flags |= MF_NO_RETRY;
- 			goto retry;
+@@ -1852,7 +1858,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 	if (res == 0) {
+ 		unlock_page(head);
+ 		res = MF_FAILED;
+-		if (__page_handle_poison(p)) {
++		if (__page_handle_poison(p) > 0) {
+ 			page_ref_inc(p);
+ 			res = MF_RECOVERED;
  		}
- 		action_result(pfn, MF_MSG_UNKNOWN, MF_IGNORED);
 -- 
 2.25.1
 

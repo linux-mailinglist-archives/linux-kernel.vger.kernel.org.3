@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FE45714E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5DD5714E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiGLIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S231793AbiGLIms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiGLIlm (ORCPT
+        with ESMTP id S229450AbiGLImp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:41:42 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBDCA5E47
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:41:41 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id l12so6654177plk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9jlvp3ctzfV5qIwygKhimi/OMZvViFDBhQEGu7/yFHI=;
-        b=kzLKsiAjlkufjLDqxapjEYgh1ncbzgUECLW+oHEZVys0qAYcP5sn6XnrSv2Awsbk3v
-         vaImKcE/YZfn8AzNPNKbopI/23QAPmafu/HOvBFr/mTB5xtRR3GGJ/Lq/lz88K1h4m51
-         NiDl3LyxnUUoT82Jk/KhkQJ1yEJTW3DqpbYO0MnhPEgqD4dc5tYPsThWnoNrtQ728teU
-         JDE+DSUJ2vfntqY4SQ6gpDU9Y+EUY7EkLM5kC9CgizxqAxTIsmu/Y63aCmBteDtIYl1f
-         kvKmA/zpWkf7tktfx/ui/7XvzbnyKkayZvBL59rGSLDFB6lHIUsV/MeeQlwN9Nfrw8Nr
-         1DTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9jlvp3ctzfV5qIwygKhimi/OMZvViFDBhQEGu7/yFHI=;
-        b=rXlYNavpknP2Ei166K91GBfUT4jWV2r9lQzZjTHNl/abAaPl/D6vqFT1QjyhOq6HaF
-         mlEwaOo3ibqBBHfn0g6h0Li/Wea5V1LToC8V5ySS/zSIS+Hc1a4nVwEMXrvLwREcxYfl
-         filmHW/JXhWpCTAXrGlcL/I68PcFVZZU+cmR2rugSiLXG2RuMYqtSe3UKjqF0RXZjQhT
-         7PT/InGiFTps7ibP7xq2Yz6nmeRxqit5dvC7wq//3OtxiFz5qf8JWB8wdqc1UMD2eADg
-         nhJA0c/HbFQe4WVWmVhOsCmpbbuYbiRkpMymZAUQgo9cwKpP4ZzHAscbk9tJ7H64vMpe
-         P8cQ==
-X-Gm-Message-State: AJIora8LJVAaOdC+KmDMge6gwM2kjxnuqJba+MdmEcelRZPb6dk74pEd
-        VphJ55jV4H3YmuIpykfrUpKwGg==
-X-Google-Smtp-Source: AGRyM1u0Orb3NyHrPVrygHCrKYTYrtkpqltCrDm7vAH9cwSewR2UFTT/T76rR7qWddA2MUIBo0A5Hg==
-X-Received: by 2002:a17:902:ce8c:b0:16c:4be6:254d with SMTP id f12-20020a170902ce8c00b0016c4be6254dmr8898036plg.51.1657615300935;
-        Tue, 12 Jul 2022 01:41:40 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id l7-20020a622507000000b0052aaf7fe731sm6174399pfl.45.2022.07.12.01.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 01:41:40 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 14:11:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
-Message-ID: <20220712084137.pb24lolhuk2yln4e@vireshk-i7>
-References: <20220711124229.16516-1-lukasz.luba@arm.com>
+        Tue, 12 Jul 2022 04:42:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E17DA44FD;
+        Tue, 12 Jul 2022 01:42:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhvQS07Gsz4xL4;
+        Tue, 12 Jul 2022 18:42:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657615360;
+        bh=eZDrBrH/oDGHeRw9fIk9gVHXIN4bp5aZjGGhktdWJlQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WKPFoEWu99+PSS9j97lMbwhQiqBbp3kyBAgVhJRupm8FepZ6KlEj2rSlUP05p5k4P
+         r48GBRpmlx26piEDG5G3l1RBb5cb2FlaNn2etXPD3PFXcwya6DK8J7xGJq1twiCXRz
+         TpQV15BF4qVHR5ORn5R8Iy/zYpjoNGEeeWdQjCAnSDjUeof+eCBfFvow/E/YgFKEom
+         Rn2wN0hvEQIe3M2i7aL4ZNf/DxB/qiyJCVfA8AAe62P0zoTOEiy9cOsvt70SWHDO4T
+         wtPq8OtjbkNKY5OVp5n6MRSYsQl1kbzCInxdENEltZTP15//bxAq9sna14qOAcQxEO
+         yTARm0FK9qplA==
+Date:   Tue, 12 Jul 2022 18:42:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: linux-next: manual merge of the mm tree with the m68k tree
+Message-ID: <20220712184238.3670f277@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711124229.16516-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/M.T6m48gRiu66qgjieKl5EU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-07-22, 13:42, Lukasz Luba wrote:
-> There is no need to keep the max CPU capacity in the per_cpu instance.
-> Furthermore, there is no need to check and update that variable
-> (sg_cpu->max) everytime in the frequency change request, which is part
-> of hot path. Instead use struct sugov_policy to store that information.
-> Initialize the max CPU capacity during the setup and start callback.
-> We can do that since all CPUs in the same frequency domain have the same
-> max capacity (capacity setup and thermal pressure are based on that).
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+--Sig_/M.T6m48gRiu66qgjieKl5EU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I tried to check all possible combinations on how this can break, but
-couldn't find one. I had to check that as this code is there since
-ages and none of us thought of it, which was surprising.
+Hi all,
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Today's linux-next merge of the mm tree got a conflict in:
 
--- 
-viresh
+  arch/m68k/include/asm/sun3_pgtable.h
+
+between commit:
+
+  c2a6236024b7 ("m68k: sun3: Fix spelling mistake")
+
+from the m68k tree and commit:
+
+  e7911fea382d ("m68k/mm: enable ARCH_HAS_VM_GET_PAGE_PROT")
+
+from the mm tree.
+
+I fixed it up (the latter removed the comment that the former updated)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/M.T6m48gRiu66qgjieKl5EU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLNM/4ACgkQAVBC80lX
+0Gyp7Qf/VkPqYDRZ9+KE5/VGNXMm3W0tM73slrbL1yOsnhY76zv+DMr9PAcHEYuv
+p/2uv8vd8evXgt+0LAJ4EX04lqDNaSnDzoBPVi7jDEy42NRmjqZ6IWrqOyzX+Nav
+5FRM7v+Upmyjoh1lLJ5/FLDP1+Zh6uI6CXX8n8OxckcE4h3ZW8SQxOzwtyLucibu
+AAL87vzH/4+iteCAcmKyCoJKOVURuPx07xCTo3EKjmwwi3EumtqEfQfw/yQZ+zBn
+1U9/l1fRbcQcbA+0q7kWav0xW0ov2fA58Lvb7N/IcMFSha6NWrtuJmxFXdiz46+k
+yTQ5aqQYaBRDS+RXY0/VrhtRHOTNIA==
+=eErR
+-----END PGP SIGNATURE-----
+
+--Sig_/M.T6m48gRiu66qgjieKl5EU--

@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6306B571374
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7E5571380
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiGLHve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S232480AbiGLHwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiGLHv3 (ORCPT
+        with ESMTP id S232388AbiGLHwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:51:29 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFEA9CE03
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:51:25 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id d12so12549269lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:51:25 -0700 (PDT)
+        Tue, 12 Jul 2022 03:52:45 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754CF9D504
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w185so6828219pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZrFIt8F9N1X4RMbtLQXEkQDymA1m5MwO6fwtCs+pTX4=;
-        b=Pylb32qF3GILfB+lcn/tDTMiqu5neaXiJd+TjKPouepYd8WxRXX8JpC9EBGwA4UFq9
-         DUagA01g8oamdd+u1ceBFohbpjco9W0aFbpOVGkKkmXAQF6MW/gUR3vXZzUO9Jvll0pX
-         UeqjyPTC6k12R0J/0Qpt+SuY0+Hk4wBdXqyPxz4Ohuor6rR9Q1DzIUsQTNT5v/89oTGx
-         VnbVkxVCEx6Xy5Zrw7ZC2vTb0fJ1xhV1lWrd98KRKoa0z+R6kft+KU3llIfw0LA6tFPd
-         rIUt7Cmcgh2/sWAiQlnSxSGLN01cGXHk6ve+pEn/JA5UyE8LdJefxw+Gt9/AjYrnL42/
-         /w3g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
+        b=aIVJoOrYsOxTCnwRWJsJsadg8YScTtWaD0KWY7O/2+d8GVdTuEwcbqHC65rXN8wf++
+         3HyfuAZeUSNgl+yUHx/5KlRezG7txR0FdQaKUCs2dK0RgqKtkIgKMHUn4a3fWXtchUD8
+         g7IW4PdmeGjP3yX98W+7cqVp78RzOGcfYR2jVyT+kDsObWUtEQhH3ipi3c2vyzkFN7va
+         evzX9xXekM3lXyocMknYXWvrCdbXQa0fWYKFk+OPPr6btstHwE+thj2ExuI+0c/1nZaE
+         VVpSXpq1Vet9CUK+J3jdAlNviHFp/4+V2qoSblLUDATIq/8mDyFEOkl3La/CM4Q0VqgH
+         8E7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZrFIt8F9N1X4RMbtLQXEkQDymA1m5MwO6fwtCs+pTX4=;
-        b=B2BPSC+q8k2LxKEetSmhvhdWG7G5GebG1TP6jYRcPCdw7sUBxF9AP7qny78/eaRwxG
-         YnCrQ0mbhFVGxqY1C6Muiyob0xbNZGqJq2lcXYd6CUysqricwdmDbsgqslP7g99KW1MP
-         vgdRy1xkMlhjvUNj6wfke353FhYNiR9KIj97QFqyHs8MA4Ksi6LPzPRLPH+kjdStWICI
-         /L6p/Z+qy/C1aESjVpAOZ1SB/KeXv/x+u9jfjBAcJxZdJwjxmXDigJ6aPD/d0WC+pKFQ
-         hWVO0Q/QGY8gaWs5Xr0yUh6rHd42RXyQGsabDKz0gOmDx/iZ9iIYqbK2KGR3PzV6SHmi
-         C7WA==
-X-Gm-Message-State: AJIora9jGAaqL1rgySzej2aydjkPfA5PByaySqBddCnXqBi3TgTj9lSt
-        Uigwfuv2WwgwMFAa3rL7yB4cZQ==
-X-Google-Smtp-Source: AGRyM1tYy/NNy4lhCjH90yu62C6nKh4qLFcJwq/30YuIninxYAiD5F+EuvrofzBlQW3iPC7Ege9GLg==
-X-Received: by 2002:a05:6512:2210:b0:484:f174:bd51 with SMTP id h16-20020a056512221000b00484f174bd51mr14689892lfu.482.1657612284305;
-        Tue, 12 Jul 2022 00:51:24 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056512118700b0047f647414efsm2034115lfr.190.2022.07.12.00.51.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:51:23 -0700 (PDT)
-Message-ID: <fe4dd875-c223-e70f-c935-064b0574fae2@linaro.org>
-Date:   Tue, 12 Jul 2022 09:51:22 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
+        b=yIyGt9qD/5qqsYaAH+GUqIZjxlvcIahe/n73PnU6+tZkzBa53uCZ6Bp9/hL45IDYKp
+         eNaK6iABiRkxIodMhlEDyvRmLUkYA8AhPoy6IexK4tUjnsJSfy/zrEJFv5nds3a8tSfT
+         J/uWnTwaR/gnxvLoaMn5ZaGDua7VaAmBaBMGKaxifI3E8AC15kF/FZg4vbuzIa3Hsl9/
+         ZWCL2FFfkHoiFWOK9hbYM/na2I6wRFqkN8E+2TmCUg6HdPeUbbOu6y0YqzsbhDFNFQws
+         YK9RXP5tb0jrafycnBpCNtXHRzCQ6nKOR92u7/CCyvXc9RrohDCNV3hoH97N5Xo3Nccj
+         kvVQ==
+X-Gm-Message-State: AJIora/imi5xtSK9+TJTy96m1wDrGFgTB/ZWnG7pjKxhChoHOgh8SQCq
+        Hefi4u8lqtq4SK1oigQIvVTRXg==
+X-Google-Smtp-Source: AGRyM1vRTqycGBlzrqk2OttaehDP+MhVi+0ovxCWFXTXmuSWvayqxox7e6xtAjUzE9s1bj017NCd/Q==
+X-Received: by 2002:a63:754:0:b0:415:4578:248a with SMTP id 81-20020a630754000000b004154578248amr19503049pgh.196.1657612362818;
+        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0016bdf53b303sm5739118plk.205.2022.07.12.00.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 13:22:40 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
+Message-ID: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
+References: <cover.1657003420.git.viresh.kumar@linaro.org>
+ <YsxSkswzsqgMOc0l@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 2/2] dt-bindings: arm: qcom: Add Xiaomi Mi Mix2s
- bindings
-Content-Language: en-US
-To:     MollySophia <mollysophia379@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20220709131935.50708-1-mollysophia379@gmail.com>
- <20220709131935.50708-2-mollysophia379@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220709131935.50708-2-mollysophia379@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsxSkswzsqgMOc0l@hovoldconsulting.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +87,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/07/2022 15:19, MollySophia wrote:
-> Add documentation for "xiaomi,polaris" device.
+On 11-07-22, 18:40, Johan Hovold wrote:
+> This break OPP parsing on SC8280XP and hence cpufreq and other things:
 > 
-> Signed-off-by: MollySophia <mollysophia379@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
+> [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
+> [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
+> [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
+> ...
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 129cdd246223..80dff09bdc83 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -235,6 +235,11 @@ properties:
->                - xiaomi,lavender
->            - const: qcom,sdm660
->  
-> +      - items:
-> +          - enum:
-> +              - xiaomi,polaris
-> +          - const: qcom,sdm845
+> I just did a rebase on next-20220708 and hit this.
+> 
+> I've narrowed it down to _read_rate() now returning -ENODEV since
+> opp_table->clk_count is zero.
+> 
+> Similar to what was reported for tegra for v1:
+> 
+> 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
+> 
+> I don't have time to look at this any more today, but it would we nice
+> if you could unbreak linux-next.
+> 
+> Perhaps Bjorn or Mani can help with further details, but this doesn't
+> look like something that is specific to SC8280XP.
 
-I propose to rebase on:
-https://lore.kernel.org/all/20220524020411.GA2602849-robh@kernel.org/
-or:
-https://lore.kernel.org/all/20220628092253.21905-1-krzysztof.kozlowski@linaro.org/
+It is actually. This is yet another corner case, Tegra had one as
+well.
 
+I have tried to understand the Qcom code / setup to best of my
+abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
+provide a clk to the OPP core, which breaks it after the new updates
+to the OPP core. I believe following will solve it. Can someone please
+try this ? I will then merge it with the right commit.
 
-Best regards,
-Krzysztof
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 666e1ebf91d1..4f4a285886fa 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+        }
+
+        if (ret == -ENOENT) {
++               /*
++                * There are few platforms which don't want the OPP core to
++                * manage device's clock settings. In such cases neither the
++                * platform provides the clks explicitly to us, nor the DT
++                * contains a valid clk entry. The OPP nodes in DT may still
++                * contain "opp-hz" property though, which we need to parse and
++                * allow the platform to find an OPP based on freq later on.
++                *
++                * This is a simple solution to take care of such corner cases,
++                * i.e. make the clk_count 1, which lets us allocate space for
++                * frequency in opp->rates and also parse the entries in DT.
++                */
++               opp_table->clk_count = 1;
++
+                dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+                return opp_table;
+        }
+
+-- 
+viresh

@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFC75726F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AEF5726FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbiGLUIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S233932AbiGLUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234527AbiGLUHq (ORCPT
+        with ESMTP id S231134AbiGLUKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:07:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F5BB8E84
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657656454; x=1689192454;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I4PtPocbbHJsmVqeSdj0j+ww60VTiKmwmGpsonHY+Qs=;
-  b=KhlrctMK0SzW9opETbQH2dF2pgG9aACUNpgGlusXXHarmCKRR+AQb/ct
-   bfJ5LlR4nJeEJw/MspbSTODurJ7QUJntz5Se9kYOPMMveDO/zsUYw/Lup
-   EAg3hljc2z6pKXUdQ1Eb8ArCVYZNRhEROjowlNQferm8pXmuom7d26vhS
-   6xerM9wl0wsaHQ8cyisu52TkzcNs/GyGOdm2cWslHAsPMFDBRxIuC8ZZu
-   /WEPGObnzSbySbIVAEXvw11r4B11beEfbR6zRx0B71TlsSikXJ1Oor4dj
-   N86ltPAw/L7WXOBCO5S7O4adifo/eb5wUEUeRoZmPPdR9kNPDmiB8STP2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285058342"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="285058342"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 13:07:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="737608261"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jul 2022 13:07:32 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBMAN-0002ei-HF;
-        Tue, 12 Jul 2022 20:07:31 +0000
-Date:   Wed, 13 Jul 2022 04:07:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <bwh@kernel.org>
-Subject: [linux-stable-rc:linux-5.10.y 7109/7120]
- arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on
- redeclared variable
-Message-ID: <202207130344.AUqExE4E-lkp@intel.com>
+        Tue, 12 Jul 2022 16:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E223BE6B0;
+        Tue, 12 Jul 2022 13:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A34661A18;
+        Tue, 12 Jul 2022 20:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AD82C341C8;
+        Tue, 12 Jul 2022 20:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657656614;
+        bh=kHVaz4LkBkvGBh1Syd+eWooUZG+L82rtyMOr7V33XbU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SBULjhojKlj2MDvDG1NFF9PZv8n0HYaklNuhHG/KKXX/SnEHJ6Ue7u9tbzzSe0kHa
+         4AAfNtKM9zK3U1KoAp4uIihPPgeRBMNwz/vZHIn7ariIAkykhCahVEL4rLz2RCK8eE
+         TXILcUHF4AuquloIU/5OmyLYPDER/+3aaCOgOfvRVC5vQ0+hPJuZde5RZdnE9+S6v3
+         Dj7VfqomQ2O6TFsWCCaXVAaNMsYFED9lwyBqeLnCV+92r18l6zOGRzIyUZrtpQ9yo8
+         IRs/SrIcGd6x9TYHFyAsE3T7cIL/DPAegdBWv4R7W1BGIngcG4v/UMF4/EvjX/DhPd
+         mBASWLBmfor2g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 31B17E45228;
+        Tue, 12 Jul 2022 20:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [kernel PATCH v2 0/1] Bluetooth: hci_sync: Fix resuming scan after
+ suspend resume
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165765661419.22843.6745868828865009344.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Jul 2022 20:10:14 +0000
+References: <20220712000530.2531197-1-jiangzp@google.com>
+In-Reply-To: <20220712000530.2531197-1-jiangzp@google.com>
+To:     Zhengping Jiang <jiangzp@google.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,50 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   ba398a0e54049bb6a1c102245ae84103f103ff2c
-commit: 855b78ccf1c8c952e148bdbd234cde117b098060 [7109/7120] KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220713/202207130344.AUqExE4E-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=855b78ccf1c8c952e148bdbd234cde117b098060
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout 855b78ccf1c8c952e148bdbd234cde117b098060
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+Hello:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-All warnings (new ones prefixed by >>):
+On Mon, 11 Jul 2022 17:05:29 -0700 you wrote:
+> This patch fixes a previous patch which did not remove setting
+> scanning_paused to false after resuming. So after setting the value,
+> the function to update scan will always quit.
+> Also need to set the value first before updating passive scan.
+> 
+> BUG=b:236868580,b:236340454
+> TEST=verified suspend is fixed in volteer with LE mouse
+> TEST=bluetooth_AdapterSRHealth.sr_peer_wake_le_hid
+> TEST=bluetooth_AdapterCLHealth.cl_adapter_pairing_suspend_resume_test
+> 
+> [...]
 
->> arch/x86/kernel/cpu/bugs.c:57:21: warning: section attribute is specified on redeclared variable [-Wsection]
-   DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-                       ^
-   arch/x86/include/asm/nospec-branch.h:278:12: note: previous declaration is here
-   extern u64 x86_spec_ctrl_current;
-              ^
-   1 warning generated.
+Here is the summary with links:
+  - [kernel,v2,1/1] Bluetooth: hci_sync: Fix resuming scan after suspend resume
+    https://git.kernel.org/bluetooth/bluetooth-next/c/0cc323d985f9
 
-
-vim +57 arch/x86/kernel/cpu/bugs.c
-
-c40221c4c496c5 Peter Zijlstra 2022-06-14  55  
-c40221c4c496c5 Peter Zijlstra 2022-06-14  56  /* The current value of the SPEC_CTRL MSR with task-specific bits set */
-c40221c4c496c5 Peter Zijlstra 2022-06-14 @57  DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-c40221c4c496c5 Peter Zijlstra 2022-06-14  58  EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
-c40221c4c496c5 Peter Zijlstra 2022-06-14  59  
-
-:::::: The code at line 57 was first introduced by commit
-:::::: c40221c4c496c5c026ede111094a96f292875d88 x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-
-:::::: TO: Peter Zijlstra <peterz@infradead.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

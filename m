@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B8D57297A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6FE57297E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiGLWs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S233756AbiGLWuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiGLWs0 (ORCPT
+        with ESMTP id S229994AbiGLWuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:48:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6618C9978;
-        Tue, 12 Jul 2022 15:48:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 12 Jul 2022 18:50:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471D1CA6E3;
+        Tue, 12 Jul 2022 15:50:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LjGBH2c4xz4xvW;
-        Wed, 13 Jul 2022 08:48:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657666103;
-        bh=YQAXHLEZl/awahUB6FwWpnFdDJdCz12TelvBYYOtNbk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E8ayPyxwNS05cfpIL6py1NJxS4x+tMJ9FEWRd3uQKNfzl7UhYXyZ5ISXp8WDC/Wz7
-         2CrNf0QnYMxxGrtnLicrJjQ5YOflgr512MZhFGWsRtifQL+j+uD9DO0qRDnYBnpbEf
-         /ELJ7sGcEcaaAZdPr4AC8rIyjCAR7sjKBvJg6znHgKj6Gkjuzmr8ieoSyqdBWqIqu3
-         YDaaNLKIbPGQ70xcny1auc+/xfpAR4eeTjXANEm79W0VM97i6u2P6e8tvjwbWAWrJh
-         EzW5HWOgjp+ou4CRoO1thX/qtFW1AZHVGkQv7f0gz4U7KSDu27fJg071w3W5n1yip+
-         cQ6w5axtjf7vA==
-Date:   Wed, 13 Jul 2022 08:48:22 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Zhengping Jiang <jiangzp@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the bluetooth tree
-Message-ID: <20220713084822.5e815c56@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D89EF616BF;
+        Tue, 12 Jul 2022 22:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A5EAC341C0;
+        Tue, 12 Jul 2022 22:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657666213;
+        bh=Fw2HVl5pOOx14EuTz+/2ML5JWynn7CkeflqoQrb4fiI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=sjS77mO/0R7Jmh1itiZeo1B52QQI8X9j3NAQl4yYs0sjCBEgBkR9KVIg2NRxEtJ9a
+         YuRzxHnnnWSAVJKASs98F7SGBZBAhAWHqcr9SVmATkhxKMma4rGTKzQJRgoDhsIQAc
+         eVHcZDzzgGIawAcgVmS/r7Run0EXaH8ED5Ehch+YLIPu6YIiDfzbnDm6CO57K28E9C
+         vgLlwWUEuoJaaD7w9Tj4kXfPZF1gyFW86YUzr8IDGuASiqtVV1VTUYWKase5AwkM49
+         vTP7yVBGT0MjKRSI3ay/HjiGC00E6tV9FRL6SakV8o/Pl4F2/y8nb9O7dJzvGhjTu/
+         XacloXLzszbZw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12239E45227;
+        Tue, 12 Jul 2022 22:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pQhuONsYb84gJfLur/dysjY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] bpf: reparent bpf maps on memcg offlining
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165766621306.6916.10461037448631832100.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Jul 2022 22:50:13 +0000
+References: <20220711162827.184743-1-roman.gushchin@linux.dev>
+In-Reply-To: <20220711162827.184743-1-roman.gushchin@linux.dev>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     bpf@vger.kernel.org, shakeelb@google.com, ast@kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/pQhuONsYb84gJfLur/dysjY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-In commit
+On Mon, 11 Jul 2022 09:28:27 -0700 you wrote:
+> The memory consumed by a mpf map is always accounted to the memory
+> cgroup of the process which created the map. The map can outlive
+> the memory cgroup if it's used by processes in other cgroups or
+> is pinned on bpffs. In this case the map pins the original cgroup
+> in the dying state.
+> 
+> For other types of objects (slab objects, non-slab kernel allocations,
+> percpu objects and recently LRU pages) there is a reparenting process
+> implemented: on cgroup offlining charged objects are getting
+> reassigned to the parent cgroup. Because all charges and statistics
+> are fully recursive it's a fairly cheap operation.
+> 
+> [...]
 
-  0cc323d985f9 ("Bluetooth: hci_sync: Fix resuming scan after suspend resum=
-e")
+Here is the summary with links:
+  - [bpf-next,v2] bpf: reparent bpf maps on memcg offlining
+    https://git.kernel.org/bpf/bpf-next/c/cbddef2759b6
 
-Fixes tag
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  Fixes: 3b42055388c30 (Bluetooth: hci_sync: Fix attempting to suspend with
 
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-
-Please do not break Fixes: tags over more than one line and also keep
-all the commit message tas together at the end of the commit message.
-
-Just use
-
-	git log -1 --format=3D'Fixes: %h ("%s")' <commit>
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pQhuONsYb84gJfLur/dysjY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLN+jYACgkQAVBC80lX
-0GwtJgf/c9+iqgJyiinF7BzZmFNrZNVhTCocBI5xZ2NCGMzMaI1ST8XGZ/mFRwIE
-ySwoT2JZCNe/BE1uda3Hj6wakOsW39O3q1Vh+rxcLFPjmC4KBsFhMmtoLWjOUVTA
-uJVr8UPJDGATcaBPO07mpvlUJRqgJsFwCro7i87znUHZn4FARrRIl+9LYJ+wCrvn
-KJXsmglFr53NwAVH5LWk5grteeM6KIOILn/5C7Ug02ndw53W7cePQ82zpSzMvvSU
-St0aW0BkaAe9KA5kA9P2MqZYqdE97DN7YTrRRxHdLHqIu0ZTx1FWnzlZsXOg3jdF
-ba2qy95nkfZWXQW2iPa6ImxbgqLArA==
-=98M0
------END PGP SIGNATURE-----
-
---Sig_/pQhuONsYb84gJfLur/dysjY--

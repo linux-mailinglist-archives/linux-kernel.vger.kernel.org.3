@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27D557219C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2919A5721A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiGLROs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 13:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S231192AbiGLRUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 13:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiGLROn (ORCPT
+        with ESMTP id S229823AbiGLRUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 13:14:43 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0FEB79F7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657646082; x=1689182082;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8RMeG8zscE7DyFRKmEbCnGAL3Id+0MlNRoW2dx79+/U=;
-  b=cTg+6L+zqjPKM1zZmoY5FRBqRnDWT9a/6i1pOpyynJC1/gKieh6DJT/V
-   8a2fKt5e4ETmCYbsKSJDIlZ9KNz3Obi8SS0fIHylirypD9ekG3gOd3a0V
-   FhLtI05jvAm3+wz0nUIg1S9J7fsTFTN9G/zc6Je0szjy08NdGu3eCdxAk
-   9w18/iUxiv24jcaSjdZJO9pcDoalPCh6aA2itnfhjAG8JmXvI+LMJRbxz
-   Tgj46BGv+nlDVQNO1RBO3eEfEjofmTp+9GgIhHXcrFO1NhSH7/mMx+72h
-   YJ7e2taAXoyQRAwm2MsMfACnNYkZGHDiUVjVi+N4KYG4BuKtIvkYNmMZZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="348968940"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="348968940"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 10:14:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="663028079"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jul 2022 10:14:38 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 442FDF1; Tue, 12 Jul 2022 20:14:46 +0300 (EEST)
-Date:   Tue, 12 Jul 2022 20:14:45 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv4 6/8] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Message-ID: <20220712171445.74b46mgdxgaub3qj@black.fi.intel.com>
-References: <20220622162230.83474-1-kirill.shutemov@linux.intel.com>
- <20220622162230.83474-7-kirill.shutemov@linux.intel.com>
- <CAG_fn=Uo8E-6r3otLPC9iEfO02=A0=zROO8R8TL=8vXVZVE5Ww@mail.gmail.com>
+        Tue, 12 Jul 2022 13:20:15 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B5967C81
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:20:12 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d12so15053255lfq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ibrUHnlGz87syZWBzvYZCl2iDjwrLt5IxsZ/+T6H5Kk=;
+        b=LKapj/7eKcH3Ctl0xLFhsHrioyJ2DRfd8EH69UtRZl8yDlKgnJU/i5wG+H7SaVVYjF
+         1/+fCuNEwfB8Df87JbtOiS1YHhVYLPvwSWtdiKFDJljv4fYaR8HScOgqK1fb1svFnAUu
+         NqoEVjX2rZPj90rE+JjAt/7BvdepDYNW7bwldQVTvpr8M4JLpSAYt42iaX+61GtVIcTa
+         3Od0RJSgItJlic/n5ypdpsuhC/CuT/hyexCfQGrSnw7dwoygyhRJBtA+QX9L2sZ4tG6N
+         01Ii3o+98GrbVlEZxHHM5WeTLsFeE+BTNFhZjap7o9NT9FpV64jK595ilhgduNMscK1C
+         UCeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ibrUHnlGz87syZWBzvYZCl2iDjwrLt5IxsZ/+T6H5Kk=;
+        b=MZmmbmLpXGjhPEvtErPqf6VnsSiw5rIxQZphKXH/iHEyqDPneML3JRGai6ag6p6IEC
+         lz3/oIJx3w+w9wQJlYiOJM8yo0Z8Of+6R+ocBVqsuxqzJQVvS+tdVstVedfLFh/B53vj
+         82itykHu8uhR2VHARpe8itcUscIjo7Gkuzjo55HI5iu8Oz26aQZ0+rwI5KN7AhTUwVXe
+         KTYRasgPD2eLHNfjiJYpfHdnZ3+m0GSqSzreFeII/ZsStqpRNYnzpF8uGd2x03tr0liL
+         Jvhh5hA5i2Y73NpHROunkR1Jn8qa6oRLYbLzIU5QEEXLrY/Li1Ui7Nizd5ub7y/rOHqC
+         gUhQ==
+X-Gm-Message-State: AJIora+TumHdz5nXxLXs/fh/QOdzb2adHtyB/KnmFOCyUgZTWgGbZ4q0
+        o0S/jpJsjg9TCbF1DoIeyvzPp4jg/3Uoo7Bia0b/uA==
+X-Google-Smtp-Source: AGRyM1sAh9uywucDWtlWxMee+W8CJDTIEAdUt5aFrGoVFJdcm32kcNTvUU60L8KP6MWXbwXkjeM/a8fSk7y6Hqk3/jk=
+X-Received: by 2002:a05:6512:1523:b0:489:db27:c171 with SMTP id
+ bq35-20020a056512152300b00489db27c171mr8262355lfb.58.1657646410942; Tue, 12
+ Jul 2022 10:20:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=Uo8E-6r3otLPC9iEfO02=A0=zROO8R8TL=8vXVZVE5Ww@mail.gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-20-jthoughton@google.com> <Ysy1EySRmjxl2TmQ@monkey>
+In-Reply-To: <Ysy1EySRmjxl2TmQ@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 12 Jul 2022 10:19:59 -0700
+Message-ID: <CADrL8HVimb9qx8fjhgFMfj2hWwD3+6_ZY7W=gHbf6as6qbiLYQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 19/26] hugetlb: add HGM support for copy_hugetlb_page_range
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:12:01PM +0200, Alexander Potapenko wrote:
-> On Wed, Jun 22, 2022 at 6:22 PM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
+On Mon, Jul 11, 2022 at 4:41 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 06/24/22 17:36, James Houghton wrote:
+> > This allows fork() to work with high-granularity mappings. The page
+> > table structure is copied such that partially mapped regions will remain
+> > partially mapped in the same way for the new process.
 > >
-> > Add a couple of arch_prctl() handles:
-> >
-> >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
-> >    of tag bits. It is rounded up to the nearest LAM mode that can
-> >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> >
-> >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> >    bits located in the address.
-> >
-> Am I right that the desired way to detect the presence of LAM without
-> enabling it is to check that arch_prctl(ARCH_GET_UNTAG_MASK, ...)
-> returns zero?
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >  mm/hugetlb.c | 74 +++++++++++++++++++++++++++++++++++++++++-----------
+> >  1 file changed, 59 insertions(+), 15 deletions(-)
+>
+> FYI -
+> With https://lore.kernel.org/linux-mm/20220621235620.291305-5-mike.kravetz@oracle.com/
+> copy_hugetlb_page_range() should never be called for shared mappings.
+> Since HGM only works on shared mappings, code in this patch will never
+> be executed.
+>
+> I have a TODO to remove shared mapping support from copy_hugetlb_page_range.
 
-Returns -1UL, but yes.
+Thanks Mike. If I understand things correctly, it seems like I don't
+have to do anything to support fork() then; we just don't copy the
+page table structure from the old VMA to the new one. That is, as
+opposed to having the same bits of the old VMA being mapped in the new
+one, the new VMA will have an empty page table. This would slightly
+change how userfaultfd's behavior on the new VMA, but that seems fine
+to me.
 
-> Overall, I think these new arch_prctls should be documented following
-> the spirit of PR_SET_TAGGED_ADDR_CTRL/PR_GET_TAGGED_ADDR_CTRL
-> somewhere.
+- James
 
-The plan is to update man page for the syscall once the interface is
-upstream.
-
-> > +
-> > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
-> > +{
-> > +       int ret = 0;
-> > +
-> > +       if (!cpu_feature_enabled(X86_FEATURE_LAM))
-> > +               return -ENODEV;
-> > +
-> > +       mutex_lock(&mm->context.lock);
-> > +
-> > +       /* Already enabled? */
-> > +       if (mm->context.lam_cr3_mask) {
-> > +               ret = -EBUSY;
-> > +               goto out;
-> > +       }
-> > +
-> > +       if (!nr_bits) {
-> > +               ret = -EINVAL;
-> 
-> One would expect that `arch_prctl(ARCH_ENABLE_TAGGED_ADDR, 0)`
-> disables tagging for the current process.
-> Shouldn't this workflow be supported as well?
-
-Is there an use-case for it?
-
-I would rather keep the interface minimal. We can always add this in the
-future if an use-case comes.
-
--- 
- Kirill A. Shutemov
+> --
+> Mike Kravetz

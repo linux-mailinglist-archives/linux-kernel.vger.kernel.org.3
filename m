@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8FE5729BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E2B5729BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiGLXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:14:01 -0400
+        id S234026AbiGLXN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:13:57 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiGLXNg (ORCPT
+        with ESMTP id S233869AbiGLXNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:13:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E6CC78B
+        Tue, 12 Jul 2022 19:13:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D49CC78A
         for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1657667610; x=1689203610;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FNDoAfmeIi8uLbuI0UIqM3X0guL9pMr/mCnJr0E5bVU=;
-  b=nWngtr4y64mzfPSW7oXzu0Ybn/Sy0rkzdal/11RGVMeRZzIvt5FsCCQx
-   MXF1Wu1NOpPnwtDU8M+murk/0v0a0CT3VwJji5qoHThK1Pi01H7kOVjyF
-   YnzYn8aFQkGlZqrSl/inDnoyCQ8TZaQyGxOhdGNfNq5fFDbpBIOrYWtpQ
-   OcMfLIntXhIsGErsuFzXDc2ZZewzAhFLz0rlO1M/av3eW1FML8L3sqQy3
-   k+++1e9g9PEMeNWL3c+3jaGmp0mIJssO99YKrkYBIjqqVuYk9sydIpo0G
-   +hZ2xTTAf7cU3KBXapZNI3of/VwkFEhyGgGkJq/pM6/fjZkaxKdwUbsp1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="283818842"
+  bh=OJDuDjvUGA+HqDGHfFlodTRAfB+eKXuXU7w3WDfuVQk=;
+  b=LIrmgR1GR8S075KU0qsh1B8AeO+bwqgkGbW2c8vHlXNQIIv6f/GBI+zD
+   rYuKCm908JS9M7IR4n5QCt54Hlk8QhyJHPUz3h4opYn3FYvYF8lJa4BL0
+   J0A4e7fBxaF+069ymX/a33rlyWtK5S+u4OPu2YsMVdhLbkVPtaqaoctrV
+   aZKZLvasPeqyEB/4AU3nbxFB/ttFRgiQhX1UwKbQmelMH/hY/aAYHzQ5Z
+   UK36GmgnGURJPEM6sx0VzUm47iH5+AjlZjX5vmjbqauhixogFqO890KIk
+   gcFszZsfrR8o4lAmWfw+A7WeY0F+whRghgRxjbj3K/zQSTgREJOyJGXE7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285808443"
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="283818842"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:13:30 -0700
+   d="scan'208";a="285808443"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:13:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="628074991"
+   d="scan'208";a="737658278"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 12 Jul 2022 16:13:26 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jul 2022 16:13:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id E6AAB3ED; Wed, 13 Jul 2022 02:13:29 +0300 (EEST)
+        id EC3853E3; Wed, 13 Jul 2022 02:13:29 +0300 (EEST)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -55,198 +55,129 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv5 05/13] x86/uaccess: Provide untagged_addr() and remove tags before address check
-Date:   Wed, 13 Jul 2022 02:13:20 +0300
-Message-Id: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
+Date:   Wed, 13 Jul 2022 02:13:21 +0300
+Message-Id: <20220712231328.5294-7-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
 References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-untagged_addr() is a helper used by the core-mm to strip tag bits and
-get the address to the canonical shape. In only handles userspace
-addresses. The untagging mask is stored in mmu_context and will be set
-on enabling LAM for the process.
+Add a couple of arch_prctl() handles:
 
-The tags must not be included into check whether it's okay to access the
-userspace address.
+ - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+   of tag bits. It is rounded up to the nearest LAM mode that can
+   provide it. For now only LAM_U57 is supported, with 6 tag bits.
 
-Strip tags in access_ok().
-
-get_user() and put_user() don't use access_ok(), but check access
-against TASK_SIZE directly in assembly. Strip tags, before calling into
-the assembly helper.
+ - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+   bits located in the address.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/mmu.h         |  3 +++
- arch/x86/include/asm/mmu_context.h | 11 ++++++++
- arch/x86/include/asm/uaccess.h     | 42 +++++++++++++++++++++++++++---
- arch/x86/kernel/process.c          |  3 +++
- 4 files changed, 56 insertions(+), 3 deletions(-)
+ arch/x86/include/uapi/asm/prctl.h |  3 ++
+ arch/x86/kernel/process_64.c      | 60 ++++++++++++++++++++++++++++++-
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 002889ca8978..2fdb390040b5 100644
---- a/arch/x86/include/asm/mmu.h
-+++ b/arch/x86/include/asm/mmu.h
-@@ -43,6 +43,9 @@ typedef struct {
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..38164a05c23c 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,7 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
  
- 	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
- 	unsigned long lam_cr3_mask;
++#define ARCH_GET_UNTAG_MASK		0x4001
++#define ARCH_ENABLE_TAGGED_ADDR		0x4002
 +
-+	/* Significant bits of the virtual address. Excludes tag bits. */
-+	u64 untag_mask;
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 1962008fe743..82a19168bfa4 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -742,6 +742,60 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ }
  #endif
  
- 	struct mutex lock;
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 69c943b2ae90..5bd3d46685dc 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -100,6 +100,12 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+	mm->context.untag_mask = oldmm->context.untag_mask;
++static void enable_lam_func(void *mm)
++{
++	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
++	unsigned long lam_mask;
++	unsigned long cr3;
++
++	if (loaded_mm != mm)
++		return;
++
++	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
++
++	/* Update CR3 to get LAM active on the CPU */
++	cr3 = __read_cr3();
++	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
++	cr3 |= lam_mask;
++	write_cr3(cr3);
++	set_tlbstate_cr3_lam_mask(lam_mask);
 +}
 +
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
++static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
 +{
-+	mm->context.untag_mask = -1UL;
- }
- 
- #else
-@@ -112,6 +118,10 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- }
++	int ret = 0;
 +
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
++	if (!cpu_feature_enabled(X86_FEATURE_LAM))
++		return -ENODEV;
++
++	mutex_lock(&mm->context.lock);
++
++	/* Already enabled? */
++	if (mm->context.lam_cr3_mask) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	if (!nr_bits) {
++		ret = -EINVAL;
++		goto out;
++	} else if (nr_bits <= 6) {
++		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
++		mm->context.untag_mask =  ~GENMASK(62, 57);
++	} else {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Make lam_cr3_mask and untag_mask visible on other CPUs */
++	smp_mb();
++
++	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
++out:
++	mutex_unlock(&mm->context.lock);
++	return ret;
 +}
- #endif
- 
- #define enter_lazy_tlb enter_lazy_tlb
-@@ -138,6 +148,7 @@ static inline int init_new_context(struct task_struct *tsk,
- 		mm->context.execute_only_pkey = -1;
- 	}
- #endif
-+	mm_reset_untag_mask(mm);
- 	init_new_context_ldt(mm);
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 913e593a3b45..803241dfc473 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -6,6 +6,7 @@
-  */
- #include <linux/compiler.h>
- #include <linux/kasan-checks.h>
-+#include <linux/mm_types.h>
- #include <linux/string.h>
- #include <asm/asm.h>
- #include <asm/page.h>
-@@ -20,6 +21,30 @@ static inline bool pagefault_disabled(void);
- # define WARN_ON_IN_IRQ()
- #endif
- 
-+#ifdef CONFIG_X86_64
-+/*
-+ * Mask out tag bits from the address.
-+ *
-+ * Magic with the 'sign' allows to untag userspace pointer without any branches
-+ * while leaving kernel addresses intact.
-+ */
-+#define untagged_addr(mm, addr)	({					\
-+	u64 __addr = (__force u64)(addr);				\
-+	s64 sign = (s64)__addr >> 63;					\
-+	__addr &= (mm)->context.untag_mask | sign;			\
-+	(__force __typeof__(addr))__addr;				\
-+})
 +
-+#define untagged_ptr(mm, ptr)	({					\
-+	u64 __ptrval = (__force u64)(ptr);				\
-+	__ptrval = untagged_addr(mm, __ptrval);				\
-+	(__force __typeof__(*(ptr)) *)__ptrval;				\
-+})
-+#else
-+#define untagged_addr(mm, addr)	(addr)
-+#define untagged_ptr(mm, ptr)	(ptr)
-+#endif
-+
- /**
-  * access_ok - Checks if a user space pointer is valid
-  * @addr: User space pointer to start of block to check
-@@ -40,7 +65,7 @@ static inline bool pagefault_disabled(void);
- #define access_ok(addr, size)					\
- ({									\
- 	WARN_ON_IN_IRQ();						\
--	likely(__access_ok(addr, size));				\
-+	likely(__access_ok(untagged_addr(current->mm, addr), size));	\
- })
- 
- #include <asm-generic/access_ok.h>
-@@ -125,7 +150,13 @@ extern int __get_user_bad(void);
-  * Return: zero on success, or -EFAULT on error.
-  * On error, the variable @x is set to zero.
-  */
--#define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
-+#define get_user(x,ptr)							\
-+({									\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_get_user_call(get_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __get_user - Get a simple variable from user space, with less checking.
-@@ -222,7 +253,12 @@ extern void __put_user_nocheck_8(void);
-  *
-  * Return: zero on success, or -EFAULT on error.
-  */
--#define put_user(x, ptr) ({ might_fault(); do_put_user_call(put_user,x,ptr); })
-+#define put_user(x, ptr) ({						\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_put_user_call(put_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __put_user - Write a simple value into user space, with less checking.
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 9b2772b7e1f3..18b2bfdf7b9b 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -47,6 +47,7 @@
- #include <asm/frame.h>
- #include <asm/unwind.h>
- #include <asm/tdx.h>
-+#include <asm/mmu_context.h>
- 
- #include "process.h"
- 
-@@ -367,6 +368,8 @@ void arch_setup_new_exec(void)
- 		task_clear_spec_ssb_noexec(current);
- 		speculation_ctrl_update(read_thread_flags());
- 	}
-+
-+	mm_reset_untag_mask(current->mm);
- }
- 
- #ifdef CONFIG_X86_IOPL_IOPERM
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ {
+ 	int ret = 0;
+@@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++	case ARCH_GET_UNTAG_MASK:
++		return put_user(task->mm->context.untag_mask,
++				(unsigned long __user *)arg2);
++	case ARCH_ENABLE_TAGGED_ADDR:
++		return prctl_enable_tagged_addr(task->mm, arg2);
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 -- 
 2.35.1
 

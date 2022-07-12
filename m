@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0688A5711BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 07:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AAA5711BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 07:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiGLFNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 01:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S231159AbiGLFOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 01:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiGLFNU (ORCPT
+        with ESMTP id S229635AbiGLFOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 01:13:20 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4731226;
-        Mon, 11 Jul 2022 22:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ega+Z9B/4Yexu++aBsELz0a6/2VIgxnLFmauVgfSpZU=; b=wxVoxPxw3IyK+C8HHBMt2jepI4
-        TSBxQB+MTtSoxQDrUn24D94dNsXzN6zLMu8dlxphvBFdxicbMCDD7y7ZflkcrON9bvhjU++Vjby5X
-        kN1IOFbMpX50qJ8ONftqHyoT5LIsYW/rHUhxDHbf39gg7gWJ4bfg5MYEaxTx+fyvklOxTedIWs/aG
-        sC0vtIT0WcLbTIpQiIiHaaKMvEMhMwBrzHIYP3ciufq+vArc99ai1HMi/CvMl9tETI2RQgoOxwTcS
-        Q1GIitEq/PrgMdEm7BS3KVEfpi1ElDAtSQ/FkZdHv1CiK7RipSLjfi54m89AlLy9v6W3OBCc0rJ6m
-        nQKjLX0Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oB8D1-007iTg-H9; Tue, 12 Jul 2022 05:13:19 +0000
-Date:   Mon, 11 Jul 2022 22:13:19 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] block: Use try_cmpxchg some more
-Message-ID: <Ys0C72unFFlsWomq@infradead.org>
-References: <20220711153301.2388-1-ubizjak@gmail.com>
+        Tue, 12 Jul 2022 01:14:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7878BDEFB
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 22:14:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 131D31424;
+        Mon, 11 Jul 2022 22:14:15 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.42.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BDC853F73D;
+        Mon, 11 Jul 2022 22:14:11 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     german.gomez@arm.com, james.clark@arm.com, suzuki.poulose@arm.com,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/perf: arm_spe: Fix consistency of SYS_PMSCR_EL1.CX
+Date:   Tue, 12 Jul 2022 10:44:04 +0530
+Message-Id: <20220712051404.2546851-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711153301.2388-1-ubizjak@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:33:01PM +0200, Uros Bizjak wrote:
-> Use try_cmpxchg family of functions instead of cmpxchg (*ptr, old, new) == old.
-> x86 CMPXCHG instruction returns success in ZF flag, so this change saves a
-> compare after cmpxchg (and related move instruction in front of cmpxchg).
-> 
-> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when
-> cmpxchg fails, enabling further code simplifications.
-> 
-> No functional change intended.
+The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+packets into the traces, if the owner of the perf event runs with required
+capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
 
-You might want to split this into a patch per caller as it might
-attact different reviewers.
+The value of this bit is computed in the arm_spe_event_to_pmscr() function
+but the check for capabilities happens in the pmu event init callback i.e
+arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+remain consistent for the duration of the perf session.
 
-> +	do {
-> +	} while (old && !atomic_try_cmpxchg(&blkg->use_delay, &old, old - 1));
+However, the function arm_spe_event_to_pmscr() may be called later during
+the event start callback i.e arm_spe_pmu_start() when the "current" process
+is not the owner of the perf session, hence the CX bit setting is currently
+not consistent.
 
-It might just be me, but for loops with an empty body this do { } while
-construct looks odd.  Why not:
+One way to fix this, is by caching the required value of the CX bit during
+the initialization of the PMU event, so that it remains consistent for the
+duration of the session. It uses currently unused 'event->hw.flags' element
+to cache perfmon_capable() value, which can be referred during event start
+callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+of context packets in the trace as per event owner capabilities.
 
-	while (old && !atomic_try_cmpxchg(&blkg->use_delay, &old, old - 1))
-		;
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v5.19-rc6 and built on an earlier version posted by German
+https://lore.kernel.org/all/20220117124432.3119132-1-german.gomez@arm.com/
 
-?
+ drivers/perf/arm_spe_pmu.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-The the use of the atomic on ->use_delay looks really whacky to start
-with.  To me it sounds like it really wants to use a proper lock
-instead of all this magic.
-
->  	else
->  		return;
->  
-> -	old = atomic_cmpxchg(&iolat->scale_cookie, our_cookie, cur_cookie);
-> -
-> -	/* Somebody beat us to the punch, just bail. */
-> -	if (old != our_cookie)
-> +	if (!atomic_try_cmpxchg(&iolat->scale_cookie, &our_cookie, cur_cookie)) {
-> +		/* Somebody beat us to the punch, just bail. */
->  		return;
-> +	}
-
-
-	/* If somebody beat us to the punch, just bail. */
-	if (!atomic_try_cmpxchg(&iolat->scale_cookie, &our_cookie, cur_cookie))
-		return;
+diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+index db670b265897..011e98428233 100644
+--- a/drivers/perf/arm_spe_pmu.c
++++ b/drivers/perf/arm_spe_pmu.c
+@@ -39,6 +39,26 @@
+ #include <asm/mmu.h>
+ #include <asm/sysreg.h>
+ 
++/*
++ * event.hw.flags remain unused for events created for this
++ * PMU driver. A single bit there i.e BIT(0), could be used
++ * to remember initiating process's perfmon_capable() value
++ * which can be subsequently used to enable SYS_PMSCR_EL.CX
++ * thus enabling context information in the trace.
++ */
++#define SPE_PMU_HW_FLAGS_CX			BIT(0)
++
++static void event_hw_flags_set_cx(struct perf_event *event)
++{
++	if (perfmon_capable())
++		event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
++}
++
++static bool event_hw_flags_has_cx(struct perf_event *event)
++{
++	return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
++}
++
+ #define ARM_SPE_BUF_PAD_BYTE			0
+ 
+ struct arm_spe_pmu_buf {
+@@ -272,7 +292,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+ 	if (!attr->exclude_kernel)
+ 		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+ 
+-	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
++	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && event_hw_flags_has_cx(event))
+ 		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+ 
+ 	return reg;
+@@ -710,7 +730,8 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+ 		return -EOPNOTSUPP;
+ 
+ 	reg = arm_spe_event_to_pmscr(event);
+-	if (!perfmon_capable() &&
++	event_hw_flags_set_cx(event);
++	if (!event_hw_flags_has_cx(event) &&
+ 	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+ 		    BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+ 		    BIT(SYS_PMSCR_EL1_PCT_SHIFT))))
+-- 
+2.25.1
 

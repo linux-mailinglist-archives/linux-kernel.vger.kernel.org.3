@@ -2,165 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7403D5729E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A5F5729EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbiGLX14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S233315AbiGLXaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiGLX1y (ORCPT
+        with ESMTP id S230094AbiGLXaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:27:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA16A8505;
-        Tue, 12 Jul 2022 16:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B55A9B81BF2;
-        Tue, 12 Jul 2022 23:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC69AC3411C;
-        Tue, 12 Jul 2022 23:27:48 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IXCsfUZt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1657668466;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aB9rTSoP5TcFMxIKv1dXr9wSKovU/IFkSimTlBSvEpw=;
-        b=IXCsfUZt/FWBdscwWyhHZieu1Bq9xEAe37ehLp/YdGzacWZZP20PPDNnAejQ92Sv/KbW6n
-        PZIxE4ZVOgU2mLjMbWdPYH126zvIOU2tqy/zovu/lB6NAsIi+sgpcElkH+WEaTQvWu5lYg
-        rlodp1RlsA/oEzmabKyKBUSCy+jJ2AM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id af0bb318 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 12 Jul 2022 23:27:46 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        johannes@sipsolutions.net
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org
-Subject: [PATCH] um: seed rng using host OS rng
-Date:   Wed, 13 Jul 2022 01:27:38 +0200
-Message-Id: <20220712232738.77737-1-Jason@zx2c4.com>
+        Tue, 12 Jul 2022 19:30:06 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07283B8511;
+        Tue, 12 Jul 2022 16:30:05 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10bf634bc50so12218141fac.3;
+        Tue, 12 Jul 2022 16:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WnTghxFtBu2OXOEU87B3AgUgfQXj7MipiT7mcrRjJ8U=;
+        b=DaJ0AyL3CWqo/8jTMhu/RWfBG6hJQkhTIo2KeGqcu3GnOKDtCw6zA22bOdYEy/kvrT
+         +pAU5YhfttQRQi81VkujUUkLc5/iS2h0eFaaZYjBzMTylS/At8cRjCLNaeFF+buaIGiS
+         AH3c9q6JYKKP56heR0KOorgcWT2V0c6PqzUNpN9YYJEyzy/3hMb0Rh0yHKVztS6+yp5J
+         h6ULPO5vfHyaOl9ipSbnQXZ3CyT8V/Rls04FfU9I5ySB5qc9SVM+7D/SrNe+CzGeJWJ0
+         h7nfZ1cCaqLy75bR6A6EVqCMYOlAmx8ASiJpowDVWt/DNqRodzQyTilz/txfabQA3Vnh
+         zdHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WnTghxFtBu2OXOEU87B3AgUgfQXj7MipiT7mcrRjJ8U=;
+        b=surMBGjfmAR9aNBv71WIxR7kHDrjQaojprA2ndWn3iSpskzunVwt/OHxS07sJ4tx9N
+         Acm6x0C4gBqe8DNUuZFgY7BiDKgozeDbRRcZRZiwCqD6z7HvxM8pr9EaWjQwYsW6PTRr
+         k+PTe18OuTC3qsoEw6mWJsgt7Je1yxX/w8M8MCNUNSnW0Awtb3jYZL8EeALZLdT8USZ5
+         VCTmswHXSffyIXdSCx8itbsZpfKUMKoz/EZyol8MPSyyRWo0sD+o2YxIjtxasuGH8UxD
+         muVxLnJJy+g2Ps9/TzMX2XvEBOZKO2BqVLOo4GNnF2bTsi0DfaR1X/eBlcGHaDl+9f5k
+         u5pw==
+X-Gm-Message-State: AJIora/NLL9TiUlUiQkTJJSXYNbsOy8lAGkXLEzrkG6gK7pPUTZaCxZT
+        KqT72aH4ilipzqhEX0zL9X2W3WdZdhOjo+H3joc=
+X-Google-Smtp-Source: AGRyM1ueMc+11lpynByTZX4WV3tgjQkbuZWMss8T/lZWNsLRUfJlb9mnAT0iEe2B39RWalsVyTTD7PA2ApxDrtn3tSM=
+X-Received: by 2002:a05:6870:d0ce:b0:f3:3856:f552 with SMTP id
+ k14-20020a056870d0ce00b000f33856f552mr343201oaa.99.1657668604358; Tue, 12 Jul
+ 2022 16:30:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+ <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com> <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+ <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com> <a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com>
+In-Reply-To: <a443a6f9-fd6f-d283-ce00-68d72b40539d@isovalent.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Tue, 12 Jul 2022 17:29:53 -0600
+Message-ID: <CADvTj4qrKkyGBzxVk-Ddtv5fAs8wUD7L-cwZtqNE=7CMF+O0Eg@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UML generally does not provide access to special CPU instructions like
-RDRAND, and execution tends to be rather deterministic, with no real
-hardware interrupts, making good randomness really very hard, if not
-all together impossible. Not only is this a security eyebrow raiser, but
-it's also quite annoying when trying to do various pieces of UML-based
-automation that takes a long time to boot, if ever.
+On Tue, Jul 12, 2022 at 3:48 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> On 12/07/2022 05:40, Andrii Nakryiko wrote:
+> > CC Quentin as well
+> >
+> > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+> > <james.hilliard1@gmail.com> wrote:
+> >>
+> >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 7/6/22 10:28 AM, James Hilliard wrote:
+> >>>> The current bpf_helper_defs.h helpers are llvm specific and don't work
+> >>>> correctly with gcc.
+> >>>>
+> >>>> GCC appears to required kernel helper funcs to have the following
+> >>>> attribute set: __attribute__((kernel_helper(NUM)))
+> >>>>
+> >>>> Generate gcc compatible headers based on the format in bpf-helpers.h.
+> >>>>
+> >>>> This adds conditional blocks for GCC while leaving clang codepaths
+> >>>> unchanged, for example:
+> >>>>       #if __GNUC__ && !__clang__
+> >>>>       void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+> >>>>       #else
+> >>>>       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+> >>>>       #endif
+> >>>
+> >>> It does look like that gcc kernel_helper attribute is better than
+> >>> '(void *) 1' style. The original clang uses '(void *) 1' style is
+> >>> just for simplicity.
+> >>
+> >> Isn't the original style going to be needed for backwards compatibility with
+> >> older clang versions for a while?
+> >
+> > I'm curious, is there any added benefit to having this special
+> > kernel_helper attribute vs what we did in Clang for a long time? Did
+> > GCC do it just to be different and require workarounds like this or
+> > there was some technical benefit to this?
+> >
+> > This duplication of definitions with #if for each one looks really
+> > awful, IMO. I'd rather have a macro invocation like below (or
+> > something along those lines) for each helper:
+> >
+> > BPF_HELPER_DEF(2, void *, bpf_map_update_elem, void *map, const void
+> > *key, const void *value, __u64 flags);
+> >
+> > And then define BPF_HELPER_DEF() once based on whether it's Clang or GCC.
+>
+> Hi, for what it's worth I agree with Andrii, I would rather avoid the
+> #if/else/endif and dual definition for each helper in the header, using
+> a macro should keep it more readable indeed. The existing one
+> (BPF_HELPER(return_type, name, args, id)) can likely be adapted.
 
-Fix this by trivially calling getrandom() in the host and using that
-seed as "bootloader randomness", which initializes the rng immediately
-at UML boot.
+Yeah, seems a bit cleaner, think I got it working:
+https://lore.kernel.org/bpf/20220712232556.248863-1-james.hilliard1@gmail.com/
 
-The old behavior can be restored the same way as on any other arch, by
-way of CONFIG_TRUST_BOOTLOADER_RANDOMNESS=n or
-random.trust_bootloader=0. So seen from that perspective, this just
-makes UML act like other archs, which is positive in its own right.
-
-Cc: stable@vger.kernel.org
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/um/include/shared/os.h | 7 +++++++
- arch/um/kernel/um_arch.c    | 8 ++++++++
- arch/um/os-Linux/util.c     | 6 ++++++
- 3 files changed, 21 insertions(+)
-
-diff --git a/arch/um/include/shared/os.h b/arch/um/include/shared/os.h
-index fafde1d5416e..79644dd88d58 100644
---- a/arch/um/include/shared/os.h
-+++ b/arch/um/include/shared/os.h
-@@ -11,6 +11,12 @@
- #include <irq_user.h>
- #include <longjmp.h>
- #include <mm_id.h>
-+/* This is to get size_t */
-+#ifndef __UM_HOST__
-+#include <linux/types.h>
-+#else
-+#include <stddef.h>
-+#endif
- 
- #define CATCH_EINTR(expr) while ((errno = 0, ((expr) < 0)) && (errno == EINTR))
- 
-@@ -243,6 +249,7 @@ extern void stack_protections(unsigned long address);
- extern int raw(int fd);
- extern void setup_machinename(char *machine_out);
- extern void setup_hostinfo(char *buf, int len);
-+extern ssize_t os_getrandom(void *buf, size_t len, unsigned int flags);
- extern void os_dump_core(void) __attribute__ ((noreturn));
- extern void um_early_printk(const char *s, unsigned int n);
- extern void os_fix_helper_signals(void);
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index 0760e24f2eba..74f3efd96bd4 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -16,6 +16,7 @@
- #include <linux/sched/task.h>
- #include <linux/kmsg_dump.h>
- #include <linux/suspend.h>
-+#include <linux/random.h>
- 
- #include <asm/processor.h>
- #include <asm/cpufeature.h>
-@@ -406,6 +407,8 @@ int __init __weak read_initrd(void)
- 
- void __init setup_arch(char **cmdline_p)
- {
-+	u8 rng_seed[32];
-+
- 	stack_protections((unsigned long) &init_thread_info);
- 	setup_physmem(uml_physmem, uml_reserved, physmem_size, highmem);
- 	mem_total_pages(physmem_size, iomem_size, highmem);
-@@ -416,6 +419,11 @@ void __init setup_arch(char **cmdline_p)
- 	strlcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
- 	setup_hostinfo(host_info, sizeof host_info);
-+
-+	if (os_getrandom(rng_seed, sizeof(rng_seed), 0) == sizeof(rng_seed)) {
-+		add_bootloader_randomness(rng_seed, sizeof(rng_seed));
-+		memzero_explicit(rng_seed, sizeof(rng_seed));
-+	}
- }
- 
- void __init check_bugs(void)
-diff --git a/arch/um/os-Linux/util.c b/arch/um/os-Linux/util.c
-index 41297ec404bf..fc0f2a9dee5a 100644
---- a/arch/um/os-Linux/util.c
-+++ b/arch/um/os-Linux/util.c
-@@ -14,6 +14,7 @@
- #include <sys/wait.h>
- #include <sys/mman.h>
- #include <sys/utsname.h>
-+#include <sys/random.h>
- #include <init.h>
- #include <os.h>
- 
-@@ -96,6 +97,11 @@ static inline void __attribute__ ((noreturn)) uml_abort(void)
- 			exit(127);
- }
- 
-+ssize_t os_getrandom(void *buf, size_t len, unsigned int flags)
-+{
-+	return getrandom(buf, len, flags);
-+}
-+
- /*
-  * UML helper threads must not handle SIGWINCH/INT/TERM
-  */
--- 
-2.35.1
-
+>
+> Also I note that contrarily to clang's helpers, you don't declare GCC's
+> as "static" (although I'm not sure of the effect of declaring them
+> static in this case).
+>
+> Thanks,
+> Quentin

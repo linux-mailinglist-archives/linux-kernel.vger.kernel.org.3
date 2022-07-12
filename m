@@ -2,128 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812D4571CDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F8657200B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbiGLOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S233785AbiGLPzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiGLOfa (ORCPT
+        with ESMTP id S233916AbiGLPzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:35:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA0D24F12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:28 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lj3Cg4LvdzlVpR;
-        Tue, 12 Jul 2022 22:33:51 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 22:35:25 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 22:35:24 +0800
-Message-ID: <8efb2c6f-f00a-ea02-d5ae-ac454bb721f5@huawei.com>
-Date:   Tue, 12 Jul 2022 22:35:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] amba: Remove deferred device addition
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "John Stultz" <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Marek Szyprowski" <m.szyprowski@samsung.com>,
-        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>
-References: <20220705083934.3974140-1-saravanak@google.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220705083934.3974140-1-saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 11:55:39 -0400
+X-Greylist: delayed 2333 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 08:55:36 PDT
+Received: from lizzy.crudebyte.com (lizzy.crudebyte.com [91.194.90.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B18C54A7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=lizzy; h=Cc:To:Subject:Date:From:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Content-ID:
+        Content-Description; bh=DR3HV1SiIkmW4IR/q6IEoMYBeifoU6ydrhuDi/6K044=; b=JLWBp
+        gHkHeaKR9uoySe7mI5RXdMk5eM3CvX4kJVb2YrdP9Twm3QzZ6S+Y6wVFRAp7WWQFdtJ3BuwtWhWN6
+        8wRfR0767mXO3VYp73AtO09kpTLimCxsrF/3/ZCxz36rMROSaL+yvUVGgXHon14kaFFxQbsd8TwxP
+        UyBbL+8DGTfAto/gBpbuFDXy84qAP2ebfuh3uMDTAewXMmwDdeITuhrWWBnWwP8ozOdyW2x8yNdhM
+        wIv7Or4GdQneIDuoeaDlaIdmZQvathN7kMCPiIg+BoyOF+60uWcuIezRHxkAlxOzrjl9/omsM6awR
+        M5jCAFZ1uohM1amebgFDe2AlMpaxA==;
+Message-Id: <cover.1657636554.git.linux_oss@crudebyte.com>
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+Date:   Tue, 12 Jul 2022 16:35:54 +0200
+Subject: [PATCH v5 00/11] remove msize limit in virtio transport
+To:     v9fs-developer@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series aims to get get rid of the current 500k 'msize' limitation in
+the 9p virtio transport, which is currently a bottleneck for performance
+of 9p mounts.
 
-On 2022/7/5 16:39, Saravana Kannan wrote:
-> The uevents generated for an amba device need PID and CID information
-> that's available only when the amba device is powered on, clocked and
-> out of reset. So, if those resources aren't available, the information
-> can't be read to generate the uevents. To workaround this requirement,
-> if the resources weren't available, the device addition was deferred and
-> retried periodically.
->
-> However, this deferred addition retry isn't based on resources becoming
-> available. Instead, it's retried every 5 seconds and causes arbitrary
-> probe delays for amba devices and their consumers.
->
-> Also, maintaining a separate deferred-probe like mechanism is
-> maintenance headache.
->
-> With this commit, instead of deferring the device addition, we simply
-> defer the generation of uevents for the device and probing of the device
-> (because drivers needs PID and CID to match) until the PID and CID
-> information can be read. This allows us to delete all the amba specific
-> deferring code and also avoid the arbitrary probing delays.
->
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->
-> v1 -> v2:
-> - Dropped RFC tag
-> - Complete rewrite to not use stub devices.
->
-> v2 -> v3:
-> - Flipped the if() condition for hard-coded periphids.
-> - Added a stub driver to handle the case where all amba drivers are
->    modules loaded by uevents.
-> - Cc Marek after I realized I forgot to add him.
->
-> v3 -> v4:
-> - Finally figured out and fixed the issue reported by Kefeng (bus match
->    can't return an error other than -EPROBE_DEFER).
-> - I tested the patch on "V2P-CA15" on qemu
-> - Marek tested v3, but that was so long ago and the rebase wasn't clean,
->    so I didn't include the tested-by.
->
-> Marek/Kefeng,
->
-> Mind giving a Tested-by?
+To avoid confusion: it does remove the msize limit for the virtio transport,
+on 9p client level though the anticipated milestone for this series is now
+a max. 'msize' of 4 MB. See patch 7 for reason why.
 
-Hi Saravana, I tested on my qemu, and previous panic[1] disappeared, so
+This is a follow-up of the following series and discussion:
+https://lore.kernel.org/all/cover.1640870037.git.linux_oss@crudebyte.com/
 
-Tested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Latest version of this series:
+https://github.com/cschoenebeck/linux/commits/9p-virtio-drop-msize-cap
 
-[1] 
-https://lore.kernel.org/linux-arm-kernel/CAGETcx8RLor0JcboBuMrB96xUot14P1CAcqoen7ZHnYRi7KMEQ@mail.gmail.com/
+
+OVERVIEW OF PATCHES:
+
+* Patches 1..6 remove the msize limitation from the 'virtio' transport
+  (i.e. the 9p 'virtio' transport itself actually supports >4MB now, tested
+  successfully with an experimental QEMU version and some dirty 9p Linux
+  client hacks up to msize=128MB).
+
+* Patch 7 limits msize for all transports to 4 MB for now as >4MB would need
+  more work on 9p client level (see commit log of patch 7 for details).
+
+* Patches 8..11 tremendously reduce unnecessarily huge 9p message sizes and
+  therefore provide performance gain as well. So far, almost all 9p messages
+  simply allocated message buffers exactly msize large, even for messages
+  that actually just needed few bytes. So these patches make sense by
+  themselves, independent of this overall series, however for this series
+  even more, because the larger msize, the more this issue would have hurt
+  otherwise.
+
+
+PREREQUISITES:
+
+If you are testing with QEMU then please either use QEMU 6.2 or higher, or
+at least apply the following patch on QEMU side:
+
+  https://lore.kernel.org/qemu-devel/E1mT2Js-0000DW-OH@lizzy.crudebyte.com/
+
+That QEMU patch is required if you are using a user space app that
+automatically retrieves an optimum I/O block size by obeying stat's
+st_blksize, which 'cat' for instance is doing, e.g.:
+
+	time cat test_rnd.dat > /dev/null
+
+Otherwise please use a user space app for performance testing that allows
+you to force a large block size and to avoid that QEMU issue, like 'dd'
+for instance, in that case you don't need to patch QEMU.
+
+
+KNOWN LIMITATION:
+
+With this series applied I can run
+
+  QEMU host <-> 9P virtio <-> Linux guest
+
+with up to slightly below 4 MB msize [4186112 = (1024-2) * 4096]. If I try
+to run it with exactly 4 MB (4194304) it currently hits a limitation on
+QEMU side:
+
+  qemu-system-x86_64: virtio: too many write descriptors in indirect table
+
+That's because QEMU currently has a hard coded limit of max. 1024 virtio
+descriptors per vring slot (i.e. per virtio message), see to do (1.) below.
+
+
+STILL TO DO:
+
+  1. Negotiating virtio "Queue Indirect Size" (MANDATORY):
+
+    The QEMU issue described above must be addressed by negotiating the
+    maximum length of virtio indirect descriptor tables on virtio device
+    initialization. This would not only avoid the QEMU error above, but would
+    also allow msize of >4MB in future. Before that change can be done on
+    Linux and QEMU sides though, it first requires a change to the virtio
+    specs. Work on that on the virtio specs is in progress:
+
+    https://github.com/oasis-tcs/virtio-spec/issues/122
+
+    This is not really an issue for testing this series. Just stick to max.
+    msize=4186112 as described above and you will be fine. However for the
+    final PR this should obviously be addressed in a clean way.
+
+  2. Reduce readdir buffer sizes (optional - maybe later):
+
+    This series already reduced the message buffers for most 9p message
+    types. This does not include Treaddir though yet, which is still simply
+    using msize. It would make sense to benchmark first whether this is
+    actually an issue that hurts. If it does, then one might use already
+    existing vfs knowledge to estimate the Treaddir size, or starting with
+    some reasonable hard coded small Treaddir size first and then increasing
+    it just on the 2nd Treaddir request if there are more directory entries
+    to fetch.
+
+  3. Add more buffer caches (optional - maybe later):
+
+    p9_fcall_init() uses kmem_cache_alloc() instead of kmalloc() for very
+    large buffers to reduce latency waiting for memory allocation to
+    complete. Currently it does that only if the requested buffer size is
+    exactly msize large. As patch 10 already divided the 9p message types
+    into few message size categories, maybe it would make sense to use e.g.
+    4 separate caches for those memory category (e.g. 4k, 8k, msize/2,
+    msize). Might be worth a benchmark test.
+
+Testing and feedback appreciated!
+
+v4 -> v5:
+
+  * Exclude RDMA transport from buffer size reduction. [patch 11]
+
+Christian Schoenebeck (11):
+  9p/trans_virtio: separate allocation of scatter gather list
+  9p/trans_virtio: turn amount of sg lists into runtime info
+  9p/trans_virtio: introduce struct virtqueue_sg
+  net/9p: add trans_maxsize to struct p9_client
+  9p/trans_virtio: support larger msize values
+  9p/trans_virtio: resize sg lists to whatever is possible
+  net/9p: limit 'msize' to KMALLOC_MAX_SIZE for all transports
+  net/9p: split message size argument into 't_size' and 'r_size' pair
+  9p: add P9_ERRMAX for 9p2000 and 9p2000.u
+  net/9p: add p9_msg_buf_size()
+  net/9p: allocate appropriate reduced message buffers
+
+ include/net/9p/9p.h     |   3 +
+ include/net/9p/client.h |   2 +
+ net/9p/client.c         |  68 +++++++--
+ net/9p/protocol.c       | 154 ++++++++++++++++++++
+ net/9p/protocol.h       |   2 +
+ net/9p/trans_virtio.c   | 304 +++++++++++++++++++++++++++++++++++-----
+ 6 files changed, 484 insertions(+), 49 deletions(-)
+
+-- 
+2.30.2
 

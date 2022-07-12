@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25480572028
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30ED572030
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbiGLQAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S234101AbiGLQCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiGLQAn (ORCPT
+        with ESMTP id S233286AbiGLQCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:00:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E579C54AD;
-        Tue, 12 Jul 2022 09:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657641642; x=1689177642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AnwCkEUuxJLCRx7GhtMQk+FLBhJzxZJHbxYHUOLgTl8=;
-  b=P27IVRQNKzmaG2d+TwGBLUdc3yLbidOE8HrVpX4Tex8v3nKDhDDZaLEC
-   y9Y37xDBmVIklq0VyedAFDvj3AIH2NAMezk5ZkREzjE7y2ItwRrO6zaWV
-   eBzbnsIG6tqAP//h2UplzKn8iKxNGVDO2K6B2okAClg+uM2JYBOLxrm2P
-   jsk1az1TxX0LgMpQ9rSPQRjZy79yWTGjxgSFTPpdVkNk1c1THX8qeaodj
-   RhZ7Q5uoNj9Zz1YIj/duwRKBKHYxCe/5IkNUzMj+1ALvEHyX+YtbBzulc
-   kgiM2Vavg1k8zJNqbxMnckeyXA8PcShfOPSyvyIG8m13RG7cNkQRWeGm/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265386478"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="265386478"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:00:41 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="841430869"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:00:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBIJP-001Bb2-1l;
-        Tue, 12 Jul 2022 19:00:35 +0300
-Date:   Tue, 12 Jul 2022 19:00:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Suresh Siddha <suresh.b.siddha@intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        iommu@lists.linux.dev, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/vt-d: avoid invalid memory access via
- node_online(NUMA_NO_NODE)
-Message-ID: <Ys2aoyVn7lc9VIUO@smile.fi.intel.com>
-References: <20220712153836.41599-1-alexandr.lobakin@intel.com>
+        Tue, 12 Jul 2022 12:02:10 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76818C766D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:02:08 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4Lj59S3m2Kz9sSd;
+        Tue, 12 Jul 2022 18:02:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dragonslave.de;
+        s=MBO0001; t=1657641724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=83iQhRFKVk1mc+/DOJ47+bxvoNcFz6OLK68kEiS8wTA=;
+        b=bLJxcGyYai20DSm3qcZsuWw4YRwg12OFYm3BAPGlShK9efmnxmZjmuCdzZgzxktlwV+mtK
+        K8/UI1od8ErNoq5FIXlNtLsJW5dMLpVs10hQz7PDxJHACQHfXLQJ3RO7TRPKbEvoKJ9zre
+        8D657QjhZmGfUlg6duJfspdwNEqJEAHmtv+M9FqvU4FbKD2ilMjy5z24r0HcHmRfHggzfq
+        yRZ5/0jAd+8LS1um0eeCnXvnGBW0Gl2jryorint0L5GwOZmRJVf0/TWc4OKBK59tZJafkO
+        ICqtrHUN/bOTI3YE6jkfoYwwsswQhBUuyUaRZYAnzxPONYuXVHhz+tp3jomwFQ==
+Message-ID: <46fd7a73-06fd-a8a0-8530-0ecf9b18c08d@dragonslave.de>
+Date:   Tue, 12 Jul 2022 18:02:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712153836.41599-1-alexandr.lobakin@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Daniel Exner <dex@dragonslave.de>
+From:   Daniel Exner <dex@dragonslave.de>
+Subject: Regression in v5.19-rc4 Sound Distortion
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4Lj59S3m2Kz9sSd
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:38:36PM +0200, Alexander Lobakin wrote:
-> KASAN reports:
-> 
-> [ 4.668325][ T0] BUG: KASAN: wild-memory-access in dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
-> [    4.676149][    T0] Read of size 8 at addr 1fffffff85115558 by task swapper/0/0
-> [    4.683454][    T0]
-> [    4.685638][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc3-00004-g0e862838f290 #1
-> [    4.694331][    T0] Hardware name: Supermicro SYS-5018D-FN4T/X10SDV-8C-TLN4F, BIOS 1.1 03/02/2016
-> [    4.703196][    T0] Call Trace:
-> [    4.706334][    T0]  <TASK>
-> [ 4.709133][ T0] ? dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
-> 
-> after converting the type of the first argument (@nr, bit number)
-> of arch_test_bit() from `long` to `unsigned long`[0].
-> 
-> Under certain conditions (for example, when ACPI NUMA is disabled
-> via command line), pxm_to_node() can return %NUMA_NO_NODE (-1).
-> It is valid 'magic' number of NUMA node, but not valid bit number
-> to use in bitops.
-> node_online() eventually descends to test_bit() without checking
-> for the input, assuming it's on caller side (which might be good
-> for perf-critical tasks). There, -1 becomes %ULONG_MAX which leads
-> to an insane array index when calculating bit position in memory.
-> 
-> For now, add an explicit check for @node being not %NUMA_NO_NODE
-> before calling test_bit(). The actual logics didn't change here
-> at all.
+Hi everyone,
 
-Yes, and bitops performance is critical, so it's caller's responsibility to
-supply correct bit number.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Fixes: ee34b32d8c29 ("dmar: support for parsing Remapping Hardware Static Affinity structure")
-> Cc: stable@vger.kernel.org # 2.6.33+
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  drivers/iommu/intel/dmar.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-> index 9699ca101c62..64b14ac4c7b0 100644
-> --- a/drivers/iommu/intel/dmar.c
-> +++ b/drivers/iommu/intel/dmar.c
-> @@ -494,7 +494,7 @@ static int dmar_parse_one_rhsa(struct acpi_dmar_header *header, void *arg)
->  		if (drhd->reg_base_addr == rhsa->base_address) {
->  			int node = pxm_to_node(rhsa->proximity_domain);
->  
-> -			if (!node_online(node))
-> +			if (node != NUMA_NO_NODE && !node_online(node))
->  				node = NUMA_NO_NODE;
->  			drhd->iommu->node = node;
->  			return 0;
-> -- 
-> 2.36.1
-> 
+(please keep me CC as I am currently not subscribed to LKML)
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+Since  v5.19-rc4 this box got some *loud* distorting sound on boot and 
+after some time without any sound if something plays sound again from 
+the integrated speakers in my monitor.
+
+
+I managed to bisect this down to:
+
+> commit 202773260023b56e868d09d13d3a417028f1ff5b
+> Author: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Date:   Fri Jun 17 15:24:02 2022 +0300
+>
+>    PM: hibernate: Use kernel_can_power_off()
+>
+
+Reverting that commit on top of v5.19-rc6 does indeed fix the problem here.
+
+Any ideas?
+
+
+Greetings,
+
+Daniel
 

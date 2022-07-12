@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BCA571294
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1952257129F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiGLGyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S231730AbiGLG52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbiGLGyq (ORCPT
+        with ESMTP id S229529AbiGLG5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:54:46 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3169F936B7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:54:42 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id w17so7235999ljh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rn3i9yImta8oxCfkEnFJ7Ot67eZ6TujXXgzt8R7sT4Y=;
-        b=ihrcO8cVPHAyPrALJVwtzrj2gUBS2E6i3309qBnD3hax2Iy/zRjNk6czP/DsgUC49o
-         e3jCP7oUhlSvTSUrbJjwE6BaT8hqG6cKXG+p9YmuAqIulSEqvl36GbeWPRINrXtLb502
-         x0TPy8OQv+4rxx54AK2+SN4b+jlcj+qSfXQf6lq1PluyCeAUcnAgYweGYPYj8sYhc5oj
-         jBt1QtXPHpuqmW9yZQelgMATbcV5lHWrQStHw3t3vjvLpn/EZn255PmXW1P2A+XcP2jZ
-         KeXO9KTekIq9fH3BBJiEdb2KNd2cjIhE0Xvod+zYkFIVQtMWGwxErE+8awCF6xZzy0Ca
-         h/wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rn3i9yImta8oxCfkEnFJ7Ot67eZ6TujXXgzt8R7sT4Y=;
-        b=SHwfjdC5Q4v4VUEZMsA8xhDGvk2AVKopEon5N1LHGR/j8s5KaOtwZWsqvhmhCKniMj
-         CLwiuHiJJVFVEbLgOSfk+r+0AqIeIFN93JKlVXJKSnYFLon8xoIVVxQXcCCQF2CpMGRk
-         PW0OcvTJXqi3RZYvKhS1G1Di4vYeys1bMLO2SRKdhqQw4WnVOvqn759TtQCSYq5xWa6O
-         fAVH8DWwkDMXUX6yHHbc9eQRyQE7CE09ksHjt/JZgmK3GCpfLM06Us8YPyuqOu3o9v07
-         +mYA27k9QjLyFjqzTzzwcmrFQDoWmyh0Oc7l52jl3hDlldDjGdcRKsww6k6XV1Te+t2N
-         QTdA==
-X-Gm-Message-State: AJIora9PUbfV+TlI/i4TVplYFpZYNMfsk9c75O205DpsMF0Zou+hxjyC
-        GzXJzup+3iitO6zQiEf4AzEdIoxkCpeqocwPg57yEg==
-X-Google-Smtp-Source: AGRyM1uG/ok2m2oUO2WYxnvG3wzXsku8i0A3iXbzzRKcl8h9DzshoJc/DWAfa9TBBucfiIGwwuvECMdkk5ceWWjWGjA=
-X-Received: by 2002:a2e:be8d:0:b0:25d:6035:ebd0 with SMTP id
- a13-20020a2ebe8d000000b0025d6035ebd0mr8580717ljr.92.1657608880218; Mon, 11
- Jul 2022 23:54:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000eb2d6c05e35a0d73@google.com> <20220711133808.d86400ce9960febcb0fd537b@linux-foundation.org>
- <YsyMQ2jzOICVbCda@casper.infradead.org>
-In-Reply-To: <YsyMQ2jzOICVbCda@casper.infradead.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 12 Jul 2022 08:54:28 +0200
-Message-ID: <CACT4Y+bL3aM-cVeYSLU7az1x2Yj1vH7GaQSq=Z-BGc5Vk1Vi4w@mail.gmail.com>
-Subject: Re: [syzbot] memory leak in xas_create
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Liam Howlett <liam.howlett@oracle.com>
+        Tue, 12 Jul 2022 02:57:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CFC951CC;
+        Mon, 11 Jul 2022 23:57:22 -0700 (PDT)
+X-UUID: 098aa1e34f294927bc99f0d4833748ad-20220712
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:cfc356d1-53a1-4a27-8af5-3e9cd555aa1f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:7df7bb32-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 098aa1e34f294927bc99f0d4833748ad-20220712
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 558935923; Tue, 12 Jul 2022 14:57:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Jul 2022 14:57:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Jul 2022 14:57:15 +0800
+Message-ID: <b30154d38b4c0216ddb6c587c1120846e2209335.camel@mediatek.com>
+Subject: Re: [PATCH v13 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 12 Jul 2022 14:57:15 +0800
+In-Reply-To: <6b4a4be9b5c93b1931cdbd5b009eac3bfa9badbe.camel@mediatek.com>
+References: <20220701062808.18596-1-rex-bc.chen@mediatek.com>
+         <20220701062808.18596-6-rex-bc.chen@mediatek.com>
+         <6b4a4be9b5c93b1931cdbd5b009eac3bfa9badbe.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +89,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 22:47, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Mon, Jul 11, 2022 at 01:38:08PM -0700, Andrew Morton wrote:
-> > On Sat, 09 Jul 2022 00:13:23 -0700 syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com> wrote:
-> >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    c1084b6c5620 Merge tag 'soc-fixes-5.19-2' of git://git.ker..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14967ccc080000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=916233b7694a38ff
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=a785d07959bc94837d51
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122ae834080000
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com
-> > >
-> > > 2022/07/05 05:22:17 executed programs: 828
-> > > 2022/07/05 05:22:23 executed programs: 846
-> > > 2022/07/05 05:22:30 executed programs: 866
-> > > 2022/07/05 05:22:37 executed programs: 875
-> > > BUG: memory leak
-> >
-> > Thanks.  Presumably due to khugepaged changes.
->
-> Huh, I was expecting it to be something I'd messed up.  I've been
-> looking at it today, but no luck figuring it out so far.
->
-> > Can we expect a bisection search?
->
-> We only have a syz reproducer so far, and if I understand correctly,
-> it's probably because this is a flaky test (because it's trying to
-> find something that's a race condition).
->
-> I expect a bisection search to go badly wrong if this is true.
+On Thu, 2022-07-07 at 13:14 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Fri, 2022-07-01 at 14:28 +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a embedded displayport driver for the MediaTek
+> > mt8195
+> > SoC.
+> > 
+> > It supports the MT8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jitao shi <jitao.shi@mediatek.com>
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> 
+> [snip]
+> 
+> > +
+> > +static ssize_t mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
+> 
+> The caller never use the return value, so let this function to void.
+> 
+> > +{
+> > +	ssize_t ret;
+> > +	u8 sink_count;
+> > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
+> > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
+> > +	u32 link_status_reg = DP_LANE0_1_STATUS;
+> > +
+> > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
+> > &sink_count);
+> 
+> You read sink_count but never use it, so this read is redundant.
+> Remove
+> it.
+> 
 
-Is it possible that parts of xas are not freed on the error paths?
-I don't immediately see where anything is freed on these error paths:
+Hello CK,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n681
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n721
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/khugepaged.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n1675
+this is a pre-request for the following codes, so I think we need to
+keep this.
+
+If we failed to read sink_count, we don't need to do the driver under
+this.
+
+> > +	if (ret < 1) {
+> > +		drm_err(mtk_dp->drm_dev, "Read sink count failed\n");
+> > +		return ret == 0 ? -EIO : ret;
+> > +	}
+> > +
+> > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
+> > link_status,
+> > +			       sizeof(link_status));
+> > +	if (!ret) {
+> > +		drm_err(mtk_dp->drm_dev, "Read link status failed\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	drm_dp_channel_eq_ok(link_status, mtk_dp-
+> > > train_info.lane_count);
+> 
+> This function just return true or false, and you does not process the
+> return value, so this is redundant. Remove it.
+> 
+
+I will handle this in next version.
+
+BRs,
+Bo-Chen
+
+> Regard,
+> CK
+> 
+> > +
+> > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
+> > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
+> > DP_DEVICE_SERVICE_IRQ_VECTOR,
+> > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
+> > +
+> > +	return 0;
+> > +}
+> 
+> 
+

@@ -2,153 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B54571208
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 07:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EF057120B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 07:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiGLF5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 01:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S230040AbiGLF6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 01:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiGLF5k (ORCPT
+        with ESMTP id S229542AbiGLF6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 01:57:40 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120080.outbound.protection.outlook.com [40.107.12.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD18F3134F;
-        Mon, 11 Jul 2022 22:57:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kWpme3uzngYOQJsLzDtPjw0gJNkUKp3DYML1b+1WWqCsS7xXOfw9EkEbh+HxXjzcifpuIGn5i3qMYhRua5+5DcC+wJyScL3Qe+6hCjHLpjUdSMa+i0gVm3myhKRTro6FlV5q9xCBOlyEFlwc24S1a3tB9TIzpHKctilYyLJ3/dIORNVQUzqKJyMufshzAAWjVH2SfWMPZoaSCdl2bpNXYUE2sNrprpQcnbLh8Jz7auJcUAIThplU14nQ5iMJop/hZBVO79l9AMSHCb5RibLMQw7EKNIM0Ll6bsk486h4oH/lzKJ4jGnYH+cCHEcLx0bFlpHXShz4ARZO8MVuEYxCsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KNd5OHDFOMyAcA35nrGpwtC7HP6yS4SAiBAZrWlRNKQ=;
- b=Q9kXdiFemuQZIvbCmHfkL0tNYElG0P9dMbSbWxr9kwzCt2q7Y0LsCYSJxG8La0C4aH2phCKRcgYMrnxJVWW6qCOE75nCKlJ4oxV8r61Lj4WW18IUzs/Uz7P5oh5DoBrGcCCqDl4xI9ZGA/hlTvqUzafSQbOu+JJe1nKUFPtmPmxQgDonnAs7umdt3b7tQYlkKzCdFbzw1epfvkvwGiwczOF3neCB/jcCyjJk3dEGzVjDfafcl9PoHZ9mKtPcsNX3mYXyd2xZmm7w/7AlVfp/3NwoYsjT5TW9fjWVLnilbso+fvbj428rOFJ6AIX61jR8Vj3mGW9EZO41tVJ2nie9EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KNd5OHDFOMyAcA35nrGpwtC7HP6yS4SAiBAZrWlRNKQ=;
- b=sNug10HQWLtza7cxm0nXOL/EOAPMu4D/id1v6LeKIHoHhQNfJwGdoC929t0OTreHRz/gbgSaWMwb5l90tBKpDvUblexKo0Y5v5P5mP3+Pr0w8IF6Z8mFOqO+tOlAdeAum+kxiN/mZKnhGkO+2LV1eKiGz1EjI8fTruxNS/vm9np3P1jl8h9m/b57jQee5K5FZ3JX+gmC5wuicbT+4KZykemYZiPHANzDJO3oRBfGmEaYXlV/hVof2L+dsH3huOA84YHdsn01/rDxm+HN4KSU78OWYoijZkqXzjIpVeGvomPJNb0Qtahj/BVvphafFlq1tfnY0HMEIj2VL2dK0qN/Vg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB4195.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:25::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
- 2022 05:57:35 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624%6]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 05:57:35 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "atomlin@redhat.com" <atomlin@redhat.com>
-Subject: Re: [PATCH] modules: move module symbols from init/Kconfig
-Thread-Topic: [PATCH] modules: move module symbols from init/Kconfig
-Thread-Index: AQHYlUI0lS17lhNdbEioFe+q7QTC9q15fs+AgAAJuYCAALWEgA==
-Date:   Tue, 12 Jul 2022 05:57:35 +0000
-Message-ID: <09f3ec9a-3a8e-d116-d38a-2fdb55f125c6@csgroup.eu>
-References: <20220711162049.761342-1-mcgrof@kernel.org>
- <74dcc785-f3e7-6832-9af3-e0a0f69c58c9@csgroup.eu>
- <Ysx1C9IkJiFL+OH5@bombadil.infradead.org>
-In-Reply-To: <Ysx1C9IkJiFL+OH5@bombadil.infradead.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0ab642ab-d5a9-48ab-8ef2-08da63cb6b2f
-x-ms-traffictypediagnostic: MR1P264MB4195:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Z3cHYuqdQ98r+ds+N1d9IVsHo/elp1pmvp+DsK5sUSkc7pMrSwjL97/YV8D8ETAZvFQTmHqGrwOciKk1/O5oQ32zAY99wgAodjrYKUE7AnlvwGAmspcE1RUE1gNALfxPrPACq4SG9yJ8selOopfjiawpQGOUNRm2abjgLec/s8j09wWe/YrOtBkF+dttMitMXPqpNKrzBaEeBEPIoA/Otqr359t/gupkrEY9qWyVqjT77VCg+dpXMtt3CpOO36iHB4MXMWGU9eUxXltV10/AiemwMhnpC3zNCN2xeYQ5DGVFzSayqCEo8ra18m7jRSWFl0IZRnCiEUA2/dIr7ieZjIVJQUPMrI9M16vbhVpGn0AHWQJRMehHOPwUaNEf/pa2Y2n6zN7VoyBPowFnZQnzfsCjnRspffLfuWNcc2EE1abEUlFxhG/JgKUTRRtdAT61w1313pxlmClBAaPXej5WCk4npUZXBooK5J59wqBuVnZ9GFmtDCpTUrRKxBm9ENiLbhc8S9GhAIRPts6XwuVT8o+Qw11UgVEunRXiT/eu0D9kZbLZn+LXoqD+0OGMB1Ax++nL0/rS89hMGKHeYOLTzsrWUzZoKrKHZhj1tDz3uNn4r6Z5U1Sb67LacirQLqPROyLBShnq+KVCG5tp7TjnCjIQ47hGgukf/07lQOvBnIg9QTdyMs/qVybCQodfYa9M5ZwvvkHg3WvVKLS1Hxlwo5O1bWXK+kTTUZDqtpWj9RLGXLWTsDQ8Ypv/voRBvPYkDTNco+mAhwCnlT1TueEPtqye3YxrGIgO3arkB1rOZUOOvaCC6IOu7mqp48DQr1mrhdLIUxSairpFHwS5Cckawjia0SV83cNAbofqEjAUZbteAcpYDipudz1uCHlVsK8RaF2PwJKKhX1VDxm8rZVXDrhILVHe8I+woGHmRaoc3mY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(44832011)(186003)(316002)(478600001)(54906003)(71200400001)(8936002)(26005)(6486002)(5660300002)(2616005)(122000001)(8676002)(38070700005)(86362001)(6916009)(6506007)(38100700002)(31696002)(41300700001)(2906002)(64756008)(76116006)(66556008)(66446008)(66476007)(31686004)(91956017)(6512007)(66946007)(36756003)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWM2VUZ0c0M2bjkvek85WW5oUkIvaFlKdmhnMWoyZi9MYTlnMUI0ZStnSW8r?=
- =?utf-8?B?a2d6UFBDK0pCWElMWlo0VE9HcU1oRlZlVmlndS9DQ0wvbmhPak1LeWwxL0JI?=
- =?utf-8?B?TGhzWXlDZXJKUXd6Nkx4YlNldGVlS2VlUFhDaUdoNC9OQmlWYmlKVVVSZ1Qz?=
- =?utf-8?B?VGxTVE9sempVVTRtYllFNWVwUCs3YzZmN2hpZHJJWmlDVmdxN0w2T0RCTEZJ?=
- =?utf-8?B?eWNzcVh5Y1QzM2s5dnh0Z0tXRklwcUZqbjJQWjJLVFU0N0tSaE9aWk9ZTURw?=
- =?utf-8?B?aWFFdWVScnpoZDQ1QTRNU0Q0NWpWdXliTDBUejBlekt6dVhMUjNuVHZaY25O?=
- =?utf-8?B?SFphWVdEMjRzZlBock5XTjZYbGdDOENrTmErNkxDNGxxSVd1L1UxcEkxQytN?=
- =?utf-8?B?UHpvVUprbmlSL1ZBVWowY3RTTGhhOXYwRU1CY21yV1Ixd1hhWWc1bER4dkpJ?=
- =?utf-8?B?YXFrMnRJT0JmUUtpRXBrNVR1TDhWckNKTFQ2TnZWa05ueGFvRkdmanRKYXBS?=
- =?utf-8?B?SDJRRjYrRFB3dWhOUUFLVlB2aEplRlBXemQvaGZxN1I2YUVBZk9vUjMzZzEy?=
- =?utf-8?B?N1ZXb2hVNW9GR0phaGxIZGdCRnBDN0JESnQybDkwYWIzYmVNSGJaU0pxSXZX?=
- =?utf-8?B?Ym54MmszWExOa1Y0RFpxdVJjazdtVHBaMTh4MTJMa1Fzb2NxcFJOc2pTNGVX?=
- =?utf-8?B?aW0zNjVQcElERGx1Q0I0RlMvQTI2L3J2L2RabHZMV1l5dVBOQmpITFpabjdI?=
- =?utf-8?B?OTlRVWQ0UmY3ejZrektSM1VqYUxqZVJSTWpPY2JndGs0b0U0eTROeTBnbURV?=
- =?utf-8?B?bklsNWJOREszRE5LaGtOUExIRWx5WXVNcmlZSGdqZlgyOFpZR1ZwVHRKV2VX?=
- =?utf-8?B?UmlkQjFlZTZwSFpVOWEraWpxRDIxNjlsVzQ0RTYwKy9tOGtYSjV1OVIwZ3hJ?=
- =?utf-8?B?eHBpTEhPQWhVZEwxdlRLVGpMRVpsbGduQVEwODJNd2pPbGNnNnlPaWkycDRo?=
- =?utf-8?B?V3FLRXdFcDNlbzEyck5zQ2hyZ1Z5NUdYNU5pSDdod1VKMFNQVUthNUovdWdl?=
- =?utf-8?B?RmxZZnF1QmtvcktqYzd1Sno5QUlGQ2F2Y1hKODF5M090U216UklybGpOYmFx?=
- =?utf-8?B?Z0xQekU1c3ZaNFlGQXVmZ2F6U1JPWEw5QUVRbm9MUStYZzNyQ01QV2pOejB2?=
- =?utf-8?B?c3pZalR5M29xVnBkMUF0YTRRR25CTnlzNkZpb0hSSkZ5TkdNT2NDR1htakl3?=
- =?utf-8?B?aG5OcmVUcnNtU3N4Tm5XSi8yUTZtc0tCa2ZNeW9xQmpiTytYT1N5bU1Ha05y?=
- =?utf-8?B?WWJ2U2lCVENhcnk2QU0vSjlrZkxWSEMwMklvaWNsMnJWWWNEa0MwMm0yZWRC?=
- =?utf-8?B?TlpPU0ZGUEdNRzhFSmkwVGlQbjVrTURySUFCc2NyWUlQTmVXWTJ0YWFXeFk1?=
- =?utf-8?B?WTFMU3BXWDBBZ0o0Z2VYT21kdkpLMmFnUmpNcDBxRjVIRjVZTmZuWVd1bFZU?=
- =?utf-8?B?TUdYbVBOOTgwTXBManZVVzM2bmx1UjQ4YTFVczRTcHJpb2N0VGVpTjNNT0Zo?=
- =?utf-8?B?d3FWVTVVUWJIQkM3TkFZNEs3NmpITk1wRjVITVVFb05sd3Y3OWxXTGF4TFQ4?=
- =?utf-8?B?UnRndDZGS2d3RXFjT3Z4eGo1UmcwUVQyNXhrLy84elM5NGFWTnBJWlVqcmhH?=
- =?utf-8?B?dWtmQ0liSnJlejdDZ1hQbXVVa2lDYkZneGxSTDhKWmR2OWZUK2tWL2hGUCtE?=
- =?utf-8?B?TWJlUGRSWmRBNVZaMnFHY0lJdHplVmkxRWw1Z0xEYTZXb1VYcWdqNy9Bblpj?=
- =?utf-8?B?QVpwTUUrNVAydFVCZm1xZzVBRFdWMFdUMVN4NHFJcWNQSVFFUG5JVVpkRnVL?=
- =?utf-8?B?V2lOdyszYmlPVjBrRzhmL3o2YmhBTTJGYTNURFpsWEZmdXRtM1c5NUhRblpu?=
- =?utf-8?B?aCtCV0preWlwV2QxRlBab2RnUFJHb1hlQW5wSUxIb1BPWVFqbjlxc1RCaFNt?=
- =?utf-8?B?cXdnanZyanYyS1B6Tzl5c2wzT0trKzFtTjdNaTJCdjZLY2xhVVdBb1lGZHZk?=
- =?utf-8?B?bFNWQXVZSHVPTkZLNTk5bEk0TnFKZ3oyZ1ZsNG1MTzl2Q2dJV0ZETEwrZ1V1?=
- =?utf-8?B?SXB4T2M0RUUyTjBXMXV1T0kraGw5SVppcysrbEdDa3dkcWF3Q0FxSUxpOWtw?=
- =?utf-8?Q?2cy7wUDbLUpdgd4vT89KGvY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <27B39F3EA58C5E40955E9C5CA65BCA55@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 12 Jul 2022 01:58:13 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE8593C11;
+        Mon, 11 Jul 2022 22:58:12 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 19so8690099ljz.4;
+        Mon, 11 Jul 2022 22:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=98QKZRRjktULyJB2oCAwRiwYRLiFSUT43FJ/8QHRm0w=;
+        b=bhAW/UXIPy2w3FRdyp4jeJuD5oIGA+F8MgG9CjKYC0G5axKlRNfujDhGg5HS692ZvB
+         bH3i9WxKSOpfyinMUz6RwdFVaoYOzd85/+SiOspohofTvK3yJbDjsx3M0lfp+JooL5NA
+         0xo1sd8iw+QU8SrzP0pQW2BFCayCVu8QWST3tM0+wZwVECKbmzN+JRVJPUiiLTC6x3pf
+         nuedpfCfFslzY79ebXVpgsulhA4qzifP+D3yv59bjMcMzzAKYebbWPlZGLMhiSNx2oc7
+         HDMN9jKGcm+bVsgCBXSSL63SCIgDtaNWjcUzc2+IJZNK4wj7iHnkkXvTTzcvjYulG4x7
+         1ZyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=98QKZRRjktULyJB2oCAwRiwYRLiFSUT43FJ/8QHRm0w=;
+        b=eDX3NKiqyl0OvMCT3P4hiwabvxzCv9EaWyJxJFzCWy/N1DRTLwZ4ku6UiWLs684a22
+         XEw2rS2qg7+JXjwXJ2mnRqnOJB2se/K/GMDFs6dwjtKKEx7bGS9CHtHWaiNILozaJD1K
+         eq4DVr5h21/5Gmd7WM+T4q3DWG7VrET/wswbvqKQt8rEvZHkFFPNIf6SCC0pxKb7z2Ar
+         PfP5PQzyuHd0rf+yGQ4n4TSXPZMwBNl9IMeVfgY9vl+D0UTun0yxyh1wC5JBJd8hvhf4
+         KqORgURycU2hgh4jVcVFbRd4puwmVvV54OGqmnTvWqSwnQerXQV1229GXs7uAYQZ66+K
+         vuow==
+X-Gm-Message-State: AJIora+UWzRE5ynafw2mB7hLZAoOXDXuk11lzPj6BKMPcUQaGrHg8Yji
+        B0+p1jSDzLAMzVXqFcAF7QwQytYUlTLzLuQHm6Q=
+X-Google-Smtp-Source: AGRyM1vf7m6B3lMY7xYvcR71EEYqtwR8FdBdq3JSoDrsig44qrY2Efv9HRAb5GD4SmyPXtFlLCiU+b/BwZZXpa6IprM=
+X-Received: by 2002:a2e:9004:0:b0:25a:6dee:4ae2 with SMTP id
+ h4-20020a2e9004000000b0025a6dee4ae2mr12510646ljg.33.1657605490792; Mon, 11
+ Jul 2022 22:58:10 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ab642ab-d5a9-48ab-8ef2-08da63cb6b2f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 05:57:35.3667
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KER9KVv0iVcFPr2oHu59VbdZHXb70hwSIgkP218MLSX5Qwin8L6c39zV2HTkCZdo7oNYR2bJe0oNAH9U1M99Jxl15Ag5bp0TiG7cSDWnqOg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB4195
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220705123705.764-1-xuewen.yan@unisoc.com> <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+ <YsyO9GM9mCydaybo@slm.duckdns.org> <20220711171130.6390600b@gandalf.local.home>
+In-Reply-To: <20220711171130.6390600b@gandalf.local.home>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Tue, 12 Jul 2022 13:57:59 +0800
+Message-ID: <CAB8ipk_mB0uo8YUj6Ct5t9BWjXba1PznJ7QL7UVg+mSO401=bg@mail.gmail.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Tejun Heo <tj@kernel.org>, Qais Yousef <qais.yousef@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>,
+        Lukasz Luba <Lukasz.Luba@arm.com>
+Content-Type: multipart/mixed; boundary="00000000000075055005e3955a08"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDExLzA3LzIwMjIgw6AgMjE6MDcsIEx1aXMgQ2hhbWJlcmxhaW4gYSDDqWNyaXTCoDoN
-Cj4gT24gTW9uLCBKdWwgMTEsIDIwMjIgYXQgMDY6MzM6MDhQTSArMDAwMCwgQ2hyaXN0b3BoZSBM
-ZXJveSB3cm90ZToNCj4+DQo+Pg0KPj4gTGUgMTEvMDcvMjAyMiDDoCAxODoyMCwgTHVpcyBDaGFt
-YmVybGFpbiBhIMOpY3JpdMKgOg0KPj4+IFRoaXMgbW92ZXMgYWxsIHRoZSBtb2R1bGUgc3ltYm9s
-cyBmcm9tIGluaXQvS2NvbmZpZyB0byBpdHMNCj4+PiBvd24gZGVkaWNhdGVkIGZpbGUgbm93IHRo
-YXQgd2UgaGF2ZSBhbGwgb2YgdGhlIG1vZHVsZSBjb2RlIGluDQo+Pj4gaXRzIG93biBkaXJlY3Rv
-cnkuDQo+Pj4NCj4+PiBUaGlzIGRvZXMgbm90IGludHJvZHVjZSBhbnkgZnVuY3Rpb25hbCBjaGFu
-Z2VzLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogTHVpcyBDaGFtYmVybGFpbiA8bWNncm9mQGtl
-cm5lbC5vcmc+DQo+Pg0KPj4gSXQgaXMgc2ltaWxhciB0byB0aGUgcGF0Y2ggSSBzZW50IGluIEZl
-YnJ1YXJ5LCBpc24ndCBpdCA/DQo+PiAoaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9q
-ZWN0L2xpbnV4LW1vZHVsZXMvcGF0Y2gvNDA0MjcxMjk2MWQ0MjE4NmM0NDk3MzRjMjUzNTExZWE3
-MDc2Yzc4MC4xNjQ1NTQzMTA1LmdpdC5jaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXUvKQ0KPiAN
-Cj4gU29ycnksIEkgaGFkIG1pc3NlZCB0aGF0LiBDYW4geW91IHNlbmQgYSBuZXcgdjIgYmFzZWQg
-b24gdG9kYXkncw0KPiBtb2R1bGVzLW5leHQ/IEFuZCBJJ2xsIGp1c3QgZHJvcCBteSBwYXRjaD8N
-Cj4gDQoNCkkgc2VudCBvdXQgdjIgcmViYXNlZCBvbiB0b2RheSdzIG1vZHVsZXMtbmV4dCANCihj
-NzY2NTRlMjJkYTFlMGNiODMwYmQwZWI1ODMyMDcyZmI3NmRmMzU4KQ0KDQpJIHNlZSBhbGwgbXkg
-cGF0Y2hlcyBzdGlsbCBoYXZlIHN0YXR1cyAnbmV3JyBpbiBtb2R1bGVzJ3MgcGF0Y2h3b3JrIA0K
-KGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9saW51eC1tb2R1bGVzL2xpc3Qv
-P3N1Ym1pdHRlcj0xOTIzNjMpLg0KDQpEb24ndCB5b3UgbWFpbnRhaW4gaXQgPw0KDQpUaGFua3MN
-CkNocmlzdG9waGU=
+--00000000000075055005e3955a08
+Content-Type: text/plain; charset="UTF-8"
+
+[RESEND]
+
+On Tue, Jul 12, 2022 at 5:34 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Mon, 11 Jul 2022 10:58:28 -1000
+> Tejun Heo <tj@kernel.org> wrote:
+>
+> > I don't think lockdep would be able to track CPU1 -> CPU2 dependency here
+> > unfortunately.
+> >
+> > > AFAIU:
+> > >
+> > >
+> > > CPU0                                     CPU1                                   CPU2
+> > >
+> > > // attach task to a different
+> > > // cpuset cgroup via sysfs
+> > > __acquire(cgroup_threadgroup_rwsem)
+> > >
+> > >                                          // pring up CPU2 online
+> > >                                          __acquire(cpu_hotplug_lock)
+> > >                                          // wait for CPU2 to come online
+>
+> Should there be some annotation here that tells lockdep that CPU1 is now
+> blocked on CPU2?
+>
+> Then this case would be caught by lockdep.
+>
+> -- Steve
+>
+>
+> > >                                                                                 // bringup cpu online
+> > >                                                                                 // call cpufreq_online() which tries to create sugov kthread
+> > > __acquire(cpu_hotplug_lock)                                                     copy_process()
+> > >                                                                                    cgroup_can_fork()
+> > >                                                                                       cgroup_css_set_fork()
+> > >                                                                                       __acquire(cgroup_threadgroup_rwsem)
+> > > // blocks forever                        // blocks forever                            // blocks forever
+> > >
+
+Indeed, It's caused by threads instead of cpus.
+
+Our soc contains two cpufreq policy.0-5 belongs to policy0, 6-7
+belongs to policy1.
+
+when cpu6/7 online
+
+Thread-A                                                      Thread-B
+
+cgroup_file_write                                          device_online
+cgroup1_tasks_write                                              ...
+__cgroup1_procs_write                                      _cpu_up
+write(&cgroup_threadgroup_rwsem); <<     cpus_write_lock();<<
+cgroup_attach_task                                               ......
+cgroup_migrate_execute                             cpuhp_kick_ap
+cpuset_attach                                              //wakeup cpuhp
+cpus_read_lock()                                        //waitingfor cpuhp
+
+
+cpuhp/6                                                        kthreadd
+
+cpuhp_thread_fun
+cpuhp_invoke_callback
+cpuhp_cpufreq_online
+cpufreq_online
+ sugov_init
+ __kthread_create_on_node                 copy_process
+ //blocked, waiting for kthreadd             cgroup_can_fork
+                                                        cgroup_css_set_fork
+                           __acquires(&cgroup_threadgroup_rwsem)
+                                                        //blocked
+
+So it's logic is:
+Thread-A --->Thread-B---->cpuhp--->kthreadd---->Thread-A
+
+When cpu offline, the sugov thread would stop, so it would waiting
+cgroup_threadgroup_rwsem when kthread_stop();
+It's logic is:
+Thread-A --->Thread-B---->cpuhp--->sugov---->Thread-A
+
+As Qais said:
+> if there's anything else that creates a kthread when a cpu goes online/offline
+> then we'll hit the same problem again.
+
+Indeed, only the cpuhp thread create/destroy kthread would cause the case.
+
+I have put the test script in the mail, and I have tested it without
+monkey test, the deadlock still occurs..
+
+
+Thanks!
+xuewen.yan
+
+--00000000000075055005e3955a08
+Content-Type: text/x-sh; charset="US-ASCII"; name="test_hotplug.sh"
+Content-Disposition: attachment; filename="test_hotplug.sh"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l5hrh50n0>
+X-Attachment-Id: f_l5hrh50n0
+
+IyEvc3lzdGVtL2Jpbi9zaAoKaW50ZXJ2YWw9MC41CQkJCQkJCQkJCQkJCQkJCQpwYXRoPSIvc3lz
+L2RldmljZXMvc3lzdGVtL2NwdS9jcHUiCm5fY3B1PWBscyAvc3lzL2RldmljZXMvc3lzdGVtL2Nw
+dSB8IGdyZXAgIl5jcHVbMC05XSIgfCB3YyAtbGAKbl9wb2xpY3k9YGxzIC9zeXMvZGV2aWNlcy9z
+eXN0ZW0vY3B1L2NwdWZyZXEgfCBncmVwICJecG9saWN5WzAtOV0iIHwgd2MgLWxgCgpmdW5jdGlv
+biByYW5kb21faG90cGx1ZygpewoJbGV0IG5fY3B1LT0xCglsb2NhbCByZXQ9MAoJd2hpbGUgWyAx
+IF0KCWRvCgkJbGV0IHJldD0kUkFORE9NJSRuX2NwdQoJCWxldCByZXQrPTEKCQlsb2NhbCBvbmxp
+bmU9YGNhdCAkcGF0aCRyZXQiL29ubGluZSJgCgkJWyAiJG9ubGluZSIgPSAiMCIgXSAmJiBjbT0x
+IHx8IGNtPTAKCQlvbmxpbmVfY3B1cwoJCWdldF9jcHVzPSQ/CgkJaWYgWyAiJGNtIiA9ICIxIiBd
+O3RoZW4KCQkJZWNobyAkY20gPiAkcGF0aCRyZXQiL29ubGluZSIKCQkJZWNobyAib25saW5lX2Nw
+dV9jb3VudD0kZ2V0X2NwdXMgbl9wb2xpY3k9JG5fcG9saWN5ICRwYXRoJHJldC9vbmxpbmUgJGNt
+ICRvbmxpbmUgYGNhdCAkcGF0aCRyZXQvb25saW5lYCBgY2F0IC9zeXMvZGV2aWNlcy9zeXN0ZW0v
+Y3B1L29ubGluZWAiCgkJCXNsZWVwICRpbnRlcnZhbAoJCWVsc2UKCQkJaWYgWyAiJGdldF9jcHVz
+IiAtZ3QgIjIiIF07dGhlbgoJCQkJZWNobyAkY20gPiAkcGF0aCRyZXQiL29ubGluZSIKCQkJCWVj
+aG8gIm9ubGluZV9jcHVfY291bnQ9JGdldF9jcHVzIG5fcG9saWN5PSRuX3BvbGljeSAkcGF0aCRy
+ZXQvb25saW5lICRjbSAkb25saW5lIGBjYXQgJHBhdGgkcmV0L29ubGluZWAgYGNhdCAvc3lzL2Rl
+dmljZXMvc3lzdGVtL2NwdS9vbmxpbmVgIgoJCQkJc2xlZXAgJGludGVydmFsCgkJCWVsc2UKCQkJ
+CWVjaG8gIm9ubGluZV9jcHVfY291bnQ9WyAkZ2V0X2NwdXMgLWx0IDIgXSwgbl9wb2xpY3k9JG5f
+cG9saWN5ICwgbmV4dCBsb29wLCAkcGF0aCRyZXQvb25saW5lICRjbSAkb25saW5lIGBjYXQgJHBh
+dGgkcmV0L29ubGluZWAgYGNhdCAvc3lzL2RldmljZXMvc3lzdGVtL2NwdS9vbmxpbmVgIgoJCQlm
+aQoJCWZpCgoJZG9uZQp9CgpmdW5jdGlvbiBvbmxpbmVfY3B1cygpewoJbG9jYWwgY3B1X2NvdW50
+PTEKCWZvciBpIGluIGBzZXEgMSAkbl9jcHVgCglkbwoJCVsgImBjYXQgJHBhdGgke2l9L29ubGlu
+ZWAiIC1lcSAiMSIgXSAmJiBsZXQgY3B1X2NvdW50PWNwdV9jb3VudCsxIAoJZG9uZQoJcmV0dXJu
+ICRjcHVfY291bnQKfQoKCnJhbmRvbV9ob3RwbHVnCgoK
+--00000000000075055005e3955a08--

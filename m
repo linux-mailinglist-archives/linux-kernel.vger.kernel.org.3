@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5D6572894
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB82572899
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiGLV0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S231766AbiGLV1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbiGLV01 (ORCPT
+        with ESMTP id S229881AbiGLV1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:26:27 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09766D0E2A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:26:26 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id l11so3523712qvu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:26:25 -0700 (PDT)
+        Tue, 12 Jul 2022 17:27:22 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105DAD0E11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:27:22 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id 190so9174022iou.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:27:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=ErGKC+iaVGBTzQ4jHmkuIH32JYO5Zpx2Ix6hmNqFWSQ=;
-        b=TG1ivwDnuT3Vkxk4MKCpHTf+v9ML7AAOEnlSYRlMXskUid7ZFNTbhvEFarsn6JT0Ub
-         tC2sfYUVKZ2yzLQ9FYaBTX2Sh3RuV2ZfaTfPT+c6EDJXFBz4ZtEDQQKZ1kT0Vft7ymdv
-         oSfAl0gmDN038PXL0eI8r7ke1JDbgZK7y2Fxs=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
+        b=FMJNqa++kuJpdQYJXjWWJcEWpD8+YWreVG7WugTc0ennaNQ4QR7g8pXILGxJlJ45Tv
+         cB4XqYlFi6xnxR63ejBJexoF9BKMSG8ivgsWYOM6F3T9eOXrFw96hdTxCtFpg7cbuCUh
+         gicIFv0swNlNJPJsLTNN5Zv1Y+5d49PtpDWn+lsVJ18QnUn7vApvzDoS48Tg2ffs/qQc
+         1QdwHD3kSAX8nvdErP/G3gA9yj1QcMMoijpCESLcOKunlCtGyjrVyoQEwckhS71h9RFs
+         4Dl/LY0JvOXaii8UM6oYj/xSqoywoU8cnGQuqLl5j/7qYIaB6loPcnbFqanDr59ekRr+
+         V0nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=ErGKC+iaVGBTzQ4jHmkuIH32JYO5Zpx2Ix6hmNqFWSQ=;
-        b=jRheTY+MHXp5FJoYpo40WVUpMFTU9tB/lw7hvxk02Nua0g7xXUuHDiv6e072t5gFA7
-         5U3iKx+XNNnSnbNCby17o+14JWxoSPPFpK/8RyFs6IjOdZsqrToP5/ACcocp065gnIUY
-         zBsynwx8RQq0YAcPx+Yfa/Ra5KPLqwdXklxNd3LUFXkq+B8wliPY3hYipiH0APhU7a7G
-         8po4/KnId5fqEre4MtEEl6BCpMeA/jv26fqPLMqjZ6gg7n0Y2A9nLb8vA1QPzggFfDnE
-         i4qvEp/ppYlsCOAPIqfasejtqtYlxtQ3yM4bM0tF+jLZzbCdeHLQ9X/RPMyFVjnj7IT8
-         eNiw==
-X-Gm-Message-State: AJIora/9e8QyJzIAK709zswcRrE1sdz7u6RpURbjjfzlkGGDHnszoViP
-        UsEcXV5YcEnbprz8/2U5GQDBig==
-X-Google-Smtp-Source: AGRyM1tsesBESjrN/rzBRcxB2eekllPKVCNSlFdi1Hhzkd8QqzfFnsesUllulk/5eW9CYQHojG66Aw==
-X-Received: by 2002:ad4:5baa:0:b0:473:6b81:a735 with SMTP id 10-20020ad45baa000000b004736b81a735mr200053qvq.30.1657661185205;
-        Tue, 12 Jul 2022 14:26:25 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id t11-20020ac8588b000000b0031eb47652dcsm5779579qta.59.2022.07.12.14.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:26:24 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Tue, 12 Jul 2022 17:26:23 -0400 (EDT)
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-cc:     Vince Weaver <vincent.weaver@maine.edu>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
- intel_pmu_lbr_restore
-In-Reply-To: <20220712204830.kvblayj37s3udt4b@guptapa-desk>
-Message-ID: <487465e6-b034-f08-907-de37a0a173b5@maine.edu>
-References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu> <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu> <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com> <20220711221658.4gpkizopmftpnav6@guptapa-desk> <32ccdda1-63bf-746e-48fb-935fa58285b1@maine.edu>
- <20220712204830.kvblayj37s3udt4b@guptapa-desk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0YyLEzw3IkHIEc6hzXGbO7iGAv4+7wdnlnG9pY25FY=;
+        b=gfa7o28nfajP/PO8AKyB7rUg9O748x3QTFLWeavPUE7nVHB/6CQln0l0wBVrIJzTSH
+         uTOSIjXOSfovsViak+oDWYrla1CrvvQLcVRyNK/IJEZmrOf0ljLSEbfgY0q846WUgcZh
+         Ss9vF6PG3O1enEv9EYcm1ln94vATKM9BALX8OJj90eZST5miKqEYiEA7cR90jDBGK0zJ
+         /mLMFEFpPVv9sjQoSdsAentb7jNdsUlUsKwai5m9whtUC3fwMZqdSgKWsK9W81eftVBR
+         EdQLfRa2qgXG9BhqBr6pPA4dISi2DYt7VK8BORT4R9rifSqK6Lm702Sdd5Nfqd/Nyrl2
+         sSHg==
+X-Gm-Message-State: AJIora/Z5N3aKzLJDJU5xrSKixfzq2SVmKS+xq3bBemXU0fHdHQ5mH9G
+        iq8NKIt/9Ks2SgUBmUZzp807GoC0EuhvxZyFkLnofcWyk2s=
+X-Google-Smtp-Source: AGRyM1tNjr8o/bDVFpbm8D9wO5b8kklpsyfdub1zcBTGrK8QXVgsSC8mlph3W82pJqOwau91MwVRx/tD9fxDqB4UnFQ=
+X-Received: by 2002:a05:6602:340b:b0:67b:8189:23c5 with SMTP id
+ n11-20020a056602340b00b0067b818923c5mr130294ioz.52.1657661241327; Tue, 12 Jul
+ 2022 14:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712095627.1770312-1-davidgow@google.com>
+In-Reply-To: <20220712095627.1770312-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 12 Jul 2022 14:27:10 -0700
+Message-ID: <CAGS_qxrBGcz4gAtqu8QSJO8SP_a0n+18OiBVQaRXBQMwbL4w+Q@mail.gmail.com>
+Subject: Re: [PATCH] kunit: executor: Fix a memory leak on failure in kunit_filter_tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, kernel test robot <yujie.liu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022, Pawan Gupta wrote:
+On Tue, Jul 12, 2022 at 2:56 AM David Gow <davidgow@google.com> wrote:
+>
+> It's possible that memory allocation for the copy will fail, but for the
+> copy of the suite to succeed. In this case, the copy could be leaked.
+>
+> Properly free 'copy' in the error case for the allocation of 'filtered'
+> failing.
+>
+> Note that there may also have been a similar issue in
+> kunit_filter_subsuites, before it was removed in "kunit: flatten
+> kunit_suite*** to kunit_suite** in .kunit_test_suites".
+>
+> This was reported by clang-analyzer via the kernel test robot, here:
+> https://lore.kernel.org/all/c8073b8e-7b9e-0830-4177-87c12f16349c@intel.com/
+>
+> Fixes: a02353f49162 ("kunit: bail out of test filtering logic quicker if OOM")
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-> On Tue, Jul 12, 2022 at 03:39:56PM -0400, Vince Weaver wrote:
-> It appears this CPU does not support TSX feature (or disabling TSX). If
-> the bug is easy to reproduce, bisecting can help.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-I thought TSX was disabled via firmware update for all Haswell machines?
-
-In any case, the fuzzer is triggering the
-	unchecked MSR access error: WRMSR to 0x689
-in intel_pmu_lbr_restore.  So either this is a false error and should be 
-disabled, or else it's a real issue and should be fixed.
-
-Unfortunately the fuzzer can take up to a few days to trigger the message 
-(it's not easily repeatable) so doing a kernel bisect would take a very 
-long time.
-
-Vince
-
+Thanks for taking care of this.

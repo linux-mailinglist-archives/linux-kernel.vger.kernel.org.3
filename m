@@ -2,124 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E313F571EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA64571EEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiGLPWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S233671AbiGLPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiGLPVy (ORCPT
+        with ESMTP id S233183AbiGLPWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:21:54 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34FC326D2;
-        Tue, 12 Jul 2022 08:20:02 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id sz17so14898914ejc.9;
-        Tue, 12 Jul 2022 08:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MqOmwRuXYXSLwqGNBlZZoo02pse57Zj1+1zzVfadMm4=;
-        b=SxyAi9cJkpORxth8EJQCz/EuRVjPwj8CxgHaZom3oR/sgVf5/38dY++qp4PgvGHRVp
-         asgtqvUkwxUsyz1Qf2bd8ueA4jEE80aM72WS9nluN95M4YVpTv88qd84H5hVMTZ43Hxb
-         KCxuhGfM0iXaEwdUzzzpVRLtxzs7QaB00fW5/gQHHLBmnBEtGcAtiWbsJyZVrzZujJaY
-         tzqJNylf31l0zqUhrumak5kZPwh0/tr+wqSS+XfmJvQNnR5G/9A0xyC/e+I+pvsikrly
-         oCoEZkfwNF/fHTsACGBTT1oNiCDPjuaf335viE3rfM9TPjWcXvJuQAXeeYXMIuzv3BaM
-         esKQ==
+        Tue, 12 Jul 2022 11:22:46 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948A4C1761;
+        Tue, 12 Jul 2022 08:21:34 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id h200so8117280iof.9;
+        Tue, 12 Jul 2022 08:21:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MqOmwRuXYXSLwqGNBlZZoo02pse57Zj1+1zzVfadMm4=;
-        b=JR11L9nsQRpAG7QvaTIndJ3ve4UOjFVat7CHJcwIHvlNnUjraleaegROtN0LrTLiXy
-         f/JXDEOyph7DdTacRJDl696w/k7siL1hIG6aPzcFUdbDbYeLSkJTx4jn9vOkiEyX1MuN
-         1kM1KH4/mJ0TPzylpIkiCAapZdkQRliKnt7Uh4tNSeeQg+0FtT3hH/Vs4xnKT8kIaaXy
-         dgsK/n/uBU6wF+SxenLK+NIkCDH9dSW76jjbVxa04grR19ACPXKiZNeNNY/y7GglOe/2
-         wpMi6mOX8fsIefDx5TAMsfaXMCrRqY8w4aTHt0K6vOaDQ6xAIgTkwIWFRsx+IDI+EOGh
-         +ldA==
-X-Gm-Message-State: AJIora8sjtKTtvQshk/KcmUG/dDhpBZ6Ym3HE4W7qkV0vkovfwUr9n3M
-        0A5fEocIncRNi5sCgcVI+ZVGTHp086A=
-X-Google-Smtp-Source: AGRyM1vOwbtLoAvZNLQrepbTZ7rQvqweYLxdCv7MBf4QAsFEzBvhW4O/P3b0mQgH+BLEAs8j7coBXg==
-X-Received: by 2002:a17:906:8448:b0:72b:5659:9873 with SMTP id e8-20020a170906844800b0072b56599873mr10647830ejy.117.1657639201143;
-        Tue, 12 Jul 2022 08:20:01 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b00722e50e259asm3868006ejo.102.2022.07.12.08.20.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dDdtW6rNYIAp97Z79cLxZ45hBOzgYdm8qs6dwMe06kE=;
+        b=udXhXjgi2WEeMemHhvb5hdhOGX3OIAtuCq1xW9wadYLW0gst3vybHdwF2jgRF4pYNv
+         SbJOLjf+naRZhPgXPtt1IH+5e2rdKXrkcSQa5YsHbGm3wC/tH0gG6YanjlWksRZ2MWG0
+         hW1wBjondEaoVCVZ3Qk2hwmivJ9lJsX4ZvrCiPM+V8wjngIOSq+1TAJWt3wb3M/DKjIc
+         sAGc6qZmpnEiey0vOiKQUuaRZyXYnLBgV/rHNl1yDxw+YQ0YPvvXjqQSxZFKdXAWaYCX
+         H4x4bholJ/OIcgjMqQp3fDVJQW+x2l/CmVaR5gt2h4DpytBWSV5csN54KIh09IPv+f1+
+         uwUA==
+X-Gm-Message-State: AJIora92EYhDyEyP3MEl9oN+sqZvnUqDP+DJS3KEWfLQSJGNWxJOrPx5
+        9Og2BaxthyoKcM+4saQJ6g==
+X-Google-Smtp-Source: AGRyM1u4Wa6kjd1im1mCu+hIdmoX1OrX7mux3KsADPgZgjKXuPCus7u6YBCHY1jBifOYL9R8YJ2wCg==
+X-Received: by 2002:a05:6638:4126:b0:33f:6bc0:f8e7 with SMTP id ay38-20020a056638412600b0033f6bc0f8e7mr3449861jab.189.1657639293815;
+        Tue, 12 Jul 2022 08:21:33 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id m21-20020a02a155000000b00339e2f0a9bfsm4228957jah.13.2022.07.12.08.21.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 08:20:00 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v2] blk-iolatency: Use atomic{,64}_try_cmpxchg
-Date:   Tue, 12 Jul 2022 17:19:47 +0200
-Message-Id: <20220712151947.6783-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 12 Jul 2022 08:21:33 -0700 (PDT)
+Received: (nullmailer pid 1879877 invoked by uid 1000);
+        Tue, 12 Jul 2022 15:21:31 -0000
+Date:   Tue, 12 Jul 2022 09:21:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, vkoul@kernel.org, kishon@ti.com,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v1 3/9] dt-bindings: reset: intel,rcu-gw: Update bindings
+ for "legacy" SoCs
+Message-ID: <20220712152131.GC1823936-robh@kernel.org>
+References: <20220628124441.2385023-1-martin.blumenstingl@googlemail.com>
+ <20220628124441.2385023-4-martin.blumenstingl@googlemail.com>
+ <20220701163350.GA1078312-robh@kernel.org>
+ <CAFBinCARuO0WFLufwgPxQkY_Mh+Pfn6V8QAe-HZ8sjUBKTYhtQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCARuO0WFLufwgPxQkY_Mh+Pfn6V8QAe-HZ8sjUBKTYhtQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
-in check_scale_change and atomic64_try_cmpxchg in blkcg_iolatency_done_bio.
-x86 CMPXCHG instruction returns success in ZF flag, so this change saves a
-compare after cmpxchg (and related move instruction in front of cmpxchg).
+On Sun, Jul 03, 2022 at 01:04:20AM +0200, Martin Blumenstingl wrote:
+>  Hi Rob,
+> 
+> On Fri, Jul 1, 2022 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, Jun 28, 2022 at 02:44:35PM +0200, Martin Blumenstingl wrote:
+> > > The Lantiq Amazon-SE, Danube, xRX100 and xRX200 SoCs have up to two USB2
+> > > PHYs which are part of the RCU register space. The RCU registers on
+> > > these SoCs are using big endian. Update the binding for these SoCs to
+> > > properly describe this IP:
+> > > - Add compatible strings for Amazon-SE, Danube and xRX100
+> > > - Rename the xRX200 compatible string (which is not used anywhere) and
+> > >   switch to the one previously documented in mips/lantiq/rcu.txt
+> > > - Allow usage of "simple-mfd" and "syscon" in the compatible string so the
+> > >   child devices (USB2 PHYs) can be described
+> > > - Allow #address-cells and #size-cells to be set to 1 for describing the
+> > >   child devices (USB2 PHYs)
+> > > - #reset-cells must always be 3 (offset, reset bit and status bit) on the
+> > >   legacy SoCs while LGM uses a fixed value of 2 (offset and reset bit -
+> > >   status bit is always identical to the reset bit).
+> > >
+> > > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> > > ---
+> > >  .../bindings/reset/intel,rcu-gw.yaml          | 84 +++++++++++++++++--
+> > >  1 file changed, 79 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/reset/intel,rcu-gw.yaml b/Documentation/devicetree/bindings/reset/intel,rcu-gw.yaml
+> > > index be64f8597710..b90913c7b7d3 100644
+> > > --- a/Documentation/devicetree/bindings/reset/intel,rcu-gw.yaml
+> > > +++ b/Documentation/devicetree/bindings/reset/intel,rcu-gw.yaml
+> > > @@ -11,9 +11,16 @@ maintainers:
+> > >
+> > >  properties:
+> > >    compatible:
+> > > -    enum:
+> > > -      - intel,rcu-lgm
+> > > -      - intel,rcu-xrx200
+> >
+> > It is okay to remove/change this because ?
+> I'll update the description in v2. The "intel,rcu-xrx200" compatible
+> string isn't used anywhere (upstream or downstream in OpenWrt).
+> u-boot on Lantiq xRX200 SoCs is too old to pass a dtb to the kernel,
+> so we're appending the DTB to the kernel image.
+> 
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - enum:
+> > > +              - lantiq,ase-rcu
+> > > +              - lantiq,danube-rcu
+> > > +              - lantiq,xrx100-rcu
+> > > +              - lantiq,xrx200-rcu
+> > > +          - const: simple-mfd
+> >
+> > This says child nodes have 0 dependence on anything in the parent node.
+> > Such as a clock in the parent needing to be enabled.
+> >
+> > > +          - const: syscon
+> >
+> > Given the child nodes depend on this, I find the combination to be a
+> > contradiction. But it's widely used, so oh well.
+> I can think of two ways to solve this:
+> 1) remove the simple-mfd compatible string and make the driver also
+> discover child nodes
+> 2) remove the simple-mfd compatible string and remove the USB PHY
+> child nodes - then add add #phy-cells = <1> to the RCU node itself
+> (and somehow update the RCU and USB PHY drivers accordingly)
+> 3) introduce a separate child node for the reset-controller, then the
+> child nodes depend on each other (but there's no strict dependency on
+> the parent anymore other than the fact that the parent needs a
+> "syscon" compatible string).
+> 
+> My understanding of this IP block is that it was initially designed as
+> a reset controller, hence its name "reset controller unit" (RCU). Then
+> additional logic was added after the fact.
+> So I think 1) (dropping the simple-mfd compatible string) or 2)
+> (dropping the simple-mfd compatible string and the child nodes
+> altogether) is the right way to go here. Which route would you go and
+> why?
 
-No functional change intended.
+2 would be my choice. That's the simplest binding. Unless the phy 
+registers show up in different places on multiple devices, then maybe 
+it's worth keeping the child node.
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>
----
-v2: Split patch from the original big patch
----
- block/blk-iolatency.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 9568bf8dfe82..79745c6d8e15 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -401,7 +401,6 @@ static void check_scale_change(struct iolatency_grp *iolat)
- 	unsigned int cur_cookie;
- 	unsigned int our_cookie = atomic_read(&iolat->scale_cookie);
- 	u64 scale_lat;
--	unsigned int old;
- 	int direction = 0;
- 
- 	if (lat_to_blkg(iolat)->parent == NULL)
-@@ -422,11 +421,10 @@ static void check_scale_change(struct iolatency_grp *iolat)
- 	else
- 		return;
- 
--	old = atomic_cmpxchg(&iolat->scale_cookie, our_cookie, cur_cookie);
--
--	/* Somebody beat us to the punch, just bail. */
--	if (old != our_cookie)
-+	if (!atomic_try_cmpxchg(&iolat->scale_cookie, &our_cookie, cur_cookie)) {
-+		/* Somebody beat us to the punch, just bail. */
- 		return;
-+	}
- 
- 	if (direction < 0 && iolat->min_lat_nsec) {
- 		u64 samples_thresh;
-@@ -633,8 +631,8 @@ static void blkcg_iolatency_done_bio(struct rq_qos *rqos, struct bio *bio)
- 			window_start = atomic64_read(&iolat->window_start);
- 			if (now > window_start &&
- 			    (now - window_start) >= iolat->cur_win_nsec) {
--				if (atomic64_cmpxchg(&iolat->window_start,
--					     window_start, now) == window_start)
-+				if (atomic64_try_cmpxchg(&iolat->window_start,
-+							 &window_start, now))
- 					iolatency_check_latencies(iolat, now);
- 			}
- 		}
--- 
-2.35.3
-
+Rob

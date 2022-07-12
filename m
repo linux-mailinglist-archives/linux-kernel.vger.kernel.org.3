@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE455723FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2391D57244B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbiGLSxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S235234AbiGLTB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiGLSwd (ORCPT
+        with ESMTP id S235448AbiGLS7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:52:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D4DE6810;
-        Tue, 12 Jul 2022 11:45:07 -0700 (PDT)
+        Tue, 12 Jul 2022 14:59:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B289C1089;
+        Tue, 12 Jul 2022 11:48:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAF28B81BC2;
-        Tue, 12 Jul 2022 18:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FF2C341C8;
-        Tue, 12 Jul 2022 18:45:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56FA7B81BAB;
+        Tue, 12 Jul 2022 18:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB751C3411C;
+        Tue, 12 Jul 2022 18:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651504;
-        bh=xp4hUKui/6IFtmVwexHXR6RltV7kLR8FPniaMYkkTbU=;
+        s=korg; t=1657651712;
+        bh=1p7z3a6btKOspUtMApewAl28R49WOAw/ATM3cR03gVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H4mWb3iFTephtiKXGWOzmBMOQwqdZBV4h+bvN/Jf95RA0HAKoLemYBaFirGOKnNxH
-         dXJnYd0BngF2ti+f4vyJFm5fuFDu/lOVkDi5+a3yf2wGTJMr94iT3ehveFGSbz15a2
-         GF9QbtjKuBGzx/O2MB0NHk6X6osBiIU0LRKLxDxs=
+        b=RD/wk8H5LKoN6EevlWfcohhOX67ilFrecCpIxSoEItBui5mcvt5A7hJpl1MRV/W83
+         KBSnzjmiHs15RV0jHTOBjAAa6pmF2qtiWOuezmEiNOy6BlLJhNEpjc1bpm6reA5wRf
+         da9O3Q8XEm+EMCdk2CekcaMYnsSOkla9B/7RVUcc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.10 096/130] x86/bugs: Report AMD retbleed vulnerability
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.15 32/78] x86,static_call: Use alternative RET encoding
 Date:   Tue, 12 Jul 2022 20:39:02 +0200
-Message-Id: <20220712183250.893083352@linuxfoundation.org>
+Message-Id: <20220712183240.095416713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
-References: <20220712183246.394947160@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,170 +57,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Chartre <alexandre.chartre@oracle.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 6b80b59b3555706508008f1f127b5412c89c7fd8 upstream.
+commit ee88d363d15617ff50ac24fab0ffec11113b2aeb upstream.
 
-Report that AMD x86 CPUs are vulnerable to the RETBleed (Arbitrary
-Speculative Code Execution with Return Instructions) attack.
+In addition to teaching static_call about the new way to spell 'RET',
+there is an added complication in that static_call() is allowed to
+rewrite text before it is known which particular spelling is required.
 
-  [peterz: add hygon]
-  [kim: invert parity; fam15h]
+In order to deal with this; have a static_call specific fixup in the
+apply_return() 'alternative' patching routine that will rewrite the
+static_call trampoline to match the definite sequence.
 
-Co-developed-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
+This in turn creates the problem of uniquely identifying static call
+trampolines. Currently trampolines are 8 bytes, the first 5 being the
+jmp.d32/ret sequence and the final 3 a byte sequence that spells out
+'SCT'.
+
+This sequence is used in __static_call_validate() to ensure it is
+patching a trampoline and not a random other jmp.d32. That is,
+false-positives shouldn't be plenty, but aren't a big concern.
+
+OTOH the new __static_call_fixup() must not have false-positives, and
+'SCT' decodes to the somewhat weird but semi plausible sequence:
+
+  push %rbx
+  rex.XB push %r12
+
+Additionally, there are SLS concerns with immediate jumps. Combined it
+seems like a good moment to change the signature to a single 3 byte
+trap instruction that is unique to this usage and will not ever get
+generated by accident.
+
+As such, change the signature to: '0x0f, 0xb9, 0xcc', which decodes
+to:
+
+  ud1 %esp, %ecx
+
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+[cascardo: skip validation as introduced by 2105a92748e8 ("static_call,x86: Robustify trampoline patching")]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeatures.h |    1 +
- arch/x86/kernel/cpu/bugs.c         |   13 +++++++++++++
- arch/x86/kernel/cpu/common.c       |   19 +++++++++++++++++++
- drivers/base/cpu.c                 |    8 ++++++++
- include/linux/cpu.h                |    2 ++
- 5 files changed, 43 insertions(+)
+ arch/x86/include/asm/static_call.h |   17 ++++++++++++++++
+ arch/x86/kernel/alternative.c      |   12 +++++++----
+ arch/x86/kernel/static_call.c      |   38 ++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 62 insertions(+), 5 deletions(-)
 
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -426,5 +426,6 @@
- #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
- #define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
-+#define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
+--- a/arch/x86/include/asm/static_call.h
++++ b/arch/x86/include/asm/static_call.h
+@@ -21,6 +21,16 @@
+  * relative displacement across sections.
+  */
  
- #endif /* _ASM_X86_CPUFEATURES_H */
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1917,6 +1917,11 @@ static ssize_t srbds_show_state(char *bu
- 	return sprintf(buf, "%s\n", srbds_strings[srbds_mitigation]);
- }
++/*
++ * The trampoline is 8 bytes and of the general form:
++ *
++ *   jmp.d32 \func
++ *   ud1 %esp, %ecx
++ *
++ * That trailing #UD provides both a speculation stop and serves as a unique
++ * 3 byte signature identifying static call trampolines. Also see tramp_ud[]
++ * and __static_call_fixup().
++ */
+ #define __ARCH_DEFINE_STATIC_CALL_TRAMP(name, insns)			\
+ 	asm(".pushsection .static_call.text, \"ax\"		\n"	\
+ 	    ".align 4						\n"	\
+@@ -34,8 +44,13 @@
+ #define ARCH_DEFINE_STATIC_CALL_TRAMP(name, func)			\
+ 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, ".byte 0xe9; .long " #func " - (. + 4)")
  
-+static ssize_t retbleed_show_state(char *buf)
-+{
-+	return sprintf(buf, "Vulnerable\n");
-+}
++#ifdef CONFIG_RETPOLINE
++#define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
++	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "jmp __x86_return_thunk")
++#else
+ #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
+ 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; int3; nop; nop; nop")
++#endif
+ 
+ 
+ #define ARCH_ADD_TRAMP_KEY(name)					\
+@@ -44,4 +59,6 @@
+ 	    ".long " STATIC_CALL_KEY_STR(name) " - .		\n"	\
+ 	    ".popsection					\n")
+ 
++extern bool __static_call_fixup(void *tramp, u8 op, void *dest);
 +
- static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
- 			       char *buf, unsigned int bug)
- {
-@@ -1962,6 +1967,9 @@ static ssize_t cpu_show_common(struct de
- 	case X86_BUG_MMIO_STALE_DATA:
- 		return mmio_stale_data_show_state(buf);
+ #endif /* _ASM_STATIC_CALL_H */
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -538,18 +538,22 @@ void __init_or_module noinline apply_ret
+ 	s32 *s;
  
-+	case X86_BUG_RETBLEED:
-+		return retbleed_show_state(buf);
+ 	for (s = start; s < end; s++) {
+-		void *addr = (void *)s + *s;
++		void *dest = NULL, *addr = (void *)s + *s;
+ 		struct insn insn;
+ 		int len, ret;
+ 		u8 bytes[16];
+-		u8 op1;
++		u8 op;
+ 
+ 		ret = insn_decode_kernel(&insn, addr);
+ 		if (WARN_ON_ONCE(ret < 0))
+ 			continue;
+ 
+-		op1 = insn.opcode.bytes[0];
+-		if (WARN_ON_ONCE(op1 != JMP32_INSN_OPCODE))
++		op = insn.opcode.bytes[0];
++		if (op == JMP32_INSN_OPCODE)
++			dest = addr + insn.length + insn.immediate.value;
 +
- 	default:
++		if (__static_call_fixup(addr, op, dest) ||
++		    WARN_ON_ONCE(dest != &__x86_return_thunk))
+ 			continue;
+ 
+ 		DPRINTK("return thunk at: %pS (%px) len: %d to: %pS",
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -12,6 +12,13 @@ enum insn_type {
+ };
+ 
+ /*
++ * ud1 %esp, %ecx - a 3 byte #UD that is unique to trampolines, chosen such
++ * that there is no false-positive trampoline identification while also being a
++ * speculation stop.
++ */
++static const u8 tramp_ud[] = { 0x0f, 0xb9, 0xcc };
++
++/*
+  * cs cs cs xorl %eax, %eax - a single 5 byte instruction that clears %[er]ax
+  */
+ static const u8 xor5rax[] = { 0x2e, 0x2e, 0x2e, 0x31, 0xc0 };
+@@ -43,7 +50,10 @@ static void __ref __static_call_transfor
+ 		break;
+ 
+ 	case RET:
+-		code = &retinsn;
++		if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
++			code = text_gen_insn(JMP32_INSN_OPCODE, insn, &__x86_return_thunk);
++		else
++			code = &retinsn;
  		break;
  	}
-@@ -2018,4 +2026,9 @@ ssize_t cpu_show_mmio_stale_data(struct
- {
- 	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
+ 
+@@ -109,3 +119,29 @@ void arch_static_call_transform(void *si
+ 	mutex_unlock(&text_mutex);
  }
+ EXPORT_SYMBOL_GPL(arch_static_call_transform);
 +
-+ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
++#ifdef CONFIG_RETPOLINE
++/*
++ * This is called by apply_returns() to fix up static call trampolines,
++ * specifically ARCH_DEFINE_STATIC_CALL_NULL_TRAMP which is recorded as
++ * having a return trampoline.
++ *
++ * The problem is that static_call() is available before determining
++ * X86_FEATURE_RETHUNK and, by implication, running alternatives.
++ *
++ * This means that __static_call_transform() above can have overwritten the
++ * return trampoline and we now need to fix things up to be consistent.
++ */
++bool __static_call_fixup(void *tramp, u8 op, void *dest)
 +{
-+	return cpu_show_common(dev, attr, buf, X86_BUG_RETBLEED);
++	if (memcmp(tramp+5, tramp_ud, 3)) {
++		/* Not a trampoline site, not our problem. */
++		return false;
++	}
++
++	if (op == RET_INSN_OPCODE || dest == &__x86_return_thunk)
++		__static_call_transform(tramp, RET, NULL);
++
++	return true;
 +}
- #endif
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1092,16 +1092,27 @@ static const __initconst struct x86_cpu_
- 	{}
- };
- 
-+#define VULNBL(vendor, family, model, blacklist)	\
-+	X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, blacklist)
-+
- #define VULNBL_INTEL_STEPPINGS(model, steppings, issues)		   \
- 	X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(INTEL, 6,		   \
- 					    INTEL_FAM6_##model, steppings, \
- 					    X86_FEATURE_ANY, issues)
- 
-+#define VULNBL_AMD(family, blacklist)		\
-+	VULNBL(AMD, family, X86_MODEL_ANY, blacklist)
-+
-+#define VULNBL_HYGON(family, blacklist)		\
-+	VULNBL(HYGON, family, X86_MODEL_ANY, blacklist)
-+
- #define SRBDS		BIT(0)
- /* CPU is affected by X86_BUG_MMIO_STALE_DATA */
- #define MMIO		BIT(1)
- /* CPU is affected by Shared Buffers Data Sampling (SBDS), a variant of X86_BUG_MMIO_STALE_DATA */
- #define MMIO_SBDS	BIT(2)
-+/* CPU is affected by RETbleed, speculating where you would not expect it */
-+#define RETBLEED	BIT(3)
- 
- static const struct x86_cpu_id cpu_vuln_blacklist[] __initconst = {
- 	VULNBL_INTEL_STEPPINGS(IVYBRIDGE,	X86_STEPPING_ANY,		SRBDS),
-@@ -1134,6 +1145,11 @@ static const struct x86_cpu_id cpu_vuln_
- 	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
- 	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_D,	X86_STEPPING_ANY,		MMIO),
- 	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_L,	X86_STEPPINGS(0x0, 0x0),	MMIO | MMIO_SBDS),
-+
-+	VULNBL_AMD(0x15, RETBLEED),
-+	VULNBL_AMD(0x16, RETBLEED),
-+	VULNBL_AMD(0x17, RETBLEED),
-+	VULNBL_HYGON(0x18, RETBLEED),
- 	{}
- };
- 
-@@ -1235,6 +1251,9 @@ static void __init cpu_set_bug_bits(stru
- 	    !arch_cap_mmio_immune(ia32_cap))
- 		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
- 
-+	if (cpu_matches(cpu_vuln_blacklist, RETBLEED))
-+		setup_force_cpu_bug(X86_BUG_RETBLEED);
-+
- 	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
- 		return;
- 
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -572,6 +572,12 @@ ssize_t __weak cpu_show_mmio_stale_data(
- 	return sysfs_emit(buf, "Not affected\n");
- }
- 
-+ssize_t __weak cpu_show_retbleed(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "Not affected\n");
-+}
-+
- static DEVICE_ATTR(meltdown, 0444, cpu_show_meltdown, NULL);
- static DEVICE_ATTR(spectre_v1, 0444, cpu_show_spectre_v1, NULL);
- static DEVICE_ATTR(spectre_v2, 0444, cpu_show_spectre_v2, NULL);
-@@ -582,6 +588,7 @@ static DEVICE_ATTR(tsx_async_abort, 0444
- static DEVICE_ATTR(itlb_multihit, 0444, cpu_show_itlb_multihit, NULL);
- static DEVICE_ATTR(srbds, 0444, cpu_show_srbds, NULL);
- static DEVICE_ATTR(mmio_stale_data, 0444, cpu_show_mmio_stale_data, NULL);
-+static DEVICE_ATTR(retbleed, 0444, cpu_show_retbleed, NULL);
- 
- static struct attribute *cpu_root_vulnerabilities_attrs[] = {
- 	&dev_attr_meltdown.attr,
-@@ -594,6 +601,7 @@ static struct attribute *cpu_root_vulner
- 	&dev_attr_itlb_multihit.attr,
- 	&dev_attr_srbds.attr,
- 	&dev_attr_mmio_stale_data.attr,
-+	&dev_attr_retbleed.attr,
- 	NULL
- };
- 
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -68,6 +68,8 @@ extern ssize_t cpu_show_srbds(struct dev
- extern ssize_t cpu_show_mmio_stale_data(struct device *dev,
- 					struct device_attribute *attr,
- 					char *buf);
-+extern ssize_t cpu_show_retbleed(struct device *dev,
-+				 struct device_attribute *attr, char *buf);
- 
- extern __printf(4, 5)
- struct device *cpu_device_create(struct device *parent, void *drvdata,
++#endif
 
 

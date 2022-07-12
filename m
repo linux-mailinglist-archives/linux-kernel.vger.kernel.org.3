@@ -2,95 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420BC570EC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21421570EC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiGLAQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S232003AbiGLAR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiGLAQX (ORCPT
+        with ESMTP id S231902AbiGLARl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:16:23 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C0A31352;
-        Mon, 11 Jul 2022 17:15:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657584897; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=bJmObJhUXPfREMqCN/WvVFaSBUz3AzVlTwIJKfvLDHoe1aG6K7Iqc4ovk/XOOtlgXLTGsjOwF4JoS8ZWQfquvAZ+nspaUKHGAabfjufMaeksl3J0Wma8w3FrjHTrYGL/azYM2wZr1L7giIUz5mvI/OeW1d/maBtAD4yGIyjVZIk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657584897; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=fhJVT85aTlBQWQb6yaeXraBInDSuiyuvEmq9JyUyXYE=; 
-        b=HJXLnQdePfBzYS5gYvF2NWYq6Ar0h+zlTQeWYGDsmpy47vOMKQ1cguN2NJ3nOFpcdqRWJEYd0V0ewebpw87dq4EmRKZC1Mt1eEv6zcO0Hj50baqOiLSxitRYwkUC33qqZQ05ygR7jv4iKMRhZ2KOt7bR4+5Xp7O8A08iD42DfB0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657584897;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=fhJVT85aTlBQWQb6yaeXraBInDSuiyuvEmq9JyUyXYE=;
-        b=ht469zLCvWSqlKO3GMKF5L1p8SJlW6uMKUtxZUtAmkO/WlFcm1aMBSqQvNJ/dgUN
-        vTxuNTnejwgRWnlF1T5TDGb3pDxejhjEgsaZYCNzMF3F/15bHdKcnGgUDFjdVU02U6D
-        TZdqG93CB0fZCtau2mX8Ml/V9B1YS81TCUVheAU8=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1657584897026777.3647169706071; Mon, 11 Jul 2022 17:14:57 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 08:14:56 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Christoph Hellwig" <hch@infradead.org>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "devicetree" <devicetree@vger.kernel.org>,
-        "linux-mm" <linux-mm@kvack.org>
-Message-ID: <181efc24bdd.108279419521615.7697137316951540027@linux.beauty>
-In-Reply-To: <YsxLU66tNvi10c82@infradead.org>
-References: <20220711122459.13773-1-me@linux.beauty>
- <Ysw7TMFO8Mw0nq8x@infradead.org>
- <181ee01d384.b809bd01412268.496620746959082770@linux.beauty> <YsxLU66tNvi10c82@infradead.org>
-Subject: Re: [PATCH 0/4] add struct page and Direct I/O support to reserved
- memory
+        Mon, 11 Jul 2022 20:17:41 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144798BA8D;
+        Mon, 11 Jul 2022 17:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1657584980; x=1689120980;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S3ejaRnW01VNLQ/1XovIQoxZMXojlYmfQp9xaPV993w=;
+  b=PnDvPDYqchUiX/qL7o3lmtpjLl/FHf33R+WKZTSdCaMjm8Dk7HubA2p8
+   nBQfzmzJ9IXFzxLcJZfxQMgp06f29DqYXwUxvDiQd9Wyr+0ORpEa5r/X3
+   v52uMbnBoO7tEqLq55YMJdRnCXq2NtoM8utVhd3jPQC+rLwLuA/m7xWcX
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.92,264,1650931200"; 
+   d="scan'208";a="107193599"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 12 Jul 2022 00:16:04 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com (Postfix) with ESMTPS id 855D695C24;
+        Tue, 12 Jul 2022 00:16:03 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 12 Jul 2022 00:16:02 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.43.161.185) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.9;
+ Tue, 12 Jul 2022 00:15:59 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 net 00/15] sysctl: Fix data-races around ipv4_net_table (Round 1).
+Date:   Mon, 11 Jul 2022 17:15:18 -0700
+Message-ID: <20220712001533.89927-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.161.185]
+X-ClientProxiedBy: EX13D04UWB002.ant.amazon.com (10.43.161.133) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
- ---- On Tue, 12 Jul 2022 00:09:55 +0800  Christoph Hellwig <hch@infradead.org> wrote --- 
- > On Tue, Jul 12, 2022 at 12:05:06AM +0800, Li Chen wrote:
- > > My use case has been stated in the cover letter, but our driver is not ready for upstream yet.
- > 
- > Which means we can't review the use case.  I'd suggest you come back
- > when you submit your driver.
+This series fixes data-races around the first 13 knobs and
+nexthop_compat_mode in ipv4_net_table.
 
-Totally agree, but we plan to start rewriting the code of our video driver in a long time, it has many legacy codes and I need to rewrite a lot of codes to migrate to v4l2.
-That's why I also submit a sample driver here: to make the review progress easier and don't need reviewers to read video driver codes.
+I will post another patch for three early_demux knobs later,
+so the next round will start from ip_default_ttl.
 
- > 
- > > With DMA allocator, we can access buffer in kernel space, not userspace, however, this patch
- > 
- > Take a look at dma_mmap_* on how to map DMA coherent allocations to
- > usersapce.  This is of course easily possible.
- > 
 
-Yes, I know them. They take use of remap_pfn_range, which set VM_IO and VM_PFNMAP on vma, so dio is not possible with them.
-IIUC, if you want to expose the kernel's reserved memory to userspace, it doesn't matter whether the memory came from dma allocator or something else.
-The point is if they want to get better throughput, they can consider replacing their dma_mmap_* with my reserved_mem_memremap_pages + reserved_mem_dio_mmap.
+Kuniyuki Iwashima (15):
+  sysctl: Fix data-races in proc_dou8vec_minmax().
+  sysctl: Fix data-races in proc_dointvec_ms_jiffies().
+  tcp: Fix a data-race around sysctl_max_tw_buckets.
+  icmp: Fix a data-race around sysctl_icmp_echo_ignore_all.
+  icmp: Fix data-races around sysctl_icmp_echo_enable_probe.
+  icmp: Fix a data-race around sysctl_icmp_echo_ignore_broadcasts.
+  icmp: Fix a data-race around sysctl_icmp_ignore_bogus_error_responses.
+  icmp: Fix a data-race around sysctl_icmp_errors_use_inbound_ifaddr.
+  icmp: Fix a data-race around sysctl_icmp_ratelimit.
+  icmp: Fix a data-race around sysctl_icmp_ratemask.
+  raw: Fix a data-race around sysctl_raw_l3mdev_accept.
+  tcp: Fix data-races around sysctl_tcp_ecn.
+  tcp: Fix a data-race around sysctl_tcp_ecn_fallback.
+  ipv4: Fix data-races around sysctl_ip_dynaddr.
+  nexthop: Fix data-races around nexthop_compat_mode.
 
-Regards,
-Li
+ Documentation/networking/ip-sysctl.rst            |  2 +-
+ .../chelsio/inline_crypto/chtls/chtls_cm.c        |  2 +-
+ include/net/raw.h                                 |  2 +-
+ kernel/sysctl.c                                   | 12 ++++++------
+ net/ipv4/af_inet.c                                |  4 ++--
+ net/ipv4/fib_semantics.c                          |  2 +-
+ net/ipv4/icmp.c                                   | 15 ++++++++-------
+ net/ipv4/inet_timewait_sock.c                     |  3 ++-
+ net/ipv4/nexthop.c                                |  5 +++--
+ net/ipv4/syncookies.c                             |  2 +-
+ net/ipv4/sysctl_net_ipv4.c                        | 12 ++++++++++++
+ net/ipv4/tcp_input.c                              |  2 +-
+ net/ipv4/tcp_output.c                             |  4 ++--
+ net/ipv6/icmp.c                                   |  2 +-
+ net/ipv6/route.c                                  |  2 +-
+ 15 files changed, 43 insertions(+), 28 deletions(-)
+
+-- 
+2.30.2
+

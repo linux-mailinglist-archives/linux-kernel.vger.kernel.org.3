@@ -2,84 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DED571A33
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5FF571A3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiGLMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S232450AbiGLMo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbiGLMl0 (ORCPT
+        with ESMTP id S230152AbiGLMoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:41:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3170AA5E77;
-        Tue, 12 Jul 2022 05:41:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 588DE616C3;
-        Tue, 12 Jul 2022 12:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE6C3411C;
-        Tue, 12 Jul 2022 12:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657629680;
-        bh=YhdHurAYvqU9HYvYJ3QQIe0wxM38NxHxJZeD7l5WnZs=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=bOlWhFyLAUZ4n40G98F2TnE3+uccvtlSfKhQQHDY0/cl+jRP2CGCkRqwps7fX1pjC
-         dh7vhzieJgblBblEr0h6bW5ylAoYhCYtc4H2F0vvJ/ebiADU2ZqZMz9fKbRD4qL3Cd
-         Hj8rMvIVeNGT2jHJUEPK7soUC8Z96bAVdEHD1stLtZV/hvsgObKFQuhj6C3XDZNh2A
-         S2Aj+AgAHqPi1EIFzU5ZtNceFr3CZwcWZsYMlBCkPRXV7H6pycc701kHe/gw+50Lgo
-         rINuIVnVXrPOPUxA13Mnlz6MrS/WPMIWlo1DRbbMaAyv4tnWTrxe4BHuDEHQeg04Mb
-         qCnbipBADBz+A==
-Message-ID: <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
-Date:   Tue, 12 Jul 2022 07:41:06 -0500
+        Tue, 12 Jul 2022 08:44:54 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F6599ED
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id fz10so7515382pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QYL0SRgLUmg8BnK5Yo3lzlJ4c0o1vhFy27q1BHms55E=;
+        b=M9ZOyqVnnUe1kQ1lYFItGrYNc078kUr6Am55NLN0d1kC3kIbA+ABERmQoje+GHES78
+         AlnIcs/g2MpFEwNW6yLzuJipMD3yEPQs7stbk8+q8MBWP02Qgz+ZyINb8gTS8mPiiW+m
+         duREQLrPy3kHmKzqDU3zfNEvKbJwvVnnsGCMPiDOxTfzNysdXYCWGhpyXyi+cj8nRbhS
+         SzNwVQ+n5xTqUPo/Caxl7D/FnnVPEa5lZm5c0RCZPkpiLQzPrSkKKmwFsr3OIqRJcCxm
+         nxPO1jpXd+n4kbNBbR+9KmnWfeiV3c+vEbi313WP3dPYB2DZO0tGPYywVH3wS1NsXIpi
+         fjlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QYL0SRgLUmg8BnK5Yo3lzlJ4c0o1vhFy27q1BHms55E=;
+        b=Zs05ejjuW0MlpC0DkDUxHrkwNDJ/4MJBBDtXMsvKpPjU6kL5D+PyzZ4QKcTzREWDWL
+         FOX0YuhwWUb7JSFNDqMhan47Jy7CsKhnntAceDQCDOqkft3ybftN5auiRGncX/t/NfiY
+         1DWbfzKOzmDQ17awf2ys/TEVXE7OA61ZdWy3EW8KiNCRliom6dCyA4cjscPKKaConTIV
+         stiOayQPfBvzQSpKTG//Gk2lbVX2FMhRi5Il2JFlnLZs0S9iJ05JxWuhIhyeUUtongD3
+         7g1ptvMChFym0e8WGsn/LhGIMR3k6Gmk08oVkC4lM2pxTuPdIdDftQDL7GAR4FS04nzZ
+         jOzg==
+X-Gm-Message-State: AJIora/tiGExZy3JMJK9UwOM8fsJVo7gLcX2l+RihNW5SyglrNroheJF
+        RxT6yZAfu5RFjf0cXkz6DjyR
+X-Google-Smtp-Source: AGRyM1v+M5lV7lgNVXXA7ep5lugVxUMn5AWgMFlKRyd/tc8Cbi7QwigHgSxgIwlOdFq966IerhvE4g==
+X-Received: by 2002:a17:90b:4c91:b0:1ef:f85b:6342 with SMTP id my17-20020a17090b4c9100b001eff85b6342mr4254301pjb.75.1657629892302;
+        Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
+Received: from workstation ([117.207.31.14])
+        by smtp.gmail.com with ESMTPSA id pi4-20020a17090b1e4400b001df264610c4sm3212648pjb.0.2022.07.12.05.44.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Jul 2022 05:44:51 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 18:14:45 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org, linus.walleij@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+Message-ID: <20220712124445.GC21746@workstation>
+References: <20220624195112.894916-1-robimarko@gmail.com>
+ <87edyq1ujr.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220620230109.986298-1-dinguyen@kernel.org>
- <YrI6EeVkkWVMNPFY@shikoro> <928b2996-b2e7-d847-0e20-7e19df3cbf03@kernel.org>
- <YrN2lxvlP4cWfelY@kunai>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <YrN2lxvlP4cWfelY@kunai>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87edyq1ujr.wl-maz@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On 6/22/22 15:07, Wolfram Sang wrote:
+On Tue, Jul 12, 2022 at 11:42:32AM +0100, Marc Zyngier wrote:
+> On Fri, 24 Jun 2022 20:51:12 +0100,
+> Robert Marko <robimarko@gmail.com> wrote:
+> > 
+> > Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> > immutable") added a warning to indicate if the gpiolib is altering the
+> > internals of irqchips.
+> > 
+> > Following this change the following warning is now observed for the SPMI
+> > PMIC pinctrl driver:
+> > gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+> > 
+> > Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
+> > 
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> >  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 22 ++++++++++++----------
+> >  1 file changed, 12 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> > index c3255b0bece4..406ee0933d0b 100644
+> > --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> > +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> > @@ -171,7 +171,6 @@ struct pmic_gpio_state {
+> >  	struct regmap	*map;
+> >  	struct pinctrl_dev *ctrl;
+> >  	struct gpio_chip chip;
+> > -	struct irq_chip irq;
+> >  	u8 usid;
+> >  	u8 pid_base;
+> >  };
+> > @@ -988,6 +987,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+> >  	return fwspec;
+> >  }
+> >  
+> > +static const struct irq_chip spmi_gpio_irq_chip = {
+> > +	.name		= "spmi-gpio",
+> > +	.irq_ack	= irq_chip_ack_parent,
+> > +	.irq_mask	= irq_chip_mask_parent,
+> > +	.irq_unmask	= irq_chip_unmask_parent,
 > 
->>  From the original code, the first mechanism to a recovery is to acquire a
->> GPIO for the SCL line and send the 9 SCL pulses, after that, it does a reset
->> of the I2C module. For the SOCFPGA part, there is no GPIO line for the SCL,
->> thus the I2C module cannot even get a reset. This code allows the function
->> to reset the I2C module for SOCFPGA, which is the 2nd part of the recovery
->> process.
-> 
-> The second part is totally useless if the client device is holding SDA
-> low. Which is exactly the situation that recovery tries to fix. As I
-> said, if you can't control SCL, you don't have recovery.
+> No, this is wrong. Please look at the documentation to see how you
+> must now directly call into the gpiolib helpers for these two
+> callbacks.
 > 
 
-This is recovery of the master and not the slave.  We have a customer 
-that is the using I2C with the signals routed through the FPGA, and thus 
-are not GPIO. During a timeout, with this code, the driver is able to 
-recover the master.
+IIUC, you are referring to gpiochip_disable_irq() and
+gpiochip_enable_irq() APIs. These APIs are supposed to let the gpiolib
+know about that the IRQ usage of these GPIOs. But for the case of hierarchial
+IRQ domain, isn't the parent is going to do that?
 
-Dinh
+Please correct me if I'm wrong.
+
+Thanks,
+Mani
+
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

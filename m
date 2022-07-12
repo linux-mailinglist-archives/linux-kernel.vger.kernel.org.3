@@ -2,417 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E9B5720B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11715720BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbiGLQYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S233004AbiGLQZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiGLQY3 (ORCPT
+        with ESMTP id S233943AbiGLQZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:24:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 886C1CA6FB;
-        Tue, 12 Jul 2022 09:24:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC5EE165C;
-        Tue, 12 Jul 2022 09:24:27 -0700 (PDT)
-Received: from [10.57.85.194] (unknown [10.57.85.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F5FA3F73D;
-        Tue, 12 Jul 2022 09:24:24 -0700 (PDT)
-Message-ID: <9eb795cd-999b-73e5-2eeb-c123b1d05a34@arm.com>
-Date:   Tue, 12 Jul 2022 17:24:16 +0100
+        Tue, 12 Jul 2022 12:25:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834D7CB453;
+        Tue, 12 Jul 2022 09:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=EyUFDwm+MCF5o/jfmCwe0q+h8aIIfJ6Fh6QWFZidMRQ=; b=o7F7qm8JPqBXj5UYxBg1ZN3Oz+
+        6C8spyb8w8F+4P09llAiHI8Wuy0lpK087JBQEthXA1isE0s+SKnUBUcBhkVNTPO0aMwYgxSA3pdNi
+        CbVedOTzknDAgDJwtxaVuziPs9sWWkxmtQguv2Lh/DPSxzBMrnLpEj0DMNW5DXKnRw7LxDNGNEaSp
+        oXUH8yN7BNYsimD++6N+CwpgDrD5/IaXGSZhEy7RHl5ejZHcfgi4Mn3IAiedh5M06h6QUm4NGx4qX
+        q0vuQEzjtx4PKMb9PgsOc19SQsFznoZbdfvBdaeQ+99sDDlhUdjCKfiMpLaG0DdbvQdCtKkOLm7Pn
+        OZnZor1g==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBIha-00ClSx-5G; Tue, 12 Jul 2022 16:25:34 +0000
+Message-ID: <a646b2e9-e7a7-3d52-413e-4e2b8c48e383@infradead.org>
+Date:   Tue, 12 Jul 2022 09:25:32 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/7] iommu/exynos: Use lookup based approach to access
- registers
-Content-Language: en-GB
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220710230603.13526-1-semen.protsenko@linaro.org>
- <20220710230603.13526-5-semen.protsenko@linaro.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220710230603.13526-5-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v4 4/4] pseries/mobility: set NMI watchdog factor during
+ LPM
+Content-Language: en-US
+To:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
+Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+References: <20220712143202.23144-1-ldufour@linux.ibm.com>
+ <20220712143202.23144-5-ldufour@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220712143202.23144-5-ldufour@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-11 00:06, Sam Protsenko wrote:
-> At the moment the driver supports SysMMU v1..v5 versions. SysMMU v5 has
-> different register layout than SysMMU v1..v3. Instead of checking the
-> version each time before reading/writing the registers, let's create
-> corresponding register table for each SysMMU version and set the needed
-> table on init, checking the SysMMU version one single time. This way is
-> faster and more elegant.
+Hi--
+
+On 7/12/22 07:32, Laurent Dufour wrote:
+> During a LPM, while the memory transfer is in progress on the arrival side,
+> some latencies is generated when accessing not yet transferred pages on the
+
+                 are
+
+> arrival side. Thus, the NMI watchdog may be triggered too frequently, which
+> increases the risk to hit a NMI interrupt in a bad place in the kernel,
+
+                            an NMI
+
+> leading to a kernel panic.
 > 
-> No functional change here, just a refactoring patch.
+> Disabling the Hard Lockup Watchdog until the memory transfer could be a too
+> strong work around, some users would want this timeout to be eventually
+> triggered if the system is hanging even during LPM.
+> 
+> Introduce a new sysctl variable nmi_watchdog_factor. It allows to apply
+> a factor to the NMI watchdog timeout during a LPM. Just before the CPU are
 
-FWIW I'd say that this absolutely *is* a functional change. Achieving 
-the same end result, but fundamentally changing the mechanism used to 
-get there, is a bit different to simply moving code around.
+                                              an LPM.            the CPU is
 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> stopped for the switchover sequence, the NMI watchdog timer is set to
+>  watchdog_tresh + factor%
+
+   watchdog_thresh
+
+> 
+> A value of 0 has no effect. The default value is 200, meaning that the NMI
+> watchdog is set to 30s during LPM (based on a 10s watchdog_tresh value).
+
+                                                    watchdog_thresh
+
+> Once the memory transfer is achieved, the factor is reset to 0.
+> 
+> Setting this value to a high number is like disabling the NMI watchdog
+> during a LPM.
+
+         an LPM.
+
+> 
+> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
 > ---
-> Changes in v2:
->    - Reworked existing code (SysMMU v1..v5) to use this approach
->    - Extracted v7 registers to the separate patches
->    - Replaced MMU_REG() with corresponding SysMMU read/write functions
->    - Improved the comment for 0x1 offsets triggering an unaligned access
->      exception
->    - Removed support for VMID number, as only VMID=0 (default) is used
->      for now
->    - Renamed register index names to reflect the old SysMMU version
->      register names
+>  Documentation/admin-guide/sysctl/kernel.rst | 12 ++++++
+>  arch/powerpc/platforms/pseries/mobility.c   | 43 +++++++++++++++++++++
+>  2 files changed, 55 insertions(+)
 > 
->   drivers/iommu/exynos-iommu.c | 141 ++++++++++++++++++++++-------------
->   1 file changed, 90 insertions(+), 51 deletions(-)
-> 
-> diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
-> index 494f7d7aa9c5..0cb1ce10db51 100644
-> --- a/drivers/iommu/exynos-iommu.c
-> +++ b/drivers/iommu/exynos-iommu.c
-> @@ -136,9 +136,6 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
->   #define CFG_FLPDCACHE	(1 << 20) /* System MMU 3.2+ only */
->   
->   /* common registers */
-> -#define REG_MMU_CTRL		0x000
-> -#define REG_MMU_CFG		0x004
-> -#define REG_MMU_STATUS		0x008
->   #define REG_MMU_VERSION		0x034
->   
->   #define MMU_MAJ_VER(val)	((val) >> 7)
-> @@ -148,31 +145,57 @@ static u32 lv2ent_offset(sysmmu_iova_t iova)
->   #define MAKE_MMU_VER(maj, min)	((((maj) & 0xF) << 7) | ((min) & 0x7F))
->   
->   /* v1.x - v3.x registers */
-> -#define REG_MMU_FLUSH		0x00C
-> -#define REG_MMU_FLUSH_ENTRY	0x010
-> -#define REG_PT_BASE_ADDR	0x014
-> -#define REG_INT_STATUS		0x018
-> -#define REG_INT_CLEAR		0x01C
-> -
->   #define REG_PAGE_FAULT_ADDR	0x024
->   #define REG_AW_FAULT_ADDR	0x028
->   #define REG_AR_FAULT_ADDR	0x02C
->   #define REG_DEFAULT_SLAVE_ADDR	0x030
->   
->   /* v5.x registers */
-> -#define REG_V5_PT_BASE_PFN	0x00C
-> -#define REG_V5_MMU_FLUSH_ALL	0x010
-> -#define REG_V5_MMU_FLUSH_ENTRY	0x014
-> -#define REG_V5_MMU_FLUSH_RANGE	0x018
-> -#define REG_V5_MMU_FLUSH_START	0x020
-> -#define REG_V5_MMU_FLUSH_END	0x024
-> -#define REG_V5_INT_STATUS	0x060
-> -#define REG_V5_INT_CLEAR	0x064
->   #define REG_V5_FAULT_AR_VA	0x070
->   #define REG_V5_FAULT_AW_VA	0x080
->   
->   #define has_sysmmu(dev)		(dev_iommu_priv_get(dev) != NULL)
->   
-> +enum {
-> +	REG_SET_V1,
-> +	REG_SET_V5,
-> +	MAX_REG_SET
-> +};
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index ddccd1077462..0bb0b7f27e96 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -592,6 +592,18 @@ to the guest kernel command line (see
+>  Documentation/admin-guide/kernel-parameters.rst).
+>  
+
+This entire block should be in kernel-parameters.txt, not .rst,
+and it should be formatted like everything else in the .txt file.
+
+>  
+> +nmi_watchdog_factor (PPC only)
+> +==================================
 > +
-> +enum {
-> +	IDX_CTRL,
-> +	IDX_CFG,
-> +	IDX_STATUS,
-> +	IDX_PT_BASE,
-> +	IDX_FLUSH_ALL,
-> +	IDX_FLUSH_ENTRY,
-> +	IDX_FLUSH_RANGE,
-> +	IDX_FLUSH_START,
-> +	IDX_FLUSH_END,
-> +	IDX_INT_STATUS,
-> +	IDX_INT_CLEAR,
-> +	MAX_REG_IDX
-> +};
+> +Factor apply to to the NMI watchdog timeout (only when ``nmi_watchdog`` is
+
+   Factor to apply to the NMI
+
+> +set to 1). This factor represents the percentage added to
+> +``watchdog_thresh`` when calculating the NMI watchdog timeout during a
+
+                                                                 during an
+
+> +LPM. The soft lockup timeout is not impacted.
 > +
-> +/*
-> + * Some SysMMU versions might not implement some registers from this set, thus
-> + * those registers shouldn't be accessed. Set the offsets for those registers to
-> + * 0x1 to trigger an unaligned access exception, which can help one to debug
-> + * related issues.
-> + */
-> +static const unsigned int sysmmu_regs[MAX_REG_SET][MAX_REG_IDX] = {
-
-Do we really need MAX_REG_SET? Maybe there's a consistency argument, I 
-guess :/
-
-> +	/* SysMMU v1..v3 */
-> +	{
-> +		0x00, 0x04, 0x08, 0x14, 0x0c, 0x10, 0x1, 0x1, 0x1,
-> +		0x18, 0x1c,
-
-This looks fragile and unnecessarily difficult to follow and maintain - 
-designated initialisers would be a lot better in all respects, i.e.:
-
-	[REG_SET_V1] = {
-		...
-		[IDX_PT_BASE] = REG_PT_BASE_ADDR,
-		...
-
-etc.
-
-> +	},
-> +	/* SysMMU v5 */
-> +	{
-> +		0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, 0x18, 0x20, 0x24,
-> +		0x60, 0x64,
-> +	},
-> +};
+> +A value of 0 means no change. The default value is 200 meaning the NMI
+> +watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
 > +
->   static struct device *dma_dev;
->   static struct kmem_cache *lv2table_kmem_cache;
->   static sysmmu_pte_t *zero_lv2_table;
-> @@ -274,6 +297,7 @@ struct sysmmu_drvdata {
->   	unsigned int version;		/* our version */
->   
->   	struct iommu_device iommu;	/* IOMMU core handle */
-> +	const unsigned int *regs;	/* register set */
->   };
->   
->   static struct exynos_iommu_domain *to_exynos_domain(struct iommu_domain *dom)
-> @@ -281,20 +305,30 @@ static struct exynos_iommu_domain *to_exynos_domain(struct iommu_domain *dom)
->   	return container_of(dom, struct exynos_iommu_domain, domain);
->   }
->   
-> +static void sysmmu_write(struct sysmmu_drvdata *data, size_t idx, u32 val)
-> +{
-> +	writel(val, data->sfrbase + data->regs[idx]);
-> +}
 > +
-> +static u32 sysmmu_read(struct sysmmu_drvdata *data, size_t idx)
-> +{
-> +	return readl(data->sfrbase + data->regs[idx]);
-> +}
-> +
->   static void sysmmu_unblock(struct sysmmu_drvdata *data)
->   {
-> -	writel(CTRL_ENABLE, data->sfrbase + REG_MMU_CTRL);
-> +	sysmmu_write(data, IDX_CTRL, CTRL_ENABLE);
->   }
->   
->   static bool sysmmu_block(struct sysmmu_drvdata *data)
->   {
->   	int i = 120;
->   
-> -	writel(CTRL_BLOCK, data->sfrbase + REG_MMU_CTRL);
-> -	while ((i > 0) && !(readl(data->sfrbase + REG_MMU_STATUS) & 1))
-> +	sysmmu_write(data, IDX_CTRL, CTRL_BLOCK);
-> +	while (i > 0 && !(sysmmu_read(data, IDX_STATUS) & 0x1))
->   		--i;
->   
-> -	if (!(readl(data->sfrbase + REG_MMU_STATUS) & 1)) {
-> +	if (!(sysmmu_read(data, IDX_STATUS) & 0x1)) {
->   		sysmmu_unblock(data);
->   		return false;
->   	}
-> @@ -304,10 +338,7 @@ static bool sysmmu_block(struct sysmmu_drvdata *data)
->   
->   static void __sysmmu_tlb_invalidate(struct sysmmu_drvdata *data)
->   {
-> -	if (MMU_MAJ_VER(data->version) < 5)
-> -		writel(0x1, data->sfrbase + REG_MMU_FLUSH);
-> -	else
-> -		writel(0x1, data->sfrbase + REG_V5_MMU_FLUSH_ALL);
-> +	sysmmu_write(data, IDX_FLUSH_ALL, 0x1);
->   }
->   
->   static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
-> @@ -317,31 +348,33 @@ static void __sysmmu_tlb_invalidate_entry(struct sysmmu_drvdata *data,
->   
->   	if (MMU_MAJ_VER(data->version) < 5) {
->   		for (i = 0; i < num_inv; i++) {
-> -			writel((iova & SPAGE_MASK) | 1,
-> -				     data->sfrbase + REG_MMU_FLUSH_ENTRY);
-> +			sysmmu_write(data, IDX_FLUSH_ENTRY,
-> +				     (iova & SPAGE_MASK) | 0x1);
->   			iova += SPAGE_SIZE;
->   		}
->   	} else {
->   		if (num_inv == 1) {
+>  numa_balancing
+>  ==============
+>  
 
-You could merge this condition into the one above now. That much I'd 
-call non-functional refactoring ;)
 
-> -			writel((iova & SPAGE_MASK) | 1,
-> -				     data->sfrbase + REG_V5_MMU_FLUSH_ENTRY);
-> +			sysmmu_write(data, IDX_FLUSH_ENTRY,
-> +				     (iova & SPAGE_MASK) | 0x1);
->   		} else {
-> -			writel((iova & SPAGE_MASK),
-> -				     data->sfrbase + REG_V5_MMU_FLUSH_START);
-> -			writel((iova & SPAGE_MASK) + (num_inv - 1) * SPAGE_SIZE,
-> -				     data->sfrbase + REG_V5_MMU_FLUSH_END);
-> -			writel(1, data->sfrbase + REG_V5_MMU_FLUSH_RANGE);
-> +			sysmmu_write(data, IDX_FLUSH_START, iova & SPAGE_MASK);
-> +			sysmmu_write(data, IDX_FLUSH_END, (iova & SPAGE_MASK) +
-> +				     (num_inv - 1) * SPAGE_SIZE);
-> +			sysmmu_write(data, IDX_FLUSH_RANGE, 0x1);
->   		}
->   	}
->   }
->   
->   static void __sysmmu_set_ptbase(struct sysmmu_drvdata *data, phys_addr_t pgd)
->   {
-> +	u32 pt_base;
-> +
->   	if (MMU_MAJ_VER(data->version) < 5)
-> -		writel(pgd, data->sfrbase + REG_PT_BASE_ADDR);
-> +		pt_base = pgd;
->   	else
-> -		writel(pgd >> SPAGE_ORDER, data->sfrbase + REG_V5_PT_BASE_PFN);
-> +		pt_base = pgd >> SPAGE_ORDER;
->   
-> +	sysmmu_write(data, IDX_PT_BASE, pt_base);
->   	__sysmmu_tlb_invalidate(data);
->   }
->   
-> @@ -365,8 +398,7 @@ static void __sysmmu_get_version(struct sysmmu_drvdata *data)
->   {
->   	u32 ver;
->   
-> -	__sysmmu_enable_clocks(data);
-> -
-> +	/* Don't use sysmmu_read() here, as data->regs is not set yet */
->   	ver = readl(data->sfrbase + REG_MMU_VERSION);
->   
->   	/* controllers on some SoCs don't report proper version */
-> @@ -377,6 +409,17 @@ static void __sysmmu_get_version(struct sysmmu_drvdata *data)
->   
->   	dev_dbg(data->sysmmu, "hardware version: %d.%d\n",
->   		MMU_MAJ_VER(data->version), MMU_MIN_VER(data->version));
-> +}
-> +
-> +static void sysmmu_get_hw_info(struct sysmmu_drvdata *data)
-> +{
-
-Seems a bit unnecessary to split the call up like this - I'd say the 
-register set is fundamentally connected to the version, and 
-"get_hw_info" is even less meaningfully descriptive than just having 
-"get_version" take care of one more assignment, but hey ho, it's not my 
-driver.
-
-Thanks,
-Robin.
-
-> +	__sysmmu_enable_clocks(data);
-> +
-> +	__sysmmu_get_version(data);
-> +	if (MMU_MAJ_VER(data->version) < 5)
-> +		data->regs = sysmmu_regs[REG_SET_V1];
-> +	else
-> +		data->regs = sysmmu_regs[REG_SET_V5];
->   
->   	__sysmmu_disable_clocks(data);
->   }
-> @@ -405,19 +448,14 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
->   	const struct sysmmu_fault_info *finfo;
->   	unsigned int i, n, itype;
->   	sysmmu_iova_t fault_addr;
-> -	unsigned short reg_status, reg_clear;
->   	int ret = -ENOSYS;
->   
->   	WARN_ON(!data->active);
->   
->   	if (MMU_MAJ_VER(data->version) < 5) {
-> -		reg_status = REG_INT_STATUS;
-> -		reg_clear = REG_INT_CLEAR;
->   		finfo = sysmmu_faults;
->   		n = ARRAY_SIZE(sysmmu_faults);
->   	} else {
-> -		reg_status = REG_V5_INT_STATUS;
-> -		reg_clear = REG_V5_INT_CLEAR;
->   		finfo = sysmmu_v5_faults;
->   		n = ARRAY_SIZE(sysmmu_v5_faults);
->   	}
-> @@ -426,7 +464,7 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
->   
->   	clk_enable(data->clk_master);
->   
-> -	itype = __ffs(readl(data->sfrbase + reg_status));
-> +	itype = __ffs(sysmmu_read(data, IDX_INT_STATUS));
->   	for (i = 0; i < n; i++, finfo++)
->   		if (finfo->bit == itype)
->   			break;
-> @@ -443,7 +481,7 @@ static irqreturn_t exynos_sysmmu_irq(int irq, void *dev_id)
->   	/* fault is not recovered by fault handler */
->   	BUG_ON(ret != 0);
->   
-> -	writel(1 << itype, data->sfrbase + reg_clear);
-> +	sysmmu_write(data, IDX_INT_CLEAR, 1 << itype);
->   
->   	sysmmu_unblock(data);
->   
-> @@ -461,8 +499,8 @@ static void __sysmmu_disable(struct sysmmu_drvdata *data)
->   	clk_enable(data->clk_master);
->   
->   	spin_lock_irqsave(&data->lock, flags);
-> -	writel(CTRL_DISABLE, data->sfrbase + REG_MMU_CTRL);
-> -	writel(0, data->sfrbase + REG_MMU_CFG);
-> +	sysmmu_write(data, IDX_CTRL, CTRL_DISABLE);
-> +	sysmmu_write(data, IDX_CFG, 0x0);
->   	data->active = false;
->   	spin_unlock_irqrestore(&data->lock, flags);
->   
-> @@ -482,7 +520,7 @@ static void __sysmmu_init_config(struct sysmmu_drvdata *data)
->   
->   	cfg |= CFG_EAP; /* enable access protection bits check */
->   
-> -	writel(cfg, data->sfrbase + REG_MMU_CFG);
-> +	sysmmu_write(data, IDX_CFG, cfg);
->   }
->   
->   static void __sysmmu_enable(struct sysmmu_drvdata *data)
-> @@ -492,10 +530,10 @@ static void __sysmmu_enable(struct sysmmu_drvdata *data)
->   	__sysmmu_enable_clocks(data);
->   
->   	spin_lock_irqsave(&data->lock, flags);
-> -	writel(CTRL_BLOCK, data->sfrbase + REG_MMU_CTRL);
-> +	sysmmu_write(data, IDX_CTRL, CTRL_BLOCK);
->   	__sysmmu_init_config(data);
->   	__sysmmu_set_ptbase(data, data->pgtable);
-> -	writel(CTRL_ENABLE, data->sfrbase + REG_MMU_CTRL);
-> +	sysmmu_write(data, IDX_CTRL, CTRL_ENABLE);
->   	data->active = true;
->   	spin_unlock_irqrestore(&data->lock, flags);
->   
-> @@ -622,6 +660,8 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
->   	data->sysmmu = dev;
->   	spin_lock_init(&data->lock);
->   
-> +	sysmmu_get_hw_info(data);
-> +
->   	ret = iommu_device_sysfs_add(&data->iommu, &pdev->dev, NULL,
->   				     dev_name(data->sysmmu));
->   	if (ret)
-> @@ -633,7 +673,6 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, data);
->   
-> -	__sysmmu_get_version(data);
->   	if (PG_ENT_SHIFT < 0) {
->   		if (MMU_MAJ_VER(data->version) < 5) {
->   			PG_ENT_SHIFT = SYSMMU_PG_ENT_SHIFT;
+-- 
+~Randy

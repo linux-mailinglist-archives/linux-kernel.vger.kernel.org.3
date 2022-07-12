@@ -2,240 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6409557263E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5208C572642
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbiGLTqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S234862AbiGLTqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiGLTph (ORCPT
+        with ESMTP id S235112AbiGLTqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:45:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380949C257;
-        Tue, 12 Jul 2022 12:34:31 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso9551389pjk.3;
-        Tue, 12 Jul 2022 12:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n4hhtUV/7d3Hrcufg5badfEYjmHc8zvs4wyYB+BVUlc=;
-        b=F3WNmR0MIHppkPYJ0BpbyftgfXEZNu9242PskWmElgFE83zoA+TBu0d6D+k26Kijgu
-         hSfBZd+iKP2vf2DWNOh8L+6go1H0gPBgQPtfNasdXWuDjzI7sSYI5BRG2dpVrZGzRTa5
-         htBSzJTrtXPVc5cVWAj9rWH1h+hBTcCssG+FyM24iW868DqFaBH/7VqNmPeF/nq6+P0D
-         iZ3Tf0HuJ+MVrcuLLdqfhlzHnoQ5OEhsx8h7+dAW8VeC7j9jk3+xt83SBXm9WqKrxAi6
-         7ZkplvmTPn+9Zc+aBXGV0GTu4lGEsKBilVmilJd8xLkiLHi/Y1evvDkOAH3AVoJcK0R0
-         EmLA==
+        Tue, 12 Jul 2022 15:46:06 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB4CB41BF;
+        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id z11so5634768qkz.13;
+        Tue, 12 Jul 2022 12:36:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n4hhtUV/7d3Hrcufg5badfEYjmHc8zvs4wyYB+BVUlc=;
-        b=kMXQ8IdtJHouhha3MySQ+kwDXNhgbLMQ+cOuNwiMEF9F3voPJm42TdMufB0zPYeY8v
-         b2foAxtJuZyLERSsaRqtz0EG5si/rE7ANeMuewJ9m4ko1ucl7rgJFPJ/qypToPjNqImD
-         BSVG6Zl3ZPWIssT7lsTlx9vXkpk2kDqH+iZW4QBI6Z3zIyv7Rws+D1z4vSiWwEpUceb1
-         p2Eqh4M+Db4G0+nYe/4JPxDRBdjRqeC8m0gRRyn9jxcecDkuxsIGoMc7/gLblcCbKtQd
-         bVL1HttIy8upw6tuUoUlSxpwgIBPttnMoHh1xkFxTkfCxuu5LfotW8Zj/vxekeR/53/I
-         cz3Q==
-X-Gm-Message-State: AJIora+gOAlWH1pFV8F41EEykkm6EsVs6ifnsG822Jfd+7G/bSZbHdmc
-        5nbZwK/7FZV1MWUKRJLUSGQ=
-X-Google-Smtp-Source: AGRyM1vmJf7MVlh38UJVbC6A6TPuqKkGNmTyQ0fKXiOJLkMonOBN0CiLf2DZFyOewJLkGjLqkrtPwQ==
-X-Received: by 2002:a17:902:ab87:b0:16a:82a9:feb7 with SMTP id f7-20020a170902ab8700b0016a82a9feb7mr25889355plr.37.1657654470575;
-        Tue, 12 Jul 2022 12:34:30 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id 64-20020a621943000000b00518764d09cdsm7198030pfz.164.2022.07.12.12.34.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j0miCz7yO1Y2I8pvw032h1mnhQYjkHXsC5R5mX24dTg=;
+        b=ssNxXzvV0G0LziJ8TgeFUSF1A2+yjhNpUXULxujFk/DGYAzb3gwgHqBQRj2mlV4BoI
+         wgiUOKZYrd1BuHI1qq6hSzmyLsryQlWGr6IfWKqH9XNVLE2vSqqh9NBHG8+jco9GGEcF
+         gvP7VRKUWk7JOsUcG1dBr3tF0zulaRvrEKPXv3gejCg25W2cc/0IGIWo/dJ/kKGXFZT+
+         tH/zJYMck5VkogfVeyBP2iDrDFYWcbPWs5sSN0b2vYabVlGqW/XqJeTyNYs31/m5WE+6
+         3ZCNYRkzo/3aQSx+eoS4G7w8NRjAkMs/bDWAZF0pQgyL3phxh+HoeGVXUs3gMcTvmj2z
+         ECeg==
+X-Gm-Message-State: AJIora+JtLPgSqZAReko+4G5ZXVIlD/JdYIDDEz1Yh8ZPDg/UJaLjjaX
+        NsXU0QVM05XbI9jPBLwadWviBGoEB44=
+X-Google-Smtp-Source: AGRyM1tmda6zGMVpOlj2P77rNbtj6+6NL5E1S8G9DyprdGvF0ZWAY8KoTARaJmN7LzkUuyxmFuXTDw==
+X-Received: by 2002:a05:620a:2624:b0:6b5:965d:e043 with SMTP id z36-20020a05620a262400b006b5965de043mr6402036qko.236.1657654560623;
+        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
+Received: from mfe-desktop.dimonoffinc.intra (ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca. [142.116.33.166])
+        by smtp.googlemail.com with ESMTPSA id u4-20020a37ab04000000b006b56a4400f6sm9395769qke.16.2022.07.12.12.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 12:34:29 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 12:34:28 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH 08/12] Documentation: kvm: tdx-tdp-mmu: Properly format
- nested list for EPT state machine
-Message-ID: <20220712193428.GL1379820@ls.amr.corp.intel.com>
-References: <20220709042037.21903-1-bagasdotme@gmail.com>
- <20220709042037.21903-9-bagasdotme@gmail.com>
- <YskDcli+Lg6uKzYX@debian.me>
+        Tue, 12 Jul 2022 12:36:00 -0700 (PDT)
+From:   ferlandm@amotus.ca
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Ferland <ferlandm@amotus.ca>
+Subject: [PATCH] hwmon: (mcp3021) improve driver support for newer hwmon interface
+Date:   Tue, 12 Jul 2022 15:35:04 -0400
+Message-Id: <20220712193504.1374656-1-ferlandm@amotus.ca>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YskDcli+Lg6uKzYX@debian.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 09, 2022 at 11:26:26AM +0700,
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+From: Marc Ferland <ferlandm@amotus.ca>
 
-> On Sat, Jul 09, 2022 at 11:20:34AM +0700, Bagas Sanjaya wrote:
-> >  The state machine of EPT entry
-> >  ------------------------------
-> > -(private EPT entry, shared EPT entry) =
-> > -        (non-present, non-present):             private mapping is allowed
-> > -        (present, non-present):                 private mapping is mapped
-> > -        (non-present | SPTE_SHARED_MASK, non-present | SPTE_SHARED_MASK):
-> > -                                                shared mapping is allowed
-> > -        (non-present | SPTE_SHARED_MASK, present | SPTE_SHARED_MASK):
-> > -                                                shared mapping is mapped
-> > -        (present | SPTE_SHARED_MASK, any)       invalid combination
-> > +* (private EPT entry, shared EPT entry)
-> >  
-> > -* map_gpa(private GPA): Mark the region that private GPA is allowed(NEW)
-> > -        private EPT entry: clear SPTE_SHARED_MASK
-> > -          present: nop
-> > -          non-present: nop
-> > -          non-present | SPTE_SHARED_MASK -> non-present (clear SPTE_SHARED_MASK)
-> > +  * (non-present, non-present):
-> > +       private mapping is allowed
-> > +  * (present, non-present):
-> > +       private mapping is mapped
-> > +  * (non-present | SPTE_SHARED_MASK, non-present | SPTE_SHARED_MASK):
-> > +       shared mapping is allowed
-> > +  * (non-present | SPTE_SHARED_MASK, present | SPTE_SHARED_MASK):
-> > +       shared mapping is mapped
-> > +  * (present | SPTE_SHARED_MASK, any):
-> > +       invalid combination
-> >  
-> > -        shared EPT entry: zap the entry, clear SPTE_SHARED_MASK
-> > -          present: invalid
-> > -          non-present -> non-present: nop
-> > -          present | SPTE_SHARED_MASK -> non-present
-> > -          non-present | SPTE_SHARED_MASK -> non-present
-> > +* map_gpa (private GPA): Mark the region that private GPA is allowed(NEW)
-> >  
-> > -* map_gpa(shared GPA): Mark the region that shared GPA is allowed(NEW)
-> > -        private EPT entry: zap and set SPTE_SHARED_MASK
-> > -          present     -> non-present | SPTE_SHARED_MASK
-> > -          non-present -> non-present | SPTE_SHARED_MASK
-> > -          non-present | SPTE_SHARED_MASK: nop
-> > +  * private EPT entry: clear SPTE_SHARED_MASK
-> >  
-> > -        shared EPT entry: set SPTE_SHARED_MASK
-> > -          present: invalid
-> > -          non-present -> non-present | SPTE_SHARED_MASK
-> > -          present | SPTE_SHARED_MASK -> present | SPTE_SHARED_MASK: nop
-> > -          non-present | SPTE_SHARED_MASK -> non-present | SPTE_SHARED_MASK: nop
-> > +    * present: nop
-> > +    * non-present: nop
-> > +    * non-present | SPTE_SHARED_MASK -> non-present (clear SPTE_SHARED_MASK)
-> >  
-> > -* map(private GPA)
-> > -        private EPT entry
-> > -          present: nop
-> > -          non-present -> present
-> > -          non-present | SPTE_SHARED_MASK: nop. looping on EPT violation(NEW)
-> > +  * shared EPT entry: zap the entry, clear SPTE_SHARED_MASK
-> >  
-> > -        shared EPT entry: nop
-> > +    * present: invalid
-> > +    * non-present -> non-present: nop
-> > +    * present | SPTE_SHARED_MASK -> non-present
-> > +    * non-present | SPTE_SHARED_MASK -> non-present
-> >  
-> > -* map(shared GPA)
-> > -        private EPT entry: nop
-> > +* map_gpa (shared GPA): Mark the region that shared GPA is allowed(NEW)
-> >  
-> > -        shared EPT entry
-> > -          present: invalid
-> > -          present | SPTE_SHARED_MASK: nop
-> > -          non-present | SPTE_SHARED_MASK -> present | SPTE_SHARED_MASK
-> > -          non-present: nop. looping on EPT violation(NEW)
-> > +  * private EPT entry: zap and set SPTE_SHARED_MASK
-> >  
-> > -* zap(private GPA)
-> > -        private EPT entry: zap the entry with keeping SPTE_SHARED_MASK
-> > -          present -> non-present
-> > -          present | SPTE_SHARED_MASK: invalid
-> > -          non-present: nop as is_shadow_present_pte() is checked
-> > -          non-present | SPTE_SHARED_MASK: nop as is_shadow_present_pte() is
-> > -                                          checked
-> > +    * present     -> non-present | SPTE_SHARED_MASK
-> > +    * non-present -> non-present | SPTE_SHARED_MASK
-> > +    * non-present | SPTE_SHARED_MASK: nop
-> >  
-> > -        shared EPT entry: nop
-> > +  * shared EPT entry: set SPTE_SHARED_MASK
-> >  
-> > -* zap(shared GPA)
-> > -        private EPT entry: nop
-> > +    * present: invalid
-> > +    * non-present -> non-present | SPTE_SHARED_MASK
-> > +    * present | SPTE_SHARED_MASK -> present | SPTE_SHARED_MASK: nop
-> > +    * non-present | SPTE_SHARED_MASK -> non-present | SPTE_SHARED_MASK: nop
-> >  
-> > -        shared EPT entry: zap
-> > -          any -> non-present
-> > -          present: invalid
-> > -          present | SPTE_SHARED_MASK -> non-present | SPTE_SHARED_MASK
-> > -          non-present: nop as is_shadow_present_pte() is checked
-> > -          non-present | SPTE_SHARED_MASK: nop as is_shadow_present_pte() is
-> > -                                          checked
-> > +* map (private GPA)
-> > +
-> > +  * private EPT entry
-> > +
-> > +    * present: nop
-> > +    * non-present -> present
-> > +    * non-present | SPTE_SHARED_MASK: nop. looping on EPT violation(NEW)
-> > +
-> > +  * shared EPT entry: nop
-> > +
-> > +* map (shared GPA)
-> > +
-> > +  * private EPT entry: nop
-> > +
-> > +  * shared EPT entry:
-> > +
-> > +    * present: invalid
-> > +    * present | SPTE_SHARED_MASK: nop
-> > +    * non-present | SPTE_SHARED_MASK -> present | SPTE_SHARED_MASK
-> > +    * non-present: nop. looping on EPT violation(NEW)
-> > +
-> > +* zap (private GPA)
-> > +
-> > +  * private EPT entry: zap the entry with keeping SPTE_SHARED_MASK
-> > +
-> > +    * present -> non-present
-> > +    * present | SPTE_SHARED_MASK: invalid
-> > +    * non-present: nop as is_shadow_present_pte() is checked
-> > +    * non-present | SPTE_SHARED_MASK: nop as is_shadow_present_pte() is
-> > +      checked
-> > +
-> > +  * shared EPT entry: nop
-> > +
-> > +* zap (shared GPA)
-> > +
-> > +  * private EPT entry: nop
-> > +
-> > +  * shared EPT entry: zap
-> > +
-> > +    * any -> non-present
-> > +    * present: invalid
-> > +    * present | SPTE_SHARED_MASK -> non-present | SPTE_SHARED_MASK
-> > +    * non-present: nop as is_shadow_present_pte() is checked
-> > +    * non-present | SPTE_SHARED_MASK: nop as is_shadow_present_pte() is
-> > +      checked
-> 
-> IMO, the state machine lists above should have used tables instead.
+This driver is currently broken, it does not show the in0_input sysfs
+file and also returns the following message on startup:
 
-Makes sense. I'll convert those into tables.
+hwmon_device_register() is deprecated. Please convert the driver to
+use hwmon_device_register_with_info().
+
+This patch converts the driver and also cleans up the 'read' function.
+
+Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
+---
+ drivers/hwmon/mcp3021.c | 99 ++++++++++++++++++++---------------------
+ 1 file changed, 49 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
+index ce2780768074..e093b1998296 100644
+--- a/drivers/hwmon/mcp3021.c
++++ b/drivers/hwmon/mcp3021.c
+@@ -7,7 +7,7 @@
+  * Reworked by Sven Schuchmann <schuchmann@schleissheimer.de>
+  * DT support added by Clemens Gruber <clemens.gruber@pqgruber.com>
+  *
+- * This driver export the value of analog input voltage to sysfs, the
++ * This driver exports the value of analog input voltage to sysfs, the
+  * voltage unit is mV. Through the sysfs interface, lm-sensors tool
+  * can also display the input voltage.
+  */
+@@ -45,19 +45,29 @@ enum chips {
+  * Client data (each client gets its own)
+  */
+ struct mcp3021_data {
+-	struct device *hwmon_dev;
++	struct i2c_client *client;
+ 	u32 vdd;        /* supply and reference voltage in millivolt */
+ 	u16 sar_shift;
+ 	u16 sar_mask;
+ 	u8 output_res;
+ };
+ 
+-static int mcp3021_read16(struct i2c_client *client)
++static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+ {
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-	int ret;
+-	u16 reg;
++	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
++}
++
++static int mcp3021_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	struct mcp3021_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
+ 	__be16 buf;
++	u16 reg;
++	int ret;
++
++	if (type != hwmon_in)
++		return -EOPNOTSUPP;
+ 
+ 	ret = i2c_master_recv(client, (char *)&buf, 2);
+ 	if (ret < 0)
+@@ -74,39 +84,46 @@ static int mcp3021_read16(struct i2c_client *client)
+ 	 */
+ 	reg = (reg >> data->sar_shift) & data->sar_mask;
+ 
+-	return reg;
+-}
++	*val = volts_from_reg(data, reg);
+ 
+-static inline u16 volts_from_reg(struct mcp3021_data *data, u16 val)
+-{
+-	return DIV_ROUND_CLOSEST(data->vdd * val, 1 << data->output_res);
++	return 0;
+ }
+ 
+-static ssize_t in0_input_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
++static umode_t mcp3021_is_visible(const void *_data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-	int reg, in_input;
++	if (type != hwmon_in)
++		return 0;
+ 
+-	reg = mcp3021_read16(client);
+-	if (reg < 0)
+-		return reg;
++	if (attr != hwmon_in_input)
++		return 0;
+ 
+-	in_input = volts_from_reg(data, reg);
+-
+-	return sprintf(buf, "%d\n", in_input);
++	return 0444;
+ }
+ 
+-static DEVICE_ATTR_RO(in0_input);
++static const struct hwmon_channel_info *mcp3021_info[] = {
++	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops mcp3021_hwmon_ops = {
++	.is_visible = mcp3021_is_visible,
++	.read = mcp3021_read,
++};
++
++static const struct hwmon_chip_info mcp3021_chip_info = {
++	.ops = &mcp3021_hwmon_ops,
++	.info = mcp3021_info,
++};
+ 
+ static const struct i2c_device_id mcp3021_id[];
+ 
+ static int mcp3021_probe(struct i2c_client *client)
+ {
+-	int err;
+ 	struct mcp3021_data *data = NULL;
+ 	struct device_node *np = client->dev.of_node;
++	struct device *hwmon_dev;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+@@ -147,34 +164,17 @@ static int mcp3021_probe(struct i2c_client *client)
+ 		break;
+ 	}
+ 
++	data->client = client;
++
+ 	if (data->vdd > MCP3021_VDD_REF_MAX || data->vdd < MCP3021_VDD_REF_MIN)
+ 		return -EINVAL;
+ 
+-	err = sysfs_create_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-	if (err)
+-		return err;
+-
+-	data->hwmon_dev = hwmon_device_register(&client->dev);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		err = PTR_ERR(data->hwmon_dev);
+-		goto exit_remove;
+-	}
+-
+-	return 0;
+-
+-exit_remove:
+-	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-	return err;
+-}
+-
+-static int mcp3021_remove(struct i2c_client *client)
+-{
+-	struct mcp3021_data *data = i2c_get_clientdata(client);
+-
+-	hwmon_device_unregister(data->hwmon_dev);
+-	sysfs_remove_file(&client->dev.kobj, &dev_attr_in0_input.attr);
+-
+-	return 0;
++	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
++							 client->name,
++							 data,
++							 &mcp3021_chip_info,
++							 NULL);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+ 
+ static const struct i2c_device_id mcp3021_id[] = {
+@@ -199,7 +199,6 @@ static struct i2c_driver mcp3021_driver = {
+ 		.of_match_table = of_match_ptr(of_mcp3021_match),
+ 	},
+ 	.probe_new = mcp3021_probe,
+-	.remove = mcp3021_remove,
+ 	.id_table = mcp3021_id,
+ };
+ 
+
+base-commit: 9f6ca00b5be47e471e9703e6b017e1e2cfa7f604
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.30.2
+

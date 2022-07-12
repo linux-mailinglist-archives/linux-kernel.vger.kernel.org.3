@@ -2,199 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD066571A7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAEF571A81
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiGLMvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S233296AbiGLMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiGLMvM (ORCPT
+        with ESMTP id S233286AbiGLMwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:51:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CB84D15C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:51:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D04DB81865
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8DBC385A2;
-        Tue, 12 Jul 2022 12:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657630268;
-        bh=gf3Kh9mGjGhhDRkCSjil3HxV2z0Hza6K7hRiT1t8UU0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eICNQS0eU6+uLjgcbP0KlGBORCgUlRVgfXxIqlvx9aunc2ermkOqca6ZEGo/u20DZ
-         h/v/s7zMewE8b4/YXDmX2qFt8jNfPXAUHozEtGhDtg9Kbk/zFmNCJ/u1kw48nhI+XN
-         89FmgjoZBM2njZdtglGmjm8xxSOq+c+yqvMhJAMJ1AW80MzO4V3qSsdufxDEh0EbFg
-         9RjhETP0qv+HL9EtYW+TrWMpuAiVU/yA9NO8NrZU+nazgbStMbH0ZYei1JXG32dVZ0
-         pZjGnCbB4j6Q+XIzgVe+KFP9//lv08FB6Rz2ZKt6Q83zTmcgb8BrAVvP35MvhojOk4
-         p0GBbQ/MxfdbA==
-Message-ID: <c49403fb-119c-f363-8a67-a5f1f535bb1c@kernel.org>
-Date:   Tue, 12 Jul 2022 20:51:03 +0800
+        Tue, 12 Jul 2022 08:52:09 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE5F32EF0;
+        Tue, 12 Jul 2022 05:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657630328; x=1689166328;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U2Un04XVTmq4xkp4/4A5znANGKPLAF6CfLJmOF8T2vQ=;
+  b=WUh62GntfmIVriD0qG3ScSCnQmITP8wbNooeI9m0WWvX5RQ4vWPelNDP
+   fjPAHPCC+oahxRlU68MefjN2073MOcWYwP78zF5n+X2+rb9fOiefW8ImI
+   mFiJxFRPVDT4uMR1HdY9Bty6FXa65Ufoi1JIFePhUtLBuTOPqc32DuPe8
+   U=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 12 Jul 2022 05:52:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 05:52:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 12 Jul 2022 05:52:07 -0700
+Received: from [10.216.22.118] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Jul
+ 2022 05:52:03 -0700
+Message-ID: <78aeec99-60d4-c495-0623-c9450621d23b@quicinc.com>
+Date:   Tue, 12 Jul 2022 18:21:59 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] f2fs: add some sysfs nodes for segment
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Guowei Du <duguoweisz@gmail.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, duguowei <duguowei@xiaomi.com>
-References: <20220706020615.29938-1-duguoweisz@gmail.com>
- <YszRrHHqLk4My3vO@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YszRrHHqLk4My3vO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/91.10.0
+Subject: Re: [V4] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
+ otherwise could return a sub-optimal clock rate.
+Content-Language: en-CA
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <1657560808-9795-1-git-send-email-quic_vnivarth@quicinc.com>
+ <CAD=FV=U20bzea7qzuMCgrAApFqBZ_sc9QsRdUZ_xX4ptRas-0w@mail.gmail.com>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <CAD=FV=U20bzea7qzuMCgrAApFqBZ_sc9QsRdUZ_xX4ptRas-0w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/12 9:43, Jaegeuk Kim wrote:
-> On 07/06, Guowei Du wrote:
->> From: duguowei <duguowei@xiaomi.com>
->>
->> There are two ways to show meta segment information,
->> one is by dump.f2fs, another is by sysfs node. But,
->> sometimes dump needs root privilege,So adding a
->> few sysfs nodes.
 
-If this is used for debug, how about checking /sys/kernel/debug/f2fs/status?
-
-Thanks,
-
+On 7/11/2022 11:35 PM, Doug Anderson wrote:
+> Hi,
+>
+> On Mon, Jul 11, 2022 at 10:33 AM Vijaya Krishna Nivarthi
+> <quic_vnivarth@quicinc.com> wrote:
+>> In the logic around call to clk_round_rate(), for some corner conditions,
+>> get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
+>> exact clock rate was not found lowest clock was being returned.
 >>
->> The generic permission of node is 0444(S_IRUGO).
+>> Search for suitable clock rate in 2 steps
+>> a) exact match or within 2% tolerance
+>> b) within 5% tolerance
+>> This also takes care of corner conditions.
 >>
->> $ cd /sys/fs/f2fs/DEVICE/...
->> $ ls -l
->> ...
->> -r--r--r-- 1 root root 4096 7月   5 23:21 reserved_segments
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count_ckpt
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count_main
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count_nat
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count_sit
->> -r--r--r-- 1 root root 4096 7月   5 23:21 segment_count_ssa
->> ...
->>
->> $ sudo dump.f2fs -d 1 DEVICE
->> ...
->> Super block
->> segment_count                           [0x      26 : 38]
->> segment_count_ckpt                      [0x       2 : 2]
->> segment_count_sit                       [0x       2 : 2]
->> segment_count_nat                       [0x       2 : 2]
->> segment_count_ssa                       [0x       1 : 1]
->> segment_count_main                      [0x      1f : 31]
->> ...
->> Checkpoint
->> rsvd_segment_count                      [0x       e : 14]
->> ...
->>
->> Signed-off-by: duguowei <duguowei@xiaomi.com>
+>> Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
+>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 >> ---
->>   fs/f2fs/sysfs.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 63 insertions(+)
+>> v4: replaced pr_dbg calls with dev_dbg
+>> v3: simplified algorithm further, fixed robot compile warnings
+>> v2: removed minor optimisations to make more readable
+>> v1: intial patch contained slightly complicated logic
+>> ---
+>>   drivers/tty/serial/qcom_geni_serial.c | 89 +++++++++++++++++++++--------------
+>>   1 file changed, 54 insertions(+), 35 deletions(-)
 >>
->> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
->> index 4c50aedd5144..05350bba2c83 100644
->> --- a/fs/f2fs/sysfs.c
->> +++ b/fs/f2fs/sysfs.c
->> @@ -697,6 +697,55 @@ static ssize_t f2fs_sb_feature_show(struct f2fs_attr *a,
->>   	return sprintf(buf, "unsupported\n");
+>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+>> index 2e23b65..f88b042 100644
+>> --- a/drivers/tty/serial/qcom_geni_serial.c
+>> +++ b/drivers/tty/serial/qcom_geni_serial.c
+>> @@ -943,52 +943,71 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+>>          return 0;
 >>   }
->>   
->> +static ssize_t segment_count_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count));
+>>
+>> -static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+>> -                       unsigned int sampling_rate, unsigned int *clk_div)
+>> +static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
+>> +                       unsigned int *clk_div, unsigned int percent_tol)
+>>   {
+>> -       unsigned long ser_clk;
+>> -       unsigned long desired_clk;
+>> -       unsigned long freq, prev;
+>> +       unsigned long freq;
+>>          unsigned long div, maxdiv;
+>> -       int64_t mult;
+>> -
+>> -       desired_clk = baud * sampling_rate;
+>> -       if (!desired_clk) {
+>> -               pr_err("%s: Invalid frequency\n", __func__);
+>> -               return 0;
+>> -       }
+>> +       u64 mult;
+>> +       unsigned long offset, abs_tol, achieved;
+>>
+>> +       abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
+>>          maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+>> -       prev = 0;
+>> -
+>> -       for (div = 1; div <= maxdiv; div++) {
+>> -               mult = div * desired_clk;
+>> -               if (mult > ULONG_MAX)
+>> +       div = 1;
+>> +       while (div <= maxdiv) {
+>> +               mult = (u64)div * desired_clk;
+>> +               if (mult != (unsigned long)mult)
+>>                          break;
+>>
+>> -               freq = clk_round_rate(clk, (unsigned long)mult);
+>> -               if (!(freq % desired_clk)) {
+>> -                       ser_clk = freq;
+>> -                       break;
+>> -               }
+>> +               offset = div * abs_tol;
+>> +               freq = clk_round_rate(clk, mult - offset);
+>>
+>> -               if (!prev)
+>> -                       ser_clk = freq;
+>> -               else if (prev == freq)
+>> +               /* Can only get lower if we're done */
+>> +               if (freq < mult - offset)
+>>                          break;
+>>
+>> -               prev = freq;
+>> +               /*
+>> +                * Re-calculate div in case rounding skipped rates but we
+>> +                * ended up at a good one, then check for a match.
+>> +                */
+>> +               div = DIV_ROUND_CLOSEST(freq, desired_clk);
+>> +               achieved = DIV_ROUND_CLOSEST(freq, div);
+>> +               if (achieved <= desired_clk + abs_tol &&
+>> +                   achieved >= desired_clk - abs_tol) {
+>> +                       *clk_div = div;
+>> +                       return freq;
+>> +               }
+>> +
+>> +               div = DIV_ROUND_UP(freq, desired_clk);
+>>          }
+>>
+>> -       if (!ser_clk) {
+>> -               pr_err("%s: Can't find matching DFS entry for baud %d\n",
+>> -                                                               __func__, baud);
+>> -               return ser_clk;
+>> +       return 0;
 >> +}
 >> +
->> +static ssize_t segment_count_ckpt_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
+>> +static unsigned long get_clk_div_rate(struct clk *clk, struct device *dev,
+>> +               unsigned int baud, unsigned int sampling_rate, unsigned int *clk_div)
 >> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count_ckpt));
->> +}
+>> +       unsigned long ser_clk;
+>> +       unsigned long desired_clk;
 >> +
->> +static ssize_t segment_count_sit_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count_sit));
->> +}
+>> +       desired_clk = baud * sampling_rate;
+>> +       if (!desired_clk) {
+>> +               dev_dbg(dev, "Invalid frequency\n");
+>> +               return 0;
+>>          }
+>>
+>> -       *clk_div = ser_clk / desired_clk;
+>> -       if (!(*clk_div))
+>> -               *clk_div = 1;
+>> +       /*
+>> +        * try to find a clock rate within 2% tolerance, then within
+>> +        */
+>> +       ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
+>> +       if (!ser_clk)
+>> +               ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
 >> +
->> +static ssize_t segment_count_nat_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count_nat));
->> +}
->> +
->> +static ssize_t segment_count_ssa_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count_ssa));
->> +}
->> +
->> +static ssize_t segment_count_main_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(F2FS_RAW_SUPER(sbi)->segment_count_main));
->> +}
->> +
->> +static ssize_t reserved_segments_show(struct f2fs_attr *a,
->> +		struct f2fs_sb_info *sbi, char *buf)
->> +{
->> +	return sprintf(buf, "%llu\n",
->> +			(unsigned long long)(reserved_segments(sbi)));
->> +}
-> 
-> Can we create a macro to do the above functions?
-> 
->> +
->>   #define F2FS_SB_FEATURE_RO_ATTR(_name, _feat)			\
->>   static struct f2fs_attr f2fs_attr_sb_##_name = {		\
->>   	.attr = {.name = __stringify(_name), .mode = 0444 },	\
->> @@ -801,6 +850,13 @@ F2FS_GENERAL_RO_ATTR(moved_blocks_background);
->>   F2FS_GENERAL_RO_ATTR(moved_blocks_foreground);
->>   F2FS_GENERAL_RO_ATTR(avg_vblocks);
->>   #endif
->> +F2FS_GENERAL_RO_ATTR(segment_count);
->> +F2FS_GENERAL_RO_ATTR(segment_count_ckpt);
->> +F2FS_GENERAL_RO_ATTR(segment_count_sit);
->> +F2FS_GENERAL_RO_ATTR(segment_count_nat);
->> +F2FS_GENERAL_RO_ATTR(segment_count_ssa);
->> +F2FS_GENERAL_RO_ATTR(segment_count_main);
->> +F2FS_GENERAL_RO_ATTR(reserved_segments);
->>   
->>   #ifdef CONFIG_FS_ENCRYPTION
->>   F2FS_FEATURE_RO_ATTR(encryption);
->> @@ -934,6 +990,13 @@ static struct attribute *f2fs_attrs[] = {
->>   	ATTR_LIST(gc_reclaimed_segments),
->>   	ATTR_LIST(max_fragment_chunk),
->>   	ATTR_LIST(max_fragment_hole),
->> +	ATTR_LIST(segment_count),
->> +	ATTR_LIST(segment_count_ckpt),
->> +	ATTR_LIST(segment_count_sit),
->> +	ATTR_LIST(segment_count_nat),
->> +	ATTR_LIST(segment_count_ssa),
->> +	ATTR_LIST(segment_count_main),
->> +	ATTR_LIST(reserved_segments),
->>   	NULL,
->>   };
->>   ATTRIBUTE_GROUPS(f2fs);
->> -- 
->> 2.36.1
+>> +       if (!ser_clk)
+>> +               dev_err(dev, "Couldn't find suitable clock rate for %d\n", desired_clk);
+>> +       else
+>> +               dev_dbg(dev, "desired_clk-%d, ser_clk-%d, clk_div-%d\n",
+>> +                               desired_clk, ser_clk, *clk_div);
+> Pretty sure the robot is going to yell at you again here. Here is my
+> analysis in detail:
+>
+> desired_clk
+> * type: unsigned long
+> * proper format code: %lu
+> * marginally acceptable code: %ld
+> * format code you used in v3: %lu
+> * did robot yell at you about this in v3: no
+> * format code you used in v4: %d
+> * will robot yell at you in v4: YES
+>
+> ser_clk:
+> * type: unsigned long
+> * proper format code: %lu
+> * marginally acceptable code: %ld
+> * format code you used in v3: %lu
+> * did robot yell at you about this in v3: no
+> * format code you used in v4: %d
+> * will robot yell at you in v4: YES
+>
+> *clk_div:
+> * type: unsigned int
+> * proper format code: %u
+> * marginally acceptable code: %d
+> * format code you used in v3: %lu
+> * did robot yell at you about this in v3: YES
+> * format code you used in v4: %d
+> * will robot yell at you in v4: no
+> * should you change it to %u: yes
+>
+>
+> -Doug
+Thank you very much.
+For some reason robot seems to be more forgiving towards dev_funcs than 
+pr_funcs, at least it did not yell at v4.
+
+Also I found usage of %d for uls at many locations.
+
+Made the changes and uploaded V5.
+
+-Vijay/
+
+

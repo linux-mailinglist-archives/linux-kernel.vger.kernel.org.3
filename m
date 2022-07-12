@@ -2,306 +2,471 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54447572752
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2317D572754
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiGLUdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S231299AbiGLUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGLUdt (ORCPT
+        with ESMTP id S230351AbiGLUeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:33:49 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5D8B4A4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:33:46 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CKTSat003982;
-        Tue, 12 Jul 2022 20:31:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=yvii7AsFKlHLHw7x4oCkw0zrJvp6OqeyJeG3nn7LKdk=;
- b=zRpgQth4ROPrETDlMYdIwe+ooKNAS9J8njvDtqOmQE8Xe1czvFm+MDPg+IQYu8DBYEIb
- pn47tyiA8KnWgiT+Rc7/sAVWoMtqLrHh/B2xfaF6dVHzCWvtjxNeuGpx+U18u3McD1GW
- Dy3ki+tWzbqjda6tH1+iAjRL07hQdebPoNEfvhsjGjxze91/MCsOkf2GJxphzH7zcwLW
- h7kSf4PzKJqlehcTeQzM335U7JvD6qX7TSdjBG6GFymzD+1uYYH7pWJK2a8iKJE5JHqL
- XcbNuEr5d4m/xccsvQ5EpyAi/G2HsnKQKOzSPA3xuVkYkCP38AzYTF56cahh/czPYQRR /Q== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71xrg884-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 20:31:22 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26CKBZFT013991;
-        Tue, 12 Jul 2022 20:31:22 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2045.outbound.protection.outlook.com [104.47.56.45])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h70440s88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 20:31:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YD9wBov/IUdL+Czw+7RTXwN5hHc9fmfO69wQQ+wwvp1ZYkmhZENeKHNtT5V20WaK/zRbEFBDhZFQ+9Wk0ORnu6rRB+o4Gz6UWxWZQEjMe+GaGg2BZ1wQ3Z9097yfsCb7sn4xAJCDqyIANVMGbiRfPiUvlCnoLDNJ3QIx1JvscBqhI3lStmNCiDLvuZqr/Tloq87y65RFGTRoaLlYMNeU4ni4StZppb4dFXM1E+1xzWtxeIii+pFgd2aJBgX1NRY/q3IDIZtbbRXbQa1me51FdXXj/cdUuT88s3HO0knxEKyX5Z8pSz929Z16ItskCzvM39uEBG5S5TJHMa2yjPZAsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yvii7AsFKlHLHw7x4oCkw0zrJvp6OqeyJeG3nn7LKdk=;
- b=aidDdN5FJeBMLOU7t6Q8hRndGuwK+hqGXvvi5h7HGwEsZ6MaUz7C9fAWnW14V7I10245Ty9FWc/wLddOHKWAdctRU5KeIfSFK4BDY19BiqbbhBQ4+KmoRaL/ngQr3CyM07OgrPvaNMBfvmSEagD56Xbvev4vgvVteUdZ8dHbtAzovd2tAi7wMFUQQjx4l6wCehJICwYsaUX3ip+voGrtZtE1kPsLf6yUb9i7N4lhrLwaei1XQ5DncFzsJbJz8VAb0s7QWs0Smnyq6hb+dylqrxRkVEA5AW41Sa81qOB1O4NWgjcQ8FAVHn/puIEG2qExsdytBobGWmwUbr5ky3QwGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yvii7AsFKlHLHw7x4oCkw0zrJvp6OqeyJeG3nn7LKdk=;
- b=dZZLXf9cfXtYFEzIR7dOICU6Fu6sgZRRlBsOZc0HWYQO4fzT2RFyyqe4mHrwi8+tjdO46rblHNTmtMDISXfaWTbw6jFwLltobtz9SfjQ2hts20YRfAM/bDYV9MIjks+H08xgdyBtXAlB3sGhnHtY+2L09y5GFKB3V3LrPdhN2Nc=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by PH7PR10MB6036.namprd10.prod.outlook.com (2603:10b6:510:1fc::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
- 2022 20:31:19 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::747b:31f7:db5e:9e0d]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::747b:31f7:db5e:9e0d%3]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 20:31:19 +0000
-Message-ID: <cd0f60ef-9c1a-69c4-2971-df5b2c43cc21@oracle.com>
-Date:   Tue, 12 Jul 2022 15:31:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v9 7/7] x86/crash: Add x86 crash hotplug support
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Sourabh Jain <sourabhjain@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220613224240.79400-1-eric.devolder@oracle.com>
- <20220613224240.79400-8-eric.devolder@oracle.com>
- <94f5e036-770d-4ca5-c386-9a43e7333b43@linux.ibm.com>
- <e96c42ee-7a14-3565-16cd-dbf7cf163c21@oracle.com>
- <Ysv0BEMOmN/WnhVg@MiWiFi-R3L-srv>
-From:   Eric DeVolder <eric.devolder@oracle.com>
-In-Reply-To: <Ysv0BEMOmN/WnhVg@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DM6PR03CA0072.namprd03.prod.outlook.com
- (2603:10b6:5:100::49) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0c429e62-b8aa-4ad6-f3d2-08da644579f1
-X-MS-TrafficTypeDiagnostic: PH7PR10MB6036:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IjsnCB0dq4M6bPuQ3LuDgnkBRrHcwNtsn6a7VO8etPznbfNKYPStrbd9cMTRtrToc97u/3iAKKrBCrv4wdYGExs4Mzi4wF+OS0+TDPz3BlRBNSRSPGQgJb7Bhmot2Yeu2VdVxz8xBDy0oawGb8Hu1/8uC4gOsN45VsHhdSkpI0g2eKGQx5L2qRoxFwgFB6PRzGOzxUP2YEplqj3eQy7qepCOnkGj1d752aWnlaAJG1jD7c31ODErWucVttwGYYAEvZcjNyuUn+yDxwwVLoNsB/8g2H7BgbfoWZCAKYJCGasRYjPpqLneS7w5w9JbeHIO0q5wSCrEO0JyzUbiLBVFBVqveLGH0zaWq+LeLY56xDPJZqu164Ysy9CZJKfGXI+OmPEVcM7fOFif4iNW4JFWZUcZqntfDONMp0/X38XECAwtDoNM3B2MdDKk35pqUTIfOjtohCqvyykBrHfr+rfHkgiVBMal39voQP+13Lbb/iVbkacOEs+PMAcdKxrFPqtWwdmjJLj2XZf1mQxqxjri4WX6Mp8wuszibqD/F8xtjg+sGJnCkLcGYJp3g1JXZ0ixjuq0g4JgdsoOqJqlFQlc55drsDAdcNKMi3i4rs3U9QzMcum0qH70yQ63MgwXUW8g5fXezAB2Jg1IW41qmRvt+0nK6O9fw8fNGtXzAiT1yDFfNCiBhnOLyBTB5+zP8YV9Yg6Bp+zp4yG7hw0vcwvyn8+sIDORJGea1nmVIOcHqxDpIFEmz3FMOiHT8erDlTt1OqYUtyDoBHqGaspn1cVfCwdNBzk3kGwBhim4yO+XbmaRI3yToWR27Crg+Hk75CsNAASzr/Wcr5sKdE+dLVY44w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(39860400002)(366004)(376002)(6666004)(6506007)(41300700001)(66946007)(478600001)(66476007)(316002)(6486002)(53546011)(6916009)(31686004)(8936002)(8676002)(2906002)(66556008)(7416002)(4326008)(5660300002)(107886003)(36756003)(86362001)(186003)(31696002)(6512007)(2616005)(38100700002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUE4QWZpeGtiUm0vczh6NElnYllweiswZk9mdEF3QUpxNDJ6RWZSQjFUZHFs?=
- =?utf-8?B?OU43blNmdmJFaU1NZHJTb2xXaUpHbEVMamJmcnl3SjV2QXdNRlluU2hvODRZ?=
- =?utf-8?B?Y3BKSStEeDU2M0ZZQXduVVpRL1dYSGhqYm5OaXhualByVlBFbS9TREx4eFdZ?=
- =?utf-8?B?UlZjcXhESUZxVDdlNUptSG1qd0txR05kZlFXN0tTOVJHeXQ4eTNMUTBNdW00?=
- =?utf-8?B?Q2VQMWRZekVwK2tqTkZORThXR1FPR1NXRUFkUlgzQWExbFJkNkNuQUlYRDlM?=
- =?utf-8?B?RWdDZXZJWTVjOHVHeVlBWnBEZkc0WjNiTENaMEVnT1dTZWhuMHZyOER0eDZq?=
- =?utf-8?B?bVFGY3BqWUJrRmsrV0RxSDBycEhHcTVSQStwNjV5V0RPaFlhK3JQbUZKcEQy?=
- =?utf-8?B?M3FObkUxUEJmR0xKSDdiYTVQQjZJZkVQaGpXbStteTVpbUhOSWNiMDhVdjlJ?=
- =?utf-8?B?RFgxVkUwaWlaMWU5OThIRURMZjc0L2M1Vm5sUmJOTTBObVpkQWVYY1NyUm1r?=
- =?utf-8?B?Mmhqd1YxNXZ0R2xaSTNnVk9BZ3AwaklRSnEzUllSMHkvUi9LbWREcjB6aFpN?=
- =?utf-8?B?U3NPNEVnRE41RTU5KzdiK2l6cjczNUdiQ3g3UzdqTjZ4OU1hYlovSWs5RUxa?=
- =?utf-8?B?THVnTEEyNjMvMmhSVG9Oc3lpZCs5L0lBczR3UEw5M2ZLNEM3YWJQUVgrWXlr?=
- =?utf-8?B?aUJQdUx1ZTNiT2JOaThOd20vSW1pTkl2aUNNRWZLYS9oUlRuM0tiUmh3SnIr?=
- =?utf-8?B?NFdHR1FiZENzOTZMZFUxekd0ODZlbDhlUGJSbC9RbVJHSWM4OXgxMkM2bDVE?=
- =?utf-8?B?N2FqWm1KVk9KeFhpUWpkbmZMRjBUckNqSEpqaUJreGVhcmRqdG4yZTVqUGhB?=
- =?utf-8?B?Y1R2Ym1sRWpWRjRBb3NkSGxTMWZITDk1RkR4N0pnQ2Q0YTJqbURtUXAySHV2?=
- =?utf-8?B?WlBCRWpoT3c4MjF1a0dseU80dnNaZjJ1MFhscGxpMlRJNHlTTWliZysyaHBJ?=
- =?utf-8?B?QnR2cVBjUUFkUmlITnhaTkNGeXZhT2ppZmcvQmx3RU45dHgyMXd5ekxpREpD?=
- =?utf-8?B?alZ3cXlNK2l1NHFuMmE4eENHMENFTjVnMUVUWWZoUklqTkI0T0kzM0F1dXZ4?=
- =?utf-8?B?NjllSGs0RWVQazdVem53VEZtM1JIVGtodjU0a0pBY2xPSXhuMVc2OFpGa3RZ?=
- =?utf-8?B?TlhBWHo3MGFYNTRqUFpWZTIzK2d6VC9TUm1TVmdDOURRZm9lMGV3Uk1CNUQ5?=
- =?utf-8?B?MFJVcmNPRlFQT0Z6MDBSdjNBZzRUeWtSaUdhRUpKSTA1bjlVVUhFVG5lQWlm?=
- =?utf-8?B?Vyt0ZmlXVTlaRHVCUmpYa1FZajFIY3QrT3VHZjJFVEttN3FTYjg0blZGRitK?=
- =?utf-8?B?bWJleklvOVU5NTBUN1RleTNXVS8vU2lJbkxEQ053K2x2aTZXNzN0QkptR2VD?=
- =?utf-8?B?bW1QaEpmQ0NGU0xmVmZaWVc3K0VHS1VjSG5nalJ1bXJoSlBteXBQaC8wWDVr?=
- =?utf-8?B?Sy85NVhNTW9zVkwrVzF0alNvRkFzV0padjJxMFFmMXhsYVNuRnNSczk0Q2U4?=
- =?utf-8?B?dmY2bE1NRmM4UERXY0pacVk2VGRnWUM4M0ZScU5WSjJCMmZzdUtyWXcwaGYz?=
- =?utf-8?B?WUhMNUFMZzFucDRuRHV5TGNrWkVNdEdXcXlWVVErc2dlajYzZFFLcThUTDNP?=
- =?utf-8?B?WmNkZGhrSkszVmJJREhPV0w2ZEJ5NDMrUGNMQzBtU3l3OWNFeEpRTjdnM3RZ?=
- =?utf-8?B?TnVROC9vbm5JeGZKYjY5ait2c2RjVlkzaWhJL29jSlVNaG0walVtQ29pbERh?=
- =?utf-8?B?bjVVN2FXM0VXek53WWpDRjNOT2xYY2dNOE5DKzE1YjlJdjhQQW5QbS9YVkFK?=
- =?utf-8?B?SFN6ZTBQSFBxamVYOU9KaGdsVVlxQi9WOGRka0RsVDRqWWJQQjBvMGxoQXB4?=
- =?utf-8?B?M0d4dGZPSk85WUtmQmxFdWpNRDhkcTNQODgrRDhRVnFDUVZUSjVtMG9XcU5w?=
- =?utf-8?B?UTdRNTZNcXZUc2dPNzh0WmJsYlc5cHV0bVNnN21JLzZHY3oyOURNaUFzWkQ4?=
- =?utf-8?B?SDVDM3MrcHArVkwvNHZvT2g4S1l0TEIwMlc1L0lmcHRXbWhCUTc3Zy85TnNH?=
- =?utf-8?B?NEc0REViK3lqMWdjS2hwK2tqaFk1SzZtNnllY09pd09SZEdkKzdJUUVkMFlG?=
- =?utf-8?Q?k8InSFyXgJIXBprP7lMO5ek=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c429e62-b8aa-4ad6-f3d2-08da644579f1
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 20:31:19.1516
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OS4UjpIWAdApcFol1eQRadWJlGSZBKnm/AEdfShrK2dRXcL3bSxqSEa7CLuuv8LXAsu5mETS2/vFs/v5cVvZ5szL0HqeVN0nWDYl5Q2p74s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6036
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-07-12_12:2022-07-12,2022-07-12 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120082
-X-Proofpoint-GUID: NABIIOeQtep1iKYOm2ZBCSLLYrd89BBI
-X-Proofpoint-ORIG-GUID: NABIIOeQtep1iKYOm2ZBCSLLYrd89BBI
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 16:34:02 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999FE21E1F;
+        Tue, 12 Jul 2022 13:33:59 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 64A09C01E; Tue, 12 Jul 2022 22:33:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657658038; bh=C5F3rSQ7GqIANd5Bt9J8Do3iD0oialhIYzeN1rNK98U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=plKCc2lAwLbjXpJUqFL+6wGMu3chpxMzhwvfY+4LijSlom5q1ZFpCApPBOSr0V5Qg
+         0mk36G/jHorbMrqivl8Hcxqy9p8QkbrCRY7qaFPQUTGK5svaY4RPAu3aRNB5zKyJtF
+         qCUTVKU+1p3lzzA5SLForMdgvdGyOC9/fEublQ9jAsGwp9tp3WzgpTcWnpIdMH6GmF
+         kmwJbgFEPFmV4IGG6KSDu3/SBqMxoHutzhS2j2GiRILS8hejVbcrDwptUnkj2el67r
+         bJtcHoyIxUSO7WZaNzg22n16CMG31acQ109IgpV13Ar/SxIULh0dPpDKVuNxmrwQkj
+         fK27SDtGKTPow==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 4371EC009;
+        Tue, 12 Jul 2022 22:33:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657658035; bh=C5F3rSQ7GqIANd5Bt9J8Do3iD0oialhIYzeN1rNK98U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sxXn7Tn63jw18ZRLEkuGV7tM/0hbMBT6Gekzbju/A01d2VYBufV+pY6ncXc1TDYn0
+         0B9T6Ne7AXuswTSeDgYifyuX6RiBSk8JZsp6k7qD2iZ9DpFQCHV5kl0087ggW8Wnr8
+         P38QC++nxtZH8O9/8+HEh5K5NNP7YDRZC0NwoDwggrbX4mXnLahhaCWVbZ7NnQ9hr7
+         BRaJ3uPASF9c4jaYTU5q1zP+L6rCYOuREkDxIO5oJFVewhBXIAQDgTbbtHAUomw9kV
+         9Kzzj9UJu+FcyTf5eVsb6ROqj1MpCkpp/nfdqd9EwNCEBx99AqkrTLS7XBktiN9jHz
+         uaRLZyb123oug==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c1db48ba;
+        Tue, 12 Jul 2022 20:33:49 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 05:33:34 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [PATCH v5 03/11] 9p/trans_virtio: introduce struct virtqueue_sg
+Message-ID: <Ys3antr+zrP5eQ1Z@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+ <862eef0d6d4b14faaea0d2aab982a3c8dfd8056b.1657636554.git.linux_oss@crudebyte.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <862eef0d6d4b14faaea0d2aab982a3c8dfd8056b.1657636554.git.linux_oss@crudebyte.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:16PM +0200:
+> The amount of elements in a scatter/gather list is limited to
+> approximately 128 elements. To allow going beyond that limit
+> with subsequent patches, pave the way by turning the one-
+> dimensional sg list array into a two-dimensional array, i.e:
+> 
+>   sg[128]
+> 
+> becomes
+> 
+>   sgl[nsgl][SG_MAX_SINGLE_ALLOC]
+> 
+> As the value of 'nsgl' is exactly (still) 1 in this commit
+> and the compile-time (compiler and architecture dependent)
+> value of 'SG_MAX_SINGLE_ALLOC' equals approximately the
+> previous hard coded 128 elements, this commit is therefore
+> more of a preparatory refactoring then actual behaviour
+> change.
+> 
+> A custom struct virtqueue_sg is defined instead of using
+> shared API struct sg_table, because the latter would not
+> allow to resize the table after allocation. sg_append_table
+> API OTOH would not fit either, because it requires a list
+> of pages beforehand upon allocation. And both APIs only
+> support all-or-nothing allocation.
+> 
+> Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> ---
+> 
+> The question is whether that should really become 9p specifc SG list
+> code, or whether it should rather be squeezed into shared SG list code
+> base. Opinions by maintainers needed.
+
+hmm from the 9p side I'd say the type is simple enough that we can just
+keep it here; most people don't want to resize these lists...
+
+How much do you care about the all-or-nothing case you described in this
+commit message? From the look of it, patch 6 -- at what point did you
+actually see this being useful?
+
+>  net/9p/trans_virtio.c | 193 ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 147 insertions(+), 46 deletions(-)
+> 
+> diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
+> index 18bdfa64b934..f63cd1b08bca 100644
+> --- a/net/9p/trans_virtio.c
+> +++ b/net/9p/trans_virtio.c
+> @@ -36,7 +36,31 @@
+>  #include <linux/virtio_9p.h>
+>  #include "trans_common.h"
+>  
+> -#define VIRTQUEUE_DEFAULT_NUM	128
+> +/**
+> + * struct virtqueue_sg - (chained) scatter gather lists for virtqueue data
+> + * transmission
+> + * @nsgl: amount of elements (in first dimension) of array field @sgl
+> + * @sgl: two-dimensional array, i.e. sgl[nsgl][SG_MAX_SINGLE_ALLOC]
+> + */
+> +struct virtqueue_sg {
+> +	unsigned int nsgl;
+> +	struct scatterlist *sgl[];
+> +};
+> +
+> +/*
+> + * Default value for field nsgl in struct virtqueue_sg, which defines the
+> + * initial virtio data transmission capacity when this virtio transport is
+> + * probed.
+> + */
+> +#define VIRTQUEUE_SG_NSGL_DEFAULT 1
+> +
+> +/* maximum value for field nsgl in struct virtqueue_sg */
+> +#define VIRTQUEUE_SG_NSGL_MAX						\
+> +	((PAGE_SIZE - sizeof(struct virtqueue_sg)) /			\
+> +	sizeof(struct scatterlist *))					\
+> +
+> +/* last entry per sg list is used for chaining (pointer to next list) */
+> +#define SG_USER_PAGES_PER_LIST	(SG_MAX_SINGLE_ALLOC - 1)
+>  
+>  /* a single mutex to manage channel initialization and attachment */
+>  static DEFINE_MUTEX(virtio_9p_lock);
+> @@ -53,8 +77,7 @@ static atomic_t vp_pinned = ATOMIC_INIT(0);
+>   * @ring_bufs_avail: flag to indicate there is some available in the ring buf
+>   * @vc_wq: wait queue for waiting for thing to be added to ring buf
+>   * @p9_max_pages: maximum number of pinned pages
+> - * @sg: scatter gather list which is used to pack a request (protected?)
+> - * @sg_n: amount of elements in sg array
+> + * @vq_sg: table of scatter gather lists, which are used to pack a request
+>   * @chan_list: linked list of channels
+>   *
+>   * We keep all per-channel information in a structure.
+> @@ -77,9 +100,7 @@ struct virtio_chan {
+>  	 * will be placing it in each channel.
+>  	 */
+>  	unsigned long p9_max_pages;
+> -	/* Scatterlist: can be too big for stack. */
+> -	struct scatterlist *sg;
+> -	size_t sg_n;
+> +	struct virtqueue_sg *vq_sg;
+>  	/**
+>  	 * @tag: name to identify a mount null terminated
+>  	 */
+> @@ -96,6 +117,92 @@ static unsigned int rest_of_page(void *data)
+>  	return PAGE_SIZE - offset_in_page(data);
+>  }
+>  
+> +/**
+> + * vq_sg_page - returns user page for given page index
+> + * @vq_sg: scatter gather lists used by this transport
+> + * @page: user page index across all scatter gather lists
+> + */
+> +static struct scatterlist *vq_sg_page(struct virtqueue_sg *vq_sg, size_t page)
+> +{
+> +	unsigned int node = page / SG_USER_PAGES_PER_LIST;
+> +	unsigned int leaf = page % SG_USER_PAGES_PER_LIST;
+> +	BUG_ON(node >= VIRTQUEUE_SG_NSGL_MAX);
+
+probably awnt to check with vq_sg->sg_n instead?
+(we already check sg_n <= MAX on alloc)
 
 
-On 7/11/22 04:57, Baoquan He wrote:
-> On 07/07/22 at 07:55am, Eric DeVolder wrote:
->>
->>
->> On 6/20/22 00:06, Sourabh Jain wrote:
->>> Hello Eric,
->>>
->>> On 14/06/22 04:12, Eric DeVolder wrote:
->>>> For x86_64, when CPU or memory is hot un/plugged, the crash
->>>> elfcorehdr, which describes the CPUs and memory in the system,
->>>> must also be updated.
->>>>
->>>> When loading the crash kernel via kexec_load or kexec_file_load,
->>>> the elfcorehdr is identified at run time in
->>>> crash_core:handle_hotplug_event().
->>>>
->>>> To update the elfcorehdr for x86_64, a new elfcorehdr must be
->>>> generated from the available CPUs and memory. The new elfcorehdr
->>>> is prepared into a buffer, and then installed over the top of
->>>> the existing elfcorehdr.
->>>>
->>>> In the patch 'kexec: exclude elfcorehdr from the segment digest'
->>>> the need to update purgatory due to the change in elfcorehdr was
->>>> eliminated.  As a result, no changes to purgatory or boot_params
->>>> (as the elfcorehdr= kernel command line parameter pointer
->>>> remains unchanged and correct) are needed, just elfcorehdr.
->>>>
->>>> To accommodate a growing number of resources via hotplug, the
->>>> elfcorehdr segment must be sufficiently large enough to accommodate
->>>> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
->>>>
->>>> With this change, crash hotplug for kexec_file_load syscall
->>>> is supported. The kexec_load is also supported, but also
->>>> requires a corresponding change to userspace kexec-tools.
->>>>
->>>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
->>>> ---
->>>>    arch/x86/Kconfig        |  11 ++++
->>>>    arch/x86/kernel/crash.c | 116 ++++++++++++++++++++++++++++++++++++++++
->>>>    2 files changed, 127 insertions(+)
->>>>
->>>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->>>> index 762a0b6ab8b6..e9eecff3b97d 100644
->>>> --- a/arch/x86/Kconfig
->>>> +++ b/arch/x86/Kconfig
->>>> @@ -2082,6 +2082,17 @@ config CRASH_DUMP
->>>>          (CONFIG_RELOCATABLE=y).
->>>>          For more details see Documentation/admin-guide/kdump/kdump.rst
->>>> +config CRASH_MAX_MEMORY_RANGES
->>>> +    depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
->>>> +    int
->>>> +    default 32768
->>>> +    help
->>>> +      For the kexec_file_load path, specify the maximum number of
->>>> +      memory regions, eg. as represented by the 'System RAM' entries
->>>> +      in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
->>>> +      This value is combined with NR_CPUS and multiplied by Elf64_Phdr
->>>> +      size to determine the final buffer size.
->>>> +
->>>>    config KEXEC_JUMP
->>>>        bool "kexec jump"
->>>>        depends on KEXEC && HIBERNATION
->>>> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
->>>> index 9db41cce8d97..b9cdf7a0d868 100644
->>>> --- a/arch/x86/kernel/crash.c
->>>> +++ b/arch/x86/kernel/crash.c
->>>> @@ -25,6 +25,7 @@
->>>>    #include <linux/slab.h>
->>>>    #include <linux/vmalloc.h>
->>>>    #include <linux/memblock.h>
->>>> +#include <linux/highmem.h>
->>>>    #include <asm/processor.h>
->>>>    #include <asm/hardirq.h>
->>>> @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
->>>>        image->elf_headers = kbuf.buffer;
->>>>        image->elf_headers_sz = kbuf.bufsz;
->>>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
->>>> +    /* Ensure elfcorehdr segment large enough for hotplug changes */
->>>> +    kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
->>>> +    /* For marking as usable to crash kernel */
->>>> +    image->elf_headers_sz = kbuf.memsz;
->>>> +    /* Record the index of the elfcorehdr segment */
->>>> +    image->elfcorehdr_index = image->nr_segments;
->>>> +    image->elfcorehdr_index_valid = true;
->>>> +#else
->>>>        kbuf.memsz = kbuf.bufsz;
->>>> +#endif
->>>>        kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->>>>        kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->>>>        ret = kexec_add_buffer(&kbuf);
->>>> @@ -413,3 +424,108 @@ int crash_load_segments(struct kimage *image)
->>>>        return ret;
->>>>    }
->>>>    #endif /* CONFIG_KEXEC_FILE */
->>>> +
->>>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
->>>> +int crash_hotplug_support(void) { return 1; }
->>>> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
->>>> +{
->>>> +    /*
->>>> +     * NOTE: The addresses and sizes passed to this routine have
->>>> +     * already been fully aligned on page boundaries. There is no
->>>> +     * need for massaging the address or size.
->>>> +     */
->>>> +    void *ptr = NULL;
->>>> +
->>>> +    /* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
->>>> +    if (size > 0) {
->>>> +        struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
->>>> +
->>>> +        ptr = kmap(page);
->>>> +    }
->>>> +
->>>> +    return ptr;
->>>> +}
->>>> +
->>>> +void arch_unmap_crash_pages(void **ptr)
->>>> +{
->>>> +    if (ptr) {
->>>> +        if (*ptr)
->>>> +            kunmap(*ptr);
->>>> +        *ptr = NULL;
->>>> +    }
->>>> +}
->>>
->>> Aren't arch will have build issue if arch_[un]map_crash_pages methods are not defined?
->> Sourabh,
->> Yes, you are correct. I'll add __weak versions of each in crash_core.c in the next patch.
-> 
-> Just a reminder, __weak is deprecated and has been cleaned up in
-> kernel/kexec*.c in below patch.
-> 
-> [PATCH 0/2] kexec: Drop __weak attributes from functions
-> 
-Baoquan,
-Thanks for the pointer! I have corrected this code to do away with __weak and use the style 
-presented in the kexec patch.
-Eric
+> +	return &vq_sg->sgl[node][leaf];
+> +}
+> +
+> +/**
+> + * vq_sg_npages - returns total number of individual user pages in passed
+> + * scatter gather lists
+> + * @vq_sg: scatter gather lists to be counted
+> + */
+> +static size_t vq_sg_npages(struct virtqueue_sg *vq_sg)
+> +{
+> +	return vq_sg->nsgl * SG_USER_PAGES_PER_LIST;
+> +}
+> +
+> +/**
+> + * vq_sg_free - free all memory previously allocated for @vq_sg
+> + * @vq_sg: scatter gather lists to be freed
+> + */
+> +static void vq_sg_free(struct virtqueue_sg *vq_sg)
+> +{
+> +	unsigned int i;
+> +
+> +	if (!vq_sg)
+> +		return;
+> +
+> +	for (i = 0; i < vq_sg->nsgl; ++i) {
+> +		kfree(vq_sg->sgl[i]);
+> +	}
+> +	kfree(vq_sg);
+> +}
+> +
+> +/**
+> + * vq_sg_alloc - allocates and returns @nsgl scatter gather lists
+> + * @nsgl: amount of scatter gather lists to be allocated
+> + * If @nsgl is larger than one then chained lists are used if supported by
+> + * architecture.
+> + */
+> +static struct virtqueue_sg *vq_sg_alloc(unsigned int nsgl)
+> +{
+> +	struct virtqueue_sg *vq_sg;
+> +	unsigned int i;
+> +
+> +	BUG_ON(!nsgl || nsgl > VIRTQUEUE_SG_NSGL_MAX);
+> +#ifdef CONFIG_ARCH_NO_SG_CHAIN
+> +	if (WARN_ON_ONCE(nsgl > 1))
+> +		return NULL;
+> +#endif
+> +
+> +	vq_sg = kzalloc(sizeof(struct virtqueue_sg) +
+> +			nsgl * sizeof(struct scatterlist *),
+> +			GFP_KERNEL);
+> +
+> +	if (!vq_sg)
+> +		return NULL;
+> +
+> +	vq_sg->nsgl = nsgl;
+> +
+> +	for (i = 0; i < nsgl; ++i) {
+> +		vq_sg->sgl[i] = kmalloc_array(
+> +			SG_MAX_SINGLE_ALLOC, sizeof(struct scatterlist),
+> +			GFP_KERNEL
+> +		);
+> +		if (!vq_sg->sgl[i]) {
+> +			vq_sg_free(vq_sg);
+> +			return NULL;
+> +		}
+> +		sg_init_table(vq_sg->sgl[i], SG_MAX_SINGLE_ALLOC);
+> +		if (i) {
+> +			/* chain the lists */
+> +			sg_chain(vq_sg->sgl[i - 1], SG_MAX_SINGLE_ALLOC,
+> +				 vq_sg->sgl[i]);
+> +		}
+> +	}
+> +	sg_mark_end(&vq_sg->sgl[nsgl - 1][SG_MAX_SINGLE_ALLOC - 1]);
+> +	return vq_sg;
+> +}
+> +
+>  /**
+>   * p9_virtio_close - reclaim resources of a channel
+>   * @client: client instance
+> @@ -158,9 +265,8 @@ static void req_done(struct virtqueue *vq)
+>  
+>  /**
+>   * pack_sg_list - pack a scatter gather list from a linear buffer
+> - * @sg: scatter/gather list to pack into
+> + * @vq_sg: scatter/gather lists to pack into
+>   * @start: which segment of the sg_list to start at
+> - * @limit: maximum segment to pack data to
+>   * @data: data to pack into scatter/gather list
+>   * @count: amount of data to pack into the scatter/gather list
+>   *
+> @@ -170,11 +276,12 @@ static void req_done(struct virtqueue *vq)
+>   *
+>   */
+>  
+> -static int pack_sg_list(struct scatterlist *sg, int start,
+> -			int limit, char *data, int count)
+> +static int pack_sg_list(struct virtqueue_sg *vq_sg, int start,
+> +			char *data, int count)
+>  {
+>  	int s;
+>  	int index = start;
+> +	size_t limit = vq_sg_npages(vq_sg);
+>  
+>  	while (count) {
+>  		s = rest_of_page(data);
+> @@ -182,13 +289,13 @@ static int pack_sg_list(struct scatterlist *sg, int start,
+>  			s = count;
+>  		BUG_ON(index >= limit);
+>  		/* Make sure we don't terminate early. */
+> -		sg_unmark_end(&sg[index]);
+> -		sg_set_buf(&sg[index++], data, s);
+> +		sg_unmark_end(vq_sg_page(vq_sg, index));
+> +		sg_set_buf(vq_sg_page(vq_sg, index++), data, s);
+>  		count -= s;
+>  		data += s;
+>  	}
+>  	if (index-start)
+> -		sg_mark_end(&sg[index - 1]);
+> +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
+>  	return index-start;
+>  }
+>  
+> @@ -208,21 +315,21 @@ static int p9_virtio_cancelled(struct p9_client *client, struct p9_req_t *req)
+>  /**
+>   * pack_sg_list_p - Just like pack_sg_list. Instead of taking a buffer,
+>   * this takes a list of pages.
+> - * @sg: scatter/gather list to pack into
+> + * @vq_sg: scatter/gather lists to pack into
+>   * @start: which segment of the sg_list to start at
+> - * @limit: maximum number of pages in sg list.
+>   * @pdata: a list of pages to add into sg.
+>   * @nr_pages: number of pages to pack into the scatter/gather list
+>   * @offs: amount of data in the beginning of first page _not_ to pack
+>   * @count: amount of data to pack into the scatter/gather list
+>   */
+>  static int
+> -pack_sg_list_p(struct scatterlist *sg, int start, int limit,
+> +pack_sg_list_p(struct virtqueue_sg *vq_sg, int start,
+>  	       struct page **pdata, int nr_pages, size_t offs, int count)
+>  {
+>  	int i = 0, s;
+>  	int data_off = offs;
+>  	int index = start;
+> +	size_t limit = vq_sg_npages(vq_sg);
+>  
+>  	BUG_ON(nr_pages > (limit - start));
+>  	/*
+> @@ -235,15 +342,16 @@ pack_sg_list_p(struct scatterlist *sg, int start, int limit,
+>  			s = count;
+>  		BUG_ON(index >= limit);
+>  		/* Make sure we don't terminate early. */
+> -		sg_unmark_end(&sg[index]);
+> -		sg_set_page(&sg[index++], pdata[i++], s, data_off);
+> +		sg_unmark_end(vq_sg_page(vq_sg, index));
+> +		sg_set_page(vq_sg_page(vq_sg, index++), pdata[i++], s,
+> +			    data_off);
+>  		data_off = 0;
+>  		count -= s;
+>  		nr_pages--;
+>  	}
+>  
+>  	if (index-start)
+> -		sg_mark_end(&sg[index - 1]);
+> +		sg_mark_end(vq_sg_page(vq_sg, index - 1));
+>  	return index - start;
+>  }
+>  
+> @@ -271,15 +379,13 @@ p9_virtio_request(struct p9_client *client, struct p9_req_t *req)
+>  
+>  	out_sgs = in_sgs = 0;
+>  	/* Handle out VirtIO ring buffers */
+> -	out = pack_sg_list(chan->sg, 0,
+> -			   chan->sg_n, req->tc.sdata, req->tc.size);
+> +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
+>  	if (out)
+> -		sgs[out_sgs++] = chan->sg;
+> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
+>  
+> -	in = pack_sg_list(chan->sg, out,
+> -			  chan->sg_n, req->rc.sdata, req->rc.capacity);
+> +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, req->rc.capacity);
+>  	if (in)
+> -		sgs[out_sgs + in_sgs++] = chan->sg + out;
+> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
+>  
+>  	err = virtqueue_add_sgs(chan->vq, sgs, out_sgs, in_sgs, req,
+>  				GFP_ATOMIC);
+> @@ -448,16 +554,15 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
+>  	out_sgs = in_sgs = 0;
+>  
+>  	/* out data */
+> -	out = pack_sg_list(chan->sg, 0,
+> -			   chan->sg_n, req->tc.sdata, req->tc.size);
+> +	out = pack_sg_list(chan->vq_sg, 0, req->tc.sdata, req->tc.size);
+>  
+>  	if (out)
+> -		sgs[out_sgs++] = chan->sg;
+> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, 0);
+>  
+>  	if (out_pages) {
+> -		sgs[out_sgs++] = chan->sg + out;
+> -		out += pack_sg_list_p(chan->sg, out, chan->sg_n,
+> -				      out_pages, out_nr_pages, offs, outlen);
+> +		sgs[out_sgs++] = vq_sg_page(chan->vq_sg, out);
+> +		out += pack_sg_list_p(chan->vq_sg, out, out_pages,
+> +				      out_nr_pages, offs, outlen);
+>  	}
+>  
+>  	/*
+> @@ -467,15 +572,14 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
+>  	 * Arrange in such a way that server places header in the
+>  	 * allocated memory and payload onto the user buffer.
+>  	 */
+> -	in = pack_sg_list(chan->sg, out,
+> -			  chan->sg_n, req->rc.sdata, in_hdr_len);
+> +	in = pack_sg_list(chan->vq_sg, out, req->rc.sdata, in_hdr_len);
+>  	if (in)
+> -		sgs[out_sgs + in_sgs++] = chan->sg + out;
+> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out);
+>  
+>  	if (in_pages) {
+> -		sgs[out_sgs + in_sgs++] = chan->sg + out + in;
+> -		in += pack_sg_list_p(chan->sg, out + in, chan->sg_n,
+> -				     in_pages, in_nr_pages, offs, inlen);
+> +		sgs[out_sgs + in_sgs++] = vq_sg_page(chan->vq_sg, out + in);
+> +		in += pack_sg_list_p(chan->vq_sg, out + in, in_pages,
+> +				     in_nr_pages, offs, inlen);
+>  	}
+>  
+>  	BUG_ON(out_sgs + in_sgs > ARRAY_SIZE(sgs));
+> @@ -576,14 +680,12 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+>  		goto fail;
+>  	}
+>  
+> -	chan->sg = kmalloc_array(VIRTQUEUE_DEFAULT_NUM,
+> -				 sizeof(struct scatterlist), GFP_KERNEL);
+> -	if (!chan->sg) {
+> +	chan->vq_sg = vq_sg_alloc(VIRTQUEUE_SG_NSGL_DEFAULT);
+> +	if (!chan->vq_sg) {
+>  		pr_err("Failed to allocate virtio 9P channel\n");
+>  		err = -ENOMEM;
+>  		goto out_free_chan_shallow;
+>  	}
+> -	chan->sg_n = VIRTQUEUE_DEFAULT_NUM;
+>  
+>  	chan->vdev = vdev;
+>  
+> @@ -596,8 +698,6 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+>  	chan->vq->vdev->priv = chan;
+>  	spin_lock_init(&chan->lock);
+>  
+> -	sg_init_table(chan->sg, chan->sg_n);
+> -
+>  	chan->inuse = false;
+>  	if (virtio_has_feature(vdev, VIRTIO_9P_MOUNT_TAG)) {
+>  		virtio_cread(vdev, struct virtio_9p_config, tag_len, &tag_len);
+> @@ -646,7 +746,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+>  out_free_vq:
+>  	vdev->config->del_vqs(vdev);
+>  out_free_chan:
+> -	kfree(chan->sg);
+> +	vq_sg_free(chan->vq_sg);
+>  out_free_chan_shallow:
+>  	kfree(chan);
+>  fail:
+> @@ -741,7 +841,7 @@ static void p9_virtio_remove(struct virtio_device *vdev)
+>  	kobject_uevent(&(vdev->dev.kobj), KOBJ_CHANGE);
+>  	kfree(chan->tag);
+>  	kfree(chan->vc_wq);
+> -	kfree(chan->sg);
+> +	vq_sg_free(chan->vq_sg);
+>  	kfree(chan);
+>  
+>  }
+> @@ -780,7 +880,8 @@ static struct p9_trans_module p9_virtio_trans = {
+>  	 * that are not at page boundary, that can result in an extra
+>  	 * page in zero copy.
+>  	 */
+> -	.maxsize = PAGE_SIZE * (VIRTQUEUE_DEFAULT_NUM - 3),
+> +	.maxsize = PAGE_SIZE *
+> +		((VIRTQUEUE_SG_NSGL_DEFAULT * SG_USER_PAGES_PER_LIST) - 3),
+>  	.def = 1,
+>  	.owner = THIS_MODULE,
+>  };

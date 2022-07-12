@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0669457262F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A254C572638
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiGLToS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S230235AbiGLTpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234854AbiGLTnw (ORCPT
+        with ESMTP id S234097AbiGLTon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:43:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6784CDD;
-        Tue, 12 Jul 2022 12:28:03 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CJPpCY002711;
-        Tue, 12 Jul 2022 19:28:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=1HniwvOuytE5H3+nMFD5ZrPlArfFeM40vkuexo78F+M=;
- b=l7xNSmRzHMbWUzVi6k04c4QJBzZ6Oy17M9EpI2U1OS3XAl4Z0gTsG+Ewon/TJ1wBcJsv
- HOd3oUqkS3drangLiAqQyrWaOalEzBRBhggI1Apr5y5hpCE6AlLPv4Lr4p/zCxNgw+Hi
- XqqYBE8cOnbe/krBoo8ptD5VovQAVNbOqa6B9kqBnaiytvK9WebydBNOX1dAsT2L84Qp
- OVEoVc10YorWV35MjgDMO+/x1y375Vq+2XfmtVgb8n3M8MDML+iq/NBIcyD65keywZjl
- WW6E81ObRtgLUG7npISvrDzezTEjl+DI62/YBIiJ60kBhrhWTEgB2jzrUoAW022K6oN0 5Q== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h964384cs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 19:28:00 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CJLihs018343;
-        Tue, 12 Jul 2022 19:27:58 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn1gxk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 19:27:58 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CJQQ1a22544818
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 19:26:26 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96EC9AE053;
-        Tue, 12 Jul 2022 19:27:55 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2FC90AE045;
-        Tue, 12 Jul 2022 19:27:55 +0000 (GMT)
-Received: from osiris (unknown [9.145.52.105])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 12 Jul 2022 19:27:55 +0000 (GMT)
-Date:   Tue, 12 Jul 2022 21:27:53 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Steffen Eiden <seiden@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-Subject: Re: [PATCH 1/3] s390/cpufeature: rework to allow more than only
- hwcap bits
-Message-ID: <Ys3LOT/fGcGo+4Eh@osiris>
-References: <20220712105220.325010-1-seiden@linux.ibm.com>
- <20220712105220.325010-2-seiden@linux.ibm.com>
- <20220712184619.45edd420@p-imbrenda>
+        Tue, 12 Jul 2022 15:44:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4011AAB29
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:31:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48898B81BD0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C5FC341C0;
+        Tue, 12 Jul 2022 19:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657654310;
+        bh=O5l3DDkCL1GLC1cLcZh7E/j88FiYHXorbNoNPs9qYjU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y7mlHgNgtuET3TxAjKenZBXszlKL5EWencfe+7pE6MvAfl5dII94BZePOvH7Y9v+9
+         aeQwJTYBa1Q8k/ixcCtlq5Qx/t/S6QtFtd1Qt0KqzhyG2/tPiR+MxMsBb4qiolssHp
+         FNhjcDS/z85gj8K/4anC04dMYLqVoHhrA8C7EI5M=
+Date:   Tue, 12 Jul 2022 21:31:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Build warnings in Xen 5.15.y and 5.10.y with retbleed backports
+Message-ID: <Ys3MI7cv2yKj9RFc@kroah.com>
+References: <Ys2jlGMqAe6+h1SX@kroah.com>
+ <ddcdd531-fc33-39df-a69f-5352d7a1c8af@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712184619.45edd420@p-imbrenda>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: edzKj_LzbgK8bX0Wc0YOlwfKFcO075uU
-X-Proofpoint-GUID: edzKj_LzbgK8bX0Wc0YOlwfKFcO075uU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_12,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxscore=0 suspectscore=0 clxscore=1011 lowpriorityscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=677 spamscore=0
- impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207120077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ddcdd531-fc33-39df-a69f-5352d7a1c8af@oracle.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 06:46:19PM +0200, Claudio Imbrenda wrote:
-> > +int cpu_have_feature(unsigned int num)
-> > +{
-> > +	struct s390_cpu_feature *feature;
-> > +
-> > +	feature = &s390_cpu_features[num];
+On Tue, Jul 12, 2022 at 03:19:39PM -0400, Boris Ostrovsky wrote:
 > 
-> I would put some check to make sure you are going past the end of the
-> array. 
+> On 7/12/22 12:38 PM, Greg KH wrote:
+> > Hi all,
+> > 
+> > I'm seeing the following build warning:
+> > 	arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
+> > in the 5.15.y and 5.10.y retbleed backports.
+> > 
+> > I don't know why just this one hypercall is being called out by objtool,
+> > and this warning isn't in 5.18 and Linus's tree due to I think commit
+> > 5b2fc51576ef ("x86/ibt,xen: Sprinkle the ENDBR") being there.
+> > 
+> > But, is this a ret call that we "forgot" here?  It's a "real" ret in
+> > Linus's branch:
+> > 
+> > .pushsection .noinstr.text, "ax"
+> > 	.balign PAGE_SIZE
+> > SYM_CODE_START(hypercall_page)
+> > 	.rept (PAGE_SIZE / 32)
+> > 		UNWIND_HINT_FUNC
+> > 		ANNOTATE_NOENDBR
+> > 		ANNOTATE_UNRET_SAFE
+> > 		ret
+> > 		/*
+> > 		 * Xen will write the hypercall page, and sort out ENDBR.
+> > 		 */
+> > 		.skip 31, 0xcc
+> > 	.endr
+> > 
+> > while 5.15.y and older has:
+> > .pushsection .text
+> > 	.balign PAGE_SIZE
+> > SYM_CODE_START(hypercall_page)
+> > 	.rept (PAGE_SIZE / 32)
+> > 		UNWIND_HINT_FUNC
+> > 		.skip 31, 0x90
+> > 		ANNOTATE_UNRET_SAFE
+> > 		RET
+> > 	.endr
+> > 
+> > So should the "ret" remain or be turned into "RET" in mainline right
+> > now?
 > 
-> Maybe something like
 > 
-> if (num >= MAX_CPU_FEATURES) {
-> 	WARN(1, "Invalid feature %d", num);
-> 	return 0;
+> It doesn't matter --- this is overwritten by the hypervisor during initialization when Xen fills in actual hypercall code.
+> 
+> 
+> So f4b4bc10b0b85ec66f1a9bf5dddf475e6695b6d2 added 'ret' to make objtool happy and then 14b476e07fab6 replaced 'ret' with RET as part of SLS fixes. The latter was not really necessary but harmless.
+> 
+> 
+> So it can be 'ret', RET, or anything else that tools don't complain about. It will not be executed.
 
-That makes sense. I would go for a simple
+Cool, thanks.
 
-	if (WARN_ON_ONCE(num >= MAX_CPU_FEATURES))
-		return 0;
+But what about the objtool warning that I now see?  Is that "real"?
+
+I don't run any Xen systems, so I can't test any of this myself.
+
+thanks,
+
+greg k-h

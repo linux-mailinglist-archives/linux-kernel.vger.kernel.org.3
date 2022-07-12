@@ -2,132 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0358570EA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3128D570EA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbiGLAL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S231575AbiGLALj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGLALY (ORCPT
+        with ESMTP id S231523AbiGLALd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:11:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C255A422C9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657584683; x=1689120683;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RqE/10F8cM5p6ujyAuxaXmD/9itGhRl3pE9JzAmilx0=;
-  b=S2c44iAHh/bI2G5da0SP9dFx7oNl4Gd8pYpdxNlNAha7DrD5wyeUFZ1e
-   bF8otqD0b/SuYRookvdIjYDO2ACysTaDvHfwVsll6GjFgnvyuw2Z7pkUk
-   o0Wbcehg3PQWj1W+peOAKtN9uf15kD5m0QRaOj1M1XwKUVrrPb6RnuKnb
-   FgiKW+XaLbhqckmIAb8RtIUP9yIetypJBy+AF8RYgbcafj0QfHrYJRmZ/
-   +UDezI1aO3dyXEoiGfkS6NFx2g4Gyhglfn7qVrxYsSezwxv67vuMHfAxa
-   Z+n+TuOsoxB5V+5Tif+6Nr+DVlQ5H+NwVpiOIfuPfQ9lGJDzMsmhUsjvr
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="264589457"
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="264589457"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 17:11:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="841187818"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Jul 2022 17:11:23 -0700
-Received: from [10.252.212.229] (kliang2-mobl1.ccr.corp.intel.com [10.252.212.229])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 712105805BD;
-        Mon, 11 Jul 2022 17:11:21 -0700 (PDT)
-Message-ID: <96d7a36e-c6d1-f45f-6d5a-3eb7c56ddc3d@linux.intel.com>
-Date:   Mon, 11 Jul 2022 20:11:19 -0400
+        Mon, 11 Jul 2022 20:11:33 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BBD52DE4;
+        Mon, 11 Jul 2022 17:11:32 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id d12-20020a4aeb8c000000b004214e709b72so1245744ooj.6;
+        Mon, 11 Jul 2022 17:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wX4uw378nHlZZknwBrLqu9hUejNkdIA+CIdUtRzeQzk=;
+        b=NymimtnM+Y30KQXD7Cptxk5Z4ryzMYPBT7zbkpkh6jPgLhmRchiDCaO8jl9xkAMUST
+         nGHBw9018BZcw8Tz31l+LjHaEfLPg8rGKF314uGxeJlmjJBamvCZmbCneXkVGHtROPyv
+         6Ec69hspGGyNPw9H8ELkRPKwANwJ0L+Lknc6RsZbSjOhM5hv/EZocwpQ25HSBFaaBuSC
+         73pj98+DVOkgdJZNktgftZ7H1Vsi3jYaMU8mpmZhvfoLWEsD9Gh3V72enJwP8/45ujPj
+         pPxeud2eDQb4TVaemhXgK2v9l/E1lBt11VKujjtX375TLdOY4d6vQDmJjd9Jv3UkLzkU
+         gG2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wX4uw378nHlZZknwBrLqu9hUejNkdIA+CIdUtRzeQzk=;
+        b=1Hg0hLG5UK4mo/ibESrROJeJkoTVni5zzV8fZ61h5K4DSEy/RgeaJ8oqqz98ds1iA9
+         7COMrFAF/a8O7zENvq8mECGDm6xcuzrjqcCrKl7PCpuLTFIqZckj0Ta5/huB7AYGziAq
+         LCyXoTQv2uXkqsEK1JZ2jmAc/JGStaEFojDoStXa8YofBQwE1WPS1C5mz6mTPkIqeB+A
+         UKmnkLOnAz3sS3qrHSxGAd7606+7Yz/5/skSebH3ipKDLSyXHqhXVlfWdrAE45TNbxxV
+         i2/zVwVy/yIiostru5qojgxtuuKiD25RFCFrvhbf4F2iv36IoezqrxFQ3viECbCB7GzQ
+         BUQQ==
+X-Gm-Message-State: AJIora9jRkVNeWqDt9sVcxNbEHoID9YYZCpKSrHQLImUTzXmO+ozzj+/
+        9yMVkfmiDcDFHqL4LhtzgFNlKCczdHCODE6JTVM=
+X-Google-Smtp-Source: AGRyM1vj4LOisBgu89jgkYWeP2kS6EPd2McSLFszQseAIDiNr82gXEopeUU2DNf4jJeHxtDqAtMFWYaryxSEAWCMR4w=
+X-Received: by 2002:a4a:5107:0:b0:41b:873e:895f with SMTP id
+ s7-20020a4a5107000000b0041b873e895fmr7619919ooa.22.1657584692166; Mon, 11 Jul
+ 2022 17:11:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [perf] unchecked MSR access error: WRMSR to 0x689 in
- intel_pmu_lbr_restore
-Content-Language: en-US
-To:     Vince Weaver <vincent.weaver@maine.edu>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        pawan.kumar.gupta@linux.intel.com
-References: <66961a7d-a6d8-2536-9ed3-68c2e7f4e03d@maine.edu>
- <e71fa75-a718-ffb-c3f3-40cccf77ba9b@maine.edu>
- <4b15d3d1-389b-fee4-d1b9-8732859e3696@linux.intel.com>
- <f22dd6fb-48b7-99cf-3d7a-348e5792c8@maine.edu>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <f22dd6fb-48b7-99cf-3d7a-348e5792c8@maine.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220706172814.169274-1-james.hilliard1@gmail.com> <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+In-Reply-To: <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Mon, 11 Jul 2022 18:11:21 -0600
+Message-ID: <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-07-11 5:13 p.m., Vince Weaver wrote:
-> On Mon, 11 Jul 2022, Liang, Kan wrote:
-> 
->>
->>
->> On 2022-07-08 12:13 p.m., Vince Weaver wrote:
->>> [ 7763.384369] unchecked MSR access error: WRMSR to 0x689 (tried to write 0x1fffffff8101349e) at rIP: 0xffffffff810704a4 (native_write_msr+0x4/0x20)
->>
->> The 0x689 is a valid LBR register, which is MSR_LASTBRANCH_9_FROM_IP.
->> The issue should be caused by the known TSX bug, which is mentioned in
->> the commit 9fc9ddd61e0 ("perf/x86/intel: Fix MSR_LAST_BRANCH_FROM_x bug
->> when no TSX"). It looks like the TSX support has been deactivated,
->> however the quirk in the commit isn't applied for some reason.
->>
->>
->> To apply the quirk, perf relies on the boot CPU's flag and LBR format.
->>
->> static inline bool lbr_from_signext_quirk_needed(void)
->> {
->> 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
->> 			   boot_cpu_has(X86_FEATURE_RTM);
->>
->> 	return !tsx_support && x86_pmu.lbr_has_tsx;
->> }
->>
->> Could you please share the value of the PERF_CAPABILITIES MSR	0x00000345
->> of the machine?
->> I'd like to double check whether the LBR fromat is correct. 0x5 is expected.
-> 
-> How would I do that?  Just something like:
-> # rdmsr 0x00000345
-> 32c4
+On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
 >
+>
+>
+> On 7/6/22 10:28 AM, James Hilliard wrote:
+> > The current bpf_helper_defs.h helpers are llvm specific and don't work
+> > correctly with gcc.
+> >
+> > GCC appears to required kernel helper funcs to have the following
+> > attribute set: __attribute__((kernel_helper(NUM)))
+> >
+> > Generate gcc compatible headers based on the format in bpf-helpers.h.
+> >
+> > This adds conditional blocks for GCC while leaving clang codepaths
+> > unchanged, for example:
+> >       #if __GNUC__ && !__clang__
+> >       void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+> >       #else
+> >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+> >       #endif
+>
+> It does look like that gcc kernel_helper attribute is better than
+> '(void *) 1' style. The original clang uses '(void *) 1' style is
+> just for simplicity.
 
-Yes. It indicates that the LBR format is 4. That's expected for HSW.
-(I made a mistake in the previous email. Skylake has format 5, not HSW.)
-For the LBR format 4, the x86_pmu.lbr_has_tsx must be 1.
+Isn't the original style going to be needed for backwards compatibility with
+older clang versions for a while?
 
-So it looks like an issue of the CPU flag.
+>
+> Do you mind to help implement similar attribute in clang so we
+> don't need "#if" here?
 
-Could you please collect the TSX information which Pawan mentioned in
-the other thread?
+That's well outside my area of expertise unfortunately.
 
-Thanks,
-Kan
-
-> or is it more involved than that?
-> 
-> Vince Weaver
-> vincent.weaver@maine.edu
+>
+> >
+> >       #if __GNUC__ && !__clang__
+> >       long bpf_map_update_elem(void *map, const void *key, const void *value, __u64 flags) __attribute__((kernel_helper(2)));
+> >       #else
+> >       static long (*bpf_map_update_elem)(void *map, const void *key, const void *value, __u64 flags) = (void *) 2;
+> >       #endif
+> >
+> > See:
+> > https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
+> >
+> > This fixes the following build error:
+> > error: indirect call in function, which are not supported by eBPF
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v1 -> v2:
+> >    - more details in commit log
+> > ---
+> >   scripts/bpf_doc.py | 43 ++++++++++++++++++++++++++-----------------
+> >   1 file changed, 26 insertions(+), 17 deletions(-)
+> >
+> [...]

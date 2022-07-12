@@ -2,107 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AF6571A30
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DED571A33
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbiGLMlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        id S232990AbiGLMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiGLMk7 (ORCPT
+        with ESMTP id S232871AbiGLMl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:40:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8B453D11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UWhG7Ip5SnXCg0duAf4R5ZOj7EMneuDd+1yKd/aFWAs=; b=fv4XW2pRMy0PdgxwGCr0TsIHbn
-        XWir5GR5Hs4ppNE6ep6q+EZFeqCWHyXssIvbgQiEh2h+kmg4Ma2NjHE7dnRcwvBv/sS+sklZiKanb
-        KvZ0qcF5V60kmOhbT1OPGHJcbcdrr7Nj7uVA7idTDyKRnKJ3ud1e7sqxHrHAsHO5ODNba2Po+6L6/
-        vRwzPY3mGdtuY0PK5am+2dyPR9m7wOW+JSYTGt+Cj1fYI++WQvNt4qyWLmfdCKDXUHzLWWxVzXHow
-        8tpCuUKmmDI20UkM9Xd9IKPzm+cUVVa8c43hP1/73sxQVF93aOP3s8g/FW9+y2CrePR5L2BueW5Hh
-        FHD4YBuw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBFC7-006uQ1-BW; Tue, 12 Jul 2022 12:40:51 +0000
-Date:   Tue, 12 Jul 2022 13:40:51 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, Zach O'Keefe <zokeefe@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Liam Howlett <liam.howlett@oracle.com>
-Subject: Re: [syzbot] memory leak in xas_create
-Message-ID: <Ys1r06szkVi3QEai@casper.infradead.org>
-References: <000000000000eb2d6c05e35a0d73@google.com>
- <20220711133808.d86400ce9960febcb0fd537b@linux-foundation.org>
- <YsyMQ2jzOICVbCda@casper.infradead.org>
- <CACT4Y+bL3aM-cVeYSLU7az1x2Yj1vH7GaQSq=Z-BGc5Vk1Vi4w@mail.gmail.com>
+        Tue, 12 Jul 2022 08:41:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3170AA5E77;
+        Tue, 12 Jul 2022 05:41:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 588DE616C3;
+        Tue, 12 Jul 2022 12:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE6C3411C;
+        Tue, 12 Jul 2022 12:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657629680;
+        bh=YhdHurAYvqU9HYvYJ3QQIe0wxM38NxHxJZeD7l5WnZs=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=bOlWhFyLAUZ4n40G98F2TnE3+uccvtlSfKhQQHDY0/cl+jRP2CGCkRqwps7fX1pjC
+         dh7vhzieJgblBblEr0h6bW5ylAoYhCYtc4H2F0vvJ/ebiADU2ZqZMz9fKbRD4qL3Cd
+         Hj8rMvIVeNGT2jHJUEPK7soUC8Z96bAVdEHD1stLtZV/hvsgObKFQuhj6C3XDZNh2A
+         S2Aj+AgAHqPi1EIFzU5ZtNceFr3CZwcWZsYMlBCkPRXV7H6pycc701kHe/gw+50Lgo
+         rINuIVnVXrPOPUxA13Mnlz6MrS/WPMIWlo1DRbbMaAyv4tnWTrxe4BHuDEHQeg04Mb
+         qCnbipBADBz+A==
+Message-ID: <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
+Date:   Tue, 12 Jul 2022 07:41:06 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+bL3aM-cVeYSLU7az1x2Yj1vH7GaQSq=Z-BGc5Vk1Vi4w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
+ for SoCFPGA platforms
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220620230109.986298-1-dinguyen@kernel.org>
+ <YrI6EeVkkWVMNPFY@shikoro> <928b2996-b2e7-d847-0e20-7e19df3cbf03@kernel.org>
+ <YrN2lxvlP4cWfelY@kunai>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <YrN2lxvlP4cWfelY@kunai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 08:54:28AM +0200, Dmitry Vyukov wrote:
-> On Mon, 11 Jul 2022 at 22:47, Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 01:38:08PM -0700, Andrew Morton wrote:
-> > > On Sat, 09 Jul 2022 00:13:23 -0700 syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com> wrote:
-> > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    c1084b6c5620 Merge tag 'soc-fixes-5.19-2' of git://git.ker..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=14967ccc080000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=916233b7694a38ff
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=a785d07959bc94837d51
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122ae834080000
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com
-> > > >
-> > > > 2022/07/05 05:22:17 executed programs: 828
-> > > > 2022/07/05 05:22:23 executed programs: 846
-> > > > 2022/07/05 05:22:30 executed programs: 866
-> > > > 2022/07/05 05:22:37 executed programs: 875
-> > > > BUG: memory leak
-> > >
-> > > Thanks.  Presumably due to khugepaged changes.
-> >
-> > Huh, I was expecting it to be something I'd messed up.  I've been
-> > looking at it today, but no luck figuring it out so far.
-> >
-> > > Can we expect a bisection search?
-> >
-> > We only have a syz reproducer so far, and if I understand correctly,
-> > it's probably because this is a flaky test (because it's trying to
-> > find something that's a race condition).
-> >
-> > I expect a bisection search to go badly wrong if this is true.
-> 
-> Is it possible that parts of xas are not freed on the error paths?
-> I don't immediately see where anything is freed on these error paths:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n681
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n721
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/khugepaged.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n1675
+Hi Wolfram,
 
-There's nothing to free; if a node is allocated, then it's stored in
-the tree where it can later be found and reused.
+On 6/22/22 15:07, Wolfram Sang wrote:
+> 
+>>  From the original code, the first mechanism to a recovery is to acquire a
+>> GPIO for the SCL line and send the 9 SCL pulses, after that, it does a reset
+>> of the I2C module. For the SOCFPGA part, there is no GPIO line for the SCL,
+>> thus the I2C module cannot even get a reset. This code allows the function
+>> to reset the I2C module for SOCFPGA, which is the 2nd part of the recovery
+>> process.
+> 
+> The second part is totally useless if the client device is holding SDA
+> low. Which is exactly the situation that recovery tries to fix. As I
+> said, if you can't control SCL, you don't have recovery.
+> 
 
+This is recovery of the master and not the slave.  We have a customer 
+that is the using I2C with the signals routed through the FPGA, and thus 
+are not GPIO. During a timeout, with this code, the driver is able to 
+recover the master.
+
+Dinh

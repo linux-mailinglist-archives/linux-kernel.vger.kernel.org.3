@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8989571D2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84000571D31
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiGLOo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S233693AbiGLOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiGLOom (ORCPT
+        with ESMTP id S233660AbiGLOpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:44:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0E821E35;
-        Tue, 12 Jul 2022 07:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=TIMJuXXvaSY0EDiwuEYp7w+lzyifMk6auUfw6Pmy8H8=; b=f5VgE4wDv0lSQC5lTzqabKnVFB
-        2MGHWFSwP7P/40XxyUz26NovWdTh/lT2cUCI2TDwxXIOFpKmrZjyEk8viz7KfDHVlA8JUC0ZTuscZ
-        dumqPhR//ME/UnijW00DpOQvNb6P0vH/GMuMygkcYT5BPY+TK8t5suvl4SjK8Q7k26y0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oBH7h-00A3p2-Tq; Tue, 12 Jul 2022 16:44:25 +0200
-Date:   Tue, 12 Jul 2022 16:44:25 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Frank <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net: phy: Add driver for Motorcomm yt8521 gigabit
- ethernet
-Message-ID: <Ys2IyaI2u2iLL0g6@lunn.ch>
-References: <20220711103706.709-1-Frank.Sae@motor-comm.com>
+        Tue, 12 Jul 2022 10:45:04 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CF325C7F;
+        Tue, 12 Jul 2022 07:45:02 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id v14so11497840wra.5;
+        Tue, 12 Jul 2022 07:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Sa6iY3pzwir6onyo2+3SEdO5IslImquHb/B2ephjWNA=;
+        b=LEESkbTjEcOU7bUoY8h448YndDqAvOl5l7XJabm8Ky5wETpujsDs2To2eLk/OT56a8
+         bhuKg+K4NgHXhY8ZEf3EDlkZ1WWgwMle85E6unzgzKAyqYOwB3v+FD5w9CMywRY2PZv7
+         PW5YkKBbuMNMSHpdc/SztIQHLluvga2JuHXZFyrFD3+gZ8jnC9wZjxnF1PGukc2KJodo
+         1HgZFMSgqjgBqrDdYAD1Nc6t3Pyb8mmCm8db40asy3ZlnWWz673zGAhBoWThCZjf0afl
+         NsXvdoq+uK91mgSGYizB5Yb5ZXoVhN0BiJshuK3jdcN0P0TRHRhODGTnGwJupXNDuNoi
+         xZQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sa6iY3pzwir6onyo2+3SEdO5IslImquHb/B2ephjWNA=;
+        b=v0MNUL/On6JuX0pOTQYN+ef/0h02lzYKPug2Ppkd3Y59Si3udWdYI8XdY8M0/jMohI
+         tqlezLz9xTI2gTfacnsfzznUSkir93o9Z3vmu23mTSLHiUjZl3wiDC/8u3JL/wsD/vfF
+         t+ig/2va3zRAs4CP68P7OLwG8EP4G7dHNLgHj73lIDWQLndKw5xibU+yq9RmUP6R7ltA
+         QEmCnCrpg6QzCCVnkpoGUUOcKK1KQ/BkN955LiUdqsEhsUmnhzYzs4cIRM3hZHNEZpHN
+         n086ZW3wpOLFzuQNlEBzc4f7p7AtCd5xzBJX9UWa78GWa9yUY2PLBzMhXSdyNWmtv/9S
+         yDbw==
+X-Gm-Message-State: AJIora9+KIh0vX50b5jWChVXgBosBLDOQc6mmL2e3+Kyhm9Vpu2QYp99
+        mPbMWLfX8LznUh35sU1OyRw=
+X-Google-Smtp-Source: AGRyM1u9IqTISr1wyRgga0Wj5eYmfortujWr+8ZL/NhFS8z4Uf+MK9ThLDEiwzSF6wcgo4Oq15bSmw==
+X-Received: by 2002:a5d:58cc:0:b0:21d:6919:7daf with SMTP id o12-20020a5d58cc000000b0021d69197dafmr22544454wrf.434.1657637101303;
+        Tue, 12 Jul 2022 07:45:01 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id m4-20020a5d6244000000b0021d6e917442sm10180708wrv.72.2022.07.12.07.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:45:00 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 15:44:59 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/55] 5.10.130-rc1 review
+Message-ID: <Ys2I6x4PlN6APY54@debian>
+References: <20220711090541.764895984@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220711103706.709-1-Frank.Sae@motor-comm.com>
+In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 06:37:06PM +0800, Frank wrote:
-> patch v3:
->  Hi Andrew
->  Thanks and based on your comments we modified the patch as below.
->  
-> > It is generally not that simple. Fibre, you probably want 1000BaseX,
-> > unless the fibre module is actually copper, and then you want
-> > SGMII. So you need something to talk to the fibre module and ask it
-> > what it is. That something is phylink. Phylink does not support both
-> > copper and fibre at the same time for one MAC.
+Hi Greg,
+
+On Mon, Jul 11, 2022 at 11:06:48AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.130 release.
+> There are 55 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->  yes, you said it and for MAC, it does not support copper and Fiber at same time.
->  but from Physical Layer, you know, sometimes both Copper and Fiber cables are
->  connected. in this case, Phy driver should do arbitration and report to MAC
->  which media should be used and Link-up.
->  This is the reason that the driver has a "polling mode", and by default, also
->  this driver takes fiber as first priority which matches phy chip default behavior.
+> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
+> Anything received after that time might be too late.
 
-The Marvell 10G driver is another PHY which can be used for both
-Copper and Fibre. In order to do this, it has a few extra functions:
+Build test (gcc version 11.3.1 20220706):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-static int mv3310_sfp_insert(void *upstream, const struct sfp_eeprom_id *id)
-{
-        struct phy_device *phydev = upstream;
-        __ETHTOOL_DECLARE_LINK_MODE_MASK(support) = { 0, };
-        phy_interface_t iface;
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-        sfp_parse_support(phydev->sfp_bus, id, support);
-        iface = sfp_select_interface(phydev->sfp_bus, support);
+[1]. https://openqa.qa.codethink.co.uk/tests/1486
+[2]. https://openqa.qa.codethink.co.uk/tests/1496
 
-        if (iface != PHY_INTERFACE_MODE_10GBASER) {
-                dev_err(&phydev->mdio.dev, "incompatible SFP module inserted\n");
-                return -EINVAL;
-        }
-        return 0;
-}
 
-static const struct sfp_upstream_ops mv3310_sfp_ops = {
-        .attach = phy_sfp_attach,
-        .detach = phy_sfp_detach,
-        .module_insert = mv3310_sfp_insert,
-};
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-Also see the at803x driver.
-
-This allows the PHY to report to phylink what it is doing, and to
-determine the host side interface mode. I would expect this driver to
-implement sfp_upstream_ops as well.
-
-	  Andrew
+--
+Regards
+Sudip

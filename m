@@ -2,137 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5FF571A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73348571A40
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbiGLMo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S233005AbiGLMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiGLMoy (ORCPT
+        with ESMTP id S233044AbiGLMpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:44:54 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F6599ED
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id fz10so7515382pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QYL0SRgLUmg8BnK5Yo3lzlJ4c0o1vhFy27q1BHms55E=;
-        b=M9ZOyqVnnUe1kQ1lYFItGrYNc078kUr6Am55NLN0d1kC3kIbA+ABERmQoje+GHES78
-         AlnIcs/g2MpFEwNW6yLzuJipMD3yEPQs7stbk8+q8MBWP02Qgz+ZyINb8gTS8mPiiW+m
-         duREQLrPy3kHmKzqDU3zfNEvKbJwvVnnsGCMPiDOxTfzNysdXYCWGhpyXyi+cj8nRbhS
-         SzNwVQ+n5xTqUPo/Caxl7D/FnnVPEa5lZm5c0RCZPkpiLQzPrSkKKmwFsr3OIqRJcCxm
-         nxPO1jpXd+n4kbNBbR+9KmnWfeiV3c+vEbi313WP3dPYB2DZO0tGPYywVH3wS1NsXIpi
-         fjlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QYL0SRgLUmg8BnK5Yo3lzlJ4c0o1vhFy27q1BHms55E=;
-        b=Zs05ejjuW0MlpC0DkDUxHrkwNDJ/4MJBBDtXMsvKpPjU6kL5D+PyzZ4QKcTzREWDWL
-         FOX0YuhwWUb7JSFNDqMhan47Jy7CsKhnntAceDQCDOqkft3ybftN5auiRGncX/t/NfiY
-         1DWbfzKOzmDQ17awf2ys/TEVXE7OA61ZdWy3EW8KiNCRliom6dCyA4cjscPKKaConTIV
-         stiOayQPfBvzQSpKTG//Gk2lbVX2FMhRi5Il2JFlnLZs0S9iJ05JxWuhIhyeUUtongD3
-         7g1ptvMChFym0e8WGsn/LhGIMR3k6Gmk08oVkC4lM2pxTuPdIdDftQDL7GAR4FS04nzZ
-         jOzg==
-X-Gm-Message-State: AJIora/tiGExZy3JMJK9UwOM8fsJVo7gLcX2l+RihNW5SyglrNroheJF
-        RxT6yZAfu5RFjf0cXkz6DjyR
-X-Google-Smtp-Source: AGRyM1v+M5lV7lgNVXXA7ep5lugVxUMn5AWgMFlKRyd/tc8Cbi7QwigHgSxgIwlOdFq966IerhvE4g==
-X-Received: by 2002:a17:90b:4c91:b0:1ef:f85b:6342 with SMTP id my17-20020a17090b4c9100b001eff85b6342mr4254301pjb.75.1657629892302;
-        Tue, 12 Jul 2022 05:44:52 -0700 (PDT)
-Received: from workstation ([117.207.31.14])
-        by smtp.gmail.com with ESMTPSA id pi4-20020a17090b1e4400b001df264610c4sm3212648pjb.0.2022.07.12.05.44.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Jul 2022 05:44:51 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:14:45 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, bjorn.andersson@linaro.org,
-        agross@kernel.org, linus.walleij@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
-Message-ID: <20220712124445.GC21746@workstation>
-References: <20220624195112.894916-1-robimarko@gmail.com>
- <87edyq1ujr.wl-maz@kernel.org>
+        Tue, 12 Jul 2022 08:45:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B57A6F1A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:45:12 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CBxmws023669;
+        Tue, 12 Jul 2022 12:44:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=m+HurB37esaYPyXcV322ffClt3dKNXFg4mguC6R77tw=;
+ b=YhmFI3DzeFKdFmyAvGDqrUkzuFjkWN5pjLAyXlaKOAUuK7NjYJp1yhu/zVBcSiXzOx9y
+ UM4Yhf0kaAfCmyL21RT3QLmaiXqQLtKCA06Bnfzxj9l+PqSV+/38m2MQ3DNYvHzD/geY
+ hK9Psz4LwZogqfBOZstqaZJ3oQw7eF4O6vWj3vfBPgNlwHs5J34UZyjjWmQM4/uVh+Sf
+ NGcmnlkipCO+Zm6QSbg3aajzA/Tdpv7YFqZfSgDYF8wr/S46jCuADEVwW7Zs9gwzIrk1
+ GVlJQYW0I4HdeXKyu13u2UOFC+mRjbEbk5i37g+0yt6ho2IlWXzt+VBzEq4OuBD9tToT +w== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h98jvhd0k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 12:44:58 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CCMgo8021877;
+        Tue, 12 Jul 2022 12:44:56 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncngcrv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 12:44:55 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CCirUY24052116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 12:44:53 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69097A4051;
+        Tue, 12 Jul 2022 12:44:53 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 31F42A4040;
+        Tue, 12 Jul 2022 12:44:53 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 12:44:53 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>
+Cc:     Stefan Roese <sr@denx.de>, Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] nvme-pci: fix hang during error recovery when the PCI device is isolated
+Date:   Tue, 12 Jul 2022 14:44:52 +0200
+Message-Id: <20220712124453.2227362-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87edyq1ujr.wl-maz@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RqNpgWD8A2th9MugL-spxZNOTYVDqSwP
+X-Proofpoint-ORIG-GUID: RqNpgWD8A2th9MugL-spxZNOTYVDqSwP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ impostorscore=0 clxscore=1011 spamscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120048
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 11:42:32AM +0100, Marc Zyngier wrote:
-> On Fri, 24 Jun 2022 20:51:12 +0100,
-> Robert Marko <robimarko@gmail.com> wrote:
-> > 
-> > Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
-> > immutable") added a warning to indicate if the gpiolib is altering the
-> > internals of irqchips.
-> > 
-> > Following this change the following warning is now observed for the SPMI
-> > PMIC pinctrl driver:
-> > gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
-> > 
-> > Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
-> > 
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 22 ++++++++++++----------
-> >  1 file changed, 12 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > index c3255b0bece4..406ee0933d0b 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> > @@ -171,7 +171,6 @@ struct pmic_gpio_state {
-> >  	struct regmap	*map;
-> >  	struct pinctrl_dev *ctrl;
-> >  	struct gpio_chip chip;
-> > -	struct irq_chip irq;
-> >  	u8 usid;
-> >  	u8 pid_base;
-> >  };
-> > @@ -988,6 +987,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
-> >  	return fwspec;
-> >  }
-> >  
-> > +static const struct irq_chip spmi_gpio_irq_chip = {
-> > +	.name		= "spmi-gpio",
-> > +	.irq_ack	= irq_chip_ack_parent,
-> > +	.irq_mask	= irq_chip_mask_parent,
-> > +	.irq_unmask	= irq_chip_unmask_parent,
-> 
-> No, this is wrong. Please look at the documentation to see how you
-> must now directly call into the gpiolib helpers for these two
-> callbacks.
-> 
+Hi Christoph, Hi Keith,
 
-IIUC, you are referring to gpiochip_disable_irq() and
-gpiochip_enable_irq() APIs. These APIs are supposed to let the gpiolib
-know about that the IRQ usage of these GPIOs. But for the case of hierarchial
-IRQ domain, isn't the parent is going to do that?
+I found a regression when recovering NVMes after a simulated PCI error on
+s390, though I believe at least some POWER systems should be affected as
+well. I tracked this down to commit b98235d3a471 ("nvme-pci: harden drive
+presence detect in nvme_dev_disable()") which causes nvme_start_freeze() to
+not be called before nvme_reset_work() does nvme_wait_freeze() thus hanging
+forever. The detailed analysis is included in the commit message and not
+too complex but I'm not entirely sure my proposed solution is the correct
+one.
 
-Please correct me if I'm wrong.
+The patch I'm sending here works for me and should at least only affect
+platforms using the explicit driver->err_handler->slot_reset callback. To
+my understanding it seems that the nvme_dev_disable() in
+nvme_error_detected() still does the necessary quiescing towards upper
+layers and I assume that nvme_start_freeze() won't do anything useful if
+the controller is inaccessible but I'm not an expert in this. In particular
+I'm not sure it makes sense to start freezing the queues right after
+a reset.
 
-Thanks,
-Mani
+Also note I will be travelling for about 3 weeks starting July 14th and
+won't have access to s390 machines or my work mail address so apologies if
+I won't answer. Feel free to do your own fix. Also Matt (on CC) might be
+able to test fixes for this.
 
-> Thanks,
-> 
-> 	M.
-> 
-> -- 
-> Without deviation from the norm, progress is not possible.
+Best regards,
+Niklas
+
+
+Niklas Schnelle (1):
+  nvme-pci: fix hang during error recovery when the PCI device is
+    isolated
+
+ drivers/nvme/host/pci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+-- 
+2.34.1
+

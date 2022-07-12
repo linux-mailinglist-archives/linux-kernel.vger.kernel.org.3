@@ -2,346 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917115714BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D4E5714BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbiGLIfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S232411AbiGLIhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiGLIfv (ORCPT
+        with ESMTP id S229559AbiGLIh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:35:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB632A942;
-        Tue, 12 Jul 2022 01:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657614950; x=1689150950;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CMMOHSQnt4pXL7Lap1dzPhshjD8QGIMdroMSwJ1d4Sc=;
-  b=ZoQkUlP9Rs0KcsUYsb4ZTjnvo7fwXSP3609ohi7HClyY7/WKTMAEYNuk
-   S9fJwcYSS8OGYxVz7hJMgegeAVRG+W+PR4tLd9M1sMWIdmN+tqJLvMYpQ
-   OLSTyZ1iZyi+i2SmEhokOQfcYDmV3mMJai4+/wP0GlLger9ZkwLVaW4bo
-   L7tR1uCkFwZ6zCCs1x61DSDxA/s9SzsS3NS81cdE7kdU5MwRlEZ+nnb4m
-   fgBxdA69ILO5M6M5soJQmX6Ft9G4igxtSd+YFJrbbrlXUMPxUVrfHXeKN
-   zoDx22+Q7s64AsG7S5Ujw1YeOZjTgX7U7GwKxGwc2zFaLHQ2FjkEi7DDF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="348851804"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="348851804"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 01:35:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="737403368"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jul 2022 01:35:45 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Jul 2022 11:35:45 +0300
-Date:   Tue, 12 Jul 2022 11:35:45 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, christophe.jaillet@wanadoo.fr,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-Subject: Re: [PATCH v2 2/4] usb: typec: ucsi: stm32g0: add support for
- stm32g0 i2c controller
-Message-ID: <Ys0yYSqcJC4eJ/8A@kuha.fi.intel.com>
-References: <20220711120122.25804-1-fabrice.gasnier@foss.st.com>
- <20220711120122.25804-3-fabrice.gasnier@foss.st.com>
+        Tue, 12 Jul 2022 04:37:29 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220505071A;
+        Tue, 12 Jul 2022 01:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1657615047; x=1689151047;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version:subject;
+  bh=56fb1kGCypchDcbHSpub023hR1OiGEKMXvxgJ3v2G1M=;
+  b=m6r8ikRmXmVDdYQtriq7VpH6IrKoD6NeUqp2ic91xfbcPE9yRofzGh6e
+   1sfQuGrbTm5QaAN/lIyr1CR7p894TrYVHh2MZTqH+GmwEfZAgBfvNAJJB
+   0Hq13FQZ7Hg40P9LXiVa6Lt0GsalDUOCq7LzuYrPEBSgZE3qNSzQzlkwm
+   8=;
+X-IronPort-AV: E=Sophos;i="5.92,265,1650931200"; 
+   d="scan'208";a="1033119265"
+Subject: RE: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
+ if present
+Thread-Topic: [PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
+ if present
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 12 Jul 2022 08:37:10 +0000
+Received: from EX13D32EUC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id 6D21A42D31;
+        Tue, 12 Jul 2022 08:37:10 +0000 (UTC)
+Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
+ EX13D32EUC002.ant.amazon.com (10.43.164.94) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Tue, 12 Jul 2022 08:37:09 +0000
+Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
+ EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
+ Tue, 12 Jul 2022 08:37:09 +0000
+From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Thread-Index: AQHYlXfZ7mCZjdwoh0Oy8SwBeicg4K16ZByA
+Date:   Tue, 12 Jul 2022 08:37:09 +0000
+Message-ID: <369c3e9e02f947e2a2b0c093cbddc99c@EX13D32EUC003.ant.amazon.com>
+References: <20220629130514.15780-1-pdurrant@amazon.com>
+ <YsynoyUb4zrMBhRU@google.com>
+In-Reply-To: <YsynoyUb4zrMBhRU@google.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.165.192]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711120122.25804-3-fabrice.gasnier@foss.st.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jul 11, 2022 at 02:01:20PM +0200, Fabrice Gasnier kirjoitti:
-> STM32G0 provides an integrated USB Type-C and power delivery interface.
-> It can be programmed with a firmware to handle UCSI protocol over I2C
-> interface. A GPIO is used as an interrupt line.
-> 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> -----Original Message-----
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: 12 July 2022 00:44
+> To: Durrant, Paul <pdurrant@amazon.co.uk>
+> Cc: x86@kernel.org; kvm@vger.kernel.org; linux-kernel@vger.kernel.org; Da=
+vid Woodhouse
+> <dwmw2@infradead.org>; Paolo Bonzini <pbonzini@redhat.com>; Vitaly Kuznet=
+sov <vkuznets@redhat.com>;
+> Wanpeng Li <wanpengli@tencent.com>; Jim Mattson <jmattson@google.com>; Jo=
+erg Roedel <joro@8bytes.org>;
+> Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Bor=
+islav Petkov <bp@alien8.de>;
+> Dave Hansen <dave.hansen@linux.intel.com>; H. Peter Anvin <hpa@zytor.com>
+> Subject: RE: [EXTERNAL][PATCH v5] KVM: x86/xen: Update Xen CPUID Leaf 4 (=
+tsc info) sub-leaves, if
+> present
+>=20
+> CAUTION: This email originated from outside of the organization. Do not c=
+lick links or open
+> attachments unless you can confirm the sender and know the content is saf=
+e.
+>=20
+>=20
+>=20
+> On Wed, Jun 29, 2022, Paul Durrant wrote:
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
+_host.h
+> > index 88a3026ee163..abb0a39f60eb 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -638,6 +638,7 @@ struct kvm_vcpu_xen {
+> >       struct hrtimer timer;
+> >       int poll_evtchn;
+> >       struct timer_list poll_timer;
+> > +     u32 cpuid_tsc_info;
+>=20
+> I would prefer to follow vcpu->arch.kvm_cpuid_base and capture the base C=
+PUID
+> function.  I have a hard time believing this will be the only case where =
+KVM needs
+> to query XEN CPUID leafs.  And cpuid_tsc_info is a confusing name given t=
+he helper
+> kvm_xen_setup_tsc_info(); it's odd to see a "setup" helper immediately co=
+nsume a
+> variable with the same name.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Sure. It is rather shrink-to-fit at the moment... no problem with capturing=
+ the base.
 
+>=20
+> It'll incur another CPUID lookup in the update path to check the limit, b=
+ut again
+> that should be a rare operation so it doesn't seem too onerous.
+>=20
+
+We could capture the limit leaf in the general case. It's not Xen-specific =
+after all.
+
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 031678eff28e..29ed665c51db 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -3110,6 +3110,7 @@ static int kvm_guest_time_update(struct kvm_vcpu =
+*v)
+> >                                  &vcpu->hv_clock.tsc_shift,
+> >                                  &vcpu->hv_clock.tsc_to_system_mul);
+> >               vcpu->hw_tsc_khz =3D tgt_tsc_khz;
+> > +             kvm_xen_setup_tsc_info(v);
+>=20
+> Any objection to s/setup/update?  KVM Xen uses "setup" for things like co=
+nfiguring
+> the event channel using userspace input, whereas this is purely updating =
+existing
+> data structures.
+>=20
+
+Sure.
+
+> >       }
+> >
+> >       vcpu->hv_clock.tsc_timestamp =3D tsc_timestamp;
+> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> > index 610beba35907..c84424d5c8b6 100644
+> > --- a/arch/x86/kvm/xen.c
+> > +++ b/arch/x86/kvm/xen.c
+> > @@ -10,6 +10,9 @@
+> >  #include "xen.h"
+> >  #include "hyperv.h"
+> >  #include "lapic.h"
+> > +#include "cpuid.h"
+> > +
+> > +#include <asm/xen/cpuid.h>
+> >
+> >  #include <linux/eventfd.h>
+> >  #include <linux/kvm_host.h>
+> > @@ -1855,3 +1858,51 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
+> >       if (kvm->arch.xen_hvm_config.msr)
+> >               static_branch_slow_dec_deferred(&kvm_xen_enabled);
+> >  }
+> > +
+> > +void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
+> > +{
+> > +     u32 base =3D 0;
+> > +     u32 limit;
+> > +     u32 function;
+> > +
+> > +     vcpu->arch.xen.cpuid_tsc_info =3D 0;
+> > +
+> > +     for_each_possible_hypervisor_cpuid_base(function) {
+> > +             struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_entry(v=
+cpu, function, 0);
+> > +
+> > +             if (entry &&
+> > +                 entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
+> > +                 entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
+> > +                 entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
+> > +                     base =3D function;
+> > +                     limit =3D entry->eax;
+> > +                     break;
+> > +             }
+> > +     }
+> > +     if (!base)
+> > +             return;
+>=20
+> Rather than open code a variant of kvm_update_kvm_cpuid_base(), that help=
+er can
+> be tweaked to take a signature.  Along with a patch to provide a #define =
+for Xen's
+> signature as a string, this entire function becomes a one-liner.
+>=20
+
+Sure, but as said above, we could make capturing the limit part of the gene=
+ral function too. It could even be extended to capture the Hyper-V base/lim=
+it too.
+As for defining the sig as a string... I guess it would be neater to use th=
+e values from the Xen header, but it'll probably make the code more ugly so=
+ a secondary definition is reasonable.
+
+> If the below looks ok (won't compile, needs prep patches), I'll test and =
+post a
+> proper mini-series.
+
+Ok. Thanks,
+
+  Paul
+
+>=20
 > ---
-> Changes in v2:
-> Christophe's remarks:
-> - use kmalloc instead of kzalloc
-> - Use-after-free of buf: directly print the offset
-> ---
->  drivers/usb/typec/ucsi/Kconfig        |  10 ++
->  drivers/usb/typec/ucsi/Makefile       |   1 +
->  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 218 ++++++++++++++++++++++++++
->  3 files changed, 229 insertions(+)
->  create mode 100644 drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index 5e9b37b3f25e1..8f9c4b9f31f79 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -48,4 +48,14 @@ config UCSI_ACPI
->  	  To compile the driver as a module, choose M here: the module will be
->  	  called ucsi_acpi
->  
-> +config UCSI_STM32G0
-> +	tristate "UCSI Interface Driver for STM32G0"
-> +	depends on I2C
-> +	help
-> +	  This driver enables UCSI support on platforms that expose a STM32G0
-> +	  Type-C controller over I2C interface.
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/kvm/cpuid.c            |  2 ++
+>  arch/x86/kvm/x86.c              |  1 +
+>  arch/x86/kvm/xen.c              | 30 ++++++++++++++++++++++++++++++
+>  arch/x86/kvm/xen.h              | 22 +++++++++++++++++++++-
+>  5 files changed, 55 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
+ost.h
+> index de5a149d0971..b2565d05fc86 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -638,6 +638,7 @@ struct kvm_vcpu_xen {
+>         struct hrtimer timer;
+>         int poll_evtchn;
+>         struct timer_list poll_timer;
+> +       u32 cpuid_base;
+>  };
+>=20
+>  struct kvm_vcpu_arch {
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 0abe3adc9ae3..54ed51799b8d 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -25,6 +25,7 @@
+>  #include "mmu.h"
+>  #include "trace.h"
+>  #include "pmu.h"
+> +#include "xen.h"
+>=20
+>  /*
+>   * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need=
+ to be
+> @@ -309,6 +310,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu =
+*vcpu)
+>             __cr4_reserved_bits(guest_cpuid_has, vcpu);
+>=20
+>         kvm_hv_set_cpuid(vcpu);
+> +       kvm_xen_after_set_cpuid(vcpu);
+>=20
+>         /* Invoke the vendor callback only after the above state is updat=
+ed. */
+>         static_call(kvm_x86_vcpu_after_set_cpuid)(vcpu);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 567d13405445..a624293c66c8 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3110,6 +3110,7 @@ static int kvm_guest_time_update(struct kvm_vcpu *v=
+)
+>                                    &vcpu->hv_clock.tsc_shift,
+>                                    &vcpu->hv_clock.tsc_to_system_mul);
+>                 vcpu->hw_tsc_khz =3D tgt_tsc_khz;
+> +               kvm_xen_update_tsc_info(v);
+>         }
+>=20
+>         vcpu->hv_clock.tsc_timestamp =3D tsc_timestamp;
+> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> index 610beba35907..3fc0c194b813 100644
+> --- a/arch/x86/kvm/xen.c
+> +++ b/arch/x86/kvm/xen.c
+> @@ -10,6 +10,9 @@
+>  #include "xen.h"
+>  #include "hyperv.h"
+>  #include "lapic.h"
+> +#include "cpuid.h"
 > +
-> +	  To compile the driver as a module, choose M here: the module will be
-> +	  called ucsi_stm32g0.
+> +#include <asm/xen/cpuid.h>
+>=20
+>  #include <linux/eventfd.h>
+>  #include <linux/kvm_host.h>
+> @@ -1855,3 +1858,30 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
+>         if (kvm->arch.xen_hvm_config.msr)
+>                 static_branch_slow_dec_deferred(&kvm_xen_enabled);
+>  }
 > +
->  endif
-> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> index 8a8eb5cb8e0f0..480d533d762fe 100644
-> --- a/drivers/usb/typec/ucsi/Makefile
-> +++ b/drivers/usb/typec/ucsi/Makefile
-> @@ -17,3 +17,4 @@ endif
->  
->  obj-$(CONFIG_UCSI_ACPI)			+= ucsi_acpi.o
->  obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
-> +obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
-> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> new file mode 100644
-> index 0000000000000..bb5271bf7cdcf
-> --- /dev/null
-> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-> @@ -0,0 +1,218 @@
-> +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +/*
-> + * UCSI driver for STMicroelectronics STM32G0 Type-C PD controller
-> + *
-> + * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
-> + * Author: Fabrice Gasnier <fabrice.gasnier@foss.st.com>.
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "ucsi.h"
-> +
-> +struct ucsi_stm32g0 {
-> +	struct i2c_client *client;
-> +	struct completion complete;
-> +	struct device *dev;
-> +	unsigned long flags;
-> +	struct ucsi *ucsi;
-> +};
-> +
-> +static int ucsi_stm32g0_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t len)
+> +void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu)
 > +{
-> +	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-> +	struct i2c_client *client = g0->client;
-> +	u8 reg = offset;
-> +	struct i2c_msg msg[] = {
-> +		{
-> +			.addr	= client->addr,
-> +			.flags  = 0,
-> +			.len	= 1,
-> +			.buf	= &reg,
-> +		},
-> +		{
-> +			.addr	= client->addr,
-> +			.flags  = I2C_M_RD,
-> +			.len	= len,
-> +			.buf	= val,
-> +		},
-> +	};
-> +	int ret;
+> +       struct kvm_cpuid_entry2 *entry;
+> +       u32 function;
 > +
-> +	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-> +	if (ret != ARRAY_SIZE(msg)) {
-> +		dev_err(g0->dev, "i2c read %02x, %02x error: %d\n", client->addr, reg, ret);
+> +       if (!vcpu->arch.xen.cpuid_base)
+> +               return;
 > +
-> +		return ret < 0 ? ret : -EIO;
-> +	}
+> +       entry =3D kvm_find_cpuid_entry(vcpu, vcpu->arch.xen.cpuid_base, 0=
+);
+> +       if (WARN_ON_ONCE(!entry))
+> +               return;
 > +
-> +	return 0;
+> +       function =3D vcpu->arch.xen.cpuid_base | XEN_CPUID_LEAF(3);
+> +       if (function > entry->eax)
+> +               return;
+> +
+> +       entry =3D kvm_find_cpuid_entry(vcpu, function, 1);
+> +       if (entry) {
+> +               entry->ecx =3D vcpu->arch.hv_clock.tsc_to_system_mul;
+> +               entry->edx =3D vcpu->arch.hv_clock.tsc_shift;
+> +       }
+> +
+> +       entry =3D kvm_find_cpuid_entry(vcpu, function, 2);
+> +       if (entry)
+> +               entry->eax =3D vcpu->arch.hw_tsc_khz;
+> +}
+> diff --git a/arch/x86/kvm/xen.h b/arch/x86/kvm/xen.h
+> index 532a535a9e99..b8161b99b82a 100644
+> --- a/arch/x86/kvm/xen.h
+> +++ b/arch/x86/kvm/xen.h
+> @@ -9,9 +9,14 @@
+>  #ifndef __ARCH_X86_KVM_XEN_H__
+>  #define __ARCH_X86_KVM_XEN_H__
+>=20
+> -#ifdef CONFIG_KVM_XEN
+>  #include <linux/jump_label_ratelimit.h>
+>=20
+> +#include <asm/xen/cpuid.h>
+> +
+> +#include "cpuid.h"
+> +
+> +#ifdef CONFIG_KVM_XEN
+> +
+>  extern struct static_key_false_deferred kvm_xen_enabled;
+>=20
+>  int __kvm_xen_has_interrupt(struct kvm_vcpu *vcpu);
+> @@ -32,6 +37,13 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe,
+>  int kvm_xen_setup_evtchn(struct kvm *kvm,
+>                          struct kvm_kernel_irq_routing_entry *e,
+>                          const struct kvm_irq_routing_entry *ue);
+> +void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu);
+> +
+> +static inline void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
+> +{
+> +       vcpu->arch.xen.cpuid_base =3D
+> +               kvm_get_hypervisor_cpuid_base(vcpu, XEN_CPUID_SIGNATURE);
+> +}
+>=20
+>  static inline bool kvm_xen_msr_enabled(struct kvm *kvm)
+>  {
+> @@ -135,6 +147,14 @@ static inline bool kvm_xen_timer_enabled(struct kvm_=
+vcpu *vcpu)
+>  {
+>         return false;
+>  }
+> +
+> +static inline void kvm_xen_after_set_cpuid(struct kvm_vcpu *vcpu)
+> +{
 > +}
 > +
-> +static int ucsi_stm32g0_async_write(struct ucsi *ucsi, unsigned int offset, const void *val,
-> +				    size_t len)
+> +static inline void kvm_xen_update_tsc_info(struct kvm_vcpu *vcpu)
 > +{
-> +	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-> +	struct i2c_client *client = g0->client;
-> +	struct i2c_msg msg[] = {
-> +		{
-> +			.addr	= client->addr,
-> +			.flags  = 0,
-> +		}
-> +	};
-> +	unsigned char *buf;
-> +	int ret;
-> +
-> +	buf = kmalloc(len + 1, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	buf[0] = offset;
-> +	memcpy(&buf[1], val, len);
-> +	msg[0].len = len + 1;
-> +	msg[0].buf = buf;
-> +
-> +	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-> +	kfree(buf);
-> +	if (ret != ARRAY_SIZE(msg)) {
-> +		dev_err(g0->dev, "i2c write %02x, %02x error: %d\n", client->addr, offset, ret);
-> +
-> +		return ret < 0 ? ret : -EIO;
-> +	}
-> +
-> +	return 0;
 > +}
-> +
-> +static int ucsi_stm32g0_sync_write(struct ucsi *ucsi, unsigned int offset, const void *val,
-> +				   size_t len)
-> +{
-> +	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-> +	int ret;
-> +
-> +	set_bit(COMMAND_PENDING, &g0->flags);
-> +
-> +	ret = ucsi_stm32g0_async_write(ucsi, offset, val, len);
-> +	if (ret)
-> +		goto out_clear_bit;
-> +
-> +	if (!wait_for_completion_timeout(&g0->complete, msecs_to_jiffies(5000)))
-> +		ret = -ETIMEDOUT;
-> +
-> +out_clear_bit:
-> +	clear_bit(COMMAND_PENDING, &g0->flags);
-> +
-> +	return ret;
-> +}
-> +
-> +static irqreturn_t ucsi_stm32g0_irq_handler(int irq, void *data)
-> +{
-> +	struct ucsi_stm32g0 *g0 = data;
-> +	u32 cci;
-> +	int ret;
-> +
-> +	ret = ucsi_stm32g0_read(g0->ucsi, UCSI_CCI, &cci, sizeof(cci));
-> +	if (ret)
-> +		return IRQ_NONE;
-> +
-> +	if (UCSI_CCI_CONNECTOR(cci))
-> +		ucsi_connector_change(g0->ucsi, UCSI_CCI_CONNECTOR(cci));
-> +
-> +	if (test_bit(COMMAND_PENDING, &g0->flags) &&
-> +	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
-> +		complete(&g0->complete);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static const struct ucsi_operations ucsi_stm32g0_ops = {
-> +	.read = ucsi_stm32g0_read,
-> +	.sync_write = ucsi_stm32g0_sync_write,
-> +	.async_write = ucsi_stm32g0_async_write,
-> +};
-> +
-> +static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct ucsi_stm32g0 *g0;
-> +	int ret;
-> +
-> +	g0 = devm_kzalloc(dev, sizeof(*g0), GFP_KERNEL);
-> +	if (!g0)
-> +		return -ENOMEM;
-> +
-> +	g0->dev = dev;
-> +	g0->client = client;
-> +	init_completion(&g0->complete);
-> +	i2c_set_clientdata(client, g0);
-> +
-> +	g0->ucsi = ucsi_create(dev, &ucsi_stm32g0_ops);
-> +	if (IS_ERR(g0->ucsi))
-> +		return PTR_ERR(g0->ucsi);
-> +
-> +	ucsi_set_drvdata(g0->ucsi, g0);
-> +
-> +	/* Request alert interrupt */
-> +	ret = request_threaded_irq(client->irq, NULL, ucsi_stm32g0_irq_handler, IRQF_ONESHOT,
-> +				   dev_name(&client->dev), g0);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "request IRQ failed\n");
-> +		goto destroy;
-> +	}
-> +
-> +	ret = ucsi_register(g0->ucsi);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "ucsi_register failed\n");
-> +		goto freeirq;
-> +	}
-> +
-> +	return 0;
-> +
-> +freeirq:
-> +	free_irq(client->irq, g0);
-> +destroy:
-> +	ucsi_destroy(g0->ucsi);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ucsi_stm32g0_remove(struct i2c_client *client)
-> +{
-> +	struct ucsi_stm32g0 *g0 = i2c_get_clientdata(client);
-> +
-> +	ucsi_unregister(g0->ucsi);
-> +	free_irq(client->irq, g0);
-> +	ucsi_destroy(g0->ucsi);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id __maybe_unused ucsi_stm32g0_typec_of_match[] = {
-> +	{ .compatible = "st,stm32g0-typec" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, ucsi_stm32g0_typec_of_match);
-> +
-> +static const struct i2c_device_id ucsi_stm32g0_typec_i2c_devid[] = {
-> +	{"stm32g0-typec", 0},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ucsi_stm32g0_typec_i2c_devid);
-> +
-> +static struct i2c_driver ucsi_stm32g0_i2c_driver = {
-> +	.driver = {
-> +		.name = "ucsi-stm32g0-i2c",
-> +		.of_match_table = of_match_ptr(ucsi_stm32g0_typec_of_match),
-> +	},
-> +	.probe = ucsi_stm32g0_probe,
-> +	.remove = ucsi_stm32g0_remove,
-> +	.id_table = ucsi_stm32g0_typec_i2c_devid
-> +};
-> +module_i2c_driver(ucsi_stm32g0_i2c_driver);
-> +
-> +MODULE_AUTHOR("Fabrice Gasnier <fabrice.gasnier@foss.st.com>");
-> +MODULE_DESCRIPTION("STMicroelectronics STM32G0 Type-C controller");
-> +MODULE_LICENSE("Dual BSD/GPL");
-> +MODULE_ALIAS("platform:ucsi-stm32g0");
-> -- 
-> 2.25.1
+>  #endif
+>=20
+>  int kvm_xen_hypercall(struct kvm_vcpu *vcpu);
+>=20
+> base-commit: b08b2f54c49d8f96a22107c444d500dff73ec2a6
+> --
 
--- 
-heikki

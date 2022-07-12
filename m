@@ -2,84 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67979571B6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4C5571B70
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbiGLNhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S233087AbiGLNhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiGLNg5 (ORCPT
+        with ESMTP id S229691AbiGLNhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:36:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1B2B6548;
-        Tue, 12 Jul 2022 06:36:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01682B818CF;
-        Tue, 12 Jul 2022 13:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C604AC3411C;
-        Tue, 12 Jul 2022 13:36:51 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 09:36:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, Networking <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/5] ftrace: host klp and bpf trampoline
- together
-Message-ID: <20220712093650.5520d4a2@gandalf.local.home>
-In-Reply-To: <8B0FCB44-6241-4220-A1AE-CF91AAA25777@fb.com>
-References: <20220602193706.2607681-1-song@kernel.org>
-        <20220711195552.22c3a4be@gandalf.local.home>
-        <8B0FCB44-6241-4220-A1AE-CF91AAA25777@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 12 Jul 2022 09:37:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B82ABB79FD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657633031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B3NrhGN3QDhLJqIwcsb2TkKqYIlLbUqMpzzZ94y01dE=;
+        b=DfyGYXSZ3VXIACfezfD71o8UNxw+e+FeFziL+zbmPE0fHpN0iJfk8p77HdN+84cG8VsGwH
+        wnMh9GCx/+0RVWQ9P8HPEDurbN+KFV5uW/O0fpxhIYbmMxKXwt2lhp50mBjxq1nkBeE1uQ
+        e+Zi9TXDYPQXKs2n13/3J7Pi3fOoWfE=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-JR-8AeiePii-bM67UAPYvA-1; Tue, 12 Jul 2022 09:37:10 -0400
+X-MC-Unique: JR-8AeiePii-bM67UAPYvA-1
+Received: by mail-qt1-f197.google.com with SMTP id o22-20020ac87c56000000b0031d4ab81b21so6875812qtv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:37:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=B3NrhGN3QDhLJqIwcsb2TkKqYIlLbUqMpzzZ94y01dE=;
+        b=WdhmG5Qxn+7cY2mC/0SNlnMEhO4z7CvBnlvI8b05mtKKQyTUxNxLWNq0kz2jMfa2xw
+         MYdHLf0t40ZKTtzi7zPub+h7TICfjg8Wp7rkX/58jiUiymT/DC1x+x7qvDzyUNUO+PGR
+         IfW3IS8SGupOB7L+5xixwsWUpmo5I4kofjQphFpho/Ex2z4VOLbfzlXbhq8NwvAhHa4K
+         Mm6x9bR9QDjt4W5MzYdUqgUCTgcmICSyrQ38f6GsvojLk7c4QJrm562kKnGkCPZTcuQn
+         fI3L4Pm1BaW12INI/32mP0bmVOh3IzlovMIyd631ne4Vq/6UGshdwTrj0ASHGAzlR+w6
+         8IVg==
+X-Gm-Message-State: AJIora81rw8V3OpwmZRvUVPfZ7EyfhHHMLDyAxRL64/pAd0KWL/YDRIe
+        7ORiK2oq2TJ4L2e/XQO0F7WAtQ/4xqwJQQIsJZocRWtMcnZWf1gNM0XVbZSW6jr9DfvXIFeMwmM
+        bsiczZiGSLTcFM5Ach6bhXM4x
+X-Received: by 2002:a05:620a:4446:b0:6af:1d31:c257 with SMTP id w6-20020a05620a444600b006af1d31c257mr15093794qkp.399.1657633030067;
+        Tue, 12 Jul 2022 06:37:10 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tZ903RTp1aT6+v7VmosFNF43G33TqmEcKlRp3/i8mOo2uGbStQlm5M4dWv2KYJBUgBGZWqgw==
+X-Received: by 2002:a05:620a:4446:b0:6af:1d31:c257 with SMTP id w6-20020a05620a444600b006af1d31c257mr15093771qkp.399.1657633029822;
+        Tue, 12 Jul 2022 06:37:09 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id o21-20020a05622a009500b0031d4044c464sm7807985qtw.46.2022.07.12.06.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 06:37:09 -0700 (PDT)
+Message-ID: <4017447bfd4636f4075d29d8f3c57c4c32fd67d2.camel@redhat.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Set error code to segment selector on
+ LLDT/LTR non-canonical #GP
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>
+Date:   Tue, 12 Jul 2022 16:37:06 +0300
+In-Reply-To: <20220711232750.1092012-3-seanjc@google.com>
+References: <20220711232750.1092012-1-seanjc@google.com>
+         <20220711232750.1092012-3-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 05:15:26 +0000
-Song Liu <songliubraving@fb.com> wrote:
-
-> > On Jul 11, 2022, at 4:55 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > I just realized that none of the live kernel patching folks are Cc'd on
-> > this thread. I think they will care much more about this than I do.  
+On Mon, 2022-07-11 at 23:27 +0000, Sean Christopherson wrote:
+> When injecting a #GP on LLDT/LTR due to a non-canonical LDT/TSS base, set
+> the error code to the selector.  Intel SDM's says nothing about the #GP,
+> but AMD's APM explicitly states that both LLDT and LTR set the error code
+> to the selector, not zero.
 > 
-> vger.kernel.org often drops my email when the CC list is too long. So I
-
-Oh, they fixed that. I've had over 20 Cc's and it still works. ;-)
-
-> try to keep the list short. In this case, since we are not changing live
-> patch code, and there isn't any negative impact for live patch side, I 
-> didn't CC live patch folks. 
-
-It affects them indirectly, and they should be aware of what is happening
-underneath.
-
+> Note, a non-canonical memory operand on LLDT/LTR does generate a #GP(0),
+> but the KVM code in question is specific to the base from the descriptor.
 > 
-> I will at least CC live-patching@ in the next version. 
+> Fixes: e37a75a13cda ("KVM: x86: Emulator ignores LDTR/TR extended base on LLDT/LTR")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/emulate.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 09e4b67b881f..bd9e9c5627d0 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -1736,8 +1736,8 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+>                 if (ret != X86EMUL_CONTINUE)
+>                         return ret;
+>                 if (emul_is_noncanonical_address(get_desc_base(&seg_desc) |
+> -                               ((u64)base3 << 32), ctxt))
+> -                       return emulate_gp(ctxt, 0);
+> +                                                ((u64)base3 << 32), ctxt))
+> +                       return emulate_gp(ctxt, err_code);
+>         }
+>  
+>         if (seg == VCPU_SREG_TR) {
 
-Thanks.
+I guess this is the quote from AMD's manual (might we worth to add to the source?)
 
--- Steve
+
+"The 64-bit system-segment base address must be in canonical form. Otherwise, a general-protection
+exception occurs with a selector error-code, #GP(selector), when the system segment is loaded.
+System-segment limit values are checked by the processor in both 64-bit and compatibility modes,
+under the control of the granularity (G) bit."
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

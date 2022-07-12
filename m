@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078FB571A84
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453E8571A87
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiGLMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S233319AbiGLMxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiGLMwY (ORCPT
+        with ESMTP id S233286AbiGLMxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:52:24 -0400
+        Tue, 12 Jul 2022 08:53:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5213AB3D5C;
-        Tue, 12 Jul 2022 05:52:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A88B3D5C;
+        Tue, 12 Jul 2022 05:53:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFFFC61707;
-        Tue, 12 Jul 2022 12:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529D0C341CA;
-        Tue, 12 Jul 2022 12:52:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB0506171A;
+        Tue, 12 Jul 2022 12:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC3AC3411C;
+        Tue, 12 Jul 2022 12:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657630343;
-        bh=CZjOFtcsRU4tBiWJ7CtJh3EtYkC4QzT0yP++sYR6tgo=;
-        h=Date:Subject:From:To:References:In-Reply-To:From;
-        b=B+u2WqNBosq/zXqBeLc8uz7K0IPDAxthTXWNWQVyYcaihM3D2c5qpKBv94OnUNiIH
-         wIQ9z2zWl52Yo8TXjwmzdfbI0xqCl/b89BOea7x4rO4OKdZDFZkCk29zSgj+LwpKZZ
-         pU+sAWKbraC+jSNwTgtBkhoU9/3U41wTyh63Yeh5WFLLlr2YsqEhj64iYOLzrOzblJ
-         MWhSCrRbcybF4UKInRZyfTIOGeJTXJ9VQSDdXOgeGMRXgWnP5O6JtKC0tJWvpPd1ui
-         kcGFI9KZiFYp37t7tYlQbSSD2PbUmsDn/NKEDCDH10P8w1JNV30SLR9NIoxUJqfYTi
-         pVDhZMeM3r36A==
-Message-ID: <124806c0-4189-0280-ce9a-80cafb238c7d@kernel.org>
-Date:   Tue, 12 Jul 2022 07:52:12 -0500
+        s=k20201202; t=1657630381;
+        bh=jJin7lOWMTaJyTA//FjzideMNMuqj8Mr/pLMpaUWtcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=khWAjOj6JT+x/wK40kEyMmNV61m7fqDMoi6FBMkE326WiBbCn5y+sxfj1QdUPpRgd
+         DGCCduZxJPMqD4sOushQAxkz+pNNaxwzE+5JzQ2cTTyVI24CCuxsPAGrFxbN9SOS5d
+         2CPr5bZ0vU91CfUrdNQ7ryIhA5vRqDVTwf6s7KmoLLab83pBZypaoArma8fGsMftlH
+         TPxo8kCfi9dFW8f7BRxK55v5JCNOY9xSDu5N3AnFm+J4FzlYWWhXVyebQ/9OL3dlrx
+         8E/HJ2NCj9r9UG+OYZtIadr46E6k+AkaTijwGLdZs4NhJexcFyzwbFztRJC0nICegd
+         2kiwt646wHQ/w==
+Date:   Tue, 12 Jul 2022 13:52:55 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>
+Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
+ error: Oops - BUG: 0
+Message-ID: <Ys1up5DBGV5c2MG0@sirena.org.uk>
+References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
+ <Ys1t8win0pVPPuig@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv6 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Content-Language: en-US
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        christopher.hatch@intel.com
-References: <20220620230109.986298-1-dinguyen@kernel.org>
- <YrI6EeVkkWVMNPFY@shikoro> <928b2996-b2e7-d847-0e20-7e19df3cbf03@kernel.org>
- <YrN2lxvlP4cWfelY@kunai> <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
-In-Reply-To: <c765455f-c1b9-2da0-675e-591f7c268d99@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VloPA9NQFi1jxZ57"
+Content-Disposition: inline
+In-Reply-To: <Ys1t8win0pVPPuig@FVFF77S0Q05N.cambridge.arm.com>
+X-Cookie: I like your SNOOPY POSTER!!
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,42 +66,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--VloPA9NQFi1jxZ57
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/12/22 07:41, Dinh Nguyen wrote:
-> Hi Wolfram,
-> 
-> On 6/22/22 15:07, Wolfram Sang wrote:
->>
->>>  From the original code, the first mechanism to a recovery is to 
->>> acquire a
->>> GPIO for the SCL line and send the 9 SCL pulses, after that, it does 
->>> a reset
->>> of the I2C module. For the SOCFPGA part, there is no GPIO line for 
->>> the SCL,
->>> thus the I2C module cannot even get a reset. This code allows the 
->>> function
->>> to reset the I2C module for SOCFPGA, which is the 2nd part of the 
->>> recovery
->>> process.
->>
->> The second part is totally useless if the client device is holding SDA
->> low. Which is exactly the situation that recovery tries to fix. As I
->> said, if you can't control SCL, you don't have recovery.
->>
-> 
-> This is recovery of the master and not the slave.  We have a customer 
-> that is the using I2C with the signals routed through the FPGA, and thus 
-> are not GPIO. During a timeout, with this code, the driver is able to 
-> recover the master.
-> 
+On Tue, Jul 12, 2022 at 01:49:55PM +0100, Mark Rutland wrote:
 
-Adding a bit more, because of patch:
+> ...  and it boots perfectly fine under:
 
-ca382f5b38f3 ("i2c: designware: add i2c gpio recovery option")
+> * An FVP Base RevC model using the latest boot-wrapper
 
-the driver is now not able to reset the controller at all because it has 
-placed a strict dependency on getting a GPIO. Before this patch, during 
-a timeout, there was a simple call to i2c_dw_init_master(), which 
-ultimately resets the master.
+Also with TF-A and u-boot (both some random recentish tip of tree
+whenever I last built them).
 
-Dinh
+--VloPA9NQFi1jxZ57
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLNbqYACgkQJNaLcl1U
+h9A3uAf+MhpLUtT4NKLJxPxbuc1ffEyWrJ9PDg3u2fRg6AJxuaFvZajeSMQBpgF4
+M+M71of0EFqD/nJxyjFBfm/tcbUFm5Z77JJvJCx4FipGd3WFy75u6ML2hJcz7APH
+bDvyMVdIRsnlwO2jaieYvD7difM25+nE5g0SBg+KDGAJkLWll/7ENLPa1aBFKyJy
+8GJeznsuVpEc89xdJJm8LzmJ0+1h4osh9GQ0q0FBFbnbGng6lgMDTVTGqgOCrDPb
+hxN7qwzxn8KwTYW934IFNUlV7p/Ac48g+WHhfWJIwhrZQihp5yIMxUjMdhcYqc14
+12/TSOkBZQEMkaSqgYD744YXmHyG3A==
+=Pl6k
+-----END PGP SIGNATURE-----
+
+--VloPA9NQFi1jxZ57--

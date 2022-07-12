@@ -2,46 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5BD571F0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E05571F0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiGLPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S233473AbiGLP0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbiGLPZs (ORCPT
+        with ESMTP id S233212AbiGLPZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:25:48 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F009FEE;
-        Tue, 12 Jul 2022 08:25:46 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5E1C22000F;
-        Tue, 12 Jul 2022 15:25:40 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 17:25:38 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        quentin.schulz@theobroma-systems.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] media: dt-bindings: ov5693: document YAML binding
-Message-ID: <20220712152538.jh4ufxik7icllox6@uno.localdomain>
-References: <20220630134835.592521-1-tommaso.merciai@amarulasolutions.com>
- <20220630134835.592521-6-tommaso.merciai@amarulasolutions.com>
- <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 12 Jul 2022 11:25:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E01BA47D;
+        Tue, 12 Jul 2022 08:25:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B64C7615D1;
+        Tue, 12 Jul 2022 15:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24419C3411C;
+        Tue, 12 Jul 2022 15:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657639555;
+        bh=f03fkCp+T0kJXEAtG828037pWBQYAHiFGeWOGKqwIQc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ltCadJraaEfxB1g2nkhYInID6Kd/VGUbti3z07+JcpgnNZfeQQIb1y4sziX9yHG8C
+         euE/ussnFSRMTcd7VG19RvLvHHZEU5ctHVt+bXHuO0gcerAoBZgYH90oJRsZny9Coi
+         xFkh/sdvn1Seno8FkCccBu5sNjGbZGFFabc5W9GJEDed1QRaXJI1LLnaUdP1NxS+In
+         tIcyPvfe0XAaAWLSj6XxSask4aY1x1lRna3ngktJHAw2Dm0DZxvzlBh1thHZijAIQk
+         J+a0xlapnQSgIw4RamPB8PY6badYroNFW+aY7osH4hhbEK3bVs1zGJl7UJb39HJAnP
+         bVxDRSKEj7J8Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oBHlo-006yiG-W3;
+        Tue, 12 Jul 2022 16:25:53 +0100
+Date:   Tue, 12 Jul 2022 16:25:52 +0100
+Message-ID: <87bktu1hfj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
+        chenxiang via <qemu-devel@nongnu.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [QUESTION] Exception print when enabling GICv4
+In-Reply-To: <6d6d61fb-6241-4e1e-ddff-8ae8be96f9ff@hisilicon.com>
+References: <6d6d61fb-6241-4e1e-ddff-8ae8be96f9ff@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenxiang66@hisilicon.com, alex.williamson@redhat.com, pbonzini@redhat.com, kvm@vger.kernel.org, qemu-devel@nongnu.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,182 +68,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
-   could you have a look at the below question ?
+Hi Xiang,
 
-If no need to resend from Tommaso I think the series could be
-collected for v5.20.
-
-On Mon, Jul 11, 2022 at 11:37:05AM +0200, Jacopo Mondi wrote:
-> Hi Tommaso, Krzysztof,
+On Tue, 12 Jul 2022 13:55:16 +0100,
+"chenxiang (M)" <chenxiang66@hisilicon.com> wrote:
+> 
+> Hi,
+> I encounter a issue related to GICv4 enable on ARM64 platform (kernel
+> 5.19-rc4, qemu 6.2.0):
+> We have a accelaration module whose VF has 3 MSI interrupts, and we
+> passthrough it to virtual machine with following steps:
+> 
+> echo 0000:79:00.1 > /sys/bus/pci/drivers/hisi_hpre/unbind
+> echo vfio-pci >
+> /sys/devices/pci0000\:78/0000\:78\:00.0/0000\:79\:00.1/driver_override
+> echo 0000:79:00.1 > /sys/bus/pci/drivers_probe
+> 
+> Then we boot VM with "-device vfio-pci,host=79:00.1,id=net0 \".
+> When insmod the driver which registers 3 PCI MSI interrupts in VM,
+> some exception print occur as following:
+> 
+> vfio-pci 0000:3a:00.1: irq bypass producer (token 000000008f08224d)
+> registration fails: 66311
+> 
+> I find that bit[6:4] of register PCI_MSI_FLAGS is 2 (4 MSI interrupts)
+> though we only register 3 PCI MSI interrupt,
 >
->    This has been reviewed by Krzysztof already, so I guess it's fine,
-> but let me ask anyway
->
-> On Thu, Jun 30, 2022 at 03:48:34PM +0200, Tommaso Merciai wrote:
-> > Add documentation of device tree in YAML schema for the OV5693
-> > CMOS image sensor from Omnivision
-> >
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> > Changes since v1:
-> >  - Fix allOf position as suggested by Krzysztof
-> >  - Remove port description as suggested by Krzysztof
-> >  - Fix EOF as suggested by Krzysztof
-> >
-> > Changes since v2:
-> >  - Fix commit body as suggested by Krzysztof
-> >
-> > Changes since v3:
-> >  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
-> >
-> > Changes since v4:
-> >  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
-> >
-> >  .../bindings/media/i2c/ovti,ov5693.yaml       | 106 ++++++++++++++++++
-> >  MAINTAINERS                                   |   1 +
-> >  2 files changed, 107 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > new file mode 100644
-> > index 000000000000..b83c9fc04023
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> > @@ -0,0 +1,106 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (c) 2022 Amarulasolutions
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Omnivision OV5693 CMOS Sensor
-> > +
-> > +maintainers:
-> > +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > +
-> > +description: |
-> > +  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
-> > +  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
-> > +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-> > +  Serial Camera Control Bus (SCCB) interface.
-> > +
-> > +  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (SCCB).
-> > +  The sensor output is available via CSI-2 serial data output (up to 2-lane).
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: ovti,ov5693
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      System input clock (aka XVCLK). From 6 to 27 MHz.
-> > +    maxItems: 1
-> > +
-> > +  dovdd-supply:
-> > +    description:
-> > +      Digital I/O voltage supply, 1.8V.
-> > +
-> > +  avdd-supply:
-> > +    description:
-> > +      Analog voltage supply, 2.8V.
-> > +
-> > +  dvdd-supply:
-> > +    description:
-> > +      Digital core voltage supply, 1.2V.
-> > +
-> > +  reset-gpios:
-> > +    description:
-> > +      The phandle and specifier for the GPIO that controls sensor reset.
-> > +      This corresponds to the hardware pin XSHUTDN which is physically
-> > +      active low.
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - dovdd-supply
-> > +  - avdd-supply
-> > +  - dvdd-supply
->
-> Should supplies be made mandatory ? Sensors are often powered by fixed
-> rails. Do we want DTS writers to create "fixed-regulators" for all of
-> them ? The fact the regulator framework creates dummies if there's no
-> entry in .dts for a regulator makes me think it's fine to have them
-> optional, but I understand how Linux works should not be an indication
-> of how a bindings should look like.
->
+> and only 3 MSI interrupt is activated at last.
+> It allocates 4 vectors in function vfio_msi_enable() (qemu)  as it
+> reads the register PCI_MSI_FLAGS.
+> Later it will  call system call VFIO_DEVICE_SET_IRQS to set forwarding
+> for those interrupts
+> using function kvm_vgic_v4_set_forrwarding() as GICv4 is enabled. For
+> interrupt 0~2, it success to set forwarding as they are already
+> activated,
+> but for the 4th interrupt, it is not activated, so ite is not found in
+> function vgic_its_resolve_lpi(), so above printk occurs.
+> 
+> It seems that we only allocate and activate 3 MSI interrupts in guest
+> while it tried to set forwarding for 4 MSI interrupts in host.
+> Do you have any idea about this issue?
 
-This question ^ :)
+I have a hunch: QEMU cannot know that the guest is only using 3 MSIs
+out of the 4 that the device can use, and PCI/Multi-MSI only has a
+single enable bit for all MSIs. So it probably iterates over all
+possible MSIs and enable the forwarding. Since the guest has only
+created 3 mappings in the virtual ITS, the last call fails. I would
+expect the guest to still work properly though.
 
-Thanks
-  j
+Thanks,
 
-> > +  - port
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/px30-cru.h>
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/pinctrl/rockchip.h>
-> > +
-> > +    i2c {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        ov5693: camera@36 {
-> > +            compatible = "ovti,ov5693";
-> > +            reg = <0x36>;
-> > +
-> > +            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-> > +            pinctrl-names = "default";
-> > +            pinctrl-0 = <&cif_clkout_m0>;
-> > +
-> > +            clocks = <&cru SCLK_CIF_OUT>;
-> > +            assigned-clocks = <&cru SCLK_CIF_OUT>;
-> > +            assigned-clock-rates = <19200000>;
-> > +
-> > +            avdd-supply = <&vcc_1v8>;
-> > +            dvdd-supply = <&vcc_1v2>;
-> > +            dovdd-supply = <&vcc_2v8>;
-> > +
-> > +            rotation = <90>;
-> > +            orientation = <0>;
-> > +
-> > +            port {
-> > +                ucam_out: endpoint {
-> > +                    remote-endpoint = <&mipi_in_ucam>;
-> > +                    data-lanes = <1 2>;
-> > +                    link-frequencies = /bits/ 64 <450000000>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +...
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 1fc9ead83d2a..844307cb20c4 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -14719,6 +14719,7 @@ M:	Daniel Scally <djrscally@gmail.com>
-> >  L:	linux-media@vger.kernel.org
-> >  S:	Maintained
-> >  T:	git git://linuxtv.org/media_tree.git
-> > +F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
-> >  F:	drivers/media/i2c/ov5693.c
-> >
-> >  OMNIVISION OV5695 SENSOR DRIVER
-> > --
-> > 2.25.1
-> >
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

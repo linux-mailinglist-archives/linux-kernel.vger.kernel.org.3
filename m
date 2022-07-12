@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155F57110C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15395571112
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiGLEAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 00:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        id S229768AbiGLEFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 00:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiGLEAv (ORCPT
+        with ESMTP id S229666AbiGLEFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 00:00:51 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73122422F6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:00:50 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id a12so4157511ilp.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:00:50 -0700 (PDT)
+        Tue, 12 Jul 2022 00:05:46 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C637180
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:05:45 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id a15so6420987pfv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UDmz6J2xhATtjIjVKeT6M6oqCXmwom6pKSeUfa8N9a0=;
-        b=ppFHoPSihEH+cJRqPAwQbyu8Quh8JEwtIR+IITVx1xLtjukCLWDpAyfti9U3+neANV
-         AQxuJgzxHbyneCD0oBpTQW+ZERzW3+MKVkyBUgx/DdQkdlkH4mpn5w//xUneUz496w5l
-         XujTfn46y3Yly7NzQvdC4Rn063A+mJ1wOOsYliBYHIQPbz0z1Mz5dcMCU/MW7pfjDq/U
-         aRmt8GuPoQRfQDNSUUJrt57vdQHjFObJoKMbwp+LA05pBV26zfYucc2m7XUaJ3qld5p/
-         GmYN8hKlv8vr5ZUJJ2b+VgwF4y4Yj21Tijur+7967E4CCV2lc0vWUr3YvnLeoxNOQScK
-         Y5Lg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Sz9szSa4PbjdihEuUkN/48M4rjKmKhhNvz2LsBkiT+8=;
+        b=QX15/6NlbhAEeDEbNujQ9sq7v5HZAqpO0vg+ua1cnzwnIdJVmtlO9/lJLOwIQ3876I
+         EzQoy/GEI04wgBhVNZvkh3TJgIluMqdkBfGfvLZy4PVG6LMzzNi24jykMrgQYMXTpNIG
+         vfciD/9f1LcU5h45GdUy3WcEFkeMa324qeX1fkbxn6WZoU2T6B0/K1kch8Dc4rJga8/T
+         xyNYWJwa8xc0gWKMXBmNysDTBGh3uXCNQ0UelxzwNrmyNictyqOsmhTqxP2upNsBfz4T
+         /rJAxYYGV32jkFCvYitlUlSFfRtw0g0LragRs/ohG43/UQYXHueu6jgBBdb7N/qu0DT9
+         9yGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UDmz6J2xhATtjIjVKeT6M6oqCXmwom6pKSeUfa8N9a0=;
-        b=TnLMxSj2J6HvgmECuBWIcXcBI1uM58ewnw3uxA1aAX0qINPJCbkegXx77bPuZJsgCM
-         ijWNyc6NZf6QUwyYy8RhKXZMva81bT11i5BfBTA4ZCNUNyM8WmjiRm+ut/WBOCLj8R23
-         RGRCokY/9XtHbRgt19UXdGOfWZsDj7IS3YhhZuvxlQ0JHcj2+KFWFtoRnHr6EV3DkT+4
-         wmOzlFrsCoXNphDRPJHavxmIjbXsdO39vMFUiKHlO2KLQ0SU2yve+NC+vfh+8SZChJVa
-         k3Rraj+RdHrUz7UEZ5rf0zTV8CWblfSsXYnx7FDJP4JDPmNdbMJf+zoLHJR3Lizd8GuL
-         Dg7A==
-X-Gm-Message-State: AJIora+v8fPXh0x+1yhBgfObHoCAtkiBr1xWJ42Nnm3Zai1a5wqxKhUs
-        mawik/If82EtCAV2nowYt9AGJC9JCnk/W7AzB8MDrA==
-X-Google-Smtp-Source: AGRyM1tV0b46UlWN1tsUlSpWFqz33NQJ/emgfIKDa39gC71vWyd6HgvP+aQusq2UPmpT9xZZJNdsMlqUJIKptMITPgw=
-X-Received: by 2002:a05:6e02:170d:b0:2da:a903:4342 with SMTP id
- u13-20020a056e02170d00b002daa9034342mr11957859ill.92.1657598449691; Mon, 11
- Jul 2022 21:00:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Sz9szSa4PbjdihEuUkN/48M4rjKmKhhNvz2LsBkiT+8=;
+        b=VRZ/b3MrJrNcGDSc+SETRb2dYX4uDJx6g/BLxsfx38FyuaW7qTLUezlp7qhCc10gJr
+         BRZMUAJjlQsJqqKivxS4bdQPpLhi3v9MaFFLpyc/b5i0V83zDhUtmzmoJhNYPJ4lc776
+         zStG0QaFcguF7QEsxhZRcAUa+72OY3WLvN0f3RoONQa+tljgsNGx6Y4ryrlhQiLSEf9W
+         o6YekxivqHiy4fCQFPjRmuNBGn+7P/641LeVSKjl7MA9bUfPuV6ejvMGoDmv1TcGA0MY
+         kspaSbGbJPlDn76TPaf8/XKJm3vQkh353fNH2TRbOp3wj4X6qS+W5x/ED28VQcl1+6qs
+         5ikg==
+X-Gm-Message-State: AJIora92oQXyCvnBLydW9G1lyafwQbwrI29UNnihhCCXGbE6dE5nBQXS
+        ErhTLScx/wGUYN/KSaaMH2R3eg==
+X-Google-Smtp-Source: AGRyM1up2gx7HxHdTNFwz/N7EM5ljIsXcl9JX4Rr0Y1ZU41hewb5iNJsOePKQTn1z407POCg2DtHSA==
+X-Received: by 2002:a63:a46:0:b0:412:b1d6:94cf with SMTP id z6-20020a630a46000000b00412b1d694cfmr19249022pgk.373.1657598744629;
+        Mon, 11 Jul 2022 21:05:44 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id ce23-20020a17090aff1700b001ef8780f873sm5576182pjb.39.2022.07.11.21.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 21:05:44 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 12:05:38 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Fangrui Song <maskray@google.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chang Rui <changruinj@gmail.com>
+Subject: Re: [RFC PATCH v1] perf symbol: Correct address for bss symbols
+Message-ID: <20220712040538.GB10379@leoy-ThinkPad-X240s>
+References: <20220710012204.2390293-1-leo.yan@linaro.org>
+ <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
+ <20220711172706.rtfd6pp2pochmdre@google.com>
 MIME-Version: 1.0
-References: <20220711090541.764895984@linuxfoundation.org>
-In-Reply-To: <20220711090541.764895984@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 12 Jul 2022 09:30:38 +0530
-Message-ID: <CA+G9fYsMKggHKyPT5PtXqr7AbrCPXrZd_TE4oitVzMnnvMbhcw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/55] 5.10.130-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220711172706.rtfd6pp2pochmdre@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,118 +81,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 at 14:42, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.130 release.
-> There are 55 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.130-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jul 11, 2022 at 10:27:06AM -0700, Fangrui Song wrote:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thanks for review, Ian and Fangrui!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[...]
 
-## Build
-* kernel: 5.10.130-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: b344d768cea41307cf893102087e3134995cf1ea
-* git describe: v5.10.129-56-gb344d768cea4
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.129-56-gb344d768cea4
+> > > First we used 'perf mem record' to run the test program and then used
+> > > 'perf --debug verbose=4 mem report' to observe what's the symbol info
+> > > for 'buf1' and 'buf2' structures.
+> > > 
+> > >   # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
+> > >   # ./perf --debug verbose=4 mem report
+> > >     ...
+> > >     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
+> > >     symbol__new: buf2 0x30a8-0x30e8
+> > >     ...
+> > >     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
+> > >     symbol__new: buf1 0x3068-0x30a8
+> > >     ...
+> 
+> It seems unclear how 0x30a8 and 0x3068 are derived,
 
-## Test Regressions (compared to v5.10.129)
-No test regressions found.
+In perf tool, 0x30a8 and 0x3068 are adjusted address, which are derived
+from 'st_value', 'sh_addr' and 'sh_offset' with the formula:
 
-## Metric Regressions (compared to v5.10.129)
-No metric regressions found.
+  adjusted_address = st_value - sh_addr + sh_offset
 
-## Test Fixes (compared to v5.10.129)
-No test fixes found.
+So perf computes symbol address for buf1:
 
-## Metric Fixes (compared to v5.10.129)
-No metric fixes found.
+  adjusted_address = st_value - sh_addr + sh_offset
+                   = 0x4080 - 0x4040 + 0x3028
+                   = 0x3068
 
-## Test result summary
-total: 133598, pass: 120651, fail: 512, skip: 11641, xfail: 794
+> > > Perf tool relies on libelf to parse symbols, here 'st_value' is the
+> > > address from executable file, 'sh_addr' is the belonged section's linked
+> > > start address, and 'sh_offset' is the dynamic loaded address for this
+> > > section, then perf tool uses below formula to adjust symbol address:
+> > > 
+> > >   adjusted_address = st_value - sh_addr + sh_offset
+> > > 
+> > > So we can see the final adjusted address ranges for buf1 and buf2 are
+> > > [0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
+> > > incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
+> > > compiler attribute with 64-byte alignment.
+> 
+> so I cannot judge this paragraph.
+> 
+> > > The problem happens for 'sh_offset', libelf returns it as 0x3028 which
+> > > is not 64-byte aligned, on the other hand, we can see both 'st_value'
+> > > and 'sh_addr' are 64-byte aligned.  Combining with disassembly, it's
+> > > likely libelf uses the .data section end address as .bss section
+> > > start address, therefore, it doesn't respect the alignment attribute for
+> > > structures in .bss section.
+> > > 
+> > > Since .data and .bss sections are in the continuous virtual address
+> > > space, and .data section info returned by libelf is reliable, to fix
+> > > this issue, if detects it's a bss symbol, it rolls back to use .data
+> > > section info to adjust symbol's virtual address.
+> 
+> This is not necessarily true.
+> 
+> * In GNU ld's internal linker script, .data1 sits between .data and .bss.
+> * A linker script can add other sections between .data and .bss
+> * A linker script may place .data and .bss in two PT_LOAD program headers.
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 308 total, 308 passed, 0 failed
-* arm64: 62 total, 62 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 48 total, 48 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
+Agreed the approach in this patch cannot handle all cases.
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+> % readelf -WS aa
+> There are 13 section headers, starting at offset 0x10a8:
+> 
+> With a linker script like
+> 
+> % cat a/a.lds
+> SECTIONS {
+>   .text : { *(.text) }
+>   data1 : { *(data1) }
+>   data2 : { *(data2) }
+>   .bss : { *(.bss) }
+> }
+> 
+> I can get something like
+> 
+> Section Headers:
+>   [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+>   [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
+>   [ 1] .text             PROGBITS        0000000000000000 001000 000001 00  AX  0   0  1
+>   [ 2] data1             PROGBITS        0000000000000001 001001 000001 00  WA  0   0  1
+>   [ 3] data2             PROGBITS        0000000000000002 001002 000001 00  WA  0   0  1
+>   [ 4] .data             PROGBITS        0000000000000003 001003 000000 00  WA  0   0  1
+>   [ 5] data3             PROGBITS        0000000000000003 001003 000001 00  WA  0   0  1
+>   [ 6] .bss              NOBITS          0000000000000020 001004 000001 00  WA  0   0 32
+> 
+> .bss's sh_offset does not need to be aligned per http://www.sco.com/developers/gabi/latest/ch4.sheader.html
+> 
+>     sh_offset
+>     This member's value gives the byte offset from the beginning of the file to the first byte in the section. One section type, SHT_NOBITS described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+> I don't have more context why the file offset is needed for a variable in the all-zero section.
+
+We need to create symbol info for not only .text section but also for
+.data section and .bss sectionṡ.  So based on the data address, we can
+know what's the symbol for the data access.
+
+But I need to correct the description for "st_value" [1]: In
+executable and shared object files, st_value holds a virtual address.
+To make these files' symbols more useful for the dynamic linker, the
+section offset (file interpretation) gives way to a virtual address
+(memory interpretation) for which the section number is irrelevant.
+
+So perf tool uses the formula "st_value - sh_addr + sh_offset" to
+convert from the memory address to file address.  But it calculates
+the wrong file address because "sh_offset" doesn't respect the
+alignment.
+
+[1] http://www.sco.com/developers/gabi/latest/ch4.symtab.html#symbol_value
+
+> If the file offset has to be used and we want to use a heuristic, a better one is to find the section index of .bss, say, i.
+> 
+> const uint64_t align = shdr[i].sh_addralign;
+> assert(i > 0);
+> if (shdr[i].offset % align == 0)
+>   return shdr[i].offset;
+> return (shdr[i-1].sh_offset + shdr[i-1].sh_size + align - 1) & -align;
+> 
+> Really, it is better to use the program header to derive the virtual address of a variable residing in .bss.
+
+I think we can simplify the code.  Because:
+
+  shdr[i].sh_offset = shdr[i-1].sh_offset + shdr[i-1].sh_size
+
+... thus we can simply fixup "sh_offset":
+
+  const uint64_t align = shdr[i].sh_addralign;
+  aligned_sh_offset = (shdr[i].sh_offset + align - 1) & ~(align - 1);
+
+So:
+
+  symbol_addr = st_value - sh_addr + aligned_sh_offset
+
+If you still see any issue, please let me know.
+
+Thanks a lot for suggestions.
+
+Leo

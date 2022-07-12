@@ -2,160 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DA3571C0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2223571C13
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiGLOQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S233170AbiGLORF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiGLOQO (ORCPT
+        with ESMTP id S233186AbiGLOQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:16:14 -0400
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30059.outbound.protection.outlook.com [40.107.3.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8B60538
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:16:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aQwm1HYfnh8uWfGBLxQQYzcXW1eMXTFham3cG+sZ4OMphEIqG9uZ3tH9tt00xb4aYXAY4B5LijBvYDvN4rBDRWLqTkZyF3jDYmQcVxC7wHgRHeoHUNvwlIojgJg2BrufgJwXnadiCGd+e6YPexGQLv7qCf1ludzaVLL+VIZJJjjLeuK0wUiMIdYO7EAnpX7dyZPs2Fay1o8jHDUxdg0coSY7AKDxY0yQCpblxx0QkshY+0euLDqizyY/nbnqYJH3a+GSdAyOLYXqGBZ+YvkM9AnjPanlkZyRUFsnmHqkbZ0WLQoid4qmI2oS75kr5HNx1V3URMSVvOGgIh0k1HBF3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ceLa9D+Qpb6/lc8AwdiIW4+4rAWVx19NDFBb8oegG9I=;
- b=Bl+fGNJ8VI9sRzrTMVPYZX0mDJ9tBLHbXhLYnXelzF+4Civ9/ZYsiytNocebzyKln/mxbQfMUI64NJd+8LMQ39D970RQGNjaGpqq95U07h80tEj47phc65mmanM8X+R5+GxX6+V7B737Rquio+r9o9kIcMm2Lc7Ed7QDiWNcbdSR4nwtlzcbUni0ZKAtm+9Z5Q88Y4f9LkA/wtR1EpgrN5pRbAoQ1WrDW7bwh/cI+y2dzvO6AprJu94p46JHQE/0+OT6XwNPTai7AXJ7I/QlOKRErJ0fNEKiMqSXTjobKjuXOJME9oj0qHzQUpeth9zOCdGW/qW2dAEDIHC3PC2UNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ceLa9D+Qpb6/lc8AwdiIW4+4rAWVx19NDFBb8oegG9I=;
- b=S6PvqDLPyX25LiNNIPYtw6fkxu2CwhXHM8q22AZx1ZOHyWCjlfC06fkBMApKLMqopPldhtLwwFn5i1xkcuK5LGpvYJvCupoTTwhBGMuf4fnhbwydYF7xBDP3wU8sY+PVBO3w6Qwag8qd2aSY9snwQMQY44DK4Y1ZPjSFL6HV9AQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM0PR04MB5140.eurprd04.prod.outlook.com (2603:10a6:208:ca::21)
- by PA4PR04MB7885.eurprd04.prod.outlook.com (2603:10a6:102:ce::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
- 2022 14:16:10 +0000
-Received: from AM0PR04MB5140.eurprd04.prod.outlook.com
- ([fe80::15ba:4274:2df4:8928]) by AM0PR04MB5140.eurprd04.prod.outlook.com
- ([fe80::15ba:4274:2df4:8928%5]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 14:16:10 +0000
-From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
-To:     broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     daniel.baluta@nxp.com, linux-imx@nxp.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        yc.hung@mediatek.com, linux-kernel@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [PATCH 4/4] uapi: sof: abi: Bump SOF ABI for ext_data_length
-Date:   Tue, 12 Jul 2022 17:15:31 +0300
-Message-Id: <20220712141531.14599-5-daniel.baluta@oss.nxp.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220712141531.14599-1-daniel.baluta@oss.nxp.com>
-References: <20220712141531.14599-1-daniel.baluta@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM3PR07CA0141.eurprd07.prod.outlook.com
- (2603:10a6:207:8::27) To AM0PR04MB5140.eurprd04.prod.outlook.com
- (2603:10a6:208:ca::21)
+        Tue, 12 Jul 2022 10:16:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55830B418A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657635400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U0E800OOqW5ckhgP7sOdw5kGbfjGB1H4nNWnEL28pNs=;
+        b=VjxO6nZA2z27c4BWucxDFgyC/q9jFHSr0ADPvL6ft13byi5OvBk1u/Q/gowjgkssr6mHc0
+        SYA6oJN8yaH3vKQUyqjYxfKw6IPCeAqkzQgj/MwGF8fVnzOy7ZU3lF3NUZ7lMQpvT8ohil
+        VstIOm3+pCbj22QiSR0uS4AQJ1lpUUc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-bOl8jFemMRmaSl7QFRkhtw-1; Tue, 12 Jul 2022 10:16:33 -0400
+X-MC-Unique: bOl8jFemMRmaSl7QFRkhtw-1
+Received: by mail-qk1-f200.google.com with SMTP id l189-20020a37bbc6000000b006af2596c5e8so7925666qkf.14
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:16:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=U0E800OOqW5ckhgP7sOdw5kGbfjGB1H4nNWnEL28pNs=;
+        b=VGRI8Eb7MkNW4BxdWRrSEGgGYD6p+/qg55nSpdxutJdjz0m1di/elqm6jAQ+XRe8NJ
+         DoSB+pmYMb4Bq4NiA/w87F3ZQ/C5iW6uk1OS+/NRezLHQI4OyKb+8gLuKrlg4KHIHBnc
+         aH3hdRx9SGR3bo1up1fGfJXUvzVYpX9FpQdu8n/54Khyilr+k9HyNwb6j5rtxhaQjz3M
+         WXjGcDhO28ailv9NpDgWAp9Q/cqNK3Z9f8YfB/oyMOA8LEnr024VLdcTKPSlgJRA+nmU
+         nejaXA1IGh790EpxTkTJyAe8P4bwlr8jwr7qd4IqafPtZr7lvLkgIL/P44UIY+ZaftC/
+         zcaA==
+X-Gm-Message-State: AJIora8cCgTmPpttvkLfNEPD19QL1hHYwNAct0mzMHfJWwIdg+8vhRuu
+        sDYEXNCbLnJZ7O0itxMa4+O3Su9zI5hy3vXANg7wc4Rf5dcOz6B8vmM2fJbdzogr4yGq4nL4Obt
+        kNPvOIBpgb6ghyNoIf96ZPOUA
+X-Received: by 2002:a05:620a:16d3:b0:6b5:76f3:4f8e with SMTP id a19-20020a05620a16d300b006b576f34f8emr10386987qkn.473.1657635392040;
+        Tue, 12 Jul 2022 07:16:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tQdkvIRVXScoSRWjvtDqqmO0XeFQEDUJFQ6nwxHO07gf4piqkM62wZH6UFM1CoQhp+9r9GyQ==
+X-Received: by 2002:a05:620a:16d3:b0:6b5:76f3:4f8e with SMTP id a19-20020a05620a16d300b006b576f34f8emr10386955qkn.473.1657635391661;
+        Tue, 12 Jul 2022 07:16:31 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id fp6-20020a05622a508600b0031eb0bb5c3csm6020743qtb.28.2022.07.12.07.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:16:31 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:16:28 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH v4] proc: Fix a dentry lock race between release_task and
+ lookup
+Message-ID: <Ys2CPO4FodMlAqRR@bfoster>
+References: <20220601062332.232439-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 36cf0971-e77f-441d-d103-08da641111e9
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7885:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N6WezHId6XyD0T2MCAYHG95Tjgw2/y7lK6RLPP2aDM45I4JKhEcncoMGMUC4GGteMBv4bXdN2Tf5eZ8K3rs9tlW05P/YAvH1RbZudzcksVc0paDFkgi82fbVDOoSPfwM+7gzserhYn6Yh+/ZGQ+zTYte+7hijixu0kx9CWR9LjUgdIitzVnttJCw1yms54MutY1PKfwLut6gXxf9iprondk3n/4eyB5KBVH7aR42vXtjYttJHs/oaWjmL3ajuO9xzaQCvwYsFkgSZJTKGBkkG8t12MX+41WNFofAe76a5sdWUuNCNKcnwWKJyxXLYDaTkPvq/c8a9KDw55bL8c7DMqEYXeWkfuiZaE+9h8GTAVHl4N5OutIVxMUK0ueVoZ+YkAhzAvhdWAIXxUb4LjhcseCRlXiCCyUGR9TXBzNIknHH+yquBtyxmGQWLV46rj8vqeGgZ5W7KrDL/SVaHkQFw0c45v70o7b8cJ2H0S9f8P4CrbzzLup+fCqUYKXfSFtGz3thmaN4mcpwVwRE+CkolMdN5++Th+IbrPNeBABLHaCUeJ1joSLDaowC9pKhi1IMvHUTUJEudZNbIf/9G+t7X31zK9r2hWWwtoU2chfmQ1d487gbo7d5iZL+s5tKFgHutNGZPrOUxdmvN7Xum68lC9ioKmdTJTZAGS/cyhRBFDyCTzO24nx9So70d1nKgRxKLYga4EwZ4wHZ4OGuUq5weYc1XSPeXA/CiO+IF+PEwqkqpY/ptqRaH/2cpDpYW4TtO6ZQ8ybqZ8UJGj3CQJ+Nmk0InNvAQoSWtCGIYKr+omGwYZXZdu3FySjPTFMMOqq+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5140.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(39860400002)(346002)(366004)(316002)(38100700002)(478600001)(6486002)(8676002)(38350700002)(2616005)(66946007)(4326008)(186003)(66556008)(66476007)(66574015)(1076003)(26005)(6666004)(86362001)(6506007)(44832011)(41300700001)(5660300002)(8936002)(7416002)(6512007)(52116002)(83380400001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzBnYXgzL0pjOGZ5U2ZuK3BRcWpSZ0pWaDZ6WlpyOWd1RXpuRkZKRXJrTlpC?=
- =?utf-8?B?Q2l2TU13a25mRmEyUUVieUYzZXdNZHExMGdpRGNEVzFWOTlmTldQZ2NIOHVt?=
- =?utf-8?B?a1VkY25Uei9PdlR4QmFBdzd1ZjNuSUFqcE5LS1RkQkFVT0JqcHJEL0lXVVBG?=
- =?utf-8?B?TmowalNOZ1VsQkRqY1JvTk9SVS9NQVZOSHFKdEs5S0c1SGY4Y2RDTWhpV0Q4?=
- =?utf-8?B?VSsvaFBaeW91TWhIN045S3pPUy9BR1lUWlFEVXoza0VCQi9qSWsxWjhIS1dR?=
- =?utf-8?B?S3VncHkvNDdJRFZKVjh6c2dybHJ1L0s5ZGdUVHdLeHpGT2JEdnc2blJsUUFX?=
- =?utf-8?B?ZXBMWUN6emwyb2tFWHpjRElWZGZnbm5oSGJlVm9xNGt1MWljT211dTEyUmp3?=
- =?utf-8?B?eXdWY1QrS05PWWNvMUozRWpKVkJnYWJKM1J1SVFsS01CSUExUEo3TlpoWHgv?=
- =?utf-8?B?ckFaMjVBRTVUYmJyZUo0TmhTeU9aeEFiUERJK3RKVEhHdDRQVXJ6V3gxUnJl?=
- =?utf-8?B?MVF1WUxLVzdoSzhZZko2Sjc3Uk5vd09MekZZWEZCWmk4bkVpSnFzZ3EzRXdt?=
- =?utf-8?B?VWhKY1I5cjlsb2w3eWxSZ2R6RHpBVDhHNTdSQk1wb1ZSWlh4c0ZjQUFKWGxH?=
- =?utf-8?B?cWlKbTNYUGVxTmlDbXFYM2ZvUWh2RlY1aGFSeXhmc2o1djl1bjJEbmF2VG5a?=
- =?utf-8?B?NkdUS2RJYmFINEVZSEwrbEJyY0tjU0RuOG5MVk41eVNEYVhLL3o2cUI3dmtj?=
- =?utf-8?B?azB4cTR6TE5pYUR0eGhQWWZVbEhuTGJxaEhvbUoxbFJxeG9kOWxEN21EWEgz?=
- =?utf-8?B?Zkp3VkUxdW5JY2M4MjRYaFBUclJiT2VSbUM1ZlF3QnR2N0szaXphV2lBeWNt?=
- =?utf-8?B?Q1c2S3B3NVkrWFEvVFloZjREWlF5K01KcUl6VHdNdmVQSHlkeEdDaXJzcnpQ?=
- =?utf-8?B?ekVUeHozcGMrWUxDbEJJQmRmemsyYWVOZTlBT3ZXMGMwWEgrd00vNXFJSzRa?=
- =?utf-8?B?ditGTWpocjJxd3JPMDRkbGFlVTJUVzBSTEY0ZjM1ZURTTTRmaDdqUmtmNU5K?=
- =?utf-8?B?bGZKZ0ZPOU9iNDE3ZmtkSmdkVGtvVGZ6cjdNTkFYclYwMFl6OG1RZnNxZzVo?=
- =?utf-8?B?S0RUeUlkNFo4VUxCZTgzek1HY3p6bWtOOTEveTFwVWszTGcvSDdnbkhuUHZJ?=
- =?utf-8?B?K3BOSWpDSmFrOTlqU1M4UTRtZVJFM1IvbDRHdzNVcFo2ck5xODRWZU9RZ08w?=
- =?utf-8?B?Wm4ybXNlcit4bkhVUTl2YW1DbHFQc3U0NU1CWUdMbEZFMTd3bmlUNmFVREdO?=
- =?utf-8?B?S0ZDWTc2Z0xsTWJta1kwNFMwcENJWDhzRjlNSUNPa0dxNEtLSUJ5aFN0VDUv?=
- =?utf-8?B?aXpsVEFtNW83ZVkxTk1PaVhYZXJuMWZlajFIdDdZK3EwQTdsOEZQK1FtcnRI?=
- =?utf-8?B?RVRFZ296MUFzb1VGTURhN1VEWjFBYTBnSEVLZGdPWjNJaEZmc0Z4VklMeFpE?=
- =?utf-8?B?dTg3ZXRnRW5Ldm9ZNGNkMDgzT3I4ellGYWwybjNDWTRHd3YvUGdvbDhjSWJ1?=
- =?utf-8?B?dk1qS3VuQm5oLzNDMUhCek5JQllOaDlsSjVrVnVDTlVzcEEzTEd6Smw0WXJr?=
- =?utf-8?B?cnA3dFNtMi9XdmJSUTBJSGZpTXl6ejhqSU9QbFRoWE5pUEl3Ym1xVlFIdXZS?=
- =?utf-8?B?NnVVS2pRVVhzL2d3NE1xanNrTUJIRHU2R25IazBvSXpHcmNJL3ljaGl0eldX?=
- =?utf-8?B?T05QR0ZFcHFXdHFpOHk0OXJaZ09vVDlzOThBenpzOWp4SHRuaDlzTnhIUXE3?=
- =?utf-8?B?cHpaUlhFSW94SEYyOFVXaXNiMnMveTlmaTJLOTJvcHltYmN1czllUWNpMWY3?=
- =?utf-8?B?R2JpQTJESGRaeXRWeDlXTEVwMGRtcy80TVJYeTdQK2dQaHB6UHZRanp0MjJs?=
- =?utf-8?B?eVZVcnNqMDMwVFJHeUNSUDM1TEZKU2Y1K0NUMWx3d1F5dC9zdXRTSngwRDly?=
- =?utf-8?B?N3BHSzA0RjVHTVZOK3ZXNHRzR211Vy9HZS9kTHg5TmVsbEhkN216QmhVeGNi?=
- =?utf-8?B?RHp1bnlEK2RNMUlRVGpsNlRTekxpMWZqZTRhR0hEUlNsbytROUtrMUlsUnVG?=
- =?utf-8?Q?D3bMext8OTKBZWiM7KYgnGlCW?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36cf0971-e77f-441d-d103-08da641111e9
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5140.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 14:16:10.5979
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sIOIDLCdtVFW/niuQeYxntybwOHzYsmfkZRar3vD4h9gIRAFp2rlReJxb5tPU0MGCvhEy/VtSHJkiooFqm9XrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7885
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220601062332.232439-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Baluta <daniel.baluta@nxp.com>
+On Wed, Jun 01, 2022 at 02:23:32PM +0800, Zhihao Cheng wrote:
+> Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+> moved proc_flush_task() behind __exit_signal(). Then, process systemd
+> can take long period high cpu usage during releasing task in following
+> concurrent processes:
+> 
+>   systemd                                 ps
+> kernel_waitid                 stat(/proc/tgid)
+>   do_wait                       filename_lookup
+>     wait_consider_task            lookup_fast
+>       release_task
+>         __exit_signal
+>           __unhash_process
+>             detach_pid
+>               __change_pid // remove task->pid_links
+>                                      d_revalidate -> pid_revalidate  // 0
+>                                      d_invalidate(/proc/tgid)
+>                                        shrink_dcache_parent(/proc/tgid)
+>                                          d_walk(/proc/tgid)
+>                                            spin_lock_nested(/proc/tgid/fd)
+>                                            // iterating opened fd
+>         proc_flush_pid                                    |
+>            d_invalidate (/proc/tgid/fd)                   |
+>               shrink_dcache_parent(/proc/tgid/fd)         |
+>                 shrink_dentry_list(subdirs)               ↓
+>                   shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
+> 
 
-Add new field to sof_ipc_stream_params in order to extend
-stream params struct with extended data to store compress parameters.
+Curious... can this same sort of thing happen with /proc/<tgid>/task if
+that dir similarly has a lot of dentries?
 
-Older kernel will still work this as they ext_data_length will always be
-zero.
+...
+> Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> ---
+>  v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+> 	 work of adding to the pid->list.
+>  v2->v3: Add performance regression in commit message.
+>  v3->v4: Make proc_pid_make_base_inode() static
+>  fs/proc/base.c | 34 ++++++++++++++++++++++++++--------
+>  1 file changed, 26 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index c1031843cc6a..d884933950fd 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+...
+> @@ -1931,6 +1926,27 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+>  	return NULL;
+>  }
+>  
+> +static struct inode *proc_pid_make_base_inode(struct super_block *sb,
+> +				struct task_struct *task, umode_t mode)
+> +{
+> +	struct inode *inode;
+> +	struct proc_inode *ei;
+> +	struct pid *pid;
+> +
+> +	inode = proc_pid_make_inode(sb, task, mode);
+> +	if (!inode)
+> +		return NULL;
+> +
+> +	/* Let proc_flush_pid find this directory inode */
+> +	ei = PROC_I(inode);
+> +	pid = ei->pid;
+> +	spin_lock(&pid->lock);
+> +	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+> +	spin_unlock(&pid->lock);
+> +
+> +	return inode;
+> +}
+> +
 
-Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
----
- include/uapi/sound/sof/abi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Somewhat related to the question above.. it would be nice if this
+wrapper had a line or two comment above it that explained when it should
+or shouldn't be used over the underlying function (for example, why or
+why not include /proc/<tgid>/task?). Otherwise the patch overall seems
+reasonable to me..
 
-diff --git a/include/uapi/sound/sof/abi.h b/include/uapi/sound/sof/abi.h
-index c88f467374ae..b7dce4df7ecd 100644
---- a/include/uapi/sound/sof/abi.h
-+++ b/include/uapi/sound/sof/abi.h
-@@ -28,7 +28,7 @@
- 
- /* SOF ABI version major, minor and patch numbers */
- #define SOF_ABI_MAJOR 3
--#define SOF_ABI_MINOR 21
-+#define SOF_ABI_MINOR 22
- #define SOF_ABI_PATCH 0
- 
- /* SOF ABI version number. Format within 32bit word is MMmmmppp */
--- 
-2.27.0
+Brian
+
+>  int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+>  		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+>  {
+> @@ -3350,7 +3366,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+>  {
+>  	struct inode *inode;
+>  
+> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
+> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
+> +					 S_IFDIR | S_IRUGO | S_IXUGO);
+>  	if (!inode)
+>  		return ERR_PTR(-ENOENT);
+>  
+> @@ -3649,7 +3666,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+>  	struct task_struct *task, const void *ptr)
+>  {
+>  	struct inode *inode;
+> -	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
+> +	inode = proc_pid_make_base_inode(dentry->d_sb, task,
+> +					 S_IFDIR | S_IRUGO | S_IXUGO);
+>  	if (!inode)
+>  		return ERR_PTR(-ENOENT);
+>  
+> -- 
+> 2.31.1
+> 
 

@@ -2,260 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3903E571CA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40271571C8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiGLOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S233129AbiGLO32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbiGLOaB (ORCPT
+        with ESMTP id S233071AbiGLO3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:30:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAEE2191;
-        Tue, 12 Jul 2022 07:30:00 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CDJ0E9006969;
-        Tue, 12 Jul 2022 14:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OdfZSqJJ97Yxoj48Ckzbfof+fH1pBkaPsxXBN/SYXLE=;
- b=Z6qbMB5EQ1l9GEjAMFA0+VqVwNQeTeZOV4j5siWedAhE/e2Y2RsPEEOv5Fh3PvTNj8LE
- TeF0tdX3uOYk9Bz/aRuLGA/iGcUWqmhttyD+QVV+tupAa80MK5uxK0OjhHRfNuHxB6Kn
- ATZ5Hvs2I0YnXd855Vj0v+dmU2J2/3MALf4BsO+xyvX5kaBLmyK+nIixS5G4YQLuXTUk
- ilhEat3gC72UvqtbsLG/v2w2FQuW3ZUzlR+789ppxo+ocVhwBNY0KS6pXLLjgqx0PcZn
- +vzKNg4KKzga1J1eNPR+lREpgvx8vySKhroScgURLQ48TTojjEIwBDg8RDReCXPJkl7f zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h99r01xrn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 14:28:53 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CDKOsM014679;
-        Tue, 12 Jul 2022 14:28:53 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h99r01xq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 14:28:52 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CEL4gs032549;
-        Tue, 12 Jul 2022 14:28:51 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma03wdc.us.ibm.com with ESMTP id 3h71a9e87y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 14:28:51 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CESo4225100754
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 14:28:50 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7FA8E28058;
-        Tue, 12 Jul 2022 14:28:50 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8FBC28059;
-        Tue, 12 Jul 2022 14:28:48 +0000 (GMT)
-Received: from [9.65.200.23] (unknown [9.65.200.23])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 14:28:48 +0000 (GMT)
-Message-ID: <c1662fda-c87c-e204-dddd-e6159c8aa104@linux.ibm.com>
-Date:   Tue, 12 Jul 2022 10:28:48 -0400
+        Tue, 12 Jul 2022 10:29:24 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A1DC7F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:29:22 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ez10so14600871ejc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UpQJKKbtg93cX86UuSBO9tVRJrPAdwmdctCEOdnSRnU=;
+        b=ijq11B8dVKWd4WwXQdLWGL47Ff65ZWhCh8I3SE5MaxMAad6+ff+0LigbAoCe2JY4iV
+         3LYhRmAzDWby1Q6v0gv1VaqErS7z7UeZOhoWW35oxwjCuJ3tvmQYNhvS3m9DSj3ZipSe
+         75C5HfTf7UALfjjpZlu/UxdxlwILLB1WhqUf4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UpQJKKbtg93cX86UuSBO9tVRJrPAdwmdctCEOdnSRnU=;
+        b=PPLN+kCaaAMHx1IpqIIEgK165/X7SmTjA6IxFSORNMf/kMYJKQR7JyqJMblrwnfC0J
+         ICk1ofyerGCRIfq4vGrEaoP/GP4rE0VHvy2c3BNsdCixOZ6Y74eT5jUzqk0EgaSgIrEM
+         tUIO79Faus7o8hDM0vgGnMC+F/coR8ecDU42szuc7GMGc9WQZiLsefJ9VYwuUNXUsxjK
+         Rjd31NQbnrmDB2n3hFgaeT+JrcK278jnaQ9j4n54yP3EABcfouvjKGshsEfSizREovwc
+         jnuOnhkGrUG3lbZIx0lx3jzfQwoBTWm3u69nBdOVTyPod/+5VVsNlRFm1OlaoRhGX68B
+         iO2Q==
+X-Gm-Message-State: AJIora+JjQnT4sm58XVUU127e2y7hgzRVa1CWNqGNK9mULAQ9QmRwcPj
+        NXF2uOx2anUkg87X3X6gNPXEsDHo8PljwYmBF34=
+X-Google-Smtp-Source: AGRyM1urVUaZPWI0RrNKGSED+xIGP4FuOathQyMz1Jg+F2cUm56uRRZmoC0i6z1jlj4zyvp719a7Kw==
+X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr23596090ejc.605.1657636161137;
+        Tue, 12 Jul 2022 07:29:21 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id o2-20020aa7dd42000000b0043ad162b5e3sm3953538edw.18.2022.07.12.07.29.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 07:29:19 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id v16so11400441wrd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:29:19 -0700 (PDT)
+X-Received: by 2002:adf:d1c1:0:b0:21b:a5e9:b7b2 with SMTP id
+ b1-20020adfd1c1000000b0021ba5e9b7b2mr22505619wrd.405.1657636159126; Tue, 12
+ Jul 2022 07:29:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 06/10] vfio/ap: Change saved_pfn to saved_iova
-Content-Language: en-US
-To:     Nicolin Chen <nicolinc@nvidia.com>, kwankhede@nvidia.com,
-        corbet@lwn.net, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, jjherne@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, hch@infradead.org
-Cc:     jchrist@linux.ibm.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        terrence.xu@intel.com
-References: <20220708224427.1245-1-nicolinc@nvidia.com>
- <20220708224427.1245-7-nicolinc@nvidia.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20220708224427.1245-7-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _j6ePaBx9pKp0DXjWFutlwf2W9WPoPd7
-X-Proofpoint-ORIG-GUID: Z2Erh4ovuh4-1QaA8MtuoCaVso489d7K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 clxscore=1015 spamscore=0 malwarescore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207120055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220711082940.39539-1-krzysztof.kozlowski@linaro.org>
+ <20220711082940.39539-3-krzysztof.kozlowski@linaro.org> <CAD=FV=WUCPzzZHAPqoz-vhmcVxzYDxkKQs=+1tLZvsQjWe4q3Q@mail.gmail.com>
+ <f8744ff8-15a0-bf31-c49f-b1bb35ba5cdd@linaro.org> <CAD=FV=X2ZfwwDO_hSSN35ObfvBbBbPjMoSB4GvS7m0yJieNg3Q@mail.gmail.com>
+ <629ede41-326b-9c84-4bb8-2f7e695ca928@linaro.org>
+In-Reply-To: <629ede41-326b-9c84-4bb8-2f7e695ca928@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 12 Jul 2022 07:29:06 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W7dypM9=uqaY650TGfiV4EaZR9EBH_3svQefyNv-oE7Q@mail.gmail.com>
+Message-ID: <CAD=FV=W7dypM9=uqaY650TGfiV4EaZR9EBH_3svQefyNv-oE7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] dt-bindings: mmc: sdhci-msm: constrain reg-names
+ perp variants
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Tony Krowiak <akrowiak@linux.ibm.com>
+Hi,
 
-On 7/8/22 6:44 PM, Nicolin Chen wrote:
-> The vfio_ap_ops code maintains both nib address and its PFN, which
-> is redundant, merely because vfio_pin/unpin_pages API wanted pfn.
-> Since vfio_pin/unpin_pages() now accept "iova", change "saved_pfn"
-> to "saved_iova" and remove pfn in the vfio_ap_validate_nib().
+On Tue, Jul 12, 2022 at 12:02 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Tested-by: Eric Farman <farman@linux.ibm.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->   drivers/s390/crypto/vfio_ap_ops.c     | 42 +++++++++++----------------
->   drivers/s390/crypto/vfio_ap_private.h |  4 +--
->   2 files changed, 19 insertions(+), 27 deletions(-)
+> On 11/07/2022 17:11, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Mon, Jul 11, 2022 at 7:53 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 11/07/2022 16:52, Doug Anderson wrote:
+> >>> Hi
+> >>>
+> >>> On Mon, Jul 11, 2022 at 1:29 AM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> The entries in arrays must have fixed order, so the bindings and Linux
+> >>>> driver expecting various combinations of 'reg' addresses was never
+> >>>> actually conforming to guidelines.
+> >>>>
+> >>>> The 'core' reg entry is valid only for SDCC v4 and lower, so disallow it
+> >>>> in SDCC v5.  SDCC v4 supports CQE and ICE, so allow them, even though
+> >>>> the qcom,sdhci-msm-v4 compatible is used also for earlier SoCs with SDCC
+> >>>> v2 or v3, so it is not entirely accurate.
+> >>>>
+> >>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>>
+> >>>> ---
+> >>>>
+> >>>> Changes since v1:
+> >>>> 1. Rework the patch based on Doug's feedback.
+> >>>> ---
+> >>>>  .../devicetree/bindings/mmc/sdhci-msm.yaml    | 61 ++++++++++++-------
+> >>>>  1 file changed, 38 insertions(+), 23 deletions(-)
+> >>>
+> >>> In the ${SUBJECT} I'm not sure what a "perp variant" is. Is that a
+> >>> typo or just a phrase I'm not aware of?
+> >>
+> >> Should be:
+> >> "per variants"
+> >>
+> >>>
+> >>>
+> >>>> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >>>> index fc6e5221985a..2f0fdd65e908 100644
+> >>>> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >>>> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+> >>>> @@ -49,33 +49,11 @@ properties:
+> >>>>
+> >>>>    reg:
+> >>>>      minItems: 1
+> >>>> -    items:
+> >>>> -      - description: Host controller register map
+> >>>> -      - description: SD Core register map
+> >>>> -      - description: CQE register map
+> >>>> -      - description: Inline Crypto Engine register map
+> >>>> +    maxItems: 4
+> >>>>
+> >>>>    reg-names:
+> >>>>      minItems: 1
+> >>>>      maxItems: 4
+> >>>> -    oneOf:
+> >>>> -      - items:
+> >>>> -          - const: hc
+> >>>> -      - items:
+> >>>> -          - const: hc
+> >>>> -          - const: core
+> >>>> -      - items:
+> >>>> -          - const: hc
+> >>>> -          - const: cqhci
+> >>>> -      - items:
+> >>>> -          - const: hc
+> >>>> -          - const: cqhci
+> >>>> -          - const: ice
+> >>>> -      - items:
+> >>>> -          - const: hc
+> >>>> -          - const: core
+> >>>> -          - const: cqhci
+> >>>> -          - const: ice
+> >>>>
+> >>>>    clocks:
+> >>>>      minItems: 3
+> >>>> @@ -177,6 +155,43 @@ required:
+> >>>>  allOf:
+> >>>>    - $ref: mmc-controller.yaml#
+> >>>>
+> >>>> +  - if:
+> >>>> +      properties:
+> >>>> +        compatible:
+> >>>> +          contains:
+> >>>> +            enum:
+> >>>> +              - qcom,sdhci-msm-v4
+> >>>> +    then:
+> >>>> +      properties:
+> >>>> +        reg:
+> >>>> +          minItems: 2
+> >>>> +          items:
+> >>>> +            - description: Host controller register map
+> >>>> +            - description: SD Core register map
+> >>>> +            - description: CQE register map
+> >>>> +            - description: Inline Crypto Engine register map
+> >>>> +        reg-names:
+> >>>> +          minItems: 2
+> >>>> +          items:
+> >>>> +            - const: hc
+> >>>> +            - const: core
+> >>>> +            - const: cqhci
+> >>>> +            - const: ice
+> >>>> +    else:
+> >>>> +      properties:
+> >>>> +        reg:
+> >>>> +          minItems: 1
+> >>>> +          items:
+> >>>> +            - description: Host controller register map
+> >>>> +            - description: CQE register map
+> >>>> +            - description: Inline Crypto Engine register map
+> >>>> +        reg-names:
+> >>>> +          minItems: 1
+> >>>> +          items:
+> >>>> +            - const: hc
+> >>>> +            - const: cqhci
+> >>>> +            - const: ice
+> >>>
+> >>> Do you need to set "maxItems" here? If you don't then will it inherit
+> >>> the maxItems of 4 from above?
+> >>
+> >> No, items determine the size instead.
+> >
+> > Can you just remove the "maxItems" from above then? Does it buy us anything?
 >
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-> index 8a2018ab3cf0..e8856a7e151c 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -112,7 +112,7 @@ static void vfio_ap_wait_for_irqclear(int apqn)
->    *
->    * Unregisters the ISC in the GIB when the saved ISC not invalid.
->    * Unpins the guest's page holding the NIB when it exists.
-> - * Resets the saved_pfn and saved_isc to invalid values.
-> + * Resets the saved_iova and saved_isc to invalid values.
->    */
->   static void vfio_ap_free_aqic_resources(struct vfio_ap_queue *q)
->   {
-> @@ -123,9 +123,9 @@ static void vfio_ap_free_aqic_resources(struct vfio_ap_queue *q)
->   		kvm_s390_gisc_unregister(q->matrix_mdev->kvm, q->saved_isc);
->   		q->saved_isc = VFIO_AP_ISC_INVALID;
->   	}
-> -	if (q->saved_pfn && !WARN_ON(!q->matrix_mdev)) {
-> -		vfio_unpin_pages(&q->matrix_mdev->vdev, q->saved_pfn << PAGE_SHIFT, 1);
-> -		q->saved_pfn = 0;
-> +	if (q->saved_iova && !WARN_ON(!q->matrix_mdev)) {
-> +		vfio_unpin_pages(&q->matrix_mdev->vdev, q->saved_iova, 1);
-> +		q->saved_iova = 0;
->   	}
->   }
->   
-> @@ -189,27 +189,19 @@ static struct ap_queue_status vfio_ap_irq_disable(struct vfio_ap_queue *q)
->    *
->    * @vcpu: the object representing the vcpu executing the PQAP(AQIC) instruction.
->    * @nib: the location for storing the nib address.
-> - * @g_pfn: the location for storing the page frame number of the page containing
-> - *	   the nib.
->    *
->    * When the PQAP(AQIC) instruction is executed, general register 2 contains the
->    * address of the notification indicator byte (nib) used for IRQ notification.
-> - * This function parses the nib from gr2 and calculates the page frame
-> - * number for the guest of the page containing the nib. The values are
-> - * stored in @nib and @g_pfn respectively.
-> - *
-> - * The g_pfn of the nib is then validated to ensure the nib address is valid.
-> + * This function parses and validates the nib from gr2.
->    *
->    * Return: returns zero if the nib address is a valid; otherwise, returns
->    *	   -EINVAL.
->    */
-> -static int vfio_ap_validate_nib(struct kvm_vcpu *vcpu, unsigned long *nib,
-> -				unsigned long *g_pfn)
-> +static int vfio_ap_validate_nib(struct kvm_vcpu *vcpu, dma_addr_t *nib)
->   {
->   	*nib = vcpu->run->s.regs.gprs[2];
-> -	*g_pfn = *nib >> PAGE_SHIFT;
->   
-> -	if (kvm_is_error_hva(gfn_to_hva(vcpu->kvm, *g_pfn)))
-> +	if (kvm_is_error_hva(gfn_to_hva(vcpu->kvm, *nib >> PAGE_SHIFT)))
->   		return -EINVAL;
->   
->   	return 0;
-> @@ -239,34 +231,34 @@ static struct ap_queue_status vfio_ap_irq_enable(struct vfio_ap_queue *q,
->   						 int isc,
->   						 struct kvm_vcpu *vcpu)
->   {
-> -	unsigned long nib;
->   	struct ap_qirq_ctrl aqic_gisa = {};
->   	struct ap_queue_status status = {};
->   	struct kvm_s390_gisa *gisa;
->   	int nisc;
->   	struct kvm *kvm;
-> -	unsigned long g_pfn, h_pfn;
-> +	unsigned long h_pfn;
->   	phys_addr_t h_nib;
-> +	dma_addr_t nib;
->   	int ret;
->   
->   	/* Verify that the notification indicator byte address is valid */
-> -	if (vfio_ap_validate_nib(vcpu, &nib, &g_pfn)) {
-> -		VFIO_AP_DBF_WARN("%s: invalid NIB address: nib=%#lx, g_pfn=%#lx, apqn=%#04x\n",
-> -				 __func__, nib, g_pfn, q->apqn);
-> +	if (vfio_ap_validate_nib(vcpu, &nib)) {
-> +		VFIO_AP_DBF_WARN("%s: invalid NIB address: nib=%pad, apqn=%#04x\n",
-> +				 __func__, &nib, q->apqn);
->   
->   		status.response_code = AP_RESPONSE_INVALID_ADDRESS;
->   		return status;
->   	}
->   
-> -	ret = vfio_pin_pages(&q->matrix_mdev->vdev, g_pfn << PAGE_SHIFT, 1,
-> +	ret = vfio_pin_pages(&q->matrix_mdev->vdev, nib, 1,
->   			     IOMMU_READ | IOMMU_WRITE, &h_pfn);
->   	switch (ret) {
->   	case 1:
->   		break;
->   	default:
->   		VFIO_AP_DBF_WARN("%s: vfio_pin_pages failed: rc=%d,"
-> -				 "nib=%#lx, g_pfn=%#lx, apqn=%#04x\n",
-> -				 __func__, ret, nib, g_pfn, q->apqn);
-> +				 "nib=%pad, apqn=%#04x\n",
-> +				 __func__, ret, &nib, q->apqn);
->   
->   		status.response_code = AP_RESPONSE_INVALID_ADDRESS;
->   		return status;
-> @@ -296,12 +288,12 @@ static struct ap_queue_status vfio_ap_irq_enable(struct vfio_ap_queue *q,
->   	case AP_RESPONSE_NORMAL:
->   		/* See if we did clear older IRQ configuration */
->   		vfio_ap_free_aqic_resources(q);
-> -		q->saved_pfn = g_pfn;
-> +		q->saved_iova = nib;
->   		q->saved_isc = isc;
->   		break;
->   	case AP_RESPONSE_OTHERWISE_CHANGED:
->   		/* We could not modify IRQ setings: clear new configuration */
-> -		vfio_unpin_pages(&q->matrix_mdev->vdev, g_pfn << PAGE_SHIFT, 1);
-> +		vfio_unpin_pages(&q->matrix_mdev->vdev, nib, 1);
->   		kvm_s390_gisc_unregister(kvm, isc);
->   		break;
->   	default:
-> diff --git a/drivers/s390/crypto/vfio_ap_private.h b/drivers/s390/crypto/vfio_ap_private.h
-> index a26efd804d0d..479b205179bd 100644
-> --- a/drivers/s390/crypto/vfio_ap_private.h
-> +++ b/drivers/s390/crypto/vfio_ap_private.h
-> @@ -102,13 +102,13 @@ struct ap_matrix_mdev {
->    * struct vfio_ap_queue - contains the data associated with a queue bound to the
->    *			  vfio_ap device driver
->    * @matrix_mdev: the matrix mediated device
-> - * @saved_pfn: the guest PFN pinned for the guest
-> + * @saved_iova: the notification indicator byte (nib) address
->    * @apqn: the APQN of the AP queue device
->    * @saved_isc: the guest ISC registered with the GIB interface
->    */
->   struct vfio_ap_queue {
->   	struct ap_matrix_mdev *matrix_mdev;
-> -	unsigned long saved_pfn;
-> +	dma_addr_t saved_iova;
->   	int	apqn;
->   #define VFIO_AP_ISC_INVALID 0xff
->   	unsigned char saved_isc;
+> There is no maxItems directly here...
+
+Sorry, I mean above in the schema. After your patch the schema is effectively:
+
+reg:
+  minItems: 1
+  maxItems: 4
+reg-names:
+  minItems: 1
+  maxItems: 4
+
+...
+
+allOf:
+  - if:
+      blah-blah-blah
+    then:
+      properties:
+        reg:
+          minItems: 2
+          items:
+            - description: ...
+            - description: ...
+            - description: ...
+            - description: ...
+        reg-names:
+          blah-blah-blah
+    else:
+      blah-blah-blah
+
+I'm asking about the maxItems _above_, AKA in the section:
+
+reg:
+  minItems: 1
+  maxItems: 4
+reg-names:
+  minItems: 1
+  maxItems: 4
+
+Can we remove the "maxItems: 4" from the above and have it just be:
+
+reg:
+  minItems: 1
+reg-names:
+  minItems: 1
+
+-Doug

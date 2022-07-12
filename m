@@ -2,191 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C0E571CD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812D4571CDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiGLOfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S233007AbiGLOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233499AbiGLOfJ (ORCPT
+        with ESMTP id S232548AbiGLOfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:35:09 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150F4B31F5;
-        Tue, 12 Jul 2022 07:34:59 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:57756)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oBGyX-00B32U-U5; Tue, 12 Jul 2022 08:34:57 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:46192 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oBGyW-00Dghw-Qt; Tue, 12 Jul 2022 08:34:57 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Christian Brauner <brauner@kernel.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YrShFXRLtRt6T/j+@risky>
-        <CAJfpegvH1EMS_469yOyUP9f=eCAEqzhyngm7h=YLRExeRdPEaw@mail.gmail.com>
-        <CAJfpegurW7==LEp2yXWMYdBYXTZN4HCMMVJPu-f8yvHVbu79xQ@mail.gmail.com>
-        <YsyHMVLuT5U6mm+I@netflix>
-        <877d4jbabb.fsf@email.froward.int.ebiederm.org>
-        <Ysyp8Kbl8FzhApUb@netflix>
-        <87zghf6yhe.fsf@email.froward.int.ebiederm.org>
-        <Ys16l6+iotX2JE33@netflix>
-Date:   Tue, 12 Jul 2022 09:34:50 -0500
-In-Reply-To: <Ys16l6+iotX2JE33@netflix> (Tycho Andersen's message of "Tue, 12
-        Jul 2022 07:43:51 -0600")
-Message-ID: <87sfn62yd1.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 12 Jul 2022 10:35:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA0D24F12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:28 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lj3Cg4LvdzlVpR;
+        Tue, 12 Jul 2022 22:33:51 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 22:35:25 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 22:35:24 +0800
+Message-ID: <8efb2c6f-f00a-ea02-d5ae-ac454bb721f5@huawei.com>
+Date:   Tue, 12 Jul 2022 22:35:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oBGyW-00Dghw-Qt;;;mid=<87sfn62yd1.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19GFtaSVDwPoTYZnHwdRxtgbEun6enaSZ4=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] amba: Remove deferred device addition
+Content-Language: en-US
+To:     Saravana Kannan <saravanak@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "John Stultz" <john.stultz@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Marek Szyprowski" <m.szyprowski@samsung.com>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>
+References: <20220705083934.3974140-1-saravanak@google.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20220705083934.3974140-1-saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Tycho Andersen <tycho@tycho.pizza>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 527 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 12 (2.2%), b_tie_ro: 10 (1.8%), parse: 1.29
-        (0.2%), extract_message_metadata: 14 (2.7%), get_uri_detail_list: 2.7
-        (0.5%), tests_pri_-1000: 14 (2.7%), tests_pri_-950: 1.46 (0.3%),
-        tests_pri_-900: 1.02 (0.2%), tests_pri_-90: 98 (18.5%), check_bayes:
-        95 (18.0%), b_tokenize: 10 (1.9%), b_tok_get_all: 10 (1.9%),
-        b_comp_prob: 3.4 (0.6%), b_tok_touch_all: 68 (12.8%), b_finish: 0.99
-        (0.2%), tests_pri_0: 368 (69.8%), check_dkim_signature: 0.78 (0.1%),
-        check_dkim_adsp: 2.8 (0.5%), poll_dns_idle: 0.56 (0.1%), tests_pri_10:
-        2.1 (0.4%), tests_pri_500: 12 (2.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: strange interaction between fuse + pidns
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tycho Andersen <tycho@tycho.pizza> writes:
 
-> On Mon, Jul 11, 2022 at 06:06:21PM -0500, Eric W. Biederman wrote:
->> Tycho Andersen <tycho@tycho.pizza> writes:
->> It is not different enough to change the semantics.  What I am aiming
->> for is having a dedicated flag indicating a task will exit, that
->> fatal_signal_pending can check.  And I intend to make that flag one way
->> so that once it is set it will never be cleared.
+On 2022/7/5 16:39, Saravana Kannan wrote:
+> The uevents generated for an amba device need PID and CID information
+> that's available only when the amba device is powered on, clocked and
+> out of reset. So, if those resources aren't available, the information
+> can't be read to generate the uevents. To workaround this requirement,
+> if the resources weren't available, the device addition was deferred and
+> retried periodically.
 >
-> Ok - how far out is that? I'd like to try to convince Miklos to land
-> the fuse part of this fix now, but without the "look at shared signals
-> too" patch, that fix is useless. I'm not married to my patch, but I
-> would like to get this fixed somehow soon.
-
-My point is that we need to figure out why you need the look at shared
-signals.
-
-If I can get everything reviewed my changes will be in the next merge
-window (it unfortunately always takes longer to get the code reviewed
-than I would like).
-
-However when my changes land does not matter.  What you are trying to
-solve is orthogonal of my on-going work.
-
-The problem is that looking at shared signals is fundamentally broken.
-A case in point is that kernel threads can have a pending SIGKILL that
-is not a fatal signal.  As kernel threads are allowed to ignore or even
-handle SIGKILL.
-
-If you want to change fatal_signal_pending to include PF_EXITING I would
-need to double check the implications but I think that would work, and
-would not have the problems including the shared pending state of
-SIGKILL.
-
->> The other thing I have played with that might be relevant was removing
->> the explicit wait in zap_pid_ns_processes and simply not allowing wait
->> to reap the pid namespace init until all it's children had been reaped.
->> Essentially how we deal with the thread group leader for ordinary
->> processes.  Does that sound like it might help in the fuse case?
+> However, this deferred addition retry isn't based on resources becoming
+> available. Instead, it's retried every 5 seconds and causes arbitrary
+> probe delays for amba devices and their consumers.
 >
-> No, the problem is that the wait code doesn't know to look in the
-> right place, so waiting later still won't help.
+> Also, maintaining a separate deferred-probe like mechanism is
+> maintenance headache.
+>
+> With this commit, instead of deferring the device addition, we simply
+> defer the generation of uevents for the device and probing of the device
+> (because drivers needs PID and CID to match) until the PID and CID
+> information can be read. This allows us to delete all the amba specific
+> deferring code and also avoid the arbitrary probing delays.
+>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: John Stultz <john.stultz@linaro.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>
+> v1 -> v2:
+> - Dropped RFC tag
+> - Complete rewrite to not use stub devices.
+>
+> v2 -> v3:
+> - Flipped the if() condition for hard-coded periphids.
+> - Added a stub driver to handle the case where all amba drivers are
+>    modules loaded by uevents.
+> - Cc Marek after I realized I forgot to add him.
+>
+> v3 -> v4:
+> - Finally figured out and fixed the issue reported by Kefeng (bus match
+>    can't return an error other than -EPROBE_DEFER).
+> - I tested the patch on "V2P-CA15" on qemu
+> - Marek tested v3, but that was so long ago and the rebase wasn't clean,
+>    so I didn't include the tested-by.
+>
+> Marek/Kefeng,
+>
+> Mind giving a Tested-by?
 
-I was suggesting to modify the kernel so that zap_pid_ns_processes would
-not wait for the zapped processes.  Instead I was proposing that
-delay_group_leader called from wait_consider_task would simply refuse to
-allow the init process of a pid namespace to be reaped until every other
-process of that pid namespace had exited.
+Hi Saravana, I tested on my qemu, and previous panic[1] disappeared, so
 
-You can prototype how that would affect the deadlock by simply removing
-the waiting from zap_pid_ns_processes.
+Tested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-I suggest that simply because that has the potential to remove some of
-the strange pid namespace cases.
+[1] 
+https://lore.kernel.org/linux-arm-kernel/CAGETcx8RLor0JcboBuMrB96xUot14P1CAcqoen7ZHnYRi7KMEQ@mail.gmail.com/
 
-I don't understand the problematic interaction between pid namespace
-shutdown and the fuse daemon, so I am merely suggesting a possibility
-that I know can simplify pid namespace shutdown.
-
-Something like:
-
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index f4f8cb0435b4..d22a30b0b0cf 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -207,47 +207,6 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
- 	read_unlock(&tasklist_lock);
- 	rcu_read_unlock();
- 
--	/*
--	 * Reap the EXIT_ZOMBIE children we had before we ignored SIGCHLD.
--	 * kernel_wait4() will also block until our children traced from the
--	 * parent namespace are detached and become EXIT_DEAD.
--	 */
--	do {
--		clear_thread_flag(TIF_SIGPENDING);
--		rc = kernel_wait4(-1, NULL, __WALL, NULL);
--	} while (rc != -ECHILD);
--
--	/*
--	 * kernel_wait4() misses EXIT_DEAD children, and EXIT_ZOMBIE
--	 * process whose parents processes are outside of the pid
--	 * namespace.  Such processes are created with setns()+fork().
--	 *
--	 * If those EXIT_ZOMBIE processes are not reaped by their
--	 * parents before their parents exit, they will be reparented
--	 * to pid_ns->child_reaper.  Thus pidns->child_reaper needs to
--	 * stay valid until they all go away.
--	 *
--	 * The code relies on the pid_ns->child_reaper ignoring
--	 * SIGCHILD to cause those EXIT_ZOMBIE processes to be
--	 * autoreaped if reparented.
--	 *
--	 * Semantically it is also desirable to wait for EXIT_ZOMBIE
--	 * processes before allowing the child_reaper to be reaped, as
--	 * that gives the invariant that when the init process of a
--	 * pid namespace is reaped all of the processes in the pid
--	 * namespace are gone.
--	 *
--	 * Once all of the other tasks are gone from the pid_namespace
--	 * free_pid() will awaken this task.
--	 */
--	for (;;) {
--		set_current_state(TASK_INTERRUPTIBLE);
--		if (pid_ns->pid_allocated == init_pids)
--			break;
--		schedule();
--	}
--	__set_current_state(TASK_RUNNING);
--
- 	if (pid_ns->reboot)
- 		current->signal->group_exit_code = pid_ns->reboot;
- 
-
-Eric

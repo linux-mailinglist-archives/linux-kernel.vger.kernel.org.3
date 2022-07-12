@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2265720F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9F85720EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiGLQeF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 12 Jul 2022 12:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S233097AbiGLQeA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 12 Jul 2022 12:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiGLQdz (ORCPT
+        with ESMTP id S229746AbiGLQdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:33:55 -0400
+        Tue, 12 Jul 2022 12:33:54 -0400
 Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4056E13DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:33:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7358E20BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:33:53 -0700 (PDT)
 Received: from CHE01-GV0-obe.outbound.protection.outlook.com
  (mail-gv0che01lp2047.outbound.protection.outlook.com [104.47.22.47]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-22-lXjZf_bWMVmIFl8yF1cEaw-3; Tue, 12 Jul 2022 18:33:50 +0200
-X-MC-Unique: lXjZf_bWMVmIFl8yF1cEaw-3
+ de-mta-22-RMZy1JirNn-sjAT-K7IYzg-2; Tue, 12 Jul 2022 18:33:49 +0200
+X-MC-Unique: RMZy1JirNn-sjAT-K7IYzg-2
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
  ZRAP278MB0173.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2c::9) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5417.15; Tue, 12 Jul 2022 16:33:48 +0000
+ 15.20.5417.15; Tue, 12 Jul 2022 16:33:47 +0000
 Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::3d:ca30:8c24:1a95]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  ([fe80::3d:ca30:8c24:1a95%7]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
@@ -38,56 +38,56 @@ To:     Lee Jones <lee.jones@linaro.org>,
 CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 1/5] mfd: stmpe: Remove rotator block from probe
-Date:   Tue, 12 Jul 2022 18:33:41 +0200
-Message-ID: <20220712163345.445811-2-francesco.dolcini@toradex.com>
+        devicetree@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v2 2/5] mfd: stmpe: Probe sub-function by compatible
+Date:   Tue, 12 Jul 2022 18:33:42 +0200
+Message-ID: <20220712163345.445811-3-francesco.dolcini@toradex.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220712163345.445811-1-francesco.dolcini@toradex.com>
 References: <20220712163345.445811-1-francesco.dolcini@toradex.com>
-X-ClientProxiedBy: MR1P264CA0165.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:55::13) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-ClientProxiedBy: MR2P264CA0144.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::36) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:910:2e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3c48593c-4c2f-409f-a9b2-08da64244b77
+X-MS-Office365-Filtering-Correlation-Id: 615b4774-40a9-4985-a9b2-08da64244b77
 X-MS-TrafficTypeDiagnostic: ZRAP278MB0173:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: DzNsB8jgWf3EzASoAEC3cEf8DSQsDVIbh3M0iurdaDYGHFdcbjDHp5YUaFlNc4IF/TOsCJgxsuvLjYJ3V3pMjfeUP+DaOHiATyQOB7wEojrBhvlujU6KGJNkUjf/g2nQM2uH/41tZgLueOZb7s2ofDafgYLdDTi1U75ZSLiCugWelmyL7PWAYA3eKlD2QRGDE+LfTsgr0Lbv9bL+UzI3gnZ3xmCRmuXIdbv3B/muAMySlmolsd1iXqEodvoTNZA8P6FJo22ncDD3DkD7tvPYtvEGmNLCyownN8ONuFJxyESS3MNB3KeK6Ev1Em+nnjmRjzav8+hrs4bpCw0sGKYja06WFSV2xXvGFZCbijfVznAkqrZyMRrs4ps9GUG+/eu9sxXHJFRoZC538m9JdzEu3Rj1o0EuOrLmrl4qpex4FTS16qCpcdvw4P1oxCrC3iMGsfsUyGnzt4sMyeUIwc2rnNVFVG8p4dwL/Nd8kxvJPH5GM9HDKFgP1l5YNcx1kAhhIs6pJ3Bsq8+qUZ/KnuItptS1MlnErE96IuLvS6+ZmolesiJo75mSw+omT55wVzZFLCY9HySq2pKoIkIUjPUpUDmvwot+nbN8KWiUKk75MJ3QGo71UnKTaK8vx5YbhxxDoMm4reOptIRcsdrafVWgkd+jtbZAuWQW7W02yw3/W5BHAhvZNyBD4k4mYuyJ9amiT+9yRAO7Z6L11FZWIjm/zihJqIGLSFrXiniLpnUuP/NWKY85g8BypLpOzZtA2Otc88x/2ji8IWlcex2UzzTSxxU7bnZ3Yt7emSisTyRT5IsRP2AzIJN5M0q8x06biPSs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(376002)(346002)(366004)(396003)(136003)(478600001)(44832011)(6666004)(4744005)(36756003)(6486002)(8936002)(41300700001)(83380400001)(110136005)(316002)(5660300002)(2616005)(66946007)(26005)(1076003)(66556008)(8676002)(6512007)(186003)(52116002)(4326008)(66476007)(2906002)(38350700002)(6506007)(38100700002)(86362001);DIR:OUT;SFP:1102
+X-Microsoft-Antispam-Message-Info: wULL2Qvbwqj3+4wWPDq7bm0L7TPQxKzRgJkrW03HWJ9s+TgYVYszoZ7LQaUrUfcbY1jEc0KexmwB21ubewwi/lcWddMS6upsvjf/tycQTCzO97l/tWkZKkNjRYyGZAp1jMlIIfipCqEBHmlcCzVWfPUIlHAcl1Bmi1S4KQmW07Vkv6QYnQobQJfR3Ot2cbKiECuCZmHeQKED7QCxEqmaPSSxWHnFw5oMvBfkxE4f45No4ZJ5U7+aE7ljxnDq/M7TzN4kCWM2z9gTZprkD3TfQYLev85nz5ukA6OxTbhCsjkExxmitXkwxEJqSCjF5fhe4wtEakcmCj1m7jUMn9yqb9S0eNhN2n+pk1XiDRzkrqoevWpkaZoeSLFd444mXquhBqi+/VpIwGBiVpAqsR0o2Mgxu36sXxObKTaVeiNUuGqZOwFuFL6Fk5D1s12raHyXGKwOXokQUeia57CfnbQt/cfsuY0BUL8hDS/jNxsv1JvLcFOBAEj/DQAiRhH9yginEMsBo8HER4Zcn4pUea2X83H3uatMRnJTnZFfDvnw4ySeMjNJV0cI9BUW+xjezLYmjbDEXqlk1WVTaJ7FrF1XyQWiLm3WjPbI6HQxqBq8xMUPbtPuMG7Ipm2imqDY8kEJYZPeqT5TUqkBQzW9ODh7jj/OPnyUyHE2V7JV4diqV4M5bjk9YYVM6zRtwRO7IC7qIBEs4ghXLEB5OyK2LT8odGxZhRs0YkMoLdAeqcnXZIlpr7gIGr9+QZ67KCekjnl3xl7Ia3wVD+DRaRxx6Pb78bld5WH+DDopi9MHzbs2k5rQR9Ed+0CLhfisK/cOvJja
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(376002)(346002)(366004)(396003)(136003)(478600001)(44832011)(6666004)(36756003)(6486002)(8936002)(41300700001)(83380400001)(54906003)(7416002)(110136005)(316002)(5660300002)(2616005)(66946007)(26005)(1076003)(66556008)(8676002)(6512007)(186003)(52116002)(4326008)(66476007)(2906002)(38350700002)(6506007)(38100700002)(86362001);DIR:OUT;SFP:1102
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tgYNDfB/hdOTNpML8YeG1s2TVu2uOHp+yrJU0rmCFBRa8OWpBIDgUQLheY3Y?=
- =?us-ascii?Q?XLZzmcJR5y6kjDef0YsjhYcN/+JMvp4CRIxvD0cq6zKp+mfuxje1R75Yx7s1?=
- =?us-ascii?Q?eJTbJPdbEnE9vVjLyWM4TWmzaNe+T5Ms81+luFqDnhGQgkYAJYu4L5DyVoIE?=
- =?us-ascii?Q?rkhg/CjgDc+bWpgLsEEAuyWLc/PmCyFjwQfXkCy/ghacKBGUMiZo2dew6ye/?=
- =?us-ascii?Q?ONqHF67WrF7Hz74HqbfCdtFfg/I8LRZ7toKqm4tM0i6FCwtkMLAKbc5W/avS?=
- =?us-ascii?Q?xWSPcpkt081pVtaqdWidvusGqzuUyVwJKjIEbucRDX5WAAywM/99/LYLB/hW?=
- =?us-ascii?Q?m42HfH6Sa/QAnzLdkibH8vUUzBavwW4gRR1cbQsC790k4BR8pH/DWxDoY9Aj?=
- =?us-ascii?Q?S09IbmV2faHpF1BSm7/kCxoadWA8QYVHaETziTlZIOfEx6MIiMzkqrbnR/qV?=
- =?us-ascii?Q?xawHcD5iubQ4vyx1t851CvUcd/yNZYsol2HvTX4L9jc4fBuDTnv6V8y+btQi?=
- =?us-ascii?Q?d5Z1G8BUNNFe/UKsMyV7rnJezdSmigZ8Q6lWIOwVHy9rKkwXdgVFKjA0GBZa?=
- =?us-ascii?Q?RmMSXyWFsccZhs3OzRrwdMRF81OH2l0xLllWdWEC9kfBR2X/2ICuaq4nGDm4?=
- =?us-ascii?Q?aXM+DuhYvT+7wnyWbTd5j6PpGgPHe8Lok+py1RUVGHs9saPQZtRdaOPFET/D?=
- =?us-ascii?Q?jNpZ3QuH9r8X2pn9mxijnnqSpx07X+lA5lfqp7jreNiYUXTIb/EkzUCudhe+?=
- =?us-ascii?Q?bptRv0U+BbuWZzeWjC6YFxB+hYUdgHbfsDeK/qEOJUdInnc2XnZkjNPDFv8T?=
- =?us-ascii?Q?5GIEdc9EQh36ZjFKWiV2lylHvzMCzmDzWQJP9Bc7qb6y4ZdLxWoUPvl5u0o6?=
- =?us-ascii?Q?zV5py/q78rKHvYIidL6ZR5S+Dw3zL502co3mJrv0hOO3n/kvAV9GHY3PSGbA?=
- =?us-ascii?Q?5/cZ+7PR+gabRiM+usoEPdwPPMH5f7L9X7yZeXA8xWiq+tJVnvhWBUuUjJzO?=
- =?us-ascii?Q?Pt0CsuHFqa/xRvuVzB8jC5O7EwZRI40hgZHeNTwuSCFIzB812deViUHA5NDF?=
- =?us-ascii?Q?jucQ/fs58Vf/ukzpU32TMIyv8/UnN7RcF1wzpQEEpBLs70vn0eDVWiEZ0DA/?=
- =?us-ascii?Q?QUMx3eje5844qYXt4ulx9f/SwoLkNbdW2CyHJ2/JHfIF5MwgHMmqH7qPUkS9?=
- =?us-ascii?Q?zvb3FN/bE7wFe/kRQJMdsjbGxGLVm5sApdREe6+yEIjivM2pi/pRCY/Dpf1o?=
- =?us-ascii?Q?2hkiQtKxfGtPEFBSbwsyeAcLlvTG5wdGcaV5Ch6MaUznvBUZ6T+xxrWq5Avm?=
- =?us-ascii?Q?MWDtNFUtRgl4/Dd4b4mfgTuknE38+l5hwDJ6nRhigVx6ZXhXd9KzqyLpxbih?=
- =?us-ascii?Q?dX+G5evJpmdrF1wpklqXfazrApFEDZYRHKn1ZJ0mpFJ1oN9qq/r8Hx4QHQUh?=
- =?us-ascii?Q?QAaosa1/vRjLi2EKU5DWCHZrUmNF28YNIs1lm25gwFaGy6Q+7/dEtqdtVKUW?=
- =?us-ascii?Q?qpP6R27K67AVSg93sxHaTZyM0XB//gtoTsQqq4M3wLlU5JqaLb6LxJm63tLF?=
- =?us-ascii?Q?m7nLLNWeSvjHcbL8BYk6m1FekCrJVZrUwhesWg/5my4vZpG/9BQMMNKeknOh?=
- =?us-ascii?Q?vw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vwNnOiMo8cbLnNWHFmHH4YgoTBl46eCwFG8K7gPnzlC8S466HauzwF35u8Rl?=
+ =?us-ascii?Q?fQZPNTZ2sZbT+rKKqzKkP9IMAOZpEtcWrHLwd7BmJ1f7td4WXKTgvhOGxVej?=
+ =?us-ascii?Q?mq1ibQPoWxCUkY6alv6whNOTFvY/rJWUSH1PM/PdDHKnB6rgKTea3++rYWAy?=
+ =?us-ascii?Q?E9CLI9QVoV0dZCzzG8MPwIg9xvT7dghZ27c+1pGfMXDgkS1GLEHzDoJKUqWf?=
+ =?us-ascii?Q?eMFlQgCO7n7H+PzHQ4fV/Nt0BxsTWJwOLew41iPxgQyizhFNAbID3T9JWdNA?=
+ =?us-ascii?Q?S01NGXoQSR7ggB1PO7e6XnqMukPGwMvc66Menll0ulXZ3P/HWHJDiu2AMdXc?=
+ =?us-ascii?Q?fP1LLLUvDhnb2SnKQp6Db6GquaQ57VQdxKmdFYFd5BekrKJUPORat8peCrmj?=
+ =?us-ascii?Q?jjuzehjoKthB5vT8YvRt09HoYNHH1TEWqzHYQ7p3GzVn++gHGJoJ3ar0QKya?=
+ =?us-ascii?Q?6GPjf/8OwXuDRNg7C04i2ktFI2QYDHVkdM4bKK8fQ2J6kyX6JVhbc3eW4CHj?=
+ =?us-ascii?Q?vc2Gd84yqXq9bEB0t9R8/vhOLdtuGkZEW6rSuwn4jZGJW0KxYGCSN12P096O?=
+ =?us-ascii?Q?J8Ilq/tKE8qpF/sXDKCntx1QM5k4UdCelGvRQLkozBSl/EPwnWoOBlKPQPdy?=
+ =?us-ascii?Q?5OTO2aeA00XwnwIY77UCcU5epAkD6Vvzgra7unITTI9PPUd6v1XWovu9FTcK?=
+ =?us-ascii?Q?Vi8XornaSmLQIf/oagJDzan8MQ1vSxonl2s9+cBP7FK0qYQVTuOXlJxziRDl?=
+ =?us-ascii?Q?9yra3J4cRIM+PpXcaG78L891FzNrNGh4ok8NR+s2aH4ce3lJ5vfXKyNfiIgM?=
+ =?us-ascii?Q?3NOGZ15cS02iby/z7T3mGirNVRie9AyovXCel6AYSxZoTHoXv2LFaCw2HZHF?=
+ =?us-ascii?Q?+GDbZmxaBnHJVaO1cvE+659889pfuu5AZo10dOXNb0ftYWH9ARRLl9MKIGOJ?=
+ =?us-ascii?Q?sdrKvlz7m/88WoUbOF173Gtm3j8Z0lQ6GgNkY0a/lb5r5R7TuxfDhj2kTjPF?=
+ =?us-ascii?Q?aIg1MVazWBfuQ5l5zroqSeUdMfMZIYwh9IGa/J2lqWZoQsrSamBDuu/ldZTL?=
+ =?us-ascii?Q?Wvpcf/C0O3txRYaq292bQlmFwwkQBI4YtUvvpVChOVu2u/rmpfV1TthpGQnr?=
+ =?us-ascii?Q?EbRVB97SJwUMKY+aO2Nz9IAKwNFncoQ/SVN16Jw4OLGZHRMWUtCB/4jN11Z+?=
+ =?us-ascii?Q?+HRK2kTH+ql/z0ULb2w/O9jjvo15/L1TrpxrHzhAdHq5mf9R9BSY05Z+/9A4?=
+ =?us-ascii?Q?RliPK2ubTrVMsTz6emSwofg0JJLvMqYivVvB1cu28pKu+8FUWFN5RRNc/Qta?=
+ =?us-ascii?Q?seG/ConGOBHkbkjLl30ae7sy/DSy9aBtWINKYQJ6vTezpCLdZCOQ6YeXh1BU?=
+ =?us-ascii?Q?qABlhw3cEFRCSdf4Yon9gl5L+GXT0U8HrVXu8RwJ6VImUh0tcnU5W+BeIhFa?=
+ =?us-ascii?Q?HNeQ0Am3h1jPVWc/mhL/+YAmqkhVLrHQ+xfp0IHjgSwIC0phFtgMNESe/Q3A?=
+ =?us-ascii?Q?skbKk96kj0tze3zYHzQgiGapxwSczysr1S2M8ZLcvuHfsJlmuBgejqmDkSh7?=
+ =?us-ascii?Q?urFCV8OMu2TqiKTxnm+tRyh/wP5vhWeSjJK4K/BtQxhcfMI+cTWd3Z5ug7aR?=
+ =?us-ascii?Q?JA=3D=3D?=
 X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c48593c-4c2f-409f-a9b2-08da64244b77
+X-MS-Exchange-CrossTenant-Network-Message-Id: 615b4774-40a9-4985-a9b2-08da64244b77
 X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 16:33:47.5341
@@ -95,8 +95,10 @@ X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 16:33:47.5341
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BEwaokeWcaSAoF0IYi9Jf0RwS8Vws0P+DzLr5Cenp+dT8NHzNhsdX2wV/yGmxtcQYY+KbKQPk0JEICalmxApNlETehPu5Kg8gVchJMMxZBA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tqk+vkjL3WHilQ/VpbFnWQcRwEOs1ejq8NOo19ltGFtkzjkrfLg0GM4fDbvW1g3z9JV8Je8fS0Yhq3mGZEAtV6H21i9BCiUv1DFN/MskGII=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0173
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: toradex.com
 Content-Transfer-Encoding: 8BIT
@@ -110,34 +112,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove rotator block from probe, it is not used in any device tree file,
-there is no related cell defined, it's just dead non-working code with no
-of_compatible for it.
+Use sub-function of_compatible during probe, instead of using the node
+name. The code should not rely on the node names during probe, in
+addition to that the previously hard-coded node names are not compliant
+to the latest naming convention (they are not generic and they use
+underscores), and it was broken by mistake already once [1].
 
-This is a preliminary change to allow probing by of_compatible and not
-by a fixed name.
+[1] commit 56086b5e804f ("ARM: dts: imx6qdl-apalis: Avoid underscore in node name")
 
+Suggested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
 v2:
- - new patch
+ - remove define usage for compatible strings
+ - moved rotator removal from probe to a separate patch
 ---
- drivers/mfd/stmpe.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/mfd/stmpe.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/mfd/stmpe.c b/drivers/mfd/stmpe.c
-index aeb9ea55f97d..4aa4ac2ff406 100644
+index 4aa4ac2ff406..987e251d90ae 100644
 --- a/drivers/mfd/stmpe.c
 +++ b/drivers/mfd/stmpe.c
-@@ -1372,8 +1372,6 @@ static void stmpe_of_probe(struct stmpe_platform_data *pdata,
+@@ -1362,17 +1362,16 @@ static void stmpe_of_probe(struct stmpe_platform_data *pdata,
+ 	pdata->autosleep = (pdata->autosleep_timeout) ? true : false;
+ 
+ 	for_each_available_child_of_node(np, child) {
+-		if (of_node_name_eq(child, "stmpe_gpio")) {
++		if (of_device_is_compatible(child, stmpe_gpio_cell.of_compatible))
+ 			pdata->blocks |= STMPE_BLOCK_GPIO;
+-		} else if (of_node_name_eq(child, "stmpe_keypad")) {
++		else if (of_device_is_compatible(child, stmpe_keypad_cell.of_compatible))
+ 			pdata->blocks |= STMPE_BLOCK_KEYPAD;
+-		} else if (of_node_name_eq(child, "stmpe_touchscreen")) {
++		else if (of_device_is_compatible(child, stmpe_ts_cell.of_compatible))
+ 			pdata->blocks |= STMPE_BLOCK_TOUCHSCREEN;
+-		} else if (of_node_name_eq(child, "stmpe_adc")) {
++		else if (of_device_is_compatible(child, stmpe_adc_cell.of_compatible))
  			pdata->blocks |= STMPE_BLOCK_ADC;
- 		} else if (of_node_name_eq(child, "stmpe_pwm")) {
+-		} else if (of_node_name_eq(child, "stmpe_pwm")) {
++		else if (of_device_is_compatible(child, stmpe_pwm_cell.of_compatible))
  			pdata->blocks |= STMPE_BLOCK_PWM;
--		} else if (of_node_name_eq(child, "stmpe_rotator")) {
--			pdata->blocks |= STMPE_BLOCK_ROTATOR;
- 		}
+-		}
  	}
  }
+ 
 -- 
 2.25.1
 

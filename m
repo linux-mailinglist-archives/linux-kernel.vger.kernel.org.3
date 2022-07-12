@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E13F571E2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F44571D85
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbiGLPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S233234AbiGLO7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbiGLPGA (ORCPT
+        with ESMTP id S233449AbiGLO7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:06:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8D8C3AF7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657638020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lr/kO1D/q9tV+euGAX7ORJQlJrSPOmv8A9AB5l12iy8=;
-        b=H8XLw9wHH7sLBFuEjPz81va/hup6VERlN7A2Fe4t/BwpInLB6JSl3F2REpuYerGzxMFLrC
-        Rm7fMCKDkOqDQ5gtdyYbV59nP0ckJ6MfpFVZK6sI+t2+SxRhfyNjWSbR6n6a9B6FkWskXb
-        EH9RmT5zMvnxdmuSeS/Lb1Nr60oC4Ow=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-NGsUPHqwPniOFAOqGZ7Zkw-1; Tue, 12 Jul 2022 11:00:17 -0400
-X-MC-Unique: NGsUPHqwPniOFAOqGZ7Zkw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 12 Jul 2022 10:59:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F316C11453;
+        Tue, 12 Jul 2022 07:58:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE9F51029F7E;
-        Tue, 12 Jul 2022 15:00:11 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED4AE2166B26;
-        Tue, 12 Jul 2022 15:00:07 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 17/23] selftests/bpf: add tests for bpf_hid_hw_request
-Date:   Tue, 12 Jul 2022 16:58:44 +0200
-Message-Id: <20220712145850.599666-18-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D711B819AD;
+        Tue, 12 Jul 2022 14:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DA7C341C8;
+        Tue, 12 Jul 2022 14:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657637935;
+        bh=cXNjsVX+8XdC+OgT+ly+ALQHhJP/zbUWZiF9/y+3SPk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mz/Xa/B4JZWCU6h91Sx+uWQ+ZCnVPYwSoRxEajVnVYASxogMSsadajOG+OPRSF7EN
+         vlAaqiaD+e/5Dn/d0mgq+5dZT+vZz7/aUgKB3htQMOTmJQo/eORreY6cK/rEVbd3Jc
+         DZ8eqagX/Xzhn/f2TqGSZFvpWmN4GwTb07VZpVyk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.14.288
+Date:   Tue, 12 Jul 2022 16:58:45 +0200
+Message-Id: <1657637926225123@kroah.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,275 +50,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for the newly implemented function.
-We test here only the GET_REPORT part because the other calls are pure
-HID protocol and won't infer the result of the test of the bpf hook.
+I'm announcing the release of the 4.14.288 kernel.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+All users of the 4.14 kernel series must upgrade.
 
----
+The updated 4.14.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-changes in v6:
-- fixed copy/paste in prog_tests when calling ASSERT_OK
-- removed the need for memcpy now that kfuncs can access ctx
+thanks,
 
-changes in v5:
-- use the new hid_bpf_allocate_context() API
-- remove the need for ctx_in for syscall TEST_RUN
+greg k-h
 
-changes in v3:
-- use the new hid_get_data API
-- directly use HID_FEATURE_REPORT and HID_REQ_GET_REPORT from uapi
+------------
 
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
----
- tools/testing/selftests/bpf/prog_tests/hid.c | 114 ++++++++++++++++---
- tools/testing/selftests/bpf/progs/hid.c      |  43 +++++++
- 2 files changed, 139 insertions(+), 18 deletions(-)
+ Makefile                                   |    2 +-
+ arch/powerpc/platforms/powernv/rng.c       |   16 ++++++++++------
+ drivers/dma/at_xdmac.c                     |    5 +++++
+ drivers/dma/ti-dma-crossbar.c              |    5 +++++
+ drivers/i2c/busses/i2c-cadence.c           |    1 +
+ drivers/iommu/dmar.c                       |    2 +-
+ drivers/net/can/grcan.c                    |    1 -
+ drivers/net/can/usb/gs_usb.c               |   23 +++++++++++++++++++++--
+ drivers/net/usb/usbnet.c                   |   17 ++++++++++++-----
+ drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c |   10 +++++-----
+ drivers/video/fbdev/core/fbcon.c           |    5 +++++
+ fs/xfs/xfs_inode.c                         |    1 -
+ include/net/esp.h                          |    2 --
+ include/video/of_display_timing.h          |    2 ++
+ lib/idr.c                                  |    4 +++-
+ mm/slub.c                                  |    4 ++--
+ net/ipv4/esp4.c                            |    5 ++---
+ net/ipv6/esp6.c                            |    5 ++---
+ net/rose/rose_route.c                      |    4 ++--
+ 19 files changed, 79 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 47bc0a30c275..19172d3e0f44 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -77,12 +77,23 @@ static unsigned char rdesc[] = {
- 	0xc0,			/* END_COLLECTION */
- };
- 
-+static u8 feature_data[] = { 1, 2 };
-+
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
- 	int retval;
- };
- 
-+struct hid_hw_request_syscall_args {
-+	__u8 data[10];
-+	unsigned int hid;
-+	int retval;
-+	size_t size;
-+	enum hid_report_type type;
-+	__u8 request_type;
-+};
-+
- static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
- static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
- 
-@@ -142,7 +153,7 @@ static void destroy(int fd)
- 
- static int uhid_event(int fd)
- {
--	struct uhid_event ev;
-+	struct uhid_event ev, answer;
- 	ssize_t ret;
- 
- 	memset(&ev, 0, sizeof(ev));
-@@ -183,6 +194,15 @@ static int uhid_event(int fd)
- 		break;
- 	case UHID_GET_REPORT:
- 		fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
-+
-+		answer.type = UHID_GET_REPORT_REPLY;
-+		answer.u.get_report_reply.id = ev.u.get_report.id;
-+		answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
-+		answer.u.get_report_reply.size = sizeof(feature_data);
-+		memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
-+
-+		uhid_write(fd, &answer);
-+
- 		break;
- 	case UHID_SET_REPORT:
- 		fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
-@@ -391,6 +411,7 @@ static int open_hidraw(int dev_id)
- struct test_params {
- 	struct hid *skel;
- 	int hidraw_fd;
-+	int hid_id;
- };
- 
- static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
-@@ -419,27 +440,33 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
- 	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
- 		goto cleanup;
- 
--	prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
--	if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
--		goto cleanup;
-+	if (prog_name) {
-+		prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
-+		if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
-+			goto cleanup;
- 
--	bpf_program__set_autoload(prog, true);
-+		bpf_program__set_autoload(prog, true);
- 
--	err = hid__load(hid_skel);
--	if (!ASSERT_OK(err, "hid_skel_load"))
--		goto cleanup;
-+		err = hid__load(hid_skel);
-+		if (!ASSERT_OK(err, "hid_skel_load"))
-+			goto cleanup;
- 
--	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
--	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
--		err = attach_fd;
--		goto cleanup;
--	}
-+		attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
-+		if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
-+			err = attach_fd;
-+			goto cleanup;
-+		}
- 
--	args.prog_fd = bpf_program__fd(prog);
--	err = bpf_prog_test_run_opts(attach_fd, &tattr);
--	snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
--	if (!ASSERT_EQ(args.retval, 0, buf))
--		goto cleanup;
-+		args.prog_fd = bpf_program__fd(prog);
-+		err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+		snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
-+		if (!ASSERT_EQ(args.retval, 0, buf))
-+			goto cleanup;
-+	} else {
-+		err = hid__load(hid_skel);
-+		if (!ASSERT_OK(err, "hid_skel_load"))
-+			goto cleanup;
-+	}
- 
- 	hidraw_fd = open_hidraw(dev_id);
- 	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
-@@ -447,6 +474,7 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
- 
- 	test_data->skel = hid_skel;
- 	test_data->hidraw_fd = hidraw_fd;
-+	test_data->hid_id = hid_id;
- 
- 	return 0;
- 
-@@ -693,6 +721,54 @@ static int test_hid_change_report(int uhid_fd, int dev_id)
- 	return ret;
- }
- 
-+/*
-+ * Attach hid_user_raw_request to the given uhid device,
-+ * call the bpf program from userspace
-+ * check that the program is called and does the expected.
-+ */
-+static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
-+{
-+	struct test_params params;
-+	int err, prog_fd;
-+	int ret = -1;
-+	struct hid_hw_request_syscall_args args = {
-+		.retval = -1,
-+		.type = HID_FEATURE_REPORT,
-+		.request_type = HID_REQ_GET_REPORT,
-+		.size = 10,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	err = prep_test(dev_id, NULL, &params);
-+	if (!ASSERT_EQ(err, 0, "prep_test()"))
-+		goto cleanup;
-+
-+	args.hid = params.hid_id;
-+	args.data[0] = 1; /* report ID */
-+
-+	prog_fd = bpf_program__fd(params.skel->progs.hid_user_raw_request);
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
-+	if (!ASSERT_EQ(err, 0, "bpf_prog_test_run_opts"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(args.retval, 2, "bpf_prog_test_run_opts_retval"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(args.data[1], 2, "hid_user_raw_request_check_in"))
-+		goto cleanup;
-+
-+	ret = 0;
-+
-+cleanup:
-+	cleanup_test(&params);
-+
-+	return ret;
-+}
-+
- void serial_test_hid_bpf(void)
- {
- 	int err, uhid_fd;
-@@ -720,6 +796,8 @@ void serial_test_hid_bpf(void)
- 	ASSERT_OK(err, "hid_attach_detach");
- 	err = test_hid_change_report(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_change_report");
-+	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
-+	ASSERT_OK(err, "hid_user_raw_request");
- 
- 	destroy(uhid_fd);
- 
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index ee7529c47ad8..0be319c11575 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -10,6 +10,13 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
- 			      unsigned int offset,
- 			      const size_t __sz) __ksym;
- extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8 *data,
-+			      size_t buf__sz,
-+			      enum hid_report_type type,
-+			      enum hid_class_request reqtype) __ksym;
- 
- struct attach_prog_args {
- 	int prog_fd;
-@@ -56,3 +63,39 @@ int attach_prog(struct attach_prog_args *ctx)
- 					  0);
- 	return 0;
- }
-+
-+struct hid_hw_request_syscall_args {
-+	/* data needs to come at offset 0 so we can do a memcpy into it */
-+	__u8 data[10];
-+	unsigned int hid;
-+	int retval;
-+	size_t size;
-+	enum hid_report_type type;
-+	__u8 request_type;
-+};
-+
-+SEC("syscall")
-+int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
-+{
-+	struct hid_bpf_ctx *ctx;
-+	const size_t size = args->size;
-+	int i, ret = 0;
-+
-+	if (size > sizeof(args->data))
-+		return -7; /* -E2BIG */
-+
-+	ctx = hid_bpf_allocate_context(args->hid);
-+	if (!ctx)
-+		return -1; /* EPERM check */
-+
-+	ret = hid_bpf_hw_request(ctx,
-+				 args->data,
-+				 size,
-+				 args->type,
-+				 args->request_type);
-+	args->retval = ret;
-+
-+	hid_bpf_release_context(ctx);
-+
-+	return 0;
-+}
--- 
-2.36.1
+Duoming Zhou (1):
+      net: rose: fix UAF bug caused by rose_t0timer_expiry
+
+Eric Sandeen (1):
+      xfs: remove incorrect ASSERT in xfs_rename
+
+Greg Kroah-Hartman (1):
+      Linux 4.14.288
+
+Helge Deller (1):
+      fbcon: Disallow setting font bigger than screen size
+
+Hsin-Yi Wang (1):
+      video: of_display_timing.h: include errno.h
+
+Jann Horn (1):
+      mm/slub: add missing TID updates on slab deactivation
+
+Jason A. Donenfeld (1):
+      powerpc/powernv: delay rng platform device creation until later in boot
+
+Liang He (1):
+      can: grcan: grcan_probe(): remove extra of_node_get()
+
+Linus Torvalds (1):
+      ida: don't use BUG_ON() for debugging
+
+Miaoqian Lin (2):
+      dmaengine: ti: Fix refcount leak in ti_dra7_xbar_route_allocate
+      dmaengine: ti: Add missing put_device in ti_dra7_xbar_route_allocate
+
+Michael Walle (1):
+      dmaengine: at_xdma: handle errors of at_xdmac_alloc_desc() correctly
+
+Oliver Neukum (1):
+      usbnet: fix memory leak in error case
+
+Rhett Aultman (1):
+      can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Sabrina Dubroca (1):
+      esp: limit skb_page_frag_refill use to a single page
+
+Samuel Holland (1):
+      pinctrl: sunxi: a83t: Fix NAND function name for some pins
+
+Satish Nagireddy (1):
+      i2c: cadence: Unregister the clk notifier in error path
+
+Yian Chen (1):
+      iommu/vt-d: Fix PCI bus rescan device hot add
 

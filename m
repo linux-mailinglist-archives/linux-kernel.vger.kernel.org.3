@@ -2,148 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9061A571A9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429E5571AA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiGLM5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S231735AbiGLM6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbiGLM5k (ORCPT
+        with ESMTP id S229841AbiGLM6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:57:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4344AC071;
-        Tue, 12 Jul 2022 05:57:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED44B81868;
-        Tue, 12 Jul 2022 12:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70A8C341CD;
-        Tue, 12 Jul 2022 12:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657630657;
-        bh=cW1C3A28y7M0Wa7SoYZtf30sJKBFXl9X73+ZlF8Vvt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sUTSW/a1JicHdPlFQb9l3h71/9LnyigR59l49n/v7oBw2LeaxBY2ck+TU73EjTcsN
-         pIDqblBd2L2CT2/ESo9U06JvrbnQ3VSrbu7sRMchdmQJHbabKRG3sRhv0x0IsOHJ8r
-         yV/0n4mH4rwH0q0AjQxMSQYWG6EmM41NQ/StJpX41vizngigb6gjzLGULuzBn6I5Vg
-         A5mNZYxpLG+HpnIfguVS2HWXDnALEcFE8TRH9TAF23mh/yDrw+vQxSGJ2nAjEUdEQ9
-         wbZQWSpb0mZtAaAoEw0EOBoxiTLUf94PYLpDeWn9HJaqcigAefcHZ6RKzSn6eyfnXy
-         95z5EU8Nh5g4Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3B13E40374; Tue, 12 Jul 2022 09:57:34 -0300 (-03)
-Date:   Tue, 12 Jul 2022 09:57:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCHSET 0/7] perf lock: New lock contention tracepoints
- support (v4)
-Message-ID: <Ys1vvte9izUxDAO/@kernel.org>
-References: <20220615163222.1275500-1-namhyung@kernel.org>
+        Tue, 12 Jul 2022 08:58:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3747DAA761
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AdhEHYr8+2vzJ5ieaWHpDyda90wFHDOWzppwqyUC9n8=; b=Pv9rMtaJNlryzmYE7km5XCMOam
+        vdHV/99a/k+NILfGven3UhK9+SDXJfEE7RVvca24Vqj2Yoj22TI8zjqQiorYc6Q24/f4eYNVJ00R7
+        mft5zWm26mvW0iKvcuPGf++H0oeU4JNUnEGRp2gFWwVjveB5erlus28bF0qEHFuTTbQ+/KKSVhAZK
+        st3Sz7vnbCHGUSLUA2B4ruuUA9BJWn1yggNtRQactz076eGLOcmSrW8QQcRe4ltCZz3TdFUHMKyK8
+        eGufGrV7yIoJv7KnEIGXSdHogVZgqx8/0EDxDpsMKVcJ3wTtVl2aO2amUFFd3PzQKbfsJOENcmsf8
+        5dJL8TCw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBFSi-006w3J-0m; Tue, 12 Jul 2022 12:58:00 +0000
+Date:   Tue, 12 Jul 2022 13:57:59 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, Zach O'Keefe <zokeefe@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Liam Howlett <liam.howlett@oracle.com>
+Subject: Re: [syzbot] memory leak in xas_create
+Message-ID: <Ys1v1548IkSJ45F/@casper.infradead.org>
+References: <000000000000eb2d6c05e35a0d73@google.com>
+ <20220711133808.d86400ce9960febcb0fd537b@linux-foundation.org>
+ <YsyMQ2jzOICVbCda@casper.infradead.org>
+ <CACT4Y+bL3aM-cVeYSLU7az1x2Yj1vH7GaQSq=Z-BGc5Vk1Vi4w@mail.gmail.com>
+ <Ys1r06szkVi3QEai@casper.infradead.org>
+ <CACT4Y+Z44fS04StzMh+sfUWo-k5sjYf3VGhhK2ppkHP=9RZQEw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615163222.1275500-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACT4Y+Z44fS04StzMh+sfUWo-k5sjYf3VGhhK2ppkHP=9RZQEw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jun 15, 2022 at 09:32:15AM -0700, Namhyung Kim escreveu:
-> Hello,
+On Tue, Jul 12, 2022 at 02:50:50PM +0200, Dmitry Vyukov wrote:
+> On Tue, 12 Jul 2022 at 14:40, Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Tue, Jul 12, 2022 at 08:54:28AM +0200, Dmitry Vyukov wrote:
+> > > On Mon, 11 Jul 2022 at 22:47, Matthew Wilcox <willy@infradead.org> wrote:
+> > > >
+> > > > On Mon, Jul 11, 2022 at 01:38:08PM -0700, Andrew Morton wrote:
+> > > > > On Sat, 09 Jul 2022 00:13:23 -0700 syzbot <syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com> wrote:
+> > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > syzbot found the following issue on:
+> > > > > >
+> > > > > > HEAD commit:    c1084b6c5620 Merge tag 'soc-fixes-5.19-2' of git://git.ker..
+> > > > > > git tree:       upstream
+> > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=14967ccc080000
+> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=916233b7694a38ff
+> > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=a785d07959bc94837d51
+> > > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122ae834080000
+> > > > > >
+> > > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > > Reported-by: syzbot+a785d07959bc94837d51@syzkaller.appspotmail.com
+> > > > > >
+> > > > > > 2022/07/05 05:22:17 executed programs: 828
+> > > > > > 2022/07/05 05:22:23 executed programs: 846
+> > > > > > 2022/07/05 05:22:30 executed programs: 866
+> > > > > > 2022/07/05 05:22:37 executed programs: 875
+> > > > > > BUG: memory leak
+> > > > >
+> > > > > Thanks.  Presumably due to khugepaged changes.
+> > > >
+> > > > Huh, I was expecting it to be something I'd messed up.  I've been
+> > > > looking at it today, but no luck figuring it out so far.
+> > > >
+> > > > > Can we expect a bisection search?
+> > > >
+> > > > We only have a syz reproducer so far, and if I understand correctly,
+> > > > it's probably because this is a flaky test (because it's trying to
+> > > > find something that's a race condition).
+> > > >
+> > > > I expect a bisection search to go badly wrong if this is true.
+> > >
+> > > Is it possible that parts of xas are not freed on the error paths?
+> > > I don't immediately see where anything is freed on these error paths:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n681
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/xarray.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n721
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/khugepaged.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n1675
+> >
+> > There's nothing to free; if a node is allocated, then it's stored in
+> > the tree where it can later be found and reused.
 > 
-> Kernel v5.19 will have a new set of tracepoints to track lock
-> contentions for various lock types.  Unlike tracepoints in LOCKDEP and
-> LOCK_STAT, it's hit only for contended locks and lock names are not
-> available.  So it needs to collect stack traces and display the caller
-> function instead.
+> What I was thinking of is:
+> 
+> The leaked memory is allocated with:
+> xas_create_range(&xas);
+> here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/khugepaged.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n1670
+> 
+> So I assumed the nodes stored in the xas object, which is local to the
+> collapse_file() function.
 
-Applied to tmp.perf/core, performing some further tests and then will
-push to perf/core.
+Yes, that's a reasonable thing to think, but it's actually not how
+it works.  When we allocate a node in xas_create(), we put it straight
+into the tree without storing it in xas->xa_alloc.  We may then end
+up not using it, but the node isn't leaked because it's in the tree.
 
-Thanks for you work on this!
+If the GFP_NOWAIT allocation fails (it didn't in these stack traces),
+we call xas_nomem(), which sees an -ENOMEM, allocates a node and stores
+it in xas->xa_alloc; then we go round the loop again where xas_create()
+will take the node from xas->xa_alloc.  But the backtraces here don't
+implicate xas_nomem().
 
-- Arnaldo
- 
-> Changes in v4)
->  * add Acked-by from Ian
->  * more comments on trace_lock_handler
->  * don't create stats in the contention_end handler
->  
-> Changes in v3)
->  * fix build error
->  * support data from different kernels/machines
->  * skip bad stat unless there's actual bad ones
->  
-> Changes in v2)
->  * add Acked-by from Ian
->  * print time with a unit for compact output
->  * add some comments  (Ian)
->  * remove already applied patch
->  
-> This patchset merely adds support for the new tracepoints to the
-> existing perf lock commands.  So there's no change to the user.  Later
-> I'll add new a sub-command dedicated to the tracepoints to make use of
-> the additional information.
+> So if we do "goto out" here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/khugepaged.c?id=c1084b6c5620a743f86947caca66d90f24060f56#n1676
 > 
-> Example output:
+> There does not seem to be anything that frees anything stored in the xas:
 > 
->   $ sudo perf lock record -a sleep 3
+> out:
+>     VM_BUG_ON(!list_empty(&pagelist));
+>     if (!IS_ERR_OR_NULL(*hpage))
+>         mem_cgroup_uncharge(page_folio(*hpage));
+>     /* TODO: tracepoints */
+> }
 > 
->   $ perf lock report -F acquired,contended,avg_wait,wait_total
-> 
->                   Name   acquired  contended     avg wait    total wait
-> 
->    update_blocked_a...         40         40      3.61 us     144.45 us
->    kernfs_fop_open+...          5          5      3.64 us      18.18 us
->     _nohz_idle_balance          3          3      2.65 us       7.95 us
->    tick_do_update_j...          1          1      6.04 us       6.04 us
->     ep_scan_ready_list          1          1      3.93 us       3.93 us
->   ...
-> 
-> You can find the code in the 'perf/lock-contention-v4' branch at
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> Namhyung Kim (7):
->   perf lock: Print wait times with unit
->   perf lock: Allow to use different kernel symbols
->   perf lock: Skip print_bad_events() if nothing bad
->   perf lock: Add lock contention tracepoints record support
->   perf lock: Handle lock contention tracepoints
->   perf record: Allow to specify max stack depth of fp callchain
->   perf lock: Look up callchain for the contended locks
-> 
->  tools/perf/Documentation/perf-lock.txt   |   7 +
->  tools/perf/Documentation/perf-record.txt |   5 +
->  tools/perf/builtin-lock.c                | 426 ++++++++++++++++++++++-
->  tools/perf/util/callchain.c              |  18 +-
->  4 files changed, 434 insertions(+), 22 deletions(-)
-> 
-> 
-> base-commit: 9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
-
--- 
-
-- Arnaldo

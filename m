@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8466C5714A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E109D5714A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiGLIcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiGLIb4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232538AbiGLIb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 12 Jul 2022 04:31:56 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62750A43BB;
-        Tue, 12 Jul 2022 01:31:55 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id y141so6895855pfb.7;
-        Tue, 12 Jul 2022 01:31:55 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232347AbiGLIbv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 12 Jul 2022 04:31:51 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F0BA44C9;
+        Tue, 12 Jul 2022 01:31:49 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u12so13010210eja.8;
+        Tue, 12 Jul 2022 01:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+ihihgGZUmY2/0a390+NibBsCD73DBtUh+DsJP+XRRo=;
-        b=mKKKcvcQqUipPu54C0OosbvkxjyBPI2HgOtfEtbeG8slxpHUF8od8fQ2iZsY8ZLxHI
-         ++9GISY25O/wK+QWLDCLgyaztpX8ylXn6d482xCtD2oMrqbi5Tmmrf/ISqrw5d2Nc4Se
-         1AfpeW4cC/a+CZfGUzw9Fci+Rj6fNI8jAX8exDsMr8tdowV1D+968Uc4Fk130zG4M/K5
-         KTylvJJUAi/K75fBB4612BGe/G+2hp8ct7/UT6ZEYfx7upbgZnlpoKoRpzUYjOUcSh+C
-         84qP0ZLiruE+2exe8/Mnw1dCZwjGXoh5/RA6wOFdU47vwwAFrj6G7nF6MFEb6fw6nkyp
-         lDUg==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Rw0D6MOQNgwtHVy5EHhS3LDpVuivadaMB6MVJn/OAoU=;
+        b=QzuplMgfE/kFHk61XSAFjXkGGpuBQb8Y4wEsuENnY4rAjcrt0BRibp8s0SR3/Q2ubn
+         GgGQgJw5rN0SzQOG41e2Dpfo1zJNPW7JhLwTbWRER4JrUR5e0aPuxPWXjSc9Vile+IuV
+         ozVYcMd5XDdrueeXqCWgYwRaRCXJPADE/PGCVHRhI9jlAkHVMJ3ihOT8v7SbH3YMbI4r
+         NGdlCKDXzZVA5DPbqotjPS0Cd5INpaKe7/hJPms0iF22a4KW5egfcAhcUzPWNady0kEk
+         LljI14XabSEc8dUlW/D3tnqeHRr4waCa60/k3BbQ714FGUGGnudFBhPltOuW8w9lyg25
+         qWNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+ihihgGZUmY2/0a390+NibBsCD73DBtUh+DsJP+XRRo=;
-        b=e54GR4abbe15+k43bgyUZ0qzyGYwc4/wqxC4mj5gZvB5koggsnm/eLN0GzikPf26el
-         hUPi1cdXETP5EcXZsTcNaJW4h7FVhJHhfBvsWTf6BMwNbO/juHr8pY6fMf/egjlImcE6
-         zYEIQ/XRsOqXiO/6dzzEmEHxgx43JLSEz3+URcNCUVn3KBuIEI6TRyK63YJVSHF+a6zk
-         a6Bi8YZ++3cZUi8JhEkxP7kx9tgKgqcu6dSYisDPQ6qdEjuJYPFz0R0gEklXosgl7sGF
-         ehPAXfTRKnzH/PmOR2vhtD6TBiEk3pxFvaOszbShTsavpz2ygwMCLM9JNCncKoEGHzer
-         dauA==
-X-Gm-Message-State: AJIora/Tht0Z03awrG1EmCQ7Zr+2/fpPra7WfV97ws+ozu0upQFGL4AR
-        rR9121gYAbCifW9G0fIzOgPEExKQrh56fzkCsW8=
-X-Google-Smtp-Source: AGRyM1uqacAKT5j+jPbReGRauD1rjYv6gDcFXZyHW4LIDJSOWF/Vx7qbRWE+HLfP2QWQe3cjgidYPX/lkKAKCOjxVFE=
-X-Received: by 2002:a05:6a00:3006:b0:52a:ca34:7e43 with SMTP id
- ay6-20020a056a00300600b0052aca347e43mr11603050pfb.10.1657614714676; Tue, 12
- Jul 2022 01:31:54 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Rw0D6MOQNgwtHVy5EHhS3LDpVuivadaMB6MVJn/OAoU=;
+        b=KA2yYBd1tHPB7P2IIn6RKJKgwKd3K1Q55Vv4++j3u2Z8/cdiXRG0je9F7GhGqF8xt7
+         AIwWEuI/O5heT5SRKXccgJ9uvaIOgfLkWa3hS3CMprutjodBLDB+8o3wtu42n4f5/Hec
+         h7uK6+yYY3jmoQslbcw3SBBsSZtQOQY6TJeiUTwM9emTCOq65N0iAlbOqbH9ZGXZVwi3
+         Ba+T0ay/gWqY55slgOSeVVhUwJPSQfBdtarEgs3GfDJbHxW6WdJvVP5XPkU5LRqssKL3
+         bI5gI1zk452BfKiA7sCtlabh45bdsU08rNlH+K9O+goqiXdD3SOeIL7+rOqM+Pw358MB
+         VoPQ==
+X-Gm-Message-State: AJIora9gtHjbcbBCtS/LaCb7ap+KtnGVrpW/Jy8YKOiDbr1aFRB2WuL9
+        4uKb4dH48/VT1+RdRgq/ZT8=
+X-Google-Smtp-Source: AGRyM1sCGo7oWXUoiAf19HelQ6cTyYc12/s2113N0rki2LPZ8TVyFOBl4AyWQ5vH/V8FxG1u3/XVUA==
+X-Received: by 2002:a17:907:2cca:b0:72b:4188:f95b with SMTP id hg10-20020a1709072cca00b0072b4188f95bmr14594494ejc.153.1657614708272;
+        Tue, 12 Jul 2022 01:31:48 -0700 (PDT)
+Received: from krava ([151.14.22.253])
+        by smtp.gmail.com with ESMTPSA id fd9-20020a1709072a0900b006fed062c68esm3531509ejc.182.2022.07.12.01.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 01:31:47 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 12 Jul 2022 10:31:45 +0200
+To:     Anquan Wu <leiqi96@hotmail.com>
+Cc:     andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] libbpf: fix the name of a reused map
+Message-ID: <Ys0xcf2yRG4fjkBY@krava>
+References: <OSZP286MB1725CEA1C95C5CB8E7CCC53FB8869@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20220711065907.23105-1-hbh25y@gmail.com> <YsvTvalrwd4bxO75@codewreck.org>
- <f68df7cf-4b72-4c01-9492-103fa67c5e99@gmail.com> <Ys0PYaD7x7InUpc+@codewreck.org>
-In-Reply-To: <Ys0PYaD7x7InUpc+@codewreck.org>
-From:   Hangyu Hua <hbh25y@gmail.com>
-Date:   Tue, 12 Jul 2022 16:31:43 +0800
-Message-ID: <CAOo-nL+B1RkQ8PKeH+bs9gjX+Fq72PnyB9No+HiMoJ8azDBbag@mail.gmail.com>
-Subject: Re: [PATCH] net: 9p: fix possible refcount leak in p9_read_work() and recv_done()
-To:     asmadeus@codewreck.org
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, tomasbortoli@gmail.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <OSZP286MB1725CEA1C95C5CB8E7CCC53FB8869@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,180 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/12 14:06, asmadeus@codewreck.org wrote:
-> Hangyu Hua wrote on Tue, Jul 12, 2022 at 11:24:36AM +0800:
->> That's a little weird. If you are right, the three return paths of this
->> function are inconsistent with the handling of refcount.
->>
->> static void p9_read_work(struct work_struct *work)
->> {
->> ...
->>      if ((m->rreq) && (m->rc.offset == m->rc.capacity)) {
->>              p9_debug(P9_DEBUG_TRANS, "got new packet\n");
->>              m->rreq->rc.size = m->rc.offset;
->>              spin_lock(&m->client->lock);
->>              if (m->rreq->status == REQ_STATUS_SENT) {
->>                      list_del(&m->rreq->req_list);
->>                      p9_client_cb(m->client, m->rreq, REQ_STATUS_RCVD);      <---- [1]
->>              } else if (m->rreq->status == REQ_STATUS_FLSHD) {
->>                      /* Ignore replies associated with a cancelled request. */
->>                      p9_debug(P9_DEBUG_TRANS,
->>                               "Ignore replies associated with a cancelled request\n");       <---- [2]
->>              } else {
->>                      spin_unlock(&m->client->lock);
->>                      p9_debug(P9_DEBUG_ERROR,
->>                               "Request tag %d errored out while we were reading the reply\n",
->>                               m->rc.tag);
->>                      err = -EIO;
->>                      goto error;     <---- [3]
->>              }
->>              spin_unlock(&m->client->lock);
->>              m->rc.sdata = NULL;
->>              m->rc.offset = 0;
->>              m->rc.capacity = 0;
->>              p9_req_put(m->rreq);    <---- [4]
->>              m->rreq = NULL;
->>      }
->> ...
->> error:
->>      p9_conn_cancel(m, err);         <---- [5]
->>      clear_bit(Rworksched, &m->wsched);
->> }
->>
->> There are three return paths here, [1] and [2] and [3].
->> [1]: m->rreq will be put twice in [1] and [4]. And m->rreq will be deleted
->> from the m->req_list in [1].
->>
->> [2]: m->rreq will be put in [4]. And m->rreq will not be deleted from
->> m->req_list.
->
-> when req status got put to FLUSHD the req was dropped from the list
-> already and put in p9_fd_cancel, so we shouldn't put it here.
->
->> [3]: m->rreq will be put in [5]. And m->rreq will be deleted from the
->> m->req_list in [5].
->
-> On this error case I really can't say anything: it depends on how the
-> req got in this state in the first place -- more precisely is it still
-> in req_list or not?
->
-> But even if it is and we leak it here, we return an error here, so the
-> connection will be marked as disconnected and won't be usable anymore.
-> The memory will be freed when the user umounts after that.
->
-> If we took the time to re-init the rreq->req_list everytime we could
-> check if it's empty (don't think we can rely on it being poisoned), but
-> I just don't think it's worth it: it's better to consume a bit more
-> memory until umount than to risk a UAF.
->
-> (note: while writing this I noticed p9_tag_cleanup() in
-> p9_client_destroy() only tracks requests still in the idr, so doesn't
-> work for requests that went through p9_tag_remove().
-> We don't need p9_tag_remove() anymore so I've just gotten rid of it and
-> we will catch these now)
->
->
->> If p9_tag_lookup keep the refcount of req which is in m->req_list. There
->> will be a double put in return path [1] and a potential UAF in return path
->> [2]. And this also means a req in m->req_list without getting refcount
->> before p9_tag_lookup.
->
-> That is the nominal path, we'd notice immediately if there are too many
-> puts there.
-> A request is initialized with two refs so that we can have one for the
-> transport ((a), for fd, "is the request tracked in a list?") and one for
-> the main thread ((b), p9_client_rpc which will put it at the end)
-> Then you get a third ref from p9_tag_lookup that I was forgetting about,
-> (c).
->
-> Going through [1] removes it from the list, and removes the associated
-> ref (a), then through p9_client_cb which removes ref (c) and wakes up
-> p9_client_rpc which takes the last ref (b), freeing the request.
->
+On Tue, Jul 12, 2022 at 11:15:40AM +0800, Anquan Wu wrote:
+> BPF map name is limited to BPF_OBJ_NAME_LEN.
+> A map name is defined as being longer than BPF_OBJ_NAME_LEN,
+> it will be truncated to BPF_OBJ_NAME_LEN when a userspace program
+> calls libbpf to create the map. A pinned map also generates a path
+> in the /sys. If the previous program wanted to reuse the map，
+> it can not get bpf_map by name, because the name of the map is only
+> partially the same as the name which get from pinned path.
+> 
+> The syscall information below show that map name "process_pinned_map"
+> is truncated to "process_pinned_".
+> 
+>     bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/process_pinned_map",
+>     bpf_fd=0, file_flags=0}, 144) = -1 ENOENT (No such file or directory)
+> 
+>     bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_HASH, key_size=4,
+>     value_size=4,max_entries=1024, map_flags=0, inner_map_fd=0,
+>     map_name="process_pinned_",map_ifindex=0, btf_fd=3, btf_key_type_id=6,
+>     btf_value_type_id=10,btf_vmlinux_value_type_id=0}, 72) = 4
+> 
+> This patch check that if the name of pinned map are the same as the
+> actual name for the first (BPF_OBJ_NAME_LEN - 1),
+> bpf map still uses the name which is included in bpf object.
+> 
+> Signed-off-by: Anquan Wu <leiqi96@hotmail.com>
+> ---
+> 
+> v2: compare against zero explicitly
+> 
+> v1: https://lore.kernel.org/linux-kernel/OSZP286MB1725A2361FA2EE8432C4D5F4B8879@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM/
+> ---
+>  tools/lib/bpf/libbpf.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index e89cc9c885b3..7b4d3604dfb4 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4328,6 +4328,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+>  {
+>  	struct bpf_map_info info = {};
+>  	__u32 len = sizeof(info);
+> +	__u32 name_len;
+>  	int new_fd, err;
+>  	char *new_name;
+>  
+> @@ -4337,7 +4338,12 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+>  	if (err)
+>  		return libbpf_err(err);
+>  
+> -	new_name = strdup(info.name);
+> +	name_len = strlen(info.name);
+> +	if (name_len == BPF_OBJ_NAME_LEN - 1 && strncmp(map->name, info.name, name_len) == 0)
 
-I think the normal path is right beacuase p9_tag_lookup and [4] keep the
-balance of refcount. This just proves that error path may have refcount
-leak. Beacause error path only put refcount once. In general, either [4]
-of the normal path is redundant(like you said, this is easy to catch),
-or the error path may have a refcount leak.
+so what if the map->name is different after 'name_len' ?
 
-But you are right, it'll be caught on umount.
+jirka
 
->
-> Now you were correct on one of these error paths not described in your
-> last mail: we -are- missing a p9_req_ut in the "No recv fcall for tag
-> %d" error path shortly after p9_tag_lookup, for the ref obtained from
-> p9_tag_lookup itself -- feel free to resend a patch with just that one.
-> But once again the connection is now unusable and it'll be caught on
-> umount so it's not the end of the world...
->
-> (I'd appreciate if you base the new patch on top of
-> https://github.com/martinetd/linux/commits/9p-next )
->
-
-I see. I will make a new patch later.
-
->>
->> static void p9_write_work(struct work_struct *work)
->> {
->> ...
->>              list_move_tail(&req->req_list, &m->req_list);
->>
->>              m->wbuf = req->tc.sdata;
->>              m->wsize = req->tc.size;
->>              m->wpos = 0;
->>              p9_req_get(req);
->> ...
->> }
->>
->> But if you check out p9_write_work, a refcount already get after
->> list_move_tail. We don't need to rely on p9_tag_lookup to keep a list's
->> refcount.
->
-> This refcount is because we are keeping a ref in m->wreq, and is freed
-> when m->wreq is set back to null when the packet is done writing a few
-> lines below (but possibly in another call of the function).
->
-> refs don't have to come from p9_tag_lookup, they're managing pointers
-> lifecycle: we're making a copy of the pointer, so we should increment
-> the refcount so another thread can't free the req under us. In this case
-> the p9_req_get() is under the trans fd m->client->lock where we got the
-> req from the list, so req can't be freed between its obtention from the
-> list and then; once the lock is dropped the req is protected by the ref.
->
->
-
-My fault. I misunderstood here.
-
-Thanks,
-Hangyu
-
-
-
->> Whatsmore, code comments in p9_tag_alloc also proves that the
->> refcount get by p9_tag_lookup is a temporary refcount.
->
-> comments don't prove anything, but yes I forgot p9_tag_alloc takes a ref
-> when I commented earlier, sorry.
->
->>> This one isn't as clear cut, I see that they put the client in a
->>> FLUSHING state but nothing seems to acton on it... But if this happens
->>> we're already in the use after free realm -- it means rc.sdata was
->>> already set so the other thread could be calling p9_client_cb anytime if
->>> it already hasn't, and yet another thread will then do the final ref put
->>> and free this.
->>> We shouldn't free this here as that would also be an overflow. The best
->>> possible thing to do at this point is just to stop using that pointer.
->>>
->>
->> But p9_tag_lookup have a lock inside. Doesn't this mean p9_tag_lookup won't
->> return a freed req? Otherwise we should fix the lock to avoid falling into
->> the use after free realm.
->
-> Right, that falls into the p9_tag_lookup ref, I had implemented this
-> better than I thought I did...
->
-> I agree that one is also more correct to add, although I'd really want
-> to make some rdma setup and trigger a few errors to test.
->  > --
-> Dominique
+> +		new_name = strdup(map->name);
+> +	else
+> +		new_name = strdup(info.name);
+> +
+>  	if (!new_name)
+>  		return libbpf_err(-errno);
+>  
+> -- 
+> 2.32.0
+> 

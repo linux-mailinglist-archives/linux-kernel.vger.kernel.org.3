@@ -2,181 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75375718ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2A05718F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiGLLvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S232745AbiGLLvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiGLLvc (ORCPT
+        with ESMTP id S232649AbiGLLvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:51:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FD0EB31FD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657626689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VpMSN19JfZbDsQBGsM5q3hUeCYalwJXgpAY79QE0LRc=;
-        b=OlCRRMmzkOU5gfhOYUHNnXP4OxViXhlEIDbF6dVaGfiDlZgKMoCcQeujkgPBOy3w4XzHpL
-        lGW0OeEIzOY/kPmveBNvvKHmqrnIkHCdu2Y2niF2MI0wla3Ah3ecN+MJZIW5+fdDIzOJmj
-        SHijmRgw7CSNyfS00YkWyRXjFVReBgo=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-q4GHxn5pPcmtrXvaHUCCZg-1; Tue, 12 Jul 2022 07:51:28 -0400
-X-MC-Unique: q4GHxn5pPcmtrXvaHUCCZg-1
-Received: by mail-qk1-f198.google.com with SMTP id bl27-20020a05620a1a9b00b0069994eeb30cso7569894qkb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:51:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=VpMSN19JfZbDsQBGsM5q3hUeCYalwJXgpAY79QE0LRc=;
-        b=5X1m6krQhBIUEqArppnN/XptKIsjU+3U83QpDEUudsAVHhKtoxjyig1F3Q1YOnUpXU
-         5L0UEYopuMOwVcZCeQor3BQVbKd7C96karZ0y7yndCi9zjFCKsDuYaBpFI4mUKlNqvxu
-         T5yuU0pppxpjczaxEd8flsDhycUGLdulFnb8Vxq3DcZHV4eqtKFR1r2FDyofvFamyN03
-         6dPjZ5CIt9s9Lse7/9obfDItATzSsIJ0jzQ7Hhd4pcD9taPdvgKeEPHdkAXjlM4RObqe
-         Y+Z+PwVNTuoZEw7OK+Lek/7zZ+MvRE0vdMMipkRooUQC0wxM4TNoHoXZMSrUcUNRmwRF
-         nBbA==
-X-Gm-Message-State: AJIora+y1G3AUAksaTD8esEF7LoQG6EjHJPzHMNBPDJNhAxwhQTBNcfU
-        djKpSDmh7ArnvM22+yUc2Gmo3MBtJvodHaZzz3GlSlV+k55SgkOOzmL+HYZiBG6Bx/bh0ILJ4lw
-        8GTkRcvHIgW1/O1wqmBiO9tsS
-X-Received: by 2002:ac8:5fc6:0:b0:31e:b87b:66b6 with SMTP id k6-20020ac85fc6000000b0031eb87b66b6mr5495070qta.113.1657626688046;
-        Tue, 12 Jul 2022 04:51:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uC1suIks7htniWcFZcv5Q71PyP6lVZTePxvkpmzxL3fu7tO6X4FXbrP8SjlWR0BwlnAvrSaA==
-X-Received: by 2002:ac8:5fc6:0:b0:31e:b87b:66b6 with SMTP id k6-20020ac85fc6000000b0031eb87b66b6mr5495059qta.113.1657626687829;
-        Tue, 12 Jul 2022 04:51:27 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id y20-20020a37f614000000b006b55036fd3fsm8441957qkj.70.2022.07.12.04.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:51:27 -0700 (PDT)
-Message-ID: <74dbbe45ff8208c7900228842dda289453e6970c.camel@redhat.com>
-Subject: Re: [PATCH v3 05/25] KVM: nVMX: Support several new fields in
- eVMCSv1
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:51:24 +0300
-In-Reply-To: <20220708144223.610080-6-vkuznets@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-6-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 07:51:40 -0400
+Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB0B3D51;
+        Tue, 12 Jul 2022 04:51:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VJ7zTHL_1657626690;
+Received: from localhost(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VJ7zTHL_1657626690)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Jul 2022 19:51:31 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/6] net/smc: Introduce virtually contiguous buffers for SMC-R
+Date:   Tue, 12 Jul 2022 19:51:24 +0800
+Message-Id: <1657626690-60367-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> Enlightened VMCS v1 definition was updated with new fields, add
-> support for them for Hyper-V on KVM.
-> 
-> Note: SSP, CET and Guest LBR features are not supported by KVM yet
-> and 'struct vmcs12' has no corresponding fields.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/nested.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 778f82015f03..4fc84f0f5875 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -1603,6 +1603,10 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
->  		vmcs12->guest_rflags = evmcs->guest_rflags;
->  		vmcs12->guest_interruptibility_info =
->  			evmcs->guest_interruptibility_info;
-> +		/*
-> +		 * Not present in struct vmcs12:
-> +		 * vmcs12->guest_ssp = evmcs->guest_ssp;
-> +		 */
->  	}
->  
->  	if (unlikely(!(hv_clean_fields &
-> @@ -1649,6 +1653,13 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
->  		vmcs12->host_fs_selector = evmcs->host_fs_selector;
->  		vmcs12->host_gs_selector = evmcs->host_gs_selector;
->  		vmcs12->host_tr_selector = evmcs->host_tr_selector;
-> +		vmcs12->host_ia32_perf_global_ctrl = evmcs->host_ia32_perf_global_ctrl;
-> +		/*
-> +		 * Not present in struct vmcs12:
-> +		 * vmcs12->host_ia32_s_cet = evmcs->host_ia32_s_cet;
-> +		 * vmcs12->host_ssp = evmcs->host_ssp;
-> +		 * vmcs12->host_ia32_int_ssp_table_addr = evmcs->host_ia32_int_ssp_table_addr;
-> +		 */
->  	}
->  
->  	if (unlikely(!(hv_clean_fields &
-> @@ -1716,6 +1727,8 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
->  		vmcs12->tsc_offset = evmcs->tsc_offset;
->  		vmcs12->virtual_apic_page_addr = evmcs->virtual_apic_page_addr;
->  		vmcs12->xss_exit_bitmap = evmcs->xss_exit_bitmap;
-> +		vmcs12->encls_exiting_bitmap = evmcs->encls_exiting_bitmap;
-> +		vmcs12->tsc_multiplier = evmcs->tsc_multiplier;
->  	}
->  
->  	if (unlikely(!(hv_clean_fields &
-> @@ -1763,6 +1776,13 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
->  		vmcs12->guest_bndcfgs = evmcs->guest_bndcfgs;
->  		vmcs12->guest_activity_state = evmcs->guest_activity_state;
->  		vmcs12->guest_sysenter_cs = evmcs->guest_sysenter_cs;
-> +		vmcs12->guest_ia32_perf_global_ctrl = evmcs->guest_ia32_perf_global_ctrl;
-> +		/*
-> +		 * Not present in struct vmcs12:
-> +		 * vmcs12->guest_ia32_s_cet = evmcs->guest_ia32_s_cet;
-> +		 * vmcs12->guest_ia32_lbr_ctl = evmcs->guest_ia32_lbr_ctl;
-> +		 * vmcs12->guest_ia32_int_ssp_table_addr = evmcs->guest_ia32_int_ssp_table_addr;
-> +		 */
->  	}
->  
->  	/*
-> @@ -1865,12 +1885,23 @@ static void copy_vmcs12_to_enlightened(struct vcpu_vmx *vmx)
->  	 * evmcs->vm_exit_msr_store_count = vmcs12->vm_exit_msr_store_count;
->  	 * evmcs->vm_exit_msr_load_count = vmcs12->vm_exit_msr_load_count;
->  	 * evmcs->vm_entry_msr_load_count = vmcs12->vm_entry_msr_load_count;
-> +	 * evmcs->guest_ia32_perf_global_ctrl = vmcs12->guest_ia32_perf_global_ctrl;
-> +	 * evmcs->host_ia32_perf_global_ctrl = vmcs12->host_ia32_perf_global_ctrl;
-> +	 * evmcs->encls_exiting_bitmap = vmcs12->encls_exiting_bitmap;
-> +	 * evmcs->tsc_multiplier = vmcs12->tsc_multiplier;
->  	 *
->  	 * Not present in struct vmcs12:
->  	 * evmcs->exit_io_instruction_ecx = vmcs12->exit_io_instruction_ecx;
->  	 * evmcs->exit_io_instruction_esi = vmcs12->exit_io_instruction_esi;
->  	 * evmcs->exit_io_instruction_edi = vmcs12->exit_io_instruction_edi;
->  	 * evmcs->exit_io_instruction_eip = vmcs12->exit_io_instruction_eip;
-> +	 * evmcs->host_ia32_s_cet = vmcs12->host_ia32_s_cet;
-> +	 * evmcs->host_ssp = vmcs12->host_ssp;
-> +	 * evmcs->host_ia32_int_ssp_table_addr = vmcs12->host_ia32_int_ssp_table_addr;
-> +	 * evmcs->guest_ia32_s_cet = vmcs12->guest_ia32_s_cet;
-> +	 * evmcs->guest_ia32_lbr_ctl = vmcs12->guest_ia32_lbr_ctl;
-> +	 * evmcs->guest_ia32_int_ssp_table_addr = vmcs12->guest_ia32_int_ssp_table_addr;
-> +	 * evmcs->guest_ssp = vmcs12->guest_ssp;
->  	 */
->  
->  	evmcs->guest_es_selector = vmcs12->guest_es_selector;
+On long-running enterprise production servers, high-order contiguous
+memory pages are usually very rare and in most cases we can only get
+fragmented pages.
 
-Looks good.
+When replacing TCP with SMC-R in such production scenarios, attempting
+to allocate high-order physically contiguous sndbufs and RMBs may result
+in frequent memory compaction, which will cause unexpected hung issue
+and further stability risks.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+So this patch set is aimed to allow SMC-R link group to use virtually
+contiguous sndbufs and RMBs to avoid potential issues mentioned above.
+Whether to use physically or virtually contiguous buffers can be set
+by sysctl smcr_buf_type.
 
-Best regards,
-	Maxim Levitsky
+Note that using virtually contiguous buffers will bring an acceptable
+performance regression, which can be mainly divided into two parts:
+
+1) regression in data path, which is brought by additional address
+   translation of sndbuf by RNIC in Tx. But in general, translating
+   address through MTT is fast. According to qperf test, this part
+   regression is basically less than 10% in latency and bandwidth.
+   (see patch 5/6 for details)
+
+2) regression in buffer initialization and destruction path, which is
+   brought by additional MR operations of sndbufs. But thanks to link
+   group buffer reuse mechanism, the impact of this kind of regression
+   decreases as times of buffer reuse increases.
+
+Patch set overview:
+- Patch 1/6 and 2/6 mainly about simplifying and optimizing DMA sync
+  operation, which will reduce overhead on the data path, especially
+  when using virtually contiguous buffers;
+- Patch 3/6 and 4/6 introduce a sysctl smcr_buf_type to set the type
+  of buffers in new created link group;
+- Patch 5/6 allows SMC-R to use virtually contiguous sndbufs and RMBs,
+  including buffer creation, destruction, MR operation and access;
+- patch 6/6 extends netlink attribute for buffer type of SMC-R link group;
+
+Guangguan Wang (2):
+  net/smc: remove redundant dma sync ops
+  net/smc: optimize for smc_sndbuf_sync_sg_for_device and
+    smc_rmb_sync_sg_for_cpu
+
+Wen Gu (4):
+  net/smc: Introduce a sysctl for setting SMC-R buffer type
+  net/smc: Use sysctl-specified types of buffers in new link group
+  net/smc: Allow virtually contiguous sndbufs or RMBs for SMC-R
+  net/smc: Extend SMC-R link group netlink attribute
+
+ include/net/netns/smc.h  |   1 +
+ include/uapi/linux/smc.h |   1 +
+ net/smc/af_smc.c         |  68 +++++++++++--
+ net/smc/smc_clc.c        |   8 +-
+ net/smc/smc_clc.h        |   2 +-
+ net/smc/smc_core.c       | 246 ++++++++++++++++++++++++++++++-----------------
+ net/smc/smc_core.h       |  20 +++-
+ net/smc/smc_ib.c         |  44 +++++++--
+ net/smc/smc_ib.h         |   2 +
+ net/smc/smc_llc.c        |  33 ++++---
+ net/smc/smc_rx.c         |  92 ++++++++++++++----
+ net/smc/smc_sysctl.c     |  11 +++
+ net/smc/smc_tx.c         |  10 +-
+ 13 files changed, 391 insertions(+), 147 deletions(-)
+
+-- 
+1.8.3.1
 

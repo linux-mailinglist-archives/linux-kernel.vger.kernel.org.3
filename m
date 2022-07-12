@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139B95728C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE3C5728C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiGLVpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S233173AbiGLVqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiGLVpr (ORCPT
+        with ESMTP id S233044AbiGLVqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:45:47 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7176DA58C3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:45:46 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id w185so8588201pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
-         :content-transfer-encoding;
-        bh=t91dV4p+lIBUUzn1a9qwdkpkg3zk1bPcQsEAZ+bI0n4=;
-        b=LXA1nvp/pnJFnXX58mMxdmCDAp9A/H2P5NRTYlra6mVFwjjWpLS+/8gLrcYP8S9OxC
-         yZYKdJtb69SGHYhdeA9x7ZZ/4ogA8Axl0soi3V+9kmSDhzSiylXvVyHUXvC8yBODG7dK
-         iE+UI176nucZuGK7HMEQcagi80fmCdfaCr/VXVTZfr669E+rcQR9ZzxQbRGmgufQEiUq
-         XL7AY/cVnEmitX2J2X4PMEp1O+NzJbxZ95WqDrsRYZSkz7DTVJqbbW397qLoLNs9XrRc
-         pGFYdNPwMbu0C70y9Kbeux5ucWiEovYrYCyxBwsre/oV3WlR0frcL7eSyneGJSUZTxSg
-         +kBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=t91dV4p+lIBUUzn1a9qwdkpkg3zk1bPcQsEAZ+bI0n4=;
-        b=sjhAvO4TVtaCxLpfGrn+Gi9HYJGW6iLZVRz+IFe0yqtg6rikdN0unAUeLVsoRxuCwY
-         gOekHOrSu+jtUYJZhD7K34SYquufPG3MgpiU+HEqVV/t2i1kmrKR19LGANafaYKi5Z0b
-         H2b+ROlr0plmw4Nw+ur+fmonTOHNC7NXCbpFCfuVdsHjH7B+HOfXBBh8JTIoqERJr4M3
-         8i1aCsqdTP6ZyxgxPMBsvsN5udGvvFN04UfB5Pc+mYwjZpsVxaz7T19jmB+1ps9413fr
-         NE9ddvZxuzCZsf1P07HdRivoOvVyOp+ZhOSqyDAb9n7YqYW/zKc6OM4sr6B0kAw6Cimg
-         6BGQ==
-X-Gm-Message-State: AJIora8pL6ADwDSiFfRSd5rN6znk06axHopdY6CCNOaZvymka2lksOwn
-        6mDRA1fHu51WChkXZ8xMrCZHJKdGHA0UQg==
-X-Google-Smtp-Source: AGRyM1uIM2IhbbnhU5hU2KB7CAbnkROh4oRWKyYPDKmv+Jr+UhBnD+Z6QhKTiBe+IcHsNlhwCgRASQ==
-X-Received: by 2002:a62:1b57:0:b0:52a:d646:de3c with SMTP id b84-20020a621b57000000b0052ad646de3cmr207673pfb.60.1657662345921;
-        Tue, 12 Jul 2022 14:45:45 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902f54700b0016be4d310b2sm7368109plf.80.2022.07.12.14.45.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:45:45 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     ubizjak@gmail.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220712151947.6783-1-ubizjak@gmail.com>
-References: <20220712151947.6783-1-ubizjak@gmail.com>
-Subject: Re: [PATCH v2] blk-iolatency: Use atomic{,64}_try_cmpxchg
-Message-Id: <165766234436.62453.4264335710864400533.b4-ty@kernel.dk>
-Date:   Tue, 12 Jul 2022 15:45:44 -0600
+        Tue, 12 Jul 2022 17:46:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7520A58C3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:45:59 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6416266015C4;
+        Tue, 12 Jul 2022 22:45:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657662358;
+        bh=IHenW9H7ZxGU905n2XgP0AlaR9jUMs4T5Bm5awMEA/0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i0S1jGP6Z+4WBNl/9P4yI8+sBw0TVXK/aXG5IuI0OU3KWL8ENeRUFmFKSBF78nRvG
+         +Bmj/wnKRxdtOrApL5PW/+p3M/zO7NNY1IjSTVdk7LlpQulTtUgiwe3N79xYGkhnp6
+         uX+0RYD2nfB+csGoBGthFb7pagjGcS0S4onR8ANu70Qg6oT5w+9KUHLEAYoXb/1UbW
+         gsZ1kWErQGf2VEHxVDqGNWDvEkX7/KWXLI/6StHctB4g8Qc1qRI/d90GgbUi44dM9Q
+         K0+nIyJXlEHv7rSwRzpEUyvyHzOXuRjfPFhtmrAr4BrSHif5fvm20OIlUZFGdXi1MU
+         lKD5ClvT4D9Cw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] platform/chrome: cros_ec_typec: Use dev_err_probe on port register fail
+Date:   Tue, 12 Jul 2022 17:45:54 -0400
+Message-Id: <20220712214554.545035-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,23 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 17:19:47 +0200, Uros Bizjak wrote:
-> Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
-> in check_scale_change and atomic64_try_cmpxchg in blkcg_iolatency_done_bio.
-> x86 CMPXCHG instruction returns success in ZF flag, so this change saves a
-> compare after cmpxchg (and related move instruction in front of cmpxchg).
-> 
-> No functional change intended.
-> 
-> [...]
+The typec_register_port() can fail with EPROBE_DEFER if the endpoint
+node hasn't probed yet. In order to avoid spamming the log with errors
+in that case, log using dev_err_probe().
 
-Applied, thanks!
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-[1/1] blk-iolatency: Use atomic{,64}_try_cmpxchg
-      commit: aee8960c2eae12636040dbf0f04e135273b1612d
+---
 
-Best regards,
+ drivers/platform/chrome/cros_ec_typec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index d6088ba447af..8c0ca3c128ee 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -352,8 +352,8 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ 
+ 		cros_port->port = typec_register_port(dev, cap);
+ 		if (IS_ERR(cros_port->port)) {
+-			dev_err(dev, "Failed to register port %d\n", port_num);
+ 			ret = PTR_ERR(cros_port->port);
++			dev_err_probe(dev, ret, "Failed to register port %d\n", port_num);
+ 			goto unregister_ports;
+ 		}
+ 
 -- 
-Jens Axboe
-
+2.37.0
 

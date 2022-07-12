@@ -2,150 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99289572146
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68932572149
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiGLQo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
+        id S233483AbiGLQpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiGLQoX (ORCPT
+        with ESMTP id S231192AbiGLQpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:44:23 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA02E111B;
-        Tue, 12 Jul 2022 09:44:20 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so5153639wmb.3;
-        Tue, 12 Jul 2022 09:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ifJdjMfhd2iKk/La1sz317DTxpZaVFErLsB8EAQCqWU=;
-        b=buHV1961ijmLk+EpDYD/b3kQlIAzwXwGHkrSa+qr3YJD8K0JOQTBH18npKu2UAxJI9
-         if6nRVZTEsq/N1LXwqAzDW3chSsMT76XzXAV3nIoNRlEvtaMnYamL/Th/dLMoQ/+FKgy
-         DuD2ZFZKJ0h6Vk6nl/30AkDRlp+myyLiNQ5J7bbsbS977XiH38IjxU2IBB9+idJTNIlK
-         eorXwQ+wZXNQBzGP7DTp0ICtHSXHz2LbwPYgpmC5WYZcErPp4UFOjrr6ZA6k/ncGseGj
-         mhc0m97E9Jcq8Z+LwxTMT/NTS3QBA8gVrwg6F685n7+WmKsLURlmnXGApQ8LEn/Bsi+X
-         BgBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ifJdjMfhd2iKk/La1sz317DTxpZaVFErLsB8EAQCqWU=;
-        b=pHnV+E5fq58gaP03JMiP6YxP7RHD6ewQ883kLEOpVJJBkLKwLCickek5w7qqtz30r9
-         7wQcNvN7Jvq9DU7bhDEB2zUsTUlZBZ/Hf8KwYuJtGNkmq67kdL/W+MdhS86pJpuMTUlM
-         SNKuafkrmlHQrK1oRFnVww5h8BuxoxonTYdk6AssyP78ajN5dV+oDJ4k5FHOaQu9CzHF
-         galRGTr//rF/J7LmnOgJMS+91MYWD3Ro8YQoV8XO3Yq4gKe37u/i1MKONJ2Z+CiU4EZT
-         N9O1CP4DqZZXn2JcWVjsPL+FNY3z94U+/NZ5yKRLx90dfOC66/gwHjDdI2vCTY+z7VYq
-         FvbA==
-X-Gm-Message-State: AJIora9cWIvXO4ccSUwrMX2sL2FPU9wdALcOvlGtB7NAwA4bnfqRgKAr
-        d5RO9vruf/GqAUY6KL909RNHpFZwj5/60ah6tmY=
-X-Google-Smtp-Source: AGRyM1uF+nw1gsr9kC8U/QPMlY+svjw4dZlywScEVKJHQeUujCWzemXKgKo0sXo6LZbNZ/jGNbp/rV8RVM2souj65kk=
-X-Received: by 2002:a05:600c:4f83:b0:3a1:7310:62e7 with SMTP id
- n3-20020a05600c4f8300b003a1731062e7mr5133866wmq.84.1657644258936; Tue, 12 Jul
- 2022 09:44:18 -0700 (PDT)
+        Tue, 12 Jul 2022 12:45:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418201177;
+        Tue, 12 Jul 2022 09:45:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E461EB81A8F;
+        Tue, 12 Jul 2022 16:44:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB16C3411C;
+        Tue, 12 Jul 2022 16:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657644297;
+        bh=A9wVtPl9xSGq+0nbgHMGXdDdz52JColikvRDP/5TqlE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XXX4SivkRl90RB6ZxgtEMS08z8/6YjIM5XA75D7z1E9vNByWl7rCmFp5eVcgVf4Nx
+         UKBnlg6BV1w9O29ltCPFR/NAby6C/mX8oHYedjNesUTLy6VPIHNXon8JXxKtK5f4K6
+         fMF9e6tqTy+L0n8cEbTXok+izu3bdKO1Om51m2mqyyW9SmenkxbH9hAqZlVKUp+apk
+         0WrCii8LqESl3x32sCaiT5f46qfz9/do8S2tCCNH8u8rXj/hsvwZeQXEXkHgoFEFJD
+         oJj3JRasbFoXgwJM+qQwvqtkD9a9AsjwNSdKwLrkjz1eTSBQZ/PqUs3GHDgpGo+j9T
+         rah9KjVLyKZaQ==
+Date:   Tue, 12 Jul 2022 19:44:54 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 29/49] KVM: X86: Keep the NPT and RMP page level
+ in sync
+Message-ID: <Ys2lBp03iuvuvTmG@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <ae4475bc740eb0b9d031a76412b0117339794139.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
- <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com> <1299312f-e614-e4e2-72cb-fd7fb99922ce@quicinc.com>
-In-Reply-To: <1299312f-e614-e4e2-72cb-fd7fb99922ce@quicinc.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 12 Jul 2022 09:44:35 -0700
-Message-ID: <CAF6AEGvjD3LRm40mPr4n+jzx71WmwYpVWizUDLct9cgafjFRyw@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH v2 3/7] drm/msm: Fix cx collapse issue during recovery
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>, Sean Paul <sean@poorly.run>,
-        Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae4475bc740eb0b9d031a76412b0117339794139.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 10:05 PM Akhil P Oommen
-<quic_akhilpo@quicinc.com> wrote:
->
-> On 7/12/2022 4:52 AM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
-> >> There are some hardware logic under CX domain. For a successful
-> >> recovery, we should ensure cx headswitch collapses to ensure all the
-> >> stale states are cleard out. This is especially true to for a6xx family
-> >> where we can GMU co-processor.
-> >>
-> >> Currently, cx doesn't collapse due to a devlink between gpu and its
-> >> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
-> >> that the iommu driver removes its vote on cx gdsc.
-> >>
-> >> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> >> ---
-> >>
-> >> (no changes since v1)
-> >>
-> >>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 16 ++++++++++++++--
-> >>   drivers/gpu/drm/msm/msm_gpu.c         |  2 --
-> >>   2 files changed, 14 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> index 4d50110..7ed347c 100644
-> >> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> >> @@ -1278,8 +1278,20 @@ static void a6xx_recover(struct msm_gpu *gpu)
-> >>           */
-> >>          gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
-> >>
-> >> -       gpu->funcs->pm_suspend(gpu);
-> >> -       gpu->funcs->pm_resume(gpu);
-> >> +       /*
-> >> +        * Now drop all the pm_runtime usage count to allow cx gdsc to collapse.
-> >> +        * First drop the usage count from all active submits
-> >> +        */
-> >> +       for (i = gpu->active_submits; i > 0; i--)
-> >> +               pm_runtime_put(&gpu->pdev->dev);
-> >> +
-> >> +       /* And the final one from recover worker */
-> >> +       pm_runtime_put_sync(&gpu->pdev->dev);
-> >> +
-> >> +       for (i = gpu->active_submits; i > 0; i--)
-> >> +               pm_runtime_get(&gpu->pdev->dev);
-> >> +
-> >> +       pm_runtime_get_sync(&gpu->pdev->dev);
-> > In response to v1, Rob suggested pm_runtime_force_suspend/resume().
-> > Those seem like they would work to me, too. Why not use them?
-> Quoting my previous response which I seem to have sent only to Freedreno
-> list:
->
-> "I believe it is supposed to be used only during system sleep state
-> transitions. Btw, we don't want pm_runtime_get() calls from elsewhere to
-> fail by disabling RPM here."
+s/X86/x86/
 
-The comment about not wanting other runpm calls to fail is valid.. but
-that is also solveable, ie. by holding a lock around runpm calls.
-Which I think we need to do anyways, otherwise looping over
-gpu->active_submits is racey..
+On Mon, Jun 20, 2022 at 11:08:57PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> When running an SEV-SNP VM, the sPA used to index the RMP entry is
+> obtained through the NPT translation (gva->gpa->spa). The NPT page
+> level is checked against the page level programmed in the RMP entry.
+> If the page level does not match, then it will cause a nested page
+> fault with the RMP bit set to indicate the RMP violation.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  1 +
+>  arch/x86/kvm/mmu/mmu.c             |  5 ++++
+>  arch/x86/kvm/svm/sev.c             | 46 ++++++++++++++++++++++++++++++
+>  arch/x86/kvm/svm/svm.c             |  1 +
+>  arch/x86/kvm/svm/svm.h             |  1 +
+>  6 files changed, 55 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index a66292dae698..e0068e702692 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -129,6 +129,7 @@ KVM_X86_OP(complete_emulated_msr)
+>  KVM_X86_OP(vcpu_deliver_sipi_vector)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+>  KVM_X86_OP(alloc_apic_backing_page)
+> +KVM_X86_OP_OPTIONAL(rmp_page_level_adjust)
+>  
+>  #undef KVM_X86_OP
+>  #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 0205e2944067..2748c69609e3 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1514,6 +1514,7 @@ struct kvm_x86_ops {
+>  	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
+>  
+>  	void *(*alloc_apic_backing_page)(struct kvm_vcpu *vcpu);
+> +	void (*rmp_page_level_adjust)(struct kvm *kvm, kvm_pfn_t pfn, int *level);
+>  };
+>  
+>  struct kvm_x86_nested_ops {
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index c623019929a7..997318ecebd1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -43,6 +43,7 @@
+>  #include <linux/hash.h>
+>  #include <linux/kern_levels.h>
+>  #include <linux/kthread.h>
+> +#include <linux/sev.h>
+>  
+>  #include <asm/page.h>
+>  #include <asm/memtype.h>
+> @@ -2824,6 +2825,10 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+>  	if (unlikely(!pte))
+>  		return PG_LEVEL_4K;
+>  
+> +	/* Adjust the page level based on the SEV-SNP RMP page level. */
+> +	if (kvm_x86_ops.rmp_page_level_adjust)
+> +		static_call(kvm_x86_rmp_page_level_adjust)(kvm, pfn, &level);
+> +
+>  	return level;
+>  }
+>  
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index a5b90469683f..91d3d24e60d2 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -3597,3 +3597,49 @@ struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu)
+>  
+>  	return pfn_to_page(pfn);
+>  }
+> +
+> +static bool is_pfn_range_shared(kvm_pfn_t start, kvm_pfn_t end)
+> +{
+> +	int level;
+> +
+> +	while (end > start) {
+> +		if (snp_lookup_rmpentry(start, &level) != 0)
+> +			return false;
+> +		start++;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level)
 
-I think pm_runtime_force_suspend/resume() is the least-bad option.. or
-at least I'm not seeing any obvious alternative that is better
+Would not do harm to document this, given that it is not a static
+fuction.
 
-BR,
--R
+> +{
+> +	int rmp_level, assigned;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +		return;
+> +
+> +	assigned = snp_lookup_rmpentry(pfn, &rmp_level);
+> +	if (unlikely(assigned < 0))
+> +		return;
+> +
+> +	if (!assigned) {
+> +		/*
+> +		 * If all the pages are shared then no need to keep the RMP
+> +		 * and NPT in sync.
+> +		 */
+> +		pfn = pfn & ~(PTRS_PER_PMD - 1);
+> +		if (is_pfn_range_shared(pfn, pfn + PTRS_PER_PMD))
+> +			return;
+> +	}
+> +
+> +	/*
+> +	 * The hardware installs 2MB TLB entries to access to 1GB pages,
+> +	 * therefore allow NPT to use 1GB pages when pfn was added as 2MB
+> +	 * in the RMP table.
+> +	 */
+> +	if (rmp_level == PG_LEVEL_2M && (*level == PG_LEVEL_1G))
+> +		return;
+> +
+> +	/* Adjust the level to keep the NPT and RMP in sync */
+> +	*level = min_t(size_t, *level, rmp_level);
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index b4bd64f94d3a..18e2cd4d9559 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4734,6 +4734,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
+>  
+>  	.alloc_apic_backing_page = svm_alloc_apic_backing_page,
+> +	.rmp_page_level_adjust = sev_rmp_page_level_adjust,
+>  };
+>  
+>  /*
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 71c011af098e..7782312a1cda 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -673,6 +673,7 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
+>  void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
+>  void sev_es_unmap_ghcb(struct vcpu_svm *svm);
+>  struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu);
+> +void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level);
+>  
+>  /* vmenter.S */
+>  
+> -- 
+> 2.25.1
+> 
+
+
+BR, Jarkko

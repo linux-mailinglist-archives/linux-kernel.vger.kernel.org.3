@@ -2,64 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC157118F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA03A571191
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiGLEy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 00:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S229761AbiGLEzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 00:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGLEy4 (ORCPT
+        with ESMTP id S229476AbiGLEzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 00:54:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6147D7B4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3VYduSz+eQuQXPuuoUvjegjrhY0HYGxE10ZrlJdoSFg=; b=ZC5JfO8S822g7pSSUkJxqafRAw
-        OfjsRSFZmjTenePEGneBb6GMOM7c/+cyj6xa8jaAHtEu4ItbbJqIO4bheuPT9NU1KFfie+krVOpXf
-        AqamETeiZVONwoLSVXgnbNlerkszkZE4UR2sBNmqUdwt/AQOp8+PHh2ZYEWUQYf8X3DyFfkPZ4++3
-        Ol7YRbM9YffhRhXYa0W4aTjpoZNqJQsfq9CKR2zJABl/qR7aBU9K3Rrrk2bib2ljbUpnH2GRLZyHk
-        iBAcIpODDDyWZ65SCYyaL/rZBPYNfJJ3MPQPruHwPe7zdRZADIDlMcjK/mxWBfNeoRWu2JsnsYEvT
-        5idH4x7w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oB7v3-007Y5W-ET; Tue, 12 Jul 2022 04:54:45 +0000
-Date:   Mon, 11 Jul 2022 21:54:45 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 0/8] Use copy_process in vhost layer
-Message-ID: <Ysz+lXEkjlBXBC65@infradead.org>
-References: <20220620011357.10646-1-michael.christie@oracle.com>
- <319f1e21-6cf4-4502-ebc8-c808560fb48d@oracle.com>
+        Tue, 12 Jul 2022 00:55:21 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33067D7B4;
+        Mon, 11 Jul 2022 21:55:19 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d10so6515993pfd.9;
+        Mon, 11 Jul 2022 21:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EJ2Bim60TG2OxgO2j6ASbQ/DUCglgOK7bbA5rKQk8eQ=;
+        b=bLatEUazrt//trW4HpTh0UEeBPI7te4dkwE7/4DjtxJbPrg3TQoLG9lepE9xTZGkQc
+         oJh6uBlX0bpjmT1gETW2sIBfK0ujKjf8gvEqq7nvYQZOzA0vhsOZ13LBS+KYSj7MUQfZ
+         mqGT4TsfQPLuFpPzYVpRrjUP9kijh53TMyhysj0FsF7lerMH/E1v/G1ciSUU9B/A6Btn
+         VNMefZACUJj7c9W9ux5Us3b7qGYiFSBRod7JVoeZfy9BYkLKNsjFhqxC82+lhESBxeQM
+         ZLvFZTpRFjIbsns3yaKce/GrH3zVIC2CaeUCXGPoYqLPaVFlcsOpYssPRwNWXfYTFAM8
+         qOKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EJ2Bim60TG2OxgO2j6ASbQ/DUCglgOK7bbA5rKQk8eQ=;
+        b=1ymVKR0LDUuIykihwbqDH14nmW7nL48PSMLnofak1GlHiDP1QM5q6kpEZsre/GginO
+         FaSMUzu0I2lsjzXsS4SUCPsG/FY3NkNwVcGEHYkGgR4nhwBIrxmTQDCM1rZoQk6hKVGG
+         WUFciKI7lKBQCprEnf2zCvFM6ytQ0jYBHivvTnaeVlk+vt65Z9CWisYa49hAwUOPiIFZ
+         +1Y9lHoYmH026y8mSs05bc6WKnmWTfUnFT1IGCERQ3UKJBxteCuVJteVTj6QGMxOiFB2
+         wyHC7JVsLwbK2+4VMgSvVxubMiqOxF4hJeg11VnYtnzXi6fr2WS+IgDA36IPmOd31BfX
+         cusA==
+X-Gm-Message-State: AJIora9l9u1zliP7g1nvpXFZMsQ5TC/3keMwUXjz0i2f2zb0Ai/rDh1h
+        We2vBTL+I0s1NFYv870ePlEgF7n8+aQ=
+X-Google-Smtp-Source: AGRyM1ve+57NtRM2fKzZ/JikDXTNLLIT/Uj+hr6NMMo7xWcuDR6JZkKVakuRbhfj7zyPVH5v3KFYLQ==
+X-Received: by 2002:a05:6a00:16ca:b0:525:a5d5:d16f with SMTP id l10-20020a056a0016ca00b00525a5d5d16fmr22135061pfc.9.1657601719428;
+        Mon, 11 Jul 2022 21:55:19 -0700 (PDT)
+Received: from debian.moxa.com ([123.51.145.104])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b0016be0d5483asm5664677plh.252.2022.07.11.21.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 21:55:18 -0700 (PDT)
+From:   Jimmy Chen <u7702045@gmail.com>
+X-Google-Original-From: Jimmy Chen <jimmy.chen@moxa.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jimmy Chen <jimmy.chen@moxa.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] Remove an entry for MOXA platform board
+Date:   Tue, 12 Jul 2022 12:55:02 +0800
+Message-Id: <20220712045505.4500-1-jimmy.chen@moxa.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <319f1e21-6cf4-4502-ebc8-c808560fb48d@oracle.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 11:44:14PM -0500, Mike Christie wrote:
-> Eric and Christian, Ping?
-> 
-> If you guys don't like these patches anymore what about something
-> simple like just exporting some helpers to update and check a task's
-> nproc limit. Something like this:
+use Freescale instead of create new MOXA entry
 
-I'm not Eric or Christian and don't really feel qualified on the
-technical aspects here, but please drop the pointless externs while
-you're at it :)
+Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
+---
+ .../devicetree/bindings/arm/moxa.yaml         | 21 -------------------
+ 1 file changed, 21 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/moxa.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/moxa.yaml b/Documentation/devicetree/bindings/arm/moxa.yaml
+deleted file mode 100644
+index 73f4bf883b06..000000000000
+--- a/Documentation/devicetree/bindings/arm/moxa.yaml
++++ /dev/null
+@@ -1,21 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/arm/moxa.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: MOXA platform device tree bindings
+-
+-maintainers:
+-  - Jimmy Chen <jimmy.chen@moxa.com>
+-
+-properties:
+-  compatible:
+-    description: UC-82XX-LX embedded computer
+-    items:
+-      - const: moxa,uc-8210
+-      - const: moxa,uc-8220
+-
+-additionalProperties: true
+-...
+-
+-- 
+2.20.1
+

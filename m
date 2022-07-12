@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0972572509
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0443A5724BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbiGLTIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S235470AbiGLTFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbiGLTIH (ORCPT
+        with ESMTP id S235553AbiGLTEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:08:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD2BE52B8;
-        Tue, 12 Jul 2022 11:51:45 -0700 (PDT)
+        Tue, 12 Jul 2022 15:04:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DCEF7897;
+        Tue, 12 Jul 2022 11:50:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD91361123;
-        Tue, 12 Jul 2022 18:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98008C3411C;
-        Tue, 12 Jul 2022 18:51:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD973B81B95;
+        Tue, 12 Jul 2022 18:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B729C3411E;
+        Tue, 12 Jul 2022 18:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651901;
-        bh=b6ihENthbUbQ5lJ4c2//Yhi5Ha1tezAvuDGyRHTe7Vk=;
+        s=korg; t=1657651829;
+        bh=9XYS4Lio0c0OABlfphhMJokwdGGBvmmPgNIwN8pZBew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RXBUY6UtgfCG4aXt6dlogIDmtJk/UkXwaFMgFlomhlrwXaPE0cjhnNePnvqsx+5p0
-         mt9jfkBahVzu6RklY2x0QhoAlFEGKYfJeRLFpBwrljc738Z2XIli3h+Oo3h+hRiI4Q
-         2mrMmDWx9plA99AfsoOx2khzVC0Phg8k/tNh7rnY=
+        b=d6ez/9OdZxqdpzQcyYY7pbkgYAH0ZPg9njU2+v+yLvcdgwlqvoKUSomhOK0DR8tpb
+         vWZaLlf8O8rVK+C+fvoDR/aK2Vhgg10b37bjeTav3whYHui4cdBaSKrB12D1nZpqo6
+         fZ2b1B5m3kCpeUVVrHmA2gQcvf3JWM+JYuCatiMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 17/61] x86/kvm: Fix SETcc emulation for return thunks
+Subject: [PATCH 5.15 44/78] x86/bugs: Enable STIBP for JMP2RET
 Date:   Tue, 12 Jul 2022 20:39:14 +0200
-Message-Id: <20220712183237.631825759@linuxfoundation.org>
+Message-Id: <20220712183240.630386194@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,93 +57,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Kim Phillips <kim.phillips@amd.com>
 
-commit af2e140f34208a5dfb6b7a8ad2d56bda88f0524d upstream.
+commit e8ec1b6e08a2102d8755ccb06fa26d540f26a2fa upstream.
 
-Prepare the SETcc fastop stuff for when RET can be larger still.
+For untrained return thunks to be fully effective, STIBP must be enabled
+or SMT disabled.
 
-The tricky bit here is that the expressions should not only be
-constant C expressions, but also absolute GAS expressions. This means
-no ?: and 'true' is ~0.
-
-Also ensure em_setcc() has the same alignment as the actual FOP_SETCC()
-ops, this ensures there cannot be an alignment hole between em_setcc()
-and the first op.
-
-Additionally, add a .skip directive to the FOP_SETCC() macro to fill
-any remaining space with INT3 traps; however the primary purpose of
-this directive is to generate AS warnings when the remaining space
-goes negative. Which is a very good indication the alignment magic
-went side-ways.
-
+Co-developed-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Kim Phillips <kim.phillips@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/emulate.c |   28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |   16 ++++--
+ arch/x86/kernel/cpu/bugs.c                      |   58 +++++++++++++++++++-----
+ 2 files changed, 57 insertions(+), 17 deletions(-)
 
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -325,13 +325,15 @@ static int fastop(struct x86_emulate_ctx
- #define FOP_RET(name) \
- 	__FOP_RET(#name)
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4972,11 +4972,17 @@
+ 			Speculative Code Execution with Return Instructions)
+ 			vulnerability.
  
--#define FOP_START(op) \
-+#define __FOP_START(op, align) \
- 	extern void em_##op(struct fastop *fake); \
- 	asm(".pushsection .text, \"ax\" \n\t" \
- 	    ".global em_" #op " \n\t" \
--	    ".align " __stringify(FASTOP_SIZE) " \n\t" \
-+	    ".align " __stringify(align) " \n\t" \
- 	    "em_" #op ":\n\t"
+-			off         - unconditionally disable
+-			auto        - automatically select a migitation
+-			unret       - force enable untrained return thunks,
+-				      only effective on AMD Zen {1,2}
+-				      based systems.
++			off          - no mitigation
++			auto         - automatically select a migitation
++			auto,nosmt   - automatically select a mitigation,
++				       disabling SMT if necessary for
++				       the full mitigation (only on Zen1
++				       and older without STIBP).
++			unret        - force enable untrained return thunks,
++				       only effective on AMD f15h-f17h
++				       based systems.
++			unret,nosmt  - like unret, will disable SMT when STIBP
++			               is not available.
  
-+#define FOP_START(op) __FOP_START(op, FASTOP_SIZE)
+ 			Selecting 'auto' will choose a mitigation method at run
+ 			time according to the CPU.
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -776,19 +776,34 @@ static enum retbleed_mitigation retbleed
+ static enum retbleed_mitigation_cmd retbleed_cmd __ro_after_init =
+ 	RETBLEED_CMD_AUTO;
+ 
++static int __ro_after_init retbleed_nosmt = false;
 +
- #define FOP_END \
- 	    ".popsection")
+ static int __init retbleed_parse_cmdline(char *str)
+ {
+ 	if (!str)
+ 		return -EINVAL;
  
-@@ -435,16 +437,15 @@ static int fastop(struct x86_emulate_ctx
- /*
-  * Depending on .config the SETcc functions look like:
-  *
-- * ENDBR       [4 bytes; CONFIG_X86_KERNEL_IBT]
-- * SETcc %al   [3 bytes]
-- * RET         [1 byte]
-- * INT3        [1 byte; CONFIG_SLS]
-- *
-- * Which gives possible sizes 4, 5, 8 or 9.  When rounded up to the
-- * next power-of-two alignment they become 4, 8 or 16 resp.
-+ * ENDBR			[4 bytes; CONFIG_X86_KERNEL_IBT]
-+ * SETcc %al			[3 bytes]
-+ * RET | JMP __x86_return_thunk	[1,5 bytes; CONFIG_RETPOLINE]
-+ * INT3				[1 byte; CONFIG_SLS]
-  */
--#define SETCC_LENGTH	(ENDBR_INSN_SIZE + 4 + IS_ENABLED(CONFIG_SLS))
--#define SETCC_ALIGN	(4 << IS_ENABLED(CONFIG_SLS) << HAS_KERNEL_IBT)
-+#define RET_LENGTH	(1 + (4 * IS_ENABLED(CONFIG_RETPOLINE)) + \
-+			 IS_ENABLED(CONFIG_SLS))
-+#define SETCC_LENGTH	(ENDBR_INSN_SIZE + 3 + RET_LENGTH)
-+#define SETCC_ALIGN	(4 << ((SETCC_LENGTH > 4) & 1) << ((SETCC_LENGTH > 8) & 1))
- static_assert(SETCC_LENGTH <= SETCC_ALIGN);
+-	if (!strcmp(str, "off"))
+-		retbleed_cmd = RETBLEED_CMD_OFF;
+-	else if (!strcmp(str, "auto"))
+-		retbleed_cmd = RETBLEED_CMD_AUTO;
+-	else if (!strcmp(str, "unret"))
+-		retbleed_cmd = RETBLEED_CMD_UNRET;
+-	else
+-		pr_err("Unknown retbleed option (%s). Defaulting to 'auto'\n", str);
++	while (str) {
++		char *next = strchr(str, ',');
++		if (next) {
++			*next = 0;
++			next++;
++		}
++
++		if (!strcmp(str, "off")) {
++			retbleed_cmd = RETBLEED_CMD_OFF;
++		} else if (!strcmp(str, "auto")) {
++			retbleed_cmd = RETBLEED_CMD_AUTO;
++		} else if (!strcmp(str, "unret")) {
++			retbleed_cmd = RETBLEED_CMD_UNRET;
++		} else if (!strcmp(str, "nosmt")) {
++			retbleed_nosmt = true;
++		} else {
++			pr_err("Ignoring unknown retbleed option (%s).", str);
++		}
++
++		str = next;
++	}
  
- #define FOP_SETCC(op) \
-@@ -453,9 +454,10 @@ static_assert(SETCC_LENGTH <= SETCC_ALIG
- 	#op ": \n\t" \
- 	ASM_ENDBR \
- 	#op " %al \n\t" \
--	__FOP_RET(#op)
-+	__FOP_RET(#op) \
-+	".skip " __stringify(SETCC_ALIGN) " - (.-" #op "), 0xcc \n\t"
+ 	return 0;
+ }
+@@ -834,6 +849,10 @@ static void __init retbleed_select_mitig
+ 		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
+ 		setup_force_cpu_cap(X86_FEATURE_UNRET);
  
--FOP_START(setcc)
-+__FOP_START(setcc, SETCC_ALIGN)
- FOP_SETCC(seto)
- FOP_SETCC(setno)
- FOP_SETCC(setc)
++		if (!boot_cpu_has(X86_FEATURE_STIBP) &&
++		    (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
++			cpu_smt_disable(false);
++
+ 		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+ 		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+ 			pr_err(RETBLEED_UNTRAIN_MSG);
+@@ -1080,6 +1099,13 @@ spectre_v2_user_select_mitigation(enum s
+ 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
+ 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
+ 
++	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
++		if (mode != SPECTRE_V2_USER_STRICT &&
++		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
++			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation'\n");
++		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
++	}
++
+ 	spectre_v2_user_stibp = mode;
+ 
+ set_mode:
+@@ -2090,10 +2116,18 @@ static ssize_t srbds_show_state(char *bu
+ 
+ static ssize_t retbleed_show_state(char *buf)
+ {
+-	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET &&
+-	    (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+-	     boot_cpu_data.x86_vendor != X86_VENDOR_HYGON))
+-		return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
++	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
++	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
++		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
++
++	    return sprintf(buf, "%s; SMT %s\n",
++			   retbleed_strings[retbleed_mitigation],
++			   !sched_smt_active() ? "disabled" :
++			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT ||
++			   spectre_v2_user_stibp == SPECTRE_V2_USER_STRICT_PREFERRED ?
++			   "enabled with STIBP protection" : "vulnerable");
++	}
+ 
+ 	return sprintf(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
+ }
 
 

@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D340957164F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1324E571652
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiGLJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S232062AbiGLJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiGLJ66 (ORCPT
+        with ESMTP id S232378AbiGLJ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:58:58 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ED62529E;
-        Tue, 12 Jul 2022 02:58:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657619911; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=N8Wwh5ZrxfDe+GMBeGfpPZ3e1nuPgwR/Ify54BgR/Yfuw59X3b4hF88u7M5kFxD6JtdN7DccyjsoC3jHAdFWdgVyKs7RVH5GuAOcRvy6t81XuUX+Y519PMYa4Vekry9GKbkm6Kv5DGvql91k2q5sQRG7+P2Oq2otk5Mtjo4DcNA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657619911; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=oYmnSNasXsz26eSg9mhjVYwcpWPPoFUecXawM5smvMI=; 
-        b=MzX9q3FPWhevfCqNo9ft00EODGHInwZJvoozx7vsSY6Gfb0tp+RNI2/BYX0QMYjm4VoG9OcW6ui3zOmBjlh+kOBAyBzlyuQUViE9RuIX1H51jBvQmh8S13h+8+6gDP0yBK27K1+nY0LgjuXoJjwqxkZ7xBBPhapQvei/GTYlnKs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657619911;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=oYmnSNasXsz26eSg9mhjVYwcpWPPoFUecXawM5smvMI=;
-        b=mKhuxwbrK9EMCJnF4zTdx0uxUgK8wH1F7Xd/+pDIdxpnyLBwQikRq8VQ47b/dbvN
-        sQcsiMof1gsZvHJJMLSB62FG0KgoJN0N+rMygSmQA5ch3Q83q+uk/NroA5OD1AHKBkB
-        q2bqkah1dvzWqGHOLbk+Oqd1XBeiBUU8hQemu1xM=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1657619909505764.9703126327654; Tue, 12 Jul 2022 02:58:29 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 17:58:29 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Li Chen" <lchen@ambarella.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "DTML" <devicetree@vger.kernel.org>,
-        "Linux-MM" <linux-mm@kvack.org>
-Message-ID: <181f1d88b64.e2eb2601586551.453778983551010212@linux.beauty>
-In-Reply-To: <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
- <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com> <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty> <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
+        Tue, 12 Jul 2022 05:59:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B962DABD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:59:16 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id v7so4999596pfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E3bJNjTQ0sljopXALlhyXxa+mX72VOlGEbg1L7QIj1E=;
+        b=sWuqwMsZhRcRkPdenKadW7Dk/P/7ur4EL9j6sqVJ1bhlRfAY/oc7xmZVG1CiFGk0Ns
+         ljYuR0X/umNI2OYd0XO6XR9zETL1IGaw/Zn/J8+VPfgcB/6atpffIZRhjsK0TILzHjdB
+         B+LnH2U5prvK022gJ9+wZ32aGjsm2fIaVJPaEjCzDWclbcDTZUzvWp7uEisBBdtPYbLT
+         KiWyfu1ocqksvCW4CGzQ2GRXXpi1xWdyRd55/JdRNg/PnoekbukxOj011f5a24tooUea
+         Hm2ftl0+N3xge9PtB31Rps2eG7q9Mmp7SWAdl3fPRVZJSN0h+gtJarWOCsKDlCZzqqoN
+         Az7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E3bJNjTQ0sljopXALlhyXxa+mX72VOlGEbg1L7QIj1E=;
+        b=QWc/DK7KaKiKFddRSBabtu+j2rGWadr0PI0G4EFyPjj3zERvv7W11aRXHQMcHdQVgh
+         Q9jQE7BTnlysdTCqHKrSo9KvIz7i7LruYx1VimpeJjWscktVQerIEoSG+3r+h69Fa/fo
+         KrxX9okOswOjDdWpxBqPFCVOFNWRyitr8QFcY8ZfADRnTfIx8Lss4E5SAkAKi9AFactz
+         g/3T/NhIQIvlezgi92d6jDDZ3jNSoQDA0NoAlwc6KddLdbYws/V0moQH+ncSaX3cC0r6
+         vwYWj30M1/fWLBZYNq/4bKUGk2PUjInJ+NUiJY1GBB2qdG5ZOIEuaR20ix2BiLfJiVXI
+         bM9A==
+X-Gm-Message-State: AJIora+hoh0GvB9e+uqMK5eNqdbwmjMLqgEiyhhqdqQLDZYikrDEKYtW
+        HRGG1utLaNkAN0AkR24fxFvzloL361B8E2/QGm35xw==
+X-Google-Smtp-Source: AGRyM1vSzjtgajGp71G/0ie+k3dbRm2QwTG+7RmZ7o5xoHl2yAHh8E/V3nqMqiFQf9cqXYtzhvIWXeuxZ2AenxkhL2U=
+X-Received: by 2002:a65:6a4a:0:b0:40d:dd27:80fd with SMTP id
+ o10-20020a656a4a000000b0040ddd2780fdmr20580395pgu.54.1657619956363; Tue, 12
+ Jul 2022 02:59:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <cover.1657614127.git.guillaume.tucker@collabora.com> <4a66bf3227825bbf9007ffc9c10e52fad9ae453f.1657614127.git.guillaume.tucker@collabora.com>
+In-Reply-To: <4a66bf3227825bbf9007ffc9c10e52fad9ae453f.1657614127.git.guillaume.tucker@collabora.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Tue, 12 Jul 2022 11:59:05 +0200
+Message-ID: <CADYN=9L6-ESg=mxAwXCPwcO1RTE1S5DvigpvL13+tLMWs0wB-g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] selftests: drop KSFT_KHDR_INSTALL make target
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,65 +71,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
- ---- On Tue, 12 Jul 2022 15:50:46 +0800  Arnd Bergmann <arnd@arndb.de> wrote --- 
- > On Tue, Jul 12, 2022 at 2:26 AM Li Chen <me@linux.beauty> wrote:
- > >  ---- On Mon, 11 Jul 2022 21:28:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote ---
- > >  > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
- > >  > >
- > >  > > From: Li Chen <lchen@ambarella.com>
- > >  > >
- > >  > > This sample driver shows how to build struct pages support to no-map rmem.
- > >  > >
- > >  > > Signed-off-by: Li Chen <lchen@ambarella.com>
- > >  >
- > >  > Not sure what a sample driver helps here if there are no actual users in-tree.
- > >  >
- > >  > It would make more sense to merge the driver that wants to actually use this
- > >  > first, and then add the additional feature.
- > >
- > > Totally agree, but we plan to start rewriting our video driver in a long time, it
- > > has many legacy codes and I need to rewrite a lot of codes to migrate to v4l2.
- > > That's why I also submit a sample driver here: to make the review progress
- > > easier and don't need reviewers to read video driver codes.
- > 
- > The problem is that this patch may not be the right solution for your new
- > driver either.  As Christoph also commented, what you do here is rather
- > unusual, and without seeing the video driver first, we have no way of
- > knowing whether there is something the driver should be doing
- > differently to solve the original problem.
+On Tue, 12 Jul 2022 at 10:29, Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
+>
+> Drop the KSFT_KHDR_INSTALL make target now that all use-cases have
+> been removed from the other kselftest Makefiles.
+>
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
+>  tools/testing/selftests/Makefile |  1 -
+>  tools/testing/selftests/lib.mk   | 38 --------------------------------
+>  2 files changed, 39 deletions(-)
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 619451e82863..e060777239a4 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -143,7 +143,6 @@ endif
+>  # Prepare for headers install
+>  include $(top_srcdir)/scripts/subarch.include
+>  ARCH           ?= $(SUBARCH)
+> -export KSFT_KHDR_INSTALL_DONE := 1
+>  export BUILD
+>  export KHDR_INCLUDES
+>
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 2a2d240cdc1b..df5f853951f2 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -30,45 +30,7 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+>  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+>  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+>
+> -ifdef KSFT_KHDR_INSTALL
+> -top_srcdir ?= ../../../..
+> -include $(top_srcdir)/scripts/subarch.include
+> -ARCH           ?= $(SUBARCH)
+> -
+> -# set default goal to all, so make without a target runs all, even when
+> -# all isn't the first target in the file.
+> -.DEFAULT_GOAL := all
+> -
+> -# Invoke headers install with --no-builtin-rules to avoid circular
+> -# dependency in "make kselftest" case. In this case, second level
+> -# make inherits builtin-rules which will use the rule generate
+> -# Makefile.o and runs into
+> -# "Circular Makefile.o <- prepare dependency dropped."
+> -# and headers_install fails and test compile fails.
+> -# O= KBUILD_OUTPUT cases don't run into this error, since main Makefile
+> -# invokes them as sub-makes and --no-builtin-rules is not necessary,
+> -# but doesn't cause any failures. Keep it simple and use the same
+> -# flags in both cases.
+> -# Note that the support to install headers from lib.mk is necessary
+> -# when test Makefile is run directly with "make -C".
+> -# When local build is done, headers are installed in the default
+> -# INSTALL_HDR_PATH usr/include.
+> -.PHONY: khdr
+> -.NOTPARALLEL:
+> -khdr:
+> -ifndef KSFT_KHDR_INSTALL_DONE
+> -ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> -       $(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> -else
+> -       $(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
+> -               ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> -endif
+> -endif
+> -
+> -all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+> -else
+>  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+> -endif
+>
+>  define RUN_TESTS
+>         BASE_DIR="$(selfdir)";                  \
 
-Ok, I will update the patch series after rewriting and upstreaming our video driver.
+Should this be removed as well, since 'khdr' gets droped from file the lib.mk ?
 
- > 
- > >  > > +/*
- > >  > > + * dts example
- > >  > > + * rmem: rmem@1 {
- > >  > > + *                     compatible = "shared-dma-pool";
- > >  > > + *                     no-map;
- > >  > > + *                     size = <0x0 0x20000000>;
- > >  > > + *             };
- > >  > > + * perf {
- > >  > > + *             compatible = "example,rmem";
- > >  > > + *             memory-region = <&rmem>;
- > >  > > + *     };
- > >  >
- > >  > The problem here is that the DT is meant to describe the platform in an OS
- > >  > independent way, so having a binding that just corresponds to a user space
- > >  > interface is not a good abstraction.
- > >
- > > Gotcha, but IMO dts + rmem is the only choice for our use case. In our real
- > > case, we use reg instead of size to specify the physical address, so
- > > memremap cannot be used.
- > 
- > Does your hardware require a fixed address for the buffer? If it can be
- > anywhere in memory (or at least within a certain range) but just has to
- > be physically contiguous, the normal way would be to use a CMA area
- > to allocate from, which gives you 'struct page' backed pages.
+diff --git a/tools/testing/selftests/landlock/Makefile
+b/tools/testing/selftests/landlock/Makefile
+index 1313e44e8fb9..99f88c52d61a 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -13,9 +13,6 @@ include ../lib.mk
 
-The limitation is our DSP can only access 32bit memory, but total dram is > 4G, so I cannot use
-"size = <...>" in our real case (it might get memory above 4G). I'm not sure if other vendors' DSP also has
-this limitation, if so, how do they deal with it if throughput matters.
+ khdr_dir = $(top_srcdir)/usr/include
 
-Regards,
-Li
+-$(khdr_dir)/linux/landlock.h: khdr
+-        @:
+-
+ $(OUTPUT)/true: true.c
+  $(LINK.c) $< $(LDLIBS) -o $@ -static
+
+
+Cheers,
+Anders

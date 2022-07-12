@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DBE570F9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDCD570F9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbiGLBiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S231202AbiGLBjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiGLBh7 (ORCPT
+        with ESMTP id S229707AbiGLBjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:37:59 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A92B48EB6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:37:57 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso6514621pjj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WviUjYGm+rN9XZgfwTaOdA+cnHAG88Jjo15LstAimgU=;
-        b=INQAY47xH5htGVWI6UXlhorRrnL8Jd67/7TotuHr9Sj9U8E/eQW+SGdq7tonkWTVAn
-         FOJxZvWR8Uf2UbHQQPBPYoUi5ZmRce3XsWUoQl4uYlVB0nMWiANPqeH5Nx2nU3f+5RX8
-         GMFItyEoZeta9dQdpR6EyUjK4xP8StQ8Ia4ituvuhIXuU9MenDzRkpZejumsSUkKtwIY
-         JL1En2I86PftH9nJW4fPB5UBTucIgB4o37q1itOTnRHEEPkZQw8/upHLL9a7fwuQzmCF
-         6eNu90XjgrueTFDv7yFudUAyGR3ctQRuqexZj3PRPTI6tC1Q8czyidWls5WU8IlTN1zp
-         FrUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WviUjYGm+rN9XZgfwTaOdA+cnHAG88Jjo15LstAimgU=;
-        b=UIQdM/0Md8XLZDSQo4qWv6l5XZBi6SArodJlUxVA/kKYQlPDbwzNKUjLcQ3lGZu6uG
-         IaqUvQmjAhNLyYbCGpKC/045m1HWzqrdQCFJRhsr9JkCMHumAHWOBMhLv9i64XPHDgjD
-         xhxftQ97tG7ixgcchBwaNfh/ACuiZM9OoRsWI0C6/4NT40oXyBu9YizcwBy48dIiBx26
-         EPHBluKRpYBTJXsmRgQrw5UIycCqlt5NVOUKv+QGn0SzGvfa5crirVLC5ZETIgWZreqO
-         5AOBNj/bP7OwJGxfRRzOs3I25E1OFtI31n7/mQce3A1dqA03wzzAUDdnH7Sz7EBsyZwz
-         GGDw==
-X-Gm-Message-State: AJIora9stuMLlDyMtSi4mFxZ4cFEeXOAO+o9LWOKwBqg0thQImr31EOP
-        fhlfoM89cz/dqutLi/dkygFPJg==
-X-Google-Smtp-Source: AGRyM1tiApB8857nuLuRMh9R8W73BEsT4Ar4OmhPOWBlXNDA6ziygmeb27ZfsxASqtW3V9Ck1dc4vg==
-X-Received: by 2002:a17:902:8508:b0:16c:46ff:53cb with SMTP id bj8-20020a170902850800b0016c46ff53cbmr8702022plb.168.1657589876315;
-        Mon, 11 Jul 2022 18:37:56 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id i9-20020a655b89000000b004148cbdd4e5sm4856317pgr.57.2022.07.11.18.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:37:55 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 01:37:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 0/9] KVM: x86/MMU: Optimize disabling dirty logging
-Message-ID: <YszQcBy1RwGmkkht@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <dba0ecc8-90ae-975f-7a27-3049d6951ba0@redhat.com>
+        Mon, 11 Jul 2022 21:39:13 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6343230F69
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657589952; x=1689125952;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=CkXhM9uVu0VJKKvs+R6HCnd+Wqoswxx0eolYOc5vPDg=;
+  b=EHH1s1t6lw2FDkLt7hjDLGfms9D4to8WCEUwL6UB1XxkRSja9o9mSA5c
+   eoKo2qvdBQY/gMjif/GuKMjAyoWO+OWUj/n+HfPANNPxwZ9OTnlUFk/S6
+   CANw1qSU/ZMwfF+rxAKS0Fitcm/XCCGxc8nZo3IpfIQLBbYMHSy6KNjFK
+   L/5rZxNHUnM1lYCeqaKkVJLNRY/6bP/u8Khe9NEtmD4uGNsX4viR/n53X
+   qDccnjPZ109TOZJGwDAS8gWRQh9Me4VX/bSCBanZ4geSAW4jOmmk6Bs1p
+   E8vMKmGCb1j5P2l5jixi6fucKWeueUQ7cZ1fMvs61T5ATjuw6D6Ak56Gr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="264602390"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="264602390"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:39:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="622312038"
+Received: from snaskant-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.60.27])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 18:39:09 -0700
+Message-ID: <07ff13d590cf290a14232fb113ff4183a6fa352d.camel@intel.com>
+Subject: Re: [PATCH v2] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
+ disabled by BIOS
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, kirill.shutemov@linux.intel.com,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com
+Date:   Tue, 12 Jul 2022 13:39:06 +1200
+In-Reply-To: <YszFkTZ7RtXS1rd7@google.com>
+References: <20220704142250.1512726-1-martin.fernandez@eclypsium.com>
+         <8d2a3175be8a3aff1d3fc535dd9ab6217cfe1e66.camel@intel.com>
+         <CAKgze5azQG1mnOASbpcrs9jTejdXGkXYmezz9bTKuWQoZp5EFg@mail.gmail.com>
+         <YsxZKGxVUY61zPEt@google.com>
+         <ba321fad38d5f96a240f1e88a11943cea16bb4dd.camel@intel.com>
+         <YszFkTZ7RtXS1rd7@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dba0ecc8-90ae-975f-7a27-3049d6951ba0@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022, Paolo Bonzini wrote:
-> On 3/21/22 23:43, Ben Gardon wrote:
-> > Currently disabling dirty logging with the TDP MMU is extremely slow.
-> > On a 96 vCPU / 96G VM it takes ~256 seconds to disable dirty logging
-> > with the TDP MMU, as opposed to ~4 seconds with the legacy MMU. This
-> > series optimizes TLB flushes and introduces in-place large page
-> > promotion, to bring the disable dirty log time down to ~3 seconds.
-> > 
-> > Testing:
-> > Ran KVM selftests and kvm-unit-tests on an Intel Haswell. This
-> > series introduced no new failures.
-> 
-> Thanks, looks good.  The one change I'd make is to just place the outcome of
-> build_tdp_shadow_zero_bits_mask() in a global (say tdp_shadow_zero_check) at
-> kvm_configure_mmu() time.  The tdp_max_root_level works as a conservative
-> choice for the second argument of build_tdp_shadow_zero_bits_mask().
-> 
-> No need to do anything though, I'll handle this later in 5.19 time (and
-> first merge my changes that factor out the constant part of
-> vcpu->arch.root_mmu initialization, since this is part of the same ideas).
 
-This fell through the cracks.  Ben is on a long vacation, I'll find my copy of
-the Necronomicon and do a bit of resurrection, and address the feedback from v2
-along the way.
+>=20
+> > This patch basically tries to fix the issue that TME flag isn't cleared=
+ when TME
+> > is disabled by BIOS.  And fir this purpose, the code change in this pat=
+ch looks
+> > reasonable to me.  Unless I am mistaken, detect_tme() will be called fo=
+r all
+> > cpus if TME is supported in CPUID but isn't enabled by BIOS (either LOC=
+KED or
+> > ENABLED bit isn't set).
+>=20
+> But this patch doesn't handle the bypass bit, which _does_ effectively di=
+sable
+> TME when set.  E.g. the MKTME spec says:
+>=20
+>  Software must inspect the Hardware Encryption Enable (bit 1) and TME Enc=
+ryption
+>  Bypass Enable (bit 31) to determine if TME encryption is enabled.
+
+Yeah so my original reply said:
+
+"But perhaps it's arguable whether we can also clear TME flag in this case.=
+"
+
+And I only gave my Acked-by.
+
+It completely depends on the purpose of this patch, or what does this patch
+claim to do.  If it only claims to clear TME bit if BIOS doesn't enable it,=
+ then
+looks fine to me.  If it wants to achieve "clear TME feature flag if encryp=
+tion
+isn't active", then yes you are right. =C2=A0
+
+But as I said perhaps "whether we should clear TME flag when bypass is enab=
+led"
+is arguable.  After all, what does TME flag in /proc/cpuinfo imply?

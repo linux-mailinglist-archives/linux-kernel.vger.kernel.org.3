@@ -2,116 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757E5572990
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0364557299E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbiGLW60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S233818AbiGLXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiGLW6Z (ORCPT
+        with ESMTP id S233360AbiGLXDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:58:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439E5A439F;
-        Tue, 12 Jul 2022 15:58:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D11BB61734;
-        Tue, 12 Jul 2022 22:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B07C3411C;
-        Tue, 12 Jul 2022 22:58:22 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 18:58:20 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH v2] tracing: devlink: Use static array for string in
- devlink_trap_report even
-Message-ID: <20220712185820.002d9fb5@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 12 Jul 2022 19:03:40 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93251BC87
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:03:39 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id p132so6312682oif.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qHwuHViFSN86tj0ChYoibxcY4E2c7D4JyTppJFZI4so=;
+        b=Lhh55GnSdOjPhbJGduTnxEGnWccw6kHOeEeY08jAZgJe0VqjmPoBdTPnONumi/pAun
+         p+cHg4gHnhGSvibmw9wIMHwGbOMlbmWVVet0lyBNoQFKw49iIOLl44zlrlp+lgOkWr4N
+         nI06n4Ji3hwluei1aEEzHQyZHr8WFbhVYRiJlwQVHmUD64NqpTZjoyhfvNHbS2GCc5aR
+         uNpAcmjt7Eo2ZLV4iQ/jGK1hfJ4aVbxJui0znZqX9547wQXUukqWF8+PFEtZcDsj6osq
+         cNrlBGb2ZoHRdeHJDRKTLI+onjdNABpheW4De5nAankciyk7viUqVbyzzoaaEs5liuGY
+         qvhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qHwuHViFSN86tj0ChYoibxcY4E2c7D4JyTppJFZI4so=;
+        b=puik5xsqFVktisDbr5DqTCzChx2Nm8+jKtzIHZ5P+YvFaBauAzpYUls4iouNHg2pnp
+         KQo/6rrFmmcyt4zUbEYYrmdNBbj2oDKe//O+Rg4z8LvolWjmNX8EEHNoyYoiozRmlymk
+         I3rNOVAfLkc86MiIJSCpeXtnpgPvql7x5QS4h1c4GvNSfghKwBaV0uHsKkId3PyJd1w0
+         uAU+k9Gx1frUJ6n7NzZlkBaKc7eRfLqE5c8cygIyRPRqAk4jGTcNT+AXNdSH9SQ/FZwD
+         iqroifZaujNBivUkBJgnSuA450+H/n7kw6ecaxVr5xVidH+03L8rzTwddnejSHHgBwl4
+         x7gA==
+X-Gm-Message-State: AJIora/dl1OKhe4vNrhpjbl26Z/wF7nXBYsjCykaaFSyBPYdt7Qi3rDl
+        HdqdGYbNZPtboFPxBBRo0KJ8ANsj8U3Y2ApDs1G6IQ==
+X-Google-Smtp-Source: AGRyM1sv6/a3j0mcFzaoNZorrDTb4kx9QsLkQ7zFGrGqxGPqVxoEEPKoh5NgLCA2o5UhH33aMTJl+s4tUNJhAnFoewI=
+X-Received: by 2002:aca:e043:0:b0:32e:1ad1:2d4 with SMTP id
+ x64-20020acae043000000b0032e1ad102d4mr3357976oig.235.1657667018762; Tue, 12
+ Jul 2022 16:03:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+ <20220628220938.3657876-2-yosryahmed@google.com> <YsdJPeVOqlj4cf2a@google.com>
+In-Reply-To: <YsdJPeVOqlj4cf2a@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 12 Jul 2022 16:03:02 -0700
+Message-ID: <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Thanks for taking another look at this!
 
-The trace event devlink_trap_report uses the __dynamic_array() macro to
-determine the size of the input_dev_name field. This is because it needs
-to test the dev field for NULL, and will use "NULL" if it is. But it also
-has the size of the dynamic array as a fixed IFNAMSIZ bytes. This defeats
-the purpose of the dynamic array, as this will reserve that amount of
-bytes on the ring buffer, and to make matters worse, it will even save
-that size in the event as the event expects it to be dynamic (for which it
-is not).
+On Thu, Jul 7, 2022 at 1:59 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Tue, Jun 28, 2022, Yosry Ahmed wrote:
+> > We keep track of several kernel memory stats (total kernel memory, page
+> > tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+> > per-memcg, etc). These stats give insights to users to how much memory
+> > is used by the kernel and for what purposes.
+> >
+> > Currently, memory used by kvm mmu is not accounted in any of those
+>
+> Nit, capitalize KVM (mainly to be consistent).
+>
+> > @@ -1085,6 +1086,9 @@ KernelStack
+> >                Memory consumed by the kernel stacks of all tasks
+> >  PageTables
+> >                Memory consumed by userspace page tables
+> > +SecPageTables
+> > +              Memory consumed by secondary page tables, this currently
+> > +           currently includes KVM mmu allocations on x86 and arm64.
+>
+> Nit, this line has a tab instead of eight spaces.  Not sure if it actually matters,
+> there are plenty of tabs elsewhere in the file, but all the entries in this block
+> use only spaces.
+>
 
-Since IFNAMSIZ is just 16 bytes, just make it a static array and this will
-remove the meta data from the event that records the size.
+Will fix it.
 
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Changes since v1: https://lkml.kernel.org/r/20220703111809.40cd1c3f@rorschach.local.home
+> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> > index aab70355d64f3..13190d298c986 100644
+> > --- a/include/linux/mmzone.h
+> > +++ b/include/linux/mmzone.h
+> > @@ -216,6 +216,7 @@ enum node_stat_item {
+> >       NR_KERNEL_SCS_KB,       /* measured in KiB */
+> >  #endif
+> >       NR_PAGETABLE,           /* used for pagetables */
+> > +     NR_SECONDARY_PAGETABLE, /* secondary pagetables, e.g. kvm shadow pagetables */
+>
+> Nit, s/kvm/KVM, and drop the "shadow", which might be misinterpreted as saying KVM
+> pagetables are only accounted when KVM is using shadow paging.  KVM's usage of "shadow"
+> is messy, so I totally understand why you included it, but in this case it's unnecessary
+> and potentially confusing.
+>
+> And finally, something that's not a nit.  Should this be wrapped with CONFIG_KVM
+> (using IS_ENABLED() because KVM can be built as a module)?  That could be removed
+> if another non-KVM secondary MMU user comes along, but until then, #ifdeffery for
+> stats the depend on a single feature seems to be the status quo for this code.
+>
 
-   - The old version tried to do the same logic in the __dynamic_array() to
-     calculate the size of the string, but actually failed to by not using
-     the correct variable. Just use __array() instead, as IFNAMSIZ is just
-     16 bytes anyway.
+I will #ifdef the stat, but I will emphasize in the docs that is
+currently *only* used for KVM so that it makes sense if users without
+KVM don't see the stat at all. I will also remove the stat from
+show_free_areas() in mm/page_alloc.c as it seems like none of the
+#ifdefed stats show up there.
 
-   - Cc'd more maintainers by running get_maintainers.pl from the call of
-     the tracepoint and not just the include/trace/events file.
-
- include/trace/events/devlink.h | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/events/devlink.h b/include/trace/events/devlink.h
-index 2814f188d98c..24969184c534 100644
---- a/include/trace/events/devlink.h
-+++ b/include/trace/events/devlink.h
-@@ -186,7 +186,7 @@ TRACE_EVENT(devlink_trap_report,
- 		__string(driver_name, devlink_to_dev(devlink)->driver->name)
- 		__string(trap_name, metadata->trap_name)
- 		__string(trap_group_name, metadata->trap_group_name)
--		__dynamic_array(char, input_dev_name, IFNAMSIZ)
-+		__array(char, input_dev_name, IFNAMSIZ)
- 	),
- 
- 	TP_fast_assign(
-@@ -197,15 +197,14 @@ TRACE_EVENT(devlink_trap_report,
- 		__assign_str(driver_name, devlink_to_dev(devlink)->driver->name);
- 		__assign_str(trap_name, metadata->trap_name);
- 		__assign_str(trap_group_name, metadata->trap_group_name);
--		__assign_str(input_dev_name,
--			     (input_dev ? input_dev->name : "NULL"));
-+		strscpy(__entry->input_dev_name, input_dev ? input_dev->name : "NULL", IFNAMSIZ);
- 	),
- 
- 	TP_printk("bus_name=%s dev_name=%s driver_name=%s trap_name=%s "
- 		  "trap_group_name=%s input_dev_name=%s", __get_str(bus_name),
- 		  __get_str(dev_name), __get_str(driver_name),
- 		  __get_str(trap_name), __get_str(trap_group_name),
--		  __get_str(input_dev_name))
-+		  __entry->input_dev_name)
- );
- 
- #endif /* _TRACE_DEVLINK_H */
--- 
-2.35.1
-
+> >  #ifdef CONFIG_SWAP
+> >       NR_SWAPCACHE,
+> >  #endif

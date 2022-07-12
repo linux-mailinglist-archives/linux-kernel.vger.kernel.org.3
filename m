@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4937571557
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5D657155A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbiGLJIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S232209AbiGLJJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiGLJIR (ORCPT
+        with ESMTP id S232296AbiGLJI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:08:17 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34E95073A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:08:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h17so10294597wrx.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:08:15 -0700 (PDT)
+        Tue, 12 Jul 2022 05:08:56 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AD8193FE;
+        Tue, 12 Jul 2022 02:08:42 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id a39so9121446ljq.11;
+        Tue, 12 Jul 2022 02:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=64H1Kxgm8ncmGDcNtttCQA5XuXOfCcJqu3peaSGQwt0=;
-        b=LNz3i4o2jAUEcKiMvsU1dfaggfgUlmGi8O0gCZsYDtksi3Ay6mT+0QO1Ws/AQ0xRf7
-         OxiV1c5uRao+KCfHGIwCbH8P2LGz5roJlvYguREHYMFQXtL5jgUTD55IOkgc/jvTEcPO
-         GSgZA5VVRaX3K9fFfaktQ2ZRV1FCXoL/jQxSk=
+         :cc:content-transfer-encoding;
+        bh=1RbNAk2loNo7HnTvuU1BMwc2UO5NqN/DOoq+VrgJR2M=;
+        b=EMG22hH8EyDx9MahdYbBc1FhWhhsX6CRNDakWkenx0oAa5GLIwJogcgOF8ENLRQwwx
+         Se3fEsR9DIoaK4WEu4l8vNnj+/sjr3R5m1qdqnSt20dCi8+Xf1H4y2uk06YGJZOIEJY7
+         i4+YBicPhjLJf6N+16P5SwCMP3sfFFVuiUC/+7vTNas7M1lykTfdC7zY4rib22YsIIQ4
+         XcoW09m4HYK9+9sJbFLXHc3cCAp/9+zIBtQAaI49DdiXAVzgCnQcLNoTQk4mHarYnNkq
+         9VasOsv0nXDhMvEC7GP/J4aYp5JzWTnOnYoxwFDIRvpdMPRWE+b7sRgX0kzzmJFI4beE
+         1cdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=64H1Kxgm8ncmGDcNtttCQA5XuXOfCcJqu3peaSGQwt0=;
-        b=BszU/DpdHzqXlwwriz0S4VgMS5nsi2kxk2daPEhsP+CDF4WTGQFB/tbSrXTO+CLG/u
-         SbKS8Gj+8v0loSGWwIn3FJc+WQq6EpsFC8UyAFU8MAgYu5cYbW8wBthWNmPdZRPQNkdE
-         MZo7/HrLZCGqOhRx0JZ9b4XuD1PgwGshjrFM8pjBCElAh4t2iQnTPO67u1CfoXThKPc0
-         wTuKDdY1wNpNrpiSYK/HKWxpSYJXkfz1ARpdrGEl/Xb9GfCocH+xxTfKM26LHZchf8kT
-         24TNR3wFcOJ5F3Z2vDA4sNhxRrGfMbBbXq7hWxl/L6/6TMcC9GGMvmFdkJWKzsS/NPuy
-         dXSg==
-X-Gm-Message-State: AJIora9RsjI7TSsC7ND0gdWqjQbiRrIAR9bz2k4I9nxHDhUi09BR9QrV
-        2s83iFr3Pb13I0m2nB5rhMLej+o76wBsL8FdJVKHzg==
-X-Google-Smtp-Source: AGRyM1veFTFmz28R79lM12n/O8GNXkrvz8w+ExQZWk8HwJqmd7Y+ArzgKwSYKQFbeBymgAOO/6GwPX3fMphTlpVQQzU=
-X-Received: by 2002:a5d:64cc:0:b0:21d:a4bd:fdbe with SMTP id
- f12-20020a5d64cc000000b0021da4bdfdbemr9984122wri.580.1657616894391; Tue, 12
- Jul 2022 02:08:14 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1RbNAk2loNo7HnTvuU1BMwc2UO5NqN/DOoq+VrgJR2M=;
+        b=CBOFIma+FnvplVmMC/n0ADQuuzog80p2S4bv4E/mrxpUOigU3vFP4bXZg2FFe2H1Rx
+         UCe+VkpKKOrZJTN9BDrDl1fRRzQoobavbDgtNNlAOhyPeMBhFtjinVlkiyzGcouWXp90
+         bj9r7LfVlmBwcp+1l064iNO9lV8yYXDeJ3nQticbijW2aTP2atcG/CC7nrUqOQ2fCVxb
+         a7DluSevnGtm91fMNEXM8efu6E10TSqsaDirtDZod3kN0Ihgs840yWSTDhBOBZyh4RsG
+         CCqOy3ZNlBZmUQjTIZq+u8tEdGe5LjAsCniHEwkP7h8UMEsVcSChG19WruxyvwOI3g49
+         wWJA==
+X-Gm-Message-State: AJIora/C+42WOU9doY2+MrAFgoZI/rqL2sjBrpYGWk7d4e5CimPf2OHU
+        seXphHrAwaTqx40Qs3DChVXHVC3L8DjMqnCjO3o=
+X-Google-Smtp-Source: AGRyM1tMn/6KcyAf3KU/4C9+Nq+Qk7UgIhyc1wPTZ+6jwN+B0OVOO9meDPyQ93iSexAkmvKQOlI11K1GyPF2R+ttqj0=
+X-Received: by 2002:a2e:9cc9:0:b0:25d:755f:c310 with SMTP id
+ g9-20020a2e9cc9000000b0025d755fc310mr2927837ljj.296.1657616920449; Tue, 12
+ Jul 2022 02:08:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707080600.49041-1-allen.chen@ite.com.tw> <20220707080600.49041-2-allen.chen@ite.com.tw>
- <CAG3jFystTA3sD2nWJHPYq39WxRwjVt4qj2DMDk2Khh1kR=8ntg@mail.gmail.com>
-In-Reply-To: <CAG3jFystTA3sD2nWJHPYq39WxRwjVt4qj2DMDk2Khh1kR=8ntg@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Tue, 12 Jul 2022 17:08:03 +0800
-Message-ID: <CAEXTbpc4PpvoOdu0OSsgvZFsc9AeJwvz7AmnabYO8-wGS56N5w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/bridge: it6505: Modified power sequence
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     allen <allen.chen@ite.com.tw>, Pin-yen Lin <treapking@google.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220712030509.23904-1-mimi05633@gmail.com> <20220712030509.23904-2-mimi05633@gmail.com>
+ <2f593af5-442e-67cc-9b7c-303d4c24e389@linaro.org>
+In-Reply-To: <2f593af5-442e-67cc-9b7c-303d4c24e389@linaro.org>
+From:   Minying Lin <mimi05633@gmail.com>
+Date:   Tue, 12 Jul 2022 17:08:28 +0800
+Message-ID: <CAL3ZnpxCnWt=fgNvAZ5Efep8bxbAbEb9BM3kWa00brGgoCuKLQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>, a.zummo@towertech.it,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
+        Medad Young <medadyoung@gmail.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, KFTING <KFTING@nuvoton.com>, JJLIU0@nuvoton.com,
+        CS20 MYLin1 <mylin1@nuvoton.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-rtc@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robert,
+Dear Krzysztof,
 
-On Tue, Jul 12, 2022 at 4:07 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> Hi Allen,
->
-> On Thu, 7 Jul 2022 at 10:06, allen <allen.chen@ite.com.tw> wrote:
-> >
-> > From: allen chen <allen.chen@ite.com.tw>
-> >
-> > Change power sequence to meet it6505 data sheet requirement when boot on.
-> >
-> > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> >
-> > ---
-> >  drivers/gpu/drm/bridge/ite-it6505.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> > index 2d119e3016b3..aa5e0aa1af85 100644
-> > --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> > +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> > @@ -3029,7 +3029,7 @@ static int it6505_init_pdata(struct it6505 *it6505)
-> >                 return PTR_ERR(pdata->ovdd);
-> >         }
-> >
-> > -       pdata->gpiod_reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> > +       pdata->gpiod_reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
->
-> Making this change is problematic since it requires a corresponding
-> change in all of the device trees that use this device. It's against
-> policy to change this interface after it has been introduced.
->
-> Unless anyone thinks otherwise, I would like to see this patch dropped.
+Thank you for your reminder.
+I'm new to upstream. I will add the review tag in the next patch.
 
-I don't really understand why this would require corresponding change
-in device trees.
+Thanks.
+Best regards,
+Mia
 
-Currently there's no real it6505 user on upstream. Also, the GPIO
-value will be changed
-in it6505_poweron, so this change only affects the power on sequence of it6505.
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B47=E6=9C=8812=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:43=E5=AF=AB=
+=E9=81=93=EF=BC=9A
 >
-> >         if (IS_ERR(pdata->gpiod_reset)) {
-> >                 dev_err(dev, "gpiod_reset gpio not found");
-> >                 return PTR_ERR(pdata->gpiod_reset);
-> > --
-> > 2.25.1
+> On 12/07/2022 05:05, Mia Lin wrote:
+> > Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
 > >
+> > Signed-off-by: Mia Lin <mimi05633@gmail.com>
+>
+> Where is the review tag?
+>
+> Best regards,
+> Krzysztof

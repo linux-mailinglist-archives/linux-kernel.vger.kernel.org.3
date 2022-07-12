@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2808C572465
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291B6572476
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbiGLTAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S235182AbiGLTBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235268AbiGLS71 (ORCPT
+        with ESMTP id S235325AbiGLS7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:59:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D14CF32E0;
-        Tue, 12 Jul 2022 11:48:09 -0700 (PDT)
+        Tue, 12 Jul 2022 14:59:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59046EFF9F;
+        Tue, 12 Jul 2022 11:48:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8615361257;
-        Tue, 12 Jul 2022 18:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53226C3411C;
-        Tue, 12 Jul 2022 18:48:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D1ACB81BBB;
+        Tue, 12 Jul 2022 18:48:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87825C3411C;
+        Tue, 12 Jul 2022 18:48:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651687;
-        bh=PCkUwfNrT8gTmJLiLxF5mfwsIwxED8Ugfd5v/z9GmFc=;
+        s=korg; t=1657651690;
+        bh=fvoQAdc3S9oNS5HwT/LBqeLOOHZNs1iWbmtk32aalbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ejClHKNpjPKbRz3kMLw1DB3+bCCAtwwhdof4viJxH/xYTJnOd38qjosSJn+9rONPZ
-         0096gSkQ6lh0LlvXd+lw9gqnvPfS4sNuz8pVSPUHc0puNj+ETDvKGgZoAHy2TlmO9C
-         WCSk0uOO3xiBUwv50JKfWpiHxNuSh+qe/fFCSwF0=
+        b=XT09MbC+O+yDwsRxoSEkPAELDXWieVQ2Mr1Yp7vJJxtOEnfJ+Edtu4cwGMg39rCKp
+         Rr3NRdKN7joiloVos2XYNg4AnwjqISJey/PyAb92PjXOIZa4LWCUBYv1J6VFwJlac+
+         6axd6kQ6yOFbKkfua8DrWluuf6yxWGoTTcCqFZHA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 25/78] x86/cpufeatures: Move RETPOLINE flags to word 11
-Date:   Tue, 12 Jul 2022 20:38:55 +0200
-Message-Id: <20220712183239.825918564@linuxfoundation.org>
+Subject: [PATCH 5.15 26/78] x86/retpoline: Cleanup some #ifdefery
+Date:   Tue, 12 Jul 2022 20:38:56 +0200
+Message-Id: <20220712183239.869824372@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
 References: <20220712183238.844813653@linuxfoundation.org>
@@ -59,45 +59,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit a883d624aed463c84c22596006e5a96f5b44db31 upstream.
+commit 369ae6ffc41a3c1137cab697635a84d0cc7cdcea upstream.
 
-In order to extend the RETPOLINE features to 4, move them to word 11
-where there is still room. This mostly keeps DISABLE_RETPOLINE
-simple.
+On it's own not much of a cleanup but it prepares for more/similar
+code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+[cascardo: conflict fixup because of DISABLE_ENQCMD]
+[cascardo: no changes at nospec-branch.h and bpf_jit_comp.c]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeatures.h |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/disabled-features.h |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -203,8 +203,8 @@
- #define X86_FEATURE_PROC_FEEDBACK	( 7*32+ 9) /* AMD ProcFeedbackInterface */
- /* FREE!                                ( 7*32+10) */
- #define X86_FEATURE_PTI			( 7*32+11) /* Kernel Page Table Isolation enabled */
--#define X86_FEATURE_RETPOLINE		( 7*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
--#define X86_FEATURE_RETPOLINE_LFENCE	( 7*32+13) /* "" Use LFENCE for Spectre variant 2 */
-+/* FREE!				( 7*32+12) */
-+/* FREE!				( 7*32+13) */
- #define X86_FEATURE_INTEL_PPIN		( 7*32+14) /* Intel Processor Inventory Number */
- #define X86_FEATURE_CDP_L2		( 7*32+15) /* Code and Data Prioritization L2 */
- #define X86_FEATURE_MSR_SPEC_CTRL	( 7*32+16) /* "" MSR SPEC_CTRL is implemented */
-@@ -294,6 +294,10 @@
- #define X86_FEATURE_PER_THREAD_MBA	(11*32+ 7) /* "" Per-thread Memory Bandwidth Allocation */
- #define X86_FEATURE_SGX1		(11*32+ 8) /* "" Basic SGX */
- #define X86_FEATURE_SGX2		(11*32+ 9) /* "" SGX Enclave Dynamic Memory Management (EDMM) */
-+/* FREE!				(11*32+10) */
-+/* FREE!				(11*32+11) */
-+#define X86_FEATURE_RETPOLINE		(11*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
-+#define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -56,6 +56,13 @@
+ # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
+ #endif
  
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
++#ifdef CONFIG_RETPOLINE
++# define DISABLE_RETPOLINE	0
++#else
++# define DISABLE_RETPOLINE	((1 << (X86_FEATURE_RETPOLINE & 31)) | \
++				 (1 << (X86_FEATURE_RETPOLINE_LFENCE & 31)))
++#endif
++
+ /* Force disable because it's broken beyond repair */
+ #define DISABLE_ENQCMD		(1 << (X86_FEATURE_ENQCMD & 31))
+ 
+@@ -79,7 +86,7 @@
+ #define DISABLED_MASK8	0
+ #define DISABLED_MASK9	(DISABLE_SMAP|DISABLE_SGX)
+ #define DISABLED_MASK10	0
+-#define DISABLED_MASK11	0
++#define DISABLED_MASK11	(DISABLE_RETPOLINE)
+ #define DISABLED_MASK12	0
+ #define DISABLED_MASK13	0
+ #define DISABLED_MASK14	0
 
 

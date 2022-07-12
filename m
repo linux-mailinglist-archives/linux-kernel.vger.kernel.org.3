@@ -2,167 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64770570F21
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3506570F24
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiGLAy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S232033AbiGLA4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGLAyz (ORCPT
+        with ESMTP id S229616AbiGLA4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:54:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307822A721;
-        Mon, 11 Jul 2022 17:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657587294; x=1689123294;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V6w2sMs8zcctI71jT/jdZW5CM1h96l8zoH9VbyJnAnM=;
-  b=Ldv7tubNo0S98EJKfEhYV3eR54b6saKYfLHbV3vcAeS9oy3Qhgq2cfLm
-   8UeElwpqLa9TeD70uREOlWVLlzKi2p4LIJSyGbFuVvnRMCT//qjVMq4Gi
-   zFvpZBqBd9+E6gT/CR7vUWDSSCvmfQliyAl+TruCHjRbRLhNU4ZyepbQA
-   BmjnajTHw/2ERg3XllpYCHkx7Cq224BKiwCb5EZPzznHP8YbF9We9FNBL
-   pwJKUXC1wtdn09W2BKbHDRm/iYb557BCcDxmuj2BJiQK7iyx/ZRC8VU83
-   PBQvBI5sxqdNiNeBbrLueEDU9bsbnJXWnhkoRessmF85uy61tuaCevvYI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="265219256"
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="265219256"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 17:54:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="662759318"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Jul 2022 17:54:48 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oB4Aq-0001Rz-8h;
-        Tue, 12 Jul 2022 00:54:48 +0000
-Date:   Tue, 12 Jul 2022 08:54:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jarrett Schultz <jaschultzms@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Dmitry Antipov <dmanti@microsoft.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jarrett Schultz <jaschultz@microsoft.com>
-Subject: Re: [PATCH v5 5/6] HID: add spi-hid, transport driver for HID over
- SPI bus
-Message-ID: <202207120839.Ga8kjAG8-lkp@intel.com>
-References: <20220707165902.3184-6-jaschultzMS@gmail.com>
+        Mon, 11 Jul 2022 20:56:48 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF7D2A72C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:56:47 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id b8so4844489pjo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=kCOaQJiX/ub5vIUCXViUmqmONl/eauYA/7dZ8qeb3oU=;
+        b=RZUFdRPiKD6UuuDpCJ77uRhOQX7myXXVL39YwByUPt+HoY0O8UNxykm9I0KeC+DFje
+         Bjv/EsYmQhlS38mk+jHrzYHkYK8NQS8lnAqVcWH12EbaA+O9bYKaXDym/godxTGBnfAP
+         bgzsA9z5gI918GgarMxe+LSIEQqIeDjrUrrA/qBQvdteTn/LU8P35YKQvw+afamlRjHG
+         ZNKGb/lqmIvs3ustRg4KfDXMEbST6SgUvuygJZ9oP+3f7uwlP0LsaNtOuYfeE7GeGNCK
+         a5YTTUArdaBeuj0pseNKj9Bk+jfJ+VeV4OXZX98DtIkDlItf+YqjLTAfL7XI7khXKSFl
+         BEDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=kCOaQJiX/ub5vIUCXViUmqmONl/eauYA/7dZ8qeb3oU=;
+        b=geBwRzg2ittDrazvXkbqeBPek/q6d7jIi6yDR+AiNKRsYneZ9cj14vvVVjGN9VZ2DE
+         0reQHY9CSNqctDD0ZgholRWSNo1EKdAkw5qawmRaesU/0VMJ/LtKIuzCMtXETCt4t199
+         QIVdO+pnlV+2gXJaq+LKyJe6dykRY601J7WPUuqWs1U2AMjH62uZiKI2pazfm+y3q+un
+         nx01F2750waywpjwP72TpDt8GOj39knXkPOADHWoKpql6vZ71G5zvJ+MmvcwsnBbirQl
+         KvL4P73aVQMWUm2oiP7zlxrmgyWi7meKIh/V274Tw52Uzdb9B/oH0nlbc6XdwdKPNdk9
+         jCQQ==
+X-Gm-Message-State: AJIora9tiL3L/I+WHbR4GSdEdVbzcWsjN0SudFgewVvwBTLwRISu5GLY
+        QbWzhx1xJlu065ePWtS9BmtGlf1jryU=
+X-Google-Smtp-Source: AGRyM1scsLDcJ8lkYgqAw5lc/sZ/PJRCQZAJAZIQzI4lbXdlNLovRExr3LbaYi8NMgQQ9dpQ1Qva2g==
+X-Received: by 2002:a17:903:41c2:b0:16c:52f8:9240 with SMTP id u2-20020a17090341c200b0016c52f89240mr4185882ple.161.1657587407068;
+        Mon, 11 Jul 2022 17:56:47 -0700 (PDT)
+Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
+        by smtp.gmail.com with ESMTPSA id q1-20020a170902a3c100b001690a7df347sm5323331plb.96.2022.07.11.17.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 17:56:46 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:56:41 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 00/13] locking/qspinlock: simplify code generation
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <20220704143820.3071004-1-npiggin@gmail.com>
+        <YsR8BIyrSCQ8AlEo@worktop.programming.kicks-ass.net>
+In-Reply-To: <YsR8BIyrSCQ8AlEo@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707165902.3184-6-jaschultzMS@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <1657587057.joeh91dvd9.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarrett,
+Excerpts from Peter Zijlstra's message of July 6, 2022 3:59 am:
+> On Tue, Jul 05, 2022 at 12:38:07AM +1000, Nicholas Piggin wrote:
+>> Hi,
+>>=20
+>> Been recently looking a bit closer at queued spinlock code, and
+>> found it's a little tricky to follow especially the pv generation.
+>> This series tries to improve the situation. It's not well tested
+>> outside powerpc, but it's really the x86 pv code that is the
+>> other major complexity that should need some review and testing.
+>> Opinions?
+>=20
+> perhaps something like so on top/instead? This would still allow
+> slotting in other implementations with relative ease and the compilers
+> should constant fold all this.
 
-Thank you for the patch! Perhaps something to improve:
+Yeah that could be a bit neater... I don't know. It all has to be
+inlined and compiled together so it's a matter of taste in syntactic
+sugar. Doing it with C is probably better than doing it with CPP,
+all else being equal.
 
-[auto build test WARNING on hid/for-next]
-[also build test WARNING on dtor-input/next robh/for-next linus/master v5.19-rc6 next-20220711]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+At the moment I'm not planning to replace the PV functions on powerpc
+though. If/when it comes to that I'd say more changes would be needed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarrett-Schultz/Add-spi-hid-transport-for-HID-over-SPI-bus/20220708-010203
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220712/202207120839.Ga8kjAG8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 77a38f6839980bfac61babb40d83772c51427011)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d0121c2f2d1bb21824555c34c233dd3fbc6aee96
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jarrett-Schultz/Add-spi-hid-transport-for-HID-over-SPI-bus/20220708-010203
-        git checkout d0121c2f2d1bb21824555c34c233dd3fbc6aee96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/spi-hid/ drivers/md/ drivers/net/ethernet/marvell/prestera/ drivers/vfio/pci/mlx5/
+Thanks,
+Nick
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hid/spi-hid/spi-hid-core.c:193:20: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
-   static const char *const spi_hid_power_mode_string(u8 power_state)
-                      ^~~~~~
->> drivers/hid/spi-hid/spi-hid-core.c:691:4: warning: format specifies type 'unsigned short' but the argument has type '__u32' (aka 'unsigned int') [-Wformat]
-                           hid->vendor, hid->product);
-                           ^~~~~~~~~~~
-   drivers/hid/spi-hid/spi-hid-core.c:691:17: warning: format specifies type 'unsigned short' but the argument has type '__u32' (aka 'unsigned int') [-Wformat]
-                           hid->vendor, hid->product);
-                                        ^~~~~~~~~~~~
-   drivers/hid/spi-hid/spi-hid-core.c:1318:13: error: incompatible function pointer types initializing 'void (*)(struct spi_device *)' with an expression of type 'int (struct spi_device *)' [-Werror,-Wincompatible-function-pointer-types]
-           .remove         = spi_hid_remove,
-                             ^~~~~~~~~~~~~~
-   3 warnings and 1 error generated.
---
-   In file included from drivers/hid/spi-hid/trace.c:9:
-   In file included from drivers/hid/spi-hid/./spi-hid_trace.h:194:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:237:
->> drivers/hid/spi-hid/./spi-hid_trace.h:140:92: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-           TP_printk("spi%d.%d: (%04x:%04x v%d) HID v%d.%d state i:%d p:%d len i:%d o:%d r:%d flags %c",
-                                                                                                    ~^
-   include/trace/stages/stage3_trace_output.h:9:33: note: expanded from macro 'TP_printk'
-   #define TP_printk(fmt, args...) fmt "\n", args
-                                   ^~~
-   include/trace/trace_events.h:203:27: note: expanded from macro 'DECLARE_EVENT_CLASS'
-           trace_event_printf(iter, print);                                \
-                                    ^~~~~
-   1 warning generated.
-
-
-vim +/const +193 drivers/hid/spi-hid/spi-hid-core.c
-
-   192	
- > 193	static const char *const spi_hid_power_mode_string(u8 power_state)
-   194	{
-   195		switch (power_state) {
-   196		case SPI_HID_POWER_MODE_ON:
-   197			return "d0";
-   198		case SPI_HID_POWER_MODE_SLEEP:
-   199			return "d2";
-   200		case SPI_HID_POWER_MODE_OFF:
-   201			return "d3";
-   202		case SPI_HID_POWER_MODE_WAKING_SLEEP:
-   203			return "d3*";
-   204		default:
-   205			return "unknown";
-   206		}
-   207	}
-   208	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>=20
+> --- a/kernel/locking/qspinlock.c
+> +++ b/kernel/locking/qspinlock.c
+> @@ -609,7 +609,7 @@ static void pv_kick_node(struct qspinloc
+>   *
+>   * The current value of the lock will be returned for additional process=
+ing.
+>   */
+> -static void pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *n=
+ode)
+> +static u32 pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *no=
+de)
+>  {
+>  	struct qspinlock **lp =3D NULL;
+>  	int waitcnt =3D 0;
+> @@ -641,7 +641,7 @@ static void pv_wait_head_or_lock(struct
+>  		set_pending(lock);
+>  		for (loop =3D SPIN_THRESHOLD; loop; loop--) {
+>  			if (trylock_clear_pending(lock))
+> -				return; /* got lock */
+> +				goto out; /* got lock */
+>  			cpu_relax();
+>  		}
+>  		clear_pending(lock);
+> @@ -669,7 +669,7 @@ static void pv_wait_head_or_lock(struct
+>  				 */
+>  				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
+>  				WRITE_ONCE(*lp, NULL);
+> -				return; /* got lock */
+> +				goto out; /* got lock */
+>  			}
+>  		}
+>  		WRITE_ONCE(node->state, vcpu_hashed);
+> @@ -683,12 +683,22 @@ static void pv_wait_head_or_lock(struct
+>  		 */
+>  	}
+> =20
+> +out:
+>  	/*
+>  	 * The cmpxchg() or xchg() call before coming here provides the
+>  	 * acquire semantics for locking.
+>  	 */
+> +	return atomic_read(&lock->val);
+>  }
+> =20
+> +static const struct queue_ops pv_ops =3D {
+> +	.init_node		=3D pv_init_node,
+> +	.trylock		=3D pv_hybrid_queued_unfair_trylock,
+> +	.wait_node		=3D pv_wait_node,
+> +	.wait_head_or_lock	=3D pv_wait_head_or_lock,
+> +	.kick_node		=3D pv_kick_node,
+> +};
+> +
+>  /*
+>   * PV versions of the unlock fastpath and slowpath functions to be used
+>   * instead of queued_spin_unlock().
+> @@ -756,18 +766,18 @@ __visible void __pv_queued_spin_unlock(s
+>  EXPORT_SYMBOL(__pv_queued_spin_unlock);
+>  #endif
+> =20
+> -#else /* CONFIG_PARAVIRT_SPINLOCKS */
+> -static __always_inline void pv_init_node(struct qnode *node) { }
+> -static __always_inline void pv_wait_node(struct qnode *node,
+> -					 struct qnode *prev) { }
+> -static __always_inline void pv_kick_node(struct qspinlock *lock,
+> -					 struct qnode *node) { }
+> -static __always_inline void pv_wait_head_or_lock(struct qspinlock *lock,
+> -						 struct qnode *node) { }
+> -static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspin=
+lock *lock) { BUILD_BUG(); }
+>  #endif /* CONFIG_PARAVIRT_SPINLOCKS */
+> =20
+> -static inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, bo=
+ol paravirt)
+> +struct queue_ops {
+> +	void (*init_node)(struct qnode *node);
+> +	bool (*trylock)(struct qspinlock *lock);
+> +	void (*wait_node)(struct qnode *node, struct qnode *prev);
+> +	u32 (*wait_head_or_lock)(struct qspinlock *lock, struct qnode *node);
+> +	void (*kick_node)(struct qspinlock *lock, struct qnode *node);
+> +};
+> +
+> +static __always_inline
+> +void queued_spin_lock_mcs_queue(struct qspinlock *lock, const struct que=
+ue_ops *ops)
+>  {
+>  	struct qnode *prev, *next, *node;
+>  	u32 val, old, tail;
+> @@ -813,16 +823,16 @@ static inline void queued_spin_lock_mcs_
+> =20
+>  	node->locked =3D 0;
+>  	node->next =3D NULL;
+> -	if (paravirt)
+> -		pv_init_node(node);
+> +	if (ops && ops->init_node)
+> +		ops->init_node(node);
+> =20
+>  	/*
+>  	 * We touched a (possibly) cold cacheline in the per-cpu queue node;
+>  	 * attempt the trylock once more in the hope someone let go while we
+>  	 * weren't watching.
+>  	 */
+> -	if (paravirt) {
+> -		if (pv_hybrid_queued_unfair_trylock(lock))
+> +	if (ops && ops->trylock) {
+> +		if (ops->trylock(lock))
+>  			goto release;
+>  	} else {
+>  		if (queued_spin_trylock(lock))
+> @@ -857,8 +867,8 @@ static inline void queued_spin_lock_mcs_
+>  		WRITE_ONCE(prev->next, node);
+> =20
+>  		/* Wait for mcs node lock to be released */
+> -		if (paravirt)
+> -			pv_wait_node(node, prev);
+> +		if (ops && ops->wait_node)
+> +			ops->wait_node(node, prev);
+>  		else
+>  			smp_cond_load_acquire(&node->locked, VAL);
+> =20
+> @@ -893,12 +903,11 @@ static inline void queued_spin_lock_mcs_
+>  	 * If PV isn't active, 0 will be returned instead.
+>  	 *
+>  	 */
+> -	if (paravirt) {
+> -		pv_wait_head_or_lock(lock, node);
+> -		val =3D atomic_read(&lock->val);
+> +	if (ops && ops->wait_head_or_lock) {
+> +		val =3D ops->wait_head_or_lock(lock, node);
+>  	} else {
+>  		val =3D atomic_cond_read_acquire(&lock->val,
+> -				!(VAL & _Q_LOCKED_PENDING_MASK));
+> +					       !(VAL & _Q_LOCKED_PENDING_MASK));
+>  	}
+> =20
+>  	/*
+> @@ -1049,14 +1058,14 @@ void queued_spin_lock_slowpath(struct qs
+>  	 */
+>  queue:
+>  	lockevent_inc(lock_slowpath);
+> -	queued_spin_lock_mcs_queue(lock, false);
+> +	queued_spin_lock_mcs_queue(lock, NULL);
+>  }
+>  EXPORT_SYMBOL(queued_spin_lock_slowpath);
+> =20
+>  #ifdef CONFIG_PARAVIRT_SPINLOCKS
+>  void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+>  {
+> -	queued_spin_lock_mcs_queue(lock, true);
+> +	queued_spin_lock_mcs_queue(lock, &pv_ops);
+>  }
+>  EXPORT_SYMBOL(__pv_queued_spin_lock_slowpath);
+> =20
+>=20

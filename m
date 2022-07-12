@@ -2,95 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6F35713FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C7E5713FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbiGLIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S232571AbiGLIJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiGLIJR (ORCPT
+        with ESMTP id S232240AbiGLIJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:09:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8FC252E46
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:11 -0700 (PDT)
+        Tue, 12 Jul 2022 04:09:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE8FE33A2B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657613350;
+        s=mimecast20190719; t=1657613345;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJcskA/Zg+I54A7KxLAxiRGb8qrTlBqKeeRMZ0ymcfk=;
-        b=NF3TB8hXvcEVSErbhcA45YJ3KCRdcJ1zJl4uQgvg40NzZMrKwNVxZxWATPNXtUdgF6zKmE
-        2QTGTC56SraZollrrs3/AzVo5c2yUDfYyzOpTvE+ekbdzOozO3FOuqrrsmRUz2bUz/6c1I
-        B82n9j/DeF1ccBByYVfW+0nBY49q/Xs=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5+0BHy+TbI5y4QNBf2E9cU8okI6M2ropxuo+9s7xiag=;
+        b=GwUe2nNqHznlhkbs55Ugnt/gTKSDfjcQ8GeLGqsqC4et0yyUv9633z/VnAZCuwPg+1Xzvs
+        f0gXxbA/AKxMB/wlIu6nPNU6+PEaafD+awrfIrJLg8E47tb43oYAUiz5o5wLsjTq4OForJ
+        ODf7iBZsXTaMTfGxhvI5KIU77XsGWn8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-kFXOKvSrO_uAbE0wFqjWRQ-1; Tue, 12 Jul 2022 04:09:09 -0400
-X-MC-Unique: kFXOKvSrO_uAbE0wFqjWRQ-1
-Received: by mail-lj1-f200.google.com with SMTP id m16-20020a2e8710000000b0025d46f0cfb1so892409lji.16
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:09 -0700 (PDT)
+ us-mta-42-3Z8jmoSOPm-HY_5yAJHJlg-1; Tue, 12 Jul 2022 04:09:03 -0400
+X-MC-Unique: 3Z8jmoSOPm-HY_5yAJHJlg-1
+Received: by mail-wm1-f71.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso3817466wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:09:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rJcskA/Zg+I54A7KxLAxiRGb8qrTlBqKeeRMZ0ymcfk=;
-        b=Vf6pzKYyOTH1/SJ5gL/UxgN6DMvopd63I6oBfWHIX+DcnPt2vlvcNrkH6qgJLoQvIy
-         WxxlpH0SD3dj0yR/qix1a39AZRadltULlHD9d0jmuYhmigRsgzVmDHxFVsXWoXYk+skH
-         MRI16OZldPozzbRftgebSfnGADJ60R1iDblzjDSVrPid6YgVDvEURDMq3QGMKWsUh1oH
-         WMzUkrC6f0cYDUSR2/NiUzth/ANNKFItN1zpTIfQk2f9vFvJKuXoi1e2JVq7uAkMe2Oe
-         6CnBb0xbqtQF1/xXxLddPWzRh4dlxthje3KyuOMIq2Ag2jyN6hxnKTKoCdO8vZWl+puW
-         ekjw==
-X-Gm-Message-State: AJIora/6+4J8QSNQp9EqQRJPupmucCUZYEpQhT2KeT6YH4aCab/Jeww1
-        khvGPMhLilcP7A3/+W49k3DH+NKI+ZziNiRSuxXrF90M8EBEpTgIT/SXwzjAJUbzqPUpUoPzutn
-        0wRxfhw2t+7RfA3TfnRBD+jeDjb79O4xvofg7x9BE
-X-Received: by 2002:ac2:50d1:0:b0:489:fb36:cde1 with SMTP id h17-20020ac250d1000000b00489fb36cde1mr264115lfm.411.1657613347826;
-        Tue, 12 Jul 2022 01:09:07 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vjIfYeHw/U8j+flo57s9r09p+WpV9Mywo429Jk8FiV/6lmU1F4kq5TwCDtQJDxdvwRs4LWoN08HBHaUIS+RT0=
-X-Received: by 2002:ac2:50d1:0:b0:489:fb36:cde1 with SMTP id
- h17-20020ac250d1000000b00489fb36cde1mr264103lfm.411.1657613347609; Tue, 12
- Jul 2022 01:09:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5+0BHy+TbI5y4QNBf2E9cU8okI6M2ropxuo+9s7xiag=;
+        b=0hsoSyO55Q9KGC7JcgYfHHMrGB4at3nTtOKOOILNMwt3htpYlsjF8l/z9gt0ihNWoS
+         imQYQTq4orP08ED5a0OL8vvJT78g6SnX9Zdefl8Mlb/U0/tfVw6ql+sy/F2Uj2pvo9uN
+         42o2y+Iq8birat7fVwQJsGsDC5DPhnQv6pWktWYog7LGwVyH3L1UIXiD7KWFyaPv3PoF
+         6bUas7fBN+mufJm54lwYeUOPGV5WHxNIzUuoaX9Vi+vtJhpjqpK48iN2rF4L+rNdUrNC
+         z6OHkB0KKpY7SNf9MvY991wsfgoScsI2V047SDiJ/jmUrSHQ4LLtf5QH4eJ/I0mxfEBZ
+         IBQg==
+X-Gm-Message-State: AJIora9MEh7ghJPTX5gjwJyH5aLIVNVBQHWE5N+xL41QLVEfx0v9rfq7
+        mmxRmNGp9q4647JbjUO2wMmibnsGR5RlCGPdvCVeYxwbN1IMNfvCZGwD0A3PWdBedIjyiRik8IV
+        lQIbupa8h8fjhRo3C4NGEMqRc
+X-Received: by 2002:a05:600c:3505:b0:3a1:9fbb:4d59 with SMTP id h5-20020a05600c350500b003a19fbb4d59mr2529157wmq.165.1657613342448;
+        Tue, 12 Jul 2022 01:09:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tTkRb943UWorlzCwualpK6U+eYPdow11CztHkTzoYVF1hr08+8yS0GIIDqpO6L79uZn6ijpA==
+X-Received: by 2002:a05:600c:3505:b0:3a1:9fbb:4d59 with SMTP id h5-20020a05600c350500b003a19fbb4d59mr2529139wmq.165.1657613342237;
+        Tue, 12 Jul 2022 01:09:02 -0700 (PDT)
+Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id v26-20020a1cf71a000000b003974a00697esm12069129wmh.38.2022.07.12.01.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 01:09:01 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:09:00 +0200
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] NFSD: Decode NFSv4 birth time attribute
+Message-ID: <20220712100900.1c8b18dc@redhat.com>
+In-Reply-To: <A4F0C111-B2EB-4325-AC6A-4A80BD19DA43@oracle.com>
+References: <165747876458.1259.8334435718280903102.stgit@bazille.1015granger.net>
+        <20220711191447.1046538c@redhat.com>
+        <A4F0C111-B2EB-4325-AC6A-4A80BD19DA43@oracle.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-4-eperezma@redhat.com>
- <CACGkMEt6YQvtyYwkYVxmZ01pZJK9PMFM2oPTVttPZ_kZDY-9Jw@mail.gmail.com> <CAJaqyWfGXu8k7JN1gCPdUXS2_Dct73w4wS_SdB3aLqVCWJqJQg@mail.gmail.com>
-In-Reply-To: <CAJaqyWfGXu8k7JN1gCPdUXS2_Dct73w4wS_SdB3aLqVCWJqJQg@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 12 Jul 2022 16:08:56 +0800
-Message-ID: <CACGkMEv0W=CYduTV44R71knWwyoEd9VAth0eHuwEFa9T4Njhhg@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] vhost-vdpa: uAPI to suspend the device
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Cindy Lu <lulu@redhat.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
-        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
-        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Dinan Gunawardena <dinang@xilinx.com>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Martin Porter <martinpo@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,149 +80,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 7:53 PM Eugenio Perez Martin <eperezma@redhat.com> w=
-rote:
->
-> On Wed, Jun 29, 2022 at 6:16 AM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Fri, Jun 24, 2022 at 12:08 AM Eugenio P=C3=A9rez <eperezma@redhat.co=
-m> wrote:
-> > >
-> > > The ioctl adds support for suspending the device from userspace.
-> > >
-> > > This is a must before getting virtqueue indexes (base) for live migra=
-tion,
-> > > since the device could modify them after userland gets them. There ar=
-e
-> > > individual ways to perform that action for some devices
-> > > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was n=
-o
-> > > way to perform it for any vhost device (and, in particular, vhost-vdp=
-a).
-> > >
-> > > After a successful return of the ioctl call the device must not proce=
-ss
-> > > more virtqueue descriptors. The device can answer to read or writes o=
-f
-> > > config fields as if it were not suspended. In particular, writing to
-> > > "queue_enable" with a value of 1 will not make the device start
-> > > processing buffers of the virtqueue.
-> > >
-> > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > > ---
-> > >  drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
-> > >  include/uapi/linux/vhost.h | 14 ++++++++++++++
-> > >  2 files changed, 33 insertions(+)
-> > >
-> > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > index 3d636e192061..7fa671ac4bdf 100644
-> > > --- a/drivers/vhost/vdpa.c
-> > > +++ b/drivers/vhost/vdpa.c
-> > > @@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhos=
-t_vdpa *v, u32 __user *argp)
-> > >         return 0;
-> > >  }
-> > >
-> > > +/* After a successful return of ioctl the device must not process mo=
-re
-> > > + * virtqueue descriptors. The device can answer to read or writes of=
- config
-> > > + * fields as if it were not suspended. In particular, writing to "qu=
-eue_enable"
-> > > + * with a value of 1 will not make the device start processing buffe=
-rs.
-> > > + */
-> > > +static long vhost_vdpa_suspend(struct vhost_vdpa *v)
-> > > +{
-> > > +       struct vdpa_device *vdpa =3D v->vdpa;
-> > > +       const struct vdpa_config_ops *ops =3D vdpa->config;
-> > > +
-> > > +       if (!ops->suspend)
-> > > +               return -EOPNOTSUPP;
-> > > +
-> > > +       return ops->suspend(vdpa);
-> > > +}
-> > > +
-> > >  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned in=
-t cmd,
-> > >                                    void __user *argp)
-> > >  {
-> > > @@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file=
- *filep,
-> > >         case VHOST_VDPA_GET_VQS_COUNT:
-> > >                 r =3D vhost_vdpa_get_vqs_count(v, argp);
-> > >                 break;
-> > > +       case VHOST_VDPA_SUSPEND:
-> > > +               r =3D vhost_vdpa_suspend(v);
-> > > +               break;
-> > >         default:
-> > >                 r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
-> > >                 if (r =3D=3D -ENOIOCTLCMD)
-> > > diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
-> > > index cab645d4a645..6d9f45163155 100644
-> > > --- a/include/uapi/linux/vhost.h
-> > > +++ b/include/uapi/linux/vhost.h
-> > > @@ -171,4 +171,18 @@
-> > >  #define VHOST_VDPA_SET_GROUP_ASID      _IOW(VHOST_VIRTIO, 0x7C, \
-> > >                                              struct vhost_vring_state=
-)
-> > >
-> > > +/* Suspend or resume a device so it does not process virtqueue reque=
-sts anymore
-> > > + *
-> > > + * After the return of ioctl with suspend !=3D 0, the device must fi=
-nish any
-> > > + * pending operations like in flight requests.
-> >
-> > I'm not sure we should mandate the flush here. This probably blocks us
-> > from adding inflight descriptor reporting in the future.
-> >
->
-> That's right. Maybe we should add a flags argument to allow not to
-> flush in flight descriptors in the future? Or maybe the right solution
-> is to discard that requirement and to mandate in_order to be
-> migratable at the moment?
+On Mon, 11 Jul 2022 17:18:38 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-I think it's better not to limit the device behaviour like flush or
-in_order here. This may simplify the work for adding inflight
-descriptor support.
-
-For the device that doesn't care about the inflight descriptor, this
-patch is sufficient for doing live migration.
-For the device that requires an inflight descriptor, this patch is
-insufficient, it requires future extension to get those descriptors.
-In this case, device has the flexibility to flush or not so:
-
-1) if we don't get any inflight descriptors, the device may do the flush be=
-fore
-2) if we get inflight descriptors, we need to restore them
-
-Thanks
-
->
+> > On Jul 11, 2022, at 1:14 PM, Igor Mammedov <imammedo@redhat.com> wrote:
+> > 
+> > On Sun, 10 Jul 2022 14:46:04 -0400
+> > Chuck Lever <chuck.lever@oracle.com> wrote:
+> >   
+> >> NFSD has advertised support for the NFSv4 time_create attribute
+> >> since commit e377a3e698fb ("nfsd: Add support for the birth time
+> >> attribute").
+> >> 
+> >> Igor Mammedov reports that Mac OS clients attempt to set the NFSv4
+> >> birth time attribute via OPEN(CREATE) and SETATTR if the server
+> >> indicates that it supports it, but since the above commit was
+> >> merged, those attempts now fail.
+> >> 
+> >> Table 5 in RFC 8881 lists the time_create attribute as one that can
+> >> be both set and retrieved, but the above commit did not add server
+> >> support for clients to provide a time_create attribute. IMO that's
+> >> a bug in our implementation of the NFSv4 protocol, which this commit
+> >> addresses.
+> >> 
+> >> Whether NFSD silently ignores the new birth time or actually sets it
+> >> is another matter. I haven't found another filesystem service in the
+> >> Linux kernel that enables users or clients to modify a file's birth
+> >> time attribute.
+> >> 
+> >> This commit reflects my (perhaps incorrect) understanding of whether
+> >> Linux users can set a file's birth time. NFSD will now recognize a
+> >> time_create attribute but it ignores its value. It clears the
+> >> time_create bit in the returned attribute bitmask to indicate that
+> >> the value was not used.
+> >> 
+> >> Reported-by: Igor Mammedov <imammedo@redhat.com>
+> >> Fixes: e377a3e698fb ("nfsd: Add support for the birth time attribute")
+> >> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>  
+> > 
+> > Thanks for fixing it,
+> > tested 'touch', 'cp', 'tar' within CLI and copying file with Finder
+> > 
+> > Tested-by: Igor Mammedov <imammedo@redhat.com>  
+> 
 > Thanks!
->
-> > Thanks
-> >
-> > It must also preserve all the
-> > > + * necessary state (the virtqueue vring base plus the possible devic=
-e specific
-> > > + * states) that is required for restoring in the future. The device =
-must not
-> > > + * change its configuration after that point.
-> > > + *
-> > > + * After the return of ioctl with suspend =3D=3D 0, the device can c=
-ontinue
-> > > + * processing buffers as long as typical conditions are met (vq is e=
-nabled,
-> > > + * DRIVER_OK status bit is enabled, etc).
-> > > + */
-> > > +#define VHOST_VDPA_SUSPEND             _IOW(VHOST_VIRTIO, 0x7D, int)
-> > > +
-> > >  #endif
-> > > --
-> > > 2.31.1
-> > >
-> >
->
+> 
+> 
+> > on tangent:
+> > when copying file from Mac (used 'cp') there is a delay ~4sec/file
+> > 'cp' does first triggers create then extra open and then setattr
+> > which returns
+> > SETATTR Status: NFS4ERR_DELAY
+> > after which the client stalls for a few seconds before repeating setattr.
+> > So question is what makes server unhappy to trigger this error
+> > and if it could be fixed on server side.
+> > 
+> > it seems to affect other methods of copying. So if one extracted
+> > an archive with multiple files or copied multiple files, that
+> > would be a pain.
+> > 
+> > With vers=3 copying is 'instant'
+> > with linux client and vers=4.0 copying is 'instant' as well but it
+> > doesn't use the same call sequence.
+> > 
+> > PS:
+> > it is not regression (I think slowness was there for a long time)  
+> 
+> A network capture would help diagnose this further, but it
+> sounds like it's delegation-related.
+yep, there was delegation request/response right after SETATTR failure
+possibly prompted by NFS4ERR_DELAY
+
+shall I provide a network capture (I guess pcap file) from test env
+I have?
+
+> >> ---
+> >> fs/nfsd/nfs4xdr.c | 9 +++++++++
+> >> fs/nfsd/nfsd.h | 3 ++-
+> >> 2 files changed, 11 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> >> index 61b2aae81abb..2acea7792bb2 100644
+> >> --- a/fs/nfsd/nfs4xdr.c
+> >> +++ b/fs/nfsd/nfs4xdr.c
+> >> @@ -470,6 +470,15 @@ nfsd4_decode_fattr4(struct nfsd4_compoundargs *argp, u32 *bmval, u32 bmlen,
+> >> 			return nfserr_bad_xdr;
+> >> 		}
+> >> 	}
+> >> +	if (bmval[1] & FATTR4_WORD1_TIME_CREATE) {
+> >> +		struct timespec64 ts;
+> >> +
+> >> +		/* No Linux filesystem supports setting this attribute. */
+> >> +		bmval[1] &= ~FATTR4_WORD1_TIME_CREATE;
+> >> +		status = nfsd4_decode_nfstime4(argp, &ts);
+> >> +		if (status)
+> >> +			return status;
+> >> +	}
+> >> 	if (bmval[1] & FATTR4_WORD1_TIME_MODIFY_SET) {
+> >> 		u32 set_it;
+> >> 
+> >> diff --git a/fs/nfsd/nfsd.h b/fs/nfsd/nfsd.h
+> >> index 847b482155ae..9a8b09afc173 100644
+> >> --- a/fs/nfsd/nfsd.h
+> >> +++ b/fs/nfsd/nfsd.h
+> >> @@ -465,7 +465,8 @@ static inline bool nfsd_attrs_supported(u32 minorversion, const u32 *bmval)
+> >> 	(FATTR4_WORD0_SIZE | FATTR4_WORD0_ACL)
+> >> #define NFSD_WRITEABLE_ATTRS_WORD1 \
+> >> 	(FATTR4_WORD1_MODE | FATTR4_WORD1_OWNER | FATTR4_WORD1_OWNER_GROUP \
+> >> -	| FATTR4_WORD1_TIME_ACCESS_SET | FATTR4_WORD1_TIME_MODIFY_SET)
+> >> +	| FATTR4_WORD1_TIME_ACCESS_SET | FATTR4_WORD1_TIME_CREATE \
+> >> +	| FATTR4_WORD1_TIME_MODIFY_SET)
+> >> #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
+> >> #define MAYBE_FATTR4_WORD2_SECURITY_LABEL \
+> >> 	FATTR4_WORD2_SECURITY_LABEL  
+> 
+> --
+> Chuck Lever
+> 
+> 
+> 
 

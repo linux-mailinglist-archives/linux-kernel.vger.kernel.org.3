@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195765718C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785F05718CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiGLLmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S231790AbiGLLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiGLLlp (ORCPT
+        with ESMTP id S232760AbiGLLmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:41:45 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7067B4BCE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:41:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id dn9so13786360ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G865YbNx20BZkjR4fVd4kJWWHs5OBlEN22PuFcwTI70=;
-        b=xS0p3TbW6qB5G+rF58Pzn58QHvvGxqeukiC7ytefdRZi3x/WiyLE7AekQ/Z81dKdRh
-         krDTOLCEgAjb70DfQbBz7dlogONxZRG7lQDe1zW/S/YJpiOeooJUiasdFpf2u1Ot6j3g
-         +ETNf8ePvN94JFaNj1Ce/g6zynRTtjcOCWU9uQhfSIEWsWjuOQwvAXV4Bp/AAr1jyxJO
-         KL41rmkGRE/CYneqobvJzFNzpwbwSrUpy9UPRT8c/XIJgMFF1C+khc1yvh/DBJLiOEYv
-         YyZaJxD0dw58EcBlexZb+/QaQH7ZVg+E3QMe6HMgJWpZjHkfVQ9JhlA4rb5z7Afvrtv4
-         JKNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G865YbNx20BZkjR4fVd4kJWWHs5OBlEN22PuFcwTI70=;
-        b=gJus/FY9yBiDCM48swm5aMBp3KJ3699bU6BIvKN/0Dxmt4nCpp82u9W1uzM1NiAwKE
-         Ha+D7jQknuD8wRnhp7QvWB0o3Rq6gPLLnSkbK1H7vfjJqqKg7tEXgvGao1RXwXNyqqEX
-         pWzmZO7vVE3qC8wqu+PsZ5V4ZoZ/gcEzr+f0GnPPVwknJKLZgOM+P3mYPok4/vEl85EL
-         YexNfksGlz1N5B3/y+q2qu8fm6izlf+VrDyHTPQRmnVm8L072rqVspMRVLVzrTKzcXXu
-         jm/ztZjTj19VSKXGu7XiXr9Aip4dIWI1ZS1QdT2Agu5L98JbGVnUHnnoz+uH29XaJ39E
-         Pzxw==
-X-Gm-Message-State: AJIora9cfQxuOkKhOnagAJSasuzH0vIGVoyXCQML0RMdgCsjBH9gj6g3
-        mhUowyhHwn1wTJK8PiagY+9u7/itMRFtddqOqhnWnQ==
-X-Google-Smtp-Source: AGRyM1tPoCRVNLi/vKZkjzMjHGE4trmUgPn4uVHCdPAmJMenLxiAuaIw5BaWUfYm9G0ZWCGyFGfRO4ct9QJK16FFOz8=
-X-Received: by 2002:a17:907:1b16:b0:72b:8c16:dac0 with SMTP id
- mp22-20020a1709071b1600b0072b8c16dac0mr472913ejc.286.1657626086253; Tue, 12
- Jul 2022 04:41:26 -0700 (PDT)
+        Tue, 12 Jul 2022 07:42:14 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B92B1950;
+        Tue, 12 Jul 2022 04:42:12 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 7D98661D1; Tue, 12 Jul 2022 07:42:11 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 7D98661D1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1657626131;
+        bh=0Y9FMfwftkPOnmB93rdMLCL6Et7+YdNAuaMYJwinhvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kBm59xFl775N5od/lv83C+mUJaaeT9KS7HdBL/ooWznKjnmJQ8EfQXjaYNk3j6blM
+         rvrUupSNZfR7AW6vsOUTGB96kAB/F+rjQkOqX3+yBOh3X+7JTqhkRB07VIuJMNPiN5
+         /WiWjT+lmG1GlMABqVdM0BS1K5gdtO6rH5qdECSc=
+Date:   Tue, 12 Jul 2022 07:42:11 -0400
+From:   Bruce Fields <bfields@fieldses.org>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     Jeff Layton <jlayton@redhat.com>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [GIT PULL] nfsd changes for 5.18
+Message-ID: <20220712114211.GA29976@fieldses.org>
+References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
+ <20220710124344.36dfd857@redhat.com>
+ <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
+ <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
+ <20220711181941.GC14184@fieldses.org>
+ <20220712102746.5404e88a@redhat.com>
 MIME-Version: 1.0
-References: <20220711081257.132901-1-maz@kernel.org> <CAMRc=Mf-FEKu_HrZvsL7+H2NTnME6mVV4AjMmZkEOn0Ch+4yMQ@mail.gmail.com>
- <6bb9c85796d248fdde3a6b060497b064@kernel.org>
-In-Reply-To: <6bb9c85796d248fdde3a6b060497b064@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 12 Jul 2022 13:41:15 +0200
-Message-ID: <CAMRc=MeVs_+moCz4So5nmjDmE791x=G3BmvuF06SrN9rKzQVvw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: thunderx: Don't directly include asm-generic/msi.h
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-team@android.com, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712102746.5404e88a@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,56 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 12:38 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On 2022-07-12 11:22, Bartosz Golaszewski wrote:
-> > On Mon, Jul 11, 2022 at 10:13 AM Marc Zyngier <maz@kernel.org> wrote:
-> >>
-> >> On architectures that require it, asm-generic/msi.h is already
-> >> dragged in by the higher level include files, and is commonly
-> >> refered to as 'asm/msi.h'.
-> >>
-> >> It is also architecture specific, and breaks compilation in
-> >> a pretty bad way now that linux/gpio/driver.h includes asm/msi.h
-> >> (which drags a conflicting but nonetheless correct version
-> >> of msi_alloc_info_t on x86).
-> >>
-> >> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> >> Link:
-> >> https://lore.kernel.org/r/20220711154252.4b88a601@canb.auug.org.au
-> >> Fixes: 91a29af413de ("gpio: Remove dynamic allocation from
-> >> populate_parent_alloc_arg()")
-> >> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> >> Cc: Linus Walleij <linus.walleij@linaro.org>
-> >> ---
-> >>  drivers/gpio/gpio-thunderx.c | 2 --
-> >>  1 file changed, 2 deletions(-)
-> >>
-> >> diff --git a/drivers/gpio/gpio-thunderx.c
-> >> b/drivers/gpio/gpio-thunderx.c
-> >> index e1dedbca0c85..cc62c6e64103 100644
-> >> --- a/drivers/gpio/gpio-thunderx.c
-> >> +++ b/drivers/gpio/gpio-thunderx.c
-> >> @@ -15,8 +15,6 @@
-> >>  #include <linux/module.h>
-> >>  #include <linux/pci.h>
-> >>  #include <linux/spinlock.h>
-> >> -#include <asm-generic/msi.h>
-> >> -
-> >>
-> >>  #define GPIO_RX_DAT    0x0
-> >>  #define GPIO_TX_SET    0x8
-> >> --
-> >> 2.34.1
-> >>
-> >
-> > Applied for fixes, thanks!
->
-> I'm not sure this is correct on its own without the original
-> patch mentioned in the Fixes: tag...
->
+On Tue, Jul 12, 2022 at 10:27:46AM +0200, Igor Mammedov wrote:
+> On Mon, 11 Jul 2022 14:19:41 -0400
+> Bruce Fields <bfields@fieldses.org> wrote:
+> 
+> > On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:
+> > > On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:  
+> > > > > This patch regressed clients that support TIME_CREATE attribute.
+> > > > > Starting with this patch client might think that server supports
+> > > > > TIME_CREATE and start sending this attribute in its requests.  
+> > > > 
+> > > > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
+> > > > attribute") does not include a change to nfsd4_decode_fattr4()
+> > > > that decodes the birth time attribute.
+> > > > 
+> > > > I don't immediately see another storage protocol stack in our
+> > > > kernel that supports a client setting the birth time, so NFSD
+> > > > might have to ignore the client-provided value.
+> > > >   
+> > > 
+> > > Cephfs allows this. My thinking at the time that I implemented it was
+> > > that it should be settable for backup purposes, but this was possibly a
+> > > mistake. On most filesystems, the btime seems to be equivalent to inode
+> > > creation time and is read-only.  
+> > 
+> > So supporting it as read-only seems reasonable.
+> > 
+> > Clearly, failing to decode the setattr attempt isn't the right way to do
+> > that.  I'm not sure what exactly it should be doing--some kind of
+> > permission error on any setattr containing TIME_CREATE?
+> 
+> erroring out on TIME_CREATE will break client that try to
+> set this attribute (legitimately). That's what by chance 
+> happening with current master (return error when TIME_CREATE
+> is present).
 
-Fair enough, in that case backing it out and:
+Hang on, now--our current server completely fails to decode any RPC
+including a SETATTR that attempts to set TIME_CREATE, which means it
+isn't able to return a useful error or tell the client which attribute
+was the problem.
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+It's not too surprising that that would cause a problem for a client.
+
+But failures to set supported attributes are completely normal, and if
+mounts are failing completely because of that, something is really very
+wrong with the client.
+
+Could you first retest with a server that's patched to at least decode
+the attribute correctly?  I suspect that may be enough.  If not, then
+the client in question has a more interesting problem on its hands.
+
+--b.

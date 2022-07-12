@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669E3572985
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22BE572987
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233781AbiGLWwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S233812AbiGLWx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiGLWwc (ORCPT
+        with ESMTP id S231996AbiGLWxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:52:32 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44BECAF0F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:52:31 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id s128so12334874oie.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:52:31 -0700 (PDT)
+        Tue, 12 Jul 2022 18:53:53 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123D324968
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:53:53 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 70so8714619pfx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=htaxsmbLkerK/WzSwDGnn60xtZCz4ZbFlZTWngCZmEo=;
-        b=PJvAiv/DmAKyikrJij5JE66g75DNqz4DHzNmHd/JdP5z0zk7MZqnCrSzDvKAn/vIHL
-         /D1NSeoCJVH6odh+Uj/o+s5cBf7HLPhJcKRVVRRPWXogWz+S1pndViMAUC1Zvw5ESZAP
-         a4uDkbnnM/6ytDcaYwsBLjwLxeO9Rih93Gr+RXKEKTPt1wqx/q0JXbde46/8Bpzm1NLV
-         78Bw7c0NvdCwXjhEsfKVunNKJ9ihm2+YXJqQWj5UFZzKq30VoqbtCJCBYX34Eh3+yLHx
-         tX5KytQJPfANtkoIvguy1zTKRUksrSmQqW7JiP3kjvDh4jRUVC8MV/aTs5+JNNpJOxnR
-         3ZKw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HWyKOm/lcyOl8O084SO+nkGRnokYrR/9NGWVH+hUDX4=;
+        b=h4tI4WQeJW4ZlggcTTxIV2rlia7CgUC+TlJS2Qn7HRmeUb6ioW4RQ+jAnFKRBDw3WD
+         Tny5mKocjRuYN89ZNEv2dLFBqcRyeBVd7dfE2a5a1QSMGSytubKQYebtGc9q5Ph/LOIg
+         bx76WIHxmOHQMtE0Aq0NmlLxSvSfWz2kvi+VTLmoo5CdsczV8sfwxM/EeD2e99t74vRS
+         nEz0MpWixLmPkVsEIDaIceoLD0Xkbot2rf5EHLW/pye25u7lADX2BeiCVUcpkhP3Y2wC
+         nt800T6U6m/S7IMp9MLELHxODFKkBFaeJmekb6Czx+L65wglqHqxneQ2p8FAr9VKEem5
+         k8iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=htaxsmbLkerK/WzSwDGnn60xtZCz4ZbFlZTWngCZmEo=;
-        b=tNqB8ntCy8z2nlZxLSSYxVZiikTz/qdbNZCbg6O3i6FH6XtbORlyLydyEo/yLGpwY9
-         BF9ATHMO1wpID/aQ9NKANnYUpjURcecGQgaEr22gpNpG9x2KJbof9MZTIGlLS0gr8JbW
-         12raqOlxhfiWu/z16OS9x75shDgRHS8nd5CNjk+j2jaP1+nbO6oQ9xzckdnpPU4j07RH
-         v3dOMOVuqewsMxi97n1/l5xa4pyDNPUBpW+Lor2SXZL9xVWYuupA+5XWFCi8SVRDNn98
-         D1Dpyq5EW6BF8AojSq6ZFru0v5RjjBvs36oSo7VRyEIJZM1IrFS9hh03UOwl7YuVfiaz
-         In2g==
-X-Gm-Message-State: AJIora8Nv7/AqYra2GSJRjs28tAMWyTfLbELFY+Fo4+wkWL4LtZlTJqC
-        4wWUdDuFqZ9bir5dgjvHLJu7cukTXieLiZp/Rw/Yew==
-X-Google-Smtp-Source: AGRyM1v5ZQYkfQFzh3Q+CTwzVWkW3rKZ4YQSPbjjNofA8KjFTYODA3mdjroafcnyMFZaGWXf9o9yfeVXNks1gmZ3kmU=
-X-Received: by 2002:a05:6808:1a10:b0:335:9e39:693b with SMTP id
- bk16-20020a0568081a1000b003359e39693bmr216623oib.165.1657666350921; Tue, 12
- Jul 2022 15:52:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HWyKOm/lcyOl8O084SO+nkGRnokYrR/9NGWVH+hUDX4=;
+        b=YB43FxX64aj4gugf7nzb9QM7rRAveofWdCvx/51AD1NLMQ3rTW1CXfeFKdvLXVBHh+
+         FzSQ/FfEpuVOASogGZOUNO1Oo7uv2Fg4fyszocM2dM123WuityPzTdrTeyil4X/sPs0u
+         ksEjMKL2zg0I6dsQ6UNe0siZ9qc1PtaxdlvfIqnxHqOcVszH6KIIxCBGNCQ6PYVEDT8y
+         Gw+hsq2Bjx00+RnaX3JTT98V5dQkkkFg9SW2boN5dnCW7O+SMj7kkavqW2nGxe2ES182
+         ZAIS04cghmxY3Hd9XpH2Yk5y1eo+xaLBPRJexcsTlNA9hHxFgfwN9ZYCLrj2S0bXHxML
+         yuzw==
+X-Gm-Message-State: AJIora+1Q4ORlUZuevUnAEP2JJi9og2DZqTWDUjAx+6rGZHmp2E4TrhO
+        BBCUNbAXUuRzRD9NIXAcmBwZ9ZFx2Z5Sew==
+X-Google-Smtp-Source: AGRyM1tUNzl8R21w5j4v3UwvX46aUMLMnpea0GKpu/4WmjWWElzK+uGAo21woDWYSl9jIPcvxCwQHA==
+X-Received: by 2002:a63:ea45:0:b0:415:fa9a:ae71 with SMTP id l5-20020a63ea45000000b00415fa9aae71mr437116pgk.285.1657666432444;
+        Tue, 12 Jul 2022 15:53:52 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id n30-20020aa7985e000000b00528d41a998csm7532065pfq.15.2022.07.12.15.53.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 15:53:52 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 22:53:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: x86/mmu: Shrink pte_list_desc size when KVM is
+ using TDP
+Message-ID: <Ys37fNK6uQ+YTcBh@google.com>
+References: <20220624232735.3090056-1-seanjc@google.com>
+ <20220624232735.3090056-4-seanjc@google.com>
+ <Ys33RtxeDz0egEM0@xz-m1.local>
 MIME-Version: 1.0
-References: <20220630083044.997474-1-yosryahmed@google.com>
- <20220701160947.e4902e5b0484ed084db5d41f@linux-foundation.org> <CAJD7tkZ7haRwRgE5723Sfqr4WzeoATy-3SUROgAZpinyxsMt2Q@mail.gmail.com>
-In-Reply-To: <CAJD7tkZ7haRwRgE5723Sfqr4WzeoATy-3SUROgAZpinyxsMt2Q@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 12 Jul 2022 15:51:54 -0700
-Message-ID: <CAJD7tkbvPX+jMHOF6TbhBYvX-3nZ+k4-7NEKX5cudBS7ZuSNdQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: vmpressure: don't count proactive reclaim in vmpressure
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys33RtxeDz0egEM0@xz-m1.local>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 1:19 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> On Fri, Jul 1, 2022 at 4:09 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Thu, 30 Jun 2022 08:30:44 +0000 Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > > vmpressure is used in cgroup v1 to notify userspace of reclaim
-> > > efficiency events, and is also used in both cgroup v1 and v2 as a signal
-> > > for memory pressure for networking, see
-> > > mem_cgroup_under_socket_pressure().
-> > >
-> > > Proactive reclaim intends to probe memcgs for cold memory, without
-> > > affecting their performance. Hence, reclaim caused by writing to
-> > > memory.reclaim should not trigger vmpressure.
-> > >
-> > > ...
-> > >
-> > > --- a/mm/memcontrol.c
-> > > +++ b/mm/memcontrol.c
-> > > @@ -2319,6 +2319,7 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
-> > >                                 gfp_t gfp_mask)
-> > >  {
-> > >       unsigned long nr_reclaimed = 0;
-> > > +     unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
-> > >
-> > >       do {
-> > >               unsigned long pflags;
-> > > @@ -2331,7 +2332,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
-> > >
-> > >               psi_memstall_enter(&pflags);
-> > >               nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
-> > > -                                                          gfp_mask, true);
-> > > +                                                          gfp_mask,
-> > > +                                                          reclaim_options);
-> >
-> > It's a bit irksome to create all these unneeded local variables.  Why
-> > not simply add the constant arg to the try_to_free_mem_cgroup_pages()
-> > call?
-> >
->
-> I was trying to improve readability by trying to have consistent
-> reclaim_options local variable passed into
-> try_to_free_mem_cgroup_pages(), and also to avoid nested line-wrapping
-> in cases where reclaim_options = MEMCG_RECLAIM_MAY_SWAP |
-> MEMCG_RECLAIM_PROACTIVE (like in memory_reclaim()). Since you found it
-> irksome, I obviously failed :)
->
-> Will remove the local variables where possible and send a v4. Thanks
-> for taking a look!
->
-> > >               psi_memstall_leave(&pflags);
-> > >       } while ((memcg = parent_mem_cgroup(memcg)) &&
-> > >                !mem_cgroup_is_root(memcg));
-> > > @@ -2576,7 +2578,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
-> > >       struct page_counter *counter;
-> > >       unsigned long nr_reclaimed;
-> > >       bool passed_oom = false;
-> > > -     bool may_swap = true;
-> > > +     unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
-> > >       bool drained = false;
-> > >       unsigned long pflags;
-> > >
-> > > @@ -2593,7 +2595,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
-> > >               mem_over_limit = mem_cgroup_from_counter(counter, memory);
-> > >       } else {
-> > >               mem_over_limit = mem_cgroup_from_counter(counter, memsw);
-> > > -             may_swap = false;
-> > > +             reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
-> >
-> >         reclaim_options = 0
-> >
-> > would be clearer?
-> >
->
-> I feel like the current code is more clear to the reader and
-> future-proof. If we can't swap, we want to remove the MAY_SWAP flag,
-> we don't want to remove all existing flags. In this case it's the
-> same, but maybe in the future it won't be and someone will miss
-> updating this line. Anyway, I don't have a strong opinion, let me know
-> what you prefer for v4.
+On Tue, Jul 12, 2022, Peter Xu wrote:
+> On Fri, Jun 24, 2022 at 11:27:34PM +0000, Sean Christopherson wrote:
+> > Dynamically size struct pte_list_desc's array of sptes based on whether
+> > or not KVM is using TDP.  Commit dc1cff969101 ("KVM: X86: MMU: Tune
+> > PTE_LIST_EXT to be bigger") bumped the number of entries in order to
+> > improve performance when using shadow paging, but its analysis that the
+> > larger size would not affect TDP was wrong.  Consuming pte_list_desc
+> > objects for nested TDP is indeed rare, but _allocating_ objects is not,
+> > as KVM allocates 40 objects for each per-vCPU cache.  Reducing the size
+> > from 128 bytes to 32 bytes reduces that per-vCPU cost from 5120 bytes to
+> > 1280, and also provides similar savings when eager page splitting for
+> > nested MMUs kicks in.
+> > 
+> > The per-vCPU overhead could be further reduced by using a custom, smaller
+> > capacity for the per-vCPU caches, but that's more of an "and" than
+> > an "or" change, e.g. it wouldn't help the eager page split use case.
+> > 
+> > Set the list size to the bare minimum without completely defeating the
+> > purpose of an array (and because pte_list_add() assumes the array is at
+> > least two entries deep).  A larger size, e.g. 4, would reduce the number
+> > of "allocations", but those "allocations" only become allocations in
+> > truth if a single vCPU depletes its cache to where a topup is needed,
+> > i.e. if a single vCPU "allocates" 30+ lists.  Conversely, those 2 extra
+> > entries consume 16 bytes * 40 * nr_vcpus in the caches the instant nested
+> > TDP is used.
+> > 
+> > In the unlikely event that performance of aliased gfns for nested TDP
+> > really is (or becomes) a priority for oddball workloads, KVM could add a
+> > knob to let the admin tune the array size for their environment.
+> > 
+> > Note, KVM also unnecessarily tops up the per-vCPU caches even when not
+> > using rmaps; this can also be addressed separately.
+> 
+> The only possible way of using pte_list_desc when tdp=1 is when the
+> hypervisor tries to map the same host pages with different GPAs?
 
+Yes, if by "host pages" you mean L1 GPAs.  It happens if the L1 VMM maps multiple
+L2 GFNs to a single L1 GFN, in which case KVM's nTDP shadow MMU needs to rmap
+that single L1 GFN to multiple L2 GFNs.
 
-Andrew, any preferences on this before I send v4?
+> And we don't really have a real use case of that, or.. do we?
+
+QEMU does it during boot/pre-boot when BIOS remaps the flash region into the lower
+1mb, i.e. aliases high GPAs to low GPAs.
+
+> Sorry to start with asking questions, it's just that if we know that
+> pte_list_desc is probably not gonna be used then could we simply skip the
+> cache layer as a whole?  IOW, we don't make the "array size of pte list
+> desc" dynamic, instead we make the whole "pte list desc cache layer"
+> dynamic.  Is it possible?
+
+Not really?  It's theoretically possible, but it'd require pre-checking that aren't
+aliases, and to do that race free we'd have to do it under mmu_lock, which means
+having to support bailing from the page fault to topup the cache.  The memory
+overhead for the cache isn't so significant that it's worth that level of complexity.

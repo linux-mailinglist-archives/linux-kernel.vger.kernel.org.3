@@ -2,160 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7F1571B18
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E04D571B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbiGLNXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S230336AbiGLNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbiGLNXk (ORCPT
+        with ESMTP id S229814AbiGLNYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:23:40 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF2021AF
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:23:38 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a39so9842702ljq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7NpE50xIJlThXUXFOjYSw2lGGIuqwPnQSpmI3jRYAy0=;
-        b=FyPS0gCOocU+YW6bG2aEfkbmbd6ZeNmQtaGPBKwFG66toMzzJF5mX1ANCO2q67C51A
-         6+hKJ1SVkXJTFlffOvZpjYkh35W2hueRb18Sx+rZtaxpNH8rPDGLUFzuu/hDJ3jJs80m
-         1JcdpoJqFMdmmg3SOUh6kU446SWQNKDdIBeNPiTqBXzm5F7qWl478y0XQs97FmG4vtIb
-         1fhreWvfVk73PV9quj9WYoMeNs3dJ6SX2hkBmC5LBdE00T2UHtk4MgHAyyzef5y5pm4g
-         XJlnBLIlJWCGM9nQxaP+kYwmQ5muCr4oasukTlI9n5SrQmIYnFG5n/1Sgw8h8yFERwuZ
-         70Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7NpE50xIJlThXUXFOjYSw2lGGIuqwPnQSpmI3jRYAy0=;
-        b=p38EcWqQl+/sGxTglfDXWFXAvKIFSd7YVkKAR0fTfkDeptzUAenRvfa1ARhmDE5QoC
-         g7F3fux0m8+y/zvNvrPvyuN5CmtEDvmzLXRq4SuSVevoxYPAM4li9PQvhKzN6cuszTAN
-         tQSNoAFRzfSvT6yteTmBCLgQqbFuE/iBDfSGRQA6jx4Obb4yxhxOpzqroLrgylw4/PpI
-         BuXaTlXtd+2gTIxAevNLb/OPgeo3cLbQrnMY0BOfI+jPcd7i8Bb0ZoCXtCpT8vD6dpX6
-         Ozr7lAbVXChYOcyRactEhXo9hWiudoUgfMKvpS5Z/Tink/N99N3cLTR3tY152AHrF1uW
-         2gRQ==
-X-Gm-Message-State: AJIora9hFmNGBw6TVvoTpydtpQTXCLGilVW4XUr7y6+BQB+yQbwocNiP
-        obgXXT213KOyKXLBTJnpcKZWXQ==
-X-Google-Smtp-Source: AGRyM1s5e/ZHQtmXKenogZYrIc+DpEwBLIre9ljOLnNr7JILkNKpTESrtc+pzI2VAATS1W9KZ/xK2g==
-X-Received: by 2002:a2e:95ca:0:b0:25d:4ac4:1387 with SMTP id y10-20020a2e95ca000000b0025d4ac41387mr12349270ljh.145.1657632216570;
-        Tue, 12 Jul 2022 06:23:36 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id s3-20020a05651c200300b0025d5eb5dde7sm2350063ljo.104.2022.07.12.06.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 06:23:36 -0700 (PDT)
-Message-ID: <b3cf4950-4b0a-23ff-2622-4d554cf041c2@linaro.org>
-Date:   Tue, 12 Jul 2022 15:23:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: display: panel: Add Novatek NT35596S
- panel bindings
-Content-Language: en-US
-To:     MollySophia <mollysophia379@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Tue, 12 Jul 2022 09:24:46 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2124161B07;
+        Tue, 12 Jul 2022 06:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=k7j5/4LH1uxSAoyJKqSGeIzJp+14qU8heufrbtbEFus=; b=CY6DHndYMpX154FZn7uRO3BKzL
+        f1o6IfzDXQpIrYvrfDh3EocKoGzzJGLcGuK/VGP+OWvGxl5JylzLcnMS9JyXLIDk2G3MFkmLxC1x3
+        jYiTnJ5bDjuozjBzTCAjUiQ6tOblbq5YQpi/h34EeYrVOdKC7j7W/u5whh0PddnYzNyE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oBFsR-00A3Jn-BL; Tue, 12 Jul 2022 15:24:35 +0200
+Date:   Tue, 12 Jul 2022 15:24:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Xu Liang <lxu@maxlinear.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220709140422.56851-1-mollysophia379@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220709140422.56851-1-mollysophia379@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH net-next 2/4] net: phy: mxl-gpy: cache PHY firmware
+ version
+Message-ID: <Ys12E0mVdc3rd7it@lunn.ch>
+References: <20220712131554.2737792-1-michael@walle.cc>
+ <20220712131554.2737792-3-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712131554.2737792-3-michael@walle.cc>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/07/2022 16:04, MollySophia wrote:
-> Add documentation for "novatek,nt35596s" panel.
-> 
-> Signed-off-by: MollySophia <mollysophia379@gmail.com>
-> ---
->  .../display/panel/novatek,nt35596s.yaml       | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> new file mode 100644
-> index 000000000000..f724f101a6fd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/novatek,nt35596s.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/novatek,nt35596s.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Novatek NT35596S based DSI display Panels
-> +
-> +maintainers:
-> +  - Molly Sophia <mollysophia379@gmail.com>
-> +
-> +description: |
-> +  The nt35596s IC from Novatek is a generic DSI Panel IC used to drive dsi
-> +  panels.
-> +  Right now, support is added only for a JDI FHD+ LCD display panel with a
-> +  resolution of 1080x2160. It is a video mode DSI panel.
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - jdi,fhd-nt35596s
-> +      - const: novatek,nt35596s
+> +	priv->fw_type = FIELD_GET(PHY_FWV_TYPE_MASK, fw_version);
+> +	priv->fw_minor = FIELD_GET(PHY_FWV_MINOR_MASK, fw_version);
+>  
+>  	ret = gpy_hwmon_register(phydev);
+>  	if (ret)
+>  		return ret;
+>  
+> +	/* Show GPY PHY FW version in dmesg */
+>  	phydev_info(phydev, "Firmware Version: 0x%04X (%s)\n", fw_version,
+>  		    (fw_version & PHY_FWV_REL_MASK) ? "release" : "test");
 
-You need to document the novatek and idi vendor prefix in vendor-prefixes.
+Maybe use fw_type and fw_minor. It makes the patch a bit bigger, but
+makes the code more consistent.
 
-> +    description: This indicates the panel manufacturer of the panel that is
-> +      in turn using the NT35596S panel driver. This compatible string
-> +      determines how the NT35596S panel driver is configured for the indicated
-> +      panel. The novatek,nt35596s compatible shall always be provided as a fallback.
-
-Drop description, it does not make sense and last sentence duplicates
-the schema.
-
-> +
-> +  vddi0-supply:
-> +    description: regulator that provides the supply voltage
-> +      Power IC supply
-
-"regulator that provides the supply voltage" is redundant, drop it.
-Instead what is it supplying?
-
-> +
-> +  vddpos-supply:
-> +    description: positive boost supply regulator
-> +
-> +  vddneg-supply:
-> +    description: negative boost supply regulator
-> +
-> +  reg: true
-
-Any reg is accepted or is there only one reg? Does it come from other
-schema?
-
-
-
-Best regards,
-Krzysztof
+      Andrew

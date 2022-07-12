@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C6357177A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A57557177D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiGLKle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S232133AbiGLKmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiGLKlb (ORCPT
+        with ESMTP id S229889AbiGLKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:41:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146967CB61;
-        Tue, 12 Jul 2022 03:41:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 12 Jul 2022 06:42:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883B17CB61;
+        Tue, 12 Jul 2022 03:42:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C277266018EA;
-        Tue, 12 Jul 2022 11:41:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657622489;
-        bh=aOj+sQx7dj4knkAMQNH+ntgBvPv44y7F0cbpMrBGyOY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Twxvmviw03FzYyIwPUIjYmNGsgHcFzfCylKPNIhAw8llGo2yt81ZhUL4y4uXfXK/v
-         7F5hSOQrEkVvtNO8pV3d0GPii9cMDONdLIzhlAlQz6/IeFgzNgAbIjlPYYsKNI++NK
-         hvdpMTatwHDSnQ7xmlPd25Rw9yBnVzpyTI/j+3xe485hJzwzepGW45nxha25j20jv8
-         mBhOcdC881hmSsFdiUeQh+xq9clXltl6aMhMP0+11MX+2terDAL5K2t6SqMQ36G8wH
-         MHbS4TRHvDWu5sgFS80STUVEtN28Ndz6c/zU9M5ebE+wKoWL7e5iXzkF79WzWc5xNL
-         L3qovPPeDUSbA==
-Message-ID: <79a79313-00e0-632f-f238-95686362675e@collabora.com>
-Date:   Tue, 12 Jul 2022 12:41:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] clk: mediatek: Don't check HW status for mt8192/5's
- imp_iic_wrap clocks
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>
-Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ran Jianping <ran.jianping@zte.com.cn>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220711205733.203963-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220711205733.203963-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21E0361844;
+        Tue, 12 Jul 2022 10:42:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BCAC3411C;
+        Tue, 12 Jul 2022 10:42:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657622554;
+        bh=bym/CE9Aj5kn+/hAjLYdJF+4twPaMd7GMf1jkhpHwrg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GlTeeEWJYhJKaolay+JIdInK+gzOnXlV/OTTielBgCBE9hulI+PBn86NdOLbvkuOA
+         yMjrA84OYGKr1S+LYFZd33krQ85pD2ywVQW3xW/8yBTszd84q165vs1jRRi/Sq5L8s
+         Ee2eIaR7xomm0PBXcFg/t9TuZS/JTncdwV+7dB5CGATj+EqnOeFFzyPc0OUZBZop3K
+         xF3zUzs/WEPNGys6174DCuDJxyFpoxlladDmdvBl9mj8JvcEBffl0R6dLLo3r3Hm69
+         BkvCjuteqF3Ud1KMc0q1FyZPLorfOT7q3/ef+RK40XY80W1U2RZHfJfJl1n2eM6rtg
+         /zhWO55RK3Ofg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oBDLc-006uBC-E6;
+        Tue, 12 Jul 2022 11:42:32 +0100
+Date:   Tue, 12 Jul 2022 11:42:32 +0100
+Message-ID: <87edyq1ujr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+In-Reply-To: <20220624195112.894916-1-robimarko@gmail.com>
+References: <20220624195112.894916-1-robimarko@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robimarko@gmail.com, bjorn.andersson@linaro.org, agross@kernel.org, linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/07/22 22:57, Nícolas F. R. A. Prado ha scritto:
-> The imp_iic_wrap clocks on mt8192/mt8195 require that the i2c_sel parent
-> clock be enabled before their hardware status can be checked. Since this
-> wasn't taken into account, reading from the clk_summary debugfs file
-> would cause the system to completely freeze.
+On Fri, 24 Jun 2022 20:51:12 +0100,
+Robert Marko <robimarko@gmail.com> wrote:
 > 
-> Assuming that this clock is managed only by the kernel, and not by any
-> firmware, simply drop the is_enabled() optional callback and instead
-> rely on the enable count for the imp_iic_wrap clocks.
+> Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> immutable") added a warning to indicate if the gpiolib is altering the
+> internals of irqchips.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-For both MT8192 and MT8195:
-
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+> Following this change the following warning is now observed for the SPMI
+> PMIC pinctrl driver:
+> gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+> 
+> Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
+>  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
 > 
->   drivers/clk/mediatek/clk-gate.c                | 6 ++++++
->   drivers/clk/mediatek/clk-gate.h                | 1 +
->   drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c | 2 +-
->   drivers/clk/mediatek/clk-mt8195-imp_iic_wrap.c | 2 +-
->   4 files changed, 9 insertions(+), 2 deletions(-)
-> 
+> diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> index c3255b0bece4..406ee0933d0b 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
+> @@ -171,7 +171,6 @@ struct pmic_gpio_state {
+>  	struct regmap	*map;
+>  	struct pinctrl_dev *ctrl;
+>  	struct gpio_chip chip;
+> -	struct irq_chip irq;
+>  	u8 usid;
+>  	u8 pid_base;
+>  };
+> @@ -988,6 +987,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
+>  	return fwspec;
+>  }
+>  
+> +static const struct irq_chip spmi_gpio_irq_chip = {
+> +	.name		= "spmi-gpio",
+> +	.irq_ack	= irq_chip_ack_parent,
+> +	.irq_mask	= irq_chip_mask_parent,
+> +	.irq_unmask	= irq_chip_unmask_parent,
+
+No, this is wrong. Please look at the documentation to see how you
+must now directly call into the gpiolib helpers for these two
+callbacks.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

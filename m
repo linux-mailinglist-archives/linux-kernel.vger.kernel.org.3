@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723D3572550
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C388D572494
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbiGLTLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S235435AbiGLTFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiGLTKD (ORCPT
+        with ESMTP id S235487AbiGLTEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:10:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B009E5DD5;
-        Tue, 12 Jul 2022 11:52:41 -0700 (PDT)
+        Tue, 12 Jul 2022 15:04:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BABC1FD8;
+        Tue, 12 Jul 2022 11:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE0E2B81B96;
-        Tue, 12 Jul 2022 18:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D1FC3411C;
-        Tue, 12 Jul 2022 18:52:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E39EB81BBD;
+        Tue, 12 Jul 2022 18:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D2AC3411C;
+        Tue, 12 Jul 2022 18:50:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651959;
-        bh=d/Tg3KQuQEUvLOGH2fyfA6zC/xIt83TIzA+O8zUlyjc=;
+        s=korg; t=1657651803;
+        bh=wPsbQJ1Esnk4q8K/3ZlNTMTr2q0GgDEreGwpsNW0F9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dSYVNsnPXI4UUjqH//aC2H9Rb+xdmBmI55natWCLUt7EpQtqJVjvB0w+uCyp+7Xxy
-         c40UT6SCE3wB3V1vxLTApizn898BgF03ZFz7K0MBdz8Bv055thzPnsjj3lFC9dEaut
-         Jlz4SkI4j7y88ctdNbfXnULySBOFUj/L8dCm71L0=
+        b=2mpMbDJ5IxUMoD3rsPHq+hFu+niulN56wLEaB6URISyuDn0nGEKT4DH3aO0FRaZtz
+         B0vAtFtbkTnrHYzZaQQZbaHDUbMSMdFXBxUprov0lJnGiJOd8ku8LAiXQN6bFj4MDV
+         C2syQ/Qfht/afruCU8eHxMTCRFDFNsqIG+R68QXo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 35/61] x86/xen: Rename SYS* entry points
+Subject: [PATCH 5.15 62/78] x86/speculation: Use cached host SPEC_CTRL value for guest entry/exit
 Date:   Tue, 12 Jul 2022 20:39:32 +0200
-Message-Id: <20220712183238.379472213@linuxfoundation.org>
+Message-Id: <20220712183241.390562663@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,134 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-commit b75b7f8ef1148be1b9321ffc2f6c19238904b438 upstream.
+commit bbb69e8bee1bd882784947095ffb2bfe0f7c9470 upstream.
 
-Native SYS{CALL,ENTER} entry points are called
-entry_SYS{CALL,ENTER}_{64,compat}, make sure the Xen versions are
-named consistently.
+There's no need to recalculate the host value for every entry/exit.
+Just use the cached value in spec_ctrl_current().
 
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/xen/setup.c   |    6 +++---
- arch/x86/xen/xen-asm.S |   20 ++++++++++----------
- arch/x86/xen/xen-ops.h |    6 +++---
- 3 files changed, 16 insertions(+), 16 deletions(-)
+ arch/x86/kernel/cpu/bugs.c |   12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
---- a/arch/x86/xen/setup.c
-+++ b/arch/x86/xen/setup.c
-@@ -918,7 +918,7 @@ void xen_enable_sysenter(void)
- 	if (!boot_cpu_has(sysenter_feature))
- 		return;
- 
--	ret = register_callback(CALLBACKTYPE_sysenter, xen_sysenter_target);
-+	ret = register_callback(CALLBACKTYPE_sysenter, xen_entry_SYSENTER_compat);
- 	if(ret != 0)
- 		setup_clear_cpu_cap(sysenter_feature);
- }
-@@ -927,7 +927,7 @@ void xen_enable_syscall(void)
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -208,7 +208,7 @@ void __init check_bugs(void)
+ void
+ x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool setguest)
  {
- 	int ret;
+-	u64 msrval, guestval, hostval = x86_spec_ctrl_base;
++	u64 msrval, guestval, hostval = spec_ctrl_current();
+ 	struct thread_info *ti = current_thread_info();
  
--	ret = register_callback(CALLBACKTYPE_syscall, xen_syscall_target);
-+	ret = register_callback(CALLBACKTYPE_syscall, xen_entry_SYSCALL_64);
- 	if (ret != 0) {
- 		printk(KERN_ERR "Failed to set syscall callback: %d\n", ret);
- 		/* Pretty fatal; 64-bit userspace has no other
-@@ -936,7 +936,7 @@ void xen_enable_syscall(void)
+ 	/* Is MSR_SPEC_CTRL implemented ? */
+@@ -221,15 +221,6 @@ x86_virt_spec_ctrl(u64 guest_spec_ctrl,
+ 		guestval = hostval & ~x86_spec_ctrl_mask;
+ 		guestval |= guest_spec_ctrl & x86_spec_ctrl_mask;
  
- 	if (boot_cpu_has(X86_FEATURE_SYSCALL32)) {
- 		ret = register_callback(CALLBACKTYPE_syscall32,
--					xen_syscall32_target);
-+					xen_entry_SYSCALL_compat);
- 		if (ret != 0)
- 			setup_clear_cpu_cap(X86_FEATURE_SYSCALL32);
+-		/* SSBD controlled in MSR_SPEC_CTRL */
+-		if (static_cpu_has(X86_FEATURE_SPEC_CTRL_SSBD) ||
+-		    static_cpu_has(X86_FEATURE_AMD_SSBD))
+-			hostval |= ssbd_tif_to_spec_ctrl(ti->flags);
+-
+-		/* Conditional STIBP enabled? */
+-		if (static_branch_unlikely(&switch_to_cond_stibp))
+-			hostval |= stibp_tif_to_spec_ctrl(ti->flags);
+-
+ 		if (hostval != guestval) {
+ 			msrval = setguest ? guestval : hostval;
+ 			wrmsrl(MSR_IA32_SPEC_CTRL, msrval);
+@@ -1390,7 +1381,6 @@ static void __init spectre_v2_select_mit
+ 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+ 
+ 	if (spectre_v2_in_ibrs_mode(mode)) {
+-		/* Force it so VMEXIT will restore correctly */
+ 		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
+ 		write_spec_ctrl_current(x86_spec_ctrl_base, true);
  	}
---- a/arch/x86/xen/xen-asm.S
-+++ b/arch/x86/xen/xen-asm.S
-@@ -234,7 +234,7 @@ SYM_CODE_END(xenpv_restore_regs_and_retu
-  */
- 
- /* Normal 64-bit system call target */
--SYM_CODE_START(xen_syscall_target)
-+SYM_CODE_START(xen_entry_SYSCALL_64)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	popq %rcx
-@@ -249,12 +249,12 @@ SYM_CODE_START(xen_syscall_target)
- 	movq $__USER_CS, 1*8(%rsp)
- 
- 	jmp entry_SYSCALL_64_after_hwframe
--SYM_CODE_END(xen_syscall_target)
-+SYM_CODE_END(xen_entry_SYSCALL_64)
- 
- #ifdef CONFIG_IA32_EMULATION
- 
- /* 32-bit compat syscall target */
--SYM_CODE_START(xen_syscall32_target)
-+SYM_CODE_START(xen_entry_SYSCALL_compat)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	popq %rcx
-@@ -269,10 +269,10 @@ SYM_CODE_START(xen_syscall32_target)
- 	movq $__USER32_CS, 1*8(%rsp)
- 
- 	jmp entry_SYSCALL_compat_after_hwframe
--SYM_CODE_END(xen_syscall32_target)
-+SYM_CODE_END(xen_entry_SYSCALL_compat)
- 
- /* 32-bit compat sysenter target */
--SYM_CODE_START(xen_sysenter_target)
-+SYM_CODE_START(xen_entry_SYSENTER_compat)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	/*
-@@ -291,19 +291,19 @@ SYM_CODE_START(xen_sysenter_target)
- 	movq $__USER32_CS, 1*8(%rsp)
- 
- 	jmp entry_SYSENTER_compat_after_hwframe
--SYM_CODE_END(xen_sysenter_target)
-+SYM_CODE_END(xen_entry_SYSENTER_compat)
- 
- #else /* !CONFIG_IA32_EMULATION */
- 
--SYM_CODE_START(xen_syscall32_target)
--SYM_CODE_START(xen_sysenter_target)
-+SYM_CODE_START(xen_entry_SYSCALL_compat)
-+SYM_CODE_START(xen_entry_SYSENTER_compat)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	lea 16(%rsp), %rsp	/* strip %rcx, %r11 */
- 	mov $-ENOSYS, %rax
- 	pushq $0
- 	jmp hypercall_iret
--SYM_CODE_END(xen_sysenter_target)
--SYM_CODE_END(xen_syscall32_target)
-+SYM_CODE_END(xen_entry_SYSENTER_compat)
-+SYM_CODE_END(xen_entry_SYSCALL_compat)
- 
- #endif	/* CONFIG_IA32_EMULATION */
---- a/arch/x86/xen/xen-ops.h
-+++ b/arch/x86/xen/xen-ops.h
-@@ -10,10 +10,10 @@
- /* These are code, but not functions.  Defined in entry.S */
- extern const char xen_failsafe_callback[];
- 
--void xen_sysenter_target(void);
-+void xen_entry_SYSENTER_compat(void);
- #ifdef CONFIG_X86_64
--void xen_syscall_target(void);
--void xen_syscall32_target(void);
-+void xen_entry_SYSCALL_64(void);
-+void xen_entry_SYSCALL_compat(void);
- #endif
- 
- extern void *xen_initial_gdt;
 
 

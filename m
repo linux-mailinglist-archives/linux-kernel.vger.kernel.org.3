@@ -2,131 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4178B5716E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7235F5716E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiGLKMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S232881AbiGLKMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiGLKMV (ORCPT
+        with ESMTP id S232927AbiGLKMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:12:21 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3AAC068
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:11:56 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 9-20020a1c0209000000b003a2dfdebe47so3663643wmc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:11:56 -0700 (PDT)
+        Tue, 12 Jul 2022 06:12:23 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FF5AB7E9;
+        Tue, 12 Jul 2022 03:12:10 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id a15so7224102pjs.0;
+        Tue, 12 Jul 2022 03:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=i2XYOzCUtA8Ta1rr8OzoyXDjrIADtZBW93UGTbpRQTs=;
-        b=HuqOXEtE1Aefa8vkyqcUnK8kCIMt6cgP0dnwVak+AjhJ/OJs5cVFYIaPCgtc8AybKr
-         PM1mAszWA+rKfgVfOqv32nx5ok8Q978lXTCZlK3ze46hzvc4YYD60jBe/HLJfP00kLrX
-         bNCjxDultJYZJznYedjsjFfy0/mq/fejVM3zypto8nxiwJZ+IBvAcxf8cpBARlRSuNOA
-         lpK5F/aGSKF9RpEaZSXaWZVDH2vIfnBMoIeaMVJPDOqjwZCBOcPb+IHx7t+E9kzv/q6L
-         ojoJcJ/O5CjA++wuWCKvUpbgaN6WGsuwQgpqQkvkPFC3Qr0ueEfeV/uQw1y/AUvNAdPS
-         DkHA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GJHAyI+gOAQT06aTy31YV3rQsLoStm19R84REvIUiSA=;
+        b=hGm5QhWIfhqSgIu4L/4nG/qe9573VSxcSvCReID5xXhW4Obx0xqfgb+k1Ibbjfdh4r
+         A8S7jP1rKIZvbvSt2lDHu3ebYuIbkfQkm778qgwHX8Lb49mTPMAp/HNeV0iG3Q2SEM0r
+         J6ePuwwbD2DEXLcKjzMYU9qhHnT6hsGo+p3ml9UZusQ+fRf/pBZwbLBnJT8/BG1FtaFV
+         IsNc3B0uErQJER4jBWy08+OHApNBiqrDIkJvy3OEOhXqvmAW7sCYys77sT0vwG7HIjlW
+         QvGZVnlCILu1bYG1xQ9iIFYgv/HESW8eODrBYSoVBrZ5XGJyZQWkZcmZoLr3DpdWLJXy
+         fnGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i2XYOzCUtA8Ta1rr8OzoyXDjrIADtZBW93UGTbpRQTs=;
-        b=A2xnLXZyqg3J9WOL5mrRu4vnWlFYecxlo817xcDk0mru4ftNhUdsQdV6bGh4D2jvAD
-         JVYGTW7QSOuPZm8BasL0N0aOnqq+AM6rp0ZcbkB69ZXl3lbmN9siePv84wR1jolvCzap
-         oVFpjeD/qrweKnI06VLpaNeL/48PeSoTLl6NANFfOX5vGr/u1+vccZGcFMM3KdrFdqm+
-         ihqkaEWu4yNTUF5j5fJsRS2bd+UHqsk9jYl1aq5Ot13l+/31Fw1Wd4Lt3LOY2i9tco0h
-         GiFZkEPr0t3lEXq4sDWdFXIhonTNH4AwCBfTYEHW/+sztS47nx9RSm2DnP2ArtPAh2bY
-         WUuw==
-X-Gm-Message-State: AJIora9NN6+bKDcgN+GMVVIcHFQd+Zc0m/nqf8YPhpB2hI+EAb2YmjoX
-        qao5ygEzCBPagVscPxIEkLsHKw==
-X-Google-Smtp-Source: AGRyM1vDQohmXGbbjMuTB8tna0YftEx/WQsqRgPk4KBe+/NA1T7pca7ljNWjq5QzQB47mumtb7HS6g==
-X-Received: by 2002:a05:600c:3845:b0:3a2:c04d:5ff9 with SMTP id s5-20020a05600c384500b003a2c04d5ff9mr2997243wmr.74.1657620715194;
-        Tue, 12 Jul 2022 03:11:55 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id b2-20020adfde02000000b0021d9591c64fsm7895138wrm.33.2022.07.12.03.11.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 03:11:54 -0700 (PDT)
-Message-ID: <e1dd40cd-647c-10b4-53f9-a313e509474e@isovalent.com>
-Date:   Tue, 12 Jul 2022 11:11:53 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GJHAyI+gOAQT06aTy31YV3rQsLoStm19R84REvIUiSA=;
+        b=SswMZvM2xW5t4EZxui+HewmcupJcUyKnPUH14t4/hDkgODp66T8Ru/ncwNE4Z2yp1Y
+         LDHbCzpV9S0BbO0dSphxz8fQAJXmJY4uPvZlnfE/tGV1cyzYoLA1F5uMmbIAX2eW67kH
+         qMak1UjHV0JbKzP0E5mzbS4IPARjZamt9K87dgm2IoPdZQfpcYgCAoXEqV6v9tzpc7VH
+         ar0sXzJ4HUTTILr2Jrxs0fQPhcHzWPv6kFai6empOxuWxUi8DWNEtrbgVFrZiVVfcnzy
+         BzBCJ6H9gJiT7LAV7aB5u101PragNdKLSHvUBJU/kvHn1x2BjnIJ48uM/IPPbrdvmbbJ
+         djgw==
+X-Gm-Message-State: AJIora+uqNMvG5cczuT0uoZsBhYXdUfA7RpDBgJz3PqsLU2oPmjQ8Jo1
+        XzztnrZFej/b3DGkO1XRie4=
+X-Google-Smtp-Source: AGRyM1vh6jaX3SVXXaQiNPM2pKUXZq8Pl3gen4M8EErg6Z1PcTQFVpmVsEqzlMkUvKjQM1qarKHgIg==
+X-Received: by 2002:a17:902:b093:b0:16b:f20f:ee1c with SMTP id p19-20020a170902b09300b0016bf20fee1cmr22615952plr.37.1657620729905;
+        Tue, 12 Jul 2022 03:12:09 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
+        by smtp.gmail.com with ESMTPSA id e16-20020aa798d0000000b005289bfcee91sm6438896pfm.59.2022.07.12.03.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 03:12:09 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0C6FC1038FF; Tue, 12 Jul 2022 17:12:05 +0700 (WIB)
+Date:   Tue, 12 Jul 2022 17:12:05 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/226] 5.15.54-rc3 review
+Message-ID: <Ys1I9dL88ocqoluR@debian.me>
+References: <20220712071513.420542604@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH bpf-next 1/3] samples: bpf: Fix cross-compiling error by
- using bootstrap bpftool
-Content-Language: en-GB
-To:     Pu Lehui <pulehui@huawei.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220712030813.865410-1-pulehui@huawei.com>
- <20220712030813.865410-2-pulehui@huawei.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20220712030813.865410-2-pulehui@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712071513.420542604@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 04:08, Pu Lehui wrote:
-> Currently, when cross compiling bpf samples, the host side cannot
-> use arch-specific bpftool to generate vmlinux.h or skeleton. Since
-> samples/bpf use bpftool for vmlinux.h, skeleton, and static linking
-> only, we can use lightweight bootstrap version of bpftool to handle
-> these, and it's always host-native.
+On Tue, Jul 12, 2022 at 09:16:20AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.54 release.
+> There are 226 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  samples/bpf/Makefile | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 5002a5b9a7da..57012b8259d2 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -282,12 +282,18 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
->  
->  BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
->  BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
-> -BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
-> +BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
-> +ifeq ($(CROSS_COMPILE),)
->  $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
-> -	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
-> -		OUTPUT=$(BPFTOOL_OUTPUT)/ \
-> -		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
-> -		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
-> +	$(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../		\
-> +		OUTPUT=$(BPFTOOL_OUTPUT)/ 					\
-> +		LIBBPF_BOOTSTRAP_OUTPUT=$(LIBBPF_OUTPUT)/ 			\
-> +		LIBBPF_BOOTSTRAP_DESTDIR=$(LIBBPF_DESTDIR)/ bootstrap
-> +else
-> +$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
 
-Thanks for this! Just trying to fully understand the details here. When
-cross-compiling, you leave aside the dependency on target-arch-libbpf,
-so that "make -C <bpftool-dir> bootstrap" rebuilds its own host-arch
-libbpf, is this correct?
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-> +	$(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ 		\
-> +		OUTPUT=$(BPFTOOL_OUTPUT)/ bootstrap
-> +endif
->  
->  $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
->  	$(call msg,MKDIR,$@)
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+-- 
+An old man doll... just what I always wanted! - Clara

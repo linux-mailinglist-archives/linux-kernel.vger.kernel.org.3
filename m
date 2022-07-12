@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9648A570F72
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA571570F76
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbiGLB1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S231913AbiGLB2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiGLB1R (ORCPT
+        with ESMTP id S230336AbiGLB2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:27:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFF878B493
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657589236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dJoHVsOF3Ns0hbojCVbv8KvE/Pi32b6Sl12+Q0qK9b4=;
-        b=YVZ7OxEFLYM0AncmVE9Q1nXpeKg9h1hdcnhQs2csKn+Z26uwRCjUsqUqRCrGOkc5jpEf1o
-        T9vpHBKaJinSKQl0QqKJDzzjxYqQil3eBIVbt0/QzjMMKhBcqTkLlkgyV3ti9lE8Ezo/iX
-        4Na7ImOxmI36dySM+ZCzJft0HjqoXjg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-20-d6BUpj6FPxK4lPKnQ7Ting-1; Mon, 11 Jul 2022 21:27:14 -0400
-X-MC-Unique: d6BUpj6FPxK4lPKnQ7Ting-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F2AF811E81;
-        Tue, 12 Jul 2022 01:27:14 +0000 (UTC)
-Received: from localhost (ovpn-12-173.pek2.redhat.com [10.72.12.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AF9340D282E;
-        Tue, 12 Jul 2022 01:27:13 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 09:27:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v4] proc/vmcore: fix potential memory leak in
- vmcore_init()
-Message-ID: <YszN7VTPBMVniIz9@MiWiFi-R3L-srv>
-References: <20220712010055.2328111-1-niejianglei2021@163.com>
+        Mon, 11 Jul 2022 21:28:34 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA69A6157
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:28:31 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id a15so6327316pjs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c2vyjIbciyVquzlDajX3qmEOd67pfFD4fFZaxPOLy2U=;
+        b=R0rW8hG8pcYKfOtv7wArgQWO4c5J5gecTD+iAR430JXAX1rRfxks45tN1PZOo1Lp8A
+         JHvlOivBtB+rUjQ2qULebxMkb3MyOr480SWKomBcypBQ7JjjHMpLl0shHWomPo/xwS58
+         AfNQ8E9RhYkIwS5JkRAlMgppwClic61i8pUKX+ZK7qNZPQqJWR1DpZz62ZvTmstIQfRR
+         1jTgUyNUZLw7eGAL36cwqNWELwLO/w2TBQhV6aIvvZrEqdsVys0rulPO0TRpdr0D4/lW
+         Tne3R6dIhYbGuioSNhq9rJUlkC9l4m0do3gQe519qzyHXHKQgWJRq32fJwVIYPgIPF8q
+         HvgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c2vyjIbciyVquzlDajX3qmEOd67pfFD4fFZaxPOLy2U=;
+        b=nBB106Qs/MjM/1HjM3J+a1YzXXaE1yPQSk1iH2srt2cGF+OWexOxAVJVmomABKdN73
+         tGyXBIL08LinL61EEpDIL2dL6oaD/qV8/SK5xAmhuk68Aksao8Jr0kWdnhv8WNL7td9a
+         6WnPz96ACG8Cw7+H3cuy1pAHJevN9w6eKly196PM5iSpABTcEK8uobQGdtrRyu/RrtbU
+         GYcCOEVMEaSlT5gF2ZAy8Qnvf+pZA/125+ZWoZv4E4I6o6nJ8vRppyS+5u62q8G+4tKI
+         j1ps/hy6uTJgLci34IXdDfQb9lsE6z5KmI5olrQkz9TVqqcFL8GK2hbqz1sU54yxaCgN
+         53XQ==
+X-Gm-Message-State: AJIora/LGQEhBve4I89DuCUu5a9jxz2B2L2Nhb3awTmeNsV/pc1j9BN9
+        nEZ8dCE87NK/8Tdo8WcRZmm7zg==
+X-Google-Smtp-Source: AGRyM1u1FwY6xJU0oOJI9mtvV2RdU6Dl8F3dLvVLbbm+PSf6Nv5lh52eBhMg0gMvhMbko9Cx4tSdBw==
+X-Received: by 2002:a17:902:6901:b0:168:9bb4:7adb with SMTP id j1-20020a170902690100b001689bb47adbmr21486583plk.147.1657589311099;
+        Mon, 11 Jul 2022 18:28:31 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id z62-20020a17090a6d4400b001ef8dd1315esm7613045pjj.27.2022.07.11.18.28.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 18:28:30 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 09:28:23 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] interconnect: qcom: icc-rpm: Set bandwidth and
+ clock for bucket values
+Message-ID: <20220712012823.GA10379@leoy-ThinkPad-X240s>
+References: <20220711115240.806236-1-leo.yan@linaro.org>
+ <20220711115240.806236-6-leo.yan@linaro.org>
+ <480d38db-3114-29d1-8b81-b35a07623060@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712010055.2328111-1-niejianglei2021@163.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <480d38db-3114-29d1-8b81-b35a07623060@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,61 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/22 at 09:00am, Jianglei Nie wrote:
-> elfcorehdr_alloc() allocates a memory chunk for elfcorehdr_addr with
-> kzalloc(). If is_vmcore_usable() returns false, elfcorehdr_addr is a
-> predefined value. If parse_crash_elf_headers() occurs some error and
-                                                 ^ s/occurs/gets/
-                                           occur is intransitive verb
-> returns a negetive value, the elfcorehdr_addr should be released with
-> elfcorehdr_free().
+Hi Georgi,
+
+On Mon, Jul 11, 2022 at 04:53:47PM +0300, Georgi Djakov wrote:
+
+[...]
+
+> >   static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+> >   {
+> >   	struct qcom_icc_provider *qp;
+> >   	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+> >   	struct icc_provider *provider;
+> > -	struct icc_node *n;
+> >   	u64 sum_bw;
+> > -	u64 max_peak_bw;
+> >   	u64 rate;
+> > -	u32 agg_avg = 0;
+> > -	u32 agg_peak = 0;
+> > +	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
+> > +	u64 max_agg_avg, max_agg_peak;
 > 
-> fix by calling elfcorehdr_free() when parse_crash_elf_headers()
-> fails.
+> Now max_agg_peak is unused?
 
-  Fix it by calling elfcorehdr_free() when parse_crash_elf_headers()
-fails.
+Sorry for this mistake.  Will send new patch series soon.
 
-Other than above log concerns, you can add my ack when repost:
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
-Note:
-- Please also add change history so that people know what's happening
-  during reviewing. For this one, you can skip it.
-- remember adding all people involved to CC.
-
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  fs/proc/vmcore.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> index 4eaeb645e759..390515c249dd 100644
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -1569,15 +1569,16 @@ static int __init vmcore_init(void)
->  	rc = parse_crash_elf_headers();
->  	if (rc) {
->  		pr_warn("Kdump: vmcore not initialized\n");
-> -		return rc;
-> +		goto fail;
->  	}
-> -	elfcorehdr_free(elfcorehdr_addr);
->  	elfcorehdr_addr = ELFCORE_ADDR_ERR;
->  
->  	proc_vmcore = proc_create("vmcore", S_IRUSR, NULL, &vmcore_proc_ops);
->  	if (proc_vmcore)
->  		proc_vmcore->size = vmcore_size;
-> -	return 0;
-> +fail:
-> +	elfcorehdr_free(elfcorehdr_addr);
-> +	return rc;
->  }
->  fs_initcall(vmcore_init);
->  
-> -- 
-> 2.25.1
-> 
-
+Thanks,
+Leo

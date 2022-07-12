@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05E1571FF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2805E571FF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiGLPxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
+        id S233329AbiGLPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiGLPxH (ORCPT
+        with ESMTP id S233271AbiGLPxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:53:07 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7618ABA143
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:53:06 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so5066627wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zsJYeJMzYlfchoyhqcYMlXXcIufBbaJhfBIHb8zwwSQ=;
-        b=gw/KFQdJ9JRUU7g6lqNSyqfre+WjyR6C5Q8qOW1vetF8YDFm+o9PnNOj4OiYiW+4jM
-         21ozEHT0wjlMx1wqfYwIrj+cDyDvYKW+jLGW0Vp1qID4hDCOs28hmMYB1rGA4EAx2oj7
-         3hOOoMJkILQEr6BgSPoO/xi8TShwptp8t2Ey85OIU48Bs6qdkWHO8+eeWXUw+ZHdLwRq
-         Qs0kdw4JZHYNvmTybTfm3otKNdz4gOQUzVrQjimJK9rwCwHyYOatS/82WBU3NBHgUW2/
-         5kuGS74i0LhQafgbgONlgnpqmnZwubk6GRCCSqQYxkT2OChP6ZxkMf61QP8MZgviGugt
-         WQNg==
+        Tue, 12 Jul 2022 11:53:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95DCBC1FFE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657641197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H3SEhwY9eW7/5EBo+MkFrnSuVtppUJZMUl0OSZBCqiw=;
+        b=Tf1L/2KYgGaS5TzoMCr+Q/z3uRZ1MCA8CLHaptCIURb7fo2Y10RGQoB+pU2v5/5klfE93a
+        9lqvILvXYBSnD2iyr39TcQInNpESIxcBzfoah8/k9VLOs5F8Vr2ibDPbhNS3F7WljV120l
+        RJl+YI/F/y7gUWLmLxEG2YDJ8wSLTp0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-ecr_lRr9NrSunpzVOzuTCg-1; Tue, 12 Jul 2022 11:53:16 -0400
+X-MC-Unique: ecr_lRr9NrSunpzVOzuTCg-1
+Received: by mail-wr1-f72.google.com with SMTP id e16-20020adf9bd0000000b0021d9c17e980so1454174wrc.15
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:53:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zsJYeJMzYlfchoyhqcYMlXXcIufBbaJhfBIHb8zwwSQ=;
-        b=yc2bwUZs/ciXV2/UH7Xef9GIOqfW/OKFsbmCUv9K9vJ28b7cOzFYT+sQBYHt1gErSg
-         UUI4j8SMxE5zBMA4Pe6e3ljpLXTf6N397njDLU5j1O0++TIA18BxR7JdDZpEB1JvNiJu
-         XC2hIoAcMZlvi3uHJvZxUSpQGXpwfvl5Y71BhYYeuxSLvlD7Cw/mJhVRtucV+q8iMWn3
-         iVj4obsm4eG1l/vQSEWghCT5BGO5fDkGuqh0Q2ub1trS2J9x6aX0R6R/NK6fSmDgUR5U
-         JEQeprjyzPLllFuGuoOabjIBB0P6YydptJj+w3OEZgc+sIiwzixp3ubVgPIDC+4gS9ox
-         suug==
-X-Gm-Message-State: AJIora9OxcKuq2l4MaIWT4Xac7e+7rY6aIIRvQq0DUG8AzFJj8TVeJ2N
-        E8/QpQ5j68g948yARFRT+GvFHYCTNKgLeoMeD+qV
-X-Google-Smtp-Source: AGRyM1t+yrnEq9cKm/OAPFzrU5umggLNBl1nhf3RM8sC1K9l5Y10G/Ylf/WpJKAFTrggYCcyC1Nz2OO5uvyvyqG6STU=
-X-Received: by 2002:a05:600c:3b03:b0:3a2:ead2:c844 with SMTP id
- m3-20020a05600c3b0300b003a2ead2c844mr4600729wms.129.1657641184963; Tue, 12
- Jul 2022 08:53:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=H3SEhwY9eW7/5EBo+MkFrnSuVtppUJZMUl0OSZBCqiw=;
+        b=DcmEOrCTw+lABECyvAMZl5QMjVLlamBoZVhOE8xXl9l2bXkmJYqx+cVe8wpyTz5z8f
+         rCcjz0sTRgVJQJ/WlJ7NSYQuZvCq5eaHjf+z+OjXXkofa0PRQI9Am2nrWGk0vvPkZbOq
+         6btsyKtzkUy5ePHyQQlZQdGEC7qjMk6M6rqFgiL5dNC5svKXeN8m0aTGsS6zl6IB+QZS
+         QC42AzLka/9URh3Np0LOyGdZ4KLt4OviIQmoPGrlwmnttHE541Ib3CiKVI5rFspu6u2f
+         0SBtUuxAG0SjoaD/4Cb92QYrL5UJ+iReCSwIkRYkHZcGZ3X03smP8fIro5qcdpbQvuaR
+         XPDA==
+X-Gm-Message-State: AJIora89tLwes/mCtZ3VaznLkf7/9q1u4UC26bRMfVfauqXKogNRe9Lb
+        yx9PDVPoI7E3kLuXlj9VXrWTGURpSV5FCPkgtOdyWis4mg/uIXeyNnaFi3h6OepInTo7EgTI1h7
+        hmeNNOVdq8Zmoyhna0G8FrsN2Aeo1mEsKdAFHUXYf4+nluZknj+z21IvDDg5EC5x1iRFzP49TWq
+        FN
+X-Received: by 2002:a05:6000:2cc:b0:21d:76d8:1f2c with SMTP id o12-20020a05600002cc00b0021d76d81f2cmr22793949wry.471.1657641195141;
+        Tue, 12 Jul 2022 08:53:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vhbl7ptjnlxWiWADc93FrLuLR+G3s7XzTMM2/TEMlgK4DA/k0Sj/58daJPrb8HrJ8b491rBQ==
+X-Received: by 2002:a05:6000:2cc:b0:21d:76d8:1f2c with SMTP id o12-20020a05600002cc00b0021d76d81f2cmr22793921wry.471.1657641194898;
+        Tue, 12 Jul 2022 08:53:14 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id i25-20020a1c5419000000b003a2cfb9f5basm13602384wmb.16.2022.07.12.08.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 08:53:14 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [External] Re: [PATCH] sched/topology: Optimized copy default
+ topology in sched_init_numa()
+In-Reply-To: <e5eed9c9-afd4-e88c-dbee-7fef2e76043a@bytedance.com>
+References: <20220627105349.80715-1-jiahao.os@bytedance.com>
+ <xhsmh35fhgcww.mognet@vschneid.remote.csb>
+ <e5eed9c9-afd4-e88c-dbee-7fef2e76043a@bytedance.com>
+Date:   Tue, 12 Jul 2022 16:53:12 +0100
+Message-ID: <xhsmhtu7m72fr.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20220712042258.293010-1-jstultz@google.com> <20220712042258.293010-3-jstultz@google.com>
- <44e2cb41-641c-2a50-3e38-284e4504f012@amd.com>
-In-Reply-To: <44e2cb41-641c-2a50-3e38-284e4504f012@amd.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 12 Jul 2022 08:52:53 -0700
-Message-ID: <CANDhNCrPhJacBjQZ4DMhmo9iaxBov8m8tbTqdU07PheaKFbE-g@mail.gmail.com>
-Subject: Re: [RFC][PATCH 3/3] kselftest: Add drm_syncobj API test tool
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-        Chunming Zhou <david1.zhou@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Shuah Khan <shuah@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 12:43 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
-> Am 12.07.22 um 06:22 schrieb John Stultz:
-> > An initial pass at a drm_syncobj API test.
-> >
-> > Currently covers trivial use of:
-> >    DRM_IOCTL_SYNCOBJ_CREATE
-> >    DRM_IOCTL_SYNCOBJ_DESTROY
-> >    DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD
-> >    DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE
-> >    DRM_IOCTL_SYNCOBJ_WAIT
-> >    DRM_IOCTL_SYNCOBJ_RESET
-> >    DRM_IOCTL_SYNCOBJ_SIGNAL
-> >    DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT
-> >    DRM_IOCTL_SYNCOBJ_TIMELINE_SIGNAL
-> >
-> > And demonstrates how the userspace API can be used, along with
-> > some fairly simple bad parameter checking.
-> >
-> > The patch includes a few helpers taken from libdrm, as at least
-> > on the VM I was testing with, I didn't have a new enough libdrm
-> > to support the *_TIMELINE_* ioctls. Ideally the ioctl-helper bits
-> > can be dropped at a later time.
-> >
-> > Feedback would be appreciated!
+On 11/07/22 18:28, Hao Jia wrote:
+> On 2022/7/4 Valentin Schneider wrote:
+>>
+>> It's not a very hot path but I guess this lets you shave off a bit of boot
+>> time... While you're at it, you could add an early
+> Thanks for your time and suggestion.
+>>
+>>    if (nr_node_ids == 1)
+>>            return;
+>>
 >
-> DRM userspace selftests usually go either into libdrm or igt and not
-> into the kernel source.
+> This will cause the values of sched_domains_numa_levels and
+> sched_max_numa_distance to be different from before, and
+> sched_domains_numa_levels may cause the return value of
+> sched_numa_find_closest() to be different.
+> I'm not sure if it will cause problems.
+>
 
-Appreciate the pointer, I'll rework and submit to one of those projects.
+True, we need to be careful here, but those are all static so they get
+initialized to sensible defaults (zero / NULL pointer).
 
-thanks
--john
+sched_numa_find_closest() will return nr_cpu_ids which make sense, so I
+think we can get away with an early return
+
+>> since !NUMA systems still go through sched_init_numa() if they have a
+>> kernel with CONFIG_NUMA (which should be most of them nowdays) and IIRC
+>> they end up with an unused NODE topology level.
+>>
+>
+> I'm confused why most !NUMA systems enable CONFIG_NUMA in the kernel?
+> Maybe for scalability?
+>
+
+It just makes things easier on a distribution point of view - just ship a
+single kernel image everyone can use, rather than N different images for N
+different types of systems.
+
+AFAIA having CONFIG_NUMA on an UMA (!NUMA) system isn't bad, it just adds
+more things in the sched_domain_topology during boot time which end up
+being unused.
+

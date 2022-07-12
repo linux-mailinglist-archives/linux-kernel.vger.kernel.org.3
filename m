@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B71D5729CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B406D5729D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiGLXUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S234061AbiGLXWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiGLXUk (ORCPT
+        with ESMTP id S229788AbiGLXV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:20:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546E7AD84D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657668039; x=1689204039;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GeM6siKXMKOwgExJy3MLzaCB06SDeVqIDzPx02dIK3k=;
-  b=Am06oqIvhWnAWL/31EufL5Qgcm8QsBFzRfkZXlwkXeS9EYi8zqivtE3r
-   ksMQMdHnySr0JCEedt0H+vqdPs/5ThT9QKubOlbw6fhRUJ1BV0vrwx7fB
-   BL6jxQzH5m83nvLce+LiiICstKqigfEGcJYulpet81VUtsxpIFDruOzyx
-   zRp/HhrLex/hu1IhtibUIEJky0k3uVz/ScodWaCywUEKnsWQzLgD/R8oT
-   d2k7wF+IN/1x/i3hYSUcVPaIFKsQZgGOW2+j60PjOmSkyRYw57kqY0Gwh
-   FY+LRxe7xfwQPZUGKaZyKEN3MoBwE45Dku03LgTsolDNBMqtlPMZH9YWH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285091558"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="285091558"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:20:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="622697874"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jul 2022 16:20:37 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBPBE-0002oF-UP;
-        Tue, 12 Jul 2022 23:20:36 +0000
-Date:   Wed, 13 Jul 2022 07:20:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 4/18]
- include/linux/compiler_types.h:354:45: error: call to
- '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask
- is not constant
-Message-ID: <202207130754.W1o2Pjaw-lkp@intel.com>
+        Tue, 12 Jul 2022 19:21:58 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F77AF77E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:21:57 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so811149pjm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X2APlglw3yLJ14lMDPnrKmONyrt3oBS6yGkesaXJOQU=;
+        b=ZRsq7BeZYBbNuSrxsaGI49Wth/Uofc/HpqmU7uFH/Wg7XkbMccTmNa+ZE9YzSLswJN
+         wmhCuhcQUTvYY7gaQJcRwmI2ZU4bAWHcTAhVjlZGVU2xUJSAmN1Lq29f0SnpxKvs8wPj
+         bZbOX6AVwewBlPUOZeUVvQUHt9bc9NyG3EJy0xmsP2omaih0VzZAXq2LtyOOJoTHXFr6
+         7QLyB+qimYNJO7vPtYRo/hwVdL2pto5vV8Iuog1lUxfiDHHvaFr3Idh187q+7Ha+Hq+X
+         vRJlZXG5QrCY2UhXi+qZ97CLAt5+gTBdCvME78zj+601Q4XZ1KZcM0RP/z/Ywkbd34JZ
+         w2Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X2APlglw3yLJ14lMDPnrKmONyrt3oBS6yGkesaXJOQU=;
+        b=p8aDZ0iySksQc4vuqhYnP0X5St12gs0GB8Fm3jAVrNQin4mjoivPzXIml1ajhkIdnh
+         htlmhlRtTZJEmycdfUt6hVHtH0LYjEwYzShl3zcdTXKifBWHVq1kesbn8N5B+YrthfuR
+         9gYQufk6Y8+I2Zm2jAiJBmTp7wCYZwuYTdhv9PjOPYM/pYR7aResUDxYI11gDaR7+F5o
+         HAD3yW9m4YO/alIEVfDKkBWeJDqr5eulFbUhxD2+4SGDlIaj2hduyZBNpKKHsSeweGdm
+         kIsgLmbjikwCqzxqwwHUIYPt22Q3Ne48yfbxqRxjCWi9/d8lOXnQhB/u8W6BYYM676do
+         Wf+g==
+X-Gm-Message-State: AJIora9q93VgwD67dFXJBCrbPQoXEO2QKP2n9KcSI8rIe3+JuZUWeTvH
+        rCx2+0/TknU349uBA/HK/4iX+g==
+X-Google-Smtp-Source: AGRyM1ucZD0moIchI1Gk9GW7l3TSrIRfIF0avNOR8sVBut1RFZyj6955Ik3g98yvR7hz1M1r3EqGLA==
+X-Received: by 2002:a17:902:a406:b0:16b:c816:6427 with SMTP id p6-20020a170902a40600b0016bc8166427mr330601plq.88.1657668116435;
+        Tue, 12 Jul 2022 16:21:56 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b001677fa34a07sm2715744ple.43.2022.07.12.16.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 16:21:55 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 23:21:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
+ disabling dirty logging
+Message-ID: <Ys4CD/VHtbrBVi6a@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-10-bgardon@google.com>
+ <YkH0O2Qh7lRizGtC@google.com>
+ <CANgfPd8V_34TBb3m-JpmczZnY3t5aaFwHNZq1W0eknumbrXCRw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <CANgfPd8V_34TBb3m-JpmczZnY3t5aaFwHNZq1W0eknumbrXCRw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,266 +81,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   b76dc0fdf51c9227cd04d9d3648a5555d9c61fa8
-commit: 092d508daf53fa9e5ba7fb7c0163a125753054c3 [4/18] platform/apple: Add new Apple Mac SMC driver
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220713/202207130754.W1o2Pjaw-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/092d508daf53fa9e5ba7fb7c0163a125753054c3
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout 092d508daf53fa9e5ba7fb7c0163a125753054c3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Mon, Mar 28, 2022, Ben Gardon wrote:
+> On Mon, Mar 28, 2022 at 10:45 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Mon, Mar 21, 2022 at 03:43:58PM -0700, Ben Gardon wrote:
+> > > +{
+> > > +     struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
+> > > +     struct rsvd_bits_validate shadow_zero_check;
+> > > +     bool map_writable;
+> > > +     kvm_pfn_t pfn;
+> > > +     u64 new_spte;
+> > > +     u64 mt_mask;
+> > > +
+> > > +     /*
+> > > +      * If addresses are being invalidated, don't do in-place promotion to
+> > > +      * avoid accidentally mapping an invalidated address.
+> > > +      */
+> > > +     if (unlikely(kvm->mmu_notifier_count))
+> > > +             return false;
+> >
+> > Why is this necessary? Seeing this makes me wonder if we need a similar
+> > check for eager page splitting.
+> 
+> This is needed here, but not in the page splitting case, because we
+> are potentially mapping new memory.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As written, it's required because KVM doesn't check that there's at least one
+leaf SPTE for the range.  If KVM were to step down and find a leaf SPTE before
+stepping back up to promote, then this check can be dropped because KVM zaps leaf
+SPTEs during invalidate_range_start(), and the primary MMU must invalidate the
+entire range covered by a huge page if it's splitting a huge page.
 
-All errors (new ones prefixed by >>):
+I'm inclined to go that route because it allows for a more unified path (with some
+other prep work).  Having to find a leaf SPTE could increase the time to disable
+dirty logging, but unless it's an order of magnitude or worse, I'm not sure we care
+because walking SPTEs doesn't impact vCPUs (unlike actually zapping).
 
-                    from arch/mips/include/asm/smp-ops.h:16,
-                    from arch/mips/include/asm/smp.h:21,
-                    from include/linux/smp.h:113,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/rcupdate.h:29,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/delay.h:23,
-                    from drivers/platform/apple/smc_rtkit.c:8:
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/bitfield.h:129:44: note: in definition of macro 'FIELD_GET'
-     129 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-         |                                            ^~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
-      30 | #define SMC_DATA                        GENMASK(63, 32)
-         |                                         ^~~~~~~
-   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                                       ^~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bitfield.h:129:44: note: in definition of macro 'FIELD_GET'
-     129 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-         |                                            ^~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
-      30 | #define SMC_DATA                        GENMASK(63, 32)
-         |                                         ^~~~~~~
-   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                                       ^~~~~~~~
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
-      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
-         |                                      ^
-   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                             ^~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
-      30 | #define SMC_DATA                        GENMASK(63, 32)
-         |                                         ^~~~~~~
-   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                                       ^~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bitfield.h:45:38: note: in definition of macro '__bf_shf'
-      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
-         |                                      ^
-   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                             ^~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:30:41: note: in expansion of macro 'GENMASK'
-      30 | #define SMC_DATA                        GENMASK(63, 32)
-         |                                         ^~~~~~~
-   drivers/platform/apple/smc_rtkit.c:332:55: note: in expansion of macro 'SMC_DATA'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                                       ^~~~~~~~
-   In file included from <command-line>:
-   include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_409' declared with attribute error: FIELD_GET: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:128:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     128 |                 __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:332:45: note: in expansion of macro 'FIELD_GET'
-     332 |         apple_smc_event_received(smc->core, FIELD_GET(SMC_DATA, message));
-         |                                             ^~~~~~~~~
-   In function 'apple_smc_cmd',
-       inlined from 'apple_smc_rtkit_get_key_info' at drivers/platform/apple/smc_rtkit.c:224:8:
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
-     125 |                FIELD_PREP(SMC_DATA, arg));
-         |                ^~~~~~~~~~
-   In function 'apple_smc_cmd',
-       inlined from 'apple_smc_rtkit_get_key_by_index' at drivers/platform/apple/smc_rtkit.c:212:8:
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
-     125 |                FIELD_PREP(SMC_DATA, arg));
-         |                ^~~~~~~~~~
-   In function 'apple_smc_cmd',
-       inlined from '_apple_smc_rtkit_read_key.isra' at drivers/platform/apple/smc_rtkit.c:167:8:
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
-     125 |                FIELD_PREP(SMC_DATA, arg));
-         |                ^~~~~~~~~~
-   In function 'apple_smc_cmd',
-       inlined from 'apple_smc_rtkit_write_key' at drivers/platform/apple/smc_rtkit.c:192:9:
->> include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_369' declared with attribute error: FIELD_PREP: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:125:16: note: in expansion of macro 'FIELD_PREP'
-     125 |                FIELD_PREP(SMC_DATA, arg));
-         |                ^~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c: In function 'apple_smc_rtkit_write_key_atomic':
-   include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_324' declared with attribute error: FIELD_PREP: mask is not constant
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-     335 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-     354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:65:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      65 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     114 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/platform/apple/smc_rtkit.c:77:16: note: in expansion of macro 'FIELD_PREP'
-      77 |                FIELD_PREP(SMC_DATA, key));
-         |                ^~~~~~~~~~
+> > > +             /* Try to promote the constitutent pages to an lpage. */
+> > > +             if (!is_last_spte(iter.old_spte, iter.level) &&
+> > > +                 try_promote_lpage(kvm, slot, &iter))
+> > >                       continue;
+> >
+> > If iter.old_spte is not a leaf, the only loop would always continue to
+> > the next SPTE. Now we try to promote it and if that fails we run through
+> > the rest of the loop. This seems broken. For example, in the next line
+> > we end up grabbing the pfn of the non-leaf SPTE (which would be the PFN
+> > of the TDP MMU page table?) and treat that as the PFN backing this GFN,
+> > which is wrong.
+> >
+> > In the worst case we end up zapping an SPTE that we didn't need to, but
+> > we should still fix up this code.
+
+My thought to remedy this is to drop the @pfn argument to kvm_mmu_max_mapping_level().
+It's used only for historical reasons, where KVM didn't walk the host page tables
+to get the max mapping level and instead pulled THP information out of struct page.
+I.e. KVM needed the pfn to get the page.
+
+That would also allow KVM to use huge pages for things that aren't backed by
+struct page (I know of at least one potential use case).
+
+I _think_ we can do the below.  It's compile tested only at this point, and I
+want to split some of the changes into separate patches, e.g. the WARN on the step-up
+not going out-of-bounds.  I'll put this on the backburner for now, it's too late
+for 5.20, and too many people are OOO :-)
+
+	tdp_root_for_each_pte(iter, root, start, end) {
+		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+			continue;
+
+		/*
+		 * Step down until a PRESENT, leaf SPTE is found, even when
+		 * promoting a parent shadow page.  Requiring a leaf SPTE
+		 * ensures that KVM is not creating a new mapping while an MMU
+		 * notifier invalidation is in-progress (KVM zaps only leaf
+		 * SPTEs in response to MMU notifier invlidation events), and
+		 * avoids doing work for shadow pages with no children.
+		 */
+		if (!is_shadow_present_pte(iter.old_spte) ||
+		    !is_last_spte(iter.old_spte, iter.level))
+			continue;
+
+		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
+							      PG_LEVEL_NUM);
+		if (iter.level == max_mapping_level)
+			continue;
+
+		/*
+		 * KVM zaps leaf SPTEs when handling MMU notifier invalidations,
+		 * and the primary MMU is supposed to invalidate secondary MMUs
+		 * _before_ zapping PTEs in the host page tables.  It should be
+		 * impossible for a leaf SPTE to violate the host mapping level.
+		 */
+		if (WARN_ON_ONCE(max_mapping_level < iter.level))
+			continue;
+
+		/*
+		 * The page can be remapped at a higher level, so step
+		 * up to zap the parent SPTE.
+		 */
+		while (max_mapping_level > iter.level)
+			tdp_iter_step_up(&iter);
+
+		/*
+		 * Stepping up should not cause the iter to go out of range of
+		 * the memslot, the max mapping level is bounded by the memslot
+		 * (among other things).
+		 */
+		if (WARN_ON_ONCE(iter.gfn < start || iter.gfn >= end))
+			continue;
+
+		/*
+		 * Attempt to promote the non-leaf SPTE to a huge page.  If the
+		 * promotion fails, zap the SPTE and let it be rebuilt on the
+		 * next associated TDP page fault.
+		 */
+		if (!try_promote_to_huge_page(kvm, &rsvd_bits, slot, &iter))
+			continue;
+
+		/* Note, a successful atomic zap also does a remote TLB flush. */
+		tdp_mmu_zap_spte_atomic(kvm, &iter);
+
+		/*
+		 * If the atomic zap fails, the iter will recurse back into
+		 * the same subtree to retry.
+		 */
+	}
+
+and then promotion shrinks a decent amount too as it's just getting the pfn,
+memtype, and making the SPTE.
+
+  static int try_promote_to_huge_page(struct kvm *kvm,
+				      struct rsvd_bits_validate *rsvd_bits,
+				      const struct kvm_memory_slot *slot,
+				      struct tdp_iter *iter)
+  {
+	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
+	kvm_pfn_t pfn;
+	u64 new_spte;
+	u8 mt_mask;
+	int r;
+
+	/*
+	 * Treat the lookup as a write "fault", in-place promotion is used only
+	 * when disabling dirty logging, which requires a writable memslot.
+	 */
+	pfn = __gfn_to_pfn_memslot(slot, iter->gfn, true, NULL, true, NULL, NULL);
+	if (is_error_noslot_pfn(pfn))
+		return -EINVAL;
+
+	/*
+	 * In some cases, a vCPU pointer is required to get the MT mask,
+	 * however in most cases it can be generated without one. If a
+	 * vCPU pointer is needed kvm_x86_try_get_mt_mask will fail.
+	 * In that case, bail on in-place promotion.
+	 */
+	r = static_call(kvm_x86_try_get_mt_mask)(kvm, iter->gfn,
+						 kvm_is_mmio_pfn(pfn), &mt_mask);
+	if (r)
+		return r;
+
+	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
+		    true, mt_mask, rsvd_bits, &new_spte);
+
+	return tdp_mmu_set_spte_atomic(kvm, iter, new_spte);
+  }
 
 
-vim +/__compiletime_assert_369 +354 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  343  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  344  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  351   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  352   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @354  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  355  
-
-:::::: The code at line 354 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

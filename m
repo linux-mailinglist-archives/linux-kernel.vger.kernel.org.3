@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E6571893
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BF857188E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiGLLcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S229926AbiGLLcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiGLLcL (ORCPT
+        with ESMTP id S229542AbiGLLcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:32:11 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9B4F641
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:32:09 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id bh13so7303576pgb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Oyv6ls5n5LtXZ+eFrLN0Kgir8c8eeeHctyKmi21xDfU=;
-        b=ImsYx5Ku+Ab8MqVb/ZzRH9XFV9El4m+WUWrW9VTtX2efmRpl6j584D6ilTaioM7GuY
-         3VWIEvaYsJqJnJa8kNtQyoKP3nRUjATbmmw20kX0OzdXf2ckm2LhB7D57Z1bD50XZDfH
-         PlJK0/nVT2+QXEt8i3DxTxerhl831H78bmZxc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Oyv6ls5n5LtXZ+eFrLN0Kgir8c8eeeHctyKmi21xDfU=;
-        b=3bQiKDHSnJsyoZU0oVCSv0vT+EOBQCF5Fjg5BxsDrlskvaOWH0NEnLa1DNn0pGJWzM
-         jGTc7ULpd+/EtUS1IVf2RKF86Kpe9wJLp0T1y9SDaFE5W2pleYRzKwBvmfd6WdzZ2NFt
-         8vxrsu+6asW88Xw4aLyZ1E75+n7y3jHTgzv2SpCeNuQHT27FO1qP967LZTbxJbkD/1Ju
-         DHsxPA1RpcZQ5PV5RjYImmP20jh0pqOK1LnWEVUSRGAvmlK2cFPBxkbMf5UJL6biJNQ4
-         zrxfx4p3Gq6f8F3PmYKjKc1BBgZk6qdNLP3VXtXqKzuW147KmDXA62w1Fc2qGCCE2Bx4
-         Hzww==
-X-Gm-Message-State: AJIora+Qwa1AwFlFTHL0HY6A8reu5bWAdW2aQ+srNOd6OtnRzIFosO+L
-        QURpjTBGfl4EQHNlZVgZ3FnfNw==
-X-Google-Smtp-Source: AGRyM1vNTI7P5FFRL8K9PK2KWyhjO0NXooJUOhB6blvPca1HMAd1tLyTL0bTIb9nIiSlIRA9J2QFCg==
-X-Received: by 2002:a63:2c89:0:b0:411:66bf:9efc with SMTP id s131-20020a632c89000000b0041166bf9efcmr19639098pgs.589.1657625528922;
-        Tue, 12 Jul 2022 04:32:08 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:d1a9:ca7d:e86f:cf6f])
-        by smtp.gmail.com with ESMTPSA id m12-20020a170902f64c00b0016bf9437766sm6527972plg.261.2022.07.12.04.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:32:02 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-Subject: [PATCH 0/2] clk: Fix CLK_OPS_PARENT_ENABLE and runtime PM
-Date:   Tue, 12 Jul 2022 19:31:05 +0800
-Message-Id: <20220712113107.871623-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+        Tue, 12 Jul 2022 07:32:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7021721807;
+        Tue, 12 Jul 2022 04:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657625519;
+        bh=4DGf9fAelIjMIL4cUJBkvt2Bi+U2qT/l8y6i/0sSxCc=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=DYH5a1dy32jHuT3Vd+/MgCnLWvDP5p5ulA70CH2G6Q8xdvglBoqSROGr+zx2heg28
+         8H0lbJo7bnxta1Ypl3+tbWB7an31+YDrwVjyFAcUKnnoGJjA0M8CHJNaSZj2Wj8JUK
+         nM3nGtaq3ulEq/8/1xPmfHVlBMKtGBKpPoaYWuvE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.68]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLzBp-1ntHd03DsH-00Hw06; Tue, 12
+ Jul 2022 13:31:59 +0200
+Message-ID: <611a0107-d736-e40f-e13f-5495c72cbe4e@gmx.de>
+Date:   Tue, 12 Jul 2022 13:31:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.18 000/112] 5.18.11-rc1 review review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:V/3Cc/GjCQrwadwbJAFBot3skc2wdHZSN/bjhIKpRC9QZAyHhWg
+ +MmNUWXQv+T+8Ndwt9suYk2PEm2uaIeaP9nYsF99/OjXli3rYPCk91ddGhyzSRacFHO7wDB
+ T5nnmR/SzsaZ1bWvGVHXVV2o8ZBorwd/K0zSUQbtVVMEKe5Un59TaEEPT41/1dn4yanNSa1
+ aP+j49GR9oIWdttY819lA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hwzsMyDZv0s=:JcwlVEjJZS0txX2J2zZCaU
+ /FtJV/lEHBmsYSuBIKRMtkLtnYm96blBPQR5O4kYVXbVja88/X6zSuSixnpK5phA+hRJLyvGN
+ lsn6P635GYMJQaDYIu07/TObH7zJQ2rmwaaCkC1S0acbCe8upD7geF+7b6fSoREzQK+orR8oJ
+ 1OzYJCMKXvNjAI2fYiT+FjaLwfjq1/0jUxXtbRIitOWqnQMxk0zx2PXd2d6BwTXyhnYeb6ofB
+ Jnd1Xci6OY7gXd4zlFDZ8ZnZKL4OjgBM3ThO00d2CBPXOochdsZNI2V5M6rLVycW71VUBkDdO
+ LVzIAqm8mzdh2ZNze8/9b8WdpvyBiv1yTkwNk/j7oLcR6oBLgRcyb+66oipALTQ+uDTsOCbHO
+ cKe/UlA0KGJZ6yQ/GfgcbTrm7IIIZkPWWl8o7TlJ7ooxQ97+klGwr1aplBIujqZ2kN0NwQeYd
+ f5/xVo/QNw2694qPfQYKBbOHrDu0bZZnxQ/Jzzo1sPZwBYCZMrVZx4cS+PQIT1CVphVn3wkfA
+ Y5aUuKp61FgzjKxyMeiTBT+KFMIio4S5dX3qA9e8LCPRHm0zt+K+mVbHqIg8VV6uZbfRUo1S0
+ fTDOSJJhNFCDeGbzyj/I/xJdMSLl+ngrdtLb/V6+Tj71Q2fXa53D0q0/EjQm2orammZAzCDZZ
+ cBvnASwfsSZEcxxpN2hqstcChy/bGZeYKqca4htLBfKvZfNNtvZ9K28RNIlA9f+1Vhxmd0FP1
+ 0C1DmJE1BoXp1JmEvZLVU9AAo+aPYcS9Uj8TXadZsO55ZrBNr4QeteeH9Zv1G46/U6sUpj1Qd
+ M1Y324x+5HVFenPL1V4lhopXJZSiGTUwm8mcB9KdLXb/xHzaDwjLBtNjxL4WiKSilhjkg2by4
+ 6dIHx4uTKW4aqg3QMhCsZ3zM2Q0sZzAdiJhHWpJbP73onT6W4yfBgfga7cXe1aqoWs9H5iRnR
+ FSkyy1+s5IQGVx8ZpGdlLJM4rT6PN43QPMWKdgG5ziS+37OrN0NtQKM/fuy/F2+6RbuDsqy2B
+ WDWxu/mB6Ft78wmUK1at5cWjEMLDWjjzcoQnkQnIpOUOA9qix4Vaq4sUG3ZOo7VC0pyRt3hEZ
+ yjA2Q0BgsC0WFj+OVIo/rbs9yY1f9ah2LFu
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike, Stephen,
+hallo Greg
 
-Here are a couple fixes for the clk core. They are unrelated but overlap
-in diff context, so I'm sending them together.
+5.18.11-rc1
 
-Patch 1 makes the clk core honor CLK_OPS_PARENT_ENABLE for clk gate ops.
-Without this, dumping clk_summary on the MT8192 would cause the system
-to hang.
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
 
-Patch 2 reorders the runtime PM call in clk_core_unprepare() to match
-the order described in its original commit, and the opposite of that
-in clk_core_prepare().
+Thanks
 
-
-Regards
-ChenYu
-
-Chen-Yu Tsai (2):
-  clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops
-  clk: core: Fix runtime PM sequence in clk_core_unprepare()
-
- drivers/clk/clk.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
-
--- 
-2.37.0.144.g8ac04bfd2-goog
+Tested-by: rwarsow@gmx.de
 

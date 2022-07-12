@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA3557296F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B8D57297A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiGLWmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S233719AbiGLWs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiGLWmv (ORCPT
+        with ESMTP id S229994AbiGLWs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:42:51 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE28C9120
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:42:51 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y9so8658173pff.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EOQK1yQsd3sxXf3ifqolSQDmS565G3PBpmyW4cpx2HA=;
-        b=MSBeQK///1NrBGbw7DV7tnTXdkZYNFjowCKH7HWWo6GHJtRs2JBzAZOUS8wJPeS3uB
-         FdmbaYtn+hTpf1LGNZgEyeUWRG1cVzTz/1oEyLDknyKU4hUPvpIGJ+X4vRY3nURrKaay
-         11uzpc4OgaK1zQf7vNDHPl0glTe00vOyLDwPjtJLPoJSgRslvY7XqKtECfR51PBum7Vz
-         +hrGteaVNQuO34sksAm9/YBxtGc0pA3exzkgYaL3hFnNKNEJn3y4DsWBEdU8q+fmIgR9
-         0JZlBNgeX/nc44836d3Gy6EyMmJKZyLrer3qSJ861OHV3LL6WQVB1FeqbxasQjhsatFy
-         ILTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=EOQK1yQsd3sxXf3ifqolSQDmS565G3PBpmyW4cpx2HA=;
-        b=oUoRbbde5feQ8zxo9d4Xz+szrS/JDXxBBgdjJ8Y0P+ym/JGqZldPShDBkCiSnY3ZTP
-         2uewqZc+zXSQseCWjYcKhcGuDZtyqUvdiOPokCKu+FtsnXzLAmbg7X0avDixh+Lcrbsm
-         cHQrf0nY7Hxu6sH/H1hhoDom7r7c10h8Pou+AjWXN8EDiYLnzCCpMxmHIxEdsYjyAMl6
-         0IpKqS+4JQ1pv0GyiPUUW2rqZy0P6T+p2FhQD9dHdvjWFO8Pf/7lGZRYYbfMBGyYuuTo
-         XpsxleQ+1ZC9Z1lehF00hOwVsMVcRyMuLRp2XiB2CIR30p6DgY7o6b86LuyLud/S878d
-         08qw==
-X-Gm-Message-State: AJIora84NxEfdEgd5NhlyAK0pXvIDL4d9IfyA2EWHkqxeAxJ9k9Ih3IR
-        rduZ9ao7WhQkuSnNPxAS5FY=
-X-Google-Smtp-Source: AGRyM1tLJIcznWizk9iJQMKwRvzQyZlrxC0AQCyjI0CRaOuIOSRtFl2r3Pu3cEB73Omx8SddXOOy/g==
-X-Received: by 2002:a63:6c42:0:b0:3fe:465:7a71 with SMTP id h63-20020a636c42000000b003fe04657a71mr398029pgc.101.1657665770859;
-        Tue, 12 Jul 2022 15:42:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 6-20020a631446000000b00415fcde23a4sm4552956pgu.27.2022.07.12.15.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 15:42:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Leo Li <sunpeng.li@amd.com>
-Subject: [PATCH] drm/amd/display: Enable building new display engine with KCOV enabled
-Date:   Tue, 12 Jul 2022 15:42:47 -0700
-Message-Id: <20220712224247.1950273-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        Tue, 12 Jul 2022 18:48:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6618C9978;
+        Tue, 12 Jul 2022 15:48:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LjGBH2c4xz4xvW;
+        Wed, 13 Jul 2022 08:48:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657666103;
+        bh=YQAXHLEZl/awahUB6FwWpnFdDJdCz12TelvBYYOtNbk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=E8ayPyxwNS05cfpIL6py1NJxS4x+tMJ9FEWRd3uQKNfzl7UhYXyZ5ISXp8WDC/Wz7
+         2CrNf0QnYMxxGrtnLicrJjQ5YOflgr512MZhFGWsRtifQL+j+uD9DO0qRDnYBnpbEf
+         /ELJ7sGcEcaaAZdPr4AC8rIyjCAR7sjKBvJg6znHgKj6Gkjuzmr8ieoSyqdBWqIqu3
+         YDaaNLKIbPGQ70xcny1auc+/xfpAR4eeTjXANEm79W0VM97i6u2P6e8tvjwbWAWrJh
+         EzW5HWOgjp+ou4CRoO1thX/qtFW1AZHVGkQv7f0gz4U7KSDu27fJg071w3W5n1yip+
+         cQ6w5axtjf7vA==
+Date:   Wed, 13 Jul 2022 08:48:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Zhengping Jiang <jiangzp@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the bluetooth tree
+Message-ID: <20220713084822.5e815c56@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/pQhuONsYb84gJfLur/dysjY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new display engine uses floating point math, which is not supported
-by KCOV. Commit 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov
-is enabled") tried to work around the problem by disabling
-CONFIG_DRM_AMD_DC_DCN if KCOV_INSTRUMENT_ALL and KCOV_ENABLE_COMPARISONS
-are enabled. The result is that KCOV can not be enabled on systems which
-require this display engine. A much simpler and less invasive solution is
-to disable KCOV selectively when compiling the display enagine while
-keeping it enabled for the rest of the kernel.
+--Sig_/pQhuONsYb84gJfLur/dysjY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov is enabled")
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Leo Li <sunpeng.li@amd.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/gpu/drm/amd/display/Kconfig     | 2 +-
- drivers/gpu/drm/amd/display/dc/Makefile | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-index b4029c0d5d8c..96cbc87f7b6b 100644
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@ -6,7 +6,7 @@ config DRM_AMD_DC
- 	bool "AMD DC - Enable new display engine"
- 	default y
- 	select SND_HDA_COMPONENT if SND_HDA_CORE
--	select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-+	select DRM_AMD_DC_DCN if (X86 || PPC64)
- 	help
- 	  Choose this option if you want to use the new display engine
- 	  support for AMDGPU. This adds required support for Vega and
-diff --git a/drivers/gpu/drm/amd/display/dc/Makefile b/drivers/gpu/drm/amd/display/dc/Makefile
-index b4eca0236435..b801973749d2 100644
---- a/drivers/gpu/drm/amd/display/dc/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/Makefile
-@@ -26,6 +26,9 @@
- DC_LIBS = basics bios dml clk_mgr dce gpio irq link virtual
- 
- ifdef CONFIG_DRM_AMD_DC_DCN
-+
-+KCOV_INSTRUMENT := n
-+
- DC_LIBS += dcn20
- DC_LIBS += dsc
- DC_LIBS += dcn10
--- 
-2.35.1
+In commit
 
+  0cc323d985f9 ("Bluetooth: hci_sync: Fix resuming scan after suspend resum=
+e")
+
+Fixes tag
+
+  Fixes: 3b42055388c30 (Bluetooth: hci_sync: Fix attempting to suspend with
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+
+Please do not break Fixes: tags over more than one line and also keep
+all the commit message tas together at the end of the commit message.
+
+Just use
+
+	git log -1 --format=3D'Fixes: %h ("%s")' <commit>
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/pQhuONsYb84gJfLur/dysjY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLN+jYACgkQAVBC80lX
+0GwtJgf/c9+iqgJyiinF7BzZmFNrZNVhTCocBI5xZ2NCGMzMaI1ST8XGZ/mFRwIE
+ySwoT2JZCNe/BE1uda3Hj6wakOsW39O3q1Vh+rxcLFPjmC4KBsFhMmtoLWjOUVTA
+uJVr8UPJDGATcaBPO07mpvlUJRqgJsFwCro7i87znUHZn4FARrRIl+9LYJ+wCrvn
+KJXsmglFr53NwAVH5LWk5grteeM6KIOILn/5C7Ug02ndw53W7cePQ82zpSzMvvSU
+St0aW0BkaAe9KA5kA9P2MqZYqdE97DN7YTrRRxHdLHqIu0ZTx1FWnzlZsXOg3jdF
+ba2qy95nkfZWXQW2iPa6ImxbgqLArA==
+=98M0
+-----END PGP SIGNATURE-----
+
+--Sig_/pQhuONsYb84gJfLur/dysjY--

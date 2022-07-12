@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6EE571505
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682F8571508
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiGLIrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S232425AbiGLIrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiGLIrj (ORCPT
+        with ESMTP id S232394AbiGLIrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:47:39 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F8EA6F20;
-        Tue, 12 Jul 2022 01:47:38 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id 23so8850452qtt.3;
-        Tue, 12 Jul 2022 01:47:38 -0700 (PDT)
+        Tue, 12 Jul 2022 04:47:51 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B47A6F33
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:47:49 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id o12so6468755ljc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BoX+rp4PoiS5Atec4w7HqPMg4nXltL8P8j6D72BzscY=;
+        b=sMoxnxlbxggNYM8BAq2Lcy19LzB6d3G+PJ0RClZQVELEnW4CL9uBpEkIPB9Ijg0XTj
+         xrvFU4Fp+xf5KzAG5/YmhTAHbgd6nxxhaj7oY2XoAGi3zDqrolEC4MAjDU3hxPioaLlX
+         F7TE0AMpMwjTPwRXFlXuXuQFY524HfhbYHo+Vb4WeaptAATCfJFtr7ZA6xL+KLJKgJpH
+         JNcO9XyTNzXxf0LoF+6vvFgOyqqdLnamHLmLvfiBjgYHO4cLSTe9jVs5AA6pYPoAdoD/
+         plB2usym8nVYcM+zQoWxtpcSeWef7tI3LuMUDk4xKDqxLU3HBsq/LJEBepaaBXbrecF/
+         vscA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FH/b2a6H8GyarbPO1fevZpm1/zS2ziSIONXtWtQHlSY=;
-        b=y5kCTM6jjpaHfvKGk+TOgRcktTzQgBlaqMnm3UG9ZvkoxuZ3ffplJ6xcDZUkF5dQoB
-         yCrL8U6woduRnKQ2Dbm9ds7o0xfWGGOcz17s4gqn1RhFB3RfMBWs0IFOxQXGiLxGTqyk
-         T6fKg0juWJrGqaegFxbSW3B0Hau5Lw3octXMA9M56kb5vGj8o/cgtyFURT7ICiDx2bJo
-         /+qK60or+5PN+euCJQYFdS9sB/81wj7snPnsjzBVc1g9jedI3/L2RzEZfzhcM1VsOW5k
-         C1S15QrBgThAIUapgvRQqZhm0HepBucaI+MutODaPgcLKS/0xc0NAJ/2VO1g6zEIw3Ci
-         w58Q==
-X-Gm-Message-State: AJIora8RlgppUfrVV1zSdeecLvoZ4WJrIsmSwXUWXh0I3CbOqeFnUoiT
-        qDfr7lUFBZhb7ECRVZPU+nCkoIffdQO51g==
-X-Google-Smtp-Source: AGRyM1tjq6cRALvUhymGuGAJRQtDFVeRB++hdwTrfWhITkkimGRg5dOJOb/lCPOpBRAjYoy5oOyvnQ==
-X-Received: by 2002:ac8:5a49:0:b0:31e:78fc:1f3 with SMTP id o9-20020ac85a49000000b0031e78fc01f3mr17465602qta.90.1657615657205;
-        Tue, 12 Jul 2022 01:47:37 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id f4-20020a05620a408400b006b5a63947e3sm699941qko.79.2022.07.12.01.47.35
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BoX+rp4PoiS5Atec4w7HqPMg4nXltL8P8j6D72BzscY=;
+        b=1UwD+jjbz9p3CqLcoAcyYBMwpN28dmY/mSp+B4xAc+hXsHrTv9nlS3VXVKKmW7VQjN
+         3LNMGLPMXuXeq/AAtHe8LP/WMbb6Mg+pte+0oHEEZeKMijJ4m2KIvm3fPw7bYamzhDp9
+         9nPN5MtgWad9ATKyNMVHwo0DSYPQ7Y9b9EvB2UGqsHhylzx6iCLMkf7+ydMR2Q8d181W
+         /MNAmnT/kJJe1uDBo/Q0ykDy6Uqs+aL7eioXIzWc/HeXtvxrFeOjIx/6aopB9E1UzEcR
+         OLfbidFESeySqvf4NO4VhdexA/H4CT8yeZdg3cuUvfxNoAmGiM+7yNxtEXroLNlckHjZ
+         dIhg==
+X-Gm-Message-State: AJIora+/nfRLBge3EukboVYnB2XLnzWo7DfJUDFVt3PM72LGUqqNEMgr
+        itY8hZMU5JhDYOCccuD9NYHJVg==
+X-Google-Smtp-Source: AGRyM1vNKk2hrAz+F5i8IgmeZ6aMdIA8yvFym7dtAAyKnTQEQaOnXisA+5/D71f6YI3DToiYzV6C8A==
+X-Received: by 2002:a2e:8303:0:b0:25b:d18a:75d9 with SMTP id a3-20020a2e8303000000b0025bd18a75d9mr11995412ljh.495.1657615668155;
+        Tue, 12 Jul 2022 01:47:48 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id b40-20020a0565120ba800b004785b66a9a4sm2063432lfv.126.2022.07.12.01.47.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 01:47:36 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31bf3656517so73624667b3.12;
-        Tue, 12 Jul 2022 01:47:35 -0700 (PDT)
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr23551067ywd.283.1657615655563; Tue, 12
- Jul 2022 01:47:35 -0700 (PDT)
+        Tue, 12 Jul 2022 01:47:47 -0700 (PDT)
+Message-ID: <4584120c-8e6f-6943-1bd3-aa6942525eda@linaro.org>
+Date:   Tue, 12 Jul 2022 10:47:40 +0200
 MIME-Version: 1.0
-References: <20220712184238.3670f277@canb.auug.org.au>
-In-Reply-To: <20220712184238.3670f277@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Jul 2022 10:47:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUdFwoHqwtH-eL3dc3s612fV4v7gYteuCZxZnPpHOFh-Q@mail.gmail.com>
-Message-ID: <CAMuHMdUdFwoHqwtH-eL3dc3s612fV4v7gYteuCZxZnPpHOFh-Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the mm tree with the m68k tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhang Jiaming <jiaming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH net-next 1/9] dt-bindings: net: Add lynx PCS
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20220711160519.741990-1-sean.anderson@seco.com>
+ <20220711160519.741990-2-sean.anderson@seco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220711160519.741990-2-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On 11/07/2022 18:05, Sean Anderson wrote:
+> This adds bindings for the PCS half of the Lynx 10g/28g SerDes drivers.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+>  .../devicetree/bindings/net/fsl,lynx-pcs.yaml | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
+> new file mode 100644
+> index 000000000000..49dee66ab679
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
 
-On Tue, Jul 12, 2022 at 10:42 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the mm tree got a conflict in:
->
->   arch/m68k/include/asm/sun3_pgtable.h
->
-> between commit:
->
->   c2a6236024b7 ("m68k: sun3: Fix spelling mistake")
->
-> from the m68k tree and commit:
->
->   e7911fea382d ("m68k/mm: enable ARCH_HAS_VM_GET_PAGE_PROT")
->
-> from the mm tree.
->
-> I fixed it up (the latter removed the comment that the former updated)
-> and can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+Shouldn't this be under net/pcs?
 
-Ah, right. The previous version of the m68k/mm patch didn't remove
-the comment, so I thought the spelling fix was safe to apply.
+Rest looks good to me:
 
-I'll drop the spelling fix from the m68k for-v5.20 branch.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks for reporting!
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof

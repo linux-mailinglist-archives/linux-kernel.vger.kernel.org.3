@@ -2,86 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93B4571CAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C6357200A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiGLObg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S233736AbiGLPzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiGLObe (ORCPT
+        with ESMTP id S233764AbiGLPzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:31:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB1FAE3A5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657636292; x=1689172292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8VaZtscI5pp0hY+DtvP9CdNw3OvobWQDH5Z194rvsCM=;
-  b=VMaravAEmoSyncAQuh0+rQqmKjAMpz7UN1sPNLPY2uvhb7UcBgtf54a2
-   /aPR1l/EBCxWfnpgEYsn5pPK9mTStIQ4HomKXGFVmxg8fDwmSDP3DZIwi
-   AFUVMta2lkv1VCqVYS8uH3XIYxiwdIwgisHgH4hBNSJFTT4SGzYNUgre7
-   W4F4IbaI3mpNdS0ypITDJGznKfl5y+9sSV/ecZqCAc4bafVe7Pe1EQmv6
-   qrVWQB93zapfoUXIbwv+VQ7ZU38pV7p75frFb0DJ30ctt6E/mIQVVuR0k
-   TQDj0mjfL0qpCKuWQuYCxFoN48CniXoc1cP1IzfpA8/uGA5hAAtwCj+6d
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="371258235"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="371258235"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 07:30:55 -0700
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="662970836"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 07:30:51 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBGuW-001BXJ-2L;
-        Tue, 12 Jul 2022 17:30:48 +0300
-Date:   Tue, 12 Jul 2022 17:30:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] lib/bitmap: fix off-by-one in bitmap_to_arr64()
-Message-ID: <Ys2FmN3hDKPAciKi@smile.fi.intel.com>
-References: <20220711180930.28271-1-alexandr.lobakin@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711180930.28271-1-alexandr.lobakin@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Jul 2022 11:55:43 -0400
+X-Greylist: delayed 2336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 08:55:42 PDT
+Received: from lizzy.crudebyte.com (lizzy.crudebyte.com [91.194.90.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6FC4470
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=lizzy; h=Cc:To:Subject:Date:From:References:In-Reply-To:
+        Message-Id:Content-Type:Content-Transfer-Encoding:MIME-Version:Content-ID:
+        Content-Description; bh=xq+qB+6LSBSIw4B37E9JgHNJIm1VN9v6g48FmouXfvs=; b=Iizer
+        5m+yT4yIEgA8pfP+JqDQ+kLypZzQY91RErkvjS8Os51RSQUW+Qeipo6S5lDzUOb7v5PDSS7ddiOXR
+        tzWbbKLJ3sg2WHvoF1WYEc7HFsmPkP9kvrHgIKqhwwiSadMpBwfMs2HN2nq385zirxz4rfnQQCDWD
+        ej4iORqTnmpXSu/ylZ1d7To1MH2Jdku6Z1tkuMvthFcpz711HOpJxf8Ruf9Lcd2vlYMiOKL2xuVRj
+        zZwk7ryoCVgQdfNEQi9Gal0GniO/pSoA5S7uVowN6kluYWogeJa8gQM6cXFtpmC45b3CRACDdiBwA
+        38+bUmlBCo5WqjNwg1ZfoEV/0+OmQ==;
+Message-Id: <ecd622e4cd058c47eae518b01d67a715ee04108d.1657636554.git.linux_oss@crudebyte.com>
+In-Reply-To: <cover.1657636554.git.linux_oss@crudebyte.com>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+Date:   Tue, 12 Jul 2022 16:31:09 +0200
+Subject: [PATCH v5 01/11] 9p/trans_virtio: separate allocation of scatter
+ gather list
+To:     v9fs-developer@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 08:09:28PM +0200, Alexander Lobakin wrote:
-> Fix tail clearing in bitmap_to_arr64() for 32-bit BEs and expand
-> the tests to cover the bug being fixed.
+The scatter gather list in struct virtio_chan currently
+resides as compile-time constant size array directly within the
+contiguous struct virtio_chan's memory space.
 
-Thanks,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Separate memory space and allocation of the scatter gather list
+from memory space and allocation of struct virtio_chan.
 
-> Alexander Lobakin (2):
->   lib/bitmap: fix off-by-one in bitmap_to_arr64()
->   lib/test_bitmap: test the tail after bitmap_to_arr64()
-> 
->  lib/bitmap.c      | 2 +-
->  lib/test_bitmap.c | 6 ++++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
+Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+---
+ net/9p/trans_virtio.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
+index b24a4fb0f0a2..2693e618080c 100644
+--- a/net/9p/trans_virtio.c
++++ b/net/9p/trans_virtio.c
+@@ -77,7 +77,7 @@ struct virtio_chan {
+ 	 */
+ 	unsigned long p9_max_pages;
+ 	/* Scatterlist: can be too big for stack. */
+-	struct scatterlist sg[VIRTQUEUE_NUM];
++	struct scatterlist *sg;
+ 	/**
+ 	 * @tag: name to identify a mount null terminated
+ 	 */
+@@ -574,6 +574,14 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+ 		goto fail;
+ 	}
+ 
++	chan->sg = kmalloc_array(VIRTQUEUE_NUM,
++				 sizeof(struct scatterlist), GFP_KERNEL);
++	if (!chan->sg) {
++		pr_err("Failed to allocate virtio 9P channel\n");
++		err = -ENOMEM;
++		goto out_free_chan_shallow;
++	}
++
+ 	chan->vdev = vdev;
+ 
+ 	/* We expect one virtqueue, for requests. */
+@@ -635,6 +643,8 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+ out_free_vq:
+ 	vdev->config->del_vqs(vdev);
+ out_free_chan:
++	kfree(chan->sg);
++out_free_chan_shallow:
+ 	kfree(chan);
+ fail:
+ 	return err;
+@@ -728,6 +738,7 @@ static void p9_virtio_remove(struct virtio_device *vdev)
+ 	kobject_uevent(&(vdev->dev.kobj), KOBJ_CHANGE);
+ 	kfree(chan->tag);
+ 	kfree(chan->vc_wq);
++	kfree(chan->sg);
+ 	kfree(chan);
+ 
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 

@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AE7571FEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B4A571FEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiGLPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S233092AbiGLPv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiGLPu0 (ORCPT
+        with ESMTP id S231334AbiGLPvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:50:26 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45176B41B1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:50:25 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id o12so7758374ljc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7xRo1tbRw235GqlWt7H/gMak0ChzgLukcWrxmjFVVnY=;
-        b=BsfSiO0DzTQwAXsOVV/eaDqG4Q9ih0+Yp7vHqlvRLtrfeq4nSudPAF/HuwWgxkoOS+
-         OVPRQgDWqHoUZB72KJUDnwuJKVndUO36Meo8MAjEkfROPp+wo07CuY+P1yFP6hUrgCUl
-         750uDp238dFqPAUqORzLrVj2TRXw52yGI/gGbDvziAd1PwQrgj+RTbCoCBrP7UYsQBMX
-         8UzqdzuEZiqVZdRER/kWx9gXJEjgo2M33Ic84TJgT5zmUPtAoL6DdRmVKrBSWsi/BJ+m
-         XAOq2Vu8IYR4Un2TJkl8y9WegzUrUDNXX6W6mcdMRGLHAiG2yBA2JHDnNsYpqO8D02Ox
-         cC9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7xRo1tbRw235GqlWt7H/gMak0ChzgLukcWrxmjFVVnY=;
-        b=o9R3O3g9OkScqHcfaBe9B90BdQy1/92KhDbC4S4U6jKShSs3+43UjdJ4FDTcfQQd7b
-         Z9kbbFXXDU9I2G0gjSkBY+vC7C1zYmd8SCmsvYQtR5CzsQlBveWs1dFlAvZIAsd+jiWK
-         K/y7xl/NbBW0DmNOc9bFxx3mpBccGHZ3qOLvY5vkQ+Eq+dOanuUK/xn93j0Sz5Mil9t5
-         8YORyeyFxwJ/XjMQmmm+3h1HqVunx29scEHVor1GC7eUSKc7gF1qU/5WDsgmQXcWuTpH
-         +UZyXuCgsSxKlTIo21gyJ6r5tT26GhYK0c5cWrIHTZb4pOEF6brPvWqQ8zMj7+gukiKd
-         5Lew==
-X-Gm-Message-State: AJIora8p0+K2mICP92dR+7IpIXgirL6/mxwi6OPLuKBeP8Yv8GHa91Bv
-        HgbdLPLu2dDzflUaXmDugZWEHQ==
-X-Google-Smtp-Source: AGRyM1sdHz15fM6xAwfuLdHc1EeE/3kjXzdcFi7xq2lIR8s/6SQUh2gSPRONWAf4k07wRLj7JjjmWw==
-X-Received: by 2002:a2e:be9f:0:b0:25d:6051:971 with SMTP id a31-20020a2ebe9f000000b0025d60510971mr10618934ljr.372.1657641023668;
-        Tue, 12 Jul 2022 08:50:23 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id q6-20020a056512210600b00477c0365b20sm2249927lfr.188.2022.07.12.08.50.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 08:50:23 -0700 (PDT)
-Message-ID: <6b7bab04-90ce-6111-35bd-42cb3a1f73f8@linaro.org>
-Date:   Tue, 12 Jul 2022 17:50:20 +0200
+        Tue, 12 Jul 2022 11:51:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A642B6560
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657641084; x=1689177084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OsbDyE3YnVvtPN31c8IWoJq9a7qi8GTlkb72sPxTnZo=;
+  b=fW8Y4pe9MmHjWIeQzvnHojJ5NSRVn+ul9Q6ecRcJqUSBTfpJrVkK3M8L
+   vGJ3r2WNc8CEWlQ0LfqrRbRL8/3VS6iT4z1bTv7ES33USydaZ28JwIioC
+   7R3pD0ARWAtx+wzUAQJwLNJ+tmodUqPPoMMtaoYMdZ4mRvkQTMJxHwu23
+   NFHtoatMOK+s1AUDtsA5kXjDcyc3xK2fPQ+/UPm5CYeAHl0ud7sMXJNQi
+   2a8MIJrG/4Clx4rL/TW8Hav79tMEkb8hNjlipa0TcOOTKC2NpY5Sdf4xx
+   vbb0PDCAEpbWpzHj/3g9XYgEPJVTgQxTLQfc5KaEdFxftZh3CP3gp396v
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="284998487"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="284998487"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 08:51:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="627942879"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 12 Jul 2022 08:51:22 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBIAT-0002M7-E2;
+        Tue, 12 Jul 2022 15:51:21 +0000
+Date:   Tue, 12 Jul 2022 23:50:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
+ function 'kasan_tag_mismatch'
+Message-ID: <202207122314.QtmUlhky-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 3/3] arm64: dts: bcmbca: update bcm4808 board dts file
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220712021144.7068-1-william.zhang@broadcom.com>
- <20220712021144.7068-4-william.zhang@broadcom.com>
- <d93e55fa-3359-2609-aad5-c80eca78f380@linaro.org>
- <900ac3ed-a77c-3cc0-f5ab-c45267a1a4ba@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <900ac3ed-a77c-3cc0-f5ab-c45267a1a4ba@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,30 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 17:36, Florian Fainelli wrote:
-> On 7/12/22 00:47, Krzysztof Kozlowski wrote:
->> On 12/07/2022 04:11, William Zhang wrote:
->>> Update compatible string based on the new bcmbca binding rule
->>> for BCM4908 famliy based boards
->>
->> Typo - family
->>
->> Please explain why breaking the ABI (and users of these DTS_ is acceptable.
-> 
-> This will be largely targeted towards Rafal who supports these kinds of 
-> devices with an upstream kernel. My understanding is that this is OK 
-> because we will always ship a DTB matching the Linux kernel, and I 
-> believe this is true for both the way that William and his group support 
-> these devices, as well as how OpenWrt, buildroot or other build systems 
-> envision to support these devices.
-> 
-> Rafal, does that sound about right?
+Hi Peter,
 
-I am fine, just maybe mention it in the commit because it literally
-breaks the DTSes.
+FYI, the error/warning still remains.
 
-I assume you considered all possible uses outside of Linux like U-Boot,
-BSD etc?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5a29232d870d9e63fe5ff30b081be6ea7cc2465d
+commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
+date:   1 year, 2 months ago
+config: arm64-randconfig-r002-20220712 (https://download.01.org/0day-ci/archive/20220712/202207122314.QtmUlhky-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/kasan/
 
-Best regards,
-Krzysztof
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
+
+>> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for function 'kasan_tag_mismatch' [-Wmissing-prototypes]
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+        ^
+   mm/kasan/sw_tags.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
+
+   210	
+ > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

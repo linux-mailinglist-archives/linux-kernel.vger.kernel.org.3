@@ -2,142 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86176571180
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65913571186
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiGLEjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 00:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S231376AbiGLEkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 00:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiGLEi7 (ORCPT
+        with ESMTP id S229702AbiGLEks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 00:38:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0892725C64
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657600739; x=1689136739;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BFAI3Vex6qOybZjRwyHygNl+Ppab/iQX6BXwqhB29YM=;
-  b=VpK9UWmt32wbsbXxGUOKWn0ODwO3v1aAV0OGUewTwoq/5rf7RHtKQjqj
-   hROSQ5fAHI8wlbF8SSEWn8YIU3f2MlC98Oclzt0Rv0agFAlNtzssrCBu5
-   oXAR/HJSIrvZSDgqn6ZoyqP2rZOW7nHvep4tEG5/wUrlICn5LzlWWbqWt
-   mG1KrWyShOKBMJfcOVrrz6dyvnuHZW7+yB0cMXjR8slGAxNxvwQTmWEoU
-   oQhFBvo65CRbbKhpnb2aMBjaTdoKg4ZPkd81W+zX+Eg0Sct8JyzYMXU6e
-   Aw4cPowBLmkFoCF7sbjHixK2PK+QGbbuOo3BK6bt7Deo+bbCkA+FbH1P4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="267874415"
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="267874415"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 21:38:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="652750800"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Jul 2022 21:38:57 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oB7fk-0001gh-Kr;
-        Tue, 12 Jul 2022 04:38:56 +0000
-Date:   Tue, 12 Jul 2022 12:38:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: kernel/trace/trace_osnoise.c:131:1: sparse: sparse: symbol
- '__pcpu_scope_per_cpu_timerlat_var' was not declared. Should it be static?
-Message-ID: <202207121205.3WDa90OI-lkp@intel.com>
+        Tue, 12 Jul 2022 00:40:48 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461578CCA4;
+        Mon, 11 Jul 2022 21:40:47 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l23so12242403ejr.5;
+        Mon, 11 Jul 2022 21:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9bwM//cvZFymb4WUWDusQzRbwBn9nlsjCD79TISVsJ0=;
+        b=BlHWfQPRFKfJ61g8T/P6TuGTmb0P9ffpqao3TOROw798XwkY9vxuZfu0lO+CKXaQiG
+         d6+RYqD2XsbD4tuL0uSsjRjGTsOVyb8nctHQiTWhwqUBX423OELfHfILQR636DVDHBKI
+         FnLOAeWO5pIZNRHRThYFWUrrbPXMzoxkPIKKo1eHYfV+tgBTTwSEDPyVtCRUmO/q+Yh2
+         ae8PBjZEYvVwZ9GfqiKXfkkLvW4cNtsfm2kpb8tZvLXouY+zrZJKd7VQCSjs3BC36kQi
+         atzjqc5CJBJpoiiK0II/s1WhGlID11Na/5QluR1+87qFM+BE/6cwmlpFJrQ9yaAvvRJe
+         QYrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9bwM//cvZFymb4WUWDusQzRbwBn9nlsjCD79TISVsJ0=;
+        b=FS+mVrsLRenNII9J1xawOjOY0sz5n8D1AWxmjfA79T/g3eqjLtTWSgHuIvXS+RERJI
+         3Iwu4c3uitc/ACPLFtEAknnCVn0b5PnSFRKifYN4MP35SMaXRHk+iCmd/FQRvSo/iain
+         i+BgezRWJKA2A++xpL7VtJ5C1kXz1j6hiAbyphDJUq072O3iE+EJ16Oe7oKkBReKdtqC
+         jzButVbmlIuGBWDtXNqAgXffoZzJ0OTysNyf8S+d89RvokdwY054uBM6OUxWnCNrK8QA
+         FGEIGej3+1ZO2gx9nMtVTGD01h5oEPgEIA637ichoWcMhJWFYGuE9U36IemCKLdlWaip
+         rawg==
+X-Gm-Message-State: AJIora8CM1Kb0DATrvnOCO+qQPFDGNG2toLLyy4zt53bE++o9/QKtcb5
+        T5yR4PNvGPOSqaTNOrFM0eYtWZ8zfsL147Wtw80=
+X-Google-Smtp-Source: AGRyM1tPTIVzj650H/XE+ZZ8SPlMtwf7jTnRkEAvIGcGsDc4hAd7svZcAbESE0UtOfkT6dlwP4W6Oncm4IQIYJ2P9bw=
+X-Received: by 2002:a17:906:5a6c:b0:72b:561a:3458 with SMTP id
+ my44-20020a1709065a6c00b0072b561a3458mr8361763ejc.114.1657600845829; Mon, 11
+ Jul 2022 21:40:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220706172814.169274-1-james.hilliard1@gmail.com>
+ <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com> <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+In-Reply-To: <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 11 Jul 2022 21:40:34 -0700
+Message-ID: <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
+To:     James Hilliard <james.hilliard1@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5a29232d870d9e63fe5ff30b081be6ea7cc2465d
-commit: a955d7eac1779b437ceb24fc352026a2cbcec140 trace: Add timerlat tracer
-date:   1 year, 1 month ago
-config: s390-randconfig-s032-20220712 (https://download.01.org/0day-ci/archive/20220712/202207121205.3WDa90OI-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a955d7eac1779b437ceb24fc352026a2cbcec140
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a955d7eac1779b437ceb24fc352026a2cbcec140
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+CC Quentin as well
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
+> >
+> >
+> >
+> > On 7/6/22 10:28 AM, James Hilliard wrote:
+> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
+> > > correctly with gcc.
+> > >
+> > > GCC appears to required kernel helper funcs to have the following
+> > > attribute set: __attribute__((kernel_helper(NUM)))
+> > >
+> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
+> > >
+> > > This adds conditional blocks for GCC while leaving clang codepaths
+> > > unchanged, for example:
+> > >       #if __GNUC__ && !__clang__
+> > >       void *bpf_map_lookup_elem(void *map, const void *key) __attribute__((kernel_helper(1)));
+> > >       #else
+> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
+> > >       #endif
+> >
+> > It does look like that gcc kernel_helper attribute is better than
+> > '(void *) 1' style. The original clang uses '(void *) 1' style is
+> > just for simplicity.
+>
+> Isn't the original style going to be needed for backwards compatibility with
+> older clang versions for a while?
 
+I'm curious, is there any added benefit to having this special
+kernel_helper attribute vs what we did in Clang for a long time? Did
+GCC do it just to be different and require workarounds like this or
+there was some technical benefit to this?
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/trace/trace_osnoise.c:108:1: sparse: sparse: symbol '__pcpu_scope_per_cpu_osnoise_var' was not declared. Should it be static?
->> kernel/trace/trace_osnoise.c:131:1: sparse: sparse: symbol '__pcpu_scope_per_cpu_timerlat_var' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:223:14: sparse: sparse: symbol 'interface_lock' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:657:6: sparse: sparse: symbol 'osnoise_trace_irq_entry' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:680:6: sparse: sparse: symbol 'osnoise_trace_irq_exit' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:739:5: sparse: sparse: symbol 'hook_irq_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:771:6: sparse: sparse: symbol 'unhook_irq_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:788:6: sparse: sparse: symbol 'trace_softirq_entry_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:811:6: sparse: sparse: symbol 'trace_softirq_exit_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:953:1: sparse: sparse: symbol 'trace_sched_switch_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:971:5: sparse: sparse: symbol 'hook_thread_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:988:6: sparse: sparse: symbol 'unhook_thread_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:1000:6: sparse: sparse: symbol 'save_osn_sample_stats' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:1015:6: sparse: sparse: symbol 'diff_osn_sample_stats' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:1657:5: sparse: sparse: symbol 'timerlat_min_period' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:1658:5: sparse: sparse: symbol 'timerlat_max_period' was not declared. Should it be static?
+This duplication of definitions with #if for each one looks really
+awful, IMO. I'd rather have a macro invocation like below (or
+something along those lines) for each helper:
 
-vim +/__pcpu_scope_per_cpu_timerlat_var +131 kernel/trace/trace_osnoise.c
+BPF_HELPER_DEF(2, void *, bpf_map_update_elem, void *map, const void
+*key, const void *value, __u64 flags);
 
-   112	
-   113	/*
-   114	 *  osnoise_unregister_instance - unregister a registered trace instance
-   115	 *
-   116	 * Remove the trace_array *tr from the list of instances running
-   117	 * osnoise/timerlat tracers.
-   118	 */
-   119	static void osnoise_unregister_instance(struct trace_array *tr)
-   120	{
-   121		struct osnoise_instance *inst;
-   122		int found = 0;
-   123	
-   124		/*
-   125		 * register/unregister serialization is provided by trace's
-   126		 * trace_types_lock.
-   127		 */
-   128		lockdep_assert_held(&trace_types_lock);
-   129	
-   130		list_for_each_entry_rcu(inst, &osnoise_instances, list) {
- > 131			if (inst->tr == tr) {
-   132				list_del_rcu(&inst->list);
-   133				found = 1;
-   134				break;
-   135			}
-   136		}
-   137	
-   138		if (!found)
-   139			return;
-   140	
-   141		kvfree_rcu(inst);
-   142	}
-   143	
+And then define BPF_HELPER_DEF() once based on whether it's Clang or GCC.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> >
+> > Do you mind to help implement similar attribute in clang so we
+> > don't need "#if" here?
+>
+> That's well outside my area of expertise unfortunately.
+>
+> >
+> > >
+> > >       #if __GNUC__ && !__clang__
+> > >       long bpf_map_update_elem(void *map, const void *key, const void *value, __u64 flags) __attribute__((kernel_helper(2)));
+> > >       #else
+> > >       static long (*bpf_map_update_elem)(void *map, const void *key, const void *value, __u64 flags) = (void *) 2;
+> > >       #endif
+> > >
+> > > See:
+> > > https://github.com/gcc-mirror/gcc/blob/releases/gcc-12.1.0/gcc/config/bpf/bpf-helpers.h#L24-L27
+> > >
+> > > This fixes the following build error:
+> > > error: indirect call in function, which are not supported by eBPF
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > > Changes v1 -> v2:
+> > >    - more details in commit log
+> > > ---
+> > >   scripts/bpf_doc.py | 43 ++++++++++++++++++++++++++-----------------
+> > >   1 file changed, 26 insertions(+), 17 deletions(-)
+> > >
+> > [...]

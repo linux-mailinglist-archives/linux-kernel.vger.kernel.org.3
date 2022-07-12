@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF2B572481
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E4B5723D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235202AbiGLTCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S234637AbiGLSxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbiGLTA5 (ORCPT
+        with ESMTP id S234607AbiGLSwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:00:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C744DF2C;
-        Tue, 12 Jul 2022 11:48:49 -0700 (PDT)
+        Tue, 12 Jul 2022 14:52:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3DBE5870;
+        Tue, 12 Jul 2022 11:45:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F52CB81B96;
-        Tue, 12 Jul 2022 18:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793A8C3411C;
-        Tue, 12 Jul 2022 18:48:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74EF4B81BAB;
+        Tue, 12 Jul 2022 18:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3A0C3411C;
+        Tue, 12 Jul 2022 18:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651727;
-        bh=ddghRq3UuZwjfdqG04lrwv2NjgZopcv5DfxDD/Hw6+s=;
+        s=korg; t=1657651492;
+        bh=LqAXempH+uBg7nKHHZs2ygdeOzpx6l017Z5ZBhQO7y4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UYwyacjbU+kNB22tPegZbN0bmb7GGJJwgCq0EufWP05bBTxI1+0GsPXzDocc8/Ucj
-         bvupHGjAHlXgDbKcAejC0xnMGzNxB7HOsw1oiEu56+l6UIb1Aj1P7FJr4Db8IxnAbs
-         LyBr+siJjZPawapLhCnCgNMQaf1FBXt6gZSQ/NuE=
+        b=p/8z8T/E08W5LQeQI0Aut76rz35mcslhqQVF8d7eIeKLB6nALQnqh3E9y4Wj/UCpA
+         XtRVuHkP6Guww4XwyGNQDE07HBQ+anNDsDiBjMwgQLZAqe+NJnoGFbXZe1j7K69+2m
+         oP7Mfa0p90oYoVKV3caJ1sdpXfjV8+EJsUyspOhE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 10/78] x86/retpoline: Remove unused replacement symbols
-Date:   Tue, 12 Jul 2022 20:38:40 +0200
-Message-Id: <20220712183239.270013931@linuxfoundation.org>
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 075/130] x86/entry: Remove skip_r11rcx
+Date:   Tue, 12 Jul 2022 20:38:41 +0200
+Message-Id: <20220712183249.925893382@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-References: <20220712183238.844813653@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,94 +58,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit 4fe79e710d9574a14993f8b4e16b7252da72d5e8 upstream.
+commit 1b331eeea7b8676fc5dbdf80d0a07e41be226177 upstream.
 
-Now that objtool no longer creates alternatives, these replacement
-symbols are no longer needed, remove them.
+Yes, r11 and rcx have been restored previously, but since they're being
+popped anyway (into rsi) might as well pop them into their own regs --
+setting them to the value they already are.
+
+Less magical code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Borislav Petkov <bp@suse.de>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Tested-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/r/20211026120309.915051744@infradead.org
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220506121631.365070674@infradead.org
+[bwh: Backported to 5.10: adjust context]
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/asm-prototypes.h |   10 --------
- arch/x86/lib/retpoline.S              |   42 ----------------------------------
- 2 files changed, 52 deletions(-)
+ arch/x86/entry/calling.h  |   10 +---------
+ arch/x86/entry/entry_64.S |    3 +--
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
---- a/arch/x86/include/asm/asm-prototypes.h
-+++ b/arch/x86/include/asm/asm-prototypes.h
-@@ -24,14 +24,4 @@ extern void cmpxchg8b_emu(void);
- 	extern asmlinkage void __x86_indirect_thunk_ ## reg (void);
- #include <asm/GEN-for-each-reg.h>
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -146,27 +146,19 @@ For 32-bit we have the following convent
  
--#undef GEN
--#define GEN(reg) \
--	extern asmlinkage void __x86_indirect_alt_call_ ## reg (void);
--#include <asm/GEN-for-each-reg.h>
--
--#undef GEN
--#define GEN(reg) \
--	extern asmlinkage void __x86_indirect_alt_jmp_ ## reg (void);
--#include <asm/GEN-for-each-reg.h>
--
- #endif /* CONFIG_RETPOLINE */
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -41,36 +41,6 @@ SYM_FUNC_END(__x86_indirect_thunk_\reg)
  .endm
  
- /*
-- * This generates .altinstr_replacement symbols for use by objtool. They,
-- * however, must not actually live in .altinstr_replacement since that will be
-- * discarded after init, but module alternatives will also reference these
-- * symbols.
-- *
-- * Their names matches the "__x86_indirect_" prefix to mark them as retpolines.
-- */
--.macro ALT_THUNK reg
--
--	.align 1
--
--SYM_FUNC_START_NOALIGN(__x86_indirect_alt_call_\reg)
--	ANNOTATE_RETPOLINE_SAFE
--1:	call	*%\reg
--2:	.skip	5-(2b-1b), 0x90
--SYM_FUNC_END(__x86_indirect_alt_call_\reg)
--
--STACK_FRAME_NON_STANDARD(__x86_indirect_alt_call_\reg)
--
--SYM_FUNC_START_NOALIGN(__x86_indirect_alt_jmp_\reg)
--	ANNOTATE_RETPOLINE_SAFE
--1:	jmp	*%\reg
--2:	.skip	5-(2b-1b), 0x90
--SYM_FUNC_END(__x86_indirect_alt_jmp_\reg)
--
--STACK_FRAME_NON_STANDARD(__x86_indirect_alt_jmp_\reg)
--
--.endm
--
--/*
-  * Despite being an assembler file we can't just use .irp here
-  * because __KSYM_DEPS__ only uses the C preprocessor and would
-  * only see one instance of "__x86_indirect_thunk_\reg" rather
-@@ -92,15 +62,3 @@ STACK_FRAME_NON_STANDARD(__x86_indirect_
- #undef GEN
- #define GEN(reg) EXPORT_THUNK(reg)
- #include <asm/GEN-for-each-reg.h>
--
--#undef GEN
--#define GEN(reg) ALT_THUNK reg
--#include <asm/GEN-for-each-reg.h>
--
--#undef GEN
--#define GEN(reg) __EXPORT_THUNK(__x86_indirect_alt_call_ ## reg)
--#include <asm/GEN-for-each-reg.h>
--
--#undef GEN
--#define GEN(reg) __EXPORT_THUNK(__x86_indirect_alt_jmp_ ## reg)
--#include <asm/GEN-for-each-reg.h>
+-.macro POP_REGS pop_rdi=1 skip_r11rcx=0
++.macro POP_REGS pop_rdi=1
+ 	popq %r15
+ 	popq %r14
+ 	popq %r13
+ 	popq %r12
+ 	popq %rbp
+ 	popq %rbx
+-	.if \skip_r11rcx
+-	popq %rsi
+-	.else
+ 	popq %r11
+-	.endif
+ 	popq %r10
+ 	popq %r9
+ 	popq %r8
+ 	popq %rax
+-	.if \skip_r11rcx
+-	popq %rsi
+-	.else
+ 	popq %rcx
+-	.endif
+ 	popq %rdx
+ 	popq %rsi
+ 	.if \pop_rdi
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -191,8 +191,7 @@ SYM_INNER_LABEL(entry_SYSCALL_64_after_h
+ 	 * perf profiles. Nothing jumps here.
+ 	 */
+ syscall_return_via_sysret:
+-	/* rcx and r11 are already restored (see code above) */
+-	POP_REGS pop_rdi=0 skip_r11rcx=1
++	POP_REGS pop_rdi=0
+ 
+ 	/*
+ 	 * Now all regs are restored except RSP and RDI.
 
 

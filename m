@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5F5572543
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46789572432
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbiGLTMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S234726AbiGLS4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236045AbiGLTKI (ORCPT
+        with ESMTP id S234521AbiGLS4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:10:08 -0400
+        Tue, 12 Jul 2022 14:56:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD9110149F;
-        Tue, 12 Jul 2022 11:52:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD94EB03B;
+        Tue, 12 Jul 2022 11:46:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B8A46157B;
-        Tue, 12 Jul 2022 18:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D14C3411C;
-        Tue, 12 Jul 2022 18:52:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E748560A5A;
+        Tue, 12 Jul 2022 18:46:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70F4C3411C;
+        Tue, 12 Jul 2022 18:46:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651965;
-        bh=15TToz8XKhbmTcApF7Z9A6OBETY/DRBlolp+6qvTRso=;
+        s=korg; t=1657651602;
+        bh=MwuU+xseDp9KXWFIrzDY8KulQryfkv/g26Hg1/eETvA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rN6OQmvNIwgUXs3eoEwAVPc6UK2w/VvKuDPovS6L5QAe/Mn7JqLcIIj63khu/teNm
-         suyG+HiVcSMaXc+fxT81N68jNHL0MOtLwtNoylaLklLVAyneTdGwoX2uaLamz37JmF
-         pkhnHy+cSLBMgZk8AY3BbMkfvqB7n2xORdyXpR9s=
+        b=tzctrIWzScPD9gGHbJWX0AlVLH+GYPGBRDQbsf22kJoobP1T7XYpLWKpm/lThR9fT
+         D1t3aLs5hDkLeEUMQuPOc2hp4K1n55pXpafonV1cT6CY/Q4hz5KONGcMY0O6FEvNTX
+         DYA1gSkLJ27jFT0+12t4CRlRQmceERt5ryjHMp5w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 36/61] x86/xen: Add UNTRAIN_RET
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 127/130] x86/bugs: Do not enable IBPB-on-entry when IBPB is not supported
 Date:   Tue, 12 Jul 2022 20:39:33 +0200
-Message-Id: <20220712183238.422111056@linuxfoundation.org>
+Message-Id: <20220712183252.325226631@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit d147553b64bad34d2f92cb7d8ba454ae95c3baac upstream.
+commit 2259da159fbe5dba8ac00b560cf00b6a6537fa18 upstream.
 
-Ensure the Xen entry also passes through UNTRAIN_RET.
+There are some VM configurations which have Skylake model but do not
+support IBPB. In those cases, when using retbleed=ibpb, userspace is going
+to be killed and kernel is going to panic.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+If the CPU does not support IBPB, warn and proceed with the auto option. Also,
+do not fallback to IBPB on AMD/Hygon systems if it is not supported.
+
+Fixes: 3ebc17006888 ("x86/bugs: Add retbleed=ibpb")
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/entry/entry_64.S |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/bugs.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -323,6 +323,12 @@ SYM_CODE_END(ret_from_fork)
- #endif
- .endm
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -821,7 +821,10 @@ static void __init retbleed_select_mitig
+ 		break;
  
-+SYM_CODE_START_LOCAL(xen_error_entry)
-+	UNWIND_HINT_FUNC
-+	UNTRAIN_RET
-+	RET
-+SYM_CODE_END(xen_error_entry)
-+
- /**
-  * idtentry_body - Macro to emit code calling the C function
-  * @cfunc:		C function to be called
-@@ -342,7 +348,7 @@ SYM_CODE_END(ret_from_fork)
- 	 * switch the CR3.  So it can skip invoking error_entry().
- 	 */
- 	ALTERNATIVE "call error_entry; movq %rax, %rsp", \
--		"", X86_FEATURE_XENPV
-+		    "call xen_error_entry", X86_FEATURE_XENPV
+ 	case RETBLEED_CMD_IBPB:
+-		if (IS_ENABLED(CONFIG_CPU_IBPB_ENTRY)) {
++		if (!boot_cpu_has(X86_FEATURE_IBPB)) {
++			pr_err("WARNING: CPU does not support IBPB.\n");
++			goto do_cmd_auto;
++		} else if (IS_ENABLED(CONFIG_CPU_IBPB_ENTRY)) {
+ 			retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
+ 		} else {
+ 			pr_err("WARNING: kernel not compiled with CPU_IBPB_ENTRY.\n");
+@@ -836,7 +839,7 @@ do_cmd_auto:
+ 		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
+ 			if (IS_ENABLED(CONFIG_CPU_UNRET_ENTRY))
+ 				retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
+-			else if (IS_ENABLED(CONFIG_CPU_IBPB_ENTRY))
++			else if (IS_ENABLED(CONFIG_CPU_IBPB_ENTRY) && boot_cpu_has(X86_FEATURE_IBPB))
+ 				retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
+ 		}
  
- 	ENCODE_FRAME_POINTER
- 	UNWIND_HINT_REGS
 
 

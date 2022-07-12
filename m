@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949C7572007
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B301572017
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiGLPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S232649AbiGLP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiGLPzF (ORCPT
+        with ESMTP id S229862AbiGLP6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:55:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283F1B8EAA;
-        Tue, 12 Jul 2022 08:55:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D72D6B819AC;
-        Tue, 12 Jul 2022 15:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E875C3411C;
-        Tue, 12 Jul 2022 15:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657641300;
-        bh=8tOgJxPDTATRCSBvm6zjfU2BJpjyIA7W/clNTO70iqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UqtUWrYcGEt3nT6wv8aAHmLUeR9RH/RuZJKpdUTTNZrwRUyf+Zrk8rbfUV2yv51Dc
-         4Ff4yqIYcb0iPi1whl2XwD9bS9VT+P6NmZjg42xCtlpuJl3tqUt3vGe6r7cmWGzkU6
-         s7VHxLFrOQtrAQfavCuVStaZNKDmTaw4QQee4UBAbPD0fIhy77URhFT++/CJ4ISvQH
-         n5ELoM4Mz1AN7B7YTMoBgBXQ3klFhQrKBOJeO+tC+r9boJq5EOFmBR1+EvgcHCrQpN
-         HhPPdEewFEGtR002rK40owGK5if/46AncBLHga7vQcb8y1U/E/Y5+1Y1TmLZ4I+4Qw
-         HCJQGDkivRriw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBIE1-0003ol-SG; Tue, 12 Jul 2022 17:55:02 +0200
-Date:   Tue, 12 Jul 2022 17:55:01 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <Ys2ZVeBHyhrUBC4m@hovoldconsulting.com>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
- <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
- <Ys2FZa6YDwt7d/Zc@hovoldconsulting.com>
- <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
+        Tue, 12 Jul 2022 11:58:46 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0C2A448
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:58:43 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id v7so5771144pfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3NuNGzPX7l2+4H4FqXMF3G2Iv4qIhgXKrczFI5RGpVE=;
+        b=KobxG4F8v+qthtwpu7gbH2IQkDOCkXPPXTqHgHWNsvq6z38hgkKWUYINThYxJYBVjw
+         evvB8xnHRoaczS8dHVfibY8iwBGTIYBP/5sj2W++9tP+LqoVuRSit+KlkFTWZYE14FGm
+         C2r93ude/BoVRbzYL2mrDbdViI5aPXPl/pmDUdQgLowPuNBHh3cifa+dXlE4ddNA82J2
+         86z3wVU4x3sIlHFaUNkJCa7sM6UBMTldfXCp+PiGW1t/5M9Ym9LVF+k125IPnqHOZ3JQ
+         eDJcyXznBLiNyIh6oVr53sd8I9Xh+dcoAN5clFw3PfNtUQAifbjMnu39wUAYk+FqbPb6
+         J8WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3NuNGzPX7l2+4H4FqXMF3G2Iv4qIhgXKrczFI5RGpVE=;
+        b=VK9q2ztaMihXwYI+B8gzxgwi8bFlBrEG8tyDe/aOYvTs0aYFNLWfhaHhwdMP55iC24
+         aezKPi8jZEk3lsVCPRHaPv09hyWxCj9JRZf+FCsVVNwgpqdzdaizPKzvBp3CzlLnIPz4
+         YGziH9IaeIKfQp0OcRLP1gl5STmnByGcCBCC+sgey9eLkyqiZ7TBzOTCg1lFZxZxLcf1
+         QPYlEDAoHbLpT3GesURg+tBJC/ZjqWL1rL15qgfohHQCBjR5m8GnXbbvjggMMb74a7bH
+         aGRakKpHSB7IZzMebHeJEpusoKq3jF23U/ZCxMeHjCfF5dBo5IQKGAS3uzGerFGL8Jqc
+         Pb4A==
+X-Gm-Message-State: AJIora/uzbx7fAIlbG18O7copcnU63ujl3as4enM0DysmVkfZYFKX7en
+        rkrKWQfdcolSL7/N47AjLBxgUw==
+X-Google-Smtp-Source: AGRyM1sxLANce1xqGhsht71y51IJWGaCzyWUoPHm08yJixijPHX2pu2nnl4Pm3GBexyPjWUZpfXJNg==
+X-Received: by 2002:a05:6a00:22d6:b0:52a:b9fc:4c88 with SMTP id f22-20020a056a0022d600b0052ab9fc4c88mr18633914pfj.3.1657641522504;
+        Tue, 12 Jul 2022 08:58:42 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id w1-20020a1709026f0100b0016b953872a7sm6963581plk.201.2022.07.12.08.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 08:58:41 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 15:58:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Wang Guangju <wangguangju@baidu.com>, pbonzini@redhat.com,
+        vkuznets@redhat.com, jmattson@google.com, wanpengli@tencent.com,
+        bp@alien8.de, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        hpa@zytor.com, tglx@linutronix.de, mingo@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, lirongqing@baidu.com
+Subject: Re: [PATCH v3] KVM: x86: Send EOI to SynIC vectors on accelerated
+ EOI-induced VM-Exits
+Message-ID: <Ys2aLfYFfyQO0R86@google.com>
+References: <20220712123210.89-1-wangguangju@baidu.com>
+ <6dcd11aefcd817ee0f8603328886df3023a98fa5.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712151045.vn4tpat4c4cplndo@vireshk-i7>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6dcd11aefcd817ee0f8603328886df3023a98fa5.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 08:40:45PM +0530, Viresh Kumar wrote:
-> On 12-07-22, 16:29, Johan Hovold wrote:
-> > On Tue, Jul 12, 2022 at 01:22:40PM +0530, Viresh Kumar wrote:
-> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > > index 666e1ebf91d1..4f4a285886fa 100644
-> > > --- a/drivers/opp/core.c
-> > > +++ b/drivers/opp/core.c
-> > > @@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
-> > >         }
-> > > 
-> > >         if (ret == -ENOENT) {
-> > > +               /*
-> > > +                * There are few platforms which don't want the OPP core to
-> > > +                * manage device's clock settings. In such cases neither the
-> > > +                * platform provides the clks explicitly to us, nor the DT
-> > > +                * contains a valid clk entry. The OPP nodes in DT may still
-> > > +                * contain "opp-hz" property though, which we need to parse and
-> > > +                * allow the platform to find an OPP based on freq later on.
-> > > +                *
-> > > +                * This is a simple solution to take care of such corner cases,
-> > > +                * i.e. make the clk_count 1, which lets us allocate space for
-> > > +                * frequency in opp->rates and also parse the entries in DT.
-> > > +                */
-> > > +               opp_table->clk_count = 1;
-> > > +
-> > >                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
-> > >                 return opp_table;
-> > >         }
+On Tue, Jul 12, 2022, Maxim Levitsky wrote:
+> On Tue, 2022-07-12 at 20:32 +0800, Wang Guangju wrote:
+> > When EOI virtualization is performed on VMX, kvm_apic_set_eoi_accelerated()
+> > is called upon EXIT_REASON_EOI_INDUCED but unlike its non-accelerated
+> > apic_set_eoi() sibling, Hyper-V SINT vectors are left unhandled.
 > > 
-> > This looks like a hack.
+> > Send EOI to Hyper-V SINT vectors when handling acclerated EOI-induced
+> > VM-Exits. KVM Hyper-V needs to handle the SINT EOI irrespective of whether
+> > the EOI is acclerated or not.
 > 
-> Yeah, a bit. Initially I wanted to solve it in a cleaner way, like it
-> is done for Tegra, where you will pass the right clock name to the OPP
-> core, so it can verify that the clk is there and parse the table. And
-> then tell the OPP core not to configure the clk from
-> dev_pm_opp_set_opp(), which is possible now. This would have done the
-> things in the right way.
+> How does this relate to the AutoEOI feature, and the fact that on AVIC,
+> it can't intercept EOI at all (*)?
 > 
-> The problem with Qcom's DT is that the CPU node have the OPP table but
-> doesn't contain the clocks, which are available with the
-> qcom,cpufreq-hw node instead. Because of this, I couldn't pass the
-> real clocks name to the OPP core, "xo", for the CPU device.
+> Best regards,
+> 	Maxim Levitsky
 > 
-> I really tried to avoid adding the above code for Tegra and found a
-> better and cleaner way out. But I couldn't do the same here and
-> figured it may be more generic of a problem, which is fine as well.
 > 
-> The OPP core does two things currently:
-> 
-> 1) Parse the DT and provide helpers to find the right OPP, etc.
-> 
-> 2) Provide generic helper to configure all resources related to the
->    OPP.
-> 
-> It is fine if some platforms only want to have the first and not the
-> second. To have the second though, you need to have the first as well.
-> 
-> The clk is required only for the second case, and the OPP core should
-> parse the DT anyways, irrespective of the availability of the clock.
-> Because of this reason, making the above change looked reasonable
-> (this is what was happening before my new patches came in anyway). The
-> clock isn't there, but there is "opp-hz" present in the DT, which
-> needs to be parsed.
+> (*) AVIC does intercept EOI write but only for level triggered interrupts.
 
-Ok, thanks for the details. I'd still look into if there's some way to
-avoid setting clk_count when there are no clocks as it sounds like an
-anti-pattern that will just make the code harder to understand and
-maintain.
+If there are one or more AutoEOI vectors, KVM disables AVIC.  Which begs the question
+of why SVM doesn't disable the AVIC if there's an edge-triggered I/O APIC interrupt
+that has a notifier, which is where kvm_hv_notify_acked_sint() eventually ends up.
+vmx_load_eoi_exitmap() sets the EOI intercept for all such vectors, and for _all_
+SynIC vectors (see vcpu_load_eoi_exitmap()), but AFAICT SVM relies purely on the
+level-triggered behavior.
 
-> > And it also triggers a bunch of new warning when
-> > opp is trying to create debugfs entries for an entirely different table
-> > which now gets clk_count set to 1:
-> > 
-> > [  +0.000979]  cx: _update_opp_table_clk: Couldn't find clock: -2
-> > [  +0.000022] debugfs: Directory 'opp:0' with parent 'cx' already present!
+KVM manually disables AVIC for PIT reinjection, which uses an ack notifier;
+AFAICT that's a one-off hack to workaround AVIC not playing nice with notifiers.
 
-> > This is for the rpmhpd whose opp table does not have either opp-hz or
-> > clocks (just opp-level).
-> 
-> Ahh, I missed switching back to the earlier code here. i.e. not use
-> the frequency for OPP directory's name, when it is 0.
-> 
-> This will fix it.
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 402c507edac7..96a30a032c5f 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
->          * - For some devices rate isn't available or there are multiple, use
->          *   index instead for them.
->          */
-> -       if (likely(opp_table->clk_count == 1))
-> +       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
->                 id = opp->rates[0];
->         else
->                 id = _get_opp_count(opp_table);
+So yeah, it seems like the proper fix would be to add svm_load_eoi_exitmap() and
+replace the PIT inhibit with a generic ACK inhibit that is set if there is at least
+one edge-triggered vector present in the eoi_exit_bitmap.
 
-Indeed it does, thanks.
-
-> I have merged this into:
-> 
-> commit 341df9889277 ("OPP: Allow multiple clocks for a device")
-> 
-> and pushed out for linux-next.
-
-Thanks for addressing this quickly. With the two patches above applied,
-the issues I noticed are gone.
-
-Johan
+Tangentially related to all of this, it's bizarre/confusing the KVM_CREATE_PIT{2}
+is allowed regardless of whether or not the I/O APIC is in-kernel.  I don't see
+how it can possibly work since create_pit_timer() silently does nothing if the I/O
+APIC isn't in-kernel.

@@ -2,125 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D1D57163C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9817C571643
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiGLJzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S232401AbiGLJ4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiGLJzX (ORCPT
+        with ESMTP id S229780AbiGLJ4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:55:23 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CB5AA81C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:55:20 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y11so6517246lfs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=axICpN3J/kMmaCf6S84TqGPCux368wms9PQ9I5oaU1Y=;
-        b=sgRn9iuPJDgWVdjaKv2jASetCuvgyB1fPCM+Uk+k1rQUY3idehVWK1F4ch8IyPAEL5
-         FLVBeM9+sq3kyoUucHx7vTTLeD+achPZeHZy3NRQrkkyVfNWc9F7WQWm+Oj2EuYQPdpz
-         YXxhCFWIt7xsMqneckUIjOBUTiPboVK1aOSBEj/wO+dTDnBnKSvtzuwMQk08jASq7gNo
-         9JD7RhZ8ken9hZb2xjtdeNiAvgrDcyErGBZ1dvLfdvb2636w+OTb7KBnEmJVvfILLFpA
-         +V+7xgf0gQlYirp33ZUZFPzMd/R7CdXvfPH9MK2WANEwqze1NZIyyqKWFx86eZNeXxcg
-         Q5dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=axICpN3J/kMmaCf6S84TqGPCux368wms9PQ9I5oaU1Y=;
-        b=hiRM2s7FK+2r8vl77cEnWsTwOMp0Eg5/9eJxCgVWcNlgzjl77K85tsa+z8JjhtIQyC
-         vrWQGcg+uIi+RD9+dvF7uxIY0pjDV9kqjNdb+8ZfJCDWokF69y9ux0Y/Qst1R9lR5rGS
-         dGnu2/9ml3jfDPNbBkPjX1WOkOAhDaMKDbaRwri7u1wxY1XeBxdPQLCRF4Tu9JLKUG4s
-         HA4iaYynNtWR0xGikU+i0IzYx0jxjK+wWgttE7O0qzJ5+uUXce8Xb1VNQGd/CBDxqIbE
-         X9WXBCWVVheLb8M2cRcQ92YfIOgwfbJvMY3jek05t78xuVCa61pTj/1RsTAc+ipp1nqK
-         vuUg==
-X-Gm-Message-State: AJIora9mk1rydHU/JDqAupcelWmT6DwLSlj/CKt4ifhPcE4EQq3Cd+It
-        k82Tz7NW7NjXWMayCX9x/pJaTA==
-X-Google-Smtp-Source: AGRyM1ssaxls1fUxMc6/WdaimSgtDYowXLkqFMFTIULBRqh8A9jBeagdf7UHpFRz2wr0G30u76TsUw==
-X-Received: by 2002:a05:6512:108d:b0:489:e640:df8c with SMTP id j13-20020a056512108d00b00489e640df8cmr4334829lfg.332.1657619718613;
-        Tue, 12 Jul 2022 02:55:18 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id f28-20020a05651c03dc00b0025d40241c1dsm2354259ljp.6.2022.07.12.02.55.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 02:55:17 -0700 (PDT)
-Message-ID: <6f9d2ea8-1ffd-41d1-9441-00c2b35187ec@linaro.org>
-Date:   Tue, 12 Jul 2022 11:55:13 +0200
+        Tue, 12 Jul 2022 05:56:11 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053DBAA835;
+        Tue, 12 Jul 2022 02:56:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VJ7lbUe_1657619766;
+Received: from 30.43.105.186(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VJ7lbUe_1657619766)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Jul 2022 17:56:07 +0800
+Message-ID: <820bc0be-d044-ef52-3255-26b973b04cf4@linux.alibaba.com>
+Date:   Tue, 12 Jul 2022 17:56:06 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 09/15] dt-bindings: firmware: Add fsl,scu yaml file
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
 Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
- <20220707125022.1156498-10-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707125022.1156498-10-viorel.suman@oss.nxp.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Kai Shen <kaishen@linux.alibaba.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
+ <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
+ <20220712090110.GL2338@kadam>
+From:   Cheng Xu <chengyou@linux.alibaba.com>
+In-Reply-To: <20220712090110.GL2338@kadam>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 14:50, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
+
+
+On 7/12/22 5:01 PM, Dan Carpenter wrote:
+> On Mon, Jul 11, 2022 at 03:34:56PM +0800, Cheng Xu wrote:
+>>
+>>
+>> On 7/9/22 1:37 AM, Christophe JAILLET wrote:
+>>> Use [devm_]bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+>>>
+>>> It is less verbose and it improves the semantic.
+>>>
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>>> ---
+>>>  drivers/infiniband/hw/erdma/erdma_cmdq.c | 7 +++----
+>>>  drivers/infiniband/hw/erdma/erdma_main.c | 9 ++++-----
+>>>  2 files changed, 7 insertions(+), 9 deletions(-)
+>>>
+>>
+>> Hi Christophe,
+>>
+>> Thanks for your two patches of erdma.
+>>
+>> The erdma code your got is our first upstreaming code, so I would like to squash your
+>> changes into the relevant commit in our next patchset to make the commit history cleaner.
+>>
+>> BTW, the coding style in the patches is OK, but has a little differences with clang-format's
+>> result. I will use the format from clang-format to minimize manual adjustments.
+>>  
 > 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch adds the
-> fsl,scu.yaml in the firmware bindings folder. This one is only for
-> the main SCU node. The old txt file will be removed only after all
-> the child nodes have been properly switch to yaml.
+> Best not to use any auto-formatting tools.  They are all bad.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+I understand your worry. Tool is not prefect but it's useful to handle large amounts of code in
+our first upstream, and helps us avoiding style mistakes.
+
+While using the clang-format with the config in kernel tree, we also checked all the modifications
+made by the tool carefully. We won't rely on tools too much with small changes in the future.
+
+Thanks,
+Cheng Xu
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

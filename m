@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36331572238
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB96572243
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbiGLSKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S233038AbiGLSPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiGLSKP (ORCPT
+        with ESMTP id S229757AbiGLSPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:10:15 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460612AC7;
-        Tue, 12 Jul 2022 11:10:15 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id h62so12677572ybb.11;
-        Tue, 12 Jul 2022 11:10:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ajRROCzsGzf/oZHzGwM4u5js6AqaHpYWximnT5xFfY=;
-        b=W+0HGuMhvGpJzOudWOqt6t7gwiSInJ701w28lFuQPKJLdfZvoppC+SQJJG91S//pB8
-         8Vvb+daiAx2uN38J2J+XgmbifCtrzAWwtIvW9G9SjRdtafgAYeLdfx3PG6uX+RorKDYK
-         O87/DQiI8kL8UPr1N9xBlPhNvd6huLJX6QDbbglC0iuwo61uAHJHK+U6bUqp4Rih3QlV
-         ZdbbN+IArgo2jaUshwihJABaEGgbGCfFRAoJhqDcZyVqrXhpZ1Sz+60fiqxaKXdoCVN0
-         YYU1pLsIKLpOxDsDbanN9GN1YSBh9TJ+etrTmIDaf+O0ZGQi98bUAQVZ9DLyhXJF8OKB
-         y80A==
-X-Gm-Message-State: AJIora9VDt+QO6OSnr+QyEHYpzIyvNsAyO3Jcg5RERZSK6iaEE2lONMz
-        p8mcASbFNCBqaDIAXidIm4ww9Hro8rN0jwfFfoo=
-X-Google-Smtp-Source: AGRyM1sW4QB3B6/zvLrzkhAsEvuKPbuv9+dLMLAn+66dCgmzTc20cxd5Fs/TvjLJShPV/tcbQyP8nRIs/u720kHZ0kY=
-X-Received: by 2002:a25:fb02:0:b0:66e:3db9:5d49 with SMTP id
- j2-20020a25fb02000000b0066e3db95d49mr24779010ybe.137.1657649414441; Tue, 12
- Jul 2022 11:10:14 -0700 (PDT)
+        Tue, 12 Jul 2022 14:15:16 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E98ABD3AE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 11:15:09 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 27443 invoked from network); 12 Jul 2022 20:15:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1657649702; bh=zGkagB45h+s+I2oFUucK24FU3BjdVGg3GYTCxnIGezE=;
+          h=From:To:Cc:Subject;
+          b=o1bet5Hjnn0aqq3Wf0z/ZH3HXfE2Xj+pzqtyjG//4/exfms6yV4A/mFZeVOizex9r
+           RBT8l+GrjExUMdUclzFxj73DxMrOfT55ho8/8RN4qQbwBZhmpwRL/jiLH53QFuRUq6
+           B00mNhoVkFxJ7u83uqz5EO0+DtmtDA2oH75jYcFs=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hauke@hauke-m.de>; 12 Jul 2022 20:15:02 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     hauke@hauke-m.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Subject: [PATCH net-next] net: lantiq_xrx200: use skb cache
+Date:   Tue, 12 Jul 2022 20:14:56 +0200
+Message-Id: <20220712181456.3398-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220711231419.706639-1-helgaas@kernel.org>
-In-Reply-To: <20220711231419.706639-1-helgaas@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jul 2022 20:10:03 +0200
-Message-ID: <CAJZ5v0gYhSkFWF49+orQsiqO0Kbmc_A+1L+QiZWcO6Q8sGWFKQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ASPM: Unexport pcie_aspm_support_enabled()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-WP-DKIM-Status: good (id: wp.pl)                                      
+X-WP-MailID: b2a8cc528473dba19639df9c4c0d0321
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [YZP0]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 1:14 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> pcie_aspm_support_enabled() is used only by the acpi/pci_root.c driver,
-> which cannot be built as a module, so it does not need to be exported.
-> Unexport it.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+napi_build_skb() reuses NAPI skbuff_head cache in order to save some
+cycles on freeing/allocating skbuff_heads on every new Rx or completed
+Tx.
+Use napi_consume_skb() to feed the cache with skbuff_heads of completed
+Tx. The budget parameter is added to indicate NAPI context, as a value
+of zero can be passed in the case of netpoll.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+NAT performance results on BT Home Hub 5A (kernel 5.15.45, mtu 1500):
 
-> ---
->  drivers/pci/pcie/aspm.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 7f76a5875feb..a8aec190986c 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -1347,4 +1347,3 @@ bool pcie_aspm_support_enabled(void)
->  {
->         return aspm_support_enabled;
->  }
-> -EXPORT_SYMBOL(pcie_aspm_support_enabled);
-> --
-> 2.25.1
->
+Fast path (Software Flow Offload):
+	Up	Down
+Before	702.4	719.3
+After	707.3	739.9
+
+Slow path:
+	Up	Down
+Before	91.8	184.1
+After	92.0	185.7
+
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ drivers/net/ethernet/lantiq_xrx200.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
+index 5edb68a8aab1..83e07404803f 100644
+--- a/drivers/net/ethernet/lantiq_xrx200.c
++++ b/drivers/net/ethernet/lantiq_xrx200.c
+@@ -238,7 +238,7 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
+ 		return ret;
+ 	}
+ 
+-	skb = build_skb(buf, priv->rx_skb_size);
++	skb = napi_build_skb(buf, priv->rx_skb_size);
+ 	skb_reserve(skb, NET_SKB_PAD);
+ 	skb_put(skb, len);
+ 
+@@ -321,7 +321,7 @@ static int xrx200_tx_housekeeping(struct napi_struct *napi, int budget)
+ 			pkts++;
+ 			bytes += skb->len;
+ 			ch->skb[ch->tx_free] = NULL;
+-			consume_skb(skb);
++			napi_consume_skb(skb, budget);
+ 			memset(&ch->dma.desc_base[ch->tx_free], 0,
+ 			       sizeof(struct ltq_dma_desc));
+ 			ch->tx_free++;
+-- 
+2.30.2
+

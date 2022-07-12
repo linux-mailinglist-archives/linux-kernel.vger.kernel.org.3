@@ -2,113 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD0D571B89
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DFA571B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbiGLNlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S232605AbiGLNmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiGLNk4 (ORCPT
+        with ESMTP id S233174AbiGLNmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:40:56 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC73B8530
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:34 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c86fe1dddso81423847b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ALyPmALyKUZN850RRfbsMebRjTXHId7O0aEtI7++nZc=;
-        b=LSt+DLU33Q6liALS8BuSSMkfOKSlRWDFuTo7po1O26Fv7bk7ore1ydtL7Hkh54hx5B
-         9uSRjCaDwCvwdfWSzS7lnufwTmWr2b2BeYWR5YFP9ZU8F9VUUXmk6Zu5giNcEj2YbgpC
-         uI4p1/JHiKYlEhx0fK1shW+TiQcG27FxZBVsXr+bZEYrVso0bpBwSBWJ2SnXgjmK3o2a
-         TljCQ3HgMAtH+5k9+nmdR7HTEIpmR3g8H3YU3v/0m4e+3pVXNggO7+TOdghExzxY46ET
-         DIp6u0LHdi2CFsZzjm9ZOB6D+HRRffEUqutrzlU2tzRGZr0L4jryw4F7HNyo/VTj61UD
-         CAVA==
+        Tue, 12 Jul 2022 09:42:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 325C6B96BA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657633296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LtXyCz0IEfDkRQV6tTiEfKs8tnmrH7wPrOPUpSOgUsI=;
+        b=VYUw4EwWgGlhedwsXNJvIHW8kHuOLJtCiLnBHh4wyDmdMmBL1rq+wcsyAW/VLgYjUCdl25
+        YGU1dilfjbUNZSJZTiVzbpyWrX4Ac6oCBEFSSkYuMi17fPf8x0iio4xkU/l/wyYSHXza+4
+        aSwGesKnZaepy0NDgYEUfBTQPBTRkvI=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-120-1zJAXwVcN5G0zw5j2GIbQQ-1; Tue, 12 Jul 2022 09:41:35 -0400
+X-MC-Unique: 1zJAXwVcN5G0zw5j2GIbQQ-1
+Received: by mail-qv1-f72.google.com with SMTP id m11-20020a0cfbab000000b004738181b474so1257439qvp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:41:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ALyPmALyKUZN850RRfbsMebRjTXHId7O0aEtI7++nZc=;
-        b=ad/s7U1yE3IjasSEsjIVEqwEFNmwRv86FPk7xCxMogqdUI9RQ3JPy4xHc9eqiRn8Cm
-         TELMT+ZuXI/sLDvx0x2Jte509GGZ0mhQ3y7iCp65+hQUMpxnhHQdBtanKqvhdhsk9ae8
-         y8HNjpLQOyhfaCzt3VKE6kbVA5mc/KqLjjPqA7wf8m4vlqdmT8z6ofrTU9GlzTpKEgvl
-         QSvTrqrWo8CxpnMrCXDhuwIR2InH/N5fIKJYzcuQSehqO57GF4dE5e37USjlwh7IOLCd
-         4e6gWkw+rAOD5oggVCwbaHDzK5ieLFcJS1PLaBEHCM97HDLfLBahF11kSpfZRVib9Zik
-         xmHQ==
-X-Gm-Message-State: AJIora8M6iMLLhcJ/uFL4KLiAx+e5XRRrSNHlMMvco01jt1uL+shFMlS
-        4egSL3i+lhlTPnMpgHVETK4l609Kvsu3822khHJAEQ==
-X-Google-Smtp-Source: AGRyM1vOJbA/kJ593A3ED5ZJMoh4prb03n/Kz2Y5PlZioljval/AgDFA11ABBXVIE5GqjlsCSBB2nghmV/bKBZoaO6Q=
-X-Received: by 2002:a81:98d:0:b0:31c:921c:9783 with SMTP id
- 135-20020a81098d000000b0031c921c9783mr25237173ywj.316.1657633233606; Tue, 12
- Jul 2022 06:40:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com>
-In-Reply-To: <20220704150514.48816-1-elver@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 15:39:57 +0200
-Message-ID: <CANpmjNP0hPuhXmZmkX1ytCDh56LOAmxJjf7RyfxOvoaem=2d8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] perf/hw_breakpoint: Optimize for thousands of tasks
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=LtXyCz0IEfDkRQV6tTiEfKs8tnmrH7wPrOPUpSOgUsI=;
+        b=7K216LMn7SYQdVcnHDQIj42FYeTODGq1lRF/TxsNLAttmCIXCaNRZ67HVTHi23Biwh
+         gCK6YDkGajSYHMJMa9cwLa4B/G+sqq/t9WeRbKCFACvslOEY4Q7oUc/q7LAxikqCuhoG
+         zjF/kmLYEI0nL/jCQFqpVIvyziEAagC3ZkTwqbQWxyrVPH8xLiksA03NIeNUuYdumQUs
+         m9Lg9Ra5XDYbYWebYpKrLv5glZeQbhIoPXms1CTmcFFcUALQQs3BUUlU+Wo/ze4qZPBk
+         DNeKN5uHfqVdZIzbZ4KCrr9WXa9jk/IIMThSPQopR5Ab494bzCNar9TntsFRcUzkfpVT
+         JPXA==
+X-Gm-Message-State: AJIora9a7fCHNcCj5EDLYXrBilkH0psMABV+RO1u/FCJG6et+79fQxgx
+        mL8sc+yDyDTFLAIMuXiqEpR/PxYlwAw0N6b762Aa35Qtef5uhQPfoHG72qy+QbedAUOS8ODrAUW
+        ip4v1RUkhp+MS44cU/w6cx59w
+X-Received: by 2002:a05:620a:40cf:b0:6b1:41dd:9710 with SMTP id g15-20020a05620a40cf00b006b141dd9710mr14646817qko.727.1657633294702;
+        Tue, 12 Jul 2022 06:41:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v61v1x/bKlX35n737dVpDCn8PCMlVt2a+QFdLNlNJ3XN++zxJMZHXLCeAUxahcb5Un9igiKQ==
+X-Received: by 2002:a05:620a:40cf:b0:6b1:41dd:9710 with SMTP id g15-20020a05620a40cf00b006b141dd9710mr14646786qko.727.1657633294359;
+        Tue, 12 Jul 2022 06:41:34 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id l10-20020a05620a28ca00b006b59f02224asm2379927qkp.60.2022.07.12.06.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 06:41:33 -0700 (PDT)
+Message-ID: <6dcd11aefcd817ee0f8603328886df3023a98fa5.camel@redhat.com>
+Subject: Re: [PATCH v3] KVM: x86: Send EOI to SynIC vectors on accelerated
+ EOI-induced VM-Exits
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Wang Guangju <wangguangju@baidu.com>, seanjc@google.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        wanpengli@tencent.com, bp@alien8.de, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, hpa@zytor.com, tglx@linutronix.de,
+        mingo@redhat.com, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        lirongqing@baidu.com
+Date:   Tue, 12 Jul 2022 16:41:28 +0300
+In-Reply-To: <20220712123210.89-1-wangguangju@baidu.com>
+References: <20220712123210.89-1-wangguangju@baidu.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 at 17:05, Marco Elver <elver@google.com> wrote:
->
-> The hw_breakpoint subsystem's code has seen little change in over 10
-> years. In that time, systems with >100s of CPUs have become common,
-> along with improvements to the perf subsystem: using breakpoints on
-> thousands of concurrent tasks should be a supported usecase.
-[...]
-> Marco Elver (14):
->   perf/hw_breakpoint: Add KUnit test for constraints accounting
->   perf/hw_breakpoint: Provide hw_breakpoint_is_used() and use in test
->   perf/hw_breakpoint: Clean up headers
->   perf/hw_breakpoint: Optimize list of per-task breakpoints
->   perf/hw_breakpoint: Mark data __ro_after_init
->   perf/hw_breakpoint: Optimize constant number of breakpoint slots
->   perf/hw_breakpoint: Make hw_breakpoint_weight() inlinable
->   perf/hw_breakpoint: Remove useless code related to flexible
->     breakpoints
->   powerpc/hw_breakpoint: Avoid relying on caller synchronization
->   locking/percpu-rwsem: Add percpu_is_write_locked() and
->     percpu_is_read_locked()
->   perf/hw_breakpoint: Reduce contention with large number of tasks
->   perf/hw_breakpoint: Introduce bp_slots_histogram
->   perf/hw_breakpoint: Optimize max_bp_pinned_slots() for CPU-independent
->     task targets
->   perf/hw_breakpoint: Optimize toggle_bp_slot() for CPU-independent task
->     targets
-[...]
+On Tue, 2022-07-12 at 20:32 +0800, Wang Guangju wrote:
+> When EOI virtualization is performed on VMX, kvm_apic_set_eoi_accelerated()
+> is called upon EXIT_REASON_EOI_INDUCED but unlike its non-accelerated
+> apic_set_eoi() sibling, Hyper-V SINT vectors are left unhandled.
+> 
+> Send EOI to Hyper-V SINT vectors when handling acclerated EOI-induced
+> VM-Exits. KVM Hyper-V needs to handle the SINT EOI irrespective of whether
+> the EOI is acclerated or not.
 
-This is ready from our side, and given the silence, assume it's ready
-to pick up and/or have a maintainer take a look. Since this is mostly
-kernel/events, would -tip/perf/core be appropriate?
+How does this relate to the AutoEOI feature, and the fact that on AVIC,
+it can't intercept EOI at all (*)?
 
-Thanks,
--- Marco
+Best regards,
+	Maxim Levitsky
+
+
+(*) AVIC does intercept EOI write but only for level triggered interrupts.
+
+> 
+> Rename kvm_apic_set_eoi_accelerated() to kvm_apic_set_eoi() and let the
+> non-accelerated helper call the "acclerated" version. That will document
+> the delta between the non-accelerated path and the accelerated path.
+> In addition, guarantee to trace even if there's no valid vector to EOI in
+> the non-accelerated path in order to keep the semantics of the function
+> intact.
+> 
+> Fixes: 5c919412fe61 ("kvm/x86: Hyper-V synthetic interrupt controller")
+> Cc: <stable@vger.kernel.org>
+> Tested-by: Wang Guangju <wangguangju@baidu.com>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Co-developed-by: Li Rongqing <lirongqing@baidu.com>
+> Signed-off-by: Wang Guangju <wangguangju@baidu.com>
+> ---
+>  v1 -> v2: Updated the commit message and implement a new inline function
+>  of apic_set_eoi_vector()
+> 
+>  v2 -> v3: Updated the subject and commit message, drop func 
+>  apic_set_eoi_vector() and rename kvm_apic_set_eoi_accelerated() 
+>  to kvm_apic_set_eoi()
+> 
+>  arch/x86/kvm/lapic.c   | 45 ++++++++++++++++++++++-----------------------
+>  arch/x86/kvm/lapic.h   |  2 +-
+>  arch/x86/kvm/vmx/vmx.c |  3 ++-
+>  3 files changed, 25 insertions(+), 25 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index f03facc..b2e72ab 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1269,46 +1269,45 @@ static void kvm_ioapic_send_eoi(struct kvm_lapic *apic, int vector)
+>         kvm_ioapic_update_eoi(apic->vcpu, vector, trigger_mode);
+>  }
+>  
+> +/*
+> + * Send EOI for a valid vector.  The caller, or hardware when this is invoked
+> + * after an accelerated EOI VM-Exit, is responsible for updating the vISR and
+> + * vPPR.
+> + */
+> +void kvm_apic_set_eoi(struct kvm_lapic *apic, int vector)
+> +{
+> +       trace_kvm_eoi(apic, vector);
+> +
+> +       if (to_hv_vcpu(apic->vcpu) &&
+> +           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+> +               kvm_hv_synic_send_eoi(apic->vcpu, vector);
+> +
+> +       kvm_ioapic_send_eoi(apic, vector);
+> +       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_apic_set_eoi);
+> +
+>  static int apic_set_eoi(struct kvm_lapic *apic)
+>  {
+>         int vector = apic_find_highest_isr(apic);
+>  
+> -       trace_kvm_eoi(apic, vector);
+> -
+>         /*
+>          * Not every write EOI will has corresponding ISR,
+>          * one example is when Kernel check timer on setup_IO_APIC
+>          */
+> -       if (vector == -1)
+> +       if (vector == -1) {
+> +               trace_kvm_eoi(apic, vector);
+>                 return vector;
+> +       }
+>  
+>         apic_clear_isr(vector, apic);
+>         apic_update_ppr(apic);
+>  
+> -       if (to_hv_vcpu(apic->vcpu) &&
+> -           test_bit(vector, to_hv_synic(apic->vcpu)->vec_bitmap))
+> -               kvm_hv_synic_send_eoi(apic->vcpu, vector);
+> +       kvm_apic_set_eoi(apic, vector);
+>  
+> -       kvm_ioapic_send_eoi(apic, vector);
+> -       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+>         return vector;
+>  }
+>  
+> -/*
+> - * this interface assumes a trap-like exit, which has already finished
+> - * desired side effect including vISR and vPPR update.
+> - */
+> -void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector)
+> -{
+> -       struct kvm_lapic *apic = vcpu->arch.apic;
+> -
+> -       trace_kvm_eoi(apic, vector);
+> -
+> -       kvm_ioapic_send_eoi(apic, vector);
+> -       kvm_make_request(KVM_REQ_EVENT, apic->vcpu);
+> -}
+> -EXPORT_SYMBOL_GPL(kvm_apic_set_eoi_accelerated);
+> -
+>  void kvm_apic_send_ipi(struct kvm_lapic *apic, u32 icr_low, u32 icr_high)
+>  {
+>         struct kvm_lapic_irq irq;
+> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+> index 762bf61..48260fa 100644
+> --- a/arch/x86/kvm/lapic.h
+> +++ b/arch/x86/kvm/lapic.h
+> @@ -126,7 +126,7 @@ u64 kvm_get_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu);
+>  void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data);
+>  
+>  void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset);
+> -void kvm_apic_set_eoi_accelerated(struct kvm_vcpu *vcpu, int vector);
+> +void kvm_apic_set_eoi(struct kvm_lapic *apic, int vector);
+>  
+>  int kvm_lapic_set_vapic_addr(struct kvm_vcpu *vcpu, gpa_t vapic_addr);
+>  void kvm_lapic_sync_from_vapic(struct kvm_vcpu *vcpu);
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 9258468..f8b9eb1 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5519,9 +5519,10 @@ static int handle_apic_eoi_induced(struct kvm_vcpu *vcpu)
+>  {
+>         unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+>         int vector = exit_qualification & 0xff;
+> +       struct kvm_lapic *apic = vcpu->arch.apic;
+>  
+>         /* EOI-induced VM exit is trap-like and thus no need to adjust IP */
+> -       kvm_apic_set_eoi_accelerated(vcpu, vector);
+> +       kvm_apic_set_eoi(apic, vector);
+>         return 1;
+>  }
+>  
+
+

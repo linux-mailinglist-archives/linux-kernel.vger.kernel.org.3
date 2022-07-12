@@ -2,90 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78D1571734
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF80571739
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiGLKW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S232735AbiGLKXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiGLKWy (ORCPT
+        with ESMTP id S232625AbiGLKXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:22:54 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEA2AD869
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:22:53 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 9-20020a1c0209000000b003a2dfdebe47so3680028wmc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rYt9mJQXaGbahl8QZrYNjHB9pJ9eAjTgp/ns4Eb/t8M=;
-        b=C5cPOGc9EqUsoFUWmrc7jVCibS5iN0UUoBC/PfD22KAgo7wUifuge6eKtWgdHhTmhK
-         fvpH/mXMm0hRgT9dWl3DZZDJL93EODM9jrUcKm7gjTFh/xMon7EdLXhbB2YK122pbx73
-         rwuP0BAxkambkdp1i6kemqXPccg0rBuRv2ni0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rYt9mJQXaGbahl8QZrYNjHB9pJ9eAjTgp/ns4Eb/t8M=;
-        b=lfazmK+zzrmgQL91vdDoiBe9jjhFVHjxDJUd+ciIejqlvoI3hlVnQx5LGuWAAx6oUT
-         S1wf+Lm9i4F/7P7yVz2f3pDBcD76/dTt72jVKpENJhYzwkhqwu8HeF6khH8VFUK2jbqq
-         VPr97Bi/zlKamLKh12DoGhs3UG9bZ98p9wdwyOHewdbEvflKMRiH4WlZkZFcQTff5TKK
-         WglVc4cgz5bErfE2lM53tiSAYlKieowU3xlYyJIlJTlQA90Cw5+qwY20WYT2T9GWZzw0
-         BF1LFqykzdBwzlNy3paNRYzab1ncWaV4rNHvzHVn7bolFB/e+d7Tw7p7tBvnRrYL7KWY
-         75+A==
-X-Gm-Message-State: AJIora/Nyzd41oFSXyhB8KgGzrnK8xIM4NqpzQpABaSmNXPQ/Zeqy5mC
-        8DlanMrZ7f0qd7jiCJ1W51eWXAU53CyosuRgu9a+kg==
-X-Google-Smtp-Source: AGRyM1svSmDLIfSSDkmMhxcC2NCCDtQdNFo2Jmf8Eb2S0Zy+X9IE/1D5IMRYMtZUefJka9rOnNuo/87dPKq7cEDP4jA=
-X-Received: by 2002:a05:600c:3d13:b0:3a2:cb5f:87e7 with SMTP id
- bh19-20020a05600c3d1300b003a2cb5f87e7mr3008291wmb.178.1657621371850; Tue, 12
- Jul 2022 03:22:51 -0700 (PDT)
+        Tue, 12 Jul 2022 06:23:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E26002DE7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:23:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CA071515;
+        Tue, 12 Jul 2022 03:23:38 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 555353F792;
+        Tue, 12 Jul 2022 03:23:36 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:23:34 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+ migration margin
+Message-ID: <20220712102334.6nwkbkilmmup4h4u@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-2-qais.yousef@arm.com>
+ <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
- <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
- <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
- <CACeCKafzB0wW_B2TOEWywLMyB+UhYCpXYDVBV=UbyxBiGnv1Rw@mail.gmail.com>
- <CAE-0n50Akd8QikGhaAQgxLkJBhE-7KQf5aJ_P2ajOmCjLk555g@mail.gmail.com>
- <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
- <CACeCKafya_XA+C3eJUvT4vjQSgsjdewVkCb+Jr2tA1605jjfjg@mail.gmail.com> <CAE-0n53kujMrzFG++5kaS4QKj2YrzLJEu5R76W887rCW_S592g@mail.gmail.com>
-In-Reply-To: <CAE-0n53kujMrzFG++5kaS4QKj2YrzLJEu5R76W887rCW_S592g@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Tue, 12 Jul 2022 18:22:40 +0800
-Message-ID: <CAEXTbpdVr07Ur2L1NQjk8Vn=yUK=70K0sgbfTxsMJEvGd7CD2A@mail.gmail.com>
-Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,106 +50,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 7, 2022 at 8:17 AM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Prashant Malani (2022-07-06 11:26:19)
+On 07/11/22 14:36, Vincent Guittot wrote:
+> On Wed, 29 Jun 2022 at 21:47, Qais Yousef <qais.yousef@arm.com> wrote:
 > >
-> > Stephen, any pending concerns?
->
-> No more pending concerns.
->
-> > If not,I will post a v6 series with the suggested changes:
-> > - Drop typec-switch binding; instead add a new top-level port with
-> > end-points for each Type-C connector's switch.
-> > - Drop it6505 patches.
-> > - Squash anx7625 driver patches into one patch.
-> > - Add a comment mentioning that we aren't registering the orientation-switch.
+> > fits_capacity() verifies that a util is within 20% margin of the
+> > capacity of a CPU, which is an attempt to speed up upmigration.
+> >
+> > But when uclamp is used, this 20% margin is problematic because for
+> > example if a task is boosted to 1024, then it will not fit on any CPU
+> > according to fits_capacity() logic.
+> >
+> > Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
+> > end up on big instead on the desired medium CPU.
+> >
+> > Similar corner cases exist for uclamp and usage of capacity_of().
+> > Slightest irq pressure on biggest CPU for example will make a 1024
+> > boosted task look like it can't fit.
+> >
+> > What we really want is for uclamp comparisons to ignore the migration
+> > margin and capacity pressure, yet retain them for when checking the
+> > _actual_ util signal.
+> 
+> I fully agree on the migration margin but I'm a bit more skeptical
+> about the capacity pressure. If uclam_min is set to ensure a minimum
+> compute capacity of X for a task but the CPU can't provide such
+> capacity because of some pressures (I have irq and thermal in mind),
+> then we should find a better cpu otherwise uclamp_min becomes
+> meaningless because it doesn't ensure a minimum compute capacity which
+> usually means a time to execute the work of the thread
 
-We've been working on these changes, and the new DT node looks like this:
+We need to be careful here about what uclamp_min means.
 
-```
-    anx_bridge_dp: anx7625-dp@58 {
-        [...]
-        mode-switch;
-        ports {
-            [...]
-            typec_switches: port@2 {
-                #adderss-cells = <1>;
-                #size-cells = <0>;
-                reg = <2>;
+uclamp is a performance hint, not a bandwidth hint. When a task p with:
 
-                anx_typec0: endpoint@0 {
-                    reg = <0>;
-                    remote-endpoint = <&typec_port0>;
-                };
-                anx_typec1: endpoint@1 {
-                    reg = <1>;
-                    remote-endpoint = <&typec_port1>;
-                };
-            };
-        };
-```
+	p->util_avg = 300
+	p->uclamp_min = 1024
 
-However we found some issues with that approach:
-1. The current typec mux API does not allow us to put muxes into
-`ports` directly.
-`fwnode_typec_mux_get` searches for the parent node behind the port(s)
-nodes, so we cannot register the muxes with the port nodes unless we
-change the interface.
-2. We need a compatible string between the `endpoint` nodes and the
-parent node (anx7625-dp@58).
-This is because when the driver core builds the device links, they
-only add links on nodes with a compatible string for `remote-endpoint`
-properties[1].
-Without a compatible string, the parent node of `typec_port0`
-(cros-ec-typec in our case) has to be probed before anx7625, but this
-leads to a deadlock because cros-ec-typec requires anx7625 to register
-the typec_mux drivers first. I'm not sure if this is cros-ec-typec
-specific, though.
-*Any* compatible string fixes this issue, and it doesn't have to be
-"typec-switch".
+what this means is that it needs to run at max performance point as it cares
+about how long it runs for. Its bandwidth which is defined but util_avg is 300
+which means there's plenty of idle time on the CPU. As you know better,
+util_avg of 300 could translate to different runtimes based on the performance
+point you're operating at.
+
+IOW, a uclamp_min of 1024 translates into task placement and frequency
+selection (biggest CPU and highest achievable OPP for 1024 case). Capacity
+pressure doesn't impact this selection. Only thermal pressure can actually
+impact our ability to achieve a performance level. I touched on this topic
+below.
+
+since p->util_avg reflect the true bandwidth of the task, 300 means there's
+plenty of idle time on that CPU and unless capacity pressure is higher than 724
+the task will always fit and be able to run at max perf point as uclamp_min
+hint indicated.
+
+Note that by design this means if there are 2 of these tasks whose util_avg is
+300 and uclamp_min is 1024, then they both can be packed on the biggest CPU and
+run at the highest perf point with still plenty of idle time left on that CPU.
+
+The keyword here is that uclamp indicates performance level requirements, not
+bandwidth. We have cpushares, nice values, bandwidth controllers, etc for that.
+
+> 
+> >
+> > For example, task p:
+> >
+> >         p->util_avg = 300
+> >         p->uclamp[UCLAMP_MIN] = 1024
+> >
+> > Will fit a big CPU. But
+> >
+> >         p->util_avg = 900
+> >         p->uclamp[UCLAMP_MIN] = 1024
+> >
+> > will not, this should trigger overutilized state because the big CPU is
+> > now *actually* being saturated.
+> >
+> > Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
+> >
+> >         p->util_avg = 1024
+> >         p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
+> >
+> > Should fit the task on medium cpus without triggering overutilized
+> > state.
+> >
+> > Inlined comments expand more on desired behavior in more scenarios.
+> >
+> > Introduce new util_fits_cpu() function which encapsulates the new logic.
+> > The new function is not used anywhere yet, but will be used to update
+> > various users of fits_capacity() in later patches.
+> >
+> > Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > ---
+> >  kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 114 insertions(+)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index f80ae86bb404..5eecae32a0f6 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+> >         trace_sched_util_est_se_tp(&p->se);
+> >  }
+> >
+> > +static inline int util_fits_cpu(unsigned long util,
+> > +                               unsigned long uclamp_min,
+> > +                               unsigned long uclamp_max,
+> > +                               int cpu)
+> > +{
+> > +       unsigned long capacity = capacity_of(cpu);
+> > +       unsigned long capacity_orig;
+> > +       bool fits, max_capacity;
+> > +       bool uclamp_max_fits;
+> > +
+> > +       /*
+> > +        * Check if the real util fits without any uclamp boost/cap applied.
+> > +        */
+> > +       fits = fits_capacity(util, capacity);
+> > +
+> > +       if (!uclamp_is_used())
+> > +               return fits;
+> > +
+> > +       /*
+> > +        * We must use capacity_orig_of() for comparing against uclamp_min and
+> > +        * uclamp_max. We only care about capacity pressure (by using
+> > +        * capacity_of()) for comparing against the real util.
+> 
+> I don't fully agree on this. see below
+> 
+> > +        *
+> > +        * If a task is boosted to 1024 for example, we don't want a tiny
+> > +        * pressure to skew the check whether it fits a CPU or not.
+> 
+> But should we look for a CPU with less pressure  ?
+> 
+> Another example:
+> Task boosted to capacity_orig_of(medium_cpu) and there is pressure of
+> this medium CPU. Shouldn't we look for another CPU either a medium
+> without pressure or a big core if all mediums are under pressure ?
+
+Not if the *actual* utilization is small. As I tried to explain above uclamp
+hints indicates performance level requirements, which will be achieved
+regardless of the pressure. The only thing I'm worried about here is capacity
+inversion (like we saw for RT), but I think we need more infra structure to
+handle that case. And as I tried to explain on the RT thread, you can't just
+subtract thermal pressure because any tiny thermal pressure will mean 1024 hint
+will always be false. I think this area in general needs to be better defined
+and handled and I see it out of scope of these fixes.
+
+Generally EAS always looks for most energy efficient CPU with max spare
+capacity. So least busy medium will be picked. And if the mediums are pressued
+enough that adding this task will cause rq->util_avg to be high,
+util_fits_cpu() will see that and return false because actual utilization will
+be within the margin value and we should spell into the big cores then.
+
+If there's something simple to do now, I'll be happy to apply it. A simple
+subtraction of thermal pressure from capacity_orig_of won't cut it.
+
+> Otherwise, uclamp_min can become somewhat meaningless because you will
+> not have the requested min capacity when running. If you really want
+
+This can be only true if you interpret uclamp_min as bandwidth hint. Which as
+I explained above is not what uclamp_min means. Or maybe I misread your words
+:-)
+
+> your task to never go on big core, some cpu affinity would be a better
+> way to achieve this
+
+I hope I cleared this up with my answers above. The actual bandwidth used by
+the task and available by the CPU is not the same as the performance level.
+
+> 
+> 
+> > +        *
+> > +        * Similarly if a task is capped to capacity_orig_of(little_cpu), it
+> > +        * should fit a little cpu even if there's some pressure.
+> > +        *
+> > +        * Known limitation is when thermal pressure is severe to the point
+> > +        * where we have capacity inversion. We don't cater for that as the
+> > +        * system performance will already be impacted severely.
+> > +        */
+> > +       capacity_orig = capacity_orig_of(cpu);
+> > +
+> > +       /*
+> > +        * We want to force a task to fit a cpu as implied by uclamp_max.
+> > +        * But we do have some corner cases to cater for..
+> > +        *
+> > +        *
+> > +        *                                 C=z
+> > +        *   |                             ___
+> > +        *   |                  C=y       |   |
+> > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
+> > +        *   |      C=x        |   |      |   |
+> > +        *   |      ___        |   |      |   |
+> > +        *   |     |   |       |   |      |   |    (util somewhere in this region)
+> > +        *   |     |   |       |   |      |   |
+> > +        *   |     |   |       |   |      |   |
+> > +        *   +----------------------------------------
+> > +        *         cpu0        cpu1       cpu2
+> > +        *
+> > +        *   In the above example if a task is capped to a specific performance
+> > +        *   point, y, then when:
+> > +        *
+> > +        *   * util = 80% of x then it does not fit on cpu0 and should migrate
+> > +        *     to cpu1
+> > +        *   * util = 80% of y then it is forced to fit on cpu1 to honour
+> > +        *     uclamp_max request.
+> > +        *
+> > +        *   which is what we're enforcing here. A task always fits if
+> > +        *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
+> > +        *   the normal upmigration rules should withhold still.
+> > +        *
+> > +        *   Only exception is when we are on max capacity, then we need to be
+> > +        *   careful not to block overutilized state. This is so because:
+> > +        *
+> > +        *     1. There's no concept of capping at max_capacity! We can't go
+> > +        *        beyond this performance level anyway.
+> > +        *     2. The system is being saturated when we're operating near
+> > +        *        max_capacity, it doesn't make sense to block overutilized.
+> > +        */
+> > +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> 
+> Is this intermediate variable max_capacity really needed ?
+
+I thought it helps with readability and breaks down an otherwise a very long
+line. Is it harmful?
+
+
+Thanks!
 
 --
+Qais Yousef
 
-Alternatively, can we split the two muxes into two sub-nodes, like the
-following snippet?
-
-```
-    anx_bridge_dp: anx7625-dp@58 {
-        [...]
-        mode-switch;
-
-        anx_mux0 {
-            compatible = "typec-switch";
-            reg = <0>;
-
-            port {
-                anx_typec0: endpoint {
-                    remote-endpoint = <&typec_port0>;
-                };
-            };
-        };
-
-        anx_mux1 {
-            compatible = "typec-switch";
-            reg = <1>;
-
-            port {
-                anx_typec1: endpoint {
-                    remote-endpoint = <&typec_port1>;
-                };
-            };
-        };
-```
-
-This eliminates the additional "switches" node in the devicetree. The
-sub-nodes also describe our hardware design, which split the DP lanes
-of anx7625 to two type-c ports.
-
-[1]: The `node_not_dev` property searches for a node with a compatible
-string: https://elixir.bootlin.com/linux/latest/source/drivers/of/property.c#L1390
-
-
-
->
-> Ok. I'll take a look on v6.
+> 
+> > +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
+> > +       fits = fits || uclamp_max_fits;
+> > +
+> > +       /*
+> > +        *
+> > +        *                                 C=z
+> > +        *   |                             ___       (region a, capped, util >= uclamp_max)
+> > +        *   |                  C=y       |   |
+> > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
+> > +        *   |      C=x        |   |      |   |
+> > +        *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
+> > +        *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
+> > +        *   |     |   |       |   |      |   |
+> > +        *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
+> > +        *   +----------------------------------------
+> > +        *         cpu0        cpu1       cpu2
+> > +        *
+> > +        * a) If util > uclamp_max, then we're capped, we don't care about
+> > +        *    actual fitness value here. We only care if uclamp_max fits
+> > +        *    capacity without taking margin/pressure into account.
+> > +        *    See comment above.
+> > +        *
+> > +        * b) If uclamp_min <= util <= uclamp_max, then the normal
+> > +        *    fits_capacity() rules apply. Except we need to ensure that we
+> > +        *    enforce we remain within uclamp_max, see comment above.
+> > +        *
+> > +        * c) If util < uclamp_min, then we are boosted. Same as (b) but we
+> > +        *    need to take into account the boosted value fits the CPU without
+> > +        *    taking margin/pressure into account.
+> > +        *
+> > +        * Cases (a) and (b) are handled in the 'fits' variable already. We
+> > +        * just need to consider an extra check for case (c) after ensuring we
+> > +        * handle the case uclamp_min > uclamp_max.
+> > +        */
+> > +       uclamp_min = min(uclamp_min, uclamp_max);
+> > +       if (util < uclamp_min)
+> > +               fits = fits && (uclamp_min <= capacity_orig);
+> > +
+> > +       return fits;
+> > +}
+> > +
+> >  static inline int task_fits_capacity(struct task_struct *p,
+> >                                      unsigned long capacity)
+> >  {
+> > --
+> > 2.25.1
+> >

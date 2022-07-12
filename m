@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A465717B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81AD5717BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiGLK4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S232702AbiGLK5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiGLK4O (ORCPT
+        with ESMTP id S231770AbiGLK5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:56:14 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EA9AE54E;
-        Tue, 12 Jul 2022 03:56:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1657623350; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=NesB+pgNfxQce8Q3B1kMWPE9IL4UaavFicShfBxDFet9aF74U8kRb82jonZ3bs+4FvuLgAKU9+8jejGXqQzpBHQcmaiEsLiwNMdBmqKiP3xvEIFygJ0UBJnoRhkcRiHE6oH7w4SSiq/M1XX0CoV6d6WeEiMAjxeKHgrQPupaI5I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1657623350; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=tFSe8DXlfnP6rHVBGRr8qpDTToiIeu8mAIvR+SIfcvs=; 
-        b=WpIBPNEcOfsLcMZzFn2MWXCUqTxRahZaFWyPQd4agadCJQDTNS7wzR+DxgM/o/wcjEf6LPmFWqLgjWcUusfScsh/KM3YGc4VORFs0DrnA0v4ZEsdUDYk5UuvTHVDMRJ4+dAW/tli8Li1rlhAcjYYTvX3OWddcvD1o//zPVAtSbY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1657623350;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=tFSe8DXlfnP6rHVBGRr8qpDTToiIeu8mAIvR+SIfcvs=;
-        b=K9L+GTzW7q5PPB0CK2GhHx8xFcFfkcRU2cAR9moGiynNvzWaw9rXMqet08cIl0FC
-        fuGdtYBHr9454wBiW7TdTYuNPdJ6pXlM/mcW6U9rkYt9qM/kV+ofw/8NgmtBgIeLhfj
-        /CmN+dKnhILe3EByBAGfdjGzWS2mWfmYT1ZwQKRE=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1657623348256160.91761174332316; Tue, 12 Jul 2022 03:55:48 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:55:48 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Li Chen" <lchen@ambarella.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "DTML" <devicetree@vger.kernel.org>,
-        "Linux-MM" <linux-mm@kvack.org>
-Message-ID: <181f20d0403.121f433c8600165.2068876337784123868@linux.beauty>
-In-Reply-To: <CAK8P3a3gX-JMh6E2X3rH+U37zhkA6b0+AJDtXCJfdZiMocxLjg@mail.gmail.com>
-References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
- <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com>
- <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
- <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com> <181f1d88b64.e2eb2601586551.453778983551010212@linux.beauty> <CAK8P3a3gX-JMh6E2X3rH+U37zhkA6b0+AJDtXCJfdZiMocxLjg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
- page and dio support to no-map rmem
+        Tue, 12 Jul 2022 06:57:18 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C17AE56C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:57:16 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id c15so9461823ljr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=haJtaBg9iJ7nUU8NyVLm6SPXfQl/TvLT88BBTucdy5M=;
+        b=agUpPvt8q/piTx49RLWIj8ofUY2vjIMGpP3lbcGdETZFSkhEYtT5UxKcA8dFWzzgfk
+         n06npNPXOagYdM5UH3VrdrSII0Sz+FCYi19CRg+XRZNAwi3GNwjGL4VKs3ayAh+T63c5
+         OqGMg5uaSkJb5SqVSchX34psYkfFEYGdnHAHCr7bINjpY+oZcWusbUF9H1LfXSGRocDX
+         +Y4ArIRLEXgi9s5lzfnMUeV8RStEt/RurEibti8HQZs9O1Awluj/N+c3fn9pHPvFORLI
+         jcOyQchqzJ946Wr083jlWj3qeK/QtAcBQMoxUmHcP2To7i6ISUnRTRwzohZ3UZH7vN2b
+         Fufg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=haJtaBg9iJ7nUU8NyVLm6SPXfQl/TvLT88BBTucdy5M=;
+        b=0MxxkftPka8DDYcynvUzaXpQGjy8/2hbK9xQ2mIDRH5hMfGYYztRVTW05bnzt59gKR
+         tufaobu4omEMyBdGubMiSzbVlpHg7NBHmwA5jZ5FmppYjg7kkkdvjwmVpYZgOP4GHnEO
+         cDwj2ufwUfZO8ZFoXnCVnLyK7C7wD1xtDXKzWyVTNWEC1MdtaSapEEOKWDl3iu9rynNv
+         G9CmvFguNPMH0z2zF8lGEzFySs2jnwEXoYlfikoubxOljq3Cu9MHpyd0vo9OpPGg6fny
+         hQThCrNSjsmzpQc4ltFA28V3ofKKvHCxrA81YLm0ZkLNjsgLU5ZHd85Fou8a3cwsXgFQ
+         p2dQ==
+X-Gm-Message-State: AJIora+i13vRfzw+slIvj/fDFjdNyXr7/tpq8sdBOdd9rbyEP8asb6ky
+        DVJd4I8UPlYjpD8xgCXw8VxHeJW72oL0nLWpi61uIQ==
+X-Google-Smtp-Source: AGRyM1tFIFOwDqnJk5IXBL9wN5qLMB2NWlDmWHobMdtt7RQc8J/Wd8Sk3QtdvOH3kt4Rpi9D6SISiu336cOuQYnYiyw=
+X-Received: by 2002:a2e:bd11:0:b0:25d:4f94:ac79 with SMTP id
+ n17-20020a2ebd11000000b0025d4f94ac79mr12751057ljq.4.1657623435169; Tue, 12
+ Jul 2022 03:57:15 -0700 (PDT)
 MIME-Version: 1.0
+References: <CGME20220705012516epcas1p2c15e9e9984735c32bcc754ff646ccbf3@epcas1p2.samsung.com>
+ <20220705015729.14455-1-sh043.lee@samsung.com>
+In-Reply-To: <20220705015729.14455-1-sh043.lee@samsung.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 12 Jul 2022 12:56:39 +0200
+Message-ID: <CAPDyKFodLj7McOsT1ObGFU03g0iBLaydo-E5QV=hy+0tOi846A@mail.gmail.com>
+Subject: Re: [PATCH] mmc: use mmc_card_* macro and add it for sd_combo
+To:     Seunghui Lee <sh043.lee@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        axboe@kernel.dk, Avri.Altman@wdc.com, shawn.lin@rock-chips.com,
+        adrian.hunter@intel.com, grant.jung@samsung.com,
+        jt77.jang@samsung.com, dh0421.hwang@samsung.com,
+        junwoo80.lee@samsung.com, jangsub.yi@samsung.com,
+        cw9316.lee@samsung.com, sh8267.baek@samsung.com,
+        wkon.kim@samsung.com, seunghwan.hyun@samsung.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +72,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
- ---- On Tue, 12 Jul 2022 18:08:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote --- 
- > On Tue, Jul 12, 2022 at 11:58 AM Li Chen <me@linux.beauty> wrote:
- > >  > On Tue, Jul 12, 2022 at 2:26 AM Li Chen <me@linux.beauty> wrote:
- > >  > >  ---- On Mon, 11 Jul 2022 21:28:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote ---
- > >  > >  > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
- > >  > >  > The problem here is that the DT is meant to describe the platform in an OS
- > >  > >  > independent way, so having a binding that just corresponds to a user space
- > >  > >  > interface is not a good abstraction.
- > >  > >
- > >  > > Gotcha, but IMO dts + rmem is the only choice for our use case. In our real
- > >  > > case, we use reg instead of size to specify the physical address, so
- > >  > > memremap cannot be used.
- > >  >
- > >  > Does your hardware require a fixed address for the buffer? If it can be
- > >  > anywhere in memory (or at least within a certain range) but just has to
- > >  > be physically contiguous, the normal way would be to use a CMA area
- > >  > to allocate from, which gives you 'struct page' backed pages.
- > >
- > > The limitation is our DSP can only access 32bit memory, but total dram is > 4G, so I cannot use
- > > "size = <...>" in our real case (it might get memory above 4G). I'm not sure if other vendors' DSP also has
- > > this limitation, if so, how do they deal with it if throughput matters.
- > 
- > This is a common limitation that gets handled automatically by setting
- > the dma_mask of the device through the dma-ranges property in DT.
- > When the driver does dma_alloc_coherent() or similar to gets its buffer,
- > it will then allocate pages below this boundary.
- 
-Thanks for the tip! I wasn't aware that dma-ranges can be used by devices other than PCIe controllers.
+On Tue, 5 Jul 2022 at 03:25, Seunghui Lee <sh043.lee@samsung.com> wrote:
+>
+> add mmc_card_sd_combo() macro for sd combo type card and
+> use mmc_card_* macro to simplify instead of comparing card->type
+>
+> Signed-off-by: Seunghui Lee <sh043.lee@samsung.com>
 
- > If you need a large contiguous memory area, then using CMA allows
- > you to specify a region of memory that is kept reserved for DMA
- > allocations, so a call to dma_alloc_coherent() on your device will
- > get contiguous pages from that area, and move other data in those
- > pages elsewhere if necessary. non-movable data is allocated from
- > pages outside of the CMA reserved area in this case.
+Nice cleanup! I minor thing though, see below.
 
-We need a large memory pool, around 2G. I will try CMA and dma-ranges later!
+> ---
+>  drivers/mmc/core/block.c  |  4 ++--
+>  drivers/mmc/core/bus.c    |  4 ++--
+>  drivers/mmc/core/sd.c     |  2 +-
+>  drivers/mmc/core/sdio.c   | 16 ++++++++--------
+>  drivers/mmc/host/mxcmmc.c |  2 +-
 
-Regards,
-Li
+Please split this patch into two. One for the core and one for the
+mxcmmc driver.
+
+Otherwise this looks good to me!
+
+Kind regards
+Uffe
+
+>  include/linux/mmc/card.h  |  1 +
+>  6 files changed, 15 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index bda6c67ce93f..4d7ae8fc2901 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -2987,7 +2987,7 @@ static int mmc_blk_probe(struct mmc_card *card)
+>          * Don't enable runtime PM for SD-combo cards here. Leave that
+>          * decision to be taken during the SDIO init sequence instead.
+>          */
+> -       if (card->type != MMC_TYPE_SD_COMBO) {
+> +       if (!mmc_card_sd_combo(card)) {
+>                 pm_runtime_set_active(&card->dev);
+>                 pm_runtime_enable(&card->dev);
+>         }
+> @@ -3014,7 +3014,7 @@ static void mmc_blk_remove(struct mmc_card *card)
+>                 mmc_blk_part_switch(card, md->part_type);
+>                 mmc_release_host(card->host);
+>         }
+> -       if (card->type != MMC_TYPE_SD_COMBO)
+> +       if (!mmc_card_sd_combo(card))
+>                 pm_runtime_disable(&card->dev);
+>         pm_runtime_put_noidle(&card->dev);
+>         mmc_blk_remove_req(md);
+> diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
+> index 58a60afa650b..d8762fa3d5cd 100644
+> --- a/drivers/mmc/core/bus.c
+> +++ b/drivers/mmc/core/bus.c
+> @@ -85,7 +85,7 @@ mmc_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
+>                         return retval;
+>         }
+>
+> -       if (card->type == MMC_TYPE_SDIO || card->type == MMC_TYPE_SD_COMBO) {
+> +       if (mmc_card_sdio(card) || mmc_card_sd_combo(card)) {
+>                 retval = add_uevent_var(env, "SDIO_ID=%04X:%04X",
+>                                         card->cis.vendor, card->cis.device);
+>                 if (retval)
+> @@ -107,7 +107,7 @@ mmc_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
+>          * SDIO (non-combo) cards are not handled by mmc_block driver and do not
+>          * have accessible CID register which used by mmc_card_name() function.
+>          */
+> -       if (card->type == MMC_TYPE_SDIO)
+> +       if (mmc_card_sdio(card))
+>                 return 0;
+>
+>         retval = add_uevent_var(env, "MMC_NAME=%s", mmc_card_name(card));
+> diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+> index c5f1df6ce4c0..f0186bdf2025 100644
+> --- a/drivers/mmc/core/sd.c
+> +++ b/drivers/mmc/core/sd.c
+> @@ -793,7 +793,7 @@ static umode_t sd_std_is_visible(struct kobject *kobj, struct attribute *attr,
+>              attr == &dev_attr_info2.attr ||
+>              attr == &dev_attr_info3.attr ||
+>              attr == &dev_attr_info4.attr
+> -           ) && card->type != MMC_TYPE_SD_COMBO)
+> +           ) &&!mmc_card_sd_combo(card))
+>                 return 0;
+>
+>         return attr->mode;
+> diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+> index 25799accf8a0..b589df1c35e0 100644
+> --- a/drivers/mmc/core/sdio.c
+> +++ b/drivers/mmc/core/sdio.c
+> @@ -335,7 +335,7 @@ static int sdio_disable_4bit_bus(struct mmc_card *card)
+>  {
+>         int err;
+>
+> -       if (card->type == MMC_TYPE_SDIO)
+> +       if (mmc_card_sdio(card))
+>                 goto out;
+>
+>         if (!(card->host->caps & MMC_CAP_4_BIT_DATA))
+> @@ -360,7 +360,7 @@ static int sdio_enable_4bit_bus(struct mmc_card *card)
+>         err = sdio_enable_wide(card);
+>         if (err <= 0)
+>                 return err;
+> -       if (card->type == MMC_TYPE_SDIO)
+> +       if (mmc_card_sdio(card))
+>                 goto out;
+>
+>         if (card->scr.bus_widths & SD_SCR_BUS_WIDTH_4) {
+> @@ -415,7 +415,7 @@ static int sdio_enable_hs(struct mmc_card *card)
+>         int ret;
+>
+>         ret = mmc_sdio_switch_hs(card, true);
+> -       if (ret <= 0 || card->type == MMC_TYPE_SDIO)
+> +       if (ret <= 0 || mmc_card_sdio(card))
+>                 return ret;
+>
+>         ret = mmc_sd_switch_hs(card);
+> @@ -441,7 +441,7 @@ static unsigned mmc_sdio_get_max_clock(struct mmc_card *card)
+>                 max_dtr = card->cis.max_dtr;
+>         }
+>
+> -       if (card->type == MMC_TYPE_SD_COMBO)
+> +       if (mmc_card_sd_combo(card))
+>                 max_dtr = min(max_dtr, mmc_sd_get_max_clock(card));
+>
+>         return max_dtr;
+> @@ -689,7 +689,7 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+>             mmc_sd_get_cid(host, ocr & rocr, card->raw_cid, NULL) == 0) {
+>                 card->type = MMC_TYPE_SD_COMBO;
+>
+> -               if (oldcard && (oldcard->type != MMC_TYPE_SD_COMBO ||
+> +               if (oldcard && (!mmc_card_sd_combo(oldcard) ||
+>                     memcmp(card->raw_cid, oldcard->raw_cid, sizeof(card->raw_cid)) != 0)) {
+>                         err = -ENOENT;
+>                         goto mismatch;
+> @@ -697,7 +697,7 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+>         } else {
+>                 card->type = MMC_TYPE_SDIO;
+>
+> -               if (oldcard && oldcard->type != MMC_TYPE_SDIO) {
+> +               if (oldcard && !mmc_card_sdio(oldcard)) {
+>                         err = -ENOENT;
+>                         goto mismatch;
+>                 }
+> @@ -754,7 +754,7 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+>         /*
+>          * Read CSD, before selecting the card
+>          */
+> -       if (!oldcard && card->type == MMC_TYPE_SD_COMBO) {
+> +       if (!oldcard && mmc_card_sd_combo(card)) {
+>                 err = mmc_sd_get_csd(card);
+>                 if (err)
+>                         goto remove;
+> @@ -827,7 +827,7 @@ static int mmc_sdio_init_card(struct mmc_host *host, u32 ocr,
+>
+>         mmc_fixup_device(card, sdio_fixup_methods);
+>
+> -       if (card->type == MMC_TYPE_SD_COMBO) {
+> +       if (mmc_card_sd_combo(card)) {
+>                 err = mmc_sd_setup_card(host, card, oldcard != NULL);
+>                 /* handle as SDIO-only card if memory init failed */
+>                 if (err) {
+> diff --git a/drivers/mmc/host/mxcmmc.c b/drivers/mmc/host/mxcmmc.c
+> index 613f13306433..2cf0413407ea 100644
+> --- a/drivers/mmc/host/mxcmmc.c
+> +++ b/drivers/mmc/host/mxcmmc.c
+> @@ -923,7 +923,7 @@ static void mxcmci_init_card(struct mmc_host *host, struct mmc_card *card)
+>          * One way to prevent this is to only allow 1-bit transfers.
+>          */
+>
+> -       if (is_imx31_mmc(mxcmci) && card->type == MMC_TYPE_SDIO)
+> +       if (is_imx31_mmc(mxcmci) && mmc_card_sdio(card))
+>                 host->caps &= ~MMC_CAP_4_BIT_DATA;
+>         else
+>                 host->caps |= MMC_CAP_4_BIT_DATA;
+> diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
+> index 37f975875102..156a7b673a28 100644
+> --- a/include/linux/mmc/card.h
+> +++ b/include/linux/mmc/card.h
+> @@ -348,5 +348,6 @@ bool mmc_card_is_blockaddr(struct mmc_card *card);
+>  #define mmc_card_mmc(c)                ((c)->type == MMC_TYPE_MMC)
+>  #define mmc_card_sd(c)         ((c)->type == MMC_TYPE_SD)
+>  #define mmc_card_sdio(c)       ((c)->type == MMC_TYPE_SDIO)
+> +#define mmc_card_sd_combo(c)   ((c)->type == MMC_TYPE_SD_COMBO)
+>
+>  #endif /* LINUX_MMC_CARD_H */
+> --
+> 2.29.0
+>

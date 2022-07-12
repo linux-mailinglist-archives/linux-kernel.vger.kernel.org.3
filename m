@@ -2,249 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1CF57126A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B217357126B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiGLGp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S232031AbiGLGqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiGLGp4 (ORCPT
+        with ESMTP id S229709AbiGLGql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:45:56 -0400
-Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2663DF1D;
-        Mon, 11 Jul 2022 23:45:54 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 12757101223;
-        Tue, 12 Jul 2022 08:45:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1657608353;
-        bh=L5z0BKhZwBpamcT5arrYS2KRI63KC15oA+S8b1j4SMg=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=QBRhqAxas4IG1fxQv/MvRjH/BMxY20t/HbGA7X8ZxqyB5ckEiF4mFvpSEW02mRhSz
-         otNcnC1HooIAjLRxhgEDv+6SVVrBel7RNtfyzN363OvgM7wgIJtAOoTY8MCrEjlRyr
-         mW1iTldHbMwsTY7g5OkmNyTeOZraRC+C/x0X0hT/nzCme1gv+UXMTKsb6l1YJM/Vh5
-         dINUDh4XF/8AaltlLQRmQuY+Uh+wlzOGqUAMJe05u4r4ancDtTtPH9UJzvG79b21KU
-         u1ZuxZjSbLNPcSvz0wZjQOCnUkNgBDK2dtZbUGbH9sDTi1679emMitvAj24fenB6PI
-         4JjSjTNEVIuCg==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 0E5D1D6; Tue, 12 Jul 2022 08:45:53 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id DF028D2;
-        Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id DAB1DCE;
-        Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id D6B054A0226; Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id F37204A0033;
-        Tue, 12 Jul 2022 08:45:51 +0200 (CEST)
-        (Extended-Queue-bit xtech_ma@fff.in.tum.de)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v2] tools/memory-model: Clarify LKMM's limitations in
- litmus-tests.txt
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <20220711163011.GN1790663@paulmck-ThinkPad-P17-Gen-1>
-Date:   Tue, 12 Jul 2022 08:45:51 +0200
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Marco Elver <elver@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F9BC91E3-5B01-4BDE-B0C0-4A567473B1D2@in.tum.de>
-References: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu>
- <20220614154812.1870099-1-paul.heidekrueger@in.tum.de>
- <CANpmjNOkXz=+221i70CWJexQWwfA_By3+7Cnimwgjmwn7RQdBg@mail.gmail.com>
- <YshC8sJ4dZq3m2wy@rowland.harvard.edu>
- <20220708184749.GW1790663@paulmck-ThinkPad-P17-Gen-1>
- <EE1854E3-C33D-4A4E-AC31-4194A701052B@in.tum.de>
- <20220711163011.GN1790663@paulmck-ThinkPad-P17-Gen-1>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 02:46:41 -0400
+X-Greylist: delayed 3433 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Jul 2022 23:46:40 PDT
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBFC3DF1D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:46:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5C1FB21FFF;
+        Tue, 12 Jul 2022 06:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657608399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6llmww4ReNfnv3TctnPNAp5VowplEtyGScA5o5Kuix4=;
+        b=P+Wsb10ZnqXlETzoeOz1lndqv33SGyoRL0PLO6rDqia6XrHcTeTR28zPHOhwBvuGMDfPbG
+        EDTleFUHBM63v72/Zn505zLHaaD8GilWQV6dxHXmGW3t4NIin54NX4lZXdcAHwR34oiKgA
+        jJx5s7k2h78ocaZ7/6MrC8CRbuIE5XY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FF6813A94;
+        Tue, 12 Jul 2022 06:46:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id d/p8Cs8YzWIzAQAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 12 Jul 2022 06:46:39 +0000
+Message-ID: <ed99b8a1-3cc2-e949-d57d-ea6511dc70bb@suse.com>
+Date:   Tue, 12 Jul 2022 08:46:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] xen/gntdev: Ignore failure to unmap
+ INVALID_GRANT_HANDLE
+Content-Language: en-US
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220710230522.1563-1-demi@invisiblethingslab.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220710230522.1563-1-demi@invisiblethingslab.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------wifTR62gzPVUhQi2UogD5woE"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul E. McKenney <paulmck@kernel.org> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------wifTR62gzPVUhQi2UogD5woE
+Content-Type: multipart/mixed; boundary="------------kfkGZI8k0UwMZ3vwC43xvL7H";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Demi Marie Obenour <demi@invisiblethingslab.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Message-ID: <ed99b8a1-3cc2-e949-d57d-ea6511dc70bb@suse.com>
+Subject: Re: [PATCH v3] xen/gntdev: Ignore failure to unmap
+ INVALID_GRANT_HANDLE
+References: <20220710230522.1563-1-demi@invisiblethingslab.com>
+In-Reply-To: <20220710230522.1563-1-demi@invisiblethingslab.com>
 
-> On Mon, Jul 11, 2022 at 05:14:55PM +0200, Paul Heidekr=C3=BCger wrote:
->>> On 8. Jul 2022, at 20:47, Paul E. McKenney <paulmck@kernel.org> =
-wrote:
->>>=20
->>> On Fri, Jul 08, 2022 at 10:45:06AM -0400, Alan Stern wrote:
->>>> On Fri, Jul 08, 2022 at 01:44:06PM +0200, Marco Elver wrote:
->>>>> On Tue, 14 Jun 2022 at 17:49, Paul Heidekr=C3=BCger
->>>>> <paul.heidekrueger@in.tum.de> wrote:
->>>>>> As discussed, clarify LKMM not recognizing certain kinds of =
-orderings.
->>>>>> In particular, highlight the fact that LKMM might deliberately =
-make
->>>>>> weaker guarantees than compilers and architectures.
->>>>>>=20
->>>>>> Link: =
-https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/=
-#u
->>>>>> Signed-off-by: Paul Heidekr=C3=BCger =
-<paul.heidekrueger@in.tum.de>
->>>>>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->>>>>=20
->>>>> Reviewed-by: Marco Elver <elver@google.com>
->>>>>=20
->>>>> However with the Co-developed-by, this is missing Alan's SOB.
->>>>=20
->>>> For the record:
->>>>=20
->>>> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->>>>=20
->>>> (Note that according to =
-Documentation/process/submitting-patches.rst,=20
->>>> the submitting author's SOB is supposed to come last.)
->>>=20
->>> And this is what I ended up with. Please provide additional feedback
->>> as needed, and in the meantime, thank you all!
->>>=20
->>> 							Thanx, Paul
->>=20
->> Looks great - my first commit in the Linux kernel!
->=20
-> Congratulations!!! ;-)
+--------------kfkGZI8k0UwMZ3vwC43xvL7H
+Content-Type: multipart/mixed; boundary="------------JEyKwfzYNs6fvV87d2Sbxhbx"
 
-Thanks! Hopefully many more to come :-)
+--------------JEyKwfzYNs6fvV87d2Sbxhbx
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> My commits for the upcoming merge window, which is probably 2-3 weeks
-> from now, are already set. So this is targeted at the merge window
-> after that, which is likely to be in late September or early October.
->=20
-> So it is well on its way!
+T24gMTEuMDcuMjIgMDE6MDUsIERlbWkgTWFyaWUgT2Jlbm91ciB3cm90ZToNCj4gVGhlIGVy
+cm9yIHBhdGhzIG9mIGdudGRldl9tbWFwKCkgY2FuIGNhbGwgdW5tYXBfZ3JhbnRfcGFnZXMo
+KSBldmVuDQo+IHRob3VnaCBub3QgYWxsIG9mIHRoZSBwYWdlcyBoYXZlIGJlZW4gc3VjY2Vz
+c2Z1bGx5IG1hcHBlZC4gIFRoaXMgd2lsbA0KPiB0cmlnZ2VyIHRoZSBXQVJOX09OKClzIGlu
+IF9fdW5tYXBfZ3JhbnRfcGFnZXNfZG9uZSgpLiAgVGhlIG51bWJlciBvZg0KPiB3YXJuaW5n
+cyBjYW4gYmUgdmVyeSBsYXJnZTsgSSBoYXZlIG9ic2VydmVkIHRob3VzYW5kcyBvZiBsaW5l
+cyBvZg0KPiB3YXJuaW5ncyBpbiB0aGUgc3lzdGVtZCBqb3VybmFsLg0KPiANCj4gQXZvaWQg
+dGhpcyBwcm9ibGVtIGJ5IG9ubHkgd2FybmluZyBvbiB1bm1hcHBpbmcgZmFpbHVyZSBpZiB0
+aGUgaGFuZGxlDQo+IGJlaW5nIHVubWFwcGVkIGlzIG5vdCBJTlZBTElEX0dSQU5UX0hBTkRM
+RS4gIFRoZSBoYW5kbGUgZmllbGQgb2YgYW55DQo+IHBhZ2UgdGhhdCB3YXMgbm90IHN1Y2Nl
+c3NmdWxseSBtYXBwZWQgd2lsbCBiZSBJTlZBTElEX0dSQU5UX0hBTkRMRSwgc28NCj4gdGhp
+cyBjYXRjaGVzIGFsbCBjYXNlcyB3aGVyZSB1bm1hcHBpbmcgY2FuIGxlZ2l0aW1hdGVseSBm
+YWlsLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5j
+b20+DQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+IFNpZ25lZC1vZmYtYnk6IERl
+bWkgTWFyaWUgT2Jlbm91ciA8ZGVtaUBpbnZpc2libGV0aGluZ3NsYWIuY29tPg0KPiBGaXhl
+czogZGJlOTdjZmY3ZGQ5ICgieGVuL2dudGRldjogQXZvaWQgYmxvY2tpbmcgaW4gdW5tYXBf
+Z3JhbnRfcGFnZXMoKSIpDQoNClB1c2hlZCB0byB4ZW4vdGlwLmdpdCBmb3ItbGludXMtNS4x
+OWENCg0KDQpKdWVyZ2VuDQo=
+--------------JEyKwfzYNs6fvV87d2Sbxhbx
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Awesome!
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Many thanks,
-Paul
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> 							Thanx, Paul
->=20
->> Thanks everyone!
->>=20
->> Paul
->>=20
->>> =
-------------------------------------------------------------------------
->>>=20
->>> commit 3c7753e959706f39e1ee183ef8dcde3b4cfbb4c7
->>> Author: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->>> Date: Tue Jun 14 15:48:11 2022 +0000
->>>=20
->>> tools/memory-model: Clarify LKMM's limitations in litmus-tests.txt
->>>=20
->>> As discussed, clarify LKMM not recognizing certain kinds of =
-orderings.
->>> In particular, highlight the fact that LKMM might deliberately make
->>> weaker guarantees than compilers and architectures.
->>>=20
->>> Link: =
-https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/=
-#u
->>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->>> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->>> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->>> Reviewed-by: Marco Elver <elver@google.com>
->>> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->>> Cc: Martin Fink <martin.fink@in.tum.de>
->>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>=20
->>> diff --git a/tools/memory-model/Documentation/litmus-tests.txt =
-b/tools/memory-model/Documentation/litmus-tests.txt
->>> index 8a9d5d2787f9e..cc355999815cb 100644
->>> --- a/tools/memory-model/Documentation/litmus-tests.txt
->>> +++ b/tools/memory-model/Documentation/litmus-tests.txt
->>> @@ -946,22 +946,39 @@ Limitations of the Linux-kernel memory model =
-(LKMM) include:
->>> 	carrying a dependency, then the compiler can break that =
-dependency
->>> 	by substituting a constant of that value.
->>>=20
->>> -	Conversely, LKMM sometimes doesn't recognize that a particular
->>> -	optimization is not allowed, and as a result, thinks that a
->>> -	dependency is not present (because the optimization would break =
-it).
->>> -	The memory model misses some pretty obvious control dependencies
->>> -	because of this limitation. A simple example is:
->>> +	Conversely, LKMM will sometimes overestimate the amount of
->>> +	reordering compilers and CPUs can carry out, leading it to miss
->>> +	some pretty obvious cases of ordering. A simple example is:
->>>=20
->>> 		r1 =3D READ_ONCE(x);
->>> 		if (r1 =3D=3D 0)
->>> 			smp_mb();
->>> 		WRITE_ONCE(y, 1);
->>>=20
->>> -	There is a control dependency from the READ_ONCE to the =
-WRITE_ONCE,
->>> -	even when r1 is nonzero, but LKMM doesn't realize this and =
-thinks
->>> -	that the write may execute before the read if r1 !=3D 0. (Yes, =
-that
->>> -	doesn't make sense if you think about it, but the memory model's
->>> -	intelligence is limited.)
->>> +	The WRITE_ONCE() does not depend on the READ_ONCE(), and as a
->>> +	result, LKMM does not claim ordering. However, even though no
->>> +	dependency is present, the WRITE_ONCE() will not be executed =
-before
->>> +	the READ_ONCE(). There are two reasons for this:
->>> +
->>> + The presence of the smp_mb() in one of the branches
->>> + prevents the compiler from moving the WRITE_ONCE()
->>> + up before the "if" statement, since the compiler has
->>> + to assume that r1 will sometimes be 0 (but see the
->>> + comment below);
->>> +
->>> + CPUs do not execute stores before po-earlier conditional
->>> + branches, even in cases where the store occurs after the
->>> + two arms of the branch have recombined.
->>> +
->>> +	It is clear that it is not dangerous in the slightest for LKMM =
-to
->>> +	make weaker guarantees than architectures. In fact, it is
->>> +	desirable, as it gives compilers room for making optimizations.=20=
+--------------JEyKwfzYNs6fvV87d2Sbxhbx--
 
->>> +	For instance, suppose that a 0 value in r1 would trigger =
-undefined
->>> +	behavior elsewhere. Then a clever compiler might deduce that r1
->>> +	can never be 0 in the if condition. As a result, said clever
->>> +	compiler might deem it safe to optimize away the smp_mb(),
->>> +	eliminating the branch and any ordering an architecture would
->>> +	guarantee otherwise.
->>>=20
->>> 2.	Multiple access sizes for a single variable are not supported,
->>> 	and neither are misaligned or partially overlapping accesses.
+--------------kfkGZI8k0UwMZ3vwC43xvL7H--
 
+--------------wifTR62gzPVUhQi2UogD5woE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmLNGM4FAwAAAAAACgkQsN6d1ii/Ey/9
+awgAjPkSH4ydXd8sKoSaXVtvu2fheMlVekQO0C1FDPNv6jWjcwDcRW1f3J6eVmn+rgjqKMpG6X9e
+UvlI0Oa2WXl/QVL8VXgALpvGN+EZeC3IHQwKcDoHFRyu+dff9wR7SkSNJ1U45sMGg1iXqfxIzFXw
+4nTQcU8CoRK5okI8pPHmzmYIQixrikHPFPIZanI7dtH8aIoGHegUMkB4CQ7T4/RDomaKhJ+HxRdB
+Ee0poL4AYWDT/Mqj/CnB/HUyPjhXxy6RDV21bcA0Z443z4qzZl2VCZmZ0DLJnsjhKadmF1N2vP91
+5VSwaHzlojO0bsnij0D0w9pxMc2lIZtNLu1W1UeL8Q==
+=4Fpt
+-----END PGP SIGNATURE-----
+
+--------------wifTR62gzPVUhQi2UogD5woE--

@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98189572160
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB79572164
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiGLQue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S233424AbiGLQvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiGLQu3 (ORCPT
+        with ESMTP id S234058AbiGLQu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:50:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A21BFAF3;
-        Tue, 12 Jul 2022 09:50:28 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CG7AnM003488;
-        Tue, 12 Jul 2022 16:50:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=GZziBP99d0vDibe9zAPx6o4FeLdVbvYp/D9HCbjpcG8=;
- b=djogIvN39cUUtTRlXrH+B7F4zs3xN80mrXgRU/aEZu+dh5qcmv/Mvspj/Gxiz8TALk/b
- Pdw+18vdaHNbn6TZcoJnVqtZUzmz7QA2P/PacUzrAozli1yUxEIcAL6eZ59ec96A+XL6
- 4OdO84oJoTyZtq9RuBZmD65rFT+XlPBG1FNVJWZDjoSwMPN6e0mVCz6sxBki3NMe5ZZF
- leMY/h+kewZT8h5YEZdG/xpVjqBin/vTf+Ql2s4E+oP875OmNmU5o6ZgZPcTkiqR7Zn7
- K8gXVEzUnFfUz+ybh47qmsJTjzlM6LXYRhnI7ZcBx7cA3qrVRwYC+wL3BdZrpj/X8w71 JQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h99hh609r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 16:50:27 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CGLuBT025283;
-        Tue, 12 Jul 2022 16:50:25 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3h99s78644-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 16:50:25 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CGoWwU25231860
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 16:50:32 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27ACE42047;
-        Tue, 12 Jul 2022 16:50:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9A5942042;
-        Tue, 12 Jul 2022 16:50:21 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.1.61])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 16:50:21 +0000 (GMT)
-Date:   Tue, 12 Jul 2022 18:50:13 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-Subject: Re: [PATCH 2/3] s390/cpufeature: allow for facility bits
-Message-ID: <20220712185013.3f9320eb@p-imbrenda>
-In-Reply-To: <20220712105220.325010-3-seiden@linux.ibm.com>
-References: <20220712105220.325010-1-seiden@linux.ibm.com>
-        <20220712105220.325010-3-seiden@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Tue, 12 Jul 2022 12:50:58 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA939CD3CE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:50:57 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id f2so11994030wrr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gUq4aoUBvcByToPP+7UKCjXNaAh3FW4+50wwxtlcpGU=;
+        b=JEJsrYrsJsr22QMN1yr81Aorvtq5Ct8d8HgnV/jPqm81K6bJ32bYeLFSODfJeqUX3Q
+         4PwypjJzRNWcdo/pdUWwQc0MhCHufvduRJDkzXBQ19M/AZUclVle7bMxmlwOnOAr6Q66
+         8s1RuD7cdiFMGtEc83MFecs4GyepKCmIwwooW6xEp+D0tmrJWiCv6SgdoAD5Qxrb7aFS
+         Wy2StusuL6qBeDsuol606vvabAG0Xn7wXPP6HHwsy1aRYFaEuqyOXK4wSvq8yXSj0YtE
+         mV02CRyZfJjCgIpIJh02WCSsPq9jYM6XncFxmXt2ndIqnRkD23NJ1a/opd68njNnCDrl
+         upHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gUq4aoUBvcByToPP+7UKCjXNaAh3FW4+50wwxtlcpGU=;
+        b=qiReUzwHeEGZXSxtyuCl7wExlHOY01XCN7GNlS36rNm16HGkYNoRUUL6SiWFG/5R6W
+         9vHkZkOs2FGiK46OGAZtYCUFwb3eaqJAsrwiPS1jxDjBaECNk51r0MbOFuLQPvzglwmG
+         vlV74/wPfXsLjX96IK/rAgJ6e4DUygD+2Caj396bz8h1EgkJYC/wp+RJY7y8rA9TGIM+
+         DNQ+MuVBrjjJ/sJuNnBsBlT9M4PYcLAtdHlyVrU/mnBki7z6/7ye2r2Dz0dyTWEe3jA0
+         evjXCp0Bp5rcfPajvp3mZ5G8hRFKywQ33yGhdjmG/Iy8VRMASsf6xqJO5DwrAS/i0glx
+         1U4g==
+X-Gm-Message-State: AJIora8+u97Y3l8yY22V8FwgfHYRRlJXgdE7pBKWTdAzg+JSZsMsZJs2
+        wVDI9ldNqHvawRuID3lHaji+OCG3jAtuBlxg9HP+C8cOY60c
+X-Google-Smtp-Source: AGRyM1ss2apZFJS9xIlHo11FoTeRrFiKUVCgHVHsLGjP6oHcSPVWodn6AasEsHrm2u39Ss+yNO+vO0PyKEA7Gtd/Qh4=
+X-Received: by 2002:adf:e804:0:b0:21d:6e85:7550 with SMTP id
+ o4-20020adfe804000000b0021d6e857550mr24217908wrm.337.1657644656109; Tue, 12
+ Jul 2022 09:50:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bDkWKpek6FtOzfHNDJZooSSUhq3x4H-y
-X-Proofpoint-GUID: bDkWKpek6FtOzfHNDJZooSSUhq3x4H-y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_10,2022-07-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=953
- priorityscore=1501 clxscore=1015 spamscore=0 mlxscore=0 phishscore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712042258.293010-1-jstultz@google.com> <20220712042258.293010-2-jstultz@google.com>
+ <6e490429-e34c-fa51-c6d9-3315c4639d9d@amd.com>
+In-Reply-To: <6e490429-e34c-fa51-c6d9-3315c4639d9d@amd.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 12 Jul 2022 09:50:44 -0700
+Message-ID: <CANDhNCo1WAUC9DhGfT19Smq2Z5duruAAwOs6AWUWUvNAjZqgAg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/3] drm: vgem: Enable SYNCOBJ and SYNCOBJ_TIMELINE
+ on vgem driver
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 12:52:19 +0200
-Steffen Eiden <seiden@linux.ibm.com> wrote:
+On Tue, Jul 12, 2022 at 12:46 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 12.07.22 um 06:22 schrieb John Stultz:
+> > Allows for basic SYNCOBJ api testing, in environments
+> > like VMs where there may not be a supported drm driver.
+> >
+> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > Cc: Maxime Ripard <mripard@kernel.org>
+> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > Cc: Jason Ekstrand <jason@jlekstrand.net>
+> > Cc: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > Cc: Lionel Landwerlin <lionel.g.landwerlin@intel.com>
+> > Cc: Chunming Zhou <david1.zhou@amd.com>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: dri-devel@lists.freedesktop.org
+> > Signed-off-by: John Stultz <jstultz@google.com>
+> > ---
+> >   drivers/gpu/drm/vgem/vgem_drv.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/vgem/vgem_drv.c b/drivers/gpu/drm/vgem/vge=
+m_drv.c
+> > index c5e3e5457737..e5427d7399da 100644
+> > --- a/drivers/gpu/drm/vgem/vgem_drv.c
+> > +++ b/drivers/gpu/drm/vgem/vgem_drv.c
+> > @@ -109,7 +109,8 @@ static struct drm_gem_object *vgem_gem_create_objec=
+t(struct drm_device *dev, siz
+> >   }
+> >
+> >   static const struct drm_driver vgem_driver =3D {
+> > -     .driver_features                =3D DRIVER_GEM | DRIVER_RENDER,
+> > +     .driver_features                =3D DRIVER_GEM | DRIVER_RENDER |
+> > +                                       DRIVER_SYNCOBJ | DRIVER_SYNCOBJ=
+_TIMELINE,
+>
+> Well that's rather surprising. I'm not an export on VGEM, but AFAIK you
+> need to adjust the CS interface to support that stuff as well.
 
-> From: Heiko Carstens <hca@linux.ibm.com>
-> 
-> Allow for facility bits to be used in cpu features.
-> 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Apologies, could you clarify a bit more what you mean here?  This was
+just helpful to enable the generic userland ioctls for the example
+test tool in this series.
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Are you proposing to add interfaces so the vgem driver can
+attach/signal syncobjs similar to the
+DRM_IOCTL_VGEM_FENCE_ATTACH/DRM_IOCTL_VGEM_FENCE_SIGNAL calls?
 
-> ---
->  arch/s390/kernel/cpufeature.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/s390/kernel/cpufeature.c b/arch/s390/kernel/cpufeature.c
-> index ea4bbfd855db..e70b29804db4 100644
-> --- a/arch/s390/kernel/cpufeature.c
-> +++ b/arch/s390/kernel/cpufeature.c
-> @@ -10,6 +10,7 @@
->  
->  enum {
->  	TYPE_HWCAP,
-> +	TYPE_FACILITY,
->  };
->  
->  struct s390_cpu_feature {
-> @@ -54,6 +55,8 @@ int cpu_have_feature(unsigned int num)
->  	switch (feature->type) {
->  	case TYPE_HWCAP:
->  		return !!(elf_hwcap & (1UL << feature->num));
-> +	case TYPE_FACILITY:
-> +		return test_facility(feature->num);
->  	default:
->  		WARN_ON_ONCE(1);
->  		return 0;
-
+thanks
+-john

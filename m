@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3C1572948
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C7A572951
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiGLW0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S233235AbiGLW3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiGLW0w (ORCPT
+        with ESMTP id S229729AbiGLW3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:26:52 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410E6AA83D;
-        Tue, 12 Jul 2022 15:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1657664809;
-        bh=6vgHIYo307C+wMr3Dqy/LXRmGc5jwOOtlylqnpb0aPk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=gR7Rwvo+QeoUYj6i0k4VV1PvVRj6XRQEuRdNRUewU3CpNnvVDaAaEfRbSqCED8tmQ
-         oVU+mjPePszaeyKxBuH3kS4HXMxTK1AJpYynT4PUcOuHEeRlGc5pECBe0Wa5ftGhkY
-         hsnRZWC3pK+26QvQlFId/kCCxq0vB6jy97C9V7Cc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.68]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5VHG-1nVtjP2KNe-016sv4; Wed, 13
- Jul 2022 00:26:49 +0200
-Message-ID: <6094fba0-5089-914a-f8b2-14bb9d68a4eb@gmx.de>
-Date:   Wed, 13 Jul 2022 00:26:49 +0200
+        Tue, 12 Jul 2022 18:29:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2756B851C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657664977; x=1689200977;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hIf7JOETL3U4PW1pZpGI4ivM/hW8aQW0YEe0B/6Lg6w=;
+  b=cma37gSPgIbq/+x9Wp8TAG3Y9izmGWVlD1EMx+R7euc/xhvQxkIItwgw
+   uujpUYGPLO9az1LyWY4vwOczSdEwrCfvbaxuafu2Tb0FvwGMDqizC4tXq
+   7fCpSxVoyX54bFUXbxdR4uAZvU+0a+RyXttLZ+GshsQMdjxfWZITYJ/e9
+   Ip8OAHl3ZJNjy1ZcTsX5lgPlbxALUmaJ3Ged4PfpUf2S49BC01lKNgLWl
+   0J9nRc0t7N3AR65oz4hJYK8HlLw7Z9aCZpha/JFnhBlAjtqmoqNriqQy2
+   mmhlASNYdHsc73SteNwbmEDqYUUSTG9fZTs/ZYMt+zsUkNuv1zJ2JnlRF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268094713"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="268094713"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 15:29:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="737646505"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jul 2022 15:29:35 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBONq-0002kR-Sm;
+        Tue, 12 Jul 2022 22:29:34 +0000
+Date:   Wed, 13 Jul 2022 06:29:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 3/20] kismet: WARNING: unmet direct
+ dependencies detected for APPLE_ADMAC when selected by SND_SOC_APPLE_MCA
+Message-ID: <202207130614.AspjDmES-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:LdFRrNaXODKuu0Z8A/dOku3q8qzRA2ciDxpQHr/0UqXn3n+PCxP
- tamROs4PvCFqLOQM7YP0Ku0fU/UK0DjQA3W1IwD36zzcsdcDyNJ9OeSnr616X0+WMUpNbkp
- nMti9m+EdShYtZf3rb0dIR0VhV8mEL7mN2T1NRaiR7OkRIOJVEeTior1FYsGySINJ3nHRXl
- U5xyzYE4R9Inn19mPJZNw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tiB0EXPRBR8=:KcnIoaEysKi1Iy21AgVNNG
- PVrwuYaQhpcCmb/oYA7Lu7yZn+Mng56BskhZKDWI/Bh5tzrwK9GWTOq1K5FGgJ9gip/cQ234d
- 7v2eysEp12EuUZsiDeGrnanUU80EKkHoJE+QZUIwZWifTqyEkp2KG0GlkMlsxz915vqt6jpFF
- Tx2qH5Cj50j7uQmjss9DTgkS5OHLtKKBmx2BCl7SZYAe3QpQIJFhoiSOJErcRebk8NRWxjv+I
- 6CVU2Jd88ZEEYRCa5sgdfNHI/V68vJwf56SBrdcVjfFN6B322gmJQz3UZXHnmmwqndnE1bk3S
- ubqBXJTsFzsn/bOBj96lZ/B2UctpBjc5YTA9AlShRf3zFP/6LwbOOAwiKJTwNAQC+qKrglNPE
- C858qzW8i6h0gDZ8jZRcLKAXgyso/1w+WnYjcz/1JE4MeymKnY2fu0CnZFt+l5F91wOwalVgB
- uhS3k88kTZJlGY75ZypIdqEKzNf8P9T5fQsUnGhaSrz5w0XG5mXUu/dpcUQvUBjktMjtHOFqI
- 9hEy5kleqep+dNbM1zhZmKtHr28ovuM9u9+yMf9lzmfEgJ4UBpEDQR71fVM/BCA+BSIyBjkSv
- aGPvoSN9n7+DhqugywTsw3qa6sjcfh8YGgQ0jU4SslLtEvfw8w0MezmU7eJyEmtuOKE1SKzrs
- ypxG+tzY9W1zkjI4XeIec5kxMJ49T8C6D8z8EKoX6NTobgpL6ect+4E1/iJ2B9FFtNisI5+wR
- snJcd+UFqpE6b+7/ZSMIDvixl7mi71VfMpFOK/WfD4AoS1Bfx2WklkKfmRLxXmocNOLWPFohf
- Cj6WLs/sVcM+fPAh/5u0ipd0361AWMHy4QuwNiZxsNggKx6tfd0VQY476PxOV5auSFMV8AtKA
- F9A9L5QiBsrCI4sX/RBYfuLCpH2MMb+3oN2wACkyW1+bnz/eFC44nVUxv8iTlLAun8L1LHlqj
- BzLXuclzIMBR9WMnqd/JIqmXbmI2RvM+tTtmF9A49J5gDcFPhab81EsSVaU+waR1uLB1HlsNa
- NKTOdogwiRZv52otyq1JYbFzJurZqA17M7q3y7M0ZTHW2wZzGlvBMxAY5nU8EHezQRkCg6oSA
- 6HWRla+b0FpoK+iV2daAbh1n+qdTPU67peh
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   55bc86786332628db127357b98246a6731108679
+commit: 50833b1f649b754c7dc6af363080f758ffb76329 [3/20] ASoC: apple-mca: Add platform driver for Apple SoCs
+config: (https://download.01.org/0day-ci/archive/20220713/202207130614.AspjDmES-lkp@intel.com/config)
+reproduce:
+        # https://github.com/AsahiLinux/linux/commit/50833b1f649b754c7dc6af363080f758ffb76329
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout 50833b1f649b754c7dc6af363080f758ffb76329
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_APPLE_ADMAC --selectors CONFIG_SND_SOC_APPLE_MCA -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
 
-5.18.12-rc1
-
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for APPLE_ADMAC when selected by SND_SOC_APPLE_MCA
+   
+   WARNING: unmet direct dependencies detected for APPLE_ADMAC
+     Depends on [n]: DMADEVICES [=n] && (ARCH_APPLE [=y] || COMPILE_TEST [=n])
+     Selected by [y]:
+     - SND_SOC_APPLE_MCA [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (ARCH_APPLE [=y] || COMPILE_TEST [=n])
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

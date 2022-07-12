@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63043571C3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05541571C3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiGLOTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S233428AbiGLOTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiGLOTh (ORCPT
+        with ESMTP id S233237AbiGLOTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:19:37 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF803340A;
-        Tue, 12 Jul 2022 07:19:35 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t1so10661103lft.8;
-        Tue, 12 Jul 2022 07:19:35 -0700 (PDT)
+        Tue, 12 Jul 2022 10:19:40 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51E131911;
+        Tue, 12 Jul 2022 07:19:37 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id n18so12486662lfq.1;
+        Tue, 12 Jul 2022 07:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7U7RsYqGMW/Fuz5G2Ml9y4+TwTHhAM4/OuSGIAeWbUM=;
-        b=opkQ5LRmeZQfW7OxvixldzYBv/+hIidMoUVZf13hKz5+zku8M/PtCuwFuwaTdTMFRp
-         5oUdZgmSizQJ2YyKGTkbAOIEyemv9Nf0qk1VWum6QBkGcsDf+yS1qr89Sg5/LQ0RiE5o
-         4KSUa5LSRsgFmqN81eiHygwnn0fUu6YfFVNQ4YyX/7Cx/+MyP8r9Emk4mUyzGKhIA+b4
-         bie6NVVcSKZCFiRQDpNL0ke49gkNI4XrAkWDUY+vupjYblUBVmPK9pJ0vCTFJ9v6SrEA
-         lVwrvlb3JlRPQ54xZQ9b/WtBWhFyXh7gNOYf5easL+4DSzD4J60nDBYbX7adGd5dVJIA
-         qyUQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VsO6tc/YsVbF80WJSJzqnQTnc6HnCKzY/cXXDocNJaY=;
+        b=BfmTtrk/48Kk+yqzkW9j+U4MSt0/lflRxm5hS5cvBzgQFAHMbu5h3gJNyRdvH+C5NO
+         im4Yj04Ttnr0eUS1DvBPR+2qBckzonn6M1bChJbYSD9KFMdtqhmX5X31X+o2YKMjuajC
+         GPWV8at4i7nbc8FfrMKEsXj9kpAYp9xWEPeHm3LbKgwXHo1YO/uxGQvuxf5sG0a7w2rW
+         3FgzR9t0lD5ASxgp6/h6Scp6JMVUFKCOP0/A7HHtVtF38Gt4gzaoMlB3Gsjbb3JXjNOC
+         lMdQcWzXLIwjBOCEN5DV2g7rMY+AZHOeZd12I2z0q3R91M4t+N/+vZAPTGYJqGD36GrC
+         wJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7U7RsYqGMW/Fuz5G2Ml9y4+TwTHhAM4/OuSGIAeWbUM=;
-        b=0ReUyD2pJgdA+3oBc1RxlpCBMoCBD2qVMU/qJvsbWurS6JgaoIKbtLG8luvtLoFVMy
-         1r2n9kt60mst8MRKnNYbS9W59+g8uH1nI6UbyRE2iOZeesBIwIxkzGsmfdGjYk0g1ea6
-         VQ5CoEb2ffwA5OKL3FYQImxQUcOTogBlH6QrhwI5yQD4Aq8EWu/skYq2LhZXPgcReo7R
-         slwQS/9G2r5iD090jd3eaOyGJId1fj+UMWvi87toRoMX9LmhUJezqo1onQU6/Q6ghF2b
-         2aEH2HOPBDgZtjMhfJrXeCWzZUNmGG8BRwWd/gU1KMNb3To89V/g2gMasZXk7WwPo3yy
-         UfZw==
-X-Gm-Message-State: AJIora+b8xzMFLJRUkwGHMPWGZdaDK8/ABvWeJZcMzuKX9HYRvFafCHv
-        5HboTc/TKtpsU+UlkT3tdDcHUhOc1EtzLg==
-X-Google-Smtp-Source: AGRyM1tVrlnrOfg8pwo/F6ioRtUvp/BhxrW3YH3CUSeqJ2l2ax7KrKyDDTSNAmQu/5A5zzNZz889yQ==
-X-Received: by 2002:a05:6512:10d1:b0:489:feee:3b80 with SMTP id k17-20020a05651210d100b00489feee3b80mr85265lfg.212.1657635573757;
-        Tue, 12 Jul 2022 07:19:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VsO6tc/YsVbF80WJSJzqnQTnc6HnCKzY/cXXDocNJaY=;
+        b=twQfvONiMVSkEBTFpkeVa8cchIeSYHVm6nB/Ib1kv6YkTiM23nvCxbr0CdEqP3pMqT
+         M8BQRdv+ilGhlaK9JkELoaVOcbXQrdawDhilNg/i4beEXjmPG2NoVrL9zriu2LXgmqoI
+         OgssgXpXT3FWZ/8ONPR350JhONyRAcGS9f0xk3z7umR639I8Pgk8C2RsQZAWFaBdKmzE
+         J0J4n+ALn+/Bt5L3GDJsUzS0BwzggnsFI98uJxtybaRu9i0xB8TD6+v8oAQe0nAiXtg2
+         vPXF98WJ2R6+9ZkihJwHxO1+L3rpBgCia6jEClWA8jMgX41GsKTb2F4k4QX0sIcdpcIi
+         JKBg==
+X-Gm-Message-State: AJIora/3/ORWURlPQdI18UO7mDhXJ+KcQeg6BtoqdXb2lxGnL2IvPYEl
+        OaQyH4ma6OPvGsjeTdbYQhk=
+X-Google-Smtp-Source: AGRyM1t9yAuUwo3D0XhVEAeaPNKlepz3s781JeQPEf4HZY9tg4u1S15w4+kmtGtqc0IBIQzIJ1IBGA==
+X-Received: by 2002:a05:6512:1149:b0:480:77ae:cdbe with SMTP id m9-20020a056512114900b0048077aecdbemr14837503lfg.604.1657635576306;
+        Tue, 12 Jul 2022 07:19:36 -0700 (PDT)
 Received: from localhost (95-31-189-152.broadband.corbina.ru. [95.31.189.152])
-        by smtp.gmail.com with ESMTPSA id o16-20020a2e9b50000000b0025d6856933fsm1854964ljj.134.2022.07.12.07.19.32
+        by smtp.gmail.com with ESMTPSA id s16-20020ac24650000000b00489ca4e297csm2199515lfo.226.2022.07.12.07.19.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:19:33 -0700 (PDT)
+        Tue, 12 Jul 2022 07:19:35 -0700 (PDT)
 From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH 0/2] Add Omnivision OV4689 image sensor driver
-Date:   Tue, 12 Jul 2022 17:19:08 +0300
-Message-Id: <20220712141925.678595-1-mike.rudenko@gmail.com>
+Subject: [PATCH 1/2] media: dt-bindings: media: i2c: document OV4689 DT bindings
+Date:   Tue, 12 Jul 2022 17:19:09 +0300
+Message-Id: <20220712141925.678595-2-mike.rudenko@gmail.com>
 X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220712141925.678595-1-mike.rudenko@gmail.com>
+References: <20220712141925.678595-1-mike.rudenko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,53 +73,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add device-tree binding documentation for OV4689 image sensor driver,
+and the relevant MAINTAINERS entries.
 
-this series implements support for Omnivision OV4689 image
-sensor. The Omnivision OV4689 is a high performance, 1/3-inch, 4
-megapixel image sensor. Ihis chip supports high frame rate speeds up
-to 90 fps at 2688x1520 resolution. It is programmable through an I2C
-interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
-connection.
-
-The driver is based on Rockchip BSP kernel [1]. It implements 4-lane CSI-2
-and single 2688x1520 @ 30 fps mode. The driver was tested on Rockchip
-3399-based FriendlyElec NanoPi M4 board with MCAM400 camera module.
-
-While porting the driver, I stumbled upon two issues:
-
-(1) In the original driver, horizontal total size (HTS) was set to a
-value (2584) lower then the frame width (2688), resulting in negative
-hblank. In this driver, I increased HTS to 2688, but fps dropped from
-29.88 to 28.73. What is the preferred way to handle this?
-
-(2) The original driver exposes analog gain range 0x0 - 0x7ff, but the
-gain is not linear across that range. Instead, it is piecewise linear
-(and discontinuous). 0x0-0xff register values result in 0x-2x gain,
-0x100-0x1ff to 0x-4x, 0x300-0x3ff to 0x-8x, and 0x700-0x7ff to 0x-16x,
-with more linear segments in between. Rockchip's camera engine code
-chooses one of the above segments depenging on the desired gain
-value. The question is, how should we proceed keeping in mind
-libcamera use case? Should the whole 0x0-0x7ff be exposed as-is and
-libcamera will do the mapping, or the driver will do the mapping
-itself and expose some logical gain units not tied to the actual gain
-register value? Meanwhile, this driver conservatively exposes only
-0x0-0xf8 gain register range.
-
-[1] https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/media/i2c/ov4689.c
-
-Mikhail Rudenko (2):
-  media: dt-bindings: media: i2c: document OV4689 DT bindings
-  media: i2c: add support for ov4689
-
- .../bindings/media/i2c/ovti,ov4689.yaml       | 122 +++
- MAINTAINERS                                   |   8 +
- drivers/media/i2c/Kconfig                     |  14 +
- drivers/media/i2c/Makefile                    |   1 +
- drivers/media/i2c/ov4689.c                    | 899 ++++++++++++++++++
- 5 files changed, 1044 insertions(+)
+Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+---
+ .../bindings/media/i2c/ovti,ov4689.yaml       | 122 ++++++++++++++++++
+ MAINTAINERS                                   |   7 +
+ 2 files changed, 129 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
- create mode 100644 drivers/media/i2c/ov4689.c
 
---
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+new file mode 100644
+index 000000000000..6bdebe5862b4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
+@@ -0,0 +1,122 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov4689.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Omnivision OV4689 CMOS Sensor Device Tree Bindings
++
++maintainers:
++  - Mikhail Rudenko <mike.rudenko@gmail.com>
++
++description: |-
++  The Omnivision OV4689 is a high performance, 1/3-inch, 4 megapixel
++  image sensor. Ihis chip supports high frame rate speeds up to 90 fps
++  at 2688x1520 resolution. It is programmable through an I2C
++  interface, and sensor output is sent via 1/2/4 lane MIPI CSI-2
++  connection.
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++properties:
++  compatible:
++    const: ovti,ov4689
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    description:
++      External clock for the sensor.
++    items:
++      - const: xclk
++
++  dovdd-supply:
++    description:
++      Definition of the regulator used as Digital I/O voltage supply.
++
++  avdd-supply:
++    description:
++      Definition of the regulator used as Analog voltage supply.
++
++  dvdd-supply:
++    description:
++      Definition of the regulator used as Digital core voltage supply.
++
++  powerdown-gpios:
++    maxItems: 1
++    description:
++      Reference to the GPIO connected to the powerdown pin (active low).
++
++  reset-gpios:
++    maxItems: 1
++    description:
++      Reference to the GPIO connected to the reset pin (active low).
++
++  orientation: true
++
++  rotation: true
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++    description:
++      Output port node, single endpoint describing the CSI-2 transmitter.
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - dovdd-supply
++  - avdd-supply
++  - dvdd-supply
++  - powerdown-gpios
++  - reset-gpios
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov4689: camera@36 {
++            compatible = "ovti,ov4689";
++            reg = <0x36>;
++
++            clocks = <&ov4689_clk>;
++            clock-names = "xclk";
++
++            avdd-supply = <&ov4689_avdd>;
++            dovdd-supply = <&ov4689_dovdd>;
++            dvdd-supply = <&ov4689_dvdd>;
++
++            powerdown-gpios = <&pio 107 GPIO_ACTIVE_LOW>;
++            reset-gpios = <&pio 109 GPIO_ACTIVE_LOW>;
++
++            orientation = <2>;
++            rotation = <0>;
++
++            port {
++                wcam_out: endpoint {
++                    remote-endpoint = <&mipi_in_wcam>;
++                };
++            };
++        };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f468864fd268..63c4844f26e6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14523,6 +14523,13 @@ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/i2c/ov2740.c
+ 
++OMNIVISION OV4689 SENSOR DRIVER
++M:	Mikhail Rudenko <mike.rudenko@gmail.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
++
+ OMNIVISION OV5640 SENSOR DRIVER
+ M:	Steve Longerbeam <slongerbeam@gmail.com>
+ L:	linux-media@vger.kernel.org
+-- 
 2.37.0
+

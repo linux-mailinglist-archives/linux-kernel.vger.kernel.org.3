@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507D3571D61
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A9D571D64
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiGLOyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S233772AbiGLOyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiGLOyB (ORCPT
+        with ESMTP id S233407AbiGLOyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:54:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5683E248DA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7C0F61006
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0597C3411C;
-        Tue, 12 Jul 2022 14:53:54 +0000 (UTC)
-Date:   Tue, 12 Jul 2022 10:53:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
-Message-ID: <20220712105353.08358450@gandalf.local.home>
-In-Reply-To: <20220712134916.GT1790663@paulmck-ThinkPad-P17-Gen-1>
-References: <20220503073844.4148944-1-elver@google.com>
-        <20220711182918.338f000f@gandalf.local.home>
-        <20220712002128.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-        <20220711205319.1aa0d875@gandalf.local.home>
-        <20220712025701.GS1790663@paulmck-ThinkPad-P17-Gen-1>
-        <20220712114954.GA3870114@paulmck-ThinkPad-P17-Gen-1>
-        <20220712093940.45012e47@gandalf.local.home>
-        <20220712134916.GT1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 12 Jul 2022 10:54:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA63B3192D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+k83zGSxic1pbQTEJQS/iJCti7MTxdVcT9sj/XVqF9o=; b=AYur2/Yrsq3i8wnAiMQB5+HeGR
+        Cw1t1umk+nFN6rzDv9R8Kx4j4+IbnkrgsEYyIxGKCrGXH6RGeySCrD/75ebbwoNRX6FXZg7zYOoQc
+        pJBZfDHzeAgsQRlmUhdHkHxwaGQOmL2mvL1ysNWIPqYKl9LMq/2DvVjIMG7cj9aEcdqyWr12Nrl8K
+        feqbLA6Rp/mCUDdslVe8t1ZDq6J4/VzufUvgGfcElp1Rxm7X5tHtU5VVjuExRYm15zBZ9jGtrDFgo
+        W1AFvEjia6lwr0qz3ZrxQbsxetPO8Sk9Ib085EHPXQO8BCZbu3E8uJcFxAn+16vN9oGyKsgSFcG7g
+        EtYvT1Xg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBHH1-00715O-MX; Tue, 12 Jul 2022 14:54:03 +0000
+Date:   Tue, 12 Jul 2022 15:54:03 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
+Message-ID: <Ys2LCwQZUuOwiiX6@casper.infradead.org>
+References: <20220712142441.4184969-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712142441.4184969-1-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 06:49:16 -0700
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+On Tue, Jul 12, 2022 at 02:24:55PM +0000, Liam Howlett wrote:
+> When building with C=1, the maple tree had some rcu type mismatch &
+> locking mismatches in the destroy functions.  There were cosmetic only
+> since this happens after the nodes are removed from the tree.
 
-> > I guess the question is, can we have printk() in such a place? Because this
-> > tracepoint is attached to printk and where ever printk is done so is this
-> > tracepoint.  
+... in the current use-case.  It's a legitimate use of the API to do:
+
+	ma_init();
+	ma_store();
+	ma_destroy();
+	ma_store();
+
+Can you add a new test that does that?
+
+> @@ -5524,13 +5526,17 @@ static void mt_destroy_walk(struct maple_enode *enode, unsigned char ma_flags,
+>  
+>  		type = mte_node_type(mas.node);
+>  		slots = ma_slots(mte_to_node(mas.node), type);
+> -		if ((offset < mt_slots[type]) && mte_node_type(slots[offset]) &&
+> -		    mte_to_node(slots[offset])) {
+> -			struct maple_enode *parent = mas.node;
+> +		if (offset >= mt_slots[type])
+> +			goto next;
+>  
+> -			mas.node = mas_slot_locked(&mas, slots, offset);
+> +		tmp = mas_slot_locked(&mas, slots, offset);
+> +		if (mte_node_type(tmp) && mte_to_node(tmp)) {
+> +
+
+Unnecessary blank line?
+
+> +			parent = mas.node;
+> +			mas.node = tmp;
+>  			slots = mas_destroy_descend(&mas, parent, offset);
+>  		}
+> +next:
+>  		node = mas_mn(&mas);
+>  	} while (start != mas.node);
+>  
+> -- 
+> 2.35.1
 > 
-> As I understand it, code in such a place should be labeled noinstr.
-> Then the call to printk() would be complained about as an illegal
-> noinstr-to-non-noinstr call.
-> 
-> But where exactly is that printk()?
-
-Perhaps the fix is to remove the _rcuidle() from trace_console_rcuidle().
-If printk() can never be called from noinstr (aka RCU not watching).
-
--- Steve

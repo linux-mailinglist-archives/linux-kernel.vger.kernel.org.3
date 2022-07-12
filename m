@@ -2,163 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E0F571B20
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2A7571B26
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbiGLNZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        id S232070AbiGLN0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbiGLNZc (ORCPT
+        with ESMTP id S229677AbiGLN0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:25:32 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A68E4ED;
-        Tue, 12 Jul 2022 06:25:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Lj1gd1sHjzKHnx;
-        Tue, 12 Jul 2022 21:24:29 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgAHamlGds1iag20Ag--.36943S3;
-        Tue, 12 Jul 2022 21:25:27 +0800 (CST)
-Subject: Re: [PATCH RFC v3 1/3] sbitmap: fix that same waitqueue can be woken
- up continuously
-To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, asml.silence@gmail.com, osandov@fb.com,
-        kbusch@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220710042200.20936-1-yukuai1@huaweicloud.com>
- <20220710042200.20936-2-yukuai1@huaweicloud.com>
- <20220711142009.jz2ilqrxjgtwuvq6@quack3.lan>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <0369ea84-f9ac-4992-5f1e-4f44d373b65d@huaweicloud.com>
-Date:   Tue, 12 Jul 2022 21:25:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 12 Jul 2022 09:26:36 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354388F34;
+        Tue, 12 Jul 2022 06:26:35 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id l11so13855410ybu.13;
+        Tue, 12 Jul 2022 06:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tPT19Kfs8LeMRuQNUNS/QgGrqQ3NwvwMCFw4PNMdSIs=;
+        b=X8Px23L+V3za0BnD3cakHrQ4J6Ya3vYywEENBbezm987pke851PTKV3avyjDFjRkw7
+         ZsMydqcBLJv1w8HwUidrwp60ZfwEAubhw+4j8iw97cXOtLbJKICSf6edAkIhIVxrVO8o
+         8djHIoBs1X07CJJYqcfCtAaUFJOpJSP5MRkA6zs3DqGDRHrldH/RErwdGp23qryQlRIC
+         YFIuOdj4zngBXTJUgkZUvsODCNIVAFLxd1LCmFfFpbQHujNoDKsY9Ic5Oa/8tqjIhNmQ
+         r5zdPSWjKg0hnVDxffWc1k8rwNa6q5NtVYRXJ9mF76y0MxTeb43IL3FXKFltVity347i
+         QukA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tPT19Kfs8LeMRuQNUNS/QgGrqQ3NwvwMCFw4PNMdSIs=;
+        b=fi/WLCIfkY86Q5dZdxjf4GtoX0+JU8Qi1TCrVkVoWQJM+SB+jz4MAVvDlw+SPrl6UE
+         JyGH3D2stV6Xfy51ADkyoK1Mt3uB63ZqxLJ7cDuriixnFpAkEe8Au+YPpuMnH14uyfwC
+         LBXXGAQ2VZB2cBf2yfaShHTBhIpwikWBHwFaBoht4fIx4v7TRqf1grrnm0thOXGuqoS9
+         o2NPN0KlVAY57RKnMQK5fqW1zwdZmDu0zZStwIg8enLPMfDEPtvBlKL+mfMizrz2+aHy
+         kKdR5/GfcEyhwaNWdc2BtcxabZULZwK8FkpgNkAjFl40sT9l7LY2tch78FYLAP8163jU
+         btVQ==
+X-Gm-Message-State: AJIora+MYg3cHC8d1tws4msHb4Z97Y0JnXAFlNkkUS8o2MIBUMCkAZt3
+        +sCivBVls0gJIh5c+wLN6m8gNDWzZAG1uHNYcnA=
+X-Google-Smtp-Source: AGRyM1tydpkTIh2IgBmDJrpBmhXorykjG2XeC1Otp/8Wl7SPN46xnfSPreo3g9mX+Tw/YQ1D+Phgw5v+6rJXfVUMlhk=
+X-Received: by 2002:a25:cbcf:0:b0:66e:8893:a02c with SMTP id
+ b198-20020a25cbcf000000b0066e8893a02cmr23004457ybg.460.1657632394963; Tue, 12
+ Jul 2022 06:26:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220711142009.jz2ilqrxjgtwuvq6@quack3.lan>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgAHamlGds1iag20Ag--.36943S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw45tr1DKw1fGryxJF1UZFb_yoW5CF4Upa
-        1UWFyvyF48tFy2kws2qF1UAw1YkwnFgr9rGr4rK3WjkrnrKr4ftr9Y9rs8ur18ZFsrCay8
-        JF47tFZxWr4jqFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220712131523.1874428-1-vamshigajjela@google.com>
+In-Reply-To: <20220712131523.1874428-1-vamshigajjela@google.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 12 Jul 2022 15:25:57 +0200
+Message-ID: <CAHp75VecnJSv9P4ZXf5g4Yi7rYySRN=73KwZ_OBFUyFtaSq00w@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250_dw: Avoid pslverr on reading empty receiver fifo
+To:     Vamshi Gajjela <vamshigajjela@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Tue, Jul 12, 2022 at 3:16 PM Vamshi Gajjela <vamshigajjela@google.com> wrote:
+>
+> From: VAMSHI GAJJELA <vamshigajjela@google.com>
+>
+> With PSLVERR_RESP_EN parameter set to 1, device generates an error
 
-ÔÚ 2022/07/11 22:20, Jan Kara Ð´µÀ:
-> On Sun 10-07-22 12:21:58, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> __sbq_wake_up		__sbq_wake_up
->>   sbq_wake_ptr -> assume	0
->> 			 sbq_wake_ptr -> 0
->>   atomic_dec_return
->> 			atomic_dec_return
->>   atomic_cmpxchg -> succeed
->> 			 atomic_cmpxchg -> failed
->> 			  return true
->>
->> 			__sbq_wake_up
->> 			 sbq_wake_ptr
->> 			  atomic_read(&sbq->wake_index) -> still 0
->>   sbq_index_atomic_inc -> inc to 1
->> 			  if (waitqueue_active(&ws->wait))
->> 			   if (wake_index != atomic_read(&sbq->wake_index))
->> 			    atomic_set -> reset from 1 to 0
->>   wake_up_nr -> wake up first waitqueue
->> 			    // continue to wake up in first waitqueue
->>
->> Fix the problem by using atomic_cmpxchg() instead of atomic_set()
->> to update 'wake_index'.
->>
->> Fixes: 417232880c8a ("sbitmap: Replace cmpxchg with xchg")
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> I don't think this patch is really needed after the following patches.  As
-> I see it, wake_index is just a performance optimization (plus a fairness
-> improvement) but in principle the code in sbq_wake_ptr() is always prone to
-> races as the waitqueue it returns needn't have any waiters by the time we
-> return. So for correctness the check-and-retry loop needs to happen at
-> higher level than inside sbq_wake_ptr() and occasional wrong setting of
-> wake_index will result only in a bit of unfairness and more scanning
-> looking for suitable waitqueue but I don't think that really justifies the
-> cost of atomic operations in cmpxchg loop...
+the device
 
-It's right this patch just improve fairness. However, in hevyload tests
-I found that the 'wrong setting of wake_index' can happen frequently,
-for consequence, some waitqueue can be empty while some waitqueue have
-a lot of waiters.
+> response when an attempt to read empty RBR with FIFO enabled.
 
-There shoud be lots of work to fix unfairness throughly, I can remove
-this patch for now.
+an empty
 
-Thanks,
-Kuai
-> 
-> 								Honza
->> ---
->>   lib/sbitmap.c | 15 ++++++++++-----
->>   1 file changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
->> index 29eb0484215a..b46fce1beb3a 100644
->> --- a/lib/sbitmap.c
->> +++ b/lib/sbitmap.c
->> @@ -579,19 +579,24 @@ EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
->>   
->>   static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
->>   {
->> -	int i, wake_index;
->> +	int i, wake_index, old_wake_index;
->>   
->> +again:
->>   	if (!atomic_read(&sbq->ws_active))
->>   		return NULL;
->>   
->> -	wake_index = atomic_read(&sbq->wake_index);
->> +	old_wake_index = wake_index = atomic_read(&sbq->wake_index);
->>   	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
->>   		struct sbq_wait_state *ws = &sbq->ws[wake_index];
->>   
->>   		if (waitqueue_active(&ws->wait)) {
->> -			if (wake_index != atomic_read(&sbq->wake_index))
->> -				atomic_set(&sbq->wake_index, wake_index);
->> -			return ws;
->> +			if (wake_index == old_wake_index)
->> +				return ws;
->> +
->> +			if (atomic_cmpxchg(&sbq->wake_index, old_wake_index,
->> +					   wake_index) == old_wake_index)
->> +				return ws;
->> +			goto again;
->>   		}
->>   
->>   		wake_index = sbq_index_inc(wake_index);
->> -- 
->> 2.31.1
->>
+> This happens when LCR writes are ignored when UART is busy.
+> dw8250_check_lcr() in retries to updateLCR, invokes dw8250_force_idle()
+> to clear and reset fifo and eventually reads UART_RX causing pslverr.
 
+fifo --> FIFO
+pslverr --> the error
+
+> Avoid this by not reading RBR/UART_RX when no data is available.
+
+...
+
+> +       unsigned int lsr;
+>         struct uart_8250_port *up = up_to_u8250p(p);
+
+Can we keep it ordered according to the reversed xmas tree?
+
+...
+
+> +       /*
+> +        * With PSLVERR_RESP_EN parameter set to 1, device generates pslverr
+
+the device
+pslverr --> an
+
+> +        * error response when an attempt to read empty RBR with FIFO enabled
+
+Missed period.
+
+> +        */
+> +       lsr = p->serial_in(p, UART_LSR);
+
+The only caller of this function already has the lsr value, why you
+can't (re)use it?
+
+> +       if ((up->fcr & UART_FCR_ENABLE_FIFO) && !(lsr & UART_LSR_DR))
+> +               return;
+
+-- 
+With Best Regards,
+Andy Shevchenko

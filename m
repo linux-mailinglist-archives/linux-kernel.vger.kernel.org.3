@@ -2,161 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA32C571E84
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B83571E8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiGLPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S233277AbiGLPMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiGLPLS (ORCPT
+        with ESMTP id S234005AbiGLPMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:11:18 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003BFCD3C3;
-        Tue, 12 Jul 2022 08:04:59 -0700 (PDT)
-X-UUID: 6ea1f3a796d34eb8913b6ce8f6b5ce79-20220712
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:b6c9b8f7-92c4-4774-be0f-3fbe47dae641,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:0f94e32,CLOUDID:731149d7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 6ea1f3a796d34eb8913b6ce8f6b5ce79-20220712
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1016350427; Tue, 12 Jul 2022 23:04:53 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 12 Jul 2022 23:04:51 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Jul 2022 23:04:50 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v9 8/8] dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s document
-Date:   Tue, 12 Jul 2022 23:04:42 +0800
-Message-ID: <20220712150442.32504-9-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220712150442.32504-1-jiaxin.yu@mediatek.com>
-References: <20220712150442.32504-1-jiaxin.yu@mediatek.com>
+        Tue, 12 Jul 2022 11:12:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B378CF6CE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657638307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UYGQowRRWMmN0sxEy+ystye0hklNDwtwy22gwY/oCHU=;
+        b=CjOkQxw4qxv2VokG+83sUO91xVn9Cl3XyPABakij50chA+EJto7gc+Mp+7+b0Jmty8Q8Wz
+        9hrxAcFOrE2n2NRYOrrupo2MWvvb2kzmjYc49R+fVvff6f4bxTudXm5KJq/T4P/3AT8xGk
+        P3YMlP+6q6sQqv/6NkSLIEPfLHu2jgU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-_M5s2jpoPKCcE32j_hm0tA-1; Tue, 12 Jul 2022 11:05:04 -0400
+X-MC-Unique: _M5s2jpoPKCcE32j_hm0tA-1
+Received: by mail-wm1-f71.google.com with SMTP id y14-20020a7bcd8e000000b003a2ea282944so903861wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:05:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UYGQowRRWMmN0sxEy+ystye0hklNDwtwy22gwY/oCHU=;
+        b=Q/O5HQ0/vSsjnfjV+Lj3IKdrCtt/hRxREBo2xexFl3+xm+pKONHEW6CuU2Y/31ZKr3
+         M6u3kYDEPZcLQz7kjB+bk6/X9rUNmyJbRG15FRm3PFab2+riE7XJ+1aGPFgC5J476bSQ
+         sct+IZ/bID2DIkl/W3VurD/X3QrSaDayH7NR60plqOCsAZAHwQfQEg3D967RJyaiIiwa
+         NLtojuWP++SNCouHkuZSRlQzAnNsnICHyL/hdFutn+nXUZnKbp5wNsJI4UEN0LpRDunb
+         AGD3MoGVgEMYbCrmjSLurEnJping8qsIcAi/SFhmTEo1FTvu129RO5nD3tnJ52/0XBdL
+         Lbrw==
+X-Gm-Message-State: AJIora9yAFsI5Gl8AS+LMWPnAgnl97JT2/MVaPAXLqYwJ0hM6FPiNjXN
+        9nOEGBqgiiUGlYGuYs5AzKQJHuido4gEQCuaIqjhZLW0R91pmXxgNgYz3b/C0YW1p/G3is2xV4S
+        JvcaOxC7ZVzK18RkLuW3kJHo=
+X-Received: by 2002:a5d:5846:0:b0:21d:a98a:b236 with SMTP id i6-20020a5d5846000000b0021da98ab236mr9133163wrf.674.1657638303593;
+        Tue, 12 Jul 2022 08:05:03 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t9DslN6RE054elR+7RG4LKNVXeLPBmWOEg+8DTB3NT7tuycRzCk/nDHHFVlmgVhISImkhmFg==
+X-Received: by 2002:a5d:5846:0:b0:21d:a98a:b236 with SMTP id i6-20020a5d5846000000b0021da98ab236mr9133136wrf.674.1657638303418;
+        Tue, 12 Jul 2022 08:05:03 -0700 (PDT)
+Received: from [192.168.9.27] (net-2-34-30-100.cust.vodafonedsl.it. [2.34.30.100])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05600c1d1300b003976fbfbf00sm9491042wms.30.2022.07.12.08.05.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 08:05:02 -0700 (PDT)
+Message-ID: <23a5d310-7d5e-a8ee-bd66-b80505e0553e@redhat.com>
+Date:   Tue, 12 Jul 2022 17:05:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+To:     matthew.gerlach@linux.intel.com
+Cc:     basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
+        hao.wu@intel.com, linux-doc@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, russell.h.weight@intel.com,
+        tianfei.zhang@intel.com, trix@redhat.com, yilun.xu@intel.com
+References: <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
+ C6100 cards
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8186 board with mt6366, rt1019 and rt5682s.
+On 2022-07-07 17:05, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add pci_dev_table entries supporting the Intel N6000, N6001
+> and C6100 cards to the dfl-pci driver.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+Tested-by: Marco Pagani <marpagan@redhat.com>
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-new file mode 100644
-index 000000000000..059a7629b2d3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mt8186-mt6366-rt1019-rt5682s.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek MT8186 with MT6366, RT1019 and RT5682S ASoC sound card driver
-+
-+maintainers:
-+  - Jiaxin Yu <jiaxin.yu@mediatek.com>
-+
-+description:
-+  This binding describes the MT8186 sound card.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8186-mt6366-rt1019-rt5682s-sound
-+
-+  mediatek,platform:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: The phandle of MT8186 ASoC platform.
-+
-+  headset-codec:
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        maxItems: 1
-+    required:
-+      - sound-dai
-+
-+  playback-codecs:
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      sound-dai:
-+        items:
-+          - description: phandle of dp codec
-+          - description: phandle of l channel speaker codec
-+          - description: phandle of r channel speaker codec
-+        minItems: 2
-+    required:
-+      - sound-dai
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+  - headset-codec
-+  - playback-codecs
-+
-+examples:
-+  - |
-+
-+    sound: mt8186-sound {
-+        compatible = "mediatek,mt8186-mt6366-rt1019-rt5682s-sound";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "aud_clk_mosi_off",
-+                        "aud_clk_mosi_on";
-+        pinctrl-0 = <&aud_clk_mosi_off>;
-+        pinctrl-1 = <&aud_clk_mosi_on>;
-+
-+        headset-codec {
-+            sound-dai = <&rt5682s>;
-+        };
-+
-+        playback-codecs {
-+             sound-dai = <&it6505dptx>,
-+                         <&rt1019p>;
-+        };
-+    };
-+
-+...
--- 
-2.18.0
+> ---
+> v3: added necessary subdevice ids
+>     removed 'drivers: ' from title
+> 
+> v2: changed names from INTEL_OFS to INTEL_DFL
+> ---
+>  drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index fd1fa55c9113..94eabdf1d2f7 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
+>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
+>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
+> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
+>  
+>  /* VF Device */
+>  #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
+>  #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
+>  #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
+>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
+> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
+> +
+> +/* PCI Subdevice ID */
+> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
+> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
+> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
+>  
+>  static struct pci_device_id cci_pcie_id_tbl[] = {
+>  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
+> @@ -96,6 +103,18 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+>  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
+>  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
+>  	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
+>  	{0,}
+>  };
+>  MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
 

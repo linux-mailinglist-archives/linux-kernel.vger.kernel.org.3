@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BB85724F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1835724C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbiGLTK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S235282AbiGLTDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235783AbiGLTJb (ORCPT
+        with ESMTP id S235319AbiGLTCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:09:31 -0400
+        Tue, 12 Jul 2022 15:02:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8634E586B;
-        Tue, 12 Jul 2022 11:52:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A27BDB97;
+        Tue, 12 Jul 2022 11:49:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA49B81BAC;
-        Tue, 12 Jul 2022 18:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A643FC3411C;
-        Tue, 12 Jul 2022 18:52:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ECDDB81B95;
+        Tue, 12 Jul 2022 18:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E33FC3411C;
+        Tue, 12 Jul 2022 18:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651935;
-        bh=YviMuseI7ZZnS9AUuLIn0isWO6Kg2NnspcB5yQa98XU=;
+        s=korg; t=1657651779;
+        bh=JlIyOuUj9JLLrDz59NnPWuShcfTAFWu4/c6+Co6rN1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVYTiHcUenj99H0tvSIeA2C8nz9RF//UOL98XOB1wjIFYzSK4cJBGmgFNZlSAghXE
-         DgK5K6YOd+a4GKQiyNRWJde4CMguQiZ+HcOyvcqFZlhI0GB9u2ZTD1SkmeQN9zVDy+
-         K7VP4zWyPR5U/EwzglnQPNvZYPRTxV/xetY8MPvs=
+        b=uscWGcma/IsTCrX42lurTHgilVltnASZlXYE7+jvXqv/jTdbxdAgweNVEgXx5iuE9
+         1vZVWL9PlHQ9Th1BciNXq/Y2HLsD4grvimDpf5UNoYQCfNzeSqLZmS5d/9yzyVAYYo
+         pidHnzHX+nQlHsoEeEw4w1kpHEZKgi0JNSYJXYYU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Andrew Cooper <Andrew.Cooper3@citrix.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 27/61] x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-Date:   Tue, 12 Jul 2022 20:39:24 +0200
-Message-Id: <20220712183238.048856685@linuxfoundation.org>
+Subject: [PATCH 5.15 55/78] x86/bugs: Add retbleed=ibpb
+Date:   Tue, 12 Jul 2022 20:39:25 +0200
+Message-Id: <20220712183241.114739841@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,14 +59,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit caa0ff24d5d0e02abce5e65c3d2b7f20a6617be5 upstream.
+commit 3ebc170068885b6fc7bedda6c667bb2c4d533159 upstream.
 
-Due to TIF_SSBD and TIF_SPEC_IB the actual IA32_SPEC_CTRL value can
-differ from x86_spec_ctrl_base. As such, keep a per-CPU value
-reflecting the current task's MSR content.
+jmp2ret mitigates the easy-to-attack case at relatively low overhead.
+It mitigates the long speculation windows after a mispredicted RET, but
+it does not mitigate the short speculation window from arbitrary
+instruction boundaries.
 
-  [jpoimboe: rename]
+On Zen2, there is a chicken bit which needs setting, which mitigates
+"arbitrary instruction boundaries" down to just "basic block boundaries".
 
+But there is no fix for the short speculation window on basic block
+boundaries, other than to flush the entire BTB to evict all attacker
+predictions.
+
+On the spectrum of "fast & blurry" -> "safe", there is (on top of STIBP
+or no-SMT):
+
+  1) Nothing		System wide open
+  2) jmp2ret		May stop a script kiddy
+  3) jmp2ret+chickenbit  Raises the bar rather further
+  4) IBPB		Only thing which can count as "safe".
+
+Tentative numbers put IBPB-on-entry at a 2.5x hit on Zen2, and a 10x hit
+on Zen1 according to lmbench.
+
+  [ bp: Fixup feature bit comments, document option, 32-bit build fix. ]
+
+Suggested-by: Andrew Cooper <Andrew.Cooper3@citrix.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
@@ -74,101 +94,216 @@ Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/nospec-branch.h |    1 +
- arch/x86/kernel/cpu/bugs.c           |   28 +++++++++++++++++++++++-----
- arch/x86/kernel/process.c            |    2 +-
- 3 files changed, 25 insertions(+), 6 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |    3 +
+ arch/x86/entry/Makefile                         |    2 -
+ arch/x86/entry/entry.S                          |   22 ++++++++++++
+ arch/x86/include/asm/cpufeatures.h              |    2 -
+ arch/x86/include/asm/nospec-branch.h            |    8 +++-
+ arch/x86/kernel/cpu/bugs.c                      |   43 ++++++++++++++++++------
+ 6 files changed, 67 insertions(+), 13 deletions(-)
+ create mode 100644 arch/x86/entry/entry.S
 
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4978,6 +4978,9 @@
+ 				       disabling SMT if necessary for
+ 				       the full mitigation (only on Zen1
+ 				       and older without STIBP).
++			ibpb	     - mitigate short speculation windows on
++				       basic block boundaries too. Safe, highest
++				       perf impact.
+ 			unret        - force enable untrained return thunks,
+ 				       only effective on AMD f15h-f17h
+ 				       based systems.
+--- a/arch/x86/entry/Makefile
++++ b/arch/x86/entry/Makefile
+@@ -11,7 +11,7 @@ CFLAGS_REMOVE_common.o		= $(CC_FLAGS_FTR
+ 
+ CFLAGS_common.o			+= -fno-stack-protector
+ 
+-obj-y				:= entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
++obj-y				:= entry.o entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
+ obj-y				+= common.o
+ 
+ obj-y				+= vdso/
+--- /dev/null
++++ b/arch/x86/entry/entry.S
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Common place for both 32- and 64-bit entry routines.
++ */
++
++#include <linux/linkage.h>
++#include <asm/export.h>
++#include <asm/msr-index.h>
++
++.pushsection .noinstr.text, "ax"
++
++SYM_FUNC_START(entry_ibpb)
++	movl	$MSR_IA32_PRED_CMD, %ecx
++	movl	$PRED_CMD_IBPB, %eax
++	xorl	%edx, %edx
++	wrmsr
++	RET
++SYM_FUNC_END(entry_ibpb)
++/* For KVM */
++EXPORT_SYMBOL_GPL(entry_ibpb);
++
++.popsection
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -294,7 +294,7 @@
+ #define X86_FEATURE_PER_THREAD_MBA	(11*32+ 7) /* "" Per-thread Memory Bandwidth Allocation */
+ #define X86_FEATURE_SGX1		(11*32+ 8) /* "" Basic SGX */
+ #define X86_FEATURE_SGX2		(11*32+ 9) /* "" SGX Enclave Dynamic Memory Management (EDMM) */
+-/* FREE!				(11*32+10) */
++#define X86_FEATURE_ENTRY_IBPB		(11*32+10) /* "" Issue an IBPB on kernel entry */
+ /* FREE!				(11*32+11) */
+ #define X86_FEATURE_RETPOLINE		(11*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
+ #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
 --- a/arch/x86/include/asm/nospec-branch.h
 +++ b/arch/x86/include/asm/nospec-branch.h
-@@ -253,6 +253,7 @@ static inline void indirect_branch_predi
+@@ -123,14 +123,17 @@
+  * return thunk isn't mapped into the userspace tables (then again, AMD
+  * typically has NO_MELTDOWN).
+  *
+- * Doesn't clobber any registers but does require a stable stack.
++ * While zen_untrain_ret() doesn't clobber anything but requires stack,
++ * entry_ibpb() will clobber AX, CX, DX.
+  *
+  * As such, this must be placed after every *SWITCH_TO_KERNEL_CR3 at a point
+  * where we have a stack but before any RET instruction.
+  */
+ .macro UNTRAIN_RET
+ #ifdef CONFIG_RETPOLINE
+-	ALTERNATIVE "", "call zen_untrain_ret", X86_FEATURE_UNRET
++	ALTERNATIVE_2 "",						\
++	              "call zen_untrain_ret", X86_FEATURE_UNRET,	\
++		      "call entry_ibpb", X86_FEATURE_ENTRY_IBPB
+ #endif
+ .endm
  
- /* The Intel SPEC CTRL MSR base value cache */
- extern u64 x86_spec_ctrl_base;
-+extern void write_spec_ctrl_current(u64 val);
+@@ -144,6 +147,7 @@
  
- /*
-  * With retpoline, we must use IBRS to restrict branch prediction
+ extern void __x86_return_thunk(void);
+ extern void zen_untrain_ret(void);
++extern void entry_ibpb(void);
+ 
+ #ifdef CONFIG_RETPOLINE
+ 
 --- a/arch/x86/kernel/cpu/bugs.c
 +++ b/arch/x86/kernel/cpu/bugs.c
-@@ -49,12 +49,30 @@ static void __init mmio_select_mitigatio
- static void __init srbds_select_mitigation(void);
- static void __init l1d_flush_select_mitigation(void);
+@@ -798,6 +798,7 @@ static enum spectre_v2_mitigation spectr
+ enum retbleed_mitigation {
+ 	RETBLEED_MITIGATION_NONE,
+ 	RETBLEED_MITIGATION_UNRET,
++	RETBLEED_MITIGATION_IBPB,
+ 	RETBLEED_MITIGATION_IBRS,
+ 	RETBLEED_MITIGATION_EIBRS,
+ };
+@@ -806,11 +807,13 @@ enum retbleed_mitigation_cmd {
+ 	RETBLEED_CMD_OFF,
+ 	RETBLEED_CMD_AUTO,
+ 	RETBLEED_CMD_UNRET,
++	RETBLEED_CMD_IBPB,
+ };
  
--/* The base value of the SPEC_CTRL MSR that always has to be preserved. */
-+/* The base value of the SPEC_CTRL MSR without task-specific bits set */
- u64 x86_spec_ctrl_base;
- EXPORT_SYMBOL_GPL(x86_spec_ctrl_base);
-+
-+/* The current value of the SPEC_CTRL MSR with task-specific bits set */
-+DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-+EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
-+
- static DEFINE_MUTEX(spec_ctrl_mutex);
- 
- /*
-+ * Keep track of the SPEC_CTRL MSR value for the current task, which may differ
-+ * from x86_spec_ctrl_base due to STIBP/SSB in __speculation_ctrl_update().
-+ */
-+void write_spec_ctrl_current(u64 val)
-+{
-+	if (this_cpu_read(x86_spec_ctrl_current) == val)
-+		return;
-+
-+	this_cpu_write(x86_spec_ctrl_current, val);
-+	wrmsrl(MSR_IA32_SPEC_CTRL, val);
-+}
-+
-+/*
-  * The vendor and possibly platform specific bits which can be modified in
-  * x86_spec_ctrl_base.
-  */
-@@ -1272,7 +1290,7 @@ static void __init spectre_v2_select_mit
- 	if (spectre_v2_in_eibrs_mode(mode)) {
- 		/* Force it so VMEXIT will restore correctly */
- 		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
--		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+		write_spec_ctrl_current(x86_spec_ctrl_base);
- 	}
- 
- 	switch (mode) {
-@@ -1327,7 +1345,7 @@ static void __init spectre_v2_select_mit
- 
- static void update_stibp_msr(void * __unused)
- {
--	wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+	write_spec_ctrl_current(x86_spec_ctrl_base);
- }
- 
- /* Update x86_spec_ctrl_base in case SMT state changed. */
-@@ -1570,7 +1588,7 @@ static enum ssb_mitigation __init __ssb_
- 			x86_amd_ssb_disable();
+ const char * const retbleed_strings[] = {
+ 	[RETBLEED_MITIGATION_NONE]	= "Vulnerable",
+ 	[RETBLEED_MITIGATION_UNRET]	= "Mitigation: untrained return thunk",
++	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",
+ 	[RETBLEED_MITIGATION_IBRS]	= "Mitigation: IBRS",
+ 	[RETBLEED_MITIGATION_EIBRS]	= "Mitigation: Enhanced IBRS",
+ };
+@@ -840,6 +843,8 @@ static int __init retbleed_parse_cmdline
+ 			retbleed_cmd = RETBLEED_CMD_AUTO;
+ 		} else if (!strcmp(str, "unret")) {
+ 			retbleed_cmd = RETBLEED_CMD_UNRET;
++		} else if (!strcmp(str, "ibpb")) {
++			retbleed_cmd = RETBLEED_CMD_IBPB;
+ 		} else if (!strcmp(str, "nosmt")) {
+ 			retbleed_nosmt = true;
  		} else {
- 			x86_spec_ctrl_base |= SPEC_CTRL_SSBD;
--			wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+			write_spec_ctrl_current(x86_spec_ctrl_base);
- 		}
- 	}
+@@ -854,11 +859,13 @@ static int __init retbleed_parse_cmdline
+ early_param("retbleed", retbleed_parse_cmdline);
  
-@@ -1821,7 +1839,7 @@ int arch_prctl_spec_ctrl_get(struct task
- void x86_spec_ctrl_setup_ap(void)
+ #define RETBLEED_UNTRAIN_MSG "WARNING: BTB untrained return thunk mitigation is only effective on AMD/Hygon!\n"
+-#define RETBLEED_COMPILER_MSG "WARNING: kernel not compiled with RETPOLINE or -mfunction-return capable compiler!\n"
++#define RETBLEED_COMPILER_MSG "WARNING: kernel not compiled with RETPOLINE or -mfunction-return capable compiler; falling back to IBPB!\n"
+ #define RETBLEED_INTEL_MSG "WARNING: Spectre v2 mitigation leaves CPU vulnerable to RETBleed attacks, data leaks possible!\n"
+ 
+ static void __init retbleed_select_mitigation(void)
  {
- 	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
--		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+		write_spec_ctrl_current(x86_spec_ctrl_base);
++	bool mitigate_smt = false;
++
+ 	if (!boot_cpu_has_bug(X86_BUG_RETBLEED) || cpu_mitigations_off())
+ 		return;
  
- 	if (ssb_mode == SPEC_STORE_BYPASS_DISABLE)
- 		x86_amd_ssb_disable();
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -600,7 +600,7 @@ static __always_inline void __speculatio
+@@ -870,11 +877,21 @@ static void __init retbleed_select_mitig
+ 		retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
+ 		break;
+ 
++	case RETBLEED_CMD_IBPB:
++		retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++		break;
++
+ 	case RETBLEED_CMD_AUTO:
+ 	default:
+ 		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+-		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+-			retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
++
++			if (IS_ENABLED(CONFIG_RETPOLINE) &&
++			    IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK))
++				retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++			else
++				retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++		}
+ 
+ 		/*
+ 		 * The Intel mitigation (IBRS) was already selected in
+@@ -890,26 +907,34 @@ static void __init retbleed_select_mitig
+ 		if (!IS_ENABLED(CONFIG_RETPOLINE) ||
+ 		    !IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK)) {
+ 			pr_err(RETBLEED_COMPILER_MSG);
+-			retbleed_mitigation = RETBLEED_MITIGATION_NONE;
+-			break;
++			retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++			goto retbleed_force_ibpb;
+ 		}
+ 
+ 		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
+ 		setup_force_cpu_cap(X86_FEATURE_UNRET);
+ 
+-		if (!boot_cpu_has(X86_FEATURE_STIBP) &&
+-		    (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
+-			cpu_smt_disable(false);
+-
+ 		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+ 		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+ 			pr_err(RETBLEED_UNTRAIN_MSG);
++
++		mitigate_smt = true;
++		break;
++
++	case RETBLEED_MITIGATION_IBPB:
++retbleed_force_ibpb:
++		setup_force_cpu_cap(X86_FEATURE_ENTRY_IBPB);
++		mitigate_smt = true;
+ 		break;
+ 
+ 	default:
+ 		break;
  	}
  
- 	if (updmsr)
--		wrmsrl(MSR_IA32_SPEC_CTRL, msr);
-+		write_spec_ctrl_current(msr);
- }
- 
- static unsigned long speculation_ctrl_update_tif(struct task_struct *tsk)
++	if (mitigate_smt && !boot_cpu_has(X86_FEATURE_STIBP) &&
++	    (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
++		cpu_smt_disable(false);
++
+ 	/*
+ 	 * Let IBRS trump all on Intel without affecting the effects of the
+ 	 * retbleed= cmdline option.
 
 

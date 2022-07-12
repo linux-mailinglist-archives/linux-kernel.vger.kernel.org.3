@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3D7570FFC
+	by mail.lfdr.de (Postfix) with ESMTP id 204A3570FFB
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiGLCHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S231287AbiGLCHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiGLCHb (ORCPT
+        with ESMTP id S230233AbiGLCHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:07:31 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEE963931
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:07:30 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id m5-20020a170902768500b0016a1c410f6cso4801994pll.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:07:30 -0700 (PDT)
+        Mon, 11 Jul 2022 22:07:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420687CB7D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:07:32 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id f91-20020a17090a706400b001ef890a44e0so3127544pjk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=7zGopdQFPQGp9nip4E1VjLTbCwtKn+Wbvtvm7Hq7wik=;
-        b=QzHXJQot962Hjsh6aB9dnFMWGQigLj0aos5R4594XSOkJ0/+dzvCZTeJ+xkiYvm9DB
-         ym774ehd0zGrPsOXudCxPrqK2rPkAgNXGiifW1c4yw7ypAxp/hFWM/0M6yK/Ojsw0TP5
-         qVOqsl1WSO5g/MhP41Ql30SwD6D9zcd4XlSgHWdatfv4JXXRZ45EnQHj8B9NyYdunS9G
-         XzbyHrdrvdkniMQrw4jHCmwrSS7k0BRLlH5SqPJJdWphBNK8PFLyH15r9erNNsoPpiXA
-         GAiwMgA51OITPv2eS7phoC70areFpMDuf4fA6q4WNd89Ggr7lPWrFMpwDkCkmklQPnnE
-         LA7Q==
+        bh=wC4daWuN72ntGNvsqnVV6vq+bt1gw7NePoqDxLLGrS8=;
+        b=CVfLrEPTwIaX/ki4UHYkP2ZYB4PdTx80sHad8DGQnCFvjKorZ6JfnaYRfzbWOIJvW2
+         itUY2sdVixbqHdbUNb5j7uQy41tHY1uo4vwY590DpNkmxAyfP6T71U64XE0p6rGWRPOQ
+         4zULpdTPLDYFSAHe/VMpzNp5llohVFJbfQ0d+HDFFlr8op2cZywsn81iw+nSBCDzAxmu
+         yUKf9e3Zh+S0hmBwRzIRA6wH5eaLxpZGN7G2g1skjxWOxRxEChRb0GcasYGWdF5itqR9
+         12CwWrVUW6QLDxrLrkDXRmgoK7wacQgV/NLz2Agxy0kIgSDFUko16nV+OJ5j3+h2O3Pv
+         gjOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=7zGopdQFPQGp9nip4E1VjLTbCwtKn+Wbvtvm7Hq7wik=;
-        b=ahTAz9w7xQLYwB7Kjj2u56XAOeuInwjTfrSz4E+qyWpe4TB0+jWFDyqYaBtoV/XbCq
-         7IKkbU2nRkp2bzyvpRlKyQk6c/Q3HIc/2Psr6fReiyEeA1a2Y99zHeN5tFvAltFpoaQ6
-         q4mzYaf3ka0DhUJ/9pAEhH0kOmogzeEqsES/WwdM9bWYk/PckQSGC+C2z/Oi6QXw2Py6
-         ohJKiuJJJdgOgNZd3PVvTw29JAjfsfaurjP+8IVHx/cR8iK4tnrWtzzzKYPnBGNILgoq
-         0kxdnZ+y2j3AS7jDeADTAUmsgHikP5MzQWiEEGGRbZYbX0UsOpN1Wsc09BEe3fG5FQ6z
-         wmGg==
-X-Gm-Message-State: AJIora+pNZ3nkKICcWEHPEHU6dMQLZ9LfZTz/3n9JAX6/Xg88o7Lp2OL
-        V8qVC1U8SWN8QfGcrR2W/wmDp71vbmI=
-X-Google-Smtp-Source: AGRyM1vtd9UhT2QUE4GGRjHiDLn3YbyJA3rd375NZtlyQ512IYAH6cdN/WpBQ+ntdpFTAj+U1tTtjWuwXeQ=
+        bh=wC4daWuN72ntGNvsqnVV6vq+bt1gw7NePoqDxLLGrS8=;
+        b=C4WEZqyBdjKWw4GzXfYJhz0Yaczud8uxU8iwgh5VZ3AbddoGKsN+3STFmXxQ5j/D/s
+         gnQGXX8msLSsicPdcNENIPU950CfTyMAAd35Zy/pNfl2tV01dEFqZrxzIwcexZXmvove
+         Nm/D6LnfQj0pGKVd40cCBFn+0/+hZ1kovDIiDMcu11g170dRsSeJJAQ6gho4uC8Q45O5
+         wvu+lbaPDb62y2DXl5VerqLaHl8WkoPNNTG+rFW++3803CHRPe5kqp1jsx8qER7rp6cH
+         PEjMbXRHW4hkteVqve+PGg7ChvRuhDWWTodlbFpBy+oz5GTgHP1cKLfyBpR7Ic4TytQF
+         Ei6A==
+X-Gm-Message-State: AJIora9LZW+5xsCCyMZ6Vqg5nPrNXUfU9F2IQ1ctTl6FoIaqzxTAW2da
+        HQxaryxOkG0IlJZbdH+UXiFs5m7ASKk=
+X-Google-Smtp-Source: AGRyM1tamDaouxIjsR84u7D+TdWg376mrBI9rco87Xf1xz5mM8bsjTYhZ9LZN+mcQ4ZJ0rEVThTJZqUAw5g=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:84b:b0:528:c70c:9508 with SMTP id
- q11-20020a056a00084b00b00528c70c9508mr21342272pfk.31.1657591649685; Mon, 11
- Jul 2022 19:07:29 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr40863pje.0.1657591651230; Mon, 11 Jul
+ 2022 19:07:31 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 12 Jul 2022 02:07:23 +0000
+Date:   Tue, 12 Jul 2022 02:07:24 +0000
 In-Reply-To: <20220712020724.1262121-1-seanjc@google.com>
-Message-Id: <20220712020724.1262121-3-seanjc@google.com>
+Message-Id: <20220712020724.1262121-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220712020724.1262121-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH v3 2/3] KVM: x86/mmu: Expand quadrant comment for PG_LEVEL_4K
- shadow pages
+Subject: [PATCH v3 3/3] KVM: x86/mmu: Fix typo and tweak comment for
+ split_desc_cache capacity
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -64,61 +64,52 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tweak the comment above the computation of the quadrant for PG_LEVEL_4K
-shadow pages to explicitly call out how and why KVM uses role.quadrant to
-consume gPTE bits.
+Remove a spurious closing paranthesis and tweak the comment about the
+cache capacity for PTE descriptors (rmaps) eager page splitting to tone
+down the assertion slightly, and to call out that topup requires dropping
+mmu_lock, which is the real motivation for avoiding topup (as opposed to
+memory usage).
 
-Opportunistically wrap an unnecessarily long line.
-
-No functional change intended.
-
-Link: https://lore.kernel.org/all/YqvWvBv27fYzOFdE@google.com
-Reviewed-by: David Matlack <dmatlack@google.com>
+Cc: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 864a32f96082..7a65e57b9b41 100644
+index 7a65e57b9b41..52664c3caaab 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2168,7 +2168,8 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
- 	return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
- }
- 
--static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsigned int access)
-+static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
-+						  unsigned int access)
+@@ -6125,14 +6125,15 @@ static int topup_split_caches(struct kvm *kvm)
  {
- 	struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
- 	union kvm_mmu_page_role role;
-@@ -2195,9 +2196,15 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsig
- 	 * uses 2 PAE page tables, each mapping a 2MiB region. For these,
- 	 * @role.quadrant encodes which half of the region they map.
- 	 *
--	 * Note, the 4 PAE page directories are pre-allocated and the quadrant
--	 * assigned in mmu_alloc_root(). So only page tables need to be handled
--	 * here.
-+	 * Concretely, a 4-byte PDE consumes bits 31:22, while an 8-byte PDE
-+	 * consumes bits 29:21.  To consume bits 31:30, KVM's uses 4 shadow
-+	 * PDPTEs; those 4 PAE page directories are pre-allocated and their
-+	 * quadrant is assigned in mmu_alloc_root().   A 4-byte PTE consumes
-+	 * bits 21:12, while an 8-byte PTE consumes bits 20:12.  To consume
-+	 * bit 21 in the PTE (the child here), KVM propagates that bit to the
-+	 * quadrant, i.e. sets quadrant to '0' or '1'.  The parent 8-byte PDE
-+	 * covers bit 21 (see above), thus the quadrant is calculated from the
-+	 * _least_ significant bit of the PDE index.
+ 	/*
+ 	 * Allocating rmap list entries when splitting huge pages for nested
+-	 * MMUs is uncommon as KVM needs to allocate if and only if there is
++	 * MMUs is uncommon as KVM needs to use a list if and only if there is
+ 	 * more than one rmap entry for a gfn, i.e. requires an L1 gfn to be
+-	 * aliased by multiple L2 gfns.  Aliasing gfns when using TDP is very
+-	 * atypical for VMMs; a few gfns are often aliased during boot, e.g.
+-	 * when remapping firmware, but aliasing rarely occurs post-boot).  If
+-	 * there is only one rmap entry, rmap->val points directly at that one
+-	 * entry and doesn't need to allocate a list.  Buffer the cache by the
+-	 * default capacity so that KVM doesn't have to topup the cache if it
++	 * aliased by multiple L2 gfns and/or from multiple nested roots with
++	 * different roles.  Aliasing gfns when using TDP is atypical for VMMs;
++	 * a few gfns are often aliased during boot, e.g. when remapping BIOS,
++	 * but aliasing rarely occurs post-boot or for many gfns.  If there is
++	 * only one rmap entry, rmap->val points directly at that one entry and
++	 * doesn't need to allocate a list.  Buffer the cache by the default
++	 * capacity so that KVM doesn't have to drop mmu_lock to topup if KVM
+ 	 * encounters an aliased gfn or two.
  	 */
- 	if (role.has_4_byte_gpte) {
- 		WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+ 	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
 -- 
 2.37.0.144.g8ac04bfd2-goog
 

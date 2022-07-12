@@ -2,127 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261335713E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FB45713E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiGLIDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
+        id S230086AbiGLIEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiGLIDp (ORCPT
+        with ESMTP id S232223AbiGLIEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:03:45 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079026579;
-        Tue, 12 Jul 2022 01:03:44 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id n18so10912072lfq.1;
-        Tue, 12 Jul 2022 01:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A/bW8s0zoH5UpbLSo1+jfXj3G0A2yQEqrO879sTZg5Q=;
-        b=VxhyLif+q+1G5dGPSu8k90vU6hL373LvHxZVzMk2MsBLRbSavwWVZuWG4a7zM8cQyY
-         BMMgqdsHgFtEmT177VKDRc/pI12Gty4TW6NC70OWWz8TefcTzMbk/okzFrp8kY4+EiP6
-         EjB100143GnuOMTbCmW7YjtnPof97VLNkIz1GsOc5nw/85fSnZTJDtl+RpRTrsd+dG31
-         XfgxLsHc1ubY3Z8e1zzV2DOQzihtp+ayYK15qMCNTM/Ald/3WoVLN3ljCiaXNNhCd/4m
-         5yGdhq5+Ck5mb9puVd2BGr5QutymWQVbpD/CLv/Ve8fAXdHvonmIwHoolZB1N4oioj0h
-         3ayQ==
+        Tue, 12 Jul 2022 04:04:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3B9ADF1C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657613078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zk3S2xAdR/7hGTN3JMUGrzoWncg4Rn0Aa+mjreKRU3I=;
+        b=HuMngzBqIr7YYIof3MhLPUox8wKJrS2lB18nGQ1I6/b0IXA+uMn1+foZo6BGReKKsad4Ft
+        al/Vr5vpVKh4AkbDXeAHQ0heHl0e7377k6Jq9J+h00Y6Lz25qQXw5uqMkCkOU06VG5InEK
+        I0TpQT4wgP7Pg6rNJVzw57TbkXNLRTs=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-gytXheyKOiC9OcUYr-eSSw-1; Tue, 12 Jul 2022 04:04:36 -0400
+X-MC-Unique: gytXheyKOiC9OcUYr-eSSw-1
+Received: by mail-lj1-f197.google.com with SMTP id x21-20020a2e7c15000000b0025d5f706f66so1257147ljc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:04:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A/bW8s0zoH5UpbLSo1+jfXj3G0A2yQEqrO879sTZg5Q=;
-        b=7Vjq8M+HLbtN5alxc2pw6Nexr542QSj3FrYRgRCnBPNXhzEm2TzfERxDBV5rq5LH8U
-         xuvY0pt6YPPJrC9nDWgXGEN7j4/dQjyug8qMTVP1GbvCUBdtr0DJjKViCDZG6rt2NLMn
-         JaBR0Pt9N++O1sD96hond4N2Nc696qVe/0XprsRAhL2yRIDXjEYhy7u0ofc55Cjj1qc6
-         liLeG9fPMoITeklsz7NfpUydFbj9NLE19/XuI230Ngekij3cmSHOSJckWpMyXmXNWnNq
-         pFp9LfLHQKVCbBdODki14T5d2e/ztVgBdbgbw45uT5PV/FUWyoVHD8SJ4b5kmYZZC8f5
-         1RjQ==
-X-Gm-Message-State: AJIora9596abcU0SCGQUmnyYMez/LZjCmxRLX/Le9MhnXrz1FNTDJKWv
-        JH0BRhiSzGtcRStvohizhndI++eb6LlDdk+lS8U=
-X-Google-Smtp-Source: AGRyM1uetHv/UaG2R06jgnf9Ql2EOiVLPNLAlyTB3qAJPBJR9BfzPSFpwGS8ztIHge2xsMxx4c18CNJkdJ+rPX76K6M=
-X-Received: by 2002:a05:6512:1188:b0:481:2eb7:f2 with SMTP id
- g8-20020a056512118800b004812eb700f2mr13946842lfr.401.1657613022433; Tue, 12
- Jul 2022 01:03:42 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Zk3S2xAdR/7hGTN3JMUGrzoWncg4Rn0Aa+mjreKRU3I=;
+        b=Eey/LZxpvp+1b9+eke26u0ZkSR8cxblV8AkUXF1xfqKe5Xi9fwDUeNCpSPBzF7AJM2
+         XSzWhJQLpSEnxz50gy5zHKv35LHuE3ffeO2NndHcTzIY+nWo24KQidyoomfU5wMt9U3y
+         q6vCFTzAUIEf87scWaoCkiqn6CqTx5gLGkfN+oXeCM3SRwkQi/wsy8fufpioAC2QCyGO
+         GPYpXe9YFMqSmy0swZ/yrt7LeiVKQgeDLrElF6mlhKzOt5rmqVsxZwTbQYVwJQS5GulG
+         SECNOTlFAmxCA6HjB32F8dX72u/G09gn640IoexHf3zL+ZumRfoB1FPnd3TuI6Exs3l4
+         TTVQ==
+X-Gm-Message-State: AJIora+zCF8bir+CLXo1cDfzfQWlVqrQxr8uXD08a2l6ImN3LdoeTdsV
+        5R3/SDPa6TbPpUtztnsY3OxjWjbCv1KIlaH24CrWwZFkgB862PsgIDWccrnYIwlyAXrTXYQZrOH
+        hTIu5YJNiQpeLhkGc2DkD6KxVsI9xetC5V/EWiMcl
+X-Received: by 2002:a05:6512:3b8e:b0:481:1a75:452 with SMTP id g14-20020a0565123b8e00b004811a750452mr15293723lfv.238.1657613075127;
+        Tue, 12 Jul 2022 01:04:35 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vFL+N9RzhXFr/ks5hqi5WjMGbUNrOhsaPrmrfRg/JxZpXDwQSu5M2XKsRZPR3L6Fkftxrqt8icOOXsoZFhCZE=
+X-Received: by 2002:a05:6512:3b8e:b0:481:1a75:452 with SMTP id
+ g14-20020a0565123b8e00b004811a750452mr15293702lfv.238.1657613074923; Tue, 12
+ Jul 2022 01:04:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711134312.234268-1-tmaimon77@gmail.com> <20220711134312.234268-2-tmaimon77@gmail.com>
- <1657562119.172361.4172123.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1657562119.172361.4172123.nullmailer@robh.at.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Tue, 12 Jul 2022 11:03:30 +0300
-Message-ID: <CAP6Zq1jAzHysKaVMt960hsL2rN05_kfC265CS8Xcz1r8KOQDPg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: iio: adc: npcm: Add npcm845
- compatible string
-To:     Rob Herring <robh@kernel.org>
-Cc:     zhengbin13@huawei.com,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Nancy Yuen <yuenn@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Patrick Venture <venture@google.com>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220623160738.632852-1-eperezma@redhat.com> <20220623160738.632852-2-eperezma@redhat.com>
+ <CACGkMEv+yFLCzo-K7eSaVPJqLCa5SxfVCmB=piQ3+6R3=oDz-w@mail.gmail.com> <CAJaqyWcsesMV5DSs7sCrsJmZX=QED7p7UXa_7H=1UHfQTnKS6w@mail.gmail.com>
+In-Reply-To: <CAJaqyWcsesMV5DSs7sCrsJmZX=QED7p7UXa_7H=1UHfQTnKS6w@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 12 Jul 2022 16:04:23 +0800
+Message-ID: <CACGkMEsr=2LjU1-UDV1SF9vJPty2003YKORHZMSr1W-p9eNr+A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] vdpa: Add suspend operation
+To:     Eugenio Perez Martin <eperezma@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Cindy Lu <lulu@redhat.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        habetsm.xilinx@gmail.com, "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>, ecree.xilinx@gmail.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-Thanks for your comment, it will be addressed next version.
-
-On Mon, 11 Jul 2022 at 20:55, Rob Herring <robh@kernel.org> wrote:
+On Fri, Jul 8, 2022 at 7:31 PM Eugenio Perez Martin <eperezma@redhat.com> w=
+rote:
 >
-> On Mon, 11 Jul 2022 16:43:10 +0300, Tomer Maimon wrote:
-> > Add a compatible string for Nuvoton BMC NPCM845 ADC.
+> On Wed, Jun 29, 2022 at 6:10 AM Jason Wang <jasowang@redhat.com> wrote:
 > >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml     | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > On Fri, Jun 24, 2022 at 12:07 AM Eugenio P=C3=A9rez <eperezma@redhat.co=
+m> wrote:
+> > >
+> > > This operation is optional: It it's not implemented, backend feature =
+bit
+> > > will not be exposed.
+> >
+> > A question, do we allow suspending a device without DRIVER_OK?
 > >
 >
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> That should be invalid. In particular, vdpa_sim will resume in that
+> case, but I guess it would depend on the device.
+
+Yes, and that will match our virtio spec patch (STOP bit).
+
 >
-> yamllint warnings/errors:
+> Do you think it should be controlled in the vdpa frontend code?
+
+The vdpa bus should validate this at least.
+
+Thanks
+
 >
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.example.dtb: adc@f000c000: compatible: 'oneOf' conditional failed, one must be fixed:
->         ['nuvoton,npcm750-adc'] is too short
->         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml
+> Thanks!
 >
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/patch/
->
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit.
+> > Thanks
+> >
+> > >
+> > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > > ---
+> > >  include/linux/vdpa.h | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> > > index 7b4a13d3bd91..d282f464d2f1 100644
+> > > --- a/include/linux/vdpa.h
+> > > +++ b/include/linux/vdpa.h
+> > > @@ -218,6 +218,9 @@ struct vdpa_map_file {
+> > >   * @reset:                     Reset device
+> > >   *                             @vdev: vdpa device
+> > >   *                             Returns integer: success (0) or error=
+ (< 0)
+> > > + * @suspend:                   Suspend or resume the device (optiona=
+l)
+> > > + *                             @vdev: vdpa device
+> > > + *                             Returns integer: success (0) or error=
+ (< 0)
+> > >   * @get_config_size:           Get the size of the configuration spa=
+ce includes
+> > >   *                             fields that are conditional on featur=
+e bits.
+> > >   *                             @vdev: vdpa device
+> > > @@ -319,6 +322,7 @@ struct vdpa_config_ops {
+> > >         u8 (*get_status)(struct vdpa_device *vdev);
+> > >         void (*set_status)(struct vdpa_device *vdev, u8 status);
+> > >         int (*reset)(struct vdpa_device *vdev);
+> > > +       int (*suspend)(struct vdpa_device *vdev);
+> > >         size_t (*get_config_size)(struct vdpa_device *vdev);
+> > >         void (*get_config)(struct vdpa_device *vdev, unsigned int off=
+set,
+> > >                            void *buf, unsigned int len);
+> > > --
+> > > 2.31.1
+> > >
+> >
 >
 
-Best regards,
-
-Tomer

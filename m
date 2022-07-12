@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62B157190A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3755657190D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiGLLxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S232952AbiGLLyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiGLLxB (ORCPT
+        with ESMTP id S232787AbiGLLxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:53:01 -0400
+        Tue, 12 Jul 2022 07:53:39 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0B6AB6542
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:52:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47055B4BD2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:52:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657626723;
+        s=mimecast20190719; t=1657626747;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X6w0674s9ili7eArWVuDLnAMEL/ug8bcR3ZZcjz90CE=;
-        b=ftkTFSd6uoqAKsuawDclIPJwy8GUChX4PVBnPPm7A9sUKEjd9OfdRUO88LrAImUG6NnDe2
-        EDEoIKxDwDQjU/OstYTiSMuRPVzBhSJSk5G5gk1IqtAqXa22+x1CG3DJ+BXGMjA1rqfku+
-        LrhzZ70UdtEubXUL6XT9rdemfUndB3I=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=dhbH7KElfOyWiL5eIhAtguRUr0eHcXNIg5bb45tjqNE=;
+        b=GB8WWEVuwzD5Fl0s5JrmVm2gkJdIOVUTFp+vfItJbNL6h6wezPaEM0q8VRHnMOEkuELCyW
+        8Eem/Lbyk/dS3t4GjMaCFfyD8a1g1XmTDlEsxQ88M3vxKrPh4ZvthF8hO9atdnGDtN83cm
+        /ZDFbO9YRVN5tiQ2z4TQScbq+jn/L2Y=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-qC90wFv4NqiAKiGsSZJWtw-1; Tue, 12 Jul 2022 07:52:02 -0400
-X-MC-Unique: qC90wFv4NqiAKiGsSZJWtw-1
-Received: by mail-qt1-f198.google.com with SMTP id x10-20020ac8120a000000b0031ea260a047so6691412qti.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:52:02 -0700 (PDT)
+ us-mta-612-JEWBG-K8NGugxuSF0-Xfdw-1; Tue, 12 Jul 2022 07:52:26 -0400
+X-MC-Unique: JEWBG-K8NGugxuSF0-Xfdw-1
+Received: by mail-qk1-f197.google.com with SMTP id n15-20020a05620a294f00b006b5768a0ed0so6893843qkp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:52:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=X6w0674s9ili7eArWVuDLnAMEL/ug8bcR3ZZcjz90CE=;
-        b=r9lMDiXvGvqmFmhm8q38YAKDmFkRFUxwqbNRO5K7h1EGz0IKgWTWbFRSb1oRKIK4EG
-         ZHbCnpXC0VT7qYOsl5Jle8HGatL45jBfM1fwmY3mK56blBzqufEkx9dTZs1DzH62B004
-         nfPFtMjupjFj1L7Trxy91c8z1GXT30hFJtwDE3BAiTaewmtFVAnqzQuYCvYao+4jZdSJ
-         LlP5sNgRi4eiQ1eyTIk4EHd8UzeV1CLpJLgC9MNtma2/2dx/9qQ6b5Mki9sA4a5G0mAA
-         N1xCoCQO0LJdmUV5I6e3I0xeNZT41Q3DCG4m7vqos8bsXP8SOglEkwtbLQY/NPLfIglr
-         Vgmw==
-X-Gm-Message-State: AJIora9L5Qj50g9Hgh9q2wO0asiHhkM3AmPXm7jOczRB2m/mlJCMbUGy
-        JiF+NGY9uzYTMQsQOVITgUUtSrMCpBJRb8fFfWuDsBVdrg6XJiQMYKoP/Hjrf62qdY2YX7Y/BYc
-        I+EOf/LzYFmk6Rb4aVUou93uu
-X-Received: by 2002:a05:620a:460d:b0:6b5:91f7:62e with SMTP id br13-20020a05620a460d00b006b591f7062emr4923484qkb.487.1657626722506;
-        Tue, 12 Jul 2022 04:52:02 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tOyzMnWtzjI+gxSVBLeO+oFjE5N8UcGZXyfPv0gM8p73Issnk6xlKMnd/qXHM9ma7lLPObww==
-X-Received: by 2002:a05:620a:460d:b0:6b5:91f7:62e with SMTP id br13-20020a05620a460d00b006b591f7062emr4923471qkb.487.1657626722298;
-        Tue, 12 Jul 2022 04:52:02 -0700 (PDT)
+        bh=dhbH7KElfOyWiL5eIhAtguRUr0eHcXNIg5bb45tjqNE=;
+        b=Bx2Rm9BgF/tBNUCPlQLLoUIjDjBmFyOiHz4N9MqOkULcXqtZG1Mz6BtmWpaPYTUqwn
+         OaG5Mx4ae08VIaq6aH2ngAVVsqCjDJdGQ5BJOa+M2yplqXPwZ909SuZz3H7KfPvGltVw
+         MTL0/gZnIEIymEyclIHJdADZVRVmmxEdEN4SDUPPxRHreTijiqNymOuD0emLOGN8Mkg2
+         oeRCh9ADb3GqlVVavXuYyrzVVZ9UWHoE4/hSKKDIUp1dS2kLMYGw7twwye42un3EPTWr
+         F0Hygcda/5gQbX/7+QRMrf6vSKoEkVpp8rX3e5ua09VtBRgjdOwuzW2pnDuuahT5KJCv
+         kLJQ==
+X-Gm-Message-State: AJIora96dVdtQXuDCu4JW+d/fEDTbABEZcSCpmBK4CR/v5DIoEB8UweT
+        DWQtVscEM/VUlBhJ01SZPLlHw25R0a1B6YSMt1Jxre06Dz1HETjqsDp8q/aXKf+E+xVlFFnnY6p
+        MWwuCZ6KF1KUBwclIOMXzutdn
+X-Received: by 2002:a05:620a:288a:b0:6b5:3d7d:5c22 with SMTP id j10-20020a05620a288a00b006b53d7d5c22mr14480463qkp.603.1657626745946;
+        Tue, 12 Jul 2022 04:52:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sEGjmBVqQz0S7Qf0iQ9nIMt3O3IZzz5WmXPQMyFXuPxc6Trhfrnmn1TD7JlrXBV9C5wQe3fA==
+X-Received: by 2002:a05:620a:288a:b0:6b5:3d7d:5c22 with SMTP id j10-20020a05620a288a00b006b53d7d5c22mr14480447qkp.603.1657626745706;
+        Tue, 12 Jul 2022 04:52:25 -0700 (PDT)
 Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id j9-20020ac85c49000000b0031eac31e630sm7443948qtj.49.2022.07.12.04.51.59
+        by smtp.gmail.com with ESMTPSA id h19-20020a379e13000000b006b55da43182sm8164931qke.23.2022.07.12.04.52.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:52:01 -0700 (PDT)
-Message-ID: <86803b99df343926b9dd4f4089fccd7efb04eb00.camel@redhat.com>
-Subject: Re: [PATCH v3 07/25] KVM: selftests: Add
- ENCLS_EXITING_BITMAP{,HIGH} VMCS fields
+        Tue, 12 Jul 2022 04:52:25 -0700 (PDT)
+Message-ID: <f0b3d3ef960882b34e365bc6fbb97d8df8931efc.camel@redhat.com>
+Subject: Re: [PATCH v3 08/25] KVM: selftests: Switch to updated eVMCSv1
+ definition
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -66,10 +66,10 @@ Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 12 Jul 2022 14:51:58 +0300
-In-Reply-To: <20220708144223.610080-8-vkuznets@redhat.com>
+Date:   Tue, 12 Jul 2022 14:52:21 +0300
+In-Reply-To: <20220708144223.610080-9-vkuznets@redhat.com>
 References: <20220708144223.610080-1-vkuznets@redhat.com>
-         <20220708144223.610080-8-vkuznets@redhat.com>
+         <20220708144223.610080-9-vkuznets@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
@@ -85,30 +85,106 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
-> The updated Enlightened VMCS definition has 'encls_exiting_bitmap'
-> field which needs mapping to VMCS, add the missing encoding.
+> Update Enlightened VMCS definition in selftests from KVM.
 > 
 > Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
->  tools/testing/selftests/kvm/include/x86_64/vmx.h | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../selftests/kvm/include/x86_64/evmcs.h      | 45 +++++++++++++++++--
+>  1 file changed, 42 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> index cc3604f8f1d3..5292d30fb7f2 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-> @@ -208,6 +208,8 @@ enum vmcs_field {
->  	VMWRITE_BITMAP_HIGH		= 0x00002029,
->  	XSS_EXIT_BITMAP			= 0x0000202C,
->  	XSS_EXIT_BITMAP_HIGH		= 0x0000202D,
-> +	ENCLS_EXITING_BITMAP		= 0x0000202E,
-> +	ENCLS_EXITING_BITMAP_HIGH	= 0x0000202F,
->  	TSC_MULTIPLIER			= 0x00002032,
->  	TSC_MULTIPLIER_HIGH		= 0x00002033,
->  	GUEST_PHYSICAL_ADDRESS		= 0x00002400,
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/evmcs.h b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
+> index 3c9260f8e116..a777711d5474 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/evmcs.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
+> @@ -203,14 +203,25 @@ struct hv_enlightened_vmcs {
+>  		u32 reserved:30;
+>  	} hv_enlightenments_control;
+>  	u32 hv_vp_id;
+> -
+> +	u32 padding32_2;
+
+This is not just an update, this is a fix - I do see that padding field,
+in the spec. It is possible that compiler added that padding on its own
+to pad everything to 8 bytes though.
+
+>  	u64 hv_vm_id;
+>  	u64 partition_assist_page;
+>  	u64 padding64_4[4];
+>  	u64 guest_bndcfgs;
+> -	u64 padding64_5[7];
+> +	u64 guest_ia32_perf_global_ctrl;
+> +	u64 guest_ia32_s_cet;
+> +	u64 guest_ssp;
+> +	u64 guest_ia32_int_ssp_table_addr;
+> +	u64 guest_ia32_lbr_ctl;
+> +	u64 padding64_5[2];
+Matches the spec.
+
+
+>  	u64 xss_exit_bitmap;
+> -	u64 padding64_6[7];
+> +	u64 host_ia32_perf_global_ctrl;
+> +	u64 encls_exiting_bitmap;
+This is swapped here as well, expains why it was not caught in the testing.
+
+> +	u64 tsc_multiplier;
+> +	u64 host_ia32_s_cet;
+> +	u64 host_ssp;
+> +	u64 host_ia32_int_ssp_table_addr;
+> +	u64 padding64_6;
+>  };
+>  
+>  #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE                     0
+> @@ -656,6 +667,18 @@ static inline int evmcs_vmread(uint64_t encoding, uint64_t *value)
+>  	case VIRTUAL_PROCESSOR_ID:
+>  		*value = current_evmcs->virtual_processor_id;
+>  		break;
+> +	case HOST_IA32_PERF_GLOBAL_CTRL:
+> +		*value = current_evmcs->host_ia32_perf_global_ctrl;
+> +		break;
+> +	case GUEST_IA32_PERF_GLOBAL_CTRL:
+> +		*value = current_evmcs->guest_ia32_perf_global_ctrl;
+> +		break;
+> +	case ENCLS_EXITING_BITMAP:
+> +		*value = current_evmcs->encls_exiting_bitmap;
+> +		break;
+> +	case TSC_MULTIPLIER:
+> +		*value = current_evmcs->tsc_multiplier;
+> +		break;
+>  	default: return 1;
+>  	}
+>  
+> @@ -1169,6 +1192,22 @@ static inline int evmcs_vmwrite(uint64_t encoding, uint64_t value)
+>  		current_evmcs->virtual_processor_id = value;
+>  		current_evmcs->hv_clean_fields &= ~HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_XLAT;
+>  		break;
+> +	case HOST_IA32_PERF_GLOBAL_CTRL:
+> +		current_evmcs->host_ia32_perf_global_ctrl = value;
+> +		current_evmcs->hv_clean_fields &= ~HV_VMX_ENLIGHTENED_CLEAN_FIELD_HOST_GRP1;
+> +		break;
+> +	case GUEST_IA32_PERF_GLOBAL_CTRL:
+> +		current_evmcs->guest_ia32_perf_global_ctrl = value;
+> +		current_evmcs->hv_clean_fields &= ~HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1;
+> +		break;
+> +	case ENCLS_EXITING_BITMAP:
+> +		current_evmcs->encls_exiting_bitmap = value;
+> +		current_evmcs->hv_clean_fields &= ~HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_GRP2;
+> +		break;
+> +	case TSC_MULTIPLIER:
+> +		current_evmcs->tsc_multiplier = value;
+> +		current_evmcs->hv_clean_fields &= ~HV_VMX_ENLIGHTENED_CLEAN_FIELD_CONTROL_GRP2;
+> +		break;
+>  	default: return 1;
+>  	}
+>  
+
+Other than bug in the order of host_ia32_perf_global_ctrl/encls_exiting_bitmap, everything else looks fine to me.
+
+So with this bug fixed:
 
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
 Best regards,
 	Maxim Levitsky
+
 

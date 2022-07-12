@@ -2,135 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BA3571EA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95024571EAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbiGLPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S230272AbiGLPPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiGLPOJ (ORCPT
+        with ESMTP id S233908AbiGLPPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:14:09 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2060.outbound.protection.outlook.com [40.107.20.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D59D13BB;
-        Tue, 12 Jul 2022 08:06:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DzYTt9moI8eWFEtwzNjytWlZuAQvsxxORf6kpfujHVWqXpVbux0QU6/KKwAwfEWIPLonqKBacuJQHlkTcQXZUYuJCZKx0oI+2BH7BoXf8AypKk2NUDYgNtyOmf1ft91+TaeQbDQB+rEg6+o8bH32zg43QRpY+/Im9WHV69QYMBKp0rkAPc77qoXi7gl6nJn+b+lMpusEUbtlc1Ui+CyNjhO6ltahObsJVUVrx9X/gq+LizhbsMC6rqmr06fkLsG8MC71YWVt0l/Gsqq3P1mDLd5kExdf2uthXXET9ghuUXceHzyHbRMTaWe4k/QGOUYwSNnFDvt8gV2EnIJz7lOnOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FAJs1kmKljPLcF1VnhvA0z86k/cBtBvSPl5TBiKOVPY=;
- b=gxSxVduKgzaEcDb/CPRjHUZHkIkpAVOuBeznE7njJ4BUUcG2TxLM1Fg0+oCAsMmquyBkOJMxIuiuKbK1uKF6mKjCojibzMrGLK+Q/tD4/rgzpBzPowU++/b0Z7ZhzRybVwssTd7dAmDjGlf+t7K0umc7BPEdCjqWZODL6A6E6dZ8iNPVo8xk5ZQWF7/4No/cacnQ+GREHtCxjoFxRLnZ/wmBaQT3qSr81uF7MyqJ3CitT4vbrCMUDpN5JM3auA2cKdiQRqVxZWp1ucHpBu0dvcSAeFauqFyqKNE7xLBq4Ry2+kPnFY1Cy8T9GWOaXMXaeHHTt9YrlE6wEp+/dA1S0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FAJs1kmKljPLcF1VnhvA0z86k/cBtBvSPl5TBiKOVPY=;
- b=NoMv8Bp9Sqnx8eEpGN6wnLTzQ2T5taqgVzu25WLigU4Vpk+CwA7Ce/fo+HkyjJsVulM2ZAZOYZ8TlFeyTgmIYU2hBhNFZe6cIeysTGqOh/CMe7TgtF7giy+fbq9EOnShR4VpYXUp8KmU3q3JkTh2UxMUJRT7b/JQU0SXm2YHVHnYnXnQcTzz6fFzJ4cQLew1NcKzs6fF9xWE44qVlfpXevkNq9c+dMoTciV8O4tI/Pct2dOvfpXeFni6uoMQmqxGTa7HQpFoXpLdJJhD/QG9YK5fTVopbN+4YcFwA1kNBCRQ+LWhqaUWXMhNSZItLufjK3dZgBGcFhHRTG70O6huyg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AM9PR03MB6961.eurprd03.prod.outlook.com (2603:10a6:20b:280::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
- 2022 15:06:55 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 15:06:55 +0000
-Subject: Re: [RFC PATCH net-next 1/9] dt-bindings: net: Add lynx PCS
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220711160519.741990-1-sean.anderson@seco.com>
- <20220711160519.741990-2-sean.anderson@seco.com>
- <4584120c-8e6f-6943-1bd3-aa6942525eda@linaro.org>
- <a6b2d031-8356-492b-8eef-a7cdfacaba51@seco.com>
- <b46f49e4-355d-7a59-4a4a-f5c77b6835df@linaro.org>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <73415f21-7c48-b9b0-e02f-c83d0a185718@seco.com>
-Date:   Tue, 12 Jul 2022 11:06:50 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <b46f49e4-355d-7a59-4a4a-f5c77b6835df@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1P221CA0011.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::23) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Tue, 12 Jul 2022 11:15:35 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F308CC1FDA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:08:43 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8a1e9e33so84118107b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rVxYUPu70x23v27CqTL6O9oHmdkYH1ZfRmRpfUbyCvM=;
+        b=M1QfBgD73UtrxG8I52Nqel8WC41cU8VsHP+DERTznglaNV9+hzcqBS9XvLWDbcieAm
+         4VZX66r8ZRGqWEC2kekhDfqkF7bPZYcoCFUEO1kwvYTaYDJ+LHhY3aw1n4PqsJKcQ0z+
+         TprxrIl+zKGETCWiXHGvRqDgsnuEzrFPQua72h1g4BdtExXl1+kXoa4Zmy9j6ZLauAIo
+         TtBy7i7nDuHV0cPxTh2E0msQAaHQs2jABV7yvAFKuqxECiS+cMflyBphZ7AiHGZhP9Hy
+         VfyrQckLldZwo2SjCoR9ropJd4hVuFCgtZFnm6bceC5aqENMz8QeCoK3rXkPqQBhBZC0
+         Fppg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rVxYUPu70x23v27CqTL6O9oHmdkYH1ZfRmRpfUbyCvM=;
+        b=eAf6Jond8h8T4zG4i1jDC4mJKHKymIXDSOlVMJgeOYZ0NZDL7Lpcv/KdaSCOXdq5nc
+         3zWSdopjM2eh93x2+jcoJYfNYTSpFNwSF5gdaaY72S+fDaj6fOAyYlAY47bH2DdC/NdT
+         ucMxvKDlIeh1IGzi86MXD5P/P0thz2Z/LdiwaFUuzldlZvKvFWreum4NsbAM+XK9kDWc
+         RKCOkj+b7ZwI+5Fwr1L0bNaf5CjCrutVhoyF+oO/FKwqhIvju4f5w5Qh1op4PIxU7qrZ
+         pa2xvORh+TnwEKryfPTKNlww3OEiX9jsrLu3wcnAAIqzlNt0PLPJXok93Kxs0dcI5jJG
+         LuUg==
+X-Gm-Message-State: AJIora/YIeVsS35Alyvx7pi8yo5I1pwbz+mtOiDo5iuFjwe5tC6pqmwC
+        xBng0d98GqlloysX6cvppWAFSojHApC5uTYlPy0=
+X-Google-Smtp-Source: AGRyM1vsi7TFCJDQF776IC08vhKWXr+8INR+vq1yIP+dP9dKvn+DQnHcTs3K+LwrDJAvHIytvKftUylKcjq10HwkOHA=
+X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
+ w128-20020a814986000000b0031d388bd08dmr20961683ywa.185.1657638522767; Tue, 12
+ Jul 2022 08:08:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5513e4f8-e97a-4f27-36c8-08da641828e0
-X-MS-TrafficTypeDiagnostic: AM9PR03MB6961:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oFAi5MyC1wBTH44sIAORF8aoGKpL00GN+alMXEtQbhc3ZjpzOSubQFslqcKbrEUe5/toS6rz7DZeEVUU9eVXwf+eM6JW6KhDEv3mNDhHHPbUfgZQ8M0NPSW3y2vAe03eIa2XvYf4OSY0XuUyRSwTPAp7L2Ne/2o3xAVcUDbYjDs+hA9wfzH7/vpg0hgiXt/YhS/Ah1P0ItMRew8OhJ1N/UWzMQajCJoYuq6VT0mfO2mFeXN+p6Gl6LE1rpjjgs2XdfYJVGfOOKb5K5gkSxNNuqbZMzp7DSxxQakFqywJTE9eUT2rQIW/eOkX0kRkOUSYbP4bSQibfIkpN774RDTP1HlfuAA0shCBxs6AH341CQq966cc6LxhDXt1GymbFEgkpjogsN040BZKppL/EKUMVyrZKSCLwj1ZfBUgGt3yLrWRiGhIZY0i4WbTKSrpWRKc6piuWHC8YWm8PeeCeJ36CwZ7MEHzHGi6Q3/PbEeT5MRCizdZ6Ay/vHoiE2GBerQPhfqBSK8FhSKbRIIsFANzIT3tcyKlfBKWGZijWfQsvb2/qJZwPM9yk9IAG46Wzi8NGHL3AX95ZrTT5bvjW99zUUF2hycHGVpu9hkzFDCT2Hq5ffAi65SRUiX/Jo0qQOTZqvGvs7yDnYBr6nc7+z/EBVU+MgjuCToPy7aJx4At72enaxZCdSAh0aBzh5Kbk3lSTMDUJHOa3BJqweDC2NlXeIwLFlACe8eCg9x9yHVRjAbhqMKVF7dmX81D+5QZ4FwrfPt8A8AxjhdDVcwEzSZ2XkQVA9L11YpXOCeAbcRgXTBYKLvlrd1GrILv6rjswPGsDHSiyr1oSMhd1O1yoHXG+5ZZcwWQFeo0gjTjQEa4wTyzS4bHGcQLMy/h5zGAAQJE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39850400004)(366004)(136003)(376002)(396003)(186003)(2616005)(53546011)(26005)(52116002)(6512007)(6506007)(2906002)(38350700002)(86362001)(31696002)(110136005)(8676002)(4326008)(66476007)(54906003)(6666004)(41300700001)(5660300002)(38100700002)(6486002)(316002)(66556008)(44832011)(31686004)(7416002)(478600001)(36756003)(66946007)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVdDZXRhVlBwSVRONWdBQmQvS3k4R1BTZGFjOVFIbUppd2dIQTJJZ3J4Ym5K?=
- =?utf-8?B?a1hndU9GdGhSRnN6TlVZbjlYTWwxM0hOeHVTeTB6UmtHUzZ6MnN5cTJrdDZh?=
- =?utf-8?B?L0FZSW5OdVRKV1g1UmFFWXVHRlVpb0xnWnpJZ3dYM0djcnRkcm95elVYNUlP?=
- =?utf-8?B?Qk5lendkQjBPS1NjV1BoUVk3dkQwVWh0dC9XTEhqR3RXOTA2bzBpajJxN08v?=
- =?utf-8?B?NU1tM0hYbFlpaXI4cWwrNlRUKzRCY3Q4RjFFUXkycmxRQXJZY1RpSzBNZEJP?=
- =?utf-8?B?NHRUMXpuS2xIQlB4dFBmdFBaMmoyWVBDRW9GZW4vTzFENC9pQVZScHZVeGJD?=
- =?utf-8?B?bnZnMVJGOGVSZi8rajhyejc0UkVVYzBhaXZhTW1jbnlDNE5IbTR4RE05aTJY?=
- =?utf-8?B?NlZtSjVDV3RoNUEwM0c3YWFYRkp1M1N2Y0NVT2kyVXZjWFBKRTVaamtLWlBL?=
- =?utf-8?B?QUtsaitycXBMMWRrc1AwQlNwMkhCNkJDZnFOL2JiY1FiNC8yMTdTamNCNU5V?=
- =?utf-8?B?N2RZNEdxSFhzRWJXY2hqd2REQ256RG81VU9iZVBIMW5wZGF4dHlLV0duY2dC?=
- =?utf-8?B?cThMY0JEUnBURUozbk04ektWN2RpUEpVeXB1b3JRRzB4QWgxaXlzUHIvOUpD?=
- =?utf-8?B?NFB2dWxjcGNxYm5sZWozbFowTlNwTzZ3NmpTMjgyUEg1UmtIQkFxa3dlUGE0?=
- =?utf-8?B?bGdqNi9OQVRaR1Q5SWQ3OGpqUllQNEJ0YU0yV2ZIeUw0cncvbDNodHRqYld1?=
- =?utf-8?B?VGp4VDVTeU5yNDN6MW0wRFhDcXlMVkdPTHBqQ2QyUFhMaVZBQUhIUGhoMVRX?=
- =?utf-8?B?M1FKOERhRXVYY1c0MkhJbElMQ0FXTFlZQzNZWkFyU1lGT2p3TkxtUjUzYTJk?=
- =?utf-8?B?WUZ2SmpRLzdzQWgrK3YxeGg0RUt1L29jajJlUUpydDEyU3F6SDVzTlk2ek1K?=
- =?utf-8?B?dDVSV29QcytDTVljOGM2OUY2Z2p5Sk9oQzlXM2NucmlBRGxVaklKWTJmUlpN?=
- =?utf-8?B?S2ljYXdQcVY2eFZySXdEalE3OW95eFZNb0RxTzVIanhaTFEyOXU0WW1ZVVZR?=
- =?utf-8?B?VUp0UVBwQkREc0gwSkhzd01WVmhXazkyTmtSc3RuUjVneWMvL1B4V1B6REtL?=
- =?utf-8?B?aEs2UDlERG9VbkV0QVZjSTQ0eUJCTGllVitRWk9RVEk5NlZMQXlaMWxrb0d3?=
- =?utf-8?B?Qi9EQWN6ZE05ZE9VU0J2cS9MZmxJdEgxNTV0ZkdGUzdLUlJTVnhNdGFiZ3V1?=
- =?utf-8?B?bzlwTXdzWnRQRUUwbDcvOFhRNnA2ZHRRZC9uNmJYS0lId0duU1MySWFseFRD?=
- =?utf-8?B?dmFBNS8ya3pZa0lGWWdwNkJNUCtUS29oaHdjSUkwQTV4U2gyUzkvYXdHUG9l?=
- =?utf-8?B?K2dDcXRIOFpHaTJXNVlnRWh5QVJocmhkZHhGWlZ0eXV3QU1rNmFBb0lid3Bw?=
- =?utf-8?B?T3JUTEhPUUR4NmxFTU1RTk4rQllMY0NkK2doa0VGekZNRldTU1JzZUdJcXJk?=
- =?utf-8?B?cGxlMm9CL3I4MWFjRkNYdzc3UWhiZCsyZUNSY0pvU0FzOUpQMFJKdDB3dzhL?=
- =?utf-8?B?MFBET2M4SmRNQm5ZNEhpYUVDK00vemQ5ZDNGQ1pRNk5GRThTODJsZFRvK09E?=
- =?utf-8?B?RDFqdkhpNk83d2EyUlJzaG5mVEFQZ0NUZW85aUtjb1VXR2svL2FXRUxxVXRO?=
- =?utf-8?B?eE9STGpmc3ZoWnNsMXV6S3d0T0JYNWYzSmxld3lUQS9wdC9uSXhwODFCVFJt?=
- =?utf-8?B?MU5SMFdWL1UzT1lJRThGQlczUkhqcUhyTWxINGhCZWpUcU1aR0xhcmZoUW84?=
- =?utf-8?B?R1BlbWROS0RzZEwzVW13TWJlc24zT0Q3VEE2TmxqV29HY25UeTF2dllHcjVW?=
- =?utf-8?B?VkhqMC9vbS96Qm1OZTVtQ2c0NW5oYllzOXkxSmxHM1JEZGRBbEdIWUVEaFQ0?=
- =?utf-8?B?dFlQbGkvY0xuTVAzdk1HSTMwRitJei9KR1lDZk9xZ3EzUlpoRUU3MG5aYk1M?=
- =?utf-8?B?ZlVZNUpWWVNsNnFwQ3dFMC82VE1LcGxidGFBdTM4OU05RlNaRW43STBwUnR2?=
- =?utf-8?B?cVpNcG50U0FFTFlSWDlRS1NBRzByRXhmb1lPNmVXZDV5WElTdmM0bStOYUpq?=
- =?utf-8?B?WDBTYVVDdFNWQWxaRTRIZVpXa01HOUQrbFBLbExBTGEyQWI2MDN1SExiSHhv?=
- =?utf-8?B?VWc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5513e4f8-e97a-4f27-36c8-08da641828e0
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 15:06:55.5528
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xfrmUTqW0TKtPqNxV8mrMC4pJyxRMHB2le4+aMNcKmRUkaQMPRN5Yd6sjFlaNhhO4heWosZmdY8Byx1UieXxsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB6961
+References: <20220710142822.52539-1-arthurchang09@gmail.com>
+ <20220710142822.52539-3-arthurchang09@gmail.com> <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
+ <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
+ <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com> <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
+In-Reply-To: <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 12 Jul 2022 17:08:06 +0200
+Message-ID: <CAHp75Vc0s6bFmNWtnVJEowJsDUPO6RnNqPgnYFQmV6A2P0mtYQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
+To:     Yu-Jen Chang <arthurchang09@gmail.com>
+Cc:     Andrey Semashev <andrey.semashev@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,35 +73,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 12, 2022 at 4:58 PM Yu-Jen Chang <arthurchang09@gmail.com> wrot=
+e:
+> Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A11:00=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On 7/11/22 17:52, Yu-Jen Chang wrote:
+> > > Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=
+=E6=9C=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E5=87=8C=E6=99=A84:01=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+> > >> On 7/10/22 17:28, Yu-Jen Chang wrote:
 
+...
 
-On 7/12/22 11:00 AM, Krzysztof Kozlowski wrote:
-> On 12/07/2022 16:57, Sean Anderson wrote:
->> Hi Krzysztof,
->> 
->> On 7/12/22 4:47 AM, Krzysztof Kozlowski wrote:
->>> On 11/07/2022 18:05, Sean Anderson wrote:
->>>> This adds bindings for the PCS half of the Lynx 10g/28g SerDes drivers.
->>>>
->>>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->>>> ---
->>>>
->>>>  .../devicetree/bindings/net/fsl,lynx-pcs.yaml | 47 +++++++++++++++++++
->>>>  1 file changed, 47 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
->>>> new file mode 100644
->>>> index 000000000000..49dee66ab679
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
->>>
->>> Shouldn't this be under net/pcs?
->> 
->> There's no net/pcs, since this is the first of its kind. 
-> 
-> There is, coming via Renesas tree.
+> > >>> +             for (; p <=3D end - 8; p +=3D 8) {
+> > >>> +                     val =3D *(u64 *)p ^ mask;
+> > >>
+> > >> What if p is not aligned to 8 (or 4 on 32-bit targets) bytes? Not al=
+l
+> > >> targets support (efficient) unaligned loads, do they?
+> > >
+> > > I think it works if p is not aligned to 8 or 4 bytes.
+> > >
+> > > Let's say the string is 10 bytes. The for loop here will search the f=
+irst
+> > > 8 bytes. If the target character is in the last 2 bytes, the second f=
+or
+> > > loop will find it. It also work like this on 32-bit machine.
+> >
+> > I think you're missing the point. Loads at unaligned addresses may not
+> > be allowed by hardware using conventional load instructions or may be
+> > inefficient. Given that this memchr implementation is used as a fallbac=
+k
+> > when no hardware-specific version is available, you should be
+> > conservative wrt. hardware capabilities and behavior. You should
+> > probably have a pre-alignment loop.
+>
+> Got it. I add  pre-alignment loop. It aligns the address to 8 or 4bytes.
 
-Ah, I will move this then.
+Still far from what can be accepted. Have you had a chance to read how
+strscpy() is implemented? Do you understand why it's done that way?
 
---Sean
+> void *memchr(const void *p, int c, size_t length)
+> {
+>     u64 mask, val;
+>     const void *end =3D p + length;
+>     c &=3D 0xff;
+
+>     while ((long ) p & (sizeof(long) - 1)) {
+>         if (p >=3D end)
+>             return NULL;
+>         if (*(unsigned char *)p =3D=3D c)
+>             return (void *) p;
+>         p++;
+>     }
+>     if (p <=3D end - 8) {
+>         mask =3D c;
+>         MEMCHR_MASK_GEN(mask);
+>
+>         for (; p <=3D end - 8; p +=3D 8) {
+
+Why you decided that this code will be run explicitly on 64-bit arch?
+
+>             val =3D *(u64*)p ^ mask;
+>             if ((val + 0xfefefefefefefeffull)
+> & (~val & 0x8080808080808080ull))
+>                 break;
+>         }
+>     }
+>
+>     for (; p < end; p++)
+>         if (*(unsigned char *)p =3D=3D c)
+>             return (void *)p;
+>
+>     return NULL;
+> }
+
+--=20
+With Best Regards,
+Andy Shevchenko

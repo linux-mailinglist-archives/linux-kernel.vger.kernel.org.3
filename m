@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7545723EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C06572447
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbiGLSzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S235041AbiGLTAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbiGLSy2 (ORCPT
+        with ESMTP id S235093AbiGLS6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:54:28 -0400
+        Tue, 12 Jul 2022 14:58:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FACE95E6;
-        Tue, 12 Jul 2022 11:45:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A711EEA92;
+        Tue, 12 Jul 2022 11:47:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52EDBB81BB9;
-        Tue, 12 Jul 2022 18:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B269AC3411E;
-        Tue, 12 Jul 2022 18:45:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2BB7B81BAC;
+        Tue, 12 Jul 2022 18:47:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9ECC3411C;
+        Tue, 12 Jul 2022 18:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651553;
-        bh=U/+eLCYI4YDKjT6BcIXjKCgdRxC0oXdMaxjk/f6TANk=;
+        s=korg; t=1657651663;
+        bh=WBiwT2yc/NGkHe0muEFiSHX5dPep+wgeR6ZmXIblcp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j7s7M7OABmPu4uzyUCB29OjRS8xmZHvzmtFhm4XDD9dxWnJAnq9a389dLall06rGX
-         uG4uuX5sm6hcy/9yD8KjnDLlKhiwWP/bpu/eqlS8yodpbayS/vdmfl0hwFhuOoPN0S
-         cAF0FjckdesNEXvOxRyPL1upAiGdkDyg8aFeywig=
+        b=VeuPd/d36LSZOmhTQsFnMllwMtgSTsZjgRzVL9xyzu+d0/BfwTFVoTiNzsTcXWXBw
+         FGNUH6VHOA49NLSYZomZk0cLbXbwsYqhi6AAUfeQ/NXH6yyr9dgaeIM0ieF+7kplKP
+         TSB8mNR47vN7b16QMkWeTNLGLxgSt7YV+DaDTaK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.10 081/130] x86/retpoline: Swizzle retpoline thunk
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.15 17/78] x86/alternative: Try inline spectre_v2=retpoline,amd
 Date:   Tue, 12 Jul 2022 20:38:47 +0200
-Message-Id: <20220712183250.196932918@linuxfoundation.org>
+Message-Id: <20220712183239.542957036@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
-References: <20220712183246.394947160@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,39 +60,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit 00e1533325fd1fb5459229fe37f235462649f668 upstream.
+commit bbe2df3f6b6da7848398d55b1311d58a16ec21e4 upstream.
 
-Put the actual retpoline thunk as the original code so that it can
-become more complicated. Specifically, it allows RET to be a JMP,
-which can't be .altinstr_replacement since that doesn't do relocations
-(except for the very first instruction).
+Try and replace retpoline thunk calls with:
+
+  LFENCE
+  CALL    *%\reg
+
+for spectre_v2=retpoline,amd.
+
+Specifically, the sequence above is 5 bytes for the low 8 registers,
+but 6 bytes for the high 8 registers. This means that unless the
+compilers prefix stuff the call with higher registers this replacement
+will fail.
+
+Luckily GCC strongly favours RAX for the indirect calls and most (95%+
+for defconfig-x86_64) will be converted. OTOH clang strongly favours
+R11 and almost nothing gets converted.
+
+Note: it will also generate a correct replacement for the Jcc.d32
+case, except unless the compilers start to prefix stuff that, it'll
+never fit. Specifically:
+
+  Jncc.d8 1f
+  LFENCE
+  JMP     *%\reg
+1:
+
+is 7-8 bytes long, where the original instruction in unpadded form is
+only 6 bytes.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Tested-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/r/20211026120310.359986601@infradead.org
+[cascardo: RETPOLINE_AMD was renamed to RETPOLINE_LFENCE]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/lib/retpoline.S |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/alternative.c |   16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -32,9 +32,9 @@
- SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
- 	UNWIND_HINT_EMPTY
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -389,6 +389,7 @@ static int emit_indirect(int op, int reg
+  *
+  *   CALL *%\reg
+  *
++ * It also tries to inline spectre_v2=retpoline,amd when size permits.
+  */
+ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
+ {
+@@ -405,7 +406,8 @@ static int patch_retpoline(void *addr, s
+ 	/* If anyone ever does: CALL/JMP *%rsp, we're in deep trouble. */
+ 	BUG_ON(reg == 4);
  
--	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
--		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
--		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE
-+	ALTERNATIVE_2 __stringify(RETPOLINE \reg), \
-+		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE, \
-+		      __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), ALT_NOT(X86_FEATURE_RETPOLINE)
+-	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE))
++	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE) &&
++	    !cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE))
+ 		return -1;
  
- .endm
+ 	op = insn->opcode.bytes[0];
+@@ -418,8 +420,9 @@ static int patch_retpoline(void *addr, s
+ 	 * into:
+ 	 *
+ 	 *   Jncc.d8 1f
++	 *   [ LFENCE ]
+ 	 *   JMP *%\reg
+-	 *   NOP
++	 *   [ NOP ]
+ 	 * 1:
+ 	 */
+ 	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
+@@ -434,6 +437,15 @@ static int patch_retpoline(void *addr, s
+ 		op = JMP32_INSN_OPCODE;
+ 	}
  
++	/*
++	 * For RETPOLINE_AMD: prepend the indirect CALL/JMP with an LFENCE.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
++		bytes[i++] = 0x0f;
++		bytes[i++] = 0xae;
++		bytes[i++] = 0xe8; /* LFENCE */
++	}
++
+ 	ret = emit_indirect(op, reg, bytes + i);
+ 	if (ret < 0)
+ 		return ret;
 
 

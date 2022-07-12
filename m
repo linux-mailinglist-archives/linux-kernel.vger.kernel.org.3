@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241F757143A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AC0571438
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiGLIRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
+        id S232622AbiGLIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiGLIRX (ORCPT
+        with ESMTP id S229739AbiGLIRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:17:23 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9F3A1244;
-        Tue, 12 Jul 2022 01:17:22 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C6FC1w017805;
-        Tue, 12 Jul 2022 10:17:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=V6sjMB7RYrAmyXGWjhUGVzI5Qe/pzRzlrpCoknQyqNs=;
- b=hR8WRcgff5vb8gEEHH7cKung5pd0Mn+XE0gch4XVWOT7VRjf9d0uO4gUkC89ue5wloJK
- xPNI6YH2vSVQsayiBpmH9ng7JhhV4gOE3GXKkoYkQBMjDpl0LhoNN64yHx4+BZRtGiNd
- PDwYv14fQ8Kq+8JCZP6Clbt5eGY+Cl3OHhMe6tn+yLOyoVEEDsPW0CGLs+NU3b8Astau
- LUeDgz4aAFEhapyxWI8oULgU/87iTBFZ8tVjNlMYwt2o47M+AvcSkldQmwVW/aY8chsm
- ct4maonrWSvFa4PWyt8/uxKSMG4b7qK8N8Q5nMHe6tN582sIHpc7gSgI05Q/2hgELMRN JA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h71127u5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 10:17:05 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B258D10002A;
-        Tue, 12 Jul 2022 10:17:03 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A59A1212FA9;
-        Tue, 12 Jul 2022 10:17:03 +0200 (CEST)
-Received: from [10.201.20.246] (10.75.127.45) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Jul
- 2022 10:17:02 +0200
-Message-ID: <18ffb30b-692d-4a67-896d-7b9485734336@foss.st.com>
-Date:   Tue, 12 Jul 2022 10:17:02 +0200
+        Tue, 12 Jul 2022 04:17:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05210A025E;
+        Tue, 12 Jul 2022 01:17:08 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25AE06601A1F;
+        Tue, 12 Jul 2022 09:17:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657613826;
+        bh=d3b+CsWkPsYr8qKMtwTzmv9uLDZ9cL0m9n4E0ufVExw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fz2EGkZ9bpmliBI/TP4TTip8xfXgxpG5FeE08vweder9fo1LWxz2ddfc7e8VoKWmz
+         RQ4kSUcxxDI4oLUsXevLx+JYL7tdGNnWWR8aOJZHGNFm8GPmllL4539yYFiO8VL7Ol
+         TZhBRKH2wBKPHk/2rWYn749U0n8p/kPgtM66BigWXIEUUL2hLBlRrSH1M9akZJ+6Bu
+         1bq30IcUqKIB4VM3tLxfZIuqNomlRc/xnIX9w4GNa2xq1b/l7URBuZDPTVGwKwT2Tx
+         x0MgBVzjfZqQUbSs5Fgcj9lMT60Sbhv9q5RrALe1VsWrY/9yMWj+MFvp6DoyenH8jC
+         KSyRblMEgs7GA==
+Message-ID: <b6523c64-dfe2-13b0-db60-fb4f53ed1e31@collabora.com>
+Date:   Tue, 12 Jul 2022 10:17:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] arm64: defconfig: Config that had RPMSG_CHAR now gets
- RPMSG_CTRL
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
 Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     Will Deacon <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
- <c497e1ef-5a62-d956-4516-87e7b53a6001@foss.st.com> <YpdutV3/jOsfPb5c@arm.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <YpdutV3/jOsfPb5c@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
+ <20220704100028.19932-9-tinghan.shen@mediatek.com>
+ <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
+ <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
+ <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-08_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,56 +72,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 6/1/22 15:50, Catalin Marinas wrote:
-> On Wed, Jun 01, 2022 at 03:25:42PM +0200, Arnaud POULIQUEN wrote:
->> Gentle reminder.
->> Please notice that Mathieu replied with a "Reviewed-by".
-> 
-> We usually leave the defconfig updates to the SoC team. Cc'ing Arnd.
-
-This patch seems still be stalled, should I resent it?
-
-Thanks,
-Arnaud
-
-> 
-> Catalin
-> 
->> Thanks,
->> Arnaud
+Il 06/07/22 17:18, Krzysztof Kozlowski ha scritto:
+> On 06/07/2022 14:00, Tinghan Shen wrote:
+>> Hi Krzysztof,
 >>
->> On 4/5/22 18:11, Arnaud Pouliquen wrote:
->>> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
->>> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
->>> By default give everyone who had the old driver enabled the rpmsg_ctrl
->>> driver too.
+>> After discussing your message with our power team,
+>> we realized that we need your help to ensure we fully understand you.
+>>
+>> On Mon, 2022-07-04 at 14:38 +0200, Krzysztof Kozlowski wrote:
+>>> On 04/07/2022 12:00, Tinghan Shen wrote:
+>>>> Add power domains controller node for mt8195.
+>>>>
+>>>> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+>>>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+>>>> ---
+>>>>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 327 +++++++++++++++++++++++
+>>>>   1 file changed, 327 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>> index 8d59a7da3271..d52e140d9271 100644
+>>>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>>> @@ -10,6 +10,7 @@
+>>>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>>>   #include <dt-bindings/phy/phy.h>
+>>>>   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+>>>> +#include <dt-bindings/power/mt8195-power.h>
+>>>>   
+>>>>   / {
+>>>>   	compatible = "mediatek,mt8195";
+>>>> @@ -338,6 +339,332 @@
+>>>>   			#interrupt-cells = <2>;
+>>>>   		};
+>>>>   
+>>>> +		scpsys: syscon@10006000 {
+>>>> +			compatible = "syscon", "simple-mfd";
 >>>
->>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>> ---
+>>> These compatibles cannot be alone.
+>>
+>> the scpsys sub node has the compatible of the power domain driver.
+>> do you suggest that the compatible in the sub node should move to here?
+> 
+> Not necessarily, depends. You have here device node representing system
+> registers. They need they own compatibles, just like everywhere in the
+> kernel (except the broken cases...).
+> 
+> Whether this should be compatible of power-domain driver, it depends
+> what this device node is. I don't know, I don't have your datasheets or
+> your architecture diagrams...
+> 
+>>
+>>>> +			reg = <0 0x10006000 0 0x1000>;
+>>>> +			#power-domain-cells = <1>;
 >>>
->>> This patch is extracted from the series [1] that has been partially
->>> integrated in the Linux Kernel 5.18-rc1.
->>>
->>> Update vs previous version:
->>> - Add missing "---" separation marker after "Signed-off-by".
->>>
->>> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
->>> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
->>> ---
->>>  arch/arm64/configs/defconfig | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->>> index 50aa3d75ab4f..3f8906b8a2ca 100644
->>> --- a/arch/arm64/configs/defconfig
->>> +++ b/arch/arm64/configs/defconfig
->>> @@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
->>>  CONFIG_QCOM_SYSMON=m
->>>  CONFIG_QCOM_WCNSS_PIL=m
->>>  CONFIG_RPMSG_CHAR=m
->>> +CONFIG_RPMSG_CTRL=m
->>>  CONFIG_RPMSG_QCOM_GLINK_RPM=y
->>>  CONFIG_RPMSG_QCOM_GLINK_SMEM=m
->>>  CONFIG_RPMSG_QCOM_SMD=y
+>>> If it is simple MFD, then probably it is not a power domain provider.
+>>> Decide.
+>>
+>> this MFD device is the power controller on mt8195.
+> 
+> Then it is not a simple MFD but a power controller. Do not use
+> "simple-mfd" compatible.
+> 
+>> Some features need
+>> to do some operations on registers in this node. We think that implement
+>> the operation of these registers as the MFD device can provide flexibility
+>> for future use. We want to clarify if you're saying that an MFD device
+>> cannot be a power domain provider.
+> 
+> MFD device is Linuxism, so it has nothing to do here. I am talking only
+> about simple-mfd. simple-mfd is a simple device only instantiating
+> children and not providing anything to anyone. Neither to children. This
+>   the most important part. The children do not depend on anything from
+> simple-mfd device. For example simple-mfd device can be shut down
+> (gated) and children should still operate. Being a power domain
+> controller, contradicts this usually.
+> 
+
+If my interpretation of this issue is right, I have pushed a solution for it.
+Krzysztof, Matthias, can you please check [1] and give feedback, so that
+Tinghan can rewrite this commit ASAP?
+
+Reason is - I need the MT8195 devicetree to be complete to push the remaining
+pieces for Tomato Chromebooks, of course.
+
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=658527
+
+Thanks a lot,
+Angelo

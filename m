@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F57572553
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCAB5723F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbiGLTMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S234688AbiGLSxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbiGLTMS (ORCPT
+        with ESMTP id S234678AbiGLSxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:12:18 -0400
+        Tue, 12 Jul 2022 14:53:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BD8E680D;
-        Tue, 12 Jul 2022 11:53:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED830DAB8E;
+        Tue, 12 Jul 2022 11:45:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06ABE61274;
-        Tue, 12 Jul 2022 18:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF12C3411C;
-        Tue, 12 Jul 2022 18:53:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0195F60AC3;
+        Tue, 12 Jul 2022 18:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB83C3411C;
+        Tue, 12 Jul 2022 18:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651990;
-        bh=Blu1wDuwQwj1vl2Ovptffjjz0/kzFxLq7KwHo/jSTCc=;
+        s=korg; t=1657651507;
+        bh=7NjT53egA3ATlJ9aTxXrE1cWTZ5hf+G2pbGremAuhQQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Isg4KN78xrGIwbjoeH/Nqi7OSN2EgB/+u20yPVlhHebmSl2uyzhnTJpfi9PnMEGvz
-         MvguOJlP2exU1MXPQzaOBP17vBOCvgqKCoeNOz5fDF33IckBX7hrbWrBXCGF8V+cBW
-         bIqvG5eoMe5tA+YnqhHjmKIzIkSsWpCLNYWGhnVM=
+        b=Cf5ST7QP9zB7ZJVxyQlbCFxoypOPC4eDtjQ3QpnCBApyVwAO24QqSFG1NPzbIZmdc
+         GPB9lknqaq3OaBpaz4b5eIC2b1k1zReBZkkvBdyfnHDSQTdSqJxMthi0FnJ8h+PIcA
+         zveqKnhG6la6MpJdIp/LVs8ALQXlToviqYTyLnN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 06/61] x86/kvm/vmx: Make noinstr clean
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 097/130] x86/bugs: Add AMD retbleed= boot parameter
 Date:   Tue, 12 Jul 2022 20:39:03 +0200
-Message-Id: <20220712183237.195528665@linuxfoundation.org>
+Message-Id: <20220712183250.941778542@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +59,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Alexandre Chartre <alexandre.chartre@oracle.com>
 
-commit 742ab6df974ae8384a2dd213db1a3a06cf6d8936 upstream.
+commit 7fbf47c7ce50b38a64576b150e7011ae73d54669 upstream.
 
-The recent mmio_stale_data fixes broke the noinstr constraints:
+Add the "retbleed=<value>" boot parameter to select a mitigation for
+RETBleed. Possible values are "off", "auto" and "unret"
+(JMP2RET mitigation). The default value is "auto".
 
-  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x15b: call to wrmsrl.constprop.0() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1bf: call to kvm_arch_has_assigned_device() leaves .noinstr.text section
+Currently, "retbleed=auto" will select the unret mitigation on
+AMD and Hygon and no mitigation on Intel (JMP2RET is not effective on
+Intel).
 
-make it all happy again.
+  [peterz: rebase; add hygon]
+  [jpoimboe: cleanups]
 
+Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/vmx.c   |    6 +++---
- arch/x86/kvm/x86.c       |    4 ++--
- include/linux/kvm_host.h |    2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |   15 +++
+ arch/x86/Kconfig                                |    3 
+ arch/x86/kernel/cpu/bugs.c                      |  108 +++++++++++++++++++++++-
+ 3 files changed, 125 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -383,9 +383,9 @@ static __always_inline void vmx_disable_
- 	if (!vmx->disable_fb_clear)
- 		return;
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4656,6 +4656,21 @@
  
--	rdmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
-+	msr = __rdmsr(MSR_IA32_MCU_OPT_CTRL);
- 	msr |= FB_CLEAR_DIS;
--	wrmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
-+	native_wrmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
- 	/* Cache the MSR value to avoid reading it later */
- 	vmx->msr_ia32_mcu_opt_ctrl = msr;
- }
-@@ -396,7 +396,7 @@ static __always_inline void vmx_enable_f
- 		return;
+ 	retain_initrd	[RAM] Keep initrd memory after extraction
  
- 	vmx->msr_ia32_mcu_opt_ctrl &= ~FB_CLEAR_DIS;
--	wrmsrl(MSR_IA32_MCU_OPT_CTRL, vmx->msr_ia32_mcu_opt_ctrl);
-+	native_wrmsrl(MSR_IA32_MCU_OPT_CTRL, vmx->msr_ia32_mcu_opt_ctrl);
- }
++	retbleed=	[X86] Control mitigation of RETBleed (Arbitrary
++			Speculative Code Execution with Return Instructions)
++			vulnerability.
++
++			off         - unconditionally disable
++			auto        - automatically select a migitation
++			unret       - force enable untrained return thunks,
++				      only effective on AMD Zen {1,2}
++				      based systems.
++
++			Selecting 'auto' will choose a mitigation method at run
++			time according to the CPU.
++
++			Not specifying this option is equivalent to retbleed=auto.
++
+ 	rfkill.default_state=
+ 		0	"airplane mode".  All wifi, bluetooth, wimax, gps, fm,
+ 			etc. communication is blocked by default.
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -465,6 +465,9 @@ config RETPOLINE
+ config CC_HAS_SLS
+ 	def_bool $(cc-option,-mharden-sls=all)
  
- static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12531,9 +12531,9 @@ void kvm_arch_end_assignment(struct kvm
- }
- EXPORT_SYMBOL_GPL(kvm_arch_end_assignment);
++config CC_HAS_RETURN_THUNK
++	def_bool $(cc-option,-mfunction-return=thunk-extern)
++
+ config SLS
+ 	bool "Mitigate Straight-Line-Speculation"
+ 	depends on CC_HAS_SLS && X86_64
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -37,6 +37,7 @@
+ #include "cpu.h"
  
--bool kvm_arch_has_assigned_device(struct kvm *kvm)
-+bool noinstr kvm_arch_has_assigned_device(struct kvm *kvm)
+ static void __init spectre_v1_select_mitigation(void);
++static void __init retbleed_select_mitigation(void);
+ static void __init spectre_v2_select_mitigation(void);
+ static void __init ssb_select_mitigation(void);
+ static void __init l1tf_select_mitigation(void);
+@@ -112,6 +113,12 @@ void __init check_bugs(void)
+ 
+ 	/* Select the proper CPU mitigations before patching alternatives: */
+ 	spectre_v1_select_mitigation();
++	retbleed_select_mitigation();
++	/*
++	 * spectre_v2_select_mitigation() relies on the state set by
++	 * retbleed_select_mitigation(); specifically the STIBP selection is
++	 * forced for UNRET.
++	 */
+ 	spectre_v2_select_mitigation();
+ 	ssb_select_mitigation();
+ 	l1tf_select_mitigation();
+@@ -709,6 +716,100 @@ static int __init nospectre_v1_cmdline(c
+ early_param("nospectre_v1", nospectre_v1_cmdline);
+ 
+ #undef pr_fmt
++#define pr_fmt(fmt)     "RETBleed: " fmt
++
++enum retbleed_mitigation {
++	RETBLEED_MITIGATION_NONE,
++	RETBLEED_MITIGATION_UNRET,
++};
++
++enum retbleed_mitigation_cmd {
++	RETBLEED_CMD_OFF,
++	RETBLEED_CMD_AUTO,
++	RETBLEED_CMD_UNRET,
++};
++
++const char * const retbleed_strings[] = {
++	[RETBLEED_MITIGATION_NONE]	= "Vulnerable",
++	[RETBLEED_MITIGATION_UNRET]	= "Mitigation: untrained return thunk",
++};
++
++static enum retbleed_mitigation retbleed_mitigation __ro_after_init =
++	RETBLEED_MITIGATION_NONE;
++static enum retbleed_mitigation_cmd retbleed_cmd __ro_after_init =
++	RETBLEED_CMD_AUTO;
++
++static int __init retbleed_parse_cmdline(char *str)
++{
++	if (!str)
++		return -EINVAL;
++
++	if (!strcmp(str, "off"))
++		retbleed_cmd = RETBLEED_CMD_OFF;
++	else if (!strcmp(str, "auto"))
++		retbleed_cmd = RETBLEED_CMD_AUTO;
++	else if (!strcmp(str, "unret"))
++		retbleed_cmd = RETBLEED_CMD_UNRET;
++	else
++		pr_err("Unknown retbleed option (%s). Defaulting to 'auto'\n", str);
++
++	return 0;
++}
++early_param("retbleed", retbleed_parse_cmdline);
++
++#define RETBLEED_UNTRAIN_MSG "WARNING: BTB untrained return thunk mitigation is only effective on AMD/Hygon!\n"
++#define RETBLEED_COMPILER_MSG "WARNING: kernel not compiled with RETPOLINE or -mfunction-return capable compiler!\n"
++
++static void __init retbleed_select_mitigation(void)
++{
++	if (!boot_cpu_has_bug(X86_BUG_RETBLEED) || cpu_mitigations_off())
++		return;
++
++	switch (retbleed_cmd) {
++	case RETBLEED_CMD_OFF:
++		return;
++
++	case RETBLEED_CMD_UNRET:
++		retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++		break;
++
++	case RETBLEED_CMD_AUTO:
++	default:
++		if (!boot_cpu_has_bug(X86_BUG_RETBLEED))
++			break;
++
++		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++			retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++		break;
++	}
++
++	switch (retbleed_mitigation) {
++	case RETBLEED_MITIGATION_UNRET:
++
++		if (!IS_ENABLED(CONFIG_RETPOLINE) ||
++		    !IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK)) {
++			pr_err(RETBLEED_COMPILER_MSG);
++			retbleed_mitigation = RETBLEED_MITIGATION_NONE;
++			break;
++		}
++
++		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
++		setup_force_cpu_cap(X86_FEATURE_UNRET);
++
++		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
++		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
++			pr_err(RETBLEED_UNTRAIN_MSG);
++		break;
++
++	default:
++		break;
++	}
++
++	pr_info("%s\n", retbleed_strings[retbleed_mitigation]);
++}
++
++#undef pr_fmt
+ #define pr_fmt(fmt)     "Spectre V2 : " fmt
+ 
+ static enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init =
+@@ -1919,7 +2020,12 @@ static ssize_t srbds_show_state(char *bu
+ 
+ static ssize_t retbleed_show_state(char *buf)
  {
--	return atomic_read(&kvm->arch.assigned_device_count);
-+	return arch_atomic_read(&kvm->arch.assigned_device_count);
- }
- EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
- 
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1511,7 +1511,7 @@ static inline void kvm_arch_end_assignme
- {
+-	return sprintf(buf, "Vulnerable\n");
++	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET &&
++	    (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
++	     boot_cpu_data.x86_vendor != X86_VENDOR_HYGON))
++		return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
++
++	return sprintf(buf, "%s\n", retbleed_strings[retbleed_mitigation]);
  }
  
--static inline bool kvm_arch_has_assigned_device(struct kvm *kvm)
-+static __always_inline bool kvm_arch_has_assigned_device(struct kvm *kvm)
- {
- 	return false;
- }
+ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr,
 
 

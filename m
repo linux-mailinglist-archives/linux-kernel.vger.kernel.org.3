@@ -2,233 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BEC5721FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535E35721FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiGLRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 13:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S233401AbiGLRyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 13:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiGLRxl (ORCPT
+        with ESMTP id S230372AbiGLRyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 13:53:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF06B38BB;
-        Tue, 12 Jul 2022 10:53:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 12 Jul 2022 13:54:09 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4AD4F65F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:54:08 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4ADC1B81B88;
-        Tue, 12 Jul 2022 17:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB44C341C8;
-        Tue, 12 Jul 2022 17:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657648417;
-        bh=81DQ6XwV6QSGRv/Y8PZB4OF0sSCD+qz4XroqcCziNmg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nd3/SesHarbZ9Ec5IuCJ/CxludbfYk4IrYVLcvv/AT257kIyLgURuvBaEV3Vum0hc
-         t3ME+q+Z0hh6HnQnNpocVI39x0VHdAbXJZ9V/86jTEztZOkmehbiQehlIAwcFCgI83
-         U9BpOsR0ZKhWAKjdSGzlT6DrYaE7pmgFoGif9cvR8zGasRtD6ltfQQMAbVSB6f9saU
-         3TLmtZYnugNpToW+BFontk/DHQezBdPbTbk6fQbCwesvUAnyDr0/RKq2k7vAFZWBBb
-         WdP/lyKt5KjUuMxHHamf5Ky4lpRkemMIeZe9E2UqJYhbV7ZG8pefk1JATo+e9o16pN
-         WjGLF0NGXvoRw==
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-31bf3656517so88792797b3.12;
-        Tue, 12 Jul 2022 10:53:36 -0700 (PDT)
-X-Gm-Message-State: AJIora8iYPmbbE0eOG+TMTTXaAi6QRKV6dinXcwIxlPaGP61ajpcAQyK
-        jaS92gMx+lClXV/mcB0SAYZHmayetwpqEeY8UfA=
-X-Google-Smtp-Source: AGRyM1uZFjBEihbK2YQQp/NBSOZ9Xn1WI5+IJIQYfmNEdqci5UczaZ7c5pkl25sDzH1+9TZ7vqGVhxQpLxRNKtYZXl4=
-X-Received: by 2002:a0d:f445:0:b0:31d:4f2c:a0b0 with SMTP id
- d66-20020a0df445000000b0031d4f2ca0b0mr19507196ywf.73.1657648415966; Tue, 12
- Jul 2022 10:53:35 -0700 (PDT)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id E940FF91F2E;
+        Tue, 12 Jul 2022 19:54:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1657648446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZAEvDrruioRUeOqOP35LLO6mwrB7yP6awQauT5tRizA=;
+        b=FLmLObv3ScGZwWlYLs0MNDpULkQzehYJPhcioXM0GJuqruQ/WDaS/RSbQfuMkZ9OajXmIq
+        +BxSIdJTsQdkNx3TO6pRhnPmF5xdGbUGxq9Rw48shoPmO8EQW1dDVMsw4+LxTpst0UFQK6
+        SX0KpRkS3BpV48//SPa2es2kTxz9bng=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [REGRESSION] amd-pstate doesn't work since v5.18.11
+Date:   Tue, 12 Jul 2022 19:54:04 +0200
+Message-ID: <2414945.NDPYyZybsh@natalenko.name>
+In-Reply-To: <MN0PR12MB6101ECFEFBBDBB65CA75F1C3E2869@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <3559249.JlDtxWtqDm@natalenko.name> <DM4PR12MB527879122FE84DCD355C33B59C869@DM4PR12MB5278.namprd12.prod.outlook.com> <MN0PR12MB6101ECFEFBBDBB65CA75F1C3E2869@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220711083220.2175036-1-asavkov@redhat.com> <20220711083220.2175036-4-asavkov@redhat.com>
-In-Reply-To: <20220711083220.2175036-4-asavkov@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 12 Jul 2022 10:53:25 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
-Message-ID: <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 3/4] bpf: add bpf_panic() helper
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 1:32 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> Add a helper that will make the kernel panic immediately with specified
-> message. Using this helper requires kernel.destructive_bpf_enabled sysctl
-> to be enabled, BPF_F_DESTRUCTIVE flag to be supplied on program load as
-> well as CAP_SYS_BOOT capabilities.
->
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> ---
->  include/linux/bpf.h            |  1 +
->  include/uapi/linux/bpf.h       |  7 +++++++
->  kernel/bpf/core.c              |  1 +
->  kernel/bpf/helpers.c           | 13 +++++++++++++
->  kernel/bpf/verifier.c          |  7 +++++++
->  kernel/trace/bpf_trace.c       |  2 ++
->  tools/include/uapi/linux/bpf.h |  7 +++++++
->  7 files changed, 38 insertions(+)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 43c008e3587a..77c20ba9ca8e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2339,6 +2339,7 @@ extern const struct bpf_func_proto bpf_strtol_proto;
->  extern const struct bpf_func_proto bpf_strtoul_proto;
->  extern const struct bpf_func_proto bpf_tcp_sock_proto;
->  extern const struct bpf_func_proto bpf_jiffies64_proto;
-> +extern const struct bpf_func_proto bpf_panic_proto;
->  extern const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto;
->  extern const struct bpf_func_proto bpf_event_output_data_proto;
->  extern const struct bpf_func_proto bpf_ringbuf_output_proto;
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 4423874b5da4..e2e2c4de44ee 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3927,6 +3927,12 @@ union bpf_attr {
->   *     Return
->   *             The 64 bit jiffies
->   *
-> + * void bpf_panic(const char *msg)
-> + *     Description
-> + *             Make the kernel panic immediately
-> + *     Return
-> + *             void
-> + *
->   * long bpf_read_branch_records(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
->   *     Description
->   *             For an eBPF program attached to a perf event, retrieve the
-> @@ -5452,6 +5458,7 @@ union bpf_attr {
->         FN(tcp_send_ack),               \
->         FN(send_signal_thread),         \
->         FN(jiffies64),                  \
-> +       FN(panic),                      \
->         FN(read_branch_records),        \
->         FN(get_ns_current_pid_tgid),    \
->         FN(xdp_output),                 \
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index b5ffebcce6cc..0f333a0e85a5 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2649,6 +2649,7 @@ const struct bpf_func_proto bpf_map_lookup_percpu_elem_proto __weak;
->  const struct bpf_func_proto bpf_spin_lock_proto __weak;
->  const struct bpf_func_proto bpf_spin_unlock_proto __weak;
->  const struct bpf_func_proto bpf_jiffies64_proto __weak;
-> +const struct bpf_func_proto bpf_panic_proto __weak;
->
->  const struct bpf_func_proto bpf_get_prandom_u32_proto __weak;
->  const struct bpf_func_proto bpf_get_smp_processor_id_proto __weak;
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index a1c84d256f83..5cb90208a264 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -374,6 +374,19 @@ const struct bpf_func_proto bpf_jiffies64_proto = {
->         .ret_type       = RET_INTEGER,
->  };
->
-> +BPF_CALL_1(bpf_panic, const char *, msg)
-> +{
-> +       panic(msg);
+Hello.
 
-I think we should also check
+On =C3=BAter=C3=BD 12. =C4=8Dervence 2022 19:50:33 CEST Limonciello, Mario =
+wrote:
+> [Public]
+>=20
+> + Ray=20
+>=20
+> > -----Original Message-----
+> > From: Yuan, Perry <Perry.Yuan@amd.com>
+> > Sent: Tuesday, July 12, 2022 12:50
+> > To: Oleksandr Natalenko <oleksandr@natalenko.name>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; linux-kernel@vger.kernel.org
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>; Sasha Levin
+> > <sashal@kernel.org>; x86@kernel.org; H. Peter Anvin <hpa@zytor.com>;
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Subject: RE: [REGRESSION] amd-pstate doesn't work since v5.18.11
+> >=20
+> > [AMD Official Use Only - General]
+> >=20
+> > Hi Oleksandr:
+> >=20
+> > > -----Original Message-----
+> > > From: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > > Sent: Wednesday, July 13, 2022 1:40 AM
+> > > To: Limonciello, Mario <Mario.Limonciello@amd.com>; linux-
+> > > kernel@vger.kernel.org
+> > > Cc: Yuan, Perry <Perry.Yuan@amd.com>; Rafael J. Wysocki
+> > > <rafael.j.wysocki@intel.com>; Sasha Levin <sashal@kernel.org>;
+> > > x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org>
+> > > Subject: [REGRESSION] amd-pstate doesn't work since v5.18.11
+> > >
+> > > [CAUTION: External Email]
+> > >
+> > > Hello Mario.
+> > >
+> > > The following commits were pulled into v5.18.11:
+> > >
+> > > ```
+> > > $ git log --oneline --no-merges v5.18.10..v5.18.11 | grep ACPI
+> > > 2783414e6ef7 ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is
+> > > supported
+> > > 3068cfeca3b5 ACPI: CPPC: Only probe for _CPC if CPPC v2 is acked
+> > > 8beb71759cc8 ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB =
+is
+> > > supported
+> > > 13bb696dd2f3 ACPI: CPPC: Check _OSC for flexible address space ```
+> > >
+> > > and now this happens:
+> > >
+> > > ```
+> > > $ sudo modprobe amd-pstate shared_mem=3D1
+> > > modprobe: ERROR: could not insert 'amd_pstate': No such device ```
+> > >
+> > > With v5.18.10 this worked just fine.
+> > >
+> > > In your upstream commit 8b356e536e69f3a4d6778ae9f0858a1beadabb1f
+> > > you write:
+> > >
+> > > ```
+> > > If there is additional breakage on the shared memory designs also mis=
+sing
+> > > this _OSC, additional follow up changes may be needed.
+> > > ```
+> > >
+> > > So the question is what else should be pulled into the stable tree to
+> > > unbreak amd-pstate?
+> > >
+> > > Thanks.
+> > >
+> > > --
+> > > Oleksandr Natalenko (post-factum)
+> > >
+> >=20
+> > Could you share the lscpu output ?
 
-   capable(CAP_SYS_BOOT) && destructive_ebpf_enabled()
+Here's my `lscpu`:
 
-here. Or at least, destructive_ebpf_enabled(). Otherwise, we
-may trigger panic after the sysctl is disabled.
+```
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   43 bits physical, 48 bits virtual
+Byte Order:                      Little Endian
+CPU(s):                          24
+On-line CPU(s) list:             0-23
+Vendor ID:                       AuthenticAMD
+Model name:                      AMD Ryzen 9 3900XT 12-Core Processor
+CPU family:                      23
+Model:                           113
+Thread(s) per core:              2
+Core(s) per socket:              12
+Socket(s):                       1
+Stepping:                        0
+=46requency boost:                 enabled
+CPU(s) scaling MHz:              59%
+CPU max MHz:                     3800,0000
+CPU min MHz:                     2200,0000
+BogoMIPS:                        7589.71
+=46lags:                           fpu vme de pse tsc msr pae mce cx8 apic =
+sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmx=
+ext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid=
+ extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 ss=
+e4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm e=
+xtapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt t=
+ce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_=
+l3 hw_pstate ssbd mba ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm r=
+dt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves =
+cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr =
+rdpru wbnoinvd arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushb=
+yasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spe=
+c_ctrl umip rdpid overflow_recov succor smca sev sev_es
+Virtualization:                  AMD-V
+L1d cache:                       384 KiB (12 instances)
+L1i cache:                       384 KiB (12 instances)
+L2 cache:                        6 MiB (12 instances)
+L3 cache:                        64 MiB (4 instances)
+NUMA node(s):                    1
+NUMA node0 CPU(s):               0-23
+Vulnerability Itlb multihit:     Not affected
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Mmio stale data:   Not affected
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disab=
+led via prctl
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and _=
+_user pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, =
+STIBP conditional, RSB filling
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
 
-In general, I don't think sysctl is a good API, as it is global, and
-the user can easily forget to turn it back off. If possible, I would
-rather avoid adding new BPF related sysctls.
+```
 
-Thanks,
-Song
+> > Perry.
+>=20
+> Thanks this is the sort of thing I was worried might happen as a result o=
+f requiring
+> the _OSC.  It was introduced as part of that commit 8beb71759cc8.
+>=20
+> To solve it I think we need to add more things to cpc_supported_by_cpu
+> (https://github.com/torvalds/linux/blob/525496a030de4ae64bb9e1d6bfc88eec6=
+f5fe6e2/arch/x86/kernel/acpi/cppc.c#L19)
+>=20
+> The question is how do we safely detect the shared memory designs?
+> These are a fixed quantity as newer designs /should/ be using the MSR.
+>=20
+> I am tending to thing that unfortunately we need to have an allow-list of=
+ shared
+> memory design here unless someone has other ideas.
+
+Happy to test any patches as needed.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
 
 
-> +       return 0;
-> +}
-> +
-> +const struct bpf_func_proto bpf_panic_proto = {
-> +       .func           = bpf_panic,
-> +       .gpl_only       = false,
-> +       .ret_type       = RET_VOID,
-> +       .arg1_type      = ARG_PTR_TO_CONST_STR,
-> +};
-> +
->  #ifdef CONFIG_CGROUPS
->  BPF_CALL_0(bpf_get_current_cgroup_id)
->  {
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2859901ffbe3..f49c026917c5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7285,6 +7285,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->                                 reg_type_str(env, regs[BPF_REG_1].type));
->                         return -EACCES;
->                 }
-> +               break;
-> +       case BPF_FUNC_panic:
-> +               struct bpf_prog_aux *aux = env->prog->aux;
-> +               if (!aux->destructive) {
-> +                       verbose(env, "bpf_panic() calls require BPF_F_DESTRUCTIVE flag\n");
-> +                       return -EACCES;
-> +               }
->         }
->
->         if (err)
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 4be976cf7d63..3ee888507795 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1304,6 +1304,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->                 return &bpf_find_vma_proto;
->         case BPF_FUNC_trace_vprintk:
->                 return bpf_get_trace_vprintk_proto();
-> +       case BPF_FUNC_panic:
-> +               return capable(CAP_SYS_BOOT) && destructive_ebpf_enabled() ? &bpf_panic_proto : NULL;
->         default:
->                 return bpf_base_func_proto(func_id);
->         }
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index 4423874b5da4..e2e2c4de44ee 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -3927,6 +3927,12 @@ union bpf_attr {
->   *     Return
->   *             The 64 bit jiffies
->   *
-> + * void bpf_panic(const char *msg)
-> + *     Description
-> + *             Make the kernel panic immediately
-> + *     Return
-> + *             void
-> + *
->   * long bpf_read_branch_records(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
->   *     Description
->   *             For an eBPF program attached to a perf event, retrieve the
-> @@ -5452,6 +5458,7 @@ union bpf_attr {
->         FN(tcp_send_ack),               \
->         FN(send_signal_thread),         \
->         FN(jiffies64),                  \
-> +       FN(panic),                      \
->         FN(read_branch_records),        \
->         FN(get_ns_current_pid_tgid),    \
->         FN(xdp_output),                 \
-> --
-> 2.35.3
->

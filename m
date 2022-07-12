@@ -2,233 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632FB571747
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B04D57174B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 12:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiGLK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 06:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S232720AbiGLK0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 06:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiGLK0I (ORCPT
+        with ESMTP id S229752AbiGLK0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:26:08 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009DFADD78
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:25:59 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z25so13195887lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yWy18Lynv1Yzq+NCbZJ0I3w7Y+py7fFlGQHV4YYmBEA=;
-        b=YhUrQS7CDO/km6iLR9MKy/Th+0vO3y95kmZmpo9YfWSZCWrtTYqhGUt22TJf0sgNF/
-         C+JiOOuBHD21fxx+xrndL2Oi6YlOy+vTCzh4BZ+hEF9CnS0AvbM9RiybI1P5Z6mNJpyC
-         mOunPrv+UkIIZ14k9OKlCL0cx21CVlegXaM8bv0AfXrgDNd78ssPwLfSGpbeBp57Pjtc
-         mQWG4UQm+xHtL+37DvflFUdlfnDkueQ3S1dHSlfvJ10j/T7f3hANdx6LdvY4iYj2OZLX
-         IQ+JQQXwG13HZnxxo5KJ6Fqatq6Qw/fwBQnZMiDG4b47Qa5QpIxFbnK21hnZbv1RgkaP
-         /lFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yWy18Lynv1Yzq+NCbZJ0I3w7Y+py7fFlGQHV4YYmBEA=;
-        b=ZSvTUKKv/2Kq3myBmPLttzLIHivpxY3C6+LXIEHetM7TcPQ5wOLSXd3fqDEkdSJikh
-         T1ZdYk6gfCANnwpkZDHHzFsYrFCjX8YgpDk2I6vMLx4l+pArMuwVzcAxiZzHR7Thry2C
-         nhsYKsz3JHjoCNkrb2MEw90BdQVgAj0vBPTiqwcnQsOhANICJBWME149xmwds4lAE6wG
-         Uki8crGISeoOJbw+I+D2l1Qc6HufRWAdoygAUhfwSKLApcVBowrwaTJ1c5sw1tKknSaz
-         hKkZxhaEaLFPaZ8BMHPyRmb43wv1bXNXt+3pGuakAlzmxIM7BGK49QyoyLv2cCrwjU50
-         pRJA==
-X-Gm-Message-State: AJIora99CJcEgcLiTRvhweWqQUKLOLfuX9Rsb+q7PJ5d9HcmmuflzH+6
-        /O0Xrmeif1tdhEj4hv5K5+uaiQ==
-X-Google-Smtp-Source: AGRyM1vwP52r+DOrP+7+sPj3gLT+i3nLFiVYE70VJk0djpZK0MJCR7EkLpOI5uCX9GWZwUWm0oTzKg==
-X-Received: by 2002:a05:6512:2030:b0:489:c8bf:3f29 with SMTP id s16-20020a056512203000b00489c8bf3f29mr12284746lfs.274.1657621558363;
-        Tue, 12 Jul 2022 03:25:58 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056512078300b00485e55192a3sm2097839lfr.72.2022.07.12.03.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 03:25:57 -0700 (PDT)
-Message-ID: <d28ea0ac-ff1b-5394-4c76-1561353ab7ce@linaro.org>
-Date:   Tue, 12 Jul 2022 12:25:54 +0200
-MIME-Version: 1.0
+        Tue, 12 Jul 2022 06:26:44 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2071.outbound.protection.outlook.com [40.107.92.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D93AB7E8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:26:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sr3GR4+ySSSqTujk+PzIq0Wt8c6e0tuTYonGtjEw7J14IFSsiQsrE4Pe3vfZ8gJInZ725Ejm449eK5soXO303lXIoauxAO0gw0/Bdxxz7JnR0hUMolSa/0ji/kpoBXwrf/KKi3OTbdNR6u2U6WhVYpSBa4BSlnMp3ATvgYBlUnD/slJOz9k/+E9MHUpXh03JAJz46PThVokf9SoDm5FL5psrx8kXbqvta7Od6Dz56PodPicR4XCTO3EP0bA2VZ0zDYSISfgsypNaauOdGQF4K9Gp3Hl7psJzScOScDnvNzepx/3cJOJrOxufXGjavZQ7n3dIeQzHwXyxxpw41dw26w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xnvr3oQx9QwjQJ5RKrYzBNe66MAWxdnijhTSYaHav/Y=;
+ b=JVzLytcyD5XithPjQXHJFdq0WFJZdOb2IGArellwfTACKv7innoBZYt99a77OKDcb/FJKcVAKTPFW3agDelwjHDGCxO2hcWQXUcJpFtBfBUBXo9PgDUJwAD0QZpV8lnIerDt3v7j8QpxK0Kmg2283Wb9WrngjDMFY/ahIv5A6GYZotCWtotbck6detdvOfcPcnGjynNeZDw4j4fINXHmiA8ev5K/D8WtaNlRXWGguLcAyU+3fdynV/K5ANTDEYksUdbeFbH6H/2IIgJG9/mbqEpWgfiwSbZ8Z/PtDzCVxzxsBTMHZICFP6MHCNNDQkRn1roW56jza+sHFntQJ10rxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xnvr3oQx9QwjQJ5RKrYzBNe66MAWxdnijhTSYaHav/Y=;
+ b=Cw4u63iNv1ou/RItPkL3nyq2R/67jUlBxXCQnJ/N8kj8rGQ3QbFzd68MB66DrrYcyH0Gl0rHNWkgKBKP6LPC+v2UdVTwyt+J/pI70tA/oVLWTyvmxRPYw8mjTeUIJ6YH5r2ZXh9RPe1H6zejpoxkhX74e79J3zE7dl57EpUgLTs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by PH7PR12MB5759.namprd12.prod.outlook.com (2603:10b6:510:1d2::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
+ 2022 10:26:36 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 10:26:35 +0000
+Message-ID: <22a21338-305d-bdf7-0079-df67fb030fc7@amd.com>
+Date:   Tue, 12 Jul 2022 12:26:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: irqchip: imx mu work as msi controller
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] drm/syncobj: Fix sync syncobj issue
 Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, tglx@linutronix.de, maz@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com,
-        jdmason@kudzu.us
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev
-References: <20220707210238.917477-1-Frank.Li@nxp.com>
- <20220707210238.917477-2-Frank.Li@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707210238.917477-2-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     jie1zhan <jesse.zhang@amd.com>, broonie@kernel.org,
+        dri-devel-bounces@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, ajitkumar.pandey@amd.com,
+        lucas.demarchi@intel.com, nirmoy.das@linux.intel.com,
+        lionel.g.landwerlin@intel.com,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220707102953.769684-1-jesse.zhang@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220707102953.769684-1-jesse.zhang@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0131.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::16) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7fc1d73d-538f-43ca-6764-08da63f0ff79
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5759:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZcqXbv1h1ohXLdjEN4/0luZ7kbSiVV319btjIkuK5/2oo+cxH/51MOtx5n+msKZntsjnI0gyhANz95/dJW19DiMdd9pRfQyRX1PtzPB1Vldvri9TnT28ZjEeVWUVvA/d0ybS7jRvw/0K+0HvNnB4322kXZlJvW3Iwvy7jIVwcMKafXwAZUYgTP9iohL+b53YP2VOItQ/4cok+sNem6SYtwd6nCJxylgmz8oPCIf3Z6xL3CQm3L0iMxMHYZiMtJT2jxGDn+4Air0wdQ2sC30ql+h4Ard1n9IgKHu/91LNInJ+zNKrHyfHHW2zRc8DxIbCgbeBxZbrwVDjg70TkxuIeLJ8E2CjdcPl4BxgTzdvEgBfS4wLxhxdOZ+OQsiZr/ogB4SXysdItrU1oKPG1RTffW//9uDt3RJ7lTOV1C6+b4HFZbYLf/gPsV0gV1/qMYEyyqMO9Z3YwwG3PlxieaoqxST+5VfNPiOO/L9ug26387woYPCuozTIkC7/lBRR0j7Qz6n4qBORWzX3NE5WM2GdWFpQpfrZ6qgSUXpwFWZ0KN/MGgGydX0vgrHoq3spVb4oNVVB19JFiQ889LTOvF0/m4w3+o+J6K6Yc50yTXiMGk+7miWlsQun1802parP8Nqpm5GWl3Xg3whGTEeH1d8vyhBf8ePVdpkjs1XTGmj8hv/Yi34Ga8NPLk1O64WWgXLgi2/EhgIFPfs4g8wEvfmOQ9CkbfgLJfcxfLfuO8rVRXTbPRaDtaDcjzUQNdjTdwrsDmSsmvwodD7JD98ldKzxu+OdeSSPz3iyYVQWOAvikf3ulWfQyecXWolatTo80MWWaGCtPZporWP9YwVW4Zz6pACSh7UKJSts9AYo12wVKJ+ShI2EOGwLn0DjWTXtZMe+SPot4n4DWU5iCzhUGUOnFA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(66946007)(4744005)(8676002)(4326008)(66556008)(36756003)(6512007)(31686004)(8936002)(2906002)(5660300002)(66476007)(7416002)(26005)(38100700002)(478600001)(31696002)(54906003)(186003)(86362001)(6506007)(41300700001)(6486002)(2616005)(316002)(6666004)(45980500001)(43740500002)(473944003)(414714003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?am5UNVUrK0hveGYySGxRQjd5NHp6QzVDVjlUS2FVU2N3WlN4Z3VSV3ZxMDVh?=
+ =?utf-8?B?SzQxS0dQKy9OclpzZG5HdUFDZng1QXJUSVQ3cTh3YnlVdmFFL0dudFlNdzdI?=
+ =?utf-8?B?VThRMmZBT1ZqamRnTjN6TGdQMEZPVnluTkV0eUg3SFVvakZ5Y3RydEhOOXhB?=
+ =?utf-8?B?NTZxU05tUWVISGFDVUhaRk5OWXJLOFBlaE5oa0NCcmpGOVdKS0s5d2F1VVYx?=
+ =?utf-8?B?U0xqMlF5M21KQlNESzdpOEVJRHl2KzIvQXN6a3h4MXBUWFJaOWhaQUl3L05Q?=
+ =?utf-8?B?Z3M3V0lmUHYrcTQ2S2hoTFgzVHdnbmlhODhLeHlUUWFxazJSalh6aU44NkZX?=
+ =?utf-8?B?b3hhUlNkOGpVVjBuQXlmU2pOV3U2MWFJWkVKYnFZR1JIOVcyMkRST0NIVmg3?=
+ =?utf-8?B?WCtZVmFVbVE0dC93dEx3ZDMwMStUa1h0UjZHa0szN1B3OEQyNzVJZi96c1Vu?=
+ =?utf-8?B?d1paekdmczVyRnBzb3d4cE9uQXNUUlBuS2I4bXdtNGYzRG40SHpYMVRSOWUv?=
+ =?utf-8?B?Rk0rU2lHKzZ0VUlxZm1JNDdKaW5VaTlYKzliR1FHNW9LcTA1RXNIUXU4UlBQ?=
+ =?utf-8?B?Y2g0M2dvUUw2aDBKTmhQTGJEOWVvbFlGa2EydzBjOTNEeU04d0xycTdiSElS?=
+ =?utf-8?B?RHVoRHR6VFB1Y0Qwczc1NE41UDhsMnZxOFRQdzhlbkhRbVBVUU1OT1JsUjJt?=
+ =?utf-8?B?RFVrT21kYitNS09qRE9wcHlIRzFaalFuRndvTTFyUWNGaUV2SW9ucTlDWkp3?=
+ =?utf-8?B?TFcvc0FnTlNHWUJwdFBpSm55MENlS1dmOCtKM05zS1VyRllwQmhDVVpFSVJ2?=
+ =?utf-8?B?aVU1dk1TbVRCb282QU9xMGo3NUVIRnBDb2V2MlJoSXlVRGczNUFKL2NlSEJV?=
+ =?utf-8?B?SE53QnZFaDhVUkNOOVpFY2JnWWQvcjFMamc2UmVBMkJBWTdIYVB6MER4R1ZR?=
+ =?utf-8?B?SndsSDN4Q2U0ZkdjZjBDRDh2UEgwd2lRWEFJRkRBU1p0eEN4SmU4OTNpUHhy?=
+ =?utf-8?B?UkJiQ0JqMHRlaEdSQkhCY2NNZnhRYTk1RXNGVWFUSEJHb1BEUEpLeWplaUhP?=
+ =?utf-8?B?d3dYZjJ6WXJVOTlyMFJORWZiOFVHTEhOUFVKUTh2enFwdEppdjFhQzVvREpY?=
+ =?utf-8?B?dkl6WnpKOWEwYkRZeXVadHk5WE1TQ2V4WmNORGNtOXVLUE94MDBGOHF3NmlE?=
+ =?utf-8?B?SSs5aWtHdnBwL3JCT2JlU0RTSlZrV0w1cDEzN1ZCK0Y1blFYcWpVdXVqZGdG?=
+ =?utf-8?B?NnBnMWhVVGFoL0dOWHNRUWtxUFdvWm5MRkxLNUFxRDhlNmtmd0R0UzBYNWRT?=
+ =?utf-8?B?SmhieTN3b1MxT200SzlaNkhWdEwrTWtTK0xJUnVvVUh1b1QvaDl5MDZHZ1lP?=
+ =?utf-8?B?dnpjb3RLZUs3RUI4c1lJTkZzNlRzMFhKYjZnZ0VPMnlvMm9JdWtQMlc3UDJp?=
+ =?utf-8?B?SzY2clloUjA3eWhRVzkxL1FmbGFlcWpPMDBCMVpMczdlak5RTFg3dzJXNkZP?=
+ =?utf-8?B?Z3hRRTZ2V2crRmZ5R1VscnU0SVF5eWRjcUd4VWRaMnBrMFc1SlZtMUg2c241?=
+ =?utf-8?B?SVI5RTByNkcyQktHdVV5OTRIQlQ0djRkSkdlTWlRNU5uMWc4Ukt5bG5Sakdr?=
+ =?utf-8?B?TFhsbm05Z3BFdFhOclZMOVBUNTZHVGpGaDdrKzk0bFBRYjdrUTFKY2Fna2Rj?=
+ =?utf-8?B?Q21NTG40ZTZ3dnlUNkVlRGJuczMzNThZbDYrTGxvWHBjb25SZlZtRTlrbENG?=
+ =?utf-8?B?NDBjdGduamJPbGlNKzFndnBIbWZjZGhSb2VxZklYUVowdmlsMGFqR2tJT1FD?=
+ =?utf-8?B?cWtUMlM1aUltck9BSlE5UWgyMnByMnQ2NGxRd01aMWNqNnE4L2NZWUdpc0Vy?=
+ =?utf-8?B?Qy9RZCtSbDBrSnJLeXZ2b0dqV01vbzcyeXEzNWJ2MDhHWlk4b1kzeU5lKzha?=
+ =?utf-8?B?d0pJN2hhMERmTWVjUHl3NVhnZUpCcWNmSlltMnpIMU9oaVFESW5vUGUzdURZ?=
+ =?utf-8?B?cTcxVjVxdGhQUHB3REV6NFlwUktZYkE2WTAwcHMzQkVMZkt5TlBON1kzaVVQ?=
+ =?utf-8?B?anhZL1FEWjdIckNMQlhESlg2emtodTR0NVhhZ25DOFBMRS9FaUxJYXZ4VU96?=
+ =?utf-8?Q?1PW/6eJpOkAlJy1+YgmyfeVoa?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fc1d73d-538f-43ca-6764-08da63f0ff79
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 10:26:35.8762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mVaMCJUWM8uGFG0S912z3aQWqBnSm3adZuEImqw0R+oVG34w9+jM5blv7F1BnQGK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5759
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 23:02, Frank Li wrote:
-> imx mu support generate irq by write a register.
-> provide msi controller support so other driver
-> can use it by standard msi interface.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Ping to the Intel guys here. Especially Lucas/Nirmoy/Lionel.
+
+IIRC you stumbled over that problem as well, have you found any solution?
+
+Regards,
+Christian.
+
+Am 07.07.22 um 12:29 schrieb jie1zhan:
+> enable signaling after flatten dma_fence_chains on transfer
+>
+> Signed-off-by: jie1zhan <jesse.zhang@amd.com>
 > ---
->  .../interrupt-controller/fsl,mu-msi.yaml      | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
-> new file mode 100644
-> index 0000000000000..b4ac583f60227
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
-> @@ -0,0 +1,94 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/fsl,mu-msi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX Messaging Unit (MU)
-> +
-> +maintainers:
-> +  - Frank Li <Frank.Li@nxp.com>
-> +
-> +description: |
-> +  The Messaging Unit module enables two processors within the SoC to
-> +  communicate and coordinate by passing messages (e.g. data, status
-> +  and control) through the MU interface. The MU also provides the ability
-> +  for one processor to signal the other processor using interrupts.
-> +
-> +  Because the MU manages the messaging between processors, the MU uses
-> +  different clocks (from each side of the different peripheral buses).
-> +  Therefore, the MU must synchronize the accesses from one side to the
-> +  other. The MU accomplishes synchronization using two sets of matching
-> +  registers (Processor A-facing, Processor B-facing).
-> +
-> +  MU can work as msi interrupt controller to do doorbell
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: fsl,imx6sx-mu-msi
-> +      - const: fsl,imx7ulp-mu-msi
-> +      - const: fsl,imx8ulp-mu-msi
-> +      - const: fsl,imx8-mu-msi
-> +      - const: fsl,imx8ulp-mu-msi-s4
+>   drivers/gpu/drm/drm_syncobj.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+> index 7e48dcd1bee4..0d9d3577325f 100644
+> --- a/drivers/gpu/drm/drm_syncobj.c
+> +++ b/drivers/gpu/drm/drm_syncobj.c
+> @@ -920,6 +920,7 @@ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
+>   	if (ret)
+>   		goto err_free_fence;
+>   
+> +	dma_fence_enable_sw_signaling(fence);
+>   	chain = dma_fence_chain_alloc();
+>   	if (!chain) {
+>   		ret = -ENOMEM;
 
-Use enum
-
-> +      - items:
-> +          - const: fsl,imx8ulp-mu-msi
-
-Single item... why?
-
-> +      - items:
-> +          - enum:
-> +              - fsl,imx7s-mu-msi
-> +              - fsl,imx8mq-mu-msi
-> +              - fsl,imx8mm-mu-msi
-> +              - fsl,imx8mn-mu-msi
-> +              - fsl,imx8mp-mu-msi
-> +              - fsl,imx8qm-mu-msi
-
-Why qm is here not compatible with qxp? It's already mentioned in
-section below.
-
-> +              - fsl,imx8qxp-mu-msi
-> +          - const: fsl,imx6sx-mu-msi
-> +      - description: MU work as msi controller
-> +        items:
-> +          - enum:
-> +              - fsl,imx8qm-mu-msi
-> +              - fsl,imx8qxp-mu-msi
-> +          - const: fsl,imx6sx-mu-msi
-> +  reg:
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 2
-
-Instead describe the items.
-
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - const: tx
-> +      - const: rx
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - msi-controller
-
-How this end up here?
-
-Aren't you missing allOf with a reference to msi-controller?
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    lsio_mu12: msi@5d270000 {
-> +               compatible = "fsl,imx6sx-mu-msi-db";
-
-???
-
-> +               msi-controller;
-> +               interrupt-controller;
-
-??? How this appeared here
-
-Also fix your indentation like in example-schema.
-
-> +               reg = <0x5d270000 0x10000>,     /* A side */
-> +                     <0x5d300000 0x10000>;     /* B side */
-> +               reg-names = "a", "b";
-> +               interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
-> +               power-domains = <&pd IMX_SC_R_MU_12A>,
-> +                               <&pd IMX_SC_R_MU_12B>;
-
-Please do not send untested bindings. It's a waste of our time.
-
-Really two items here? You just said only one is allowed.
-
-> +               power-domain-names = "a", "b";
-
-Sorry, this patch looks really poor. a/b is not a descriptive name and
-they are not allowed by your own bindings. Please perform some internal
-reviews...
-
-> +    };
-
-
-Best regards,
-Krzysztof

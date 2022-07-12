@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8412E5723C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C535D572462
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiGLSwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S235132AbiGLTAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbiGLSv4 (ORCPT
+        with ESMTP id S235254AbiGLS7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:51:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B638EE5842;
-        Tue, 12 Jul 2022 11:44:53 -0700 (PDT)
+        Tue, 12 Jul 2022 14:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B19DF32C8;
+        Tue, 12 Jul 2022 11:48:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B580F60A5A;
-        Tue, 12 Jul 2022 18:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E113C341C0;
-        Tue, 12 Jul 2022 18:44:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C246B81BBC;
+        Tue, 12 Jul 2022 18:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C42C36AED;
+        Tue, 12 Jul 2022 18:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651473;
-        bh=5hXOOZIyVXu5H3P4QzuLuk/qpBj2HGskshf6QCS+reA=;
+        s=korg; t=1657651684;
+        bh=858XkGJsEaEPn0Cxq0Vp/TdCC0NNhi1/foQN/ehOyak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jIHXZfa36ov6ErWQaFKzuPeOAGYCn8qRiYtrPxAZ6AIEh995yjDt/MKsiOMBQP0t/
-         4JWrodrUEl3oqJmxrArmzGx8GR9Pr7356mGkAP/f272nJbppvFDWOrLXjsqq8unXvN
-         q34WAnmiEejsN2x2JZRR3/H45DP+FDkuFFp9jgdk=
+        b=yQAnOsA+UwYmh500MP/soFjms8ujhHhPT1zRRc1ZtvP9zPGZNkDb20GaPa8f+WIS0
+         53xCBdpYdXBENmj2EDHR/k/CWGCs9CURuoJm25u2DHvmlHU4WCOc5vZPi3HPVVxXcG
+         NbUKZoCYcK+GiJb/i39XBBtwUOTZedFkUKD8UXNk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.10 087/130] x86,static_call: Use alternative RET encoding
-Date:   Tue, 12 Jul 2022 20:38:53 +0200
-Message-Id: <20220712183250.471354842@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.15 24/78] x86/kvm/vmx: Make noinstr clean
+Date:   Tue, 12 Jul 2022 20:38:54 +0200
+Message-Id: <20220712183239.791662425@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
-References: <20220712183246.394947160@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,182 +58,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit ee88d363d15617ff50ac24fab0ffec11113b2aeb upstream.
+commit 742ab6df974ae8384a2dd213db1a3a06cf6d8936 upstream.
 
-In addition to teaching static_call about the new way to spell 'RET',
-there is an added complication in that static_call() is allowed to
-rewrite text before it is known which particular spelling is required.
+The recent mmio_stale_data fixes broke the noinstr constraints:
 
-In order to deal with this; have a static_call specific fixup in the
-apply_return() 'alternative' patching routine that will rewrite the
-static_call trampoline to match the definite sequence.
+  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x15b: call to wrmsrl.constprop.0() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x1bf: call to kvm_arch_has_assigned_device() leaves .noinstr.text section
 
-This in turn creates the problem of uniquely identifying static call
-trampolines. Currently trampolines are 8 bytes, the first 5 being the
-jmp.d32/ret sequence and the final 3 a byte sequence that spells out
-'SCT'.
-
-This sequence is used in __static_call_validate() to ensure it is
-patching a trampoline and not a random other jmp.d32. That is,
-false-positives shouldn't be plenty, but aren't a big concern.
-
-OTOH the new __static_call_fixup() must not have false-positives, and
-'SCT' decodes to the somewhat weird but semi plausible sequence:
-
-  push %rbx
-  rex.XB push %r12
-
-Additionally, there are SLS concerns with immediate jumps. Combined it
-seems like a good moment to change the signature to a single 3 byte
-trap instruction that is unique to this usage and will not ever get
-generated by accident.
-
-As such, change the signature to: '0x0f, 0xb9, 0xcc', which decodes
-to:
-
-  ud1 %esp, %ecx
+make it all happy again.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-[cascardo: skip validation as introduced by 2105a92748e8 ("static_call,x86: Robustify trampoline patching")]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-[bwh: Backported to 5.10: adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/static_call.h |   17 ++++++++++++++++
- arch/x86/kernel/alternative.c      |   12 +++++++----
- arch/x86/kernel/static_call.c      |   38 ++++++++++++++++++++++++++++++++++++-
- 3 files changed, 62 insertions(+), 5 deletions(-)
+ arch/x86/kvm/vmx/vmx.c   |    6 +++---
+ arch/x86/kvm/x86.c       |    4 ++--
+ include/linux/kvm_host.h |    2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
---- a/arch/x86/include/asm/static_call.h
-+++ b/arch/x86/include/asm/static_call.h
-@@ -21,6 +21,16 @@
-  * relative displacement across sections.
-  */
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -380,9 +380,9 @@ static __always_inline void vmx_disable_
+ 	if (!vmx->disable_fb_clear)
+ 		return;
  
-+/*
-+ * The trampoline is 8 bytes and of the general form:
-+ *
-+ *   jmp.d32 \func
-+ *   ud1 %esp, %ecx
-+ *
-+ * That trailing #UD provides both a speculation stop and serves as a unique
-+ * 3 byte signature identifying static call trampolines. Also see tramp_ud[]
-+ * and __static_call_fixup().
-+ */
- #define __ARCH_DEFINE_STATIC_CALL_TRAMP(name, insns)			\
- 	asm(".pushsection .static_call.text, \"ax\"		\n"	\
- 	    ".align 4						\n"	\
-@@ -34,8 +44,13 @@
- #define ARCH_DEFINE_STATIC_CALL_TRAMP(name, func)			\
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, ".byte 0xe9; .long " #func " - (. + 4)")
- 
-+#ifdef CONFIG_RETPOLINE
-+#define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
-+	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "jmp __x86_return_thunk")
-+#else
- #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; int3; nop; nop; nop")
-+#endif
- 
- 
- #define ARCH_ADD_TRAMP_KEY(name)					\
-@@ -44,4 +59,6 @@
- 	    ".long " STATIC_CALL_KEY_STR(name) " - .		\n"	\
- 	    ".popsection					\n")
- 
-+extern bool __static_call_fixup(void *tramp, u8 op, void *dest);
-+
- #endif /* _ASM_STATIC_CALL_H */
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -693,18 +693,22 @@ void __init_or_module noinline apply_ret
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
--		void *addr = (void *)s + *s;
-+		void *dest = NULL, *addr = (void *)s + *s;
- 		struct insn insn;
- 		int len, ret;
- 		u8 bytes[16];
--		u8 op1;
-+		u8 op;
- 
- 		ret = insn_decode_kernel(&insn, addr);
- 		if (WARN_ON_ONCE(ret < 0))
- 			continue;
- 
--		op1 = insn.opcode.bytes[0];
--		if (WARN_ON_ONCE(op1 != JMP32_INSN_OPCODE))
-+		op = insn.opcode.bytes[0];
-+		if (op == JMP32_INSN_OPCODE)
-+			dest = addr + insn.length + insn.immediate.value;
-+
-+		if (__static_call_fixup(addr, op, dest) ||
-+		    WARN_ON_ONCE(dest != &__x86_return_thunk))
- 			continue;
- 
- 		DPRINTK("return thunk at: %pS (%px) len: %d to: %pS",
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -11,6 +11,13 @@ enum insn_type {
- 	RET = 3,  /* tramp / site cond-tail-call */
- };
- 
-+/*
-+ * ud1 %esp, %ecx - a 3 byte #UD that is unique to trampolines, chosen such
-+ * that there is no false-positive trampoline identification while also being a
-+ * speculation stop.
-+ */
-+static const u8 tramp_ud[] = { 0x0f, 0xb9, 0xcc };
-+
- static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
- 
- static void __ref __static_call_transform(void *insn, enum insn_type type, void *func)
-@@ -32,7 +39,10 @@ static void __ref __static_call_transfor
- 		break;
- 
- 	case RET:
--		code = &retinsn;
-+		if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
-+			code = text_gen_insn(JMP32_INSN_OPCODE, insn, &__x86_return_thunk);
-+		else
-+			code = &retinsn;
- 		break;
- 	}
- 
-@@ -97,3 +107,29 @@ void arch_static_call_transform(void *si
- 	mutex_unlock(&text_mutex);
+-	rdmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
++	msr = __rdmsr(MSR_IA32_MCU_OPT_CTRL);
+ 	msr |= FB_CLEAR_DIS;
+-	wrmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
++	native_wrmsrl(MSR_IA32_MCU_OPT_CTRL, msr);
+ 	/* Cache the MSR value to avoid reading it later */
+ 	vmx->msr_ia32_mcu_opt_ctrl = msr;
  }
- EXPORT_SYMBOL_GPL(arch_static_call_transform);
-+
-+#ifdef CONFIG_RETPOLINE
-+/*
-+ * This is called by apply_returns() to fix up static call trampolines,
-+ * specifically ARCH_DEFINE_STATIC_CALL_NULL_TRAMP which is recorded as
-+ * having a return trampoline.
-+ *
-+ * The problem is that static_call() is available before determining
-+ * X86_FEATURE_RETHUNK and, by implication, running alternatives.
-+ *
-+ * This means that __static_call_transform() above can have overwritten the
-+ * return trampoline and we now need to fix things up to be consistent.
-+ */
-+bool __static_call_fixup(void *tramp, u8 op, void *dest)
-+{
-+	if (memcmp(tramp+5, tramp_ud, 3)) {
-+		/* Not a trampoline site, not our problem. */
-+		return false;
-+	}
-+
-+	if (op == RET_INSN_OPCODE || dest == &__x86_return_thunk)
-+		__static_call_transform(tramp, RET, NULL);
-+
-+	return true;
-+}
-+#endif
+@@ -393,7 +393,7 @@ static __always_inline void vmx_enable_f
+ 		return;
+ 
+ 	vmx->msr_ia32_mcu_opt_ctrl &= ~FB_CLEAR_DIS;
+-	wrmsrl(MSR_IA32_MCU_OPT_CTRL, vmx->msr_ia32_mcu_opt_ctrl);
++	native_wrmsrl(MSR_IA32_MCU_OPT_CTRL, vmx->msr_ia32_mcu_opt_ctrl);
+ }
+ 
+ static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12177,9 +12177,9 @@ void kvm_arch_end_assignment(struct kvm
+ }
+ EXPORT_SYMBOL_GPL(kvm_arch_end_assignment);
+ 
+-bool kvm_arch_has_assigned_device(struct kvm *kvm)
++bool noinstr kvm_arch_has_assigned_device(struct kvm *kvm)
+ {
+-	return atomic_read(&kvm->arch.assigned_device_count);
++	return arch_atomic_read(&kvm->arch.assigned_device_count);
+ }
+ EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
+ 
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1233,7 +1233,7 @@ static inline void kvm_arch_end_assignme
+ {
+ }
+ 
+-static inline bool kvm_arch_has_assigned_device(struct kvm *kvm)
++static __always_inline bool kvm_arch_has_assigned_device(struct kvm *kvm)
+ {
+ 	return false;
+ }
 
 

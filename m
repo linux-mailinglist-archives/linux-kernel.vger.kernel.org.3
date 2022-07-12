@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6799572708
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FC857270C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiGLUM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S232854AbiGLUNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiGLUM0 (ORCPT
+        with ESMTP id S233435AbiGLUNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:12:26 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6D1BEB46;
-        Tue, 12 Jul 2022 13:12:25 -0700 (PDT)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oBMEz-0002bi-O3; Tue, 12 Jul 2022 22:12:17 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oBMEz-000SVy-9w; Tue, 12 Jul 2022 22:12:17 +0200
-Subject: Re: [PATCH bpf-next] bpf: Don't redirect packets with invalid pkt_len
-To:     sdf@google.com, Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        hawk@kernel.org, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-References: <20220712120158.56325-1-shaozhengchao@huawei.com>
- <Ys2oPzt7Yn1oMou8@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <f0bf3e9a-15e6-f5c8-1b2a-7866acfcb71b@iogearbox.net>
-Date:   Tue, 12 Jul 2022 22:12:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 12 Jul 2022 16:13:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15D652DE;
+        Tue, 12 Jul 2022 13:13:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08874165C;
+        Tue, 12 Jul 2022 13:13:32 -0700 (PDT)
+Received: from [10.57.85.194] (unknown [10.57.85.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 218E23F70D;
+        Tue, 12 Jul 2022 13:13:29 -0700 (PDT)
+Message-ID: <632f5c80-2be3-ace5-6b0d-ee0c9e5560ff@arm.com>
+Date:   Tue, 12 Jul 2022 21:13:24 +0100
 MIME-Version: 1.0
-In-Reply-To: <Ys2oPzt7Yn1oMou8@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26599/Tue Jul 12 10:00:48 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support for ARM
+ CoreSight PMU driver
+Content-Language: en-GB
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Besar Wicaksono <bwicaksono@nvidia.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
+        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>
+References: <20220621055035.31766-1-bwicaksono@nvidia.com>
+ <20220621055035.31766-2-bwicaksono@nvidia.com>
+ <73dafe08-d1f1-90b6-995e-7d38e9e1dce7@arm.com>
+ <SJ0PR12MB567600F730B47F3A1007775AA0829@SJ0PR12MB5676.namprd12.prod.outlook.com>
+ <20220712163638.GA2945984@p14s>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220712163638.GA2945984@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,69 +65,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 6:58 PM, sdf@google.com wrote:
-> On 07/12, Zhengchao Shao wrote:
->> Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
->> skbs, that is, the flow->head is null.
->> The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
->> run a bpf prog which redirects empty skbs.
->> So we should determine whether the length of the packet modified by bpf
->> prog or others like bpf_prog_test is valid before forwarding it directly.
+On 2022-07-12 17:36, Mathieu Poirier wrote:
+[...]
+>>> If we have decied to call this arm_system_pmu, (which I am perfectly
+>>> happy with), could we please stick to that name for functions that we
+>>> export ?
+>>>
+>>> e.g,
+>>> s/coresight_pmu_sysfs_event_show/arm_system_pmu_event_show()/
+>>>
+>>
+>> Just want to confirm, is it just the public functions or do we need to replace
+>> all that has "coresight" naming ? Including the static functions, structs, filename.
 > 
->> LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
->> LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
+> I think all references to "coresight" should be changed to "arm_system_pmu",
+> including filenames.  That way there is no doubt this IP block is not
+> related, and does not interoperate, with the any of the "coresight" IP blocks
+> already supported[1] in the kernel.
 > 
->> Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
->> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
->> ---
->>   net/core/filter.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 4ef77ec5255e..27801b314960 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -2122,6 +2122,11 @@ static int __bpf_redirect_no_mac(struct sk_buff *skb, struct net_device *dev,
->>   {
->>       unsigned int mlen = skb_network_offset(skb);
-> 
->> +    if (unlikely(skb->len == 0)) {
->> +        kfree_skb(skb);
->> +        return -EINVAL;
->> +    }
->> +
->>       if (mlen) {
->>           __skb_pull(skb, mlen);
-> 
->> @@ -2143,7 +2148,9 @@ static int __bpf_redirect_common(struct sk_buff *skb, struct net_device *dev,
->>                    u32 flags)
->>   {
->>       /* Verify that a link layer header is carried */
->> -    if (unlikely(skb->mac_header >= skb->network_header)) {
->> +    if (unlikely(skb->mac_header >= skb->network_header) ||
->> +        (min_t(u32, skb_mac_header_len(skb), skb->len) <
->> +         (u32)dev->min_header_len)) {
-> 
-> Why check skb->len != 0 above but skb->len < dev->min_header_len here?
-> I guess it doesn't make sense in __bpf_redirect_no_mac because we know
-> that mac is empty, but why do we care in __bpf_redirect_common?
-> Why not put this check in the common __bpf_redirect?
-> 
-> Also, it's still not clear to me whether we should bake it into the core
-> stack vs having some special checks from test_prog_run only. I'm
-> assuming the issue is that we can construct illegal skbs with that
-> test_prog_run interface, so maybe start by fixing that?
+> I have looked at the documentation[2] in the cover letter and I agree
+> with an earlier comment from Sudeep that this IP has very little to do with any
+> of the other CoreSight IP blocks found in the CoreSight framework[1].  Using the
+> "coresight" naming convention in this driver would be _extremely_ confusing,
+> especially when it comes to exported functions.
 
-Agree, ideally we can prevent it right at the source rather than adding
-more tests into the fast-path.
+But conversely, how is it not confusing to make up completely different 
+names for things than what they're actually called? The CoreSight 
+Performance Monitoring Unit is a part of the Arm CoreSight architecture, 
+it says it right there on page 1. What if I instinctively associate the 
+name Mathieu with someone more familiar to me, so to avoid confusion I'd 
+prefer to call you Steve? Is that OK?
 
-> Did you have a chance to look at the reproducer more closely? What
-> exactly is it doing?
-> 
->>           kfree_skb(skb);
->>           return -ERANGE;
->>       }
->> -- 
->> 2.17.1
-> 
+As it happens, Steve, I do actually agree with you that "coresight_" is 
+a bad prefix here, but only for the reason that it's too general. TBH I 
+think that's true of the existing Linux subsystem too, but that damage 
+is already done, and I'd concur that there's little value in trying to 
+unpick that now, despite the clear existence of products like CoreSight 
+DAP and CoreSight ELA which don't have all that much to do with program 
+trace either.
 
+However, hindsight and inertia are hardly good reasons to double down on 
+poor decisions, so if I was going to vote for anything here it would be 
+"cspmu_", which is about as 
+obviously-related-to-the-thing-it-actually-is as we can get while also 
+being pleasantly concise.
+
+[ And no, this isn't bikeshedding. Naming things right is *important* ]
+
+Cheers,
+Robin.
+
+> 
+> Thanks,
+> Steve
+> 
+> [1]. drivers/hwtracing/coresight/
+> [2]. https://developer.arm.com/documentation/ihi0091/latest

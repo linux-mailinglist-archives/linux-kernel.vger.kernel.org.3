@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3D4571020
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038DD571038
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiGLC0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S230250AbiGLCbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGLC0B (ORCPT
+        with ESMTP id S229629AbiGLCbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:26:01 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B58632BAE
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:26:00 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id w184so2668615oie.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:26:00 -0700 (PDT)
+        Mon, 11 Jul 2022 22:31:13 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEEB3336F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:31:12 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id v6so5318889qkh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=I0de4wabST6gWpJe4bl9FhiTG19f2KboMVUf/03W2w0=;
-        b=mraQedEo53DaR20MLo/XD9DrgTYhhYat0NLG5gsVAVCUelBl4IzXidM28mWJ6N3mPn
-         sO8nhuF2eGMkgaaK+eAvoUn5mu9cAUSbrlfLsRFYkqyw4lRIWdGKX7Y0MI3NnSQ452za
-         hHJ3EEau+/9Do9yM7LbY7ohz0luiZTGJnAhjntkwo0Zbnoa+ghNx63duZ7UdSf9w7quB
-         Z7QeBSLTdVS8nRj+dnnAwchZAvVoEXkUQ1QMF0sGz7hT1ReozJkpqRfdx4E+K0y5gURj
-         9i4XToAngTm4uExrYuFg3P+67OuIw54aPas74adFfnz+SbqjGPl1nsV1Gcu10ZBRrYDs
-         lewA==
+        bh=AmIBu9eJI4O2vCJpeuCdhgJb9LGCZJQYDhsDtn3WLRU=;
+        b=AmGsvlyIHhgUj9HXy2/JuS72mE/38WBicCbwWGTxyt1M3gaUQCPiYU5yoPWDTIk4Fg
+         tV6PDt2i64dJGXL1dn8j58hfUVuaOXDl4Sp9IwFjgq4gV6dCd/d4rBWLAjB5FMoYkOaZ
+         3/Pu4IThZUbwO151VlbJZuoiyvFz5rWCTb23AUCJGdFgwHCpZRWXkwVeT7BLD8hYxqTf
+         mGi1ZjvROVrJ1VmR8Pc3ewc1sJxjeAXyjciQQraHjr4kMO6ip93eLgFRc5JnL99UHuRp
+         0nbcaJHpo/DbaUVniy1rLxXestDYdJoAMKxGGep9zzIkW4u5Vld9ZIwHCblk0yhZpsF7
+         YQzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=I0de4wabST6gWpJe4bl9FhiTG19f2KboMVUf/03W2w0=;
-        b=F2XShdTfMu5HEd3tre3h9GamfYycTtV0Hns5Rk7IpGNhjFroQpiKdjkKgXt8nd+cui
-         Y06B8h8vtOff3/qNaekJNRB722bJwNskt4w7jPAaU2Yip+AtsWbFkiZ+qOs1C7ksvCZn
-         coYYqvkjA7YA26r4Ryiojm/sJyy9KkmjljgZbfV3+7/fwXGJbhTSZPGqBFYYU2NJicdU
-         sVWjT0JVXG/MSkV+8mD0nnd0Bl7ZSMzq4IWMjU49574SJ8enAzz2Randqekbvsx+wIjg
-         DR1HYKCie8RHVwYILxgaV8VojOOvEsHipEFS5ZOVxhwj9FwhXNTbybsX+iSYvrxy67kX
-         lTOg==
-X-Gm-Message-State: AJIora8REMH6UdkkC0uvqceiBXOkT7JMKqaUuop4tVROPBy0kiDpsDDW
-        xMP5E042hng8ukzXA4HIKaQyYQ==
-X-Google-Smtp-Source: AGRyM1sUnWyKKpqKOCAUzmjP+LImn3c2NF8v1If++//vIw8Dp+7FY1nDpxC+6kiS9NJrt0tL8qi0ug==
-X-Received: by 2002:a05:6808:1184:b0:322:4c18:2f7e with SMTP id j4-20020a056808118400b003224c182f7emr795922oil.109.1657592759573;
-        Mon, 11 Jul 2022 19:25:59 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p2-20020a056870830200b0010be09dc797sm3985546oae.18.2022.07.11.19.25.58
+        bh=AmIBu9eJI4O2vCJpeuCdhgJb9LGCZJQYDhsDtn3WLRU=;
+        b=DyVbPyE9Sw1/X7dV+zQyUagwP0HT9LiTuLbRrauqdMv2TZ/kSeem+R8DUFYhmhasoB
+         d/fCx85nP3OYmO3QmVXkYwC0R3FrY/54O9YxcsS20mVqR6AJNKnoO+RtSb1Q1JvDZXcS
+         5rD0aIqcoxkgCqEzdyen1IS1DOm+zN8o4V/w8XHrfs7JBo6U2WWRjWf3ODogj3+MzWC+
+         PQKXBL4WRN8Qj/iTfAQO7xhyecosebnAmXJ6U28iwUKtEjuP5J+VVNjePsjVXs5Gp6Cw
+         81tH+DrlL0MAK/ueS0KJm4IPejlyn8zz4cAqTipCH0sSOgt5Q7EaF0/GGqMJpFvW20Wc
+         Z9Tw==
+X-Gm-Message-State: AJIora9dmnK/JrUOuPmBanPGmDrqr9+7kFc6JFJX1b9cayK8qDW1/vDi
+        Qfh5FWXAb5adSkIaGr3vMlRCFLw886eVXQ==
+X-Google-Smtp-Source: AGRyM1tKTKG1peLHl78LBetPvvq8nWXRgR/nKcyIrD6QeeNC0fY5CNcs/lT6T7KXgsX5fKO4vjwPgQ==
+X-Received: by 2002:a05:620a:2455:b0:6b5:797a:5d85 with SMTP id h21-20020a05620a245500b006b5797a5d85mr7829367qkn.249.1657593071977;
+        Mon, 11 Jul 2022 19:31:11 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id bk9-20020a05620a1a0900b006af3f3b385csm8221838qkb.98.2022.07.11.19.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 19:25:58 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 19:28:26 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Add lost ranges for timer
-Message-ID: <YszcSgnSrbsncw0J@ripper>
-References: <20220707160858.3178771-1-bjorn.andersson@linaro.org>
- <Ysvlqw/+eMk5XLRY@hovoldconsulting.com>
+        Mon, 11 Jul 2022 19:31:11 -0700 (PDT)
+Date:   Mon, 11 Jul 2022 22:31:09 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fred Eckert <Frede@cmslaser.com>,
+        John Hentges <jhentges@accesio.com>,
+        Jay Dolan <jay.dolan@accesio.com>
+Subject: Re: [PATCH v2 1/6] gpio: i8255: Introduce the i8255 module
+Message-ID: <Yszc7cvyB37b8UHg@fedora>
+References: <cover.1657216200.git.william.gray@linaro.org>
+ <6be749842a4ad629c8697101f170dc7e425ae082.1657216200.git.william.gray@linaro.org>
+ <CAHp75VdM7QoBfcsQ-S4OEn2ZLnFH+0HfLY44FcRQC+_cw+UXzg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eII5gPQELsvNu0az"
 Content-Disposition: inline
-In-Reply-To: <Ysvlqw/+eMk5XLRY@hovoldconsulting.com>
+In-Reply-To: <CAHp75VdM7QoBfcsQ-S4OEn2ZLnFH+0HfLY44FcRQC+_cw+UXzg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -76,56 +78,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 11 Jul 01:56 PDT 2022, Johan Hovold wrote:
 
-> On Thu, Jul 07, 2022 at 09:08:58AM -0700, Bjorn Andersson wrote:
-> > The timer node needs ranges specified to map the 1-cell children to the
-> > 2-cell address range used in /soc. This addition never made it into the
-> > patch that was posted and merged, so add it now.
-> > 
-> > Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > index 2bdb42c88311..37a4cd6f85b6 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > @@ -1667,6 +1667,7 @@ timer@17c20000 {
-> >  			reg = <0x0 0x17c20000 0x0 0x1000>;
-> >  			#address-cells = <1>;
-> >  			#size-cells = <1>;
-> > +			ranges = <0 0 0 0x20000000>;
-> 
-> While addressing the current issue, this looks odd to me. Why not use a
-> non-zero parent bus address here instead?
-> 
+--eII5gPQELsvNu0az
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I guess we could express the frames relative the timer range, but that
-would imply that anyone porting downstream dts snippets would have to
-translate these addresses - or more likely would end up just copying the
-existing cases.
+On Fri, Jul 08, 2022 at 04:40:01PM +0200, Andy Shevchenko wrote:
+> On Fri, Jul 8, 2022 at 1:16 AM William Breathitt Gray
+> <william.gray@linaro.org> wrote:
+> >
+> > Exposes consumer functions providing support for Intel 8255 Programmable
+> > Peripheral Interface devices. A CONFIG_GPIO_I8255 Kconfig option is
+> > introduced; modules wanting access to these functions should select this
+> > Kconfig option.
+>=20
+> Spent much time with these chips in my teenage times :-)
+>=20
+> Very good written library, see my comments below.
+>=20
+> ...
+>=20
+> > +#include <linux/compiler_types.h>
+>=20
+> Should be simple types.h as you are using u8, etc.
 
-> And please use hex notation consistently for the addresses.
+Ack.
 
-That seems like a reasonable ask, I can fix that up. But on both
-accounts this matches what I merged for all the other platforms in:
+> > +#include <linux/err.h>
+> > +#include <linux/export.h>
+>=20
+> > +#include <linux/gpio/i8255.h>
+>=20
+> gpio/driver.h ?
+>=20
+> And since it belongs to GPIO, I would group them and move after all
+> other include/* to emphasize the relationship.
+>=20
+> Also, why is it in the global header folder? Do you expect some
+> drivers outside of drivers/gpio/? Maybe we can move after when the
+> user comes?
 
-458ebdbb8e5d ("arm64: dts: qcom: timer should use only 32-bit size")
+I think gpio/driver.h does make more sense for now since all the users
+of library are located under drivers/gpio/. I'll move the header code
+into gpio/driver.h then and adjust the includes accordingly.
 
+> > +#include <linux/io.h>
+> > +#include <linux/module.h>
+>=20
+> ...
+>=20
+> > +#define I8255_CONTROL_PORTCLOWER_DIRECTION BIT(0)
+> > +#define I8255_CONTROL_PORTCUPPER_DIRECTION BIT(3)
+>=20
+> Missed underscore.
 
-So I guess we'll also need to go back and fix up the style of all the
-other platforms - just because we're not allowed to express the frames
-in 64-bits according to the binding...
+Ack.
 
-Regards,
-Bjorn
+> ...
+>=20
+> > +static u8 i8255_direction_mask(const unsigned long offset)
+> > +{
+> > +       const unsigned long io_port =3D offset / 8;
+> > +       const unsigned long ppi_port =3D io_port % 3;
+> > +
+> > +       switch (ppi_port) {
+> > +       case I8255_PORTA:
+> > +               return I8255_CONTROL_PORTA_DIRECTION;
+> > +       case I8255_PORTB:
+> > +               return I8255_CONTROL_PORTB_DIRECTION;
+> > +       case I8255_PORTC:
+> > +               /* Port C can be configured by nibble */
+>=20
+> > +               if (offset % 8 > 3)
+>=20
+> I would move it to the local definition block close to offset/8. On
+> some architectures this may give one assembly instruction for two
+> variables.
 
-> 
-> >  
-> >  			frame@17c21000 {
-> >  				frame-number = <0>;
-> 
-> Johan
+Ack.
+
+> > +                       return I8255_CONTROL_PORTCUPPER_DIRECTION;
+> > +               return I8255_CONTROL_PORTCLOWER_DIRECTION;
+> > +       default:
+> > +               /* Should never reach this path */
+> > +               return 0;
+> > +       }
+> > +}
+>=20
+> > +void i8255_direction_input(struct i8255 __iomem *const ppi,
+> > +                          u8 *const control_state, const unsigned long=
+ offset)
+> > +{
+> > +       const unsigned long io_port =3D offset / 8;
+> > +       const unsigned long group =3D io_port / 3;
+> > +
+> > +       control_state[group] |=3D I8255_CONTROL_MODE_SET;
+> > +       control_state[group] |=3D i8255_direction_mask(offset);
+> > +
+> > +       iowrite8(control_state[group], &ppi[group].control);
+>=20
+> No I/O serialization? Can this be accessed during interrupt? (It may
+> be that the code is correct, but please go through it and check with a
+> question "can this register be accessed during IRQ and if yes, will
+> the user get the correct / meaningful data?")
+
+Writing to the 8255 control register for the device shouldn't be a
+problem, but we do have a race condition with the control_state[group]
+value. This value is accessed and modified in other functions (e.g. the
+i8255_direction_output() right below) so if an interrupt occurs the
+value could end up clobbered before it's written.
+
+I'm not sure what the best approach would be here. In the subsequent
+patches I have the GPIO drivers take a lock before calling these i8255_*
+functions in order to synchronize access to those state arrays. Do you
+think it would be better to move the sychronization lock acquisition
+internally to the i8255_* functions here?
+
+> > +}
+> > +EXPORT_SYMBOL_GPL(i8255_direction_input);
+>=20
+> Make it with a namespace. Ditto for the rest.
+
+Ack.
+
+William Breathitt Gray
+
+> --=20
+> With Best Regards,
+> Andy Shevchenko
+
+--eII5gPQELsvNu0az
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYszc7QAKCRC1SFbKvhIj
+K46yAQC1oTzg124TYsWDbLzyTHSPNZUL+J0wxtKJ8zAAQ4h6RgD/SkAQxFs0yRNd
+UlNDP4cEmMuWJqRQ4v2owveUeyXy0g4=
+=WTnk
+-----END PGP SIGNATURE-----
+
+--eII5gPQELsvNu0az--

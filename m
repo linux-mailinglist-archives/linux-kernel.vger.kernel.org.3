@@ -2,145 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F26571A9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9061A571A9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiGLM5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S232868AbiGLM5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiGLM5h (ORCPT
+        with ESMTP id S232270AbiGLM5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:57:37 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44CCA5E73;
-        Tue, 12 Jul 2022 05:57:34 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 4013064EB; Tue, 12 Jul 2022 08:57:34 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 4013064EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1657630654;
-        bh=M6WdCyriOloN+RDs822UlkL0MGgMRmbew1eUogj1s4A=;
+        Tue, 12 Jul 2022 08:57:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4344AC071;
+        Tue, 12 Jul 2022 05:57:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED44B81868;
+        Tue, 12 Jul 2022 12:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70A8C341CD;
+        Tue, 12 Jul 2022 12:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657630657;
+        bh=cW1C3A28y7M0Wa7SoYZtf30sJKBFXl9X73+ZlF8Vvt8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b35z0NnOnJpv2pjF9bAwqiPqMYaJ5gR70Q8s5xFIGo8Uuz8fWAwYo5KHeUL1MHKi1
-         m1lrAD68WK6qJSX1D6y+9TlcJsQhmJaoeZDVcDsyoWuBYn3CxY24cmN2YDJhJoEErL
-         a1uWk/kPPwQO79jNxtfMa9diyMMe4Ff72dM6Xyo4=
-Date:   Tue, 12 Jul 2022 08:57:34 -0400
-From:   Bruce Fields <bfields@fieldses.org>
-To:     Jeff Layton <jlayton@redhat.com>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [GIT PULL] nfsd changes for 5.18
-Message-ID: <20220712125734.GB29976@fieldses.org>
-References: <EF97E1F5-B70F-4F9F-AC6D-7B48336AE3E5@oracle.com>
- <20220710124344.36dfd857@redhat.com>
- <B62B3A57-A8F7-478B-BBAB-785D0C2EE51C@oracle.com>
- <5268baed1650b4cba32978ad32d14a5ef00539f2.camel@redhat.com>
- <20220711181941.GC14184@fieldses.org>
- <7CD95BBD-3552-47BD-ACF6-EC51F62787E1@oracle.com>
- <20220711183603.GD14184@fieldses.org>
- <f5d20f4e1aeb5d478e10a39c17ed003616c7872c.camel@redhat.com>
+        b=sUTSW/a1JicHdPlFQb9l3h71/9LnyigR59l49n/v7oBw2LeaxBY2ck+TU73EjTcsN
+         pIDqblBd2L2CT2/ESo9U06JvrbnQ3VSrbu7sRMchdmQJHbabKRG3sRhv0x0IsOHJ8r
+         yV/0n4mH4rwH0q0AjQxMSQYWG6EmM41NQ/StJpX41vizngigb6gjzLGULuzBn6I5Vg
+         A5mNZYxpLG+HpnIfguVS2HWXDnALEcFE8TRH9TAF23mh/yDrw+vQxSGJ2nAjEUdEQ9
+         wbZQWSpb0mZtAaAoEw0EOBoxiTLUf94PYLpDeWn9HJaqcigAefcHZ6RKzSn6eyfnXy
+         95z5EU8Nh5g4Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3B13E40374; Tue, 12 Jul 2022 09:57:34 -0300 (-03)
+Date:   Tue, 12 Jul 2022 09:57:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Subject: Re: [PATCHSET 0/7] perf lock: New lock contention tracepoints
+ support (v4)
+Message-ID: <Ys1vvte9izUxDAO/@kernel.org>
+References: <20220615163222.1275500-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f5d20f4e1aeb5d478e10a39c17ed003616c7872c.camel@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615163222.1275500-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 02:56:40PM -0400, Jeff Layton wrote:
-> On Mon, 2022-07-11 at 14:36 -0400, Bruce Fields wrote:
-> > On Mon, Jul 11, 2022 at 06:24:01PM +0000, Chuck Lever III wrote:
-> > > 
-> > > 
-> > > > On Jul 11, 2022, at 2:19 PM, Bruce Fields <bfields@fieldses.org> wrote:
-> > > > 
-> > > > On Mon, Jul 11, 2022 at 06:33:04AM -0400, Jeff Layton wrote:
-> > > > > On Sun, 2022-07-10 at 16:42 +0000, Chuck Lever III wrote:
-> > > > > > > This patch regressed clients that support TIME_CREATE attribute.
-> > > > > > > Starting with this patch client might think that server supports
-> > > > > > > TIME_CREATE and start sending this attribute in its requests.
-> > > > > > 
-> > > > > > Indeed, e377a3e698fb ("nfsd: Add support for the birth time
-> > > > > > attribute") does not include a change to nfsd4_decode_fattr4()
-> > > > > > that decodes the birth time attribute.
-> > > > > > 
-> > > > > > I don't immediately see another storage protocol stack in our
-> > > > > > kernel that supports a client setting the birth time, so NFSD
-> > > > > > might have to ignore the client-provided value.
-> > > > > > 
-> > > > > 
-> > > > > Cephfs allows this. My thinking at the time that I implemented it was
-> > > > > that it should be settable for backup purposes, but this was possibly a
-> > > > > mistake. On most filesystems, the btime seems to be equivalent to inode
-> > > > > creation time and is read-only.
-> > > > 
-> > > > So supporting it as read-only seems reasonable.
-> > > > 
-> > > > Clearly, failing to decode the setattr attempt isn't the right way to do
-> > > > that.  I'm not sure what exactly it should be doing--some kind of
-> > > > permission error on any setattr containing TIME_CREATE?
-> > > 
-> > > I don't think that will work.
-> > > 
-> > > NFSD now asserts FATTR4_WORD1_TIME_CREATE when clients ask for
-> > > the mask of attributes it supports. That means the server has
-> > > to process GETATTR and SETATTR (and OPEN) operations that
-> > > contain FATTR4_WORD1_TIME_CREATE as not an error.
-> > 
-> > Well, permissions or bad attribute values or other stuff may prevent
-> > setting one of the attributes.
-> > 
-> > And setattr isn't guaranteed to be atomic, so I don't think you can
-> > eliminate the possibility that part of it might succeed and part might
-> > not.
-> > 
-> > But it might be more helpful to fail the whole thing up front if you
-> > know part of it's going to fail?
-> > 
+Em Wed, Jun 15, 2022 at 09:32:15AM -0700, Namhyung Kim escreveu:
+> Hello,
 > 
-> RFC5661 says:
+> Kernel v5.19 will have a new set of tracepoints to track lock
+> contentions for various lock types.  Unlike tracepoints in LOCKDEP and
+> LOCK_STAT, it's hit only for contended locks and lock names are not
+> available.  So it needs to collect stack traces and display the caller
+> function instead.
+
+Applied to tmp.perf/core, performing some further tests and then will
+push to perf/core.
+
+Thanks for you work on this!
+
+- Arnaldo
+ 
+> Changes in v4)
+>  * add Acked-by from Ian
+>  * more comments on trace_lock_handler
+>  * don't create stats in the contention_end handler
+>  
+> Changes in v3)
+>  * fix build error
+>  * support data from different kernels/machines
+>  * skip bad stat unless there's actual bad ones
+>  
+> Changes in v2)
+>  * add Acked-by from Ian
+>  * print time with a unit for compact output
+>  * add some comments  (Ian)
+>  * remove already applied patch
+>  
+> This patchset merely adds support for the new tracepoints to the
+> existing perf lock commands.  So there's no change to the user.  Later
+> I'll add new a sub-command dedicated to the tracepoints to make use of
+> the additional information.
 > 
->    On either success or failure of the operation, the server will return
->    the attrsset bitmask to represent what (if any) attributes were
->    successfully set.  The attrsset in the response is a subset of the
->    attrmask field of the obj_attributes field in the argument.
+> Example output:
 > 
-> ...and then later:
+>   $ sudo perf lock record -a sleep 3
 > 
->    A mask of the attributes actually set is returned by SETATTR in all
->    cases.  That mask MUST NOT include attribute bits not requested to be
->    set by the client.  If the attribute masks in the request and reply
->    are equal, the status field in the reply MUST be NFS4_OK.
+>   $ perf lock report -F acquired,contended,avg_wait,wait_total
+> 
+>                   Name   acquired  contended     avg wait    total wait
+> 
+>    update_blocked_a...         40         40      3.61 us     144.45 us
+>    kernfs_fop_open+...          5          5      3.64 us      18.18 us
+>     _nohz_idle_balance          3          3      2.65 us       7.95 us
+>    tick_do_update_j...          1          1      6.04 us       6.04 us
+>     ep_scan_ready_list          1          1      3.93 us       3.93 us
+>   ...
+> 
+> You can find the code in the 'perf/lock-contention-v4' branch at
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> Namhyung Kim (7):
+>   perf lock: Print wait times with unit
+>   perf lock: Allow to use different kernel symbols
+>   perf lock: Skip print_bad_events() if nothing bad
+>   perf lock: Add lock contention tracepoints record support
+>   perf lock: Handle lock contention tracepoints
+>   perf record: Allow to specify max stack depth of fp callchain
+>   perf lock: Look up callchain for the contended locks
+> 
+>  tools/perf/Documentation/perf-lock.txt   |   7 +
+>  tools/perf/Documentation/perf-record.txt |   5 +
+>  tools/perf/builtin-lock.c                | 426 ++++++++++++++++++++++-
+>  tools/perf/util/callchain.c              |  18 +-
+>  4 files changed, 434 insertions(+), 22 deletions(-)
+> 
+> 
+> base-commit: 9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
 
-For some reason I thought the converse was true too (if the masks
-differ, then the server should return an error).  But you're right, I
-don't see that in the spec.
+-- 
 
-> So, I think just clearing the bit and returning NFS4_OK should be fine.
-
-I suppose.
-
-Nevertheless, the spec gives the option of returning both an error and a
-bitmap, and to me it seems more helpful to take advantage of the
-opportunity to tell the client both which attribute(s) failed and (to
-the extent possible) why.  ??
-
-> If the mask ends up being 0 after clearing the bit though, it might be
-> reasonable to return something like NFS4ERR_ATTRNOTSUPP. That would be a
-> bit weird though since we do support it for GETATTR, hence my suggestion
-> for a NFS4ERR_ATTR_RO.
-
-That might be useful.
-
---b.
+- Arnaldo

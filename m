@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3028C572833
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54BE572835
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiGLVDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S231243AbiGLVDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiGLVCx (ORCPT
+        with ESMTP id S229800AbiGLVD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:02:53 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606D560530
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:02:51 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id bn33so11285722ljb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:02:51 -0700 (PDT)
+        Tue, 12 Jul 2022 17:03:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03CA1172
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:03:28 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so277569pjr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wYfMN1U2Pe3jpUIv6aB3aQPgJskkEEj7WPI7YhpZ+iM=;
-        b=iZXAjAw4olgV0sdKbWutYFhrJLkIBmMclGHtIompGla2ei8+ABHriBhI3sAyRBwQyj
-         Nw2uJ1ShRyvRClLPSTGtOg4VPZ0yWWO/bu2LK5ACyTY3P3Vxd2OqnEglT6D73HK8ZBiL
-         y3KWoycp98U2TrSmE6EyY1dsNCf6O7S/5QV3IptfC+BBb/UBl7G0TeSgRUwA7N41wYt0
-         6baOu7/yvywfkoVIsP7t18eTdmHY/3OFsh7hxDRf41UBd539R56ut+rL+60/+Ino0JEk
-         Zeb4/cZRkx3zlM6qSBHpmHhErgzjbrmO4U0hXW3/GdsV3lsL/V95Cn57P5SYMCn5vCvV
-         +uJQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oXKjVT7u/Vdw6OQapcARzJ8tfeoIWiT56vDmOkl6F3I=;
+        b=OjqqmVzsv0YolRrIIZLjhjdZCq1rmYEBkn8DRiK6Wk0S2y5Ir4mr4pL/27LxVLDmQe
+         aWl1whRFV+vPO/nyLDG9vb6DyCXlGyMboZjjSOMxHQxu6SSTOxqJxPuiMUF5fcOIqBRP
+         4TdCdMZIwKJ6EV9qhTaoX79MbML24W6P0A1MI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=wYfMN1U2Pe3jpUIv6aB3aQPgJskkEEj7WPI7YhpZ+iM=;
-        b=QXyUARbGAyuxPAmAp+mQTHszkkY+8gbjt+euDPaIz4ivrU01YAgwNJA+KM0W6tR3U3
-         W6TWSa2yGV+tBfMv36WhzSEukTbMIXeuOFHmTl0c4hDr7x82AuCyh0YaT8eJcorB01VX
-         HqcSwVbZKQkBfyl2KYhZw+vzcN3Et0hukHhQrHu202lAiyxzmtA3zRdyJLOBIy6RWXfG
-         G9ODZ6G5gz5cqg+DsWDeRNe1hVJe8I6/AJ19MdQW4bHx1wz4gtSby4S8gZT9MOd7IpIF
-         AAtpVZ685y3ui1ObYUnjwS3+E5Q9tmDu6fpDWwkN72KyPciJ9OxkoVNchhJXwVkiXw7Y
-         /IBA==
-X-Gm-Message-State: AJIora+YP+r0i0Zv/LcQlatJlwE78E6RzBgVr9Y29SCXRe58yacxlUMo
-        1zyZO33GMLNbi5d5amOSKrl7tw==
-X-Google-Smtp-Source: AGRyM1v+9fnhivd68F9zNYLDGadJBtEWyFQcWpvtuIzRBBdhrlhiHwQ4slZrz/esjHrNn6MtFsgZPg==
-X-Received: by 2002:a2e:888e:0:b0:25d:8112:dfc7 with SMTP id k14-20020a2e888e000000b0025d8112dfc7mr2100485lji.270.1657659769611;
-        Tue, 12 Jul 2022 14:02:49 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id v12-20020ac258ec000000b00489dfb5d622sm1390518lfo.257.2022.07.12.14.02.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 14:02:49 -0700 (PDT)
-Message-ID: <db31ded1-d240-e5a0-c4ec-03ad7aef6af8@linaro.org>
-Date:   Tue, 12 Jul 2022 23:02:46 +0200
+        bh=oXKjVT7u/Vdw6OQapcARzJ8tfeoIWiT56vDmOkl6F3I=;
+        b=tlt9+7p9mbnGs4aWJVdEx8Qm9/qKqRcafTHGDFULx/ugsP9EZdWWEE4JaXkRIiADw4
+         Jzq6gt2b0ZTITehhUaQ0W6cH8ydvFe0br4O3R34z9LwPnr1opFSza/5c19Kl1ala/UAG
+         jyib5eJF1npUm3fCWig4/jmTgTQsbctgtfpFxdhQPETCGVPDR9AlSCFJ50DCNfPWd7dV
+         Ah0Fz5XJCXxoQvpRiLMuO0Ni3wnUuYRA018rBa1JvaV14XqJnsNC0VWJD476dH3V3Kfq
+         wDJXTyzAHJ5VcCu0x0XDDniIIGRKLHQ9d8fpGSVNsaJFoSBsl7488cKtMWBoEoEE92GM
+         MTDQ==
+X-Gm-Message-State: AJIora+a2uCkGrnkxFoIg30CPbtD9t+5Q2CT6wkAdrsst1PpUogrX0ls
+        7gusKEmV0hvWlAMz1QSDR0lrpWouHVGLwg==
+X-Google-Smtp-Source: AGRyM1t3A2NeYZ46IZn1+5Gsngitu30LooC617kS/EU05ggoSiWAACIwHprl6NLuRAJwQgmOn5AP2A==
+X-Received: by 2002:a17:90a:eacd:b0:1ef:84c2:418d with SMTP id ev13-20020a17090aeacd00b001ef84c2418dmr6323006pjb.101.1657659808270;
+        Tue, 12 Jul 2022 14:03:28 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902eccf00b0016bf8048bd2sm7284130plh.175.2022.07.12.14.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 14:03:27 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH 1/2] platform/chrome: cros_ec_typec: Rename port altmode array
+Date:   Tue, 12 Jul 2022 21:03:17 +0000
+Message-Id: <20220712210318.2671292-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2] arm64: dts: qcom: sc7280: Update lpassaudio clock
- controller for resets
-Content-Language: en-US
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Taniya Das <tdas@codeaurora.org>, mka@chromium.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>
-References: <1657181739-32052-1-git-send-email-quic_c_skakit@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1657181739-32052-1-git-send-email-quic_c_skakit@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,41 +66,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 10:15, Satya Priya wrote:
-> From: Taniya Das <quic_tdas@quicinc.com>
-> 
-> The lpass audio supports TX/RX/WSA block resets. Disable the LPASS PIL
-> clock by default, boards can enable it if needed.
+Rename "p_altmode" to "port_altmode" which is a less ambiguous name for
+the port_altmode struct array.
 
-You made here few different changes at once but I fail to see why. The
-most important message in commit msg is "why?". Why are you disabling
-LPASS PIL by default?
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/platform/chrome/cros_ec_typec.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-> 
-> Also to keep consistency update lpasscore to lpass_core.
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index d6088ba447af..b9848e80f372 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -60,8 +60,7 @@ struct cros_typec_port {
+ 	uint8_t mux_flags;
+ 	uint8_t role;
+ 
+-	/* Port alt modes. */
+-	struct typec_altmode p_altmode[CROS_EC_ALTMODE_MAX];
++	struct typec_altmode port_altmode[CROS_EC_ALTMODE_MAX];
+ 
+ 	/* Flag indicating that PD partner discovery data parsing is completed. */
+ 	bool sop_disc_done;
+@@ -282,16 +281,16 @@ static void cros_typec_register_port_altmodes(struct cros_typec_data *typec,
+ 	struct cros_typec_port *port = typec->ports[port_num];
+ 
+ 	/* All PD capable CrOS devices are assumed to support DP altmode. */
+-	port->p_altmode[CROS_EC_ALTMODE_DP].svid = USB_TYPEC_DP_SID;
+-	port->p_altmode[CROS_EC_ALTMODE_DP].mode = USB_TYPEC_DP_MODE;
++	port->port_altmode[CROS_EC_ALTMODE_DP].svid = USB_TYPEC_DP_SID;
++	port->port_altmode[CROS_EC_ALTMODE_DP].mode = USB_TYPEC_DP_MODE;
+ 
+ 	/*
+ 	 * Register TBT compatibility alt mode. The EC will not enter the mode
+ 	 * if it doesn't support it, so it's safe to register it unconditionally
+ 	 * here for now.
+ 	 */
+-	port->p_altmode[CROS_EC_ALTMODE_TBT].svid = USB_TYPEC_TBT_SID;
+-	port->p_altmode[CROS_EC_ALTMODE_TBT].mode = TYPEC_ANY_MODE;
++	port->port_altmode[CROS_EC_ALTMODE_TBT].svid = USB_TYPEC_TBT_SID;
++	port->port_altmode[CROS_EC_ALTMODE_TBT].mode = TYPEC_ANY_MODE;
+ 
+ 	port->state.alt = NULL;
+ 	port->state.mode = TYPEC_STATE_USB;
+@@ -431,7 +430,7 @@ static int cros_typec_enable_tbt(struct cros_typec_data *typec,
+ 		data.enter_vdo |= TBT_ENTER_MODE_ACTIVE_CABLE;
+ 
+ 	if (!port->state.alt) {
+-		port->state.alt = &port->p_altmode[CROS_EC_ALTMODE_TBT];
++		port->state.alt = &port->port_altmode[CROS_EC_ALTMODE_TBT];
+ 		ret = cros_typec_usb_safe_state(port);
+ 		if (ret)
+ 			return ret;
+@@ -473,7 +472,7 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
+ 	/* Configuration VDO. */
+ 	dp_data.conf = DP_CONF_SET_PIN_ASSIGN(pd_ctrl->dp_mode);
+ 	if (!port->state.alt) {
+-		port->state.alt = &port->p_altmode[CROS_EC_ALTMODE_DP];
++		port->state.alt = &port->port_altmode[CROS_EC_ALTMODE_DP];
+ 		ret = cros_typec_usb_safe_state(port);
+ 		if (ret)
+ 			return ret;
+-- 
+2.37.0.144.g8ac04bfd2-goog
 
-This definitely should not be backported to stable.
-
-> 
-> Fixes: 9499240d15f2 ("arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers")
-
-This does not look right or I did not understand where the bug is.
-Please describe what is the error/issue/bug being fixed (which would
-explain the need of backporting).
-
-More over, the patch alone brings regression - disables the LPASS PIL
-while before it was enabled. For sure it should not be backported.
-
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
-> Changes since V1:
->  - Updated the phandle reference in lpass_aon node.
->  - As per Matthias' comment updated the commit text.
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-
-
-Best regards,
-Krzysztof

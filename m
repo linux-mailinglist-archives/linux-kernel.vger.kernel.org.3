@@ -2,263 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E7E5727CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20F15727C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 22:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiGLUxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 16:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S233815AbiGLUwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 16:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiGLUxK (ORCPT
+        with ESMTP id S230050AbiGLUwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 16:53:10 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBE2CC7B3;
-        Tue, 12 Jul 2022 13:53:09 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so88346wmb.3;
-        Tue, 12 Jul 2022 13:53:09 -0700 (PDT)
+        Tue, 12 Jul 2022 16:52:34 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D09CC790;
+        Tue, 12 Jul 2022 13:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657659151; x=1689195151;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=BEppSE8HQta09KX2Ec9CKuDnm5/jVLNrIHR0bzDndcg=;
+  b=TSg1+RvcXzYvz5Daiq6PidtXiLNv5Tpi1zipD0RrL6lUX2R43LzNvWe3
+   8Bb/gzjK+lcTZTjPqiEnBS2m8qZZVpuSUm7AEXgavAB3K7Qe1jEEIomC3
+   QAKCdTMi6px+rsVCqMCzg4Rkr848tX5cUi6VO1ZwoAvWJMuzpPLXk1H3L
+   9jjoFxBXTrQbZCgchjbY21MmiN/eXkH82RftMJebymokD7tAGVztcI+Xh
+   AHTViXfCIvAhmj90IAK/pXD742WU4W6r9NJFKrn52PGEW7HNYpKXqfobm
+   zKdUigr/jQKe/ZJ1c1OGuihAfGAuzIq1+C8ZYe91TBl6pbu84vhdQso+U
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="172111518"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jul 2022 13:52:31 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 12 Jul 2022 13:52:31 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Tue, 12 Jul 2022 13:52:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GTAGv4R0iDm/abPHWMWsIV9oJYmjHdbjIULps9kOiBIo3p1cLvvfoCc2E+Akr7DmmwyFHIxi5JmGgR+DnGXWWaA+usF3qgvu9ucgJ1h8sbVrbIPQJC7lN2dmeIbA2X6X3d2N+V+TrUXE+zcfMizSidyz7oeGRiJPL42TBdMa1nw5ib20GA9wHylAVY6yY7+rIHa4Yv4uLpLLiQe2fg7UaqR2E8Q+Gl5VqIzxuxWBqWaET9WXhzMD8ofh3udkeJTV0S5DJBAOSq/ZIdkz2njyR6ZSsn09hlBxjetb27G5N7xRoTKX3OCPzHNVu6SK1HUGYn805dNTlaRV9rcoiRdYdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BEppSE8HQta09KX2Ec9CKuDnm5/jVLNrIHR0bzDndcg=;
+ b=n7ZBi7nU4xFWa+SqpeQadxQNkTYndjxSJZqd9T1B7PLx/eN9bsy/m1aLI8TyomY8sjCB1kkGmVMVD1hYxEFDuezmm0KMrxU1wu9XzgCoGy+uTZChwPpTsWasyIPEiZ6qULc9mz26Iz+xQOIFgeC5QGe4R9tpYp/Bhf3G0bDuqwXe3mH7EVveNgUvcYRzc8NxDuo74xs8aDe8pmXJCqSCgrjwFiiIA8nnCP01kGKDmor4CEzbYRFE52U/MXKTD/9QPzrdbSoBhUWF4l6NYLQ1uVp7J6Dg9vMXHLGuSQVUcMOCe4mT+Og7pqKcgXEGnFFvCHoC05Y8EKL3B28N1N7Rlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ih7ca1XFNBvW21TmsDZ0YEYcVjZEuP7NxIbhOweV4rk=;
-        b=lxi29WSGdHQoqv0SjQjxQ8+IMB/ajkiCtimvN5HUXXG2WcNqhBkwryqytnZydIdT9Y
-         KRKGANu33s/wKerLt+1XH4pELJ+sTVOiDJB5e1FO1Bzbo/Wlnvy+hA+zYAtsfbf6O+lE
-         FDzDM1AOUB3lWLex+OFbhVjAdRWSHdPpXLIuxpKW/oLiz8aTeO7NflAopH+xYYOPL+ua
-         9unOgqz0bk6e6QUCutA6UXIKhx2nNMDM6o0Oh0TzKLrHtL7BCoAK6tUvNTEKJQtzfjbF
-         azZi2DD9aOHiwzayjoaRzACDBNeiu7hdQjE1R2niSrcoCMgenDbvEu+KocwyeljheraO
-         0Y0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ih7ca1XFNBvW21TmsDZ0YEYcVjZEuP7NxIbhOweV4rk=;
-        b=Y9tilrKXGCQYN3E//vx0l+dt+9nsaSmPf4l7QdHxmatLutDP+Se2zDGO8SbknGOn1f
-         tw3/aKELKY/F84ZL6YOTGYfwNCNvAHPv8S/r9Z4AOr/1ygnekat6/WzPXPoahAEjbIvN
-         XhZslxGn8ScYGu46JdWCwcsaMRHUqdhliy6JG6hqxHBRi9JBQkbtlhqwZxq0Wwdgzyf/
-         VqjxuXNneb6XaVp4bXSM8QU9vnLfuGrm/DcUd7PrAxniELW6/Xr8RSNWGmJJOsQHNozA
-         pJkUPQ64xPC0f+Rk3mHO7DH4K7FJBa3f3jS4scv7sqMK1Jf0+aVj4YckHlV2Srmuf+Uh
-         LBkA==
-X-Gm-Message-State: AJIora8fZS5QmXxC+FMBzkbgV+TXSS2RM8AFuB0du+AqDh4+HFHenjDr
-        mE1iRaWQD6/qc8H4NTCexe4kpf/wJgU=
-X-Google-Smtp-Source: AGRyM1vWJmFtv+VE6VELazo6TQh83iwIOKlpkHUxrD07MXd37jzlO+wacfgaQxajH6hV6x1Kj9kNfQ==
-X-Received: by 2002:a1c:f607:0:b0:3a0:3dc9:c4db with SMTP id w7-20020a1cf607000000b003a03dc9c4dbmr6002742wmc.30.1657659187133;
-        Tue, 12 Jul 2022 13:53:07 -0700 (PDT)
-Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id c14-20020a7bc00e000000b003a044fe7fe7sm89833wmb.9.2022.07.12.13.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 13:53:06 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
-        kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v5 00/27] io_uring zerocopy send
-Date:   Tue, 12 Jul 2022 21:52:24 +0100
-Message-Id: <cover.1657643355.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.37.0
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BEppSE8HQta09KX2Ec9CKuDnm5/jVLNrIHR0bzDndcg=;
+ b=aPaX/9CO2qdisIxhDAZHdVZR+Xbd7vMlUGr2oNtFRdOjy6Bwbr0s+ILm/hCek/FceipdBdX9DNucy9BGXMlv9NGNVb1/MjGHNyiZa8gdwCWSrZz22/Nv2KupCZJPF8t8F7KK6hwMQhT/Q8zUe9LoD1Bg0Y6C4Y7aSBFMuPUwXcA=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by BYAPR11MB3384.namprd11.prod.outlook.com (2603:10b6:a03:75::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Tue, 12 Jul
+ 2022 20:52:26 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::8d4a:1681:398d:9714]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::8d4a:1681:398d:9714%5]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 20:52:26 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <yangyingliang@huawei.com>, <broonie@kernel.org>
+CC:     <Conor.Dooley@microchip.com>, <Daire.McNamara@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH -next 1/2] spi: microchip-core: fix UAF in
+ mchp_corespi_remove()
+Thread-Topic: [PATCH -next 1/2] spi: microchip-core: fix UAF in
+ mchp_corespi_remove()
+Thread-Index: AQHYlfWYV6SS9xgv6k+Ymq3GejRdI617NqmA
+Date:   Tue, 12 Jul 2022 20:52:25 +0000
+Message-ID: <0f43a8a1-3df3-9704-c7f8-414496df40e4@microchip.com>
+References: <20220712135357.918997-1-yangyingliang@huawei.com>
+In-Reply-To: <20220712135357.918997-1-yangyingliang@huawei.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d1858de8-c379-4f98-c5cc-08da64486d4a
+x-ms-traffictypediagnostic: BYAPR11MB3384:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QeByTNaqt8gGWXXLLpiE5LqllhMTlKtGC9p/P331WPUXZauYGDE6k+f0150Oz5Nvp26qIghdOKmurUC132QZz6TTV7mle89UAmmKHJ4dYCWSrDdtqUVJA1raNlWICGkWgC2MkE9MSHh3XCGbIa2oRsb9TTAG7Zw3qaLjzhaef5WXZ5oyPTt0kqcgn+h3neIeMB7yvEkwhadOYM+2CexbpKunXhi39QxQWxktXGMsrvt5Fi6kRu9QVRZIax6s1tz12rTv8VLaU8CRZl9x2m1Tg78Gpus+DeTh92jwKZYyEV6xciaaR9uYERwJ/Kpja1zXXt/cm8bjG2KuGxD9nl9iy7eVVqZpfYFdt0jGhPNEOYwobeHgRBBV2St/VmKsURUf98vhXxGfmDVjWcpKGqJRRr1zCLHfV2ac8XIlo1QtRXypsSiclgp1ING2GhfeFNE7UAmgklCHdDELWeSFUGNHoRJSFyQZXZ7tZ8uw5W8LGPX59sK7jzGYgSK15yfpXGgYuJEbgeVSgv/Ij/UkTsSBoIJx+8yJB2lSGu+qKeJ131dynh6fTbfa7aNSqiay9wVcW/jeb11aUNitCrZUAHqPUuGqecp4DXUDmFeLAqnpOJjjfYHhp1N2WWNlYa8gr8d0fOAZTi2jq6ZPpqtAGUKkigTj0x+CToYrVp1J6Nu5FKh72HuO2bF+K902HxObh/dBEOa+nxivRdzHgac1b3sj7tGtOBThhMluk1FZWY+L7odd/dQ73GQED7kEgiy7obTIWEfkp72GLN5A0kGCsIrgKbdIeFNASQoVcKdoohA+EX47zfKTrrSN8Iezx27Jr6LmlCcTwTJIPGuY9IibKeq4l4PQjrtW2bHFkV5YOCxz2eZ5KmouiKz4pjhaBrDgYJWB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(39860400002)(376002)(136003)(8676002)(8936002)(71200400001)(110136005)(36756003)(316002)(54906003)(38100700002)(6486002)(5660300002)(31686004)(83380400001)(478600001)(122000001)(53546011)(6506007)(66556008)(26005)(66946007)(66446008)(66476007)(38070700005)(2616005)(31696002)(86362001)(4326008)(41300700001)(2906002)(76116006)(186003)(64756008)(91956017)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UFdRdkoyeTBFanlDZEpmRlFGSTAwazlaVFYzSWN0bXFpcEhOVEs1eEpPdFB4?=
+ =?utf-8?B?MUxOaUdWd3p6Wk1PWkJyRzdLcWs0OUtSSWN2NzF0Q1VQUVFpWU1kNHZyc3dP?=
+ =?utf-8?B?MDVuaTFpQXRPOWx4VzhNNUJERDJ3bjkzVFhaM1NYWlh0ckNKNWJZTHdTWVZK?=
+ =?utf-8?B?WUIvZHJucG1LdHpZOTdkN1hVRHJWZDZiNEEwRnU5NlNWSmR2VEZGSHNheThl?=
+ =?utf-8?B?Y3hjTWlYNHJ3c1YwYlRUbDFqbDhkdm80bi9rU0t4UVV6SVJqUEJ5LzREVjdZ?=
+ =?utf-8?B?TFRRcS9UdlJ3VEo1eUg2aytLbHR5NkJxdWJzQjZ3S3Z3dlpQOW1pSXZFbHZC?=
+ =?utf-8?B?M09uWXBLTmJzSk1UMTNRZ1V4RHhPU01ZWEcxa2ZrQ2xWSDFiRytPS3RtcWRH?=
+ =?utf-8?B?NHIxVDZQUlhyWndkMkZlTWx3UTdaTFRyQzk5TFBWblN3cEpIRU9Oc29jbmhJ?=
+ =?utf-8?B?MmM4elNxUDVncTM2Nm93bGF5Z2pHaUNkMWlTWjQyZEFuNmlYYTRpeUJZQjlm?=
+ =?utf-8?B?R0wwdGZZU1VIUWpJVjQ3UXFyMy9hNE96YnVvZUFvSGYxa3ZyWGR3NkhobnNP?=
+ =?utf-8?B?ME90RWE3ZDFocStZSVdmVG5zRWFrWFVrYnF1NDI5eDg4STNxRUtOTnI3Vi9l?=
+ =?utf-8?B?WXJrWDhkOHlhNTBSbi9LNmVrMFRNdlk0VGExRlZXYnRmUE41aGw1Q2dyV2Zw?=
+ =?utf-8?B?N0VOR1JSeGg2SzA2Ym9jYnNUR3hNdUlTaUpzalQ0ZXd6RC9iYlBER3JSRVBw?=
+ =?utf-8?B?ME9WVmJPMDRGbkxmNWY5YVBSa2dHSWw0NGxYTHgrejRCUm1uQTRCQ1lyeDk0?=
+ =?utf-8?B?UG80YTJlNDlWTlZaN1RPdmFiQWx4ZzJvUTdnRVdxTWEyM0N5STcxWkZlNDhm?=
+ =?utf-8?B?QTI4MVIzb29MdzNWZ0ZnTkJhaEFHaysrR0hHc3BWblpTMER0bHU5aE5aL2Nn?=
+ =?utf-8?B?cDFOdFZvdkphcDdCWEt1ckJMUTBEVzRiTmliUWFRMHcySEN0MmVjaHUvVTBG?=
+ =?utf-8?B?MlhyQ0FQYnc4TFNaYzYrazJTRDdJdlFmc1h2K2xjRGtXWmpxYmx0QW1xYnRs?=
+ =?utf-8?B?YTVTWTlzUDJVVUZkd1VJdHhYNTBNSGRXQnVmSHBvaEk1Q0dMUy9UdkxTWlFz?=
+ =?utf-8?B?RFdHQWVIRGFjOVljalpxTnNsRldtakdqbUdLR3J3eE9BMGJFYURZcm5Fcnox?=
+ =?utf-8?B?cGZtQXVwWHJpUDJpS0Q3ZVAvWFBwN0MwbjJPNUhSd25qa2pYTGtnVHE3R3Jo?=
+ =?utf-8?B?Qlo0STNSM3NpOE1aZkRuZ3hUMmswQi8zbHZlYWRIdWVvQzE4MUxRUlBOeUlk?=
+ =?utf-8?B?b0grc3RVcmZreEpLcDhPV21UU0xOd3JIVmxtRVhiMjdsbDl0LzVBN1pnV1JQ?=
+ =?utf-8?B?T2xKNG9xa0ZOQUV4WkJTR1BrSjhvOFh0WWpkYThGM0JxajBPSWkwdTJWbUJN?=
+ =?utf-8?B?REVkVmVkbW9kRFFJSmlUS0RCeGQ1NzlTZVN6V29DWkcyZUVEOHBLK3VBY3Rz?=
+ =?utf-8?B?cTVRK1ZyREZMbGpjUTBYNEwyVmVETXRLMDRJU0tZbFQvQWZQV3VJNlJqcCtw?=
+ =?utf-8?B?ckJ6WC92UUNrc01wZEI3QTdzS3BOSWVJeUVNT0hsV0FEZjZHelEzcVJwV0xo?=
+ =?utf-8?B?TkFWU0lKaERueUJ4UHYxYzJGY2lhTy8yQnk0ZEZNdjdZZ216YWRYRy9vWGNO?=
+ =?utf-8?B?bjZITXJRZEp6cXhvbkJtN0p5VEdrYVNCZzB4RjZXUEhCV04vOElGblVCNDJ4?=
+ =?utf-8?B?aWpJVDJ0d0VRMVhlMzNjb2RGR1YyZkJmVFhmZEFWSTVPaVFvRGJxY2pZWTlU?=
+ =?utf-8?B?OXZUc2hsN2F0TURHeXBXbUo0aVVLVFYreW9CdHRTaklIeVM1UFJjcXU0RVJF?=
+ =?utf-8?B?MWlsRTZMR3RrV01vZGVrY0xub0paTnplQUpWb3ZSNjdmTGFsVkJXMEJaeHha?=
+ =?utf-8?B?U3JmQ3lCLzdTQ0VHWjF6Ykg5OU85amd5ZWg4Q2xnMjBOd1FJeEQ0WldlOXV5?=
+ =?utf-8?B?NEFodk1oblJlcnJhcVFodnVVK1drbW90bmpkcWpNTk1sSE1PMm1XSTNtNjdT?=
+ =?utf-8?B?QWpMNFU5TjhRMmFrK3c2MDNjN1NTOVVYNlIyZ3FVZlg3bTJ4QTMzZFRSQlZn?=
+ =?utf-8?B?TFpnT1MwcTRXbHkraWRoYkFUMFNHYUhQcDVJUW1oYnAwa2xsTHZwVjlnWEtE?=
+ =?utf-8?B?a1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F4EE685394E7DE42A75EDF1B89B4425C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1858de8-c379-4f98-c5cc-08da64486d4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 20:52:25.9761
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 859Kcp0EtaG+rsUXPDhSATtd126f+gVU+a/l7aEMl+KrkjF3q20u1opd1fAvLoOsL4zjdGMvDBg2JLj9HgctD09wN4hcuhqZoPyoT6/6+V0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3384
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NOTE: Not to be picked directly. After getting necessary acks, I'll be
-      working out merging with Jakub and Jens.
-
-The patchset implements io_uring zerocopy send. It works with both registered
-and normal buffers, mixing is allowed but not recommended. Apart from usual
-request completions, just as with MSG_ZEROCOPY, io_uring separately notifies
-the userspace when buffers are freed and can be reused (see API design below),
-which is delivered into io_uring's Completion Queue. Those "buffer-free"
-notifications are not necessarily per request, but the userspace has control
-over it and should explicitly attaching a number of requests to a single
-notification. The series also adds some internal optimisations when used with
-registered buffers like removing page referencing.
-
-From the kernel networking perspective there are two main changes. The first
-one is passing ubuf_info into the network layer from io_uring (inside of an
-in kernel struct msghdr). This allows extra optimisations, e.g. ubuf_info
-caching on the io_uring side, but also helps to avoid cross-referencing
-and synchronisation problems. The second part is an optional optimisation
-removing page referencing for requests with registered buffers.
-
-Benchmarking UDP with an optimised version of the selftest (see [1]), which
-sends a bunch of requests, waits for completions and repeats. "+ flush" column
-posts one additional "buffer-free" notification per request, and just "zc"
-doesn't post buffer notifications at all.
-
-NIC (requests / second):
-IO size | non-zc    | zc             | zc + flush
-4000    | 495134    | 606420 (+22%)  | 558971 (+12%)
-1500    | 551808    | 577116 (+4.5%) | 565803 (+2.5%)
-1000    | 584677    | 592088 (+1.2%) | 560885 (-4%)
-600     | 596292    | 598550 (+0.4%) | 555366 (-6.7%)
-
-dummy (requests / second):
-IO size | non-zc    | zc             | zc + flush
-8000    | 1299916   | 2396600 (+84%) | 2224219 (+71%)
-4000    | 1869230   | 2344146 (+25%) | 2170069 (+16%)
-1200    | 2071617   | 2361960 (+14%) | 2203052 (+6%)
-600     | 2106794   | 2381527 (+13%) | 2195295 (+4%)
-
-Previously it also brought a massive performance speedup compared to the
-msg_zerocopy tool (see [3]), which is probably not super interesting. There
-is also an additional bunch of refcounting optimisations that was omitted from
-the series for simplicity and as they don't change the picture drastically,
-they will be sent as follow up, as well as flushing optimisations closing the
-performance gap b/w two last columns.
-
-For TCP on localhost (with hacks enabling localhost zerocopy) and including
-additional overhead for receive:
-
-IO size | non-zc    | zc
-1200    | 4174      | 4148
-4096    | 7597      | 11228
-
-Using a real NIC 1200 bytes, zc is worse than non-zc ~5-10%, maybe the
-omitted optimisations will somewhat help, should look better for 4000,
-but couldn't test properly because of setup problems.
-
-Links:
-
-  liburing (benchmark + tests):
-  [1] https://github.com/isilence/liburing/tree/zc_v4
-
-  kernel repo:
-  [2] https://github.com/isilence/linux/tree/zc_v4
-
-  RFC v1:
-  [3] https://lore.kernel.org/io-uring/cover.1638282789.git.asml.silence@gmail.com/
-
-  RFC v2:
-  https://lore.kernel.org/io-uring/cover.1640029579.git.asml.silence@gmail.com/
-
-  Net patches based:
-  git@github.com:isilence/linux.git zc_v4-net-base
-  or
-  https://github.com/isilence/linux/tree/zc_v4-net-base
-
-API design overview:
-
-  The series introduces an io_uring concept of notifactors. From the userspace
-  perspective it's an entity to which it can bind one or more requests and then
-  requesting to flush it. Flushing a notifier makes it impossible to attach new
-  requests to it, and instructs the notifier to post a completion once all
-  requests attached to it are completed and the kernel doesn't need the buffers
-  anymore.
-
-  Notifications are stored in notification slots, which should be registered as
-  an array in io_uring. Each slot stores only one notifier at any particular
-  moment. Flushing removes it from the slot and the slot automatically replaces
-  it with a new notifier. All operations with notifiers are done by specifying
-  an index of a slot it's currently in.
-
-  When registering a notification the userspace specifies a u64 tag for each
-  slot, which will be copied in notification completion entries as
-  cqe::user_data. cqe::res is 0 and cqe::flags is equal to wrap around u32
-  sequence number counting notifiers of a slot.
-
-Changelog:
-
-  v4 -> v5
-    remove ubuf_info checks from custom iov_iter callbacks to
-    avoid disabling the page refs optimisations for TCP
-
-  v3 -> v4
-    custom iov_iter handling
-
-  RFC v2 -> v3:
-    mem accounting for non-registered buffers
-    allow mixing registered and normal requests per notifier
-    notification flushing via IORING_OP_RSRC_UPDATE
-    TCP support
-    fix buffer indexing
-    fix io-wq ->uring_lock locking
-    fix bugs when mixing with MSG_ZEROCOPY
-    fix managed refs bugs in skbuff.c
-
-  RFC -> RFC v2:
-    remove additional overhead for non-zc from skb_release_data()
-    avoid msg propagation, hide extra bits of non-zc overhead
-    task_work based "buffer free" notifications
-    improve io_uring's notification refcounting
-    added 5/19, (no pfmemalloc tracking)
-    added 8/19 and 9/19 preventing small copies with zc
-    misc small changes
-
-David Ahern (1):
-  net: Allow custom iter handler in msghdr
-
-Pavel Begunkov (26):
-  ipv4: avoid partial copy for zc
-  ipv6: avoid partial copy for zc
-  skbuff: don't mix ubuf_info from different sources
-  skbuff: add SKBFL_DONT_ORPHAN flag
-  skbuff: carry external ubuf_info in msghdr
-  net: introduce managed frags infrastructure
-  net: introduce __skb_fill_page_desc_noacc
-  ipv4/udp: support externally provided ubufs
-  ipv6/udp: support externally provided ubufs
-  tcp: support externally provided ubufs
-  io_uring: initialise msghdr::msg_ubuf
-  io_uring: export io_put_task()
-  io_uring: add zc notification infrastructure
-  io_uring: cache struct io_notif
-  io_uring: complete notifiers in tw
-  io_uring: add rsrc referencing for notifiers
-  io_uring: add notification slot registration
-  io_uring: wire send zc request type
-  io_uring: account locked pages for non-fixed zc
-  io_uring: allow to pass addr into sendzc
-  io_uring: sendzc with fixed buffers
-  io_uring: flush notifiers after sendzc
-  io_uring: rename IORING_OP_FILES_UPDATE
-  io_uring: add zc notification flush requests
-  io_uring: enable managed frags with register buffers
-  selftests/io_uring: test zerocopy send
-
- include/linux/io_uring_types.h                |  37 ++
- include/linux/skbuff.h                        |  66 +-
- include/linux/socket.h                        |   5 +
- include/uapi/linux/io_uring.h                 |  45 +-
- io_uring/Makefile                             |   2 +-
- io_uring/io_uring.c                           |  42 +-
- io_uring/io_uring.h                           |  22 +
- io_uring/net.c                                | 187 ++++++
- io_uring/net.h                                |   4 +
- io_uring/notif.c                              | 215 +++++++
- io_uring/notif.h                              |  87 +++
- io_uring/opdef.c                              |  24 +-
- io_uring/rsrc.c                               |  55 +-
- io_uring/rsrc.h                               |  16 +-
- io_uring/tctx.h                               |  26 -
- net/compat.c                                  |   1 +
- net/core/datagram.c                           |  14 +-
- net/core/skbuff.c                             |  37 +-
- net/ipv4/ip_output.c                          |  50 +-
- net/ipv4/tcp.c                                |  32 +-
- net/ipv6/ip6_output.c                         |  49 +-
- net/socket.c                                  |   3 +
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/io_uring_zerocopy_tx.c      | 605 ++++++++++++++++++
- .../selftests/net/io_uring_zerocopy_tx.sh     | 131 ++++
- 25 files changed, 1628 insertions(+), 128 deletions(-)
- create mode 100644 io_uring/notif.c
- create mode 100644 io_uring/notif.h
- create mode 100644 tools/testing/selftests/net/io_uring_zerocopy_tx.c
- create mode 100755 tools/testing/selftests/net/io_uring_zerocopy_tx.sh
-
--- 
-2.37.0
-
+T24gMTIvMDcvMjAyMiAxNDo1MywgWWFuZyBZaW5nbGlhbmcgd3JvdGU6DQo+IFdoZW4gdXNpbmcg
+ZGV2bV9zcGlfcmVnaXN0ZXJfbWFzdGVyKCksIHRoZSB1bnJlZ2lzdGVyIGZ1bmN0aW9uIHdpbGwN
+Cj4gYmUgY2FsbGVkIGluIGRldnJlc19yZWxlYXNlX2FsbCgpIHdoaWNoIGlzIGNhbGxlZCBhZnRl
+ciAtPnJlbW92ZSgpLA0KPiBzbyByZW1vdmUgc3BpX3VucmVnaXN0ZXJfbWFzdGVyKCkgYW5kc3Bp
+X21hc3Rlcl9wdXQoKS4NCj4gDQo+IEZpeGVzOiA5YWM4ZDE3Njk0YjYgKCJzcGk6IGFkZCBzdXBw
+b3J0IGZvciBtaWNyb2NoaXAgZnBnYSBzcGkgY29udHJvbGxlcnMiKQ0KPiBTaWduZWQtb2ZmLWJ5
+OiBZYW5nIFlpbmdsaWFuZyA8eWFuZ3lpbmdsaWFuZ0BodWF3ZWkuY29tPg0KDQpXaXRoIDU5ZWJi
+ZTQwZmI1MSAoInNwaTogc2ltcGxpZnkgZGV2bV9zcGkgcmVnaXN0ZXJfY29udHJvbGxlciIpIHJl
+dmVydGVkLA0KdGhpcyBsb29rcyBnb29kIHRvIG1lLg0KDQpSZXZpZXdlZC1ieTogQ29ub3IgRG9v
+bGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NCg0KVGhhbmtzIQ0KDQo+IC0tLQ0KPiAg
+ZHJpdmVycy9zcGkvc3BpLW1pY3JvY2hpcC1jb3JlLmMgfCAyIC0tDQo+ICAxIGZpbGUgY2hhbmdl
+ZCwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9zcGktbWlj
+cm9jaGlwLWNvcmUuYyBiL2RyaXZlcnMvc3BpL3NwaS1taWNyb2NoaXAtY29yZS5jDQo+IGluZGV4
+IGIzMDgzMDc1Y2QzNi4uYzI2NzY3MzQzMTc2IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3NwaS9z
+cGktbWljcm9jaGlwLWNvcmUuYw0KPiArKysgYi9kcml2ZXJzL3NwaS9zcGktbWljcm9jaGlwLWNv
+cmUuYw0KPiBAQCAtNTk1LDggKzU5NSw2IEBAIHN0YXRpYyBpbnQgbWNocF9jb3Jlc3BpX3JlbW92
+ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCXN0cnVjdCBtY2hwX2NvcmVzcGkg
+KnNwaSA9IHNwaV9tYXN0ZXJfZ2V0X2RldmRhdGEobWFzdGVyKTsNCj4gIA0KPiAgCW1jaHBfY29y
+ZXNwaV9kaXNhYmxlX2ludHMoc3BpKTsNCj4gLQlzcGlfdW5yZWdpc3Rlcl9tYXN0ZXIobWFzdGVy
+KTsNCj4gLQlzcGlfbWFzdGVyX3B1dChtYXN0ZXIpOw0KPiAgCWNsa19kaXNhYmxlX3VucHJlcGFy
+ZShzcGktPmNsayk7DQo+ICAJbWNocF9jb3Jlc3BpX2Rpc2FibGUoc3BpKTsNCj4gIA0K

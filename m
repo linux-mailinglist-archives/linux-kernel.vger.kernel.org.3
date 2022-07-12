@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EF1571FE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AE7571FEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbiGLPs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S233604AbiGLPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiGLPsZ (ORCPT
+        with ESMTP id S232792AbiGLPu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:48:25 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E982C54BD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:48:21 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id p27-20020a05600c1d9b00b003a2f36054d0so52442wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:48:20 -0700 (PDT)
+        Tue, 12 Jul 2022 11:50:26 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45176B41B1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:50:25 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id o12so7758374ljc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2nlWovdml3x38ikBsijP4iu2GVcLVtEJCFEUL/KVw7o=;
-        b=l7epumwrTzHY/T/kgehRLD4WmQF+WOR5a1v/PiZIlCt0xOL8TbVuf2dOsADboZauYg
-         yoHGQR9uyhRHNy5Z+nD+Yr/Q4cjuuoa9717gHmCsEmXCZ/rp5QqzsjCTFNVry0nBuUQs
-         oNuoDRJgCp4nizfkUcp4m7npXsvxkMY4EcPEbXdtKtMaGrRwD85mdhlPbmIF6zfSi++s
-         MNocdcQZIE4dJTnTes/KPHJRgRQ+FMrgxNsAtRDCoZVdJvj0T1yzqWZ/cFRMRp4d3UfS
-         mwVBT0upNQxQC+KQnXKvDcnVv44yLYa7rwH++mX8p7TUCXdA7Gowr+9glk8fn+Chx/hG
-         Nn9g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7xRo1tbRw235GqlWt7H/gMak0ChzgLukcWrxmjFVVnY=;
+        b=BsfSiO0DzTQwAXsOVV/eaDqG4Q9ih0+Yp7vHqlvRLtrfeq4nSudPAF/HuwWgxkoOS+
+         OVPRQgDWqHoUZB72KJUDnwuJKVndUO36Meo8MAjEkfROPp+wo07CuY+P1yFP6hUrgCUl
+         750uDp238dFqPAUqORzLrVj2TRXw52yGI/gGbDvziAd1PwQrgj+RTbCoCBrP7UYsQBMX
+         8UzqdzuEZiqVZdRER/kWx9gXJEjgo2M33Ic84TJgT5zmUPtAoL6DdRmVKrBSWsi/BJ+m
+         XAOq2Vu8IYR4Un2TJkl8y9WegzUrUDNXX6W6mcdMRGLHAiG2yBA2JHDnNsYpqO8D02Ox
+         cC9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2nlWovdml3x38ikBsijP4iu2GVcLVtEJCFEUL/KVw7o=;
-        b=bN8dzG5FiUtSFgFaq25VrbBMJBjneph4GXTI9z6cp6FUl0fxOlalmm/Sgrad4+xKc1
-         Ny8XsJpRto4w9QjOzty9trm7QNX+8qzYMvQba9/4bfoPWzhVvILCYFZNgOrD1St2YFzl
-         3LqVMPM0zzIzbHu07iIvsVZ35PNicsQtLmos6ZXwRmC25DR8OFMWQXM4IZiQXtDrex9Q
-         dzbM9n3WpPqzyV1V4j1iAc6J7ARXDw0qMUIbCd5Oz+NmyaT6excK0Md/syt1Kn53Q7Wb
-         wGAHDCDOlyNOt1D6UEoDAESAPVo0tTSnMffJZIcVP9Dkiq4SWEGd6+kny4f9PVuqVqIZ
-         9IOA==
-X-Gm-Message-State: AJIora+alQLwMoXTEj2GWNWd4QYCY3ZYdLGlSK0l6ZbJRHvO1vY3sT8T
-        v1DDbQCQcyS41eFvVqSwcZSEZLE0ZZh8kNad4J+HBnQESg==
-X-Google-Smtp-Source: AGRyM1u6t4VbjNJona2UEpNHlKP5wTHkHby6Ya+C9mPUk56Zqy7EeRgKiauK/i7GOVZQ7XHor7ObgQc+c29/qmHZ6+0=
-X-Received: by 2002:a7b:cd0c:0:b0:3a2:e864:98b8 with SMTP id
- f12-20020a7bcd0c000000b003a2e86498b8mr4562927wmj.200.1657640899216; Tue, 12
- Jul 2022 08:48:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7xRo1tbRw235GqlWt7H/gMak0ChzgLukcWrxmjFVVnY=;
+        b=o9R3O3g9OkScqHcfaBe9B90BdQy1/92KhDbC4S4U6jKShSs3+43UjdJ4FDTcfQQd7b
+         Z9kbbFXXDU9I2G0gjSkBY+vC7C1zYmd8SCmsvYQtR5CzsQlBveWs1dFlAvZIAsd+jiWK
+         K/y7xl/NbBW0DmNOc9bFxx3mpBccGHZ3qOLvY5vkQ+Eq+dOanuUK/xn93j0Sz5Mil9t5
+         8YORyeyFxwJ/XjMQmmm+3h1HqVunx29scEHVor1GC7eUSKc7gF1qU/5WDsgmQXcWuTpH
+         +UZyXuCgsSxKlTIo21gyJ6r5tT26GhYK0c5cWrIHTZb4pOEF6brPvWqQ8zMj7+gukiKd
+         5Lew==
+X-Gm-Message-State: AJIora8p0+K2mICP92dR+7IpIXgirL6/mxwi6OPLuKBeP8Yv8GHa91Bv
+        HgbdLPLu2dDzflUaXmDugZWEHQ==
+X-Google-Smtp-Source: AGRyM1sdHz15fM6xAwfuLdHc1EeE/3kjXzdcFi7xq2lIR8s/6SQUh2gSPRONWAf4k07wRLj7JjjmWw==
+X-Received: by 2002:a2e:be9f:0:b0:25d:6051:971 with SMTP id a31-20020a2ebe9f000000b0025d60510971mr10618934ljr.372.1657641023668;
+        Tue, 12 Jul 2022 08:50:23 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id q6-20020a056512210600b00477c0365b20sm2249927lfr.188.2022.07.12.08.50.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 08:50:23 -0700 (PDT)
+Message-ID: <6b7bab04-90ce-6111-35bd-42cb3a1f73f8@linaro.org>
+Date:   Tue, 12 Jul 2022 17:50:20 +0200
 MIME-Version: 1.0
-References: <20220712042258.293010-1-jstultz@google.com> <13c5ca05-a366-2751-4f26-d978d074f748@amd.com>
-In-Reply-To: <13c5ca05-a366-2751-4f26-d978d074f748@amd.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 12 Jul 2022 08:48:07 -0700
-Message-ID: <CANDhNCp_d2M+n90T1ziP5rHF85ZsxyN6qg4iE84ucPO-XK_HUg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] drm: drm_syncobj: Add note in DOC about absolute
- timeout values
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-        Chunming Zhou <david1.zhou@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 3/3] arm64: dts: bcmbca: update bcm4808 board dts file
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        joel.peshkin@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220712021144.7068-1-william.zhang@broadcom.com>
+ <20220712021144.7068-4-william.zhang@broadcom.com>
+ <d93e55fa-3359-2609-aad5-c80eca78f380@linaro.org>
+ <900ac3ed-a77c-3cc0-f5ab-c45267a1a4ba@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <900ac3ed-a77c-3cc0-f5ab-c45267a1a4ba@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 12:40 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
-> Am 12.07.22 um 06:22 schrieb John Stultz:
-> > After having to debug down through the kernel to figure out
-> > why my _WAIT calls were always timing out, I realized its
-> > an absolute timeout value instead of the more common relative
-> > timeouts.
-> >
-> > This detail should be called out in the documentation, as while
-> > the absolute value makes sense here, its not as common for timeout
-> > values.
->
-> Well absolute timeout values are mandatory for making -ERESTARTSYS work
-> without any additional handling.
+On 12/07/2022 17:36, Florian Fainelli wrote:
+> On 7/12/22 00:47, Krzysztof Kozlowski wrote:
+>> On 12/07/2022 04:11, William Zhang wrote:
+>>> Update compatible string based on the new bcmbca binding rule
+>>> for BCM4908 famliy based boards
+>>
+>> Typo - family
+>>
+>> Please explain why breaking the ABI (and users of these DTS_ is acceptable.
+> 
+> This will be largely targeted towards Rafal who supports these kinds of 
+> devices with an upstream kernel. My understanding is that this is OK 
+> because we will always ship a DTB matching the Linux kernel, and I 
+> believe this is true for both the way that William and his group support 
+> these devices, as well as how OpenWrt, buildroot or other build systems 
+> envision to support these devices.
+> 
+> Rafal, does that sound about right?
 
-Yes! I'm not saying it's wrong to use absolute values, just that
-relative values are common enough to create some confusion here.
+I am fine, just maybe mention it in the commit because it literally
+breaks the DTSes.
 
-> So using them is recommended for ~20 years now and IIRC even documented
-> somewhere.
+I assume you considered all possible uses outside of Linux like U-Boot,
+BSD etc?
 
-So in addition to "somewhere", why not in the interface documentation as we=
-ll?
-
-> See here as well https://lwn.net/Articles/17744/ how much trouble system
-> calls with relative timeouts are.
-
-Yep. Well aware. :)
-
-thanks
--john
+Best regards,
+Krzysztof

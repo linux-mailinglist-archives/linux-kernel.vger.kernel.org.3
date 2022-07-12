@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E82A570FB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D2C570FB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbiGLBwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S231874AbiGLByq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiGLBwa (ORCPT
+        with ESMTP id S229605AbiGLByo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:52:30 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1C42AC5D
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:52:29 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26C1qRx9011160;
-        Tue, 12 Jul 2022 10:52:27 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Tue, 12 Jul 2022 10:52:27 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26C1qQNS011156
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 12 Jul 2022 10:52:27 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7ad25274-fa10-c5f1-44f4-fe7786169fa1@I-love.SAKURA.ne.jp>
-Date:   Tue, 12 Jul 2022 10:52:22 +0900
+        Mon, 11 Jul 2022 21:54:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9350E20F46
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:54:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31053615AB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95671C341CB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657590882;
+        bh=jai4unYoYEgmq9d0+NE1P3VEX4nsNsQTPUicfpX2T98=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qbtg7wT1xzigRyUfeKQgY+bDFolYzHa8prAl/yt5FStmzlhg+n00NAK7IaoF7Swhr
+         cRoMVeHEEQJ97eJ0JBMw0pzQlG5UkIEXWPulpab8vLM4Xg3BrLhK8XBBOTr15+DZh/
+         2gn9ce749TknBA/9/JXFUQcCjqYyURO+/qTbpcu19MnLk7mDb1ML94CN7x2PQrdM2o
+         vdfZdyikQckjFr9c68j1y2PDzw7a2ulsqpcdfWmeHYKNCc5sKmWYxZSTCL0LAM2i2w
+         iZiYovAdVWMozPH89+FJtSeIK55qj22rVm5Cc4xotYR+WZGhPY+Ebck7jwYbrVb8DK
+         0BS943y0OzcSg==
+Received: by mail-vs1-f54.google.com with SMTP id d187so6529233vsd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:54:42 -0700 (PDT)
+X-Gm-Message-State: AJIora+4o/FN7UeC0YyjBr+UirWdVrY+9tZAwBzSYES2gzQyXIlvjGuQ
+        gUu4/MGPKA0+4fa2YR/21/GzWtSx/2Y0m+CYBKM=
+X-Google-Smtp-Source: AGRyM1uonhG1aIA7uUxN/Hmh1AaYTk5MdtW09YwB7rnwONdJmrKgrRXbRPHS15azbbpSISu0EpbhLOOsBS/vHuzSKCQ=
+X-Received: by 2002:a67:e311:0:b0:357:58a3:6878 with SMTP id
+ j17-20020a67e311000000b0035758a36878mr3274610vsf.2.1657590881589; Mon, 11 Jul
+ 2022 18:54:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: Re: [PATCH v2 3/4] PM: hibernate: allow wait_for_device_probe() to
- timeout when resuming from hibernation
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@sisk.pl>,
-        Oliver Neukum <oneukum@suse.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp>
- <48d01ce7-e028-c103-ea7f-5a4ea4c8930b@I-love.SAKURA.ne.jp>
- <2646e8a3-cc9f-c2c5-e4d6-c86de6e1b739@I-love.SAKURA.ne.jp>
- <YsvbgxJ80kMP5juv@kroah.com>
- <601436f2-b13e-6c24-bcfd-29548e288f23@I-love.SAKURA.ne.jp>
- <CAJZ5v0g9v35m9vaSeBC19axqRuNqG7qp+AGPn8wRb3Gzn+H9CA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAJZ5v0g9v35m9vaSeBC19axqRuNqG7qp+AGPn8wRb3Gzn+H9CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220711174632.4186047-1-atishp@rivosinc.com> <20220711174632.4186047-3-atishp@rivosinc.com>
+In-Reply-To: <20220711174632.4186047-3-atishp@rivosinc.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 12 Jul 2022 09:54:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT=0S-_nCM-+SHUNkG0i-h1zBca_KwgRgsZ8BBE-DPG_w@mail.gmail.com>
+Message-ID: <CAJF2gTT=0S-_nCM-+SHUNkG0i-h1zBca_KwgRgsZ8BBE-DPG_w@mail.gmail.com>
+Subject: Re: [v3 2/5] RISC-V: Update user page mapping only once during start
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +69,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/12 3:14, Rafael J. Wysocki wrote:
-> On Mon, Jul 11, 2022 at 1:21 PM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>
->> On 2022/07/11 17:12, Greg KH wrote:
->>>                                                        creating a
->>> locking loop like this should be resolved first,
->>
->> Rafael and Arjan, can we agree with removing wait_for_device_probe() from snapshot_open() ?
-> 
-> No, we can't.
+Good catch, Is there any bug report?
 
-Then, can we defer wait_for_device_probe() till first write()/ioctl()
-which is called without locks?
+Anyway:
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
- kernel/power/user.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index a00a728ddfc1..92aecb989c76 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -26,6 +26,7 @@
- 
- #include "power.h"
- 
-+static bool need_wait;
- 
- static struct snapshot_data {
- 	struct snapshot_handle handle;
-@@ -78,7 +79,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 		 * Resuming.  We may need to wait for the image device to
- 		 * appear.
- 		 */
--		wait_for_device_probe();
-+		need_wait = true;
- 
- 		data->swap = -1;
- 		data->mode = O_WRONLY;
-@@ -168,6 +169,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	lock_system_sleep();
- 
- 	data = filp->private_data;
-@@ -244,6 +250,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 	loff_t size;
- 	sector_t offset;
- 
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
- 		return -ENOTTY;
- 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
--- 
-2.18.4
+On Tue, Jul 12, 2022 at 1:46 AM Atish Patra <atishp@rivosinc.com> wrote:
+>
+> Currently, riscv_pmu_event_set_period updates the userpage mapping.
+> However, the caller of riscv_pmu_event_set_period should update
+> the userpage mapping because the counter can not be updated/started
+> from set_period function in counter overflow path.
+>
+> Invoke the perf_event_update_userpage at the caller so that it
+> doesn't get invoked twice during counter start path.
+>
+> Fixes: f5bfa23f576f ("RISC-V: Add a perf core library for pmu drivers")
+>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  drivers/perf/riscv_pmu.c     | 1 -
+>  drivers/perf/riscv_pmu_sbi.c | 1 +
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+> index b2b8d2074ed0..130b9f1a40e0 100644
+> --- a/drivers/perf/riscv_pmu.c
+> +++ b/drivers/perf/riscv_pmu.c
+> @@ -170,7 +170,6 @@ int riscv_pmu_event_set_period(struct perf_event *event)
+>                 left = (max_period >> 1);
+>
+>         local64_set(&hwc->prev_count, (u64)-left);
+> -       perf_event_update_userpage(event);
+>
+>         return overflow;
+>  }
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 0cb694b794ae..3735337a4cfb 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -532,6 +532,7 @@ static inline void pmu_sbi_start_overflow_mask(struct riscv_pmu *pmu,
+>                         sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_START, idx, 1,
+>                                   flag, init_val, 0, 0);
+>  #endif
+> +                       perf_event_update_userpage(event);
+>                 }
+>                 ctr_ovf_mask = ctr_ovf_mask >> 1;
+>                 idx++;
+> --
+> 2.25.1
+>
+
+
+--
+Best Regards
+ Guo Ren

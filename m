@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077F857282E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E99157282F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiGLVCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S232987AbiGLVCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbiGLVBy (ORCPT
+        with ESMTP id S233430AbiGLVCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:01:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81CEBD385;
-        Tue, 12 Jul 2022 13:58:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45810B81BDC;
-        Tue, 12 Jul 2022 20:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A34EC3411C;
-        Tue, 12 Jul 2022 20:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657659535;
-        bh=95wTQGxdY3JAMeghe4pZTklJo1uL30E/1xAwZRg6/7o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=mtZnShCXpF/w0QIX0/Lodv4DjBfOkKlLoQ6t51a9ZkKUW/yKhBxodUqzvKMny5dwZ
-         5i/8t/EBQjyTYdl+Z/kQyD2Y/AUSX5I3GKdTfNVPQFGbxIUlXw1q3/blQAccAF5lMG
-         KCoNQNRoLc6kiRAG88x1XjX8mk8MerLwLWp25SZs63PhgzEN/0fZkgMznKZYFkOGvx
-         k6gbP9Fr4AbLjOt9ogXoPi90KwUujS/bPs/EupbQ0fcQPa4TltjUgi4I4Mltc9V/P6
-         ZvEbsQqq8V1/10T9tqVl1zQrc+gr4WXjMeXvmrYhuRRmPiw92SBf54tSLrEDaNmXPi
-         smxXzhbDaI8KQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A59DD5C08C7; Tue, 12 Jul 2022 13:58:54 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 13:58:54 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 6/8] rcuscale: Add test for using call_rcu_lazy() to
- emulate kfree_rcu()
-Message-ID: <20220712205854.GE1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-8-joel@joelfernandes.org>
- <20220626041327.GN1790663@paulmck-ThinkPad-P17-Gen-1>
- <YsexpcG2iaplKPIs@google.com>
- <20220708230600.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YS8hrT78JG_2uQX38oaF5TEGz-M3EgJ2PWjx8g+cfmhBw@mail.gmail.com>
+        Tue, 12 Jul 2022 17:02:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FD0CB454
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657659713; x=1689195713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f4KGXLrrWGWgegokfLH23YGfA5p33OTfV87tCgEjzfI=;
+  b=Wnxz0gF50nrWbAUSBPK5iUoq2ex/2LXc0hVxu1PsldY5f/KQE2WQx6Zb
+   fZdmbbvxLIFIz3Emw6Evd/p7HMJFOTnUgDLKavRTwR2KDRL0KrvUAvROE
+   PSBobr+psI3PSxF8Sjhf++3ImERFZBxXdi3zhPpdiO/S6sgv7eKm2bReq
+   AHiI2DFR5n5YxrAUMEOHVAjsyg9njdPfhV0f0ryrd9rdw4cVvM1Wmc2GA
+   5jd8TTEGe4i4dV8qKLgbL7F0W+1yAcYtrPe+SRFEwUJhIiIwNyOAp5ysX
+   NniiXP9AvZf1df8J5jGzAGkWFV3E7ugAZqVIxGWQuu3DjeULByXmFwB9r
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="286171754"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="286171754"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 14:01:52 -0700
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="545577847"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 14:01:52 -0700
+Date:   Tue, 12 Jul 2022 14:01:51 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: crash during machine check recovery testing
+Message-ID: <Ys3hPyojZEAf3sru@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YS8hrT78JG_2uQX38oaF5TEGz-M3EgJ2PWjx8g+cfmhBw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,182 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:27:05PM -0400, Joel Fernandes wrote:
-> Ah, with all the threads, I missed this one :(. Sorry about that.
+Here's a puzzling trace. It looks as though there was a recoverable
+machine check that used task_work_add() to request that kill_me_maybe()
+be called before going back to user mode.
 
-I know that feeling...
+I'm guessing that the scheduler picked someone else to run, so this
+didn't happen right away.
 
-> On Fri, Jul 8, 2022 at 7:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> 
-> > > Currently I added a test like the following which adds a new torture type, my
-> > > thought was to stress the new code to make sure nothing crashed or hung the
-> > > kernel. That is working well except I don't exactly understand the total-gps
-> > > print showing 0, which the other print shows 1188 GPs. I'll go dig into that
-> > > tomorrow.. thanks!
-> > >
-> > > The print shows
-> > > TREE11 ------- 1474 GPs (12.2833/s) [rcu_lazy: g0 f0x0 total-gps=0]
-> > > TREE11 no success message, 7 successful version messages
-> >
-> > Nice!!!  It is very good to see you correctly using the rcu_torture_ops
-> > facility correctly!
-> >
-> > And this could be good for your own testing, and I am happy to pull it
-> > in for that purpose (given it being fixed, having a good commit log,
-> > and so on).  After all, TREE10 is quite similar -- not part of CFLIST,
-> > but useful for certain types of focused testing.
-> >
-> > However, it would be very good to get call_rcu_lazy() testing going
-> > more generally, and in particular in TREE01 where offloading changes
-> > dynamically.  A good way to do this is to add a .call_lazy() component
-> > to the rcu_torture_ops structure, and check for it in a manner similar
-> > to that done for the .deferred_free() component.  Including adding a
-> > gp_normal_lazy module parameter.  This would allow habitual testing
-> > on a few scenarios and focused lazy testing on all of them via the
-> > --bootargs parameter.
-> 
-> Ok, if you don't mind I will make this particular enhancement to the
-> torture test in a future patchset, since I kind of decided on doing v3
-> with just fixes to what I have and more testing. Certainly happy to
-> enhance these tests in a future version.
+The stack trace looks like the task somehow did run without handling
+that task_work ... and then the task called exit(2). This seems very
+odd.
 
-No need to gate v3 on those tests.
+Things went downhill from there with do_exit() trying to clean up
+by calling exit_task_work()->task_work_run() which called
+kill_me_maybe() and tries to do something with an already dying process.
 
-> > On the total-gps=0, the usual suspicion would be that the lazy callbacks
-> > never got invoked.  It looks like you were doing about a two-minute run,
-> > so maybe a longer run?  Though weren't they supposed to kick in at 15
-> > seconds or so?  Or did this value of zero come about because this run
-> > used exactly 300 grace periods?
-> 
-> It was zero because it required the RCU_FLAVOR torture type, where as
-> my torture type was lazy. Adding RCU_LAZY_FLAVOR to the list fixed it
-> :)
 
-Heh!  Then it didn't actually do any testing.  Done that as well!
-
-							Thanx, Paul
-
-> Thanks!
-> 
->  - Joel
-> 
-> 
-> > > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-> > > index 7120165a9342..cc6b7392d801 100644
-> > > --- a/kernel/rcu/rcutorture.c
-> > > +++ b/kernel/rcu/rcutorture.c
-> > > @@ -872,6 +872,64 @@ static struct rcu_torture_ops tasks_rude_ops = {
-> > >
-> > >  #endif // #else #ifdef CONFIG_TASKS_RUDE_RCU
-> > >
-> > > +#ifdef CONFIG_RCU_LAZY
-> > > +
-> > > +/*
-> > > + * Definitions for lazy RCU torture testing.
-> > > + */
-> > > +unsigned long orig_jiffies_till_flush;
-> > > +
-> > > +static void rcu_sync_torture_init_lazy(void)
-> > > +{
-> > > +     rcu_sync_torture_init();
-> > > +
-> > > +     orig_jiffies_till_flush = rcu_lazy_get_jiffies_till_flush();
-> > > +     rcu_lazy_set_jiffies_till_flush(50);
-> > > +}
-> > > +
-> > > +static void rcu_lazy_cleanup(void)
-> > > +{
-> > > +     rcu_lazy_set_jiffies_till_flush(orig_jiffies_till_flush);
-> > > +}
-> > > +
-> > > +static struct rcu_torture_ops rcu_lazy_ops = {
-> > > +     .ttype                  = RCU_LAZY_FLAVOR,
-> > > +     .init                   = rcu_sync_torture_init_lazy,
-> > > +     .cleanup                = rcu_lazy_cleanup,
-> > > +     .readlock               = rcu_torture_read_lock,
-> > > +     .read_delay             = rcu_read_delay,
-> > > +     .readunlock             = rcu_torture_read_unlock,
-> > > +     .readlock_held          = torture_readlock_not_held,
-> > > +     .get_gp_seq             = rcu_get_gp_seq,
-> > > +     .gp_diff                = rcu_seq_diff,
-> > > +     .deferred_free          = rcu_torture_deferred_free,
-> > > +     .sync                   = synchronize_rcu,
-> > > +     .exp_sync               = synchronize_rcu_expedited,
-> > > +     .get_gp_state           = get_state_synchronize_rcu,
-> > > +     .start_gp_poll          = start_poll_synchronize_rcu,
-> > > +     .poll_gp_state          = poll_state_synchronize_rcu,
-> > > +     .cond_sync              = cond_synchronize_rcu,
-> > > +     .call                   = call_rcu_lazy,
-> > > +     .cb_barrier             = rcu_barrier,
-> > > +     .fqs                    = rcu_force_quiescent_state,
-> > > +     .stats                  = NULL,
-> > > +     .gp_kthread_dbg         = show_rcu_gp_kthreads,
-> > > +     .check_boost_failed     = rcu_check_boost_fail,
-> > > +     .stall_dur              = rcu_jiffies_till_stall_check,
-> > > +     .irq_capable            = 1,
-> > > +     .can_boost              = IS_ENABLED(CONFIG_RCU_BOOST),
-> > > +     .extendables            = RCUTORTURE_MAX_EXTEND,
-> > > +     .name                   = "rcu_lazy"
-> > > +};
-> > > +
-> > > +#define LAZY_OPS &rcu_lazy_ops,
-> > > +
-> > > +#else // #ifdef CONFIG_RCU_LAZY
-> > > +
-> > > +#define LAZY_OPS
-> > > +
-> > > +#endif // #else #ifdef CONFIG_RCU_LAZY
-> > > +
-> > >
-> > >  #ifdef CONFIG_TASKS_TRACE_RCU
-> > >
-> > > @@ -3145,7 +3203,7 @@ rcu_torture_init(void)
-> > >       unsigned long gp_seq = 0;
-> > >       static struct rcu_torture_ops *torture_ops[] = {
-> > >               &rcu_ops, &rcu_busted_ops, &srcu_ops, &srcud_ops, &busted_srcud_ops,
-> > > -             TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
-> > > +             TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS LAZY_OPS
-> > >               &trivial_ops,
-> > >       };
-> > >
-> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11 b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
-> > > new file mode 100644
-> > > index 000000000000..436013f3e015
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11
-> > > @@ -0,0 +1,18 @@
-> > > +CONFIG_SMP=y
-> > > +CONFIG_PREEMPT_NONE=n
-> > > +CONFIG_PREEMPT_VOLUNTARY=n
-> > > +CONFIG_PREEMPT=y
-> > > +#CHECK#CONFIG_PREEMPT_RCU=y
-> > > +CONFIG_HZ_PERIODIC=n
-> > > +CONFIG_NO_HZ_IDLE=y
-> > > +CONFIG_NO_HZ_FULL=n
-> > > +CONFIG_RCU_TRACE=y
-> > > +CONFIG_HOTPLUG_CPU=y
-> > > +CONFIG_MAXSMP=y
-> > > +CONFIG_CPUMASK_OFFSTACK=y
-> > > +CONFIG_RCU_NOCB_CPU=y
-> > > +CONFIG_DEBUG_LOCK_ALLOC=n
-> > > +CONFIG_RCU_BOOST=n
-> > > +CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
-> > > +CONFIG_RCU_EXPERT=y
-> > > +CONFIG_RCU_LAZY=y
-> > > diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-> > > new file mode 100644
-> > > index 000000000000..9b6f720d4ccd
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-> > > @@ -0,0 +1,8 @@
-> > > +maxcpus=8 nr_cpus=43
-> > > +rcutree.gp_preinit_delay=3
-> > > +rcutree.gp_init_delay=3
-> > > +rcutree.gp_cleanup_delay=3
-> > > +rcu_nocbs=0-7
-> > > +rcutorture.torture_type=rcu_lazy
-> > > +rcutorture.nocbs_nthreads=8
-> > > +rcutorture.fwd_progress=0
-> > > --
-> > > 2.37.0.rc0.161.g10f37bed90-goog
-> > >
+[38682.429683] BUG: kernel NULL pointer dereference, address: 0000000000000090
+[38682.437571] #PF: supervisor write access in kernel mode
+[38682.443479] #PF: error_code(0x0002) - not-present page
+[38682.449282] PGD 0
+[38682.451604] Oops: 0002 [#1] SMP NOPTI
+[38682.455773] CPU: 62 PID: 3851780 Comm: movdir64b_mem_s Tainted: G   M               5.15.0-spr.bkc.pc.8.8.5.x86_64 #1
+[38682.467708] Hardware name: Intel Corporation ArcherCity/ArcherCity, BIOS EGSDCRB1.86B.0082.D01.2206061329 06/06/2022
+[38682.479534] RIP: 0010:down_read+0xa/0x90
+[38682.484016] Code: f0 ff ff 19 c0 f7 d0 83 e0 fc c3 65 48 8b 04 25 c0 6d 01 00 48 89 47 08 31 c0 c3 0f 1f 44 00 00 0f 1f 44 00 00 be 00 01 00 00 <f0> 48 0f c1 37 48 81 c6 00 01 00 00 78 2b 48 b8 07 00 00 00 00 00
+[38682.505037] RSP: 0018:ff81f92d7f4d7dc8 EFLAGS: 00010246
+[38682.510955] RAX: 0000000000000000 RBX: ff3cfa798b5e0000 RCX: 0000000000000000
+[38682.518998] RDX: 0000000000000002 RSI: 0000000000000100 RDI: 0000000000000090
+[38682.527046] RBP: 00000000001d0b6a R08: 0000000000000000 R09: c0000001003c4637
+[38682.535072] R10: ff81f92d7f4d7c60 R11: ff81f92d7f4d7c58 R12: 0000000000000002
+[38682.543137] R13: 0000000000000000 R14: 0000000000000002 R15: 0000000000000000
+[38682.551179] FS:  0000000000000000(0000) GS:ff3cfb75f9980000(0000) knlGS:0000000000000000
+[38682.560281] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[38682.566775] CR2: 0000000000000090 CR3: 0000006ecb20c006 CR4: 0000000001f71ee0
+[38682.574827] DR0: ffffffffa2b9879b DR1: 0000000000000000 DR2: 0000000000000000
+[38682.582887] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+[38682.590947] PKRU: 55555554
+[38682.594052] PKRS: 0x55555554
+[38682.597366] Call Trace:
+[38682.600188]  kill_accessing_process+0x63/0x138
+[38682.605240]  memory_failure.cold.54+0xd7/0xde
+[38682.610203]  kill_me_maybe+0x3d/0xa5
+[38682.614287]  task_work_run+0x6a/0xa0
+[38682.618383]  do_exit+0x345/0xb40
+[38682.622078]  __x64_sys_exit+0x17/0x20
+[38682.626256]  do_syscall_64+0x3f/0x90
+[38682.630325]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[38682.636030] RIP: 0033:0x7fed33d4b28e
+[38682.640110] Code: Unable to access opcode bytes at RIP 0x7fed33d4b264.
+[38682.647481] RSP: 002b:00007fec5fffed40 EFLAGS: 00000246 ORIG_RAX: 000000000000003c
+[38682.656031] RAX: ffffffffffffffda RBX: 00007fec5f7ff000 RCX: 00007fed33d4b28e
+[38682.664074] RDX: 000000000000003c RSI: 00000000007fb000 RDI: 0000000000000000
+[38682.672112] RBP: 0000000000000000 R08: 0000000000000000 R09: 00003f72fbf65c35
+[38682.680145] R10: 00000000000000e7 R11: 0000000000000246 R12: 00007ffdc87d6cae
+[38682.688191] R13: 00007ffdc87d6caf R14: 00007fec5ffff700 R15: 00007fec5fffee00
+[38682.696242] Modules linked in: einj veth xt_conntrack xt_MASQUERADE nf_conntrack_netlink xfrm_user nft_counter xt_addrtype nft_compat nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink br_netfilter bridge stp llc overlay sunrpc iax_crypto idxd_mdev vfio_pci_core vfio_virqfd intel_rapl_msr intel_rapl_common i10nm_edac nfit x86_pkg_temp_thermal intel_powerclamp coretemp ofpart spi_nor pmt_crashlog pmt_telemetry mtd pmt_class kvm_intel intel_sdsi joydev kvm irqbypass isst_if_mbox_pci snd_pcm isst_if_mmio isst_if_common idxd i2c_i801 spi_intel_pci intel_vsec snd_timer spi_intel i2c_smbus mei_me mei i2c_ismt wmi acpi_power_meter acpi_pad pfr_update pfr_telemetry ip_tables crc32c_intel igb ast igc drm_vram_helper dca drm_ttm_helper pinctrl_emmitsburg pinctrl_intel fuse
+[38682.775007] CR2: 0000000000000090
+[38682.778807] ---[ end trace 8a3c9a1881a94be4 ]---
+[38683.503336] RIP: 0010:down_read+0xa/0x90
+[38683.507819] Code: f0 ff ff 19 c0 f7 d0 83 e0 fc c3 65 48 8b 04 25 c0 6d 01 00 48 89 47 08 31 c0 c3 0f 1f 44 00 00 0f 1f 44 00 00 be 00 01 00 00 <f0> 48 0f c1 37 48 81 c6 00 01 00 00 78 2b 48 b8 07 00 00 00 00 00
+[38683.528877] RSP: 0018:ff81f92d7f4d7dc8 EFLAGS: 00010246
+[38683.534807] RAX: 0000000000000000 RBX: ff3cfa798b5e0000 RCX: 0000000000000000
+[38683.542866] RDX: 0000000000000002 RSI: 0000000000000100 RDI: 0000000000000090
+[38683.550909] RBP: 00000000001d0b6a R08: 0000000000000000 R09: c0000001003c4637
+[38683.558958] R10: ff81f92d7f4d7c60 R11: ff81f92d7f4d7c58 R12: 0000000000000002
+[38683.566995] R13: 0000000000000000 R14: 0000000000000002 R15: 0000000000000000
+[38683.575045] FS:  0000000000000000(0000) GS:ff3cfb75f9980000(0000) knlGS:0000000000000000
+[38683.584155] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[38683.590656] CR2: 0000000000000090 CR3: 0000006ecb20c006 CR4: 0000000001f71ee0
+[38683.598713] DR0: ffffffffa2b9879b DR1: 0000000000000000 DR2: 0000000000000000
+[38683.606749] DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+[38683.614808] PKRU: 55555554
+[38683.617915] PKRS: 0x55555554
+[38683.621216] Fixing recursive fault but reboot is needed!

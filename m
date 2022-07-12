@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBC6572196
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FED8572198
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 19:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiGLRNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 13:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S230475AbiGLROO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 13:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGLRNL (ORCPT
+        with ESMTP id S229880AbiGLROM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 13:13:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F1025591
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 10:13:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE9EF617C3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC56CC3411C;
-        Tue, 12 Jul 2022 17:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657645989;
-        bh=8mG46t3TuVyKPlLiLBSw4LoS7dMnhCqizqMq7SkWiDo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m9jmsa9y3YMNxAPfVRqN+3IqC4WPktDuJfU9VkMxUI6w1CF0jClLhGmBVg0CA5q8A
-         PC9M8aSw6xiC3gEJrNgP4hudJV0njN9FUXx2vqZwh7lNWk48vfVUa6+PlT7ZCtftHg
-         n6y5wiC38XdhIkhEmIdtkxCGKisqlBdf1NQTYQDZuUZYtB7OSlCxW3c8UaOtaa2ilv
-         riJUrj16Nq9cjpPTVAq3rpjCRnidyd5Pr0zU0NgLdOsvAuAwfwxkDegKEk4aZe7M1Y
-         Csy420H0TJ5SuddSFTfBmK58oAsnF61lDHzQei0Hc6Ee9aLSpl35PJPFslEN7/1NHB
-         o3z8nEE9HAL7g==
-From:   SeongJae Park <sj@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     SeongJae Park <sj@kernel.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [sj:damon/next 20/20] drivers/block/xen-blkback/xenbus.c:184:38: error: use of undeclared identifier 'feature_persistent'
-Date:   Tue, 12 Jul 2022 17:13:06 +0000
-Message-Id: <20220712171306.75486-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202207121401.8Yis7IHm-lkp@intel.com>
-References: 
+        Tue, 12 Jul 2022 13:14:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79B102E9E1;
+        Tue, 12 Jul 2022 10:14:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7FD1165C;
+        Tue, 12 Jul 2022 10:14:11 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.85.79])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB4583F73D;
+        Tue, 12 Jul 2022 10:14:08 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 18:14:07 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
+        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
+ hotplug when using schedutil
+Message-ID: <20220712171407.ns67p7nygltydupx@wubuntu>
+References: <20220705123705.764-1-xuewen.yan@unisoc.com>
+ <20220711174629.uehfmqegcwn2lqzu@wubuntu>
+ <YsyO9GM9mCydaybo@slm.duckdns.org>
+ <20220712125702.yg4eqbaakvj56k6m@wubuntu>
+ <Ys2duuPDNq/q+oOz@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ys2duuPDNq/q+oOz@slm.duckdns.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,58 +52,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 14:22:23 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-> head:   40d1ef717dd762939c0a8734fd901ee517b50334
-> commit: 40d1ef717dd762939c0a8734fd901ee517b50334 [20/20] xen-blkback: fix persistent grants negotiation
-> config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220712/202207121401.8Yis7IHm-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?id=40d1ef717dd762939c0a8734fd901ee517b50334
->         git remote add sj https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git
->         git fetch --no-tags sj damon/next
->         git checkout 40d1ef717dd762939c0a8734fd901ee517b50334
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/block/xen-blkback/
+On 07/12/22 06:13, Tejun Heo wrote:
+> On Tue, Jul 12, 2022 at 01:57:02PM +0100, Qais Yousef wrote:
+> > Is there a lot of subsystems beside cpuset that needs the cpus_read_lock()?
+> > A quick grep tells me it's the only one.
+> > 
+> > Can't we instead use cpus_read_trylock() in cpuset_can_attach() so that we
+> > either hold the lock successfully then before we go ahead and call
+> > cpuset_attach(), or bail out and cancel the whole attach operation which should
+> > unlock the threadgroup_rwsem() lock?
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/block/xen-blkback/xenbus.c:184:38: error: use of undeclared identifier 'feature_persistent'
->            blkif->vbd.feature_gnt_persistent = feature_persistent;
->                                                ^
->    1 error generated.
+> But now we're failing user-initiated operations randomly. I have a hard time
 
-Thank you for the report.  I fixed it as below and pushed:
+True. That might appear more random than necessary. It looked neat and
+I thought since hotplug operations aren't that common and users must be
+prepared for failures for other reasons, it might be okay.
 
-    +/* Enable the persistent grants feature. */
-    +static bool feature_persistent = true;
-    +module_param(feature_persistent, bool, 0644);
-    +MODULE_PARM_DESC(feature_persistent, "Enables the persistent grants feature");
-    +
-     static struct xen_blkif *xen_blkif_alloc(domid_t domid)
-     {
-            struct xen_blkif *blkif;
-    @@ -474,12 +479,6 @@ static void xen_vbd_free(struct xen_vbd *vbd)
-            vbd->bdev = NULL;
-     }
-    
-    -/* Enable the persistent grants feature. */
-    -static bool feature_persistent = true;
-    -module_param(feature_persistent, bool, 0644);
-    -MODULE_PARM_DESC(feature_persistent,
-    -               "Enables the persistent grants feature");
-    -
-     static int xen_vbd_create(struct xen_blkif *blkif, blkif_vdev_t handle,
-                              unsigned major, unsigned minor, int readonly,
-                              int cdrom)
+> seeing that as an acceptable solution. The only thing we can do, I think, is
+> establishing a locking order between the two locks by either nesting
 
-Note: The commit is only for my personal test at the moment.
+That might be enough if no other paths can exist which would hold them in
+reverse order again. It would be more robust to either hold them both or wait
+until we can. Then potential ordering problems can't happen again, because of
+this path at least.
 
-[...]
+> threadgroup_rwsem under cpus_read_lock or disallowing thread creation during
+> hotplug operations.
+
+I think that's what Xuewen tried to do in the proposed patch. But it fixes it
+for a specific user. If we go with that we'll need nuts and bolts to help warn
+when other users do that.
+
+
+Thanks
+
+--
+Qais Yousef

@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B52A5718B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96325718B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 13:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiGLLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 07:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S232312AbiGLLki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 07:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGLLkU (ORCPT
+        with ESMTP id S229776AbiGLLkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 07:40:20 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A41AB7DF
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:40:19 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r9so9516680ljp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 04:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=btM9O32CpBgf9kJSlQ2/qg4sExAM4lqY12hcCyew4L4=;
-        b=MSCNJZqcyi8mLKBEVZJlWmSCppOBNhhpRe7h6+H3HIUBdpTsEKsK8mE5lh50C9J1Lm
-         nT3Sb3CrPfGsF7hhOqdObCgxyuf40G6SkLrrzycPIIWYXKQ/S0uMKOGEJ0WP85Jy2nzp
-         KTxPhM0jb28DNnO4QCy4HOR3X5/TDpTaes+UCL5HTlPYxYsteyyGf6yq+kGfALyQWjct
-         o6A/37JpMnq5+fbbpQWIxPRnyX8GOlFS4Gg/cHxvhfpq5fGc/JSG+g/aePLYU6JxTIdp
-         FaB7vxwy79asmV3Ip80BF2VnDIVY8722PywUdxDhQR0Y7ueS5HfAc5SnSta2p4ozEqWr
-         UNEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=btM9O32CpBgf9kJSlQ2/qg4sExAM4lqY12hcCyew4L4=;
-        b=D0Ao/Qf45mv+iez1CaIXKJ/bm3U4jzopYMi6+9DV9wPQyKnMCvtlqB7tlebMV1aJJY
-         cOwGgb1PF9OMDrY3I6PcDVNI2S7wGyN3nivjUyjnHckmv7ZEmAL/mjdPuBKP64Fe1cbr
-         gru5Y1ITyAagzuMlnYF3bBTLnwLKz8G2c6CjEPRFtfANdonmYbxo2HxuomSODF/qb0Cb
-         VEMTWbxwksu2wSwibMyak6VLIvTRgfCcFAclwmhg5KUWEx2aKVZy2elBDj9HWFyMcRe4
-         Jm0lAFdro9c7mKQ1FAzw+v98+A9masqTClzHgbcQBONBplyh5gre+b8ba4uqJRTJPNux
-         6OSg==
-X-Gm-Message-State: AJIora8JpY14Ph7gwHcmU0Z8eHrKL0eqmwyW7F+BMm5biZp7E//djxPP
-        8Q9Cp0tx1XHwAkvDtoZVztM=
-X-Google-Smtp-Source: AGRyM1uQru/cEAVmqTHTRN/afmY9LzWQVOeKtl+D8TNLyBugv3x8OQlAUpU8GfP7IvUNZtddlTr0Ag==
-X-Received: by 2002:a05:651c:545:b0:25b:c791:816c with SMTP id q5-20020a05651c054500b0025bc791816cmr13015642ljp.161.1657626017605;
-        Tue, 12 Jul 2022 04:40:17 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id g7-20020a19ee07000000b0047f7fc29169sm2135412lfb.223.2022.07.12.04.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 04:40:17 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 14:40:15 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Jon Mason <jdmason@kudzu.us>, Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, ntb@lists.linux.dev,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ntb: idt: fix clang -Wformat warnings
-Message-ID: <20220712114015.uosuteetstheqhgj@mobilestation>
-References: <20220711230148.2130871-1-justinstitt@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711230148.2130871-1-justinstitt@google.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
+        Tue, 12 Jul 2022 07:40:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE87AD869;
+        Tue, 12 Jul 2022 04:40:34 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CAcNIh010433;
+        Tue, 12 Jul 2022 11:40:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=uxRmJ+Q3UusrkgxXc/qHV1tSW/A5revJxU/n8Y2w+io=;
+ b=WUr9odpv5yiJALYlB2iVDmm5NbKKrU2SeLgcRW2ZhdQZ+ul7mBwERvUiQxSPtJHxdEB0
+ bnWsm908X3XUM0b742/HRV0H5dtRY7OZlU4lZ776T9lpKSyzyWwWJPL5hvBXZVZuQzmo
+ 0I7zLdefMbl0xJCzTEOKYgTFi8X2qeMLkY9JRDTAY2gOZCA/+JW1KImB/lL3imUxOR5I
+ 1R/V9BjF6Iz2jYuYQpnwRHnCwrzF+vUo4MXm5ik7VvZoXqAQtwY84ssesDE/xrTi98DG
+ ZRX8lHHmZnAaAqsih5egAh1LW3KL+nVMZpWoRnnEtoux9MY/ABlqsa2u6PCr903mUQhs AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h96qfaemj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 11:40:26 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CAlMNh012943;
+        Tue, 12 Jul 2022 11:40:25 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h96qfaekf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 11:40:25 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CBaEmW007672;
+        Tue, 12 Jul 2022 11:40:23 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn116k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 11:40:23 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CBeLus23462380
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 11:40:21 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 535F8A405F;
+        Tue, 12 Jul 2022 11:40:21 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 606F3A405B;
+        Tue, 12 Jul 2022 11:40:19 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.147.132])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 11:40:19 +0000 (GMT)
+Message-ID: <7dd513fba6c248327a9118e8dafe628d13dde495.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima/evm: Fix potential memory leak in
+ ima_init_crypto()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 07:40:18 -0400
+In-Reply-To: <20220712011037.2328591-1-niejianglei2021@163.com>
+References: <20220712011037.2328591-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cgH4NewqkjZ0UwAHxoC8ycYRGNQfhzme
+X-Proofpoint-GUID: 1ZyU6QD20WvAe1586bMQmGtYfhUJH0m5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 mlxscore=0 mlxlogscore=700 phishscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Justin
+On Tue, 2022-07-12 at 09:10 +0800, Jianglei Nie wrote:
+> On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
+> without freeing the ima_algo_array. Add the missing kfree() for
+> ima_algo_array to avoid the potential memory leak.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-On Mon, Jul 11, 2022 at 04:01:48PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter these warnings:
-> | drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> | "\t%hhu-%hhu.\t", idx + cnt - 1);
-> -
-> | drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> | "\t%hhu-%hhu.\t", idx + cnt - 1);
-> -
-> | drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat], src);
-> 
-> For the first two warnings the format specifier used is `%hhu` which
-> describes a u8. Both `idx` and `cnt` are u8 as well. However, the
-> expression as a whole is promoted to an int as you cannot get
-> smaller-than-int from addition. Therefore, to fix the warning, use the
-> promoted-to-type's format specifier -- in this case `%d`.
-> 
-> example:
-> ``
-> uint8_t a = 4, b = 7;
-> int size = sizeof(a + b - 1);
-> printf("%d\n", size);
-> // output: 4
-> ```
-> 
-> For the last warning, src is of type `int` while the format specifier
-> describes a u8. The fix here is just to use the proper specifier `%d`.
-> 
-> See more:
-> (https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
-> "Integer types smaller than int are promoted when an operation is
-> performed on them. If all values of the original type can be represented
-> as an int, the value of the smaller type is converted to an int;
-> otherwise, it is converted to an unsigned int."
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Thanks, Jianglei.  This patch is now queued in next-integrity/next-
+integrity-testing.
 
-Thanks for fixing this. Definitely
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Mimi
 
--Sergey
-
-> ---
-> Note: This patch silences the -Wformat warnings for this file (which is
-> the goal) but in reality all instances of `%hh[dux]` should be converted
-> to `%[dux]` for this file and probably every file. That's a bit larger
-> scope than the goal of enabling -Wformat for Clang builds, though.
-> 
->  drivers/ntb/hw/idt/ntb_hw_idt.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
-> index 733557231ed0..0ed6f809ff2e 100644
-> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
-> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
-> @@ -2406,7 +2406,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
->  				"\t%hhu.\t", idx);
->  		else
->  			off += scnprintf(strbuf + off, size - off,
-> -				"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-> +				"\t%hhu-%d.\t", idx, idx + cnt - 1);
->  
->  		off += scnprintf(strbuf + off, size - off, "%s BAR%hhu, ",
->  			idt_get_mw_name(data), ndev->mws[idx].bar);
-> @@ -2435,7 +2435,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
->  					"\t%hhu.\t", idx);
->  			else
->  				off += scnprintf(strbuf + off, size - off,
-> -					"\t%hhu-%hhu.\t", idx, idx + cnt - 1);
-> +					"\t%hhu-%d.\t", idx, idx + cnt - 1);
->  
->  			off += scnprintf(strbuf + off, size - off,
->  				"%s BAR%hhu, ", idt_get_mw_name(data),
-> @@ -2480,7 +2480,7 @@ static ssize_t idt_dbgfs_info_read(struct file *filp, char __user *ubuf,
->  		int src;
->  		data = idt_ntb_msg_read(&ndev->ntb, &src, idx);
->  		off += scnprintf(strbuf + off, size - off,
-> -			"\t%hhu. 0x%08x from peer %hhu (Port %hhu)\n",
-> +			"\t%hhu. 0x%08x from peer %d (Port %hhu)\n",
->  			idx, data, src, ndev->peers[src].port);
->  	}
->  	off += scnprintf(strbuf + off, size - off, "\n");
-> -- 
-> 2.37.0.144.g8ac04bfd2-goog
-> 

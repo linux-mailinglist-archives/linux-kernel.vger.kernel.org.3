@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90665710C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35315710CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiGLDXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 23:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S230443AbiGLDYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiGLDXk (ORCPT
+        with ESMTP id S229764AbiGLDYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:23:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296731088;
-        Mon, 11 Jul 2022 20:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657596218; x=1689132218;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Z12SMYSX+r064B/+tjd3g8dC+r9/P1KHbIvSeKh7MKs=;
-  b=Py9SB1wFCZ91XPxrVIYVItCDxPsvfv150I2e+KbfcdXr8Mmvfn02d0Zh
-   a9ZjVs5KIEVXqffzHCUgSY0n8WA2xXwrP6GaQmxrasAFyCdcIbxRY2UEn
-   Llqg65MHRZ0aQuWynAOboZSKzFV1UXdJ0q8OpF4M/GkOcf0zFPabKlpKH
-   4Uc4qh9BE2QzmzpdXoeJD+OnxMIdGZgJ69zEPdOLa4lIBo07OYq/v99JY
-   R4ojW02kxzIDNxFwqT4FxB9MQSiQ6UQqAuInjsDcJ+XzQsSAnyZnSb39Z
-   29OsOVaocXZwiKR3RTSq0m/6oVwugrzizWpXzHGfakptmBUQs8YfRV8y1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="282378005"
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="282378005"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 20:23:37 -0700
-X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
-   d="scan'208";a="570025962"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.169.11]) ([10.249.169.11])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 20:23:36 -0700
-Message-ID: <34935bcd-0a5a-e239-d434-42187f94ad09@intel.com>
-Date:   Tue, 12 Jul 2022 11:23:33 +0800
+        Mon, 11 Jul 2022 23:24:21 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AC1BF44;
+        Mon, 11 Jul 2022 20:24:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhmM13YtPz4xD0;
+        Tue, 12 Jul 2022 13:24:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657596253;
+        bh=Wwl/SRlzmgky0H1M2Q123D86lnMqoO0qrvtqbbgBEyE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qjRsfiB6S28hQ3zthDhs1CYmrFF1CeoCkPTWeJ150kmAu07k41eK2WDHgxlYtGhcI
+         7HTHLnNdGG7sKjaZJNaKmNQ3kmLEtYa5EJuAsx9QSR5bxX5TWKJ44TShvdZkFlQ4wZ
+         fYwc7/E85sXh0073xGjXVIhGxZ68gxyh6vBXN2yBrL4ehnKkMgUDlM71ln8jOfc5wu
+         IoKivbVQS3lgQMz3YbLKjYk5lvnUUXjDiUqyiOaw3AS4qrPXRCUJTOqquNrwPWRKTp
+         T2t/mld82n2BE0+t2jcGQZg2JLvJN7MDMM/nX9d85HA92vZtkufPrHn+IuIENeGItU
+         RkEjhdbgzd6bQ==
+Date:   Tue, 12 Jul 2022 13:23:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the apparmor tree
+Message-ID: <20220712132339.383219ad@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] KVM: VMX: Update PT MSR intercepts during filter change
- iff PT in host+guest
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220712015838.1253995-1-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20220712015838.1253995-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/gnY2l1L842n58wNYaTqO6I9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/2022 9:58 AM, Sean Christopherson wrote:
-> Update the Processor Trace (PT) MSR intercepts during a filter change if
-> and only if PT may be exposed to the guest, i.e. only if KVM is operating
-> in the so called "host+guest" mode where PT can be used simultaneously by
-> both the host and guest.  If PT is in system mode, the host is the sole
-> owner of PT and the MSRs should never be passed through to the guest.
-> 
-> Luckily the missed check only results in unnecessary work, as select RTIT
-> MSRs are passed through only when RTIT tracing is enabled "in" the guest,
-> and tracing can't be enabled in the guest when KVM is in system mode
-> (writes to guest.MSR_IA32_RTIT_CTL are disallowed).
+--Sig_/gnY2l1L842n58wNYaTqO6I9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Hi all,
 
-> Cc: Xiaoyao Li <xiaoyao.li@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/vmx/vmx.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 74ca64e97643..e6ab2c2c4d3b 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4004,7 +4004,9 @@ static void vmx_msr_filter_changed(struct kvm_vcpu *vcpu)
->   			vmx_disable_intercept_for_msr(vcpu, msr, MSR_TYPE_W);
->   	}
->   
-> -	pt_update_intercept_for_msr(vcpu);
-> +	/* PT MSRs can be passed through iff PT is exposed to the guest. */
-> +	if (vmx_pt_mode_is_host_guest())
-> +		pt_update_intercept_for_msr(vcpu);
->   }
->   
->   static inline void kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
-> 
-> base-commit: 5406e590ac8fa33e390616031370806cdbcc5791
+After merging the apparmor tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+In file included from security/apparmor/include/policy.h:29,
+                 from security/apparmor/include/policy_ns.h:19,
+                 from security/apparmor/include/cred.h:19,
+                 from security/apparmor/net.c:13:
+security/apparmor/net.c: In function 'aa_label_sk_perm':
+security/apparmor/net.c:148:40: error: 'sock' undeclared (first use in this=
+ function)
+  148 |         struct aa_sk_ctx *ctx =3D SK_CTX(sock->sk);
+      |                                        ^~~~
+security/apparmor/include/net.h:54:21: note: in definition of macro 'SK_CTX'
+   54 | #define SK_CTX(X) ((X)->sk_security)
+      |                     ^
+security/apparmor/net.c:148:40: note: each undeclared identifier is reporte=
+d only once for each function it appears in
+  148 |         struct aa_sk_ctx *ctx =3D SK_CTX(sock->sk);
+      |                                        ^~~~
+security/apparmor/include/net.h:54:21: note: in definition of macro 'SK_CTX'
+   54 | #define SK_CTX(X) ((X)->sk_security)
+      |                     ^
+
+Caused by commit
+
+  6ff81169592d ("apparmor: add a kernel label to use on kernel objects")
+
+I have used the apparmor tree from next-20220711 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gnY2l1L842n58wNYaTqO6I9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLM6TsACgkQAVBC80lX
+0Gzclgf/Y/6iffVk+DSlujjISqMEWpRpCJXbZYzwb9fLGhV/BX5v4XHaCpxT/KkN
+27iLUcXRH6zKwAPxWlGLerFtzTntBBUJtFkWSnxzZ0cIQpRk74a5S+iX1liqGHcQ
+EdSp05K1pDbtMWxfv5073ORT5Dqb23p979Mu3KAc4WcZ8rR0jiDFzTLsyq5lulrS
+ws4C/s89tNxTeHZTjmAqU6zfrVJU/OLiVNVxCAOiyw8014UJpo8yWGVRiKjjKhbK
+Bmtet+nvPCz5ieyPb4m5/K7A5/z4etKp4GKT/Y3gpfwBr5Eck7cOrF3FkRJ5IBtp
+xRlgMmKdxawlS7Yb9HcnF17bB8ospg==
+=L7gX
+-----END PGP SIGNATURE-----
+
+--Sig_/gnY2l1L842n58wNYaTqO6I9--

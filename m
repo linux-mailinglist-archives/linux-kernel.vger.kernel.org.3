@@ -2,166 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEC257136F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43405571371
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiGLHuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S232446AbiGLHvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbiGLHt4 (ORCPT
+        with ESMTP id S229984AbiGLHvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:49:56 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C7F9A69E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:49:53 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220712074950epoutp02ac8a77bc2e144b5f9323c16f729c6f4e~BBYErI88X0639706397epoutp02G
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:49:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220712074950epoutp02ac8a77bc2e144b5f9323c16f729c6f4e~BBYErI88X0639706397epoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1657612190;
-        bh=gEwQtqGECLpxEtA+sZ5ZleXsmdODF2JoJO1Frfr3CNc=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=YWad4Kbz6XMxZN0o40wKisHF9/5YSwazKdj80d56Zgh0v7Z9uk1UMvPb9SvyfGBiN
-         hDzzDEu5hiJuO7X0w/4a4kBtTNUPLGhLYTv5lQZlwo90cbIOmF6w1nBi8pbv+c8IYf
-         /YkbI4W+n7sdl5Xdshn1mLbOnrDpYqInztk4QtAM=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220712074948epcas2p32cf6f101cd38338544e055f6f5bf0b9f~BBYDVfanC1502515025epcas2p3I;
-        Tue, 12 Jul 2022 07:49:48 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4LhtFS19wfz4x9Pv; Tue, 12 Jul
-        2022 07:49:48 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E7.BF.09662.A972DC26; Tue, 12 Jul 2022 16:49:46 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220712074946epcas2p2de643084312b94a7ea0823d8900126e2~BBYBHjb8U3191331913epcas2p2l;
-        Tue, 12 Jul 2022 07:49:46 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220712074946epsmtrp1802d5b2acc65aa54080235f4380aca0e~BBYBGzf993222332223epsmtrp1D;
-        Tue, 12 Jul 2022 07:49:46 +0000 (GMT)
-X-AuditID: b6c32a48-9e1ff700000025be-cd-62cd279aa7aa
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        76.19.08905.A972DC26; Tue, 12 Jul 2022 16:49:46 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220712074946epsmtip1f70137a1ec650255499ad7f2518d72f1~BBYA5kqP21104611046epsmtip1S;
-        Tue, 12 Jul 2022 07:49:46 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Arnd Bergmann'" <arnd@arndb.de>,
-        "'Youngmin Nam'" <youngmin.nam@samsung.com>
-Cc:     "'John Stultz'" <jstultz@google.com>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Stephen Boyd'" <sboyd@kernel.org>,
-        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
-        <hajun.sung@samsung.com>, <hosung0.kim@samsung.com>,
-        <d7271.choe@samsung.com>
-In-Reply-To: <CAK8P3a0pCov7ZiNhG+by7PpxMdBbBpUa7TKNc9e0p-zXvqg-7g@mail.gmail.com>
-Subject: RE: [PATCH] time: remove useless "const" keyword in
- ns_to_kernel_old_timeval() and ns_to_timespec64()
-Date:   Tue, 12 Jul 2022 16:49:46 +0900
-Message-ID: <01a201d895c3$f4955ba0$ddc012e0$@samsung.com>
+        Tue, 12 Jul 2022 03:51:10 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21949A69E;
+        Tue, 12 Jul 2022 00:51:06 -0700 (PDT)
+Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M9Wqa-1oEU3x0SqC-005aPt; Tue, 12 Jul 2022 09:51:05 +0200
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31cac89d8d6so72844987b3.2;
+        Tue, 12 Jul 2022 00:51:04 -0700 (PDT)
+X-Gm-Message-State: AJIora+lnbQj5ZbYTwSYbSk85goa1cAFM1nI3diUF5yCH0zl+VWAgJRD
+        7QWjtIx4M8EnOaRHYLKGVUD0cO5zfM/guUn7xHs=
+X-Google-Smtp-Source: AGRyM1ufca0XkARKSb1i/9Hgo/QC/CH6QUlrdoqUuF3Jwpyoc+XbP0yMd1avuvBxh4Bz5/H8vuI4X+XdchTTBll8UJg=
+X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
+ i15-20020a0ddf0f000000b0031be0007942mr23243135ywe.320.1657612263753; Tue, 12
+ Jul 2022 00:51:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJDeDvkkBXeDou4pRSMa+nAkmZkTQMAn7SBAeYw4mOsfV+nQA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmue4s9bNJBrvOWVv8nXSM3eLa3ons
-        Fk37LzFbfL3+iN3iz4mNbBaXd81hs/h3bSOLxeZNU5ktFh/4xO7A6fH71yRGjwWbSj02repk
-        83h37hy7R9+WVYwenzfJBbBFZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynk
-        Jeam2iq5+AToumXmAB2lpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwL9ArTswt
-        Ls1L18tLLbEyNDAwMgUqTMjOOPO+g7XgI2fFm95XrA2MDRxdjJwcEgImEq3L+pm6GLk4hAR2
-        MEoc2tzFCuF8YpTY8ugHO4TzjVHiy7nZjDAtCxfNgWrZyyix5O0pFgjnBaPE65ufmECq2AT0
-        JV52bGMFsUUEQiQ+nf4C1sEs0MUkMffuPRaQBKdAoMT376vBbGGBAolZjxrZQGwWAVWJu5N/
-        s4PYvAKWEl+OvGaFsAUlTs58AlbPLKAtsWzha2aIkxQkfj5dBrXMSWLl2/vMEDUiErM725hB
-        FksILOSQONk7GaiZA8hxkVh0qxiiV1ji1fEt7BC2lMTL/jYou1hi6axPTBC9DYwSl7f9YoNI
-        GEvMetbOCDKHWUBTYv0ufYiRyhJHbkGdxifRcfgvO0SYV6KjTQiiUV3iwPbpLBC2rET3nM+s
-        ExiVZiF5bBaSx2YheWAWwq4FjCyrGMVSC4pz01OLjQpM4LGdnJ+7iRGcYLU8djDOfvtB7xAj
-        EwfjIUYJDmYlEd4/Z08lCfGmJFZWpRblxxeV5qQWH2I0BQb1RGYp0eR8YIrPK4k3NLE0MDEz
-        MzQ3MjUwVxLn9UrZkCgkkJ5YkpqdmlqQWgTTx8TBKdXAZGjhoWmxSbXdQNRo047Lb1fHM+eo
-        /tN4fG3yZMbtS+esWua3//RLyz/z0q/OESyK6vt88vw5rfmMshWzeKbumvPOL8DWqjzw0S/f
-        Nj52loLjsvx3pp7ozxMpdVOdoxk8iyNkbcaHHVM3y86YNv0SJ/+5yqY9qxdpFjP7qzgWrV4u
-        Ym1S897oWNuDqzEab+5umH7S+ful0nkWChPLpvHUCXqddX8p6Lbn1FELBtmi09OXli06paH4
-        McPk4oT9azfaVr2e0HVGxchcuNTc9Pp1hgkXW++7tq6tsrntUHTvhadqsmlHWsCXq+a3c0XE
-        lbnCotosplyN7nXubXdlYSxYa55W9Oolk4lzYMABxby7SizFGYmGWsxFxYkAyPNG2TkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnO4s9bNJBj/O8ln8nXSM3eLa3ons
-        Fk37LzFbfL3+iN3iz4mNbBaXd81hs/h3bSOLxeZNU5ktFh/4xO7A6fH71yRGjwWbSj02repk
-        83h37hy7R9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGWsvdfFWPCOs+L1y1bWBsbv7F2MnBwS
-        AiYSCxfNYepi5OIQEtjNKLFz+QkWiISsxLN3O6CKhCXutxxhhSh6xigxadpeZpAEm4C+xMuO
-        bawgtohAiMS6OXuYQGxmgQlMEsdv6EA0XGWUePbhG9gkToFAie/fV4NtEBbIkzh55QgjiM0i
-        oCpxd/JvsBpeAUuJL0des0LYghInZz5hgRiqLfH05lM4e9nC18wQ1ylI/Hy6DOoIJ4mVb+8z
-        Q9SISMzubGOewCg8C8moWUhGzUIyahaSlgWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS
-        83M3MYKjTUtzB+P2VR/0DjEycTAeYpTgYFYS4f1z9lSSEG9KYmVValF+fFFpTmrxIUZpDhYl
-        cd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUyC13OVSkuXCKXHl3gr5rN7WC4RUQ/Nr1miU/ji
-        fXXmjnsO+xZtL7orK/Sne11k3Web5vNz4pYv8JJ9/Yc3/qyM1G/Hpg+TDlp+v7ltRWVAc4Fv
-        uUrZD59nPpG/La9eZr0trJZse8/qk3iMgHzODvEU3biP5bG9yxdcYI/cr3XO/EJX9u4H0Y2a
-        y120NGfG2gZ8sJp79HSk/EnumydmHFENMf3qpqNWVvFOlS3Icucjs3gD79yfDaG3yxhd71W5
-        9izK2hZbuf1WQsm9r5enNoSybXK6U2aj+fpa/PK9b/+wsMzzVGSYcz7qy2Kmz4o66g/lf/j3
-        NXi4TMoSNtUv1Bbh/6KocjRSkaFE2ltbiaU4I9FQi7moOBEATZmhqCUDAAA=
-X-CMS-MailID: 20220712074946epcas2p2de643084312b94a7ea0823d8900126e2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220712071941epcas2p2faa87d8efe182e9c28a924ea3de15209
-References: <CGME20220712071941epcas2p2faa87d8efe182e9c28a924ea3de15209@epcas2p2.samsung.com>
-        <20220712074705.420399-1-youngmin.nam@samsung.com>
-        <CAK8P3a0pCov7ZiNhG+by7PpxMdBbBpUa7TKNc9e0p-zXvqg-7g@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220711122459.13773-1-me@linux.beauty> <20220711122459.13773-5-me@linux.beauty>
+ <CAK8P3a2Mr0ZMXGDx6htYEbBBtm4mubk-meSASJjPRK1j1O-hEA@mail.gmail.com> <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
+In-Reply-To: <181efcca6ae.de84203d522625.7740936811073442334@linux.beauty>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 12 Jul 2022 09:50:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
+Message-ID: <CAK8P3a30o1RLifV1TMqDJ26vLhVdOzz3wP6yPrayLV2GPxUtwQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] sample/reserved_mem: Introduce a sample of struct
+ page and dio support to no-map rmem
+To:     Li Chen <me@linux.beauty>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Li Chen <lchen@ambarella.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:8lGB+NJxQc33gsettBfh+xxQK2l7f7QQa6CRc7EbjKMRsczPJNE
+ RleVsYCFJ5qzVX75nxJDSfDnpieQHNQeE3BV8s1lu9tjZq66+IvwtIM6yWHc/DJwLGT/zOD
+ FmH8sAMgupnOzmmrDMMhxfMZgyvvtW1mNFDfrw4/ef4wGhw1QT6Ipu62I5rW0MpTj7fiT9c
+ 3kllEkLiMCE6U4R9V//vg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5DhGn80DuMo=:D8xdg5OOtkkwpau06UnTPj
+ xH7LpWsAJK5ajA+jUCJ7aoIasKSlcDVvL31LgSuBxX+O+KgJnUnWF4oqC2DDtOGpLURLVOvtF
+ BYzdrRJTgyg0G/e2Erp0hhQOIbLyhcoOJ/sSASTCAqub1e3gnPFkfId6vYe8WCO76koaqPnDL
+ 1dAHFsNsthaoygdnWJHviHD8kPAs3ckQaK7a9LypXKSVeEYt2QlUoLLc2IjLXSp2wgzXzxjCr
+ uIsMbmtpynQ9S9RzaEGrNtUpt/mVX7Z3cKUQyzZ9GgSzy5eCyKrmjwCgaD8/1TTuG8GrXriU3
+ QiD2MSA7fL2RVwmFHJC1AOObN8092H7z/7EhB94Yj+04SVQ2rykAh1WD/NKhqWm7+1MDtbJuS
+ jBU8SwOIR/MKizBUmulpVKvoCERTsvIAIWRXwaT+S1Bx2mlwxjf9fzvq5hfAuYlZ1Su49MiLV
+ OHLmzVDR/huGzfqOGUpQnAIXULLGM7oTvWfTJV+b+GBdBGS2vBJnP18UchCBvbvrJfjK9CRCt
+ Mq0ynQyxq7aU6x8njaAKSQIrpPJsZWIY1iXOzSGesrouk+b2y5b0fUBRVVp8mEVJQuy2VWZjY
+ 13+yQ+9l9aIjvZiBe+kqXPNao2+/sp6qnhNEY6Fjv0G7UeO98zFYZKO81s2kFE+9WAa+Sv23V
+ HGRuj0dOTf4qLRBwfTIuYcc4qaf55NnZEHQoFvmWJ+roa/4IUNL42CI75zOGHOuyikFj7HBhD
+ IGFkvto9qtz6nok4nVFfqdYuuzw2drSfxmjbpgvEPZAcz4kVxrrdYx4xuDfz/BnyTXebJTXX2
+ jzvQgKFsWZjWtbV19912STsnqGGMyrbB/JVWMOJgaikiHin1bfqXjgVhHVBAg05mYs0AFgKzd
+ 8LJwiceZdLoUPsq9CtGcu8Bfd4/phgSBVo+2ryy8E=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > As mentioned below,
-> >
-> https://lore.kernel.org/lkml/CAK8P3a3nknJgEDESGdJH91jMj6R_xydFqWASd8r5Bbe=
-s
-> dvMBgA=40mail.gmail.com/
+On Tue, Jul 12, 2022 at 2:26 AM Li Chen <me@linux.beauty> wrote:
+>  ---- On Mon, 11 Jul 2022 21:28:10 +0800  Arnd Bergmann <arnd@arndb.de> wrote ---
+>  > On Mon, Jul 11, 2022 at 2:24 PM Li Chen <me@linux.beauty> wrote:
+>  > >
+>  > > From: Li Chen <lchen@ambarella.com>
+>  > >
+>  > > This sample driver shows how to build struct pages support to no-map rmem.
+>  > >
+>  > > Signed-off-by: Li Chen <lchen@ambarella.com>
+>  >
+>  > Not sure what a sample driver helps here if there are no actual users in-tree.
+>  >
+>  > It would make more sense to merge the driver that wants to actually use this
+>  > first, and then add the additional feature.
+>
+> Totally agree, but we plan to start rewriting our video driver in a long time, it
+> has many legacy codes and I need to rewrite a lot of codes to migrate to v4l2.
+> That's why I also submit a sample driver here: to make the review progress
+> easier and don't need reviewers to read video driver codes.
 
-I'm not sure why you drop my originality but please use my commit message a=
-nd put this link between --- and include/linux/time32.h if you need additio=
-nal comments.
-https://lore.kernel.org/all/20220531064346.51677-1-chanho61.park=40samsung.=
-com/T/
+The problem is that this patch may not be the right solution for your new
+driver either.  As Christoph also commented, what you do here is rather
+unusual, and without seeing the video driver first, we have no way of
+knowing whether there is something the driver should be doing
+differently to solve the original problem.
 
-Indeed you should put Fixes tag for stable tree.
+>  > > +/*
+>  > > + * dts example
+>  > > + * rmem: rmem@1 {
+>  > > + *                     compatible = "shared-dma-pool";
+>  > > + *                     no-map;
+>  > > + *                     size = <0x0 0x20000000>;
+>  > > + *             };
+>  > > + * perf {
+>  > > + *             compatible = "example,rmem";
+>  > > + *             memory-region = <&rmem>;
+>  > > + *     };
+>  >
+>  > The problem here is that the DT is meant to describe the platform in an OS
+>  > independent way, so having a binding that just corresponds to a user space
+>  > interface is not a good abstraction.
+>
+> Gotcha, but IMO dts + rmem is the only choice for our use case. In our real
+> case, we use reg instead of size to specify the physical address, so
+> memremap cannot be used.
 
-Best Regards,
-Chanho Park
+Does your hardware require a fixed address for the buffer? If it can be
+anywhere in memory (or at least within a certain range) but just has to
+be physically contiguous, the normal way would be to use a CMA area
+to allocate from, which gives you 'struct page' backed pages.
 
-> >
-> > The =22const=22 keyword is useless, so we drop it from the function
-> definition and declaration.
-> >
-> > Change-Id: If35bba78aa7757476e22be42afc719c27fb0f527
-> > Signed-off-by: Youngmin Nam <youngmin.nam=40samsung.com>
->=20
-> The patch looks good, but the description can be improved:
->=20
-> - drop the useless Change-Id field
-> - move the URL into a 'Link: field'
-> - wrap the lines to fit into the normal width of an email (under 80
-> characters,
->   ideally 70)
-> - explain why the change helps, rather than just stating the keyword is
-> useless.
->   In your description, it's not clear if one is better than the other, it
-> sounds
->   like it should make no difference.
->=20
-> With that done:
->=20
-> Reviewed-by: Arnd Bergmann <arnd=40arndb.de>
-
+         Arnd

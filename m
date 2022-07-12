@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC585724AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3162257242F
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235517AbiGLTF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S234842AbiGLS5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiGLTEs (ORCPT
+        with ESMTP id S234954AbiGLS4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:04:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2AEDE1A8;
-        Tue, 12 Jul 2022 11:50:43 -0700 (PDT)
+        Tue, 12 Jul 2022 14:56:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8ACD31E3;
+        Tue, 12 Jul 2022 11:46:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6D0EB81BBD;
-        Tue, 12 Jul 2022 18:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257A8C3411C;
-        Tue, 12 Jul 2022 18:50:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F622B81BBB;
+        Tue, 12 Jul 2022 18:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D30C3411C;
+        Tue, 12 Jul 2022 18:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651841;
-        bh=R/EPJn3x6F61ZOxxxOhGBMfTTnFt4vNuH1TXJ/oY05M=;
+        s=korg; t=1657651615;
+        bh=E1G/sj44DQ1PBjU34Ar46hxoaFI0v+72xBumAP9AX4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sFMboPndOwb7tciS96mnxAnreEjNGb/ekt54CxdvXUzS/M5Q1H16PBJJFyd1QaEu6
-         uDTQR3kxTHV9Y/bPzktEU72A0uLv9637Mc+XUXq6iUxEj01ACEN2VG45Oph0rDLi0g
-         KYgLvzR4ptxa6EEYg2RX+i3cgEC5ow/Q5Orj9mEg=
+        b=z+UmkDn/GTPDFyyXGogJU8S+/AYJwK/w56EnAmDDv2dYW8OBkk3pllDJOIoK7DAdZ
+         IULUHHc+iQ3OrAJ/ubJBN69a8ovSeIHeb8cQfKjECdxX6gyrNe86RtEWAuRCo4R00h
+         Hs3mHiD88NvHLXWf5KPBBBHY3wGZ6/DfsbfSDEs0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 45/78] x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 109/130] x86/bugs: Do IBPB fallback check only once
 Date:   Tue, 12 Jul 2022 20:39:15 +0200
-Message-Id: <20220712183240.674777614@linuxfoundation.org>
+Message-Id: <20220712183251.505316520@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-References: <20220712183238.844813653@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,118 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-commit caa0ff24d5d0e02abce5e65c3d2b7f20a6617be5 upstream.
+commit 0fe4aeea9c01baabecc8c3afc7889c809d939bc2 upstream.
 
-Due to TIF_SSBD and TIF_SPEC_IB the actual IA32_SPEC_CTRL value can
-differ from x86_spec_ctrl_base. As such, keep a per-CPU value
-reflecting the current task's MSR content.
+When booting with retbleed=auto, if the kernel wasn't built with
+CONFIG_CC_HAS_RETURN_THUNK, the mitigation falls back to IBPB.  Make
+sure a warning is printed in that case.  The IBPB fallback check is done
+twice, but it really only needs to be done once.
 
-  [jpoimboe: rename]
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/nospec-branch.h |    1 +
- arch/x86/kernel/cpu/bugs.c           |   28 +++++++++++++++++++++++-----
- arch/x86/kernel/process.c            |    2 +-
- 3 files changed, 25 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/bugs.c |   15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -254,6 +254,7 @@ static inline void indirect_branch_predi
- 
- /* The Intel SPEC CTRL MSR base value cache */
- extern u64 x86_spec_ctrl_base;
-+extern void write_spec_ctrl_current(u64 val);
- 
- /*
-  * With retpoline, we must use IBRS to restrict branch prediction
 --- a/arch/x86/kernel/cpu/bugs.c
 +++ b/arch/x86/kernel/cpu/bugs.c
-@@ -49,12 +49,30 @@ static void __init mmio_select_mitigatio
- static void __init srbds_select_mitigation(void);
- static void __init l1d_flush_select_mitigation(void);
+@@ -847,18 +847,13 @@ static void __init retbleed_select_mitig
+ 	case RETBLEED_CMD_AUTO:
+ 	default:
+ 		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+-		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
+-
+-			if (IS_ENABLED(CONFIG_RETPOLINE) &&
+-			    IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK))
+-				retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
+-			else
+-				retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
+-		}
++		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++			retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
  
--/* The base value of the SPEC_CTRL MSR that always has to be preserved. */
-+/* The base value of the SPEC_CTRL MSR without task-specific bits set */
- u64 x86_spec_ctrl_base;
- EXPORT_SYMBOL_GPL(x86_spec_ctrl_base);
-+
-+/* The current value of the SPEC_CTRL MSR with task-specific bits set */
-+DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
-+EXPORT_SYMBOL_GPL(x86_spec_ctrl_current);
-+
- static DEFINE_MUTEX(spec_ctrl_mutex);
+ 		/*
+-		 * The Intel mitigation (IBRS) was already selected in
+-		 * spectre_v2_select_mitigation().
++		 * The Intel mitigation (IBRS or eIBRS) was already selected in
++		 * spectre_v2_select_mitigation().  'retbleed_mitigation' will
++		 * be set accordingly below.
+ 		 */
  
- /*
-+ * Keep track of the SPEC_CTRL MSR value for the current task, which may differ
-+ * from x86_spec_ctrl_base due to STIBP/SSB in __speculation_ctrl_update().
-+ */
-+void write_spec_ctrl_current(u64 val)
-+{
-+	if (this_cpu_read(x86_spec_ctrl_current) == val)
-+		return;
-+
-+	this_cpu_write(x86_spec_ctrl_current, val);
-+	wrmsrl(MSR_IA32_SPEC_CTRL, val);
-+}
-+
-+/*
-  * The vendor and possibly platform specific bits which can be modified in
-  * x86_spec_ctrl_base.
-  */
-@@ -1272,7 +1290,7 @@ static void __init spectre_v2_select_mit
- 	if (spectre_v2_in_eibrs_mode(mode)) {
- 		/* Force it so VMEXIT will restore correctly */
- 		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
--		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+		write_spec_ctrl_current(x86_spec_ctrl_base);
- 	}
- 
- 	switch (mode) {
-@@ -1327,7 +1345,7 @@ static void __init spectre_v2_select_mit
- 
- static void update_stibp_msr(void * __unused)
- {
--	wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+	write_spec_ctrl_current(x86_spec_ctrl_base);
- }
- 
- /* Update x86_spec_ctrl_base in case SMT state changed. */
-@@ -1570,7 +1588,7 @@ static enum ssb_mitigation __init __ssb_
- 			x86_amd_ssb_disable();
- 		} else {
- 			x86_spec_ctrl_base |= SPEC_CTRL_SSBD;
--			wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+			write_spec_ctrl_current(x86_spec_ctrl_base);
- 		}
- 	}
- 
-@@ -1821,7 +1839,7 @@ int arch_prctl_spec_ctrl_get(struct task
- void x86_spec_ctrl_setup_ap(void)
- {
- 	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
--		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
-+		write_spec_ctrl_current(x86_spec_ctrl_base);
- 
- 	if (ssb_mode == SPEC_STORE_BYPASS_DISABLE)
- 		x86_amd_ssb_disable();
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -584,7 +584,7 @@ static __always_inline void __speculatio
- 	}
- 
- 	if (updmsr)
--		wrmsrl(MSR_IA32_SPEC_CTRL, msr);
-+		write_spec_ctrl_current(msr);
- }
- 
- static unsigned long speculation_ctrl_update_tif(struct task_struct *tsk)
+ 		break;
 
 

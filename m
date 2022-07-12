@@ -2,138 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF16571BB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A35571BBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbiGLNvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S232848AbiGLNwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiGLNvc (ORCPT
+        with ESMTP id S231184AbiGLNwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:51:32 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11390B79E6;
-        Tue, 12 Jul 2022 06:51:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kQSK6NAd2YQhhjYwwlnr3OJpOqDFXD/k+3bPg90+3dJ4CbPnsOtTGAhzES5nLqurkqO3i9kQIcyuu4X72Gjca2auOjONV6rz9p060bBDkKc+l4FIDbAK1x7a/ayfReL+ZskdkDWKRaIrA6BrPGN7DgBZHLuLyjZZaBuzkjVllZpFXRn4cGAjdo3Uk0KTEH8ZRPtV9g1weSCOoakRLekUIXhm5YQipKqVhWKy+QiVbuCgHN+MgQKiqiFBp7Rmw5fKhIMrwAGRZKJXdxoa/df1MdFKqBHIHyXpTceCWo8q3ZX2zWkR6RUFzZjebyRmWgiew6ngYNpdmqdP+ybmbJfaDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DMLcnsPwGUyMGsw0Kg47NBc3E1L+3nP9DXNzyLSEgEA=;
- b=j4SAbjXkaKEXBrvmnLQrnSz5t2TS2MqEXhLqPdsxa9eWdFXezQ7lTdf/zE7LlFWbbV4pasoj/g5J3/Wlq5h6xXoiExPKBWpq8Wllo8kNNH7Ch1KsYCf+iXjEZOywVIZ2BjyK5StzQJ7/WgGJwBNdttx9R92OJEM+9Mn1b5Q7E5WIhP4ueB0yN20Nx1I7D/h+iwJC7K5nIfusYsWDDBFhIVgCWMTpObGWahWoNRWwNzXqIXrMwTrcw3KJU1REOO4TKCUdKURbeZHJfqGtaeGkS75DWD0XbEsV7e2P5pIG51kYDz9Cdhzu1wxHEcy0xAbT94AnwMJvuzN9BClRF4vB+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DMLcnsPwGUyMGsw0Kg47NBc3E1L+3nP9DXNzyLSEgEA=;
- b=NFSzRu7OxTywrfqoy2JpXsSPxaNWU1ZX3r5NU8EyFWsLtYGk2XMR5lbBupaWHukePOoyrqJlUIZziNUS8C5xnNH/rqAkeibLZ6cZGf51ERSvAFIm69tzs5TXdbY+CEhBpLTab3mp0ydQzwqWanmXzEKW9sPlMbxKnWptxntUY78=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by SN7PR12MB6816.namprd12.prod.outlook.com (2603:10b6:806:264::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.23; Tue, 12 Jul
- 2022 13:51:28 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::c9f3:8fbe:281a:454e%3]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 13:51:28 +0000
-Date:   Tue, 12 Jul 2022 13:51:25 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] x86/mce: Add support for Extended Physical
- Address MCA changes
-Message-ID: <Ys18XVCB7CeR/jVw@yaz-fattaah>
-References: <YlbZ1k1cT1FVJj4W@yaz-ubuntu>
- <YlbkCK9LU2KdXZUG@zn.tnic>
- <YlbzbZO6AvxOqQb/@agluck-desk3.sc.intel.com>
- <Ylb3/4oi6KAjdsJW@zn.tnic>
- <YlcnN2q9ducdvsUZ@yaz-ubuntu>
- <YlflJfyQR/j/eRkn@zn.tnic>
- <YlmHtlKABn9W0pu5@yaz-ubuntu>
- <YlmfZU2Bg5cRk07J@agluck-desk3.sc.intel.com>
- <YqJHwXkg3Ny9fI3s@yaz-fattaah>
- <YrnTMmwl5TrHwT9J@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrnTMmwl5TrHwT9J@zn.tnic>
-X-ClientProxiedBy: BLAPR03CA0008.namprd03.prod.outlook.com
- (2603:10b6:208:32b::13) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Tue, 12 Jul 2022 09:52:09 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C43B79E0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id l11so13977048ybu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
+        b=fLRarT5d7pJmh7A50/oCtJdSEsMl6AUE3JJAWBUs5VRHku5TfmA2ZaNuN9yxSHaiIN
+         uwtuacBFDfHbwF6Bm+jjGZvODksVkWM5jxN3OkliOz894DxvftnJTqBwbIKjL3a5Jg7O
+         aD/FvQUvMXwFSfDXS95BPdRaSu7iLOPKW1iUcwu/8mbh2rgEJYfXBSvs5rJCN+tbCW5B
+         j9nesILDH3K0YJDH31eTwvUt6JTHN6f/36ZkIpJmZn5kpG6CapCdvx0JiOFJWYt0Wlhp
+         +g0M1lIyMMzrKYY4H+JmEQ3F9zNBW040MDY9TBTTgYfY69+SrLs4HRdOEbdtzaKYoX2a
+         DFuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
+        b=W0cB3bvuDJ3nJGb+CGU3iZ34LhSuBpQJxQ5SUApXQ/cXV6zEzXl1libRXIR2/eQCv2
+         JtOUmpRsUiCQ0HfUByfZjGHr5025rQC4I7Il+kfbDCM5PLSlG0EWBPWWMYWkc3c0+uaq
+         R1dqX6/0j4zeUf291FIJQkXUhczdLX2eiDI5Xe9we0uCzEw9T+4n1Qok530HvtQAtWw6
+         p6TxdcHVH4bvyQjxR8vspU8NezVAjSyT7DnvBG/LWJMzO0sJ6LNSOCyUJTS5BW7Q6bdF
+         EW62bqXhAhtEACDRz4yPqtTHZjxzFsA9aFH7EgqYsuoNwoDTdkV/iAm/4pCYlB0zprbz
+         emyQ==
+X-Gm-Message-State: AJIora+iRrKiQuU5rNJ0yGOJzGQEy8sblnJh7rJRY4h7zTPR/2+EYgeU
+        +jTH8yIA9MlEV8XY6Y7fSEEZlAvDF0NBwKZZL6V3Gw==
+X-Google-Smtp-Source: AGRyM1vaXhDrW9SzgGVGnQeO3sKZbN8zrYy0RbeU0jBi1M5Io3ShqhFaENqRfTiUKywPAI3ytd02a4hWcGbWqnCnWlg=
+X-Received: by 2002:a5b:10a:0:b0:66d:d8e3:9da2 with SMTP id
+ 10-20020a5b010a000000b0066dd8e39da2mr22834061ybx.87.1657633927213; Tue, 12
+ Jul 2022 06:52:07 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84d503ec-58be-41da-7214-08da640d9e64
-X-MS-TrafficTypeDiagnostic: SN7PR12MB6816:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oXHUwYWaedovkjzVcXV78d1T65aZeQ4UK/tKsMR70B0zwnXlFKBs6GWn+lt4JpOumjQLtjJ873g0LbzCjttuiEWl+E0BUHH+b/135CNLZq27MnNxAPV771uHsGG4Xw0uFYwnjKROmC9N0Jux8qOgrMLl8b1SWdF2yn9awyYFu+05NzFtLejT2F4WrEMzn97U4dLnRjfVFBodgwOWQNX+4IvgaC8YfgmupIKIAagDbM8Rzl4jBYex5IVQC+f5SMJOH5qVf6aacdXZLukNeQ8wXLKCauc2GnKO6U2oFtf9eUqRES39GITXEEJGkoGtvxfkh4GyQrRltXTr3ed+9Dx69fvOmTS0lLEsObvrwDAPnwpy6ydupiYz6gd81fWyJXLPXoy5LoRO6VxjLudIbMhWjDXgWaEZpXEKhun3IBfSai1guwcWAkTvKwx+LbQxdV88oYZaZLTu40T363nInj/qniBtD/X/deqOiQ/+OzGki5Rfp4n7chHTr6iGqw5y7avgO3uMTBaK/kS/OOkTgOzKTV4STg+l0uTI0LbLBsaM0auo8aKa6F83bV3nzKuNMZWIXbv7YuVcvD8T4viOkJsTGOPVXP0NLb95Susw6xO60WwYfwWwD0r1kwD5o4UFyzBcw59YSfdcb7TN6Dn+uUG1F6OsHYXosWB0dV1iB5yBTchBZNIliaCAdzrOr7Xi0Ae/MhXCBJupewoCigGAmfVEz5E0MqQHO+wSpHzweyOlEPyGtLs4UG+XxxDFoFfCJ917
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(5660300002)(26005)(86362001)(316002)(9686003)(6512007)(66556008)(2906002)(33716001)(4326008)(66946007)(66476007)(44832011)(478600001)(8676002)(186003)(6506007)(4744005)(38100700002)(41300700001)(8936002)(6916009)(6666004)(54906003)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GD324TnqJzPhxA4CYGdQlr/wNRGqjcy7bd5abFYTnK8yiO/VcpO1sugbtzsm?=
- =?us-ascii?Q?7Jl89uzerw2eSc0XHeScc06hO6YpkW/1/r0jjGfq32mxmRfETEsnEGivatLf?=
- =?us-ascii?Q?a4sIQpKN3T+EO9IUgu4IOCmtLFyc7nNo2fPrMdpgt4bHboKqL20s38FiJAfc?=
- =?us-ascii?Q?gtmYal//XL29HMbYh45jF/xEPBrJOGeKgmYsEQl2HB2g5vRpNc4bOPBfJ/vF?=
- =?us-ascii?Q?EKCizW4wLf9VSnTDA+4F/67kV8OmCgjKotwt2xZZkETZHvEtxG4o0EB/zap7?=
- =?us-ascii?Q?+HjOfttxoq63AycC3HHp2xL/yHR551+U+j5Y2gM9YrF4LfBU3qwF+vILOnM4?=
- =?us-ascii?Q?webkFa2fai658oVUKo5VYkQrOZyerB2P1MX/VVXOjqM/ehW37DEEbXud8qJY?=
- =?us-ascii?Q?DJGvYacZc4ZpskwdcK27RDf+ZnnNFt5BIMjsUgjgUXtzqkszHKzVuyVwDf2a?=
- =?us-ascii?Q?1NXl72w3YAJ3ynNNre8+cUTGQ5BNkr60KFc302S6FwuX6ZfcHTaZGEanyVI4?=
- =?us-ascii?Q?MkgHvMA6JHE8Rzqgjwhc7eHrWGNvMwlBESqoEAP5ObqoDGAwiZfMATiGW2Yx?=
- =?us-ascii?Q?YjPocUoHUontzmG8yFYajiJVo1uash7f1cMAxrjGrwjAmRK+z1ZapBYYGts/?=
- =?us-ascii?Q?4X+AnEbq0w3tU8iEVFEs0rTXFOsplM9b2i164d+gt3bzVHSg2gj3P6Pm/4hi?=
- =?us-ascii?Q?d6jIINLeXjEdm5NEAUkK+mCnJ5Kjavh7W87f1pTxwY5pMSRFjQJimN1xr+lW?=
- =?us-ascii?Q?u/q6Sk8c9idJJTF7nSUDRk0bFZ1iK9+OSuWFnPz5LTnaQzp7g2wGB5y50XoE?=
- =?us-ascii?Q?YZUc+qeStpuJAQ6N7YftOgpTcY+qeFkOX4PzjyNk1p/tDWWdsStpILZQvuz5?=
- =?us-ascii?Q?cWBqj/oiyEa2SdHuh7WKc1yu642o36lJGz2SzSDbAmLqhn2J1bd1AKnx5TnM?=
- =?us-ascii?Q?gcQt/fN/04E5WeFn1Owe9yVh5O5punEeaJLZmj8YOFIDCj/0sVSSbudLmKk+?=
- =?us-ascii?Q?nuVEJr0V4bESKVqOiaWYnc4hVOYZMyrao7rc+kH5bUstWaPjU93nevTHkNsu?=
- =?us-ascii?Q?DT6A2/BtqTA9hOLlDFIyEc4dHxX58fy+vbcqlBfW3Non4kkv7X51hzqk62QG?=
- =?us-ascii?Q?KofuNf53cGnAybSVBSLQ09H2Q/Akiwm88QxbPVz101ofVykVBMEVNcrO+zSk?=
- =?us-ascii?Q?QQ3iPIjJjLKHdOMLsWOYtXuLb9Khf2C2IC4NWtqlp7M3MWNEZWq6v/I3HlyC?=
- =?us-ascii?Q?Jr2+Pk562KuTFZP6xgyxkRPtaUt3hHt8QogBljRwumsxeP0bBHNa5h26ayCM?=
- =?us-ascii?Q?u9lqtTL+Q8sRTqEHCwFt9gNKkyGdJC2P//zHf/ANRq7DXQcW707GJW/zIZ3q?=
- =?us-ascii?Q?2k9HUpdlAryraft84Sb64OW5rm7iA1iws94GMdf5L4fszvYlrVKUBxVj7q2z?=
- =?us-ascii?Q?7fXD8kPhExs02TTbXwB1Yh1xK30AU1m+B7Jx93gYaAbjDKKfXFd89/0zbv2t?=
- =?us-ascii?Q?TCHuoEx8EKhGgfmVnfeF06aq2JzlIh/czP2yuruQ9gEzhstNCE63QdSre91J?=
- =?us-ascii?Q?I3wGhj+xXk7+qQK8sVU9JtJVRtqMz733K1Rg7KqW?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84d503ec-58be-41da-7214-08da640d9e64
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 13:51:28.3894
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KDYbVXxvWT70kButAt4gyd0+i0jXfyr4Gsiq/zC/+AO+g+LOwIWhAs84rwOz3Sya4VVJNEn7c4bM9pGv9RH7Qw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6816
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-19-glider@google.com>
+In-Reply-To: <20220701142310.2188015-19-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Jul 2022 15:51:31 +0200
+Message-ID: <CANpmjNOPJL7WAUh5CUZOYO8hY-dHTHMUMJzd9OGbmWES+smtrQ@mail.gmail.com>
+Subject: Re: [PATCH v4 18/45] instrumented.h: add KMSAN support
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:56:34PM +0200, Borislav Petkov wrote:
-> On Thu, Jun 09, 2022 at 07:19:29PM +0000, Yazen Ghannam wrote:
-> > Also, please see the patch below which is based on Boris' patch from earlier
-> > in this thread.
-> 
-> Looks good to me. You can send me one against latest tip:ras/core
-> whenever you can.
+On Fri, 1 Jul 2022 at 16:24, Alexander Potapenko <glider@google.com> wrote:
 >
+> To avoid false positives, KMSAN needs to unpoison the data copied from
+> the userspace. To detect infoleaks - check the memory buffer passed to
+> copy_to_user().
+>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-Thanks. Do you want a set with yours, mine, and Smita's patches all together?
+Reviewed-by: Marco Elver <elver@google.com>
 
--Yazen
+With the code simplification below.
+
+[...]
+> --- a/mm/kmsan/hooks.c
+> +++ b/mm/kmsan/hooks.c
+> @@ -212,6 +212,44 @@ void kmsan_iounmap_page_range(unsigned long start, unsigned long end)
+>  }
+>  EXPORT_SYMBOL(kmsan_iounmap_page_range);
+>
+> +void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
+> +                       size_t left)
+> +{
+> +       unsigned long ua_flags;
+> +
+> +       if (!kmsan_enabled || kmsan_in_runtime())
+> +               return;
+> +       /*
+> +        * At this point we've copied the memory already. It's hard to check it
+> +        * before copying, as the size of actually copied buffer is unknown.
+> +        */
+> +
+> +       /* copy_to_user() may copy zero bytes. No need to check. */
+> +       if (!to_copy)
+> +               return;
+> +       /* Or maybe copy_to_user() failed to copy anything. */
+> +       if (to_copy <= left)
+> +               return;
+> +
+> +       ua_flags = user_access_save();
+> +       if ((u64)to < TASK_SIZE) {
+> +               /* This is a user memory access, check it. */
+> +               kmsan_internal_check_memory((void *)from, to_copy - left, to,
+> +                                           REASON_COPY_TO_USER);
+
+This could just do "} else {" and the stuff below, and would result in
+simpler code with no explicit "return" and no duplicated
+user_access_restore().
+
+> +               user_access_restore(ua_flags);
+> +               return;
+> +       }
+> +       /* Otherwise this is a kernel memory access. This happens when a compat
+> +        * syscall passes an argument allocated on the kernel stack to a real
+> +        * syscall.
+> +        * Don't check anything, just copy the shadow of the copied bytes.
+> +        */
+> +       kmsan_internal_memmove_metadata((void *)to, (void *)from,
+> +                                       to_copy - left);
+> +       user_access_restore(ua_flags);
+> +}
+> +EXPORT_SYMBOL(kmsan_copy_to_user);

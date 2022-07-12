@@ -2,217 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73107571547
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E0757154B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbiGLJD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S231751AbiGLJFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiGLJDV (ORCPT
+        with ESMTP id S229669AbiGLJFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:03:21 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9154BA44CD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:03:19 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y11so6310289lfs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:03:19 -0700 (PDT)
+        Tue, 12 Jul 2022 05:05:47 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2118.outbound.protection.outlook.com [40.107.92.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F0532B8D;
+        Tue, 12 Jul 2022 02:05:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OPY5N8hI9l3yNCvX1KZ7jdz5ZoeimYHwbSBfevqp+jB3dxZqaNzofq3Bib1S2cslLEjXqeXQjIacQvMsCzR8IcnNzHXi3fh1yHkkQLlNAVsDH2HrLsMm1wrUs2smS88pF2dudb16U18gNvVIq8Z2iBB4qVy6CgVoQOh9I2emirRGssWEfXHwA6AH+GKDJPoclo1hC8qBa4qBPB5Zagi82VL4f620/zbmG8dnBf49InIhr4MVkEtP3z7CdP5PyhpOB9GuDviaosGPeRDLIJU7wIdIVtCFMSs+jxoL20QGw/5JOAoqHS/zCu+D6/ZLzFUDwslCpCSL2ajjIEUyNWwMsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7OrNlacPEv/vCIDmcNrp3k4RuoYFPiHnnnIw4QQW+2U=;
+ b=kLUGRRHUt5jaIc8lULn4sPw3yYmEqYw6GdZeeE4ImAujLeBEqx7MOM2j522HkRi9m7I5QR03uodp5JDHZHm7WXvOXXEl/zZCp/EydkQeXEU/gLCrwqMHs7F4UpFdC8+KdQeIuqxgk5QfiZyi5ZW9uMauy3Pw1zkPLoChIczkPJP6gKe1FfhLOT67E1cnSpgjKA9wEwwodFuJYVz+dJhIvGJHmJwp5yGacuSkcn7vnntMoPoEdppVdZo/FS2knYHAcuA7MiyZ2EXyyOqZu1OO2cDLK7H5gAzrQWj4LKiDN+Z1cUNajTlQ2mXVwtkYpeLHr0Mcnke9pBGYkXmryfyQ1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qJxUyqqHev67tpfClaZNAocOsbllu9hMYiypPtjySTQ=;
-        b=omEU2Ab2IkEDRlh2Hu2HNGB8ChfxSCNmR9dyDAZn9HZlo/p4u4XFaYstZ4agyHy4GI
-         0xkIMmpkbVnWpVj1urLHZdVpU8l56N3Kfv3dGm7rDQ7/eYR7F33OJ80IU4QXCoDBOQg9
-         b3Sl6iYT4S2SGvoGnGHtPqHYWkMXqezq+O69BNnQn8M/LR5DbDVq56GkS+LR0v6MRagn
-         N0S3mjnrJdGoNMaQWEtABwJPENqNg6e2mK/eWHzGGDktxY68xcC9PvwQxIfjETxNfZFT
-         CSh6tqpevrraUr3U8nIb5k+NT4zhbwJJDsbFwv6sx4M128174WijWDlSsgxF8hAvd6rv
-         3oNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qJxUyqqHev67tpfClaZNAocOsbllu9hMYiypPtjySTQ=;
-        b=fEeDPs3mVzSjjWo9GE09F7Y2yysqj088HFsxBkSjgPIPW1FAeMy5eOGuAU+UQ+/fJH
-         jHXvA0kKlz+a6XIrqF4Naz4iWSnw4M7laiRsFf00KxW8vIgHuXlnJX1eaQYqLGiGgKm2
-         xt5N2hzCoO1prfBWcq4qRJ8dUM76G/SQoWuaRXtfD/GM/+dVQb8t5QAMyUNnta0vh7uN
-         VQyvDggQsvSBmx0uEceZcdbJRQBVPr+zuR62//fxuYu2foBCmg9gBVAtwlHiadJaL/e9
-         hKGatm5YnwU1s12b+zM9WWXRHKo9E/hLLR9FJR1ISa3wVpEUiUl2BQpRAmzVNuHOh8fQ
-         QF1Q==
-X-Gm-Message-State: AJIora/qqlYe907HXjMM8Ez8Gb9Z7zrw6I1F0KH7hY9622dm4Zg1hN40
-        VsVbTervTZYrcrLSt5mnabJVhg==
-X-Google-Smtp-Source: AGRyM1vbDloanlf1JX4n1W5PjwRlQVj5gqoAPuLaNpzCxXvb1SDDgQlxyHSSFGNX9p+0kfp29S4bFQ==
-X-Received: by 2002:ac2:4d43:0:b0:489:cb6e:b293 with SMTP id 3-20020ac24d43000000b00489cb6eb293mr11303350lfp.376.1657616597891;
-        Tue, 12 Jul 2022 02:03:17 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id f19-20020ac25333000000b00478fe690207sm2059505lfh.286.2022.07.12.02.03.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 02:03:17 -0700 (PDT)
-Message-ID: <d8bc3b20-45db-a869-2aff-9cda8e0fca92@linaro.org>
-Date:   Tue, 12 Jul 2022 11:03:14 +0200
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7OrNlacPEv/vCIDmcNrp3k4RuoYFPiHnnnIw4QQW+2U=;
+ b=T0iQ+hDnGtpveLE5XQfrxDbgMStAeZ8j0yAi11EP+HQGKIaxXX40mpDX2CPz/ZhexOO9h8E8iNEcQN9AA7wRSh3D33gWKlLH3xCbdw6VPuXWC6HqQHlPor1o5qBJoBpiVH5hAELg1/GNMgxr7hC3cGNMmzX9VGd1Sw02C5iqjL4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BN6PR04MB0658.namprd04.prod.outlook.com (2603:10b6:404:d2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
+ 2022 09:05:45 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b%5]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 09:05:45 +0000
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Xin Ji <xji@analogixsemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v16 1/3] usb: typec: tcpci: move tcpci.h to include/linux/usb/
+Date:   Tue, 12 Jul 2022 17:05:31 +0800
+Message-Id: <20220712090534.2783494-1-xji@analogixsemi.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWPR01CA0049.jpnprd01.prod.outlook.com
+ (2603:1096:400:17f::20) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 08/16] arm64: dts: mt8195: Add power domains controller
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220704100028.19932-1-tinghan.shen@mediatek.com>
- <20220704100028.19932-9-tinghan.shen@mediatek.com>
- <3b65405d-167f-a0c7-d15e-5da6f08d99b3@linaro.org>
- <eec6aee5cd023fff6d986882db0330e1ab85a59d.camel@mediatek.com>
- <0301ebc6-1222-e813-f237-f14ad8444940@linaro.org>
- <b6523c64-dfe2-13b0-db60-fb4f53ed1e31@collabora.com>
- <1eb212ea-c5a9-b06f-606f-1271ac52adf9@linaro.org>
- <c243bc9c-0862-450d-6bff-00ec5591e791@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c243bc9c-0862-450d-6bff-00ec5591e791@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 83f6e4d4-c00e-44b8-944e-08da63e5b462
+X-MS-TrafficTypeDiagnostic: BN6PR04MB0658:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: F8YIimGcKWnBuywol47NbMN0Yztj0IkxjwNZx9CpJkS3oJfGBvHU6+9N6F4uuB+1LBVjPwnMKKWhmBSNFckLhqzQQ6y8ZCgRnmhR0YNYPtyRLFVEFhOHkoNM0ZotQS3AUKI+KiSLX5Va9JT6FMkho0QlZ8Ah6+oC36cwknK40PWomOh5Qd/FmQFX0e0ok+n0NXzxWGeICiLD0b+4uOtXLWw9FlzVq8SvE5pfu/qjoyUEQx65sdQblmf8Y4S/XttnwnRMs8gk+IW/GdNKMbZZ1DHBRbHV454kOt8BbWRjzdM57gXsG7FQlkl7z0/fv6ivo8RWsLTgs3WneagOYq3yhSlc3lpT1l8Nw7Yu7v5PuS5f/Gu0azOuvc7iMJVbcBkljBJFk1TIGol4FYLdnLWaRaWHTwPNvX003suXf9/hEgVAB5Sh5HtViQ0wZMTuQ7CAUOstBK6SF38dRacC3MM+/ypWsKHqQgLTkNj4i6NZ6OI0xKuxfOTzZvEjM1k7rGrbcomhMMaWydcOclgc1zcRhw/kAes47fxzuW7c+dLUTNfVW/vglfNASvdjYtDeGtFO6cFv2qSK4kitN+2JzZnCSDq5NA6oYotDoRokB+/tFAA7q0LMPFcQqOgEYvZxpnA3wwyKLv4s1RHWLr3KOifKLxdWmAo90uQ3rLWrMVWC2r8K6hShrfITxvqXvta4Eu7lp+hv5F49Uej4uID3SevmANjX2W6kdkStl5qMtyIkatprHBuADoRZJaB0sQd/zSPQLO6JLz3ajkhk6zGVT/4b5ZBlb8KFN6+ZiszirouSVBzNZm4cTPmzzy0ku5Z5nIwk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39840400004)(376002)(396003)(136003)(366004)(4326008)(66476007)(66556008)(38350700002)(8676002)(6506007)(66946007)(186003)(8936002)(83380400001)(52116002)(6666004)(26005)(41300700001)(6512007)(55236004)(6486002)(38100700002)(316002)(2616005)(1076003)(478600001)(110136005)(2906002)(86362001)(36756003)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OP6XZ2kVhB7EeB7wBDbMmTObkVAFx+1rWBA/8aegjJtEh6PmOD7MGPiy5/lD?=
+ =?us-ascii?Q?gO+EE9wYrVvJz6rtBsnHFDAbXpuo+Lm6jmyII8bDuSZ3gqvBRBZhy6me1Rry?=
+ =?us-ascii?Q?VGEGFB+TthljRQ6Cdt2zdN+K19W5jPTe841HWgq3uSGnp2y1X8albYDKirdv?=
+ =?us-ascii?Q?fzTfqLpZrPN65w2HRC3oQF3YSTN0Lj0FPDDngjOfA11tODiTUU9rfFznucaR?=
+ =?us-ascii?Q?NwsCJLmOasyrpNi+vF3cs3F/CpI7kkLOBJLkEOtIlKwC+cHb3QNZVjNfOkNn?=
+ =?us-ascii?Q?SaGIrKCzW+918XBnKBsnFE6L78sVHaLAMoovrX8rkVBTihRSitEvp0I1Ozlp?=
+ =?us-ascii?Q?NGMwHQ3pqKRN6Ub8anqJuYLE4p5D36nvOd+VSyVJUZpuSpNScfdYos620huv?=
+ =?us-ascii?Q?+I+v7lHPYYj4OT76oTF9rmEPDdUI+BYQs4OeMrvBvUkW+9S2At/HISXsisSo?=
+ =?us-ascii?Q?XO9Bk9VQgBoPCV4Abjg6wBRfssuxRSPrbRIsQ3lw+1HsCvBnB5yByGl2Yti2?=
+ =?us-ascii?Q?ot+vQht1/Imx9NWmiHC7oHRDhTK9OQHAWICPcevga9OMkhyFhW0rPpJZtNBD?=
+ =?us-ascii?Q?WZp4pfSxDA1E3fntNdrrGNHA/H30q7xqdC62RN1/0pGM7WES2xgperRNtgXH?=
+ =?us-ascii?Q?X2DtMQ47ff2onkPFswy84JdgvKJOJcX+zAQdng8i2qsd9+5WrwfIua+ADV1o?=
+ =?us-ascii?Q?eA6pF2CzDQgBAPr++A4GwkcODL/g8jzxPytbvYGwA3wqZjZziFVudF1j3CYB?=
+ =?us-ascii?Q?aY6fUSQGgM2kU/TBQTpFU42ZnAAyzoWgMOVO6d5LK9TfIeCR5Q7jW31DHSQ0?=
+ =?us-ascii?Q?GsQuGdwG9yv6c6VcZzVGt4bJf4+cOScPv4M5p5pYYJfqPCGw1tINp4kqJggH?=
+ =?us-ascii?Q?T3HI2EJVZNcaJumqMhUzJKjnf3vd2ZwXpBtPOmL1NTWGO9WNYTUHy6kHcZyn?=
+ =?us-ascii?Q?/U7NJU8p59zzIr5Cj828ipjmPl4sQrCxE+BQ1KWmN4oyr7IYJ4ScycGzP0pp?=
+ =?us-ascii?Q?HCjAyUdr+ngenj0sNZTiMHm8KfRvX3NSQgHt8YYbliPo61iw9ngDdjiIa6lo?=
+ =?us-ascii?Q?Pj4N4O+yy1J5syJzpmUHA/MlGB2QgxkIE4xveAHSILJqB8dRRPYoifw61ojs?=
+ =?us-ascii?Q?w3GBeeSDrHFi+bwn6WI6Zq0Hrz8KtVEp+Nz9mekJZIwaCU7ngJH2XuFpk6nz?=
+ =?us-ascii?Q?hikjqLQGf2vT7xx0Hba0TkUbkhGoMpSioajcLHOps+DGEkcnRrM2Qg6dCVJs?=
+ =?us-ascii?Q?2ohPTfFxyDW1BkEzpo2fBy4fTDHhvutw2dAR67qj8MX2GzU5GlzrTAxwXNu7?=
+ =?us-ascii?Q?uCVuFHTn96iJen/UZ2VatIbs41DV7DyFrY3f5tDnXEY4wgah/t+s7mlEvHAr?=
+ =?us-ascii?Q?2JNLMqZHDEwn147pT6PouuZZZWpkCHfftyb0YC+Kf1b771I9Td4l78s89ZVQ?=
+ =?us-ascii?Q?lkNfarexEPq/GkiSow+XDAzgyL75XV+QXk3p0Q0E1/BvZy398IN5Q/+AZYBA?=
+ =?us-ascii?Q?qBlTVqxKI+8V41s7rz4xdGmeshYGGcp/blI2dWD/CYAzQT97kLYZrUaw6XmZ?=
+ =?us-ascii?Q?fs2lXGpSHWkuwdINPkxABQ1vTKkx65MxE7gxUfM+?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83f6e4d4-c00e-44b8-944e-08da63e5b462
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 09:05:45.3241
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gHTyhcBRi+OE/iuk2ZZY8C6//SFG28VeQHgcvAZrjkfZehnReqDWmAppsyL/95p3rAA+pBmouD09QoqQ4oiqTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR04MB0658
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 10:53, AngeloGioacchino Del Regno wrote:
-> Il 12/07/22 10:37, Krzysztof Kozlowski ha scritto:
->> On 12/07/2022 10:17, AngeloGioacchino Del Regno wrote:
->>> Il 06/07/22 17:18, Krzysztof Kozlowski ha scritto:
->>>> On 06/07/2022 14:00, Tinghan Shen wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> After discussing your message with our power team,
->>>>> we realized that we need your help to ensure we fully understand you.
->>>>>
->>>>> On Mon, 2022-07-04 at 14:38 +0200, Krzysztof Kozlowski wrote:
->>>>>> On 04/07/2022 12:00, Tinghan Shen wrote:
->>>>>>> Add power domains controller node for mt8195.
->>>>>>>
->>>>>>> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
->>>>>>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
->>>>>>> ---
->>>>>>>    arch/arm64/boot/dts/mediatek/mt8195.dtsi | 327 +++++++++++++++++++++++
->>>>>>>    1 file changed, 327 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>>>>>> index 8d59a7da3271..d52e140d9271 100644
->>>>>>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>>>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
->>>>>>> @@ -10,6 +10,7 @@
->>>>>>>    #include <dt-bindings/interrupt-controller/irq.h>
->>>>>>>    #include <dt-bindings/phy/phy.h>
->>>>>>>    #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
->>>>>>> +#include <dt-bindings/power/mt8195-power.h>
->>>>>>>    
->>>>>>>    / {
->>>>>>>    	compatible = "mediatek,mt8195";
->>>>>>> @@ -338,6 +339,332 @@
->>>>>>>    			#interrupt-cells = <2>;
->>>>>>>    		};
->>>>>>>    
->>>>>>> +		scpsys: syscon@10006000 {
->>>>>>> +			compatible = "syscon", "simple-mfd";
->>>>>>
->>>>>> These compatibles cannot be alone.
->>>>>
->>>>> the scpsys sub node has the compatible of the power domain driver.
->>>>> do you suggest that the compatible in the sub node should move to here?
->>>>
->>>> Not necessarily, depends. You have here device node representing system
->>>> registers. They need they own compatibles, just like everywhere in the
->>>> kernel (except the broken cases...).
->>>>
->>>> Whether this should be compatible of power-domain driver, it depends
->>>> what this device node is. I don't know, I don't have your datasheets or
->>>> your architecture diagrams...
->>>>
->>>>>
->>>>>>> +			reg = <0 0x10006000 0 0x1000>;
->>>>>>> +			#power-domain-cells = <1>;
->>>>>>
->>>>>> If it is simple MFD, then probably it is not a power domain provider.
->>>>>> Decide.
->>>>>
->>>>> this MFD device is the power controller on mt8195.
->>>>
->>>> Then it is not a simple MFD but a power controller. Do not use
->>>> "simple-mfd" compatible.
->>>>
->>>>> Some features need
->>>>> to do some operations on registers in this node. We think that implement
->>>>> the operation of these registers as the MFD device can provide flexibility
->>>>> for future use. We want to clarify if you're saying that an MFD device
->>>>> cannot be a power domain provider.
->>>>
->>>> MFD device is Linuxism, so it has nothing to do here. I am talking only
->>>> about simple-mfd. simple-mfd is a simple device only instantiating
->>>> children and not providing anything to anyone. Neither to children. This
->>>>    the most important part. The children do not depend on anything from
->>>> simple-mfd device. For example simple-mfd device can be shut down
->>>> (gated) and children should still operate. Being a power domain
->>>> controller, contradicts this usually.
->>>>
->>>
->>> If my interpretation of this issue is right, I have pushed a solution for it.
->>> Krzysztof, Matthias, can you please check [1] and give feedback, so that
->>> Tinghan can rewrite this commit ASAP?
->>>
->>> Reason is - I need the MT8195 devicetree to be complete to push the remaining
->>> pieces for Tomato Chromebooks, of course.
->>>
->>> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=658527
->>
->> I have two or three similar discussions, so maybe I lost the context,
->> but I don't understand how your fix is matching real hardware.
->>
->> In the patchset here, Tinghan claimed that power domain controller is a
->> child of 10006000. 10006000 is also a power domain controller. This was
->> explicitly described by the DTS code.
->>
->> Now you abandon this hierarchy in favor of syscon. If the hierarchy was
->> correct, your patchset does not match the hardware, so it's a no-go.
->> Describe the hardware.
->>
->> However maybe this patch did not make any sense and there is no
->> relationship parent-child... so what do you guys send here? Bunch of
->> hacks and work-arounds?
->>
-> 
-> For how I get it, hardware side, the SPM (System Power Manager) resides inside
-> of the SCPSYS block (consequently, in that iospace).
-> 
-> As Matthias pointed out earlier, SCPSYS provides more functionality, but the
-> only one that's currently implemented upstream is the System Power Manager,
-> responsible for managing the MTCMOS (power domains).
-> 
-> In any case, now I'm a little confused on how to proceed, can you please give
-> some suggestion?
+USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+and a port controller (TCPC) - may require that the driver for the PD
+controller accesses directly also the on-chip port controller in some cases.
 
-You should make SCPSYS (0x10006000, AFAIU) a proper driver with its own
-compatible (followed by syscon if needed), even if now it is almost
-empty stub. The driver should populate OF children and then you can
-embed SPM inside and reference to parent's regmap. No need for
-simple-mfd. Later the SCPSYS can grow, if you ever need it.
+Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
 
+---
+V9 -> V10: Rebase on the latest code
+V8 -> V9 : Add more commit message
+V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+---
+ drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+ drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+ drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+ {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+ 5 files changed, 5 insertions(+), 7 deletions(-)
+ rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index f33e08eb7670..812784702d53 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -13,11 +13,10 @@
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define	PD_RETRY_COUNT_DEFAULT			3
+ #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+ #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+index df2505570f07..4b6705f3d7b7 100644
+--- a/drivers/usb/typec/tcpm/tcpci_maxim.c
++++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+@@ -11,11 +11,10 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define PD_ACTIVITY_TIMEOUT_MS				10000
+ 
+ #define TCPC_VENDOR_ALERT				0x80
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+index 8a952eaf9016..1b7c31278ebb 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+@@ -11,10 +11,9 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ 
+-#include "tcpci.h"
+-
+ #define MT6360_REG_PHYCTRL1	0x80
+ #define MT6360_REG_PHYCTRL3	0x82
+ #define MT6360_REG_PHYCTRL7	0x86
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index b56a0880a044..3291ca4948da 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -10,9 +10,9 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/regmap.h>
+-#include "tcpci.h"
+ 
+ #define RT1711H_VID		0x29CF
+ #define RT1711H_PID		0x1711
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+similarity index 99%
+rename from drivers/usb/typec/tcpm/tcpci.h
+rename to include/linux/usb/tcpci.h
+index b2edd45f13c6..20c0bedb8ec8 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/include/linux/usb/tcpci.h
+@@ -9,6 +9,7 @@
+ #define __LINUX_USB_TCPCI_H
+ 
+ #include <linux/usb/typec.h>
++#include <linux/usb/tcpm.h>
+ 
+ #define TCPC_VENDOR_ID			0x0
+ #define TCPC_PRODUCT_ID			0x2
+-- 
+2.25.1
+

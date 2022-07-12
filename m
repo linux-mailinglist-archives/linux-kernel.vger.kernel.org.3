@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97216571072
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B453E571075
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiGLCq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S231511AbiGLCrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiGLCq1 (ORCPT
+        with ESMTP id S231304AbiGLCrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:46:27 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F1C88F08
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:46:25 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id d4so2865713ilc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c2zqwrilwWJFn1MWS5NC3zRRQytleqfbDvTL79CoEkU=;
-        b=XOoynbLzAi8cKMnaqQs/QtLT2Y0dn13yeuv+LcJK7jUeLYM62Ik9+RnVY6f/zJxKgr
-         Nr3mH1WSr3KFn6YUY5Azw0jBxqRxuOd/xqFSQltBorldtYERB4L8f32keSxNA7d9hZV4
-         lsuohj/fb9WLlpNEzho+09tMcvBVIsijOaaJU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c2zqwrilwWJFn1MWS5NC3zRRQytleqfbDvTL79CoEkU=;
-        b=TcWqJvHeSpSs1w+rjvmonibB9dNVEmYR2OoUWAdpEcTEzOH+AI3QnctZ/zIKrdLX2P
-         HH22XhNQpzMAILoIvJKcxfz2rd2HrKnYC1ndM5oWikM4Zi8w4oW7nJl8C+5uru4tInme
-         NfzLHCfYYI55P9Q2RKatmWXNP5ggcEWPuSk1vE7qOcPonwNSQsAp7oAz1DL20B3YuDX5
-         K6P+znC0lvwXQRo9OBb2kxkfsQ9iLBVKqYLcebB9lAFJLRa/9QiF3XY2thRvglon5Yo1
-         UdQa492l9ogF6d7VKZWj0P+wHvQ9BPx9Z4IMFBRBasEag3hNkTPTzxvb/S/UA9faM0O3
-         sRHQ==
-X-Gm-Message-State: AJIora8BfNDbf2FMr89NuYm2rqWeOf65Yube4lhl9QqvGKc9pJrP//wg
-        dLqRRZ60+ZH5Hk6BoHDbuTNtBA==
-X-Google-Smtp-Source: AGRyM1uZNnkjwp3gD5E60dyah5H3ZffEInP/mP8aQ29pg3Nnn7qB/enz6kjunR2PDKn786LAijZaLg==
-X-Received: by 2002:a05:6e02:12e9:b0:2dc:4e72:120a with SMTP id l9-20020a056e0212e900b002dc4e72120amr11335770iln.14.1657593985235;
-        Mon, 11 Jul 2022 19:46:25 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g38-20020a028529000000b0033f1e23ab20sm3604724jai.125.2022.07.11.19.46.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 19:46:24 -0700 (PDT)
-Subject: Re: [PATCH 4.9 00/14] 4.9.323-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220711090535.517697227@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <370bef86-9c35-d2e2-bd40-13b7546ed7e5@linuxfoundation.org>
-Date:   Mon, 11 Jul 2022 20:46:24 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 11 Jul 2022 22:47:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47C458CCA2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657594034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x1/jSIRVCmdrp57N6o2GT3cX8fSlWGgTPHdnSTG+KfQ=;
+        b=Zt2hFRNbJI0oL3dqhcZkhxDObX0UAUPlajKapQGui84aZuXXliqu7wNIdz79lJsYa7gVQ+
+        rWn68vPiHFCT5E5LSrsP6W0/HlqfgqvyR9x39s+m09BSAqrA9B+glWGsqioRJ2tc4ity2D
+        FYICWzsNNifUgChgfi8Wjai0xZOHqVc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-exFlLAfsO4GNH_20BlqzDQ-1; Mon, 11 Jul 2022 22:47:03 -0400
+X-MC-Unique: exFlLAfsO4GNH_20BlqzDQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD41C2806AB5;
+        Tue, 12 Jul 2022 02:47:02 +0000 (UTC)
+Received: from T590 (ovpn-8-24.pek2.redhat.com [10.72.8.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4987440D282E;
+        Tue, 12 Jul 2022 02:46:56 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 10:46:49 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Subject: Re: [PATCH V4 2/2] ublk_drv: add UBLK_IO_REFETCH_REQ for supporting
+ to build as module
+Message-ID: <YszgmQzXSBsQmV9p@T590>
+References: <20220711022024.217163-1-ming.lei@redhat.com>
+ <20220711022024.217163-3-ming.lei@redhat.com>
+ <87lesze7o3.fsf@collabora.com>
+ <1f021cc5-3cbe-a69d-7d50-8c758174d178@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20220711090535.517697227@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f021cc5-3cbe-a69d-7d50-8c758174d178@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/11/22 3:06 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.323 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Jul 12, 2022 at 10:26:47AM +0800, Ziyang Zhang wrote:
+> On 2022/7/12 04:06, Gabriel Krisman Bertazi wrote:
+> > Ming Lei <ming.lei@redhat.com> writes:
+> > 
+> >> Add UBLK_IO_REFETCH_REQ command to fetch the incoming io request in
+> >> ubq daemon context, so we can avoid to call task_work_add(), then
+> >> it is fine to build ublk driver as module.
+> >>
+> >> In this way, iops is affected a bit, but just by ~5% on ublk/null,
+> >> given io_uring provides pretty good batching issuing & completing.
+> >>
+> >> One thing to be careful is race between ->queue_rq() and handling
+> >> abort, which is avoided by quiescing queue when aborting queue.
+> >> Except for that, handling abort becomes much easier with
+> >> UBLK_IO_REFETCH_REQ since aborting handler is strictly exclusive with
+> >> anything done in ubq daemon kernel context.
+> > 
+> > Hi Ming,
+> > 
+> > FWIW, I'm not very fond this change.  It adds complexity to the kernel
+> > driver and to the userspace server implementation, who now have to deal
+> > with different interface semantics just because the driver was built-in
+> > or built as a module.  I don't think the tristate support warrants such
+> > complexity.  I was hoping we might get away with exporting that symbol
+> > or adding a built-in ubd-specific wrapper that can be exported and
+> > invokes task_work_add.
+> > 
+> > Either way, Alibaba seems to consider this feature useful, and if that
+> > is the case, we can just not use it on our side.
 > 
-> Responses should be made by Wed, 13 Jul 2022 09:05:28 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.323-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Our app handles IOs itself with network(RPC) and internal memory pool
+> so UBLK_IO_REFETCH_REQ
+> (actually I think it is like NEED_GET_DATA in the earlist version :) )
+> is helpful to us because we can assign data buffer address AFTER the app
+> gets one IO requests(WRITE, with data size) and we avoid PRE-allocating buffers.
 
-Compiled and booted on my test system. No dmesg regressions.
+Maybe you can consider to switch to pre-allocation.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+The patch[1] for pinning io vm pages in the io lifetime has been done, just
+not included in this patchset, and it passes all the builtin tests, but
+there is still space for further optimization.
 
-thanks,
--- Shuah
+With that patchset[1] in, io pages becomes pinned during whole io handling time,
+after io is done, mm can reclaim these pages without needing to swapout. It
+works like madvise(MADV_DONTNEED).
+
+[1] https://github.com/ming1/linux/commits/ubd-master
+
+
+Thanks, 
+Ming
+

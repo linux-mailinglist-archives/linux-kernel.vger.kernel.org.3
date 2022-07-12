@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA1A5710B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632B45710BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiGLDRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 23:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S231805AbiGLDRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiGLDRT (ORCPT
+        with ESMTP id S231514AbiGLDRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:17:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3516766BAA;
-        Mon, 11 Jul 2022 20:17:16 -0700 (PDT)
+        Mon, 11 Jul 2022 23:17:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119E68FD7E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 20:17:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2DDBB81647;
-        Tue, 12 Jul 2022 03:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B12AC34115;
-        Tue, 12 Jul 2022 03:17:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86DEB61716
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 03:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1A4C34115;
+        Tue, 12 Jul 2022 03:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657595833;
-        bh=J25fbPyZIElwvHcgf+FundCXwLuPZRG1xQlqXVip9Sg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rAMZU+jz8OfrUllrWPBQdgLoWIUBI1WLjkO8be0PilC9I4wSktXcx5426LtUfpuBc
-         xTsT67ZCbo5GPlNBem8NcKcaQF0ZE87X9rbrGBCPfshm8JwhjWOcFhRCslhFOKRifX
-         jP31eBnrnnyo8p8EKe+bDMrtcsLSYcuuWC0ROTOh36n27aKO8Hp9SVeGxjDqX/BX8S
-         EKQwSto4TF+o8FAY4x51FSyBaO8/vgiE6tj+yYc2GFjcAr+Dykz7vG2TKy9TVOtMFL
-         IPwH9LTS4QB6TnEqBD+PdBwxJXS3JBXMcpRPJmr2F11nYhknopf4xNlHXK7w2OoGEe
-         rhDZxiz4biIeA==
-Date:   Mon, 11 Jul 2022 20:17:12 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
-Cc:     netdev@vger.kernel.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/9] net: marvell: prestera: add nexthop routes
- offloading
-Message-ID: <20220711201712.64536a7d@kernel.org>
-In-Reply-To: <20220710172208.29851-1-yevhen.orlov@plvision.eu>
-References: <20220710172208.29851-1-yevhen.orlov@plvision.eu>
+        s=k20201202; t=1657595842;
+        bh=pJZwIkZ8d/iC0FwubEOjyhKFFCOrbXxtTAMZJdtPyTo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FRI10TJMayIxzm0DK/SF54vPHxcSJF4ng0Y875nqKyU/93VneHNsvfKJGHciOt8fd
+         mtUKqFEq2WGPnnJ8iDOXL16bdL8PGz88wlHUmEwZtMuvIcbUWXCnsztWJi04JJD10W
+         Zp+DHemKT78QQ4BjYEQIIGmPsLebvg/0z/zGtbpFm/mNlwu1XNotvuJXtKrQGabwxD
+         6yc5af56XEnp6hKgjIwisxOXXXijom/7RoeP5lDGCuEbEtF34BbD54F3Gbddx6Un6j
+         uZcA9yU95J+fIho9wXmBqi8IsKAs1/dbFoMZ8eTKllg9PmKqccOFtXmeF5JzomilBN
+         yRKnGZWQr4A1Q==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] f2fs: fix to check inline_data during compressed inode conversion
+Date:   Tue, 12 Jul 2022 11:17:15 +0800
+Message-Id: <20220712031715.355222-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,17 +53,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 10 Jul 2022 20:21:58 +0300 Yevhen Orlov wrote:
-> Add support for nexthop routes for Marvell Prestera driver.
-> Subscribe on NEIGH_UPDATE events.
+When converting inode to compressed one via ioctl, it needs to check
+inline_data, since inline_data flag and compressed flag are incompatible.
 
-$ git pw series apply 658304
-Failed to apply patch:
-Applying: net: marvell: prestera: Add router nexthops ABI
-error: sha1 information is lacking or useless (drivers/net/ethernet/marvell/prestera/prestera_router.c).
-error: could not build fake ancestor
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-Patch failed at 0001 net: marvell: prestera: Add router nexthops ABI
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
+Fixes: 4c8ff7095bef ("f2fs: support data compression")
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+ fs/f2fs/f2fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 1d97d06e0d87..60508a949dda 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4417,7 +4417,7 @@ static inline bool f2fs_low_mem_mode(struct f2fs_sb_info *sbi)
+ static inline bool f2fs_may_compress(struct inode *inode)
+ {
+ 	if (IS_SWAPFILE(inode) || f2fs_is_pinned_file(inode) ||
+-				f2fs_is_atomic_file(inode))
++		f2fs_is_atomic_file(inode) || f2fs_has_inline_data(inode))
+ 		return false;
+ 	return S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode);
+ }
+-- 
+2.25.1
+

@@ -2,192 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000CC5719C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E125719C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiGLMUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S232520AbiGLMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiGLMUV (ORCPT
+        with ESMTP id S232278AbiGLMVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:20:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94DA86D549
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657628419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/fC+rsuewsmYyokkHN4davc+n6pcIuIFkioCEI5EXs=;
-        b=KWtiIi7iIdV/9yg2/AC6x/ClTJSLIxLzEPhg9WPI+s0KWpamj4r2i2HyKKesn0dHIExabS
-        fq+1G9HBQo38wDrhXmW0u8srzuXCbsZnc9QEYCHi4PSm0rdd1WECGafJ3mq8QzqCi+1S0k
-        s3LW4slFilsmcjRUl6x18tBwYmagl6s=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-14-lazxwkXlOveUr_VqD-oelQ-1; Tue, 12 Jul 2022 08:19:09 -0400
-X-MC-Unique: lazxwkXlOveUr_VqD-oelQ-1
-Received: by mail-wm1-f71.google.com with SMTP id i5-20020a1c3b05000000b003a2e8a77dd1so637043wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:19:09 -0700 (PDT)
+        Tue, 12 Jul 2022 08:21:22 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BEF6D549
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:21:21 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31d7db3e6e5so48327207b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UaSHri8uX8QzRonJXk/9Ev1ksxotFizg9AxbyPG4jRk=;
+        b=AdA9qT8whnij0+KR+xYBYzsjojFQe6acCMTqkTici9ybil/uXKlgNpGU4ccpVCEIhz
+         9lstl2oAgiyy3zfDj8omvZMXE2HfC9BztuasX9rV3FAtelrWEST4nMElNJrEIUbHg6xz
+         vLBb8YSGSfV6wwGP//JqkXtQWBzWnS6IQnt0H/AhukwKmCy+De2sO+LsQj6CPfc47DEP
+         GPy1Qc9iOVk/8rq20s4g9LqjTdYELDMJmbd3WnYzVj9FTIda6MtL0VuZXtIj4K0Lxzhq
+         mXgFDNw0qg6K2V5/KOq8itfFBvS3GWdiVr7JMEdKlZRGv/i9f+m7rMBo/pDfaPsFN5yP
+         NkQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=D/fC+rsuewsmYyokkHN4davc+n6pcIuIFkioCEI5EXs=;
-        b=yU9hgBInS6jLRdoq73b4gSxNfCldb0IG2ruoTNSVAsShb8Ir7E/Dy6S8Do+cCjpLjm
-         NbYmons3GYmp005LYWKMTWbpJhiW5o1jZd4nYh9GeRwxLE4GbCxzV4qKHYWUgruQm1dT
-         +3PL/TDhAFBVDd/qAofINIt5dxCW4wy9pHkf8KlgUjzMQ1C5va0M/tXQPcTI3DZ+ETqe
-         eBgIQM3ozkLkpksk7PKfQ8TAR69ardIkKKOU1D3sWsHGoLnnzNw1pzQb3EDX10stHr/r
-         QRrAWWF2Oe0hn36KjdmOHGTvcfkZ+dK65hS45mz91UNjTUNCEtTIM+JqoIcZZyOS2HGh
-         aMgw==
-X-Gm-Message-State: AJIora8FLBj2nHr5poKk25sTfVvsgbrxIcBXcvkc+mvpqVwwUCYEkxxj
-        tuyjEaWYoGZgwtIgtFhykm8u6Zlx+pRZQRm3fJkFYkFHKPneZREIUeiLTR7NFUupxEGgia2ApEQ
-        /zACqYLod8YqQPle66Hy18uQt
-X-Received: by 2002:a05:600c:3845:b0:3a2:c04d:5ff9 with SMTP id s5-20020a05600c384500b003a2c04d5ff9mr3619765wmr.74.1657628348621;
-        Tue, 12 Jul 2022 05:19:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tSAiVrHcowqDbe7dPEm4sreDyxs47ZG63PfIWwugXmlHXOLYhohrraQDJqffTNnuGllHv/ag==
-X-Received: by 2002:a05:600c:3845:b0:3a2:c04d:5ff9 with SMTP id s5-20020a05600c384500b003a2c04d5ff9mr3619748wmr.74.1657628348428;
-        Tue, 12 Jul 2022 05:19:08 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id j5-20020adff545000000b0021d864d4461sm8090767wrp.83.2022.07.12.05.19.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 05:19:07 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v3 03/25] x86/hyperv: Update 'struct
- hv_enlightened_vmcs' definition
-In-Reply-To: <6cf5812083ebfa18ba52563527298cb8b91f7fab.camel@redhat.com>
-References: <20220708144223.610080-1-vkuznets@redhat.com>
- <20220708144223.610080-4-vkuznets@redhat.com>
- <6cf5812083ebfa18ba52563527298cb8b91f7fab.camel@redhat.com>
-Date:   Tue, 12 Jul 2022 14:19:06 +0200
-Message-ID: <874jzmplqd.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UaSHri8uX8QzRonJXk/9Ev1ksxotFizg9AxbyPG4jRk=;
+        b=HkCqm5owuBKLUCAbb4kngmnvV4P9IiVXVGFkX1Br6d0Fqc8ORrEOk6LjfIn4AW2BFI
+         DwS0F2phDx6fIMvwQIL1gRPI9pF984OnU5Bee8RWncZj9j9O+wDZVc3RB+/6sMQtOQsZ
+         nURzFzvfBjcApf/NifrPioMcUL/VU01KHKMYx0KQ7Vjv8qc4zxeU/akQrAMBZGckmPba
+         DdaJaGha1oqEWF3lSYgKYpmu/nvgltRotSsDeTiytpwM0UiMB1kDeef3o7eRYoOQvtam
+         7+aqXquqgyBCiwVvR3Hcvl1FIlUL60066W0X4T464K9kStFsabA7NhP6BrSSu39u6haG
+         yMMQ==
+X-Gm-Message-State: AJIora/46TzrRTbIC6bE+BiyDqtPGwY86LJulYNypDGpp8vJnE6CMoHz
+        ytvwUe+ClLedocRBQ+nQ+UwvK6Yf5M4BZJLSb+uwQg==
+X-Google-Smtp-Source: AGRyM1tNTqqD1WJS4VX6QxCOJmIA4NZigO0ohBTbUAMEjXFjLnHlS2MHRgJF6cAyN0c2yj/38K4PnLL3yJAEs4Jhs+g=
+X-Received: by 2002:a81:1492:0:b0:31c:a1ff:9ec with SMTP id
+ 140-20020a811492000000b0031ca1ff09ecmr23857082ywu.327.1657628480468; Tue, 12
+ Jul 2022 05:21:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-15-glider@google.com>
+In-Reply-To: <20220701142310.2188015-15-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 12 Jul 2022 14:20:44 +0200
+Message-ID: <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
+Subject: Re: [PATCH v4 14/45] mm: kmsan: maintain KMSAN metadata for page operations
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim Levitsky <mlevitsk@redhat.com> writes:
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
+>
+> Insert KMSAN hooks that make the necessary bookkeeping changes:
+>  - poison page shadow and origins in alloc_pages()/free_page();
+>  - clear page shadow and origins in clear_page(), copy_user_highpage();
+>  - copy page metadata in copy_highpage(), wp_page_copy();
+>  - handle vmap()/vunmap()/iounmap();
+>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> v2:
+>  -- move page metadata hooks implementation here
+>  -- remove call to kmsan_memblock_free_pages()
+>
+> v3:
+>  -- use PAGE_SHIFT in kmsan_ioremap_page_range()
+>
+> v4:
+>  -- change sizeof(type) to sizeof(*ptr)
+>  -- replace occurrences of |var| with @var
+>  -- swap mm: and kmsan: in the subject
+>  -- drop __no_sanitize_memory from clear_page()
+>
+> Link: https://linux-review.googlesource.com/id/I6d4f53a0e7eab46fa29f0348f3095d9f2e326850
+> ---
+>  arch/x86/include/asm/page_64.h |  12 ++++
+>  arch/x86/mm/ioremap.c          |   3 +
+>  include/linux/highmem.h        |   3 +
+>  include/linux/kmsan.h          | 123 +++++++++++++++++++++++++++++++++
+>  mm/internal.h                  |   6 ++
+>  mm/kmsan/hooks.c               |  87 +++++++++++++++++++++++
+>  mm/kmsan/shadow.c              | 114 ++++++++++++++++++++++++++++++
+>  mm/memory.c                    |   2 +
+>  mm/page_alloc.c                |  11 +++
+>  mm/vmalloc.c                   |  20 +++++-
+>  10 files changed, 379 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+> index baa70451b8df5..227dd33eb4efb 100644
+> --- a/arch/x86/include/asm/page_64.h
+> +++ b/arch/x86/include/asm/page_64.h
+> @@ -45,14 +45,26 @@ void clear_page_orig(void *page);
+>  void clear_page_rep(void *page);
+>  void clear_page_erms(void *page);
+>
+> +/* This is an assembly header, avoid including too much of kmsan.h */
 
-> On Fri, 2022-07-08 at 16:42 +0200, Vitaly Kuznetsov wrote:
->> Updated Hyper-V Enlightened VMCS specification lists several new
->> fields for the following features:
->>=20
->> - PerfGlobalCtrl
->> - EnclsExitingBitmap
->> - Tsc Scaling
->> - GuestLbrCtl
->> - CET
->> - SSP
->>=20
->> Update the definition. The updated definition is available only when
->> CPUID.0x4000000A.EBX BIT(0) is '1'. Add a define for it as well.
->>=20
->> Note: The latest TLFS is available at
->> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/=
-tlfs
->>=20
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/include/asm/hyperv-tlfs.h | 18 ++++++++++++++++--
->>  1 file changed, 16 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/h=
-yperv-tlfs.h
->> index 6f0acc45e67a..6f2c3cdacdf4 100644
->> --- a/arch/x86/include/asm/hyperv-tlfs.h
->> +++ b/arch/x86/include/asm/hyperv-tlfs.h
->> @@ -138,6 +138,9 @@
->>  #define HV_X64_NESTED_GUEST_MAPPING_FLUSH		BIT(18)
->>  #define HV_X64_NESTED_MSR_BITMAP			BIT(19)
->>=20=20
->
-> Maybe add a comment that this is undocumented + what that cpuid bit does?
->
->> +/* Nested quirks. These are HYPERV_CPUID_NESTED_FEATURES.EBX bits. */
->> +#define HV_X64_NESTED_EVMCS1_2022_UPDATE		BIT(0)
->> +
->>  /*
->>   * This is specific to AMD and specifies that enlightened TLB flush is
->>   * supported. If guest opts in to this feature, ASID invalidations only
->> @@ -559,9 +562,20 @@ struct hv_enlightened_vmcs {
->>  	u64 partition_assist_page;
->>  	u64 padding64_4[4];
->>  	u64 guest_bndcfgs;
->> -	u64 padding64_5[7];
->> +	u64 guest_ia32_perf_global_ctrl;
->> +	u64 guest_ia32_s_cet;
->> +	u64 guest_ssp;
->> +	u64 guest_ia32_int_ssp_table_addr;
->> +	u64 guest_ia32_lbr_ctl;
->> +	u64 padding64_5[2];
->
-> This change looks OK
->
->>  	u64 xss_exit_bitmap;
->> -	u64 padding64_6[7];
->> +	u64 host_ia32_perf_global_ctrl;
->> +	u64 encls_exiting_bitmap;
->> +	u64 tsc_multiplier;
->> +	u64 host_ia32_s_cet;
->> +	u64 host_ssp;
->> +	u64 host_ia32_int_ssp_table_addr;
->> +	u64 padding64_6;
->
-> I think we have a mistake here:
->
-> UINT64 XssExitingBitmap;
-> UINT64 EnclsExitingBitmap;
-> UINT64 HostPerfGlobalCtrl;
-> UINT64 TscMultiplier;
-> UINT64 HostSCet;
-> UINT64 HostSsp;
-> UINT64 HostInterruptSspTableAddr;
-> UINT64 Rsvd8;
->
->
-> I think you need to swap encls_exiting_bitmap and host_ia32_perf_global_c=
-trl
->
-> I used=C2=A0https://docs.microsoft.com/en-us/virtualization/hyper-v-on-wi=
-ndows/tlfs/datatypes/hv_vmx_enlightened_vmcs
-> as the reference.=C2=A0
+All of this code is under an "#ifndef __ASSEMBLY__" guard, does it matter?
 
-Oh, nice catch, thanks! I have no idea how this mistake crept in. A
-conspiracy theory: maybe the online version of TLFS was updated
-under our feet? :-)
+> +#ifdef CONFIG_KMSAN
+> +void kmsan_unpoison_memory(const void *addr, size_t size);
+> +#endif
+>  static inline void clear_page(void *page)
+>  {
+> +#ifdef CONFIG_KMSAN
+> +       /* alternative_call_2() changes @page. */
+> +       void *page_copy = page;
+> +#endif
+>         alternative_call_2(clear_page_orig,
+>                            clear_page_rep, X86_FEATURE_REP_GOOD,
+>                            clear_page_erms, X86_FEATURE_ERMS,
+>                            "=D" (page),
+>                            "0" (page)
+>                            : "cc", "memory", "rax", "rcx");
+> +#ifdef CONFIG_KMSAN
+> +       /* Clear KMSAN shadow for the pages that have it. */
+> +       kmsan_unpoison_memory(page_copy, PAGE_SIZE);
 
-v4 is coming to rescue.
+What happens if this is called before the alternative-call? Could this
+(in the interest of simplicity) be moved above it? And if you used the
+kmsan-checks.h header, it also doesn't need any "ifdef CONFIG_KMSAN"
+anymore.
 
->
->
-> Best regards,
-> 	Maxim Levitsky
->
->
->>  } __packed;
->>=20=20
->>  #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE			0
->
->
-
---=20
-Vitaly
-
+> +#endif
+>  }

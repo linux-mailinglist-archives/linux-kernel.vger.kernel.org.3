@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0375723AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B39572470
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbiGLSwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 14:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        id S235124AbiGLTAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiGLSvm (ORCPT
+        with ESMTP id S235232AbiGLS7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 14:51:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD54E5862;
-        Tue, 12 Jul 2022 11:44:49 -0700 (PDT)
+        Tue, 12 Jul 2022 14:59:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BA4F2723;
+        Tue, 12 Jul 2022 11:48:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D0256090C;
-        Tue, 12 Jul 2022 18:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42950C3411C;
-        Tue, 12 Jul 2022 18:44:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFDE2B81BAB;
+        Tue, 12 Jul 2022 18:48:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D57C341C0;
+        Tue, 12 Jul 2022 18:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651469;
-        bh=0A1ecswK9RXwOpzgxQteXqxtREg2wIgo60mGWUG+KJs=;
+        s=korg; t=1657651681;
+        bh=AMwao2cp+UL+oraGBM3Jg9TFI5yu1zF56vJztTh5j+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kBk1unAC49UleUX2MXGaH7n5/aCFT76zSyhiBBGlgfbfU5Pr/iseZiq2Ek4L/pvax
-         FG6NEGvnHmHArBwr04ag2ww7HM627h7uMi9z8t/dSBf16bmciELJP+rY0a7kkhTxq0
-         t42eVoeF2jDp4tJLIj6MCmOTmq0LWRaSlIjnkfqo=
+        b=U4M6txvlboUf2+SX3hh4CPVlUccZ8X5O4GFCnBd/JrBhR3y7Rodil/D3YSdUP7HWu
+         NXGNlqIN+6l/5rMg6RQA+sZ5a2rBnmaEsTPRSYPm1fq71kX4xwjFDc29dZ54UDgCtR
+         hALcxibXGI3/54BMXgnX/tDRDmDpLA6VXVAUcx+E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: [PATCH 5.10 086/130] objtool: skip non-text sections when adding return-thunk sites
-Date:   Tue, 12 Jul 2022 20:38:52 +0200
-Message-Id: <20220712183250.428122574@linuxfoundation.org>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.15 23/78] x86/realmode: build with -D__DISABLE_EXPORTS
+Date:   Tue, 12 Jul 2022 20:38:53 +0200
+Message-Id: <20220712183239.763624879@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
-References: <20220712183246.394947160@linuxfoundation.org>
+In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
+References: <20220712183238.844813653@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,35 +56,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-The .discard.text section is added in order to reserve BRK, with a
-temporary function just so it can give it a size. This adds a relocation to
-the return thunk, which objtool will add to the .return_sites section.
-Linking will then fail as there are references to the .discard.text
-section.
-
-Do not add instructions from non-text sections to the list of return thunk
-calls, avoiding the reference to .discard.text.
+Commit 156ff4a544ae ("x86/ibt: Base IBT bits") added this option when
+building realmode in order to disable IBT there. This is also needed in
+order to disable return thunks.
 
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/objtool/check.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1090,7 +1090,9 @@ static void add_return_call(struct objto
- 	insn->type = INSN_RETURN;
- 	insn->retpoline_safe = true;
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -24,7 +24,7 @@ endif
  
--	list_add_tail(&insn->call_node, &file->return_thunk_list);
-+	/* Skip the non-text sections, specially .discard ones */
-+	if (insn->sec->text)
-+		list_add_tail(&insn->call_node, &file->return_thunk_list);
- }
- 
- /*
+ # How to compile the 16-bit code.  Note we always compile for -march=i386;
+ # that way we can complain to the user if the CPU is insufficient.
+-REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING \
++REALMODE_CFLAGS	:= -m16 -g -Os -DDISABLE_BRANCH_PROFILING -D__DISABLE_EXPORTS \
+ 		   -Wall -Wstrict-prototypes -march=i386 -mregparm=3 \
+ 		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \
+ 		   -mno-mmx -mno-sse $(call cc-option,-fcf-protection=none)
 
 

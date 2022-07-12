@@ -2,185 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34158571DA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085DD571D77
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiGLPAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S233062AbiGLO6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiGLO75 (ORCPT
+        with ESMTP id S233128AbiGLO6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:59:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83514BBD11
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657637965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BQHpBnyEukIpB0e9o8whGYc//sSWJw8fHXPkrhbv0nA=;
-        b=LQe4tDRjReBU76g2475PRBGekoNIwQCY6xiJ0XoifCTvbFITcx5+PqbPnrWCVaualxbT9z
-        wKYrIb7LyCaw6Iiw9zIt/MpVZX/nYhQySrcaLZIxN+shNLn7axFEi9jZvg0BwRqb36xG6A
-        bzriRl2LPZfZ0yOqV1C2fIiU6fl/SjE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-qXnoLm6oNjOhbELEcD1Kyw-1; Tue, 12 Jul 2022 10:59:18 -0400
-X-MC-Unique: qXnoLm6oNjOhbELEcD1Kyw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 702B1811E75;
-        Tue, 12 Jul 2022 14:59:17 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.195.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1CF092166B26;
-        Tue, 12 Jul 2022 14:59:12 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v6 04/23] selftests/bpf: add test for accessing ctx from syscall program type
-Date:   Tue, 12 Jul 2022 16:58:31 +0200
-Message-Id: <20220712145850.599666-5-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+        Tue, 12 Jul 2022 10:58:46 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132563EA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:58:44 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id h200so8043745iof.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=n8VJkx0UohrHUcfROik699gEfwwdc0SDpII8DJF6C8s=;
+        b=Oak10QNvZgMB7/UKrDYLWKdMeoxUzqKUF3rSNzKHrqxJ1iS9Sgo1duF4JPHtxMsuZL
+         utvW26G04zusV8xskL22aeSChqvVcnzpNfbapVcrXTBO3oMVfm8W4KPiReYoUZynv2uD
+         oKhbR8iJh+lKj7Pu5pUeE1FqXCWR+Rt1IYoNZmqryiNw3onhtWc7Tt7UOGgCoouOrPi0
+         jGsrVhTa7Kf23vhLbiIp9/EyUxUwsk/sNgQRlkqubrReB4F5sPqEBZKpDDfOcYOSAN21
+         BM64FZqhBpZhUe/RvMXRcpr4X9OHFssw56m9LldNto/w1+uxKazQwLA8CAAtM0UL6xgU
+         /iAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n8VJkx0UohrHUcfROik699gEfwwdc0SDpII8DJF6C8s=;
+        b=Mr7DNE4irXc9qe6QcleTcybT76rJarIYxECd7sjnanFWX0s9wNZO18HKarphV+5N0y
+         9q+bcXHcG7Q81X6+fZIJfwNked76Jp5aMoGYKVJJNq5jLbjHQ3WQ9VZETiAMyXXL8xeM
+         xIQIxeEutjEVGWIrGLqnRbVzvg06wJa55jrVWyArFsmNWHHkGXxVpeHPJyfiBi1oFzWh
+         rWyvtT8gMuwaLFu6MJAbw1Tugci0qTshFiX+NXPqQcB+uBLzxlZAtiNHl7SNqf+fNsP3
+         LZxP7QA7najV8vZI6nc90zq1Q4MZH5zGXEQyu7N72jFnPFi+TdUHiEX4FOmv+aNvgaZK
+         6jjg==
+X-Gm-Message-State: AJIora8CqPf4faBDyztmDf9+prbFitHXK2nqFT3atIdvGwX1VIb5T+vG
+        U5zqJDJpX1OEvNtlMLtFRuBfLGV6ifG4fDpVLWA=
+X-Google-Smtp-Source: AGRyM1u3ECrix1ihvS3lPIRW2TSqVAMmFrHahV+S27hy0ug9xr2n6Xd3HUx6RGShCH+WQqtO5vuAmpP/GG0Fy4KT0IA=
+X-Received: by 2002:a05:6602:2b14:b0:67b:8976:2945 with SMTP id
+ p20-20020a0566022b1400b0067b89762945mr6442734iov.82.1657637924305; Tue, 12
+ Jul 2022 07:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220710142822.52539-1-arthurchang09@gmail.com>
+ <20220710142822.52539-3-arthurchang09@gmail.com> <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
+ <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com> <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
+In-Reply-To: <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
+From:   Yu-Jen Chang <arthurchang09@gmail.com>
+Date:   Tue, 12 Jul 2022 22:58:32 +0800
+Message-ID: <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] lib/string.c: Optimize memchr()
+To:     Andrey Semashev <andrey.semashev@gmail.com>
+Cc:     andy@kernel.org, akinobu.mita@gmail.com,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to also export the kfunc set to the syscall program type,
-and then add a couple of eBPF programs that are testing those calls.
+Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A11:00=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On 7/11/22 17:52, Yu-Jen Chang wrote:
+> > Andrey Semashev <andrey.semashev@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=8811=E6=97=A5 =E9=80=B1=E4=B8=80 =E5=87=8C=E6=99=A84:01=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> >>
+> >> On 7/10/22 17:28, Yu-Jen Chang wrote:
+> >>> The original version of memchr() is implemented with the byte-wise
+> >>> comparing technique, which does not fully use 64-bits or 32-bits
+> >>> registers in CPU. We use word-wide comparing so that 8 characters
+> >>> can be compared at the same time on CPU. This code is base on
+> >>> David Laight's implementation.
+> >>>
+> >>> We create two files to measure the performance. The first file
+> >>> contains on average 10 characters ahead the target character.
+> >>> The second file contains at least 1000 characters ahead the
+> >>> target character. Our implementation of =E2=80=9Cmemchr()=E2=80=9D is=
+ slightly
+> >>> better in the first test and nearly 4x faster than the orginal
+> >>> implementation in the second test.
+> >>>
+> >>> Signed-off-by: Yu-Jen Chang <arthurchang09@gmail.com>
+> >>> Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
+> >>> ---
+> >>>  lib/string.c | 28 +++++++++++++++++++++-------
+> >>>  1 file changed, 21 insertions(+), 7 deletions(-)
+> >>>
+> >>> diff --git a/lib/string.c b/lib/string.c
+> >>> index 80469e6c3..8ca965431 100644
+> >>> --- a/lib/string.c
+> >>> +++ b/lib/string.c
+> >>> @@ -905,21 +905,35 @@ EXPORT_SYMBOL(strnstr);
+> >>>  #ifndef __HAVE_ARCH_MEMCHR
+> >>>  /**
+> >>>   * memchr - Find a character in an area of memory.
+> >>> - * @s: The memory area
+> >>> + * @p: The memory area
+> >>>   * @c: The byte to search for
+> >>> - * @n: The size of the area.
+> >>> + * @length: The size of the area.
+> >>>   *
+> >>>   * returns the address of the first occurrence of @c, or %NULL
+> >>>   * if @c is not found
+> >>>   */
+> >>> -void *memchr(const void *s, int c, size_t n)
+> >>> +void *memchr(const void *p, int c, unsigned long length)
+>
+> I didn't comment on this initially, but is the change of length type
+> intentional? Why?
 
-The first one checks for valid access, and the second one is OK
-from a static analysis point of view but fails at run time because
-we are trying to access outside of the allocated memory.
+It is my mistake. I will change the type back to size_t.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> >>>  {
+> >>> -     const unsigned char *p =3D s;
+> >>> -     while (n-- !=3D 0) {
+> >>> -             if ((unsigned char)c =3D=3D *p++) {
+> >>> -                     return (void *)(p - 1);
+> >>> +     u64 mask, val;
+> >>> +     const void *end =3D p + length;
+> >>> +
+> >>> +     c &=3D 0xff;
+> >>> +     if (p <=3D end - 8) {
+> >>> +             mask =3D c;
+> >>> +             MEMCHR_MASK_GEN(mask);
+> >>> +
+> >>> +             for (; p <=3D end - 8; p +=3D 8) {
+> >>> +                     val =3D *(u64 *)p ^ mask;
+> >>
+> >> What if p is not aligned to 8 (or 4 on 32-bit targets) bytes? Not all
+> >> targets support (efficient) unaligned loads, do they?
+> >
+> > I think it works if p is not aligned to 8 or 4 bytes.
+> >
+> > Let's say the string is 10 bytes. The for loop here will search the fir=
+st
+> > 8 bytes. If the target character is in the last 2 bytes, the second for
+> > loop will find it. It also work like this on 32-bit machine.
+>
+> I think you're missing the point. Loads at unaligned addresses may not
+> be allowed by hardware using conventional load instructions or may be
+> inefficient. Given that this memchr implementation is used as a fallback
+> when no hardware-specific version is available, you should be
+> conservative wrt. hardware capabilities and behavior. You should
+> probably have a pre-alignment loop.
 
----
+Got it. I add  pre-alignment loop. It aligns the address to 8 or 4bytes.
 
-new in v6
----
- net/bpf/test_run.c                            |  1 +
- .../selftests/bpf/prog_tests/kfunc_call.c     | 20 ++++++++++++++
- .../selftests/bpf/progs/kfunc_call_test.c     | 27 +++++++++++++++++++
- 3 files changed, 48 insertions(+)
+void *memchr(const void *p, int c, size_t length)
+{
+    u64 mask, val;
+    const void *end =3D p + length;
+    c &=3D 0xff;
+    while ((long ) p & (sizeof(long) - 1)) {
+        if (p >=3D end)
+            return NULL;
+        if (*(unsigned char *)p =3D=3D c)
+            return (void *) p;
+        p++;
+    }
+    if (p <=3D end - 8) {
+        mask =3D c;
+        MEMCHR_MASK_GEN(mask);
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 2ca96acbc50a..9da2a42811e8 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1646,6 +1646,7 @@ static int __init bpf_prog_test_run_init(void)
- 	int ret;
- 
- 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_prog_test_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_prog_test_kfunc_set);
- 	return ret ?: register_btf_id_dtor_kfuncs(bpf_prog_test_dtor_kfunc,
- 						  ARRAY_SIZE(bpf_prog_test_dtor_kfunc),
- 						  THIS_MODULE);
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index c00eb974eb85..22547aafdd60 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -6,10 +6,22 @@
- #include "kfunc_call_test_subprog.skel.h"
- #include "kfunc_call_test_subprog.lskel.h"
- 
-+struct syscall_test_args {
-+	__u8 data[16];
-+	size_t size;
-+};
-+
- static void test_main(void)
- {
- 	struct kfunc_call_test_lskel *skel;
- 	int prog_fd, err;
-+	struct syscall_test_args args = {
-+		.size = 10,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
-+		.ctx_in = &args,
-+		.ctx_size_in = sizeof(args),
-+	);
- 	LIBBPF_OPTS(bpf_test_run_opts, topts,
- 		.data_in = &pkt_v4,
- 		.data_size_in = sizeof(pkt_v4),
-@@ -35,6 +47,14 @@ static void test_main(void)
- 	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
- 	ASSERT_EQ(topts.retval, 0, "test_ref_btf_id-retval");
- 
-+	prog_fd = skel->progs.kfunc_syscall_test.prog_fd;
-+	err = bpf_prog_test_run_opts(prog_fd, &syscall_topts);
-+	ASSERT_OK(err, "bpf_prog_test_run(syscall_test)");
-+
-+	prog_fd = skel->progs.kfunc_syscall_test_fail.prog_fd;
-+	err = bpf_prog_test_run_opts(prog_fd, &syscall_topts);
-+	ASSERT_ERR(err, "bpf_prog_test_run(syscall_test_fail)");
-+
- 	kfunc_call_test_lskel__destroy(skel);
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 5aecbb9fdc68..0978834e22ad 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -92,4 +92,31 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
- 	return 0;
- }
- 
-+struct syscall_test_args {
-+	__u8 data[16];
-+	size_t size;
-+};
-+
-+SEC("syscall")
-+int kfunc_syscall_test(struct syscall_test_args *args)
-+{
-+	const int size = args->size;
-+
-+	if (size > sizeof(args->data))
-+		return -7; /* -E2BIG */
-+
-+	bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(args->data));
-+	bpf_kfunc_call_test_mem_len_pass1(&args->data, size);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int kfunc_syscall_test_fail(struct syscall_test_args *args)
-+{
-+	bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args) + 1);
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.36.1
+        for (; p <=3D end - 8; p +=3D 8) {
+            val =3D *(u64*)p ^ mask;
+            if ((val + 0xfefefefefefefeffull)
+& (~val & 0x8080808080808080ull))
+                break;
+        }
+    }
 
+    for (; p < end; p++)
+        if (*(unsigned char *)p =3D=3D c)
+            return (void *)p;
+
+    return NULL;
+}
+
+>
+> >>
+> >>> +                     if ((val + 0xfefefefefefefeffu) &
+> >>> +                         (~val & 0x8080808080808080u))
+> >>> +                             break;
+> >>>               }
+> >>>       }
+> >>> +
+> >>> +     for (; p < end; p++)
+> >>> +             if (*(unsigned char *)p =3D=3D c)
+> >>> +                     return (void *)p;
+> >>> +
+> >>>       return NULL;
+> >>>  }
+> >>>  EXPORT_SYMBOL(memchr);
+> >>
+>

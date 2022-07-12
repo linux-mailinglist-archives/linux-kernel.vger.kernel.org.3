@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE4E57259F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C246A5725A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiGLT24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S234433AbiGLTbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiGLT2d (ORCPT
+        with ESMTP id S234415AbiGLTbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:28:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F2CE0F5E;
-        Tue, 12 Jul 2022 12:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5zn6hvHj4eKtfzqRScUEHMiIgZur5MyCCs29W1zBYWo=; b=xxs5oqmrZEfO2E2kxTPGNrkRA7
-        vBxlIZp9V+hqHw7UsxneA0WB6uEnzq62HTiQMSJlzBKphdX/f13tQpG50mucKGSRLyum5pR1eqxDj
-        RFiCrTx/E6tlShgUgl6TZtHLYONAUGmmDpljk3YyL2wNRddKtfsrQFBX31dnnl4UmgIcDQn6Bhiy2
-        R1AYFBFhR1bQRM6WmKGxKr2aLGpVzm5FLCWYcpg23IdcOzHEdsHa14+A8AmKHKpyw95W/1onf4lBW
-        HyF0WFSv56iDl0v13QjsccAx2nNtGNXoTClDAz2uatbs1mqzeOgB8GGcmUtfCbvtv9ss8P+BrIeKb
-        gVzKuaVA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBLBN-00E3qI-Ub; Tue, 12 Jul 2022 19:04:29 +0000
-Date:   Tue, 12 Jul 2022 12:04:29 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Christoph Hellwig <hch@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Message-ID: <Ys3FvYnASr2v9iPc@bombadil.infradead.org>
-References: <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
- <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
- <YseAEsjE49AZDp8c@bombadil.infradead.org>
- <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
- <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
- <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
- <YsiupnNJ8WANZiIc@bombadil.infradead.org>
- <6214B9C9-557B-4DC0-BFDE-77EAC425E577@fb.com>
- <Ysz2LX3q2OsaO4gM@bombadil.infradead.org>
- <E23B6EB1-AFFA-4B65-963E-B44BA0F2142D@fb.com>
+        Tue, 12 Jul 2022 15:31:21 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7833BF6BAA;
+        Tue, 12 Jul 2022 12:07:09 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id i14so15581756yba.1;
+        Tue, 12 Jul 2022 12:07:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9jSG1wgtixdY+YA7Ct6rK6ymsNuCZJmArD422MXwHis=;
+        b=T972PrJ9pEdTXdaZBKrHZXHv/ozNN3G9CyoLNIE6lS5nXY4XCgZfx0mtStUcudAdAK
+         tDcRsxMc52MFYwxmkkTnfbgyS581wdPPzSm/v0XPx4NB1UktoVfVA8cQxWgELhcbtXaH
+         ZYgZKojngbT6fxL1ACb+QJ/svFhAlqKHHYFL4EwNQFv8b1Z5Y81MvqdaT34el1nIjs78
+         dqjMVIsztUw2Qb+HFeC3rNV89Ny8lDrpiHQ0SEc+FrUVIH3dJX/MwesB6uFMYwCICOU+
+         A8JU044LkREj4sI4geMcY64vK0HEY//L1GcYLLntk3XtaIMjdAuFDnqo/qE+VdAKGviz
+         MoiA==
+X-Gm-Message-State: AJIora+/QCRvkoQlK8ZejGnzLPjjnqnAR6HzFIcZVdbmRUNJeMjbUrrF
+        CWAZiTp39mouCmv/PcRDef6rTMqCacSGalUndHI=
+X-Google-Smtp-Source: AGRyM1u98PWCXYTMOkpVRxjYEtoYwvwqepx9OO+uuI42JLM9g9l1UWgHksdgil2QZhC1d9a7zIHKSoCnqYAu7/R+hf4=
+X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
+ o20-20020a25d714000000b0066f58989eb1mr8536068ybg.633.1657652828443; Tue, 12
+ Jul 2022 12:07:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E23B6EB1-AFFA-4B65-963E-B44BA0F2142D@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701023328.2783-1-mario.limonciello@amd.com>
+In-Reply-To: <20220701023328.2783-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 12 Jul 2022 21:06:57 +0200
+Message-ID: <CAJZ5v0g5Zsbddid+w2qxa_bqwmeP-FSk_42SZ3doMoFs0r8S8g@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] PM: suspend: Introduce `pm_suspend_preferred_s2idle`
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:49:32AM +0000, Song Liu wrote:
-> > On Jul 11, 2022, at 9:18 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> 
-> > I believe you are mentioning requiring text_poke() because the way
-> > eBPF code uses the module_alloc() is different. Correct me if I'm
-> > wrong, but from what I gather is you use the text_poke_copy() as the data
-> > is already RO+X, contrary module_alloc() use cases. You do this since your
-> > bpf_prog_pack_alloc() calls set_memory_ro() and set_memory_x() after
-> > module_alloc() and before you can use this memory. This is a different type
-> > of allocator. And, again please correct me if I'm wrong but now you want to
-> > share *one* 2 MiB huge-page for multiple BPF programs to help with the
-> > impact of TLB misses.
-> 
-> Yes, sharing 1x 2MiB huge page is the main reason to require text_poke. 
-> OTOH, 2MiB huge pages without sharing is not really useful. Both kprobe
-> and ftrace only uses a fraction of a 4kB page. Most BPF programs and 
-> modules cannot use 2MiB either. Therefore, vmalloc_rw_exec() doesn't add
-> much value on top of current module_alloc(). 
+On Fri, Jul 1, 2022 at 4:33 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Many drivers in the kernel will check the FADT to determine if low
+> power idle is supported and use this information to set up a policy
+> decision in the driver.  To abstract this information from drivers
+> introduce a new helper symbol that can indicate this information.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  include/linux/suspend.h |  1 +
+>  kernel/power/suspend.c  | 17 +++++++++++++++++
+>  2 files changed, 18 insertions(+)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..9d911e026720 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -305,6 +305,7 @@ static inline bool idle_should_enter_s2idle(void)
+>         return unlikely(s2idle_state == S2IDLE_STATE_ENTER);
+>  }
+>
+> +extern bool pm_suspend_preferred_s2idle(void);
+>  extern bool pm_suspend_default_s2idle(void);
+>  extern void __init pm_states_init(void);
+>  extern void s2idle_set_ops(const struct platform_s2idle_ops *ops);
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 827075944d28..0030e7dfe6cf 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -9,6 +9,7 @@
+>
+>  #define pr_fmt(fmt) "PM: " fmt
+>
+> +#include <linux/acpi.h>
+>  #include <linux/string.h>
+>  #include <linux/delay.h>
+>  #include <linux/errno.h>
+> @@ -61,6 +62,22 @@ static DECLARE_SWAIT_QUEUE_HEAD(s2idle_wait_head);
+>  enum s2idle_states __read_mostly s2idle_state;
+>  static DEFINE_RAW_SPINLOCK(s2idle_lock);
+>
+> +/**
+> + * pm_suspend_preferred_s2idle - Check if suspend-to-idle is the preferred suspend method.
+> + *
+> + * Return 'true' if suspend-to-idle is preferred by the system designer for the default
+> + * suspend method.
+> + */
+> +bool pm_suspend_preferred_s2idle(void)
+> +{
+> +#ifdef CONFIG_ACPI
+> +       return acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0;
+> +#else
+> +       return false;
+> +#endif
+> +}
+> +EXPORT_SYMBOL_GPL(pm_suspend_preferred_s2idle);
 
-Thanks for the clarification.
+First, this is ACPI-specific, so please don't try to generalize it
+artificially.  This confuses things and doesn't really help.
 
-> > A vmalloc_ro_exec() by definition would imply a text_poke().
-> > 
-> > Can kprobes, ftrace and modules use it too? It would be nice
-> > so to not have to deal with the loose semantics on the user to
-> > have to use set_vm_flush_reset_perms() on ro+x later, but
-> > I think this can be addressed separately on a case by case basis.
-> 
-> I am pretty confident that kprobe and ftrace can share huge pages with 
-> BPF programs.
+Second, ACPI_FADT_LOW_POWER_S0 means that "low power S0 idle" is
+supported, not that suspend-to-idle is the preferred suspend method in
+Linux.
 
-Then wonderful, we know where to go in terms of a new API then as it
-can be shared in the future for sure and there are gains.
+System designers who set that bit in FADT may not even know what
+suspend-to-idle is.
 
-> I haven't looked into all the details with modules, but 
-> given CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, I think it is also 
-> possible.
+But it is good that you have identified the code checking that bit,
+because it should not be checked without a valid reason.  I need to
+review that code and see what's going on in there.
 
-Sure.
-
-> Once this is done, a regular system (without huge BPF program or huge
-> modules) will just use 1x 2MB page for text from module, ftrace, kprobe, 
-> and bpf programs. 
-
-That would be nice, if possible, however modules will require likely its
-own thing, on my system I see about 57 MiB used on coresize alone.
-
-lsmod | grep -v Module | cut -f1 -d ' ' | \
-	xargs sudo modinfo | grep filename | \
-	grep -o '/.*' | xargs stat -c "%s - %n" | \
-	awk 'BEGIN {sum=0} {sum+=$1} END {print sum}'
-60001272
-
-And so perhaps we need such a pool size to be configurable.
-
-> > But a vmalloc_ro_exec() with a respective free can remove the
-> > requirement to do set_vm_flush_reset_perms().
-> 
-> Removing the requirement to set_vm_flush_reset_perms() is the other
-> reason to go directly to vmalloc_ro_exec(). 
-
-Yes fantastic.
-
-> My current version looks like this:
-> 
-> void *vmalloc_exec(unsigned long size);
-> void vfree_exec(void *ptr, unsigned int size);
-> 
-> ro is eliminated as there is no rw version of the API. 
-
-Alright.
-
-I am not sure if 2 MiB will suffice given what I mentioned above, and
-what to do to ensure this grows at a reasonable pace. Then, at least for
-usage for all architectures since not all will support text_poke() we
-will want to consider a way to make it easy to users to use non huge
-page fallbacks, but that would be up to those users, so we can wait for
-that.
-
-> The ugly part is @size for vfree_exec(). We need it to share huge 
-> pages. 
-
-I suppose this will become evident during patch review.
-
-> Under the hood, it looks similar to current bpf_prog_pack_alloc
-> and bpf_prog_pack_free. 
-
-Groovy.
-
-  Luis
+> +
+>  /**
+>   * pm_suspend_default_s2idle - Check if suspend-to-idle is the default suspend.
+>   *
+> --
+> 2.34.1
+>

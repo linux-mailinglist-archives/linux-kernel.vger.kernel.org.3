@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90E2571429
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77765571434
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiGLIOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S232623AbiGLIQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbiGLIOt (ORCPT
+        with ESMTP id S229739AbiGLIQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:14:49 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE54F6268
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:14:48 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id r9so4648250lfp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:14:48 -0700 (PDT)
+        Tue, 12 Jul 2022 04:16:00 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD23B9FE2A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:15:58 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id bn33so8971008ljb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NaYE0YC5oBomgL0PmclsweYRAytccspL/sTByqhvc7I=;
-        b=XV6LgXVn8D1tK9kHTYiLURnyiM7aue61n6dT5mNZwp7VGrsl9wcAgZsiYjLgfVeYtY
-         AN9vERoMbcUyuYjcRZpPAJPBVrFArEvQt+qd3TDJYQUsDH/Sj5GvbJub9fEv0f1lqfwO
-         ogpEjwFHMT3pZlkjoanORhcX+rIHznRkm8Uf0V6plzlcV3t5mTF05LagSSv8Z3WSmI3h
-         JU/MUe29p5qYV1wj+6rrfy37pGqEHkd+XkLPWHYwM2bZKTnCR0crQCkbOZvBZ7L5O2JI
-         uNx1+XkNSrkXMtuBT3xD27F3T/qjIVbFwJXjeUYUPCI6q2OAu0DWZ7CJkwW0Bpt7rsN9
-         pWHQ==
+        bh=Gz399WGL/sxc1W3UfSmBpMoYFpV/x2jFmQy30J4h9co=;
+        b=Bimnodoh6uwfH+NtlsoPLf/Oi3uwH1U9mdkas6pSxeNsfHtRE/ouuE4NVGQXKwO5Ax
+         tgvQA8BXdm4JLpKz3Dr5HtOmGssyEfVYflCnkfelRrnRkJQ8oRqe64GooyhRUHDjxkU2
+         uXEr9MrHoUyP7oUgs/ylu3G/cHCV6/1nzTL7WceYyjQxzpK/JAmDtnsXvuIZIKB1NGUC
+         XbpACoUKcn5zHbBCzfUQFmokEf57OrJIzLb+9fqHGkyR8uL+Kl6bNRIwYHywCcX9/Fl7
+         9Qp7DkcGbr3dz6kwCX9WBZZWJqGPKP9ClckhirLmqBZtK20HbS5z9B+ncQ52UQQxYQv+
+         Rq8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NaYE0YC5oBomgL0PmclsweYRAytccspL/sTByqhvc7I=;
-        b=ZZ8cFsSrIP4HPqegJGEQ7gnfA9CkgpHRnmZgWQKG+BYZyp2asowyu0biRxZ05J5PRx
-         k5GvVHitfpD3aHTTotBP/kGzskhnz5KDEqmTjto3usMy1N19WgG7PFnot6wLY3jP5wea
-         ADnbEtJwqkKZ6grNMLrkpAUFmAfnIU6mRjlBlSp06iqpAjzyoeiN/VVCqv3StYpSTeYb
-         nNKbdntP2+NKkQQe++8Oj2IE+uERn0+3+u/TAWoYGbG4YZbCnluzhXmyAKzziEHa52Es
-         3lNpEg5sHxYM6zHII3c2Y79PnjGzQ6Smi3lWkosT8+X/zN/JqyQ/NOZDs2OA8wmN5vm6
-         vdlg==
-X-Gm-Message-State: AJIora/oxAdu/ggfKYbsPjhs1K54QjVgNLiKCYfkHVRed5IsM4rH2YIK
-        ntOcICkaTqdP882wF2RDXFiGbA==
-X-Google-Smtp-Source: AGRyM1uTRuXVxUGxHjUXtpenfQ8xEOSmzLpVZr/APJjFs1AGo/9O39jOrEr1RmWyohWhys6FfXZczw==
-X-Received: by 2002:a05:6512:c0f:b0:489:dc4c:55bd with SMTP id z15-20020a0565120c0f00b00489dc4c55bdmr6821749lfu.118.1657613687148;
-        Tue, 12 Jul 2022 01:14:47 -0700 (PDT)
+        bh=Gz399WGL/sxc1W3UfSmBpMoYFpV/x2jFmQy30J4h9co=;
+        b=eKSygiupd52e4P5NeM/hpUuI5zsrXUM+wT4IOfchYuQCMCg7VmO2kbSGna0YnjRUbw
+         2UvUNKUWcceZc6yrbQ8Q4kT39Uv7x5pSCwpvvNDLHVg4Q+M6hZGGlH5MZeJIBwn/Gx7L
+         pJXt6UN1WPSP6FqYHPHj5dxmOYJ7Pd6sPsu39ECbTCdSUtBt1VzRoMOWf54m+n0ueCKt
+         GwoXn0ZqD1ab7AcKOD0n5o0+QN8K+kF2WokRKDHEze82/zwT9JchBz7gQBtubx95wkcn
+         EL+zwzXmDDsZXpe+mOv29guVKPnUiDLK7JgTxoePmblGJep6HVA1vtGJXwNG1XkbHoKE
+         5R1g==
+X-Gm-Message-State: AJIora96mOdV12N/isoOrWmHSkA1iO/AKPZtydcVG6f2O4OKmEtQgpD5
+        1sRgdB8GM9H8ief2FPqJHbxUaQ==
+X-Google-Smtp-Source: AGRyM1uthbH4eFg5trDb190JDSVIAHXMJyTiKFa+qO5+e0KBkT0TIyS1XH4glZaTr2Im0vcadeZUXQ==
+X-Received: by 2002:a2e:a172:0:b0:25d:6242:ee10 with SMTP id u18-20020a2ea172000000b0025d6242ee10mr8419047ljl.399.1657613757286;
+        Tue, 12 Jul 2022 01:15:57 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05651203a900b004790a4ce3e5sm2051670lfp.278.2022.07.12.01.14.45
+        by smtp.gmail.com with ESMTPSA id j5-20020a056512344500b004855e979abcsm2038559lfr.99.2022.07.12.01.15.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 01:14:46 -0700 (PDT)
-Message-ID: <18103915-6ab5-cf23-c5c5-707864b3e049@linaro.org>
-Date:   Tue, 12 Jul 2022 10:14:44 +0200
+        Tue, 12 Jul 2022 01:15:56 -0700 (PDT)
+Message-ID: <154dd9ef-cb8c-d8d7-ae62-a73bac160089@linaro.org>
+Date:   Tue, 12 Jul 2022 10:15:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: sound: atmel,classd: Convert to
- json-schema
+Subject: Re: [PATCH v1 1/2] dt-bindings: iio: adc: npcm: Add npcm845
+ compatible string
 Content-Language: en-US
-To:     Ryan.Wanner@microchip.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220711183010.39123-1-Ryan.Wanner@microchip.com>
- <20220711183010.39123-2-Ryan.Wanner@microchip.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, j.neuschaefer@gmx.net,
+        zhengbin13@huawei.com
+Cc:     openbmc@lists.ozlabs.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220711134312.234268-1-tmaimon77@gmail.com>
+ <20220711134312.234268-2-tmaimon77@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220711183010.39123-2-Ryan.Wanner@microchip.com>
+In-Reply-To: <20220711134312.234268-2-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,22 +81,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/2022 20:30, Ryan.Wanner@microchip.com wrote:
+On 11/07/2022 15:43, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 ADC.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml     | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml b/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml
+> index 001cf263b7d5..c9e9c5bf5e5b 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/nuvoton,npcm750-adc.yaml
+> @@ -14,7 +14,10 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    const: nuvoton,npcm750-adc
+> +    oneOf:
+> +      - items:
 
-One more:
+This does not make sense. oneOf with one item. You also create now list
+breaking all existing users/ABI.
 
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/dma/at91.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    classd: sound@fc048000 {
-> +    	compatible = "atmel,sama5d2-classd";
-> +    	reg = <0xfc048000 0x100>;
-> +        interrupts = <59 IRQ_TYPE_LEVEL_HIGH 7>;
+You probably wanted an enum here.
 
-Wrong indentation. I asked about this in v1.
+> +          - const: nuvoton,npcm750-adc
+> +          - const: nuvoton,npcm845-adc
+>  
+>    reg:
+>      maxItems: 1
 
 
 Best regards,

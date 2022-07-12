@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24157256A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A01572578
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236004AbiGLTPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S231446AbiGLTP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbiGLTO2 (ORCPT
+        with ESMTP id S236175AbiGLTOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:14:28 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C7E683E;
-        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id p129so15517362yba.7;
-        Tue, 12 Jul 2022 11:54:11 -0700 (PDT)
+        Tue, 12 Jul 2022 15:14:33 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75514D5140;
+        Tue, 12 Jul 2022 11:54:23 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y9so8218340pff.12;
+        Tue, 12 Jul 2022 11:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K1IKCfZW89XQvo85Z8BhSh0884PYpNxI9KGLgL48HhU=;
+        b=mONWmWg9j5WWAGQnDhb6lMqqVC1nGf+CbhThgBUbRkwpwdhBTiHtddhsRDyShUVy6V
+         cMwn/8SH2HLSYs4td6iqqq4CHS9hciHjKY1El6t/DOl8ITfQ7bJnL/T3agcPf1nFdJ2i
+         dwVtLSeN6WoO7TztYLDuhVOUc5Kv/UL/LL1kNUZDWwMh+2/lz1vB411wsbUllsg8F26B
+         4iFi2ueShWaCXdokHRrD8EeOodNxBUOmUlWOKWE5ue+ilcpLKRuK4D5tK2Fyb6RK3KlA
+         T8b+H217RGCmpryowWSfEH8yYPeygWIrvKTcFvgCqPBGwqzV/a6OdKCdBCDnz5/XNisk
+         bKig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ayGO49PfhW5yn8VZVDZP2vCg6MktvihoyGEzbg3823A=;
-        b=vPdnYSEt92RVtKJX42PS/PjJkZCQ/HWjXXqD3qDgkEcvJFV1t5uKwIMUCK57lmFVAb
-         9J5Erv/RkOgb45plxXZfQ+hRVRIgyJIgg13XG7vZn1xuHiMpp/e/sbshXyYPdXskPxqL
-         wCrdVqYbhjiNlBYeKDAE1j9zLCVzevODIzi/wHXFb47rXQFrq3WPfkwPlyypqP2ASh+k
-         roRz1laKusUShTrXs2cv5+Z86wD+U8mrLZONxdAX7Kcj1LAI2u6/m0/7RBtNQV+BzpKD
-         o/I6CJVi4xM2w8wSZU/HVe1BC/KTQzeIRxXw3OHyF7LaLFldJ3HO6NUyEDRq5oUuJDEh
-         uDCg==
-X-Gm-Message-State: AJIora/fy40g51l5fcjYwa4dfW1vvalANJnypJ/DQBbUw2z4uVK4fhh3
-        uD0bDC4lZz1YhWoptk+6vlaVJquZ/GeLEIlpcNA=
-X-Google-Smtp-Source: AGRyM1t+aWUxZewPLwcIpwK1Ma3RA1r6QQ75+VBKPWZXevvL2PtzIyXroWnXqdtasPd086IfxhYKYyVlU+344UWm5jw=
-X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
- o20-20020a25d714000000b0066f58989eb1mr8476398ybg.633.1657652050606; Tue, 12
- Jul 2022 11:54:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K1IKCfZW89XQvo85Z8BhSh0884PYpNxI9KGLgL48HhU=;
+        b=KuKS1IDN6grFWFJR1TP66NkjBLLk45qSH8jbrPrmKQyyScvex0HCySgQqOgtztwERy
+         OE5z0Z0Ll0sIVGUHnLP1xNf5HtXkvXPoMlh8G1fZqnfyFoj2Vrp9q5sv5rfdX+XfknEv
+         OzN8YdAR8U9Bck34xkw5hG+O43j5sRIksoaOALwb6o9E35rcQZIBlQ9x+cl+RVpHzS3c
+         uses1mm5yRdjFcsK8vBdVGeVfud2CuGc+vyyAe6Iib7jr+Q5VYScK4vYvej5KGw19tBt
+         e+qubg5G07L4DOvBcY6jgvr2FYcPtDrbhtdiZ6Z36+9DSZYBeXTw+ZSIRDqGer43PSbC
+         StCw==
+X-Gm-Message-State: AJIora/Olg4Vlc6IQFZmRdCiKmophuRGuUMbISC4JbjJvdywi4Mt3VGX
+        4/lrb/ZQjBuhhnHuT9Es1unvx8jHQM8=
+X-Google-Smtp-Source: AGRyM1tijtHmJAYOsuSQDbbEVFzF0OvZrIYUyBGfKAZp6IEQzl6/TAkU1kCiKsbOgqNXU+SB7aRHSQ==
+X-Received: by 2002:a63:104f:0:b0:40d:2293:f1d6 with SMTP id 15-20020a63104f000000b0040d2293f1d6mr21274190pgq.167.1657652062552;
+        Tue, 12 Jul 2022 11:54:22 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b8-20020a6567c8000000b0040de29f847asm6575539pgs.52.2022.07.12.11.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 11:54:22 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     olivia@selenic.com, u.kleine-koenig@pengutronix.de,
+        paul.gortmaker@windriver.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        gregkh@linuxfoundation.org, Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH] MAINTAINERS: Change mentions of mpm to olivia
+Date:   Tue, 12 Jul 2022 11:54:19 -0700
+Message-Id: <20220712185419.45487-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220629011146.299521-1-xiongxin@kylinos.cn> <20220629011146.299521-3-xiongxin@kylinos.cn>
-In-Reply-To: <20220629011146.299521-3-xiongxin@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Jul 2022 20:53:59 +0200
-Message-ID: <CAJZ5v0hURC-mhHszh=BhrGYfP9hwCs_nTQVxmtnV4Ot2yuajLA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] PM: suspend: advanced pm_wakeup_clear() for
- normal suspend/hibernate
-To:     xiongxin <xiongxin@kylinos.cn>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Riwen Lu <luriwen@kylinos.cn>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 5:35 AM xiongxin <xiongxin@kylinos.cn> wrote:
->
-> pm_wakeup_clear() will clear the wakeup source, which can ensure that it
-> is not disturbed by useless wakeup signals when doing suspend/hibernate;
->
-> At the beginning of the suspend/hibernate process, the notifier
-> mechanism is used to notify other device drivers. This action is
-> time-consuming (second-level time-consuming). If the process fails due
-> to the received wakeup signal during the execution of these functions,
-> it can better improve the experience of failing suspend/hibernate
-> returns;
->
-> Therefore, it is recommended here that for the suspend/hibernate process
-> normally called from /sys/power/state, the pm_wakeup_clear() function
-> should be brought before the notifier call; for the freeze_process()
-> function called from other places, the original logic is kept;
->
-> The pm_suspend_target_state variable is used here to identify whether the
-> suspend process is going normally.
+Following this mercurial changeset:
+https://www.mercurial-scm.org/repo/hg-stable/rev/d4ba4d51f85f
 
-You seem to be arguing that the previous wakeup IRQ should be cleared
-before invoking PM notifiers.  However, it is only set in
-pm_system_irq_wakeup() which is only called after
-suspend_device_irqs(), so clearing it anywhere before calling that
-function in the given cycle should be sufficient.
+update the MAINTAINERS entry to replace the now obsolete identity.
 
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> ---
->  kernel/power/process.c | 5 ++++-
->  kernel/power/suspend.c | 6 ++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index 3068601e585a..3fde0240b3d1 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -131,7 +131,10 @@ int freeze_processes(void)
->         if (!pm_freezing)
->                 atomic_inc(&system_freezing_cnt);
->
-> -       pm_wakeup_clear(0);
-> +       if (pm_suspend_target_state != PM_SUSPEND_ON)
-> +               pm_wakeup_clear(1);
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+This was first submitted by Uwe:
 
-This doesn't make sense.
+https://lore.kernel.org/lkml/20210920080635.253826-1-u.kleine-koenig@pengutronix.de/
 
-> +       else
-> +               pm_wakeup_clear(0);
->         pr_info("Freezing user space processes ... ");
->         pm_freezing = true;
->         error = try_to_freeze_tasks(true);
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index c754b084ec03..f4259f6c1cc2 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -569,6 +569,12 @@ static int enter_state(suspend_state_t state)
->          * performed from the /sys/power/state entry.
->          */
->         pm_suspend_target_state = state;
-> +       /*
-> +        * Put pm_wakeup_clear() before the notifier notification chain to
-> +        * optimize in the suspend process, the wakeup signal can interrupt
-> +        * the suspend in advance and fail to return.
-> +        */
+but the discussion derailed into whether the EMBEDDED LINUX entry ought
+to be there or not, meanwhile we still have a bouncing entry with an
+obsolete identify.
 
-The comment above is too hard to understand for me, sorry.
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +       pm_wakeup_clear(0);
->
->         if (sync_on_suspend_enabled) {
->                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
-> --
-> 2.25.1
->
->
-> No virus found
->                 Checked by Hillstone Network AntiVirus
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f679152bdbad..b1ce4b84f99f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7404,7 +7404,7 @@ F:	Documentation/admin-guide/media/em28xx*
+ F:	drivers/media/usb/em28xx/
+ 
+ EMBEDDED LINUX
+-M:	Matt Mackall <mpm@selenic.com>
++M:	Olivia Mackall <olivia@selenic.com>
+ M:	David Woodhouse <dwmw2@infradead.org>
+ L:	linux-embedded@vger.kernel.org
+ S:	Maintained
+@@ -8787,7 +8787,7 @@ F:	include/trace/events/hwmon*.h
+ K:	(devm_)?hwmon_device_(un)?register(|_with_groups|_with_info)
+ 
+ HARDWARE RANDOM NUMBER GENERATOR CORE
+-M:	Matt Mackall <mpm@selenic.com>
++M:	Olivia Mackall <olivia@selenic.com>
+ M:	Herbert Xu <herbert@gondor.apana.org.au>
+ L:	linux-crypto@vger.kernel.org
+ S:	Odd fixes
+-- 
+2.25.1
+

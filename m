@@ -2,49 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C836571D7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67AB571E11
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiGLO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S234018AbiGLPFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiGLO6x (ORCPT
+        with ESMTP id S234005AbiGLPFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:58:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34307E092;
-        Tue, 12 Jul 2022 07:58:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 12 Jul 2022 11:05:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BC56C2587
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657638010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2n20GqM2zjAxawwgNXJV4iVeQ8BgVAwFSbOVDlZeIsM=;
+        b=HDpMaTeJzVHZKLD6SjdM6Ovdc59+L9zz7VStmennrDdNqMcMpIsT1ysfp1hGmocMXrke4U
+        uhust1p7wsM4bVymfkNo/+L1V0/bBMuGk/c1KnbeVhuZWkpGqaXeSB3QCCVK3VC+4YReHu
+        0TzgJ2zWc/RN1yXxo6Zut+HqtJSeXtY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-36-aXUckedQMV2pUJ2cH46_Fw-1; Tue, 12 Jul 2022 11:00:00 -0400
+X-MC-Unique: aXUckedQMV2pUJ2cH46_Fw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3E706100A;
-        Tue, 12 Jul 2022 14:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56D3C3411C;
-        Tue, 12 Jul 2022 14:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657637929;
-        bh=T0tKComMbX5ECWCCcnfOq3fZQAEjvBU25fKkAPPSfLQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OHP4hP8J23ZTW/FBaQm9CsJFHGuNhhzznbSIwzD+ty0GTs2ryhw3qgzQyMfLfdgU1
-         FNVyOydLwP3U/4S/YCMDM2szCVp0FjGg5GL/e2o8Znz8zahm50vosixoXadiupihxB
-         aNzUZ5lwgsahRdgf4Egh9YjgSdNIerSxp1QGOnTo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 4.9.323
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED28D185A7BA;
+        Tue, 12 Jul 2022 14:59:58 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.195.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DC042166B26;
+        Tue, 12 Jul 2022 14:59:54 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 14/23] HID: bpf: allocate data memory for device_event BPF programs
 Date:   Tue, 12 Jul 2022 16:58:41 +0200
-Message-Id: <165763792156223@kroah.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <16576379211965@kroah.com>
-References: <16576379211965@kroah.com>
+Message-Id: <20220712145850.599666-15-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,365 +73,336 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index bd4c898a9940..44c3b223062a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,6 +1,6 @@
- VERSION = 4
- PATCHLEVEL = 9
--SUBLEVEL = 322
-+SUBLEVEL = 323
- EXTRAVERSION =
- NAME = Roaring Lionus
+We need to also be able to change the size of the report.
+Reducing it is easy, because we already have the incoming buffer that is
+big enough, but extending it is harder.
+
+Pre-allocate a buffer that is big enough to handle all reports of the
+device, and use that as the primary buffer for BPF programs.
+To be able to change the size of the buffer, we change the device_event
+API and request it to return the size of the buffer.
+
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+
+---
+
+no changes in v6
+
+new-ish in v5
+---
+ drivers/hid/bpf/hid_bpf_dispatch.c  | 116 +++++++++++++++++++++++++---
+ drivers/hid/bpf/hid_bpf_jmp_table.c |   4 +-
+ drivers/hid/hid-core.c              |  12 ++-
+ include/linux/hid_bpf.h             |  37 +++++++--
+ 4 files changed, 151 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 574e0a627861..87fd11539213 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -28,8 +28,9 @@ EXPORT_SYMBOL(hid_bpf_ops);
+  *
+  * @ctx: The HID-BPF context
+  *
+- * @return %0 on success and keep processing; a negative error code to interrupt
+- * the processing of this event
++ * @return %0 on success and keep processing; a positive value to change the
++ * incoming size buffer; a negative error code to interrupt the processing
++ * of this event
+  *
+  * Declare an %fmod_ret tracing bpf program to this function and attach this
+  * program through hid_bpf_attach_prog() to have this helper called for
+@@ -44,23 +45,43 @@ __weak noinline int hid_bpf_device_event(struct hid_bpf_ctx *ctx)
+ }
+ ALLOW_ERROR_INJECTION(hid_bpf_device_event, ERRNO);
  
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index ca266fcca186..f191057065f7 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1806,6 +1806,11 @@ static int at_xdmac_alloc_chan_resources(struct dma_chan *chan)
- 	for (i = 0; i < init_nr_desc_per_channel; i++) {
- 		desc = at_xdmac_alloc_desc(chan, GFP_ATOMIC);
- 		if (!desc) {
-+			if (i == 0) {
-+				dev_warn(chan2dev(chan),
-+					 "can't allocate any descriptors\n");
-+				return -EIO;
-+			}
- 			dev_warn(chan2dev(chan),
- 				"only %d descriptors have been allocated\n", i);
- 			break;
-diff --git a/drivers/dma/ti-dma-crossbar.c b/drivers/dma/ti-dma-crossbar.c
-index a7e1f6e17e3d..8ea8d04e1ae0 100644
---- a/drivers/dma/ti-dma-crossbar.c
-+++ b/drivers/dma/ti-dma-crossbar.c
-@@ -251,6 +251,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 	if (dma_spec->args[0] >= xbar->xbar_requests) {
- 		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
- 			dma_spec->args[0]);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
+-int
++u8 *
+ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type, u8 *data,
+-			      u32 size, int interrupt)
++			      u32 *size, int interrupt)
+ {
+ 	struct hid_bpf_ctx_kern ctx_kern = {
+ 		.ctx = {
+ 			.hid = hdev,
+ 			.report_type = type,
+-			.size = size,
++			.allocated_size = hdev->bpf.allocated_data,
++			.size = *size,
+ 		},
+-		.data = data,
++		.data = hdev->bpf.device_data,
+ 	};
++	int ret;
  
-@@ -258,12 +259,14 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
- 	if (!dma_spec->np) {
- 		dev_err(&pdev->dev, "Can't get DMA master\n");
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
- 	map = kzalloc(sizeof(*map), GFP_KERNEL);
- 	if (!map) {
- 		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-@@ -274,6 +277,8 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
- 		mutex_unlock(&xbar->mutex);
- 		dev_err(&pdev->dev, "Run out of free DMA requests\n");
- 		kfree(map);
-+		of_node_put(dma_spec->np);
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	set_bit(map->xbar_out, xbar->dma_inuse);
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index a29ac9bae6d5..9ab056bb834d 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -992,6 +992,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_clk_dis:
-+	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
- 	clk_disable_unprepare(id->clk);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-diff --git a/drivers/iommu/dmar.c b/drivers/iommu/dmar.c
-index 9ad5a7019abf..d8b8cf36de31 100644
---- a/drivers/iommu/dmar.c
-+++ b/drivers/iommu/dmar.c
-@@ -373,7 +373,7 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
- 
- static struct notifier_block dmar_pci_bus_nb = {
- 	.notifier_call = dmar_pci_bus_notifier,
--	.priority = INT_MIN,
-+	.priority = 1,
- };
- 
- static struct dmar_drhd_unit *
-diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index c6a176d8681c..4e3432182092 100644
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1669,7 +1669,6 @@ static int grcan_probe(struct platform_device *ofdev)
- 	 */
- 	sysid_parent = of_find_node_by_path("/ambapp0");
- 	if (sysid_parent) {
--		of_node_get(sysid_parent);
- 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
- 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
- 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 6771c51f72c3..e3dc59fffdb7 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -192,6 +192,8 @@ struct gs_can {
- 
- 	struct usb_anchor tx_submitted;
- 	atomic_t active_tx_urbs;
-+	void *rxbuf[GS_MAX_RX_URBS];
-+	dma_addr_t rxbuf_dma[GS_MAX_RX_URBS];
- };
- 
- /* usb interface struct */
-@@ -601,6 +603,7 @@ static int gs_can_open(struct net_device *netdev)
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-+			dma_addr_t buf_dma;
- 
- 			/* alloc rx urb */
- 			urb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -611,7 +614,7 @@ static int gs_can_open(struct net_device *netdev)
- 			buf = usb_alloc_coherent(dev->udev,
- 						 sizeof(struct gs_host_frame),
- 						 GFP_KERNEL,
--						 &urb->transfer_dma);
-+						 &buf_dma);
- 			if (!buf) {
- 				netdev_err(netdev,
- 					   "No memory left for USB buffer\n");
-@@ -619,6 +622,8 @@ static int gs_can_open(struct net_device *netdev)
- 				return -ENOMEM;
- 			}
- 
-+			urb->transfer_dma = buf_dma;
+ 	if (type >= HID_REPORT_TYPES)
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
 +
- 			/* fill, anchor, and submit rx urb */
- 			usb_fill_bulk_urb(urb,
- 					  dev->udev,
-@@ -642,10 +647,17 @@ static int gs_can_open(struct net_device *netdev)
- 					   rc);
- 
- 				usb_unanchor_urb(urb);
-+				usb_free_coherent(dev->udev,
-+						  sizeof(struct gs_host_frame),
-+						  buf,
-+						  buf_dma);
- 				usb_free_urb(urb);
- 				break;
- 			}
- 
-+			dev->rxbuf[i] = buf;
-+			dev->rxbuf_dma[i] = buf_dma;
++	/* no program has been attached yet */
++	if (!hdev->bpf.device_data)
++		return data;
 +
- 			/* Drop reference,
- 			 * USB core will take care of freeing it
- 			 */
-@@ -710,13 +722,20 @@ static int gs_can_close(struct net_device *netdev)
- 	int rc;
- 	struct gs_can *dev = netdev_priv(netdev);
- 	struct gs_usb *parent = dev->parent;
-+	unsigned int i;
++	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
++	memcpy(ctx_kern.data, data, *size);
++
++	ret = hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	if (ret) {
++		if (ret > ctx_kern.ctx.allocated_size)
++			return ERR_PTR(-EINVAL);
  
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
- 	parent->active_channels--;
--	if (!parent->active_channels)
-+	if (!parent->active_channels) {
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
-+		for (i = 0; i < GS_MAX_RX_URBS; i++)
-+			usb_free_coherent(dev->udev,
-+					  sizeof(struct gs_host_frame),
-+					  dev->rxbuf[i],
-+					  dev->rxbuf_dma[i]);
+-	return hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
++		*size = ret;
 +	}
- 
- 	/* Stop sending URBs */
- 	usb_kill_anchored_urbs(&dev->tx_submitted);
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 4b7a9672d92b..d8253c6ac2b0 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -2085,7 +2085,7 @@ static void usbnet_async_cmd_cb(struct urb *urb)
- int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
- 			   u16 value, u16 index, const void *data, u16 size)
- {
--	struct usb_ctrlrequest *req = NULL;
-+	struct usb_ctrlrequest *req;
- 	struct urb *urb;
- 	int err = -ENOMEM;
- 	void *buf = NULL;
-@@ -2103,7 +2103,7 @@ int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
- 		if (!buf) {
- 			netdev_err(dev->net, "Error allocating buffer"
- 				   " in %s!\n", __func__);
--			goto fail_free;
-+			goto fail_free_urb;
- 		}
- 	}
- 
-@@ -2127,14 +2127,21 @@ int usbnet_write_cmd_async(struct usbnet *dev, u8 cmd, u8 reqtype,
- 	if (err < 0) {
- 		netdev_err(dev->net, "Error submitting the control"
- 			   " message: status=%d\n", err);
--		goto fail_free;
-+		goto fail_free_all;
- 	}
- 	return 0;
- 
-+fail_free_all:
-+	kfree(req);
- fail_free_buf:
- 	kfree(buf);
--fail_free:
--	kfree(req);
-+	/*
-+	 * avoid a double free
-+	 * needed because the flag can be set only
-+	 * after filling the URB
-+	 */
-+	urb->transfer_flags = 0;
-+fail_free_urb:
- 	usb_free_urb(urb);
- fail:
- 	return err;
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c b/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-index 383977ea3a3c..0b5aba4bf338 100644
---- a/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun8i-a83t.c
-@@ -158,26 +158,26 @@ static const struct sunxi_desc_pin sun8i_a83t_pins[] = {
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 14),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQ6 */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQ6 */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* D6 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 15),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQ7 */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQ7 */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* D7 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 16),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand"),		/* DQS */
-+		  SUNXI_FUNCTION(0x2, "nand0"),		/* DQS */
- 		  SUNXI_FUNCTION(0x3, "mmc2")),		/* RST */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 17),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand")),		/* CE2 */
-+		  SUNXI_FUNCTION(0x2, "nand0")),	/* CE2 */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(C, 18),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
--		  SUNXI_FUNCTION(0x2, "nand")),		/* CE3 */
-+		  SUNXI_FUNCTION(0x2, "nand0")),	/* CE3 */
- 	/* Hole */
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(D, 2),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index c5f2f1e3cc4b..48d62da62226 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -2973,7 +2973,6 @@ xfs_rename(
- 	 * appropriately.
- 	 */
- 	if (flags & RENAME_WHITEOUT) {
--		ASSERT(!(flags & (RENAME_NOREPLACE | RENAME_EXCHANGE)));
- 		error = xfs_rename_alloc_whiteout(target_dp, &wip);
- 		if (error)
- 			return error;
-diff --git a/include/video/of_display_timing.h b/include/video/of_display_timing.h
-index ea755b5616d8..cb3f3b2e7ccf 100644
---- a/include/video/of_display_timing.h
-+++ b/include/video/of_display_timing.h
-@@ -9,6 +9,8 @@
- #ifndef __LINUX_OF_DISPLAY_TIMING_H
- #define __LINUX_OF_DISPLAY_TIMING_H
- 
-+#include <linux/errno.h>
 +
- struct device_node;
- struct display_timing;
- struct display_timings;
-diff --git a/lib/idr.c b/lib/idr.c
-index 6098336df267..c657e35433e6 100644
---- a/lib/idr.c
-+++ b/lib/idr.c
-@@ -1124,7 +1124,9 @@ void ida_simple_remove(struct ida *ida, unsigned int id)
- {
- 	unsigned long flags;
++	return ctx_kern.data;
+ }
+ EXPORT_SYMBOL_GPL(dispatch_hid_bpf_device_event);
  
--	BUG_ON((int)id < 0);
-+	if ((int)id < 0)
-+		return;
-+
- 	spin_lock_irqsave(&simple_ida_lock, flags);
- 	ida_remove(ida, id);
- 	spin_unlock_irqrestore(&simple_ida_lock, flags);
-diff --git a/mm/slub.c b/mm/slub.c
-index 0b13135fd571..c07c5fa6adcd 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2556,6 +2556,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- 			deactivate_slab(s, page, c->freelist);
- 			c->page = NULL;
- 			c->freelist = NULL;
-+			c->tid = next_tid(c->tid);
- 			goto new_slab;
- 		}
- 	}
-@@ -2569,6 +2570,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- 		deactivate_slab(s, page, c->freelist);
- 		c->page = NULL;
- 		c->freelist = NULL;
-+		c->tid = next_tid(c->tid);
- 		goto new_slab;
- 	}
+@@ -83,7 +104,7 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
  
-@@ -2581,6 +2583,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
  
- 	if (!freelist) {
- 		c->page = NULL;
-+		c->tid = next_tid(c->tid);
- 		stat(s, DEACTIVATE_BYPASS);
- 		goto new_slab;
- 	}
-@@ -2605,6 +2608,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- 		c->partial = page->next;
- 		stat(s, CPU_PARTIAL_ALLOC);
- 		c->freelist = NULL;
-+		c->tid = next_tid(c->tid);
- 		goto redo;
- 	}
+-	if (rdwr_buf_size + offset > ctx->size)
++	if (rdwr_buf_size + offset > ctx->allocated_size)
+ 		return NULL;
  
-@@ -2627,6 +2631,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
- 	deactivate_slab(s, page, get_freepointer(s, freelist));
- 	c->page = NULL;
- 	c->freelist = NULL;
-+	c->tid = next_tid(c->tid);
- 	return freelist;
+ 	return ctx_kern->data + offset;
+@@ -122,6 +143,51 @@ static int device_match_id(struct device *dev, const void *id)
+ 	return hdev->id == *(int *)id;
  }
  
-diff --git a/net/rose/rose_route.c b/net/rose/rose_route.c
-index 9f704a7f2a28..34e7e2ab78fe 100644
---- a/net/rose/rose_route.c
-+++ b/net/rose/rose_route.c
-@@ -230,8 +230,8 @@ static void rose_remove_neigh(struct rose_neigh *rose_neigh)
++static int __hid_bpf_allocate_data(struct hid_device *hdev, u8 **data, u32 *size)
++{
++	u8 *alloc_data;
++	unsigned int i, j, max_report_len = 0;
++	size_t alloc_size = 0;
++
++	/* compute the maximum report length for this device */
++	for (i = 0; i < HID_REPORT_TYPES; i++) {
++		struct hid_report_enum *report_enum = hdev->report_enum + i;
++
++		for (j = 0; j < HID_MAX_IDS; j++) {
++			struct hid_report *report = report_enum->report_id_hash[j];
++
++			if (report)
++				max_report_len = max(max_report_len, hid_report_len(report));
++		}
++	}
++
++	/*
++	 * Give us a little bit of extra space and some predictability in the
++	 * buffer length we create. This way, we can tell users that they can
++	 * work on chunks of 64 bytes of memory without having the bpf verifier
++	 * scream at them.
++	 */
++	alloc_size = DIV_ROUND_UP(max_report_len, 64) * 64;
++
++	alloc_data = kzalloc(alloc_size, GFP_KERNEL);
++	if (!alloc_data)
++		return -ENOMEM;
++
++	*data = alloc_data;
++	*size = alloc_size;
++
++	return 0;
++}
++
++static int hid_bpf_allocate_event_data(struct hid_device *hdev)
++{
++	/* hdev->bpf.device_data is already allocated, abort */
++	if (hdev->bpf.device_data)
++		return 0;
++
++	return __hid_bpf_allocate_data(hdev, &hdev->bpf.device_data, &hdev->bpf.allocated_data);
++}
++
+ /**
+  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
+  *
+@@ -137,7 +203,7 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
  {
- 	struct rose_neigh *s;
+ 	struct hid_device *hdev;
+ 	struct device *dev;
+-	int prog_type = hid_bpf_get_prog_attach_type(prog_fd);
++	int err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
  
--	rose_stop_ftimer(rose_neigh);
--	rose_stop_t0timer(rose_neigh);
-+	del_timer_sync(&rose_neigh->ftimer);
-+	del_timer_sync(&rose_neigh->t0timer);
+ 	if (!hid_bpf_ops)
+ 		return -EINVAL;
+@@ -157,6 +223,12 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
  
- 	skb_queue_purge(&rose_neigh->queue);
+ 	hdev = to_hid_device(dev);
  
++	if (prog_type == HID_BPF_PROG_TYPE_DEVICE_EVENT) {
++		err = hid_bpf_allocate_event_data(hdev);
++		if (err)
++			return err;
++	}
++
+ 	return __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
+ }
+ 
+@@ -170,6 +242,30 @@ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
+ 	.check_set     = &hid_bpf_syscall_kfunc_ids,
+ };
+ 
++int hid_bpf_connect_device(struct hid_device *hdev)
++{
++	struct hid_bpf_prog_list *prog_list;
++
++	rcu_read_lock();
++	prog_list = rcu_dereference(hdev->bpf.progs[HID_BPF_PROG_TYPE_DEVICE_EVENT]);
++	rcu_read_unlock();
++
++	/* only allocate BPF data if there are programs attached */
++	if (!prog_list)
++		return 0;
++
++	return hid_bpf_allocate_event_data(hdev);
++}
++EXPORT_SYMBOL_GPL(hid_bpf_connect_device);
++
++void hid_bpf_disconnect_device(struct hid_device *hdev)
++{
++	kfree(hdev->bpf.device_data);
++	hdev->bpf.device_data = NULL;
++	hdev->bpf.allocated_data = 0;
++}
++EXPORT_SYMBOL_GPL(hid_bpf_disconnect_device);
++
+ void hid_bpf_destroy_device(struct hid_device *hdev)
+ {
+ 	if (!hdev)
+diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
+index 05225ff3cc27..0f20deab81ff 100644
+--- a/drivers/hid/bpf/hid_bpf_jmp_table.c
++++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
+@@ -123,8 +123,10 @@ int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
+ 
+ 		ctx_kern->ctx.index = idx;
+ 		err = __hid_bpf_tail_call(&ctx_kern->ctx);
+-		if (err)
++		if (err < 0)
+ 			break;
++		if (err)
++			ctx_kern->ctx.retval = err;
+ 	}
+ 
+  out_unlock:
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 47cc288fde63..c2589106ea4b 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2040,9 +2040,11 @@ int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data
+ 	report_enum = hid->report_enum + type;
+ 	hdrv = hid->driver;
+ 
+-	ret = dispatch_hid_bpf_device_event(hid, type, data, size, interrupt);
+-	if (ret)
++	data = dispatch_hid_bpf_device_event(hid, type, data, &size, interrupt);
++	if (IS_ERR(data)) {
++		ret = PTR_ERR(data);
+ 		goto unlock;
++	}
+ 
+ 	if (!size) {
+ 		dbg_hid("empty report\n");
+@@ -2157,6 +2159,10 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
+ 	int len;
+ 	int ret;
+ 
++	ret = hid_bpf_connect_device(hdev);
++	if (ret)
++		return ret;
++
+ 	if (hdev->quirks & HID_QUIRK_HIDDEV_FORCE)
+ 		connect_mask |= (HID_CONNECT_HIDDEV_FORCE | HID_CONNECT_HIDDEV);
+ 	if (hdev->quirks & HID_QUIRK_HIDINPUT_FORCE)
+@@ -2258,6 +2264,8 @@ void hid_disconnect(struct hid_device *hdev)
+ 	if (hdev->claimed & HID_CLAIMED_HIDRAW)
+ 		hidraw_disconnect(hdev);
+ 	hdev->claimed = 0;
++
++	hid_bpf_disconnect_device(hdev);
+ }
+ EXPORT_SYMBOL_GPL(hid_disconnect);
+ 
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 9d893c14a0f2..c9684de18f3f 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -29,15 +29,32 @@ struct hid_device;
+  *         a bigger index).
+  * @hid: the ``struct hid_device`` representing the device itself
+  * @report_type: used for ``hid_bpf_device_event()``
++ * @allocated_size: Allocated size of data.
++ *
++ *                  This is how much memory is available and can be requested
++ *                  by the HID program.
++ *                  Note that for ``HID_BPF_RDESC_FIXUP``, that memory is set to
++ *                  ``4096`` (4 KB)
+  * @size: Valid data in the data field.
+  *
+  *        Programs can get the available valid size in data by fetching this field.
++ *        Programs can also change this value by returning a positive number in the
++ *        program.
++ *        To discard the event, return a negative error code.
++ *
++ *        ``size`` must always be less or equal than ``allocated_size`` (it is enforced
++ *        once all BPF programs have been run).
++ * @retval: Return value of the previous program.
+  */
+ struct hid_bpf_ctx {
+ 	__u32 index;
+ 	const struct hid_device *hid;
++	__u32 allocated_size;
+ 	enum hid_report_type report_type;
+-	__s32 size;
++	union {
++		__s32 retval;
++		__s32 size;
++	};
+ };
+ 
+ /* Following functions are tracepoints that BPF programs can attach to */
+@@ -78,6 +95,12 @@ struct hid_bpf_prog_list {
+ 
+ /* stored in each device */
+ struct hid_bpf {
++	u8 *device_data;		/* allocated when a bpf program of type
++					 * SEC(f.../hid_bpf_device_event) has been attached
++					 * to this HID device
++					 */
++	u32 allocated_data;
++
+ 	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
+ 	bool destroyed;			/* prevents the assignment of any progs */
+ 
+@@ -85,13 +108,17 @@ struct hid_bpf {
+ };
+ 
+ #ifdef CONFIG_BPF
+-int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+-				  u32 size, int interrupt);
++u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
++				  u32 *size, int interrupt);
++int hid_bpf_connect_device(struct hid_device *hdev);
++void hid_bpf_disconnect_device(struct hid_device *hdev);
+ void hid_bpf_destroy_device(struct hid_device *hid);
+ void hid_bpf_device_init(struct hid_device *hid);
+ #else /* CONFIG_BPF */
+-static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, int type, u8 *data,
+-						u32 size, int interrupt) { return 0; }
++static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, int type, u8 *data,
++						u32 *size, int interrupt) { return 0; }
++static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
++static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
+ static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+ static inline void hid_bpf_device_init(struct hid_device *hid) {}
+ #endif /* CONFIG_BPF */
+-- 
+2.36.1
+

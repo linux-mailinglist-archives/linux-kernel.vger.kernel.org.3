@@ -2,163 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520D9571B28
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C57571B2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiGLN0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S232553AbiGLN1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiGLN0r (ORCPT
+        with ESMTP id S230272AbiGLN1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:26:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBF6AB6B2;
-        Tue, 12 Jul 2022 06:26:45 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lj1gh3gm4zkWtf;
-        Tue, 12 Jul 2022 21:24:32 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 21:26:43 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 21:26:42 +0800
-Subject: Re: [PATCH RFC v3 2/3] sbitmap: fix invalid wakeup on the wrong
- waitqueue
-To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
-CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>, <osandov@fb.com>,
-        <kbusch@kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220710042200.20936-1-yukuai1@huaweicloud.com>
- <20220710042200.20936-3-yukuai1@huaweicloud.com>
- <20220711142623.haam2wks36xa5nde@quack3.lan>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <f755a9ad-6f0c-b675-c3ff-e4da930a8af8@huawei.com>
-Date:   Tue, 12 Jul 2022 21:26:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 12 Jul 2022 09:27:07 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2462AADE8A
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:27:06 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id y11so7397247lfs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gq0wH5vmV1ZhzQHv6wskPp+9rbt497AshKhkdFthSS0=;
+        b=i1cZitI/qU/uF8X/S6ILySXGVoa8rPF1QiqE8qJ2k7Px78NE2xf59hOcFwr2cpi+Qj
+         uzZmHhup+VOOjaWZfIsBVADPtwZaKD5wFvJm5CXmQUcJwcgy7AjK+06HKfBuOcLSBTgp
+         J0WyMoC1eEn7GDaUixgZub2AqdSQAC9CDKzFIAI6JufOu+YBxo8VtcleIeIcXjLzfIkM
+         7W8FBDtA+I2c9sBz9J9yJwDt/+s5aPz7N216da+j7m+f8SGs4wEgvkLNnhV+rR8H/kWD
+         NvzydLUL0eTXpNd346BwTU3OvupYjWrnngDw6YQ8ThFywTW491e4L1qXVCwYe62y7AXm
+         yHMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gq0wH5vmV1ZhzQHv6wskPp+9rbt497AshKhkdFthSS0=;
+        b=6gm6yKTeFlJk1h082N1vL2PA8lGsf6smu/D8I1V2Q3KSqUFiqdtO6es9Lv1SMaxO47
+         vUxYhNO9/yGT4GEVlra2q/9C3RNSVkWE7cEDLeDHI8p0+IV1rzmjwSXSebqnxO3moSE3
+         zgqNhEpVPkcEE3ev8oIjEnbgWpWtrbprct+gGrLuyGtyO5yN+skf5NAibBP4H6gXbT5S
+         GUdBxdRpdd75fI3gw59XwxEV60OAN25ErILVtRERNiDtY+Idw+Xyt+aaTlSiBIvv3SZM
+         TCfiXgYjIJIxTVeafQ1mp5WUYU2qQ6vKB3LByD+isOGR9kyruc2Kux+NfcXgC980DM2C
+         xOhg==
+X-Gm-Message-State: AJIora/51hDiX06aE683s6usijZF/ox0ezUz+5iTK9raKxgYgRiO5b4R
+        brp5iw1s2+acgrbGkeBkSgr5bg==
+X-Google-Smtp-Source: AGRyM1sWm1BNKGI6GSzhbgEXcdu1G7LjnBhmE8T3/83bialcpt43Sgg+e1hc5ScPFpCXCi3CfVdO1A==
+X-Received: by 2002:a05:6512:3125:b0:489:f4ba:d5a9 with SMTP id p5-20020a056512312500b00489f4bad5a9mr1800051lfd.348.1657632424490;
+        Tue, 12 Jul 2022 06:27:04 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id h23-20020a2ea497000000b0025d5889d19csm2448568lji.38.2022.07.12.06.27.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 06:27:04 -0700 (PDT)
+Message-ID: <b1829902-c271-a677-f423-99dbc85cba89@linaro.org>
+Date:   Tue, 12 Jul 2022 15:27:01 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220711142623.haam2wks36xa5nde@quack3.lan>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/5] Add support for Xiaomi Poco F1 EBBG variant
+Content-Language: en-US
+To:     Joel Selvaraj <jo@jsfamily.in>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <MN2PR02MB702415D7BF12B7B7A41B2D38D9829@MN2PR02MB7024.namprd02.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR02MB702415D7BF12B7B7A41B2D38D9829@MN2PR02MB7024.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-ÔÚ 2022/07/11 22:26, Jan Kara Ð´µÀ:
-> On Sun 10-07-22 12:21:59, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> For example, 2 * wake_batch tags are put, while only wake_batch threads
->> are woken:
->>
->> __sbq_wake_up
->>   atomic_cmpxchg -> reset wait_cnt
->> 			__sbq_wake_up -> decrease wait_cnt
->> 			...
->> 			__sbq_wake_up -> wait_cnt is decreased to 0 again
->> 			 atomic_cmpxchg
->> 			 sbq_index_atomic_inc -> increase wake_index
->> 			 wake_up_nr -> wake up and waitqueue might be empty
->>   sbq_index_atomic_inc -> increase again, one waitqueue is skipped
->>   wake_up_nr -> invalid wake up because old wakequeue might be empty
->>
->> To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
->>
->> Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On 08/07/2022 13:12, Joel Selvaraj wrote:
+> There are two variants of Xiaomi Poco F1.
+> - Tianma variant with NOVATEK NT36672A panel + touchscreen manufactured
+>   by Tianma
+> - EBBG variant with Focaltech FT8719 panel + touchscreen manufactured
+>   by EBBG
 > 
-> This patch and the following one look sane to me but please merge them to a
-> single patch. They fix the same race of two concurrent wakers just with a
-> slightly different timing so there isn't a point in having two patches for
-> this (in particular changes in this patch are difficult to reason about
-> when we know the result is still buggy).
-
-Ok, I'll merge them.
-
-Thanks,
-Kuai
+> The current sdm845-xiaomi-beryllium.dts represents tianma panel variant.
 > 
-> 								Honza
+> To add support for the EBBG variant, let's split this into 3 files,
+> - sdm845-xiaomi-beryllium-common.dtsi which contains all the common nodes
+> - sdm845-xiaomi-beryllium-tianma.dts for the tianma variant
+> - sdm845-xiaomi-beryllium-ebbg.dts for the ebbg variant
 > 
->> ---
->>   lib/sbitmap.c | 45 +++++++++++++++++++++++----------------------
->>   1 file changed, 23 insertions(+), 22 deletions(-)
->>
->> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
->> index b46fce1beb3a..57095dd88a33 100644
->> --- a/lib/sbitmap.c
->> +++ b/lib/sbitmap.c
->> @@ -616,32 +616,33 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
->>   		return false;
->>   
->>   	wait_cnt = atomic_dec_return(&ws->wait_cnt);
->> -	if (wait_cnt <= 0) {
->> -		int ret;
->> +	if (wait_cnt > 0)
->> +		return false;
->>   
->> -		wake_batch = READ_ONCE(sbq->wake_batch);
->> +	/*
->> +	 * For concurrent callers of this, callers should call this function
->> +	 * again to wakeup a new batch on a different 'ws'.
->> +	 */
->> +	if (wait_cnt < 0)
->> +		return true;
->>   
->> -		/*
->> -		 * Pairs with the memory barrier in sbitmap_queue_resize() to
->> -		 * ensure that we see the batch size update before the wait
->> -		 * count is reset.
->> -		 */
->> -		smp_mb__before_atomic();
->> +	wake_batch = READ_ONCE(sbq->wake_batch);
->>   
->> -		/*
->> -		 * For concurrent callers of this, the one that failed the
->> -		 * atomic_cmpxhcg() race should call this function again
->> -		 * to wakeup a new batch on a different 'ws'.
->> -		 */
->> -		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
->> -		if (ret == wait_cnt) {
->> -			sbq_index_atomic_inc(&sbq->wake_index);
->> -			wake_up_nr(&ws->wait, wake_batch);
->> -			return false;
->> -		}
->> +	/*
->> +	 * Pairs with the memory barrier in sbitmap_queue_resize() to
->> +	 * ensure that we see the batch size update before the wait
->> +	 * count is reset.
->> +	 */
->> +	smp_mb__before_atomic();
->>   
->> -		return true;
->> -	}
->> +	/*
->> +	 * Increase wake_index before updating wait_cnt, otherwise concurrent
->> +	 * callers can see valid wait_cnt in old waitqueue, which can cause
->> +	 * invalid wakeup on the old waitqueue.
->> +	 */
->> +	sbq_index_atomic_inc(&sbq->wake_index);
->> +	atomic_set(&ws->wait_cnt, wake_batch);
->> +	wake_up_nr(&ws->wait, wake_batch);
->>   
->>   	return false;
->>   }
->> -- 
->> 2.31.1
->>
+> Note:
+> -----
+> Both the panels are already upstreamed and the split is based on them.
+> There were patches earlier for both the touchscreens, but they are not
+> accepted upstream yet. Once they are accepted, we will add them to
+> respective variants.
+> 
+> Joel Selvaraj (5):
+>   arm64: dts: sdm845-xiaomi-beryllium: rename beryllium.dts into
+>     beryllium-common.dtsi
+>   arm64: dts: qcom: sdm845-xiaomi-beryllium-common: generalize the
+>     display panel node
+>   arm64: dts: qcom: sdm845-xiaomi-beryllium: introduce tianma variant
+>   arm64: dts: qcom: sdm845-xiaomi-beryllium: introduce ebbg variant
+>   arm64: dts: qcom: Makefile: split beryllium into tianma and ebbg
+>     variant
+
+
+None of your patches reached recipients and mailing lists.
+
+Best regards,
+Krzysztof

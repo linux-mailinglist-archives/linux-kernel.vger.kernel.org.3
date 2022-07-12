@@ -2,322 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F02C57161C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE00571622
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiGLJtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S232129AbiGLJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiGLJs5 (ORCPT
+        with ESMTP id S229450AbiGLJu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:48:57 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9EAA2EE6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:48:55 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z25so13045080lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:48:55 -0700 (PDT)
+        Tue, 12 Jul 2022 05:50:27 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193A233E33
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:50:27 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C7twBs018649;
+        Tue, 12 Jul 2022 09:50:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=hJUGMg0dH5A10GoMzfSmBGPfdksK8e073Pc3dP4EUvg=;
+ b=HtDhI1Z9FeOtv1VuDBejJe8xIDZuLo1bTCBCYBwcL9M7Cc+LdoZTZ9cHvfJc++I7rY1U
+ V17cVlv+7DvZu2jY//6uFiiHcUQ4UBHuyGNaE3B2D64sYbLVk0KOQDxiskvw9vOQA4MH
+ boT5ZduTJQj998Ib/2jTNH4xRPI6P32gPXjkXETak/GOvPmXohzhNPk7YiGSyEmDnj7j
+ Zl6sLrY71r5VdoAvcdtTuVwQcul9GZj9AVghQ382pcsDPDPzZ99v3sUCR+rUAUh4oWvD
+ Youd6abqn/sgg+Q+6/ynDrZ40KalMIAnvJi5mCIk44kc71c/LKjev0kwl9Up4idcG3Ws dw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h727sects-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 09:50:14 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26C9fJNK008319;
+        Tue, 12 Jul 2022 09:50:13 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h7043g5ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 09:50:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JR3PZNpjN+GkDmJ7tTwVsUCoNSIoT79hwnsoWiE4KIF8w04KD1p5xt6VOf0TjBusEpwHIm9BKrgus3+WGrcicUnbH062hQjWNdt70GV0qGgnhhboknmR0tPOymENZiaNYO3snhuWy80fGKHUkByLCCLMMu1uw4F5YzeI2uwowb4TM4z5nhdL42cgZGm1bbuNl8XgmsRO1AlIZfuGq5ooyxTIHo6Y42l88s1VTbtyg1CmVNoBohKUVw/cyfJkon8luz4g1lEVJD5BCfFCc6TDM9YNSdzmWm7+y1WHqpopQHoX0PeSGBc8sn1prl3s2Im542omP0Y0NWwtSUCK3OgLSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hJUGMg0dH5A10GoMzfSmBGPfdksK8e073Pc3dP4EUvg=;
+ b=J2PWcNnMSJk0TDP6/hnn7SZ0WMuoiUCMAQGopQLd28sz2kQbdKNx+MebAVqFKcwXLn+RMJwaC+xTOxYqRwvBSDsOXEM2HfH/+sFvBLZ9cmd3SCI6BB6/uLpnGyA+tna86J5aN/RcD3zsOmrudv850bbF+drVa/aIPPYPqFDFY3SdFV5T+gh22KM0vE3tqWzQ8b/6m4lgfJ+HVjzkczesfArWIDI2V6pBbO60UqHCjeczTTmrZp09jFjFMnRgwa5zf3DJGW4XqTRKi5RWPF7NbfhrlxWa7l0suC/087fgv//+cV4w327kP5QfNdrZOQTedwkr1y3LJSgANybJOUjNVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/uH8F4Kby+JXg7Mpe1L96lV/BObBUJ58/FjGSd2zwrI=;
-        b=GHOwDC5960hhrGAi98lxdFsoVxYhQ2I/DQd5NEQZVKWyX92WrTsf8t2uM3S5O5Pasz
-         EaPxmoLo+up67H/T1lw9SK2ICPtDIXbpnFpjwJEtiMkaxLplr6Ne1TOqGXTgTi8dkiJA
-         Y+POzrid5V/l1fFk3bQz7NlKDjxL0IasYJ/SW4GtFYSRTmqGaVUb5ssUlJPMjQEp0dX2
-         QuR/+sJhEfI6EpUkJFI81oMNUs+Zf4ivdtf7J/KU5ISvA1qtBbwfx5fjRbkU6DYVeBma
-         +Chaapuv217t3WUW1yU+2nFRqqg5WTThyOJWMsUVHxYikwNKEpGEhL7fhgjQVQCcgH6f
-         yB1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/uH8F4Kby+JXg7Mpe1L96lV/BObBUJ58/FjGSd2zwrI=;
-        b=p62sR6cvyJ8JSR1EbKrvHxExCzUlycQZ+xvtC5BLLaqeGKtZsjtd8QUxdkEti75Nbw
-         Z3+WchTc9SE9ly8lDM3DL6Zog3Isjh/GefQ5Tu4coWmSqU1C1utKOFkoGZvniSkjTvzK
-         2PEBrj5r4jC1+2ECFtrM6xsYEDYt4SZloqFwuRN6IC53rW4Cor6Mdjyl4if0ybYeEXd9
-         hVvlvKT4of/6sw2VaSPJn6ars/GpUbTxKOPA/gi7lHw74MYIorI47h4VqDvGQfiZksKx
-         SLOcqjuxsoV4U+k/fnJhQ3H843goGIga5UYErsFjom4uOlIqjsxPtm0nyMAYpgILy+AC
-         2bZQ==
-X-Gm-Message-State: AJIora+G2Nyz/CFEM0Gg8zeGioTW2sgDVKhNuGvKgpI5kpyQjJgASa3P
-        7QGn96YmgJzeN1Juad3A4sCChg==
-X-Google-Smtp-Source: AGRyM1uRD8Jy2As78zbcShpLvk3bPyap8hDx7k+p73eBuiJheG1Djr3s1kq+1523oqqWLjtGEhb0lQ==
-X-Received: by 2002:a05:6512:3b91:b0:489:e63f:47b1 with SMTP id g17-20020a0565123b9100b00489e63f47b1mr4117169lfv.410.1657619333888;
-        Tue, 12 Jul 2022 02:48:53 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id s3-20020ac24643000000b0047255d2111csm2073378lfo.75.2022.07.12.02.48.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 02:48:53 -0700 (PDT)
-Message-ID: <8b1393e4-275b-6791-ad71-2edfeacd0a63@linaro.org>
-Date:   Tue, 12 Jul 2022 11:48:50 +0200
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hJUGMg0dH5A10GoMzfSmBGPfdksK8e073Pc3dP4EUvg=;
+ b=QsYH6Prbvi256lHIs6dLbXmZsMlljWKcj0BPD0mWWBDyhiNHs+6VDjsvGv1kcqtO0v5nBAIB0/fMccjF82YNgQavNLwqkGxAs2RaKqHj3Fz2AtLwi3Xy0hmg8jqqxo/XuCGwqrUHZYvEXD0Hs+c/Ij1yqOdwAThF6KWTGNTUShE=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB1525.namprd10.prod.outlook.com
+ (2603:10b6:903:27::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Tue, 12 Jul
+ 2022 09:50:10 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 09:50:10 +0000
+Date:   Tue, 12 Jul 2022 12:50:00 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, David Howells <dhowells@redhat.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
+Subject: [jlayton:ceph-netfs-llist 1/10] fs/netfs/buffered_flush.c:923
+ netfs_require_flush_group() error: uninitialized symbol 'group'.
+Message-ID: <202207091447.3Om783sk-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR2P264CA0152.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:1::15) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/2] dt-binding: pinctrl: Add NPCM8XX pinctrl and GPIO
- documentation
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, j.neuschaefer@gmx.net,
-        zhengbin13@huawei.com
-Cc:     openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220710102110.39748-1-tmaimon77@gmail.com>
- <20220710102110.39748-2-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220710102110.39748-2-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 854bd46b-8801-4681-5a85-08da63ebe8d6
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1525:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7jPUPXZxiGPrEZP31hBuvgqs1fi/yx8jW4aQEnZQZt6B1QojOjPD4IdSfK2ZRwb2xOddowRjPWJ510GJ+lzQYZQNvzNHe+1zuZ3NySwPAEAod/96CpE/T+o+lskUvMqI4qQTLClgo86+xNW2663xtaQBPvW2S/FM4gZD1kwMbBlTdYJBerwXuMP42ENyp+G3rorWvf0G4ymuyll9jd/mS6WK0RsB2cr5qz+k0JK1A49xMYVUsJ2ddywBgmYel6BUsDe9TrJvVHKMJb/kCWbxl8nrsR1vg2uheHjgAaSOI2eheIpXoAN/XphIJ13YEHzigrfG2A8AmfYJfwxs+uOhJQO8MuJcGxTVEaum3G6AgAFY0k5dsdWxP9Ge/TkfY/ZVTUKc7C7AbZ/U8wpuBL06rVa0vnb8+cBg5zT40qj7YNbt1HMOtKjEYM4t5ODPTiiyVB3SJSQ3J7RMM3opQax9ZmdfH+YSt9bmverovm/31bIDB2e+b8d6hzWhpEGnPVNv/1tdxFUOHdX5f+YU3BCK7jRdrto05BY34rWqakbIYExmbeDPu/wKuxAvcMyMwJThqK3rBlE3SIu5OgVkSbV+HU3xZQuf83vV2uLiSfj6sNK3SzQQz1pprZy5t9DmEoZoapyfvKNcV5kBl/fJ1GD9xa6VQDHnJIvzSRXjEyTMmDG1dkpQC4Zhb+oc+8HG3mZ/et/KD0IN+2rKDnVrk4WDa3DlFgGC2g8b9toCKzJTWlDfiQNA1PaLfZszd936G1E1zKynGUkQakA2G/stkQp6gdjUaGbU5aEn+k2uOJOsCrJk1v18ieuRYKCX6z//1+Xj2HhfdhigygPElaxJutUujcE93yl9Ls84TR9S8VHjhPRcsQR6A6UvvzPboeeDRi6z3UNP9bqm/eAF79265/b8Ng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(39860400002)(346002)(376002)(83380400001)(86362001)(38100700002)(38350700002)(186003)(44832011)(966005)(6916009)(66946007)(6486002)(4326008)(316002)(8676002)(66556008)(36756003)(8936002)(66476007)(26005)(6512007)(52116002)(9686003)(478600001)(6506007)(6666004)(41300700001)(1076003)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uFlldvzD4BOg0B+X/kHBrvIiusgZVXNt5Dv03yvMwahNK+ko1rpC1jrM+ua+?=
+ =?us-ascii?Q?lhwEDZVfYnkiEqX3a3MdxqR7KwGQzasJE6UiCdqYCxb77nnhyXbODvz6YVpc?=
+ =?us-ascii?Q?C9R4GDObgsqIrNrf1apcUwOLO1OFehgPf1AXiH0lPKi8twBaEIuL7rkGdUu5?=
+ =?us-ascii?Q?Jj0YmhMUHiLEUN0HlBv4COy39U1Zcjl61ehcU+nPhWLFckzsAMFz74ORVCD7?=
+ =?us-ascii?Q?r6aGNzw9E/uGYeuWw++Z0EpiJYFkETu6YbOQVP43TRxIGJZzuvg/WY9oB+CA?=
+ =?us-ascii?Q?ocbxJWtK0lufCMrI9XHjpbSsNlaWyWgVW47g4wLpsg4muKq3EIzPBkPZV3d8?=
+ =?us-ascii?Q?H2c9azWt5E6NyBWs66BiREK1WwnTUK1qKS6f+SMEl6AYxlHqASuHRaxIOKOu?=
+ =?us-ascii?Q?GBRtyvaZCWYgX8kLsFQ7cn++DEVCxLKt5tsVw6muINQD+gNhKrF+u7327FF4?=
+ =?us-ascii?Q?3twlDQeYGPUP2ao4NuDCYZGtIT4Q4OdYZ35O/Da3bR2bwgE75uQTpyuS1627?=
+ =?us-ascii?Q?9TwcW0dkUgK17tvjYF/7MTuAHCykDyeb9x98NzNQe5UYc6/FD6dQMoBWLPPV?=
+ =?us-ascii?Q?cZTt8ItY0At7omxBYoigwv5HlAVK/w3tg87Z777yKdMH36OHYh14lkp71Q9g?=
+ =?us-ascii?Q?yN8BIhCS+03UOdI/SVspeD6fzIOP+HqsQ8TFqm2z2BeNsc3TqzmGRE9K7twU?=
+ =?us-ascii?Q?lmrXUVEi34hf5ubKujVGiyNblsXKaLR0SEYMI8RbVnG6c/A6Eg44xxOuCp/b?=
+ =?us-ascii?Q?OQZQNhNRN8YYUQJwKCwNbACdr5w5gF70R2pTkeprW7AK5strSei54rYf5Vk2?=
+ =?us-ascii?Q?+qADfIaRC8e9Mc898CXtakC72x3K7pl1NpeL+O/1lFmAeiDX8w7veFhOvsuJ?=
+ =?us-ascii?Q?u6vysx6IKmXYyCAhAIs9EnlIUzuAn0gLcTm6MRj6i6SE4a0Mf0glLbPJaN50?=
+ =?us-ascii?Q?cjFDFBMMXNIUHANQhwfBvn68zvAzkCHbZKcSdspsgzMJiYil25zETto1WOcF?=
+ =?us-ascii?Q?1Bw7uwE4aUh/xooCdEZt6vyxoW9FtT3pYdUjXwBS+W0c0q/WdLcGaHLtgZwC?=
+ =?us-ascii?Q?pOTiklqlDjdDZO9mgEQcEi+CAeHPFdT8Zakt+oE03QJpDlVIeGQYLzDI5mF4?=
+ =?us-ascii?Q?yE1XT4ZhzUErZtvajSvhaHadbZpycgvAingPVuLioallf/H+7UfmS9WubhHT?=
+ =?us-ascii?Q?35lcEsHafQ6mOFl9R1N0/Z6B8QWIIvGzlP71PRO+EiDSl1J5k1+191O50Ilx?=
+ =?us-ascii?Q?8qnB2COcDS4PFSSsAOGKhwgIXfc0PH5tp/XleEf+w5QqcupSZojgjDwuRIx1?=
+ =?us-ascii?Q?61GpuUo12bDPiWGUW9hxi7FKUSNdkYYrqlK8RTD6AbNlrnITAZzLW0VUfgRx?=
+ =?us-ascii?Q?JUW+dE9dO8LYbjrju5RMp2UhClPg81GV2bFqNkGRoLlAHbKJMGX+NBvB4rOO?=
+ =?us-ascii?Q?EhF9k8K8hxor37xxtbyoMCypHPIe1+SjmuBHJbNkN3g7+0Cz2RI/kCz6zu/Q?=
+ =?us-ascii?Q?IQg+7XXn7ux3bUwR9GkXldM1qUFjCTo5fr+JvtMGn7dNyPH3nX+V16kvlpe2?=
+ =?us-ascii?Q?7fvL1b+uhMKxpjoNTJQvA1EZYc1RQrMn3j8/xH16s9hi/YKJG1yFC7xxkM6S?=
+ =?us-ascii?Q?aA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 854bd46b-8801-4681-5a85-08da63ebe8d6
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 09:50:10.2422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hU2hyw/ui+4Azl1ZnmniPe8rksiyhYsysUJ/mVFTsbpzkoJvouoMmNYzUe6fLO+iP428d3mkx7X6TWhLE+86+3HxtrCrUlL3PTzbBuNyKfM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1525
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-12_05:2022-07-08,2022-07-12 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207120036
+X-Proofpoint-ORIG-GUID: 1z197IJiMNRz77CkgNea0BDiBI357TuV
+X-Proofpoint-GUID: 1z197IJiMNRz77CkgNea0BDiBI357TuV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2022 12:21, Tomer Maimon wrote:
-> Added device tree binding documentation for Nuvoton Arbel BMC NPCM8XX
-> pinmux and GPIO controller.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../pinctrl/nuvoton,npcm845-pinctrl.yaml      | 205 ++++++++++++++++++
->  1 file changed, 205 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..6395ef2bf5b3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-> @@ -0,0 +1,205 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/nuvoton,npcm845-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NPCM845 Pin Controller and GPIO
-> +
-> +maintainers:
-> +  - Tomer Maimon <tmaimon77@gmail.com>
-> +
-> +description:
-> +  The Nuvoton BMC NPCM8XX Pin Controller multi-function routed through
-> +  the multiplexing block, Each pin supports GPIO functionality (GPIOx)
-> +  and multiple functions that directly connect the pin to different
-> +  hardware blocks.
-> +
-> +properties:
-> +  compatible:
-> +    const: nuvoton,npcm845-pinctrl
-> +
-> +  ranges:
-> +    maxItems: 1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-netfs-llist
+head:   fd428464b2220bd6c59f0a30f9dadb4720b3efb5
+commit: 3d4ae7bbf12af2c1ee8f93df5d6ea3556bdfb6ca [1/10] netfs: Add a write context
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220709/202207091447.3Om783sk-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 
-ranges without reg? Does it even work? Did you test the bindings?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +patternProperties:
-> +  "^gpio@":
-> +    type: object
-> +
-> +    description:
-> +      Eight GPIO banks that each contain between 32 GPIOs.
-> +
-> +    properties:
-> +
+New smatch warnings:
+fs/netfs/buffered_flush.c:923 netfs_require_flush_group() error: uninitialized symbol 'group'.
 
-No blank line.
+vim +/group +923 fs/netfs/buffered_flush.c
 
-> +      gpio-controller: true
-> +
-> +      '#gpio-cells':
-> +        const: 2
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      gpio-ranges:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - gpio-controller
-> +      - '#gpio-cells'
-> +      - reg
-> +      - interrupts
-> +      - gpio-ranges
-> +
-> +  "-pin":
-> +    $ref: pinmux-node.yaml#
+3d4ae7bbf12af2 David Howells 2022-07-07  911  int netfs_require_flush_group(struct netfs_write_context *write, bool force)
+ce4670495468b7 David Howells 2022-02-07  912  {
+ce4670495468b7 David Howells 2022-02-07  913  	struct netfs_flush_group *group;
+3d4ae7bbf12af2 David Howells 2022-07-07  914  	struct netfs_inode *ctx = write->ctx;
+ce4670495468b7 David Howells 2022-02-07  915  
+ce4670495468b7 David Howells 2022-02-07  916  	if (list_empty(&ctx->flush_groups) || force) {
+ce4670495468b7 David Howells 2022-02-07  917  		kdebug("new flush group");
+3d4ae7bbf12af2 David Howells 2022-07-07  918  		group = netfs_new_flush_group(ctx, NULL);
+ce4670495468b7 David Howells 2022-02-07  919  		if (!group)
+ce4670495468b7 David Howells 2022-02-07  920  			return -ENOMEM;
+ce4670495468b7 David Howells 2022-02-07  921  	}
 
-Shouldn't this be under bank?
+"group" not initialized on else path
 
-> +
-> +    properties:
-> +      groups:
-> +        description:
-> +          One or more groups of pins to mux to a certain function
-> +        items:
-> +          enum: [ iox1, iox2, smb1d, smb2d, lkgpo1, lkgpo2, ioxh, gspi,
-> +                  smb5b, smb5c, lkgpo0, pspi2, jm1, jm2, smb4den, smb4b,
-> +                  smb4c, smb15, smb16, smb17, smb18, smb19, smb20, smb21,
-> +                  smb22, smb23, smb4d, smb14, smb5, smb4, smb3, spi0cs1,
-> +                  spi0cs2, spi0cs3, smb3c, smb3b, bmcuart0a, uart1, jtag2,
-> +                  bmcuart1, uart2, bmcuart0b, r1err, r1md, r1oen, r2oen,
-> +                  rmii3, r3oen, smb3d, fanin0, fanin1, fanin2, fanin3, fanin4,
-> +                  fanin5, fanin6, fanin7, fanin8, fanin9, fanin10, fanin11,
-> +                  fanin12, fanin13, fanin14, fanin15, pwm0, pwm1, pwm2, pwm3,
-> +                  r2, r2err, r2md, r3rxer, ga20kbc, smb5d, lpc, espi, rg1,
-> +                  rg1mdio, rg2, ddr, i3c0, i3c1, i3c2, i3c3, i3c4, i3c5,
-> +                  smb0, smb1, smb2, smb2c, smb2b, smb1c, smb1b, smb8, smb9,
-> +                  smb10, smb11, sd1, sd1pwr, pwm4, pwm5, pwm6, pwm7, pwm8,
-> +                  pwm9, pwm10, pwm11, mmc8, mmc, mmcwp, mmccd, mmcrst, clkout,
-> +                  serirq, lpcclk, scipme, sci, smb6, smb7, spi1, faninx, r1,
-> +                  spi3, spi3cs1, spi3quad, spi3cs2, spi3cs3, nprd_smi, smb0b,
-> +                  smb0c, smb0den, smb0d, ddc, rg2mdio, wdog1, wdog2, smb12,
-> +                  smb13, spix, spixcs1, clkreq, hgpio0, hgpio1, hgpio2, hgpio3,
-> +                  hgpio4, hgpio5, hgpio6, hgpio7 ]
-> +
-> +      function:
-> +        description:
-> +          The function that a group of pins is muxed to
-> +        enum: [ iox1, iox2, smb1d, smb2d, lkgpo1, lkgpo2, ioxh, gspi,
-> +                smb5b, smb5c, lkgpo0, pspi2, jm1, jm2, smb4den, smb4b,
-> +                smb4c, smb15, smb16, smb17, smb18, smb19, smb20, smb21,
-> +                smb22, smb23, smb4d, smb14, smb5, smb4, smb3, spi0cs1,
-> +                spi0cs2, spi0cs3, smb3c, smb3b, bmcuart0a, uart1, jtag2,
-> +                bmcuart1, uart2, bmcuart0b, r1err, r1md, r1oen, r2oen,
-> +                rmii3, r3oen, smb3d, fanin0, fanin1, fanin2, fanin3, fanin4,
-> +                fanin5, fanin6, fanin7, fanin8, fanin9, fanin10, fanin11,
-> +                fanin12, fanin13, fanin14, fanin15, pwm0, pwm1, pwm2, pwm3,
-> +                r2, r2err, r2md, r3rxer, ga20kbc, smb5d, lpc, espi, rg1,
-> +                rg1mdio, rg2, ddr, i3c0, i3c1, i3c2, i3c3, i3c4, i3c5,
-> +                smb0, smb1, smb2, smb2c, smb2b, smb1c, smb1b, smb8, smb9,
-> +                smb10, smb11, sd1, sd1pwr, pwm4, pwm5, pwm6, pwm7, pwm8,
-> +                pwm9, pwm10, pwm11, mmc8, mmc, mmcwp, mmccd, mmcrst, clkout,
-> +                serirq, lpcclk, scipme, sci, smb6, smb7, spi1, faninx, r1,
-> +                spi3, spi3cs1, spi3quad, spi3cs2, spi3cs3, nprd_smi, smb0b,
-> +                smb0c, smb0den, smb0d, ddc, rg2mdio, wdog1, wdog2, smb12,
-> +                smb13, spix, spixcs1, clkreq, hgpio0, hgpio1, hgpio2, hgpio3,
-> +                hgpio4, hgpio5, hgpio6, hgpio7 ]
-> +
-> +    dependencies:
-> +      groups: [ function ]
-> +      function: [ groups ]
-> +
-> +    additionalProperties: false
-> +
-> +  "^pin":
+3d4ae7bbf12af2 David Howells 2022-07-07  922  
+3d4ae7bbf12af2 David Howells 2022-07-07 @923  	write->flush_group = group;
+ce4670495468b7 David Howells 2022-02-07  924  	return 0;
+ce4670495468b7 David Howells 2022-02-07  925  }
 
-This is almost the same as previous property. Confusing and I think it
-does not work.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
-> +    $ref: pincfg-node.yaml#
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          A list of pins to configure in certain ways, such as enabling
-> +          debouncing
-> +
-> +      bias-disable: true
-> +
-> +      bias-pull-up: true
-> +
-> +      bias-pull-down: true
-> +
-> +      input-enable: true
-> +
-> +      output-low: true
-> +
-> +      output-high: true
-> +
-> +      drive-push-pull: true
-> +
-> +      drive-open-drain: true
-> +
-> +      input-debounce:
-> +        description:
-> +          Debouncing periods in microseconds, one period per interrupt
-> +          bank found in the controller
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        minItems: 1
-> +        maxItems: 4
-> +
-> +      slew-rate:
-> +        description: |
-> +          0: Low rate
-> +          1: High rate
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1]
-> +
-> +      drive-strength:
-> +        enum: [ 0, 1, 2, 4, 8, 12 ]
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - ranges
-> +  - '#address-cells'
-> +  - '#size-cells'
-
-Missing allOf with ref to pinctrl.yaml.
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      pinctrl: pinctrl@f0800000 {
-> +        compatible = "nuvoton,npcm845-pinctrl";
-> +        ranges = <0x0 0x0 0xf0010000 0x8000>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        gpio0: gpio@f0010000 {
-> +          gpio-controller;
-> +          #gpio-cells = <2>;
-> +          reg = <0x0 0xB0>;
-> +          interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
-> +          gpio-ranges = <&pinctrl 0 0 32>;
-> +        };
-> +
-> +        fanin0_pin: fanin0-pin {
-> +          groups = "fanin0";
-> +          function = "fanin0";
-> +        };
-> +
-> +        pin34_slew: pin34-slew {
-
-and how does it pass your checks?
-
-Did you test the bindings?
-
-
-
-Best regards,
-Krzysztof

@@ -2,97 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C7A572951
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE29572954
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiGLW3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S233551AbiGLW3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiGLW3i (ORCPT
+        with ESMTP id S233459AbiGLW3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:29:38 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2756B851C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 15:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657664977; x=1689200977;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hIf7JOETL3U4PW1pZpGI4ivM/hW8aQW0YEe0B/6Lg6w=;
-  b=cma37gSPgIbq/+x9Wp8TAG3Y9izmGWVlD1EMx+R7euc/xhvQxkIItwgw
-   uujpUYGPLO9az1LyWY4vwOczSdEwrCfvbaxuafu2Tb0FvwGMDqizC4tXq
-   7fCpSxVoyX54bFUXbxdR4uAZvU+0a+RyXttLZ+GshsQMdjxfWZITYJ/e9
-   Ip8OAHl3ZJNjy1ZcTsX5lgPlbxALUmaJ3Ged4PfpUf2S49BC01lKNgLWl
-   0J9nRc0t7N3AR65oz4hJYK8HlLw7Z9aCZpha/JFnhBlAjtqmoqNriqQy2
-   mmhlASNYdHsc73SteNwbmEDqYUUSTG9fZTs/ZYMt+zsUkNuv1zJ2JnlRF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268094713"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="268094713"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 15:29:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="737646505"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jul 2022 15:29:35 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBONq-0002kR-Sm;
-        Tue, 12 Jul 2022 22:29:34 +0000
-Date:   Wed, 13 Jul 2022 06:29:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 3/20] kismet: WARNING: unmet direct
- dependencies detected for APPLE_ADMAC when selected by SND_SOC_APPLE_MCA
-Message-ID: <202207130614.AspjDmES-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Jul 2022 18:29:42 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD98BD683;
+        Tue, 12 Jul 2022 15:29:41 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id b12so5718205ilh.4;
+        Tue, 12 Jul 2022 15:29:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=6TlAEBKdUnbeLY0JBRbgAGQSjQ3GM7mg+m6GgP7m7Xs=;
+        b=1EeQs9Th7Caj3+WhOdmDmGBYC9EK3uSZHBsj4BwWYSRWBAnMmDStVA+MDDDc9LoEVW
+         isbM2aKdgKwqpE0wsnJ4B5Je0a0tBJfyXibHGOuk75wNv+DBouanWP8dGSAwo5JgYMgg
+         xLaH1fnuflK9amyz+CZL2GWsstqOqajASKVFi11f8bpkVWWy5qaDh6MuKAQ0Icph4f5k
+         xZjpL4XeBivolsxaFSUiPCEVJDoKG6kMCs2Jnvl5AhjFG0BKsXCfCEi2gUb2YhGk7ZRj
+         6I0hF9ofU7uF069AsnCcYNmEbJZT+mC3bib0qvrF/fas/RAKsTlZd59469Sijfrg4qdD
+         wZ8Q==
+X-Gm-Message-State: AJIora9/nI0uT18tNR8cwhvn6i0+efVHRyx4MA1jLr+ixKEXbkqDcFli
+        fkti9iXLxOGG34geCUYzng==
+X-Google-Smtp-Source: AGRyM1tQ6vLyVx8CeViibTv6d2c/M4uPa1qXqvqlwqIN7YowfkhSvUSPNEKqgcjgixJw+JJK1jc3Yg==
+X-Received: by 2002:a92:8748:0:b0:2d9:3f81:d0b7 with SMTP id d8-20020a928748000000b002d93f81d0b7mr236312ilm.310.1657664980547;
+        Tue, 12 Jul 2022 15:29:40 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id d78-20020a6bb451000000b00669ceb1d521sm5470544iof.10.2022.07.12.15.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 15:29:40 -0700 (PDT)
+Received: (nullmailer pid 2476656 invoked by uid 1000);
+        Tue, 12 Jul 2022 22:29:35 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     linux-media@vger.kernel.org, quentin.schulz@theobroma-systems.com,
+        Daniel Scally <djrscally@gmail.com>,
+        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220712163349.1308540-6-tommaso.merciai@amarulasolutions.com>
+References: <20220712163349.1308540-1-tommaso.merciai@amarulasolutions.com> <20220712163349.1308540-6-tommaso.merciai@amarulasolutions.com>
+Subject: Re: [PATCH v6 5/6] media: dt-bindings: ov5693: document YAML binding
+Date:   Tue, 12 Jul 2022 16:29:35 -0600
+Message-Id: <1657664975.862137.2476655.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   55bc86786332628db127357b98246a6731108679
-commit: 50833b1f649b754c7dc6af363080f758ffb76329 [3/20] ASoC: apple-mca: Add platform driver for Apple SoCs
-config: (https://download.01.org/0day-ci/archive/20220713/202207130614.AspjDmES-lkp@intel.com/config)
-reproduce:
-        # https://github.com/AsahiLinux/linux/commit/50833b1f649b754c7dc6af363080f758ffb76329
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout 50833b1f649b754c7dc6af363080f758ffb76329
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_APPLE_ADMAC --selectors CONFIG_SND_SOC_APPLE_MCA -a=arm64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=arm64 olddefconfig
+On Tue, 12 Jul 2022 18:33:48 +0200, Tommaso Merciai wrote:
+> Add documentation of device tree in YAML schema for the OV5693
+> CMOS image sensor from Omnivision
+> 
+> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> Changes since v1:
+>  - Fix allOf position as suggested by Krzysztof
+>  - Remove port description as suggested by Krzysztof
+>  - Fix EOF as suggested by Krzysztof
+> 
+> Changes since v2:
+>  - Fix commit body as suggested by Krzysztof
+> 
+> Changes since v3:
+>  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+> 
+> Changes since v4:
+>  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
+> 
+> Changes since v5:
+>  - Remove dovdd-supply, avdd-supply, dvdd-supply from required properties
+> as suggested by Jacopo
+> 
+>  .../bindings/media/i2c/ovti,ov5693.yaml       | 103 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 104 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for APPLE_ADMAC when selected by SND_SOC_APPLE_MCA
-   
-   WARNING: unmet direct dependencies detected for APPLE_ADMAC
-     Depends on [n]: DMADEVICES [=n] && (ARCH_APPLE [=y] || COMPILE_TEST [=n])
-     Selected by [y]:
-     - SND_SOC_APPLE_MCA [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (ARCH_APPLE [=y] || COMPILE_TEST [=n])
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.example.dtb: camera@36: Unevaluated properties are not allowed ('port' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

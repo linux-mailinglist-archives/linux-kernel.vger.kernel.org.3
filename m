@@ -2,188 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB559571CD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A7571CDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbiGLOfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S229924AbiGLOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiGLOeh (ORCPT
+        with ESMTP id S233257AbiGLOgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:34:37 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06A6BA16D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:34:10 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id u20so7974125iob.8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:34:10 -0700 (PDT)
+        Tue, 12 Jul 2022 10:36:01 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1E3BA384
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:59 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b2so7409275plx.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8Qgpcvn1YHDREufZBbmxZHbS2brMn0J4VUDssmHFods=;
-        b=q4oeBlaVfxRB59zsPD0JlGgQLtYYZw7vPAgzl60Us73EtUrRq32o715vIJwBZmQIme
-         hDzDQn0LUo8I/0ymNkltPD07MFqmPLU9OwQGG3b89gpSdBGjKVWr7xb2NDETwXJpRiei
-         AOiM7RjEoN/tk6rdfkxetOTm4Y0t9jF7MC59a5Uv5t+sFPVfXakGXwhNmHIqHybUIkiX
-         LHHIfH65bh4+vjPLI1R76e04I901jgYtiN2XWP7feNJ+EG5pb+e34/JOlU+aGMwO9SUO
-         h74TrEghWrYO9g0TaPXlcS1yKc4VvADOnFozjJXotbfP9NTn1PL0fsjzBuupd+xpISw6
-         Q+VQ==
+        d=gmail.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=GeUfY6Tn/Q9ioj3wHa1IQnm+34PkJWvBAjhW7FXaij8=;
+        b=FFQ3ZoI38S7htoLyXPyrs8plraXqTTr8yHOFDxdU1PsAkwG0XPngF9GF1Tlfqttg2P
+         ziAgp5Pz/14MkxsLy8N4uxnR43jNUHndWEuYY93g77XUSGXNs6XbSpEbtMb8eXhjZdzB
+         0n3SA8nqrbl5Do5PJsLHI2hkToFAK8s2ZVxiGR1Yfr5xNYQkSV+mJPfZcoPeL17Z6l8D
+         iFueEOHC67SJKFNfs1o+sOQsxaiSllwJRMQmmnbFrNFg1/npr4D3nb/hriKURG6xeVPJ
+         xNFETLZNqFxxGGEU1++4arL5s1FdE1YlrBFMEsoWMRueYTGjO5RN2t+7two8YBDXw9Yv
+         wnQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8Qgpcvn1YHDREufZBbmxZHbS2brMn0J4VUDssmHFods=;
-        b=d6I0W/z46OSh2P145Mw4dfaA8mo2VQrpfNn2XuNMDxUAa4ywf2qM6gXOIT8BwwAmxO
-         bvUHuBKP7seQO1XYEHNXawGuZG6EXEjb/qaU9iSnToB3A9qQtDzDazQbWkcts6mYuHH0
-         2DlD3lNQySXJScEXx4+lFuhhdB1dVFQciLOUOQbwhlMaHQtSLfupvz01L3w0I45lMM+U
-         2tInP53VGhCwPUsODC72jw0BDVKhdlrGxVCNitD+I/jWbSiQqjbgqMXuVfo+OEadOLEz
-         9krIK9IPNGVkvnSrg5qY/hb8Co7Nae5qwkPR/dpxBRP4ocdkKmQFMSllsDGAhvIqSnYK
-         VrSw==
-X-Gm-Message-State: AJIora8r5Ong70fA7R2uAZ3BuaReqc3KSSCDh0RWujJEVnFjK8UDwJE9
-        Hn2svPNsV+xwo8vPhFKJISBplTSS43rt98X0bce1UQ==
-X-Google-Smtp-Source: AGRyM1vDpGJnXqXo7v072Qxw+u+64rqLpWgz9srMYNBmnKBpSgOgYanod3X46hNRBgYNxpFvF+WKBUJiFAZbwctmWK4=
-X-Received: by 2002:a05:6638:2a9:b0:33f:2d29:7546 with SMTP id
- d9-20020a05663802a900b0033f2d297546mr13683445jaq.27.1657636450269; Tue, 12
- Jul 2022 07:34:10 -0700 (PDT)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=GeUfY6Tn/Q9ioj3wHa1IQnm+34PkJWvBAjhW7FXaij8=;
+        b=F5a5OPXqYHs7Ol0Fkk+fZvFhWXT+ehWzEvE8mlWD1UxDT4Ch9AOluSxBH1is6SkQoU
+         i1GxrRUs3cKBo0pZItXxhu0sEBoVC8ECZkDA+0Gux2F8PaT9LTgYkon0TVKoF/x2hQks
+         ylPAGvMwzOuGMv+6MyME7lV5R4RnCzC3IHH9hpLgJSe1u+LUCruvgi7w3HNfA6z91I66
+         EQSHKvRZTPljoh4hDwRM/oZSuhqUSvetMTC6z4ZJi4H/spP1Q+yb0HdunwlhmohgneB0
+         pMev8UA3ZPPDs9ZPbqIzDznq+7NLcy3Ps2QJ5GRNIQk+BWO3pQaHq7kmy4bFrFJX+obG
+         i+Zg==
+X-Gm-Message-State: AJIora8I1Y5Y+ERA5qGGQhe8K3gKMGbCLeBCxKor0rsaHiKbgtAr31Cp
+        R1OL2XXsVjmQ9OQSmTCbo2wAXaECARLymA==
+X-Google-Smtp-Source: AGRyM1ujG6w5ps9GriP+SnnUbvp+k2fcL96y5EjeY3XqpOFzffJQt14d+s4va4cHCFiFduFwFdYjpg==
+X-Received: by 2002:a17:90b:1c12:b0:1f0:2836:7799 with SMTP id oc18-20020a17090b1c1200b001f028367799mr4821591pjb.139.1657636558973;
+        Tue, 12 Jul 2022 07:35:58 -0700 (PDT)
+Received: from ArchLinux (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id b13-20020a621b0d000000b005252ab25363sm6878600pfb.206.2022.07.12.07.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:35:58 -0700 (PDT)
+References: <20220712013125.623338-1-schspa@gmail.com>
+ <20220712013125.623338-2-schspa@gmail.com>
+ <20220712102953.02d4a3bd@gandalf.local.home>
+User-agent: mu4e 1.7.5; emacs 28.1
+From:   Schspa Shi <schspa@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] sched/rt: Trying to push current task when
+ target disable migrating
+Date:   Tue, 12 Jul 2022 22:34:40 +0800
+In-reply-to: <20220712102953.02d4a3bd@gandalf.local.home>
+Message-ID: <m2fsj6flfk.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20220712071513.420542604@linuxfoundation.org>
-In-Reply-To: <20220712071513.420542604@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 12 Jul 2022 20:03:58 +0530
-Message-ID: <CA+G9fYsnJfX430NbyTzBfiWFQZ23_703WzVdLYuBiCKS7cDtww@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/226] 5.15.54-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 12:46, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+Steven Rostedt <rostedt@goodmis.org> writes:
+
+> On Tue, 12 Jul 2022 09:31:25 +0800
+> Schspa Shi <schspa@gmail.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.15.54 release.
-> There are 226 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>> When the task to push disable migration, retry to push the current
+>> running task on this CPU away, instead doing nothing for this migrate
+>> disabled task.
+>> 
+>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>> ---
+>>  kernel/sched/core.c | 6 +++++-
+>>  kernel/sched/rt.c   | 6 ++++++
+>>  2 files changed, 11 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index da0bf6fe9ecdc..0b1fefd97d874 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -2509,8 +2509,12 @@ int push_cpu_stop(void *arg)
+>>  	if (p->sched_class->find_lock_rq)
+>>  		lowest_rq = p->sched_class->find_lock_rq(p, rq);
+>>  
+>> -	if (!lowest_rq)
+>> +	if (!lowest_rq) {
 >
-> Responses should be made by Thu, 14 Jul 2022 07:13:20 +0000.
-> Anything received after that time might be too late.
+> Probably should add a comment reminding us that the find_lock() function
+> above could have released the rq lock and allow p to schedule and be
+> preempted again, and that lowest_rq could be NULL because p now has the
+> migrate_disable flag set and not because it could not find the lowest rq.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.54-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
+
+OK, it will be better.
+
+Let me upload a v6 patch for that.
+
+> -- Steve
 >
-> thanks,
 >
-> greg k-h
+>> +		if (unlikely(is_migration_disabled(p)))
+>> +			p->migration_flags |= MDF_PUSH;
+>> +
+>>  		goto out_unlock;
+>> +	}
+>>  
+>>  	// XXX validate p is still the highest prio task
+>>  	if (task_rq(p) == rq) {
+>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>> index 7c32ba51b6d85..877380e465b7a 100644
+>> --- a/kernel/sched/rt.c
+>> +++ b/kernel/sched/rt.c
+>> @@ -2136,6 +2136,12 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>  		 */
+>>  		task = pick_next_pushable_task(rq);
+>>  		if (task == next_task) {
+>> +			/*
+>> +			 * If next task has now disabled migrating, see if we
+>> +			 * can push the current task.
+>> +			 */
+>> +			if (unlikely(is_migration_disabled(task)))
+>> +				goto retry;
+>>  			/*
+>>  			 * The task hasn't migrated, and is still the next
+>>  			 * eligible task, but we failed to find a run-queue
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.54-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 71721f5974f244f7563d10b616528059705e6237
-* git describe: v5.15.53-227-g71721f5974f2
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.53-227-g71721f5974f2
-
-## Test Regressions (compared to v5.15.53)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.53)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.53)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.53)
-No metric fixes found.
-
-## Test result summary
-total: 137871, pass: 124645, fail: 380, skip: 12150, xfail: 696
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 308 total, 308 passed, 0 failed
-* arm64: 62 total, 62 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 48 total, 48 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 52 passed, 2 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+BRs
+Schspa Shi

@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E24C571130
+	by mail.lfdr.de (Postfix) with ESMTP id E7598571131
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiGLEXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 00:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S230186AbiGLEXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 00:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiGLEXK (ORCPT
+        with ESMTP id S229735AbiGLEXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 00:23:10 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2C1EAED
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:23:08 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id s22-20020a056a001c5600b0052ad646de49so1421421pfw.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:23:08 -0700 (PDT)
+        Tue, 12 Jul 2022 00:23:11 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CBC1F61A
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:23:10 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id a127-20020a624d85000000b00525950b1feeso1722636pfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:23:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=VlO5TFuuspvYhdi2DpaxD3h20t2f4OEaq2DrHe4AmmQ=;
-        b=DyQYKlDD/IcOA4P9vRQKupo+DLs43KFlBZqdk7RIEWnyIoKW37RMSah45C6eYEV0Pm
-         g5nMaKhzXoAXgpIRbOs8Hvpwhql49X/a5gts8RYFTlQS8kHBr/jlT4CwXOkM7fWuC1Do
-         IEN7vOiitvjjkShkA3h3tDyqbl9aQbQ+Inv4lILFKGh8aSpXTjAToRD1J6Z8JQzh+Uax
-         3p6oOnn6FW98eCFH1+r4bBQKI1IXw0aPOdKVDqrlbp0FbuToLO9O8T807GajNjxIjR5p
-         lE4dXi0YR8Qnit7OyH1aLsKgZnO6jRRqB4XbBqcQmu6jOAFslutRoNCSZxWWb8o/GInk
-         ZhHA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc:content-transfer-encoding;
+        bh=l0wfKFp1ChJwLpur4LprhadUuGsHQU0cjcxPkM3pYu4=;
+        b=eydKoO5rr2LXznt/oww6+I4+oHMBcV+Dwp7kSgxo9xRjUefqx0WxWfSdeO3AxvGYYj
+         hsbSG89K48k1wHNBwKqVXwB4ofsdmPYEfk7Tk86cLkHc+Ms3I405DLnGYDvAKbkNi4ex
+         U3I3Einb3hgUR0L5bGLbAMK4OpK9znX82Cr5WUWNPlHXK4iGpg+y13GfASX6npa6IDRg
+         v1YUro0KQNVjiENneup57QrtMLdxPCJZgx1WkoMYa61nJIGISoxF/UKZs4uBzEyuMdVV
+         26/EMVsIfmf4m7JWn+Sc1AXe79CcmcNQPyvFhD4NgRUzPgcH4DmNRUZCmfcZ3zCGOQa8
+         +mIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=VlO5TFuuspvYhdi2DpaxD3h20t2f4OEaq2DrHe4AmmQ=;
-        b=gEWG1c77PlAwGehy46PkmhsE20tya72x6ZMYBmBmK7yO5uPHqYi9T7/Wcs5VbaiAmc
-         zmMcSdLfeugtjQR4PWbPfEqVBtq2Mx6HKsXmORf8Dclwi9fF0qiBlS+zGAkiGNLF8dIr
-         5E1/QTdK9RFlZ5OsO+Fv0tsKNx3vlJwXjjPnCF5XEw3Q4jZxicF/XITqceN6oQd90TS5
-         5YDvSWI7M/guHg2HY4m6KG95/mggXw6Jgzaosje5SRJ7zSV1T3b4qg1GO5ucLg6TkLMc
-         saOp5ZSZ2JfpjPo+lNk3QiREpGuFkpago7415G2LpzWDKHI6SqAYmBIfklMoL+y0+dpe
-         UWJQ==
-X-Gm-Message-State: AJIora+CcaLt8r5WkRPt+zhR3kZk9LuGNmBkiMzVBk5xO3+uvsyRvGNO
-        x6JNSQff7ALoIaXuz6sy5oZ7TdKFDofI1l9jxGGrCiaEQ69HoqWBzHC11Ep60JpOfkTDG7kjSac
-        m2JZxmjP/O6sZAEQlyOS+zM3fLX8Cnm1hTG/e9O1K9VUl1KcUd3tp0Hx/BIVQ2qjhg9S95AQ=
-X-Google-Smtp-Source: AGRyM1u5ruiHHM3S6bje5uDXHiDhsX9GPjl/iquz7U8+/miDVMM2oXhlDLLmW1rox8AgppVRKHsmFfeak9oU
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=l0wfKFp1ChJwLpur4LprhadUuGsHQU0cjcxPkM3pYu4=;
+        b=YbHVi3B36tx5FJtolP0DLY9BxGQjD3UpcLQiPU0VUUQfIbvvsST+6t31AtQyQiqI16
+         8oDDjvvaGp7APvyb2eoICQ4eiFJ7JZVEp9STmH1veG39upQvic9Tx8b8noysj7EomHVv
+         BFgw7m27PIbCRKj+BeZu9GW1+2L8odUwGB9nCZIkkMWTpwKeK8NYQl+IniIE+1oaYrdg
+         tMUgHtK7Y6nZEPl4qhPcSz75KsxtfPitFNPvybrfGdO+JtBgtzqo9G3SJhYt5I7oqleS
+         HrhzeXna1MJFq1XmktZ55PNFKEInJpdp9Y9RA3MdKzHPgUi2zDeKJa9BNzk0SBWwWP3P
+         DsuQ==
+X-Gm-Message-State: AJIora8+AsDU6bBEcFBbazKmCt6jo4ZF2U8zzXouZU91tKRXdpRoUPiE
+        LzuDWvQx9K3kTPWzqJbshlBVsMZ2D6YuX4Gq2cX76IbgcjRLDbM3jm0jas9ZVszmFxjS+uxP0EH
+        L66XIjXdygz01SczbZW6uFD6BMUltk5Q0emH9fn8+Yl18sVT10f82OQI3Tsxn2SXJVVsI+fo=
+X-Google-Smtp-Source: AGRyM1uSdSVTczuhdh9+VldYWcIPNC0HCxNLlu3dXeAxplL3jRHHA4OEjhvR03xbY4z9GwTDsOqdoWRnLtF/
 X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a05:6a00:16ca:b0:525:a5d5:d16f with SMTP
- id l10-20020a056a0016ca00b00525a5d5d16fmr22040610pfc.9.1657599788310; Mon, 11
- Jul 2022 21:23:08 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 04:22:56 +0000
-Message-Id: <20220712042258.293010-1-jstultz@google.com>
+ (user=jstultz job=sendgmr) by 2002:a17:90a:de12:b0:1ef:ae83:d225 with SMTP id
+ m18-20020a17090ade1200b001efae83d225mr2026908pjv.207.1657599790067; Mon, 11
+ Jul 2022 21:23:10 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 04:22:57 +0000
+In-Reply-To: <20220712042258.293010-1-jstultz@google.com>
+Message-Id: <20220712042258.293010-2-jstultz@google.com>
 Mime-Version: 1.0
+References: <20220712042258.293010-1-jstultz@google.com>
 X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [RFC][PATCH 1/3] drm: drm_syncobj: Add note in DOC about absolute
- timeout values
+Subject: [RFC][PATCH 2/3] drm: vgem: Enable SYNCOBJ and SYNCOBJ_TIMELINE on
+ vgem driver
 From:   John Stultz <jstultz@google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <jstultz@google.com>,
@@ -78,14 +80,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After having to debug down through the kernel to figure out
-why my _WAIT calls were always timing out, I realized its
-an absolute timeout value instead of the more common relative
-timeouts.
-
-This detail should be called out in the documentation, as while
-the absolute value makes sense here, its not as common for timeout
-values.
+Allows for basic SYNCOBJ api testing, in environments
+like VMs where there may not be a supported drm driver.
 
 Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: Maxime Ripard <mripard@kernel.org>
@@ -99,27 +95,25 @@ Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: John Stultz <jstultz@google.com>
 ---
- drivers/gpu/drm/drm_syncobj.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/vgem/vgem_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-index 7e48dcd1bee4..b84d842a1c21 100644
---- a/drivers/gpu/drm/drm_syncobj.c
-+++ b/drivers/gpu/drm/drm_syncobj.c
-@@ -136,6 +136,10 @@
-  * requirement is inherited from the wait-before-signal behavior required =
-by
-  * the Vulkan timeline semaphore API.
-  *
-+ * It should be noted, that both &DRM_IOCTL_SYNCOBJ_WAIT and
-+ * &DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT takes an *absolute* CLOCK_MONOT=
-ONIC
-+ * nanosecond value for the timeout value. Accidentally passing relative t=
-ime
-+ * values will likely result in an immediate -ETIME return.
-  *
-  * Import/export of syncobjs
-  * -------------------------
+diff --git a/drivers/gpu/drm/vgem/vgem_drv.c b/drivers/gpu/drm/vgem/vgem_dr=
+v.c
+index c5e3e5457737..e5427d7399da 100644
+--- a/drivers/gpu/drm/vgem/vgem_drv.c
++++ b/drivers/gpu/drm/vgem/vgem_drv.c
+@@ -109,7 +109,8 @@ static struct drm_gem_object *vgem_gem_create_object(st=
+ruct drm_device *dev, siz
+ }
+=20
+ static const struct drm_driver vgem_driver =3D {
+-	.driver_features		=3D DRIVER_GEM | DRIVER_RENDER,
++	.driver_features		=3D DRIVER_GEM | DRIVER_RENDER |
++					  DRIVER_SYNCOBJ | DRIVER_SYNCOBJ_TIMELINE,
+ 	.open				=3D vgem_open,
+ 	.postclose			=3D vgem_postclose,
+ 	.ioctls				=3D vgem_ioctls,
 --=20
 2.37.0.144.g8ac04bfd2-goog
 

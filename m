@@ -2,117 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFEB5728A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B865728AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 23:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbiGLVaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 17:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S231338AbiGLVji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 17:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbiGLVat (ORCPT
+        with ESMTP id S229849AbiGLVjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 17:30:49 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1CD139A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:30:47 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id p22so7353224qkj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=/ov82X9kW39yvbxY1McMir/k+O2+nYDyG4xPScmDyfc=;
-        b=ay3/5lDUwcy1Hcdr2vmHaxiMQwYnvd/iCWseV3Jo2Kp2E/uDYFyEIr76QZQCwA7K+S
-         wi1beA0eG1qxbEBdN7ZT4w6+ri8TWB8pNNplK5yvswScENpVx3UZUWOZYg2+DBlj4gEf
-         YPcT+/qh0IYxNQoeADazl8GnAJqKoTR8qVEaM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=/ov82X9kW39yvbxY1McMir/k+O2+nYDyG4xPScmDyfc=;
-        b=yezW/Rfbhv5PcjTEculoolAeZrIsqpLcbfExeN33AdjO5n/is/OhJlY+3wI0UcnU6t
-         FN4hOEo2Ll3NEfJNrtVFGBpi/HnyvSK1Z4HJsb7T7K87f75kGzW7jYELWNnttDs8C2FI
-         8DasiinnndJt9cVfu+Lx1312N12W3YVECi4piyB3oDohdP9Vi4fmwJw2mzfxsNYcCRBN
-         T8UaqqKsTPzQgAmrKxzRoz1uQyg7XGRdNR4KQuv2lGFhVptcUugzMSn7D6OgcIGlhEnT
-         YL9fFSCm1FRfMc7rJzdQItT+JjJ55TOmeKIifBFSFaxyBl54WrbU1fMIZiBJtkcygMkg
-         CzzQ==
-X-Gm-Message-State: AJIora+5IaYdN2hoEk7JRUkgYXu/sdqeYr6WUH1U8uGkRjEmczXgHPbD
-        +vUk35tKzbYik6qu434fP95U6g==
-X-Google-Smtp-Source: AGRyM1tPYp1vPM53Xd2cP3aF0HKDN4RijBCYmU7LSYzQBcaeKECQ9LthjfLWLntHfoh9ElULngaJQA==
-X-Received: by 2002:a05:620a:132d:b0:6b5:9575:9080 with SMTP id p13-20020a05620a132d00b006b595759080mr222850qkj.153.1657661446728;
-        Tue, 12 Jul 2022 14:30:46 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id y13-20020a05620a44cd00b006b5a9e53105sm1931238qkp.91.2022.07.12.14.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 14:30:46 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Tue, 12 Jul 2022 17:30:44 -0400 (EDT)
-To:     James Clark <james.clark@arm.com>
-cc:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/8] perf evsel: Do not request ptrauth sample field if
- not supported
-In-Reply-To: <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
-Message-ID: <8b6a583a-4ee0-8097-54e5-7d51a6edaa@maine.edu>
-References: <20220704145333.22557-1-andrew.kilroy@arm.com> <20220704145333.22557-3-andrew.kilroy@arm.com> <d67dff7-73c3-e5a-eb7b-f132e8f565cc@maine.edu> <8d282e87-c1c8-f7a0-631b-8d569c2154a6@arm.com>
+        Tue, 12 Jul 2022 17:39:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF058CDA22
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 14:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657661976; x=1689197976;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4fKL0I4CEkU/vp1cpmuqjpSokdof3TOx4kCluaF4yTA=;
+  b=DfHnWSQNVr7y8HAbRx7I9bTqVynb+AspRNK3m5nt0prBEzvN8JakG06J
+   dCVbH65HCaNxrS5gfZ/VJZ2/LMZ5g7Tm0ct/RTPndYZYmugpKWTersI1J
+   bH6a8xQZeNGenmbnVTzzUOyNxL1V0prsFcjglbkzguW8acaoA2LYIk0AY
+   XjTQeRAC+rLWPU7THLQoKTuLUthDmLB1cnJasBCNYQZj27AKiLtF1ttVs
+   Q4SfkGIZfFIGBYUJvw4isDLZHtRy58mV1btUYJItCZ9IzvEYau4Hw3OlI
+   YDkkJhMVAQpiDGToHJroF8KMDv0n1LM4tOTC+sUryZczgkd5matL4yjJt
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268085421"
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="268085421"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 14:39:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
+   d="scan'208";a="663105088"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Jul 2022 14:39:34 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBNbR-0002iB-Ou;
+        Tue, 12 Jul 2022 21:39:33 +0000
+Date:   Wed, 13 Jul 2022 05:38:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <bwh@kernel.org>
+Subject: [linux-stable-rc:linux-5.10.y 7082/7120] arch/x86/kernel/head_64.o:
+ warning: objtool: xen_hypercall_mmu_update(): can't find starting
+ instruction
+Message-ID: <202207130531.SkRjrrn8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022, James Clark wrote:
-> On 06/07/2022 17:01, Vince Weaver wrote:
-> > So in this case you are leaking ARM64-specific info into the generic 
-> > perf_event_open() call?  Is there any way the kernel could implement this 
-> > without userspace having to deal with the issue?
-> 
-> The alternative to this change is just to call it "PERF_SAMPLE_POINTER_AUTH_MASK"
-> and then it's not Arm specific, it's just that only Arm implements it for now.
-> This is definitely an option.
-> 
-> But if no platform ever implements something similar then that bit is wasted.
-> The intention of adding "PERF_SAMPLE_ARCH_1" was to prevent wasting that bit.
-> But as you say, maybe making it arch specific isn't the right way either.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   53b881e19526bcc3e51d9668cab955c80dcf584c
+commit: 7575d3f3bbd1c68d6833b45d1b98ed182832bd44 [7082/7120] x86: Use return-thunk in asm code
+config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220713/202207130531.SkRjrrn8-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 7575d3f3bbd1c68d6833b45d1b98ed182832bd44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-I don't know what the current kernel policy is on this kind of thing, but 
-in the past perf_event_open was meant to be a generic as possible.
-Having architecture-specific magic bits is best avoided.
-However I'm not the maintainer for this so really my opinion doesn't 
-really matter.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm just speaking up as a userspace coder who is trying to write 
-cross-platform tools, and having to maintain obscure arch-specific code 
-paths in every single utility ends up being a huge pain.  And isn't the 
-whole point of an operating system to abstract this away?
+All warnings (new ones prefixed by >>):
 
-> > can tell there haven't been any documentation patches included for the 
-> > Makefile.
-> 
-> We plan to update the docs for the syscall, but it's in another repo, and
-> we'll wait for this change to be finalised first. I'm not sure what you
-> mean about the Makefile?
+>> arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
 
-sorry, that was a mis-type.  I meant "manpage" not Makefile.
-
-Vince Weaver
-vincent.weaver@maine.edu
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

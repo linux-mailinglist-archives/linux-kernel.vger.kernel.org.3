@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373FE572939
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04AF57293C
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 00:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiGLWXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 18:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S233153AbiGLWXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 18:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbiGLWXp (ORCPT
+        with ESMTP id S232386AbiGLWXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 18:23:45 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138EE23BD8;
-        Tue, 12 Jul 2022 15:23:42 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 12 Jul 2022 18:23:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E625223BD8;
+        Tue, 12 Jul 2022 15:23:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4LjFdl14b1z9sWq;
-        Wed, 13 Jul 2022 00:23:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1657664619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d7YJrCRe6Qm+TNwSONhJxOu2TbaYcoyAuYI4xAstAgs=;
-        b=szCc/tQXdia86kD3Bd4zptVYoGWn/sl7IiefRsRaIpMSSu4fecKS0isj5rJLxBsTg8xGK/
-        zYuogQ2zobNLLjgxH/iMcgRPFm727G9d54zHfcKJCtnNiTd3s8CzOSdvk/exNxijgZw0O3
-        ohvCOehMxn0H2Ylx+rZm4H5zv1Wcu9M0WJcgJSi4LEp7Fez+tUzxmmHD0h3RHl0b3xIwzb
-        NGGKUM0xGLhhKB8OZQ15qf/0alQikapg4X2kYgF0RApI8KlHOswqXKENRYH5b0MilyeGtW
-        GYnFPTN9ybhXyzXOH2+PlleILMcCPswRJ+xtmFW+KaOmDC3e4WVsduwBF6CBlw==
-Message-ID: <d1568f0b-0972-5e52-ed63-042a625060e9@hauke-m.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD33616C3;
+        Tue, 12 Jul 2022 22:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CC3C3411E;
+        Tue, 12 Jul 2022 22:23:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657664624;
+        bh=EvcM/P0S92GwQxfYcLkzyCX5HzivdX1VwMpuvCer620=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oxpbHPcJ7VyRvD9wGYRaht6bT/aAA0xiYC5nx7ltxDBtmJZ1lHP1XJEmzwGrNVJFc
+         gglHbVL1cQjC9PFRbCtLF6lA8vvtxa3wPzBY/LMholxuj32eaPwhUNDsgsBuYwvzEq
+         NKqyILuNQXSlVo3HR9YXYtjRfvOhw97vBIOg8hdSpu+8EhcxLPOWrBZwob7Nso5ib+
+         h+4Wv6CT6cmYcueewf28kI0mHLHVE4ddAaRk8pg+7a2GzUXVgDqChr7+03+fxBmbEu
+         7pyX/RUkh0VX/QZBvIGoHHZKmXcJst38AizRKAG7vpvD3AL1hRM+BmQlhSqQPyCAWu
+         4FbvNAS3GcCMA==
 Date:   Wed, 13 Jul 2022 00:23:37 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] ARM: dts: mvebu: Add definitions for PCIe
+ legacy INTx interrupts
+Message-ID: <20220713002337.26bffcd9@thinkpad>
+In-Reply-To: <Ys2oaL7U7Ue5syU4@lunn.ch>
+References: <20220712164108.30262-1-kabel@kernel.org>
+        <Ys2oaL7U7Ue5syU4@lunn.ch>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next] net: lantiq_xrx200: use skb cache
-Content-Language: en-US
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220712181456.3398-1-olek2@wp.pl>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-In-Reply-To: <20220712181456.3398-1-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 20:14, Aleksander Jan Bajkowski wrote:
-> napi_build_skb() reuses NAPI skbuff_head cache in order to save some
-> cycles on freeing/allocating skbuff_heads on every new Rx or completed
-> Tx.
-> Use napi_consume_skb() to feed the cache with skbuff_heads of completed
-> Tx. The budget parameter is added to indicate NAPI context, as a value
-> of zero can be passed in the case of netpoll.
-> 
-> NAT performance results on BT Home Hub 5A (kernel 5.15.45, mtu 1500):
-> 
-> Fast path (Software Flow Offload):
-> 	Up	Down
-> Before	702.4	719.3
-> After	707.3	739.9
-> 
-> Slow path:
-> 	Up	Down
-> Before	91.8	184.1
-> After	92.0	185.7
-> 
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+On Tue, 12 Jul 2022 18:59:20 +0200
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
+> On Tue, Jul 12, 2022 at 06:40:58PM +0200, Marek Beh=C3=BAn wrote:
+> > As suggested by Gregory [1] (although he suggested it only for armada
+> > 380), add definitions for PCIe legacy INTx interrupts into every DTS
+> > file used by the pci-mvebu.c controller driver.
+> >=20
+> > It was tested on 88F6820 (A385) and 88F6281 (Kirkwood) SoCs.
+> >=20
+> > [1] https://lore.kernel.org/linux-arm-kernel/87wnhxjxlq.fsf@BL-laptop/
+> >=20
+> > Changes since v1:
+> > - dropped armada-385 patch, which was already applied
+> > - added commit messages =20
+>=20
+> Thanks for updating the commit message.
+>=20
+> I don't see any Fixes: tags here. So from that, can i assume that
+> there are no known broken devices? We don't need to involve stable.
+
+I don't think so. If it turns out we do, we can just send it to stable
+afterwards.
+
+Marek

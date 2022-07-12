@@ -2,170 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE3D572593
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EE5572596
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235986AbiGLTXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S234632AbiGLTZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiGLTXN (ORCPT
+        with ESMTP id S235973AbiGLTXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:23:13 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213DDEBBFE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:00:28 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id r186so1187894pgr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:00:27 -0700 (PDT)
+        Tue, 12 Jul 2022 15:23:51 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF40854646;
+        Tue, 12 Jul 2022 12:01:03 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 19so10972151ljz.4;
+        Tue, 12 Jul 2022 12:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=24a4DPzJMkufkus91pFJUFud3yFqwwXytBA96SJJdD0=;
-        b=Px/QN0h6joRjGgAJ040a+wPwOgRX0ajg8b5ub0VXfzDgNM+lkH1ZD1EozzKNh9HD/7
-         kXjR99K/2HL6gbNlUSxGdWXdYf3DBo/Fuqhc/skA8I+0L6GHk/dwNY2JCctfy7LE6uvz
-         g6wPKE8LZgVg7dTH+5u2dKEeHJh5xAFHbEPsHRfW445loekLLiNoWD399ZaZUt6RdpcA
-         fPsmgCPj8mUs5h6XhIr7H5gNsF5A1qnKi8dr+MqL513b3CNeysBMK9SgIKlyeMgNdNgC
-         zcY3GQM0oEREokqFjYs87E0Fffbwc0W+XS0qqRKZJhGJLF1dny8WbMz//keqq+YxoZ5Z
-         tvYw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YajTne79qkcjtVNppCGMfwoyWypygHPJ6o7/koAj4R0=;
+        b=WHaNH81reQpTLCfV9shfYBJd9NSACSK/fJMRPZzhWbsv15qMzKk4Mg0DZTVni09tFH
+         eNL0jvuoSORfarMIJtqBzrPW/Lv29ACEJeg+nry/XZjoMO9aEl8EO13QoKh34EuNqY/A
+         Zou7XRAF47CWchIbx9eNp/0sVow0hNqcalKquPUUpV7WS7omBWTp2u3AIY4I5pkWB/W2
+         wuk9WO1H0MJt35tTWCy+CUgD2Pd+8fTsdPCyaYC37hNIJ6Opwbkqb452LdyPvgi03eqE
+         XKI+djKcjR9F2t4m8GSZpKOc5dFOM7RpRpvxlVC74IlTUK8kr8292wainCNthOXMGFl6
+         zveg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=24a4DPzJMkufkus91pFJUFud3yFqwwXytBA96SJJdD0=;
-        b=rwTW+WFd8b1eo361Wm8Ovf9eWQ6Q04Kn+JIrOYcPet/pdB3QvqM1KSdOwCBG45D4VE
-         kEHtrBp/2lE/EkZwRhznJncnhhAPziXqqr+8gNWhCXPLARyS/C3deg3Orw+q0RTzeaTu
-         BmByQW5cvxItYFt1+bZpyekSuvPoBw2LBpvcsEQrSG8EKVjZyIjIBx6AAVkwE0X3/qnh
-         1sOPCxKHHZGUHvFcER/vIVLlK3FDFEiu1kpAtTHshSnmxBRNy9uw56To1fCCkx+gxRhw
-         ZT61pfuRSx3x2LE73ohtn0okCH33oI/PaVIGNfWu83Laaixp8veT3wXIuKrpE8Yn9rEB
-         LeLA==
-X-Gm-Message-State: AJIora8kiIhqDqUEZP91hihka6XAeYLmuR5NYbBXruETs5ACWb6oxVH+
-        emUiJr/mjkDfPVuYLXjANTrp/w==
-X-Google-Smtp-Source: AGRyM1uh9o5tjg4FqPlHU104ll/MUN6188FPj1U1eBmyjMFWPwuMjOfBt10ey9dNF8JHp9efnylMbQ==
-X-Received: by 2002:a63:170d:0:b0:415:f76d:45e1 with SMTP id x13-20020a63170d000000b00415f76d45e1mr11592144pgl.171.1657652427244;
-        Tue, 12 Jul 2022 12:00:27 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id d1-20020aa797a1000000b005259578e8fcsm7141163pfq.181.2022.07.12.12.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 12:00:26 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 19:00:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        renyu@nfschina.com
-Subject: Re: [PATCH] KVM: LAPIC: Fix a spelling mistake in comments
-Message-ID: <Ys3Ex9GaoWAbNqF0@google.com>
-References: <20220701065558.9073-1-jiaming@nfschina.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YajTne79qkcjtVNppCGMfwoyWypygHPJ6o7/koAj4R0=;
+        b=vVaNVd4uGA7MXwGamW7h/9NnwobvS0OErGCF4Vwjg2/fBniklIgeCVAaKK6NO/R5x9
+         E2BlL2RLxLBxw4MFNiqZfdtNUCaGx+bYuOouy4435bKNmmAOvu/DAowCyzBlqon3gFzi
+         jomA3NntWkgTqyNFEt06Tqfl1j+bi6HRaRf283WyFTpw1oVC7q0k/gox3MgaIvdXGQOO
+         ir0YOk71LfcYTVoYYi7nbFwsnVy0WeO6fm1KyT4bvtGRPHhoHT464jQM2Cmq8dp1EOh7
+         CwdMgMVlrbdZM79EXIO4hd3lEWfPny0/cRK1tHSbwxovcZy4hHjpvu2k7v7k+VPkYKYD
+         oJpA==
+X-Gm-Message-State: AJIora/tyaRnNe+OJOcNUfvH3wZyYV28BmP9dIfOPZZmfAXRiYojUxOC
+        z1jQVoF8ixt8N3cYp3nrkHCvT8gnGETMohgPkyU=
+X-Google-Smtp-Source: AGRyM1tHza+A3cEbT8OpM1tSUgnxEFejVA0wRfgyst4sUZKuOXuX1ZhsJ/z+j64fEKW9nPVUUcUQbSPve11bdKLiej4=
+X-Received: by 2002:a2e:9d86:0:b0:25d:5297:a75c with SMTP id
+ c6-20020a2e9d86000000b0025d5297a75cmr13561873ljj.506.1657652462135; Tue, 12
+ Jul 2022 12:01:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701065558.9073-1-jiaming@nfschina.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220710102110.39748-1-tmaimon77@gmail.com> <20220710102110.39748-3-tmaimon77@gmail.com>
+ <CAHp75VdaT8WjoHYgmUY+mKVaUivLGGeaRJAkwfRjHspPAmw_XQ@mail.gmail.com>
+ <CAP6Zq1iQL2R67dbdQiXW_JUWrGne9xp-9yQ97vQOb4RveQE7Yw@mail.gmail.com> <CAHp75VfYbFYcp6eKQsSJ9-0Wz-9=UaM8ERWyOkcXfWvinZHB7w@mail.gmail.com>
+In-Reply-To: <CAHp75VfYbFYcp6eKQsSJ9-0Wz-9=UaM8ERWyOkcXfWvinZHB7w@mail.gmail.com>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Tue, 12 Jul 2022 22:00:50 +0300
+Message-ID: <CAP6Zq1hZfA=DpnsOzvtbSLOuOHv7V_XYr27GeAuuqw2bPdxETw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022, Zhang Jiaming wrote:
-> There is a typo (writeable) in kvm_apic_match_physical_addr's comments.
-> Fix it.
-> 
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> ---
->  arch/x86/kvm/lapic.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 0e68b4c937fc..ace161bf3744 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -808,7 +808,7 @@ static bool kvm_apic_match_physical_addr(struct kvm_lapic *apic, u32 mda)
->  	 * Hotplug hack: Make LAPIC in xAPIC mode also accept interrupts as if
->  	 * it were in x2APIC mode.  Hotplugged VCPUs start in xAPIC mode and
->  	 * this allows unique addressing of VCPUs with APIC ID over 0xff.
-> -	 * The 0xff condition is needed because writeable xAPIC ID.
-> +	 * The 0xff condition is needed because writable xAPIC ID.
+Hi Andy,
 
+Thanks for your clarifications, they will be addressed in the next version.
 
-Oof, that comment isn't exactly overflowing with information about why writable
-xAPIC IDs are problematic.
+Best regards,
 
->  	 */
->  	if (kvm_x2apic_id(apic) > 0xff && mda == kvm_x2apic_id(apic))
-
-IMO checking @mda for > 0xff is more intuitive and easier to document.  Checking
-the x2APID ID is functionally equivalent when combined with the "== mda" check, but
-in isolation depends on the x2APIC ID being read-only.
-
-Aha!  And checking @mda would allow dropping "fallthrough" logic, as the xAPIC
-_can't_ match if @mda > 0xff.  
-
-So this?
-
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 12 Jul 2022 11:46:53 -0700
-Subject: [PATCH] KVM: x86: Check target, not vCPU's x2APIC ID, when applying
- hotplug hack
-
-When applying the hotplug hack to match x2APIC IDs for vCPUs in xAPIC
-mode, check the target APID ID for being unaddressable in xAPIC mode
-instead of checking the vCPU's x2APIC ID.  Functionally, the two checks
-yield identical behavior when combined with the "mda == x2apid_id" check.
-But in isolation, checking the x2APIC ID takes an unnecessary dependency
-on the x2APIC ID being read-only (which isn't strictly true on AMD CPUs,
-and is difficult to document as well), and requires KVM to fallthrough
-and check the xAPIC ID as well to deal with a writable xAPIC ID, whereas
-the xAPIC ID _can't_ match a target ID greater than 0xff.
-
-Opportunistically reword the comment to call out the various subtleties,
-and to fix a typo reported by Zhang Jiaming.
-
-No functional change intended.
-
-Cc: Zhang Jiaming <jiaming@nfschina.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/lapic.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 48740a235dee..ef5417d3ce95 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -830,13 +830,16 @@ static bool kvm_apic_match_physical_addr(struct kvm_lapic *apic, u32 mda)
- 		return mda == kvm_x2apic_id(apic);
-
- 	/*
--	 * Hotplug hack: Make LAPIC in xAPIC mode also accept interrupts as if
--	 * it were in x2APIC mode.  Hotplugged VCPUs start in xAPIC mode and
--	 * this allows unique addressing of VCPUs with APIC ID over 0xff.
--	 * The 0xff condition is needed because writable xAPIC ID.
-+	 * Hotplug hack: Accept interrupts for vCPUs in xAPIC mode as if they
-+	 * were in x2APIC mode if the target APIC ID can't be encoded as an
-+	 * xAPIC ID.  This allows unique addressing of hotplugged vCPUs (which
-+	 * start in xAPIC mode) with an APIC ID that is unaddressable in xAPIC
-+	 * mode.  Match the x2APIC ID if and only if the target APIC ID can't
-+	 * be encoded in xAPIC to avoid spurious matches against a vCPU that
-+	 * changed its (addressable) xAPIC ID (which is writable).
- 	 */
--	if (kvm_x2apic_id(apic) > 0xff && mda == kvm_x2apic_id(apic))
--		return true;
-+	if (mda > 0xff)
-+		return mda == kvm_x2apic_id(apic);
-
- 	return mda == kvm_xapic_id(apic);
- }
-
-base-commit: ba0d159dd8844469d4e4defff4985a7b80f956e9
---
-
+Tomer

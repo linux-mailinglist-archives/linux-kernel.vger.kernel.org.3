@@ -2,156 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A9D571B67
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3636B571B6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbiGLNfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S233144AbiGLNfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiGLNfQ (ORCPT
+        with ESMTP id S230453AbiGLNfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:35:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6886BB6545
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657632914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 12 Jul 2022 09:35:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C360B6DB4;
+        Tue, 12 Jul 2022 06:35:34 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 59F5920151;
+        Tue, 12 Jul 2022 13:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657632931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=AYDTpVfeHq/kcDxEOQn4ahOzHHQ5F5sUW+bY6Ncfdw0=;
-        b=cCl/b4Q/lHd9IMWyq9GbZwgFAAJiqBLryDX1W0kaLowHYHS8PEFBcvJJNEfzdQ1xrlXQ8q
-        U9JROZaLsg9e8tLj8ORA+m1K5GxBD0it3nydMmht5PXj0+OADW91eo1I3/q5J3o94WtHk3
-        33uul3zxlVm/DhYgNg9geRlH/lR9h3I=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-404-3_mvxN-POHahcA5xFuyfOQ-1; Tue, 12 Jul 2022 09:35:13 -0400
-X-MC-Unique: 3_mvxN-POHahcA5xFuyfOQ-1
-Received: by mail-qk1-f198.google.com with SMTP id t203-20020a3746d4000000b006af1d3e8068so7802458qka.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:35:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=AYDTpVfeHq/kcDxEOQn4ahOzHHQ5F5sUW+bY6Ncfdw0=;
-        b=PotXTkTsRbfiHLyQ4vgRRw45eCrO52njV1E8mx3gouXEnEPeAqn6D9mrJINHrGWi4u
-         6/Hzi85mbwd57n82FiwtJKyUnk+5f984wfYigwKMkk4o5vosEG9IfOyzO9JLPRJigHBE
-         izXU3PCLrBtetwmco2k4lX4o9AoRdUFCc9XL7lZYcs3F6+MYcHZB8NU4vqTc+i+E2ikf
-         EIe8RfqdCqCLOuZD4KI46BNQX//nW8M5OmzH7P6vF3uw+i4Nr8x22w4cQbtcU+QZ4Ip+
-         lQPGMKkfmkfK1HHY+okaQfQnxkqTK1pcji08Es2OE77rq64jG1HUpPiX2yyHlDC6qx9I
-         qAPw==
-X-Gm-Message-State: AJIora98J03Vx+W01O4iQy9a2D7YYHVR/tWFKhupy9RKLR1uXe/W4Wzp
-        SUVakUS/A8fO4vdJoAzs6mmWI1IWqKZMWc//3z363JTt+kG+SiYm8XZq2RygngWCUmbJndw1S5n
-        EJn4aG9oPjzNmgqzWSWCugwmL
-X-Received: by 2002:a05:620a:294d:b0:6b3:bb34:ecf2 with SMTP id n13-20020a05620a294d00b006b3bb34ecf2mr14838033qkp.181.1657632912658;
-        Tue, 12 Jul 2022 06:35:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vtMFCzLrA3SwwmG1gbgi57BoQRxTT2NzAoIxVA3+ubZEEcf4EGzm6Q/kg/e6cmwGmzZS8wvQ==
-X-Received: by 2002:a05:620a:294d:b0:6b3:bb34:ecf2 with SMTP id n13-20020a05620a294d00b006b3bb34ecf2mr14838011qkp.181.1657632912295;
-        Tue, 12 Jul 2022 06:35:12 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05620a448900b006a79479657fsm9407335qkp.108.2022.07.12.06.35.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 06:35:11 -0700 (PDT)
-Message-ID: <8307c007823eac899d3a017d1616e0d08a653185.camel@redhat.com>
-Subject: Re: [PATCH 1/3] KVM: x86: Mark TSS busy during LTR emulation
- _after_ all fault checks
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>
-Date:   Tue, 12 Jul 2022 16:35:08 +0300
-In-Reply-To: <20220711232750.1092012-2-seanjc@google.com>
-References: <20220711232750.1092012-1-seanjc@google.com>
-         <20220711232750.1092012-2-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        bh=+zipOz8mXTXKTOJCGZnBsxuqw/eZ2Vsh+kILV8kuqxE=;
+        b=VWaLz0Zi9WuzNQOHKOhhmJXt/adh3j2q5b/mwzjcUHqDNxLTThxGq10ppyCwcdaoz7LMJG
+        fBbTccaLbUuIIasDGhIXlz9896nN1pgO6K/iJTc8czSOkvt1q+ktZaXXGkXoZPK7wf7wTq
+        M3ccS3h7L6Y79Ux6ZHqhmnY5IB03Juw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4DFB72C141;
+        Tue, 12 Jul 2022 13:35:29 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 15:35:28 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, akpm@linux-foundation.org,
+        surenb@google.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, keescook@chromium.org, rostedt@goodmis.org,
+        mingo@redhat.com, peterz@infradead.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, david@redhat.com,
+        imbrenda@linux.ibm.com, adobriyan@gmail.com,
+        yang.yang29@zte.com.cn, brauner@kernel.org,
+        stephen.s.brennan@oracle.com, zhengqi.arch@bytedance.com,
+        haolee.swjtu@gmail.com, xu.xin16@zte.com.cn,
+        Liam.Howlett@oracle.com, ohoono.kwon@samsung.com,
+        peterx@redhat.com, arnd@arndb.de, shy828301@gmail.com,
+        alex.sierra@amd.com, xianting.tian@linux.alibaba.com,
+        willy@infradead.org, ccross@google.com, vbabka@suse.cz,
+        sujiaxun@uniontech.com, sfr@canb.auug.org.au,
+        vasily.averin@linux.dev, mgorman@suse.de, vvghjk1234@gmail.com,
+        tglx@linutronix.de, luto@kernel.org, bigeasy@linutronix.de,
+        fenghua.yu@intel.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        hezhongkun.hzk@bytedance.com
+Subject: Re: [PATCH v2 0/5] mm, oom: Introduce per numa node oom for
+ CONSTRAINT_{MEMORY_POLICY,CPUSET}
+Message-ID: <Ys14oIHL85d/T7s+@dhcp22.suse.cz>
+References: <20220708082129.80115-1-ligang.bdlg@bytedance.com>
+ <YsfwyTHE/5py1kHC@dhcp22.suse.cz>
+ <41ae31a7-6998-be88-858c-744e31a76b2a@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <41ae31a7-6998-be88-858c-744e31a76b2a@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 23:27 +0000, Sean Christopherson wrote:
-> Wait to mark the TSS as busy during LTR emulation until after all fault
-> checks for the LTR have passed.  Specifically, don't mark the TSS busy if
-> the new TSS base is non-canonical.
-
-
-Took me a while to notice it but I see the canonical check now, so the patch
-makes sense, and so:
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Unrelated, but I do wonder why we use cmpxchg_emulated for setting the busy bit, while we use
-write_segment_descriptor to set the accessed bit.
-
-
-Best regards,
-	Maxim Levitsky
-
+On Tue 12-07-22 19:12:18, Abel Wu wrote:
+[...]
+> I was just going through the mail list and happen to see this. There
+> is another usecase for us about per-numa memory usage.
 > 
-> Opportunistically drop the one-off !seg_desc.PRESENT check for TR as the
-> only reason for the early check was to avoid marking a !PRESENT TSS as
-> busy, i.e. the common !PRESENT is now done before setting the busy bit.
-> 
-> Fixes: e37a75a13cda ("KVM: x86: Emulator ignores LDTR/TR extended base on LLDT/LTR")
-> Reported-by: syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com
-> Cc: stable@vger.kernel.org
-> Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-> Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/emulate.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index 39ea9138224c..09e4b67b881f 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -1699,16 +1699,6 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
->         case VCPU_SREG_TR:
->                 if (seg_desc.s || (seg_desc.type != 1 && seg_desc.type != 9))
->                         goto exception;
-> -               if (!seg_desc.p) {
-> -                       err_vec = NP_VECTOR;
-> -                       goto exception;
-> -               }
-> -               old_desc = seg_desc;
-> -               seg_desc.type |= 2; /* busy */
-> -               ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
-> -                                                 sizeof(seg_desc), &ctxt->exception);
-> -               if (ret != X86EMUL_CONTINUE)
-> -                       return ret;
->                 break;
->         case VCPU_SREG_LDTR:
->                 if (seg_desc.s || seg_desc.type != 2)
-> @@ -1749,6 +1739,15 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
->                                 ((u64)base3 << 32), ctxt))
->                         return emulate_gp(ctxt, 0);
->         }
-> +
-> +       if (seg == VCPU_SREG_TR) {
-> +               old_desc = seg_desc;
-> +               seg_desc.type |= 2; /* busy */
-> +               ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
-> +                                                 sizeof(seg_desc), &ctxt->exception);
-> +               if (ret != X86EMUL_CONTINUE)
-> +                       return ret;
-> +       }
->  load:
->         ctxt->ops->set_segment(ctxt, selector, &seg_desc, base3, seg);
->         if (desc)
+> Say we have several important latency-critical services sitting inside
+> different NUMA nodes without intersection. The need for memory of these
+> LC services varies, so the free memory of each node is also different.
+> Then we launch several background containers without cpuset constrains
+> to eat the left resources. Now the problem is that there doesn't seem
+> like a proper memory policy available to balance the usage between the
+> nodes, which could lead to memory-heavy LC services suffer from high
+> memory pressure and fails to meet the SLOs.
 
+I do agree that cpusets would be rather clumsy if usable at all in a
+scenario when you are trying to mix NUMA bound workloads with those
+that do not have any NUMA proferences. Could you be more specific about
+requirements here though?
 
+Let's say you run those latency critical services with "simple" memory
+policies and mix them with the other workload without any policies in
+place so they compete over memory. It is not really clear to me how can
+you achieve any reasonable QoS in such an environment. Your latency
+critical servises will be more constrained than the non-critical ones
+yet they are more demanding AFAIU.
+-- 
+Michal Hocko
+SUSE Labs

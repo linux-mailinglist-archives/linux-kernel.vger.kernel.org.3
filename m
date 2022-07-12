@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65893571AEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E65A571AED
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiGLNPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
+        id S231564AbiGLNQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiGLNPd (ORCPT
+        with ESMTP id S231226AbiGLNP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:15:33 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7B3564DB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id d66-20020a636845000000b0040a88edd9c1so3304886pgc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Jj15qoURj3emWvHLxBH2nPwiIzzLvd3mSNd7M20V7kc=;
-        b=VrvPmlW1Mw9Qie6nuTLyJIEdvtB1q9qnbj5yZHc5WAz2gmilCGbHrAqHW+nbHnr1Yt
-         QYCVTeIud8NWMDpleRg/psfMwA6QarcShJmRgGOPwCri+9+7X2GBA4+Tj+c4G58JlOR2
-         AAnOp9AzxbNQ7LsrvFRsrxgHUqqbYI38rxnkXJYQf4VtAcxDHSqE1u2CVWElkavoprVq
-         MLPLZF4KKZ2n+NFw/z5bjZirvOBQtqzV8bEJ7ZcxpbnMBWkTdx+DSdszCF38jbVzKw1N
-         v+nA8OfSDnRpifHP6YFfv5eLm0pP+A8Sl89jwczzX/VKEppia8uaYMmSmotBlTP99use
-         TmPA==
+        Tue, 12 Jul 2022 09:15:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39ADAD46
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657631755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5tXsbw00YLQ7NqzC3JsrbPgngk5MuP+VNykR9IFuRR4=;
+        b=DDsOmOlxGPZba4za0aORux0zvjzmcjh26ztIJSPftrVHYqjWKFLy7+lOeg8ETWkptunYjz
+        FE5SRZ+r3dlb0gRCIzuF+4mUwDhxYKE0x8HtQkupXR5KBlFm+Dn8TotDfitOIk/N8Y/LVx
+        mK79yp//AJNCsOdA7uyw3naWUcJaMnM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-540-JODy9wOJMy-5BNN9jU6Mwg-1; Tue, 12 Jul 2022 09:15:53 -0400
+X-MC-Unique: JODy9wOJMy-5BNN9jU6Mwg-1
+Received: by mail-wm1-f69.google.com with SMTP id q15-20020a05600c040f00b003a2e5c8fca3so3506117wmb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Jj15qoURj3emWvHLxBH2nPwiIzzLvd3mSNd7M20V7kc=;
-        b=UpUM2zz7JY3sN4DcNmwQLGo4JHJ8GzdSqtlYkUlfcgRgF3/SdAc/dmVY02q3eAbf05
-         RBazSwoOhO83VnSOP3SGeJW+o6kMewtD4/50GdFlclXM7YpsC6BbjpuwdNu0PEpgb8So
-         ed1CmX5ZyiWLAyBvv/7MsEYDOrlxKGeF94TRK9eRfaKqmo8t+r4anB15v+eIPOV4+4FM
-         IxFZK3UPUkd8VyDvAxBkcpLA142/iJNens+khuptKr/Tl2EHc952LeUMKiHBfFYH5pm4
-         c9VIzUaRu1N5ieYAeyniGA6s5w0WhTri7UzTdz/9NpWgmaECAImP/oWiuM9J13Qf2BER
-         RuSQ==
-X-Gm-Message-State: AJIora/453Cm0/h/TzJp+jBWn2TfqCn5f4V1vfi57bgNIJijAVpvToql
-        6zq9nDbMjafLuPbFZvYZV0ZX0fA79V/Z9twq/AxJ
-X-Google-Smtp-Source: AGRyM1tiLhmBsSG07iMVccKmTqJMgw+sCcWHJFKw/dCojeh685N00bAiC1pMr5tl2AGmpOHdStzVwHzb7OqZJcAwSsTV
-X-Received: from vamshig51.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:70c])
- (user=vamshigajjela job=sendgmr) by 2002:a17:90b:247:b0:1f0:1192:7c22 with
- SMTP id fz7-20020a17090b024700b001f011927c22mr4471560pjb.232.1657631730301;
- Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 18:45:23 +0530
-Message-Id: <20220712131523.1874428-1-vamshigajjela@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
-Subject: [PATCH] serial: 8250_dw: Avoid pslverr on reading empty receiver fifo
-From:   Vamshi Gajjela <vamshigajjela@google.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        VAMSHI GAJJELA <vamshigajjela@google.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=5tXsbw00YLQ7NqzC3JsrbPgngk5MuP+VNykR9IFuRR4=;
+        b=O503yQZZc8Jq1+Lh2HBdv1rvy3aJ2wVgdOKjs7mgT7qfpbf46nDF+g1aU69s9b9a7E
+         EpRj/MD81PbzJ4BpHWumOyGA32kLVJX7ZS6ivTN9vWzmkaB76GTYF7gC4oSILVrNwtfv
+         YybbL02U+Fc+O3rP5SJVUGCJ4wdK0axrHEva69ZUySGtYMCffXp06H+T+civbkrUwVFY
+         dX86LwWhaqUNWSD3pfGTE2EW4TeEFhOxB2iZNANrt4FNrTTlpe0rlauiWsycnvHM8nFr
+         QM2STggdxtOvRHKAFBZ+Htriu3WRCsI523l+TWxhXSGqfpSdH/FaGvD7S+bTbNeVs50q
+         D/jA==
+X-Gm-Message-State: AJIora/0AA3+uE+RAallanYx/u7y2K28go1ur1a2dycXoc7ZHbtojo+K
+        4r7RAYFVp9GZ/GqV+R3M5yLtAyGf5TUkR60qvA9jKRAsirFW7Rgm2toXrK6YoRYy6+A+EKdJb7R
+        fftf5Xn0jA+bm1WJ9i24u1DNI
+X-Received: by 2002:a1c:ed14:0:b0:3a2:b91b:dce4 with SMTP id l20-20020a1ced14000000b003a2b91bdce4mr3861366wmh.22.1657631751414;
+        Tue, 12 Jul 2022 06:15:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1udfPIvfYSRDHa2X53wdgF/K4XHrOFPPC3TZ6BRydnjwQOBvHnS4V/0/5VLuQ5I3LCk20yyRA==
+X-Received: by 2002:a1c:ed14:0:b0:3a2:b91b:dce4 with SMTP id l20-20020a1ced14000000b003a2b91bdce4mr3861346wmh.22.1657631751166;
+        Tue, 12 Jul 2022 06:15:51 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-238.dyn.eolo.it. [146.241.97.238])
+        by smtp.gmail.com with ESMTPSA id k1-20020a05600c0b4100b003a2d45472b6sm12729950wmr.28.2022.07.12.06.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 06:15:50 -0700 (PDT)
+Message-ID: <5668b7b52b1bd9714312042f0b19d01ba30246b1.camel@redhat.com>
+Subject: Re: [PATCH v2] net: macsec: fix potential resource leak in
+ macsec_add_rxsa() and macsec_add_txsa()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 15:15:49 +0200
+In-Reply-To: <20220711072851.2319308-1-niejianglei2021@163.com>
+References: <20220711072851.2319308-1-niejianglei2021@163.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: VAMSHI GAJJELA <vamshigajjela@google.com>
+On Mon, 2022-07-11 at 15:28 +0800, Jianglei Nie wrote:
+> init_rx_sa() allocates relevant resource for rx_sa->stats and rx_sa->
+> key.tfm with alloc_percpu() and macsec_alloc_tfm(). When some error
+> occurs after init_rx_sa() is called in macsec_add_rxsa(), the function
+> released rx_sa with kfree() without releasing rx_sa->stats and rx_sa->
+> key.tfm, which will lead to a resource leak.
+> 
+> We should call macsec_rxsa_put() instead of kfree() to decrease the ref
+> count of rx_sa and release the relevant resource if the refcount is 0.
+> The same bug exists in macsec_add_txsa() for tx_sa as well. This patch
+> fixes the above two bugs.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-With PSLVERR_RESP_EN parameter set to 1, device generates an error
-response when an attempt to read empty RBR with FIFO enabled.
+uhmmm.... this is getting weird. I already asked you 2 times to please
+add a suitable Fixes tag to your commit message, and this patch has
+been reposted unmodified...
 
-This happens when LCR writes are ignored when UART is busy.
-dw8250_check_lcr() in retries to updateLCR, invokes dw8250_force_idle()
-to clear and reset fifo and eventually reads UART_RX causing pslverr.
+Please, read every document under Documentation/process/ carefully, and
+please really add the required tag next time.
 
-Avoid this by not reading RBR/UART_RX when no data is available.
+If the above is not clear, please ask questions, but _do not repost_
+your patch unmodified,
 
-Signed-off-by: VAMSHI GAJJELA <vamshigajjela@google.com>
----
- drivers/tty/serial/8250/8250_dw.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+thanks!
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index f57bbd32ef11..a83222839884 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -81,9 +81,19 @@ static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
- 
- static void dw8250_force_idle(struct uart_port *p)
- {
-+	unsigned int lsr;
- 	struct uart_8250_port *up = up_to_u8250p(p);
- 
- 	serial8250_clear_and_reinit_fifos(up);
-+
-+	/*
-+	 * With PSLVERR_RESP_EN parameter set to 1, device generates pslverr
-+	 * error response when an attempt to read empty RBR with FIFO enabled
-+	 */
-+	lsr = p->serial_in(p, UART_LSR);
-+	if ((up->fcr & UART_FCR_ENABLE_FIFO) && !(lsr & UART_LSR_DR))
-+		return;
-+
- 	(void)p->serial_in(p, UART_RX);
- }
- 
--- 
-2.37.0.144.g8ac04bfd2-goog
+Paolo
 

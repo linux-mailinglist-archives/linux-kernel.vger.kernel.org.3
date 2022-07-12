@@ -2,120 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A254C572638
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871AA57263A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiGLTpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S235082AbiGLTpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 15:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiGLTon (ORCPT
+        with ESMTP id S234634AbiGLTpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:44:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4011AAB29
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 12:31:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48898B81BD0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 19:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C5FC341C0;
-        Tue, 12 Jul 2022 19:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657654310;
-        bh=O5l3DDkCL1GLC1cLcZh7E/j88FiYHXorbNoNPs9qYjU=;
+        Tue, 12 Jul 2022 15:45:20 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C5A1DA7F;
+        Tue, 12 Jul 2022 12:33:57 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id E54A9C01D; Tue, 12 Jul 2022 21:33:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657654435; bh=LGQQkiza9LfOe3zwnoXujUyEmTxk9MeMXoKdKZeUyZs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7mlHgNgtuET3TxAjKenZBXszlKL5EWencfe+7pE6MvAfl5dII94BZePOvH7Y9v+9
-         aeQwJTYBa1Q8k/ixcCtlq5Qx/t/S6QtFtd1Qt0KqzhyG2/tPiR+MxMsBb4qiolssHp
-         FNhjcDS/z85gj8K/4anC04dMYLqVoHhrA8C7EI5M=
-Date:   Tue, 12 Jul 2022 21:31:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Build warnings in Xen 5.15.y and 5.10.y with retbleed backports
-Message-ID: <Ys3MI7cv2yKj9RFc@kroah.com>
-References: <Ys2jlGMqAe6+h1SX@kroah.com>
- <ddcdd531-fc33-39df-a69f-5352d7a1c8af@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddcdd531-fc33-39df-a69f-5352d7a1c8af@oracle.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        b=wfCToj5nuXaYmYSMYLAj0CruufU69ML6vk7Aes6qdjpsXOazG/rU+TfZJs/y9mJYw
+         RJiej2c1fWsHAjb7rS5vqPNIoFagPUD0uNt2YHCt5uQaPgm8EQGx6N+LLEleioYz8p
+         335P0n3t24k8WjJncZJn/jZ+gxv8aCzwLAlZi8adhjkBOa3JCrPYUvGITj9kQB1uJO
+         FxYwEo8BCbkCgZFgSXH0b/xvV06s4ndxDuAgbc5k1tvkvZoqLUiFqUo1fwGDiuHkml
+         Q0McKtgCvl04UUi3+zn/XiJsljqdh4CQN3nNCP1pw4ENfTmIkGAzOr/duZdURHZfE/
+         2yrtcj5eNrkMA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 62E8EC009;
+        Tue, 12 Jul 2022 21:33:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657654434; bh=LGQQkiza9LfOe3zwnoXujUyEmTxk9MeMXoKdKZeUyZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y1zmZC62w5J7Ur8UwSAENJD8Xdk+KDAozmN7VRrtFrRMPE3nd+uvmMTyTulFVlY+J
+         F0wl4eo7j8RPGicz0Mf18JYUGw4Y2nmHLb9puVGqXa1yEF4DDpdansCPP5nVm5VCru
+         2M5WvgZgw0Y3hAw4tkS+1tmxIVWenRF3Q1psVhIpT8Re19BzwPWvIv8m2B5IwcA9fP
+         2YSe4PuGRs5V8sFe7zPk//XVrjZ08K7BQwKf+qriWdeRFhGOS7Xkoks4rIzjBFCtUW
+         +2LrX1r8cgbbr6CsslLomTEq8ds8TYFjkugmClXFSYgj2wfT+vQus8YrNxCiEn+1H6
+         nML+Xal00/4mg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 4845bb4d;
+        Tue, 12 Jul 2022 19:33:50 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 04:33:35 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [PATCH v5 11/11] net/9p: allocate appropriate reduced message
+ buffers
+Message-ID: <Ys3Mj+SgWLzhQGWK@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+ <5fb0bcc402e032cbc0779f428be5797cddfd291c.1657636554.git.linux_oss@crudebyte.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5fb0bcc402e032cbc0779f428be5797cddfd291c.1657636554.git.linux_oss@crudebyte.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 03:19:39PM -0400, Boris Ostrovsky wrote:
+Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:36PM +0200:
+> So far 'msize' was simply used for all 9p message types, which is far
+> too much and slowed down performance tremendously with large values
+> for user configurable 'msize' option.
 > 
-> On 7/12/22 12:38 PM, Greg KH wrote:
-> > Hi all,
-> > 
-> > I'm seeing the following build warning:
-> > 	arch/x86/kernel/head_64.o: warning: objtool: xen_hypercall_mmu_update(): can't find starting instruction
-> > in the 5.15.y and 5.10.y retbleed backports.
-> > 
-> > I don't know why just this one hypercall is being called out by objtool,
-> > and this warning isn't in 5.18 and Linus's tree due to I think commit
-> > 5b2fc51576ef ("x86/ibt,xen: Sprinkle the ENDBR") being there.
-> > 
-> > But, is this a ret call that we "forgot" here?  It's a "real" ret in
-> > Linus's branch:
-> > 
-> > .pushsection .noinstr.text, "ax"
-> > 	.balign PAGE_SIZE
-> > SYM_CODE_START(hypercall_page)
-> > 	.rept (PAGE_SIZE / 32)
-> > 		UNWIND_HINT_FUNC
-> > 		ANNOTATE_NOENDBR
-> > 		ANNOTATE_UNRET_SAFE
-> > 		ret
-> > 		/*
-> > 		 * Xen will write the hypercall page, and sort out ENDBR.
-> > 		 */
-> > 		.skip 31, 0xcc
-> > 	.endr
-> > 
-> > while 5.15.y and older has:
-> > .pushsection .text
-> > 	.balign PAGE_SIZE
-> > SYM_CODE_START(hypercall_page)
-> > 	.rept (PAGE_SIZE / 32)
-> > 		UNWIND_HINT_FUNC
-> > 		.skip 31, 0x90
-> > 		ANNOTATE_UNRET_SAFE
-> > 		RET
-> > 	.endr
-> > 
-> > So should the "ret" remain or be turned into "RET" in mainline right
-> > now?
+> Let's stop this waste by using the new p9_msg_buf_size() function for
+> allocating more appropriate, smaller buffers according to what is
+> actually sent over the wire.
 > 
+> Only exception: RDMA transport is currently excluded from this, as
+> it would not cope with it. [1]
 > 
-> It doesn't matter --- this is overwritten by the hypervisor during initialization when Xen fills in actual hypercall code.
+> Link: https://lore.kernel.org/all/YkmVI6pqTuMD8dVi@codewreck.org/ [1]
+> Signed-off-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+> ---
 > 
-> 
-> So f4b4bc10b0b85ec66f1a9bf5dddf475e6695b6d2 added 'ret' to make objtool happy and then 14b476e07fab6 replaced 'ret' with RET as part of SLS fixes. The latter was not really necessary but harmless.
-> 
-> 
-> So it can be 'ret', RET, or anything else that tools don't complain about. It will not be executed.
+> Is the !strcmp(c->trans_mod->name, "rdma") check in this patch maybe a bit
+> too hack-ish? Should there rather be transport API extension instead?
 
-Cool, thanks.
+hmm yeah that doesn't feel great, let's add a flag to struct
+p9_trans_module
 
-But what about the objtool warning that I now see?  Is that "real"?
-
-I don't run any Xen systems, so I can't test any of this myself.
-
-thanks,
-
-greg k-h
+--
+Dominique

@@ -2,224 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68932572149
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C6757214B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiGLQpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S233425AbiGLQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiGLQpB (ORCPT
+        with ESMTP id S230294AbiGLQqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:45:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418201177;
-        Tue, 12 Jul 2022 09:45:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 12 Jul 2022 12:46:32 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFECC1177;
+        Tue, 12 Jul 2022 09:46:31 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CGBV6S022585;
+        Tue, 12 Jul 2022 16:46:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KPdO1hA9KLf7StAGWaBc5InbpwBKeKY4LPAGtGIxEAo=;
+ b=QiJJaIQDrJrvol+WCR8O/g/mjZiKfP0yKOGObsLeJBF1Gj+PDKi0tOdzVN9S02FZiAF4
+ 9XqUrmM0UuFAim5T+wBGH8Xc3KxeIj5q8AtRw5164RVm7pBYy87R5wD2dPTOZNi3XTei
+ KUKAk7U7itv82RQrwUd7Sz/+/Ab+RwdYuclZM0LFXXY4jMfXoyx3sYgzMDc0KWMhadrW
+ 9bsQICQzIkQ6jOFqrfdKRTV3UtqPWJSVR1HPOQhC8GFOsTAVd8PVwVlzGphknNtcx5Z7
+ De+aiJeNdu7AJoRUkDNoZSYqqvSE9lPTUDpwdTuuJn5IkjWdwM8QYaKpapX7q63tu7T5 3g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9974xqpp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 16:46:23 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CGF7oi010647;
+        Tue, 12 Jul 2022 16:46:23 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9974xqp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 16:46:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CGK0M5001145;
+        Tue, 12 Jul 2022 16:46:21 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3h71a8vewa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 16:46:20 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CGkSqS31261090
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 16:46:28 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79A08A4059;
+        Tue, 12 Jul 2022 16:46:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 227B3A4051;
+        Tue, 12 Jul 2022 16:46:18 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 16:46:18 +0000 (GMT)
+Received: from [9.43.200.237] (unknown [9.43.200.237])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E461EB81A8F;
-        Tue, 12 Jul 2022 16:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB16C3411C;
-        Tue, 12 Jul 2022 16:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657644297;
-        bh=A9wVtPl9xSGq+0nbgHMGXdDdz52JColikvRDP/5TqlE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XXX4SivkRl90RB6ZxgtEMS08z8/6YjIM5XA75D7z1E9vNByWl7rCmFp5eVcgVf4Nx
-         UKBnlg6BV1w9O29ltCPFR/NAby6C/mX8oHYedjNesUTLy6VPIHNXon8JXxKtK5f4K6
-         fMF9e6tqTy+L0n8cEbTXok+izu3bdKO1Om51m2mqyyW9SmenkxbH9hAqZlVKUp+apk
-         0WrCii8LqESl3x32sCaiT5f46qfz9/do8S2tCCNH8u8rXj/hsvwZeQXEXkHgoFEFJD
-         oJj3JRasbFoXgwJM+qQwvqtkD9a9AsjwNSdKwLrkjz1eTSBQZ/PqUs3GHDgpGo+j9T
-         rah9KjVLyKZaQ==
-Date:   Tue, 12 Jul 2022 19:44:54 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com
-Subject: Re: [PATCH Part2 v6 29/49] KVM: X86: Keep the NPT and RMP page level
- in sync
-Message-ID: <Ys2lBp03iuvuvTmG@kernel.org>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <ae4475bc740eb0b9d031a76412b0117339794139.1655761627.git.ashish.kalra@amd.com>
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 184D160307;
+        Wed, 13 Jul 2022 02:46:12 +1000 (AEST)
+Message-ID: <6883e31c38d42e23f7205b752a62788ca7d128d4.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/2] cxl: Fix a memory leak in an error handling path
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Date:   Wed, 13 Jul 2022 02:46:10 +1000
+In-Reply-To: <ce5869418f5838187946eb6b11a52715a93ece3d.1657566849.git.christophe.jaillet@wanadoo.fr>
+References: <59010cc7c62443030c69cb1ce0b2b62c5d47e064.1657566849.git.christophe.jaillet@wanadoo.fr>
+         <ce5869418f5838187946eb6b11a52715a93ece3d.1657566849.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae4475bc740eb0b9d031a76412b0117339794139.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: c_cWPawDFiOFIOcrLqXuC0bL4IhBKcj_
+X-Proofpoint-ORIG-GUID: EDJ6PrgzeVnxGnjfGFEtmgJFC2Pcx7Ch
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_10,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ phishscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207120065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/X86/x86/
+On Mon, 2022-07-11 at 21:14 +0200, Christophe JAILLET wrote:
+> A bitmap_zalloc() must be balanced by a corresponding bitmap_free()
+> in the
+> error handling path of afu_allocate_irqs().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-On Mon, Jun 20, 2022 at 11:08:57PM +0000, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> When running an SEV-SNP VM, the sPA used to index the RMP entry is
-> obtained through the NPT translation (gva->gpa->spa). The NPT page
-> level is checked against the page level programmed in the RMP entry.
-> If the page level does not match, then it will cause a nested page
-> fault with the RMP bit set to indicate the RMP violation.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Thanks for catching this.
+
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
+
 > ---
->  arch/x86/include/asm/kvm-x86-ops.h |  1 +
->  arch/x86/include/asm/kvm_host.h    |  1 +
->  arch/x86/kvm/mmu/mmu.c             |  5 ++++
->  arch/x86/kvm/svm/sev.c             | 46 ++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c             |  1 +
->  arch/x86/kvm/svm/svm.h             |  1 +
->  6 files changed, 55 insertions(+)
+> The error handling path should be done in the reversed order but it
+> should
+> work as-is.
+> ---
+>  drivers/misc/cxl/irq.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index a66292dae698..e0068e702692 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -129,6 +129,7 @@ KVM_X86_OP(complete_emulated_msr)
->  KVM_X86_OP(vcpu_deliver_sipi_vector)
->  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
->  KVM_X86_OP(alloc_apic_backing_page)
-> +KVM_X86_OP_OPTIONAL(rmp_page_level_adjust)
->  
->  #undef KVM_X86_OP
->  #undef KVM_X86_OP_OPTIONAL
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 0205e2944067..2748c69609e3 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1514,6 +1514,7 @@ struct kvm_x86_ops {
->  	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
->  
->  	void *(*alloc_apic_backing_page)(struct kvm_vcpu *vcpu);
-> +	void (*rmp_page_level_adjust)(struct kvm *kvm, kvm_pfn_t pfn, int *level);
->  };
->  
->  struct kvm_x86_nested_ops {
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c623019929a7..997318ecebd1 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -43,6 +43,7 @@
->  #include <linux/hash.h>
->  #include <linux/kern_levels.h>
->  #include <linux/kthread.h>
-> +#include <linux/sev.h>
->  
->  #include <asm/page.h>
->  #include <asm/memtype.h>
-> @@ -2824,6 +2825,10 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->  	if (unlikely(!pte))
->  		return PG_LEVEL_4K;
->  
-> +	/* Adjust the page level based on the SEV-SNP RMP page level. */
-> +	if (kvm_x86_ops.rmp_page_level_adjust)
-> +		static_call(kvm_x86_rmp_page_level_adjust)(kvm, pfn, &level);
-> +
->  	return level;
->  }
->  
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index a5b90469683f..91d3d24e60d2 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -3597,3 +3597,49 @@ struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu)
->  
->  	return pfn_to_page(pfn);
->  }
-> +
-> +static bool is_pfn_range_shared(kvm_pfn_t start, kvm_pfn_t end)
-> +{
-> +	int level;
-> +
-> +	while (end > start) {
-> +		if (snp_lookup_rmpentry(start, &level) != 0)
-> +			return false;
-> +		start++;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level)
-
-Would not do harm to document this, given that it is not a static
-fuction.
-
-> +{
-> +	int rmp_level, assigned;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> +		return;
-> +
-> +	assigned = snp_lookup_rmpentry(pfn, &rmp_level);
-> +	if (unlikely(assigned < 0))
-> +		return;
-> +
-> +	if (!assigned) {
-> +		/*
-> +		 * If all the pages are shared then no need to keep the RMP
-> +		 * and NPT in sync.
-> +		 */
-> +		pfn = pfn & ~(PTRS_PER_PMD - 1);
-> +		if (is_pfn_range_shared(pfn, pfn + PTRS_PER_PMD))
-> +			return;
-> +	}
-> +
-> +	/*
-> +	 * The hardware installs 2MB TLB entries to access to 1GB pages,
-> +	 * therefore allow NPT to use 1GB pages when pfn was added as 2MB
-> +	 * in the RMP table.
-> +	 */
-> +	if (rmp_level == PG_LEVEL_2M && (*level == PG_LEVEL_1G))
-> +		return;
-> +
-> +	/* Adjust the level to keep the NPT and RMP in sync */
-> +	*level = min_t(size_t, *level, rmp_level);
-> +}
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index b4bd64f94d3a..18e2cd4d9559 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4734,6 +4734,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  	.vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
->  
->  	.alloc_apic_backing_page = svm_alloc_apic_backing_page,
-> +	.rmp_page_level_adjust = sev_rmp_page_level_adjust,
->  };
->  
->  /*
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 71c011af098e..7782312a1cda 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -673,6 +673,7 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
->  void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
->  void sev_es_unmap_ghcb(struct vcpu_svm *svm);
->  struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu);
-> +void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level);
->  
->  /* vmenter.S */
->  
-> -- 
-> 2.25.1
-> 
+> diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
+> index 0ce91d99aead..b730e022a48e 100644
+> --- a/drivers/misc/cxl/irq.c
+> +++ b/drivers/misc/cxl/irq.c
+> @@ -349,6 +349,7 @@ int afu_allocate_irqs(struct cxl_context *ctx,
+> u32 count)
+>  
+>  out:
+>         cxl_ops->release_irq_ranges(&ctx->irqs, ctx->afu->adapter);
+> +       bitmap_free(ctx->irq_bitmap);
+>         afu_irq_name_free(ctx);
+>         return -ENOMEM;
+>  }
 
 
-BR, Jarkko

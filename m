@@ -2,129 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4C5571B70
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E2C571B74
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbiGLNhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S233133AbiGLNiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiGLNhR (ORCPT
+        with ESMTP id S229537AbiGLNiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:37:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B82ABB79FD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657633031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B3NrhGN3QDhLJqIwcsb2TkKqYIlLbUqMpzzZ94y01dE=;
-        b=DfyGYXSZ3VXIACfezfD71o8UNxw+e+FeFziL+zbmPE0fHpN0iJfk8p77HdN+84cG8VsGwH
-        wnMh9GCx/+0RVWQ9P8HPEDurbN+KFV5uW/O0fpxhIYbmMxKXwt2lhp50mBjxq1nkBeE1uQ
-        e+Zi9TXDYPQXKs2n13/3J7Pi3fOoWfE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-JR-8AeiePii-bM67UAPYvA-1; Tue, 12 Jul 2022 09:37:10 -0400
-X-MC-Unique: JR-8AeiePii-bM67UAPYvA-1
-Received: by mail-qt1-f197.google.com with SMTP id o22-20020ac87c56000000b0031d4ab81b21so6875812qtv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:37:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=B3NrhGN3QDhLJqIwcsb2TkKqYIlLbUqMpzzZ94y01dE=;
-        b=WdhmG5Qxn+7cY2mC/0SNlnMEhO4z7CvBnlvI8b05mtKKQyTUxNxLWNq0kz2jMfa2xw
-         MYdHLf0t40ZKTtzi7zPub+h7TICfjg8Wp7rkX/58jiUiymT/DC1x+x7qvDzyUNUO+PGR
-         IfW3IS8SGupOB7L+5xixwsWUpmo5I4kofjQphFpho/Ex2z4VOLbfzlXbhq8NwvAhHa4K
-         Mm6x9bR9QDjt4W5MzYdUqgUCTgcmICSyrQ38f6GsvojLk7c4QJrm562kKnGkCPZTcuQn
-         fI3L4Pm1BaW12INI/32mP0bmVOh3IzlovMIyd631ne4Vq/6UGshdwTrj0ASHGAzlR+w6
-         8IVg==
-X-Gm-Message-State: AJIora81rw8V3OpwmZRvUVPfZ7EyfhHHMLDyAxRL64/pAd0KWL/YDRIe
-        7ORiK2oq2TJ4L2e/XQO0F7WAtQ/4xqwJQQIsJZocRWtMcnZWf1gNM0XVbZSW6jr9DfvXIFeMwmM
-        bsiczZiGSLTcFM5Ach6bhXM4x
-X-Received: by 2002:a05:620a:4446:b0:6af:1d31:c257 with SMTP id w6-20020a05620a444600b006af1d31c257mr15093794qkp.399.1657633030067;
-        Tue, 12 Jul 2022 06:37:10 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tZ903RTp1aT6+v7VmosFNF43G33TqmEcKlRp3/i8mOo2uGbStQlm5M4dWv2KYJBUgBGZWqgw==
-X-Received: by 2002:a05:620a:4446:b0:6af:1d31:c257 with SMTP id w6-20020a05620a444600b006af1d31c257mr15093771qkp.399.1657633029822;
-        Tue, 12 Jul 2022 06:37:09 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id o21-20020a05622a009500b0031d4044c464sm7807985qtw.46.2022.07.12.06.37.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 06:37:09 -0700 (PDT)
-Message-ID: <4017447bfd4636f4075d29d8f3c57c4c32fd67d2.camel@redhat.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Set error code to segment selector on
- LLDT/LTR non-canonical #GP
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>
-Date:   Tue, 12 Jul 2022 16:37:06 +0300
-In-Reply-To: <20220711232750.1092012-3-seanjc@google.com>
-References: <20220711232750.1092012-1-seanjc@google.com>
-         <20220711232750.1092012-3-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Tue, 12 Jul 2022 09:38:05 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B735B6D8E;
+        Tue, 12 Jul 2022 06:38:03 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C9Fa5x002441;
+        Tue, 12 Jul 2022 15:37:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=h4xD17V7DTR/YNErBVRjs3G7RJZlt2Jn4LyRZD6px+4=;
+ b=FJAxMZeSr66ZY5WN87Yvn3qR9Bemn1VfFdpQ5//MFtocWtSe/WNGaytc90QqANxrAOmV
+ sVNWVMUxdB0Qp3jJtUYNOaRtnzjlLv2XEsfQpqJi6ahJ5RcZmfLewH9GhOvz8Tvv4PDW
+ FRXQQ9z/REk2wuTE60sKbb1YQrJ3t5YIXIg/Xvr3O1yFYbOCn9rCebilXSMTKT2yq909
+ sCmudFgylUs+nXKUme55+ptXcb9LliRuGoTgNcp2IFT/BBwb3uBtdtwq6z8Izc0Vhk3E
+ hvljL3gcXV617KkptqhybuOqqKw7eanAvWgvjJD0Y98xpTaF5Gr17xDtmFYnR1wZQXKB 5w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h9173k3qb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 15:37:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 30356100034;
+        Tue, 12 Jul 2022 15:37:44 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2179321FEBB;
+        Tue, 12 Jul 2022 15:37:44 +0200 (CEST)
+Received: from [10.211.14.207] (10.75.127.45) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Jul
+ 2022 15:37:42 +0200
+Message-ID: <e51bed47-b3fd-a328-a545-2810072e2bb8@foss.st.com>
+Date:   Tue, 12 Jul 2022 15:37:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/4] docs: arm: stm32: introduce STM32 DMA-MDMA chaining
+ feature
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
+References: <20220711084703.268481-1-amelie.delaunay@foss.st.com>
+ <20220711084703.268481-2-amelie.delaunay@foss.st.com>
+ <87a69ffzvk.fsf@meer.lwn.net>
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+In-Reply-To: <87a69ffzvk.fsf@meer.lwn.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-11 at 23:27 +0000, Sean Christopherson wrote:
-> When injecting a #GP on LLDT/LTR due to a non-canonical LDT/TSS base, set
-> the error code to the selector.  Intel SDM's says nothing about the #GP,
-> but AMD's APM explicitly states that both LLDT and LTR set the error code
-> to the selector, not zero.
+
+
+On 7/11/22 17:11, Jonathan Corbet wrote:
+> Amelie Delaunay <amelie.delaunay@foss.st.com> writes:
 > 
-> Note, a non-canonical memory operand on LLDT/LTR does generate a #GP(0),
-> but the KVM code in question is specific to the base from the descriptor.
+>> STM32 DMA-MDMA chaining feature is available on STM32 SoCs which embed
+>> STM32 DMAMUX, DMA and MDMA controllers. It is the case on STM32MP1 SoCs but
+>> also on STM32H7 SoCs. But focus is on STM32MP1 SoCs, using DDR.
+>> This documentation aims to explain how to use STM32 DMA-MDMA chaining
+>> feature in drivers of STM32 peripheral having request lines on STM32 DMA.
+>>
+>> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+>> ---
+>>   .../arm/stm32/stm32-dma-mdma-chaining.rst     | 365 ++++++++++++++++++
+>>   1 file changed, 365 insertions(+)
+>>   create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
 > 
-> Fixes: e37a75a13cda ("KVM: x86: Emulator ignores LDTR/TR extended base on LLDT/LTR")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/emulate.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> When you add a new RST file you also need to add it to index.rst
+> somewhere so that it becomes part of the docs build.
 > 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index 09e4b67b881f..bd9e9c5627d0 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -1736,8 +1736,8 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
->                 if (ret != X86EMUL_CONTINUE)
->                         return ret;
->                 if (emul_is_noncanonical_address(get_desc_base(&seg_desc) |
-> -                               ((u64)base3 << 32), ctxt))
-> -                       return emulate_gp(ctxt, 0);
-> +                                                ((u64)base3 << 32), ctxt))
-> +                       return emulate_gp(ctxt, err_code);
->         }
->  
->         if (seg == VCPU_SREG_TR) {
 
-I guess this is the quote from AMD's manual (might we worth to add to the source?)
+Thanks for you review.
 
+I'll add it to index.rst, with other stm32 documentations.
 
-"The 64-bit system-segment base address must be in canonical form. Otherwise, a general-protection
-exception occurs with a selector error-code, #GP(selector), when the system segment is loaded.
-System-segment limit values are checked by the processor in both 64-bit and compatibility modes,
-under the control of the granularity (G) bit."
+>> diff --git a/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+>> new file mode 100644
+>> index 000000000000..bfbbadc45aa7
+>> --- /dev/null
+>> +++ b/Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
+>> @@ -0,0 +1,365 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +=======================
+>> +STM32 DMA-MDMA chaining
+>> +=======================
+>> +
+>> +
+>> +Introduction
+>> +------------
+>> +
+>> +  This document describes the STM32 DMA-MDMA chaining feature. But before going further, let's
+>> +  introduce the peripherals involved.
+> 
+> Please keep to the 80-column limit for documentation, it makes it easier
+> to read.
+> 
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+OK, I prepare a v2 with a 80-column limit for the documentation patch.
 
-Best regards,
-	Maxim Levitsky
+>> +  To offload data transfers from the CPU, STM32 microprocessors (MPUs) embed direct memory access
+>> +  controllers (DMA).
+>> +
+>> +  STM32MP1 SoCs embed both STM32 DMA and STM32 MDMA controllers. STM32 DMA request routing
+>> +  capabilities are enhanced by a DMA request multiplexer (STM32 DMAMUX).
+>> +
+>> +  **STM32 DMAMUX**
+>> +
+>> +  STM32 DMAMUX routes any DMA request from a given peripheral to any STM32 DMA controller (STM32MP1
+>> +  counts two STM32 DMA controllers) channels.
+>> +
+>> +  **STM32 DMA**
+>> +
+>> +  STM32 DMA is mainly used to implement central data buffer storage (usually in the system SRAM) for
+>> +  different peripheral. It can access external RAMs but without the ability to generate convenient
+>> +  burst transfer ensuring the best load of the AXI.
+>> +
+>> +  **STM32 MDMA**
+>> +
+>> +  STM32 MDMA (Master DMA) is mainly used to manage direct data transfers between RAM data buffers
+>> +  without CPU intervention. It can also be used in a hierarchical structure that uses STM32 DMA as
+>> +  first level data buffer interfaces for AHB peripherals, while the STM32 MDMA acts as a second
+>> +  level DMA with better performance. As a AXI/AHB master, STM32 MDMA can take control of the AXI/AHB
+>> +  bus.
+>> +
+>> +
+>> +Principles
+>> +----------
+>> +
+>> +  STM32 DMA-MDMA chaining feature relies on the strengths of STM32 DMA and STM32 MDMA controllers.
+>> +
+>> +  STM32 DMA has a circular Double Buffer Mode (DBM). At each end of transaction (when DMA data
+>> +  counter - DMA_SxNDTR - reaches 0), the memory pointers (configured with DMA_SxSM0AR and
+>> +  DMA_SxM1AR) are swapped and the DMA data counter is automatically reloaded. This allows the SW or
+>> +  the STM32 MDMA to process one memory area while the second memory area is being filled/used by the
+>> +  STM32 DMA transfer.
+>> +
+>> +  With STM32 MDMA linked-list mode, a single request initiates the data array (collection of nodes)
+>> +  to be transferred until the linked-list pointer for the channel is null. The channel transfer
+>> +  complete of the last node is the end of transfer, unless first and last nodes are linked to each
+>> +  other, in such a case, the linked-list loops on to create a circular MDMA transfer.
+>> +
+>> +  STM32 MDMA has direct connections with STM32 DMA. This enables autonomous communication and
+>> +  synchronization between peripherals, thus saving CPU resources and bus congestion. Transfer
+>> +  Complete signal of STM32 DMA channel can triggers STM32 MDMA transfer. STM32 MDMA can clear the
+>> +  request generated by the STM32 DMA by writing to its Interrupt Clear register (whose address is
+>> +  stored in MDMA_CxMAR, and bit mask in MDMA_CxMDR).
+>> +
+>> +  .. csv-table:: STM32 MDMA interconnect table with STM32 DMA
+>> +        :header: "STM32 DMAMUX channels", "STM32 DMA controllers channels",
+>> +                 "STM32 DMA Transfer Complete signal", "STM32 MDMA request"
+> 
+> If at all possible, please use simple tables; that makes the plain text
+> documentation much easier to read.
+> 
 
+It is possible, with some extra lines. I'll update it in v2 coming soon.
+
+> [...]
+> 
+> Thanks,
+> 
+> jon
+
+Regards,
+Amelie

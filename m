@@ -2,156 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F0F571D73
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6034D571D75
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiGLO5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S232586AbiGLO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiGLO5v (ORCPT
+        with ESMTP id S233344AbiGLO6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:57:51 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387D4F1AE;
-        Tue, 12 Jul 2022 07:57:49 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id u13so4963304iln.6;
-        Tue, 12 Jul 2022 07:57:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D9CzwXKTA7gScMXDGBi3YiyfwBmHDS9K2YoQ8GfmJds=;
-        b=Xvc78D3dp/VDHudSaq7kcdgrwSpeCUQRp0gbjYQmw/VSi27O5iLEVO7eUJiCM63bdf
-         JKPaJTGKz5F5IdvH8nzD/SRLUEyChEcllb7EBkDxatAVO7IIFQFa2ZCyQJJTgGRGyvjx
-         uRnOWpD+KD5byDkOUlMg+DZ0dQn8H+EpqUpbpAZDunt7qfncraJPV7NLNcwpi+9+Gm9k
-         U3tw3vfS55kI66hcvfDa+4D9lP5MLklyHM6PboG71tio2UWxv1E2D3x/d/irBnLKmUD2
-         KUkvKBdepXoQCjmnrhnGFi4E/R5dHK8C9qD9Ru1zYyvSFrPAPYhfvBo6jIsRiWzKIOSa
-         teCQ==
-X-Gm-Message-State: AJIora+zBAq4vhJ5VAGTu8dmDwyebMdEZxDchuP08m0i9JIPLRFz++m8
-        NZVqI+MjaSievJ4g53Be5Q==
-X-Google-Smtp-Source: AGRyM1vh+aOogTSLhe8igwtKsd1CvRwky5ggWI6vrAvQdlfZY/BrJEMIos/2AOR9m0rpgyLP5fxlgw==
-X-Received: by 2002:a05:6e02:1445:b0:2da:ad32:8300 with SMTP id p5-20020a056e02144500b002daad328300mr12299828ilo.280.1657637868823;
-        Tue, 12 Jul 2022 07:57:48 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r25-20020a02b119000000b0032e271a558csm4168235jah.168.2022.07.12.07.57.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 07:57:48 -0700 (PDT)
-Received: (nullmailer pid 1848087 invoked by uid 1000);
-        Tue, 12 Jul 2022 14:57:47 -0000
-Date:   Tue, 12 Jul 2022 08:57:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     pavel@ucw.cz, sven.schwermer@disruptive-technologies.com,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        marijn.suijten@somainline.org, bjorn.andersson@linaro.org,
-        andy.shevchenko@gmail.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: leds: Add binding for a multicolor
- group of LEDs
-Message-ID: <20220712145747.GA1823936-robh@kernel.org>
-References: <20220615154918.521687-1-jjhiblot@traphandler.com>
- <20220615154918.521687-4-jjhiblot@traphandler.com>
- <20220627221257.GA3046298-robh@kernel.org>
- <c84d0513-b89b-0eea-eeaf-68dc634bd7b0@traphandler.com>
+        Tue, 12 Jul 2022 10:58:05 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886BFBDBAA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:57:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nIImg/U3W5bykBVAbFTeF2DOUrs8Caw8tnXPFp032lBJ3ceqgVaSQLyD2d1/G2phvgqCnSYIAxb+JsEQZ6w88ClM/0FkgxK6hNdBfpZIv2jjNL8sSUVrF0ncJOcXavDKBp62FTZO3Pl+d4Y5apeyIbiGnIFQRaiQxrN00Mmye3TKepjOZNPmWSoMlDHbWQrW914ayhyJBhr1kSBbIyozCjHqh4RDDYkuX4Kbvwhrz+QqzAllgFZgxcdLdfr7MWDbDBf/o8v2ezeed55iN54ErF9mdYntK5nZLos88h7a4DmcBxjp957obJWN+3yHHGFlhK6PPOMT+T4xCzwXE0ME8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DE2yDOJgRJLLQpAtWDxDnl6IcpzjEhYDNhAA71NO0EY=;
+ b=C0bmg51ufrrV2Z9uiE7TQ+QZck8s2wbItwwcBOWHkQQwlST7qxpTI/e+qtik0dbXra+Q9s2pejKbZTyhxW8RpcDCYpick2MxaVD/HqWR9bDLZW00jZbvRFTEri0xuzpfB8/LrO84D1G9VNyDTxvG0ZY+O+ePoHKKO+45YmUWcieuXQbaeZx1d8AIQYRRb+ccgxWk0ZtPfsmqjEIYh17kTi8UMAwW8LR+6inhzzDcEJqFTHfWnvJYJCdMPD56HvkXXMZhX8sT9vpCvJQy6co2BZZajwESebfAyrpVhakEq7O+39UAjFrGstIBcELn9OjtBfwxhkdAsuG2FnK3V50UDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DE2yDOJgRJLLQpAtWDxDnl6IcpzjEhYDNhAA71NO0EY=;
+ b=uQ7fXAb1bHiLW0kGMW+/fDLp0+cSr6+Uxp2SbzJQxmHQ0QOMQEZI4jvMLbiUSIfRZHHLKvUVoGQBou5xLqhIXwaImHPJd1g6hku/soLMgHc0P1Z4JCJBcOf7svOyTjX9xV4+DpndijWkPqLfO5xd4FgCEDSyV1ecSTFUH7sMt8I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH2PR12MB4165.namprd12.prod.outlook.com (2603:10b6:610:a4::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Tue, 12 Jul
+ 2022 14:57:55 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 14:57:55 +0000
+Message-ID: <5caa08ba-6211-f2ad-6c78-4201ffbed8a4@amd.com>
+Date:   Tue, 12 Jul 2022 16:57:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] drm/syncobj: Fix sync syncobj issue
+Content-Language: en-US
+To:     Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
+        jie1zhan <jesse.zhang@amd.com>, broonie@kernel.org,
+        dri-devel-bounces@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, ajitkumar.pandey@amd.com,
+        lucas.demarchi@intel.com, nirmoy.das@linux.intel.com,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220707102953.769684-1-jesse.zhang@amd.com>
+ <22a21338-305d-bdf7-0079-df67fb030fc7@amd.com>
+ <ea892ffc-4a03-7772-6d99-85a356a3738b@intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <ea892ffc-4a03-7772-6d99-85a356a3738b@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS8P189CA0013.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:31f::22) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c84d0513-b89b-0eea-eeaf-68dc634bd7b0@traphandler.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 044e4067-11f7-46f1-ad25-08da6416e6df
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4165:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /Hw5jBKTZ6RwNkJXDaJG8orY7QaySoscer3T4OCIdwxQhYqOJ/65WjvYRFJZ9NtMdJLDBfPmEe0XDnmH80hM4xE+MGCJEX5W3axNtCZ12/UE9TYlno6Ofcx9XqBJM+oOl1LdyXDBlr5gl4o2mjn0hq9GJANotRfni+OTMdxgUG9/4f9IU81VxU2IP6UtlKCzSw8dmfggS3ohle0VXqhu+rNgvt1D/j851hD4TAzj88ER/cXGRZOYtsYXAVOUl6K6yoapoP0gOa1a0tZjBO790r1uczVmx02Xmk1rkQj24/t+W1QIZILDSvWKSsTHkQ8ZgAp8JcimiXjxNzQjD9HTaex8ai9uaxWRM0DP0ByGUvNt2ukMZ1QKUiKzpJZ45pTjPoSKehcHNBFJtSDv/JEe7+GcnnDl6NP1xYBFpCMXiB0/1IDVBIpJ3q0R1LaKIyUoxoAqje4KdaLFOaQfIzfQ9nfj+5KQ4/91gLMr7VvZjO+NrsQQ2HJCSgNT3t/Q0mbtRbYE5SJD8GG7ouNB6Kf6a2PNYokM1jFLlNj906fLCcdRVOSOpBLySTcRULPK6rEXDnTW2vChjt5kv54mI0/m/5qVGTKip5VlrVJntNA42yd5hoDYOXq2LVlrfT/Zw0aLLGS1SHstmRHc1WJ8v8vykJ+GE5ldQH2UsxQjnz3BAlCmXv8IPr8laVrmtqc3JtyprWZMtQome7nOXefXFqjhqtUQcyVx7UxJmqk8yazxCU8e197c9pkxJVZKx4L/gcO0zn2d94U1Q8wY5p6gI6dL4p86I9cI5MrwBDxMa5LexBvVVvfya7oHfSmYJtgAKi6JOQJJAmRjFvqnKYAhiwSqLEqOBhAfwIJq4EW8EU1QTCnNoKi7VBrePU4hfV0x1IHNA0GJ6vq+MSincqBBRMq5LA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(396003)(366004)(66946007)(66476007)(66556008)(8676002)(4326008)(186003)(53546011)(6506007)(2616005)(6512007)(6486002)(6666004)(41300700001)(478600001)(316002)(5660300002)(7416002)(8936002)(110136005)(38100700002)(31696002)(86362001)(36756003)(31686004)(54906003)(2906002)(45980500001)(43740500002)(414714003)(473944003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qk1WNUxBVVhVYnF6T0QrOHdpSnA5UllFUWd3WjdZbm1ZcEp2alFya0NCZGJz?=
+ =?utf-8?B?YUdxaE1EUkRjZkdPSXpUNlpndG5zT2l0d0ZJYklqaFE0bFpHaUo3VGFoK2pn?=
+ =?utf-8?B?cXNyVkUveG1YNXpuT1FLRGppcjFvYlJYYlBrZHk0M04xR1JIUHdnRFYxVjZP?=
+ =?utf-8?B?T05xb2ZCRUtqdFk3Yk1wVm5RWlFTb2lZUjFpUEI5cnZyQWZmL1hoRHRHK1Iw?=
+ =?utf-8?B?b3p3eEFlTTc2TDZ4dy9SNmozcGVtSXpFZzgyNHlPMzhhUzRLejR6bEx1REda?=
+ =?utf-8?B?WUo0TzQ0M0h4aHMwTkVjcjhrcGRTeTR1Qm1oSXNWc1YrdVZOSEtscXByOFZq?=
+ =?utf-8?B?cWFEV0g2M1haUG5IaE5oWGNZa1hIeXZsM2hSZUJSMk83azNMY3A2ZlJ6RFRD?=
+ =?utf-8?B?eEd4OVl0S1J3QStNU2dDek8wT0xISU1yZnlkaCtnd050aHluUHAycmhuUTcy?=
+ =?utf-8?B?TTQ1c3dUOUs0emZNczRUaWhpYTExSFBSSGt6bDY4TzJoeFdDRXVKbFNNUUV2?=
+ =?utf-8?B?N2NVWTVac0dTV3VkU2p1Qk1WQmZEUThXeVdBTm1UUWY2UklreE1Oa3BTVVFE?=
+ =?utf-8?B?QUJFT3pDaHhOcW04WjBhTkgwd0xMNm02TU9tMi9RSC9lUGk3NmFpaGtjd2Ns?=
+ =?utf-8?B?SDQvUUlSSWFvOTlmWlpuem5Yc1RoaE9lL2pCRXplVU8wL0hLVElzVDVYQkU0?=
+ =?utf-8?B?b0dETjJtRWxtcWZuL3pCWkFsQ0pGMDhFRjRFKzhQekdoMTFLWTBsdlBJbmRv?=
+ =?utf-8?B?TjRSeGRLUkI1OU1ERWcyRWdyc1k5bVppeGR3THFGSUJEbmJ4T0J6eStRSGxr?=
+ =?utf-8?B?dFRoSCt3QndEMExVRy9DVkpCb2phUi81Qnpvc3BMV3hjUkl6cVJUemNkWEta?=
+ =?utf-8?B?OUxNZHRJeDZKZjY5cElVcFdxR2gvdWJqbHNZWE43YVFrdytIYkMvWE9hVzA4?=
+ =?utf-8?B?ZFRHY0N4TTI0dzl6cktJTFJUQTA2WW95bko2T1FkdWRaNDBzQmxGUndkWHR0?=
+ =?utf-8?B?RmtQamJ0VlQ0ZDhtaUh6eWVqb2RWUW0yNU5xT2pLMjh4c3I5dTlaYkEvWUhC?=
+ =?utf-8?B?Nll4NzZyb3pPaFFOK0hadFVyL0lpdGtKc0RzR3B2VTRrOE03WUg5NURwbWtC?=
+ =?utf-8?B?L2xMOUdBd2EyZ092VEF6R3dXRXN1U3cwUzFhQk9qTjAzSVFRREZvalJHOVFD?=
+ =?utf-8?B?d0pTMXdsU0JQZ1paV0VxVkF2QjdCeDdoQ1J4TzRmVjlCT3E4dHVvVFA0WXBw?=
+ =?utf-8?B?cmh0U0QwWWIzTjRGWXZlY3lOV0N2Rm9tZHU5ZlZiVllKRStVbFhuc0NkdlFX?=
+ =?utf-8?B?bEdKWTJFNHlVMWo5a2lrNWIrWnNjMGdmVWdFNm5XeG1yeWdLUWc1QjVCZWMr?=
+ =?utf-8?B?OU1FT0hPNXFRcU9seTlaZlRJY1BBQi9jaStMRFJlV3pneWxTbGhiNy9pRkdQ?=
+ =?utf-8?B?WUJqaUh1UGJNQStGdk54RkpEUXk1MHRXbnN1N0xoblNHM2tLbTVOWTNVcVEv?=
+ =?utf-8?B?S2xyZjhBU1pkN3RVVklpZkFMRGhwWU9xcGI2TlNKL0dKL1ZkSm0vNkR6Ukk4?=
+ =?utf-8?B?MFNDdmora1JyU2FBRUc4MCtRdGZlVEdoQjhpRXhJMktWS2ZHLzhrTzlrOEdq?=
+ =?utf-8?B?MEZSUFVrWEthdXV4d0ViaFkzSGo0MjNOekd5b29ZSS9FM0tTMzlrbXpMdHdv?=
+ =?utf-8?B?Y0tUdDdHRU81aDBBay83Ungra011OEVDbVFQZHBDYVRHdTJhZW9naEs4M1p6?=
+ =?utf-8?B?dHlESHRsQVJBbzBGN2RJRHF1d3hRTlp1SFg0VHI5Tk1jeVlFdUtqOWtXOFYv?=
+ =?utf-8?B?REZ2OFhnR2xYRm9VSlo3K2lwQUh5aCs0UkMxWmhic1JWVlJWeXBKd2IyeVpS?=
+ =?utf-8?B?RXRMY0Uxajh4c2NiZFRXcHRzcmtMSXlvWEMyRWJ0T090TWx6WFh5RUhtYTdo?=
+ =?utf-8?B?WWtKZmtiNHUwczFYM0w2REMvTW9OQklVUjhxTzdaSW1rWjZSY0dwcFhTdVB4?=
+ =?utf-8?B?RVZGMmZEYzJlRTJjbzNrbEZNQ2NKRnJaZXpDVmJQbzM5OFdRNDIzVUpxWVBC?=
+ =?utf-8?B?cklQeFQ3em0rYU04dHVsZkUvUGFTYmpGM0xaOXZ1TDNtZWQ4KzFKQytzRC9W?=
+ =?utf-8?B?R1ZxV0E1WXc5VFBnSDNuNnoxMjRZSVFnTnhLTUMyZFZ2ekpkTzBuWEJySGxW?=
+ =?utf-8?Q?kzksUhjckvNH/W9Qx1Itwd4lpB2bxM84+8eRk5U47OJ3?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 044e4067-11f7-46f1-ad25-08da6416e6df
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 14:57:55.4010
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UnWVDyc+yrUaCr1Ywt4EXn3N19xR5oParLXAF38w5Hk2plYziQg02io/t9wTq1mE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4165
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 11:33:22AM +0200, Jean-Jacques Hiblot wrote:
-> 
-> On 28/06/2022 00:12, Rob Herring wrote:
-> > On Wed, Jun 15, 2022 at 05:49:17PM +0200, Jean-Jacques Hiblot wrote:
-> > > This allows to group multiple monochromatic LEDs into a multicolor
-> > > LED, e.g. RGB LEDs.
-> > > 
-> > > Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> > > ---
-> > >   .../bindings/leds/leds-group-multicolor.yaml  | 94 +++++++++++++++++++
-> > >   1 file changed, 94 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-> > > new file mode 100644
-> > > index 000000000000..30a67985ae33
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-> > > @@ -0,0 +1,94 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/leds/leds-group-multicolor.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Multi-color LED built with monochromatic LEDs
-> > > +
-> > > +maintainers:
-> > > +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> > > +
-> > > +description: |
-> > > +  This driver combines several monochromatic LEDs into one multi-color
-> > > +  LED using the multicolor LED class.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: leds-group-multicolor
-> > > +
-> > > +  multi-led:
-> > > +    type: object
-> > > +
-> > > +    patternProperties:
-> > > +      "^led-[0-9a-z]+$":
-> > > +        type: object
-> > > +        $ref: common.yaml#
-> > > +
-> > > +        additionalProperties: false
-> > > +
-> > > +        properties:
-> > > +          leds:
-> > Not a standard property. What is the type?
-> That would be a reference to the node of a LED
-> > Really, just do a GPIO multi-color LED binding similar to the PWM one
-> > rather than adding this layer. I suppose you could combine LEDs from all
-> > different controllers, but that seems somewhat unlikely to me.
-> 
-> I'm not using gpio leds, rather leds driven by two TLC5925.
-> 
-> I agree that combining from different model of controller is unlikely.
-> However from 2 separate chips of the same model is not (ex: driving 5 RGB
-> LEDs with two 8-output chips)
-> 
-> In the case of the TLC5925, that is not really a problem because as long as
-> the chips are on the same CS, they are considered as a single entity by the
-> driver. But for I2C chips at least that would be a problem.
+Yeah, adding dma_fence_enable_sw_signaling() is the right thing to do.
 
-Okay.
+The question is where to add that? Usually right before the fence is 
+returned from the object or queried from userspace would probably be the 
+right place.
 
-I think the binding can be simplified a bit to just this:
+Regards,
+Christian.
 
-multi-led {
-    compatible = "leds-group-multicolor";
-    color = <LED_COLOR_ID_RGB>;
-    function = LED_FUNCTION_INDICATOR;
-    
-    leds = <&red_led>, <&green_led>, <&blue_led>;
-};
+Am 12.07.22 um 16:22 schrieb Lionel Landwerlin:
+> I'll let Lucas comment. I've only looked a little at it.
+> From what I remember just enabling sw_signaling was enough to fix the 
+> issue.
+>
+> -Lionel
+>
+> On 12/07/2022 13:26, Christian König wrote:
+>> Ping to the Intel guys here. Especially Lucas/Nirmoy/Lionel.
+>>
+>> IIRC you stumbled over that problem as well, have you found any 
+>> solution?
+>>
+>> Regards,
+>> Christian.
+>>
+>> Am 07.07.22 um 12:29 schrieb jie1zhan:
+>>> enable signaling after flatten dma_fence_chains on transfer
+>>>
+>>> Signed-off-by: jie1zhan <jesse.zhang@amd.com>
+>>> ---
+>>>   drivers/gpu/drm/drm_syncobj.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_syncobj.c 
+>>> b/drivers/gpu/drm/drm_syncobj.c
+>>> index 7e48dcd1bee4..0d9d3577325f 100644
+>>> --- a/drivers/gpu/drm/drm_syncobj.c
+>>> +++ b/drivers/gpu/drm/drm_syncobj.c
+>>> @@ -920,6 +920,7 @@ static int 
+>>> drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
+>>>       if (ret)
+>>>           goto err_free_fence;
+>>>   +    dma_fence_enable_sw_signaling(fence);
+>>>       chain = dma_fence_chain_alloc();
+>>>       if (!chain) {
+>>>           ret = -ENOMEM;
+>>
+>
 
-The individual color should be defined in the parent LED node (e.g. 
-red_led). You can either look up the color or the index in 'leds' 
-defines the color.
-
-Also, I don't think 'max-brightness' here makes sense. That's a property 
-of the parent LED.
-
-Rob

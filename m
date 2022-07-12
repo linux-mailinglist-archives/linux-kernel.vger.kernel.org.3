@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2637E571013
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1B0571012
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiGLCSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S229645AbiGLCSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiGLCSM (ORCPT
+        with ESMTP id S229984AbiGLCSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:18:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169FD2F02B;
-        Mon, 11 Jul 2022 19:18:11 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LhkpW56YhzVfgC;
-        Tue, 12 Jul 2022 10:14:27 +0800 (CST)
+        Mon, 11 Jul 2022 22:18:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110B72409A;
+        Mon, 11 Jul 2022 19:17:59 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lhkqb40zgzhZD8;
+        Tue, 12 Jul 2022 10:15:23 +0800 (CST)
 Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 10:17:55 +0800
+ 15.1.2375.24; Tue, 12 Jul 2022 10:17:56 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.174) by
  kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Jul 2022 10:17:54 +0800
+ 15.1.2375.24; Tue, 12 Jul 2022 10:17:55 +0800
 From:   Li Huafei <lihuafei1@huawei.com>
 To:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
         <ardb@kernel.org>, <will@kernel.org>
@@ -38,9 +38,9 @@ CC:     <mark.rutland@arm.com>, <broonie@kernel.org>,
         <ndesaulniers@google.com>, <lihuafei1@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-Subject: [PATCH 2/5] ARM: stacktrace: Avoid duplicate saving of exception PC value
-Date:   Tue, 12 Jul 2022 10:15:24 +0800
-Message-ID: <20220712021527.109921-3-lihuafei1@huawei.com>
+Subject: [PATCH 3/5] ARM: stacktrace: Allow stack trace saving for non-current tasks
+Date:   Tue, 12 Jul 2022 10:15:25 +0800
+Message-ID: <20220712021527.109921-4-lihuafei1@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220712021527.109921-1-lihuafei1@huawei.com>
 References: <20220712021527.109921-1-lihuafei1@huawei.com>
@@ -59,162 +59,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because an exception stack frame is not created in the exception entry,
-save_trace() does special handling for the exception PC, but this is
-only needed when CONFIG_FRAME_POINTER_UNWIND=y. When
-CONFIG_ARM_UNWIND=y, unwind annotations have been added to the exception
-entry and save_trace() will repeatedly save the exception PC:
-
-    [0x7f000090] hrtimer_hander+0x8/0x10 [hrtimer]
-    [0x8019ec50] __hrtimer_run_queues+0x18c/0x394
-    [0x8019f760] hrtimer_run_queues+0xbc/0xd0
-    [0x8019def0] update_process_times+0x34/0x80
-    [0x801ad2a4] tick_periodic+0x48/0xd0
-    [0x801ad3dc] tick_handle_periodic+0x1c/0x7c
-    [0x8010f2e0] twd_handler+0x30/0x40
-    [0x80177620] handle_percpu_devid_irq+0xa0/0x23c
-    [0x801718d0] generic_handle_domain_irq+0x24/0x34
-    [0x80502d28] gic_handle_irq+0x74/0x88
-    [0x8085817c] generic_handle_arch_irq+0x58/0x78
-    [0x80100ba8] __irq_svc+0x88/0xc8
-    [0x80108114] arch_cpu_idle+0x38/0x3c
-    [0x80108114] arch_cpu_idle+0x38/0x3c    <==== duplicate saved exception PC
-    [0x80861bf8] default_idle_call+0x38/0x130
-    [0x8015d5cc] do_idle+0x150/0x214
-    [0x8015d978] cpu_startup_entry+0x18/0x1c
-    [0x808589c0] rest_init+0xd8/0xdc
-    [0x80c00a44] arch_post_acpi_subsys_init+0x0/0x8
-
-We can move the special handling of the exception PC in save_trace() to
-the unwind_frame() of the frame pointer unwinder.
+The current ARM implementation of save_stack_trace_tsk() does not allow
+saving stack trace for non-current tasks, which may limit the scenarios
+in which stack_trace_save_tsk() can be used. Like other architectures,
+or like ARM's unwind_backtrace(), we can leave it up to the caller to
+ensure that the task that needs to be unwound is not running.
 
 Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 ---
- arch/arm/include/asm/stacktrace.h |  6 +++++
- arch/arm/kernel/return_address.c  |  1 +
- arch/arm/kernel/stacktrace.c      | 38 +++++++++++++++++++------------
- 3 files changed, 31 insertions(+), 14 deletions(-)
+ arch/arm/kernel/stacktrace.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/arch/arm/include/asm/stacktrace.h b/arch/arm/include/asm/stacktrace.h
-index 3e78f921b8b2..25282ff645fb 100644
---- a/arch/arm/include/asm/stacktrace.h
-+++ b/arch/arm/include/asm/stacktrace.h
-@@ -21,6 +21,9 @@ struct stackframe {
- 	struct llist_node *kr_cur;
- 	struct task_struct *tsk;
- #endif
-+#ifdef CONFIG_UNWINDER_FRAME_POINTER
-+	bool ex_frame;
-+#endif
- };
- 
- static __always_inline
-@@ -34,6 +37,9 @@ void arm_get_current_stackframe(struct pt_regs *regs, struct stackframe *frame)
- 		frame->kr_cur = NULL;
- 		frame->tsk = current;
- #endif
-+#ifdef CONFIG_UNWINDER_FRAME_POINTER
-+		frame->ex_frame = in_entry_text(frame->pc) ? true : false;
-+#endif
- }
- 
- extern int unwind_frame(struct stackframe *frame);
-diff --git a/arch/arm/kernel/return_address.c b/arch/arm/kernel/return_address.c
-index 8aac1e10b117..38f1ea9c724d 100644
---- a/arch/arm/kernel/return_address.c
-+++ b/arch/arm/kernel/return_address.c
-@@ -47,6 +47,7 @@ void *return_address(unsigned int level)
- 	frame.kr_cur = NULL;
- 	frame.tsk = current;
- #endif
-+	frame.ex_frame = false;
- 
- 	walk_stackframe(&frame, save_return_addr, &data);
- 
 diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
-index af87040b0353..3acf51ee46bb 100644
+index 3acf51ee46bb..836420c00938 100644
 --- a/arch/arm/kernel/stacktrace.c
 +++ b/arch/arm/kernel/stacktrace.c
-@@ -82,6 +82,21 @@ int notrace unwind_frame(struct stackframe *frame)
- 	if (frame_pointer_check(frame))
- 		return -EINVAL;
+@@ -171,19 +171,11 @@ static noinline void __save_stack_trace(struct task_struct *tsk,
+ 	data.no_sched_functions = nosched;
  
-+	/*
-+	 * When we unwind through an exception stack, include the saved PC
-+	 * value into the stack trace.
-+	 */
-+	if (frame->ex_frame) {
-+		struct pt_regs *regs = (struct pt_regs *)frame->sp;
-+
-+		if ((unsigned long)&regs[1] > ALIGN(frame->sp, THREAD_SIZE))
-+			return -EINVAL;
-+
-+		frame->pc = regs->ARM_pc;
-+		frame->ex_frame = false;
-+		return 0;
-+	}
-+
- 	/* restore the registers from the stack frame */
- #ifdef CONFIG_CC_IS_CLANG
- 	frame->sp = frame->fp;
-@@ -98,6 +113,9 @@ int notrace unwind_frame(struct stackframe *frame)
- 					(void *)frame->fp, &frame->kr_cur);
- #endif
- 
-+	if (in_entry_text(frame->pc))
-+		frame->ex_frame = true;
-+
- 	return 0;
- }
- #endif
-@@ -128,7 +146,6 @@ static int save_trace(struct stackframe *frame, void *d)
- {
- 	struct stack_trace_data *data = d;
- 	struct stack_trace *trace = data->trace;
--	struct pt_regs *regs;
- 	unsigned long addr = frame->pc;
- 
- 	if (data->no_sched_functions && in_sched_functions(addr))
-@@ -139,19 +156,6 @@ static int save_trace(struct stackframe *frame, void *d)
- 	}
- 
- 	trace->entries[trace->nr_entries++] = addr;
--
--	if (trace->nr_entries >= trace->max_entries)
--		return 1;
--
--	if (!in_entry_text(frame->pc))
--		return 0;
--
--	regs = (struct pt_regs *)frame->sp;
--	if ((unsigned long)&regs[1] > ALIGN(frame->sp, THREAD_SIZE))
--		return 0;
--
--	trace->entries[trace->nr_entries++] = regs->ARM_pc;
--
- 	return trace->nr_entries >= trace->max_entries;
- }
- 
-@@ -193,6 +197,9 @@ static noinline void __save_stack_trace(struct task_struct *tsk,
- 	frame.kr_cur = NULL;
- 	frame.tsk = tsk;
- #endif
-+#ifdef CONFIG_UNWINDER_FRAME_POINTER
-+	frame.ex_frame = false;
-+#endif
- 
- 	walk_stackframe(&frame, save_trace, &data);
- }
-@@ -214,6 +221,9 @@ void save_stack_trace_regs(struct pt_regs *regs, struct stack_trace *trace)
- 	frame.kr_cur = NULL;
- 	frame.tsk = current;
- #endif
-+#ifdef CONFIG_UNWINDER_FRAME_POINTER
-+	frame.ex_frame = in_entry_text(frame.pc) ? true : false;
-+#endif
- 
- 	walk_stackframe(&frame, save_trace, &data);
- }
+ 	if (tsk != current) {
+-#ifdef CONFIG_SMP
+-		/*
+-		 * What guarantees do we have here that 'tsk' is not
+-		 * running on another CPU?  For now, ignore it as we
+-		 * can't guarantee we won't explode.
+-		 */
+-		return;
+-#else
++		/* task blocked in __switch_to */
+ 		frame.fp = thread_saved_fp(tsk);
+ 		frame.sp = thread_saved_sp(tsk);
+ 		frame.lr = 0;		/* recovered from the stack */
+ 		frame.pc = thread_saved_pc(tsk);
+-#endif
+ 	} else {
+ 		/* We don't want this function nor the caller */
+ 		data.skip += 2;
 -- 
 2.17.1
 

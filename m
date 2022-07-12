@@ -2,134 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9256571A00
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BF0571A01
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 14:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbiGLMas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 08:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S233058AbiGLMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 08:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiGLMal (ORCPT
+        with ESMTP id S232586AbiGLMa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:30:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6351437FB8;
-        Tue, 12 Jul 2022 05:30:40 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP9Jnac1icVQZAA--.16223S2;
-        Tue, 12 Jul 2022 20:30:38 +0800 (CST)
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongchen Zhang <zhanghongchen@loongson.cn>
-Subject: [PATCH v2] MIPS: fix pmd_mkinvalid
-Date:   Tue, 12 Jul 2022 20:30:29 +0800
-Message-Id: <1657629029-27799-1-git-send-email-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9DxP9Jnac1icVQZAA--.16223S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur43Zry7GF45ZF15tw1UJrb_yoW5Ww4Dpa
-        n7AF9Y9rWYg34IyayYyr92gr15ArsxKFZ0gryDWr1jva43XrZ7Xrn3KwnIyFy8XayvyFy8
-        WrWSqan8GrWIv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 12 Jul 2022 08:30:59 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3318A30546
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:30:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id a5so10946672wrx.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 05:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pdE+7/hZPq79wCoXpn9rFOlgdi97u3PZ/r+EPsFhDeY=;
+        b=o81yN9sWzq5eQjIY4mfvvV4OPH0w1kUJC4cpzwXZqid2BBmy05yYjNyCO2ToIK8Se/
+         oHO9tkj31bc2uWkXREwCfuDBysqtDBuk38WOVGdUOS0ROKzCxb+kVKBkEBdrIhfBwEFc
+         J5ZHGzMgP3HpAlV056oaHucjoEMW19BlAfiH8mpvqgelCJ/XINIoLO1Id8HpBEhnEyw0
+         DSS08OeRyT/c8S9o4+bJSb+Oi44uXbRagFMrOtgLXchjJ9xxVl4+6xEv8FQPSRUFAR+O
+         sPYmJcrnpBsj9o0GgahNb1FYyrwstJEHbOrBK1wmcflFr5pY7b8sXnL9mDJRVDh1ufXf
+         V2OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pdE+7/hZPq79wCoXpn9rFOlgdi97u3PZ/r+EPsFhDeY=;
+        b=N9IwI3CPYQWJLxbL6JqD4lFO5ULDqqH8zMlCw1EtzAtPpsWzHcN+V7qVTjWHv+SQcg
+         QC5KvHmZmqyIDsVFRs+SLEqnuJeqA5lK3Fo6k4UWRDpSkTfyCBB62SRxNKl7h8VzKzZu
+         ZydKnqryvO8Xm2VRnW3fJSfdwBhINR3rtJAJn86KR2Y/MUi2t5HZXWFgmS5scTfKsTLH
+         SByTswkALma3VLJ/Wm5RlE9BzzJsRMWIPFnISdn/c6iOvlrB7jziHOj4m+srv8bkHejR
+         Eu3n6MfCNfq8RyGXQCWJ142GFpcP4SxK9ODgMNnXCRztZ+Ouyj9b+xWB0e16bNf6eOvO
+         pMnQ==
+X-Gm-Message-State: AJIora+eSjCT1Ploj71WAJV6pmrtTd/nznZHKO68uHQyI8xx7JXiE0gB
+        bLUQrwqd0PVKck+S1hIU/0Wm7w==
+X-Google-Smtp-Source: AGRyM1vWnMsWizvn0NHwp16dGrKtMXgMx4knV5hRn1oLKRKxVGf1q28H1IGF4yqJWJ+zk1FOB5cCvw==
+X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id bw12-20020a0560001f8c00b0021d7e9851bamr20612671wrb.442.1657629055677;
+        Tue, 12 Jul 2022 05:30:55 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:da26:64bf:ffc2:b735? ([2a05:6e02:1041:c10:da26:64bf:ffc2:b735])
+        by smtp.googlemail.com with ESMTPSA id q13-20020adff94d000000b0020e6ce4dabdsm8105451wrr.103.2022.07.12.05.30.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 05:30:55 -0700 (PDT)
+Message-ID: <2d680cd9-9e97-e06c-55c2-2a3a1504488e@linaro.org>
+Date:   Tue, 12 Jul 2022 14:30:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/3] thermal/core: Fix thermal trip cross point
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     quic_manafm@quicinc.com, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>, rafael@kernel.org
+References: <20220708183210.1334839-1-daniel.lezcano@linaro.org>
+ <20220708183210.1334839-3-daniel.lezcano@linaro.org>
+ <6ce87fbb-1460-503b-f1f1-8cf53e702cdf@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6ce87fbb-1460-503b-f1f1-8cf53e702cdf@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  There is a problem now:
-	    CPU 0		CPU 1
-	pmdp_invalidate		do_page_fault
-	...			  __handle_mm_fault
-				    is_swap_pmd == true
-				    trigger VM_BUG_ON() ?
-	set_pmd_at
-  the reason is when a pmd entry is invalidated by pmd_mkinvalid,
-  pmd_present should return true but now pmd_present return false.
+On 12/07/2022 13:29, Lukasz Luba wrote:
 
-  Like arm64 does in
-  commit b65399f6111b ("arm64/mm: Change THP helpers to comply with
-  generic MM semantics"). we introduce a _PMD_PRESENT_INVALID_SHIFT
-  bit to check if a pmd is present but invalidated by pmd_mkinvalid.
+[ ... ]
 
-  After this commit pmd_present will return the correct value and
-  the VM_BUG_ON will not be triggered.
+>> @@ -511,8 +528,13 @@ void thermal_zone_device_update(struct 
+>> thermal_zone_device *tz,
+>>       tz->notify_event = event;
+>> -    for (count = 0; count < tz->trips; count++)
+>> -        handle_thermal_trip(tz, count);
+>> +    if (tz->last_temperature <= tz->temperature) {
+>> +        for (count = 0; count < tz->trips; count++)
+>> +            handle_thermal_trip(tz, count);
+>> +    } else {
+>> +        for (count = tz->prev_trip; count >= 0; count--)
+>> +            handle_thermal_trip(tz, count);
+>> +    }
+> 
+> In general the code look good. I have one question, though:
+> Is it always true that these trip points coming from the DT
+> and parsed in thermal_of_build_thermal_zone() populated by
+>      for_each_child_of_node(child, gchild) {
+>           thermal_of_populate_trip(gchild, &tz->trips[i++]);
+> 
+> are always defined in right order in DT?
 
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
----
- arch/mips/include/asm/pgtable-64.h   | 2 +-
- arch/mips/include/asm/pgtable-bits.h | 2 ++
- arch/mips/include/asm/pgtable.h      | 3 +++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+Hmm, that is a good question. Even if the convention is to put the trip 
+point in the ascending order, I don't find any documentation telling it 
+is mandatory. Given that I don't feel particularly comfortable to assume 
+that is the case.
 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 41921ac..050cf66 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -265,7 +265,7 @@ static inline int pmd_present(pmd_t pmd)
- {
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- 	if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
--		return pmd_val(pmd) & _PAGE_PRESENT;
-+		return pmd_val(pmd) & (_PAGE_PRESENT | _PMD_PRESENT_INVALID);
- #endif
- 
- 	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 2362842..72cd88a 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -130,6 +130,7 @@ enum pgtable_bits {
- 	_PAGE_MODIFIED_SHIFT,
- #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
- 	_PAGE_HUGE_SHIFT,
-+	_PMD_PRESENT_INVALID_SHIFT,
- #endif
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
-@@ -157,6 +158,7 @@ enum pgtable_bits {
- #define _PAGE_MODIFIED		(1 << _PAGE_MODIFIED_SHIFT)
- #if defined(CONFIG_MIPS_HUGE_TLB_SUPPORT)
- # define _PAGE_HUGE		(1 << _PAGE_HUGE_SHIFT)
-+#define _PMD_PRESENT_INVALID	(1 << _PMD_PRESENT_INVALID_SHIFT)
- #endif
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- # define _PAGE_SPECIAL		(1 << _PAGE_SPECIAL_SHIFT)
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 374c632..a75f461 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -696,12 +696,15 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- 	return pmd;
- }
- 
-+#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- {
-+	pmd_val(pmd) |= _PMD_PRESENT_INVALID;
- 	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
- 
- 	return pmd;
- }
-+#endif
- 
- /*
-  * The generic version pmdp_huge_get_and_clear uses a version of pmd_clear() with a
+Perhaps, it would make more sense to build a map of indexes telling the 
+order in the trip points and work with it instead.
+
+
 -- 
-1.8.3.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

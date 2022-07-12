@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71665712E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7065712DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbiGLHOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S232304AbiGLHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiGLHON (ORCPT
+        with ESMTP id S229747AbiGLHMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:14:13 -0400
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E13E52E7E
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bSYm9
-        C5OeuYbDhENBAdXq4HRvNSPczwQvj64WhMLeyk=; b=KB5xRyB0ILL9VqILcLd4a
-        S83vIxTAf0E3sDLh+IaFKKo9mFY/+zguQaYmpGa8ukqNu1zJ6iBn0SZUzUWirtFI
-        YOPnaQnz31qw+8WWU4+DTiL5vZ1KRhfduBZ7fTcYXBcj04mzReko0ehU+D5Ejw7G
-        XSo8sbf8UrMi8lwLxqseb8=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp11 (Coremail) with SMTP id D8CowAAHffomH81i5anSMQ--.64515S2;
-        Tue, 12 Jul 2022 15:13:44 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH] component: replace ternary operator with min()
-Date:   Tue, 12 Jul 2022 15:12:23 +0800
-Message-Id: <20220712071223.301160-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Jul 2022 03:12:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5DB2AE2D;
+        Tue, 12 Jul 2022 00:12:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 170E7CE19C1;
+        Tue, 12 Jul 2022 07:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0395C3411E;
+        Tue, 12 Jul 2022 07:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657609957;
+        bh=ZxGWYMMD64itBG/ESY2ZgGhNK3FcEGZ7q+1wcoeTY3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TRan373ApgToLLso3FpoCPZM7ASspUjfH+Ms81rl59ZolWlvAQEvzvwMYSlMG4Rlp
+         6SD/VtZOKP9JzT7RYRrdTsOvTmcn1gkyfMh7jZZqU9lFdSpNx1D0xofDyospDP6n3U
+         Eb72YiHXk6w+yrE2YfLZOaMWSJCmulEdj0oBsiMk=
+Date:   Tue, 12 Jul 2022 09:12:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/229] 5.15.54-rc2 review
+Message-ID: <Ys0e3kVgc0iGSiha@kroah.com>
+References: <20220711145306.494277196@linuxfoundation.org>
+ <20220712011904.GG2305683@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowAAHffomH81i5anSMQ--.64515S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKw4kXF4DJw4UAry8WFWrAFb_yoWkCFc_Cr
-        nruas7Cr1fCrWrZr12vwsIyryvqayj9F1jqFnagr1fG34UZan2gFykZryrt348Cr1Yg3Zr
-        Gr1qyry2yr4IkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnc_-DUUUUU==
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizQg8+1c7NeZ7AgAAsE
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712011904.GG2305683@roeck-us.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,44 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Mon, Jul 11, 2022 at 06:19:04PM -0700, Guenter Roeck wrote:
+> On Mon, Jul 11, 2022 at 04:54:12PM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.54 release.
+> > There are 229 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 13 Jul 2022 14:51:35 +0000.
+> > Anything received after that time might be too late.
+> > 
+> 
+> This report is for v5.15.53-230-gfba36d04986b.
+> 
+> Build results:
+> 	total: 159 pass: 153 fail: 6
+> Failed builds:
+> 	powerpc:defconfig
+> 	powerpc:allmodconfig
+> 	powerpc:ppc64e_defconfig
+> 	powerpc:cell_defconfig
+> 	powerpc:skiroot_defconfig
+> 	powerpc:maple_defconfig
+> Qemu test results:
+> 	total: 488 pass: 457 fail: 31
+> Failed tests:
+> 	<all ppc64>
+> 
+> All failed builds/tests:
+> --------------
+> Error log:
+> arch/powerpc/kernel/vdso64/gettimeofday.S: Assembler messages:
+> arch/powerpc/kernel/vdso64/gettimeofday.S:25: Error: unrecognized opcode: `cvdso_call'
+> arch/powerpc/kernel/vdso64/gettimeofday.S:36: Error: unrecognized opcode: `cvdso_call'
+> arch/powerpc/kernel/vdso64/gettimeofday.S:47: Error: unrecognized opcode: `cvdso_call'
+> arch/powerpc/kernel/vdso64/gettimeofday.S:57: Error: unrecognized opcode: `cvdso_call_time'
+> make[2]: *** [scripts/Makefile.build:390: arch/powerpc/kernel/vdso64/gettimeofday.o] Error 1
+> 
+> and:
+> 
+> Building powerpc:allmodconfig ... failed
+> 
+> same as above, plus
+> 
+> arch/powerpc/perf/callchain_64.c: In function 'is_sigreturn_64_address':
+> arch/powerpc/include/asm/vdso.h:20:61: error: 'vdso64_offset_sigtramp_rt64' undeclared
+> 
+> arch/powerpc/kernel/vdso.c: In function 'vdso_fixup_features':
+> arch/powerpc/include/asm/vdso.h:20:61: error: 'vdso64_offset_ftr_fixup_start' undeclared
+> arch/powerpc/include/asm/vdso.h:20:61: error: 'vdso64_offset_ftr_fixup_end' undeclared
+> 
+> and various other similar errors.
 
-Fix the following coccicheck warning:
+Ick, I think Sasha's builders forgot to run on these patches :(
 
-drivers/base/component.c:544: WARNING opportunity for min().
-drivers/base/component.c:740: WARNING opportunity for min().
+I've dropped all of the powerpc vdso patches from the 5.15.y queue now,
+I'll push out a -rc3 if anyone wants to test them on that arch.
 
-min() macro is defined in include/linux/minmax.h. It avoids
-multiple evaluations of the arguments when non-constant and performs
-strict type-checking.
+thanks,
 
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/base/component.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/component.c b/drivers/base/component.c
-index 5eadeac6c532..349c54694481 100644
---- a/drivers/base/component.c
-+++ b/drivers/base/component.c
-@@ -541,7 +541,7 @@ int component_master_add_with_match(struct device *parent,
- 
- 	mutex_unlock(&component_mutex);
- 
--	return ret < 0 ? ret : 0;
-+	return min(ret, 0);
- }
- EXPORT_SYMBOL_GPL(component_master_add_with_match);
- 
-@@ -737,7 +737,7 @@ static int __component_add(struct device *dev, const struct component_ops *ops,
- 	}
- 	mutex_unlock(&component_mutex);
- 
--	return ret < 0 ? ret : 0;
-+	return min(ret, 0);
- }
- 
- /**
--- 
-2.25.1
-
+greg k-h

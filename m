@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2F571BF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E942571C04
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiGLOIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S229762AbiGLOOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiGLOID (ORCPT
+        with ESMTP id S229737AbiGLOO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:08:03 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947002655C;
-        Tue, 12 Jul 2022 07:08:02 -0700 (PDT)
-Received: from nazgul.tnic (unknown [193.86.92.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 218971EC008F;
-        Tue, 12 Jul 2022 16:07:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1657634877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QWJ+poG5yR9gfOjP062iPsNf/GEy2q/sVxwS/bUIYNE=;
-        b=dIx/zvXqBMJBB7HX2cpGBd+EOGQBm/v4vs7veaIDqCn24HjhVt2E6q2WzPG2x8YUGPzk/V
-        jqlSexR6ZRSBKvzbRLiNJBUPH36oMhy5kbgK3rvfYIi4mB9XEJgrploR17tFopS02Y35bt
-        757wMEpFt6RgXJX5O4Z04p+w1AMOKHc=
-Date:   Tue, 12 Jul 2022 16:08:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] x86/mce: Add support for Extended Physical
- Address MCA changes
-Message-ID: <Ys2ARtIOnkAh6zzk@nazgul.tnic>
-References: <YlbkCK9LU2KdXZUG@zn.tnic>
- <YlbzbZO6AvxOqQb/@agluck-desk3.sc.intel.com>
- <Ylb3/4oi6KAjdsJW@zn.tnic>
- <YlcnN2q9ducdvsUZ@yaz-ubuntu>
- <YlflJfyQR/j/eRkn@zn.tnic>
- <YlmHtlKABn9W0pu5@yaz-ubuntu>
- <YlmfZU2Bg5cRk07J@agluck-desk3.sc.intel.com>
- <YqJHwXkg3Ny9fI3s@yaz-fattaah>
- <YrnTMmwl5TrHwT9J@zn.tnic>
- <Ys18XVCB7CeR/jVw@yaz-fattaah>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Tue, 12 Jul 2022 10:14:28 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6B1033A0B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:14:23 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 26CEB93o025896;
+        Tue, 12 Jul 2022 09:11:09 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 26CEB7M3025895;
+        Tue, 12 Jul 2022 09:11:07 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Tue, 12 Jul 2022 09:11:07 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Michael Ellerman <michael@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
+Message-ID: <20220712141107.GM25951@gate.crashing.org>
+References: <8D562851-304F-4153-9194-426CC22B7FF2@ellerman.id.au> <20220704103951.nm4m4kpgnus3ucqo@pali> <CAK8P3a2tdny8SA7jcqhUZT13iq1mYqjFueC-gnTUZA1JKCtfgg@mail.gmail.com> <20220708171227.74nbcgsk63y4bdna@pali> <CAK8P3a3YMqGEjRr+ZD4Enm4pnuNNZOaeXqpY=PDXAP7w3P7y4A@mail.gmail.com> <d9339bb9-2410-bea5-7502-1c7839707f4e@csgroup.eu> <20220711161442.GD25951@gate.crashing.org> <2552726a-cca4-ecd4-6fca-4f73bbf7942e@csgroup.eu> <20220711214840.GJ25951@gate.crashing.org> <aab87b89-3518-f13e-995a-cbe48892e200@csgroup.eu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Ys18XVCB7CeR/jVw@yaz-fattaah>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aab87b89-3518-f13e-995a-cbe48892e200@csgroup.eu>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 01:51:25PM +0000, Yazen Ghannam wrote:
-> Thanks. Do you want a set with yours, mine, and Smita's patches all together?
+On Tue, Jul 12, 2022 at 09:22:12AM +0000, Christophe Leroy wrote:
+> Le 11/07/2022 à 23:48, Segher Boessenkool a écrit :
+> > I believe the eieio instruction is disabled on some e500 models, because
+> > it does not work correctly, so EIEIO_EN=1 cannot work, something like
+> > that?
+> 
+> Don't know.
+> 
+> It is also disabled on 405 and 440.
 
-Sure, whatever you have ready.
+BookE does not have the eieio insn.  Instead, it reuses the same opcode
+for mbar, which has similar but different semantics.
 
-No hurry, though, we'll probably have merge window next week...
+e500 has that EIEIO_EN thing which makes the insn behave like eieio.
 
-Thx.
+> That's new with GCC 12.
 
--- 
-Regards/Gruss,
-    Boris.
+Yup.  In the past we used -many, but that just hides problems in the
+best case, and causes more problems itself :-(
 
-https://people.kernel.org/tglx/notes-about-netiquette
+There are many mnemonics that cause a different instruction to be
+emitted on different targets, and that causes a lot of wasted time
+trying to find and fix the problems this causes.
+
+If you hit any remaining problems related to this, please let me know!
+
+
+Segher

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE7B57102A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F97571029
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 04:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiGLC1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 22:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S230134AbiGLC1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 22:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiGLC06 (ORCPT
+        with ESMTP id S230334AbiGLC04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 22:26:58 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BE78FD4A;
-        Mon, 11 Jul 2022 19:26:52 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJ6IXEP_1657592808;
-Received: from 30.97.56.235(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VJ6IXEP_1657592808)
-          by smtp.aliyun-inc.com;
-          Tue, 12 Jul 2022 10:26:49 +0800
-Message-ID: <1f021cc5-3cbe-a69d-7d50-8c758174d178@linux.alibaba.com>
+        Mon, 11 Jul 2022 22:26:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8578E1EF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 19:26:49 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lhl2y4VCbzlVtk;
+        Tue, 12 Jul 2022 10:25:14 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Jul 2022 10:26:47 +0800
+Subject: Re: [PATCH] mm/compaction: fix set skip in fast_find_migrateblock
+To:     Zhou Chuyi <zhouchuyi@bytedance.com>, <linux-mm@kvack.org>
+References: <20220711123213.66068-1-zhouchuyi@bytedance.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <8af11329-93d4-3bbd-fe4c-343663c00a1b@huawei.com>
 Date:   Tue, 12 Jul 2022 10:26:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH V4 2/2] ublk_drv: add UBLK_IO_REFETCH_REQ for supporting
- to build as module
+In-Reply-To: <20220711123213.66068-1-zhouchuyi@bytedance.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220711022024.217163-1-ming.lei@redhat.com>
- <20220711022024.217163-3-ming.lei@redhat.com> <87lesze7o3.fsf@collabora.com>
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-In-Reply-To: <87lesze7o3.fsf@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,101 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/12 04:06, Gabriel Krisman Bertazi wrote:
-> Ming Lei <ming.lei@redhat.com> writes:
-> 
->> Add UBLK_IO_REFETCH_REQ command to fetch the incoming io request in
->> ubq daemon context, so we can avoid to call task_work_add(), then
->> it is fine to build ublk driver as module.
->>
->> In this way, iops is affected a bit, but just by ~5% on ublk/null,
->> given io_uring provides pretty good batching issuing & completing.
->>
->> One thing to be careful is race between ->queue_rq() and handling
->> abort, which is avoided by quiescing queue when aborting queue.
->> Except for that, handling abort becomes much easier with
->> UBLK_IO_REFETCH_REQ since aborting handler is strictly exclusive with
->> anything done in ubq daemon kernel context.
-> 
-> Hi Ming,
-> 
-> FWIW, I'm not very fond this change.  It adds complexity to the kernel
-> driver and to the userspace server implementation, who now have to deal
-> with different interface semantics just because the driver was built-in
-> or built as a module.  I don't think the tristate support warrants such
-> complexity.  I was hoping we might get away with exporting that symbol
-> or adding a built-in ubd-specific wrapper that can be exported and
-> invokes task_work_add.
-> 
-> Either way, Alibaba seems to consider this feature useful, and if that
-> is the case, we can just not use it on our side.
+Add Cc Andrew and linux-kernel email list.
 
-Our app handles IOs itself with network(RPC) and internal memory pool
-so UBLK_IO_REFETCH_REQ
-(actually I think it is like NEED_GET_DATA in the earlist version :) )
-is helpful to us because we can assign data buffer address AFTER the app
-gets one IO requests(WRITE, with data size) and we avoid PRE-allocating buffers.
+On 2022/7/11 20:32, Zhou Chuyi wrote:
+> From: zhouchuyi <zhouchuyi@bytedance.com>
+> 
+> When we successfully find a pageblock in fast_find_migrateblock(), the block will be set skip-flag through set_pageblock_skip(). However, when entering isolate_migratepages_block(), the whole pageblock will be skipped due to the branch 'if (!valid_page && IS_ALIGNED(low_pfn, pageblock_nr_pages))'. Eventually we will goto isolate_abort and isolate nothing.
+> Signed-off-by: zhouchuyi <zhouchuyi@bytedance.com>
 
-Besides, adding UBLK_IO_REFETCH_REQ is helpful to build ublk driver as module
-It seems like kernel developers do not want a built-in driver. :)
+It seems we should tweak the commit log to satisfy the checkpatch.pl first.
 
-Maybe your app is different from ours(you may not need to handle IOs by yourelf).
+> ---
+>  mm/compaction.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 1f89b969c..a1a2b50c8 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -1852,7 +1852,6 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
+>  					pfn = cc->zone->zone_start_pfn;
+>  				cc->fast_search_fail = 0;
+>  				found_block = true;
+> -				set_pageblock_skip(freepage);
 
-Thanks， 
-Ziyang Zhang
+This looks like a real problem. Should we add a Fixes tag here? What's the runtime effect of it?
 
+Thanks for your patch!
 
+>  				break;
+>  			}
+>  		}
 > 
-> That said, the patch looks good to me, just a minor comment inline.
-> 
-> Thanks,
-> 
->> Signed-off-by: Ming Lei <ming.lei@redhat.com>
->> ---
->>  drivers/block/Kconfig         |   2 +-
->>  drivers/block/ublk_drv.c      | 121 ++++++++++++++++++++++++++--------
->>  include/uapi/linux/ublk_cmd.h |  17 +++++
->>  3 files changed, 113 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
->> index d218089cdbec..2ba77fd960c2 100644
->> --- a/drivers/block/Kconfig
->> +++ b/drivers/block/Kconfig
->> @@ -409,7 +409,7 @@ config BLK_DEV_RBD
->>  	  If unsure, say N.
->>  
->>  config BLK_DEV_UBLK
->> -	bool "Userspace block driver"
->> +	tristate "Userspace block driver"
->>  	select IO_URING
->>  	help
->>            io uring based userspace block driver.
->> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
->> index 0076418e6fad..98482f8d1a77 100644
->> --- a/drivers/block/ublk_drv.c
->> +++ b/drivers/block/ublk_drv.c
->> @@ -92,6 +92,7 @@ struct ublk_queue {
->>  	int q_id;
->>  	int q_depth;
->>  
->> +	unsigned long flags;
->>  	struct task_struct	*ubq_daemon;
->>  	char *io_cmd_buf;
->>  
->> @@ -141,6 +142,15 @@ struct ublk_device {
->>  	struct work_struct	stop_work;
->>  };
->>  
->> +#define ublk_use_task_work(ubq)						\
->> +({                                                                      \
->> +	bool ret = false;						\
->> +	if (IS_BUILTIN(CONFIG_BLK_DEV_UBLK) &&                          \
->> +			!((ubq)->flags & UBLK_F_NEED_REFETCH))		\
->> +		ret = true;						\
->> +	ret;								\
->> +})
->> +
-> 
-> This should be an inline function, IMO.
-> 
-> 
+

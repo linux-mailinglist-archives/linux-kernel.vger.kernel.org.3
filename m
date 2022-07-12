@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15395571112
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2A057111C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 06:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiGLEFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 00:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        id S229851AbiGLELq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 00:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiGLEFq (ORCPT
+        with ESMTP id S229542AbiGLELl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 00:05:46 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C637180
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:05:45 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id a15so6420987pfv.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 21:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Sz9szSa4PbjdihEuUkN/48M4rjKmKhhNvz2LsBkiT+8=;
-        b=QX15/6NlbhAEeDEbNujQ9sq7v5HZAqpO0vg+ua1cnzwnIdJVmtlO9/lJLOwIQ3876I
-         EzQoy/GEI04wgBhVNZvkh3TJgIluMqdkBfGfvLZy4PVG6LMzzNi24jykMrgQYMXTpNIG
-         vfciD/9f1LcU5h45GdUy3WcEFkeMa324qeX1fkbxn6WZoU2T6B0/K1kch8Dc4rJga8/T
-         xyNYWJwa8xc0gWKMXBmNysDTBGh3uXCNQ0UelxzwNrmyNictyqOsmhTqxP2upNsBfz4T
-         /rJAxYYGV32jkFCvYitlUlSFfRtw0g0LragRs/ohG43/UQYXHueu6jgBBdb7N/qu0DT9
-         9yGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Sz9szSa4PbjdihEuUkN/48M4rjKmKhhNvz2LsBkiT+8=;
-        b=VRZ/b3MrJrNcGDSc+SETRb2dYX4uDJx6g/BLxsfx38FyuaW7qTLUezlp7qhCc10gJr
-         BRZMUAJjlQsJqqKivxS4bdQPpLhi3v9MaFFLpyc/b5i0V83zDhUtmzmoJhNYPJ4lc776
-         zStG0QaFcguF7QEsxhZRcAUa+72OY3WLvN0f3RoONQa+tljgsNGx6Y4ryrlhQiLSEf9W
-         o6YekxivqHiy4fCQFPjRmuNBGn+7P/641LeVSKjl7MA9bUfPuV6ejvMGoDmv1TcGA0MY
-         kspaSbGbJPlDn76TPaf8/XKJm3vQkh353fNH2TRbOp3wj4X6qS+W5x/ED28VQcl1+6qs
-         5ikg==
-X-Gm-Message-State: AJIora92oQXyCvnBLydW9G1lyafwQbwrI29UNnihhCCXGbE6dE5nBQXS
-        ErhTLScx/wGUYN/KSaaMH2R3eg==
-X-Google-Smtp-Source: AGRyM1up2gx7HxHdTNFwz/N7EM5ljIsXcl9JX4Rr0Y1ZU41hewb5iNJsOePKQTn1z407POCg2DtHSA==
-X-Received: by 2002:a63:a46:0:b0:412:b1d6:94cf with SMTP id z6-20020a630a46000000b00412b1d694cfmr19249022pgk.373.1657598744629;
-        Mon, 11 Jul 2022 21:05:44 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id ce23-20020a17090aff1700b001ef8780f873sm5576182pjb.39.2022.07.11.21.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 21:05:44 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 12:05:38 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chang Rui <changruinj@gmail.com>
-Subject: Re: [RFC PATCH v1] perf symbol: Correct address for bss symbols
-Message-ID: <20220712040538.GB10379@leoy-ThinkPad-X240s>
-References: <20220710012204.2390293-1-leo.yan@linaro.org>
- <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
- <20220711172706.rtfd6pp2pochmdre@google.com>
+        Tue, 12 Jul 2022 00:11:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC2A2A95D;
+        Mon, 11 Jul 2022 21:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657599100; x=1689135100;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ArqaeZnuX8QcKhVxfL4Y5BxNELzHnsMjFtshijKs5MA=;
+  b=NXnu+I1EgN9clc32bRoPeT0kHgZWvn/6zX/wCgfHn/aKNJWG+LOb8p4k
+   fXxK1en9yex0Hu9oizgw/eeIvmzeBdLOsnErElfj953jf5+HBj0QGI0JF
+   IVxbkFfcepdb2iRKLKCO5eAKXnLJNmEYC5VqN8w0fgC4V2AUQr6I3L3Ub
+   3kSBgG7bE6Vm74/CaQrksLWA1Par4+JsXnkAkWIvvdqSLxLGm0bYia0tG
+   l5/xg08cO0raMXlXN0Nhf6AoQjGP/VPxr0s1XUBMdTM1TSU3v5B3pUbNz
+   DFAJFWdYIzAne6KKExX51oThlek3K6CQluQGMiVzPFNs2hldQkocDXyiF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="348810695"
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="348810695"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 21:11:39 -0700
+X-IronPort-AV: E=Sophos;i="5.92,264,1650956400"; 
+   d="scan'208";a="592493357"
+Received: from snaskant-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.60.27])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 21:11:36 -0700
+Message-ID: <b2ac926a9175306b4ae04f73a23c100645d642b6.camel@intel.com>
+Subject: Re: [PATCH 11/12] Documentation: x86: Use literal code block for
+ TDX dmesg output
+From:   Kai Huang <kai.huang@intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 12 Jul 2022 16:11:34 +1200
+In-Reply-To: <20220709042037.21903-12-bagasdotme@gmail.com>
+References: <20220709042037.21903-1-bagasdotme@gmail.com>
+         <20220709042037.21903-12-bagasdotme@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220711172706.rtfd6pp2pochmdre@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,147 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 10:27:06AM -0700, Fangrui Song wrote:
+On Sat, 2022-07-09 at 11:20 +0700, Bagas Sanjaya wrote:
+> The dmesg output blocks are using line blocks, which is incorrect, since
+> this will render the blocks as normal paragraph with preserved line
+> breaks instead of code blocks.
+>=20
+> Use literal code blocks instead for the output.
 
-Thanks for review, Ian and Fangrui!
+Thank you very much!
 
-[...]
+Obviously I am not familiar with .rst.   I'll fix.
 
-> > > First we used 'perf mem record' to run the test program and then used
-> > > 'perf --debug verbose=4 mem report' to observe what's the symbol info
-> > > for 'buf1' and 'buf2' structures.
-> > > 
-> > >   # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
-> > >   # ./perf --debug verbose=4 mem report
-> > >     ...
-> > >     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
-> > >     symbol__new: buf2 0x30a8-0x30e8
-> > >     ...
-> > >     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
-> > >     symbol__new: buf1 0x3068-0x30a8
-> > >     ...
-> 
-> It seems unclear how 0x30a8 and 0x3068 are derived,
+>=20
+> Fixes: f05f595045dfc7 ("Documentation/x86: Add documentation for TDX host=
+ support")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/x86/tdx.rst | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+> index 4430912a2e4f05..f5bd22b89159ec 100644
+> --- a/Documentation/x86/tdx.rst
+> +++ b/Documentation/x86/tdx.rst
+> @@ -41,11 +41,11 @@ TDX boot-time detection
+>  -----------------------
+> =20
+>  Kernel detects TDX and the TDX private KeyIDs during kernel boot.  User
+> -can see below dmesg if TDX is enabled by BIOS:
+> +can see below dmesg if TDX is enabled by BIOS::
+> =20
+> -|  [..] tdx: SEAMRR enabled.
+> -|  [..] tdx: TDX private KeyID range: [16, 64).
+> -|  [..] tdx: TDX enabled by BIOS.
+> +   [..] tdx: SEAMRR enabled.
+> +   [..] tdx: TDX private KeyID range: [16, 64).
+> +   [..] tdx: TDX enabled by BIOS.
+> =20
+>  TDX module detection and initialization
+>  ---------------------------------------
+> @@ -79,20 +79,20 @@ caller.
+>  User can consult dmesg to see the presence of the TDX module, and whethe=
+r
+>  it has been initialized.
+> =20
+> -If the TDX module is not loaded, dmesg shows below:
+> +If the TDX module is not loaded, dmesg shows below::
+> =20
+> -|  [..] tdx: TDX module is not loaded.
+> +   [..] tdx: TDX module is not loaded.
+> =20
+>  If the TDX module is initialized successfully, dmesg shows something
+> -like below:
+> +like below::
+> =20
+> -|  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_versio=
+n 0, build_date 20211209, build_num 160
+> -|  [..] tdx: 65667 pages allocated for PAMT.
+> -|  [..] tdx: TDX module initialized.
+> +   [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_versio=
+n 0, build_date 20211209, build_num 160
+> +   [..] tdx: 65667 pages allocated for PAMT.
+> +   [..] tdx: TDX module initialized.
+> =20
+> -If the TDX module failed to initialize, dmesg shows below:
+> +If the TDX module failed to initialize, dmesg shows below::
+> =20
+> -|  [..] tdx: Failed to initialize TDX module.  Shut it down.
+> +   [..] tdx: Failed to initialize TDX module.  Shut it down.
+> =20
+>  TDX Interaction to Other Kernel Components
+>  ------------------------------------------
+> @@ -143,10 +143,10 @@ There are basically two memory hot-add cases that n=
+eed to be prevented:
+>  ACPI memory hot-add and driver managed memory hot-add.  The kernel
+>  rejectes the driver managed memory hot-add too when TDX is enabled by
+>  BIOS.  For instance, dmesg shows below error when using kmem driver to
+> -add a legacy PMEM as system RAM:
+> +add a legacy PMEM as system RAM::
+> =20
+> -|  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enab=
+led platform.
+> -|  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
+> +   [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enab=
+led platform.
+> +   [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
+> =20
+>  However, adding new memory to ZONE_DEVICE should not be prevented as
+>  those pages are not managed by the page allocator.  Therefore,
 
-In perf tool, 0x30a8 and 0x3068 are adjusted address, which are derived
-from 'st_value', 'sh_addr' and 'sh_offset' with the formula:
-
-  adjusted_address = st_value - sh_addr + sh_offset
-
-So perf computes symbol address for buf1:
-
-  adjusted_address = st_value - sh_addr + sh_offset
-                   = 0x4080 - 0x4040 + 0x3028
-                   = 0x3068
-
-> > > Perf tool relies on libelf to parse symbols, here 'st_value' is the
-> > > address from executable file, 'sh_addr' is the belonged section's linked
-> > > start address, and 'sh_offset' is the dynamic loaded address for this
-> > > section, then perf tool uses below formula to adjust symbol address:
-> > > 
-> > >   adjusted_address = st_value - sh_addr + sh_offset
-> > > 
-> > > So we can see the final adjusted address ranges for buf1 and buf2 are
-> > > [0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
-> > > incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
-> > > compiler attribute with 64-byte alignment.
-> 
-> so I cannot judge this paragraph.
-> 
-> > > The problem happens for 'sh_offset', libelf returns it as 0x3028 which
-> > > is not 64-byte aligned, on the other hand, we can see both 'st_value'
-> > > and 'sh_addr' are 64-byte aligned.  Combining with disassembly, it's
-> > > likely libelf uses the .data section end address as .bss section
-> > > start address, therefore, it doesn't respect the alignment attribute for
-> > > structures in .bss section.
-> > > 
-> > > Since .data and .bss sections are in the continuous virtual address
-> > > space, and .data section info returned by libelf is reliable, to fix
-> > > this issue, if detects it's a bss symbol, it rolls back to use .data
-> > > section info to adjust symbol's virtual address.
-> 
-> This is not necessarily true.
-> 
-> * In GNU ld's internal linker script, .data1 sits between .data and .bss.
-> * A linker script can add other sections between .data and .bss
-> * A linker script may place .data and .bss in two PT_LOAD program headers.
-
-Agreed the approach in this patch cannot handle all cases.
-
-> % readelf -WS aa
-> There are 13 section headers, starting at offset 0x10a8:
-> 
-> With a linker script like
-> 
-> % cat a/a.lds
-> SECTIONS {
->   .text : { *(.text) }
->   data1 : { *(data1) }
->   data2 : { *(data2) }
->   .bss : { *(.bss) }
-> }
-> 
-> I can get something like
-> 
-> Section Headers:
->   [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
->   [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0
->   [ 1] .text             PROGBITS        0000000000000000 001000 000001 00  AX  0   0  1
->   [ 2] data1             PROGBITS        0000000000000001 001001 000001 00  WA  0   0  1
->   [ 3] data2             PROGBITS        0000000000000002 001002 000001 00  WA  0   0  1
->   [ 4] .data             PROGBITS        0000000000000003 001003 000000 00  WA  0   0  1
->   [ 5] data3             PROGBITS        0000000000000003 001003 000001 00  WA  0   0  1
->   [ 6] .bss              NOBITS          0000000000000020 001004 000001 00  WA  0   0 32
-> 
-> .bss's sh_offset does not need to be aligned per http://www.sco.com/developers/gabi/latest/ch4.sheader.html
-> 
->     sh_offset
->     This member's value gives the byte offset from the beginning of the file to the first byte in the section. One section type, SHT_NOBITS described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
-
-> I don't have more context why the file offset is needed for a variable in the all-zero section.
-
-We need to create symbol info for not only .text section but also for
-.data section and .bss sectionṡ.  So based on the data address, we can
-know what's the symbol for the data access.
-
-But I need to correct the description for "st_value" [1]: In
-executable and shared object files, st_value holds a virtual address.
-To make these files' symbols more useful for the dynamic linker, the
-section offset (file interpretation) gives way to a virtual address
-(memory interpretation) for which the section number is irrelevant.
-
-So perf tool uses the formula "st_value - sh_addr + sh_offset" to
-convert from the memory address to file address.  But it calculates
-the wrong file address because "sh_offset" doesn't respect the
-alignment.
-
-[1] http://www.sco.com/developers/gabi/latest/ch4.symtab.html#symbol_value
-
-> If the file offset has to be used and we want to use a heuristic, a better one is to find the section index of .bss, say, i.
-> 
-> const uint64_t align = shdr[i].sh_addralign;
-> assert(i > 0);
-> if (shdr[i].offset % align == 0)
->   return shdr[i].offset;
-> return (shdr[i-1].sh_offset + shdr[i-1].sh_size + align - 1) & -align;
-> 
-> Really, it is better to use the program header to derive the virtual address of a variable residing in .bss.
-
-I think we can simplify the code.  Because:
-
-  shdr[i].sh_offset = shdr[i-1].sh_offset + shdr[i-1].sh_size
-
-... thus we can simply fixup "sh_offset":
-
-  const uint64_t align = shdr[i].sh_addralign;
-  aligned_sh_offset = (shdr[i].sh_offset + align - 1) & ~(align - 1);
-
-So:
-
-  symbol_addr = st_value - sh_addr + aligned_sh_offset
-
-If you still see any issue, please let me know.
-
-Thanks a lot for suggestions.
-
-Leo

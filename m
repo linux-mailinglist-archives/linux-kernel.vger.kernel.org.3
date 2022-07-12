@@ -2,142 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596C85712A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12B65712A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 08:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbiGLG6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 02:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S232233AbiGLG7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 02:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiGLG54 (ORCPT
+        with ESMTP id S229670AbiGLG73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 02:57:56 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DEA97485
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so10519070pjl.5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wt7MycguGN5t84A6c+lbathd4HawDHnJrnlkQhSwpe0=;
-        b=CzwBC2T4Mqa2pzDTBcG633rO5N28nYTPP7bGlbVQV9ojiSG47PESlVsJEsYM6TYa5S
-         SCa0CD0atvUVv83Wz8vaUOz3hOwmRj39syMiymUzTjpC3L2X8BvaEEfVIEN4iWoYp7nM
-         nldD0Ks1sWeY09r68fIA5kMFBY+7HlaXGr+oEm+N41dA57mAoeUHiBpwotaR1W39JhUG
-         oqtRj1a0Jen39VzVZ06wqBa0sj9UEfZI100tVi0NAH1QzwCGP94mzFRTIOJBf9N/jp7K
-         999o1bKP8bC0uiCKD8z6aaMFLWRN8BseIEotNtKY+069sZtPalh3fH8RHq1wxFEIsfYb
-         crUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wt7MycguGN5t84A6c+lbathd4HawDHnJrnlkQhSwpe0=;
-        b=r5xU9SsxKAeDrnscXANntMLv4QNiyFPEUs0+XHMozlEr3PUO00rE1UiAt6RR5ci6zb
-         eWQG172O96R4PGPk6tmLK5y9OvUxx1FRIeoolncJUgmoEdpTlPpkFJI9UK+kmVVJBj3L
-         JKui/WqGkOzXf5m7XrFl0LYxtvmfxIpVhgWa9AK0Vpj7Ps+rX+BfVHFC6+Jy8YFHoC1D
-         y6mFa6pryTwMFKuQUAasu93QMZIkIkoBZQkRxjqFBTiD36Q+a4B+y02yag1caCI1NWir
-         2Vrior96Y5XXfg/XwO6B8/Z17j4EzWqxrvdJpunAb9Nl6iGr9VLZqvOWahevfk79nxzA
-         10Ow==
-X-Gm-Message-State: AJIora8ne6k/EsjR9ryDm3le9/cUaJ9KM8yFMY+Y9LSS5yuKl/swod20
-        xcakDa+8PJA0pnlqqOtrIBN5DA==
-X-Google-Smtp-Source: AGRyM1tbdv2oUxsRq8y9CVKh8tbYW++1GOJcDl6GNmh5W0CAyCZBUi4oZW4X6cLv2UUMsK0rBeIiVg==
-X-Received: by 2002:a17:903:1111:b0:16a:acf4:e951 with SMTP id n17-20020a170903111100b0016aacf4e951mr22284874plh.72.1657609075494;
-        Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
-Received: from [10.4.225.66] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id p6-20020a17090a4f0600b001ef9114eb9dsm5910565pjh.42.2022.07.11.23.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 23:57:55 -0700 (PDT)
-Message-ID: <8c0e93e2-72e8-bd67-e5a4-c8e3bb888bfe@bytedance.com>
-Date:   Tue, 12 Jul 2022 14:57:48 +0800
+        Tue, 12 Jul 2022 02:59:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35518CC87
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 23:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657609167; x=1689145167;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=cSwQsOVestWoujXYp9TAzAFZEkDehjIWirxENp9l0nk=;
+  b=LVsDuNLtZe3uiJb1zktbtY9zpABOyed8VzO/L42YeBiGVvRS7WJpYV4H
+   TFymn79F3Pf+PrCnB6VBc7u1TJ+I4JP5MeJ5T2X4zPsdUi8zYaJ/hwxHI
+   mC/N7l1Z4pE5m6IDeD7ZpBGnKcXFbjG4kBDfnqTvxDB3sWqHCe5v44c4u
+   vQjsTG2bafQ7uX0IsfUmBn2jtllsdd68QcQPcyhDZEFo5o0l+vUAOg186
+   MYzUFu9NQW5NjmRrsOXKit+hWGpUSKya7dViRzNSmRmZHIVThGMbsMLyk
+   FxHQ7UIncOoFCpF4BYzgyWIPKdAE8v2adRKmNEW74J3abYc3vw3/P89OA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="284882665"
+X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
+   d="scan'208";a="284882665"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:59:27 -0700
+X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
+   d="scan'208";a="922087558"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2022 23:59:24 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v8 00/12] mm/demotion: Memory tiers and demotion
+References: <20220704070612.299585-1-aneesh.kumar@linux.ibm.com>
+        <87r130b2rh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <60e97fa2-0b89-cf42-5307-5a57c956f741@linux.ibm.com>
+        <87r12r5dwu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com>
+Date:   Tue, 12 Jul 2022 14:59:13 +0800
+In-Reply-To: <0a55e48a-b4b7-4477-a72f-73644b5fc4cb@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Tue, 12 Jul 2022 10:12:17 +0530")
+Message-ID: <87mtde6cla.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0
-Subject: Re: [PATCH v1 0/2] arm64: run softirqs on the per-CPU IRQ stack
-Content-Language: en-US
-To:     arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
+> On 7/12/22 6:46 AM, Huang, Ying wrote:
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>> 
+>>> On 7/5/22 9:59 AM, Huang, Ying wrote:
+>>>> Hi, Aneesh,
+>>>>
+>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>
+>>>>> The current kernel has the basic memory tiering support: Inactive
+>>>>> pages on a higher tier NUMA node can be migrated (demoted) to a lower
+>>>>> tier NUMA node to make room for new allocations on the higher tier
+>>>>> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+>>>>> migrated (promoted) to a higher tier NUMA node to improve the
+>>>>> performance.
+>>>>>
+>>>>> In the current kernel, memory tiers are defined implicitly via a
+>>>>> demotion path relationship between NUMA nodes, which is created during
+>>>>> the kernel initialization and updated when a NUMA node is hot-added or
+>>>>> hot-removed.  The current implementation puts all nodes with CPU into
+>>>>> the top tier, and builds the tier hierarchy tier-by-tier by establishing
+>>>>> the per-node demotion targets based on the distances between nodes.
+>>>>>
+>>>>> This current memory tier kernel interface needs to be improved for
+>>>>> several important use cases:
+>>>>>
+>>>>> * The current tier initialization code always initializes
+>>>>>   each memory-only NUMA node into a lower tier.  But a memory-only
+>>>>>   NUMA node may have a high performance memory device (e.g. a DRAM
+>>>>>   device attached via CXL.mem or a DRAM-backed memory-only node on
+>>>>>   a virtual machine) and should be put into a higher tier.
+>>>>>
+>>>>> * The current tier hierarchy always puts CPU nodes into the top
+>>>>>   tier. But on a system with HBM (e.g. GPU memory) devices, these
+>>>>>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+>>>>>   with CPUs are better to be placed into the next lower tier.
+>>>>>
+>>>>> * Also because the current tier hierarchy always puts CPU nodes
+>>>>>   into the top tier, when a CPU is hot-added (or hot-removed) and
+>>>>>   triggers a memory node from CPU-less into a CPU node (or vice
+>>>>>   versa), the memory tier hierarchy gets changed, even though no
+>>>>>   memory node is added or removed.  This can make the tier
+>>>>>   hierarchy unstable and make it difficult to support tier-based
+>>>>>   memory accounting.
+>>>>>
+>>>>> * A higher tier node can only be demoted to selected nodes on the
+>>>>>   next lower tier as defined by the demotion path, not any other
+>>>>>   node from any lower tier.  This strict, hard-coded demotion order
+>>>>>   does not work in all use cases (e.g. some use cases may want to
+>>>>>   allow cross-socket demotion to another node in the same demotion
+>>>>>   tier as a fallback when the preferred demotion node is out of
+>>>>>   space), and has resulted in the feature request for an interface to
+>>>>>   override the system-wide, per-node demotion order from the
+>>>>>   userspace.  This demotion order is also inconsistent with the page
+>>>>>   allocation fallback order when all the nodes in a higher tier are
+>>>>>   out of space: The page allocation can fall back to any node from
+>>>>>   any lower tier, whereas the demotion order doesn't allow that.
+>>>>>
+>>>>> * There are no interfaces for the userspace to learn about the memory
+>>>>>   tier hierarchy in order to optimize its memory allocations.
+>>>>>
+>>>>> This patch series make the creation of memory tiers explicit under
+>>>>> the control of userspace or device driver.
+>>>>>
+>>>>> Memory Tier Initialization
+>>>>> ==========================
+>>>>>
+>>>>> By default, all memory nodes are assigned to the default tier with
+>>>>> tier ID value 200.
+>>>>>
+>>>>> A device driver can move up or down its memory nodes from the default
+>>>>> tier.  For example, PMEM can move down its memory nodes below the
+>>>>> default tier, whereas GPU can move up its memory nodes above the
+>>>>> default tier.
+>>>>>
+>>>>> The kernel initialization code makes the decision on which exact tier
+>>>>> a memory node should be assigned to based on the requests from the
+>>>>> device drivers as well as the memory device hardware information
+>>>>> provided by the firmware.
+>>>>>
+>>>>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
+>>>>>
+>>>>> Memory Allocation for Demotion
+>>>>> ==============================
+>>>>> This patch series keep the demotion target page allocation logic same.
+>>>>> The demotion page allocation pick the closest NUMA node in the
+>>>>> next lower tier to the current NUMA node allocating pages from.
+>>>>>
+>>>>> This will be later improved to use the same page allocation strategy
+>>>>> using fallback list.
+>>>>>
+>>>>> Sysfs Interface:
+>>>>> -------------
+>>>>> Listing current list of memory tiers details:
+>>>>>
+>>>>> :/sys/devices/system/memtier$ ls
+>>>>> default_tier max_tier  memtier1  power  uevent
+>>>>> :/sys/devices/system/memtier$ cat default_tier
+>>>>> memtier200
+>>>>> :/sys/devices/system/memtier$ cat max_tier 
+>>>>> 400
+>>>>> :/sys/devices/system/memtier$ 
+>>>>>
+>>>>> Per node memory tier details:
+>>>>>
+>>>>> For a cpu only NUMA node:
+>>>>>
+>>>>> :/sys/devices/system/node# cat node0/memtier 
+>>>>> :/sys/devices/system/node# echo 1 > node0/memtier 
+>>>>> :/sys/devices/system/node# cat node0/memtier 
+>>>>> :/sys/devices/system/node# 
+>>>>>
+>>>>> For a NUMA node with memory:
+>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>> 1
+>>>>> :/sys/devices/system/node# ls ../memtier/
+>>>>> default_tier  max_tier  memtier1  power  uevent
+>>>>> :/sys/devices/system/node# echo 2 > node1/memtier 
+>>>>> :/sys/devices/system/node# 
+>>>>> :/sys/devices/system/node# ls ../memtier/
+>>>>> default_tier  max_tier  memtier1  memtier2  power  uevent
+>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>> 2
+>>>>> :/sys/devices/system/node# 
+>>>>>
+>>>>> Removing a memory tier
+>>>>> :/sys/devices/system/node# cat node1/memtier 
+>>>>> 2
+>>>>> :/sys/devices/system/node# echo 1 > node1/memtier
+>>>>
+>>>> Thanks a lot for your patchset.
+>>>>
+>>>> Per my understanding, we haven't reach consensus on
+>>>>
+>>>> - how to create the default memory tiers in kernel (via abstract
+>>>>   distance provided by drivers?  Or use SLIT as the first step?)
+>>>>
+>>>> - how to override the default memory tiers from user space
+>>>>
+>>>> As in the following thread and email,
+>>>>
+>>>> https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
+>>>>
+>>>> I think that we need to finalized on that firstly?
+>>>
+>>> I did list the proposal here 
+>>>
+>>> https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
+>>>
+>>> So both the kernel default and driver-specific default tiers now become kernel parameters that can be updated
+>>> if the user wants a different tier topology. 
+>>>
+>>> All memory that is not managed by a driver gets added to default_memory_tier which got a default value of 200
+>>>
+>>> For now, the only driver that is updated is dax kmem, which adds the memory it manages to memory tier 100.
+>>> Later as we learn more about the device attributes (HMAT or something similar) that we might want to use
+>>> to control the tier assignment this can be a range of memory tiers. 
+>>>
+>>> Based on the above, I guess we can merge what is posted in this series and later fine-tune/update
+>>> the memory tier assignment based on device attributes.
+>> 
+>> Sorry for late reply.
+>> 
+>> As the first step, it may be better to skip the parts that we haven't
+>> reached consensus yet, for example, the user space interface to override
+>> the default memory tiers.  And we can use 0, 1, 2 as the default memory
+>> tier IDs.  We can refine/revise the in-kernel implementation, but we
+>> cannot change the user space ABI.
+>> 
+>
+> Can you help list the use case that will be broken by using tierID as outlined in this series?
+> One of the details that were mentioned earlier was the need to track top-tier memory usage in a
+> memcg and IIUC the patchset posted https://lore.kernel.org/linux-mm/cover.1655242024.git.tim.c.chen@linux.intel.com
+> can work with tier IDs too. Let me know if you think otherwise. So at this point
+> I am not sure which area we are still debating w.r.t the userspace interface.
 
-On 2022/7/8 17:49, Qi Zheng wrote:
-> Hi all,
-> 
-> Currently arm64 supports per-CPU IRQ stack, but softirqs are
-> still handled in the task context.
-> 
-> Since any call to local_bh_enable() at any level in the task's
-> call stack may trigger a softirq processing run, which could
-> potentially cause a task stack overflow if the combined stack
-> footprints exceed the stack's size. And we did encounter this
-> situation in the real environment:
-> 
-> Call trace:
->   dump_backtrace+0x0/0x1cc,
->   show_stack+0x14/0x1c,
->   dump_stack+0xc4/0xfc,
->   panic+0x150/0x2c8,
->   panic+0x0/0x2c8,
->   handle_bad_stack+0x11c/0x130,
->   __bad_stack+0x88/0x8c,
->   vsnprintf+0x2c/0x524,
->   vscnprintf+0x38/0x7c,
->   scnprintf+0x6c/0x90,
->   /* ... */
->   __do_softirq+0x1e0/0x370,
->   do_softirq+0x40/0x50,
->   __local_bh_enable_ip+0x8c/0x90,
->   _raw_spin_unlock_bh+0x1c/0x24,
->   /* ... */
->   process_one_work+0x1dc/0x3e4,
->   worker_thread+0x260/0x360,
->   kthread+0x118/0x128,
->   ret_from_fork+0x10/0x18,
-> 
-> So let's run these softirqs on the IRQ stack as well.
-> 
-> This series is based on next-20220707.
-> 
-> Comments and suggestions are welcome.
-> 
-> Thanks,
-> Qi
-> 
-> RFC: https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
-> 
-> Changelog in RFC -> v1:
->   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq stacks on PREEMPT_RT.")
-> 
-> Qi Zheng (2):
->    arm64: run softirqs on the per-CPU IRQ stack
->    arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
-> 
->   arch/arm64/Kconfig                 |  2 ++
->   arch/arm64/include/asm/exception.h |  4 +++-
->   arch/arm64/kernel/entry-common.c   | 30 ++++++++++++++++++++----------
->   arch/arm64/kernel/entry.S          |  6 ++++--
->   arch/arm64/kernel/irq.c            | 14 ++++++++++++++
->   5 files changed, 43 insertions(+), 13 deletions(-)
-> 
+In
 
-Hi all,
+https://lore.kernel.org/lkml/YqjZyP11O0yCMmiO@cmpxchg.org/
 
-Any other suggestions and comments for this patch set? If not, can
-this patch set be merged into some trees for testing? :)
+per my understanding, Johannes suggested to override the kernel default
+memory tiers with "abstract distance" via drivers implementing memory
+devices.  As you said in another email, that is related to [7/12] of the
+series.  And we can table it for future.
 
-Thanks,
-Qi
+And per my understanding, he also suggested to make memory tier IDs
+dynamic.  For example, after the "abstract distance" of a driver is
+overridden by users, the total number of memory tiers may be changed,
+and the memory tier ID of some nodes may be changed too.  This will make
+memory tier ID easier to be understood, but more unstable.  For example,
+this will make it harder to specify the per-memory-tier memory partition
+for a cgroup.
+
+> I will still keep the default tier IDs with a large range between them. That will allow
+> us to go back to tierID based demotion order if we can. That is much simpler than using tierID and rank
+> together. If we still want to go back to rank based approach the tierID value won't have much
+> meaning anyway.
+
+I agree to get rid of "rank".
+
+> Any feedback on patches 1 - 5, so that I can request Andrew to merge
+> them?
+
+I hope that we can discuss with Johannes firstly.  But it appears that
+he is busy recently.
+
+Best Regards,
+Huang, Ying

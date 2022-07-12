@@ -2,60 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F54572080
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D8A57207A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 18:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiGLQNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 12:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S233880AbiGLQMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 12:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiGLQNo (ORCPT
+        with ESMTP id S233077AbiGLQMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:13:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DCE2F3B0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 09:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657642423; x=1689178423;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c7Iz6RHMVKPXdsiWGS1iCkYOkcfyRfnOC1COzQRedNg=;
-  b=aEEao6grFvIxM3q5AZ1f9wVDw+0gOdvO/Nxagj8TnkFCUMW6ghO7lbWz
-   ed1B7D2khGzTBEgsQ0am7e+DjM4WnG9kUGaOkQegvEiHGqg8Yqbl/Ncva
-   nTmqsD58anBEJ2LfFkGd/QcfOe0gz+cjRyP18DdQuP4PAq/Ih4SHC2RDz
-   yBeLBpjHXqIxsajkQc3w1e2jbf0jxA1jLgDkrDVHMI9zjZD6CKaPu7a6r
-   Hr1MK0R8bhA54FRm1I5eVlwxaFdmdDuhyH6UE29CcxY7kOMw1LKVVcHIK
-   yWCoBTXWWDcmBbeB+HzFyCM6W9P/6DPr2W9srbVKTXoNdH6ESgYK70gv0
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="310600739"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="310600739"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 09:11:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="652975426"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jul 2022 09:11:23 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBITq-0002O7-Mb;
-        Tue, 12 Jul 2022 16:11:22 +0000
-Date:   Wed, 13 Jul 2022 00:10:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lama Kayal <lkayal@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: [saeed:mlx5-queue 40/68]
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable
- 'err' is uninitialized when used here
-Message-ID: <202207130003.SL9fRJbu-lkp@intel.com>
+        Tue, 12 Jul 2022 12:12:49 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1362BFAC6;
+        Tue, 12 Jul 2022 09:12:42 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 50C4840011;
+        Tue, 12 Jul 2022 16:12:38 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 18:12:36 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/6] media: dt-bindings: ov5693: document YAML binding
+Message-ID: <20220712161236.le6wvdhdbleoxeyf@uno.localdomain>
+References: <20220630134835.592521-1-tommaso.merciai@amarulasolutions.com>
+ <20220630134835.592521-6-tommaso.merciai@amarulasolutions.com>
+ <20220711093659.mf7i4uqtrejtfong@uno.localdomain>
+ <20220712152538.jh4ufxik7icllox6@uno.localdomain>
+ <47aa4fbc-9cf4-7ac3-2fb4-2135a7703212@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <47aa4fbc-9cf4-7ac3-2fb4-2135a7703212@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,87 +50,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git mlx5-queue
-head:   a78a596e3e1e4b584883b0a6f58d8f9c61943fb1
-commit: 4d121fe4ec12681d4948420ee172eb9d325df533 [40/68] net/mlx5e: Convert mlx5e_flow_steering member of mlx5e_priv to pointer
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220713/202207130003.SL9fRJbu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project badda4ac3c489a8c8cccdad1f74b9308c350a9e0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=4d121fe4ec12681d4948420ee172eb9d325df533
-        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
-        git fetch --no-tags saeed mlx5-queue
-        git checkout 4d121fe4ec12681d4948420ee172eb9d325df533
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
+Hi Krzysztof
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, Jul 12, 2022 at 05:32:45PM +0200, Krzysztof Kozlowski wrote:
+> On 12/07/2022 17:25, Jacopo Mondi wrote:
+> > Hi Krzysztof
+> >    could you have a look at the below question ?
+>
+> Sorry, there was a bunch of quoted text without end. When you reply
+> under quote, please remove the rest of the quote. None of us have a lot
+> of time to waste on scrolling emails...
+>
 
-All warnings (new ones prefixed by >>):
+I should have kept a counter of the times I've been told "please do
+not remove context, I'm so busy I do not have time to read the whole
+thread" and "please remove context, I'm so busy I cannot read the
+whole email".
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5015:57: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-                   mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
-                                                                         ^~~
-   drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.h:67:11: note: expanded from macro 'mlx5_core_err'
-                  ##__VA_ARGS__)
-                    ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5006:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
+After 5 years of kernel development I would now know what to do.
 
+> >
+> > If no need to resend from Tommaso I think the series could be
+> > collected for v5.20.
+> >
+> > On Mon, Jul 11, 2022 at 11:37:05AM +0200, Jacopo Mondi wrote:
+> >> Hi Tommaso, Krzysztof,
+> >>
+> >>    This has been reviewed by Krzysztof already, so I guess it's fine,
+> >> but let me ask anyway
+> >>
+> >> On Thu, Jun 30, 2022 at 03:48:34PM +0200, Tommaso Merciai wrote:
+> >>> Add documentation of device tree in YAML schema for the OV5693
+> >>> CMOS image sensor from Omnivision
+> >>>
+> >>> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>> ---
+> >>> Changes since v1:
+> >>>  - Fix allOf position as suggested by Krzysztof
+> >>>  - Remove port description as suggested by Krzysztof
+> >>>  - Fix EOF as suggested by Krzysztof
+> >>>
+> >>> Changes since v2:
+> >>>  - Fix commit body as suggested by Krzysztof
+> >>>
+> >>> Changes since v3:
+> >>>  - Add reviewed-by tags, suggested by Jacopo, Krzysztof
+> >>>
+> >>> Changes since v4:
+> >>>  - Remove wrong Sakari reviewed-by tag, suggested by Krzysztof, Sakari
+> >>>
+> >>>  .../bindings/media/i2c/ovti,ov5693.yaml       | 106 ++++++++++++++++++
+> >>>  MAINTAINERS                                   |   1 +
+> >>>  2 files changed, 107 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..b83c9fc04023
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+> >>> @@ -0,0 +1,106 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +# Copyright (c) 2022 Amarulasolutions
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/media/i2c/ovti,ov5693.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Omnivision OV5693 CMOS Sensor
+> >>> +
+> >>> +maintainers:
+> >>> +  - Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> >>> +
+> >>> +description: |
+> >>> +  The Omnivision OV5693 is a high performance, 1/4-inch, 5 megapixel, CMOS
+> >>> +  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
+> >>> +  sub-sampled, and windowed 10-bit MIPI images in various formats via the
+> >>> +  Serial Camera Control Bus (SCCB) interface.
+> >>> +
+> >>> +  OV5693 is controlled via I2C and two-wire Serial Camera Control Bus (SCCB).
+> >>> +  The sensor output is available via CSI-2 serial data output (up to 2-lane).
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: /schemas/media/video-interface-devices.yaml#
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    const: ovti,ov5693
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clocks:
+> >>> +    description:
+> >>> +      System input clock (aka XVCLK). From 6 to 27 MHz.
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  dovdd-supply:
+> >>> +    description:
+> >>> +      Digital I/O voltage supply, 1.8V.
+> >>> +
+> >>> +  avdd-supply:
+> >>> +    description:
+> >>> +      Analog voltage supply, 2.8V.
+> >>> +
+> >>> +  dvdd-supply:
+> >>> +    description:
+> >>> +      Digital core voltage supply, 1.2V.
+> >>> +
+> >>> +  reset-gpios:
+> >>> +    description:
+> >>> +      The phandle and specifier for the GPIO that controls sensor reset.
+> >>> +      This corresponds to the hardware pin XSHUTDN which is physically
+> >>> +      active low.
+> >>> +    maxItems: 1
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - clocks
+> >>> +  - dovdd-supply
+> >>> +  - avdd-supply
+> >>> +  - dvdd-supply
+> >>
+> >> Should supplies be made mandatory ? Sensors are often powered by fixed
+> >> rails. Do we want DTS writers to create "fixed-regulators" for all of
+> >> them ? The fact the regulator framework creates dummies if there's no
+> >> entry in .dts for a regulator makes me think it's fine to have them
+> >> optional, but I understand how Linux works should not be an indication
+> >> of how a bindings should look like.
+> >>
+> >
+> > This question ^ :)
+>
+> My generic answer for generic devices would be - if resource is
+> physically required (one need to connect the wire), I would say it
+> should be also required in the bindings. This also forces driver
+> developer to think about these resources and might result on
+> portable/better code.
+>
+> However your point is correct that it might create many "fake"
+> regulators, because pretty often these are fixed on the board and not
+> controllable. Therefore I am fine with not requiring them - to adjust
+> the bindings to real life cases.
 
-vim +/err +5015 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+Tommaso if you can re-send this one with the supplies dropped I think
+the series is still in time for being collected for this merge window
+(Sakari to confirm this).
 
-593cf33829adfd Rana Shahout    2016-04-20  5000  
-182570b26223de Feras Daoud     2018-10-02  5001  static int mlx5e_nic_init(struct mlx5_core_dev *mdev,
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5002  			  struct net_device *netdev)
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5003  {
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5004  	struct mlx5e_priv *priv = netdev_priv(netdev);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5005  	struct mlx5e_flow_steering *fs;
-547eede070eb98 Ilan Tayari     2017-04-18  5006  	int err;
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5007  
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5008  	mlx5e_build_nic_params(priv, &priv->xsk, netdev->mtu);
-84db6612471416 Roi Dayan       2020-09-16  5009  	mlx5e_vxlan_set_netdev_info(priv);
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5010  
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5011  	mlx5e_timestamp_init(priv);
-519a0bf5b20c37 Saeed Mahameed  2018-09-12  5012  
-4d121fe4ec1268 Lama Kayal      2022-01-09  5013  	fs = mlx5e_fs_init(priv->profile);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5014  	if (!fs) {
-68e66e1a69cd94 Moshe Shemesh   2021-10-02 @5015  		mlx5_core_err(mdev, "FS initialization failed, %d\n", err);
-4d121fe4ec1268 Lama Kayal      2022-01-09  5016  		return -ENOMEM;
-68e66e1a69cd94 Moshe Shemesh   2021-10-02  5017  	}
-4d121fe4ec1268 Lama Kayal      2022-01-09  5018  	priv->fs = fs;
-68e66e1a69cd94 Moshe Shemesh   2021-10-02  5019  
-547eede070eb98 Ilan Tayari     2017-04-18  5020  	err = mlx5e_ipsec_init(priv);
-547eede070eb98 Ilan Tayari     2017-04-18  5021  	if (err)
-547eede070eb98 Ilan Tayari     2017-04-18  5022  		mlx5_core_err(mdev, "IPSec initialization failed, %d\n", err);
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5023  
-943aa7bda37301 Leon Romanovsky 2022-04-04  5024  	err = mlx5e_ktls_init(priv);
-43585a41bd8949 Ilya Lesokhin   2018-04-30  5025  	if (err)
-43585a41bd8949 Ilya Lesokhin   2018-04-30  5026  		mlx5_core_err(mdev, "TLS initialization failed, %d\n", err);
-3ef14e463f6ed0 Saeed Mahameed  2020-02-25  5027  
-11af6a6d09e9a9 Aya Levin       2019-07-11  5028  	mlx5e_health_create_reporters(priv);
-182570b26223de Feras Daoud     2018-10-02  5029  	return 0;
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5030  }
-6bfd390ba54666 Hadar Hen Zion  2016-07-01  5031  
+Thanks
+  j
 
-:::::: The code at line 5015 was first introduced by commit
-:::::: 68e66e1a69cd94f934522348ab232af49863452a net/mlx5e: Fix vlan data lost during suspend flow
-
-:::::: TO: Moshe Shemesh <moshe@nvidia.com>
-:::::: CC: Saeed Mahameed <saeedm@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Best regards,
+> Krzysztof

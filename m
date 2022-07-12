@@ -2,162 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912E2571D70
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F0F571D73
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiGLO5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S233052AbiGLO5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiGLO5l (ORCPT
+        with ESMTP id S232586AbiGLO5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:57:41 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140041.outbound.protection.outlook.com [40.107.14.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E66E4F1AE;
-        Tue, 12 Jul 2022 07:57:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KtFp56Z/sTr93Gm9BO+kgCgV1f1Cjw4bHXSZZrkZKsBb5Z2Fvz8c02K9IeMpwsTQjdcVbH5dsB9pGud/Jfk+IoDYvqa1Ga9nJ0razsLuxLHgGujuYfeooGHe0SMTBZ8dgvUSuI3jWg06NUIQqRz6hKvk6oU4w1Qyb+y4QJbOC/Zq/a+9JxKJ8KQ+iwP554L5TZDxdg2AtliyCQ6HXnrZn52On0tzdhsU+bBqpNgKO8G4n0LctPK5p9X6lW8CNTvMEdi6Lba+z/nn+TGXd/M/UXU+shIwsKTvhjZ9GKnm3muY9USG+Alw42QLjEpI28RpIQeO6YxPThL+TOFngLPW7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DRphrDypqy005jsKDc2GJMfiKRNFJmIWNrTwlN3PKCQ=;
- b=S/T0i5idUSuEUOpqd7jvR67lQU7iLVqzTMwywltShiBzHbUEPcnsuCLs1XLSjd5Vtw4pUEn09YDMUn+AQdKuL64NHXVrj3yx5EORTASgbnbqkJZgJygBVf7wfpFsgJXDgC4p4x1WnQtqtkAWUefkI6ipP7u9mDdO6RLRKJBvTXDOQoFqIjUIAv6U4g2WbT4yFml3PM6UHxLRcSQw3VevfngZTtuv2UF0aRbbRrAl70OWb1t6/hJ5ETQyklOrAGlaykqyM2eT+vOEGtdeTbc3qkaTFPMkhBpkMWfzAZrKyEhW2WjMkBYZDd0hcpzs0tX8HAt4VT6YGmnMuOG0ouFk/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DRphrDypqy005jsKDc2GJMfiKRNFJmIWNrTwlN3PKCQ=;
- b=EMWhHOIGICGBJr+IICoFp1UCDgfPv7JZwstCYDrrXgRETHPyUYGglqnUTe9S6UuX0fEGNvwQ3rwoLb2/YyHPy7Rra8PqhEak2/Hp3bo6zqBqB2KxAlDhIDQGKK1dtQnS9Jjg4z4L0ZTq2+JiYFqAU1AWa3JzmR8mgW6yxDNT/+P/kLkDAGoLMdsN4M7n7eq3ru/PaUJtCLcPDnzuFMcoAi9Ja5HPPvH4jww80EOaH/VN8ihp2BzJZ+HeEqkUsMwoz9Bs1VbF91fdvpr8V5YWoXOBXm9cYOoD86QYfroVLydk+q7baKZR1SIGru+L3mClk31fF+5Ceh+JZuicQ2Je+w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by DB8PR03MB6268.eurprd03.prod.outlook.com (2603:10a6:10:133::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
- 2022 14:57:36 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 14:57:36 +0000
-Subject: Re: [RFC PATCH net-next 1/9] dt-bindings: net: Add lynx PCS
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220711160519.741990-1-sean.anderson@seco.com>
- <20220711160519.741990-2-sean.anderson@seco.com>
- <4584120c-8e6f-6943-1bd3-aa6942525eda@linaro.org>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <a6b2d031-8356-492b-8eef-a7cdfacaba51@seco.com>
-Date:   Tue, 12 Jul 2022 10:57:30 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <4584120c-8e6f-6943-1bd3-aa6942525eda@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0425.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::10) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Tue, 12 Jul 2022 10:57:51 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387D4F1AE;
+        Tue, 12 Jul 2022 07:57:49 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id u13so4963304iln.6;
+        Tue, 12 Jul 2022 07:57:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D9CzwXKTA7gScMXDGBi3YiyfwBmHDS9K2YoQ8GfmJds=;
+        b=Xvc78D3dp/VDHudSaq7kcdgrwSpeCUQRp0gbjYQmw/VSi27O5iLEVO7eUJiCM63bdf
+         JKPaJTGKz5F5IdvH8nzD/SRLUEyChEcllb7EBkDxatAVO7IIFQFa2ZCyQJJTgGRGyvjx
+         uRnOWpD+KD5byDkOUlMg+DZ0dQn8H+EpqUpbpAZDunt7qfncraJPV7NLNcwpi+9+Gm9k
+         U3tw3vfS55kI66hcvfDa+4D9lP5MLklyHM6PboG71tio2UWxv1E2D3x/d/irBnLKmUD2
+         KUkvKBdepXoQCjmnrhnGFi4E/R5dHK8C9qD9Ru1zYyvSFrPAPYhfvBo6jIsRiWzKIOSa
+         teCQ==
+X-Gm-Message-State: AJIora+zBAq4vhJ5VAGTu8dmDwyebMdEZxDchuP08m0i9JIPLRFz++m8
+        NZVqI+MjaSievJ4g53Be5Q==
+X-Google-Smtp-Source: AGRyM1vh+aOogTSLhe8igwtKsd1CvRwky5ggWI6vrAvQdlfZY/BrJEMIos/2AOR9m0rpgyLP5fxlgw==
+X-Received: by 2002:a05:6e02:1445:b0:2da:ad32:8300 with SMTP id p5-20020a056e02144500b002daad328300mr12299828ilo.280.1657637868823;
+        Tue, 12 Jul 2022 07:57:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r25-20020a02b119000000b0032e271a558csm4168235jah.168.2022.07.12.07.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 07:57:48 -0700 (PDT)
+Received: (nullmailer pid 1848087 invoked by uid 1000);
+        Tue, 12 Jul 2022 14:57:47 -0000
+Date:   Tue, 12 Jul 2022 08:57:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     pavel@ucw.cz, sven.schwermer@disruptive-technologies.com,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        marijn.suijten@somainline.org, bjorn.andersson@linaro.org,
+        andy.shevchenko@gmail.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: leds: Add binding for a multicolor
+ group of LEDs
+Message-ID: <20220712145747.GA1823936-robh@kernel.org>
+References: <20220615154918.521687-1-jjhiblot@traphandler.com>
+ <20220615154918.521687-4-jjhiblot@traphandler.com>
+ <20220627221257.GA3046298-robh@kernel.org>
+ <c84d0513-b89b-0eea-eeaf-68dc634bd7b0@traphandler.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2eece398-af00-4d55-4baf-08da6416db7e
-X-MS-TrafficTypeDiagnostic: DB8PR03MB6268:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: F0iWdn+BPlT83PZXGHl57jiZUeLUZaMX9+OA443xzkOKMSp0WFG9h92cK/EmwatcjPVagkWD5cP4gI5J/M2JVub2KO7waUc0QTzZbkz8AqAiF9JXMXNg0NnpemwCG/BJlPED0cLXsVXBSrZJIVYZkFkBWnc6QDPMRKxrYYSEA1KYVvz+qFeP8EtGqf/cf4BtMc/4FEoVP5AtKLOqXQSbiipLj0oSUjueMOj3QHlnk9n6MdcaMcFx/9o5Kh8XIpGglx3t+ei3vaVwoZZp6KTdi6Nu0VkxhQSVXpNqJtPk5JZqPH3oAYrlBjJKy+VQtnToJuvAlqFVBYW4HnyagIuAMsdM56rRBsVLLT377BTpBQiECXtkn9DB2lKH/xkx7SHL8/rjpdK32yBXCoUV1TS66FF94eD0L5YVx1VJB2sZobX21E2SGBwcb2K13RwLh2xgjuXhmJZzrdKNoU9a0E5D2AzZbhPw6SQM+93TWVh48ZCnBGjGahahvgdl6+GWeNFMkvub3NWa5l8hoYSp9lFO61NhWKEcPCAe6tiZguaYwQXgh6Cpnue/E/Xa1tByXYl7L2xkGHdIM1wa+3RBPOuHljQfWzadJFtiCPxeYDWxig4KXS0KN0hJoM4IReBvhwGK5IkDwpg7H9dZaTXz7EpWqlYzfekCP1OkqIEdDhw9mmDriulUt1s/wqqgI+G60ojuXH73lVGd15Y8IHDVgcb+JoZ3O173CMPS9ol9xVZVYqOHLdJzgMy4lw86f5w+atRXZS4IoIOZr9xnDSwKy0gY8FAxCd6YroPjP1oIvRa1w4eUTG72PJziQgLy8n+wEjN//oPYJGTNryW9fEdVDQgGQdf/J0uYIfNhDxZUh/YrtsCSZYTLdJuC3b147DMtfr9I
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(396003)(39850400004)(366004)(136003)(38100700002)(478600001)(52116002)(31686004)(86362001)(38350700002)(2906002)(6666004)(6486002)(31696002)(53546011)(6506007)(41300700001)(8676002)(8936002)(4326008)(66556008)(5660300002)(2616005)(44832011)(316002)(66946007)(66476007)(4744005)(7416002)(186003)(36756003)(26005)(54906003)(110136005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dEp5R0lEdytCdnZ6Si9UVzQ1VHN0NUpDZWZKeVpXR1BuT3BycnNoMUwvaWZT?=
- =?utf-8?B?TUhMWGxGQjZramdQMzBKZVQ1amY4WU9wZDI1MVphWExmVko5MmpYNWpmYkVW?=
- =?utf-8?B?NmIzWXl0NGIrRVBGU1gyQVg5eWxtVEN3UmgyczZaelBobGxEZER5NjZmRTZQ?=
- =?utf-8?B?ZFA3VHM4WVhCRFV4T1laemVnSXF3QXVjenlrK21yblhDVG1lZmxaS1BmdEhj?=
- =?utf-8?B?SXN3N0o1WFN1SU40RWJ6cnVjWWVwbG1kTTBSQnBVZEo3TjZZUFRaTlAwNCtY?=
- =?utf-8?B?cjZGQlYzNEhmcVh0RlhwR0V2WldzblIxVUxXeGhtRlhoaHJSQ2JSS2RlNnRn?=
- =?utf-8?B?c21ZV0ZmSlIxcVFHazgyWjY0TkgrbEJISm82ZnNUdjdHdkFoUG8wMk1uSDNr?=
- =?utf-8?B?enNKdVRLSDdCNDRMRHhWR3Rlb1ZJUGI0ZWM3VFI4Y05uOTVOeFFIRE8xaDNu?=
- =?utf-8?B?a0FLQUpjMm1XeVI5QmtHNkNBNFlyRDFIZmNTbW11YkVaUFRnK0J2bThQdkx0?=
- =?utf-8?B?STNHRGNXRVpzMmNjQUJGYnlBcXBEWFovSmtVbkcxWXlaY3BYOUx0bVdmUjlz?=
- =?utf-8?B?d0hBZ1FSa1NWRzFnV2JzaU5jNjAzNUN1RlRnSjlsT1V1NzZMK0cyRjBjUmlK?=
- =?utf-8?B?S1IydmtHRFZtRGpEVjVXVU8rUW81NUVrRWxDN2xHc1p4dkNQVnF1MzltMXNL?=
- =?utf-8?B?Q2JwSUlkOGhxcWVnMVN6TzUrYitDWFhqZmZ5QVQ0VFBzOXBDSzU1Tk1lQXlq?=
- =?utf-8?B?ZlIyUFJ2YVh0M2F1WWYweFA0eUJ5eVBISmNDQ05wemNkMUQ2Q0hVQTJqZFBx?=
- =?utf-8?B?MnovRVpRT2tsWGQ0a2U1cVpWMnhmUGNmc2prclA3OGVnYlpHRURsVnIyUUxT?=
- =?utf-8?B?UW5qR3M3QStXUGxBY2MvZldrUzJoWGdmVTVvZ0o4bXpuQktaRTVSVEV5bHlm?=
- =?utf-8?B?aXF3MGVCZU0vc2FNL2V5Y1poTWI0RUxpbGYwZDAyNDNWa1FxbktXa1hjcmNL?=
- =?utf-8?B?R2N2VWh6RGlQdHZ3S1pFSU9udUxzZGhIOXlseWlVdjMzRlJqZzJYL244amhU?=
- =?utf-8?B?R09ud1JXQ1RnMWswS1g4WmRiR1BLTWluTEFFYXBsMVpiVHYwL1VER0dWY0Er?=
- =?utf-8?B?eFBGOTFxQmROZEthbDc4MURrWDVzYm5SQmhhdlJFMU94MElKaVNXTWk4aExW?=
- =?utf-8?B?RG9rbjFVZ1RzZHhxNU5NMmE4WmlUTVRDR0FhcmcybkdTb2hKZi9sN0liMndi?=
- =?utf-8?B?cFZIS3FvSnFuRzRFcFMvMjRRMzNDanA0UjlIZnJIVEQzZFF4dWo5YkVLaldo?=
- =?utf-8?B?WVQvUHpYMTdTcldDSGNObnF2b0xvT0JXc01OMWlQOEtsQk9YdkE5RGVkcGFN?=
- =?utf-8?B?NG84eExPNjVmNGh0cGROUVBHZ011cnNHdnh3ZzNqQjdGTjd6bWVMc3JaUHRx?=
- =?utf-8?B?WVBwR0FjYWV4K3ZQa2xoclM4V1VVNmFKaHZuV2R6RW1HYW5jZVhJWEx4SzRV?=
- =?utf-8?B?OHZUK0p0NWtwV042SDdYdjNHazRoSjhaMHZXUmwwOHR3YlFpNEMraFQyRTdB?=
- =?utf-8?B?SkZwLzNwWmpuM2M2V2lhR3oxL3RLYnBnZWpRTStBdDY1OXZGMHh5d1Njd3Iz?=
- =?utf-8?B?ckp6NndlMVNSV3RsOXRGdHYrOEp3WTI0amxXZXVDK3FJeUlzSEh4dWNzWVZT?=
- =?utf-8?B?ZUFBR1lFK3hEQmJNdEVCQjA0SjZKNGZlUmJleW9MMTBYMDc0NFNhY1FJbTJ2?=
- =?utf-8?B?TCtkTjV6dE9JQW1aODEzUDFVVUtTMHdHNUJqVjVIS2psb1IzQTlmVGtEYm40?=
- =?utf-8?B?bm1MRkVrQ2ltQUx3bGRwSlFOcWt6RlRCVUFRZXVYeXRnM3I1Z3RtcWZIbmRu?=
- =?utf-8?B?bEVzWjZjaUp4M2RtZ0FtQmU5OUFKMXM1UUdTNE5VYktzazZtOXZpR08xM2NH?=
- =?utf-8?B?Z2JwTXpNNmw3NlNjMnUyYnlpQlNDelk5ejJtL25UZUY4UTBVTmtHZUVhdlF3?=
- =?utf-8?B?L0ZPVS9VZGRQbUl1ZllmOFI0anh4S0Jabzc0MFl4RXErOVVUNW8zbDY0V3FE?=
- =?utf-8?B?dHNsK1R3VTE2ODBjc1VlQzAyNlZiTVNudUYwejROVXVSQ3lxS2VCdWdUcldE?=
- =?utf-8?B?TFZnNmo1SDRmdjZUV0dxZDZzclpQQk9KbjRlQyt3WlRiWkhsS05LRG1OdE1y?=
- =?utf-8?B?cVE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2eece398-af00-4d55-4baf-08da6416db7e
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2022 14:57:36.3704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rScO5trfev5zDJR7ffKNf7lm+zE/Cj61yEOccjmkKo6STt75l2zC+8d0g8ZZNElNMwAWzBLIeZNjSvTg+ODzJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR03MB6268
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c84d0513-b89b-0eea-eeaf-68dc634bd7b0@traphandler.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 7/12/22 4:47 AM, Krzysztof Kozlowski wrote:
-> On 11/07/2022 18:05, Sean Anderson wrote:
->> This adds bindings for the PCS half of the Lynx 10g/28g SerDes drivers.
->> 
->> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->> ---
->> 
->>  .../devicetree/bindings/net/fsl,lynx-pcs.yaml | 47 +++++++++++++++++++
->>  1 file changed, 47 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
->> new file mode 100644
->> index 000000000000..49dee66ab679
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/fsl,lynx-pcs.yaml
+On Fri, Jul 01, 2022 at 11:33:22AM +0200, Jean-Jacques Hiblot wrote:
 > 
-> Shouldn't this be under net/pcs?
+> On 28/06/2022 00:12, Rob Herring wrote:
+> > On Wed, Jun 15, 2022 at 05:49:17PM +0200, Jean-Jacques Hiblot wrote:
+> > > This allows to group multiple monochromatic LEDs into a multicolor
+> > > LED, e.g. RGB LEDs.
+> > > 
+> > > Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> > > ---
+> > >   .../bindings/leds/leds-group-multicolor.yaml  | 94 +++++++++++++++++++
+> > >   1 file changed, 94 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > > new file mode 100644
+> > > index 000000000000..30a67985ae33
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > > @@ -0,0 +1,94 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/leds/leds-group-multicolor.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Multi-color LED built with monochromatic LEDs
+> > > +
+> > > +maintainers:
+> > > +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> > > +
+> > > +description: |
+> > > +  This driver combines several monochromatic LEDs into one multi-color
+> > > +  LED using the multicolor LED class.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: leds-group-multicolor
+> > > +
+> > > +  multi-led:
+> > > +    type: object
+> > > +
+> > > +    patternProperties:
+> > > +      "^led-[0-9a-z]+$":
+> > > +        type: object
+> > > +        $ref: common.yaml#
+> > > +
+> > > +        additionalProperties: false
+> > > +
+> > > +        properties:
+> > > +          leds:
+> > Not a standard property. What is the type?
+> That would be a reference to the node of a LED
+> > Really, just do a GPIO multi-color LED binding similar to the PWM one
+> > rather than adding this layer. I suppose you could combine LEDs from all
+> > different controllers, but that seems somewhat unlikely to me.
+> 
+> I'm not using gpio leds, rather leds driven by two TLC5925.
+> 
+> I agree that combining from different model of controller is unlikely.
+> However from 2 separate chips of the same model is not (ex: driving 5 RGB
+> LEDs with two 8-output chips)
+> 
+> In the case of the TLC5925, that is not really a problem because as long as
+> the chips are on the same CS, they are considered as a single entity by the
+> driver. But for I2C chips at least that would be a problem.
 
-There's no net/pcs, since this is the first of its kind. There's no net/phy
-either, so I didn't bother creating one.
+Okay.
 
---Sean
+I think the binding can be simplified a bit to just this:
+
+multi-led {
+    compatible = "leds-group-multicolor";
+    color = <LED_COLOR_ID_RGB>;
+    function = LED_FUNCTION_INDICATOR;
+    
+    leds = <&red_led>, <&green_led>, <&blue_led>;
+};
+
+The individual color should be defined in the parent LED node (e.g. 
+red_led). You can either look up the color or the index in 'leds' 
+defines the color.
+
+Also, I don't think 'max-brightness' here makes sense. That's a property 
+of the parent LED.
+
+Rob

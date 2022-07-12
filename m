@@ -2,376 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EE0571E6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D85571E77
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbiGLPKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S233902AbiGLPLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiGLPJm (ORCPT
+        with ESMTP id S234094AbiGLPLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:09:42 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DD4C8EAE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:03:11 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id y4so10478289edc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cDPLw2CbVZaDo90y78ZrmTMoMsL1dbAoIyq4iZ3QLaQ=;
-        b=FiMvDWaVxtWeQZSnjHcv8TpobwCSd16qkxExux5EJFHid+NP2AZecH6+9Njbi8tftt
-         Le02cSLfAh7FDtnY7S8oQKIofstWMtXlu0eqQnFq6eH0t5Grvg4UxQ8yqDUnkC9d+SaM
-         QKHjc5tQXyQoymLLRl2plvcppSc/TS4Z6laIl8mOcVQw72TRYE4okUaP1/W1tuZ3MV7P
-         +QRLmR6YUxcYHWV7jKd8eLs74QR9r/TB3tV6w4GEHjM07f8P5f8PhHcg/FKryFvb2xGU
-         6FTJqIQuv4BaRmf314YXpFmTLpcwxdVwhNJ+Av3p9YRZsa3OtFBqZUB6OzbxFsyBfc1L
-         RCRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cDPLw2CbVZaDo90y78ZrmTMoMsL1dbAoIyq4iZ3QLaQ=;
-        b=Nx1qs1c80eWr1Ub/+VpxfBc15lZq6wG+YEzPyqSUNFdYUACoMF5lvwTOZu3V+C7vSW
-         TEh+2NHUoFP8HELMHkFvm3dezAgNnihAwmy/x+8IWOfnJ6+E/RSgTQHIJIXXnXt49eho
-         E3S5SXFc96Rz0tFh7O+I/HtX+l8pRUPhCoNZPWgXNF2zx5WhOQkgD/raoidD87sc7rGT
-         QFXdoY7iHUWXseqA3RXAvc4fWA1rEZTNWwpUP025ZLI9JnfoAgr+rIA5TdF4bMgG37KE
-         wkqE9OJOkp1vO98ZSFSPHbWlvgNJdxSuHcK8ZFoPQKKjHgjzkJKbu/SdIBoU+tmmn6Na
-         F+cg==
-X-Gm-Message-State: AJIora+AJO4ocroMNm2Gk1yPv8lbvP4aQZ6fZ5KzbWIMdWM0WAfG+TBb
-        ZXTWIpGVFJKtT2zbpceG95F/p086BhrmakJ7ufRaZA==
-X-Google-Smtp-Source: AGRyM1sQ6a3UF0OjQq1pjj4JvllJzEy59o8mAN3Hz+12m9ylyQfskPBfyoOlEs8MKR84teFB3F51TwIdUescqfxv4so=
-X-Received: by 2002:a05:6402:3214:b0:43a:b36f:a0b4 with SMTP id
- g20-20020a056402321400b0043ab36fa0b4mr28655679eda.122.1657638189876; Tue, 12
- Jul 2022 08:03:09 -0700 (PDT)
+        Tue, 12 Jul 2022 11:11:13 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF39CB47F;
+        Tue, 12 Jul 2022 08:04:54 -0700 (PDT)
+X-UUID: 2dd2c6e62d9d440680d7796eac713480-20220712
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:87bbe036-dda0-4fea-a66d-e41fb863bdde,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:90
+X-CID-INFO: VERSION:1.1.8,REQID:87bbe036-dda0-4fea-a66d-e41fb863bdde,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:90
+X-CID-META: VersionHash:0f94e32,CLOUDID:11ce1664-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:c2c42f8f366f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2dd2c6e62d9d440680d7796eac713480-20220712
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 3148393; Tue, 12 Jul 2022 23:04:45 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 12 Jul 2022 23:04:44 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Jul 2022 23:04:43 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH v9 0/8] ASoC: mediatek: Add support for MT8186 SoC
+Date:   Tue, 12 Jul 2022 23:04:34 +0800
+Message-ID: <20220712150442.32504-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220606115555.41103-1-yangyicong@hisilicon.com>
- <20220606115555.41103-8-yangyicong@hisilicon.com> <20220706175751.GA2546265@p14s>
- <75afb15e-9fc2-d14a-c72d-dc33589cfc0e@huawei.com> <20220707162015.GA2609651@p14s>
- <0569c6e2-48b2-9d9e-a8cc-971e41d78365@huawei.com>
-In-Reply-To: <0569c6e2-48b2-9d9e-a8cc-971e41d78365@huawei.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 12 Jul 2022 09:02:57 -0600
-Message-ID: <CANLsYkx+NxOfrcBfpkor7ZgTTD35Kiy_qMP4AikKQNRzn5wvzg@mail.gmail.com>
-Subject: Re: [PATCH v9 7/8] docs: trace: Add HiSilicon PTT device driver documentation
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com, gregkh@linuxfoundation.org,
-        alexander.shishkin@linux.intel.com, leo.yan@linaro.org,
-        james.clark@arm.com, will@kernel.org, robin.murphy@arm.com,
-        acme@kernel.org, jonathan.cameron@huawei.com,
-        john.garry@huawei.com, helgaas@kernel.org,
-        lorenzo.pieralisi@arm.com, suzuki.poulose@arm.com,
-        mark.rutland@arm.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org,
-        prime.zeng@huawei.com, liuqi115@huawei.com,
-        zhangshaokun@hisilicon.com, linuxarm@huawei.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 06:38, Yicong Yang <yangyicong@huawei.com> wrote:
->
-> On 2022/7/8 0:20, Mathieu Poirier wrote:
-> > On Thu, Jul 07, 2022 at 07:43:21PM +0800, Yicong Yang wrote:
-> >> On 2022/7/7 1:57, Mathieu Poirier wrote:
-> >>> Hi,
-> >>>
-> >>> I have started looking at this set.
-> >>
-> >> Thanks!
-> >>
-> >>>
-> >>> On Mon, Jun 06, 2022 at 07:55:54PM +0800, Yicong Yang wrote:
-> >>>> Document the introduction and usage of HiSilicon PTT device driver.
-> >>>>
-> >>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> >>>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> >>>> ---
-> >>>>  Documentation/trace/hisi-ptt.rst | 307 +++++++++++++++++++++++++++++++
-> >>>>  Documentation/trace/index.rst    |   1 +
-> >>>
-> >>> The "get_maintainer" script clearly indicates that Jonathan Corbet maintains the
-> >>> Documentation directory and yet he is not CC'ed on this patch, nor is the
-> >>> linux-doc mainling list.  As such, it would not be possible to merge this
-> >>> patchset.
-> >>>
-> >>
-> >> sorry for missing. +cc'ed.
-> >>
-> >>>>  2 files changed, 308 insertions(+)
-> >>>>  create mode 100644 Documentation/trace/hisi-ptt.rst
-> >>>>
-> >>>> diff --git a/Documentation/trace/hisi-ptt.rst b/Documentation/trace/hisi-ptt.rst
-> >>>> new file mode 100644
-> >>>> index 000000000000..0a3112244d40
-> >>>> --- /dev/null
-> >>>> +++ b/Documentation/trace/hisi-ptt.rst
-> >>>> @@ -0,0 +1,307 @@
-> >>>> +.. SPDX-License-Identifier: GPL-2.0
-> >>>> +
-> >>>> +======================================
-> >>>> +HiSilicon PCIe Tune and Trace device
-> >>>> +======================================
-> >>>> +
-> >>>> +Introduction
-> >>>> +============
-> >>>> +
-> >>>> +HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex
-> >>>> +integrated Endpoint (RCiEP) device, providing the capability
-> >>>> +to dynamically monitor and tune the PCIe link's events (tune),
-> >>>> +and trace the TLP headers (trace). The two functions are independent,
-> >>>> +but is recommended to use them together to analyze and enhance the
-> >>>> +PCIe link's performance.
-> >>>> +
-> >>>> +On Kunpeng 930 SoC, the PCIe Root Complex is composed of several
-> >>>> +PCIe cores. Each PCIe core includes several Root Ports and a PTT
-> >>>> +RCiEP, like below. The PTT device is capable of tuning and
-> >>>> +tracing the links of the PCIe core.
-> >>>> +::
-> >>>> +
-> >>>> +          +--------------Core 0-------+
-> >>>> +          |       |       [   PTT   ] |
-> >>>> +          |       |       [Root Port]---[Endpoint]
-> >>>> +          |       |       [Root Port]---[Endpoint]
-> >>>> +          |       |       [Root Port]---[Endpoint]
-> >>>> +    Root Complex  |------Core 1-------+
-> >>>> +          |       |       [   PTT   ] |
-> >>>> +          |       |       [Root Port]---[ Switch ]---[Endpoint]
-> >>>> +          |       |       [Root Port]---[Endpoint] `-[Endpoint]
-> >>>> +          |       |       [Root Port]---[Endpoint]
-> >>>> +          +---------------------------+
-> >>>> +
-> >>>> +The PTT device driver registers one PMU device for each PTT device.
-> >>>> +The name of each PTT device is composed of 'hisi_ptt' prefix with
-> >>>> +the id of the SICL and the Core where it locates. The Kunpeng 930
-> >>>> +SoC encapsulates multiple CPU dies (SCCL, Super CPU Cluster) and
-> >>>> +IO dies (SICL, Super I/O Cluster), where there's one PCIe Root
-> >>>> +Complex for each SICL.
-> >>>> +::
-> >>>> +
-> >>>> +    /sys/devices/hisi_ptt<sicl_id>_<core_id>
-> >>>
-> >>> All entries added to sysfs should have corresponding documentation.  See [1] and
-> >>> [2] for details and [3] for an example.
-> >>>
-> >>> [1]. https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/README
-> >>> [2]. https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing
-> >>> [3]. https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
-> >>>
-> >>
-> >> ok. I'll add a patch for ABI description. Thanks for the reference.
-> >>
-> >>>> +
-> >>>> +Tune
-> >>>> +====
-> >>>> +
-> >>>> +PTT tune is designed for monitoring and adjusting PCIe link parameters (events).
-> >>>> +Currently we support events in 4 classes. The scope of the events
-> >>>> +covers the PCIe core to which the PTT device belongs.
-> >>>> +
-> >>>> +Each event is presented as a file under $(PTT PMU dir)/tune, and
-> >>>> +a simple open/read/write/close cycle will be used to tune the event.
-> >>>> +::
-> >>>> +
-> >>>> +    $ cd /sys/devices/hisi_ptt<sicl_id>_<core_id>/tune
-> >>>> +    $ ls
-> >>>> +    qos_tx_cpl    qos_tx_np    qos_tx_p
-> >>>> +    tx_path_rx_req_alloc_buf_level
-> >>>> +    tx_path_tx_req_alloc_buf_level
-> >>>
-> >>> These look overly long... How about watermark_rx and watermark_tx?
-> >>>
-> >>
-> >> These are gotten from the hardware manual and abbreviated. These events are highly connected
-> >> to the hardware desgin so I think it's better to keep consistence. The watermark_{rx, tx} will
-> >> become ambigious when we add more events for Rx path or other Tx path events.
-> >>
-> >> The event code is composed of two parts. First part (tx_path) describes which path it belongs to
-> >> and second part describes the function ({rx,tx}_req_alloc_buf_level). We called the link path
-> >> between CPU and PCIe RC as Rx path and the path between PCIe RC to the PCIe link as Tx path.
-> >> So we need to have tx_path prefix for the Tx path and {rx, tx}_req_alloc_buf_level for the
-> >> requested watermark of {inbound, outbound} buffer allocation. Indeed we have other Tx path
-> >> buffer events which are not exported in this series.
-> >>
-> >
-> > I will not be maintaining nor using this driver so the choice is entirely yours.
-> > That being said the end result is the same - those names are, in my opinion, too
-> > long.
-> >
-> >>
-> >>>> +    $ cat qos_tx_dp
-> >>>> +    1
-> >>>> +    $ echo 2 > qos_tx_dp
-> >>>> +    $ cat qos_tx_dp
-> >>>> +    2
-> >>>> +
-> >>>> +Current value (numerical value) of the event can be simply read
-> >>>> +from the file, and the desired value written to the file to tune.
-> >>>> +
-> >>>> +1. Tx path QoS control
-> >>>> +------------------------
-> >>>> +
-> >>>> +The following files are provided to tune the QoS of the tx path of
-> >>>> +the PCIe core.
-> >>>> +
-> >>>> +- qos_tx_cpl: weight of Tx completion TLPs
-> >>>> +- qos_tx_np: weight of Tx non-posted TLPs
-> >>>> +- qos_tx_p: weight of Tx posted TLPs
-> >>>> +
-> >>>> +The weight influences the proportion of certain packets on the PCIe link.
-> >>>> +For example, for the storage scenario, increase the proportion
-> >>>> +of the completion packets on the link to enhance the performance as
-> >>>> +more completions are consumed.
-> >>>> +
-> >>>> +The available tune data of these events is [0, 1, 2].
-> >>>> +Writing a negative value will return an error, and out of range
-> >>>> +values will be converted to 2. Note that the event value just
-> >>>> +indicates a probable level, but is not precise.
-> >>>> +
-> >>>> +2. Tx path buffer control
-> >>>> +-------------------------
-> >>>> +
-> >>>> +Following files are provided to tune the buffer of tx path of the PCIe core.
-> >>>> +
-> >>>> +- tx_path_rx_req_alloc_buf_level: watermark of Rx requested
-> >>>> +- tx_path_tx_req_alloc_buf_level: watermark of Tx requested
-> >>>> +
-> >>>> +These events influence the watermark of the buffer allocated for each
-> >>>> +type. Rx means the inbound while Tx means outbound. The packets will
-> >>>> +be stored in the buffer first and then transmitted either when the
-> >>>> +watermark reached or when timed out. For a busy direction, you should
-> >>>> +increase the related buffer watermark to avoid frequently posting and
-> >>>> +thus enhance the performance. In most cases just keep the default value.
-> >>>> +
-> >>>> +The available tune data of above events is [0, 1, 2].
-> >>>> +Writing a negative value will return an error, and out of range
-> >>>> +values will be converted to 2. Note that the event value just
-> >>>> +indicates a probable level, but is not precise.
-> >>>
-> >>> This is useful documentation but it also should be found in the ABI
-> >>> documentation referred to above.
-> >>>
-> >>>> +
-> >>>> +Trace
-> >>>> +=====
-> >>>> +
-> >>>> +PTT trace is designed for dumping the TLP headers to the memory, which
-> >>>> +can be used to analyze the transactions and usage condition of the PCIe
-> >>>> +Link. You can choose to filter the traced headers by either requester ID,
-> >>>> +or those downstream of a set of Root Ports on the same core of the PTT
-> >>>> +device. It's also supported to trace the headers of certain type and of
-> >>>> +certain direction.
-> >>>> +
-> >>>> +You can use the perf command `perf record` to set the parameters, start
-> >>>> +trace and get the data. It's also supported to decode the trace
-> >>>> +data with `perf report`. The control parameters for trace is inputted
-> >>>> +as event code for each events, which will be further illustrated later.
-> >>>> +An example usage is like
-> >>>> +::
-> >>>> +
-> >>>> +    $ perf record -e hisi_ptt0_2/filter=0x80001,type=1,direction=1,
-> >>>> +      format=1/ -- sleep 5
-> >>>> +
-> >>>> +This will trace the TLP headers downstream root port 0000:00:10.1 (event
-> >>>> +code for event 'filter' is 0x80001) with type of posted TLP requests,
-> >>>> +direction of inbound and traced data format of 8DW.
-> >>>> +
-> >>>> +1. filter
-> >>>> +---------
-> >>>> +
-> >>>> +The TLP headers to trace can be filtered by the Root Ports or the requester
-> >>>> +ID of the endpoints, which are located on the same core of the PTT device.
-> >>>> +You can set the filter by specifying the `filter` parameter which is required
-> >>>> +to start the trace. The parameter value is 20 bit. The supported filters and
-> >>>> +related values are outputted through `available_root_port_filters` and
-> >>>> +`available_requester_filters` sysfs attributes for Root Ports and Requesters
-> >>>> +respectively.
-> >>>> +::
-> >>>> +
-> >>>> +    $ cat available_root_port_filters
-> >>>> +    0000:00:10.0  0x80001
-> >>>> +    0000:00:11.0  0x80004
-> >>>> +    $ cat available_requester_filters
-> >>>> +    0000:01:00.0  0x00100
-> >>>> +    0000:01:00.1  0x00101
-> >>>
-> >>> If I remember correctly, one of the rule for sysfs is one line per entry.
-> >>>
-> >>
-> >> Since one PTT devices may support several Root Ports and Endpoints on its core, I find no better
-> >> way to make this information convenient and easy to use for the users to collect. So maybe this
-> >> canbe an exception and there seems to have some limited examples like
-> >> /sys/devices/system/node/node<N>/{meminfo, vmstat, meminfo}.
-> >
-> > You can either find a better solution or argue the matter with Greg.  I suggest
-> > to introduce new directories, i.e "root_port_filters" and "requested_filters"
-> > and under those have entries like "port0", "port1" and so on.
-> >
->
-> Thanks for the suggestion and it does make sense to me. But I've tried it and met some problems.
-> I intended to create two attribute groups for each kind of filter and create attribute for each
-> available filter. like:
->
-> $ ls root_port_filters    # each filter exists as an sysfs attribute
-> 0000:00:10.0 0000:00:11.0
-> $ cat root_port_filters/0000:00:10.0    # read the attribute get the filter value
-> 0x80001
->
-> In pratice we may have no filter for certain types, for example no endpoint found on this PCIe
-> core then we'll have no filter attributes under requester_filters directory. Or if endpoint
-> devices are hot removed or manually removed through sysfs by the user, the filter attributes
-> will be created/destroyed dynamically (will support following this series, an implementation
-> will be like in [1]) which may make the directory empty. But sysfs won't allow to have an
-> empty attribute group, restricted in [2].
->
+This series of patches adds support for Mediatek AFE of MT8186 Soc.
+Patches are based on broonie tree "for-next" branch.
 
-My comment was not meant to provide a solution but to highlight
-alternative options.  There are a lot of sysfs examples in the kernel
-for you to look at.
+Changes since v8:
+  - Remove unnecessary comments and blank line.
+  - Use devm_add_action_or_reset to ease error handling when dev probe.
+  - Remove .remove callback in plaform driver.
 
-> [1] https://lore.kernel.org/lkml/20220407125841.3678-4-yangyicong@hisilicon.com/
-> [2] https://github.com/torvalds/linux/blob/5cf3bb0d3a2d0de94f3f551f0e4211068818aabf/fs/sysfs/group.c#L121
->
-> >>
-> >>>> +
-> >>>> +Note that multiple Root Ports can be specified at one time, but only
-> >>>> +one Endpoint function can be specified in one trace. Specifying both
-> >>>> +Root Port and function at the same time is not supported.
-> >>>> +
-> >>>> +If no filter is available, reading the related filter sysfs attribute
-> >>>> +will get an empty string.
-> >>>> +::
-> >>>> +
-> >>>> +    $ cat available_root_port_filters
-> >>>> +
-> >>>> +    $ cat available_requester_filters
-> >>>
-> >>> Those too look overly long, and where to find them is not documented.  As such
-> >>> users have to guest that it must be somewhere under
-> >>> /sys/devices/hisi_ptt<sicl_id>_<core_id>/.
-> >>>
-> >>
-> >> Since Root Port and Requester are PCIe terminologies so it's better to have them
-> >> embedded to make it clear. Maybe 'available' can be removed.
-> >>
-> >> Will have all these sysfs attributes documented.
-> >>
-> >>> More comments tomorrow.
-> >>>
-> >>
-> >> Thanks,
-> >> Yicong
-> > .
-> >
+Changes since v7:
+  - Optimize the code logic, such as the return value and position of a
+    function.
+  - Use devm_pm_runtime_enable() instead of pm_runtime_enable().
+  - Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync().
+
+Changes since v6:
+  - The Makefile and Kconfig updates are moved into the driver patches so that can
+    keep independence of each patch.
+
+Changes since v5:
+  - fix build error about function snd_soc_card_jack_new that modified by:
+    Link: https://lore.kernel.org/r/20220408041114.6024-1-akihiko.odaki@gmail.com
+  - some have been accepted, details are in the link below:
+    Link: https://lore.kernel.org/all/165459931885.399031.2621579592368573898.b4-ty@kernel.org/
+
+Changes since v4:
+  - [v5 07/20]
+    - remove unsusd controls
+  - [v5 09/20]
+    - correct indent error
+  - [v5 10/20]
+  - [v5 13/20]
+  - [v5 14/20]
+    - fix the return value if the value is different from the previous
+      value in mixer controls
+  - [v5 17/20]
+  - [v5 19/20]
+    - correct the compatible name with '_' instead of '-'
+  - [v5 18/20]
+  - [v5 20/20]
+    - correct the yaml after 'pip3 install dtschema --upgrade'
+
+Changes since v3:
+  - [v4 09/18]
+    - remove DEBUG_COEFF debugging code
+  - [v4 10/18]
+    - simplify the logic of the code
+  - [v4 13/18]
+    - split out the MT6366 bits into mt8186-mt6366-commom.c
+    - fix build error of "error: 'struct dev_pm_info' has no member named 'runtime_error'"
+    - fix bug of adda dai driver
+    - add route for pcm interface channel 2.
+  - [v4 15/18]
+  - [v4 17/18]
+    - commonize the configuration of the codec
+    - move MT6366 common bits into mt8186-mt6366-common.c
+
+Changes since v2:
+  - add a new compatible string "mediatek,mt6366-sound"
+  - modify the log level for simplicity
+  - use dev_err_probe(...) instead of dev_err(...) in dev probe()
+  - optimized the logic of some code
+  - use BIT() and GENMASK() macros to descript the registers
+
+  Thanks for AngeloGioacchino's careful reviews.
+
+Changes since v1:
+  [v2 01/17]
+    - add a new ID to the existing mt6358 codec driver
+  [v2 03/17]
+    - modify log level in DAPM events
+    - use standard numeric control with name ending in Switch
+    - return 1 when the value changed in mixer control's .get callback
+  [v2 05/17]
+    - ending in Switch to the standard on/off controls
+    - change to "HW Gain 1 Volume" and "HW Gain 2 Volume"
+  [v2 09/17]
+    - return an error in the default case rather than just picking one of
+      the behaviours when do .set_fmt
+    - use the new defines that are _PROVIDER_MASK, _DAIFMT_CBP_CFP and
+      _DAIFMT_CBC_CFC
+  [v2 10/17]
+  [v2 11/17]
+    - the clock and gpio are aplit out into separate  patches
+
+  The source file's GPL comment use c++ style, and the header fils's GPL
+  comment use c style. We have added "Switch" after the names of all the
+  controls that just are simple on/off.
+
+Jiaxin Yu (8):
+  dt-bindings: mediatek: mt6358: add new compatible for using mt6366
+  ASoC: mediatek: mt8186: add platform driver
+  ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
+  dt-bindings: mediatek: mt8186: add audio afe document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, da7219 and
+    max98357
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357
+    document
+  ASoC: mediatek: mt8186: add machine driver with mt6366, rt1019 and
+    rt5682s
+  dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s
+    document
+
+ .../devicetree/bindings/sound/mt6358.txt      |    4 +-
+ .../bindings/sound/mt8186-afe-pcm.yaml        |  175 +
+ .../sound/mt8186-mt6366-da7219-max98357.yaml  |   75 +
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |   75 +
+ sound/soc/mediatek/Kconfig                    |   44 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/mt8186/Makefile            |   22 +
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |    3 +-
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |    2 +-
+ sound/soc/mediatek/mt8186/mt8186-afe-common.h |  235 ++
+ .../soc/mediatek/mt8186/mt8186-afe-control.c  |  255 ++
+ sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3000 +++++++++++++++++
+ .../mediatek/mt8186/mt8186-mt6366-common.c    |   57 +
+ .../mediatek/mt8186/mt8186-mt6366-common.h    |   17 +
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    | 1002 ++++++
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  978 ++++++
+ 16 files changed, 5942 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+ create mode 100644 sound/soc/mediatek/mt8186/Makefile
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-control.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
+
+-- 
+2.18.0
+

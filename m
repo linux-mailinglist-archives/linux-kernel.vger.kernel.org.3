@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D6A572497
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7545723EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiGLTDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S234134AbiGLSzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbiGLTCF (ORCPT
+        with ESMTP id S234189AbiGLSy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:02:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE4660C6;
-        Tue, 12 Jul 2022 11:49:18 -0700 (PDT)
+        Tue, 12 Jul 2022 14:54:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FACE95E6;
+        Tue, 12 Jul 2022 11:45:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25DF361123;
-        Tue, 12 Jul 2022 18:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F353C3411C;
-        Tue, 12 Jul 2022 18:49:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52EDBB81BB9;
+        Tue, 12 Jul 2022 18:45:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B269AC3411E;
+        Tue, 12 Jul 2022 18:45:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651757;
-        bh=+24eNmj7JBW2Luyx+OMFPP6OZKm+EOiinyIhDs6ctw8=;
+        s=korg; t=1657651553;
+        bh=U/+eLCYI4YDKjT6BcIXjKCgdRxC0oXdMaxjk/f6TANk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rdgOqtGQoEEVcL/eB/6JLQsv4BxQtX7ej1hqTogaM7ezqr8SJWjDRWesnbJzZujj4
-         n73ZqTkbPzZJUm6bGH1dytCPtGysOG1uoQPkFDK6m77VNSCfy0gX/uM7cTDimnJnBP
-         WacG3gRxeo/BHWZUYNDmQ7FBBHOBGnkXtpkVZaqw=
+        b=j7s7M7OABmPu4uzyUCB29OjRS8xmZHvzmtFhm4XDD9dxWnJAnq9a389dLall06rGX
+         uG4uuX5sm6hcy/9yD8KjnDLlKhiwWP/bpu/eqlS8yodpbayS/vdmfl0hwFhuOoPN0S
+         cAF0FjckdesNEXvOxRyPL1upAiGdkDyg8aFeywig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.15 16/78] x86/alternative: Handle Jcc __x86_indirect_thunk_\reg
-Date:   Tue, 12 Jul 2022 20:38:46 +0200
-Message-Id: <20220712183239.505639145@linuxfoundation.org>
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 081/130] x86/retpoline: Swizzle retpoline thunk
+Date:   Tue, 12 Jul 2022 20:38:47 +0200
+Message-Id: <20220712183250.196932918@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-References: <20220712183238.844813653@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,94 +60,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-commit 2f0cbb2a8e5bbf101e9de118fc0eb168111a5e1e upstream.
+commit 00e1533325fd1fb5459229fe37f235462649f668 upstream.
 
-Handle the rare cases where the compiler (clang) does an indirect
-conditional tail-call using:
-
-  Jcc __x86_indirect_thunk_\reg
-
-For the !RETPOLINE case this can be rewritten to fit the original (6
-byte) instruction like:
-
-  Jncc.d8	1f
-  JMP		*%\reg
-  NOP
-1:
+Put the actual retpoline thunk as the original code so that it can
+become more complicated. Specifically, it allows RET to be a JMP,
+which can't be .altinstr_replacement since that doesn't do relocations
+(except for the very first instruction).
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Borislav Petkov <bp@suse.de>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Tested-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/r/20211026120310.296470217@infradead.org
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/alternative.c |   40 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 36 insertions(+), 4 deletions(-)
+ arch/x86/lib/retpoline.S |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -393,7 +393,8 @@ static int emit_indirect(int op, int reg
- static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
- {
- 	retpoline_thunk_t *target;
--	int reg, i = 0;
-+	int reg, ret, i = 0;
-+	u8 op, cc;
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -32,9 +32,9 @@
+ SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
+ 	UNWIND_HINT_EMPTY
  
- 	target = addr + insn->length + insn->immediate.value;
- 	reg = target - __x86_indirect_thunk_array;
-@@ -407,9 +408,36 @@ static int patch_retpoline(void *addr, s
- 	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE))
- 		return -1;
+-	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+-		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE
++	ALTERNATIVE_2 __stringify(RETPOLINE \reg), \
++		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_LFENCE, \
++		      __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), ALT_NOT(X86_FEATURE_RETPOLINE)
  
--	i = emit_indirect(insn->opcode.bytes[0], reg, bytes);
--	if (i < 0)
--		return i;
-+	op = insn->opcode.bytes[0];
-+
-+	/*
-+	 * Convert:
-+	 *
-+	 *   Jcc.d32 __x86_indirect_thunk_\reg
-+	 *
-+	 * into:
-+	 *
-+	 *   Jncc.d8 1f
-+	 *   JMP *%\reg
-+	 *   NOP
-+	 * 1:
-+	 */
-+	/* Jcc.d32 second opcode byte is in the range: 0x80-0x8f */
-+	if (op == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80) {
-+		cc = insn->opcode.bytes[1] & 0xf;
-+		cc ^= 1; /* invert condition */
-+
-+		bytes[i++] = 0x70 + cc;        /* Jcc.d8 */
-+		bytes[i++] = insn->length - 2; /* sizeof(Jcc.d8) == 2 */
-+
-+		/* Continue as if: JMP.d32 __x86_indirect_thunk_\reg */
-+		op = JMP32_INSN_OPCODE;
-+	}
-+
-+	ret = emit_indirect(op, reg, bytes + i);
-+	if (ret < 0)
-+		return ret;
-+	i += ret;
+ .endm
  
- 	for (; i < insn->length;)
- 		bytes[i++] = BYTES_NOP1;
-@@ -443,6 +471,10 @@ void __init_or_module noinline apply_ret
- 		case JMP32_INSN_OPCODE:
- 			break;
- 
-+		case 0x0f: /* escape */
-+			if (op2 >= 0x80 && op2 <= 0x8f)
-+				break;
-+			fallthrough;
- 		default:
- 			WARN_ON_ONCE(1);
- 			continue;
 
 

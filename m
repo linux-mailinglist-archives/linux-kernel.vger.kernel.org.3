@@ -2,172 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FFD571626
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA80571629
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiGLJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S232281AbiGLJwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiGLJuv (ORCPT
+        with ESMTP id S229621AbiGLJwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:50:51 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE07AA2EC7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:50:49 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d12so13010866lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FD4c+Hsdhye940ZDEYK0eytq3nanfYvmmstMbkyO/KM=;
-        b=W5RHqZowOwhOPQ8/RfQ5YqvUbKKcnHpt1kN2nGQenjFAB7MhIu6m6uTfPb5Yhtb9nr
-         2Ssyeg8syQRdCjW7HIPgT93IEwq0G1hrOYIcnhTCPeDoP1ca63AJAhCwoifaGxPWjfhd
-         Ymxri9PDqT2yw67XsU7ZkgNGq4X7OgU/3ehn31khxdpwvyzMskIHAvFf3sMHE+bHxdo3
-         MHOZs/U8BoXD0aF/3yCQH+1zll75Hk+j7zYlbjxsBM3H3LxauvjviWbrAaUbah1kuoyD
-         Qm73s8514RSBUhflv1snfQ6184+nXJmHQ0CYIsbPxzBaMMd/ErBDJY5/FMjGO2SwU60y
-         bOcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FD4c+Hsdhye940ZDEYK0eytq3nanfYvmmstMbkyO/KM=;
-        b=d8VdoMMEPXX0Y6Uk3cJU21ufiBuJ8u8iWJVplF5As8jO7M6YimkNImw2hHwRF/88jh
-         fZEjhWch9NurVtFTFJiU9R2dEUTa2WE8Wp4aQSll0mM64lU7g9F/B7g/0pY0X6w8YmOr
-         IkBae45F9rX8prK1ksGs8ZLHbkC4U3MOVDME/jlkZAkj2B9CpYellz4MXruaAH3Bt5I+
-         5IhIU1eLstZIXiDZSAYZMBOf2E5QlnOyy5KxS6UKBI7hkxb/kkqLvZ7z4JMGQ9++gzs4
-         DqMsVLNovuUGJ+P+dl8wNZ+J7FuDa+SzkZcID2wj93JLavQEh6rCgZfQ1lqLHwfvSMA7
-         oZfw==
-X-Gm-Message-State: AJIora9EQ2Xu/gz9H8h2FUZNR13thVcbZnv0UjgIt8H13DUTTF9TBR11
-        OMeWpgNUMP+oLPLXcfiY5DUJHA==
-X-Google-Smtp-Source: AGRyM1t3ZG+j0jDG56+HTVYdVe2y58DlRXCAYBUR6gEBaEULs+nKR0Ll1WKpTXs0nFfxRDUTyAcA1A==
-X-Received: by 2002:a19:6b07:0:b0:489:c785:8dfc with SMTP id d7-20020a196b07000000b00489c7858dfcmr11265554lfa.268.1657619448133;
-        Tue, 12 Jul 2022 02:50:48 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056512348400b004795bcfe953sm2080436lfr.214.2022.07.12.02.50.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 02:50:47 -0700 (PDT)
-Message-ID: <95d12b72-be9d-5503-c4ea-801303bb7776@linaro.org>
-Date:   Tue, 12 Jul 2022 11:50:45 +0200
+        Tue, 12 Jul 2022 05:52:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8A3AA774;
+        Tue, 12 Jul 2022 02:52:12 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C98ZK6010031;
+        Tue, 12 Jul 2022 09:51:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kZLspZUt8Hz9W5xhzmxhpaQgSSao7M34bUWOKxpjPXo=;
+ b=lY3N003OC2KbNFO8RwjSCwu/RX8e8mo/s9U57m8N+r4o63/xUveKKVZwWTqrU55NBjUr
+ k6W9qexXf1QcL7c8J1F/B5KMaqgvpxM/FufLdG2/DD0ttcWQhEom/6nLLw3Lmddy++xU
+ jvI65YBqJdtW4ZLRfdL4JkKClzCmWcmb6v7/1MH2xLZUM5cUFk2lRAIyvH16bbCwQGOp
+ TciPoUl+taMjsdEJLvkxwfghrA5kenTPVozQTR5mPrni3P8Kcvw+zvazenoAgMRWa+sy
+ ZH3uKjJ9KO44XnvDbDjb4F7H1PJUaDLOi1bkwihfVzmKlRv/278dUtDCohlyYDwYAMEA 5w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95bda36m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 09:51:43 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26C9pa2G002504;
+        Tue, 12 Jul 2022 09:51:43 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95bda35v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 09:51:42 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26C9pf99020690;
+        Tue, 12 Jul 2022 09:51:41 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn0w7w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 09:51:40 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26C9pct720578626
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 09:51:38 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D4E8AE04D;
+        Tue, 12 Jul 2022 09:51:38 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6652AE051;
+        Tue, 12 Jul 2022 09:51:37 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 09:51:37 +0000 (GMT)
+Message-ID: <b92a58db-7fe3-fa88-329e-953ef4b7ebbd@linux.ibm.com>
+Date:   Tue, 12 Jul 2022 11:51:37 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO
- driver
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, j.neuschaefer@gmx.net,
-        zhengbin13@huawei.com
-Cc:     openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220710102110.39748-1-tmaimon77@gmail.com>
- <20220710102110.39748-3-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220710102110.39748-3-tmaimon77@gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.1
+Subject: Re: [PATCH v3 3/4] powerpc/watchdog: introduce a NMI watchdog's
+ factor
+Content-Language: fr
+To:     Nicholas Piggin <npiggin@gmail.com>, benh@kernel.crashing.org,
+        haren@linux.vnet.ibm.com, linux@roeck-us.net, mpe@ellerman.id.au,
+        nathanl@linux.ibm.com, paulus@samba.org, wim@linux-watchdog.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+References: <20220627135347.32624-1-ldufour@linux.ibm.com>
+ <20220627135347.32624-4-ldufour@linux.ibm.com>
+ <1657589870.vvurapsif3.astroid@bobo.none>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <1657589870.vvurapsif3.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -lkPNaI8E_CkYDYKshFvVvOgR7F4wLTJ
+X-Proofpoint-ORIG-GUID: ELk769d508oEI099WFQHjK4eTVV_l9Lk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_05,2022-07-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ bulkscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 impostorscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/07/2022 12:21, Tomer Maimon wrote:
-> Add pinctrl and GPIO controller driver support to Arbel BMC NPCM8XX SoC.
+Le 12/07/2022 à 03:42, Nicholas Piggin a écrit :
+> Excerpts from Laurent Dufour's message of June 27, 2022 11:53 pm:
+>> Introduce a factor which would apply to the NMI watchdog timeout.
+>>
+>> This factor is a percentage added to the watchdog_tresh value. The value is
+>> set under the watchdog_mutex protection and lockup_detector_reconfigure()
+>> is called to recompute wd_panic_timeout_tb.
+>>
+>> Once the factor is set, it remains until it is set back to 0, which means
+>> no impact.
 > 
-> Arbel BMC NPCM8XX pinctrl driver based on Poleg NPCM7XX, except the
-> pin mux mapping difference the NPCM8XX GPIO supports adjust debounce
-> period time.
+> Looks okay. We could worry about making it more generic or nicer if
+> another user came along.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Could you make the naming a bit more self documenting? 
+> watchdog_nmi_set_timeout_pct(), maybe? Does the wd really care
+> that it is for LPM in particular?
 
-(...)
+You're right, the name should not mention lpm.
+For my information, what does "pct" stand for?
 
-> +
-> +static int npcm8xx_pinctrl_probe(struct platform_device *pdev)
-> +{
-> +	struct npcm8xx_pinctrl *pctrl;
-> +	int ret;
-> +
-> +	pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
-> +	if (!pctrl)
-> +		return -ENOMEM;
-> +
-> +	pctrl->dev = &pdev->dev;
-> +	dev_set_drvdata(&pdev->dev, pctrl);
-> +
-> +	pctrl->gcr_regmap =
-> +		syscon_regmap_lookup_by_compatible("nuvoton,npcm845-gcr");
+> 
+> Variables and parameters could have a _pct suffix too.
 
-No. Use property. By this patchset, I would expect that you learnt from
-previous mistakes around this. Why repeating the same trouble second time?
+I'll do that.
 
-> +	if (IS_ERR(pctrl->gcr_regmap)) {
-> +		dev_err(pctrl->dev, "didn't find nuvoton,npcm845-gcr\n");
-> +		return PTR_ERR(pctrl->gcr_regmap);
-> +	}
-> +
-> +	ret = npcm8xx_gpio_of(pctrl);
-> +	if (ret < 0) {
-> +		dev_err(pctrl->dev, "Failed to gpio dt-binding %u\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	pctrl->pctldev = devm_pinctrl_register(&pdev->dev,
-> +					       &npcm8xx_pinctrl_desc, pctrl);
-> +	if (IS_ERR(pctrl->pctldev)) {
-> +		dev_err(&pdev->dev, "Failed to register pinctrl device\n");
-> +		return PTR_ERR(pctrl->pctldev);
-> +	}
-> +
-> +	ret = npcm8xx_gpio_register(pctrl);
-> +	if (ret < 0) {
-> +		dev_err(pctrl->dev, "Failed to register gpio %u\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	pr_info("npcm8xx Pinctrl driver probed\n");
+> 
+> Otherwise
+> 
+> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+> 
+>>
+>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>> ---
+>>  arch/powerpc/include/asm/nmi.h |  2 ++
+>>  arch/powerpc/kernel/watchdog.c | 21 ++++++++++++++++++++-
+>>  2 files changed, 22 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/powerpc/include/asm/nmi.h b/arch/powerpc/include/asm/nmi.h
+>> index ea0e487f87b1..7d6a8d9b0543 100644
+>> --- a/arch/powerpc/include/asm/nmi.h
+>> +++ b/arch/powerpc/include/asm/nmi.h
+>> @@ -5,8 +5,10 @@
+>>  #ifdef CONFIG_PPC_WATCHDOG
+>>  extern void arch_touch_nmi_watchdog(void);
+>>  long soft_nmi_interrupt(struct pt_regs *regs);
+>> +void watchdog_nmi_set_lpm_factor(u64 factor);
+>>  #else
+>>  static inline void arch_touch_nmi_watchdog(void) {}
+>> +static inline void watchdog_nmi_set_lpm_factor(u64 factor) {}
+>>  #endif
+>>  
+>>  #ifdef CONFIG_NMI_IPI
+>> diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
+>> index 7d28b9553654..80851b228f71 100644
+>> --- a/arch/powerpc/kernel/watchdog.c
+>> +++ b/arch/powerpc/kernel/watchdog.c
+>> @@ -91,6 +91,10 @@ static cpumask_t wd_smp_cpus_pending;
+>>  static cpumask_t wd_smp_cpus_stuck;
+>>  static u64 wd_smp_last_reset_tb;
+>>  
+>> +#ifdef CONFIG_PPC_PSERIES
+>> +static u64 wd_factor;
+>> +#endif
+>> +
+>>  /*
+>>   * Try to take the exclusive watchdog action / NMI IPI / printing lock.
+>>   * wd_smp_lock must be held. If this fails, we should return and wait
+>> @@ -527,7 +531,13 @@ static int stop_watchdog_on_cpu(unsigned int cpu)
+>>  
+>>  static void watchdog_calc_timeouts(void)
+>>  {
+>> -	wd_panic_timeout_tb = watchdog_thresh * ppc_tb_freq;
+>> +	u64 threshold = watchdog_thresh;
+>> +
+>> +#ifdef CONFIG_PPC_PSERIES
+>> +	threshold += (READ_ONCE(wd_factor) * threshold) / 100;
+>> +#endif
+>> +
+>> +	wd_panic_timeout_tb = threshold * ppc_tb_freq;
+>>  
+>>  	/* Have the SMP detector trigger a bit later */
+>>  	wd_smp_panic_timeout_tb = wd_panic_timeout_tb * 3 / 2;
+>> @@ -570,3 +580,12 @@ int __init watchdog_nmi_probe(void)
+>>  	}
+>>  	return 0;
+>>  }
+>> +
+>> +#ifdef CONFIG_PPC_PSERIES
+>> +void watchdog_nmi_set_lpm_factor(u64 factor)
+>> +{
+>> +	pr_info("Set the NMI watchdog factor to %llu%%\n", factor);
+>> +	WRITE_ONCE(wd_factor, factor);
+>> +	lockup_detector_reconfigure();
+>> +}
+>> +#endif
+>> -- 
+>> 2.36.1
+>>
+>>
 
-
-No pr_ in devices. No success debug messages.
-
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id npcm8xx_pinctrl_match[] = {
-> +	{ .compatible = "nuvoton,npcm845-pinctrl" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm8xx_pinctrl_match);
-> +
-> +static struct platform_driver npcm8xx_pinctrl_driver = {
-> +	.probe = npcm8xx_pinctrl_probe,
-> +	.driver = {
-> +		.name = "npcm8xx-pinctrl",
-> +		.of_match_table = npcm8xx_pinctrl_match,
-> +		.suppress_bind_attrs = true,
-> +	},
-> +};
-> +
-> +static int __init npcm8xx_pinctrl_register(void)
-> +{
-> +	return platform_driver_register(&npcm8xx_pinctrl_driver);
-> +}
-> +arch_initcall(npcm8xx_pinctrl_register);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("tomer.maimon@nuvoton.com");
-> +MODULE_DESCRIPTION("Nuvoton NPCM8XX Pinctrl and GPIO driver");
-
-
-Best regards,
-Krzysztof

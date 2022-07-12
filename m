@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7E5571380
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFFA57137B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 09:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiGLHwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 03:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S232468AbiGLHw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 03:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbiGLHwp (ORCPT
+        with ESMTP id S232388AbiGLHwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 03:52:45 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754CF9D504
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id w185so6828219pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 00:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
-        b=aIVJoOrYsOxTCnwRWJsJsadg8YScTtWaD0KWY7O/2+d8GVdTuEwcbqHC65rXN8wf++
-         3HyfuAZeUSNgl+yUHx/5KlRezG7txR0FdQaKUCs2dK0RgqKtkIgKMHUn4a3fWXtchUD8
-         g7IW4PdmeGjP3yX98W+7cqVp78RzOGcfYR2jVyT+kDsObWUtEQhH3ipi3c2vyzkFN7va
-         evzX9xXekM3lXyocMknYXWvrCdbXQa0fWYKFk+OPPr6btstHwE+thj2ExuI+0c/1nZaE
-         VVpSXpq1Vet9CUK+J3jdAlNviHFp/4+V2qoSblLUDATIq/8mDyFEOkl3La/CM4Q0VqgH
-         8E7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JDE9efA6tNnV2IAGh2LYLxXJO4QIDeRatDZhQ/9xv0Y=;
-        b=yIyGt9qD/5qqsYaAH+GUqIZjxlvcIahe/n73PnU6+tZkzBa53uCZ6Bp9/hL45IDYKp
-         eNaK6iABiRkxIodMhlEDyvRmLUkYA8AhPoy6IexK4tUjnsJSfy/zrEJFv5nds3a8tSfT
-         J/uWnTwaR/gnxvLoaMn5ZaGDua7VaAmBaBMGKaxifI3E8AC15kF/FZg4vbuzIa3Hsl9/
-         ZWCL2FFfkHoiFWOK9hbYM/na2I6wRFqkN8E+2TmCUg6HdPeUbbOu6y0YqzsbhDFNFQws
-         YK9RXP5tb0jrafycnBpCNtXHRzCQ6nKOR92u7/CCyvXc9RrohDCNV3hoH97N5Xo3Nccj
-         kvVQ==
-X-Gm-Message-State: AJIora/imi5xtSK9+TJTy96m1wDrGFgTB/ZWnG7pjKxhChoHOgh8SQCq
-        Hefi4u8lqtq4SK1oigQIvVTRXg==
-X-Google-Smtp-Source: AGRyM1vRTqycGBlzrqk2OttaehDP+MhVi+0ovxCWFXTXmuSWvayqxox7e6xtAjUzE9s1bj017NCd/Q==
-X-Received: by 2002:a63:754:0:b0:415:4578:248a with SMTP id 81-20020a630754000000b004154578248amr19503049pgh.196.1657612362818;
-        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0016bdf53b303sm5739118plk.205.2022.07.12.00.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 00:52:42 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 13:22:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V2 00/13] OPP: Add support for multiple clocks*
-Message-ID: <20220712075240.lsjd42yhcskqlzrh@vireshk-i7>
-References: <cover.1657003420.git.viresh.kumar@linaro.org>
- <YsxSkswzsqgMOc0l@hovoldconsulting.com>
+        Tue, 12 Jul 2022 03:52:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8099D502;
+        Tue, 12 Jul 2022 00:52:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF0FDB81614;
+        Tue, 12 Jul 2022 07:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD2EC3411E;
+        Tue, 12 Jul 2022 07:52:12 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org
+Subject: [PATCH 1/6] MIPS: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+Date:   Tue, 12 Jul 2022 15:52:50 +0800
+Message-Id: <20220712075255.1345991-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsxSkswzsqgMOc0l@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-07-22, 18:40, Johan Hovold wrote:
-> This break OPP parsing on SC8280XP and hence cpufreq and other things:
-> 
-> [  +0.010890] cpu cpu0: _opp_add_static_v2: opp key field not found
-> [  +0.000019] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -19
-> [  +0.000060] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 403200000, volt: 576000, enabled: 1
-> [  +0.000030] cpu cpu0: _opp_is_duplicate: duplicate OPPs detected. Existing: freq: 300000000, volt: 576000, enabled: 1. New: freq: 499200000, volt: 576000, enabled: 1
-> ...
-> 
-> I just did a rebase on next-20220708 and hit this.
-> 
-> I've narrowed it down to _read_rate() now returning -ENODEV since
-> opp_table->clk_count is zero.
-> 
-> Similar to what was reported for tegra for v1:
-> 
-> 	https://lore.kernel.org/all/58cc8e3c-74d4-e432-8502-299312a1f15e@collabora.com/
-> 
-> I don't have time to look at this any more today, but it would we nice
-> if you could unbreak linux-next.
-> 
-> Perhaps Bjorn or Mani can help with further details, but this doesn't
-> look like something that is specific to SC8280XP.
+When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+cpu_max_bits_warn() generates a runtime warning similar as below while
+we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+instead of NR_CPUS to iterate CPUs.
 
-It is actually. This is yet another corner case, Tegra had one as
-well.
+[    3.052463] ------------[ cut here ]------------
+[    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+[    3.070072] Modules linked in: efivarfs autofs4
+[    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+[    3.084034] Hardware name: Loongson Loongson-3A4000-7A1000-1w-V0.1-CRB/Loongson-LS3A4000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
+[    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+[    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+[    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+[    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+[    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+[    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+[    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+[    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+[    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+[    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+[    3.195868]         ...
+[    3.199917] Call Trace:
+[    3.203941] [<98000000002086d8>] show_stack+0x38/0x14c
+[    3.210666] [<9800000000cf846c>] dump_stack_lvl+0x60/0x88
+[    3.217625] [<980000000023d268>] __warn+0xd0/0x100
+[    3.223958] [<9800000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+[    3.231150] [<9800000000210220>] show_cpuinfo+0x5e8/0x5f0
+[    3.238080] [<98000000004f578c>] seq_read_iter+0x354/0x4b4
+[    3.245098] [<98000000004c2e90>] new_sync_read+0x17c/0x1c4
+[    3.252114] [<98000000004c5174>] vfs_read+0x138/0x1d0
+[    3.258694] [<98000000004c55f8>] ksys_read+0x70/0x100
+[    3.265265] [<9800000000cfde9c>] do_syscall+0x7c/0x94
+[    3.271820] [<9800000000202fe4>] handle_syscall+0xc4/0x160
+[    3.281824] ---[ end trace 8b484262b4b8c24c ]---
 
-I have tried to understand the Qcom code / setup to best of my
-abilities, and the problem as per me is that qcom-cpufreq-hw doesn't
-provide a clk to the OPP core, which breaks it after the new updates
-to the OPP core. I believe following will solve it. Can someone please
-try this ? I will then merge it with the right commit.
+Cc: stable@vger.kernel.org
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/mips/kernel/proc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 666e1ebf91d1..4f4a285886fa 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1384,6 +1384,20 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
-        }
-
-        if (ret == -ENOENT) {
-+               /*
-+                * There are few platforms which don't want the OPP core to
-+                * manage device's clock settings. In such cases neither the
-+                * platform provides the clks explicitly to us, nor the DT
-+                * contains a valid clk entry. The OPP nodes in DT may still
-+                * contain "opp-hz" property though, which we need to parse and
-+                * allow the platform to find an OPP based on freq later on.
-+                *
-+                * This is a simple solution to take care of such corner cases,
-+                * i.e. make the clk_count 1, which lets us allocate space for
-+                * frequency in opp->rates and also parse the entries in DT.
-+                */
-+               opp_table->clk_count = 1;
-+
-                dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
-                return opp_table;
-        }
-
+diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+index 4184d641f05e..33a02f3814f5 100644
+--- a/arch/mips/kernel/proc.c
++++ b/arch/mips/kernel/proc.c
+@@ -172,7 +172,7 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+ {
+ 	unsigned long i = *pos;
+ 
+-	return i < NR_CPUS ? (void *) (i + 1) : NULL;
++	return i < nr_cpu_ids ? (void *) (i + 1) : NULL;
+ }
+ 
+ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
 -- 
-viresh
+2.31.1
+

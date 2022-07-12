@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D83157252B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 21:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8319F572438
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 20:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbiGLTLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 15:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
+        id S234641AbiGLS4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 14:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbiGLTKC (ORCPT
+        with ESMTP id S234313AbiGLS4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 15:10:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71BCFFE36;
-        Tue, 12 Jul 2022 11:52:39 -0700 (PDT)
+        Tue, 12 Jul 2022 14:56:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFB0EB012;
+        Tue, 12 Jul 2022 11:46:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6707B81BBF;
-        Tue, 12 Jul 2022 18:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072A0C3411C;
-        Tue, 12 Jul 2022 18:52:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E044B81BAB;
+        Tue, 12 Jul 2022 18:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F68C3411C;
+        Tue, 12 Jul 2022 18:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657651956;
-        bh=hoHz08tC6oiQQAdYnqJuaTV4rl7eX2oX/fx/GpRDRro=;
+        s=korg; t=1657651599;
+        bh=o4/srVdodmfnh4pywnFMEK+V/2gNOqg0RGT2S3PRrWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q4+EW2EXLY88Ovxni1/14b3ECqZG9mejp0m7iEV8wQeZ5q2vvHpb+2AfJf1Mnvclr
-         BRrT3jkQg8C2fS3mQ3OZMHylJKLCVXcAfcHYHNH30zGnZ7M+oLO9H/Sdx53AodxC2U
-         +AiV5PTe6ctyf11gExyjXQ2JyMwqJSHYZN8GPv50=
+        b=RjJHVxIYeCo2HNvtzcE5Tlt+IOpdlWF0Uo1+JNxC+o/XEohiYCrPapL2LDA+L1rD0
+         RSoCGwhE6ErMAHJ7RoAyyfWLY6utB7n4w7HPQ7oseBPM1USJQD/KlFP34+Toko9wOS
+         Ej8zVg1Vy0xeVTptHG+u20WD21e7flpuWzDyXH2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.18 34/61] objtool: Update Retpoline validation
-Date:   Tue, 12 Jul 2022 20:39:31 +0200
-Message-Id: <20220712183238.342232911@linuxfoundation.org>
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 5.10 126/130] x86/bugs: Add Cannon lake to RETBleed affected CPU list
+Date:   Tue, 12 Jul 2022 20:39:32 +0200
+Message-Id: <20220712183252.279724350@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-References: <20220712183236.931648980@linuxfoundation.org>
+In-Reply-To: <20220712183246.394947160@linuxfoundation.org>
+References: <20220712183246.394947160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,110 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 9bb2ec608a209018080ca262f771e6a9ff203b6f upstream.
+commit f54d45372c6ac9c993451de5e51312485f7d10bc upstream.
 
-Update retpoline validation with the new CONFIG_RETPOLINE requirement of
-not having bare naked RET instructions.
+Cannon lake is also affected by RETBleed, add it to the list.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: 6ad0ad2bf8a6 ("x86/bugs: Report Intel retbleed vulnerability")
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/nospec-branch.h |    6 ++++++
- arch/x86/mm/mem_encrypt_boot.S       |    2 ++
- arch/x86/xen/xen-head.S              |    1 +
- tools/objtool/check.c                |   19 +++++++++++++------
- 4 files changed, 22 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/common.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -76,6 +76,12 @@
- .endm
- 
- /*
-+ * (ab)use RETPOLINE_SAFE on RET to annotate away 'bare' RET instructions
-+ * vs RETBleed validation.
-+ */
-+#define ANNOTATE_UNRET_SAFE ANNOTATE_RETPOLINE_SAFE
-+
-+/*
-  * JMP_NOSPEC and CALL_NOSPEC macros can be used instead of a simple
-  * indirect jmp/call which may be susceptible to the Spectre variant 2
-  * attack.
---- a/arch/x86/mm/mem_encrypt_boot.S
-+++ b/arch/x86/mm/mem_encrypt_boot.S
-@@ -66,6 +66,7 @@ SYM_FUNC_START(sme_encrypt_execute)
- 	pop	%rbp
- 
- 	/* Offset to __x86_return_thunk would be wrong here */
-+	ANNOTATE_UNRET_SAFE
- 	ret
- 	int3
- SYM_FUNC_END(sme_encrypt_execute)
-@@ -154,6 +155,7 @@ SYM_FUNC_START(__enc_copy)
- 	pop	%r15
- 
- 	/* Offset to __x86_return_thunk would be wrong here */
-+	ANNOTATE_UNRET_SAFE
- 	ret
- 	int3
- .L__enc_copy_end:
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -26,6 +26,7 @@ SYM_CODE_START(hypercall_page)
- 	.rept (PAGE_SIZE / 32)
- 		UNWIND_HINT_FUNC
- 		ANNOTATE_NOENDBR
-+		ANNOTATE_UNRET_SAFE
- 		ret
- 		/*
- 		 * Xen will write the hypercall page, and sort out ENDBR.
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2114,8 +2114,9 @@ static int read_retpoline_hints(struct o
- 		}
- 
- 		if (insn->type != INSN_JUMP_DYNAMIC &&
--		    insn->type != INSN_CALL_DYNAMIC) {
--			WARN_FUNC("retpoline_safe hint not an indirect jump/call",
-+		    insn->type != INSN_CALL_DYNAMIC &&
-+		    insn->type != INSN_RETURN) {
-+			WARN_FUNC("retpoline_safe hint not an indirect jump/call/ret",
- 				  insn->sec, insn->offset);
- 			return -1;
- 		}
-@@ -3648,7 +3649,8 @@ static int validate_retpoline(struct obj
- 
- 	for_each_insn(file, insn) {
- 		if (insn->type != INSN_JUMP_DYNAMIC &&
--		    insn->type != INSN_CALL_DYNAMIC)
-+		    insn->type != INSN_CALL_DYNAMIC &&
-+		    insn->type != INSN_RETURN)
- 			continue;
- 
- 		if (insn->retpoline_safe)
-@@ -3663,9 +3665,14 @@ static int validate_retpoline(struct obj
- 		if (!strcmp(insn->sec->name, ".init.text") && !module)
- 			continue;
- 
--		WARN_FUNC("indirect %s found in RETPOLINE build",
--			  insn->sec, insn->offset,
--			  insn->type == INSN_JUMP_DYNAMIC ? "jump" : "call");
-+		if (insn->type == INSN_RETURN) {
-+			WARN_FUNC("'naked' return found in RETPOLINE build",
-+				  insn->sec, insn->offset);
-+		} else {
-+			WARN_FUNC("indirect %s found in RETPOLINE build",
-+				  insn->sec, insn->offset,
-+				  insn->type == INSN_JUMP_DYNAMIC ? "jump" : "call");
-+		}
- 
- 		warnings++;
- 	}
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1129,6 +1129,7 @@ static const struct x86_cpu_id cpu_vuln_
+ 	VULNBL_INTEL_STEPPINGS(SKYLAKE,		X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE_L,	X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE,	X86_STEPPING_ANY,		SRBDS | MMIO | RETBLEED),
++	VULNBL_INTEL_STEPPINGS(CANNONLAKE_L,	X86_STEPPING_ANY,		RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_L,	X86_STEPPING_ANY,		MMIO | MMIO_SBDS | RETBLEED),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_D,	X86_STEPPING_ANY,		MMIO),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_X,	X86_STEPPING_ANY,		MMIO),
 
 

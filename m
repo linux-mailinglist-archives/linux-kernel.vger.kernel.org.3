@@ -2,142 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4167D571FD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEE6571FD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 17:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbiGLPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 11:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S233535AbiGLPq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 11:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiGLPpI (ORCPT
+        with ESMTP id S233346AbiGLPqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 11:45:08 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDA9C08E1;
-        Tue, 12 Jul 2022 08:45:07 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id e15so10646686edj.2;
-        Tue, 12 Jul 2022 08:45:07 -0700 (PDT)
+        Tue, 12 Jul 2022 11:46:23 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A74C5494
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:46:22 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t25so14623770lfg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 08:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+/Odg1sihGKTXAswGd97F0WSR+SxhfCI4ZHjZFl5WTI=;
-        b=GKkMtyNwA3AUceejasIeFoYEtVaVn4xX+Jgy6JJ/Bhmo2niK5wru/fENw4PzA9yYzh
-         CZMGK7FoeuHA8qcUzYJPrSwcC7xxkCl1TGNMWi5P+FsIGqL8Ch0P7A+520GpKp76/P1N
-         N6+Nt1l4fAv4H2BnlHz6hk+9KWrclKV2WjtaiRKWX+OQnuhCv2lkpTD3+oN2Br3h69pd
-         SoKeZOsnDm/ZYLFSk5VTHckCpQdO39EaNcon6/mnwNnKhuPNJo6zGS36skoFxxg2v6Em
-         /NoKv2YmhPuusaLfjWOUe0CQFnB6Rgej9AaZsG1l8UiWGZph0hnRXLiKWnqhBM6fSU5S
-         rceA==
+        bh=d5pYk2bgENoJKmAgJjP5u55IOFZv0T0dQhNKXZeD8lc=;
+        b=M0hAkO/ALSrNhqkwUr/tsVDZsxYCiyAIDDaijWDF/AlvXiL+HHnJ5t0UlDpdX+DVui
+         fpE/bgj461v35xJXE/X/OGyNTzRHO0A5Xzp4NxbpNF7ToaLTQm5rzo17JjVyc1cC5RQc
+         1LqplN58movOWgeQdwxI5PqkvhLU3nr5qKvb5IKR8xjaUWl5nWVWiPis6Zjrjx/LiiQY
+         pQa5/An7MivsJ2Fzw5QhqcEZQrylU3HRJRoFk/plVSQX+Gj3z4mM+CwO9yruN/l8Qdm9
+         NAhyI1rJCJf+8dxsnOOEnFrBZE2lwR81m+hfLiDeF/9tFwHZ9L7xmWE65jtXW5YtEML8
+         ADLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+/Odg1sihGKTXAswGd97F0WSR+SxhfCI4ZHjZFl5WTI=;
-        b=EtMzDNPpLx/SrSPowhMOVbFt1ICwAmMB/C8ASmOgb+KDl/qygFbjVKHvZBsTIfRGxa
-         6+1zNW+R9CkccnzT9VMFBJVOAIoZOyJ7v0Gahv5Vby3+MIKX5a6uQqkEg/6MaD0t3ddh
-         ioQw59EraXONpkH6YX8OxIpFQ3/vD9WteJyxhznBxGnCblhRSA7LDytDJLMsIIyAQ7e3
-         sS/QA8angKSP/LXnsnQoggG+Q2qiJuv8Uc/p0DIEdDzZckUSDsC9uZCJh7Xu6Ex6RrqK
-         PIbyDXpbo/NlEcCw8yjIfM7Fg4RX4eT3zOVaMBQ8/kG/yrt3i5OiDQLWY2mZzkNHlj87
-         A3vw==
-X-Gm-Message-State: AJIora9dpVGddW3SQga3SojDmsMV3QOIwko/uMZB9Zv8/Es5EAlz44bz
-        opDQzjw7T86yBKa207s0mR9PWayoD5M=
-X-Google-Smtp-Source: AGRyM1vzDIYYarVp9yz7WWwp1ttRsZeXo5LffHnmyAaDmqakNd+eO/CH3VinTckAj75EYKUX4Yizmg==
-X-Received: by 2002:a05:6402:643:b0:43a:77a6:acd with SMTP id u3-20020a056402064300b0043a77a60acdmr33077527edx.173.1657640706079;
-        Tue, 12 Jul 2022 08:45:06 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id f10-20020a1709064dca00b006fef557bb7asm3932125ejw.80.2022.07.12.08.45.05
+        bh=d5pYk2bgENoJKmAgJjP5u55IOFZv0T0dQhNKXZeD8lc=;
+        b=cjLOa2fViRcXn0ztfRuTsWp1+eNLzBCUn0Y72XJua49GLPQ5ifK668CTY4aYtcRDPC
+         drAuj3fspbP+ODhCxvXwGAGeWaW0g1ibGtxV/V3MlDP3tlWImwFEmGxcNMY93mm3NsPz
+         0iOvQbd9ZiiKmXSUVE5KC5Sg1ZDAUF45+kTKaWg2LCGJIl3uvsD+7KQzQPlDWKuecJmU
+         Eoc7bz/DINt8tKJlc/sslNaHa9T4201yn8c4omRPvaFznZf74rNBOzD+pkz9RUdiDXtb
+         CVe3nUqGKOScva5rbKf4g7K7FSoYd1iHUGszu9u4w5gdv/SySnlcmvcduVXTxeC1HMxS
+         qJOA==
+X-Gm-Message-State: AJIora+OWVdde5b45ztVhPnsS4RicaC+kuSE68jSFebXbawL83m4BK+G
+        tgBsIdhtx79HAxnVsjn2RDSh8Q==
+X-Google-Smtp-Source: AGRyM1vv1jizlfHJgxqT0dOxee25WGxKd5vBg/s8PWXRo0/Bt2J1h5OGxf2AyNpVQfJjMnogy+hAdw==
+X-Received: by 2002:a05:6512:2290:b0:489:d433:605d with SMTP id f16-20020a056512229000b00489d433605dmr8806532lfu.629.1657640780501;
+        Tue, 12 Jul 2022 08:46:20 -0700 (PDT)
+Received: from krzk-bin.. (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id q5-20020a056512210500b00489ed49d243sm582396lfr.260.2022.07.12.08.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 08:45:05 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v2] blk-cgroup: Use atomic{,64}_try_cmpxchg
-Date:   Tue, 12 Jul 2022 17:44:55 +0200
-Message-Id: <20220712154455.66868-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 12 Jul 2022 08:46:19 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: bus: qcom,ssc-block-bus: rework arrays and drop redundant minItems
+Date:   Tue, 12 Jul 2022 17:46:02 +0200
+Message-Id: <20220712154602.26994-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
-in blkcg_unuse_delay, blkcg_set_delay and blkcg_clear_delay and
-atomic64_try_cmpxchg in blkcg_scale_delay.  x86 CMPXCHG instruction
-returns success in ZF flag, so this change saves a compare after cmpxchg
-(and related move instruction in front of cmpxchg).
+There is no need to specify "minItems" if it equals to "maxItems".  On the
+other hand number of items in an array can be specified via describing
+items, which might bring some additional information.  This simplifies a
+bit the binding.
 
-Also, atomic_try_cmpxchg implicitly assigns old *ptr value to "old" when
-cmpxchg fails, enabling further code simplifications.
-
-No functional change intended.
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v2: Split patch from the original big patch
-    Use while instead of do-while loop
----
- block/blk-cgroup.c |  2 +-
- block/blk-cgroup.h | 12 ++++--------
- 2 files changed, 5 insertions(+), 9 deletions(-)
+ .../bindings/bus/qcom,ssc-block-bus.yaml      | 25 ++++++++-----------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 764e740b0c0f..ca99260348ff 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1696,7 +1696,7 @@ static void blkcg_scale_delay(struct blkcg_gq *blkg, u64 now)
- 	 * everybody is happy with their IO latencies.
- 	 */
- 	if (time_before64(old + NSEC_PER_SEC, now) &&
--	    atomic64_cmpxchg(&blkg->delay_start, old, now) == old) {
-+	    atomic64_try_cmpxchg(&blkg->delay_start, &old, now)) {
- 		u64 cur = atomic64_read(&blkg->delay_nsec);
- 		u64 sub = min_t(u64, blkg->last_delay, now - old);
- 		int cur_use = atomic_read(&blkg->use_delay);
-diff --git a/block/blk-cgroup.h b/block/blk-cgroup.h
-index d4de0a35e066..d2724d1dd7c9 100644
---- a/block/blk-cgroup.h
-+++ b/block/blk-cgroup.h
-@@ -430,12 +430,8 @@ static inline int blkcg_unuse_delay(struct blkcg_gq *blkg)
- 	 * then check to see if we were the last delay so we can drop the
- 	 * congestion count on the cgroup.
- 	 */
--	while (old) {
--		int cur = atomic_cmpxchg(&blkg->use_delay, old, old - 1);
--		if (cur == old)
--			break;
--		old = cur;
--	}
-+	while (old && !atomic_try_cmpxchg(&blkg->use_delay, &old, old - 1))
-+		;
+diff --git a/Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml b/Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml
+index 5b9705079015..8e9e6ff35d7d 100644
+--- a/Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml
++++ b/Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml
+@@ -28,11 +28,9 @@ properties:
+       - const: qcom,ssc-block-bus
  
- 	if (old == 0)
- 		return 0;
-@@ -458,7 +454,7 @@ static inline void blkcg_set_delay(struct blkcg_gq *blkg, u64 delay)
- 	int old = atomic_read(&blkg->use_delay);
+   reg:
+-    description: |
+-      Shall contain the addresses of the SSCAON_CONFIG0 and SSCAON_CONFIG1
+-      registers
+-    minItems: 2
+-    maxItems: 2
++    items:
++      - description: SSCAON_CONFIG0 registers
++      - description: SSCAON_CONFIG1 registers
  
- 	/* We only want 1 person setting the congestion count for this blkg. */
--	if (!old && atomic_cmpxchg(&blkg->use_delay, old, -1) == old)
-+	if (!old && atomic_try_cmpxchg(&blkg->use_delay, &old, -1))
- 		atomic_inc(&blkg->blkcg->css.cgroup->congestion_count);
+   reg-names:
+     items:
+@@ -48,7 +46,6 @@ properties:
+   ranges: true
  
- 	atomic64_set(&blkg->delay_nsec, delay);
-@@ -475,7 +471,7 @@ static inline void blkcg_clear_delay(struct blkcg_gq *blkg)
- 	int old = atomic_read(&blkg->use_delay);
+   clocks:
+-    minItems: 6
+     maxItems: 6
  
- 	/* We only want 1 person clearing the congestion count for this blkg. */
--	if (old && atomic_cmpxchg(&blkg->use_delay, old, 0) == old)
-+	if (old && atomic_try_cmpxchg(&blkg->use_delay, &old, 0))
- 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
- }
+   clock-names:
+@@ -61,9 +58,9 @@ properties:
+       - const: ssc_ahbs
  
+   power-domains:
+-    description: Power domain phandles for the ssc_cx and ssc_mx power domains
+-    minItems: 2
+-    maxItems: 2
++    items:
++      - description: CX power domain
++      - description: MX power domain
+ 
+   power-domain-names:
+     items:
+@@ -71,11 +68,11 @@ properties:
+       - const: ssc_mx
+ 
+   resets:
+-    description: |
+-      Reset phandles for the ssc_reset and ssc_bcr resets (note: ssc_bcr is the
+-      branch control register associated with the ssc_xo and ssc_ahbs clocks)
+-    minItems: 2
+-    maxItems: 2
++    items:
++      - description: Main reset
++      - description:
++          SSC Branch Control Register reset (associated with the ssc_xo and
++          ssc_ahbs clocks)
+ 
+   reset-names:
+     items:
 -- 
-2.35.3
+2.34.1
 

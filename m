@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C2B570F00
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90544570F05
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 02:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiGLAkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 20:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S230024AbiGLAma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 20:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGLAkA (ORCPT
+        with ESMTP id S229764AbiGLAm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 20:40:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA4B2DA8B;
-        Mon, 11 Jul 2022 17:39:59 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id f11so5867589plr.4;
-        Mon, 11 Jul 2022 17:39:59 -0700 (PDT)
+        Mon, 11 Jul 2022 20:42:28 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D78F2DA9B
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:42:27 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h17so9105107wrx.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 17:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qKjoEwy1ne1D5LbdAqN/NueJz7pPtNyuHan8nYhGCr0=;
-        b=ZEMW/bBwXkZP9Tbez9uvhsX/NVaMgyPufwW8z2Bch1vWFotJBcPAC+QW92ikJje0bA
-         JmU5G+bozCvAXo75dcNIpWuQd1tkqamPpN79CgH1APEMVWgZ+939zeNcyXAMVf3jpsFU
-         rYkvnutc50uo1nb8hTsRBBSTXqgXWl+1c5YTU3p4kSq4A2ZXaU2tPW8aMMAoPoC51AJb
-         y8rG53UGd297osyDzg6z7NDpKNNtSoeNU9+bOpwpaHDFcl8EjFytAfQoo49D9R9DSCPt
-         VyMklcKZFKQbNaId98Uiu5y/TnfLFj0OHI6pBbYsZdnICSZyL4ZVXNNJjT4O0EAF6zPC
-         KVIA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=68mkDNBCkeJpX+q116C9yWsW5XjBLSxGi+xt71TSQ28=;
+        b=pXcUEGlIhOHDWFHvDN9rRDLyJeDZML22bbC8eiEGLCy/l4q3ub47IwesxJKljkqfb8
+         nHo/r/cp9kyG8mZVZTNOAx4hzS3GaEjcvicCDoe02fE9FolqPAKFuY8Yz4hOx4lEEI+B
+         vs5VuZWfB+WFXaL8jLSq4cjzTVtlNJI1bco7XI+5d7o+6Nrc35e3zlx/La0iy33o4aQB
+         s4CD0WymQMmITSwJOIiWAIaFjB08hdaj5K8yBVWYxR1oYSeGBMLeY66fr2CPeR5SUtQz
+         FqjKBS1ff2f/3D3pFF/1j0RLdvML2qQgm8bFuhL1eit5NdIkvBO5vNiChDWEJL0ialM5
+         ooNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qKjoEwy1ne1D5LbdAqN/NueJz7pPtNyuHan8nYhGCr0=;
-        b=r8pRadv4sWmN7UP84/C3s0EGV5t+dt9rp4S2y2hYvP/b2mQTrp2/vrgj3o8HFfKXlc
-         3sUF0J9rY2a7UgohITTIpEpDKR60Z6nqhWh1UdKJ0b7LLE6ML0lLSmYFtIzkH2sJ5QON
-         fa65u5oPgdkcV9aimdxLq4YOtXqcfDsbmm3L3Ukeq6abyxtjzTpyYq47iDLC4/vaA5sM
-         Ao8Th6Z1PYkX7kFqc9gabWtMrW4GxEJCmznQoyDLcbcEFIj+E4nIyNnWtT2h48ybZK+b
-         moj5epYsSWZJ2jBWNPJx09Dtgm5wrZ8/uVkVnS9ADbjPE7TLxeXoPWboC6ZDioMCGO1+
-         JPUA==
-X-Gm-Message-State: AJIora/MLixmBhBLWZiNnHLAVCoWkkSSB8xK0PrpXE5++hZJL9W9dSFF
-        aUJXWEfsAk+Gk3tNpJtERL0=
-X-Google-Smtp-Source: AGRyM1tR6xfEM0sb00PzUR3hhlc5gGOQ0/15bN46s1wuQtrfd8s0ThXAFG6+INGZGgClXJjOJYcpPA==
-X-Received: by 2002:a17:903:120e:b0:16b:8167:e39e with SMTP id l14-20020a170903120e00b0016b8167e39emr21099496plh.165.1657586398780;
-        Mon, 11 Jul 2022 17:39:58 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902d4cc00b0016c433f7c12sm3312893plg.271.2022.07.11.17.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 17:39:58 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 17:39:57 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 010/102] x86/virt/tdx: Add a helper function to return
- system wide info about TDX module
-Message-ID: <20220712003957.GC1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <2e722b58684c3cfbedda7d2a5a446255784a615e.1656366338.git.isaku.yamahata@intel.com>
- <20220707024602.i5ym5nlnps3cjvj6@yy-desk-7060>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=68mkDNBCkeJpX+q116C9yWsW5XjBLSxGi+xt71TSQ28=;
+        b=V9HP3xFAMBh99H38QTAlRtoj7AqSlrcqYC6yfTvOWKnzsT7Yi8P0b5OCDXk16uOKAu
+         ijyyzjQqFPDjGiWHtlsUXgEG/I/UbpyaZZ+FGWA8ThPyCOL6aK6v++3OJTvBeELvH6Mr
+         ey+CkttX11cFISi8i9Jq8eAtEy7/w65xppC7Ah0BaVbradWagn+IVSd7UatNETlwfmUl
+         cNHGvaBUJQgvjkf8ik6eyXI++ztxXwT911PBM7JpuJPrPaZVhpRs30hCgBXX5NMm9XJI
+         hWW1OtFzOd9vdy8cms701sieCfyo9ToCvyLABrGvpDDC8a3EmuZtnR8tPu08M100r5ME
+         RumA==
+X-Gm-Message-State: AJIora8COg4d8oliOb8anTo/e45A1LwxM3gHV2w2PGYefIuaDlgFmfX6
+        g/gOTc//evGMuhQoELjGzRh7sra5Fv0B5PMgSRgS1A==
+X-Google-Smtp-Source: AGRyM1vG+ARZBV1wm38rCAdOILOvGSx+zc1YknhjkS5MwV6FG/E/u1kTVqKLbrKORItVEO9bU5e9GK6Ocet1qyOUDBs=
+X-Received: by 2002:a5d:59a8:0:b0:21d:8a9d:732b with SMTP id
+ p8-20020a5d59a8000000b0021d8a9d732bmr19203014wrr.28.1657586546036; Mon, 11
+ Jul 2022 17:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220707024602.i5ym5nlnps3cjvj6@yy-desk-7060>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220709000439.243271-1-yosryahmed@google.com>
+ <20220709000439.243271-5-yosryahmed@google.com> <370cb480-a427-4d93-37d9-3c6acd73b967@fb.com>
+ <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com>
+In-Reply-To: <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 11 Jul 2022 17:42:14 -0700
+Message-ID: <CA+khW7gmVmXMg4YP4fxTtgqNyAr4mQqnXbP=z0nUeQ8=hfGC3g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,19 +88,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:46:02AM +0800,
-Yuan Yao <yuan.yao@linux.intel.com> wrote:
-
-> On Mon, Jun 27, 2022 at 02:53:02PM -0700, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Mon, Jul 11, 2022 at 4:20 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> On 7/10/22 5:19 PM, Yonghong Song wrote:
 > >
-> > TDX KVM needs system-wide information about the TDX module, struct
-> > tdsysinfo_struct.  Add a helper function tdx_get_sysinfo() to return it
-> > instead of KVM getting it with various error checks.  Move out the struct
-> > definition about it to common place tdx_host.h.
-> 
-> Please correct the tdx_host.h to tdx.h or arch/x86/include/asm/tdx.h
+> >
+[...]
+> >> +
+> >>   union bpf_iter_link_info {
+> >>       struct {
+> >>           __u32    map_fd;
+> >>       } map;
+> >> +
+> >> +    /* cgroup_iter walks either the live descendants of a cgroup
+> >> subtree, or the ancestors
+> >> +     * of a given cgroup.
+> >> +     */
+> >> +    struct {
+> >> +        /* Cgroup file descriptor. This is root of the subtree if for
+> >> walking the
+> >> +         * descendants; this is the starting cgroup if for walking
+> >> the ancestors.
+> >
+> > Adding comment that cgroup_fd 0 means starting from root cgroup?
 
-Oops. Thanks for catching it. fixed it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Sure.
+
+> > Also, if I understand correctly, cgroup v1 is also supported here,
+> > right? If this is the case, for cgroup v1 which root cgroup will be
+> > used for cgroup_fd? It would be good to clarify here too.
+> >
+
+IMO, the case of cgroup_fd = 0 combined with cgroup v1 should return
+errors. It's an invalid case. If anyone wants to use cgroup_iter on
+cgroup v1 hierarchy, they could explicitly open the subsystems' root
+directory and pass the fd. With that said, Yosry and I will test and
+confirm the behavior in this situation and clarify in the comment.
+Thanks for pointing this out.
+
+> >> +         */
+> >> +        __u32    cgroup_fd;
+> >> +        __u32    traversal_order;
+> >> +    } cgroup;
+> >>   };
+> >>   /* BPF syscall commands, see bpf(2) man-page for more details. */
+> >> @@ -6134,6 +6151,10 @@ struct bpf_link_info {
+> >>                   struct {
+> >>                       __u32 map_id;
+> >>                   } map;
+> >> +                struct {
+> >> +                    __u32 traversal_order;
+> >> +                    __aligned_u64 cgroup_id;
+> >> +                } cgroup;
+> >
+> > We actually has a problem here although I don't have a solution yet.
+> >
+[...]
+> >
+> > There is a 4 byte hole after member 'target_name_len'. So map_id will
+> > have a offset 16 from the start of structure 'iter'.
+> >
+> >
+> > This will break uapi. We probably won't be able to change the existing
+> > uapi with adding a ':32' after member 'target_name_len'. I don't have
+> > a good solution yet, but any suggestion is welcome.
+> >
+> > Also, for '__aligned_u64 cgroup_id', '__u64 cgroup_id' is enough.
+> > '__aligned_u64' mostly used for pointers.
+>
+> Briefly discussed with Alexei, the following structure iter definition
+> should work. Later on, if we need to addition fields for other iter's,
+> for a single __u32, the field can be added to either the first or the
+> second union. If fields are more than __u32, they can be placed
+> in the second union.
+>
+>                  struct {
+>                          __aligned_u64 target_name; /* in/out:
+> target_name buffer ptr */
+>                          __u32 target_name_len;     /* in/out:
+> target_name buffer len */
+>                          union {
+>                                  struct {
+>                                          __u32 map_id;
+>                                  } map;
+>                          };
+>                          union {
+>                                  struct {
+>                                          __u64 cgroup_id;
+>                                          __u32 traversal_order;
+>                                  } cgroup;
+>                          };
+>                  } iter;
+>
+
+Thanks Yonghong for seeking the solution here. The solution looks
+good. I'm going to put your heads-up as comments there. One thing I'd
+like to confirm, when we query bpf_link_info for cgroup iter, do we
+also need to zero those fields for map_elem?
+
+>
+> >
+> >
+> >>               };
+> >>           } iter;
+> >>           struct  {
+[...]
+> >> +
+> >> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> >> +{
+> >> +    struct cgroup_iter_priv *p = seq->private;
+> >> +
+> >> +    mutex_lock(&cgroup_mutex);
+> >> +
+> >> +    /* support only one session */
+> >> +    if (*pos > 0)
+> >> +        return NULL;
+> >
+> > This might be okay. But want to check what is
+> > the practical upper limit for cgroups in a system
+> > and whether we may miss some cgroups. If this
+> > happens, it will be a surprise to the user.
+> >
+
+Ok. What's the max number of items supported in a single session?
+
+> >> +
+> >> +    ++*pos;
+> >> +    p->terminate = false;
+> >> +    if (p->order == BPF_ITER_CGROUP_PRE)
+> >> +        return css_next_descendant_pre(NULL, p->start_css);
+> >> +    else if (p->order == BPF_ITER_CGROUP_POST)
+> >> +        return css_next_descendant_post(NULL, p->start_css);
+> >> +    else /* BPF_ITER_CGROUP_PARENT_UP */
+> >> +        return p->start_css;
+> >> +}
+> >> +
+> >> +static int __cgroup_iter_seq_show(struct seq_file *seq,
+> >> +                  struct cgroup_subsys_state *css, int in_stop);
+> >> +
+> >> +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
+> >> +{
+> >> +    /* pass NULL to the prog for post-processing */
+> >> +    if (!v)
+> >> +        __cgroup_iter_seq_show(seq, NULL, true);
+> >> +    mutex_unlock(&cgroup_mutex);
+> >> +}
+> >> +
+> > [...]

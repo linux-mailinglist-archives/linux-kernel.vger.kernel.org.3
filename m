@@ -2,188 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE16571513
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D928E571516
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 10:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbiGLIvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 04:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S232580AbiGLIvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 04:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiGLIu7 (ORCPT
+        with ESMTP id S230115AbiGLIvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 04:50:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA261A5E6E;
-        Tue, 12 Jul 2022 01:50:58 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C8gQ4f009831;
-        Tue, 12 Jul 2022 08:50:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=UTW3BCFfdy5DjQILSq4ThpzsOPHxU1LDL5TkrC4GeZw=;
- b=qO9l1Cjj21zlK2LpLGb8QNhWDlmesGiznkzfGFvjFjS/73xzKgYjmqOQ8WASjXonZ8k9
- h7TkEx/Vpte6h/o2/BQt6HserQxhAtU8IsVW/H8GIGc6RW8C0uOwwrF9Stin30zIhdCS
- /ntELEZfI/MFinA8v6Ld6FRNxGGynYTu5CDsVFgoiFlNNtzQD2i8u6IuohlA8Ge+3V1Y
- sLalfNG3lycB9CrHZD3NKzRC7og5/xXsSaeQYkZS0yqMn5wes2Y6y6JABdOW+QX7FGs7
- UcroCXsnLHo1is0HUT6w5Y4lhZVxV7SW23vkHUZQgPjmeFlzlZ5HPhRwlEJPjZ1ueIDo Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95nyr61e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 08:50:58 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26C8iLGu018726;
-        Tue, 12 Jul 2022 08:50:57 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h95nyr608-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 08:50:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26C8M4HR013441;
-        Tue, 12 Jul 2022 08:50:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn0txm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 08:50:55 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26C8p2cI18809274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Jul 2022 08:51:02 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 349A14203F;
-        Tue, 12 Jul 2022 08:50:52 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A51542041;
-        Tue, 12 Jul 2022 08:50:51 +0000 (GMT)
-Received: from [9.171.80.212] (unknown [9.171.80.212])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Jul 2022 08:50:51 +0000 (GMT)
-Message-ID: <6124248a-24be-b43a-f827-b6bebf9e7f3d@linux.ibm.com>
-Date:   Tue, 12 Jul 2022 10:50:51 +0200
+        Tue, 12 Jul 2022 04:51:43 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D82A5E6E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:51:42 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id n18so11092682lfq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 01:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vjHu968868HtBRMF6NYSXXaRFX5EKeerKBprL50iI0E=;
+        b=B4Rg2xxpEzgxWoU2cgZY9zxkR+yH0vP0ittREWZnTv9ide6+6/h+OwcF7XZ/jPDUhD
+         luRNBUbEgsoVHTsEnUfK0nTgOwSsJ2eeFrw29LtOkTucVWf9TGLAam31/lfBzW3VYH4L
+         6HraAszhWXb6GKWkzgCvsisB0/qpjqzoTrmYCt5JqOI15cJUA+dj9pJaYYfGpbj+uUwR
+         lZz1IGbe6in9spUndTj/WnYzqEPpLt++nNLVYLJWoHvd9ugRfNUtfbO2wcnx0Rbjfdn2
+         5Jz8CVIa338s2zLcYWw9Fej9glRgLrn4qyjips9Nmo3WJB2YuyRfP+a5o9Xj1Af/0EKQ
+         es1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vjHu968868HtBRMF6NYSXXaRFX5EKeerKBprL50iI0E=;
+        b=nWQBDBJeIHtG4DJNJrI8w3ksAmZEW0uyYKP1bhQKR12hVbILHELzzJif+Z28/pXHXw
+         RyWLE8zAylV1sCFT0DZkjEjUKgGnEDEgfyDvh9+u6LE9TbIW1cbVRbcKU9WhzG0bgx2A
+         2QLgWfq89whAN5UF/mq/66/ZjkMXpoksxkRQxHIStGG2wVWZ79pRjeyfEyCvAFp4iogZ
+         8RU2HTpmDbhNIQuzyg3n8nl/Afm93lBkvpXyDrXFAU+CKOvWwPL9hltcf2TwGMIcr01V
+         8JHApEV8xmLpCmSWbcYQkjuuweHj8Zw0fuTVTH66uGfvgIFBcbOhOW/zE88irqi3k+ZZ
+         WuDg==
+X-Gm-Message-State: AJIora+5Nu4zEAfvKx8bATfnDfxb/ULJdMQKFYJ0bogQm3RPwD44OcNL
+        V2NyZYtt4TaFIG/IK/As0uvchg==
+X-Google-Smtp-Source: AGRyM1vsmzS4v4HFCqeaDGGnx1Zk47dL88gMC7MXgdrPxgTvK9Q4n1ARWFSGp3BEZ0ZjGbeNI7d8Bg==
+X-Received: by 2002:a05:6512:3da8:b0:489:e6df:3dd0 with SMTP id k40-20020a0565123da800b00489e6df3dd0mr3719758lfv.224.1657615900524;
+        Tue, 12 Jul 2022 01:51:40 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
+        by smtp.gmail.com with ESMTPSA id o26-20020ac25e3a000000b004886508ca5csm2070843lfg.68.2022.07.12.01.51.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 01:51:39 -0700 (PDT)
+Message-ID: <ecaf9d0f-6ddb-5842-790e-3d5ee80e2a77@linaro.org>
+Date:   Tue, 12 Jul 2022 10:51:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v12 2/3] KVM: s390: guest support for topology function
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH net-next 2/9] dt-bindings: net: Expand pcs-handle to
+ an array
 Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220711084148.25017-1-pmorel@linux.ibm.com>
- <20220711084148.25017-3-pmorel@linux.ibm.com>
- <92c6d13c-4494-de56-83f4-9d7384444008@linux.ibm.com>
- <1884bc26-b91b-83a7-7f8b-96b6090a0bac@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <1884bc26-b91b-83a7-7f8b-96b6090a0bac@linux.ibm.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20220711160519.741990-1-sean.anderson@seco.com>
+ <20220711160519.741990-3-sean.anderson@seco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220711160519.741990-3-sean.anderson@seco.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CDnBHqYE0UAd5LfSQqi8F7nhE3nHX5m8
-X-Proofpoint-ORIG-GUID: 8SOaAYfrUuiANWQJE1fMhxoVV0Oxfj5y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 phishscore=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 adultscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207120033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 09:45, Pierre Morel wrote:
+On 11/07/2022 18:05, Sean Anderson wrote:
+> This allows multiple phandles to be specified for pcs-handle, such as
+> when multiple PCSs are present for a single MAC. To differentiate
+> between them, also add a pcs-names property.
 > 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
 > 
-> On 7/11/22 14:30, Janis Schoetterl-Glausch wrote:
->> On 7/11/22 10:41, Pierre Morel wrote:
->>> We report a topology change to the guest for any CPU hotplug.
->>>
->>> The reporting to the guest is done using the Multiprocessor
->>> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
->>> SCA which will be cleared during the interpretation of PTF.
->>>
->>> On every vCPU creation we set the MCTR bit to let the guest know the
->>> next time it uses the PTF with command 2 instruction that the
->>> topology changed and that it should use the STSI(15.1.x) instruction
->>> to get the topology details.
->>>
->>> STSI(15.1.x) gives information on the CPU configuration topology.
->>> Let's accept the interception of STSI with the function code 15 and
->>> let the userland part of the hypervisor handle it when userland
->>> supports the CPU Topology facility.
->>>
->>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->>> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
->>
->> Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>  .../devicetree/bindings/net/ethernet-controller.yaml       | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> Thanks.
-> 
-> 
->> See nit below.
->>> ---
->>>   arch/s390/include/asm/kvm_host.h | 18 +++++++++++++++---
->>>   arch/s390/kvm/kvm-s390.c         | 31 +++++++++++++++++++++++++++++++
->>>   arch/s390/kvm/priv.c             | 22 ++++++++++++++++++----
->>>   arch/s390/kvm/vsie.c             |  8 ++++++++
->>>   4 files changed, 72 insertions(+), 7 deletions(-)
->>>
->>
->> [...]
->>
->>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>> index 8fcb56141689..70436bfff53a 100644
->>> --- a/arch/s390/kvm/kvm-s390.c
->>> +++ b/arch/s390/kvm/kvm-s390.c
->>> @@ -1691,6 +1691,32 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
->>>       return ret;
->>>   }
->>>   +/**
->>> + * kvm_s390_update_topology_change_report - update CPU topology change report
->>> + * @kvm: guest KVM description
->>> + * @val: set or clear the MTCR bit
->>> + *
->>> + * Updates the Multiprocessor Topology-Change-Report bit to signal
->>> + * the guest with a topology change.
->>> + * This is only relevant if the topology facility is present.
->>> + *
->>> + * The SCA version, bsca or esca, doesn't matter as offset is the same.
->>> + */
->>> +static void kvm_s390_update_topology_change_report(struct kvm *kvm, bool val)
->>> +{
->>> +    union sca_utility new, old;
->>> +    struct bsca_block *sca;
->>> +
->>> +    read_lock(&kvm->arch.sca_lock);
->>> +    do {
->>> +        sca = kvm->arch.sca;
->>
->> I find this assignment being in the loop unintuitive, but it should not make a difference.
-> 
-> The price would be an ugly cast.
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 4f15463611f8..c033e536f869 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -107,11 +107,16 @@ properties:
+>      $ref: "#/properties/phy-connection-type"
+>  
+>    pcs-handle:
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>      description:
+>        Specifies a reference to a node representing a PCS PHY device on a MDIO
+>        bus to link with an external PHY (phy-handle) if exists.
 
-I don't get what you mean. Nothing about the types changes if you move it before the loop.
-> 
-> 
->>
->>> +        old = READ_ONCE(sca->utility);
->>> +        new = old;
->>> +        new.mtcr = val;
->>> +    } while (cmpxchg(&sca->utility.val, old.val, new.val) != old.val);
->>> +    read_unlock(&kvm->arch.sca_lock);
->>> +}
->>> +
->> [...]
->>
-> 
-> 
+You need to update all existing bindings and add maxItems:1.
 
+>  
+> +  pcs-names:
+
+To be consistent with other properties this should be "pcs-handle-names"
+and the other "pcs-handles"... and then actually drop the "handle".
+
+
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description:
+> +      The name of each PCS in pcs-handle.
+
+You also need:
+dependencies:
+  pcs-names: [ pcs-handle ]
+
+> +
+>    phy-handle:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+
+
+Best regards,
+Krzysztof

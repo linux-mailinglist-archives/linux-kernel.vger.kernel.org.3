@@ -2,187 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2CB57109A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6D35710A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 05:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiGLDFP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Jul 2022 23:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
+        id S229608AbiGLDGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 23:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGLDFN (ORCPT
+        with ESMTP id S231536AbiGLDGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 23:05:13 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FEA20F7C;
-        Mon, 11 Jul 2022 20:05:11 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id y195so11904681yby.0;
-        Mon, 11 Jul 2022 20:05:11 -0700 (PDT)
+        Mon, 11 Jul 2022 23:06:11 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8D93692;
+        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id g4so6444245pgc.1;
+        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHe/kvvVGFhgWQMCPO6zbNMWlQyc0h0nxCqB63k2dO4=;
+        b=bAWZXTicAiKioBs6p5Qo1FSct9sDAC0hraQxZCh9BgHlV/O/575wDQGaEkxGcAnSdh
+         wJqNHTuP9kXSGQjJraTvmBRhw1BS/fJJh/3+o3zd7fggr3Jt8SuoBjt8QkDTyt7DioGo
+         S844dJWTrEMBNnS7KlBTR6VvtHXMcPb1hhQdmKs/JboEVB8olz+detHL64JCxPaqHbYz
+         sFSB4Kr6QaG/6mWTaE5ltHeglPEg+QVdPbcVUGxjO92ABBS3pmKrKctC46P4OjsCkiNR
+         cfBnZ/al7e5hGFQRyMfeGnJQX/AmGw82IF9HxzkuT2a9MD1K8Ib5BvJFIJI2IXooiKZN
+         xbqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xQ9YReWbslkfsJYK5nx/kGsWymMpYJHFL0KQKjFzhP4=;
-        b=r3BHag/fllwrRX2P4qyEpWyNLMfkUxDrAl+OcmnHMrKoz0cW8Gk6x4vKKxR0YO68SW
-         3/vjEHw0F9+lt+1rClD0Xy6kxovF4wPONhHzd+63umCCtqY0OLKORZjkL2nYX46tDSP0
-         1z49wCYISwfeFDzDDKpqklmy6YQS9lSeDTYiV8BNGTaSDvC6H+of6erZvrHEydhv2KlG
-         d0pn8hXPjrHngx5aO+V5h4kOwXGoR5aJ5mvWaPA08UiiRi6+1mAvJkHj2LMzK9u9yNJA
-         8TBtYiC1s1U4VnT7Nm53P7Z0/nS/hbwK/N4JrAMG+i0y3GVzam/i3P44jGgwWqATFJhM
-         TBow==
-X-Gm-Message-State: AJIora+FJHg79TicEsNoBH9kNZIQl9Fgo3GVaeZcLi6UQA7+rJ2/eCv4
-        RwJqHrlkpNTNBs9MYdz7/hWnb+HGOjKY1xt2Egx/jNQiEAbJaw==
-X-Google-Smtp-Source: AGRyM1uoroTErC1XfHvqxlzdhzryvuVCS2aSQj1Kll2jrX3T/mvB00jkAV+Z9OhFecqeA7lGhLwDh4FLXNqvRJhE6jw=
-X-Received: by 2002:a25:9743:0:b0:66e:f62d:4956 with SMTP id
- h3-20020a259743000000b0066ef62d4956mr12583850ybo.381.1657595110757; Mon, 11
- Jul 2022 20:05:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHe/kvvVGFhgWQMCPO6zbNMWlQyc0h0nxCqB63k2dO4=;
+        b=qog9zQtWnh506oglI3buRPiBbfA5qBs+61pBtmjJqFUy7EL/0CzVqO4L8oRJGks+ZK
+         TWTsE4MvXWdqnYfIcK+fcPTyJdcY1ggiv9Jd2ZHfV+yzYoQsPVY3WkiyDJ5t7wRgSf0x
+         QXtDqp2xNzSrWtoxPlJF/ooRnAYZyJsVorcqGCSQYGDYNe2rrY9thaWII0RvJGFGcGKF
+         0HYP1o/dyfxUOA7PbRlDqh5sXVCBbTJt4goUMJKAiGKkPOZjSnfjtt3gOFJ7E/L8h1Qn
+         8wwP2wj/CmNFGrzcBmoNfpCQNSguX5KqnfgvhujMudcCRIm1QXEZkv/36x1Tzeuyu39+
+         U42A==
+X-Gm-Message-State: AJIora+EEpsAUcbxmuFA5elmz6NTfJdkiAFqiBOXEMGGA/kYFgiLMvFR
+        YqwX1yh0IjGbicDSUItAAIM=
+X-Google-Smtp-Source: AGRyM1uwmc4DGL3IXgwmiDmeLyj/RE6oQFxI7IzUnnuOZfjA5+wGBZWRK/IuSVbpUu3eXXzrKnPo0g==
+X-Received: by 2002:a05:6a00:1d26:b0:528:31c2:5243 with SMTP id a38-20020a056a001d2600b0052831c25243mr20881620pfx.28.1657595156158;
+        Mon, 11 Jul 2022 20:05:56 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j14-20020a170903024e00b0016a5384071bsm5534076plh.1.2022.07.11.20.05.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jul 2022 20:05:55 -0700 (PDT)
+From:   xu xin <cgel.zte@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     xu.xin16@zte.com.cn, anton@tuxera.com
+Cc:     linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Songyi Zhang <zhang.songyi@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
+        Zhang wenya <zhang.wenya1@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v3] fs/ntfs: fix BUG_ON of ntfs_read_block()
+Date:   Tue, 12 Jul 2022 03:05:32 +0000
+Message-Id: <20220712030532.1312455-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220708181235.4104943-1-frank.jungclaus@esd.eu> <20220708181235.4104943-6-frank.jungclaus@esd.eu>
-In-Reply-To: <20220708181235.4104943-6-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 12 Jul 2022 12:05:24 +0900
-Message-ID: <CAMZ6Rq+BOFBRPGLmP9e4tuyV0-Jb-QH_TGbUQJm6aw4M+J1X8A@mail.gmail.com>
-Subject: Re: [PATCH 5/6] can: esd_usb: Improved support for CAN_CTRLMODE_BERR_REPORTING
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le sam. 9 juil. 2022 à 03:14, Frank Jungclaus <frank.jungclaus@esd.eu> a écrit :
->
-> Bus error reporting has already been implemented for a long time, but
-> before it was always active! Now it's user controllable by means off the
-> "berr-reporting" parameter given to "ip link set ... ", which sets
-> CAN_CTRLMODE_BERR_REPORTING within priv->can.ctrlmode.
->
-> In case of an ESD_EV_CAN_ERROR_EXT now unconditionally supply
-> priv->bec.rxerr and priv->bec.txerr with REC and TEC.
->
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 47 ++++++++++++++++++++---------------
->  1 file changed, 27 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index 588caba1453b..09649a45d6ff 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -230,12 +230,23 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->         if (id == ESD_EV_CAN_ERROR_EXT) {
->                 u8 state = msg->msg.rx.data[0];
->                 u8 ecc   = msg->msg.rx.data[1];
-> -               u8 rxerr = msg->msg.rx.data[2];
-> -               u8 txerr = msg->msg.rx.data[3];
-> +
-> +               priv->bec.rxerr = msg->msg.rx.data[2];
-> +               priv->bec.txerr = msg->msg.rx.data[3];
->
->                 netdev_dbg(priv->netdev,
->                            "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
-> -                          msg->msg.rx.dlc, state, ecc, rxerr, txerr);
-> +                          msg->msg.rx.dlc, state, ecc, priv->bec.rxerr, priv->bec.txerr);
-> +
-> +               if (ecc) {
-> +                       priv->can.can_stats.bus_error++;
-> +                       stats->rx_errors++;
-> +               }
-> +
-> +               if (state == priv->old_state &&
-> +                   !(priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING))
-> +                       /* Neither a state change nor active bus error reporting */
-> +                       return;
->
->                 skb = alloc_can_err_skb(priv->netdev, &cf);
->                 if (skb == NULL) {
-> @@ -270,16 +281,14 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                                  * berr-counters might stay on values like
->                                  * 95 forever ...
->                                  */
-> -                               txerr = 0;
-> -                               rxerr = 0;
-> +                               priv->bec.txerr = 0;
-> +                               priv->bec.rxerr = 0;
->                                 break;
->                         }
->                 }
->
-> -               if (ecc) {
-> -                       priv->can.can_stats.bus_error++;
-> -                       stats->rx_errors++;
-> -
-> +               if (ecc && (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)) {
-> +                       /* Only if bus error reporting is active ... */
->                         cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
->
->                         /* Store error in CAN protocol (type) in data[2] */
-> @@ -301,29 +310,26 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                         if (!(ecc & SJA1000_ECC_DIR))
->                                 cf->data[2] |= CAN_ERR_PROT_TX;
->
-> -                       /* Store error in CAN protocol (location) in data[3] */
-> +                       /* Store error position in the bit stream of the CAN frame in data[3] */
->                         cf->data[3] = ecc & SJA1000_ECC_SEG;
->
->                         /* Store error status of CAN-controller in data[1] */
->                         if (priv->can.state == CAN_STATE_ERROR_WARNING) {
-> -                               if (txerr >= 96)
-> +                               if (priv->bec.txerr >= 96)
+As the bug description at
+https://lore.kernel.org/lkml/20220623033635.973929-1-xu.xin16@zte.com.cn/
+attckers can use this bug to crash the system.
 
-I checked and was just surprised that we do not have any macro for the
-different thresholds.
+So to avoid panic, remove the BUG_ON, and use ntfs_warning to output a
+warning to the syslog and return ERR.
 
-Does it make sense to add below declarations to include/uapi/linux/can/error.h?
+Cc: stable@vger.kernel.org
+Cc: Songyi Zhang <zhang.songyi@zte.com.cn>
+Cc: Yang Yang <yang.yang29@zte.com.cn>
+Cc: Jiang Xuexin<jiang.xuexin@zte.com.cn>
+Cc: Zhang wenya<zhang.wenya1@zte.com.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+---
 
-#define CAN_ERROR_WARNING_THRESHOLD 96
-#define CAN_ERROR_PASSIVE_THRESHOLD 128
+Changelog for v3:
+- Use IS_ERR_OR_NULL to check runlist.rl in ntfs_read_block
+- Modify ntfs error log.
 
-I will try to submit a patch for that by the end of today.
+Changelog for v2:
+- Use ntfs_warning instead of WARN().
+- Add the tag Cc: stable@vger.kernel.org.
 
->                                         cf->data[1] |= CAN_ERR_CRTL_TX_WARNING;
-> -                               if (rxerr >= 96)
-> +                               if (priv->bec.rxerr >= 96)
->                                         cf->data[1] |= CAN_ERR_CRTL_RX_WARNING;
->                         } else if (priv->can.state == CAN_STATE_ERROR_PASSIVE) {
-> -                               if (txerr >= 128)
-> +                               if (priv->bec.txerr >= 128)
->                                         cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
-> -                               if (rxerr >= 128)
-> +                               if (priv->bec.rxerr >= 128)
->                                         cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
->                         }
->
-> -                       cf->data[6] = txerr;
-> -                       cf->data[7] = rxerr;
-> +                       cf->data[6] = priv->bec.txerr;
-> +                       cf->data[7] = priv->bec.rxerr;
->                 }
->
-> -               priv->bec.txerr = txerr;
-> -               priv->bec.rxerr = rxerr;
-> -
->                 netif_rx(skb);
->         }
->  }
-> @@ -1021,7 +1027,8 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
->
->         priv->can.state = CAN_STATE_STOPPED;
->         priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-> -               CAN_CTRLMODE_CC_LEN8_DLC;
-> +                                      CAN_CTRLMODE_CC_LEN8_DLC |
-> +                                      CAN_CTRLMODE_BERR_REPORTING;
->
->         if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
->             USB_CANUSBM_PRODUCT_ID)
-> --
-> 2.25.1
->
+---
+ fs/ntfs/aops.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ntfs/aops.c b/fs/ntfs/aops.c
+index 5f4fb6ca6f2e..b9421552686a 100644
+--- a/fs/ntfs/aops.c
++++ b/fs/ntfs/aops.c
+@@ -183,7 +183,14 @@ static int ntfs_read_block(struct page *page)
+ 	vol = ni->vol;
+ 
+ 	/* $MFT/$DATA must have its complete runlist in memory at all times. */
+-	BUG_ON(!ni->runlist.rl && !ni->mft_no && !NInoAttr(ni));
++	if (IS_ERR_OR_NULL(ni->runlist.rl) && !ni->mft_no && !NInoAttr(ni)) {
++		ntfs_error(vol->sb, "Runlist of $MFT/$DATA is not cached. "
++				    "$MFT is corrupt.");
++		unlock_page(page);
++		if (IS_ERR(ni->runlist.rl))
++			return PTR_ERR(ni->runlist.rl);
++		return -EFAULT;
++	}
+ 
+ 	blocksize = vol->sb->s_blocksize;
+ 	blocksize_bits = vol->sb->s_blocksize_bits;
+-- 
+2.25.1
+

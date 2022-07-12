@@ -2,157 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A35571BBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34380571BBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbiGLNwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        id S233356AbiGLNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiGLNwJ (ORCPT
+        with ESMTP id S229954AbiGLNxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:52:09 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C43B79E0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id l11so13977048ybu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
-        b=fLRarT5d7pJmh7A50/oCtJdSEsMl6AUE3JJAWBUs5VRHku5TfmA2ZaNuN9yxSHaiIN
-         uwtuacBFDfHbwF6Bm+jjGZvODksVkWM5jxN3OkliOz894DxvftnJTqBwbIKjL3a5Jg7O
-         aD/FvQUvMXwFSfDXS95BPdRaSu7iLOPKW1iUcwu/8mbh2rgEJYfXBSvs5rJCN+tbCW5B
-         j9nesILDH3K0YJDH31eTwvUt6JTHN6f/36ZkIpJmZn5kpG6CapCdvx0JiOFJWYt0Wlhp
-         +g0M1lIyMMzrKYY4H+JmEQ3F9zNBW040MDY9TBTTgYfY69+SrLs4HRdOEbdtzaKYoX2a
-         DFuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
-        b=W0cB3bvuDJ3nJGb+CGU3iZ34LhSuBpQJxQ5SUApXQ/cXV6zEzXl1libRXIR2/eQCv2
-         JtOUmpRsUiCQ0HfUByfZjGHr5025rQC4I7Il+kfbDCM5PLSlG0EWBPWWMYWkc3c0+uaq
-         R1dqX6/0j4zeUf291FIJQkXUhczdLX2eiDI5Xe9we0uCzEw9T+4n1Qok530HvtQAtWw6
-         p6TxdcHVH4bvyQjxR8vspU8NezVAjSyT7DnvBG/LWJMzO0sJ6LNSOCyUJTS5BW7Q6bdF
-         EW62bqXhAhtEACDRz4yPqtTHZjxzFsA9aFH7EgqYsuoNwoDTdkV/iAm/4pCYlB0zprbz
-         emyQ==
-X-Gm-Message-State: AJIora+iRrKiQuU5rNJ0yGOJzGQEy8sblnJh7rJRY4h7zTPR/2+EYgeU
-        +jTH8yIA9MlEV8XY6Y7fSEEZlAvDF0NBwKZZL6V3Gw==
-X-Google-Smtp-Source: AGRyM1vaXhDrW9SzgGVGnQeO3sKZbN8zrYy0RbeU0jBi1M5Io3ShqhFaENqRfTiUKywPAI3ytd02a4hWcGbWqnCnWlg=
-X-Received: by 2002:a5b:10a:0:b0:66d:d8e3:9da2 with SMTP id
- 10-20020a5b010a000000b0066dd8e39da2mr22834061ybx.87.1657633927213; Tue, 12
- Jul 2022 06:52:07 -0700 (PDT)
+        Tue, 12 Jul 2022 09:53:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C63B5D2C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:53:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 515E161857
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 13:53:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FDCC3411C;
+        Tue, 12 Jul 2022 13:53:27 +0000 (UTC)
+Date:   Tue, 12 Jul 2022 09:53:25 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        zhaohui.shi@horizon.ai
+Subject: Re: [PATCH v5 1/2] sched/rt: fix bad task migration for rt tasks
+Message-ID: <20220712095325.408d1730@gandalf.local.home>
+In-Reply-To: <20220712013125.623338-1-schspa@gmail.com>
+References: <20220712013125.623338-1-schspa@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-19-glider@google.com>
-In-Reply-To: <20220701142310.2188015-19-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 15:51:31 +0200
-Message-ID: <CANpmjNOPJL7WAUh5CUZOYO8hY-dHTHMUMJzd9OGbmWES+smtrQ@mail.gmail.com>
-Subject: Re: [PATCH v4 18/45] instrumented.h: add KMSAN support
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:24, Alexander Potapenko <glider@google.com> wrote:
->
-> To avoid false positives, KMSAN needs to unpoison the data copied from
-> the userspace. To detect infoleaks - check the memory buffer passed to
-> copy_to_user().
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+On Tue, 12 Jul 2022 09:31:24 +0800
+Schspa Shi <schspa@gmail.com> wrote:
 
-Reviewed-by: Marco Elver <elver@google.com>
+> @@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
+>  			 * the mean time, task could have
+>  			 * migrated already or had its affinity changed.
+>  			 * Also make sure that it wasn't scheduled on its rq.
+> +			 * It is possible the task was scheduled, set
+> +			 * "migrate_disabled" and then got preempted, And we
+> +			 * check task migration disable flag here too.
 
-With the code simplification below.
+Nit.  "got preempted, so we must check the task migration disable flag here
+too".
 
-[...]
-> --- a/mm/kmsan/hooks.c
-> +++ b/mm/kmsan/hooks.c
-> @@ -212,6 +212,44 @@ void kmsan_iounmap_page_range(unsigned long start, unsigned long end)
->  }
->  EXPORT_SYMBOL(kmsan_iounmap_page_range);
->
-> +void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
-> +                       size_t left)
-> +{
-> +       unsigned long ua_flags;
-> +
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +       /*
-> +        * At this point we've copied the memory already. It's hard to check it
-> +        * before copying, as the size of actually copied buffer is unknown.
-> +        */
-> +
-> +       /* copy_to_user() may copy zero bytes. No need to check. */
-> +       if (!to_copy)
-> +               return;
-> +       /* Or maybe copy_to_user() failed to copy anything. */
-> +       if (to_copy <= left)
-> +               return;
-> +
-> +       ua_flags = user_access_save();
-> +       if ((u64)to < TASK_SIZE) {
-> +               /* This is a user memory access, check it. */
-> +               kmsan_internal_check_memory((void *)from, to_copy - left, to,
-> +                                           REASON_COPY_TO_USER);
+But other than that.
 
-This could just do "} else {" and the stuff below, and would result in
-simpler code with no explicit "return" and no duplicated
-user_access_restore().
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-> +               user_access_restore(ua_flags);
-> +               return;
-> +       }
-> +       /* Otherwise this is a kernel memory access. This happens when a compat
-> +        * syscall passes an argument allocated on the kernel stack to a real
-> +        * syscall.
-> +        * Don't check anything, just copy the shadow of the copied bytes.
-> +        */
-> +       kmsan_internal_memmove_metadata((void *)to, (void *)from,
-> +                                       to_copy - left);
-> +       user_access_restore(ua_flags);
-> +}
-> +EXPORT_SYMBOL(kmsan_copy_to_user);
+-- Steve
+
+>  			 */

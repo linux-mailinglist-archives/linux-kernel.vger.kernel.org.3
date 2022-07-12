@@ -2,92 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48409571AE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65893571AEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 15:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiGLNOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 09:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S231254AbiGLNPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 09:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGLNOd (ORCPT
+        with ESMTP id S229703AbiGLNPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 09:14:33 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC0920BFA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:14:32 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 64so13826574ybt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:14:32 -0700 (PDT)
+        Tue, 12 Jul 2022 09:15:33 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7B3564DB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id d66-20020a636845000000b0040a88edd9c1so3304886pgc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BonEn6uOwekFl3zwAk2Kis9tLSCC45eUpmb7zWo4VJI=;
-        b=Ei+65oY0/L+YeMQ1FjVks7XnHIa0H/pol34HBHs2FcL9Q7phxIqIPLH9RPDjkjPACp
-         I+qWzwPIn0D24e++W3Y4eVpA7sk5tc2GxOj3Guu/jzK58jQSuc99e6CfhxQucydm6p2F
-         PUU6gG0AwT5w8nYdpIhdSvN+t6gR1hJYmeaCWGCDhuifOxPqP8WGTFp9BPgG+FA9kovz
-         SUqzBjp7nSm8W3HAeCK01MGJ6SyNABUd8BRocKOkPOzCaMvr64kAPXcLeF0lqvBtFumi
-         2/VRcnqTQ1W+9XHhczLWY0VAK+4ura4IXhE0342iVV6consMox/cv14hJVnDR28p639j
-         RbBg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Jj15qoURj3emWvHLxBH2nPwiIzzLvd3mSNd7M20V7kc=;
+        b=VrvPmlW1Mw9Qie6nuTLyJIEdvtB1q9qnbj5yZHc5WAz2gmilCGbHrAqHW+nbHnr1Yt
+         QYCVTeIud8NWMDpleRg/psfMwA6QarcShJmRgGOPwCri+9+7X2GBA4+Tj+c4G58JlOR2
+         AAnOp9AzxbNQ7LsrvFRsrxgHUqqbYI38rxnkXJYQf4VtAcxDHSqE1u2CVWElkavoprVq
+         MLPLZF4KKZ2n+NFw/z5bjZirvOBQtqzV8bEJ7ZcxpbnMBWkTdx+DSdszCF38jbVzKw1N
+         v+nA8OfSDnRpifHP6YFfv5eLm0pP+A8Sl89jwczzX/VKEppia8uaYMmSmotBlTP99use
+         TmPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BonEn6uOwekFl3zwAk2Kis9tLSCC45eUpmb7zWo4VJI=;
-        b=Wq/uGFvx+3RXwpxUA8dpPitxeoETuDTDB3HWYLBlynASpbdghLh74UbhRdai/uRlQd
-         g/jEgSQ2SfXn5WO6lxKuVvrB3rmzAUa5fPJgWQgJIbkELn7O6O/yrLu+KHHoyYNzetOM
-         nAxN7ktQs30rZudrPyfhydJcekqLfw5ZdmVCqra/2p7O7y0Fm5mqlB5bCuuvxI1mFbyN
-         YHwmWnTlWNUfsO6W0krulQiUyPx7SqJuzYZrlSOONB8Oug7KgTILXJ7FFOSCymZkpCnQ
-         DPJ+XPLO1UOyPI5w092vUugqgtbILbYXQOZLVYcPtkhcuFkBm+GPgvrzIgJpM/GTyhgv
-         a2Kg==
-X-Gm-Message-State: AJIora9pmXQVqk4/PzlQ4MDlEiThJ4j5kjt/faNY6YMbZGF1K7guzR7u
-        nOVjWaBlyannB9J8K6Bsa15wz2WlZfTFyroAT5XLBQ==
-X-Google-Smtp-Source: AGRyM1t3MUCp/CV5V+cpnchkexRCwEh09OyfLbEs5YJ1MMEogJ1Ly4GZ0Kh71upFxhlQLBhCzmmahxJwZPCVgMqv2po=
-X-Received: by 2002:a25:2d59:0:b0:66e:32d3:7653 with SMTP id
- s25-20020a252d59000000b0066e32d37653mr22288782ybe.625.1657631671169; Tue, 12
- Jul 2022 06:14:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-16-glider@google.com>
-In-Reply-To: <20220701142310.2188015-16-glider@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 15:13:55 +0200
-Message-ID: <CANpmjNOJ-2xim3KM=9O=sfSgQXZi81R6PQj=antfHnejaOOogg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/45] mm: kmsan: call KMSAN hooks from SLUB code
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Jj15qoURj3emWvHLxBH2nPwiIzzLvd3mSNd7M20V7kc=;
+        b=UpUM2zz7JY3sN4DcNmwQLGo4JHJ8GzdSqtlYkUlfcgRgF3/SdAc/dmVY02q3eAbf05
+         RBazSwoOhO83VnSOP3SGeJW+o6kMewtD4/50GdFlclXM7YpsC6BbjpuwdNu0PEpgb8So
+         ed1CmX5ZyiWLAyBvv/7MsEYDOrlxKGeF94TRK9eRfaKqmo8t+r4anB15v+eIPOV4+4FM
+         IxFZK3UPUkd8VyDvAxBkcpLA142/iJNens+khuptKr/Tl2EHc952LeUMKiHBfFYH5pm4
+         c9VIzUaRu1N5ieYAeyniGA6s5w0WhTri7UzTdz/9NpWgmaECAImP/oWiuM9J13Qf2BER
+         RuSQ==
+X-Gm-Message-State: AJIora/453Cm0/h/TzJp+jBWn2TfqCn5f4V1vfi57bgNIJijAVpvToql
+        6zq9nDbMjafLuPbFZvYZV0ZX0fA79V/Z9twq/AxJ
+X-Google-Smtp-Source: AGRyM1tiLhmBsSG07iMVccKmTqJMgw+sCcWHJFKw/dCojeh685N00bAiC1pMr5tl2AGmpOHdStzVwHzb7OqZJcAwSsTV
+X-Received: from vamshig51.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:70c])
+ (user=vamshigajjela job=sendgmr) by 2002:a17:90b:247:b0:1f0:1192:7c22 with
+ SMTP id fz7-20020a17090b024700b001f011927c22mr4471560pjb.232.1657631730301;
+ Tue, 12 Jul 2022 06:15:30 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 18:45:23 +0530
+Message-Id: <20220712131523.1874428-1-vamshigajjela@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] serial: 8250_dw: Avoid pslverr on reading empty receiver fifo
+From:   Vamshi Gajjela <vamshigajjela@google.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        VAMSHI GAJJELA <vamshigajjela@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,284 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:23, 'Alexander Potapenko' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> In order to report uninitialized memory coming from heap allocations
-> KMSAN has to poison them unless they're created with __GFP_ZERO.
->
-> It's handy that we need KMSAN hooks in the places where
-> init_on_alloc/init_on_free initialization is performed.
->
-> In addition, we apply __no_kmsan_checks to get_freepointer_safe() to
-> suppress reports when accessing freelist pointers that reside in freed
-> objects.
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+From: VAMSHI GAJJELA <vamshigajjela@google.com>
 
-Reviewed-by: Marco Elver <elver@google.com>
+With PSLVERR_RESP_EN parameter set to 1, device generates an error
+response when an attempt to read empty RBR with FIFO enabled.
 
-But see comment below.
+This happens when LCR writes are ignored when UART is busy.
+dw8250_check_lcr() in retries to updateLCR, invokes dw8250_force_idle()
+to clear and reset fifo and eventually reads UART_RX causing pslverr.
 
-> ---
-> v2:
->  -- move the implementation of SLUB hooks here
->
-> v4:
->  -- change sizeof(type) to sizeof(*ptr)
->  -- swap mm: and kmsan: in the subject
->  -- get rid of kmsan_init(), replace it with __no_kmsan_checks
->
-> Link: https://linux-review.googlesource.com/id/I6954b386c5c5d7f99f48bb6cbcc74b75136ce86e
-> ---
->  include/linux/kmsan.h | 57 ++++++++++++++++++++++++++++++
->  mm/kmsan/hooks.c      | 80 +++++++++++++++++++++++++++++++++++++++++++
->  mm/slab.h             |  1 +
->  mm/slub.c             | 18 ++++++++++
->  4 files changed, 156 insertions(+)
->
-> diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-> index 699fe4f5b3bee..fd76cea338878 100644
-> --- a/include/linux/kmsan.h
-> +++ b/include/linux/kmsan.h
-> @@ -15,6 +15,7 @@
->  #include <linux/types.h>
->
->  struct page;
-> +struct kmem_cache;
->
->  #ifdef CONFIG_KMSAN
->
-> @@ -72,6 +73,44 @@ void kmsan_free_page(struct page *page, unsigned int order);
->   */
->  void kmsan_copy_page_meta(struct page *dst, struct page *src);
->
-> +/**
-> + * kmsan_slab_alloc() - Notify KMSAN about a slab allocation.
-> + * @s:      slab cache the object belongs to.
-> + * @object: object pointer.
-> + * @flags:  GFP flags passed to the allocator.
-> + *
-> + * Depending on cache flags and GFP flags, KMSAN sets up the metadata of the
-> + * newly created object, marking it as initialized or uninitialized.
-> + */
-> +void kmsan_slab_alloc(struct kmem_cache *s, void *object, gfp_t flags);
-> +
-> +/**
-> + * kmsan_slab_free() - Notify KMSAN about a slab deallocation.
-> + * @s:      slab cache the object belongs to.
-> + * @object: object pointer.
-> + *
-> + * KMSAN marks the freed object as uninitialized.
-> + */
-> +void kmsan_slab_free(struct kmem_cache *s, void *object);
-> +
-> +/**
-> + * kmsan_kmalloc_large() - Notify KMSAN about a large slab allocation.
-> + * @ptr:   object pointer.
-> + * @size:  object size.
-> + * @flags: GFP flags passed to the allocator.
-> + *
-> + * Similar to kmsan_slab_alloc(), but for large allocations.
-> + */
-> +void kmsan_kmalloc_large(const void *ptr, size_t size, gfp_t flags);
-> +
-> +/**
-> + * kmsan_kfree_large() - Notify KMSAN about a large slab deallocation.
-> + * @ptr: object pointer.
-> + *
-> + * Similar to kmsan_slab_free(), but for large allocations.
-> + */
-> +void kmsan_kfree_large(const void *ptr);
-> +
->  /**
->   * kmsan_map_kernel_range_noflush() - Notify KMSAN about a vmap.
->   * @start:     start of vmapped range.
-> @@ -138,6 +177,24 @@ static inline void kmsan_copy_page_meta(struct page *dst, struct page *src)
->  {
->  }
->
-> +static inline void kmsan_slab_alloc(struct kmem_cache *s, void *object,
-> +                                   gfp_t flags)
-> +{
-> +}
-> +
-> +static inline void kmsan_slab_free(struct kmem_cache *s, void *object)
-> +{
-> +}
-> +
-> +static inline void kmsan_kmalloc_large(const void *ptr, size_t size,
-> +                                      gfp_t flags)
-> +{
-> +}
-> +
-> +static inline void kmsan_kfree_large(const void *ptr)
-> +{
-> +}
-> +
->  static inline void kmsan_vmap_pages_range_noflush(unsigned long start,
->                                                   unsigned long end,
->                                                   pgprot_t prot,
-> diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-> index 070756be70e3a..052e17b7a717d 100644
-> --- a/mm/kmsan/hooks.c
-> +++ b/mm/kmsan/hooks.c
-> @@ -26,6 +26,86 @@
->   * skipping effects of functions like memset() inside instrumented code.
->   */
->
-> +void kmsan_slab_alloc(struct kmem_cache *s, void *object, gfp_t flags)
-> +{
-> +       if (unlikely(object == NULL))
-> +               return;
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +       /*
-> +        * There's a ctor or this is an RCU cache - do nothing. The memory
-> +        * status hasn't changed since last use.
-> +        */
-> +       if (s->ctor || (s->flags & SLAB_TYPESAFE_BY_RCU))
-> +               return;
-> +
-> +       kmsan_enter_runtime();
-> +       if (flags & __GFP_ZERO)
-> +               kmsan_internal_unpoison_memory(object, s->object_size,
-> +                                              KMSAN_POISON_CHECK);
-> +       else
-> +               kmsan_internal_poison_memory(object, s->object_size, flags,
-> +                                            KMSAN_POISON_CHECK);
-> +       kmsan_leave_runtime();
-> +}
-> +EXPORT_SYMBOL(kmsan_slab_alloc);
-> +
-> +void kmsan_slab_free(struct kmem_cache *s, void *object)
-> +{
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +
-> +       /* RCU slabs could be legally used after free within the RCU period */
-> +       if (unlikely(s->flags & (SLAB_TYPESAFE_BY_RCU | SLAB_POISON)))
-> +               return;
-> +       /*
-> +        * If there's a constructor, freed memory must remain in the same state
-> +        * until the next allocation. We cannot save its state to detect
-> +        * use-after-free bugs, instead we just keep it unpoisoned.
-> +        */
-> +       if (s->ctor)
-> +               return;
-> +       kmsan_enter_runtime();
-> +       kmsan_internal_poison_memory(object, s->object_size, GFP_KERNEL,
-> +                                    KMSAN_POISON_CHECK | KMSAN_POISON_FREE);
-> +       kmsan_leave_runtime();
-> +}
-> +EXPORT_SYMBOL(kmsan_slab_free);
-> +
-> +void kmsan_kmalloc_large(const void *ptr, size_t size, gfp_t flags)
-> +{
-> +       if (unlikely(ptr == NULL))
-> +               return;
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +       kmsan_enter_runtime();
-> +       if (flags & __GFP_ZERO)
-> +               kmsan_internal_unpoison_memory((void *)ptr, size,
-> +                                              /*checked*/ true);
-> +       else
-> +               kmsan_internal_poison_memory((void *)ptr, size, flags,
-> +                                            KMSAN_POISON_CHECK);
-> +       kmsan_leave_runtime();
-> +}
-> +EXPORT_SYMBOL(kmsan_kmalloc_large);
-> +
-> +void kmsan_kfree_large(const void *ptr)
-> +{
-> +       struct page *page;
-> +
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +       kmsan_enter_runtime();
-> +       page = virt_to_head_page((void *)ptr);
-> +       KMSAN_WARN_ON(ptr != page_address(page));
-> +       kmsan_internal_poison_memory((void *)ptr,
-> +                                    PAGE_SIZE << compound_order(page),
-> +                                    GFP_KERNEL,
-> +                                    KMSAN_POISON_CHECK | KMSAN_POISON_FREE);
-> +       kmsan_leave_runtime();
-> +}
-> +EXPORT_SYMBOL(kmsan_kfree_large);
-> +
->  static unsigned long vmalloc_shadow(unsigned long addr)
->  {
->         return (unsigned long)kmsan_get_metadata((void *)addr,
-> diff --git a/mm/slab.h b/mm/slab.h
-> index db9fb5c8dae73..d0de8195873d8 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -752,6 +752,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->                         memset(p[i], 0, s->object_size);
->                 kmemleak_alloc_recursive(p[i], s->object_size, 1,
->                                          s->flags, flags);
-> +               kmsan_slab_alloc(s, p[i], flags);
->         }
->
->         memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index b1281b8654bd3..b8b601f165087 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -22,6 +22,7 @@
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->  #include <linux/kasan.h>
-> +#include <linux/kmsan.h>
->  #include <linux/cpu.h>
->  #include <linux/cpuset.h>
->  #include <linux/mempolicy.h>
-> @@ -359,6 +360,17 @@ static void prefetch_freepointer(const struct kmem_cache *s, void *object)
->         prefetchw(object + s->offset);
->  }
->
-> +/*
-> + * When running under KMSAN, get_freepointer_safe() may return an uninitialized
-> + * pointer value in the case the current thread loses the race for the next
-> + * memory chunk in the freelist. In that case this_cpu_cmpxchg_double() in
-> + * slab_alloc_node() will fail, so the uninitialized value won't be used, but
-> + * KMSAN will still check all arguments of cmpxchg because of imperfect
-> + * handling of inline assembly.
-> + * To work around this problem, we apply __no_kmsan_checks to ensure that
-> + * get_freepointer_safe() returns initialized memory.
-> + */
-> +__no_kmsan_checks
->  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
->  {
->         unsigned long freepointer_addr;
-> @@ -1709,6 +1721,7 @@ static inline void *kmalloc_large_node_hook(void *ptr, size_t size, gfp_t flags)
->         ptr = kasan_kmalloc_large(ptr, size, flags);
->         /* As ptr might get tagged, call kmemleak hook after KASAN. */
->         kmemleak_alloc(ptr, size, 1, flags);
-> +       kmsan_kmalloc_large(ptr, size, flags);
->         return ptr;
->  }
->
-> @@ -1716,12 +1729,14 @@ static __always_inline void kfree_hook(void *x)
->  {
->         kmemleak_free(x);
->         kasan_kfree_large(x);
-> +       kmsan_kfree_large(x);
->  }
->
->  static __always_inline bool slab_free_hook(struct kmem_cache *s,
->                                                 void *x, bool init)
->  {
->         kmemleak_free_recursive(x, s->flags);
-> +       kmsan_slab_free(s, x);
->
->         debug_check_no_locks_freed(x, s->object_size);
->
-> @@ -3756,6 +3771,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->          */
->         slab_post_alloc_hook(s, objcg, flags, size, p,
->                                 slab_want_init_on_alloc(flags, s));
-> +
+Avoid this by not reading RBR/UART_RX when no data is available.
 
-Remove unnecessary whitespace change.
+Signed-off-by: VAMSHI GAJJELA <vamshigajjela@google.com>
+---
+ drivers/tty/serial/8250/8250_dw.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index f57bbd32ef11..a83222839884 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -81,9 +81,19 @@ static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
+ 
+ static void dw8250_force_idle(struct uart_port *p)
+ {
++	unsigned int lsr;
+ 	struct uart_8250_port *up = up_to_u8250p(p);
+ 
+ 	serial8250_clear_and_reinit_fifos(up);
++
++	/*
++	 * With PSLVERR_RESP_EN parameter set to 1, device generates pslverr
++	 * error response when an attempt to read empty RBR with FIFO enabled
++	 */
++	lsr = p->serial_in(p, UART_LSR);
++	if ((up->fcr & UART_FCR_ENABLE_FIFO) && !(lsr & UART_LSR_DR))
++		return;
++
+ 	(void)p->serial_in(p, UART_RX);
+ }
+ 
+-- 
+2.37.0.144.g8ac04bfd2-goog
+

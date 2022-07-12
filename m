@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A9D571D64
+	by mail.lfdr.de (Postfix) with ESMTP id A781D571D65
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 16:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiGLOyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 10:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S233767AbiGLOyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 10:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbiGLOyP (ORCPT
+        with ESMTP id S233812AbiGLOyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:54:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA63B3192D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 07:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+k83zGSxic1pbQTEJQS/iJCti7MTxdVcT9sj/XVqF9o=; b=AYur2/Yrsq3i8wnAiMQB5+HeGR
-        Cw1t1umk+nFN6rzDv9R8Kx4j4+IbnkrgsEYyIxGKCrGXH6RGeySCrD/75ebbwoNRX6FXZg7zYOoQc
-        pJBZfDHzeAgsQRlmUhdHkHxwaGQOmL2mvL1ysNWIPqYKl9LMq/2DvVjIMG7cj9aEcdqyWr12Nrl8K
-        feqbLA6Rp/mCUDdslVe8t1ZDq6J4/VzufUvgGfcElp1Rxm7X5tHtU5VVjuExRYm15zBZ9jGtrDFgo
-        W1AFvEjia6lwr0qz3ZrxQbsxetPO8Sk9Ib085EHPXQO8BCZbu3E8uJcFxAn+16vN9oGyKsgSFcG7g
-        EtYvT1Xg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBHH1-00715O-MX; Tue, 12 Jul 2022 14:54:03 +0000
-Date:   Tue, 12 Jul 2022 15:54:03 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Tue, 12 Jul 2022 10:54:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ED620BDD;
+        Tue, 12 Jul 2022 07:54:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E881460C1A;
+        Tue, 12 Jul 2022 14:54:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65F4C341C0;
+        Tue, 12 Jul 2022 14:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657637649;
+        bh=VkRGH3NNN+HIyw30NEGUMWuNTYMnRNznF6Yoz8xWvHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h60oAnU1aXZaRC7VpVhzHcRhXIV0KfZ9Zm2lzo6YT5TOw0wuZD1nO+KNGFKijNu34
+         lZMJhtnZZrJ70MJD808JKzGh4pRAxRdcL3a0ILc5SyRdisTaoaN366Hej78Ejbb9hU
+         qQhKS8myxFGhQucR5emZKGxqwZouBqiCzh1hvojeRta93T3o+ZLOqYTTNwDbuWGHvN
+         S3zKyxs52kUBo0yn5c18FEEkQbZthkLG59WuRvdr7PYWgFvCS36XTvHf6rkyjxirCj
+         k0YNOyFS/olS3uOxmKphzfuDqxHtU9n41plGVYyb8bHq3C+1p8JS2e/sLZOKzUb4Ym
+         xn26XlW9iX5Lw==
+Date:   Tue, 12 Jul 2022 17:54:05 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
-Message-ID: <Ys2LCwQZUuOwiiX6@casper.infradead.org>
-References: <20220712142441.4184969-1-Liam.Howlett@oracle.com>
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>, "bp@alien8.de" <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>
+Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
+ fault for user address
+Message-ID: <Ys2LDaKFE9+aoZKr@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+ <Ys1hrq+vFbxRJbra@kernel.org>
+ <SN6PR12MB27676FD80E6B20D6B8459EC28E869@SN6PR12MB2767.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712142441.4184969-1-Liam.Howlett@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <SN6PR12MB27676FD80E6B20D6B8459EC28E869@SN6PR12MB2767.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 02:24:55PM +0000, Liam Howlett wrote:
-> When building with C=1, the maple tree had some rcu type mismatch &
-> locking mismatches in the destroy functions.  There were cosmetic only
-> since this happens after the nodes are removed from the tree.
-
-... in the current use-case.  It's a legitimate use of the API to do:
-
-	ma_init();
-	ma_store();
-	ma_destroy();
-	ma_store();
-
-Can you add a new test that does that?
-
-> @@ -5524,13 +5526,17 @@ static void mt_destroy_walk(struct maple_enode *enode, unsigned char ma_flags,
->  
->  		type = mte_node_type(mas.node);
->  		slots = ma_slots(mte_to_node(mas.node), type);
-> -		if ((offset < mt_slots[type]) && mte_node_type(slots[offset]) &&
-> -		    mte_to_node(slots[offset])) {
-> -			struct maple_enode *parent = mas.node;
-> +		if (offset >= mt_slots[type])
-> +			goto next;
->  
-> -			mas.node = mas_slot_locked(&mas, slots, offset);
-> +		tmp = mas_slot_locked(&mas, slots, offset);
-> +		if (mte_node_type(tmp) && mte_to_node(tmp)) {
-> +
-
-Unnecessary blank line?
-
-> +			parent = mas.node;
-> +			mas.node = tmp;
->  			slots = mas_destroy_descend(&mas, parent, offset);
->  		}
-> +next:
->  		node = mas_mn(&mas);
->  	} while (start != mas.node);
->  
-> -- 
-> 2.35.1
+On Tue, Jul 12, 2022 at 02:29:18PM +0000, Kalra, Ashish wrote:
+> [AMD Official Use Only - General]
 > 
+> >> +static int handle_user_rmp_page_fault(struct pt_regs *regs, unsigned long error_code,
+> >> +				      unsigned long address)
+> >> +{
+> >> +	int rmp_level, level;
+> >> +	pte_t *pte;
+> >> +	u64 pfn;
+> >> +
+> >> +	pte = lookup_address_in_mm(current->mm, address, &level);
+> 
+> >As discussed in [1], the lookup should be done in kvm->mm, along the lines of host_pfn_mapping_level().
+> 
+> With lookup_address_in_mm() now removed in 5.19, this is now using
+> lookup_address_in_pgd() though still using non init-mm, and as mentioned
+> here in [1], it makes sense to not use lookup_address_in_pgd() as it does
+> not play nice with userspace mappings, e.g. doesn't disable IRQs to block
+> TLB shootdowns and doesn't use READ_ONCE() to ensure an upper level entry
+> isn't converted to a huge page between checking the PAGE_SIZE bit and
+> grabbing the address of the next level down.
+> 
+> But is KVM going to provide its own variant of lookup_address_in_pgd()
+> that is safe for use with user addresses, i.e., a generic version of
+> lookup_address() on kvm->mm or we need to duplicate page table walking
+> code of host_pfn_mapping_level() ?
+
+It's probably cpen coded for the sole reason that there is only one
+call site, i.e. there has not been rational reason to have a helper
+function.
+
+Helpers are usually created only in-need basis, and since the need
+comes from this patch set, it should include a patch, which simply
+encapsulates it into a helper.
+
+> 
+> Thanks,
+> Ashish
+
+BR, Jarkko

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C88C5729C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C7F5729BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 01:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiGLXOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 19:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S234221AbiGLXOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 19:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbiGLXNg (ORCPT
+        with ESMTP id S233911AbiGLXNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Jul 2022 19:13:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A48DCC78C
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D9B0B
         for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 16:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1657667611; x=1689203611;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6kpq1VPBF3XlDpY7P9nLlIhIxMc1N9UleTXT2cgue9s=;
-  b=jBKMjwZCXu/jKKYXXggynjoweS7LIuWOdWnVO2oRTSrlMD9dg8bCNjya
-   LeC8bXYbbWTY0hbh0X63cVNUFzIE30G01Ftu2i8uVYN7wH3kAXGDNnUfX
-   ogpejjGaIH1OhUxEBTCBqo6go91kmdx7dfE8uv1FC4f2ab+/8CvvMvbAe
-   gCfzWc+jYvKNAsQwY3Z3P0vPizMGMmKYvTM49B9GqXXHJYIa2bHuxQSwL
-   1J77TGuZ6sZWr266F0d/+d/B2R2NzOL7ej/COpCaJa/VICLhs5jflaL5/
-   ocO0QIgijPrVzaYQo77WS5gNoTjPU4w0JnFPz7DawC1xLOy4+SY8fICeh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264852931"
+  bh=ccx0RgNBfz7piuZWOrmJMdKV3R7Gsc2VojQmQ6vSEyk=;
+  b=ifL0xduc/fDMqiPNBhFClh9G4EwjNcFoQlebl7l5MhYE6iQUsTBgmgk9
+   UAqniLm9Sa1UqsLs2BatJb6rtuqDP9rxxEyRFPOB94Gq+6+zCWztIAmax
+   ZapTFsw0bL9i7cPkJ8YBEp6VkQAneDHuanlDOjTSHyph+qy6UWD7vjmF8
+   zXO1W/8n0KkXtn120Vl/LjDJ7ySeIG2l4R6ZKg+S8NE38dgESgi7vNH5C
+   d6ju6jfVuoem4RqedvC1IiDjf2d6fy9iUltcU53pQzdfTh5GDDVf+bW3e
+   8erim6MGybFleHelJlulHGawl7Xy5qi+mWWwf6+qkwJ3BhiSi6gQK1G/A
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="285808447"
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="264852931"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:13:30 -0700
+   d="scan'208";a="285808447"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 16:13:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="722131606"
+   d="scan'208";a="592792970"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 12 Jul 2022 16:13:26 -0700
+  by orsmga007.jf.intel.com with ESMTP; 12 Jul 2022 16:13:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 4227A6CD; Wed, 13 Jul 2022 02:13:30 +0300 (EEST)
+        id 4ABDA6CE; Wed, 13 Jul 2022 02:13:30 +0300 (EEST)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -54,250 +54,237 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Andi Kleen <ak@linux.intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv5 OPTIONAL 12/13] x86/mm: Extend LAM to support to LAM_U48
-Date:   Wed, 13 Jul 2022 02:13:27 +0300
-Message-Id: <20220712231328.5294-13-kirill.shutemov@linux.intel.com>
+        Weihong Zhang <weihong.zhang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv5 OPTIONAL 13/13] selftests/x86/lam: Add tests cases for LAM_U48
+Date:   Wed, 13 Jul 2022 02:13:28 +0300
+Message-Id: <20220712231328.5294-14-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
 References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LAM_U48 allows to encode 15 bits of tags into address.
+From: Weihong Zhang <weihong.zhang@intel.com>
 
-LAM_U48 steals bits above 47-bit for tags and makes it impossible for
-userspace to use full address space on 5-level paging machine.
+LAM supports configurations that differ regarding which pointer bits are masked.
+With LAM_U48, bits 62:48 in pointers can be masked as metadata bits, the width
+of LAM is 15.
 
-Make these features mutually exclusive: whichever gets enabled first
-blocks the other one.
+Add test cases in existed test scenarios:
 
+MALLOC:
+
+ - Enable LAM_U48, masks bits 48:62 of user pointers as metadata, the
+   process can dereference these pointers.
+
+MMAP:
+
+ - Enable LAM_U48, mmaping with high address (above bits 47) have to be
+   failed, which lead to trigger SIGSEGV.
+
+ - LAM_U48 can't be enabled if there is a mmaping with high
+   address(above bits 47) before enable LAM_U48.
+
+SYSCALL:
+
+ - LAM supports set metadata in high bits 62:48 (LAM48) of user process,
+   pass these pointers to SYSCALL, SYSCALL can dereference pointers and
+   return correct result.
+
+IO_URING:
+
+ - Add LAM_U48 test on IO_URING, Enable LAM_U48, set metadata in bits
+   62:48 of buffers, IO_URING can handle these buffers well.
+
+FORK/EXEC:
+
+ - Add LAM_U48 test cases in inherit scenarios. these cases should same
+   as LAM_U57;
+
+Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/elf.h         |  3 ++-
- arch/x86/include/asm/mmu_context.h | 13 +++++++++++++
- arch/x86/kernel/process_64.c       | 23 +++++++++++++++++++++++
- arch/x86/kernel/sys_x86_64.c       |  5 +++--
- arch/x86/mm/hugetlbpage.c          |  6 ++++--
- arch/x86/mm/mmap.c                 | 10 +++++++++-
- 6 files changed, 54 insertions(+), 6 deletions(-)
+ tools/testing/selftests/x86/lam.c | 67 ++++++++++++++++++++++++++++++-
+ 1 file changed, 66 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index cb0ff1055ab1..4df13497a770 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -317,7 +317,8 @@ static inline int mmap_is_ia32(void)
- extern unsigned long task_size_32bit(void);
- extern unsigned long task_size_64bit(int full_addr_space);
- extern unsigned long get_mmap_base(int is_legacy);
--extern bool mmap_address_hint_valid(unsigned long addr, unsigned long len);
-+extern bool mmap_address_hint_valid(struct mm_struct *mm,
-+				    unsigned long addr, unsigned long len);
- extern unsigned long get_sigframe_size(void);
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index b0e9ea23758b..3736f41948e9 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -263,6 +263,19 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
- 
- unsigned long __get_current_cr3_fast(void);
- 
-+#ifdef CONFIG_X86_5LEVEL
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	/* LAM_U48 steals VA bits above 47-bit for tags */
-+	return mm->context.lam_cr3_mask != X86_CR3_LAM_U48;
-+}
-+#else
-+static inline bool full_va_allowed(struct mm_struct *mm)
-+{
-+	return false;
-+}
-+#endif
-+
- #include <asm-generic/mmu_context.h>
- 
- #endif /* _ASM_X86_MMU_CONTEXT_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 82a19168bfa4..cfa2e42a135a 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -761,6 +761,16 @@ static void enable_lam_func(void *mm)
- 	set_tlbstate_cr3_lam_mask(lam_mask);
- }
- 
-+static bool lam_u48_allowed(void)
-+{
-+	struct mm_struct *mm = current->mm;
-+
-+	if (!full_va_allowed(mm))
-+		return true;
-+
-+	return find_vma(mm, DEFAULT_MAP_WINDOW) == NULL;
-+}
-+
- static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- {
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+index fcac5feb47d0..b354e57bf072 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -24,6 +24,7 @@
+ /* LAM modes, these definitions were copied from kernel code */
+ #define LAM_NONE                0
+ #define LAM_U57_BITS            6
++#define LAM_U48_BITS            15
+ /* arch prctl for LAM */
+ #define ARCH_GET_UNTAG_MASK     0x4001
+ #define ARCH_ENABLE_TAGGED_ADDR 0x4002
+@@ -126,7 +127,7 @@ static int set_lam(unsigned long lam)
  	int ret = 0;
-@@ -768,6 +778,10 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	if (!cpu_feature_enabled(X86_FEATURE_LAM))
- 		return -ENODEV;
+ 	uint64_t ptr = 0;
  
-+	/* lam_u48_allowed() requires mmap_lock */
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
- 	mutex_lock(&mm->context.lock);
+-	if (lam != LAM_U57_BITS && lam != LAM_NONE)
++	if (lam != LAM_U48_BITS && lam != LAM_U57_BITS && lam != LAM_NONE)
+ 		return -1;
  
- 	/* Already enabled? */
-@@ -782,6 +796,14 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	} else if (nr_bits <= 6) {
- 		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
- 		mm->context.untag_mask =  ~GENMASK(62, 57);
-+	} else if (nr_bits <= 15) {
-+		if (!lam_u48_allowed()) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+
-+		mm->context.lam_cr3_mask = X86_CR3_LAM_U48;
-+		mm->context.untag_mask =  ~GENMASK(62, 48);
- 	} else {
- 		ret = -EINVAL;
- 		goto out;
-@@ -793,6 +815,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
- 	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
- out:
- 	mutex_unlock(&mm->context.lock);
-+	mmap_write_unlock(mm);
+ 	/* Skip check return */
+@@ -138,6 +139,8 @@ static int set_lam(unsigned long lam)
+ 	/* Check mask returned is expected */
+ 	if (lam == LAM_U57_BITS)
+ 		ret = (ptr != ~(0x3fULL << 57));
++	else if (lam == LAM_U48_BITS)
++		ret = (ptr != ~(0x7fffULL << 48));
+ 	else if (lam == LAM_NONE)
+ 		ret = (ptr != -1ULL);
+ 
+@@ -161,6 +164,8 @@ static int get_lam(void)
+ 		ret = LAM_U57_BITS;
+ 	else if (ptr == -1ULL)
+ 		ret = LAM_NONE;
++	else if (ptr == ~(0x7fffULL << 48))
++		ret = LAM_U48_BITS;
+ 
+ 
  	return ret;
- }
+@@ -176,6 +181,9 @@ static uint64_t get_metadata(uint64_t src, unsigned long lam)
+ 	metadata = rand();
  
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 8cc653ffdccd..5ea6aaed89ba 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -21,6 +21,7 @@
+ 	switch (lam) {
++	case LAM_U48_BITS: /* Set metadata in bits 62:48 */
++		metadata = (src & ~(0x7fffULL << 48)) | ((metadata & 0x7fff) << 48);
++		break;
+ 	case LAM_U57_BITS: /* Set metadata in bits 62:57 */
+ 		metadata = (src & ~(0x3fULL << 57)) | ((metadata & 0x3f) << 57);
+ 		break;
+@@ -552,6 +560,9 @@ int do_uring(unsigned long lam)
+ 			uint64_t addr = ((uint64_t)fi->iovecs[i].iov_base);
  
- #include <asm/elf.h>
- #include <asm/ia32.h>
-+#include <asm/mmu_context.h>
+ 			switch (lam) {
++			case LAM_U48_BITS: /* Clear bits 62:48 */
++				addr = (addr & ~(0x7fffULL << 48));
++				break;
+ 			case LAM_U57_BITS: /* Clear bits 62:57 */
+ 				addr = (addr & ~(0x3fULL << 57));
+ 				break;
+@@ -696,6 +707,12 @@ static struct testcases uring_cases[] = {
+ 		.test_func = handle_uring,
+ 		.msg = "URING: LAM_U57. Dereferencing pointer with metadata\n",
+ 	},
++	{
++		.later = 0,
++		.lam = LAM_U48_BITS,
++		.test_func = handle_uring,
++		.msg = "URING: LAM_U48. Dereferencing pointer with metadata.\n",
++	},
+ 	{
+ 		.later = 1,
+ 		.expected = 1,
+@@ -712,6 +729,12 @@ static struct testcases malloc_cases[] = {
+ 		.test_func = handle_malloc,
+ 		.msg = "MALLOC: LAM_U57. Dereferencing pointer with metadata\n",
+ 	},
++	{
++		.later = 0,
++		.lam = LAM_U48_BITS,
++		.test_func = handle_malloc,
++		.msg = "MALLOC: LAM_U48. Dereferencing pointer with metadata.\n",
++	},
+ 	{
+ 		.later = 1,
+ 		.expected = 2,
+@@ -728,6 +751,12 @@ static struct testcases syscall_cases[] = {
+ 		.test_func = handle_syscall,
+ 		.msg = "SYSCALL: LAM_U57. syscall with metadata\n",
+ 	},
++	{
++		.later = 0,
++		.lam = LAM_U48_BITS,
++		.test_func = handle_syscall,
++		.msg = "SYSCALL: LAM_U48. syscall with metadata\n",
++	},
+ 	{
+ 		.later = 1,
+ 		.expected = 1,
+@@ -738,6 +767,14 @@ static struct testcases syscall_cases[] = {
+ };
  
- /*
-  * Align a virtual address to avoid aliasing in the I$ on AMD F15h.
-@@ -182,7 +183,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	/* requesting a specific address */
- 	if (addr) {
- 		addr &= PAGE_MASK;
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
+ static struct testcases mmap_cases[] = {
++	{
++		.later = 0,
++		.expected = 2,
++		.lam = LAM_U48_BITS,
++		.addr = HIGH_ADDR,
++		.test_func = handle_mmap,
++		.msg = "MMAP: [Negtive] First LAM_U48, then High address.\n",
++	},
+ 	{
+ 		.later = 1,
+ 		.expected = 0,
+@@ -746,6 +783,14 @@ static struct testcases mmap_cases[] = {
+ 		.test_func = handle_mmap,
+ 		.msg = "MMAP: First mmap high address, then set LAM_U57.\n",
+ 	},
++	{
++		.later = 1,
++		.expected = 1,
++		.lam = LAM_U48_BITS,
++		.addr = HIGH_ADDR,
++		.test_func = handle_mmap,
++		.msg = "MMAP: [Negtive] First mmap high address, then set LAM_U48.\n",
++	},
+ 	{
+ 		.later = 0,
+ 		.expected = 0,
+@@ -762,6 +807,14 @@ static struct testcases mmap_cases[] = {
+ 		.test_func = handle_mmap,
+ 		.msg = "MMAP: First LAM_U57, then Low address.\n",
+ 	},
++	{
++		.later = 0,
++		.expected = 0,
++		.lam = LAM_U48_BITS,
++		.addr = LOW_ADDR,
++		.test_func = handle_mmap,
++		.msg = "MMAP: First LAM_U48, then low address.\n",
++	},
+ };
  
- 		vma = find_vma(mm, addr);
-@@ -203,7 +204,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	 * !in_32bit_syscall() check to avoid high addresses for x32
- 	 * (and make it no op on native i386).
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
+ static struct testcases inheritance_cases[] = {
+@@ -771,12 +824,24 @@ static struct testcases inheritance_cases[] = {
+ 		.test_func = handle_inheritance,
+ 		.msg = "FORK: LAM_U57, child process should get LAM mode same as parent\n",
+ 	},
++	{
++		.expected = 0,
++		.lam = LAM_U48_BITS,
++		.test_func = handle_inheritance,
++		.msg = "FORK: LAM_U48, child process should get LAM mode same as parent\n",
++	},
+ 	{
+ 		.expected = 0,
+ 		.lam = LAM_U57_BITS,
+ 		.test_func = handle_execve,
+ 		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
+ 	},
++	{
++		.expected = 0,
++		.lam = LAM_U48_BITS,
++		.test_func = handle_execve,
++		.msg = "EXECVE: LAM_U48, child process should get disabled LAM mode\n",
++	},
+ };
  
- 	info.align_mask = 0;
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index a0d023cb4292..9fdc8db42365 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -18,6 +18,7 @@
- #include <asm/tlb.h>
- #include <asm/tlbflush.h>
- #include <asm/elf.h>
-+#include <asm/mmu_context.h>
- 
- #if 0	/* This is just for testing */
- struct page *
-@@ -103,6 +104,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
-+	struct mm_struct *mm = current->mm;
- 	struct vm_unmapped_area_info info;
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-@@ -114,7 +116,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 	 * If hint address is above DEFAULT_MAP_WINDOW, look for unmapped area
- 	 * in the full address space.
- 	 */
--	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall())
-+	if (addr > DEFAULT_MAP_WINDOW && !in_32bit_syscall() && full_va_allowed(mm))
- 		info.high_limit += TASK_SIZE_MAX - DEFAULT_MAP_WINDOW;
- 
- 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-@@ -161,7 +163,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- 
- 	if (addr) {
- 		addr &= huge_page_mask(h);
--		if (!mmap_address_hint_valid(addr, len))
-+		if (!mmap_address_hint_valid(mm, addr, len))
- 			goto get_unmapped_area;
- 
- 		vma = find_vma(mm, addr);
-diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-index c90c20904a60..aa0086722a38 100644
---- a/arch/x86/mm/mmap.c
-+++ b/arch/x86/mm/mmap.c
-@@ -21,6 +21,7 @@
- #include <linux/elf-randomize.h>
- #include <asm/elf.h>
- #include <asm/io.h>
-+#include <asm/mmu_context.h>
- 
- #include "physaddr.h"
- 
-@@ -35,6 +36,8 @@ unsigned long task_size_32bit(void)
- 
- unsigned long task_size_64bit(int full_addr_space)
- {
-+	if (!full_va_allowed(current->mm))
-+		return DEFAULT_MAP_WINDOW;
- 	return full_addr_space ? TASK_SIZE_MAX : DEFAULT_MAP_WINDOW;
- }
- 
-@@ -170,6 +173,7 @@ const char *arch_vma_name(struct vm_area_struct *vma)
- 
- /**
-  * mmap_address_hint_valid - Validate the address hint of mmap
-+ * @mm:		Address space
-  * @addr:	Address hint
-  * @len:	Mapping length
-  *
-@@ -206,11 +210,15 @@ const char *arch_vma_name(struct vm_area_struct *vma)
-  * the failure of such a fixed mapping request, so the restriction is not
-  * applied.
-  */
--bool mmap_address_hint_valid(unsigned long addr, unsigned long len)
-+bool mmap_address_hint_valid(struct mm_struct *mm,
-+			     unsigned long addr, unsigned long len)
- {
- 	if (TASK_SIZE - len < addr)
- 		return false;
- 
-+	if (addr + len > DEFAULT_MAP_WINDOW && !full_va_allowed(mm))
-+		return false;
-+
- 	return (addr > DEFAULT_MAP_WINDOW) == (addr + len > DEFAULT_MAP_WINDOW);
- }
- 
+ static void cmd_help(void)
 -- 
 2.35.1
 

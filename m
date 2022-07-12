@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BA5570F86
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4324D570F87
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 03:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiGLBcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Jul 2022 21:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229949AbiGLBcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Jul 2022 21:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiGLBcl (ORCPT
+        with ESMTP id S231297AbiGLBcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:32:41 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27768D5CC
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:32:40 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id bh13so6255216pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:32:40 -0700 (PDT)
+        Mon, 11 Jul 2022 21:32:46 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12BF8D5E4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:32:44 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u12so11755064eja.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Jul 2022 18:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ei9yAA7QrpUbdjMc3HmjzhCQ9jQmC45mh/jU0RZTxVw=;
-        b=EQ7Q7mJlyAUBbAtNhEhuBBBuTIwOKpa3/AXEhB2TDcC3Odwcrip4c6YZLLObTAg+FO
-         wGI2Q0k1HSuSwooApuW4+iX17E8Ae4WZv+S/JOySwzRBusN/09skTvRlA4B+7RL9f3n0
-         8qOBuu4cEy6DWoG7ukU80eJsUeDozzSlTHkITVU/oXdbWiIp7saHGOySdsFPPJnMlpkf
-         jaD2TLaoe+IUlQZPRUEYTHDC+YQtgtGLppPuAxdT8oNgLebpm3/5gAcMvuq88itiV6uj
-         ci+xUiWx7GKTEPTcV7B9Bp2BcETS64WnZo2dbsLHULb7N+H9EHAAwrwQfzYCGxiCIK07
-         OHlw==
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=sKmlJNbOCxxGu2qoEpBgoFbduYBXC63XtKF5C6TRjl4=;
+        b=NyKa32/ZEaCGrRikTeghU9YrYFt7yToYrMdISiP/VYrKCVmwHMdSqH7HuqAuI/2dz/
+         2K7XfDGwwVnOMR/zv8TwExlwddpTDupWPw10vDpmRJiSMtdISF0hDpvW3385pgEBj2vQ
+         7Awb7iPaIkXg5ct35tLHRcL6NeB5sD75obZyHdi3ilAYxZA09wtt0NSgkuJX33TnIemH
+         Y8bufO5ezLAYzTaFNFGmIO3XrxZGTifDUNLX27QtuY7/qWbgfTdMr5TGFb5ZdsrhB0Rn
+         T6KjJzg0BnuLTU60j0IW8xF0vLqjW/PBGwnxx9yAjDyhqypOc3IB6+2hYAoGtbNKsal3
+         ambg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ei9yAA7QrpUbdjMc3HmjzhCQ9jQmC45mh/jU0RZTxVw=;
-        b=7Bhf35CUYBrFd3pRj4h2zQBcxU1Lb6LrJAXz+m9RqwzdLOPTc9nxGBHL2DWaeFTNig
-         tW0IMoJan2zSlegi81sallhJM6ruYxtCL+O+DfbWZ675kSTd7DzCz90QQPqpNxFhgXDd
-         Rw8oqXqfnBfK+CHLxTxDelNnXhJG5MaO1gSGNe8zfXSdt9FZmEqcFRcgGNpq+FIKLl0i
-         v3jdihre1Uixg6W49cUwtCdFAD7ykIgWtvCXTNm4k/b5ChwmOUMq6H5a0K3oA9bQdBCj
-         V0M/oFXZzX1soYNevmfVBSUrlVpHaDmfh2gY8CDbSF7ItCmXuPE33rxtLtT3Y4z8Yjnt
-         JZYw==
-X-Gm-Message-State: AJIora+aN6iXOr6YozUqm54Lwf/KjxtLqpLkaLJDyjzYMPbKlrxzK1T8
-        275TtegDJvFGHS/An0EXC7E=
-X-Google-Smtp-Source: AGRyM1vTzdFMrECEheI40uFb8pWRGJvh4N4194dquo7n6aYa75/J9V+lHQ3xOwjiV0+LKWGN8VLEEw==
-X-Received: by 2002:a05:6a00:1a46:b0:525:82e2:a0d3 with SMTP id h6-20020a056a001a4600b0052582e2a0d3mr20837514pfv.48.1657589560437;
-        Mon, 11 Jul 2022 18:32:40 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id g124-20020a625282000000b00518e1251197sm5539620pfb.148.2022.07.11.18.32.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:32:40 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
-        Schspa Shi <schspa@gmail.com>
-Subject: [PATCH v5 2/2] sched/rt: Trying to push current task when target disable migrating
-Date:   Tue, 12 Jul 2022 09:31:25 +0800
-Message-Id: <20220712013125.623338-2-schspa@gmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220712013125.623338-1-schspa@gmail.com>
-References: <20220712013125.623338-1-schspa@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=sKmlJNbOCxxGu2qoEpBgoFbduYBXC63XtKF5C6TRjl4=;
+        b=akxBezXcFcEAu7uBEJbYX8aOiKpBR1Y7P0z/Yyo2soPzZtY5ojI4ZCs7GMr2agadkA
+         vH+A8KM2ErX1fNtpxvRq2Qn29Ka2vie+oIps9OTbe4bNfQ/OM9pkYQuLPxU6UFszgW+e
+         iDAvjpuIKA9iGY5l7OsNz0SnyQp/TOUg0SUi3jaQ7lfcOm4d5OQ4HLp5BMwuxtfEo5FZ
+         aUMUokeU4RSf693bXPeSELVT+8tSjeW3geUHEs40YLQsQWcwGP8kcACwDBov6GbGcsBh
+         A7KSRjxmYzYkKO72KqpaQJ+TlpzbtYdZ0HOFkziNYCrQAkBaq/Bk6SGCAdA3SN3d7ZP+
+         /O6w==
+X-Gm-Message-State: AJIora9T/CEWPw3EGgKimDgiol9GG+wCKZppVpbTDuVEggdXdn/clELZ
+        WiGZYmZX1c4go7fR1yr6UC6p8rvYuhj/h84q+60=
+X-Google-Smtp-Source: AGRyM1vzvH3Y7oBxzCV9ARzK4CnIUVERGfxjpQPtCysIILmYPTc7fbrhvhWhCj73MmPCtxSeHf//ydZySTDY1JSCsjE=
+X-Received: by 2002:a17:906:149:b0:712:502:bc62 with SMTP id
+ 9-20020a170906014900b007120502bc62mr21783814ejh.720.1657589562490; Mon, 11
+ Jul 2022 18:32:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Tue, 12 Jul 2022 11:32:31 +1000
+Message-ID: <CAPM=9tyJzO0bwtopJsfkZ6FRjkk9EghPzhBOQ-_9qQAALvOq+A@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.19-rc7 (late rc6)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,51 +66,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the task to push disable migration, retry to push the current
-running task on this CPU away, instead doing nothing for this migrate
-disabled task.
+Hey Linus,
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- kernel/sched/core.c | 6 +++++-
- kernel/sched/rt.c   | 6 ++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+back from holidays, delayed by a day due to airline craziness, I see
+you picked up one of the fbdev fixes, this is the other stuff that was
+queued up last week.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index da0bf6fe9ecdc..0b1fefd97d874 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2509,8 +2509,12 @@ int push_cpu_stop(void *arg)
- 	if (p->sched_class->find_lock_rq)
- 		lowest_rq = p->sched_class->find_lock_rq(p, rq);
- 
--	if (!lowest_rq)
-+	if (!lowest_rq) {
-+		if (unlikely(is_migration_disabled(p)))
-+			p->migration_flags |= MDF_PUSH;
-+
- 		goto out_unlock;
-+	}
- 
- 	// XXX validate p is still the highest prio task
- 	if (task_rq(p) == rq) {
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 7c32ba51b6d85..877380e465b7a 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -2136,6 +2136,12 @@ static int push_rt_task(struct rq *rq, bool pull)
- 		 */
- 		task = pick_next_pushable_task(rq);
- 		if (task == next_task) {
-+			/*
-+			 * If next task has now disabled migrating, see if we
-+			 * can push the current task.
-+			 */
-+			if (unlikely(is_migration_disabled(task)))
-+				goto retry;
- 			/*
- 			 * The task hasn't migrated, and is still the next
- 			 * eligible task, but we failed to find a run-queue
--- 
-2.37.0
+I just noticed I got the rc? in the signed tag wrong, I've fixed them
+in this email, but not sure if you care.
 
+A bit of a scattering of fixes, 3 for i915, one amdgpu, and a couple
+of panfrost, rockchip, panel and bridge ones.
+
+If I have anything else at the end of the week I'll send a regular pull req=
+.
+
+Dave.
+
+
+drm-fixes-2022-07-12:
+drm fixes for 5.19-rc7 (well rc6 but late).
+
+amdgpu:
+- Hibernation fix
+
+dma-buf:
+- fix use after free of fence
+
+i915:
+- Fix a possible refcount leak in DP MST connector (Hangyu)
+- Fix on loading guc on ADL-N (Daniele)
+- Fix vm use-after-free in vma destruction (Thomas)
+
+bridge:
+- fsl-ldb : 3 LVDS modesetting fixes
+
+rockchip:
+- iommu domain fix
+
+panfrost:
+- fix memory corruption
+- error path fix
+
+panel:
+- orientation quirk fix for Yoga tablet 2
+
+ssd130x:
+- fix pre-charge period setting
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8=
+:
+
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-12
+
+for you to fetch changes up to 3590b44b9434af1b9c81c3f40189087ed4fe3635:
+
+  Merge tag 'drm-misc-fixes-2022-07-07-1' of
+ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes (2022-07-12
+10:44:40 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.19-rc7 (well rc6 but late).
+
+amdgpu:
+- Hibernation fix
+
+dma-buf:
+- fix use after free of fence
+
+i915:
+- Fix a possible refcount leak in DP MST connector (Hangyu)
+- Fix on loading guc on ADL-N (Daniele)
+- Fix vm use-after-free in vma destruction (Thomas)
+
+bridge:
+- fsl-ldb : 3 LVDS modesetting fixes
+
+rockchip:
+- iommu domain fix
+
+panfrost:
+- fix memory corruption
+- error path fix
+
+panel:
+- orientation quirk fix for Yoga tablet 2
+
+ssd130x:
+- fix pre-charge period setting
+
+----------------------------------------------------------------
+Alex Deucher (2):
+      drm/amdgpu: keep fbdev buffers pinned during suspend
+      drm/amdgpu/display: disable prefer_shadow for generic fb helpers
+
+Daniele Ceraolo Spurio (1):
+      drm/i915/guc: ADL-N should use the same GuC FW as ADL-S
+
+Dave Airlie (3):
+      Merge tag 'amd-drm-fixes-5.19-2022-07-06' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-intel-fixes-2022-07-07' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-07-07-1' of
+ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes
+
+Dmitry Osipenko (2):
+      drm/panfrost: Put mapping instead of shmem obj on
+panfrost_mmu_map_fault_addr() error
+      drm/panfrost: Fix shrinker list corruption by madvise IOCTL
+
+Ezequiel Garcia (1):
+      drm/ssd130x: Fix pre-charge period setting
+
+Hangyu Hua (1):
+      drm/i915: fix a possible refcount leak in intel_dp_add_mst_connector(=
+)
+
+Hans de Goede (1):
+      drm: panel-orientation-quirks: Add quirk for the Lenovo Yoga Tablet 2=
+ 830
+
+Liu Ying (3):
+      drm/bridge: fsl-ldb: Fix mode clock rate validation
+      drm/bridge: fsl-ldb: Enable split mode for LVDS dual link
+      drm/bridge: fsl-ldb: Drop DE signal polarity inversion
+
+Steven Price (1):
+      drm/rockchip: Detach from ARM DMA domain in attach_device
+
+Thomas Hellstr=C3=B6m (1):
+      drm/i915: Fix vm use-after-free in vma destruction
+
+Thomas Zimmermann (1):
+      drm/aperture: Run fbdev removal before internal helpers
+
+xinhui pan (1):
+      dma-buf: Fix one use-after-free of fence
+
+ drivers/dma-buf/dma-resv.c                        |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c       | 25 +++++++++++++++++++=
+----
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c          |  3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v10_0.c            |  3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v11_0.c            |  3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v6_0.c             |  3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c             |  3 ++-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  3 ++-
+ drivers/gpu/drm/bridge/fsl-ldb.c                  | 21 ++-----------------
+ drivers/gpu/drm/drm_panel_orientation_quirks.c    | 15 ++++++++++++++
+ drivers/gpu/drm/i915/display/intel_dp_mst.c       |  1 +
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c          |  9 ++++++++
+ drivers/gpu/drm/i915/i915_vma.c                   | 12 +++++++----
+ drivers/gpu/drm/panfrost/panfrost_drv.c           |  4 ++--
+ drivers/gpu/drm/panfrost/panfrost_mmu.c           |  2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c       | 17 +++++++++++++++
+ drivers/gpu/drm/solomon/ssd130x.c                 |  2 +-
+ 17 files changed, 90 insertions(+), 38 deletions(-)

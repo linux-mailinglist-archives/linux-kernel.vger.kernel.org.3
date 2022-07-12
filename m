@@ -2,223 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845B55715A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27CE5715AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Jul 2022 11:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiGLJZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 05:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S231147AbiGLJ2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 05:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiGLJZ4 (ORCPT
+        with ESMTP id S229760AbiGLJ22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:25:56 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268397D57
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:54 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 64so12922229ybt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 02:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d1s8GrTnsNja2UVMETHzEYbNsXWuG59DZYYujxZ0uNM=;
-        b=E7s9MG7R2vyOdYv+DyJTyP9qvDF861Hg8UVSKuu7fPfKiJcUf0T4+5rqWBOAwiFT5m
-         s71YczqnCk9QoXFJsxY2iPajEPVHRKjzLDLNfN78+HPcOlx5GCAg4lTAcA9AQpp1P7ks
-         xOvaswgiroGepfMq6tz8Iodj/oB/xEYuKHK/w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d1s8GrTnsNja2UVMETHzEYbNsXWuG59DZYYujxZ0uNM=;
-        b=sVT5Htth+Cj88tVomhV7MaCJXnVUJEznC0rCpSamaGm71q30jfm0ARkIl60RuWX0Qx
-         s/PiaKcAF9/Kr2fGbQY53f+PCGTHsH5Pk3cwRcA6FvXJk2jk/hmcT/nb2sBJR9tTQk8Q
-         F6Mm6TZN72iOwUQ15Z1K1OjIFqa4bGEmdYlq8M8KKOzrACAt4q8Gj8N/tD2cJIB21/0G
-         38fiMegX/1PFKuCadbHWZdPxK67Mqi6Bd5/r9YJufkNpvVeohI8kQceTTapL4Qi/pSpY
-         yQAfgS8zNGcKgstOkik89Fs+TE8vgRUiyjK/qHHurJaAYe8aZfp4WVEnx6KO+XZtRmEt
-         naUw==
-X-Gm-Message-State: AJIora8zjySZZd6+/ho2I93b7AKHHjGl8zLcIF8680Tgzui2JVTtx7YG
-        WML4cUof5YZYd9XE9QTC3icLGWW3331cE2V7AGUKMA==
-X-Google-Smtp-Source: AGRyM1s+8nCq65TcIOsDHs7Q7KKeErUSUAooT/HwPjUkoNu7g19Wcn3E28+svjZ6gcqJgvvsQ3k/cHQJeodj0Uih8+Q=
-X-Received: by 2002:a25:81c5:0:b0:66d:55b5:d250 with SMTP id
- n5-20020a2581c5000000b0066d55b5d250mr20396849ybm.501.1657617954174; Tue, 12
- Jul 2022 02:25:54 -0700 (PDT)
+        Tue, 12 Jul 2022 05:28:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6023D9FE17;
+        Tue, 12 Jul 2022 02:28:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WooiOqU5h1Uno+rF65aH9DhHyq9Qe1CvWGF1+eLLIoB3YhzFgSjxkvykHiXl9qIg/xsrg/nCtKGz3io/6q3zfKBUdoBuW2hJMQ7goPV5XyedIMjMV12UZ7hW7U9y69Pf3B2bcjNq+0H0MPDC5P5Vh9OkAMp+xOt91WeeyQxYYE/79vqqGKJluxqdoi6xkP0bH+zBojRq5SkIe3rSlSZTlp3pe7P1fCXuSqN9GHDzse+1qaKIyxWZHjgcrXv0wYPpcYAFHJz9gBPCLG8YxWqtYaJ7JF0r+WI+5I9CV/4QL+95vVDInQPSYaA6mFRGZUIkCrKq1r4xJDEWsMuKSzPIKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qn4aIIVxVLhWsVNoVxXbddwWH88vKIJy90yeOciVXs8=;
+ b=KOel3NwpVGONkFVSQfICFiaoj/w44fVuLk2f9BGLGFT2VAGyGJCAce9D7AqGwXw8PaoEuWz0DJKQiT81aQaSZW+ikLVtWL5CIgRw427SsKZtbafS5Cp2Jiv/hHBFzUwrBHvA8DdsPJmUMF2fmZfNJ/pBmZNUXGjG5cXTS1FSmeERXmbZeif4nuNpVMTQYLvhasIPT3y3QGWxAaLL7aMHaea8hK9jQ4wMwwJ1nkZIwaNQ462Fogb577Q+VUei9igBxOhGKaioTCMJ55x8CAgyCcGhwOcowVZzpzTx7K/S/UTcg0t/UzZdLnvE9H2RHpsvhHCzkV+0tp2mZLfWyQ5/PA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qn4aIIVxVLhWsVNoVxXbddwWH88vKIJy90yeOciVXs8=;
+ b=GfdzGFtQC2P6FXLcx0IAHltLK7lNSlkSnXTtn94Pdj4fe8bb90CXLGP/2ZEU03112oJVuMnKEm8EB0kJVUIbq7JZhYPuOCDj9gthkLtiaAnJhBH/6rGIQyD1yfnA602Z91Qu04vfWxfmfGPrmgletILE1WD1alcuk1DIM4bdlsw=
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
+ by SJ0PR12MB5661.namprd12.prod.outlook.com (2603:10b6:a03:422::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Tue, 12 Jul
+ 2022 09:28:23 +0000
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::bd3b:532c:bc96:c60a]) by DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::bd3b:532c:bc96:c60a%9]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 09:28:23 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Huang, Ray" <Ray.Huang@amd.com>
+CC:     "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 07/14] cpufreq: amd_pstate: map desired perf into
+ pstate scope for powersave governor
+Thread-Topic: [PATCH v2 07/14] cpufreq: amd_pstate: map desired perf into
+ pstate scope for powersave governor
+Thread-Index: AQHYk57i2r4aTdgb506eXFcSn0/HnK15kwoAgADo7GA=
+Date:   Tue, 12 Jul 2022 09:28:23 +0000
+Message-ID: <DM4PR12MB52788EDE6858849143B05F749C869@DM4PR12MB5278.namprd12.prod.outlook.com>
+References: <20220709141901.835903-1-Perry.Yuan@amd.com>
+ <359a0e0a-b118-450e-67d8-a784d1a43cca@amd.com>
+In-Reply-To: <359a0e0a-b118-450e-67d8-a784d1a43cca@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-07-12T09:27:27Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=499f41ee-9027-4803-b2bf-992f75927aa1;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-07-12T09:28:20Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 98641d82-19e8-4365-9d97-a3c23031a223
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 62f601f1-9f75-4f59-adc9-08da63e8ddee
+x-ms-traffictypediagnostic: SJ0PR12MB5661:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: t2vn2Dh23KGQFhY02MvPk4gG9JnPwpxGmEpGuAMZ3S5aif0WWTCdhFes8clTdYGawt0VntajoE8L1OjO7qUcUt00oB2lIWlA4Kc4M0jakFvLb6wIhaM69QvqDa/74wXPJ6XGg96CM/KWpm7ZfBsYZDrbOpB2mOH3QGAZGkEHQsJqMEPnZTgXzXqblznaeVylSS3TaEuacrybwMGZQAf/yDzCLbd4GlUbIrQuDcWjE4XQLKzXwHN0FzcybqzySSqc9YJPRbBGtb+Vw56FYlWZVQe7jTObqQsedXvQ/FnvfIF8bq2MEQSfX9ifQImVuvu8LLMTFQRqnR5DzrEYQ+OKENgA3ak0UBMETlNu1MzO5zOHps0y5+VtbE43+SeTXDxmf9WHdRxU4IaNucez5JTCoD4wnjqsaci6sgnb1ygtfoLV5Xx8+MniKSS1uKjmVDHODMbR8208KW8it8cTd4kBiEiWgpxbpoxoSwPPBg55yaLPv39GVvfL5imG/ZxYt9t+f9m9RbCDaaXBD424x7Kve2HNIiqosTVDPZj/QnJqjI1luaNWvfF4JPwbcf18cvCv0vSuen5nFaqwjMKmnYpqHDAMu8eW8UMJecGocg/Qr6d9ILRRYlt248UBvEE2SLPNryNpCqcxpI0LKetUJAWAq/fN2Ruk0CcPio6GHPhrBmRgid1+z7ri6V+ghnvaqAJcsl12gT0gpsOP4ujsp08VClnzcRGjJvB3Nzv8cAigQUnIdRsoRi6w1QWW8DkBZ5F/r0/D01iOJzldIuNZHd+Odgfg4KYcZTTNVueajI99PpfsTYVXlSF7y4ORpagKbSPp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(55016003)(83380400001)(38070700005)(7696005)(86362001)(122000001)(38100700002)(5660300002)(8936002)(52536014)(71200400001)(2906002)(41300700001)(66556008)(4326008)(54906003)(316002)(110136005)(33656002)(76116006)(66946007)(66446008)(8676002)(66476007)(64756008)(9686003)(53546011)(6636002)(26005)(478600001)(6506007)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eTNROFBkRklPZmVyZ1lNTXNQeEtIQ0FLdFhmLzNsTEtCVnE3eG4rQ1ZTVDM3?=
+ =?utf-8?B?VVhPS1k5WEl2eDdMZHhXOVUrNzBHUWlUdC9VcUpac1JoTk16MlMra0ZzK253?=
+ =?utf-8?B?dEN2cVo2RVgyZ294a0o4NTk3bmhvTFc3Z3Awd3JkVG9UTHJKWU9pT1dKakpC?=
+ =?utf-8?B?b2Z5dURuVTFjUnpYaC9MNTBCVlJaRGs2VWRacmh4dHZuZ21KUVlmc25hbm45?=
+ =?utf-8?B?MG1ncUI0S3E5aVp5eG9kbUU2NW5YYVJTa3B6MUtGZ3RyaWQzWEdOdHNudEZB?=
+ =?utf-8?B?ZUU2YUUvcUNMQThvaFJUK3dBaENhSmhnUWFTU2UwcXh6NFk3SmdPTG9lRmM5?=
+ =?utf-8?B?SGJtM3VkcCt4b2s5WjQxUFMvQWlxbG5GTHZFeUdRM2lMMEptaUQzWUlJdzN1?=
+ =?utf-8?B?alhpUnZGRllPTWEvUFFKVG8vbFlxaGFJSmRzNTNrcUF2Y3ZHVXJzc3drZ1Vl?=
+ =?utf-8?B?OXBoZHVlYTZISWlWSkR3Z1EvZWFhU3JmcnoreElaa0cxZkJPT2NWQ0NyUUFa?=
+ =?utf-8?B?U1dva3Vhb3BHSktMM2xLbGlNaDkxRDBaZEl4dmY3alZzN0phWWEzakZpWDB4?=
+ =?utf-8?B?cnZHTU9GRnpzbytxUEFaR3h4U0F5SGF5VzlQSG1iK0JGWGFNYWZYVFF0SWRS?=
+ =?utf-8?B?RmltNWpxYnRIZXhXSUhnS0JkWnZURzRQN3JBV2FiTW91aFR1RXc5bk1xTmp0?=
+ =?utf-8?B?dW9VZDlFU3llMi9lWCtCQVRGZEdONDdOU1gyc0xTMnFhQVIxMzVlVHBMM1pT?=
+ =?utf-8?B?ZVhoNTJ3MlZYbW5MQ2twT09ZcU1JaTkwTkVlRGZJOUlhb1U3ZGZQRno1RFpH?=
+ =?utf-8?B?WDNYZ3BBSWdzK2F4UEJaNHV0eWE0cmYzRTBOd3VQdHdXYzdXUFZ5ZmNLMmZ2?=
+ =?utf-8?B?Y2FwaFNDZUhjOVJrZXpzT1FVU0o1cTdCb1kwT1hSN28vdHoyTXZZSGRoc2FJ?=
+ =?utf-8?B?YVViUHlYYmVFZGJJNkRXb0dwVEgxdnRvZVJYTk1veWkzcTgzM2tpR1pKdkJ4?=
+ =?utf-8?B?aktuazNMVnNHblU3V1dlZmZiU2I4dVhTek5QQzlaR2RiemlzczdyeWJGN3dy?=
+ =?utf-8?B?V2xhWnJ2eEliOXcwUk1NSzMzYkljVUpWZkszblZxNURFUG00L3JkdHBPMTBx?=
+ =?utf-8?B?SnZtT0g2dUwyeWxHTmZubTEvbUFMaHhuVFNCbzVCNkN6QUM2a0V0bWh4VUxL?=
+ =?utf-8?B?czZZSWN3NnVxSEJNWkN6YjZ0UFJKM0dPMnJSbXpRSmVhY2tWYkFXNlZHb3Ba?=
+ =?utf-8?B?Q2MyZXNsNnJwQmNpUmtTYllUQlBXT2x6ckpueEdyWGxaUFdaK0xPdkhUeFhk?=
+ =?utf-8?B?QkRJSXVKYVZ4MFZrUXBMWTVya0daVG9hbUVsaEMwSkpESWdjd0NLYjJMTmVk?=
+ =?utf-8?B?ZjY1dXhpc3dyVFQzeWc3ckV4UytVY05vRElVUXFKZHBGTUFoL2RkVFdEMWht?=
+ =?utf-8?B?TGdocGNURG01NUs1YXBTYmpQSGdmRXA1MVZLNlNsYTgzTEdFdnpYZi8zb3ZX?=
+ =?utf-8?B?SjhFNXZ1aHhhWEl1dmx0Uk1ZWlF6ZWlpNW93UVhuVk1SeHQ4QlJ1MUhaME4z?=
+ =?utf-8?B?YzhXZGU5a3ErZHJtck5FTW4xMGtaQk9GYzRkeld3Qmx3SEpIV24zOUd6UzJU?=
+ =?utf-8?B?emkzMVZvVGVEenpXZmVONi9HQVZIMlcxd3lRMVE2WjJYZ0d4RERUSk1jTzRn?=
+ =?utf-8?B?ZHMzM3AvWHpyMTZOcEFZNjRNT1hOV1IyOHJqbUNESnVQVFgxR0NiUllNQW5E?=
+ =?utf-8?B?TnRFWmRKQXI4K0Fkdnd1ejRZZ084Q1BKNWlGMURJNHVoQnplRk5xaG5veVE3?=
+ =?utf-8?B?d3VqbW9WWmhRaGt6SWxHdktxZituOXhicGVMYWNtWG9UbWZlcE1OZkRZbndZ?=
+ =?utf-8?B?TnVFUXBhUFBGVk1XYXV0Zyt6dTFGRkg1dDhCTFBFK1B0Q2NlMyt0bU1UWTdk?=
+ =?utf-8?B?dkJ2V3ZwRDJTZmd2bVBjUkdmK0lyNXlZdFBvcUk5a3FJcCtpM0pQMG9GYXc4?=
+ =?utf-8?B?UjR6UDAzSW8zSDY0VlhVbHN2aWxIYmoyVTNKRnpLY21BTkR1Mnhjak1aWlFL?=
+ =?utf-8?B?dTVVeENSelV1ejVGcjBHM29ZOWF1Q3FoeEhMZ3F1VzdRbHZNZFRPVlFIZGVp?=
+ =?utf-8?Q?+x4DpvJ7iZ8rxit2ShGGRyJaA?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220711130522.401551-1-alexandru.elisei@arm.com>
- <CAGXv+5HyD63MSmnNSoHX6euR2qpnqh-Fn9rdRYRYz4Ci90+w8Q@mail.gmail.com> <Ys00vczqcIGzOadV@monolith.localdoman>
-In-Reply-To: <Ys00vczqcIGzOadV@monolith.localdoman>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 12 Jul 2022 17:25:43 +0800
-Message-ID: <CAGXv+5G=YvDkm8a=Wyui4mqSskqPq-kQJfU4HGNXSGzz0hXiqw@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix NULL pointer dereference when
- pinctrl is not found
-To:     Alexandru Elisei <alexandru.elisei@arm.com>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, heiko@sntech.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, judyhsiao@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62f601f1-9f75-4f59-adc9-08da63e8ddee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 09:28:23.2678
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yYJKxBgqVP1qad3mJvYdukZgErZ01xNB3P+3PWT0Pn7yGprcJYQNMlWyiFthNqzxhDLkKkQY+irrWy5XHL5odw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5661
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:53 PM Alexandru Elisei
-<alexandru.elisei@arm.com> wrote:
->
-> Hi ChenYu,
->
-> On Tue, Jul 12, 2022 at 02:17:32PM +0800, Chen-Yu Tsai wrote:
-> > On Mon, Jul 11, 2022 at 9:06 PM Alexandru Elisei
-> > <alexandru.elisei@arm.com> wrote:
-> > >
-> > > Commit a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO") switched
-> > > BCLK to GPIO functions when probing the i2s bus interface, but missed
-> > > adding a check for when devm_pinctrl_get() returns an error.  This can lead
-> > > to the following NULL pointer dereference on a rockpro64-v2 if there are no
-> > > "pinctrl" properties in the i2s device tree node:
-> > >
-> > > [    0.658381] rockchip-i2s ff880000.i2s: failed to find i2s default state
-> > > [    0.658993] rockchip-i2s ff880000.i2s: failed to find i2s gpio state
-> > > [    0.660072] rockchip-i2s ff890000.i2s: failed to find i2s default state
-> > > [    0.660670] rockchip-i2s ff890000.i2s: failed to find i2s gpio state
-> > > [    0.661716] rockchip-i2s ff8a0000.i2s: failed to find i2s pinctrl
-> > > [    0.662276] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000005
-> > > [    0.663061] Mem abort info:
-> > > [    0.663317]   ESR = 0x0000000096000004
-> > > [    0.663658]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > > [    0.664136]   SET = 0, FnV = 0
-> > > [    0.664171] mmc2: SDHCI controller on fe330000.mmc [fe330000.mmc] using ADMA
-> > > [    0.664409]   EA = 0, S1PTW = 0
-> > > [    0.664415]   FSC = 0x04: level 0 translation fault
-> > > [    0.664421] Data abort info:
-> > > [    0.666050]   ISV = 0, ISS = 0x00000004
-> > > [    0.666399]   CM = 0, WnR = 0
-> > > [    0.666671] [0000000000000005] user address but active_mm is swapper
-> > > [    0.667240] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> > > [    0.667742] Modules linked in:
-> > > [    0.668028] CPU: 5 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc6 #300
-> > > [    0.668608] Hardware name: Pine64 RockPro64 v2.0 (DT)
-> > > [    0.669062] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > [    0.669689] pc : pinctrl_lookup_state+0x20/0xc0
-> > > [    0.670110] lr : rockchip_i2s_probe+0x1a8/0x54c
-> > > [    0.670527] sp : ffff80000a17bb30
-> > > [    0.670829] x29: ffff80000a17bb30 x28: 0000000000000000 x27: ffff8000097c04c8
-> > > [    0.671480] x26: ffff800009871060 x25: ffff800009871078 x24: ffff000001c11368
-> > > [    0.672129] x23: ffff8000092dc850 x22: ffffffffffffffed x21: ffff8000096f7e98
-> > > [    0.672776] x20: ffffffffffffffed x19: ffff000001d92480 x18: ffffffffffffffff
-> > > [    0.673423] x17: 000000040044ffff x16: ffff0000f77db2d0 x15: 0764076e07690766
-> > > [    0.674070] x14: 0720076f07740720 x13: ffff800009e129f0 x12: 000000000000038d
-> > > [    0.674717] x11: 000000000000012f x10: ffff800009e6a9f0 x9 : ffff800009e129f0
-> > > [    0.675364] x8 : 00000000ffffefff x7 : ffff800009e6a9f0 x6 : 80000000fffff000
-> > > [    0.676011] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
-> > > [    0.676657] x2 : 0000000000000000 x1 : ffff8000096f7e98 x0 : ffffffffffffffed
-> > > [    0.677304] Call trace:
-> > > [    0.677531]  pinctrl_lookup_state+0x20/0xc0
-> > > [    0.677914]  rockchip_i2s_probe+0x1a8/0x54c
-> > > [    0.678297]  platform_probe+0x68/0xc0
-> > > [    0.678638]  really_probe.part.0+0x9c/0x2ac
-> > > [    0.679027]  __driver_probe_device+0x98/0x144
-> > > [    0.679429]  driver_probe_device+0xac/0x140
-> > > [    0.679814]  __driver_attach+0xf8/0x184
-> > > [    0.680169]  bus_for_each_dev+0x70/0xd0
-> > > [    0.680524]  driver_attach+0x24/0x30
-> > > [    0.680856]  bus_add_driver+0x150/0x200
-> > > [    0.681210]  driver_register+0x78/0x130
-> > > [    0.681560]  __platform_driver_register+0x28/0x34
-> > > [    0.681988]  rockchip_i2s_driver_init+0x1c/0x28
-> > > [    0.682407]  do_one_initcall+0x50/0x1c0
-> > > [    0.682760]  kernel_init_freeable+0x204/0x288
-> > > [    0.683160]  kernel_init+0x28/0x13c
-> > > [    0.683482]  ret_from_fork+0x10/0x20
-> > > [    0.683816] Code: aa0003f4 a9025bf5 aa0003f6 aa0103f5 (f8418e93)
-> > > [    0.684365] ---[ end trace 0000000000000000 ]---
-> > > [    0.684813] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > > [    0.685500] SMP: stopping secondary CPUs
-> > > [    0.685995] Kernel Offset: disabled
-> > > [    0.686310] CPU features: 0x800,00105811,00001086
-> > > [    0.686736] Memory Limit: none
-> > > [    0.687021] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> > >
-> > > Check that i2s->pinctrl is valid before attempting to search for the
-> > > bclk_on and bclk_off pinctrl states.
-> > >
-> > > Fixes: a5450aba737d ("ASoC: rockchip: i2s: switch BCLK to GPIO")
-> > > Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-> > > ---
-> > >
-> > > Full log at [1], config at [2] (pastebins expire after 6 months).
-> > >
-> > > I'm not familiar with this part of the kernel, I did my best to come up
-> > > with an explanation and a fix for the panic.
-> > >
-> > > Read Documentation/devicetree/bindings/sound/rockchip-i2s.yaml, which has the
-> > > definition for the i2s nodes with the same compatible string as the i2s@ff8a0000
-> > > that is causing the panic (which is, "rockchip,rk3399-i2s"
-> > > "rockchip,rk3066-i2s"). There's no mention there of a "pinctrl" property, maybe
-> > > I'm reading the docs wrong, or maybe the board devicetree also needs fixing.
-> > >
-> > > [1] https://pastebin.com/vuRVDsKk
-> > > [2] https://pastebin.com/3yDMF7YE
-> > >
-> > >  sound/soc/rockchip/rockchip_i2s.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
-> > > index 99a128a666fb..c9fedf6eb2e6 100644
-> > > --- a/sound/soc/rockchip/rockchip_i2s.c
-> > > +++ b/sound/soc/rockchip/rockchip_i2s.c
-> > > @@ -808,8 +808,11 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
-> > >
-> > >         i2s->bclk_ratio = 64;
-> > >         i2s->pinctrl = devm_pinctrl_get(&pdev->dev);
-> > > -       if (IS_ERR(i2s->pinctrl))
-> > > +       if (IS_ERR(i2s->pinctrl)) {
-> > >                 dev_err(&pdev->dev, "failed to find i2s pinctrl\n");
-> > > +               ret = PTR_ERR(i2s->pinctrl);
-> > > +               goto err_clk;
-> > > +       }
-> >
-> > This would break audio for HDMI audio, which uses an I2S interface
-> > to feed the HDMI controller and does not need or have pinctrl, but
-> > here you make pinctrl a requirement.
-> >
-> > See https://lore.kernel.org/alsa-devel/20220621185747.2782-1-wens@kernel.org/
-> > for my fix, which is merged for 5.20.
->
-> For what it's worth, I've tested the fix and the board boots just fine.
-
-Check if your HDMI audio card probed correctly or not?
-
-ChenYu
-
-> Thanks,
-> Alex
->
-> >
-> > Maybe your patch (which Mark already applied) and commit a5450aba737d
-> > ("ASoC: rockchip: i2s: switch BCLK to GPIO") should just be reverted from
-> > the for-5.19?
-> >
-> > Mark?
-> >
-> >
-> > Regards
-> > ChenYu
-> >
-> > >
-> > >         i2s->bclk_on = pinctrl_lookup_state(i2s->pinctrl,
-> > >                                    "bclk_on");
-> > > --
-> > > 2.37.0
-> > >
-> > >
-> > > _______________________________________________
-> > > Linux-rockchip mailing list
-> > > Linux-rockchip@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhpIE5hdGhhbi4NCg0KPiAtLS0t
+LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBGb250ZW5vdCwgTmF0aGFuIDxOYXRoYW4u
+Rm9udGVub3RAYW1kLmNvbT4NCj4gU2VudDogVHVlc2RheSwgSnVseSAxMiwgMjAyMiAzOjM0IEFN
+DQo+IFRvOiBZdWFuLCBQZXJyeSA8UGVycnkuWXVhbkBhbWQuY29tPjsgcmFmYWVsLmoud3lzb2Nr
+aUBpbnRlbC5jb207DQo+IHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnOyBIdWFuZywgUmF5IDxSYXku
+SHVhbmdAYW1kLmNvbT4NCj4gQ2M6IFNoYXJtYSwgRGVlcGFrIDxEZWVwYWsuU2hhcm1hQGFtZC5j
+b20+OyBMaW1vbmNpZWxsbywgTWFyaW8NCj4gPE1hcmlvLkxpbW9uY2llbGxvQGFtZC5jb20+OyBG
+b250ZW5vdCwgTmF0aGFuDQo+IDxOYXRoYW4uRm9udGVub3RAYW1kLmNvbT47IERldWNoZXIsIEFs
+ZXhhbmRlcg0KPiA8QWxleGFuZGVyLkRldWNoZXJAYW1kLmNvbT47IFN1LCBKaW56aG91IChKb2Up
+IDxKaW56aG91LlN1QGFtZC5jb20+Ow0KPiBIdWFuZywgU2hpbW1lciA8U2hpbW1lci5IdWFuZ0Bh
+bWQuY29tPjsgRHUsIFhpYW9qaWFuDQo+IDxYaWFvamlhbi5EdUBhbWQuY29tPjsgTWVuZywgTGkg
+KEphc3NtaW5lKSA8TGkuTWVuZ0BhbWQuY29tPjsgbGludXgtDQo+IHBtQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYy
+IDA3LzE0XSBjcHVmcmVxOiBhbWRfcHN0YXRlOiBtYXAgZGVzaXJlZCBwZXJmIGludG8NCj4gcHN0
+YXRlIHNjb3BlIGZvciBwb3dlcnNhdmUgZ292ZXJub3INCj4gDQo+IE9uIDcvOS8yMiAwOToxOSwg
+UGVycnkgWXVhbiB3cm90ZToNCj4gPiBUaGUgcGF0Y2ggd2lsbCBmaXggdGhlIGludmFsaWQgZGVz
+aXJlZCBwZXJmIHZhbHVlIGZvciBwb3dlcnNhdmUNCj4gPiBnb3Zlcm5vci4gVGhpcyBpc3N1ZSBp
+cyBmb3VuZCB3aGVuIHRlc3Rpbmcgb24gb25lIEFNRCBFUFlDIHN5c3RlbSwgdGhlDQo+ID4gYWN0
+dWFsIGRlc19wZXJmIGlzIHNtYWxsZXIgdGhhbiB0aGUgbWluX3BlcmYgdmFsdWUsIHRoYXQgaXMg
+aW52YWxpZA0KPiA+IHZhbHVlLiBiZWNhdXNlIHRoZSBtaW5fcGVyZiBpcyB0aGUgbG93ZXN0X3Bl
+cmYgc3lzdGVtIGNhbiBzdXBwb3J0IGluDQo+ID4gaWRsZSBzdGF0ZS4NCj4gPg0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IFBlcnJ5IFl1YW4gPFBlcnJ5Lll1YW5AYW1kLmNvbT4NCj4gPiAtLS0NCj4gPiAg
+ZHJpdmVycy9jcHVmcmVxL2FtZC1wc3RhdGUuYyB8IDEgKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwg
+MSBpbnNlcnRpb24oKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWZyZXEvYW1k
+LXBzdGF0ZS5jDQo+ID4gYi9kcml2ZXJzL2NwdWZyZXEvYW1kLXBzdGF0ZS5jIGluZGV4IDdjNTFm
+NDEyNTI2My4uOGEyYjZhZDliOGMwDQo+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvY3B1ZnJl
+cS9hbWQtcHN0YXRlLmMNCj4gPiArKysgYi9kcml2ZXJzL2NwdWZyZXEvYW1kLXBzdGF0ZS5jDQo+
+ID4gQEAgLTI2NSw2ICsyNjUsNyBAQCBzdGF0aWMgdm9pZCBhbWRfcHN0YXRlX3VwZGF0ZShzdHJ1
+Y3QNCj4gYW1kX2NwdWRhdGEgKmNwdWRhdGEsIHUzMiBtaW5fcGVyZiwNCj4gPiAgCXU2NCBwcmV2
+ID0gUkVBRF9PTkNFKGNwdWRhdGEtPmNwcGNfcmVxX2NhY2hlZCk7DQo+ID4gIAl1NjQgdmFsdWUg
+PSBwcmV2Ow0KPiA+DQo+ID4gKwlkZXNfcGVyZiA9IGNsYW1wX3QodW5zaWduZWQgbG9uZywgZGVz
+X3BlcmYsIG1pbl9wZXJmLCBtYXhfcGVyZik7DQo+IA0KPiBZb3Ugc2hvdWxkIGFsc28gdXBkYXRl
+IGFtZF9wc3RhdGVfYWRqdXN0X3BlcmYoKSB0byByZW1vdmUgdGhlIGNsYW1wX3QoKQ0KPiBjYWxs
+IG5vdyB0aGF0IGl0IGlzIGRvbmUgaGVyZS4NCj4gDQo+IC1OYXRoYW4NCg0KSSBtaXNzZWQgdGhh
+dCwgY2hhbmdlZCBpbnRvIFYzLg0KVGhhbmsgeW91IQ0KDQpQZXJyeS4NCj4gDQo+ID4gIAl2YWx1
+ZSAmPSB+QU1EX0NQUENfTUlOX1BFUkYofjBMKTsNCj4gPiAgCXZhbHVlIHw9IEFNRF9DUFBDX01J
+Tl9QRVJGKG1pbl9wZXJmKTsNCj4gPg0K

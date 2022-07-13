@@ -2,196 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E20572AD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA95572AD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 03:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiGMB3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 21:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        id S233465AbiGMBbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 21:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiGMB3w (ORCPT
+        with ESMTP id S230343AbiGMBbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:29:52 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E87B41A5;
-        Tue, 12 Jul 2022 18:29:51 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id n206so3824679oia.6;
-        Tue, 12 Jul 2022 18:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GK56lB3PgJDNhfaok+bTYlsAaggXRH2qzENpya+MjIk=;
-        b=BIiHRPkfm5uUS9EINwjJTTl02ZHOw+1lWUrQgXLiFWy88JWNNSG6FOAn2GaqsG6/+i
-         Ck3hj5FYFJwUk3+vwRQbgl3Wj80YpD+4cDA7S46IstV8xoV+juwnGUbUK9MSTgSSrXsu
-         dG9H3hX4hnmZpLxArIGrPcpDgggwVLI3+ep3aoWOztLWewYLZ512ZyXsXC4v3jGQZ9sQ
-         gSb91cGpCRNPMJxfY1TmxbE9flhuuPz57f52zjVMPudYHMZI6VV1QcSvLKK5O9sN2Xs2
-         y7m1POrjIBsrdplt7Wb6kQslyXejWP7nLZVe4E1erCPNKV9M+bAcfuEgQhTUsoE2yXop
-         r5GA==
+        Tue, 12 Jul 2022 21:31:09 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E37C9112
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:31:07 -0700 (PDT)
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 623013FC12
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657675866;
+        bh=BCcc4GfN+MGP0hj9IK2EKrG4OYSKiM0e7SGOkyqrreo=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=quaeGVgyzCiUGTDOirKxtSmbx5VPsnNPoR8kn9bWuWs92ixiryOywCnAJTbymel8u
+         If/K9Booud7G/nVEehB3ERLwgsYg9GO+svHGIpfhd5U56BnmoX1fIgx2Zf+hnkAl/v
+         Hp5NRMV1u/URl7NjxVxrEUQftkxW4ZaUcARhKwtqhE3zJJn98xxMZkDAwAbOaKQL8f
+         ITt01HJ01zpFvD3P08TjZLlATiYCK1TPmpn3t7OyfVMUY30yLe9LVGtU7uC0Ob7jri
+         hlAuCprZbloxWq7NCGlt+EI89rkcVwDawKwo/tmwpQwxJkFGNpa8fDtEUfByT8ErJJ
+         8AB51BQGfk1fQ==
+Received: by mail-oi1-f200.google.com with SMTP id w123-20020acaad81000000b0033a1f7de8e8so1278969oie.13
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 18:31:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GK56lB3PgJDNhfaok+bTYlsAaggXRH2qzENpya+MjIk=;
-        b=KdUkLfMvggn9CPNjtxf2qNsdqVi7/xMtLmAJt8ihlD9f0jmWpRG7N9d8WFRO5EzntH
-         /0i5/AMf5FFceWVWKg3HmK+oobd7y71wx64438VSWv3m3p12ZfSEEOnKrdUPGIxFaJEP
-         EkbFbYg34HAWhSuff36xX1I1Nf7RjjGY3VaiyKCElPIWFLGdO9bn7t3KVmJ3PuP3j+PN
-         aYZwUcRVQsvWdB44nsNr83gwoHYyyPsQD2OvLvxZe4tYOEoKEeTpqq6hUq+GXw550F+c
-         oOy47MLdec+puNndxWUxkl1BkLE6ggMISb9avf6dWMCYMvMwbHu2RB6jW7EBf8OfI17P
-         dm0A==
-X-Gm-Message-State: AJIora/IrtdTQ3CEHC7hEHytJQisBDpxS1hn0DbwnRCpVxzDktOiqqTq
-        zY8AdxcbztoOKGrVQvWyUnji1GImml3GkxXdqUE=
-X-Google-Smtp-Source: AGRyM1sLoklF8WRKdEsdNJ5hpTSlHf8xvFYF1n9dV7kANUWNdHd6/uGg4fdXwQCiXzrwrku+R0RFY3OPegLt/UcEO04=
-X-Received: by 2002:a05:6808:308f:b0:339:f8af:ea62 with SMTP id
- bl15-20020a056808308f00b00339f8afea62mr583274oib.99.1657675791218; Tue, 12
- Jul 2022 18:29:51 -0700 (PDT)
+        bh=BCcc4GfN+MGP0hj9IK2EKrG4OYSKiM0e7SGOkyqrreo=;
+        b=inv+t/+ONTmL42PsP9MqXJcy/I0Vy6odkq4o9rxUUS+EWdt6f3GhKk8HcaHyqdA6J3
+         a7NrLefMFnmNY/Z5KJmDObuOVKlLVanb8LWblUhfUjywCsxUw+cL0XyTf0RfaqeIGazi
+         lHxk5Awb3Mcgryn0xYmudUmtS1JFp09vnEHTMHOy+9LgyfqyPTA8p5sp45GAzpzrlgpw
+         RrG/7bXJA9GZSOkA46hyjdBtfq6phGW8NrONDuZkwZVHDZmmxErLrDPkANxegY+QRaxl
+         pD3ibbB8vuJfpY4JdZJx+geBpKmNG6p/x4SoJcSnnAhKoQM4pOu1Bun2dqfj49DIO5Cd
+         rohQ==
+X-Gm-Message-State: AJIora+sexqI1eTl7Lj7Pp03SKzJjNoJLsy6LKWc3MtXaScpsU0vg+zT
+        BIQvU6nL2QBX9QEm3iIobFE4QVp0b9otHBx6D7RtvkbtnWc7BX4Br3ZN8JX8xk791EJmd5mGwEH
+        U5dCxasE6appIPpLkMwsHCXyUmwcPdfgkzLE+2qaivNuKW5Byc6OYoqvmJA==
+X-Received: by 2002:a05:6808:1643:b0:335:19ba:b696 with SMTP id az3-20020a056808164300b0033519bab696mr552723oib.42.1657675865301;
+        Tue, 12 Jul 2022 18:31:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v6KysfUndZJ6mEviiHlk0zOxcc1iB28C8yGi2owgz5pTmyxq1hkaNLbmASDCQ8QImXIjNRulZ6lU2Cu1DNF5g=
+X-Received: by 2002:a05:6808:1643:b0:335:19ba:b696 with SMTP id
+ az3-20020a056808164300b0033519bab696mr552714oib.42.1657675865013; Tue, 12 Jul
+ 2022 18:31:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220706172814.169274-1-james.hilliard1@gmail.com>
- <a0bddf0b-e8c4-46ce-b7c6-a22809af1677@fb.com> <CADvTj4ovwExtM-bWUpJELy-OqsT=J9stmqbAXto8ds2n+G8mfw@mail.gmail.com>
- <CAEf4BzYwRyXG1zE5BK1ZXmxLh+ZPU0=yQhNhpqr0JmfNA30tdQ@mail.gmail.com>
- <87v8s260j1.fsf@oracle.com> <CAADnVQLQGHoj_gCOvdFFw2pRxgMubPSp+bRpFeCSa5zvcK2qRQ@mail.gmail.com>
- <CADvTj4qqxckZmxvL=97e-2W5M4DgCCMDV8RCFDg23+cY2URjTA@mail.gmail.com> <20220713011851.4a2tnqhdd5f5iwak@macbook-pro-3.dhcp.thefacebook.com>
-In-Reply-To: <20220713011851.4a2tnqhdd5f5iwak@macbook-pro-3.dhcp.thefacebook.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Tue, 12 Jul 2022 19:29:39 -0600
-Message-ID: <CADvTj4o7z7J=4BOtKM9dthZyfFogV6hL5zKBwiBq7vs+bNhUHA@mail.gmail.com>
-Subject: Re: [PATCH v2] bpf/scripts: Generate GCC compatible helpers
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "Jose E. Marchesi" <jose.marchesi@oracle.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
+References: <20220707000151.33381-1-kai.heng.feng@canonical.com> <20220707175037.1352fa6b@jic23-huawei>
+In-Reply-To: <20220707175037.1352fa6b@jic23-huawei>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 13 Jul 2022 09:30:52 +0800
+Message-ID: <CAAd53p6OS+WH+vP3GUyrExmy_a7KoGyN6-v5hspcFaBoS1S07Q@mail.gmail.com>
+Subject: Re: [PATCH v2] iio: light: cm32181: Add PM support
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     ktsai@capellamicro.com, lars@metafoo.de, hdegoede@redhat.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 7:18 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Jul 8, 2022 at 12:40 AM Jonathan Cameron <jic23@kernel.org> wrote:
 >
-> On Tue, Jul 12, 2022 at 07:10:27PM -0600, James Hilliard wrote:
-> > On Tue, Jul 12, 2022 at 10:48 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Jul 12, 2022 at 4:20 AM Jose E. Marchesi
-> > > <jose.marchesi@oracle.com> wrote:
-> > > >
-> > > >
-> > > > > CC Quentin as well
-> > > > >
-> > > > > On Mon, Jul 11, 2022 at 5:11 PM James Hilliard
-> > > > > <james.hilliard1@gmail.com> wrote:
-> > > > >>
-> > > > >> On Mon, Jul 11, 2022 at 5:36 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > >> >
-> > > > >> >
-> > > > >> >
-> > > > >> > On 7/6/22 10:28 AM, James Hilliard wrote:
-> > > > >> > > The current bpf_helper_defs.h helpers are llvm specific and don't work
-> > > > >> > > correctly with gcc.
-> > > > >> > >
-> > > > >> > > GCC appears to required kernel helper funcs to have the following
-> > > > >> > > attribute set: __attribute__((kernel_helper(NUM)))
-> > > > >> > >
-> > > > >> > > Generate gcc compatible headers based on the format in bpf-helpers.h.
-> > > > >> > >
-> > > > >> > > This adds conditional blocks for GCC while leaving clang codepaths
-> > > > >> > > unchanged, for example:
-> > > > >> > >       #if __GNUC__ && !__clang__
-> > > > >> > >       void *bpf_map_lookup_elem(void *map, const void *key)
-> > > > >> > > __attribute__((kernel_helper(1)));
-> > > > >> > >       #else
-> > > > >> > >       static void *(*bpf_map_lookup_elem)(void *map, const void *key) = (void *) 1;
-> > > > >> > >       #endif
-> > > > >> >
-> > > > >> > It does look like that gcc kernel_helper attribute is better than
-> > > > >> > '(void *) 1' style. The original clang uses '(void *) 1' style is
-> > > > >> > just for simplicity.
-> > > > >>
-> > > > >> Isn't the original style going to be needed for backwards compatibility with
-> > > > >> older clang versions for a while?
-> > > > >
-> > > > > I'm curious, is there any added benefit to having this special
-> > > > > kernel_helper attribute vs what we did in Clang for a long time?
-> > > > > Did GCC do it just to be different and require workarounds like this
-> > > > > or there was some technical benefit to this?
-> > > >
-> > > > We did it that way so we could make trouble and piss you off.
-> > > >
-> > > > Nah :)
-> > > >
-> > > > We did it that way because technically speaking the clang construction
-> > > > works relying on particular optimizations to happen to get correct
-> > > > compiled programs, which is not guaranteed to happen and _may_ break in
-> > > > the future.
-> > > >
-> > > > In fact, if you compile a call to such a function prototype with clang
-> > > > with -O0 the compiler will try to load the function's address in a
-> > > > register and then emit an invalid BPF instruction:
-> > > >
-> > > >   28:   8d 00 00 00 03 00 00 00         *unknown*
-> > > >
-> > > > On the other hand the kernel_helper attribute is bullet-proof: will work
-> > > > with any optimization level, with any version of the compiler, and in
-> > > > our opinion it is also more readable, more tidy and more correct.
-> > > >
-> > > > Note I'm not saying what you do in clang is not reasonable; it may be,
-> > > > obviously it works well enough for you in practice.  Only that we have
-> > > > good reasons for doing it differently in GCC.
-> > >
-> > > Not questioning the validity of the reasons, but they created
-> > > the unnecessary difference between compilers.
+> On Thu,  7 Jul 2022 08:01:51 +0800
+> Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+>
+> > The read on in_illuminance_input keeps at 0 after system sleep.
 > >
-> > Sounds to me like clang is relying on an unreliable hack that may
-> > be difficult to implement in GCC, so let's see what's the best option
-> > moving forwards in terms of a migration path for both GCC and clang.
->
-> The following is a valid C code:
-> static long (*foo) (void) = (void *) 1234;
-> foo();
->
-> and GCC has to generate correct assembly assuming it runs at -O1 or higher.
+> > So add proper suspend and resume callback to make the sensor keep
+> > working after system sleep.
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Applied to the togreg branch of iio.git and pushed out as testing for
+> the autobuilders to poke at it and see if we missed anything,
 
-Providing -O1 or higher with gcc-bpf does not seem to work at the moment.
+This commit doesn't seem to be included in iio/togreg branch.
 
-> There is no indirect call insn defined in BPF ISA yet,
-> so the -O0 behavior is undefined.
-
-Well GCC at least seems to be able to compile BPF programs with -O0 using
-kernel_helper. I assume -O0 is probably just targeting the minimum BPF ISA
-optimization level or something like that which avoids indirect calls.
+Kai-Heng
 
 >
-> > Or we can just feature detect kernel_helper and leave the (void *)1 style
-> > fallback in place until we drop support for clang variants that don't support
-> > kernel_helper. This would provide GCC compatibility and a better migration
-> > path for clang as well as clang will then automatically use the new variant
-> > whenever support for kernel_helper is introduced.
+> Thanks,
 >
-> Support for valid C code will not be dropped from clang.
-
-That wasn't what I was suggesting, I was suggesting adding support for
-kernel_helper to clang, and then in the future libbpf(not clang) can
-drop support
-for the (void *)1 style in the future if desired(or can just keep the
-fallback). By
-feature detecting kernel_helper and providing a fallback we get a nice clean
-migration path.
+> Jonathan
+>
+> > ---
+> > v2:
+> >  - Use dev_get_drvdata() instead of i2c_get_clientdata() to avoid extra
+> >    dereference.
+> >
+> >  drivers/iio/light/cm32181.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+> > index 97649944f1df6..edbe6a3138d0b 100644
+> > --- a/drivers/iio/light/cm32181.c
+> > +++ b/drivers/iio/light/cm32181.c
+> > @@ -460,6 +460,8 @@ static int cm32181_probe(struct i2c_client *client)
+> >                       return PTR_ERR(client);
+> >       }
+> >
+> > +     i2c_set_clientdata(client, indio_dev);
+> > +
+> >       cm32181 = iio_priv(indio_dev);
+> >       cm32181->client = client;
+> >       cm32181->dev = dev;
+> > @@ -486,6 +488,25 @@ static int cm32181_probe(struct i2c_client *client)
+> >       return 0;
+> >  }
+> >
+> > +static int cm32181_suspend(struct device *dev)
+> > +{
+> > +     struct i2c_client *client = to_i2c_client(dev);
+> > +
+> > +     return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+> > +                                      CM32181_CMD_ALS_DISABLE);
+> > +}
+> > +
+> > +static int cm32181_resume(struct device *dev)
+> > +{
+> > +     struct i2c_client *client = to_i2c_client(dev);
+> > +     struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
+> > +
+> > +     return i2c_smbus_write_word_data(client, CM32181_REG_ADDR_CMD,
+> > +                                      cm32181->conf_regs[CM32181_REG_ADDR_CMD]);
+> > +}
+> > +
+> > +DEFINE_SIMPLE_DEV_PM_OPS(cm32181_pm_ops, cm32181_suspend, cm32181_resume);
+> > +
+> >  static const struct of_device_id cm32181_of_match[] = {
+> >       { .compatible = "capella,cm3218" },
+> >       { .compatible = "capella,cm32181" },
+> > @@ -506,6 +527,7 @@ static struct i2c_driver cm32181_driver = {
+> >               .name   = "cm32181",
+> >               .acpi_match_table = ACPI_PTR(cm32181_acpi_match),
+> >               .of_match_table = cm32181_of_match,
+> > +             .pm = pm_sleep_ptr(&cm32181_pm_ops),
+> >       },
+> >       .probe_new      = cm32181_probe,
+> >  };
+>

@@ -2,89 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D45757395E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE73573972
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiGMO5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S236701AbiGMO6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiGMO5g (ORCPT
+        with ESMTP id S236661AbiGMO6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:57:36 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8193DF2E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:57:34 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a9so19477655lfk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jsje3ehsR9ECEkj9DfwB4VaXb0L+a8MycN172EG5eN0=;
-        b=yvLyC+97xwgjQCTxuOGpEGThaXKimbQEVNC3zZgRfJD7waj7OsQW4SD9tUL+KukEp4
-         H9Be1+kNouZZEaM1WPmgQlSQlH78KfEDAjelvzKr3bLJ+cOBBccHVJibqu6yPw6irowR
-         /OlBiFNiU0Tg1q3mlL39JvDD8ESfRM2QRB4gfzVCaUS2e3V5MYVFbpfTei7YnvqVTha0
-         ux3Gzwj673tn7l7ci1bOi9LIR7zl0vmzXO77Py364nzIGMRV4nqfYgRgOEo3ADxLi56Z
-         YUTZ4DAKqMHyCSMflv1sF8hZ2SW9AzbTohAAUj5PcrpMUofnoRuFffBhmw8JMM/iQoed
-         a6pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jsje3ehsR9ECEkj9DfwB4VaXb0L+a8MycN172EG5eN0=;
-        b=tiq3DxHEVlMs1G0Koxr5MNHfV4L7G/yvB5sKNQp4+2ZaviF27usqCKrWNPom9Yn88n
-         /AvSmogCwW/X8spB3Pmi6DdYkjm14rphfSPnvxv9zllC5GGS6bRcRIzb/YXUqWqn7yNN
-         MwEpY/k1FzIw4huEH4WrbP5ydxp8mmZ+P4Z1W+yj2zLJPzAEMFAioiLM+luoTnVBktnm
-         n1J8T3ljYOOd/8sM5tX1DdV3WbSeSMfsBOHORKHJ/vfkhgOvWlhoE8CjJAQISZSWTjD9
-         NLyTBZVkPeFWq4WSY1BD46UOxqG5Ds5OjeKpnCdDMgZwpeROGHpvr8x7bk6i7REhCZPE
-         /pUw==
-X-Gm-Message-State: AJIora+uTVy40G2S57mhqSvHWXj8ZTqZPIXuzG9aYKZHnO+aDMrwK9Dn
-        NNnxKbkrvirLKlNFWWQ155e6IA==
-X-Google-Smtp-Source: AGRyM1vgRrhj/XY2koHbYAelGs303XVEdbTp0skZTLYnMp+cYfZfwoA4a64JTuw4BRIVm4/zK2SH5Q==
-X-Received: by 2002:a05:6512:1091:b0:489:7a4b:c46e with SMTP id j17-20020a056512109100b004897a4bc46emr2241003lfg.151.1657724252969;
-        Wed, 13 Jul 2022 07:57:32 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id x26-20020a19f61a000000b0047f963bf815sm2842009lfe.93.2022.07.13.07.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 07:57:32 -0700 (PDT)
-Message-ID: <2a43d0a3-cb6e-460c-d17f-abb81de40422@linaro.org>
-Date:   Wed, 13 Jul 2022 16:57:29 +0200
+        Wed, 13 Jul 2022 10:58:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DD63FA22;
+        Wed, 13 Jul 2022 07:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657724293; x=1689260293;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=lTmAVQlD6Vx1Np35GsT5xt5v+z7aHOSMCs6G1835MVM=;
+  b=OwA7VLKJdaEZAMYMkRUHBRyuNGDTJt622C03J5gcMLG50KLkxVfBSTB1
+   JpRsE25y7yOvEDerF1OKP+7zdSk0bbzRSeYeAhEMLSXKJOMkcTWC2CJFI
+   cSu5I48Pt0vPDAt54v0NnD9eE69Gv7DxngpmxykDv+8m+/NAlC7/MePb7
+   NdRufhSz7v2YsbaB3/22CGGON0LY5vMSerWbOTzwcKtOkcZlYAAP0y6aX
+   2321t+OCyX0/t00QggUwcuG6LAaJx3lIBpKzihas1HQVAV7sxPanMY1nA
+   haDQlr1MkXV0pRtjQ2ONRHqe2quXhmppREdUhTKfl1yTZk78oQcH8ns9m
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265020324"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="265020324"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:58:13 -0700
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="593017443"
+Received: from melanief-mobl.amr.corp.intel.com (HELO [10.212.10.37]) ([10.212.10.37])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:58:11 -0700
+Message-ID: <726124ab-53e4-5f3c-b0bb-124d129d3028@linux.intel.com>
+Date:   Wed, 13 Jul 2022 09:58:10 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO
- driver
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [PATCH v2] soundwire: qcom: Update error prints to debug prints
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220710102110.39748-1-tmaimon77@gmail.com>
- <20220710102110.39748-3-tmaimon77@gmail.com>
- <95d12b72-be9d-5503-c4ea-801303bb7776@linaro.org>
- <CAP6Zq1geFJsKrdQEN5Vqjw6e8bsiArDe1tzJ-jkQm-2XT-0KyQ@mail.gmail.com>
- <d8bc7a14-a9c5-4d34-997a-48a8d27c5edd@linaro.org>
- <CAP6Zq1iAPmV9KVrBVqmRix8sTq0zLsw3T1vPo-t1Q+2RgO4qsA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1iAPmV9KVrBVqmRix8sTq0zLsw3T1vPo-t1Q+2RgO4qsA@mail.gmail.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        quic_plai@quicinc.com, bgoswami@quicinc.com, perex@perex.cz,
+        tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org
+References: <1657724067-19004-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <1657724067-19004-1-git-send-email-quic_srivasam@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,58 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 16:51, Tomer Maimon wrote:
-> On Wed, 13 Jul 2022 at 17:29, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 13/07/2022 15:35, Tomer Maimon wrote:
->>
->>>>> +static int npcm8xx_pinctrl_probe(struct platform_device *pdev)
->>>>> +{
->>>>> +     struct npcm8xx_pinctrl *pctrl;
->>>>> +     int ret;
->>>>> +
->>>>> +     pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
->>>>> +     if (!pctrl)
->>>>> +             return -ENOMEM;
->>>>> +
->>>>> +     pctrl->dev = &pdev->dev;
->>>>> +     dev_set_drvdata(&pdev->dev, pctrl);
->>>>> +
->>>>> +     pctrl->gcr_regmap =
->>>>> +             syscon_regmap_lookup_by_compatible("nuvoton,npcm845-gcr");
->>>>
->>>> No. Use property. By this patchset, I would expect that you learnt from
->>>> previous mistakes around this. Why repeating the same trouble second time?
->>> You suggest to use phandle property like nuvoton,sysgcr even that the
->>> NPCM8XX pin controller driver is used only NPCM8XX SoC, so the only
->>> GCR node in the NPCM8XX SoC is nuvoton,npcm845-gcr?
->>
->> Yes. The previous case (reset driver, AFAIR) was also about driver used
->> only in one SoC, wasn't it?
-> Actually not, the NPCM reset driver serves NPCM7XX and NPCM8XX and
-> probably other future BMC SoC's
 
-No, when someone developed reset driver, it served only NPCM7XX. So
-using this argument - only one SoC is supported - that person use
-exactly the same API as here.
 
-And it was wrong...
-
-Now you use the same argument - only one SoC is supported.
-
-I clearly see a pattern here...
-
-> Still, you suggest using the phandle property in the driver even if
-> the driver serves one SoC?
->>
->> Best regards,
->> Krzysztof
+On 7/13/22 09:54, Srinivasa Rao Mandadapu wrote:
+> Update error prints to debug prints to avoid redundant logging in kernel
+> boot time, as these prints are informative prints in irq handler.
 > 
-> Best regards,
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+> Changes since v1:
+>     -- Remove redundant __func__ argument.
+>     -- Replace dev_dbg with dev_dbg_ratelimited.
 > 
-> Tomer
-
-
-Best regards,
-Krzysztof
+>  drivers/soundwire/qcom.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index 9df970e..976ae75 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>  				break;
+>  			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
+>  			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
+> -				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
+> -					__func__);
+> +				dev_dbg_ratelimited(swrm->dev, "SWR new slave attached\n");
+>  				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
+>  				if (swrm->slave_status == slave_status) {
+> -					dev_err(swrm->dev, "Slave status not changed %x\n",
+> +					dev_dbg(swrm->dev, "Slave status not changed %x\n",
+>  						slave_status);
+>  				} else {
+>  					qcom_swrm_get_device_status(swrm);

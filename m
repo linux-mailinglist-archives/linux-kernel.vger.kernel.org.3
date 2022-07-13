@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDB2573928
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984A757392B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiGMOs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S236416AbiGMOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiGMOsZ (ORCPT
+        with ESMTP id S230427AbiGMOtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:48:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F05A33A04
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657723703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PTlOYax8SWdwKuBY/itdH3EnXrgEI1qbVsXFNBDxiUk=;
-        b=X+FA+4A0rUd54a0b7qDh9QOtHx/LuhoAS3CzdZSr57xZoQLd78leg6PfTqmT1k16KsUCER
-        Z92SUkOlfiVYTBWo3NULpTFK4C8ncwLQhH+WDnAI7nL92/X6TBOjtpBSVToGLiD7nwQuhl
-        2KM1Ai1vrYtKeypYyqq8J5h1glwO0qU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-85-JiAThkNvM_CvnyYck92Qew-1; Wed, 13 Jul 2022 10:48:17 -0400
-X-MC-Unique: JiAThkNvM_CvnyYck92Qew-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 228B53C10143;
-        Wed, 13 Jul 2022 14:48:17 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7BD20401473;
-        Wed, 13 Jul 2022 14:48:16 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 10:48:15 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Wed, 13 Jul 2022 10:49:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F98BE004
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:49:22 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y4so14411065edc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CPQXf2/FNIrbUvBOltPuXarESOTLgxR0JVpEyzg9cas=;
+        b=wyIpHd17GJflWwiIMfPxZGr5lwnhC/plOqcwzcTXCREM8sbtBngr7EwYKqNXsr9r9Q
+         aDhOp92BMEFHSNkyvHPZQbTsrvpZNCou2kY5hcvv2gBRNy+CVWBumpFCmcbxUd4mIKVp
+         NvpkLbAlMLNSpQEAPk+yPzW6s1jBX6IgsmcFs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CPQXf2/FNIrbUvBOltPuXarESOTLgxR0JVpEyzg9cas=;
+        b=mhteDyX2qsU3Zau7LtRY87OC1+LjK+1g7eppgHmAou8YGkkAGFdQiDEkYfwV5KI4Ot
+         MlGSjSpZ6zLJP+DJjGHfQEm12kJz3bfCm96KPELK+8D7dBy9oP+FtrpHvX30VFiu+zK9
+         y2Gd1qqjGqdbbk03JyR4ZQYftrUi2eZG4mRTJ2BqMx86QaheC+Mz2QhuLbNWzgKJE4E5
+         AMBW9p45khTPSnkhBwOEvugbNKvklyVAqMQPcIG00WvvXPa3XzEqdtPR6aMeJu0OFG1l
+         DT/b/ZVCjOkyEJ/cKn0g2LjUdJfybzw6lYWfwiQ97qXbcDn4fS3uX1Dh0Vv5AvV/P15M
+         rnQA==
+X-Gm-Message-State: AJIora/fMZ8iAxD4HtNvmepHcjqzLYgHnOE0KGZcD3TBRsjoVl0Jkdk/
+        /U/g2X+GREczSENNfPADIlI+Uw==
+X-Google-Smtp-Source: AGRyM1t0Pz0r+/Lv3hba7PeWubsYUz/V8mHaqISf3fVKh6APltm4jBzFAorSYePxuMSyC6N2mAJJiA==
+X-Received: by 2002:a05:6402:355:b0:43a:4f13:56d2 with SMTP id r21-20020a056402035500b0043a4f1356d2mr5500205edw.312.1657723760877;
+        Wed, 13 Jul 2022 07:49:20 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:400::5:b372])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b006fe9209a9edsm4538162ejf.128.2022.07.13.07.49.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:49:20 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 15:49:19 +0100
+From:   Chris Down <chris@chrisdown.name>
+To:     Petr Mladek <pmladek@suse.com>
 Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>
-Subject: Re: [PATCH v2] drivers/base/node.c: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <Ys7bL/OG6EJrZDdU@lorien.usersys.redhat.com>
-References: <20220713134545.1382367-1-pauld@redhat.com>
- <Ys7Pkxqzrz75gCiN@kroah.com>
- <Ys7TCFoGIk3hlCpB@lorien.usersys.redhat.com>
- <Ys7V2oW82qW75x6X@kroah.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: design: was: Re: [RFC PATCH v2] printk: console: Allow each
+ console to have its own loglevel
+Message-ID: <Ys7bb8+/G0iMWfzb@chrisdown.name>
+References: <YoeQLxhDeIk4VSmx@chrisdown.name>
+ <YshL2M8VdIEONDdc@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Ys7V2oW82qW75x6X@kroah.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YshL2M8VdIEONDdc@alley>
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,95 +74,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 04:25:30PM +0200 Greg Kroah-Hartman wrote:
-> On Wed, Jul 13, 2022 at 10:13:28AM -0400, Phil Auld wrote:
-> > On Wed, Jul 13, 2022 at 03:58:43PM +0200 Greg Kroah-Hartman wrote:
-> > > On Wed, Jul 13, 2022 at 09:45:45AM -0400, Phil Auld wrote:
-> > > > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> > > > This breaks userspace code that retrieves the size before reading the file. Rather
-> > > > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> > > > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> > > > comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-> > > > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
-> > > > (8192 * 5). In order to get near that you'd need a system with every other CPU on one
-> > > > node or something similar. e.g. (0,2,4,... 1024,1026...). To simplify the math and
-> > > > support larger NR_CPUS we are using NR_CPUS * 6. We also set it to a min of PAGE_SIZE
-> > > > to retain the older behavior for smaller NR_CPUS. The cpumap file wants to be something
-> > > > like NR_CPUS/4 + NR_CPUS/32, for the ","s so for simplicity we are using NR_CPUS/2.
-> > > > 
-> > > > On an 80 cpu 4-node sytem (NR_CPUS == 8192)
-> > > > 
-> > > > before:
-> > > > 
-> > > > -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
-> > > > -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
-> > > > 
-> > > > after:
-> > > > 
-> > > > -r--r--r--. 1 root root 49152 Jul 13 09:26 /sys/devices/system/node/node0/cpulist
-> > > > -r--r--r--. 1 root root  4096 Jul 13 09:24 /sys/devices/system/node/node0/cpumap
-> > > > 
-> > > > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > > > ---
-> > > >  drivers/base/node.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/base/node.c b/drivers/base/node.c
-> > > > index 0ac6376ef7a1..3577f4eb4ac6 100644
-> > > > --- a/drivers/base/node.c
-> > > > +++ b/drivers/base/node.c
-> > > > @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
-> > > >  	return n;
-> > > >  }
-> > > >  
-> > > > -static BIN_ATTR_RO(cpumap, 0);
-> > > > +static BIN_ATTR_RO(cpumap, (((NR_CPUS>>1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE));
-> > > 
-> > > Why not just PAGE_SIZE?
-> > >
-> > 
-> > This one is likely to grow beyond page size if NR_CPUS is larger than 8192. It's about 2300 bytes
-> > at 8192 if my math is right.
-> > 
-> > Let me ask again before I write the comments... what values of NR_CPUS are you seeing? Are people
-> > using an order of magnitude above 8192? Two orders?  This patch (with the 6 below) handles about 1
-> > order more.
-> 
-> One order for now that we know of, probably larger that we don't :)
+Thanks for the detailed feedback! Anything not explicitly discussed is acked 
+for v3. :-)
 
-Fair enough. I'll go with 7 then. Thanks!
-
-> 
-> > > >  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> > > >  				   struct bin_attribute *attr, char *buf,
-> > > > @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> > > >  	return n;
-> > > >  }
-> > > >  
-> > > > -static BIN_ATTR_RO(cpulist, 0);
-> > > > +static BIN_ATTR_RO(cpulist, (((NR_CPUS * 6) > PAGE_SIZE) ? NR_CPUS *6 : PAGE_SIZE));
-> > > 
-> > > "* 6" in both places here?
-> > >
-> > 
-> > It's compile time so it's cheap. But yes, 6 in both places.  That's to support NR_CPUS=100000.
-> 
-> Sorry, I was trying to point out to use a " " before the "6" in both
-> places.  Not questioning the math.
+Petr Mladek writes:
+>> +    * ``minimum``: The global minimum loglevel
+>> +      (``kernel.minimum_console_loglevel``) is in effect. Set a higher
+>> +      console-specific loglevel to override it.
 >
+>This is confusing. It might be because I am not a native speaker. It
+>sounds like a higher console-specific loglevel might update (override)
+>the minimum value.
 
-Right! Sorry, misunderstood, obviously :)
+Ah, yes. I think this higher/lower confusion also has something to do with the 
+historic artefacts of using lower-numbered integers to represent 
+higher-priority messages.
+>
+>A better explanation is that it is a limit. Neither the global nor the per-console
+>loglevel could be set below this value.
 
-Cheers,
-Phil
+Yes, that sounds better. :-)
 
-> thanks,
-> 
-> greg k-h
-> 
+>> +    * ``forced_minimum``: The global minimum loglevel
+>> +      (``kernel.minimum_console_loglevel``) is in effect. Even if the local
+>> +      console-specific loglevel is higher, it is in effect because the global
+>> +      forced loglevel (``kernel.force_console_loglevel``) is present, but is
+>> +      below ``kernel.minimum_console_loglevel``. Write "unset" to
+>> +      ``kernel.force_console_loglevel`` to disable the forcing, and make sure
+>> +      ``kernel.minimum_console_loglevel`` is below the local console loglevel
+>> +      if you want the per-console loglevel to take effect.
+>> +      console-specific loglevel to override it.
+>
+>IMHO, this makes things too complicated. A better solution is to do
+>not allow to set any log level below this limit in the first place.
 
--- 
+Hmm, how should we then handle the case that you have set the per-console 
+loglevel to 3 and minimum_console_loglevel later gets changed to 5?
 
+We had this problem when designing cgroup v2 as well, for example in cases 
+where a child requests a higher memory protection than can be afforded by the 
+parent, or where a child sets a higher memory limit than a parent specifies. We 
+went back and forth and eventually settled on allowing these, because the 
+alternatives seemed difficult to reason about or unnecessarily inflexible.
+
+ From the per-console loglevel side, one option is to return ERANGE or EINVAL on 
+values we know won't be honoured when setting the per-console loglevel. The 
+problem with that is that it doesn't allow to specify a "desired" limit in case 
+the external factors (in this case, the minimum loglevel) change. This is even 
+more difficult to reason about in our case because the minimum loglevel may be 
+changed dynamically outside of user control.
+
+Another is to disallow setting the minimum loglevel without first resetting 
+consoles which are above the value that is desired to be set, but this seems 
+really cumbersome, and again it doesn't account for cases like panic() and 
+elsewhere where we blindly change it anyway.
+
+Maybe you have another idea about how it should work in the case that the 
+minimum loglevel would take precedence over an existing loglevel?
+
+>> +    * ``ignore_loglevel``: ``ignore_loglevel`` was specified on the kernel
+>> +      command line. Restart without it to use other controls.
+>> +
+>> +* ``enabled`` (r): Whether the console is enabled.
+>> +* ``loglevel`` (rw): The local loglevel for this console. This will be in
+>> +  effect if no other global control overrides it. Look at
+>> +  ``effective_loglevel`` and ``effective_loglevel_source`` to verify that.
+>>
+>> +Deprecated
+>> +~~~~~~~~~~
+>> +
+>> +* ``syslog(SYSLOG_ACTION_CONSOLE_*)``: This sets
+>
+>Why does it use "_*"? It looks like the entire syslog interface is
+>obsolete. But this patch affects only three actions: ON, OFF, LEVEL.
+
+Not totally sure I know what you mean -- SYSLOG_ACTION_CONSOLE_* limits it to 
+those, no?
+
+     % git grep -ho 'SYSLOG_ACTION_CONSOLE_[A-Z0-9]\+' | sort -u
+     SYSLOG_ACTION_CONSOLE_LEVEL
+     SYSLOG_ACTION_CONSOLE_OFF
+     SYSLOG_ACTION_CONSOLE_ON
+
+>> +  ``kernel.force_console_loglevel``. It is unaware of per-console loglevel
+>> +  semantics and is not recommended. A warning will be emitted if it is used
+>> +  while local loglevels are in effect.
+>
+>Do we really want to obsolete it? It might be enough to say
+>that it works as force_console_loglevel.
+
+That's also fine -- my only concern with syslog() is that it's not very 
+explicit about what will happen to consoles with a per-console loglevel set.
+
+That said, once this is merged I suppose we can make it more clear in 
+downstream consumers like `dmesg -n`, so not a big issue either way. :-)
+
+>I have one idea. A big difference might be replacing
+>"force_console_loglevel" value with "ignore_per_console_loglevel" parameter.
+>
+>[...]
+>
+>The main logic difference is that we do not have 4 loglevel values
+>(global,per-console,minimum,forced) and complicated rules which one
+>will be used in the end.
+>
+>Instead we have only two values: global, and optional
+>console-specific. 2nd one is used when and only when defined.
+>Plus one or both might ignored when the "ignore*" parameter is used.
+>
+>Everything else are ways how to set the values at build/boot/run time.
+>
+>How does it sounds, please?
+
+This sounds pretty good! It had bothered me that we have these two 
+default/forced options, and I think this does make things simpler.
+
+Thanks for your detailed feedback! I will incorporate it into v3.

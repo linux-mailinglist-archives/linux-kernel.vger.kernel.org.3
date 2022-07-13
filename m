@@ -2,193 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE8D573B09
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D8D573AE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbiGMQUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S237136AbiGMQLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbiGMQUX (ORCPT
+        with ESMTP id S237146AbiGMQLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:20:23 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B9CF584
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 23so10894196pgc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=USCiroLCrx1eIq2fE4NYNm6R4ZIjqYme9mNE6xCMEl8=;
-        b=Xf6ZO3PaMEbsrJI7bGyWHJCyL4Xdxdh/LvmuLEmZg+LZJ81dntvVDVy3z1J1R1NXiN
-         PhWXnLZcZcy5NUwWwLNBfUaheFglFCLfwr5rBhXCTHCS4/tEJC3XRDNouu4cOuiWfyTZ
-         Yr+TTFMlF7k/64LmrChBbZ4LDctiuOGpvEJusA+lTqZLIkNzCDEAli8hOr8vtvnodtX3
-         TVvP7dap8Iic5YyG1DYOvHj8X5EQC2mDGBGl1mLRJpl4Knzu909OK9Hos13GNQDvvjWh
-         n8El1qMVOxfswaUcb5Kd3/CzFNI+qRrQEvOLPTCHTyBGIEm4oGqkl1nYA57Ef7+CPwmB
-         l4Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=USCiroLCrx1eIq2fE4NYNm6R4ZIjqYme9mNE6xCMEl8=;
-        b=1dIWmCZSf4elyDOMeSY5hx1X4TxDkyh4VO7UxYoOEIV9GTsRC3qdn2IBN8DbEaXIgb
-         lNcfVG0TD1d7t/4MshZevCNWtSJF0Hat4oo4BwNnT1O57Rp5mbe17cFpNJfezq/0Tfdn
-         79fLyajYj5AduiVVIudny9v82h77NqDRD4Un4+XT8hBUALkgKrHfond4luWnYpPz7z7Y
-         PR5ttMV8OaEEe6kg/4+PieTgOU2ZIMNk8DMoHeel8A0RXDy9PFUZkMAhF3g8QVuQvf9b
-         mhafJpV5YRLX6pBQYM4XqFYhRI7pahFq2aufKQxKy1bN8C+vmPf/ZAo/Mfqc44JJYqwT
-         SDiA==
-X-Gm-Message-State: AJIora+eV7XRO6c3tD5AmUkAP/RunMVIW+vK2Z44pvAfYD0rqrGt3DDN
-        NeC1CSS7jrcSBRpI902IsKxIYg==
-X-Google-Smtp-Source: AGRyM1v7wfGBI2arrpxI58f3YqoOlxayVweaZeWPprONuwOCugvkhCrXpy57Q1/ZI9gHgsylwPlTig==
-X-Received: by 2002:a63:1619:0:b0:40d:37aa:9ace with SMTP id w25-20020a631619000000b0040d37aa9acemr3477474pgl.609.1657729221066;
-        Wed, 13 Jul 2022 09:20:21 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id jj14-20020a170903048e00b0016c5b2a16ffsm3886385plb.142.2022.07.13.09.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 09:20:20 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 16:20:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
- disabling dirty logging
-Message-ID: <Ys7wwPRaUOmvqFjb@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <20220321224358.1305530-10-bgardon@google.com>
- <YkH0O2Qh7lRizGtC@google.com>
- <CANgfPd8V_34TBb3m-JpmczZnY3t5aaFwHNZq1W0eknumbrXCRw@mail.gmail.com>
- <Ys4CD/VHtbrBVi6a@google.com>
+        Wed, 13 Jul 2022 12:11:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5444E501AF;
+        Wed, 13 Jul 2022 09:11:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9DE661AD5;
+        Wed, 13 Jul 2022 16:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30801C34114;
+        Wed, 13 Jul 2022 16:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657728705;
+        bh=xKgCGVq47wtNXtj8TX6Re2zKYRejln4t9WqBUbpnVhE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z4h44caKqvqkIvqs6HwQUOqADIwkLjFK//iczkKgVOJrp/Eas6LK4iyLCD4Ov5k2G
+         BqGD/3kXLf7rE5BaYi3JLXh9b15l1aCsvyyYQWwtQs33kMSVTTS0h9oSvqYhvZ/qVu
+         aMGgz2kWO5W/9QNWb0NnctlyYTVmDKuy/GhcbdEa8V9qdJftMCwIrWDzU/XRrB6IzY
+         dhN/9wTMVkywR+n7Uw5rZTYBi3ARAaMUMS3PqKhsYDGzwW+8dif2F8cbWziuzDhiVV
+         cHoPYWSwX9w7M+Xi7Cw+/yZrFzmCvosbIpXPPsZ/IHXCAyKej9PpFDNCNLEvTatqaL
+         Knll34e5QIt2Q==
+Date:   Wed, 13 Jul 2022 17:21:32 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <lars@metafoo.de>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <j.neuschaefer@gmx.net>,
+        <zhengbin13@huawei.com>, <openbmc@lists.ozlabs.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] iio: adc: npcm: Add NPCM8XX support
+Message-ID: <20220713172132.0bc5002d@jic23-huawei>
+In-Reply-To: <20220713132640.215916-3-tmaimon77@gmail.com>
+References: <20220713132640.215916-1-tmaimon77@gmail.com>
+        <20220713132640.215916-3-tmaimon77@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys4CD/VHtbrBVi6a@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022, Sean Christopherson wrote:
-> On Mon, Mar 28, 2022, Ben Gardon wrote:
-> > On Mon, Mar 28, 2022 at 10:45 AM David Matlack <dmatlack@google.com> wrote:
-> > > If iter.old_spte is not a leaf, the only loop would always continue to
-> > > the next SPTE. Now we try to promote it and if that fails we run through
-> > > the rest of the loop. This seems broken. For example, in the next line
-> > > we end up grabbing the pfn of the non-leaf SPTE (which would be the PFN
-> > > of the TDP MMU page table?) and treat that as the PFN backing this GFN,
-> > > which is wrong.
-> > >
-> > > In the worst case we end up zapping an SPTE that we didn't need to, but
-> > > we should still fix up this code.
+On Wed, 13 Jul 2022 16:26:40 +0300
+Tomer Maimon <tmaimon77@gmail.com> wrote:
+
+> Adding ADC NPCM8XX support to NPCM ADC driver.
+> ADC NPCM8XX uses a different resolution and voltage reference.
 > 
-> My thought to remedy this is to drop the @pfn argument to kvm_mmu_max_mapping_level().
-> It's used only for historical reasons, where KVM didn't walk the host page tables
-> to get the max mapping level and instead pulled THP information out of struct page.
-> I.e. KVM needed the pfn to get the page.
+> As part of adding NPCM8XX support:
+> - Add NPCM8XX specific compatible string.
+> - Add data to handle architecture-specific ADC parameters.
 > 
-> That would also allow KVM to use huge pages for things that aren't backed by
-> struct page (I know of at least one potential use case).
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+missing 
+
+#include <linux/property.h> 
+
+So in current IIO togreg tree this doesn't build.  I could fix it up
+but given we are very late in cycle and I'd like to give this a little
+more time on list for Andy to take another look if he wishes, chances
+are this won't make it in until early next cycle.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/adc/npcm_adc.c | 35 ++++++++++++++++++++++++++++-------
+>  1 file changed, 28 insertions(+), 7 deletions(-)
 > 
-> I _think_ we can do the below.  It's compile tested only at this point, and I
-> want to split some of the changes into separate patches, e.g. the WARN on the step-up
-> not going out-of-bounds.  I'll put this on the backburner for now, it's too late
-> for 5.20, and too many people are OOO :-)
+> diff --git a/drivers/iio/adc/npcm_adc.c b/drivers/iio/adc/npcm_adc.c
+> index f7bc0bb7f112..4c7ebcd57b88 100644
+> --- a/drivers/iio/adc/npcm_adc.c
+> +++ b/drivers/iio/adc/npcm_adc.c
+> @@ -16,6 +16,12 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/reset.h>
+>  
+> +struct npcm_adc_info {
+> +	u32 data_mask;
+> +	u32 internal_vref;
+> +	u32 res_bits;
+> +};
+> +
+>  struct npcm_adc {
+>  	bool int_status;
+>  	u32 adc_sample_hz;
+> @@ -34,6 +40,7 @@ struct npcm_adc {
+>  	 * has finished.
+>  	 */
+>  	struct mutex lock;
+> +	const struct npcm_adc_info *data;
+>  };
+>  
+>  /* ADC registers */
+> @@ -52,13 +59,21 @@ struct npcm_adc {
+>  #define NPCM_ADCCON_CH(x)		((x) << 24)
+>  #define NPCM_ADCCON_DIV_SHIFT		1
+>  #define NPCM_ADCCON_DIV_MASK		GENMASK(8, 1)
+> -#define NPCM_ADC_DATA_MASK(x)		((x) & GENMASK(9, 0))
+>  
+>  #define NPCM_ADC_ENABLE		(NPCM_ADCCON_ADC_EN | NPCM_ADCCON_ADC_INT_EN)
+>  
+>  /* ADC General Definition */
+> -#define NPCM_RESOLUTION_BITS		10
+> -#define NPCM_INT_VREF_MV		2000
+> +static const struct npcm_adc_info npxm7xx_adc_info = {
+> +	.data_mask = GENMASK(9, 0),
+> +	.internal_vref = 2048,
+> +	.res_bits = 10,
+> +};
+> +
+> +static const struct npcm_adc_info npxm8xx_adc_info = {
+> +	.data_mask = GENMASK(11, 0),
+> +	.internal_vref = 1229,
+> +	.res_bits = 12,
+> +};
+>  
+>  #define NPCM_ADC_CHAN(ch) {					\
+>  	.type = IIO_VOLTAGE,					\
+> @@ -129,7 +144,8 @@ static int npcm_adc_read(struct npcm_adc *info, int *val, u8 channel)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	*val = NPCM_ADC_DATA_MASK(ioread32(info->regs + NPCM_ADCDATA));
+> +	*val = ioread32(info->regs + NPCM_ADCDATA);
+> +	*val &= info->data->data_mask;
+>  
+>  	return 0;
+>  }
+> @@ -157,9 +173,9 @@ static int npcm_adc_read_raw(struct iio_dev *indio_dev,
+>  			vref_uv = regulator_get_voltage(info->vref);
+>  			*val = vref_uv / 1000;
+>  		} else {
+> -			*val = NPCM_INT_VREF_MV;
+> +			*val = info->data->internal_vref;
+>  		}
+> -		*val2 = NPCM_RESOLUTION_BITS;
+> +		*val2 = info->data->res_bits;
+>  		return IIO_VAL_FRACTIONAL_LOG2;
+>  	case IIO_CHAN_INFO_SAMP_FREQ:
+>  		*val = info->adc_sample_hz;
+> @@ -176,7 +192,8 @@ static const struct iio_info npcm_adc_iio_info = {
+>  };
+>  
+>  static const struct of_device_id npcm_adc_match[] = {
+> -	{ .compatible = "nuvoton,npcm750-adc", },
+> +	{ .compatible = "nuvoton,npcm750-adc", .data = &npxm7xx_adc_info},
+> +	{ .compatible = "nuvoton,npcm845-adc", .data = &npxm8xx_adc_info},
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, npcm_adc_match);
+> @@ -196,6 +213,10 @@ static int npcm_adc_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  	info = iio_priv(indio_dev);
+>  
+> +	info->data = device_get_match_data(dev);
+> +	if (!info->data)
+> +		return -EINVAL;
+> +
+>  	mutex_init(&info->lock);
+>  
+>  	info->dev = &pdev->dev;
 
-Heh, that was a bit of a lie.  _Now_ it's going on the backburner.
-
-Thinking about the pfn coming from the old leaf SPTE made me realize all of the
-information we need to use __make_spte() during promotion is available in the
-existing leaf SPTE.
-
-If KVM first retrieves a PRESENT leaf SPTE, then pfn _can't_ be different, because
-that would mean KVM done messed up and didn't zap existing entries in response to
-a MMU notifier invalidation, and holding mmu_lock prevents new invalidations.
-And because the primary MMU must invalidate before splitting a huge page, having a
-valid leaf SPTE means that host mapping level can't become stale until mmu_lock is
-dropped.  In other words, KVM can compute the huge pfn by using the smaller pfn
-and adjusting based on the target mapping level.
-
-As for the EPT memtype, that can also come from the existing leaf SPTE.  KVM only
-forces the memtype for host MMIO pfns, and if the primary MMU maps a huge page that
-straddles host MMIO (UC) and regular memory (WB), then the kernel is already hosed.
-If the VM doesn't have non-coherent DMA, then the EPT memtype will be WB regardless
-of the page size.  That means KVM just needs to reject promotion if the VM has
-non-coherent DMA and the target pfn is not host MMIO, else KVM can use the leaf's
-memtype as-is.
-
-Using the pfn avoids gup() (fast-only, but still), and using the memtype avoids
-having to split vmx_get_mt_mask() and add another kvm_x86_ops hook.
-
-And digging into all of that yielded another optimization.  kvm_tdp_page_fault()
-needs to restrict the host mapping level if and only if it may consume the guest
-MTRRs.  If KVM ignores the guest MTRRs, then the fact that they're inconsistent
-across a TDP page is irrelevant because the _guest_ MTRRs are completely virtual
-and are not consumed by either EPT or NPT.  I doubt this meaningfully affects
-whether or not KVM can create huge pages for real world VMs, but it does avoid
-having to walk the guest variable MTRRs when faulting in a huge page.
-
-Compile tested only at this point, but I'm mostly certain my logic is sound.
-
-int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-{
-	/*
-	 * If the guest's MTRRs may be used, restrict the mapping level to
-	 * ensure KVM uses a consistent memtype across the entire mapping.
-	 */
-	if (kvm_may_need_guest_mtrrs(vcpu->kvm)) {
-		for ( ; fault->max_level > PG_LEVEL_4K; --fault->max_level) {
-			int page_num = KVM_PAGES_PER_HPAGE(fault->max_level);
-			gfn_t base = (fault->addr >> PAGE_SHIFT) & ~(page_num - 1);
-
-			if (kvm_mtrr_check_gfn_range_consistency(vcpu, base, page_num))
-				break;
-		}
-	}
-
-	return direct_page_fault(vcpu, fault);
-}
-
-static int try_promote_to_huge_page(struct kvm *kvm,
-				    struct rsvd_bits_validate *rsvd_bits,
-				    const struct kvm_memory_slot *slot,
-				    u64 leaf_spte, struct tdp_iter *iter)
-{
-	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
-	kvm_pfn_t pfn;
-	u64 new_spte;
-	u8 mt_mask;
-
-	if (WARN_ON_ONCE(slot->flags & KVM_MEM_READONLY))
-		return -EINVAL;
-
-	pfn = spte_to_pfn(leaf_spte) & ~(KVM_PAGES_PER_HPAGE(iter->level) - 1);
-	mt_mask = leaf_spte & shadow_memtype_mask;
-
-	/*
-	 * Bail if KVM needs guest MTRRs to compute the memtype and will not
-	 * force the memtype (host MMIO).  There is no guarantee the guest uses
-	 * a consistent MTRR memtype for the entire huge page, and MTRRs are
-	 * tracked per vCPU, not per VM.
-	 */
-	if (kvm_may_need_guest_mtrrs(kvm) && !kvm_is_mmio_pfn(pfn))
-		return -EIO;
-
-	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
-		    true, mt_mask, rsvd_bits, &new_spte);
-
-	return tdp_mmu_set_spte_atomic(kvm, iter, new_spte);
-}

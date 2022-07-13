@@ -2,82 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CC557382B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76DD573832
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236444AbiGMOAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S236490AbiGMOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiGMOAN (ORCPT
+        with ESMTP id S236447AbiGMOAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:00:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 834FC2CE22
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657720810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LVM/9+bL0Plqw8a52QPl3k4n9Q1+GAafg2rUTujh0Gc=;
-        b=C7MeA/4Cvzux7KlM9poxwLLOphu8PWeg/WjqbwGM9Gufr63eGbZBsoRhWvCslo6Z+EpLod
-        2VRMFcy9MGUROEnhQrxLp2+sSev16rE5TS32z7p5kLa+9bnRHqe+H6/5jpCUoAa6O2y/WE
-        ztIGCHspJ+JGWN8iOAQD0YOPaHvpvZc=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-bVFDepwbPdegTMuD_8Ckkw-1; Wed, 13 Jul 2022 10:00:08 -0400
-X-MC-Unique: bVFDepwbPdegTMuD_8Ckkw-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-10c071638bbso5942024fac.15
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:00:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LVM/9+bL0Plqw8a52QPl3k4n9Q1+GAafg2rUTujh0Gc=;
-        b=AvbkIedOsUt0cWtMO4/61rdpTt4d8VWsSwifgwW/ZJHkcBWc5l0pGg8p5pJd/gj4Gp
-         k5QmxAqZZW//H9gWAy7kL3tXMoIyrP+644WfllBH1DGs3ZDndWpg9NExqqNNuVBaiTN7
-         /2oFmqfpNOc1xfGx100SIPXwyR/W6cqh2t41u8RdXbgdoUPwDFQv7+WDMRLLFETSVRze
-         sV6XM1KjD6y4xI+k0uhZXIXyeym475uNeEidxXeCms+pgaXx4nVI587Ls3ACXWxZwHwz
-         Hcb+bLOO+KDWO80F8zZvTsl4ET4kgSSl/fKw6FG2vp80dDYZBd9oBMafBasgzeOy52ja
-         gzzA==
-X-Gm-Message-State: AJIora9DNiYSW9fUoMvdpesb1wXMuFwNkocMbZay6B/U6pZtViFZSjVh
-        f1HGMrigGiw9+vhdbOREyqHlpFKOCfLn/y3psjEwpvt2l52ak5x84blYY+yQvRoVpGqUlDjWcdE
-        afW9rBZwg2oiFOByq+w2FXRVH
-X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr1710710oac.286.1657720807873;
-        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tWU5P/M2v4yhf5rjgNK8fNjmlmpbF71huQvwUWO4e55Sg67LK3nJe2ebY/U445BU5Ynrdnxw==
-X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr1710691oac.286.1657720807684;
-        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
-        by smtp.gmail.com with ESMTPSA id h82-20020aca3a55000000b00339ff117f38sm3726085oia.53.2022.07.13.07.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:00:05 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: dwc3: qcom: fix missing optional irq warnings
-Message-ID: <20220713140005.qw3nhjlin4vobhvd@halaneylaptop>
-References: <20220713131340.29401-1-johan+linaro@kernel.org>
- <20220713131340.29401-4-johan+linaro@kernel.org>
+        Wed, 13 Jul 2022 10:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75902D1CB;
+        Wed, 13 Jul 2022 07:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74DB461D96;
+        Wed, 13 Jul 2022 14:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BF2AAC341C0;
+        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657720814;
+        bh=nqRDKZknBDuKW18REhA/cBNZYXJqPytagNpFFWtyS08=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mp0OeFruUnTwB+4rkEDx6qXEcMT8cEf5G4PzWMS7mVj1ZSa8SWk5V1C+eglczKpU0
+         CMrM9oGbKbVD0tla3nVQJhr/LGP0S5wVOo0+0oh8LK90+Q2/IRdru4epFQIiwWqEnZ
+         h57OL/Qww1Ym8VD0gF2t3RheAW3abWyH8hD9+pHztdXUZS0O9PnqgKmcG/9ocFtuV9
+         6t/StAKvoWMzxcwl/5/JpY1FUEEtSTlYuI9snlGryEFeHvX/dXJzl2ZRcaDzV6e1D0
+         fn8NR3Mu/LcrDBFNxFPgib7LMmWs+aPY0aPCt78Yq8svoafhkQohGWmIWdOrk5oBuj
+         yLuSoIBNpdndw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9ADB2E4521F;
+        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713131340.29401-4-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net] r8152: fix accessing unset transport header
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165772081462.13863.15234899108123755082.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jul 2022 14:00:14 +0000
+References: <20220711070004.28010-390-nic_swsd@realtek.com>
+In-Reply-To: <20220711070004.28010-390-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,38 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:13:36PM +0200, Johan Hovold wrote:
-> Not all platforms have all of the four currently supported wakeup
-> interrupts so use the optional irq helpers when looking up interrupts to
-> avoid printing error messages when an optional interrupt is not found:
-> 
-> 	dwc3-qcom a6f8800.usb: error -ENXIO: IRQ hs_phy_irq not found
-> 
-> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 77036551987a..c5e482f53e9d 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -490,9 +490,9 @@ static int dwc3_qcom_get_irq(struct platform_device *pdev,
->  	int ret;
->  
->  	if (np)
-> -		ret = platform_get_irq_byname(pdev_irq, name);
-> +		ret = platform_get_irq_byname_optional(pdev_irq, name);
->  	else
-> -		ret = platform_get_irq(pdev_irq, num);
-> +		ret = platform_get_irq_optional(pdev_irq, num);
->  
->  	return ret;
->  }
-> -- 
-> 2.35.1
-> 
+Hello:
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 13 Jul 2022 11:31:11 +0800 you wrote:
+> A warning is triggered by commit 66e4c8d95008 ("net: warn if transport
+> header was not set"). The warning is harmless, because the value from
+> skb_transport_offset() is only used for skb_is_gso() is true or the
+> skb->ip_summed is equal to CHECKSUM_PARTIAL.
+> 
+> Fixes: 66e4c8d95008 ("net: warn if transport header was not set")
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net] r8152: fix accessing unset transport header
+    https://git.kernel.org/netdev/net/c/057cc8c9005e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

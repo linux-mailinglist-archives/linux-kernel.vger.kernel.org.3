@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB9F5739BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C875739C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbiGMPIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S236736AbiGMPJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236827AbiGMPI2 (ORCPT
+        with ESMTP id S236820AbiGMPJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:08:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D07B4C61C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:08:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBdy4-0001Jr-Tk; Wed, 13 Jul 2022 17:08:00 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBdy3-000jno-4t; Wed, 13 Jul 2022 17:07:59 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBdy2-004wvj-E3; Wed, 13 Jul 2022 17:07:58 +0200
-Date:   Wed, 13 Jul 2022 17:07:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Message-ID: <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <20220712221715.GT1823936-robh@kernel.org>
- <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
- <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
- <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
+        Wed, 13 Jul 2022 11:09:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719A8616A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657724943; x=1689260943;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aqknmWmJOsBdvhrSHtYcz3nXpZCJ67cmJTQcTW1LI0A=;
+  b=mZ6CrTyaWyyAIBV8fBGY0Rg+WGJFu0bJnpACQLbZQ0sdCK2rmiSkMp0O
+   tJ0ZsaYcxuKJedug8eaLPdUqv78EvjeXEJ97PPPoi+vgg9UzQn1yGEQKQ
+   oUk7ZY+KQQCrIpI/FtcVaEp1k4CDpM9ueQ5F127sxDstsxP2gMs/VfaIC
+   r98TVUnrJlWDF4cGrdX4iKpxGmmXa4wiTHSvzcFWLdp+FohSN4rlI7Ckt
+   Q+XVWr281QMIO+ft4YX+K6kUuBQKQuQHHkg1hHiyZxUGkvw17nDgroqRR
+   JerNHbHATAvMBO5qdhilR9g/cYG2hdHTkqn7mtur+jdfsVrtVJHNsuTZA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310875511"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="310875511"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 08:09:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="922664452"
+Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jul 2022 08:09:02 -0700
+Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oBdz3-0003cN-Nq;
+        Wed, 13 Jul 2022 15:09:01 +0000
+Date:   Wed, 13 Jul 2022 23:08:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: include/linux/compiler_types.h:319:45: error: call to
+ '__compiletime_assert_239' declared with attribute error: BUILD_BUG_ON
+ failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
+Message-ID: <202207132306.7zlGsvcO-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r7fomtcfvjlx7yip"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
---r7fomtcfvjlx7yip
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-On Wed, Jul 13, 2022 at 03:30:07PM +0100, Ben Dooks wrote:
-> On 13/07/2022 14:52, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
-> > > On 12/07/2022 23:17, Rob Herring wrote:
-> > > > On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
-> > > > > The dwc pwm controller can be used in non-PCI systems, so allow
-> > > > > either platform or OF based probing.
-> > > > >=20
-> > > > > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->=20
-> [snip]
->=20
-> > > > > +properties:
-> > > > > +  "#pwm-cells":
-> > > > > +    description: |
-> > > > > +      See pwm.yaml in this directory for a description of the ce=
-lls format.
-> > > >=20
-> > > > pwm.yaml doesn't define how many cells. You need to. And you don't =
-need
-> > > > generic descriptions.
-> > >=20
-> > >   "#pwm-cells":
-> > >      const: 1
-> > >=20
-> > > should be sufficient then?
-> >=20
-> > I would expect a value of (at least) 2 or (better) 3.
->=20
-> OOPS, forgot the phandle.
->=20
-> I will have to check if we have any support yet for dealing
-> with any of the pwm flags yet.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b047602d579b4fb028128a525f056bbdc890e7f0
+commit: 39cac191ff37939544af80d5d2af6b870fd94c9b arc/mm/highmem: Use generic kmap atomic implementation
+date:   1 year, 8 months ago
+config: arc-randconfig-r023-20220712 (https://download.01.org/0day-ci/archive/20220713/202207132306.7zlGsvcO-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=39cac191ff37939544af80d5d2af6b870fd94c9b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 39cac191ff37939544af80d5d2af6b870fd94c9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-I didn't double check, but given that the driver only supports inversed
-polarity it might not even work without passing the flag for inversed
-polarity. Having said that, I expect you have to only add "#pwm-cells =3D
-<3>;" to your dts and then everything should work just fine.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards
-Uwe
+All errors (new ones prefixed by >>):
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+   In file included from <command-line>:
+   arch/arc/mm/highmem.c: In function 'kmap_init':
+>> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_239' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
+     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
+     300 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
+     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
+      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
+         |         ^~~~~~~~~~~~
 
---r7fomtcfvjlx7yip
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/__compiletime_assert_239 +319 include/linux/compiler_types.h
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLO38gACgkQwfwUeK3K
-7AlmswgAiqMblcZKY2HC5SkMnNz6H6mHLNEgzeCkHIteMgyJPzS3xsuSjuwWz+3m
-iA0HC08MY1I3nWzSTnnJjMakMX5dUIgn6Q95KVUSshSP2WHXX17DyOYwnZ18Du+0
-hxvFsp6x1tOEuFbcMSzYSxVwDCXahYUszFVz22O9ieNBsxk3/tf1v17lD9+kq8qt
-8YGnzYHLuL3m+7UENkVpqsXfDpWp2Nzshupq7g8TZFXfXX08lje5c7WK85q9JrKb
-dhyk6VsWrCJa4yXoNKpEE2WTZ8VZbQPwYyK+wyNgx83zI4l6wLKpkRjo2+4gQm2q
-0XbMxpCuONMAOhmV/BqzA46zdi6ggA==
-=CVm7
------END PGP SIGNATURE-----
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
 
---r7fomtcfvjlx7yip--
+:::::: The code at line 319 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

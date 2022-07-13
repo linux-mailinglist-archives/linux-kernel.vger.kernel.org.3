@@ -2,85 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F5E57361C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC0457361D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236358AbiGMMLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S236361AbiGMMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiGMMLr (ORCPT
+        with ESMTP id S231236AbiGMMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:11:47 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC4CF8940;
-        Wed, 13 Jul 2022 05:11:46 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id x11so561734qtv.9;
-        Wed, 13 Jul 2022 05:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mQ/hcGr/I/V5gOxH9+3HtKc0WRnaD95esCjmTcO4bQ0=;
-        b=FojwuT6sStHpE+uVYaLsaIIQad4I8HewXV7sDZTXbpuvLEXufIWG1ufnuRB4cMYyrz
-         kPOha1HctNi444O/CECbg2EoAhrjZmGgxNVFHD7lVLdK/PjolGofJE+qgGrOlW1woIlQ
-         JYGpYoVSxSjDrFE5ImvMQW+sEj+hNdRAYU6+/EU7ibVtPwJOake8jcjZ5xTfPSsdChIZ
-         rfKZQzXtJzQlYU821MXv/QWkkZhUhL5xT/bTMvVhfQeeO9MCgoXK8WnblnnfdxOagYex
-         G8U5s7/vMXpdFqGlPBx6CZMa0+adjTZHfVn/kHN+8qI4SM8geqkQmo8uZnFT0urSGFo/
-         XVMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mQ/hcGr/I/V5gOxH9+3HtKc0WRnaD95esCjmTcO4bQ0=;
-        b=kf7yp358dOyBP8VJ7S129L2zvY0KlXQ9gypSqUKXkpHGdwFPPgfpC474bDGypjXTeJ
-         lFFGxOPOwkZ/N4N7ngf+T8zJk0m9BGxxfffNV4JUR91iImfDxbQxE4kNyWbDYoLNcwql
-         VAV1DVpKgS11bEmQeZwYkEaGbbA64R9lG9Vw07Wpkr6Cfq06/m+xJj2pbTHuyG+s/pNP
-         VYN46ooJZ0yuFxfwOPZe9La0e8CGXM2fQ5EiJn/u3uIIVDKnvwV9S0MwIMfFDT+ZXA3a
-         FgV9M2nQYTifhZLAUVQ2cG75cxltkkgP7t+FkB7VESc7rylIE6JVB6u5eISkEKfxWa8a
-         j0ow==
-X-Gm-Message-State: AJIora9McBVIO5ul3NNsBxgjM0ZYCm7PCOkFbPqmBuA23FIm7pKHTCUY
-        7Fp0MxANbhDvhjoSFqzCe3A=
-X-Google-Smtp-Source: AGRyM1tQvQdoyjFYZfS1liJSgb+wrsI4bYFX7V+tmV4z8j3UvfsmISCnmKU2aLt9KbpEZgAIYIuBuQ==
-X-Received: by 2002:ac8:5cd3:0:b0:316:f772:f0b8 with SMTP id s19-20020ac85cd3000000b00316f772f0b8mr2587700qta.162.1657714305566;
-        Wed, 13 Jul 2022 05:11:45 -0700 (PDT)
-Received: from [192.168.43.228] ([193.86.92.180])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05620a400d00b006b5bbd8cb92sm630846qko.55.2022.07.13.05.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 05:11:44 -0700 (PDT)
-Message-ID: <c8fdfa7b-f4eb-8308-4064-b868ce945e3a@gmail.com>
-Date:   Wed, 13 Jul 2022 14:11:39 +0200
+        Wed, 13 Jul 2022 08:12:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7247D104034
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:12:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75F4A1424;
+        Wed, 13 Jul 2022 05:12:34 -0700 (PDT)
+Received: from [10.163.47.157] (unknown [10.163.47.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6630C3F73D;
+        Wed, 13 Jul 2022 05:12:31 -0700 (PDT)
+Message-ID: <87d3417b-dfc7-bf46-a1b6-7d0b660f8b51@arm.com>
+Date:   Wed, 13 Jul 2022 17:42:27 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net v4 1/3] stmmac: dwmac-mediatek: fix clock issue
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
 Content-Language: en-US
-To:     Biao Huang <biao.huang@mediatek.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, macpaul.lin@mediatek.com,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-References: <20220713101002.10970-1-biao.huang@mediatek.com>
- <20220713101002.10970-2-biao.huang@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220713101002.10970-2-biao.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     german.gomez@arm.com, james.clark@arm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220713085925.2627533-1-anshuman.khandual@arm.com>
+ <0bb4a26d-0480-70f0-4a56-451d2d85880b@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <0bb4a26d-0480-70f0-4a56-451d2d85880b@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,117 +53,116 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 13/07/2022 12:10, Biao Huang wrote:
-> The pm_runtime takes care of the clock handling in current
-> stmmac drivers, and dwmac-mediatek implement the
-> mediatek_dwmac_clks_config() as the callback for pm_runtime.
+On 7/13/22 15:36, Suzuki K Poulose wrote:
+> On 13/07/2022 09:59, Anshuman Khandual wrote:
+>> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+>> packets into the traces, if the owner of the perf event runs with required
+>> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+>>
+>> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+>> but the check for capabilities happens in the pmu event init callback i.e
+>> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+>> remain consistent for the duration of the perf session.
+>>
+>> However, the function arm_spe_event_to_pmscr() may be called later during
+>> the event start callback i.e arm_spe_pmu_start() when the "current" process
+>> is not the owner of the perf session, hence the CX bit setting is currently
+>> not consistent.
+>>
+>> One way to fix this, is by caching the required value of the CX bit during
+>> the initialization of the PMU event, so that it remains consistent for the
+>> duration of the session. It uses currently unused 'event->hw.flags' element
+>> to cache perfmon_capable() value, which can be referred during event start
+>> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+>> of context packets in the trace as per event owner capabilities.
+>>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+>> Reported-by: German Gomez <german.gomez@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>> Changes in V2:
+>>
+>> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
+>> - Changed the comment per Suzuki
+>> - Renamed the helpers Per Suzuki
+>> - Added "Fixes: " tag per German
+>>
+>> Changes in V1:
+>>
+>> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
+>>
+>>   drivers/perf/arm_spe_pmu.c | 23 +++++++++++++++++++++--
+>>   1 file changed, 21 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+>> index db670b265897..c4290b0492fd 100644
+>> --- a/drivers/perf/arm_spe_pmu.c
+>> +++ b/drivers/perf/arm_spe_pmu.c
+>> @@ -39,6 +39,24 @@
+>>   #include <asm/mmu.h>
+>>   #include <asm/sysreg.h>
+>>   +/*
+>> + * Cache if the event is allowed to trace Context information.
+>> + * This allows us to perform the check, i.e, perfmon_capable(),
+>> + * in the context of the event owner, once, during the event_init().
+>> + */
+>> +#define SPE_PMU_HW_FLAGS_CX            BIT(0)
+>> +
+>> +static void set_spe_event_has_cx(struct perf_event *event)
+>> +{
+>> +    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>> +        event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+>> +}
+>> +
+>> +static bool get_spe_event_has_cx(struct perf_event *event)
+>> +{
+>> +    return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+>> +}
+>> +
+>>   #define ARM_SPE_BUF_PAD_BYTE            0
+>>     struct arm_spe_pmu_buf {
+>> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>>       if (!attr->exclude_kernel)
+>>           reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>>   -    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>> +    if (get_spe_event_has_cx(event))
+>>           reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>         return reg;
+>> @@ -710,7 +728,8 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>>           return -EOPNOTSUPP;
+>>   
 > 
-> Then, stripping duplicated clocks handling in old init()/exit()
-> to fix clock issue in suspend/resume test.
 > 
-> As to clocks in probe/remove, vendor need symmetric handling to
-> ensure clocks balance.
 > 
-> Test pass, including suspend/resume and ko insertion/remove.
+>>       reg = arm_spe_event_to_pmscr(event);
+>> -    if (!perfmon_capable() &&
+>> +    set_spe_event_has_cx(event);
 > 
-> Fixes: 3186bdad97d5 ("stmmac: dwmac-mediatek: add platform level clocks management")
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 49 ++++++++-----------
->   1 file changed, 21 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> index 6ff88df58767..ca8ab290013c 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> @@ -576,32 +576,7 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
->   		}
->   	}
->   
-> -	ret = clk_bulk_prepare_enable(variant->num_clks, plat->clks);
-> -	if (ret) {
-> -		dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = clk_prepare_enable(plat->rmii_internal_clk);
-> -	if (ret) {
-> -		dev_err(plat->dev, "failed to enable rmii internal clk, err = %d\n", ret);
-> -		goto err_clk;
-> -	}
-> -
->   	return 0;
-> -
-> -err_clk:
-> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
-> -	return ret;
-> -}
-> -
-> -static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
-> -{
-> -	struct mediatek_dwmac_plat_data *plat = priv;
-> -	const struct mediatek_dwmac_variant *variant = plat->variant;
-> -
-> -	clk_disable_unprepare(plat->rmii_internal_clk);
-> -	clk_bulk_disable_unprepare(variant->num_clks, plat->clks);
->   }
->   
->   static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-> @@ -643,7 +618,6 @@ static int mediatek_dwmac_common_data(struct platform_device *pdev,
->   	plat->addr64 = priv_plat->variant->dma_bit_mask;
->   	plat->bsp_priv = priv_plat;
->   	plat->init = mediatek_dwmac_init;
-> -	plat->exit = mediatek_dwmac_exit;
->   	plat->clks_config = mediatek_dwmac_clks_config;
->   	if (priv_plat->variant->dwmac_fix_mac_speed)
->   		plat->fix_mac_speed = priv_plat->variant->dwmac_fix_mac_speed;
-> @@ -712,13 +686,32 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
->   	mediatek_dwmac_common_data(pdev, plat_dat, priv_plat);
->   	mediatek_dwmac_init(pdev, priv_plat);
->   
-> +	ret = mediatek_dwmac_clks_config(priv_plat, true);
-> +	if (ret)
-> +		return ret;
-> +
->   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
->   	if (ret) {
->   		stmmac_remove_config_dt(pdev, plat_dat);
-> -		return ret;
-> +		goto err_drv_probe;
->   	}
->   
->   	return 0;
-> +
-> +err_drv_probe:
-> +	mediatek_dwmac_clks_config(priv_plat, false);
-> +	return ret;
-> +}
-> +
-> +static int mediatek_dwmac_remove(struct platform_device *pdev)
-> +{
-> +	struct mediatek_dwmac_plat_data *priv_plat = get_stmmac_bsp_priv(&pdev->dev);
-> +	int ret;
-> +
-> +	ret = stmmac_pltfr_remove(pdev);
-> +	mediatek_dwmac_clks_config(priv_plat, false);
-> +
+> This seems to be wrong. We need to set the event_has_cx() *before*
+> we call arm_spe_event_to_pmscr(), as the latter uses
+> get_spe_event_has_cx().
 
-We enalbe the clocks after calling stmmac_probe_config_dt(), so we should 
-disable them before calling stmmac_pltfr_remove(), correct?
+Right, the order needs to be reversed.
 
-Other then that:
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+>> +    if (!get_spe_event_has_cx(event) &&
+>>           (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+> 
+> And we must retain the perfmon_capable() check here to ensure that any of the following options are usable without CX. e.g,
+> if CONFIG_PID_IN_CONTEXTIDR is not enabled, !get_spe_event_has_cx() doesn't imply !perfmon_capable().
 
-> +	return ret;
->   }
->   
->   static const struct of_device_id mediatek_dwmac_match[] = {
-> @@ -733,7 +726,7 @@ MODULE_DEVICE_TABLE(of, mediatek_dwmac_match);
->   
->   static struct platform_driver mediatek_dwmac_driver = {
->   	.probe  = mediatek_dwmac_probe,
-> -	.remove = stmmac_pltfr_remove,
-> +	.remove = mediatek_dwmac_remove,
->   	.driver = {
->   		.name           = "dwmac-mediatek",
->   		.pm		= &stmmac_pltfr_pm_ops,
+Right, but BIT(SYS_PMSCR_EL1_CX_SHIFT) check could be dropped here because
+that could not have been set in function arm_spe_event_to_pmscr() without
+perfmon_capable() ?
+
+> 
+> 
+>>               BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+>>               BIT(SYS_PMSCR_EL1_PCT_SHIFT))))
+> 
+> Suzuki

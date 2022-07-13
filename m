@@ -2,174 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96DE5731A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6095731A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiGMI4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S235449AbiGMI4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiGMIz6 (ORCPT
+        with ESMTP id S235204AbiGMI4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:55:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90CA58D1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:55:58 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oBY9z-0006jp-Mi; Wed, 13 Jul 2022 10:55:55 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oBY9x-0006Bp-PA; Wed, 13 Jul 2022 10:55:53 +0200
-Date:   Wed, 13 Jul 2022 10:55:53 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        linux-amarula@amarulasolutions.com,
-        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        dmaengine@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 1/2] dmaengine: mxs: use platform_driver_register
-Message-ID: <20220713085553.yunfuvh6a4gn2phj@pengutronix.de>
-References: <20220712160909.2054141-1-dario.binacchi@amarulasolutions.com>
- <20220713084036.ipcd6bhcdb574w7h@pengutronix.de>
- <CABGWkvpJ5Hc8pQ-Rzu8z6Y_Cfa2pEC0C2ABT_FGp6r9Vyz-Gmw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABGWkvpJ5Hc8pQ-Rzu8z6Y_Cfa2pEC0C2ABT_FGp6r9Vyz-Gmw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 04:56:11 -0400
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB966D214F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:56:10 -0700 (PDT)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
+        id 1oBYAB-000ABm-R4
+        for linux-kernel@vger.kernel.org; Wed, 13 Jul 2022 10:56:07 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-kernel@vger.kernel.org
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
+Date:   Wed, 13 Jul 2022 10:56:00 +0200
+Message-ID: <90594bd1-0ff1-0510-6d49-45d9935514b6@wanadoo.fr>
+References: <20220713084247.3090353-1-bbara93@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     linux-input@vger.kernel.org
+Content-Language: en-US
+In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-13, Dario Binacchi wrote:
-> Hi Marco,
+Le 13/07/2022 à 10:42, Benjamin Bara a écrit :
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> On Wed, Jul 13, 2022 at 10:40 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
-> >
-> > Hi Dario,
-> >
-> > On 22-07-12, Dario Binacchi wrote:
-> > > Driver registration fails on SOC imx8mn as its supplier, the clock
-> > > control module, is probed later than subsys initcall level. This driver
-> > > uses platform_driver_probe which is not compatible with deferred probing
-> > > and won't be probed again later if probe function fails due to clock not
-> > > being available at that time.
-> > >
-> > > This patch replaces the use of platform_driver_probe with
-> > > platform_driver_register which will allow probing the driver later again
-> > > when the clock control module will be available.
-> > >
-> > > Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
-> > > Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > > Cc: stable@vger.kernel.org
-> > >
-> > > ---
-> > >
-> > > Changes in v5:
-> > > - Update the commit message.
-> > > - Create a new patch to remove the warning generated by this patch.
-> >
-> > Please squash this new patch into this patch since you introduce the
-> > warning with this patch.
-> 
-> In version 4 I had only one patch, but Vinod told me to separate the
-> patches like
-> this. I also think like you, but I did what Vinod asked me to do.
-> So, can you agree and actually tell me what to do?
+> This enables the usage of "can_sleep" GPIO chips as "pin up" GPIO.
+> This might be the case if the GPIO chip is an expander behind i2c.
 
-Sorry, I didn't wanted to step in here just saw the patch and it is a
-bit strange to fix something by a 2nd patch we introduce by the 1st
-patch within the same series. This also increase the probability that
-the 2nd patch isn't ported to stable. Anyway, if Vinod is fine with this
-as maintainer than it is fine.
+Hi,
 
-Regards,
-  Marco
+should you care and/or should there be a v2, some nitpick below.
 
-> Thanks and regards,
-> Dario
+CJ
+
 > 
-> >
-> > Regards,
-> >   Marco
-> >
-> > > Changes in v4:
-> > > - Restore __init in front of mxs_dma_probe() definition.
-> > > - Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
-> > > - Update the commit message.
-> > > - Use builtin_platform_driver() instead of module_platform_driver().
-> > >
-> > > Changes in v3:
-> > > - Restore __init in front of mxs_dma_init() definition.
-> > >
-> > > Changes in v2:
-> > > - Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
-> > >
-> > >  drivers/dma/mxs-dma.c | 8 ++------
-> > >  1 file changed, 2 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-> > > index 994fc4d2aca4..18f8154b859b 100644
-> > > --- a/drivers/dma/mxs-dma.c
-> > > +++ b/drivers/dma/mxs-dma.c
-> > > @@ -839,10 +839,6 @@ static struct platform_driver mxs_dma_driver = {
-> > >               .name   = "mxs-dma",
-> > >               .of_match_table = mxs_dma_dt_ids,
-> > >       },
-> > > +     .probe = mxs_dma_probe,
-> > >  };
-> > > -
-> > > -static int __init mxs_dma_module_init(void)
-> > > -{
-> > > -     return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
-> > > -}
-> > > -subsys_initcall(mxs_dma_module_init);
-> > > +builtin_platform_driver(mxs_dma_driver);
-> > > --
-> > > 2.32.0
-> > >
-> > >
-> > >
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+> ---
+>   drivers/input/touchscreen/tsc2007.h      |  1 +
+>   drivers/input/touchscreen/tsc2007_core.c | 38 ++++++++++++++++++++----
+>   2 files changed, 34 insertions(+), 5 deletions(-)
 > 
-> 
-> 
-> -- 
-> 
-> Dario Binacchi
-> 
-> Embedded Linux Developer
-> 
-> dario.binacchi@amarulasolutions.com
-> 
-> __________________________________
-> 
-> 
-> Amarula Solutions SRL
-> 
-> Via Le Canevare 30, 31100 Treviso, Veneto, IT
-> 
-> T. +39 042 243 5310
-> info@amarulasolutions.com
-> 
-> www.amarulasolutions.com
-> 
+> diff --git a/drivers/input/touchscreen/tsc2007.h b/drivers/input/touchscreen/tsc2007.h
+> index 69b08dd6c8df..29bd1ff22c72 100644
+> --- a/drivers/input/touchscreen/tsc2007.h
+> +++ b/drivers/input/touchscreen/tsc2007.h
+> @@ -78,6 +78,7 @@ struct tsc2007 {
+>   	bool			stopped;
+>   
+>   	int			(*get_pendown_state)(struct device *);
+> +	int			(*get_pendown_state_cansleep)(struct device *);
+>   	void			(*clear_penirq)(void);
+>   
+>   	struct mutex		mlock;
+> diff --git a/drivers/input/touchscreen/tsc2007_core.c b/drivers/input/touchscreen/tsc2007_core.c
+> index 3e871d182c40..0ad4c3c41297 100644
+> --- a/drivers/input/touchscreen/tsc2007_core.c
+> +++ b/drivers/input/touchscreen/tsc2007_core.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/module.h>
+>   #include <linux/slab.h>
+>   #include <linux/gpio/consumer.h>
+> +#include <linux/gpio/driver.h>
+>   #include <linux/input.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/i2c.h>
+> @@ -108,6 +109,14 @@ bool tsc2007_is_pen_down(struct tsc2007 *ts)
+>   	return ts->get_pendown_state(&ts->client->dev);
+>   }
+>   
+> +bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
+> +{
+> +	if (!ts->get_pendown_state_cansleep)
+> +		return true;
+> +
+> +	return ts->get_pendown_state_cansleep(&ts->client->dev);
+> +}
+> +
+>   static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+>   {
+>   	struct tsc2007 *ts = handle;
+> @@ -115,7 +124,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+>   	struct ts_event tc;
+>   	u32 rt;
+>   
+> -	while (!ts->stopped && tsc2007_is_pen_down(ts)) {
+> +	while (!ts->stopped && tsc2007_is_pen_down_cansleep(ts)) {
+>   
+>   		/* pen is down, continue with the measurement */
+>   
+> @@ -125,7 +134,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
+>   
+>   		rt = tsc2007_calculate_resistance(ts, &tc);
+>   
+> -		if (!rt && !ts->get_pendown_state) {
+> +		if (!rt && !ts->get_pendown_state_cansleep) {
+>   			/*
+>   			 * If pressure reported is 0 and we don't have
+>   			 * callback to check pendown state, we have to
+> @@ -229,6 +238,14 @@ static int tsc2007_get_pendown_state_gpio(struct device *dev)
+>   	return gpiod_get_value(ts->gpiod);
+>   }
+>   
+> +static int tsc2007_get_pendown_state_gpio_cansleep(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct tsc2007 *ts = i2c_get_clientdata(client);
+> +
+> +	return gpiod_get_value_cansleep(ts->gpiod);
+> +}
+> +
+>   static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
+>   {
+>   	u32 val32;
+> @@ -264,10 +281,21 @@ static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
+>   	if (IS_ERR(ts->gpiod))
+>   		return PTR_ERR(ts->gpiod);
+>   
+> -	if (ts->gpiod)
+> -		ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
+> -	else
+> +	if (ts->gpiod) {
+> +		/* to support detection during the hard IRQ, the GPIO chip is required to not sleep.
+
+There should be /* alone on the first line of the comment.
+
+> +		 * this might be the case if the GPIO is e.g. behind an i2c-based GPIO expander.
+> +		 * it is fine to sleep later in the soft IRQ, as it is threaded.
+> +		 */
+> +		ts->get_pendown_state_cansleep = tsc2007_get_pendown_state_gpio_cansleep;
+> +		if (gpiod_to_chip(ts->gpiod) && !gpiod_to_chip(ts->gpiod)->can_sleep) {
+> +			ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
+> +		} else {
+> +			dev_dbg(dev, "Pen down GPIO chip can sleep\n");
+> +		}
+
+Un-needed extra { } around each branch of this "if".
+
+Just my 2c,
+CJ
+
+> +
+> +	} else {
+>   		dev_warn(dev, "Pen down GPIO is not specified in properties\n");
+> +	}
+>   
+>   	return 0;
+>   }
+
+

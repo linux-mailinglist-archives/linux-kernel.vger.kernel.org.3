@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12446572C00
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1D4572C06
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiGMDrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 23:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S229732AbiGMDuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 23:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiGMDrQ (ORCPT
+        with ESMTP id S230145AbiGMDuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 23:47:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F083D860C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657684035; x=1689220035;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GQ/WFbp6QqzRmi3ia7CHLxlH1IRb5fnmp9vJsSIn6JE=;
-  b=nanpZtl+2wivTdsoOoI4Zdv6AzWHsST03GS6ElbpStHLtXr7lEP1J8Lo
-   NkyVJOwArid/LT6L9t9q6bOiRQOJNZi6CnAEZBGlHfc0qtiodBDb4/r/h
-   lkdSxW+udrS80hIke4kRX5/z/2xgxoyvisWZnKvXwSzuTba8Z3jvi/8R4
-   JTO7EHd7EnzmUxJ5pI+qpJYe098hKeEUm3TMtoqnKndLOGKZ5fpcDQe//
-   mbLcLmDQ4xuuprwsOt+MgR6oLyd7T+rX7AzB25CCZzshrNlKSDuKf572O
-   EENiLTVQt31NkC3Vlv6oVJgcLDmJGUJSEODlTCB8lgyMhLbVXyl7+sSlV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371414512"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="371414512"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 20:47:15 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="653188428"
-Received: from yunliu1-mobl.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.171.118])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 20:47:13 -0700
-Date:   Wed, 13 Jul 2022 11:47:08 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
-Message-ID: <20220713034708.GA23431@chenyu5-mobl1>
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
- <20220712082036.5130-2-wuyun.abel@bytedance.com>
+        Tue, 12 Jul 2022 23:50:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EF3D9145;
+        Tue, 12 Jul 2022 20:50:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 111FFB81D08;
+        Wed, 13 Jul 2022 03:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A5808C341C0;
+        Wed, 13 Jul 2022 03:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657684213;
+        bh=7o+Dw3QCs29lyvv4dtq9cP9AotkGGFdSoaS6NoC1F78=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=slReMfb7M0vhzJ08BJN2MTvm+O2Sf4a4pPTUg28wZx+KoD+WU8cOE+4caE7zoC097
+         qZ9F8MnmrWmYdm+qr1S8bq7CSlQt5j4xYiJr4JighWeMiYGTXhqeJDlvLET5Jt8l42
+         gaXgAna4sRYkBo8GVkHEFD/F9FNpe7JBQCZYZEbIHkgBpc7Le/+IrmZs2l8Cyap/IF
+         epI74ucDRKQl0P3RtReAUvT9fSct3NNGK+TwTZ1uXB3496hdIM3+A64Hc+Y1mzeSbI
+         CUKUVCCrwhGynj9ZRdAFZyh5cXSVRzY18GJaQ4KxOvII7pLkOvV3a6Uvt7G2c+wjRE
+         G45hf5velqdEw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 84E20E4522F;
+        Wed, 13 Jul 2022 03:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712082036.5130-2-wuyun.abel@bytedance.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] qlogic: qed: fix clang -Wformat warnings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165768421353.12868.15963909501579730055.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Jul 2022 03:50:13 +0000
+References: <20220711232404.2189257-1-justinstitt@google.com>
+In-Reply-To: <20220711232404.2189257-1-justinstitt@google.com>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,65 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:20:32PM +0800, Abel Wu wrote:
-> When SIS_UTIL is enabled, SIS domain scan will be skipped if
-> the LLC is overloaded. Since the overloaded status is checked
-> in the load balancing at LLC level, the interval is llc_size
-> miliseconds. The duration might be long enough to affect the
-> overall system throughput if idle cores are out of reach in
-> SIS domain scan.
-The idle core scan was skipped in SIS_UTIL because we saw better
-improvement in some benchmarks. But yes, we could make has_idle_core
-to scan anyway no matter what the system load is, if we have some
-data to support it. I'll test this patch on top of latest sched/core
-branch to see if this makes a difference.
+Hello:
 
-thanks,
-Chenyu
-> 
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> ---
->  kernel/sched/fair.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index a78d2e3b9d49..cd758b3616bd 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6392,16 +6392,19 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->  	struct sched_domain *this_sd;
->  	u64 time = 0;
->  
-> -	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
-> -	if (!this_sd)
-> -		return -1;
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 11 Jul 2022 16:24:04 -0700 you wrote:
+> When building with Clang we encounter these warnings:
+> | drivers/net/ethernet/qlogic/qed/qed_dev.c:416:30: error: format
+> | specifies type 'char' but the argument has type 'u32' (aka 'unsigned
+> | int') [-Werror,-Wformat] i);
 > -
->  	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->  
-> -	if (sched_feat(SIS_PROP) && !has_idle_core) {
-> +	if (has_idle_core)
-> +		goto scan;
-> +
-> +	if (sched_feat(SIS_PROP)) {
->  		u64 avg_cost, avg_idle, span_avg;
->  		unsigned long now = jiffies;
->  
-> +		this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
-> +		if (!this_sd)
-> +			return -1;
-> +
->  		/*
->  		 * If we're busy, the assumption that the last idle period
->  		 * predicts the future is flawed; age away the remaining
-> @@ -6436,7 +6439,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->  				return -1;
->  		}
->  	}
-> -
-> +scan:
->  	for_each_cpu_wrap(cpu, cpus, target + 1) {
->  		if (has_idle_core) {
->  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
-> -- 
-> 2.31.1
+> | drivers/net/ethernet/qlogic/qed/qed_dev.c:630:13: error: format
+> | specifies type 'char' but the argument has type 'int' [-Werror,-Wformat]
+> | p_llh_info->num_ppfid - 1);
 > 
+> [...]
+
+Here is the summary with links:
+  - qlogic: qed: fix clang -Wformat warnings
+    https://git.kernel.org/netdev/net-next/c/b6afeb87ad29
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,100 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AF55737AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF815737AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiGMNk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S233943AbiGMNky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236315AbiGMNkb (ORCPT
+        with ESMTP id S236219AbiGMNkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:40:31 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8735695AA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:40:23 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DAkwjr027681;
-        Wed, 13 Jul 2022 15:40:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=JRyv1cb2Gr7w/X2gySSfzHJgcDNDC1uKvi9JD4ouJro=;
- b=uxo6Dn2D4OrxCBt13hKgXlMQssGX75dS+VpBAutkoEczXuGj/bt63GIA/gj1WjROUAEn
- KPuo60hCkMaqwJXcg9N+q3YidK0/RJp1ACrKT4Z1cwaTPrMAzBhsLNzLLbp3z2fu6Vof
- kyZfE8nfW2DlIMGupt5Oxn0gWBH503RDNQfTqSXRB6RdeHGqLWvcr4QsIoBO0Pcxw23m
- ljbj8BTiExwk08Ex5TEKD8L1QHDPRRX9QBJMOw8i44Qkbe7DtW+r/WICfQWiVNsuxEmm
- 1h45HJTihG7GcuGCwInsz/newACWSP9dn8ICqV09XAF3DrIK2tXkU6cBKRA6NI4lYVHb DA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h93cwhtbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 15:40:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 757C210002A;
-        Wed, 13 Jul 2022 15:40:07 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E9273222C90;
-        Wed, 13 Jul 2022 15:40:07 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 13 Jul
- 2022 15:40:07 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <vkoul@kernel.org>, <kishon@ti.com>
-CC:     <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <linux-phy@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] phy: stm32: fix error return in stm32_usbphyc_phy_init
-Date:   Wed, 13 Jul 2022 15:39:53 +0200
-Message-ID: <20220713133953.595134-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Jul 2022 09:40:32 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68936DFEE;
+        Wed, 13 Jul 2022 06:40:27 -0700 (PDT)
+Received: from pwmachine.localnet (240.119.92.79.rev.sfr.net [79.92.119.240])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 966D2204DE95;
+        Wed, 13 Jul 2022 06:40:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 966D2204DE95
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1657719627;
+        bh=zhcQR1NFu1moQf6ZTM3VRhL0045EbCU1SDAmi7ztlFw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UmSuTozVzulQTaajsVaj3Gnjob2uKqT9SkBU96fnLL+ZaEfbLYDXoDdrrd+QONl+e
+         r1Gz9Prf087V+neK0QXmunHw8x2hH+/hSsVgjHmbJX8xJSteMjj928GEr7DSn92of3
+         pKKelj4W70WA4nfLT7ymZKjjUOt4Po4XTaPLMOe8=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     sdf@google.com
+Cc:     bpf@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 1/1] bpftool: Add generating command to C dumped file.
+Date:   Wed, 13 Jul 2022 15:40:22 +0200
+Message-ID: <12015028.O9o76ZdvQC@pwmachine>
+Organization: Microsoft
+In-Reply-To: <Ys3d7LCN8yATY9az@google.com>
+References: <20220712184225.52429-1-flaniel@linux.microsoft.com> <20220712184225.52429-2-flaniel@linux.microsoft.com> <Ys3d7LCN8yATY9az@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-13_03,2022-07-13_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Error code is overridden, in case the PLL doesn't lock. So, the USB
-initialization can continue. This leads to a platform freeze.
-This can be avoided by returning proper error code to avoid USB probe
-freezing the platform. It also displays proper errors in log.
+Hi.
 
-Fixes: 5b1af71280ab ("phy: stm32: rework PLL Lock detection")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- drivers/phy/st/phy-stm32-usbphyc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
-index 007a23c78d562..a98c911cc37ae 100644
---- a/drivers/phy/st/phy-stm32-usbphyc.c
-+++ b/drivers/phy/st/phy-stm32-usbphyc.c
-@@ -358,7 +358,9 @@ static int stm32_usbphyc_phy_init(struct phy *phy)
- 	return 0;
- 
- pll_disable:
--	return stm32_usbphyc_pll_disable(usbphyc);
-+	stm32_usbphyc_pll_disable(usbphyc);
-+
-+	return ret;
- }
- 
- static int stm32_usbphyc_phy_exit(struct phy *phy)
--- 
-2.25.1
+Le mardi 12 juillet 2022, 22:47:40 CEST sdf@google.com a =E9crit :
+> On 07/12, Francis Laniel wrote:
+> > This commit adds the following lines to file generated by dump:
+> > /*
+> >=20
+> >   * File generated by bpftool using:
+> >   * bpftool btf dump file /sys/kernel/btf/vmlinux format c
+> >   * DO NOT EDIT.
+> >   */
+> >=20
+> > This warns users to not edit the file and documents the command used to
+> > generate the file.
+> >=20
+> > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> > ---
+> >=20
+> >   tools/bpf/bpftool/btf.c | 16 ++++++++++++++--
+> >   1 file changed, 14 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> > index 7e6accb9d9f7..eecfc27370c3 100644
+> > --- a/tools/bpf/bpftool/btf.c
+> > +++ b/tools/bpf/bpftool/btf.c
+> > @@ -415,7 +415,8 @@ static void __printf(2, 0) btf_dump_printf(void *ct=
+x,
+> >=20
+> >   }
+> >  =20
+> >   static int dump_btf_c(const struct btf *btf,
+> >=20
+> > -		      __u32 *root_type_ids, int root_type_cnt)
+> > +		      __u32 *root_type_ids, int root_type_cnt,
+> > +		      int argc, char **argv)
+> >=20
+> >   {
+> >  =20
+> >   	struct btf_dump *d;
+> >   	int err =3D 0, i;
+> >=20
+> > @@ -425,6 +426,14 @@ static int dump_btf_c(const struct btf *btf,
+> >=20
+> >   	if (err)
+> >   =09
+> >   		return err;
+> >=20
+> > +	printf("/*\n");
+> > +	printf(" * File generated by bpftool using:\n");
+> > +	printf(" * bpftool btf dump");
+>=20
+> [..]
+>=20
+> > +	for (i =3D 0; i < argc; i++)
+> > +		printf(" %s", argv[i]);
+>=20
+> Do we really need that complexity to preserve the arguments?
+
+I was also a bit sceptickal when I first wrote as I found this code a bit=20
+complex for not so much added value.
+But in my case, I do not use bpftool often, so having the command documente=
+d=20
+in the generated file would have been useful.
+I will just find another way to document (or I think now I will not forget =
+it=20
+anymore since this series).
+
+> For skeletons we're simply doing:
+>=20
+> 	/* THIS FILE IS AUTOGENERATED BY BPFTOOL! */
+>=20
+> So probably the same should be fine here?
+>=20
+> Also, while at it, might be worth adding SPDX license comment? So let's
+> align with whatever we have in gen.c ?
+
+I will send a v2 aligned on skeletons in no more than 15 minutes.
+
+> > +	printf("\n");
+> > +	printf(" * DO NOT EDIT.\n");
+> > +	printf(" */\n");
+> >=20
+> >   	printf("#ifndef __VMLINUX_H__\n");
+> >   	printf("#define __VMLINUX_H__\n");
+> >   	printf("\n");
+> >=20
+> > @@ -507,8 +516,10 @@ static bool btf_is_kernel_module(__u32 btf_id)
+> >=20
+> >   static int do_dump(int argc, char **argv)
+> >   {
+> >  =20
+> >   	struct btf *btf =3D NULL, *base =3D NULL;
+> >=20
+> > +	char **orig_argv =3D argv;
+> >=20
+> >   	__u32 root_type_ids[2];
+> >   	int root_type_cnt =3D 0;
+> >=20
+> > +	int orig_argc =3D argc;
+> >=20
+> >   	bool dump_c =3D false;
+> >   	__u32 btf_id =3D -1;
+> >   	const char *src;
+> >=20
+> > @@ -649,7 +660,8 @@ static int do_dump(int argc, char **argv)
+> >=20
+> >   			err =3D -ENOTSUP;
+> >   			goto done;
+> >   	=09
+> >   		}
+> >=20
+> > -		err =3D dump_btf_c(btf, root_type_ids, root_type_cnt);
+> > +		err =3D dump_btf_c(btf, root_type_ids, root_type_cnt,
+> > +				 orig_argc, orig_argv);
+> >=20
+> >   	} else {
+> >   =09
+> >   		err =3D dump_btf_raw(btf, root_type_ids, root_type_cnt);
+> >   =09
+> >   	}
+> >=20
+> > --
+> > 2.25.1
+
+
+Best regards.
+
 

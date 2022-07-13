@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3BF5737D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1403C5737D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbiGMNsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S235765AbiGMNs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235795AbiGMNsk (ORCPT
+        with ESMTP id S236173AbiGMNsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:48:40 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6449E31
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:35 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id m10so3586900qvu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:35 -0700 (PDT)
+        Wed, 13 Jul 2022 09:48:46 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC102BCE
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:43 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id q13so3433366qkc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rsPzgItEmasBgXFAgzpCJf64H76lDRgEa1O19PDOaMU=;
-        b=TbuSYP1O3BZRafZZTNs19zV3al2KhShvsbFm2cJiU4MA0osbPZaKUd9wL2Cs/YTK1n
-         1N+hcHmA7ieDpFf3q8yXPfidIS0M0v4ZBPNGKt2/ZbFqgzaJDrBxniq/AjfqnKYgT2sL
-         5j3uLaB/V5LlZrt4O79T2v4XQoz0XvV0H4zEjvMTgFO1RtIYigrlchEPLmsfddeGcWrn
-         PmYZuuTcSOkUmkjCesvFtFdKLDbm8NqqkPMLzPtUpbRiWHEp6ZMkmuSv4tE1ZFwHeMdW
-         xCobQG+I/IyWOAm3PzRz3AvJHggrH0Q+Kz286uhciVgbu6UWMEWbQauYWgM7HKkyfXNG
-         lh9Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YybWUhAbc7wfz4yEZptFD477MqhkoIQMKRvhP8fTu+0=;
+        b=KQnFd7WlnAiwY4PXk3R58GkmQ2GVlGK44Wlk9RQaEN2hmemIXnshpqqS2V0OmnJWcy
+         RC3fXeNUhPIkYirFUI/n8Qe+SV5SnhFdQBnTqtJPLgXtOXomU9k/NBZJ5DOiIxfFa86P
+         uK9oBXPusz9gr5XzZC14pK71m5X2CECIVt1B5bdJnhk3tzgDmZHRpSPrem3dKAt3tuyI
+         skmHLaKhOvjuVLPt7hIHWdWgDtYsR2z7nq7tqcD2RIasA1c8PGiEZD27+89/XG39coiN
+         KjyIwru+HT9vEz1NsLw2NWgqvwgk/D3fnHop7E06f7Nb7ugH39Llp2Wh0TqJj9w/Appx
+         Akbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rsPzgItEmasBgXFAgzpCJf64H76lDRgEa1O19PDOaMU=;
-        b=28DfONPd2uDD59PGaEAXb2lzjz9H+tbVQiD4+B0EuG4lEvxommPFQKXH1p5/xeYJ5f
-         CQ12W7yPCA7/0yj4+awjmRjVpq1x+fmCMawtUqs6ZxTKin3ac0kvmmpdZChvrAvJ1pMD
-         1iD+e2Uo8KojH/9grpS9y1bPxrY4Id8vpKAXLBHVi2i+6ZhotVYet0ITYw3/U/ldaxoF
-         E0zuopGKjEwhmGmLn+h5xgjJ4NKLeEaAzXjWwbH0nTUyFKS2ZbOgIBKYfOfvnztFWYk3
-         HU3xi8iqAZqqKqOazb7EiBdiNpR54pLm2h8q8EVAg2wqa1CxEujQkPCRaSm9oxXfL1ck
-         dlCQ==
-X-Gm-Message-State: AJIora9xF6uIedFwjRszH4h5/gv+t50yCPGYWoybAhqR0VgsCQJYaFel
-        Q6LpGPygDPm2vLmhRt2pGubpTl5iFGDxOqN5
-X-Google-Smtp-Source: AGRyM1vD9Ksp+2GEOze3I/p5khOdfRuSPGJrjaeTY2OJNS1RnfoeSN3Q0j3o7v/sm55hYUMtHCIQ6g==
-X-Received: by 2002:a0c:fe02:0:b0:473:1ca:51f1 with SMTP id x2-20020a0cfe02000000b0047301ca51f1mr3051950qvr.5.1657720114787;
-        Wed, 13 Jul 2022 06:48:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YybWUhAbc7wfz4yEZptFD477MqhkoIQMKRvhP8fTu+0=;
+        b=PW0VrOjpA9WrrDSGQvrU8oz/OnWwNXwB1I+cQgTWVFg95461eJ9Horf3VPdYOdp+aL
+         0Vt9zQsNmgJb0GebNXPKlfYvuwQ6z3m1YFBNaLjCnPU2OjinM3FBYgVlMKbxODthh4fK
+         jeL5nRQlbg85rbUktWA68BqcL7y/5dNuyS5e7aYMu1w8Mfp9yhLwpZdLyBfhHIcVyXwI
+         Xa0Gi51e3O7geHKE+/gGZvieczwvYaikJUc69V4vgYykCwPpdOCTcAQzjebS5tYxe3d1
+         6C9XUs3F2JWPAK9TbOxwY9MjFhEYozJZ2Io+ERhgQnnG7FlbbeM9hYZQ2teDAnSxKR2J
+         qy3Q==
+X-Gm-Message-State: AJIora9khIW5saqSbzAT2QbPJ2U6ISZJPkXBZn+Orh4Q/bOUbDYYQsSi
+        PYrR5ERNhS8G7ORHuRnLPlo=
+X-Google-Smtp-Source: AGRyM1uTfKC+edi+nJuqExVkbmVZEPF+RLyUCWOWcFVZwhwKptn6wso1l2MOtOYqTDr4oQWlo/x5NQ==
+X-Received: by 2002:a05:620a:22e3:b0:6b5:a2ab:b9bb with SMTP id p3-20020a05620a22e300b006b5a2abb9bbmr2444424qki.151.1657720122914;
+        Wed, 13 Jul 2022 06:48:42 -0700 (PDT)
 Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id bl22-20020a05620a1a9600b006af45243e15sm1458083qkb.114.2022.07.13.06.48.29
+        by smtp.gmail.com with ESMTPSA id bl22-20020a05620a1a9600b006af45243e15sm1458083qkb.114.2022.07.13.06.48.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 Jul 2022 06:48:34 -0700 (PDT)
+        Wed, 13 Jul 2022 06:48:42 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
@@ -55,10 +55,12 @@ To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         bristot@redhat.com, vschneid@redhat.com
 Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
         Schspa Shi <schspa@gmail.com>
-Subject: [PATCH v7 1/2] sched/rt: fix bad task migration for rt tasks
-Date:   Wed, 13 Jul 2022 21:48:22 +0800
-Message-Id: <20220713134823.95141-1-schspa@gmail.com>
+Subject: [PATCH v7 2/2] sched/rt: Trying to push current task when target disable migrating
+Date:   Wed, 13 Jul 2022 21:48:23 +0800
+Message-Id: <20220713134823.95141-2-schspa@gmail.com>
 X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20220713134823.95141-1-schspa@gmail.com>
+References: <20220713134823.95141-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,146 +73,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
-allow find_lock_lowest_rq to pick a task with migration disabled.
-This commit is intended to push the current running task on this CPU
-away.
-
-There is a race scenario, which allows a migration disabled task to
-be migrated to another CPU.
-
-When there is a RT task with higher priority, rt sched class was
-intended to migrate higher priority task to lowest rq via push_rt_tasks,
-this BUG will happen here.
-
-With the system running on PREEMPT_RT, rt_spin_lock will disable
-migration, this will make the problem easier to reproduce.
-
-I have seen this crash on PREEMPT_RT, from the logs, there is a race
-when trying to migrate higher priority tasks to the lowest rq.
-
-Please refer to the following scenarios.
-
-           CPU0                                  CPU1
-------------------------------------------------------------------
-push_rt_task
-  check is_migration_disabled(next_task)
-                                        task not running and
-                                        migration_disabled == 0
-  find_lock_lowest_rq(next_task, rq);
-    _double_lock_balance(this_rq, busiest);
-      raw_spin_rq_unlock(this_rq);
-      double_rq_lock(this_rq, busiest);
-        <<wait for busiest rq>>
-                                            <wakeup>
-                                        task become running
-                                        migrate_disable();
-                                          <context out>
-  deactivate_task(rq, next_task, 0);
-  set_task_cpu(next_task, lowest_rq->cpu);
-    WARN_ON_ONCE(is_migration_disabled(p));
-      ---------OOPS-------------
-
-Crash logs are as follows:
-[123671.996430] WARNING: CPU: 2 PID: 13470 at kernel/sched/core.c:2485
-set_task_cpu+0x8c/0x108
-[123671.996800] pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
-[123671.996811] pc : set_task_cpu+0x8c/0x108
-[123671.996820] lr : set_task_cpu+0x7c/0x108
-[123671.996828] sp : ffff80001268bd30
-[123671.996832] pmr_save: 00000060
-[123671.996835] x29: ffff80001268bd30 x28: ffff0001a3d68e80
-[123671.996844] x27: ffff80001225f4a8 x26: ffff800010ab62cb
-[123671.996854] x25: ffff80026d95e000 x24: 0000000000000005
-[123671.996864] x23: ffff00019746c1b0 x22: 0000000000000000
-[123671.996873] x21: ffff00027ee33a80 x20: 0000000000000000
-[123671.996882] x19: ffff00019746ba00 x18: 0000000000000000
-[123671.996890] x17: 0000000000000000 x16: 0000000000000000
-[123671.996899] x15: 000000000000000a x14: 000000000000349e
-[123671.996908] x13: ffff800012f4503d x12: 0000000000000001
-[123671.996916] x11: 0000000000000000 x10: 0000000000000000
-[123671.996925] x9 : 00000000000c0000 x8 : ffff00027ee58700
-[123671.996933] x7 : ffff00027ee8da80 x6 : ffff00027ee8e580
-[123671.996942] x5 : ffff00027ee8dcc0 x4 : 0000000000000005
-[123671.996951] x3 : ffff00027ee8e338 x2 : 0000000000000000
-[123671.996959] x1 : 00000000000000ff x0 : 0000000000000002
-[123671.996969] Call trace:
-[123671.996975]  set_task_cpu+0x8c/0x108
-[123671.996984]  push_rt_task.part.0+0x144/0x184
-[123671.996995]  push_rt_tasks+0x28/0x3c
-[123671.997002]  task_woken_rt+0x58/0x68
-[123671.997009]  ttwu_do_wakeup+0x5c/0xd0
-[123671.997019]  ttwu_do_activate+0xc0/0xd4
-[123671.997028]  try_to_wake_up+0x244/0x288
-[123671.997036]  wake_up_process+0x18/0x24
-[123671.997045]  __irq_wake_thread+0x64/0x80
-[123671.997056]  __handle_irq_event_percpu+0x110/0x124
-[123671.997064]  handle_irq_event_percpu+0x50/0xac
-[123671.997072]  handle_irq_event+0x84/0xfc
-
-To fix it, we need to check migration_disabled flag again to avoid
-bad migration.
-
-Fixes: 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+When the task to push disable migration, retry to push the current
+running task on this CPU away, instead doing nothing for this migrate
+disabled task.
 
 Signed-off-by: Schspa Shi <schspa@gmail.com>
-
---
-
-Changelog:
-v1 -> v2:
-        - Modify commit message to add fixed commit information.
-        - Going to retry to push the current running task on this CPU
-          away, instead doing nothing for this migrate disabled task.
-v2 -> v3:
-        - Change migration disabled check to the correct position
-v3 -> v4:
-        - Check migrate disabled in find_lock_lowest_rq to avoid not
-        necessary check when task rq is not released as Steven advised.
-v4 -> v5:
-        - Adjust the comment as Steve advised to make it clear.
-v5 -> v6:
-        - Adjust the comment again as Steve advised.
-v6 -> v7:
-        - Add missing put_task_struct && add this task migration
-        disable check to deadline scheduler too as Dietmar advised.
 ---
- kernel/sched/deadline.c | 1 +
- kernel/sched/rt.c       | 4 ++++
- 2 files changed, 5 insertions(+)
+ kernel/sched/core.c     | 13 ++++++++++++-
+ kernel/sched/deadline.c |  9 +++++++++
+ kernel/sched/rt.c       |  8 ++++++++
+ 3 files changed, 29 insertions(+), 1 deletion(-)
 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index da0bf6fe9ecd..af90cc558b8e 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2509,8 +2509,19 @@ int push_cpu_stop(void *arg)
+ 	if (p->sched_class->find_lock_rq)
+ 		lowest_rq = p->sched_class->find_lock_rq(p, rq);
+ 
+-	if (!lowest_rq)
++	if (!lowest_rq) {
++		/*
++		 * The find_lock_rq function above could have released the rq
++		 * lock and allow p to schedule and be preempted again, and
++		 * that lowest_rq could be NULL because p now has the
++		 * migrate_disable flag set and not because it could not find
++		 * the lowest rq. So we must check task migration flag again.
++		 */
++		if (unlikely(is_migration_disabled(p)))
++			p->migration_flags |= MDF_PUSH;
++
+ 		goto out_unlock;
++	}
+ 
+ 	// XXX validate p is still the highest prio task
+ 	if (task_rq(p) == rq) {
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index b5152961b743..cb3b886a081c 100644
+index cb3b886a081c..21af20445e7f 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -2238,6 +2238,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
- 				     !cpumask_test_cpu(later_rq->cpu, &task->cpus_mask) ||
- 				     task_running(rq, task) ||
- 				     !dl_task(task) ||
-+				     is_migration_disabled(task) ||
- 				     !task_on_rq_queued(task))) {
- 				double_unlock_balance(rq, later_rq);
- 				later_rq = NULL;
+@@ -2335,6 +2335,15 @@ static int push_dl_task(struct rq *rq)
+ 		 */
+ 		task = pick_next_pushable_dl_task(rq);
+ 		if (task == next_task) {
++			/*
++			 * If next task has now disabled migrating, see if we
++			 * can push the current task.
++			 */
++			if (unlikely(is_migration_disabled(task))) {
++				put_task_struct(next_task);
++				goto retry;
++			}
++
+ 			/*
+ 			 * The task is still there. We don't try
+ 			 * again, some other CPU will pull it when ready.
 diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 8c9ed9664840..7bd3e6ecbe45 100644
+index 7bd3e6ecbe45..316088e2fee2 100644
 --- a/kernel/sched/rt.c
 +++ b/kernel/sched/rt.c
-@@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
- 			 * the mean time, task could have
- 			 * migrated already or had its affinity changed.
- 			 * Also make sure that it wasn't scheduled on its rq.
-+			 * It is possible the task was scheduled, set
-+			 * "migrate_disabled" and then got preempted, so we must
-+			 * check the task migration disable flag here too.
- 			 */
- 			if (unlikely(task_rq(task) != rq ||
- 				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
- 				     task_running(rq, task) ||
- 				     !rt_task(task) ||
-+				     is_migration_disabled(task) ||
- 				     !task_on_rq_queued(task))) {
- 
- 				double_unlock_balance(rq, lowest_rq);
+@@ -2136,6 +2136,14 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		 */
+ 		task = pick_next_pushable_task(rq);
+ 		if (task == next_task) {
++			/*
++			 * If next task has now disabled migrating, see if we
++			 * can push the current task.
++			 */
++			if (unlikely(is_migration_disabled(task))) {
++				put_task_struct(next_task);
++				goto retry;
++			}
+ 			/*
+ 			 * The task hasn't migrated, and is still the next
+ 			 * eligible task, but we failed to find a run-queue
 -- 
 2.29.0
 

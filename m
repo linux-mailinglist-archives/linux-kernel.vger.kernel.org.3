@@ -2,132 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E70D57367F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21877573681
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiGMMjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S235441AbiGMMkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiGMMjx (ORCPT
+        with ESMTP id S235490AbiGMMkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:39:53 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20613.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::613])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55A1F78B5;
-        Wed, 13 Jul 2022 05:39:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hWKXzWn1uhmMUIiNhwwVqA/8itKUW6nUDAQCDv10JE6eS2dFPgZ7QUnpO7qyEGu65MlF7F8KJkK1TdLT3Vlv+Sff6Z/muNjvIXXLNX1Weyuu0oq98RAqlI98XxtkX3h5dTtCBaMdq4JxOmFSl0+0bgMSQtEmnw5PkdsOUoJYJKEP/U0F/aVKPJqpOctFa5D7LPwBwm0yRvqoRJFNkmNQf7trmczt+UKYx2PQigVGlYIhD7TvjRCtMRB0/LbcTK5IWRkVUxADjrLBOPULEperYZwWjfV6e2XUzZW4trxg9GlXMQlnDHkFPRxeBx05g2NLntGC2bcZvJHTx85XPDqu4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ORd5OE6IejCWSajkAb9baeZu3snvfbor2sPsyw37s7M=;
- b=LUkj8vIJtrh0LCoDip0C42/zm77GZxXIT3gSK+F4kNvd1twPi5bRtueDiTfsyM9nWyW+2P469DmMMhJl6Bei60sXSFnXOryPztUqUJtMJZ4kEUlxkefvtDDvmkVejRcXg2qhWj0O2cfbaqvGWrt4iNKchaj+rLKQZgk20T4Gpv53+nkV2x1lvfqJDsIZz7uuz5UG46XHUwK0e28tvOALaC/N1fhytFBMOAf6f4E4mbFu8GiXRcnTihHrXU8jve/N/uFCiN+uDphoeTraqzplobk1OWV9tvKV5UgpbOAzlhW828VE7gmQZuadOp/CipurMzfFwVZQyHFaAhjzobo1QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ORd5OE6IejCWSajkAb9baeZu3snvfbor2sPsyw37s7M=;
- b=LfNvPxKtRCCWWZopRfp4ep8hAmwxEA3+I8t9kHfFjUhNOuYi76FSBAilxuqt51+rQO82+Y1lVPdxvH0Jx1iA5T5r1cBPfI9dSFZeK/tLncuQMrDv68lYwphriLXbbCxmyNvAuvxsYkGTJcrXuof17sRvwFRakJBk8p994rPz4V59mg4Vu7CHDB0I4gyxECz6UMC6ZdIfA9xH0iHHoExw0wsW7fVHVYS1HjEEs7v5mMMILw0MCRdSpfo7urPkQPRUfdelyq5i4mHuOVm/0zRguPe38f7jPJHmtfNq7zYXHVsU/cXA5ykmGCjL/BwS3WejG6l0FxsrwkXhSJCTvAHH0g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by BN9PR12MB5145.namprd12.prod.outlook.com (2603:10b6:408:136::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Wed, 13 Jul
- 2022 12:39:49 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a525:8fcf:95ec:f7ad]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a525:8fcf:95ec:f7ad%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
- 12:39:49 +0000
-Date:   Wed, 13 Jul 2022 15:39:42 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     netdev@kapio-technology.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <Ys69DiAwT0Md+6ai@shredder>
-References: <20220707152930.1789437-1-netdev@kapio-technology.com>
- <20220707152930.1789437-4-netdev@kapio-technology.com>
- <20220708084904.33otb6x256huddps@skbuf>
- <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
- <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
-X-ClientProxiedBy: VI1PR09CA0059.eurprd09.prod.outlook.com
- (2603:10a6:802:28::27) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        Wed, 13 Jul 2022 08:40:04 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD41BFFE25
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:40:02 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i206so1973530ybc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RNIijooDpuh7t8wkqAkJiid7qf5rZ1xYfpVIgvoboa0=;
+        b=NoyrPJnID1z66mXwoajjbKlyIiUYwp9KfdGGBtJwoJUm8YTK1Jn/VMo9yQXv7Twbio
+         FMsM50nFj76+Sg89nYSuc0lZTrNN/N9YYWLM1tWim1NzGCb/hZ4BwiCmyJwZCDKXJ0Ss
+         lOmpFrrhi4h5SXPVR4wi5XCI7LD4U+Q+94t5HA9XbD4/9U8uz+TMrjjJq0hNvqEd1r5w
+         kIk/9FWc0Zs84b3v4lPjUJlO4ufOEVVSmjclaSZIQVI927ZmdBuw/qeZ2vS8hEw8j25u
+         cQ2dUuggU23qgcl6txCOWsQYJ1VRpkc1h4ebciz5Rbv7AuVaF0kygT04dKHLlCdv9Moh
+         no+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RNIijooDpuh7t8wkqAkJiid7qf5rZ1xYfpVIgvoboa0=;
+        b=bitcF54d0r1OkCkwun3EH55cnKHh1ar16k92dA8339cjmszhqySlkhJhXJI/Ga5QlT
+         2kznM2Xxe+Gufs2KX87AsyAEoK4rVXHTNdrmM9WeYZ6bUbYDH51vLDoaUmivrxhEwc1y
+         1G2sM6ScCINVjlwzmVCWf1bdWfTHUkiSRTob0ANoYFXLAih7yPatTuJkeq4RaRYQ81g2
+         t8Tiuit0MsYL++xlASJz2K3byoZBj+WBxTBY0BXKmDeLLLXXWauUYOHVNMDgrtnjQMu7
+         Bp3FNVHYK9iHOp0Ds3ZExAC+H04oqqj2pqtpjdEAQbaFP29TnltgwYDAnztf1VlEpcjR
+         owmA==
+X-Gm-Message-State: AJIora8mEettCef2xOa14INBQhKyfvrm9q2/v3mhjvyWtVih9tKqrQ1C
+        q9IYzganBkK5l5LNgcw4L4TEziPYqxnBlK1N2e+6ZQ==
+X-Google-Smtp-Source: AGRyM1uyaPPzQP9nImSbGz5rlsJRxoad2erXZzmLxsYeE6VmdHzFrxpv8zv3YGiG4nOnbViYF9kgUmSQbiGvIbuGvg4=
+X-Received: by 2002:a25:76cd:0:b0:66e:c634:1047 with SMTP id
+ r196-20020a2576cd000000b0066ec6341047mr3535888ybc.241.1657716001621; Wed, 13
+ Jul 2022 05:40:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0fd98c67-59cf-4b5c-9d9a-08da64ccc63a
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5145:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8+8q7XQAzOog+Sd5+nBAep5ZEfdxayiznUK+yn1BTavJVaNjqxmtETggknXRaOroYY9erqxadJGLw0VCaZpcwwpb6GwhJsSbjpzmr9CgrpImEQuyyT7lKU8DQGQM5fmpN/9sbRjKkgUSWSHRbDq/1Un4pgER+V9J++j5uy0nt8ukjQ8jAb9yjZsh98Y95sLS1aMHQu07MpusIjj7C8vet3DDy3sjx0/zKd97mvaD4lSqjQ8rz0LalRyj6XNd7SSPZFSDYlLSmmDtsboGAOkErFc4gFYvtJpp8m0x/yl0YcOKhzs3m0qaC4DEf3mtzltT4NNS6fOIWGXlGPgT+25GbQZOO1mD8c23MuaRVYLea3mX9ToKsp8PXBkxhgVi8cXnwe65Z6kjF/IsgYJ0hwRqff1wG6xXJy8PxVrszMk5++2vjw41tl66LBbOtxhID3zS313/X/ANeM6k1R2KV+ibFjcFFOIR2n1K56UGZ7BwGkWiomYrWJhLFOIa7ipQ6Dh85trijqh7zxUl4Re5bwfgeEd1w5sdHJIALlCurNhkvrTQLgHJGF0IX2wPL3cY1qrUWg6ijntrCIqNPIE4GTxe4hz2jD7E3acNkJmMp7wOLlqLPstifBoAQUPOSXT1wYf4RU+O5w4HFkLkhdXkCGEs2Fz1ZWsYiNB6+VdTDcCjQ8Y+NkMLP7DvkIUee0sHcTNDzhpd7m0NXpjAYYGMfjYUfPdo2Z3eDeZsp146dQHKQAqw6F8K3AiPd223RSKOlgnHv3j7ei9RzyygCUfJ5tJyZ2M9JZXh9aZUA8Zz5Hwg75AbffwNE+jX5xO1I3xyot54f8y+VbwMk855WCHpZO/LWAFNn5BiqaRjomiRdiAv4O44OqvKNyK1cVrsuoTwZ4Efk2X9Ucxj3w7eJX3CogvlrQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(136003)(346002)(376002)(39860400002)(366004)(396003)(84040400005)(186003)(33716001)(38100700002)(7416002)(2906002)(8936002)(5660300002)(6916009)(66476007)(66946007)(66556008)(8676002)(41300700001)(478600001)(26005)(6506007)(6666004)(966005)(9686003)(6512007)(6486002)(53546011)(4326008)(83380400001)(86362001)(54906003)(316002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lZpOd9tyZz+hATbz19fLNbzUEihLwakdAGC+351n+TMEhWXXS2DJAz7ifQEV?=
- =?us-ascii?Q?ehJ1gOxpliuXyuglH8PKJ8QFymCJNEWjQjT3SqD3naxywxsMTT93L3ji/IvP?=
- =?us-ascii?Q?FI8nMLRmI7KIp0yjMNcL8YU2Xh8NGIuprV1PDmz+sHl8j+6LqP9+HacoLGpE?=
- =?us-ascii?Q?T9E1mtU7nsOFkJ1rRmsBqO9JB7nu5PR86fuuG7bNUUsGjdP9sQTcdZ30nF+2?=
- =?us-ascii?Q?TumnF0LiSR0oF2CTvsEiaK8GR2Rb5S/8pVJf2YbYfwjLlb9pjGEC+gKB7g0H?=
- =?us-ascii?Q?EuyokYG2mt538/Md4NUxMZ7faRw9l1RhGmw8Pb7AaHBsI8DNH1aDqY3h+XoV?=
- =?us-ascii?Q?hLnUriryaJMwRf5N8RT4XDTAPGbU2yRy7dmXGNqi8oV+LxTrRVzRUf11gkZ3?=
- =?us-ascii?Q?5h2iynqliRJ2iimxjkxNyEbAqk02ycsuxc6KpKynoaV7QTVTZlQDHNNg1iP9?=
- =?us-ascii?Q?IjWm1ZZqXGyCtnBzJyT04j4uM5wuZEBU/ZvWqe7dM5C+pfyhL+wdmDd7i7T9?=
- =?us-ascii?Q?YoQg26aVyMYgjy1AVvcxE7zcRsW9RzMJdGSXzNOC8O6Xgr8kUtAYxjRny2Rb?=
- =?us-ascii?Q?0RtQz3dPK9SB+3c2jYxW93t4onfRRlloXI30qVoLQrAzsiaPSEARGa9C7cm1?=
- =?us-ascii?Q?3KsZcTT1lVxnN4kxoH2xhKalhKIYPe96w7B8mSWJj4hBDWNnpmx86kC2OQxg?=
- =?us-ascii?Q?3r1suMfHI5ds5XcYkEyTDrU7FvW/OZ8q8sridGGm1V06iYMC36hDQ+ENYgA5?=
- =?us-ascii?Q?20+eFve/knwPCxueirA3V8m3L8DKGL6ykj4nllZDPeEd0Dk6oLj6PFG5NJmx?=
- =?us-ascii?Q?3XLTclrRYW9oPTicZy74ft3IUOovGWDj2lxqej/cSxt8CwS6d8qrbkC92oQ8?=
- =?us-ascii?Q?hr0L4paoU87A668phxfrfOfHz4T5ZYDuVawbOdQmJ5hOssGewzvWDvqwT68k?=
- =?us-ascii?Q?rpvGSnWR5jmGgiLarYApAmuQuES6roh5M5b9zM4qG+CncEDvcpkd7EkUfWbm?=
- =?us-ascii?Q?xQ0bKK9uIwoQBkAN/1SK7rEyhya4S8z+42+Y30qAEHtjwuqvquyiIhXdo16N?=
- =?us-ascii?Q?RkY2tIMaCziyHZrGVqir01BJRl+Qbq/B3vcGT5DtZ3LcyaT50+La2IU5gZCG?=
- =?us-ascii?Q?9b0TwWKDL30Gm12WnC7C6LAUsfdjwmQJCrd/dPhhITmcCDuRXfL3AD5p5oFB?=
- =?us-ascii?Q?ERXIdflprqI10++qkCdYMLN3aRg08Znyqr/VZDbIBLBuM8g9K9VzT98bNk5i?=
- =?us-ascii?Q?3ALs3j+qA4PMY+wn1JkXLXT7gGuMxN0SWLmfT3OGN89BWBelbSV0nG41UlXE?=
- =?us-ascii?Q?6F6X9UcV2zqHYYX1+FSooOGsmyp8Y50MFpTk1SCX/Jm2rsprHW3WBDmVutrW?=
- =?us-ascii?Q?ezFWVH/ttML7kOIJbyb/TU3ptIZ4hLVubYDOQ1qNtqVCtB0aJgbdiDti2ri/?=
- =?us-ascii?Q?AZ4MJN5tZAi1dOmVTmyQsDjYYjD2UicvMj8YKVPlkfC1QwXCrHTecOIHB5mB?=
- =?us-ascii?Q?RdtWjkeVvlrtmPKfv36emOBcfYEeIXELtQtDahanGPhiMhTbIXpQJs9WW3Jo?=
- =?us-ascii?Q?Q1HIkPRRIN3CUz2U1q3m/pRgWQ4tVn4yHUHdjOlm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fd98c67-59cf-4b5c-9d9a-08da64ccc63a
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 12:39:49.1308
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iDgETA2X9R1P/5ypKEwBVPqXW/yQ/bBxWmzU2I6UJd5wlIBeaFurmCTwjkdM5EQ7ggy5s00lVgfMM9U7sOCjVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5145
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-2-qais.yousef@arm.com>
+ <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
+ <20220712102334.6nwkbkilmmup4h4u@wubuntu> <CAKfTPtDweeQDRcZb+_ANO6rzZd11vbiatoVxDNwsWPtoCTG+AQ@mail.gmail.com>
+ <20220712142013.j6fy77yejupvllah@wubuntu>
+In-Reply-To: <20220712142013.j6fy77yejupvllah@wubuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 13 Jul 2022 14:39:49 +0200
+Message-ID: <CAKfTPtB3pjoFWFP9E6RnH87nshEqJxPdFzX495R_Xju9rCPvEw@mail.gmail.com>
+Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+ migration margin
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,108 +75,424 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com wrote:
-> On 2022-07-10 10:35, Ido Schimmel wrote:
-> > On Fri, Jul 08, 2022 at 02:34:25PM +0200, netdev@kapio-technology.com
-> > wrote:
-> > > On 2022-07-08 13:56, Vladimir Oltean wrote:
-> > > > On Fri, Jul 08, 2022 at 11:50:33AM +0200, netdev@kapio-technology.com
-> > > > wrote:
-> > > > > On 2022-07-08 11:15, Vladimir Oltean wrote:
-> > > > > > When the possibility for it to be true will exist, _all_ switchdev
-> > > > > > drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
-> > > > > > rocker, prestera, etc etc), not just DSA. And you don't need to
-> > > > > > propagate the is_locked flag to all individual DSA sub-drivers when none
-> > > > > > care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
-> > > > > > within DSA until needed otherwise.
-> > > > > >
+On Tue, 12 Jul 2022 at 16:20, Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> On 07/12/22 15:21, Vincent Guittot wrote:
+> > On Tue, 12 Jul 2022 at 12:23, Qais Yousef <qais.yousef@arm.com> wrote:
+> > >
+> > > On 07/11/22 14:36, Vincent Guittot wrote:
+> > > > On Wed, 29 Jun 2022 at 21:47, Qais Yousef <qais.yousef@arm.com> wrote:
 > > > > >
-> > > > > Maybe I have it wrong, but I think that Ido requested me to send it
-> > > > > to all
-> > > > > the drivers, and have them ignore entries with is_locked=true ...
+> > > > > fits_capacity() verifies that a util is within 20% margin of the
+> > > > > capacity of a CPU, which is an attempt to speed up upmigration.
+> > > > >
+> > > > > But when uclamp is used, this 20% margin is problematic because for
+> > > > > example if a task is boosted to 1024, then it will not fit on any CPU
+> > > > > according to fits_capacity() logic.
+> > > > >
+> > > > > Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
+> > > > > end up on big instead on the desired medium CPU.
+> > > > >
+> > > > > Similar corner cases exist for uclamp and usage of capacity_of().
+> > > > > Slightest irq pressure on biggest CPU for example will make a 1024
+> > > > > boosted task look like it can't fit.
+> > > > >
+> > > > > What we really want is for uclamp comparisons to ignore the migration
+> > > > > margin and capacity pressure, yet retain them for when checking the
+> > > > > _actual_ util signal.
 > > > >
-> > > > I don't think Ido requested you to ignore is_locked from all DSA
-> > > > drivers, but instead from all switchdev drivers maybe. Quite different.
-> > > 
-> > > So without changing the signature on port_fdb_add(). If that is to
-> > > avoid
-> > > changing that signature, which needs to be changed anyhow for any
-> > > switchcore
-> > > driver to act on it, then my next patch set will change the
-> > > signarure also
-> > > as it is needed for creating dynamic ATU entries from userspace,
-> > > which is
-> > > needed to make the whole thing complete.
-> > > 
-> > > As it is already done (with the is_locked to the drivers) and needed
-> > > for
-> > > future application, I would like Ido to comment on it before I take
-> > > action.
-> > 
-> > It's related to my reply here [1]. AFAICT, we have two classes of device
-> > drivers:
-> > 
-> > 1. Drivers like mv88e6xxx that report locked entries to the bridge
-> > driver via 'SWITCHDEV_FDB_ADD_TO_BRIDGE'.
-> > 
-> > 2. Drivers like mlxsw that trap packets that incurred an FDB miss to the
-> > bridge driver. These packets will cause the bridge driver to emit
-> > 'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications with the locked flag.
-> > 
-> > If we can agree that locked entries are only meant to signal to user
-> > space that a certain MAC tried to gain authorization and that the bridge
-> > should ignore them while forwarding, then there is no point in
-> > generating the 'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications. We should
-> > teach the bridge driver to suppress these so that there is no need to
-> > patch all the device drivers.
-> 
-> I do not know of all about what other switchcores there are and how they
-> work, but those that I have knowledge of, it has been prudent in connection
-> with the locked port feature to install Storm Prevention or zero-DPV
-> (Destination Port Vector) FDB entries.
+> > > > I fully agree on the migration margin but I'm a bit more skeptical
+> > > > about the capacity pressure. If uclam_min is set to ensure a minimum
+> > > > compute capacity of X for a task but the CPU can't provide such
+> > > > capacity because of some pressures (I have irq and thermal in mind),
+> > > > then we should find a better cpu otherwise uclamp_min becomes
+> > > > meaningless because it doesn't ensure a minimum compute capacity which
+> > > > usually means a time to execute the work of the thread
+> > >
+> > > We need to be careful here about what uclamp_min means.
+> > >
+> > > uclamp is a performance hint, not a bandwidth hint. When a task p with:
+> > >
+> > >         p->util_avg = 300
+> > >         p->uclamp_min = 1024
+> > >
+> > > what this means is that it needs to run at max performance point as it cares
+> > > about how long it runs for. Its bandwidth which is defined but util_avg is 300
+> > > which means there's plenty of idle time on the CPU. As you know better,
+> > > util_avg of 300 could translate to different runtimes based on the performance
+> > > point you're operating at.
+> > >
+> > > IOW, a uclamp_min of 1024 translates into task placement and frequency
+> > > selection (biggest CPU and highest achievable OPP for 1024 case). Capacity
+> > > pressure doesn't impact this selection. Only thermal pressure can actually
+> > > impact our ability to achieve a performance level. I touched on this topic
+> > > below.
+> > >
+> > > since p->util_avg reflect the true bandwidth of the task, 300 means there's
+> > > plenty of idle time on that CPU and unless capacity pressure is higher than 724
+> > > the task will always fit and be able to run at max perf point as uclamp_min
+> > > hint indicated.
+> > >
+> > > Note that by design this means if there are 2 of these tasks whose util_avg is
+> > > 300 and uclamp_min is 1024, then they both can be packed on the biggest CPU and
+> > > run at the highest perf point with still plenty of idle time left on that CPU.
+> > >
+> > > The keyword here is that uclamp indicates performance level requirements, not
+> > > bandwidth. We have cpushares, nice values, bandwidth controllers, etc for that.
+> >
+> > That's why I have mentioned that I have thermal pressure and irq in
+> > mind. I'm speaking about performance level but not about bandwidth and
+> > time sharing.
+>
+> irq pressure has no impact on the cpu's ability to get any OPP, no? It purely
+> reduces the bandwidth availability for CFS tasks AFAIU. So the task's ability
+> to achieve a performance level has no correlation with irq pressure IMO. Unless
+> I missed something.
 
-What are "Storm Prevention" and "zero-DPV" FDB entries?
+The way irq is accounted in pelt might impact the result. TBH, i
+haven't looked in details what would be the impact
 
-> I would think that that should be the case for other switchcores too.
-> Those entries cannot normally be installed from userspace (of course special
-> tools can do anything).
-> 
-> But if the decision is to drop locked entries at the DSA layer, I can do
-> that. I just want to ensure that all considerations have been taken.
+>
+> > If the thermal pressure makes the performance of the cpu half of the
+> > capacity_orig, then you impact the performance  and you don't follow
+> > the uclamp_min hint anymore.
+>
+> If we lose half of the performance we are doomed already.
+>
+> I can't see how one cluster can have a significant 50% loss in its perf without
+> the whole SoC being under extreme thermal throttling scenarios anyway. That is,
 
-There is no decision that I'm aware of. I'm simply trying to understand
-how FDB entries that have 'BR_FDB_ENTRY_LOCKED' set are handled in
-mv88e6xxx and other devices in this class. We have at least three
-different implementations to consolidate:
+You are assuming that the mitigation happen evenly on your system but
+some could want to favor parts over some others so you can mitigate
+only some cores
 
-1. The bridge driver, pure software forwarding. The locked entry is
-dynamically created by the bridge. Packets received via the locked port
-with a SA corresponding to the locked entry will be dropped, but will
-refresh the entry. On the other hand, packets with a DA corresponding to
-the locked entry will be forwarded as known unicast through the locked
-port.
-
-2. Hardware implementations like Spectrum that can be programmed to trap
-packets that incurred an FDB miss. Like in the first case, the locked
-entry is dynamically created by the bridge driver and also aged by it.
-Unlike in the first case, since this entry is not present in hardware,
-packets with a DA corresponding to the locked entry will be flooded as
-unknown unicast.
-
-3. Hardware implementations like mv88e6xxx that fire an interrupt upon
-FDB miss. Need your help to understand how the above works there and
-why. Specifically, how locked entries are represented in hardware (if at
-all) and what is the significance of not installing corresponding
-entries in hardware.
-
-> 
-> > 
-> > [1] https://lore.kernel.org/netdev/YsqLyxTRtUjzDj6D@shredder/
-> > 
-> > > 
+> it will be impossible for one cluster to have had lost 50% of its performance
+> and everything else is still able to run at full performance.
+>
+> I think the only case that matters is the one highlighted by Xuewen in that RT
+> email thread.
+>
+>         https://lore.kernel.org/lkml/20220420135127.o7ttm5tddwvwrp2a@airbuntu/
+>
+> Which is uclamp_min is set to capacity_orig_of(medium_cpu) but the big CPU
+> which usually should be able to achieve that perf level is in capacity
+> inversion.
+>
+> For example on a system which has
+>
+>         capacity_orig_of(little) = 400
+>         capacity_orig_of(medium) = 800
+>         capacity_orig_of(big)    = 1024
+>
+> And there's a task p with
+>
+>         p->util_avg = 300
+>         p->uclamp_min = 1024
+>
+> Then the big CPU is the right task placement until thermal pressure is more
+> than 20% (capacity inversion). Once we reach that point, we can place it on
+> medium but that doesn't mean its perf requirement is honoured and this 20+%
+> perf drop will impact perceived performance by this task and there's nothing we
+> can do about it.
+>
+> Now if task p has
+>
+>         p->uclamp_min = 800
+>
+> then both medium and big cores fit this task perf requirement. But unlike the
+> above case, once the bigs are in capacity inversion, then mediums are the
+> correct ones to pick - which is the use case raised by Xuewen in the other RT
+> vs thermal pressure email thread.
+>
+> uclamp_min is a hint and best effort. We should try our best, but there's
+> a complexity to handle. I think we can do something about capacity inversion,
+> but if we want to do a full proper search when taking into account any amount
+> of thermal pressure, I think that will be very expensive search.
+>
+> My assumption here is that if thermal pressure is meaningful, then it's likely
+> the system is doomed for this best effort to save the day. Only exception IMHO
+> is capacity inversion case which I think we can handle, but I think that should
+> be a separate series.
+>
+> >
+> > >
 > > > >
-> > > > In any case I'm going to take a look at this patch set more closely and
-> > > > run the selftest on my Marvell switch, but I can't do this today
-> > > > unfortunately. I'll return with more comments.
-> > > 
-> > > Yes :-)
+> > > > >
+> > > > > For example, task p:
+> > > > >
+> > > > >         p->util_avg = 300
+> > > > >         p->uclamp[UCLAMP_MIN] = 1024
+> > > > >
+> > > > > Will fit a big CPU. But
+> > > > >
+> > > > >         p->util_avg = 900
+> > > > >         p->uclamp[UCLAMP_MIN] = 1024
+> > > > >
+> > > > > will not, this should trigger overutilized state because the big CPU is
+> > > > > now *actually* being saturated.
+> > > > >
+> > > > > Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
+> > > > >
+> > > > >         p->util_avg = 1024
+> > > > >         p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
+> > > > >
+> > > > > Should fit the task on medium cpus without triggering overutilized
+> > > > > state.
+> > > > >
+> > > > > Inlined comments expand more on desired behavior in more scenarios.
+> > > > >
+> > > > > Introduce new util_fits_cpu() function which encapsulates the new logic.
+> > > > > The new function is not used anywhere yet, but will be used to update
+> > > > > various users of fits_capacity() in later patches.
+> > > > >
+> > > > > Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
+> > > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > > > > ---
+> > > > >  kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
+> > > > >  1 file changed, 114 insertions(+)
+> > > > >
+> > > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > > index f80ae86bb404..5eecae32a0f6 100644
+> > > > > --- a/kernel/sched/fair.c
+> > > > > +++ b/kernel/sched/fair.c
+> > > > > @@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+> > > > >         trace_sched_util_est_se_tp(&p->se);
+> > > > >  }
+> > > > >
+> > > > > +static inline int util_fits_cpu(unsigned long util,
+> > > > > +                               unsigned long uclamp_min,
+> > > > > +                               unsigned long uclamp_max,
+> > > > > +                               int cpu)
+> > > > > +{
+> > > > > +       unsigned long capacity = capacity_of(cpu);
+> > > > > +       unsigned long capacity_orig;
+> > > > > +       bool fits, max_capacity;
+> > > > > +       bool uclamp_max_fits;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Check if the real util fits without any uclamp boost/cap applied.
+> > > > > +        */
+> > > > > +       fits = fits_capacity(util, capacity);
+> > > > > +
+> > > > > +       if (!uclamp_is_used())
+> > > > > +               return fits;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * We must use capacity_orig_of() for comparing against uclamp_min and
+> > > > > +        * uclamp_max. We only care about capacity pressure (by using
+> > > > > +        * capacity_of()) for comparing against the real util.
+> > > >
+> > > > I don't fully agree on this. see below
+> > > >
+> > > > > +        *
+> > > > > +        * If a task is boosted to 1024 for example, we don't want a tiny
+> > > > > +        * pressure to skew the check whether it fits a CPU or not.
+> > > >
+> > > > But should we look for a CPU with less pressure  ?
+> > > >
+> > > > Another example:
+> > > > Task boosted to capacity_orig_of(medium_cpu) and there is pressure of
+> > > > this medium CPU. Shouldn't we look for another CPU either a medium
+> > > > without pressure or a big core if all mediums are under pressure ?
+> > >
+> > > Not if the *actual* utilization is small. As I tried to explain above uclamp
+> > > hints indicates performance level requirements, which will be achieved
+> > > regardless of the pressure. The only thing I'm worried about here is capacity
+> >
+> > You seem to keep using the RT pressure in your example whereas I'm
+>
+> I'm rather referring to this similar discussion for RT sched_class vs thermal
+> pressure, not RT pressure on the rq
+>
+>         https://lore.kernel.org/lkml/20220420135127.o7ttm5tddwvwrp2a@airbuntu/
+>
+> > more concerned by the thermal pressure as I mentioned previously. As
+> > an example the thermal pressure reflects the impact on the performance
+> > while task is running.
+>
+> Like we discussed on that RT email thread. If you have a 1024 task, tiny
+> thermal pressure will make it look like it won't fit anywhere.
+
+maybe another big core without pressure. Otherwise if the task can
+accept a lower compute capacity why not setting uclamp_min to a lower
+value like 900
+
+>
+> I think we can handle capacity inversion case only here in CFS. But like how
+> the discussion went on that RT thread, we need infrastructure to detect
+> capacity inversion case.
+>
+> >
+> > > inversion (like we saw for RT), but I think we need more infra structure to
+> > > handle that case. And as I tried to explain on the RT thread, you can't just
+> > > subtract thermal pressure because any tiny thermal pressure will mean 1024 hint
+> > > will always be false. I think this area in general needs to be better defined
+> > > and handled and I see it out of scope of these fixes.
+> > >
+> > > Generally EAS always looks for most energy efficient CPU with max spare
+> > > capacity. So least busy medium will be picked. And if the mediums are pressued
+> > > enough that adding this task will cause rq->util_avg to be high,
+> > > util_fits_cpu() will see that and return false because actual utilization will
+> > > be within the margin value and we should spell into the big cores then.
+> > >
+> > > If there's something simple to do now, I'll be happy to apply it. A simple
+> > > subtraction of thermal pressure from capacity_orig_of won't cut it.
+> > >
+> > > > Otherwise, uclamp_min can become somewhat meaningless because you will
+> > > > not have the requested min capacity when running. If you really want
+> > >
+> > > This can be only true if you interpret uclamp_min as bandwidth hint. Which as
+> > > I explained above is not what uclamp_min means. Or maybe I misread your words
+> > > :-)
+> >
+> > TaskA usually runs 4 ms every 8ms but wants to ensure a running time
+> > around 5ms. Task A asks for a uclamp_min of 768.
+> > medium cpu capacity_orig is 800 but runs at half its max freq because
+> > of thermal mitigation then your task will runs more than 8ms
+>
+> If thermal pressure is 50%, then capacity_of() is 400. A 50% task will have
+> util_avg of 512, which is much larger than 0.8 * 400. So this is dealt with
+> already in this code, no?
+
+May be my example is not perfect but apply a mitigation of 20% and you
+fall in the case
+
+>
+> >
+> > >
+> > > > your task to never go on big core, some cpu affinity would be a better
+> > > > way to achieve this
+> > >
+> > > I hope I cleared this up with my answers above. The actual bandwidth used by
+> > > the task and available by the CPU is not the same as the performance level.
+> > >
+> > > >
+> > > >
+> > > > > +        *
+> > > > > +        * Similarly if a task is capped to capacity_orig_of(little_cpu), it
+> > > > > +        * should fit a little cpu even if there's some pressure.
+> > > > > +        *
+> > > > > +        * Known limitation is when thermal pressure is severe to the point
+> > > > > +        * where we have capacity inversion. We don't cater for that as the
+> > > > > +        * system performance will already be impacted severely.
+> > > > > +        */
+> > > > > +       capacity_orig = capacity_orig_of(cpu);
+> > > > > +
+> > > > > +       /*
+> > > > > +        * We want to force a task to fit a cpu as implied by uclamp_max.
+> > > > > +        * But we do have some corner cases to cater for..
+> > > > > +        *
+> > > > > +        *
+> > > > > +        *                                 C=z
+> > > > > +        *   |                             ___
+> > > > > +        *   |                  C=y       |   |
+> > > > > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
+> > > > > +        *   |      C=x        |   |      |   |
+> > > > > +        *   |      ___        |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |    (util somewhere in this region)
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   +----------------------------------------
+> > > > > +        *         cpu0        cpu1       cpu2
+> > > > > +        *
+> > > > > +        *   In the above example if a task is capped to a specific performance
+> > > > > +        *   point, y, then when:
+> > > > > +        *
+> > > > > +        *   * util = 80% of x then it does not fit on cpu0 and should migrate
+> > > > > +        *     to cpu1
+> > > > > +        *   * util = 80% of y then it is forced to fit on cpu1 to honour
+> > > > > +        *     uclamp_max request.
+> > > > > +        *
+> > > > > +        *   which is what we're enforcing here. A task always fits if
+> > > > > +        *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
+> > > > > +        *   the normal upmigration rules should withhold still.
+> > > > > +        *
+> > > > > +        *   Only exception is when we are on max capacity, then we need to be
+> > > > > +        *   careful not to block overutilized state. This is so because:
+> > > > > +        *
+> > > > > +        *     1. There's no concept of capping at max_capacity! We can't go
+> > > > > +        *        beyond this performance level anyway.
+> > > > > +        *     2. The system is being saturated when we're operating near
+> > > > > +        *        max_capacity, it doesn't make sense to block overutilized.
+> > > > > +        */
+> > > > > +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> > > >
+> > > > Is this intermediate variable max_capacity really needed ?
+> > >
+> > > I thought it helps with readability and breaks down an otherwise a very long
+> > > line. Is it harmful?
+> >
+> > uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) &&
+> > (uclamp_max == SCHED_CAPACITY_SCALE);
+> > uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
+> >
+> > Is the above less readable ?
+>
+> Ah I see, I thought you want to combine it all in one line.
+>
+> I can change it I guess. I just think it gives the check a meaningful name and
+> compiler will toss the variable away anyway.
+>
+>
+> Cheers
+>
+> --
+> Qais Yousef
+>
+> >
+> > Vincent
+> > >
+> > >
+> > > Thanks!
+> > >
+> > > --
+> > > Qais Yousef
+> > >
+> > > >
+> > > > > +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
+> > > > > +       fits = fits || uclamp_max_fits;
+> > > > > +
+> > > > > +       /*
+> > > > > +        *
+> > > > > +        *                                 C=z
+> > > > > +        *   |                             ___       (region a, capped, util >= uclamp_max)
+> > > > > +        *   |                  C=y       |   |
+> > > > > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
+> > > > > +        *   |      C=x        |   |      |   |
+> > > > > +        *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
+> > > > > +        *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
+> > > > > +        *   +----------------------------------------
+> > > > > +        *         cpu0        cpu1       cpu2
+> > > > > +        *
+> > > > > +        * a) If util > uclamp_max, then we're capped, we don't care about
+> > > > > +        *    actual fitness value here. We only care if uclamp_max fits
+> > > > > +        *    capacity without taking margin/pressure into account.
+> > > > > +        *    See comment above.
+> > > > > +        *
+> > > > > +        * b) If uclamp_min <= util <= uclamp_max, then the normal
+> > > > > +        *    fits_capacity() rules apply. Except we need to ensure that we
+> > > > > +        *    enforce we remain within uclamp_max, see comment above.
+> > > > > +        *
+> > > > > +        * c) If util < uclamp_min, then we are boosted. Same as (b) but we
+> > > > > +        *    need to take into account the boosted value fits the CPU without
+> > > > > +        *    taking margin/pressure into account.
+> > > > > +        *
+> > > > > +        * Cases (a) and (b) are handled in the 'fits' variable already. We
+> > > > > +        * just need to consider an extra check for case (c) after ensuring we
+> > > > > +        * handle the case uclamp_min > uclamp_max.
+> > > > > +        */
+> > > > > +       uclamp_min = min(uclamp_min, uclamp_max);
+> > > > > +       if (util < uclamp_min)
+> > > > > +               fits = fits && (uclamp_min <= capacity_orig);
+> > > > > +
+> > > > > +       return fits;
+> > > > > +}
+> > > > > +
+> > > > >  static inline int task_fits_capacity(struct task_struct *p,
+> > > > >                                      unsigned long capacity)
+> > > > >  {
+> > > > > --
+> > > > > 2.25.1
+> > > > >

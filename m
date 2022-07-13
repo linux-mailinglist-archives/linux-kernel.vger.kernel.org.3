@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3BA573EBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223FB573EBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbiGMVSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S237496AbiGMVTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbiGMVS2 (ORCPT
+        with ESMTP id S237408AbiGMVSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:18:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37ED39B93;
-        Wed, 13 Jul 2022 14:18:21 -0700 (PDT)
+        Wed, 13 Jul 2022 17:18:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F833E36;
+        Wed, 13 Jul 2022 14:18:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F7661EAD;
-        Wed, 13 Jul 2022 21:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA34C3411E;
-        Wed, 13 Jul 2022 21:18:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6819B821E6;
+        Wed, 13 Jul 2022 21:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F4BC341CA;
+        Wed, 13 Jul 2022 21:18:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657747100;
-        bh=1x7jnkMZSZRA4/8a3HHjZwpWBFWJawDgB1cG4HWy2qo=;
+        s=k20201202; t=1657747105;
+        bh=aTFFUhV/ovGh1pL4592w1TWqGPvo+d89bBF6ifbVuJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cvhEEAe+dpHAUy+1KjXAdpEGxQ21EgnunXaLsoLXE8pINv7pXBc1NIQEcDO6Wq5dF
-         QSgIAWSiOdlcYmFQU7Gy8pgFGFgeyxRc7/meeiSSWTqzZLUfB2tfNiRhIktYWk6Vj+
-         STeExQzD1/XhWLNZm4yph3fk2RW79AGbC23vmCx9pL8I9FktqTrTGIjlFk0jRfco0V
-         rZLCva3cwr5FXEyEJTGhBFNznz/jE//BbA/2yGBFOEZZTh1omN/jZSkLBApIu3dOFt
-         gTpzNp4aUQ1eZCCItuGgJ++dd5Y061hf4bOggyXkW7+eGUFj/va6YtiVzceF5jqmnN
-         3oBjgKQ5BBspg==
+        b=Ov6DlX4bGyQWqR506wfwM0BFk7Pp2EV4HYMG8AskIszUuo4/uwqnSpX9G0Z4QOswe
+         kNxsJAVFDi0CCC7RgQ90I2Gq6Rdw4f5DqQGOa8/X9wPciE+KQrVE7INvaX5uB6kUVR
+         kOd2/iBYIV9YBaIQt2FCIVE0pfEe0JgNALXjLRKU3nZdEjVdfA6TBdrMUFejCDtHf3
+         r87FqZJHiE7/D3LAjODKZ1870213G+YUgqRXdqro92H0OQ5Fn4+MsSGiiQ2Dw9QqNx
+         gVbFBxVaSrBwVCUW5ZW4F9VN/7+Fr1iP79tLqdEFF3Q7UV9dpp19snS3U1hv6LFQXQ
+         dcRVC5//E6b+Q==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-devel@vger.kernel.org
-Subject: [PATCH V5 06/16] Documentation/rv: Add a basic documentation
-Date:   Wed, 13 Jul 2022 23:17:22 +0200
-Message-Id: <72d6b6619c9c336b254f5e560ac4ee5f44cb3956.1657745645.git.bristot@kernel.org>
+Subject: [PATCH V5 07/16] tools/rv: Add dot2c
+Date:   Wed, 13 Jul 2022 23:17:23 +0200
+Message-Id: <4c0da37b14ae41a4d697bc1792a4c1765c879ff9.1657745645.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1657745645.git.bristot@kernel.org>
 References: <cover.1657745645.git.bristot@kernel.org>
@@ -72,8 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the runtime-verification.rst document, explaining the basics of RV
-and how to use the interface.
+dot2c is a tool that transforms an automata in the graphiviz .dot file
+into an C representation of the automata.
+
+usage: dot2c [-h] dot_file
+
+dot2c: converts a .dot file into a C structure
+
+positional arguments:
+  dot_file    The dot file to be converted
+
+optional arguments:
+  -h, --help  show this help message and exit
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
@@ -98,306 +108,506 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- Documentation/trace/index.rst                 |   1 +
- Documentation/trace/rv/index.rst              |   9 +
- .../trace/rv/runtime-verification.rst         | 233 ++++++++++++++++++
- kernel/trace/rv/Kconfig                       |   3 +
- kernel/trace/rv/rv.c                          |   3 +
- 5 files changed, 249 insertions(+)
- create mode 100644 Documentation/trace/rv/index.rst
- create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ tools/verification/dot2/Makefile    |  21 +++
+ tools/verification/dot2/automata.py | 171 +++++++++++++++++++
+ tools/verification/dot2/dot2c       |  23 +++
+ tools/verification/dot2/dot2c.py    | 251 ++++++++++++++++++++++++++++
+ 4 files changed, 466 insertions(+)
+ create mode 100644 tools/verification/dot2/Makefile
+ create mode 100644 tools/verification/dot2/automata.py
+ create mode 100644 tools/verification/dot2/dot2c
+ create mode 100644 tools/verification/dot2/dot2c.py
 
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index f9b7bcb5a630..2d73e8697523 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -32,3 +32,4 @@ Linux Tracing Technologies
-    sys-t
-    coresight/index
-    user_events
-+   rv/index
-diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
+diff --git a/tools/verification/dot2/Makefile b/tools/verification/dot2/Makefile
 new file mode 100644
-index 000000000000..b54e49b1d0de
+index 000000000000..235d182f6b2c
 --- /dev/null
-+++ b/Documentation/trace/rv/index.rst
-@@ -0,0 +1,9 @@
-+====================
-+Runtime Verification
-+====================
++++ b/tools/verification/dot2/Makefile
+@@ -0,0 +1,21 @@
++INSTALL=install
 +
-+.. toctree::
-+   :maxdepth: 2
-+   :glob:
++prefix  ?= /usr
++bindir  ?= $(prefix)/bin
++mandir  ?= $(prefix)/share/man
++miscdir ?= $(prefix)/share/dot2
++srcdir  ?= $(prefix)/src
 +
-+   runtime-verification.rst
-diff --git a/Documentation/trace/rv/runtime-verification.rst b/Documentation/trace/rv/runtime-verification.rst
++PYLIB  ?= $(shell python3 -c 'import sysconfig;  print (sysconfig.get_path("purelib"))')
++
++.PHONY: all
++all:
++
++.PHONY: clean
++clean:
++
++.PHONY: install
++install:
++	$(INSTALL) automata.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/automata.py
++	$(INSTALL) dot2c.py -D -m 644 $(DESTDIR)$(PYLIB)/dot2/dot2c.py
++	$(INSTALL) dot2c -D -m 755 $(DESTDIR)$(bindir)/
+diff --git a/tools/verification/dot2/automata.py b/tools/verification/dot2/automata.py
 new file mode 100644
-index 000000000000..894037aef48d
+index 000000000000..f22e1dff19ce
 --- /dev/null
-+++ b/Documentation/trace/rv/runtime-verification.rst
-@@ -0,0 +1,233 @@
-+====================
-+Runtime Verification
-+====================
++++ b/tools/verification/dot2/automata.py
+@@ -0,0 +1,171 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
++#
++# Automata object: parse an automata in dot file digraph format into a python object
 +
-+Runtime Verification (RV) is a lightweight (yet rigorous) method that
-+complements classical exhaustive verification techniques (such as *model
-+checking* and *theorem proving*) with a more practical approach for complex
-+systems.
++import ntpath
 +
++class Automata:
++    """Automata class: Reads a dot file and part it as an automata.
 +
-+Instead of relying on a fine-grained model of a system (e.g., a
-+re-implementation a instruction level), RV works by analyzing the trace of the
-+system's actual execution, comparing it against a formal specification of
-+the system behavior.
++    Attributes:
++        dot_file: A dot file with an state_automaton definition.
++    """
 +
-+The main advantage is that RV can give precise information on the runtime
-+behavior of the monitored system, without the pitfalls of developing models
-+that require a re-implementation of the entire system in a modeling language.
-+Moreover, given an efficient monitoring method, it is possible execute an
-+*online* verification of a system, enabling the *reaction* for unexpected
-+events, avoiding, for example, the propagation of a failure on safety-critical
-+systems.
++    invalid_state_str = "INVALID_STATE"
 +
-+Runtime Monitors and Reactors
-+=============================
++    def __init__(self, file_path):
++        self.__dot_path = file_path
++        self.name = self.__get_model_name()
++        self.__dot_lines = self.__open_dot()
++        self.states, self.initial_state, self.final_states = self.__get_state_variables()
++        self.events = self.__get_event_variables()
++        self.function = self.__create_matrix()
 +
-+A monitor is the central part of the runtime verification of a system. The
-+monitor stands in between the formal specification of the desired (or
-+undesired) behavior, and the trace of the actual system.
++    def __get_model_name(self):
++        basename = ntpath.basename(self.__dot_path)
++        if basename.endswith(".dot") == False:
++            print("not a dot file")
++            raise Exception("not a dot file: %s" % self.__dot_path)
 +
-+In Linux terms, the runtime verification monitors are encapsulated inside the
-+*RV monitor* abstraction. A *RV monitor* includes a reference model of the
-+system, a set of instances of the monitor (per-cpu monitor, per-task monitor,
-+and so on), and the helper functions that glue the monitor to the system via
-+trace, as depicted bellow::
++        model_name = basename[0:-4]
++        if model_name.__len__() == 0:
++            raise Exception("not a dot file: %s" % self.__dot_path)
 +
-+ Linux   +---- RV Monitor ----------------------------------+ Formal
-+  Realm  |                                                  |  Realm
-+  +-------------------+     +----------------+     +-----------------+
-+  |   Linux kernel    |     |     Monitor    |     |     Reference   |
-+  |     Tracing       |  -> |   Instance(s)  | <-  |       Model     |
-+  | (instrumentation) |     | (verification) |     | (specification) |
-+  +-------------------+     +----------------+     +-----------------+
-+         |                          |                       |
-+         |                          V                       |
-+         |                     +----------+                 |
-+         |                     | Reaction |                 |
-+         |                     +--+--+--+-+                 |
-+         |                        |  |  |                   |
-+         |                        |  |  +-> trace output ?  |
-+         +------------------------|--|----------------------+
-+                                  |  +----> panic ?
-+                                  +-------> <user-specified>
++        return model_name
 +
-+In addition to the verification and monitoring of the system, a monitor can
-+react to an unexpected event. The forms of reaction can vary from logging the
-+event occurrence to the enforcement of the correct behavior to the extreme
-+action of taking a system down to avoid the propagation of a failure.
++    def __open_dot(self):
++        cursor = 0
++        dot_lines = []
++        try:
++            dot_file = open(self.__dot_path)
++        except:
++            raise Exception("Cannot open the file: %s" % self.__dot_path)
 +
-+In Linux terms, a *reactor* is an reaction method available for *RV monitors*.
-+By default, all monitors should provide a trace output of their actions,
-+which is already a reaction. In addition, other reactions will be available
-+so the user can enable them as needed.
++        dot_lines = dot_file.read().splitlines()
++        dot_file.close()
 +
-+For further information about the principles of runtime verification and
-+RV applied to Linux:
++        # checking the first line:
++        line = dot_lines[cursor].split()
 +
-+  Bartocci, Ezio, et al. *Introduction to runtime verification.* In: Lectures on
-+  Runtime Verification. Springer, Cham, 2018. p. 1-33.
++        if (line[0] != "digraph") and (line[1] != "state_automaton"):
++            raise Exception("Not a valid .dot format: %s" % self.__dot_path)
++        else:
++            cursor += 1
++        return dot_lines
 +
-+  Falcone, Ylies, et al. *A taxonomy for classifying runtime verification tools.*
-+  In: International Conference on Runtime Verification. Springer, Cham, 2018. p.
-+  241-262.
++    def __get_cursor_begin_states(self):
++        cursor = 0
++        while self.__dot_lines[cursor].split()[0] != "{node":
++            cursor += 1
++        return cursor
 +
-+  De Oliveira, Daniel Bristot. *Automata-based formal analysis and
-+  verification of the real-time Linux kernel.* Ph.D. Thesis, 2020.
++    def __get_cursor_begin_events(self):
++        cursor = 0
++        while self.__dot_lines[cursor].split()[0] != "{node":
++           cursor += 1
++        while self.__dot_lines[cursor].split()[0] == "{node":
++           cursor += 1
++        # skip initial state transition
++        cursor += 1
++        return cursor
 +
-+Online RV monitors
-+==================
++    def __get_state_variables(self):
++        # wait for node declaration
++        states = []
++        final_states = []
 +
-+Monitors can be classified as *offline* and *online* monitors. *Offline*
-+monitor process the traces generated by a system after the events, generally by
-+reading the trace execution from a permanent storage system. *Online* monitors
-+process the trace during the execution of the system. Online monitors are said
-+to be *synchronous* if the processing of an event is attached to the system
-+execution, blocking the system during the event monitoring. On the other hand,
-+an *asynchronous* monitor has its execution detached from the system. Each type
-+of monitor has a set of advantages. For example, *offline* monitors can be
-+executed on different machines but require operations to save the log to a
-+file. In contrast, *synchronous online* method can react at the exact moment
-+a violation occurs.
++        has_final_states = False
++        cursor = self.__get_cursor_begin_states()
 +
-+Another important aspect regarding monitors is the overhead associated with the
-+event analysis. If the system generates events at a frequency higher than the
-+monitor's ability to process them in the same system, only the *offline*
-+methods are viable. On the other hand, if the tracing of the events incurs
-+on higher overhead than the simple handling of an event by a monitor, then a
-+*synchronous online* monitors will incur on lower overhead.
++        # process nodes
++        while self.__dot_lines[cursor].split()[0] == "{node":
++            line = self.__dot_lines[cursor].split()
++            raw_state = line[-1]
 +
-+Indeed, the research presented in:
++            #  "enabled_fired"}; -> enabled_fired
++            state = raw_state.replace('"', '').replace('};', '').replace(',','_')
++            if state[0:7] == "__init_":
++                initial_state = state[7:]
++            else:
++                states.append(state)
++                if self.__dot_lines[cursor].__contains__("doublecircle") == True:
++                    final_states.append(state)
++                    has_final_states = True
 +
-+  De Oliveira, Daniel Bristot; Cucinotta, Tommaso; De Oliveira, Romulo Silva.
-+  *Efficient formal verification for the Linux kernel.* In: International
-+  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
-+  p. 315-332.
++                if self.__dot_lines[cursor].__contains__("ellipse") == True:
++                    final_states.append(state)
++                    has_final_states = True
 +
-+Shows that for Deterministic Automata models, the synchronous processing of
-+events in-kernel causes lower overhead than saving the same events to the trace
-+buffer, not even considering collecting the trace for user-space analysis.
-+This motivated the development of an in-kernel interface for online monitors.
++            cursor += 1
 +
-+For further information about modeling of Linux kernel behavior using automata,
-+see:
++        states = sorted(set(states))
++        states.remove(initial_state)
 +
-+  De Oliveira, Daniel B.; De Oliveira, Romulo S.; Cucinotta, Tommaso. *A thread
-+  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
-+  Architecture, 2020, 107: 101729.
++        # Insert the initial state at the bein og the states
++        states.insert(0, initial_state)
 +
-+The user interface
-+==================
++        if has_final_states == False:
++            final_states.append(initial_state)
 +
-+The user interface resembles the tracing interface (on purpose). It is
-+currently at "/sys/kernel/tracing/rv/".
++        return states, initial_state, final_states
 +
-+The following files/folders are currently available:
++    def __get_event_variables(self):
++        # here we are at the begin of transitions, take a note, we will return later.
++        cursor = self.__get_cursor_begin_events()
 +
-+**available_monitors**
++        events = []
++        while self.__dot_lines[cursor][1] == '"':
++            # transitions have the format:
++            # "all_fired" -> "both_fired" [ label = "disable_irq" ];
++            #  ------------ event is here ------------^^^^^
++            if self.__dot_lines[cursor].split()[1] == "->":
++                line = self.__dot_lines[cursor].split()
++                event = line[-2].replace('"','')
 +
-+- Reading list the available monitors, one per line
++                # when a transition has more than one lables, they are like this
++                # "local_irq_enable\nhw_local_irq_enable_n"
++                # so split them.
 +
-+For example::
++                event = event.replace("\\n", " ")
++                for i in event.split():
++                    events.append(i)
++            cursor += 1
 +
-+   # cat available_monitors
-+   wip
-+   wwnr
++        return sorted(set(events))
 +
-+**available_reactors**
++    def __create_matrix(self):
++        # transform the array into a dictionary
++        events = self.events
++        states = self.states
++        events_dict = {}
++        states_dict = {}
++        nr_event = 0
++        for event in events:
++            events_dict[event] = nr_event
++            nr_event += 1
 +
-+- Reading shows the available reactors, one per line.
++        nr_state = 0
++        for state in states:
++            states_dict[state] = nr_state
++            nr_state += 1
 +
-+For example::
++        # declare the matrix....
++        matrix = [[ self.invalid_state_str for x in range(nr_event)] for y in range(nr_state)]
 +
-+   # cat available_reactors
-+   nop
-+   panic
-+   printk
++        # and we are back! Let's fill the matrix
++        cursor = self.__get_cursor_begin_events()
 +
-+**enabled_monitors**:
++        while self.__dot_lines[cursor][1] == '"':
++            if self.__dot_lines[cursor].split()[1] == "->":
++                line = self.__dot_lines[cursor].split()
++                origin_state = line[0].replace('"','').replace(',','_')
++                dest_state = line[2].replace('"','').replace(',','_')
++                possible_events = line[-2].replace('"','').replace("\\n", " ")
++                for event in possible_events.split():
++                    matrix[states_dict[origin_state]][events_dict[event]] = dest_state
++            cursor += 1
 +
-+- Reading lists the enabled monitors, one per line
-+- Writing to it enables a given monitor
-+- Writing a monitor name with a '-' prefix disables it
-+- Truncating the file disables all enabled monitors
++        return matrix
+diff --git a/tools/verification/dot2/dot2c b/tools/verification/dot2/dot2c
+new file mode 100644
+index 000000000000..8a8cd84bdfcf
+--- /dev/null
++++ b/tools/verification/dot2/dot2c
+@@ -0,0 +1,23 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
++#
++# dot2c: parse an automata in dot file digraph format into a C
++#
++# This program was written in the development of this paper:
++#  de Oliveira, D. B. and Cucinotta, T. and de Oliveira, R. S.
++#  "Efficient Formal Verification for the Linux Kernel." International
++#  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
 +
-+For example::
++if __name__ == '__main__':
++    from dot2 import dot2c
++    import argparse
++    import sys
 +
-+   # cat enabled_monitors
-+   # echo wip > enabled_monitors
-+   # echo wwnr >> enabled_monitors
-+   # cat enabled_monitors
-+   wip
-+   wwnr
-+   # echo '!wip' >> enabled_monitors
-+   # cat enabled_monitors
-+   wwnr
-+   # echo > enabled_monitors
-+   # cat enabled_monitors
-+   #
++    parser = argparse.ArgumentParser(description='dot2c: converts a .dot file into a C structure')
++    parser.add_argument('dot_file',  help='The dot file to be converted')
 +
-+Note that it is possible to enable more than one monitor concurrently.
++    args = parser.parse_args()
++    d = dot2c.Dot2c(args.dot_file)
++    d.print_model_classic()
+diff --git a/tools/verification/dot2/dot2c.py b/tools/verification/dot2/dot2c.py
+new file mode 100644
+index 000000000000..bca902eec483
+--- /dev/null
++++ b/tools/verification/dot2/dot2c.py
+@@ -0,0 +1,251 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
++#
++# dot2c: parse an automata in dot file digraph format into a C
++#
++# This program was written in the development of this paper:
++#  de Oliveira, D. B. and Cucinotta, T. and de Oliveira, R. S.
++#  "Efficient Formal Verification for the Linux Kernel." International
++#  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
 +
++from dot2.automata import Automata
 +
-+**monitoring_on**
++class Dot2c(Automata):
++    enum_suffix = ""
++    enum_states_def = "states"
++    enum_events_def = "events"
++    struct_automaton_def = "automaton"
++    var_automaton_def = "aut"
 +
-+This is an on/off general switcher for monitoring. It resembles the
-+"tracing_on" switcher in the trace interface.
++    def __init__(self, file_path):
++        super().__init__(file_path)
++        self.line_length = 100
 +
-+- Writing "0" stops the monitoring
-+- Writing "1" continues the monitoring
-+- Reading returns the current status of the monitoring
++    def __buff_to_string(self, buff):
++        string = ""
 +
-+Note that it does not disable enabled monitors but stop the per-entity
-+monitors monitoring the events received from the system.
++        for line in buff:
++            string = string + line + "\n"
 +
-+**reacting_on**
++        # cut off the last \n
++        return string[:-1]
 +
-+- Writing "0" prevents reactions for happening
-+- Writing "1" enable reactions
-+- Reading returns the current status of the monitoring
++    def __get_enum_states_content(self):
++        buff = []
++        buff.append("\t%s%s = 0," % (self.initial_state, self.enum_suffix))
++        for state in self.states:
++            if state != self.initial_state:
++                buff.append("\t%s%s," % (state, self.enum_suffix))
++        buff.append("\tstate_max%s" % (self.enum_suffix))
 +
-+**monitors/**
++        return buff
 +
-+Each monitor will have its own directory inside "monitors/". There the
-+monitor-specific files will be presented. The "monitors/" directory resembles
-+the "events" directory on tracefs.
++    def get_enum_states_string(self):
++        buff = self.__get_enum_states_content()
++        return self.__buff_to_string(buff)
 +
-+For example::
++    def format_states_enum(self):
++        buff = []
++        buff.append("enum %s {" % self.enum_states_def)
++        buff.append(self.get_enum_states_string())
++        buff.append("};\n")
 +
-+   # cd monitors/wip/
-+   # ls
-+   desc  enable
-+   # cat desc
-+   wakeup in preemptive per-cpu testing monitor.
-+   # cat enable
-+   0
++        return buff
 +
-+**monitors/$MONITOR/desc**
++    def __get_enum_events_content(self):
++        buff = []
++        first = True
++        for event in self.events:
++            if first:
++                buff.append("\t%s%s = 0," % (event, self.enum_suffix))
++                first = False
++            else:
++                buff.append("\t%s%s," % (event, self.enum_suffix))
 +
-+- Reading shows a description of the monitor *$MONITOR*
++        buff.append("\tevent_max%s" % self.enum_suffix)
 +
-+**monitors/$MONITOR/enable**
++        return buff
 +
-+- Writing "0" disables the *$MONITOR*
-+- Writing "1" enables the *$MONITOR*
-+- Reading return the current status of the *$MONITOR*
++    def get_enum_events_string(self):
++        buff = self.__get_enum_events_content()
++        return self.__buff_to_string(buff)
 +
-+**monitors/$MONITOR/reactors**
++    def format_events_enum(self):
++        buff = []
++        buff.append("enum %s {" % self.enum_events_def)
++        buff.append(self.get_enum_events_string())
++        buff.append("};\n")
 +
-+- List available reactors, with the select reaction for the given *MONITOR*
-+  inside "[]". The default one is the nop (no operation) reactor.
-+- Writing the name of a reactor enables it to the given MONITOR.
++        return buff
 +
-+For example::
++    def get_minimun_type(self):
++        min_type = "unsigned char"
 +
-+   # cat monitors/wip/reactors
-+   [nop]
-+   panic
-+   printk
-+   # echo panic > monitors/wip/reactors
-+   # cat monitors/wip/reactors
-+   nop
-+   [panic]
-+   printk
-diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 0123bdf7052a..7ad6c93cda64 100644
---- a/kernel/trace/rv/Kconfig
-+++ b/kernel/trace/rv/Kconfig
-@@ -25,6 +25,9 @@ menuconfig RV
- 	  actual execution, comparing it against a formal specification of
- 	  the system behavior.
- 
-+	  For further information, see:
-+	    Documentation/trace/rv/runtime-verification.rst
++        if self.states.__len__() > 255:
++            min_type = "unsigned short"
 +
- config RV_REACTORS
- 	bool "Runtime verification reactors"
- 	default y
-diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
-index 00f1ffc49a7b..b2f963a54e3d 100644
---- a/kernel/trace/rv/rv.c
-+++ b/kernel/trace/rv/rv.c
-@@ -133,6 +133,9 @@
-  *      auto-generated wakeup in preemptive monitor.
-  *      # cat enable
-  *      0
-+ *
-+ *  For further information, see:
-+ *   Documentation/trace/rv/runtime-verification.rst
-  */
- 
- #include <linux/kernel.h>
++        if self.states.__len__() > 65535:
++            min_type = "unsigned int"
++
++        if self.states.__len__() > 1000000:
++            raise Exception("Too many states: %d" % self.states.__len__())
++
++        return min_type
++
++    def format_automaton_definition(self):
++        min_type = self.get_minimun_type()
++        buff = []
++        buff.append("struct %s {" % self.struct_automaton_def)
++        buff.append("\tchar *state_names[state_max%s];" % (self.enum_suffix))
++        buff.append("\tchar *event_names[event_max%s];" % (self.enum_suffix))
++        buff.append("\t%s function[state_max%s][event_max%s];" % (min_type, self.enum_suffix, self.enum_suffix))
++        buff.append("\t%s initial_state;" % min_type)
++        buff.append("\tbool final_states[state_max%s];" % (self.enum_suffix))
++        buff.append("};\n")
++        return buff
++
++    def format_aut_init_header(self):
++        buff = []
++        buff.append("struct %s %s = {" % (self.struct_automaton_def, self.var_automaton_def))
++        return buff
++
++    def __get_string_vector_per_line_content(self, buff):
++        first = True
++        string = ""
++        for entry in buff:
++            if first:
++                string = string + "\t\t\"" + entry
++                first = False;
++            else:
++                string = string + "\",\n\t\t\"" + entry
++        string = string + "\""
++
++        return string
++
++    def get_aut_init_events_string(self):
++        return self.__get_string_vector_per_line_content(self.events)
++
++    def get_aut_init_states_string(self):
++        return self.__get_string_vector_per_line_content(self.states)
++
++    def format_aut_init_events_string(self):
++        buff = []
++        buff.append("\t.event_names = {")
++        buff.append(self.get_aut_init_events_string())
++        buff.append("\t},")
++        return buff
++
++    def format_aut_init_states_string(self):
++        buff = []
++        buff.append("\t.state_names = {")
++        buff.append(self.get_aut_init_states_string())
++        buff.append("\t},")
++
++        return buff
++
++    def __get_max_strlen_of_states(self):
++        max_state_name = max(self.states, key = len).__len__()
++        return max(max_state_name, self.invalid_state_str.__len__())
++
++    def __get_state_string_length(self):
++        maxlen = self.__get_max_strlen_of_states() + self.enum_suffix.__len__()
++        return "%" + str(maxlen) + "s"
++
++    def get_aut_init_function(self):
++        nr_states = self.states.__len__()
++        nr_events = self.events.__len__()
++        buff = []
++
++        strformat = self.__get_state_string_length()
++
++        for x in range(nr_states):
++            line = "\t\t{ "
++            for y in range(nr_events):
++                next_state = self.function[x][y]
++                if next_state != self.invalid_state_str:
++                    next_state = self.function[x][y] + self.enum_suffix
++
++                if y != nr_events-1:
++                    line = line + strformat % next_state + ", "
++                else:
++                    line = line + strformat % next_state + " },"
++            buff.append(line)
++
++        return self.__buff_to_string(buff)
++
++    def format_aut_init_function(self):
++        buff = []
++        buff.append("\t.function = {")
++        buff.append(self.get_aut_init_function())
++        buff.append("\t},")
++
++        return buff
++
++    def get_aut_init_initial_state(self):
++        return self.initial_state
++
++    def format_aut_init_initial_state(self):
++        buff = []
++        initial_state = self.get_aut_init_initial_state()
++        buff.append("\t.initial_state = " + initial_state + self.enum_suffix + ",")
++
++        return buff
++
++    def get_aut_init_final_states(self):
++        line = ""
++        first = True
++        for state in self.states:
++            if first == False:
++                line = line + ', '
++            else:
++                first = False
++
++            if self.final_states.__contains__(state):
++                line = line + '1'
++            else:
++                line = line + '0'
++        return line
++
++    def format_aut_init_final_states(self):
++       buff = []
++       buff.append("\t.final_states = { %s }," % self.get_aut_init_final_states())
++
++       return buff
++
++    def __get_automaton_initialization_footer_string(self):
++        footer = "};\n"
++        return footer
++
++    def format_aut_init_footer(self):
++        buff = []
++        buff.append(self.__get_automaton_initialization_footer_string())
++
++        return buff
++
++    def format_invalid_state(self):
++        buff = []
++        buff.append("#define %s state_max%s\n" % (self.invalid_state_str, self.enum_suffix))
++
++        return buff
++
++    def format_model(self):
++        buff = []
++        buff += self.format_states_enum()
++        buff += self.format_invalid_state()
++        buff += self.format_events_enum()
++        buff += self.format_automaton_definition()
++        buff += self.format_aut_init_header()
++        buff += self.format_aut_init_states_string()
++        buff += self.format_aut_init_events_string()
++        buff += self.format_aut_init_function()
++        buff += self.format_aut_init_initial_state()
++        buff += self.format_aut_init_final_states()
++        buff += self.format_aut_init_footer()
++
++        return buff
++
++    def print_model_classic(self):
++        buff = self.format_model()
++        print(self.__buff_to_string(buff))
 -- 
 2.35.1
 

@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D37573FEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98798573FF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiGMXJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S230332AbiGMXKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiGMXJV (ORCPT
+        with ESMTP id S230309AbiGMXKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:09:21 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE73119292
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:09:20 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q82so11774406pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:09:20 -0700 (PDT)
+        Wed, 13 Jul 2022 19:10:02 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ADA3F326
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:10:00 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8a1e9e33so1004817b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j+8RK9v8gWGa5a91FxFwYr8BWqBvGM+/s21xcS2xt8M=;
-        b=iA7WMNFyc+2XPTgeCCgE9e/euFNEX10zqaFS1iIgoVZCInr/5Sb6xcueFpO3imu4iG
-         enBbTqueyvLuuPDOVSAzW2/AbYP8h+2TBN58ChG2YJb/EpEU2Mf5kxQxA+0Tv2ra+sg8
-         Lnq6gWbxojeU68uDvp3yCP888hp9nsLwZ4zMKGlYRkb9XfyqSGJAvNpRg97TH0kmb825
-         qtiyXzCD6cVYRC7/tj/WNz0DbR5MLgVz6NsTLYhVOLpqLMRk1yRlcvFcGA2pAQNjHNz1
-         7QMOph3xxPFAPDnRNUeJyLHrnFw/VjPeJswM9sSXayWF7HWPVCF1vOD0tuz9G0Hu63EN
-         8SGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K8O302/7c4M+y4oSPuw97osYexdl2kGKky6mRepNyHk=;
+        b=H09N2BCSGmpudE0ji2Q/gaZvJBtiZgN4m8BvrTevY/CHTWDL6gz4rjztzk441wczCU
+         RX4gyudPZ0x6/dcPIjtS/PqA7m1mhDKscwmdHN5W5vsacoMRaca1xaX8Bi9c0vJ7912Y
+         35miB9lQMLd1D54hGVRZ74ghp5WHLHU3DqsSCrXST6bNWO3IViYh+VjOlJqDoPapciKK
+         B7ndbKU+2YYtw13rtVJZGEvMBwcAMWJwOye8ekF9n9tnm7IFdOyOki4IqzxnTMm2I4P6
+         CmVlhgirpkFIW2USMZ6EmJ3cqChrEZJsbzK6ZtsZBz+KrDoC4VrgBy2HHOHBzZPFxO6H
+         +T4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=j+8RK9v8gWGa5a91FxFwYr8BWqBvGM+/s21xcS2xt8M=;
-        b=Hl7EbbuzR5d9QIgUP58KG0qqD0ZvEc8179irOTlhp10kVfSuVjI3yWsQJvadnEzyH+
-         kQcqb6iCpYUPY2vrwcd1Zls6QoQ7R1X3eyX70viOmmUj+G6R5isf6hrARjL8bDotEjOV
-         hdO+wGws5fAFswAc4NBEPNNeHh642Bz3V2KyGypfAV7Px9K/FTfLoEXh2egpBjyDz0FQ
-         ZdGrdn0vzxp7WpxjmyqZ6xpWFo6lvk5tPsy81hDMK6BggC1w6TIjyJ/E5YbyGnvdvpCi
-         vd6pBUuTpPC+EF4O//VGV86I0IMgeD4lPbwnufqMCGKnwecnXoN1KVYxcmFATxqMAKry
-         jc5g==
-X-Gm-Message-State: AJIora+k9MRuA5ZM1QYYImxkyr23tFZ5XScOSmREKfRjWykuWJK6xu9z
-        ItI9aVtwiaF6fWO4k2cqKR6Otzg97hFqiQ==
-X-Google-Smtp-Source: AGRyM1sbZBfhPjfNH4IFyitf+1xGqss1Qja+bIDVjylaz/VxJhz5dXPtuOpvzJN6BZkHP1Y5/Smlug==
-X-Received: by 2002:a65:464d:0:b0:412:6e9f:a4e7 with SMTP id k13-20020a65464d000000b004126e9fa4e7mr4709555pgr.104.1657753760197;
-        Wed, 13 Jul 2022 16:09:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d1-20020a62f801000000b00528c26c84a3sm84399pfh.64.2022.07.13.16.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 16:09:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 16:09:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K8O302/7c4M+y4oSPuw97osYexdl2kGKky6mRepNyHk=;
+        b=0ZAg8/XthfPJ2Hk1GsnnCxeVBFJLVA7xPaoLtEE/msrCvRpzFuzbxmp6YrhwM9B3NY
+         zAieISQSV1wdbiUo/sLglBYq0yL5oxxXzjT3NzRja1dkvXjUzgpRSsaMFU51OUp/j16I
+         f3xKn1Ti++9+R3jTRRMqINgSvrz171b9SI09zP6Je3sZiydm1MwZujlaNUdeD9MA/M/H
+         Q4cGMWwMuCvpgGB56Q8zphv7R8M0DQDsE7w8aglvrxos+MsHqG57he4DLUrzNRvqAYg8
+         JcuTnHDlv862ETvmALEQo0kNV3+zwRd2atfxPxZ2F7Ihfh6+DIqVqS2NLrTVKc3YyqRH
+         idog==
+X-Gm-Message-State: AJIora9WLZE0n1Rh5TGCaj6KOQMnBp0mAW7wzZqWhUpqQ7EOWJemeH5F
+        zKCvUUmmf1ZukBmwGK1gD8eU10AqT5xIteFzAsDp6+10NSU=
+X-Google-Smtp-Source: AGRyM1ta1KjbW6tgvLYjpf/6k/gpgB7wBMLpjjuGdsSpq+y6Of+DnuhfTohzZB61/WRXkJef9Gp/OdBu/c/GkCpjDpE=
+X-Received: by 2002:a81:158a:0:b0:31c:a84a:d772 with SMTP id
+ 132-20020a81158a000000b0031ca84ad772mr6811397ywv.233.1657753800010; Wed, 13
+ Jul 2022 16:10:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+ <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+ <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk> <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+ <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
+ <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
+ <CADVatmPx=T_i1oaX2i_d5crbWkixFZU7s-_wky_kz58wDgwGDQ@mail.gmail.com> <20220713225627.GC32544@roeck-us.net>
+In-Reply-To: <20220713225627.GC32544@roeck-us.net>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 14 Jul 2022 00:09:24 +0100
+Message-ID: <CADVatmM=JR4d4WU_53PtA6g-y40qc=CbHL9uhsJc2cSW=uoOXA@mail.gmail.com>
+Subject: Re: Linux 5.19-rc6
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
         Harry Wentland <harry.wentland@amd.com>,
         Leo Li <sunpeng.li@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
         Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Daniel Axtens <dja@axtens.net>
-Subject: Re: [PATCH] drm/amd/display: Add missing hard-float compile flags
- for PPC64 builds
-Message-ID: <20220713230917.GE32544@roeck-us.net>
-References: <20220618232737.2036722-1-linux@roeck-us.net>
- <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
- <CADnq5_NkVWqcxwLMBeskqpcSEYCEjUAK0hqvA_PAo7ACHKL2cA@mail.gmail.com>
- <6a026c9a-c4ee-deba-e028-4c0f478c1911@roeck-us.net>
- <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        Balbir Singh <bsingharora@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 05:20:40PM -0400, Alex Deucher wrote:
+On Wed, Jul 13, 2022 at 11:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Jul 13, 2022 at 10:50:06PM +0100, Sudip Mukherjee wrote:
+> > On Wed, Jul 13, 2022 at 10:45 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
+> > >
+> > > On Wed, Jul 13, 2022 at 2:36 PM Sudip Mukherjee
+> > > <sudipm.mukherjee@gmail.com> wrote:
+> > > >
+> > > > > >
+> > > > > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
+> > > > >
+> > > > > That patch looks sane to me, but I guess Guenter would need to check
+> > > >
+> > > > I still see the failure in my builds with this patch. But surprisingly
+> > > > I dont see the build failure (with or without this patch) with gcc-12,
+> > > > only with gcc-11.
+> > >
+> > > Arrghs. "build failure"?
 > >
-> > The problem is not the FPU operations, but the fact that soft-float
-> > and hard-float compiled code is linked together. The soft-float and
-> > hard-float ABIs on powerpc are not compatible, so one ends up with
-> > an object file which is partially soft-float and partially hard-float
-> > compiled and thus uses different ABIs. That can only create chaos,
-> > so the linker complains about it.
-> 
-> I get that, I just don't see why only DCN 3.1.x files have this
-> problem.  The DCN 2.x files should as well.
-> 
+> > Uhh.. no, sorry.. I meant the same problem which Guenter reported with
+> > powerpc64-linux-ld, hard float and soft float.
+> > But I dont see this problem with gcc-12, only with gcc-11.
+> >
+>
+> Weird. It works for me with gcc 11.3.0 / binutils 2.38 as well as with
+> gcc 11.2.0 / binutils 2.36.1.
 
-Seen in drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile:
+Its entirely possible that I have messed up, there are references to
+many patches in this thread. :)
+Can you please paste the link of the patch that you say is working for
+you. I will try a clean build with that.
 
-# prevent build errors regarding soft-float vs hard-float FP ABI tags
-# this code is currently unused on ppc64, as it applies to Renoir APUs only
-ifdef CONFIG_PPC64
-CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn21/rn_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
-endif
 
-Does that explain it ?
-
-Guenter
+-- 
+Regards
+Sudip

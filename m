@@ -2,170 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B27572EFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16FB572F1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiGMHVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S234590AbiGMHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiGMHVT (ORCPT
+        with ESMTP id S234322AbiGMHWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:21:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47E13BA152
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657696877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1bzHcA1yQj57CCPYm74jUoouv+RLrdBI+n61plkR9Go=;
-        b=MFKJGyFoex48bbIRmOswUJsYPG5wodEwgrasX/VU+vhulaKcshfQ8Hj2FiR+fmqGars6HW
-        xVkTgtSo7eY7TLXvoCXmvaB47C8iTEmW72bDaRcHc5ntGL8ELVfkBNtOeyov3yGx3aNIwM
-        1wAhgkUAfgMhVRuLN6G/lAmaAZfOmwQ=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-lCP0JD7TOf60zgwSCA9WWg-1; Wed, 13 Jul 2022 03:21:16 -0400
-X-MC-Unique: lCP0JD7TOf60zgwSCA9WWg-1
-Received: by mail-pg1-f200.google.com with SMTP id q132-20020a632a8a000000b00411eb01811fso4661548pgq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:21:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1bzHcA1yQj57CCPYm74jUoouv+RLrdBI+n61plkR9Go=;
-        b=v+Cj2sxIlx6TWPbtGHYtSZfx1nZTYJE99yXtKntdNUW2vPLxz4ANvgsgs9X1Lw1hHl
-         duvXg37xe45V9mqiw9D/gXheNgPCKQnOr65Qq8YZl1B8fwbhp5OpSqy0sMhx/HtjasiT
-         sWYWSLe4Gy7fldSYqJe+4De20iWAM5pKVU5KNambAija+Vs8CCWY9wZgaE+AWmL94WZF
-         txDccrELYKr9IIxVNDVGS0qKuamPYcDgf3YEQfD1WWoPv5PKXMKZjAU6Wt1mU+NsHg0i
-         Vo9u8as7W+4bBdr4+PM4sKYcWym850s5XjBC2NO4iWdsoCCFd6qzY1gTihVT15UKlsBy
-         Kw/g==
-X-Gm-Message-State: AJIora95fBN3DP9IbE6976UyJnIv8J7vFmt/hHF/+Tki3ZTwmX/G3ndY
-        OjRbnQ64XNfkz4wr5FaAo2CriPMtfydRG3DGzFZtbzzKy2Npg6Q0+vCnnESplWj7owVf/lIejQH
-        9m1mchS1YRCAXpEAYHp55uGAV
-X-Received: by 2002:a17:902:e153:b0:16b:dccf:5a89 with SMTP id d19-20020a170902e15300b0016bdccf5a89mr2137309pla.69.1657696874946;
-        Wed, 13 Jul 2022 00:21:14 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vBQYf48YTRO3J0cXEwN13e016x/uaZqgH8q/LrUIWqrRZZ1fxgfGwjni6KBVsTw3wzYIRdGg==
-X-Received: by 2002:a17:902:e153:b0:16b:dccf:5a89 with SMTP id d19-20020a170902e15300b0016bdccf5a89mr2137291pla.69.1657696874696;
-        Wed, 13 Jul 2022 00:21:14 -0700 (PDT)
-Received: from localhost ([240e:3a1:31b:3d30:c711:d753:abde:647d])
-        by smtp.gmail.com with ESMTPSA id jj14-20020a170903048e00b0016c5b2a16ffsm2912305plb.142.2022.07.13.00.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:21:14 -0700 (PDT)
-From:   Coiby Xu <coxu@redhat.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v2] ima: force signature verification when CONFIG_KEXEC_SIG is configured
-Date:   Wed, 13 Jul 2022 15:21:11 +0800
-Message-Id: <20220713072111.230333-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220712093302.49490-1-coxu@redhat.com>
-References: <20220712093302.49490-1-coxu@redhat.com>
+        Wed, 13 Jul 2022 03:22:22 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2114.outbound.protection.outlook.com [40.107.94.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54B5BAAA3;
+        Wed, 13 Jul 2022 00:22:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=USc5YnvBxlSWlXlimxDAO98aEfbGic0d8IZawJCmS/Jo+E8AqJoPqA3FqB2XFhLTpCP8/XKFZxoD1XR3OqP8gGSqBkZHxFz5nPhGRtD38f6JqCiuhNONHcsdBkfsOuTeWGjIa8UkbrseUTDUtySFv7DtnbOePmhL2Ko6fAEG7DJ9lIoUV1BXbtnprkq/QD8K526loSYwAAY0TV8/qFSIpErFrXD7S15NngplJ1b8TNyUET0GjudVWFbhjCaKYkkmxkhd8W8NFYYk59blke0AWQKcdNAFfAV6ZMYh3JFpWobpVN8pl5PjhW1wcHQ8v7CT3CvDdYGsxv63HegouYBCqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hCu+xOgtabFEM/r7j8pnZHQ885/nAZ4/ProQRMZJbJA=;
+ b=HwxqrgIxAdjlV7dLtSd6mxCraKw6U+ukw+o/J1IUjHFQ91Cnv67FJco5AeFdNKKKKH2uKVqYMnT70Bds4Etg4dAODYlW87p6HnKQKB5Y76WmDtaKHS6/avVgO2ab26leG05tne1l7iW/09b0GT0uBrlcmPSDMkHWaX289CpZyIvy6sRi0g3Ypk57jxrD0ls7NHWW4ovzkkdrNpDl+6aaqxrqsPGK7nJ/GN/rIIYQKwn0q3k+d3Iev9h6gZlV18u+4tU5pdpAZLr2Df8uKVA8WM9nB4l0kVM337GTEsqrUdnevorx2zVVM3P2tjr1I0wy599w6Am/WEu016/g1BAZVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hCu+xOgtabFEM/r7j8pnZHQ885/nAZ4/ProQRMZJbJA=;
+ b=OfcT86Cmp6j4lWvIz5ioO7PIWGniPFxe+UjHpimX9dEx4lOOrEIhgHv0CqmDlCY4wjaBsaoZIrQXdBIzICX91p3yuloIBvwkEZLWSwT2ZwN7qsYS2TS56wh1wvhB/Mq3EaVXGcORm3aWA+1XY1MMcWDgFF+Z1T14U5sgW9ek2uw=
+Received: from SN6PR2101MB1327.namprd21.prod.outlook.com
+ (2603:10b6:805:107::9) by DM4PR21MB3320.namprd21.prod.outlook.com
+ (2603:10b6:8:69::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.5; Wed, 13 Jul
+ 2022 07:22:19 +0000
+Received: from SN6PR2101MB1327.namprd21.prod.outlook.com
+ ([fe80::59ea:cdde:5229:d4f0]) by SN6PR2101MB1327.namprd21.prod.outlook.com
+ ([fe80::59ea:cdde:5229:d4f0%7]) with mapi id 15.20.5458.005; Wed, 13 Jul 2022
+ 07:22:19 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Ajay Sharma <sharmaajay@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: RE: [Patch v4 06/12] net: mana: Define data structures for protection
+ domain and memory registration
+Thread-Topic: [Patch v4 06/12] net: mana: Define data structures for
+ protection domain and memory registration
+Thread-Index: AQHYgSXZ61KmVR7xZES2DK7HXoNYta122DDwgAUKhgCAACpp0A==
+Date:   Wed, 13 Jul 2022 07:22:19 +0000
+Message-ID: <SN6PR2101MB13273A97F6709C7752F37A87BF899@SN6PR2101MB1327.namprd21.prod.outlook.com>
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-7-git-send-email-longli@linuxonhyperv.com>
+ <SN6PR2101MB13276E8879F455D06318118EBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
+ <BL1PR21MB3283DDCF92E59105F9D40330D6899@BL1PR21MB3283.namprd21.prod.outlook.com>
+In-Reply-To: <BL1PR21MB3283DDCF92E59105F9D40330D6899@BL1PR21MB3283.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=b2f59ba0-0f91-467d-abb8-8c0490284381;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-07-09T23:40:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c9c40e9b-2223-423f-5f99-08da64a06bf5
+x-ms-traffictypediagnostic: DM4PR21MB3320:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yAO11wg9EEqCV0UccNksophNKZCmrKV30Eeo9Pw+i8lWqXiNbFPdK2XAdeHAPKxlD7xO9FYj4HJk0yDxQ7dsvmAgOhQ2nRu1EtwemG+NEpAJV1vchiBbHZTcNEFuriuwjm9eym574W63syyjiW2lpzxEPBgpatCWusDfw2AjpajBxGvRBz63MJ/dNT9IuqIknz06b/YcOD7NNDhCNMp6XgBtAqJOTVvGI2vm0L1s+/1sR/VpHTDw1ysN/ZyJihtzdbT05tamepaiW0Rm9KGAJIuq9DTMvk7WwAi6bUTg4zkc/NYct66Ew6ub+6RERNp3BRTUFFXvDD5EZnzs1Nisr86UA3TtxlIRGtmEdXwYimZqV7L4abtIWX9PXlslzBP7VXD81LA49eeEzpWNwBUBwGs1XynplnOwfrmQduqjOr/TB/dnvvdcHElJehOBVglJuqC2QvpQfmfHyl93H5VuAI67SKJCujs5Xu2eAc+8KdWmpsJvUTdO00GAMkhACcMkniKbMyInRoFX0p8r+l0UPTwPiSoilved7exmwKKP+JNysn9Ow6xBLSqxsUoWgrEctvREEC6FEaEoLP4bpiYKOhjYigUhtib5XiBe8SkdFzTmUrskkgzw7mu/HGMMnFJbdGID0bR3m6u2vCf1cmhoROD6rtE+DqVLcZYfUYvMW14Tp7RmoR1o7/dWL+d6qJGQhyqNk+b7XWPYoR3hUDgl7ZW52E2YmGvp5u5F3d9cwsYMsv3PT4xZztZDbcGlCRAjQgCwLVxM8MNoAKdKtrGo54wW+dcaK6ekh7h7CHUwtnc9iz+Nsh4cAwo57jWVQopEZdcpyyVUmUznDdHNwCJnH1/1r7PjapgjnPNVViGepuxQrAzsWPILN6GY8YS7zpQx
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR2101MB1327.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(366004)(39860400002)(346002)(396003)(451199009)(921005)(33656002)(82960400001)(82950400001)(10290500003)(5660300002)(7416002)(478600001)(52536014)(9686003)(26005)(8936002)(55016003)(110136005)(122000001)(316002)(54906003)(186003)(8676002)(7696005)(83380400001)(53546011)(6506007)(76116006)(66556008)(66946007)(66446008)(66476007)(64756008)(4326008)(71200400001)(38070700005)(41300700001)(8990500004)(86362001)(2906002)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ReLV7wOl3v4jzEfzcOyCess1KpDNf/mZSrDXJvO8Xcck9XLlvpb3B2n3dNoh?=
+ =?us-ascii?Q?b14eD4xl2S5DAQGI8j6Q4TeT7vPv0wBB6Bg86yS36IyPdcRQQTvu15KYYLf8?=
+ =?us-ascii?Q?3EY1ZKHydDl1Mn4UYQvGuB9V9wNPRe9itpM71frekUABRqiVUL6OJx3/QSw8?=
+ =?us-ascii?Q?+53z2jL7r+kqib2S+43RHaOCX0JplMrD7Pgvgj7iSqUnsdIPTM8I+Jx1U/Q3?=
+ =?us-ascii?Q?YvBbHyeBBsRjlgewpdFoPB1Sbd7yGD1cBVwe4J40mg5GoUErLMHHTponscKC?=
+ =?us-ascii?Q?v705NONfeaK2SwzOJpAaGpe5RAYgin+IjDr6LvmFqKiy7Amg3XjrJHyjbCmF?=
+ =?us-ascii?Q?rY8d7+/7vl5QWjpz7IJ0+nySimM7CyoWGFNmRFyAwAlyYdansZxtEzOIWt/x?=
+ =?us-ascii?Q?vGdA+EI9yag21K2n0t+6FQl/y2RUuZJON6deXY221lXdjEzg3vo7RmO2awMu?=
+ =?us-ascii?Q?kc7Ye+vsn6iWi1WsNHqeGrskYcnEbT+3FL9PfD5VrzDXmYqKYHFJt30EnOOH?=
+ =?us-ascii?Q?BMn35ZKOxownNgIB3prIy80m9NfLQtMkqQSjvsoJkdykCU3ypxqMxKL4whv/?=
+ =?us-ascii?Q?s4OyakLG+FyFk/LN7npTMzGA//xeZ/q9Ou8N0NE38+1/0DO109R5eaELnzxz?=
+ =?us-ascii?Q?YPAPc/+ku6jUm5Rt+Lcu9qz7dpjukwsZWhsA7B5hfB8WEjB/++rjr7lmWuxW?=
+ =?us-ascii?Q?aHZ4iw43LjsIV0Xw9nGYbqvq+8jy7riv3c52ZBmUW9E2+RTa+aTSpwN+eIc9?=
+ =?us-ascii?Q?QowCF/pewvxoQdvLGeBAhd66nol/qYb0DD5yPRhx8Bc1rqdg5Um1wMapq+03?=
+ =?us-ascii?Q?RQvRczRxNKeiLMVmHtg6vyN0/3MTWUoYvMy81osQ9d7cxksNyfx5xNPRZuiU?=
+ =?us-ascii?Q?jz6UQlzSWOk7t5RT9zzSOAxHeF1OWNeYk7LQdsqDeNa1a2gI/biXEvKosfMW?=
+ =?us-ascii?Q?7FcbLTbdK0dykeoaeYdeUANTuBMzEdWysfyhy75d6YvbQp3pAuV08Cry/TKL?=
+ =?us-ascii?Q?+QBr7X1AQ3oEPzRPVXkN5q3Wbwz5ToPrV3lgeOx30aJE69KH4GMp/VnMVDpn?=
+ =?us-ascii?Q?2pvbSlgxnmGdP43KN+ZR/C9WNfMToYRsJ8+n9Am4JdNir64lKI7XGJVO2eTi?=
+ =?us-ascii?Q?UbpadRedUDmncTRZNIbtklMjzeuVyxXYg3cYRngTpiT2V1y9+EtJoDTCU9bd?=
+ =?us-ascii?Q?xkcy1QpmuKcB9J2waDeg2ovxvGa6GEgHrvE85D/kclClpSVKXGsD5+lbKBZY?=
+ =?us-ascii?Q?oX/4oN9/+dbZWkGXBGnl88bZXnw1eC1hppPQ+KsIcLdF6SZ7JNSJEMrc+xmq?=
+ =?us-ascii?Q?b+JBp7PbVwB5eB+vdEPFi2oIAdwf5qA9SbvsQ5GHWylClFNEJTB4ZlnlSdZK?=
+ =?us-ascii?Q?VyR2pEXWV7Oth8UCl2HwdUimFiyjYtviXXqoJl0U55rKENj5FG0cB+MdaFsA?=
+ =?us-ascii?Q?kM4Mw736/M5TxBQ6tKHr3QDE0xHGHb7JYXe4eZMykPcglLh5JE9tb5HqJaBs?=
+ =?us-ascii?Q?/r/EG3Ij7ZKGSgumgqHae3e5GSAtAL7AK3rztskvH5C/6hDEH9UsH0UmjNd6?=
+ =?us-ascii?Q?ysjUe0ZNH8/KoluvX/i8i5CksbXZljjQnaznQWXw?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR2101MB1327.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9c40e9b-2223-423f-5f99-08da64a06bf5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 07:22:19.4821
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kCnJzfSayxM+xV/cGCp/QNW8TZJbmeEzYR8tsce0HNLNGOOccJM0eY7AibOcQwFJ1T5dC4RSVK5Vt6qK/hVuRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3320
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, an unsigned kernel could be kexec'ed when IMA arch specific
-policy is configured unless lockdown is enabled. Enforce kernel
-signature verification check in the kexec_file_load syscall when IMA
-arch specific policy is configured.
+> From: Ajay Sharma <sharmaajay@microsoft.com>
+> Sent: Tuesday, July 12, 2022 9:39 PM
+> To: Dexuan Cui <decui@microsoft.com>; Long Li <longli@microsoft.com>; KY
+>  ...
+> > The definition of struct gdma_create_mr_params is not naturally aligned=
+.
+> > This can potenially cause issues.
+> This is union and so the biggest element is aligned to word. I feel since=
+ this is
+> not passed to the hw it should be fine.
 
-Fixes: 99d5cadfde2b ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXEC_SIG_FORCE")
-Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
-v2
- - don't include linux/kexec.h since it's already been included in
-   linux/ima.h
- - fix build errors when KEXEC_FILE/KEXEC_CORE is disable as caught by
-   kernel test robot <lkp@intel.com>
+Ajay, you're right. I didn't realize struct gdma_create_mr_params is not re=
+ally
+passed to the PF driver or the device. Please ignore my comments on
+struct gdma_create_mr_params. Sorry for the confusion!
 
----
- include/linux/kexec.h            |  6 ++++++
- kernel/kexec_file.c              | 11 ++++++++++-
- security/integrity/ima/ima_efi.c |  2 ++
- 3 files changed, 18 insertions(+), 1 deletion(-)
+> > BTW, Haiyang added "/* HW DATA */ " to other definitions, e.g.
+> > gdma_create_queue_resp. Can you please add the same comment for
+> > consistency?
+It's still recommended that we add the tag "/* HW DATA */ " to new definiti=
+ons
+that are passed to the PF driver or the device.
 
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index ce6536f1d269..475683cd67f1 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -452,6 +452,12 @@ static inline int kexec_crash_loaded(void) { return 0; }
- #define kexec_in_progress false
- #endif /* CONFIG_KEXEC_CORE */
- 
-+#ifdef CONFIG_KEXEC_SIG
-+void set_kexec_sig_enforced(void);
-+#else
-+static inline void set_kexec_sig_enforced(void) {}
-+#endif
-+
- #endif /* !defined(__ASSEBMLY__) */
- 
- #endif /* LINUX_KEXEC_H */
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 145321a5e798..f9261c07b048 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -29,6 +29,15 @@
- #include <linux/vmalloc.h>
- #include "kexec_internal.h"
- 
-+#ifdef CONFIG_KEXEC_SIG
-+static bool sig_enforce = IS_ENABLED(CONFIG_KEXEC_SIG_FORCE);
-+
-+void set_kexec_sig_enforced(void)
-+{
-+	sig_enforce = true;
-+}
-+#endif
-+
- static int kexec_calculate_store_digests(struct kimage *image);
- 
- /*
-@@ -159,7 +168,7 @@ kimage_validate_signature(struct kimage *image)
- 					   image->kernel_buf_len);
- 	if (ret) {
- 
--		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
-+		if (sig_enforce) {
- 			pr_notice("Enforced kernel signature verification failed (%d).\n", ret);
- 			return ret;
- 		}
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 71786d01946f..9db66fe310d4 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -67,6 +67,8 @@ const char * const *arch_get_ima_policy(void)
- 	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
- 		if (IS_ENABLED(CONFIG_MODULE_SIG))
- 			set_module_sig_enforced();
-+		if (IS_ENABLED(CONFIG_KEXEC_SIG))
-+			set_kexec_sig_enforced();
- 		return sb_arch_rules;
- 	}
- 	return NULL;
--- 
-2.35.3
+> > +struct gdma_create_mr_request {
+> > +	struct gdma_req_hdr hdr;
+> > +	gdma_obj_handle_t pd_handle;
+> > +	enum gdma_mr_type mr_type;
+> > +	u32 reserved;
+> > +
+> > +	union {
+> > +		struct {
+> > +			enum gdma_mr_access_flags access_flags;
+> > +		} gpa;
+> > +
+> > +		struct {
+> > +			gdma_obj_handle_t dma_region_handle;
+> > +			u64 virtual_address;
+> > +			enum gdma_mr_access_flags access_flags;
+>=20
+> Similarly, there is a hidden u32 field here. We should explicitly define =
+it.
 
+The issue with struct gdma_create_mr_request is valid, since it's
+passed to the PF driver. We should explicitly define the hidden field.

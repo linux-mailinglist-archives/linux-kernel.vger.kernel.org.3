@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4D573585
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014F2573589
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbiGMLfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S236103AbiGMLf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbiGMLfD (ORCPT
+        with ESMTP id S229773AbiGMLf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:35:03 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445C110209C
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657712098; x=1689248098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ssM2K5wY4oMd1Lhe12G6JmXXhxpujMRJ6fCVET3IGvc=;
-  b=dyPcVqroSMdoQ/VLuZx4x2XVmyMBaFMcYg8HKoRwwfazX3NQ/XXiWL81
-   TtsnxgUv+Y+e185JfvrU3KYN+H5VQwqPP3sz4TNwQ9vIxGL2kzVYaOGv3
-   bv0lEK/2l9oIU+lEk5zoOoD7iAyTf3C9s5ZVGsOj2RSEWi+NZ61KHh8PT
-   VUUfazv5wr/dbRDxH8VEMg82LDeftf8pKg3Avn+Qpa9LYO9MSGemZxjTI
-   G5xdZ0m82lz8AMjYRTttKdefVXbPyBDR84pLiQWNyJs0vq7HXU6cLD2F1
-   l8hZJ2jOYz5z9QtksygATbUcKBTL3YRkGpZf/mxTTIe0MlPMGt7FtevLf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="282738661"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="282738661"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 04:34:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="622906534"
-Received: from lkp-server02.sh.intel.com (HELO 8708c84be1ad) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 04:34:56 -0700
-Received: from kbuild by 8708c84be1ad with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oBads-0003QR-0g;
-        Wed, 13 Jul 2022 11:34:56 +0000
-Date:   Wed, 13 Jul 2022 19:34:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org
-Subject: [cilium:pr/meta5 4/4] dev.c:undefined reference to
- `__qdisc_calculate_pkt_len'
-Message-ID: <202207131924.bavS51zw-lkp@intel.com>
+        Wed, 13 Jul 2022 07:35:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E9A83F2F;
+        Wed, 13 Jul 2022 04:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U1F/5wzv0m7wpoKemUgjlptyrRXhgHhVMVcmpHAB8AE=; b=ouXY6Sii0FO9X18TUWdXujmX+l
+        nT8Tesdc6ekDaNHh/OnAGW3bI55SeuvzZZVYS9MxYlzg4sI6H1GGQFGL5lik9ww4fMhpzGjHfO4VO
+        tXl4pgnvLC3CPa3Ld8gEkDvGyQyJVS9wD3ckp2EQfi+TeQ6yCcbyF0BtQzjvpWGT+U1RTo2Sen9XJ
+        jG/XiI+PcUpX7nge8bsfjndRNavOnJQ1vdkd/gtNcTCq1zyBYo9zJrMIUEBBwWzAlSGcR6V97ht49
+        ZV4gee4B9sXAeIBajt9QNvvT3FjLL6wBQyUNvOMBDyAf/PoNa8BpLu5iaMBsLc6CKEF2HxQHUuWaa
+        xx8Rn2gg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBaeL-003XvT-8O; Wed, 13 Jul 2022 11:35:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7297C300238;
+        Wed, 13 Jul 2022 13:35:22 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 57578201ECFBD; Wed, 13 Jul 2022 13:35:22 +0200 (CEST)
+Date:   Wed, 13 Jul 2022 13:35:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: mainline build failure due to fc02735b14ff ("KVM: VMX: Prevent
+ guest RSB poisoning attacks with eIBRS")
+Message-ID: <Ys6t+q4/y4DTjLQh@hirez.programming.kicks-ass.net>
+References: <Ys6sZj6KYthnDppq@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ys6sZj6KYthnDppq@debian>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/cilium/linux.git pr/meta5
-head:   3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-commit: 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5 [4/4] bpf: Add fd-based API to attach tc BPF programs
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220713/202207131924.bavS51zw-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/cilium/linux/commit/3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-        git remote add cilium https://github.com/cilium/linux.git
-        git fetch --no-tags cilium pr/meta5
-        git checkout 3dd186e5096ad47e2a3e6a5d00dd9d67513a95e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Jul 13, 2022 at 12:28:38PM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
+> 
+> The latest mainline kernel branch fails to build for x86_64 allmodconfig
+> with clang and the error is:
+> 
+> arch/x86/kernel/cpu/bugs.c:58:21: error: section attribute is specified on redeclared variable [-Werror,-Wsection]
+> DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
+>                     ^
+> ./arch/x86/include/asm/nospec-branch.h:283:12: note: previous declaration is here
+> extern u64 x86_spec_ctrl_current;
+> 
+> 
+> git bisect pointed to fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
+> 
+> I will be happy to test any patch or provide any extra log if needed.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I suspect something like this will do.
 
-All errors (new ones prefixed by >>):
-
-   ld: net/core/dev.o: in function `__dev_xmit_skb':
->> dev.c:(.text+0x7ce0): undefined reference to `__qdisc_calculate_pkt_len'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index bb05ed4f46bd..6398d39e66b0 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -280,7 +280,7 @@ static inline void indirect_branch_prediction_barrier(void)
+ 
+ /* The Intel SPEC CTRL MSR base value cache */
+ extern u64 x86_spec_ctrl_base;
+-extern u64 x86_spec_ctrl_current;
++DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
+ extern void write_spec_ctrl_current(u64 val, bool force);
+ extern u64 spec_ctrl_current(void);
+ 

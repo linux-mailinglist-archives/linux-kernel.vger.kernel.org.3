@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCD6573AAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48AC573AB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbiGMP4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S236562AbiGMP6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiGMP4R (ORCPT
+        with ESMTP id S236729AbiGMP6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:56:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30B14F6AB;
-        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id i8-20020a17090a4b8800b001ef8a65bfbdso4310173pjh.1;
-        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
+        Wed, 13 Jul 2022 11:58:02 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC9850058
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:58:01 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id dn9so20614959ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jKAUXPLBrNevdC9OiqEXv5Wg4h8+PAmTG/9uIdwRKNA=;
-        b=aBupZpHtg8XwLvVKFAXLuBmAAWVRVghrIn9ZNgreYANgaU0v/qCvdDEIc9xI6H79sA
-         NZ9TpP6vHRQfG0DdPuQH99iG2Or/tN6/USEXUEs94hwwJ9T1Ot0kdHuLklolhFTu1Vu9
-         cKQ6OXNFiSNTWdoo8iVDnSAn3mrj0hegvaqHgYgwIMTY9yydRqsECiJY8UoWpnWVLHDN
-         FcDZGik/5xc59Zm0aKoHj/wl6bramtnIqRkQpLRP/6gZglOCfL9cKd2/o7COVFIMV6Dd
-         Uj8Nj+baniaDNUtmjMqcutA/zmMl6wqmPchds9edCbIIq6IseZdbXIU74IjSddrpobOK
-         BVYA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5/Vj1VhdY5NW6ohPgoVwI8+jslVLxU7aofSuN+zvekk=;
+        b=oUXldJ8ZPFnIrUN6j4zP6t/M60/eQCX1n+2O4QAs8x351TwUOianbZzOD/qVR5Xbc1
+         VgSyE5rPJF83VQ4d0XEI/Dg0M49+YbqXCJDEM1JqYcaQBRedJVat7BoSiFToqHh60rwm
+         6mQxbKhfNx7JevSsNTK0eoU3OPJfhmJvL0syA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jKAUXPLBrNevdC9OiqEXv5Wg4h8+PAmTG/9uIdwRKNA=;
-        b=Y0bw9kq1lRhusmzgx1Vf5LWmHFXydV5++nTTjED6ZZtM24KrDsVQEgBOFmz4MS3odt
-         Zvhmju0AGGWu2Uk80LNukVti+0+vLKW3kYKCwDgixlDNeciYQ0tT//Uztz2VInm1Lie0
-         ovL/YhpGDf2BqT1Y0ZATdbvjDtDO7oMwf3A/pZHgqOYFDOLEwrAGTQYyKZwwIkCb6XKK
-         9fjJ/3FC+ZoOhHr1yoWhQZk211TDfuE84fztU1WkDIM1EbW/YhdIQTg6mIJtjB6hYYlc
-         Gj41bpbdj2TFCOrjTjI+qHLlyaIRS6MApLXGl/3a/5qkNPu8qlFl5PpcqMUCCYtKjH51
-         o05Q==
-X-Gm-Message-State: AJIora/iN7oz30snwaLnF/jCHgSOBd/MpPhZjRrBCA97k/x+5M42wJ09
-        Id44Alw1uY1JMWsIMQceDrP4tjpx7rlfmA==
-X-Google-Smtp-Source: AGRyM1uztx7H1jzf5s+TTvAW1XBZNKgEQoYqHpqn6WNTf/pSYOGA8xIgngVh0T1SEhc5aR5zpYFJEA==
-X-Received: by 2002:a17:902:7106:b0:16c:6c95:6153 with SMTP id a6-20020a170902710600b0016c6c956153mr3706590pll.166.1657727776276;
-        Wed, 13 Jul 2022 08:56:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b001678ce9080dsm8962079pla.258.2022.07.13.08.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:56:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 08:56:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v16 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Message-ID: <20220713155613.GA2194204@roeck-us.net>
-References: <20220712090534.2783494-1-xji@analogixsemi.com>
- <0bd85140-f006-8b29-0a43-500733f1654c@roeck-us.net>
- <Ys16lEvhVSSSRMP7@kroah.com>
- <20220713062845.GB2788915@anxtwsw-Precision-3640-Tower>
- <Ys5oBTeIcLjf7gnX@kroah.com>
- <20220713064818.GA2789090@anxtwsw-Precision-3640-Tower>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5/Vj1VhdY5NW6ohPgoVwI8+jslVLxU7aofSuN+zvekk=;
+        b=lTaxTL56Gvuk/Ep23EdWQ5njqYoZqa2zy1QktRni8FdgoxMUcz+annHZo9Jled91+i
+         j/OBFRRCXTCEqTHuKEvuY3siXAiQqf5MxUb8tT7hFhadyyhlljhS/6NSmd3VaJNmUjJA
+         1cyGXREgWdbn9FybKb4076u1fw8arFUTvWUPYPI8GRazzXr/fGt17sgu6tQZmoKetPLO
+         I5N76yFuqg06FAuvYWg1RHcR46DVmdR1+i6E5Dj8JTTKt0ns7weDYMoP11drqvs0txWB
+         sz9MPN9O5QaXflPtDIGx3nUjN7Z9uUUeUnO69Isn05NHph5uUhqrn62rEcUXBFpUT7fw
+         9qIg==
+X-Gm-Message-State: AJIora/jWhhxvlhWdDYyke0YYmstMMdzBtfWj6cG7nTRAfnM2DuOcDsE
+        lqauytQ9920sJfR4B+ZU+976n6T/kVhJcZ+Z
+X-Google-Smtp-Source: AGRyM1vjUbRP82TvnxQQR2qARY5tr7GOaAJ7YQceD0LEyRM5FbVS9ZODS6LIal/7zlLN2o/X+450Fg==
+X-Received: by 2002:a17:907:2855:b0:72b:67b7:2c28 with SMTP id el21-20020a170907285500b0072b67b72c28mr4060623ejc.331.1657727879635;
+        Wed, 13 Jul 2022 08:57:59 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id c5-20020aa7c745000000b0043a706d3a48sm8243625eds.76.2022.07.13.08.57.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 08:57:58 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id b26so16134493wrc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:57:57 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr4002688wrr.617.1657727877212; Wed, 13
+ Jul 2022 08:57:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713064818.GA2789090@anxtwsw-Precision-3640-Tower>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220712150219.20539-1-krzysztof.kozlowski@linaro.org> <20220712150219.20539-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220712150219.20539-4-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 13 Jul 2022 08:57:45 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VPHwkKUjanLtaM+cXdp+VGPExJ_XDe=-O8j=ayGNtnVQ@mail.gmail.com>
+Message-ID: <CAD=FV=VPHwkKUjanLtaM+cXdp+VGPExJ_XDe=-O8j=ayGNtnVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] mmc: sdhci-msm: drop redundant of_device_id entries
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 02:48:18PM +0800, Xin Ji wrote:
-> On Wed, Jul 13, 2022 at 08:36:53AM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Jul 13, 2022 at 02:28:45PM +0800, Xin Ji wrote:
-> > > On Tue, Jul 12, 2022 at 03:43:48PM +0200, Greg Kroah-Hartman wrote:
-> > > > On Tue, Jul 12, 2022 at 06:31:22AM -0700, Guenter Roeck wrote:
-> > > > > On 7/12/22 02:05, Xin Ji wrote:
-> > > > > > USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-> > > > > > and a port controller (TCPC) - may require that the driver for the PD
-> > > > > > controller accesses directly also the on-chip port controller in some cases.
-> > > > > > 
-> > > > > > Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
-> > > > > > 
-> > > > > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > > > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > > > 
-> > > > > > ---
-> > > > > > V9 -> V10: Rebase on the latest code
-> > > > > > V8 -> V9 : Add more commit message
-> > > > > > V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
-> > > > > 
-> > > > > We are now at v16. The change log has not been updated since v10,
-> > > > > making it all but worthless.
-> > > > 
-> > > > It's also already in my tree for a while, so I have no idea what this is
-> > > > being generated against :(
-> > > Hi all, I'm little confused, do I need update change log from v11 to
-> > > v16? There is no changes since v10.
-> > 
-> > I'm confused, why are you sending a patch over that is already in my
-> > tree and in linux-next?  You got an email saying it was merged, see
-> > commit 7963d4d71011 ("usb: typec: tcpci: move tcpci.h to
-> > include/linux/usb/").
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> Hi greg k-h, sorry for that, this serial has 3 patches, so I just think
-> need update all 3 patches in each upstream.
+Hi,
 
-If you resend patches as part of a series, please explain in the change
-log that this patch was unchanged.
+On Tue, Jul 12, 2022 at 8:02 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> This reverts three commits:
+> 1. Revert "mmc: sdhci-msm: Add compatible string check for sdx65"
+>    This reverts commit 953706844f0f2fd4dc6984cc010fe6cf51c041f2.
+>
+> 2. Revert "mmc: sdhci-msm: Add compatible string check for sm8150"
+>    This reverts commit 5acd6adb65802cc6f9986be3750179a820580d37.
+>
+> 3. Revert "mmc: sdhci-msm: Add SoC specific compatibles"
+>    This reverts commit 466614a9765c6fb67e1464d0a3f1261db903834b.
+>
+> The oldest commit 466614a9765c ("mmc: sdhci-msm: Add SoC specific
+> compatibles") did not specify what benefits such multiple compatibles
+> bring, therefore assume there is none.  On the other hand such approach
+> brings a lot of churn to driver maintenance by expecting commit for
+> every new compatible, even though it is already covered by the fallback.
+>
+> There is really no sense in duplicating of_device_id for each
+> variant, which is already covered by generic compatible fallback
+> qcom,sdhci-msm-v4 or qcom,sdhci-msm-v5.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Guenter
+Personally, I would have taken the extra step and added a comment in
+the code to prevent someone from doing this again. Maybe like this:
+
+/*
+ * In the device tree, all boards are required to have _two_ compatible
+ * strings listed: a SoC-specific one followed by a more generic one.
+ * Normally we can just rely on the generic string, but we always
+ * include both so that if we ever find a bug on a specific SoC that
+ * we need to workaround (like in sdm845/sc7180) that we can quickly
+ * work around it without any changes to the dts.
+ */
+
+In any case:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

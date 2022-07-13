@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7F3573F63
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75D4573F66
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbiGMWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S237105AbiGMWHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237253AbiGMWF5 (ORCPT
+        with ESMTP id S232026AbiGMWHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:05:57 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F0945050
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:05:56 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so351847pjf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ra9hdzLCWwjPPBDp9cn53pB2Ci+cucubpWeaOQOj3nY=;
-        b=Gqwc3+E6w0EUF/ryvZOM4ovQz3n3gcYqACQv2dejPsJfA5O/wU8nGEQUcv61RAF+cb
-         hLl/cPYFWMfQCVdBsDh6NhSQWFAwOX8Vzp7WHXgVlMcXiSnFD5P5ZzxZh8QG5d2xHvML
-         XMB2H3z/CnPx5yyHH/mxTYWTjLppLYUzCxWY5yP5dgOvi3W/TnIjjEchOdsaW7R2yhsR
-         qXFwX9JnouBnIsaXd2fJHfUPY8wMNFKW7Z3oDBI4id2Z4vAU3i69EMRG958N2WGRYieX
-         VmkGpHLFCwAH5dkmV521bX0NiGRWhSmQFJjy3YB49acExMxjqrhUmNFEdW52xyjux/ol
-         apzw==
+        Wed, 13 Jul 2022 18:07:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A07D45074
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657750038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GNtNspQ7ufX/7l3qNBxVep1F3AGBAOu1ulHpdR7LRfc=;
+        b=eMH3fzrwLZvUtjEn+nUJCk5GQN3A2gsS2iZpt63Xlq3U2PqF70BeniCEWYGH1EAh0935j0
+        hJvVpXQ81ENa58uHv6/MQddOzsACnKO8Q01rIZltsT/yON7Wvb9Y06THLdGWK9FgOgzK+T
+        mF9fUnjqKSBstShar5GVHihUENM7q5U=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-342-6R_NDYMUNUOhDqWaPUWV9g-1; Wed, 13 Jul 2022 18:07:17 -0400
+X-MC-Unique: 6R_NDYMUNUOhDqWaPUWV9g-1
+Received: by mail-ot1-f70.google.com with SMTP id z4-20020a9d71c4000000b0061c59fd62e9so3306292otj.20
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ra9hdzLCWwjPPBDp9cn53pB2Ci+cucubpWeaOQOj3nY=;
-        b=poEX7U/9GcdwkgWbGSBjFB5nFlX+UdWiT6a2ieJP6F0X/mn5cNU9rQeaUjOSjkwTga
-         A0g9Ddv3kfBZkQypfYq8olwQszOdXPNBnEhE9yTKu1eroXhjoYM8n5yTjyd1iM89/c3B
-         pbJ5ct+hYqNbr8kltcDYesoDATXhAfNCdXyQUq0INXc8K6xkO96jKA+lZKJn52LJvOAN
-         Ysft+oy+yfzYEtz48AHVz2TVr2kzsAGqP1NKZeMWu5AZorNU7G6D86RjV4f8JECg1lLm
-         vz9k/7rVDFRS3uwzAza6p5gT6zd5qazLNH984bJoqvVqtdcyAfRvVUFnJghRwK6t8IO1
-         NIMg==
-X-Gm-Message-State: AJIora+ee1VAHUkQlkrP6mtDQFVzkiPq6h+CT9hhLxBvieWqDPX4TMZO
-        ZQk+3yX9XqKqzAsl0fYfJByMD7SxsdK5Wg==
-X-Google-Smtp-Source: AGRyM1v3IuZuzLMmogJuClkxEYuGp/WqF2V6GQmHWVJT2/8FMaDWSfVLQo+pCfmtMA2ZAHXPmlphXQ==
-X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr12406264pjb.164.1657749955684;
-        Wed, 13 Jul 2022 15:05:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mi9-20020a17090b4b4900b001ec84b0f199sm7050163pjb.1.2022.07.13.15.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 15:05:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 15:05:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Daniel Axtens <dja@axtens.net>
-Subject: Re: [PATCH] drm/amd/display: Add missing hard-float compile flags
- for PPC64 builds
-Message-ID: <20220713220553.GB32544@roeck-us.net>
-References: <20220618232737.2036722-1-linux@roeck-us.net>
- <584fc348-7a60-26a2-af61-9edc4f4830e4@amd.com>
- <CADnq5_NkVWqcxwLMBeskqpcSEYCEjUAK0hqvA_PAo7ACHKL2cA@mail.gmail.com>
- <6a026c9a-c4ee-deba-e028-4c0f478c1911@roeck-us.net>
- <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=GNtNspQ7ufX/7l3qNBxVep1F3AGBAOu1ulHpdR7LRfc=;
+        b=Tq7hFT0+xzu22t2TD/p7QPK6xYEII6Y5QedOBNWcnuJwB7fQ5ptg/Z0/n5FeKgcxPG
+         2ey0Q4WGVyHM9ICsFF+B2VliPd8r5YJkj/YWgW6SF6Mp6lS/mQbrnQ1p2Z64E2QLKL7b
+         7sLWL6F5UQhS1LYkYUiLqNm8rmPlgjrbfQpcgCRBxcba1YJ6mhR4/4tnX/DsqXzjLpe9
+         RqF/6o8jCzWOISqnqGwBaUS2r/B6BKX6+jaAFrYCELtUi0K/mZQmnOZlp3pS1TXltFZW
+         pcMP/tRLmz2Fo5i3OaFo+YgRDPMvU0qgZuNug0jFFM4DTfUTR9tzNnEnjzDYd+M73nvA
+         JIvw==
+X-Gm-Message-State: AJIora/esmkIUNovvv13r82NDyywjFAulcZdqTaYWuUYCSG3OCl8Yt3W
+        8pGp4SpJFvdQfh2f4FtfpZDuJFyNdLgBsScoWNEASgWEO6/ICDabeB5AKMiCtwBApVEm6LTX6tE
+        7xF5rPykSm4nYiSTqOftLqwJ1
+X-Received: by 2002:a05:6808:140d:b0:339:e00e:afb1 with SMTP id w13-20020a056808140d00b00339e00eafb1mr2825668oiv.81.1657750036213;
+        Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uEvFxl9rP9NFV64gFM86/GXbJZARS8v3Lv8M/gTEDUsgw0YivueIDmJYq2iS+M92gnYHJu7A==
+X-Received: by 2002:a05:6808:140d:b0:339:e00e:afb1 with SMTP id w13-20020a056808140d00b00339e00eafb1mr2825658oiv.81.1657750036026;
+        Wed, 13 Jul 2022 15:07:16 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bu27-20020a0568300d1b00b0061b8653b0c9sm34031otb.22.2022.07.13.15.07.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 15:07:15 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] Documentation: fpga: dfl: add PCI Identification
+ documentation
+To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com
+References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
+ <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <8180679b-1d71-a527-74f2-d77460ea9902@redhat.com>
+Date:   Wed, 13 Jul 2022 15:07:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnq5_OrxMMkazXEPHeZXp_bV890=r21DRx2QsqLXUFj4t8aYg@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220707150549.265621-2-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 05:20:40PM -0400, Alex Deucher wrote:
-[ ... ]
-> > The problem is not the FPU operations, but the fact that soft-float
-> > and hard-float compiled code is linked together. The soft-float and
-> > hard-float ABIs on powerpc are not compatible, so one ends up with
-> > an object file which is partially soft-float and partially hard-float
-> > compiled and thus uses different ABIs. That can only create chaos,
-> > so the linker complains about it.
-> 
-> I get that, I just don't see why only DCN 3.1.x files have this
-> problem.  The DCN 2.x files should as well.
-> 
 
-No idea. Maybe ppc:allmodconfig only builds DCN 3.1.x, and other builds
-don't use -Werror and the warning is ignored.
+On 7/7/22 8:05 AM, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>
+> Add documentation on identifying FPGA based PCI cards prompted
+> by discussion on the linux-fpga@vger.kernel.org mailing list.
+>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v3: Add url to page tracking PCI ID information for DFL based cards.
+>
+> v2: Introduced in v2.
+> ---
+>   Documentation/fpga/dfl.rst | 21 +++++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+>
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..5144775b860a 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -507,6 +507,27 @@ ids application.
+>   https://github.com/OPAE/dfl-feature-id
+>   
+>   
+> +PCI Device Identification
+> +================================
+> +Since FPGA based PCI cards can be reconfigured to a perform a completely
+> +new function at runtime, properly identifying such cards and binding the
+> +correct driver can be challenging. In many use cases, deployed FPGA based
+> +PCI cards are essentially static and the PCI Product ID and Vendor ID pair
+> +is sufficient to identify the card.  The DFL framework helps with the
+> +dynamic case of deployed FPGA cards changing at run time by providing
+> +more detailed information about card discoverable at runtime.
+> +
+> +At one level, the DFL on a PCI card describes the function of the card.
+> +However, the same DFL could be instantiated on different physical cards.
+> +Conversely, different DFLs could be instantiated on the same physical card.
+> +Practical management of a cloud containing a heterogeneous set of such cards
+> +requires a PCI level of card identification. While the PCI Product ID and
+> +Vendor ID may be sufficient to bind the dfl-pci driver, it is expected
+> +that FPGA PCI cards would advertise suitable Subsystem ID and Subsystem
+> +Vendor ID values. Further PCI Product, Vendor, and Subsystem id tracking
+> +can be found at https://github.com/OPAE/dfl-feature-id/blob/main/dfl-pci-ids.rst.
 
-Guenter
+This link looks good.
+
+It may be good to be explicit and say which device(s) needs to be 
+specified by the quadruple.
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+> +
+> +
+>   Location of DFLs on a PCI Device
+>   ================================
+>   The original method for finding a DFL on a PCI device assumed the start of the
+

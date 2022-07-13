@@ -2,99 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD13572C3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388FD572C8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiGMESA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
+        id S233926AbiGME3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiGMERw (ORCPT
+        with ESMTP id S233941AbiGME2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:17:52 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF985D9E16;
-        Tue, 12 Jul 2022 21:17:51 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id va17so17806469ejb.0;
-        Tue, 12 Jul 2022 21:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=MAwaURqcRpusNRl3AIB3mDLAkAjWXQjGjCMsVfkKjiM=;
-        b=SHAihmGvWkE8qpEv25473rAGVNxGa61bY8JpoBaWp+8MeHkBmpu1xaKFY4tD1zGApG
-         HVtsvWZIVpYhHUlpGPhYS2VSECPp50yZaeq1+fAV/JQn493YrOb0G3YjRIQ5x5kwByoc
-         ytPA/ogIvjCE9VQaYcV5eWpv6EwC81oPLVgFZ0yc0dfYIDbI80HTZcv65W6iZT58+5u6
-         +7AlQnsR11xU8Q1KEu5ZRP8sBf32dKlm1QvtILh2kkX6BDqwaRHK4MP+4eXoRMnbqDV+
-         eI8vTDzz6mJTU+a0//MHiAzSSEmjuUL004Xgl1o1pyyMAIOxoq4Mk7Jw+xicTMAH+xZu
-         fwIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=MAwaURqcRpusNRl3AIB3mDLAkAjWXQjGjCMsVfkKjiM=;
-        b=1Yt4UY/sEa8+Hm8VrIOG7ii912Vs7VDwT1fjOBgQ92fHPXQd5YEYqEhnpCLLM9/34m
-         /ey6nCtqXmDW9sIclhe+Uku2V8NGu5L0GNhEJCDHy18Y+UC0c+GqFT27OVgd0dxVRbqn
-         gxhFn3LuAa3gpbq+E6Pzql3PT/Wv8nPRprTMQ8sCMld4jgSLua8E/4DWMwNCLJk9D8tK
-         RrCOAwe6xULaNeAHmlxiW19m26B+xf+snXiYTwkFOYqeo8/zYRHrj+5uoceIhIDZwE8b
-         aJLxLBY0NlmQLmgiuJc2rbUfCIKR13DQcD8Ili8UXs3rNrX1psZIi71rsP08dMye7mTx
-         E9OA==
-X-Gm-Message-State: AJIora++sEGBlS0JiUZkyZ+YbJ6OHzOnx06kIs1gifRkNEFpRD6LtZyk
-        LywE6vWyd4nPkqDfAJ86HTQ=
-X-Google-Smtp-Source: AGRyM1vC7+7aeJHF+wLpsnF+8rObPlM9ui7JrN3XWlslx+0t/pBXJyqA6DX74NdxdrAjc/baJm81MA==
-X-Received: by 2002:a17:907:6091:b0:72b:88c5:2a2f with SMTP id ht17-20020a170907609100b0072b88c52a2fmr1384552ejc.715.1657685870242;
-        Tue, 12 Jul 2022 21:17:50 -0700 (PDT)
-Received: from felia.fritz.box (200116b826b4e8009cf80f75265d524b.dip.versatel-1u1.de. [2001:16b8:26b4:e800:9cf8:f75:265d:524b])
-        by smtp.gmail.com with ESMTPSA id kw11-20020a170907770b00b006f3ef214e27sm4539772ejc.141.2022.07.12.21.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 21:17:49 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH RESEND] MAINTAINERS: drop entry to removed file in ARM/RISCPC ARCHITECTURE
-Date:   Wed, 13 Jul 2022 06:17:27 +0200
-Message-Id: <20220713041727.8087-1-lukas.bulwahn@gmail.com>
+        Wed, 13 Jul 2022 00:28:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D76F222BE;
+        Tue, 12 Jul 2022 21:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657686524; x=1689222524;
+  h=from:to:cc:subject:date:message-id;
+  bh=6SiSvwYpSrcAiIBIfoldM1RBHvBHBHxZggPTU5mW53M=;
+  b=XH0jrJXERupBLLSllgJndPE6uXYc1eANMQOH0/GOn9KINjtT1LfBEJ71
+   +4RgW5HTQ6uKWCzEx0JMLTvEPJYURvSibxyDhKNHXdeQHf0nqphyPPO9p
+   3wDL3Oty3We6DjPznudn0hDHiLLQ/5kgnTLZR1LXcKivKN6Lmr6suAtjE
+   GTXMQHK1Dvu0YUYFh2+s4u1xFw6ZsZSwclfMECGYbArM+n2PU/Ig04Fsj
+   n0Rkuq62MqOMjkhERF2y7VtR/e9F66mlOq73t/lNXf4ClW5c2ZF2MRxHz
+   5+eQou2K3jN2eoW4dlZSOQOZfxwTMH/759mcBAT0NWbHh3iy9VXfRpowE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264894376"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="264894376"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 21:28:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="570463201"
+Received: from srikandan-ilbpg12.png.intel.com ([10.88.229.69])
+  by orsmga006.jf.intel.com with ESMTP; 12 Jul 2022 21:28:40 -0700
+From:   nandhini.srikandan@intel.com
+To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
+        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
+        rashmi.a@intel.com
+Subject: [PATCH v6 0/4] Add support for Intel Thunder Bay SPI controller
+Date:   Wed, 13 Jul 2022 12:22:19 +0800
+Message-Id: <20220713042223.1458-1-nandhini.srikandan@intel.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c1fe8d054c0a ("ARM: riscpc: use GENERIC_IRQ_MULTI_HANDLER") removes
-arch/arm/include/asm/hardware/entry-macro-iomd.S, but missed to adjust
-MAINTAINERS.
+From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+                                                                                   
+This patch enables support for DW SPI on Intel Thunder Bay.                        
+This patch set also enables master mode for latest Designware SPI versions.        
+                                                                                   
+Patch 1: Fixed dw_spi_ip_is macro with the missing underscore.                     
+Patch 2: DW SPI DT bindings for Intel Thunder Bay SoC.                             
+Patch 3: Adds master mode support for Designware SPI controller.                   
+Patch 4: Adds support for Designware SPI on Intel Thunder Bay SoC.                 
+                                                                                   
+The driver is tested on Keem Bay and Thunder Bay evaluation board                  
+                                                                                   
+Summary: 
+Changes from v5:
+1) Added changelog for Patch 1.
+2) Added Acked-by and Reviewed-by to applicable patches. 
+3) There are no other changes other than changelog in any of the patches.
+                                                                          
+Changes from v4:                                                                   
+1) Reordered master mode selection patch and Thunder Bay support patch.            
+2) The typo fix for macro dw_spi_ip_is is made into seperate patch.                
+                                                                                   
+Changes from v3:                                                                   
+1) Dropped SSTE support in this patch.                                             
+2) Rebased to the latest code.                                                     
+                                                                                   
+Changes from v2:                                                                   
+1) SSTE support made using dt and created seperate patches.                        
+2) SPI controller master mode selection made common to all DW SPI controllers.  
+3) Using a common init function for both keem bay and thunder bay.                 
+                                                                                   
+Changes from v1:                                                                   
+1) Designware CR0 specific macros are named in a generic way.                      
+2) SPI CAP macros are named in generic way rather than naming project specific.
+3) SPI KEEM BAY specific macros are replaced by generic macros.                 
+4) Resued the existing SPI deassert API instead of adding another reset.
 
-Drop the file entry to the removed file in ARM/RISCPC ARCHITECTURE.
+Changes in patches:                                                             
+Patch 1:                                                                        
+--------                                           
+Changes from v5:
+1) Added changelog
+                             
+Changes from v4:                                                                
+1) Newly introduced in v5 as seperate patch.                                    
+                                                                                
+Patch 2:                                                                        
+--------                                                                        
+Changes from v5/v4/v3/v2/v1:                                                       
+1) No change in this patch.                                                     
+                                                                                
+                                                                                
+Patch 3:                                                                        
+--------        
+Changes from v5:
+1) No changes.
+                                                                
+Changes from v4:                                                                
+1) Reordered the patch.                                                         
+2) Setting CTRLR0 BIT31 is done conditionally for 1.02a version.                
+                                                                                
+Changes from v3:                                                                
+1) Corrected dw_spi_ip_is macro with the missing underscore.                    
+2) Setting CTRLR0 BIT31 without any condition check as in older version of      
+   DW SPI controller this bit is reserved.                                      
+                                                                                
+Changes from v2/v1:                                                             
+1)Newly introduced in v3 to make master mode selection as seperate patch.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-PATCH v1: https://lore.kernel.org/linux-arm-kernel/20220311130957.17884-1-lukas.bulwahn@gmail.com/
+Patch 4:                                                                        
+--------                                                                        
+Changes from v5:
+1) No changes. 
 
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+Changes from v4:                                                                
+1) Reordered the patch.                                                         
+                                                                                
+Changes from v3:                                                                
+1) No changes.                                                                  
+                                                                                
+Changes from v2:                                                                
+1) Init function is made common for Keem Bay and Thunder Bay.                   
+                                                                                
+Thanks & Regards,                                                               
+Nandhini 
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b5aeaddc9539..a783ef8f58a3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2652,7 +2652,6 @@ M:	Russell King <linux@armlinux.org.uk>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- W:	http://www.armlinux.org.uk/
--F:	arch/arm/include/asm/hardware/entry-macro-iomd.S
- F:	arch/arm/include/asm/hardware/ioc.h
- F:	arch/arm/include/asm/hardware/iomd.h
- F:	arch/arm/include/asm/hardware/memc.h
+Nandhini Srikandan (4):
+  spi: dw: Fix IP-core versions macro
+  dt-bindings: spi: Add bindings for Intel Thunder Bay SOC
+  spi: dw: Add support for master mode selection for DWC SSI controller
+  spi: dw: Add support for Intel Thunder Bay SPI controller
+
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml    |  2 ++
+ drivers/spi/spi-dw-core.c                           |  5 +++--
+ drivers/spi/spi-dw-mmio.c                           |  8 ++++----
+ drivers/spi/spi-dw.h                                | 13 +++----------
+ 4 files changed, 12 insertions(+), 16 deletions(-)
+
 -- 
 2.17.1
 

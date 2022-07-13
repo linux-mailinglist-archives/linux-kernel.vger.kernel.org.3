@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0B5573739
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF5573736
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiGMNSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S234676AbiGMNSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbiGMNSC (ORCPT
+        with ESMTP id S236239AbiGMNSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:18:02 -0400
+        Wed, 13 Jul 2022 09:18:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FF0219A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A966335;
         Wed, 13 Jul 2022 06:18:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2077B81F4A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D17C8B81F47;
         Wed, 13 Jul 2022 13:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9188AC385A9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B415C3411E;
         Wed, 13 Jul 2022 13:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1657718277;
-        bh=v2rWwBR0NCKPMGfpi9exx5JseAaw+qcoUF0daZnzPGY=;
+        bh=Qy6yHvMjioaqtml26SqeZHeH0fqqQeYbqmn0WdSCpMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tOSwwI6kvtQiLm/8VEcsLYKGjIQXWthamXQaSyVmOptXDI6gNujo3rjAQ+YiYBCPG
-         /zARuEkrEFN5J4aEVYR2eur9ro7+EeATQvb9Cgd35cH8XYDvKxs+t0ZTX4HjybEFpF
-         yQn68HjEunONOQhtcPyZAtBU93CK997mVaSzvqyywCyV7S99T+0Zztv0u+GvEnf0Gz
-         D1zZqOw0XyuRlw/CZ3LtXXWV3fz6cUX7vX4asP9LoyppA+fH9fIdqzp/VjkVeSzT9e
-         kz3hX4h6yG/D++eWdM/x+EDc/l+BoidOkQ6xZE9fsS/U06hNHFrH5tfXlCJShVXW+V
-         2yGxxQLEXs7Xg==
+        b=Tlmw3ojyB+u2nro1hvNvK2uO+9xmEp5xM3md+fvD98RIR/9CfcwQ++f2m9qjCcmkr
+         UhPhFiJNRLJkioWuZuSHzK0nsS6/MQLpdtVzGC6t4G/QCX5PZL45pO+jNKaw0CfKGW
+         Z25oMMB8SROhtipH3z9pbxrqLw9dGt7rKhVblJuEacUD6FerJpS05MljTWfo9pfmsv
+         yNIrmbnnj53k035FsyBMurAZNXapxsW9eOuc57PxrkEMCEkObvoMQWQZWhBTwAWdcy
+         7YuDsidYOQ3PK7pju3/bA+NruNvPKDn6i1btfKlFTCjYA4rXGA/NSAYbwSkQ1DVPwE
+         X8UfBZk7XpScw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oBcFd-0007gM-C2; Wed, 13 Jul 2022 15:18:01 +0200
+        id 1oBcFd-0007gP-FK; Wed, 13 Jul 2022 15:18:01 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4/7] arm64: dts: qcom: sc8280xp: fix USB clock order
-Date:   Wed, 13 Jul 2022 15:13:37 +0200
-Message-Id: <20220713131340.29401-5-johan+linaro@kernel.org>
+Subject: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
+Date:   Wed, 13 Jul 2022 15:13:38 +0200
+Message-Id: <20220713131340.29401-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713131340.29401-1-johan+linaro@kernel.org>
 References: <20220713131340.29401-1-johan+linaro@kernel.org>
@@ -65,67 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the USB controller clock order and naming so that they match the
-devicetree binding.
+The two single-port SC8280XP USB controllers do not have an hs_phy_irq
+interrupt. Instead they have a pwr_event interrupt which is distinct
+from the former and not yet supported by the driver.
 
-Note that the driver currently simply enables all clocks in the order
-that they are specified in the devicetree. Reordering the clocks as per
-the binding means that the only explicit ordering constraint found in
-the vendor driver, that cfg_noc should be enabled before the core_clk,
-is now honoured.
+Fix the USB node interrupt names so that they match the devicetree
+binding.
 
 Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 285a9828c250..45cc7d714fd2 100644
+index 45cc7d714fd2..4a7aa9992f3a 100644
 --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1855,16 +1855,16 @@ usb_0: usb@a6f8800 {
- 			#size-cells = <2>;
- 			ranges;
+@@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
+ 					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+ 					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+ 					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+-					  "dm_hs_phy_irq", "ss_phy_irq";
++			interrupt-names = "pwr_event",
++					  "dp_hs_phy_irq",
++					  "dm_hs_phy_irq",
++					  "ss_phy_irq";
  
--			clocks = <&gcc GCC_USB30_PRIM_MASTER_CLK>,
--				 <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-+			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-+				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
- 				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
--				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
- 				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
-+				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
- 				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
--			clock-names = "core", "iface", "bus_aggr", "utmi", "sleep",
-+			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
- 				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+ 			power-domains = <&gcc USB30_PRIM_GDSC>;
  
- 			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-@@ -1905,16 +1905,16 @@ usb_1: usb@a8f8800 {
- 			#size-cells = <2>;
- 			ranges;
+@@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
+ 					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
+ 					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
+ 					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+-					  "dm_hs_phy_irq", "ss_phy_irq";
++			interrupt-names = "pwr_event",
++					  "dp_hs_phy_irq",
++					  "dm_hs_phy_irq",
++					  "ss_phy_irq";
  
--			clocks = <&gcc GCC_USB30_SEC_MASTER_CLK>,
--				 <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-+			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-+				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
- 				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
--				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
- 				 <&gcc GCC_USB30_SEC_SLEEP_CLK>,
-+				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
- 				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
--			clock-names = "core", "iface", "bus_aggr", "utmi", "sleep",
-+			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
- 				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
+ 			power-domains = <&gcc USB30_SEC_GDSC>;
  
- 			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
 -- 
 2.35.1
 

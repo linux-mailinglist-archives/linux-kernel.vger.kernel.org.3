@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1725573805
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78158573809
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbiGMNx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S236357AbiGMNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbiGMNw7 (ORCPT
+        with ESMTP id S236309AbiGMNx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:52:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E63710552
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:52:56 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBcn6-0007Lb-9G; Wed, 13 Jul 2022 15:52:36 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBcn5-000it0-54; Wed, 13 Jul 2022 15:52:35 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oBcn4-004wNy-DQ; Wed, 13 Jul 2022 15:52:34 +0200
-Date:   Wed, 13 Jul 2022 15:52:30 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Message-ID: <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <20220712221715.GT1823936-robh@kernel.org>
- <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
+        Wed, 13 Jul 2022 09:53:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C120182;
+        Wed, 13 Jul 2022 06:53:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1C5DF200C2;
+        Wed, 13 Jul 2022 13:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1657720404; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=DM39RGb67pC/dQ+Mn9Ekz27AAhpc6Ju3ivYPtP9YBvs=;
+        b=PKsAJZoJfkrCh5hlKucZ3+P2/L0LKquOqhJZlrEKdWTcV8r76nL07sOLRqnsNZGxze5+vi
+        rJmxMeIUwbdEIUKqqBpoKbEhQEJJdbgg9Gi9hF0ii5wA59hsnxdqbot1gMi31AeACQhp7s
+        9GFsn8IUMy7Qulz/jfF1ExTp7YNuBYM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE89C13754;
+        Wed, 13 Jul 2022 13:53:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9UExLVPOzmLgUAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 13 Jul 2022 13:53:23 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, stable@vger.kernel.org,
+        Jan Beulich <jbeulich@suse.com>
+Subject: [PATCH v2] xen/netback: avoid entering xenvif_rx_next_skb() with an empty rx queue
+Date:   Wed, 13 Jul 2022 15:53:22 +0200
+Message-Id: <20220713135322.19616-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3hofxsieqbcumnqk"
-Content-Disposition: inline
-In-Reply-To: <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+xenvif_rx_next_skb() is expecting the rx queue not being empty, but
+in case the loop in xenvif_rx_action() is doing multiple iterations,
+the availability of another skb in the rx queue is not being checked.
 
---3hofxsieqbcumnqk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This can lead to crashes:
 
-On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
-> On 12/07/2022 23:17, Rob Herring wrote:
-> > On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
-> > > The dwc pwm controller can be used in non-PCI systems, so allow
-> > > either platform or OF based probing.
-> > >=20
-> > > Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> > > ---
-> > >   .../devicetree/bindings/pwm/pwm-synposys.yaml | 40 ++++++++++++++
-> >=20
-> > Use compatible string for filename.
->=20
-> ok, will fix.
->=20
-> > >   drivers/pwm/Kconfig                           |  5 +-
-> > >   drivers/pwm/pwm-dwc.c                         | 53 ++++++++++++++++=
-+++
-> > >   3 files changed, 96 insertions(+), 2 deletions(-)
-> > >   create mode 100644 Documentation/devicetree/bindings/pwm/pwm-synpos=
-ys.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/pwm/pwm-synposys.yaml =
-b/Documentation/devicetree/bindings/pwm/pwm-synposys.yaml
-> > > new file mode 100644
-> > > index 000000000000..38ac0da75272
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/pwm/pwm-synposys.yaml
-> > > @@ -0,0 +1,40 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +# Copyright (C) 2022 SiFive, Inc.
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/pwm/pwm-synposys.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Synopsys PWM controller
-> > > +
-> > > +maintainers:
-> > > +   - Ben Dooks <ben.dooks@sifive.com>
-> > > +
-> > > +properties:
-> > > +  "#pwm-cells":
-> > > +    description: |
-> > > +      See pwm.yaml in this directory for a description of the cells =
-format.
-> >=20
-> > pwm.yaml doesn't define how many cells. You need to. And you don't need
-> > generic descriptions.
->=20
->  "#pwm-cells":
->     const: 1
->=20
-> should be sufficient then?
+[40072.537261] BUG: unable to handle kernel NULL pointer dereference at 0000000000000080
+[40072.537407] IP: xenvif_rx_skb+0x23/0x590 [xen_netback]
+[40072.537534] PGD 0 P4D 0
+[40072.537644] Oops: 0000 [#1] SMP NOPTI
+[40072.537749] CPU: 0 PID: 12505 Comm: v1-c40247-q2-gu Not tainted 4.12.14-122.121-default #1 SLE12-SP5
+[40072.537867] Hardware name: HP ProLiant DL580 Gen9/ProLiant DL580 Gen9, BIOS U17 11/23/2021
+[40072.537999] task: ffff880433b38100 task.stack: ffffc90043d40000
+[40072.538112] RIP: e030:xenvif_rx_skb+0x23/0x590 [xen_netback]
+[40072.538217] RSP: e02b:ffffc90043d43de0 EFLAGS: 00010246
+[40072.538319] RAX: 0000000000000000 RBX: ffffc90043cd7cd0 RCX: 00000000000000f7
+[40072.538430] RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffc90043d43df8
+[40072.538531] RBP: 000000000000003f R08: 000077ff80000000 R09: 0000000000000008
+[40072.538644] R10: 0000000000007ff0 R11: 00000000000008f6 R12: ffffc90043ce2708
+[40072.538745] R13: 0000000000000000 R14: ffffc90043d43ed0 R15: ffff88043ea748c0
+[40072.538861] FS: 0000000000000000(0000) GS:ffff880484600000(0000) knlGS:0000000000000000
+[40072.538988] CS: e033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[40072.539088] CR2: 0000000000000080 CR3: 0000000407ac8000 CR4: 0000000000040660
+[40072.539211] Call Trace:
+[40072.539319] xenvif_rx_action+0x71/0x90 [xen_netback]
+[40072.539429] xenvif_kthread_guest_rx+0x14a/0x29c [xen_netback]
 
-I would expect a value of (at least) 2 or (better) 3.
+Fix that by stopping the loop in case the rx queue becomes empty.
 
-Best regards
-Uwe
+Cc: stable@vger.kernel.org
+Fixes: 98f6d57ced73 ("xen-netback: process guest rx packets in batches")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Paul Durrant <paul@xen.org>
+---
+V2:
+- modified patch title (Jan Beulich)
+- added Fixes: (Jan Beulich)
+---
+ drivers/net/xen-netback/rx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+diff --git a/drivers/net/xen-netback/rx.c b/drivers/net/xen-netback/rx.c
+index dbac4c03d21a..a0335407be42 100644
+--- a/drivers/net/xen-netback/rx.c
++++ b/drivers/net/xen-netback/rx.c
+@@ -495,6 +495,7 @@ void xenvif_rx_action(struct xenvif_queue *queue)
+ 	queue->rx_copy.completed = &completed_skbs;
+ 
+ 	while (xenvif_rx_ring_slots_available(queue) &&
++	       !skb_queue_empty(&queue->rx_queue) &&
+ 	       work_done < RX_BATCH_SIZE) {
+ 		xenvif_rx_skb(queue);
+ 		work_done++;
+-- 
+2.35.3
 
---3hofxsieqbcumnqk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLOzhsACgkQwfwUeK3K
-7Am62Qf+L9AW+vafE1WIr4bBIe4Lm7ps4yWWhhUuZ+QOa9k+eiwk377vUZ0JOty4
-aobS23SPOM4gC+g5GERQZFShXLEHJDnEMlVj3+dXMfTlmQsxatoLc51Of9My4XS7
-1+SeH73rG2LrtTRr5AvmFM7dVxUsTZO5clWP3ROueytPiWSVyqs2ioFgCq6e1rlF
-xBLzOYCdXwi5CllVnC1znliuv5CcuO7eewSWX09ifeBFrp1EvYr5IxoPe4ZIg6Yz
-GFuZXIbPhAJZS/LFhrQNTAYLjzwz2xpBAA5BID9jeON9Uf0hqhtVnhtdsv3OFN7z
-TM+PdAFvbek87NuBqneOjFzZaDBVKA==
-=U4yZ
------END PGP SIGNATURE-----
-
---3hofxsieqbcumnqk--

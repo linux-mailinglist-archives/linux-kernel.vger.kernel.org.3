@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0275B573C0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D31573C11
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236426AbiGMRfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S236083AbiGMRjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiGMRfT (ORCPT
+        with ESMTP id S236209AbiGMRjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:35:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAAC2CCA5;
-        Wed, 13 Jul 2022 10:35:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F38561D0E;
-        Wed, 13 Jul 2022 17:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B7AC34114;
-        Wed, 13 Jul 2022 17:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657733717;
-        bh=HFYEMG5wmH1mdTjCQGIo+9rp7fPWoJyZUnWc3Tmd2sw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KZH39mymqASDm9q7u3QUhCZoUL+Xy0JxQwhNr+L/ru6UA4A62Xz2q9o/4KkwE5Afh
-         UJLM1p0KFFf6v7bRnUfh4vXa+ka3+H+jhcDFwR3isapLzjYSV/rY3Vt77RZZtQku0A
-         RqKc+KDtptHIrcsho28fHkXw4/MNky5HsK/qWHVtbyYxbWMvYepM8dfVLRG1eladHQ
-         y/yc5sO4hevdwpfw+ay2aic61o+ISvEe3zHgwh7SO8QdGQgsCerk5Alyr61XRT/mgs
-         7sgv8jAJI0FuCvBO5XQVosT14554IMlcoNxlWM7oMZwu0N8FIwOmJlyNKwOgt1+N8W
-         YiI92vMFWKEcg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: [PATCH] bpf, arm64: Mark dummy_tramp as global
-Date:   Wed, 13 Jul 2022 10:35:03 -0700
-Message-Id: <20220713173503.3889486-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Wed, 13 Jul 2022 13:39:05 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4763C2126B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:39:03 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31c89653790so120137577b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:39:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RD0GRH4Ql0YFFRlQ5WE7C4dx47duLZOd3i+Z4AO1DPM=;
+        b=65eBjroirebcZZM+EXzJz01FsZav20mYrG1Yh43n5ISRXLySVqv2uOFXWNhbcVS42X
+         hfGJWP9ah1JgWnblcUcCjhNDUUubVz8ow1UrWu1LDr8mJc27v1M4C4X5hITyx9FdXDuU
+         2FDYavHsKKsLp7YpMzBBpzpDQ3m+wv2jiZEZAblHPleIXmFdA/Q036Ii3PsrwwalpEuP
+         GW087rtAYOW9R/SoSKO0EulDKYi8cvn95Z2VseWuGEqkE0ETom1ho3sePrWNMvQQZWkR
+         1cNqk0m3RHSYFRf2k+HDfJIHCzZUsxweK/QWO0Jmu11Ddp/wEw10sasdNGnHXAhyZzkb
+         oF9A==
+X-Gm-Message-State: AJIora/3LyWkhgoJTOeTByo57Y8GY3Xy2s6B5xPsH1s+PsBaIsOiJ0Nn
+        priXDErkiVWuWnn/ugT8zQ9cmYSOqDfnDzy49BzxJfNY
+X-Google-Smtp-Source: AGRyM1s4gXeCWRoXNhtxbRUwfe+h4fflXmP7GIjzQVbWWOGK5bt8/DGvLyPhaJsXJeFMTc+CnqMHIcbg69MakuyRZuc=
+X-Received: by 2002:a81:cd6:0:b0:31d:72e3:8b81 with SMTP id
+ 205-20020a810cd6000000b0031d72e38b81mr5388854ywm.301.1657733942517; Wed, 13
+ Jul 2022 10:39:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220713170239.84362-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0gReYjq5uBFZMF_r=fthTB6M_JpyG07-WAs=d+BC0H_Yw@mail.gmail.com> <Ys7++n8ZsmTY6J6s@smile.fi.intel.com>
+In-Reply-To: <Ys7++n8ZsmTY6J6s@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Jul 2022 19:38:51 +0200
+Message-ID: <CAJZ5v0gVJM7t1k99wT0xtJPQTpQ44gXdxde-gH3iiu5Ua0G88g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] virt: acrn: Mark the uuid field as unused
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Fei Li <fei1.li@intel.com>, Shuo Liu <shuo.a.liu@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with clang + CONFIG_CFI_CLANG=y, the following error
-occurs at link time:
+On Wed, Jul 13, 2022 at 7:21 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Jul 13, 2022 at 07:10:18PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Jul 13, 2022 at 7:03 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > After the commits for userspace [1][2] the uuid field is not being
+> > > used in the ACRN code. Update kernel to reflect these changes.
+> > > I.e. we do the following:
+> > > - adding a comment explaining that it's not used anymore
+> > > - replacing the specific type by a raw buffer
+> > > - updating the example code accordingly
+> > >
+> > > [1]: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
+> > > [2]: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
+> >
+> > Why don't you use a Link tag for each of these?
+>
+> I can use Link tags.
+>
+> > > Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
+> > > Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+> >
+> > Typically, the changelog should explain what was wrong in a previous
+> > commit that is being fixed in the current one, but that information is
+> > missing here.
+>
+> The advertised field confused users and actually never been used. So
+> the wrong part here is that kernel puts something which userspace
+> never used and hence this may confuse a reader of this code.
+>
+> Would it be sufficient? Another way is to drop Fixes tag.
 
-  ld.lld: error: undefined symbol: dummy_tramp
-
-dummy_tramp is declared globally in C but its definition in inline
-assembly does not use .global, which prevents clang from properly
-resolving the references to it when creating the CFI jump tables.
-
-Mark dummy_tramp as global so that the reference can be properly
-resolved.
-
-Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1661
-Suggested-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/arm64/net/bpf_jit_comp.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index fd1cb0d2aaa6..dcc572b7d4da 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -604,6 +604,7 @@ void dummy_tramp(void);
- 
- asm (
- "	.pushsection .text, \"ax\", @progbits\n"
-+"	.global dummy_tramp\n"
- "	.type dummy_tramp, %function\n"
- "dummy_tramp:"
- #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
-
-base-commit: ace2bee839e08df324cb320763258dfd72e6120e
--- 
-2.37.1
-
+Yes, it would.

@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5718F572CDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A825D572CE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiGMFCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S231481AbiGMFHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiGMFCV (ORCPT
+        with ESMTP id S229770AbiGMFH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:02:21 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A86932073
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:02:18 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id j22so17885935ejs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:02:18 -0700 (PDT)
+        Wed, 13 Jul 2022 01:07:28 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27774C8E95
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:07:27 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y141so9275788pfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=o4KU5GfxgtTjFqUAyp9nHhKmqMhsJeckxPFNR7wwGhI=;
-        b=Su/LoPrTpSQslxh3aRcpzhdO0vAseTq7tIMW75z4Nu13bfhVvB99uQhmU06C07/0TP
-         sWzwKBqhY7cdtxYfZjAdgRCDWtB5MaOW3XZneAp+qDINW7YwDdfQmKesvSRi74r18UWh
-         UDx6poxvQTA5+Ll78Drgf76DhYtDF6BlPvewOry66lnQ2qEiz9hqYAegzQALzfFTzlSC
-         ajRPGjSA/s/GVH14orBrUhm4vMGoGqglqakwQYutWY0/hG5CA4/q8VgAMkqYJp/C966s
-         1oPx2iKMCtMfJJkCTPms99QqE3E5Oxjbe+wTTKICBO+kiwcWOm/mQi24D8qGpNwfF2mv
-         6c3A==
+        bh=0zrCOg5AGslBs6QuY32No58qTlOSvD8WCmFSfSxxXuk=;
+        b=Lxov7rPU6PR+7iNyeqTFyEENwDTA/MkHmsplx/o8dXP05bfaZHIUsHsAXY1rJe4kAY
+         nLpZUY1uyzEmjdIMMPYoKmRSMDvhn7isXqQSxiFnWFwSAPw6QEBAoWJDsNBHqqIco0cQ
+         6m4lVCII6hWn9muqOb8onfYQupKWc8TjARoVVyvFyrAkPUMJG2wYJlrcIoRm7bFtMgRW
+         npDSDi4K9sJcjHp16VvI7wiKqVqTsfuOze6x8ydZFdkY0ZK5e4tbkEV2qC0VlCcrPgI+
+         k60fC1IDtHJUP97upx0N80J8ovk4rOB12ffYMcjW0IYqh7RsJFarEVFQK//IAzkKQAQR
+         LExQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o4KU5GfxgtTjFqUAyp9nHhKmqMhsJeckxPFNR7wwGhI=;
-        b=CG4LsdKtwXZ9siPhWQWwL+7inS2BlhbbQLkdFYOTzzTgcATd4QML4izahn14qlk7dn
-         JnVLM5R8ze8S5oOCIszExLwYPwxDPzd62IZsLxl1TlXCRB5UwZfDQo738GvIQ7Jt09d/
-         X5q5V6ckqkt88xrgJCfu9aSG7oK6gFm78UMOvUuneHAF5tYLBhzyP7q0yFnqHNE38cVt
-         /dwVoO9tu+KarQa3itObGLyndwhr1AjzxovnIt6sSo2chqGvOMpfPboHEJanH5oGJov2
-         qOWC46vQETs7Z7Fa2NEmyh12jAWCzgPiYWE/JVWIe8v2waDoJ9PlQdA4MDbE+V3lxLkE
-         TaOg==
-X-Gm-Message-State: AJIora8hFiKj6tlj3clvQhFj3DItqYe4SgSdUNMAQ4ciyke5+8EhoFCB
-        eb7gDN/nTG4cQ1l4T7vKdCE=
-X-Google-Smtp-Source: AGRyM1t6uC82lJ3lW6knb43+V1KxvgxUhrauEIGPKf18IZ1Sr7igNIjbN7AKlIBzbTBm41bCL3uyVg==
-X-Received: by 2002:a17:907:6d9b:b0:72b:5cc3:79cf with SMTP id sb27-20020a1709076d9b00b0072b5cc379cfmr1641151ejc.382.1657688536770;
-        Tue, 12 Jul 2022 22:02:16 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id b13-20020a17090630cd00b0072637b9c8c0sm4506178ejb.219.2022.07.12.22.02.15
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0zrCOg5AGslBs6QuY32No58qTlOSvD8WCmFSfSxxXuk=;
+        b=0y4mKFuEyk7mNrDA6a6FbkU5FZE1bvmW2N4Kp5sWVUJzwaGV+gMVLkabY8nlICcfT9
+         YHDKvEdQQhmKxKzH7/tMju++S8SLYkDCXjzDnVTZ1MyuQYyhZN673LV/PdykXQD8nebr
+         t7TnCSyryMoiMfeRAt4aJ8eJi5/JYORp3pRXOwLp0nCBBRYdfS3r8MoEOUzyHZqGIQYK
+         bUmeQJ6Fnk97yroVOt4SIKpXvXbL/3nOqQnvUxDP+aFvjjDajjoutJLi+zTy8/r6Zs+O
+         DecQfVPhVwa6ruXeUW45/HMt2jaTeeadlGUsINCZyu+tBE9VNIUXj7UKWkmRnqdIke99
+         wo7g==
+X-Gm-Message-State: AJIora/R86A1gTupmJ10wsYYken46ItTV1VIhr5cWhXM2QWRYaZS2isM
+        KUdsbYoSQo3WA/6SLyK6/vlUFBoWw5nrkg==
+X-Google-Smtp-Source: AGRyM1ssy4E4Y4chHEGaMhOEdtT1LZPr3ydm2I+tAOhnjs6m48j2j/Q0L+M+8Gb0TsAlBVAinqhBAQ==
+X-Received: by 2002:a63:ed48:0:b0:40d:9866:6834 with SMTP id m8-20020a63ed48000000b0040d98666834mr1495136pgk.324.1657688846564;
+        Tue, 12 Jul 2022 22:07:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lp2-20020a17090b4a8200b001e87bd6f6c2sm258504pjb.50.2022.07.12.22.07.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 22:02:16 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 07:02:14 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] staging: vt6655: Convert macro
- vt6655_mac_word_reg_bits_off to function
-Message-ID: <04fb37871c4d383c27287934a0dddb3aa7974b08.1657657918.git.philipp.g.hortmann@gmail.com>
-References: <cover.1657657918.git.philipp.g.hortmann@gmail.com>
+        Tue, 12 Jul 2022 22:07:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 12 Jul 2022 22:07:24 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.19-rc6
+Message-ID: <20220713050724.GA2471738@roeck-us.net>
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1657657918.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert macro vt6655_mac_word_reg_bits_off to function.
-checkpatch.pl does not accept multiline macros.
+On Sun, Jul 10, 2022 at 02:54:10PM -0700, Linus Torvalds wrote:
+> Things looking fairly normal for rc6, nothing here really stands out.
+> A number of small fixes all over, with the bulk being a collection of
+> sound and network driver fixes, along with some arm64 dts file
+> updates.
+> 
+> The rest is some selftest updates, and various (mostly) one-liners all
+> over the place. The shortlog below gives a good overview, and is short
+> enough to just scroll through to get a flavor of it all.
+> 
+> Perhaps somewhat unusually, I picked up a few fixes that were pending
+> in trees that haven't actually hit upstream yet.  It's already rc6,
+> and I wanted to close out a few of the regression reports and not have
+> to wait for another (possibly last, knock wood) rc to have them in the
+> tree.
+> 
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/vt6655/mac.c | 8 ++++++++
- drivers/staging/vt6655/mac.h | 9 ++-------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+Build results:
+	total: 150 pass: 149 fail: 1
+Failed builds:
+	powerpc:allmodconfig
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
-diff --git a/drivers/staging/vt6655/mac.c b/drivers/staging/vt6655/mac.c
-index aa9684229dfe..a7f645f9ccf8 100644
---- a/drivers/staging/vt6655/mac.c
-+++ b/drivers/staging/vt6655/mac.c
-@@ -62,6 +62,14 @@ void vt6655_mac_reg_bits_off(void __iomem *iobase, const u8 reg_offset, const u8
- 	iowrite8(reg_value & ~(bit_mask), iobase + reg_offset);
- }
- 
-+void vt6655_mac_word_reg_bits_off(void __iomem *iobase, const u8 reg_offset, const u16 bit_mask)
-+{
-+	unsigned short reg_value;
-+
-+	reg_value = ioread16(iobase + reg_offset);
-+	iowrite16(reg_value & ~(bit_mask), iobase + reg_offset);
-+}
-+
- /*
-  * Description:
-  *      Test if all test bits off
-diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index e7b648cf2024..b307161818a0 100644
---- a/drivers/staging/vt6655/mac.h
-+++ b/drivers/staging/vt6655/mac.h
-@@ -537,13 +537,6 @@
- 
- /*---------------------  Export Macros ------------------------------*/
- 
--#define vt6655_mac_word_reg_bits_off(iobase, reg_offset, bit_mask)	\
--do {									\
--	unsigned short reg_value;					\
--	reg_value = ioread16(iobase + reg_offset);			\
--	iowrite16(reg_value & ~(bit_mask), iobase + reg_offset);	\
--} while (0)
--
- #define MACvReceive0(iobase)						\
- do {									\
- 	unsigned long dwData;						\
-@@ -648,6 +641,8 @@ do {									\
- void vt6655_mac_reg_bits_on(void __iomem *iobase, const u8 reg_offset, const u8 bit_mask);
- void vt6655_mac_word_reg_bits_on(void __iomem *iobase, const u8 reg_offset, const u16 bit_mask);
- void vt6655_mac_reg_bits_off(void __iomem *iobase, const u8 reg_offset, const u8 bit_mask);
-+void vt6655_mac_word_reg_bits_off(void __iomem *iobase, const u8 reg_offset, const u16 bit_mask);
-+
- bool MACbIsRegBitsOff(struct vnt_private *priv, unsigned char byRegOfs,
- 		      unsigned char byTestBits);
- 
--- 
-2.37.0
+Same problems as every week.
 
+Building powerpc:allmodconfig ... failed
+--------------
+Error log:
+powerpc64-linux-ld: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses hard float, drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.o uses soft float
+powerpc64-linux-ld: failed to merge target specific data of file drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.o
+powerpc64-linux-ld: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses hard float, drivers/gpu/drm/amd/amdgpu/../display/dc/dcn315/dcn315_resource.o uses soft float
+powerpc64-linux-ld: failed to merge target specific data of file drivers/gpu/drm/amd/amdgpu/../display/dc/dcn315/dcn315_resource.o
+powerpc64-linux-ld: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses hard float, drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.o uses soft float
+powerpc64-linux-ld: failed to merge target specific data of file drivers/gpu/drm/amd/amdgpu/../display/dc/dcn316/dcn316_resource.o
+
+My attempt to fix the problem was rejected, but I don't see an alternate
+solution either (or at least I was not copied on it, and the problem still
+persists in linux-next).
+
+plus
+
+OF: amba_device_add() failed (-19) for /amba/smc@10100000
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at lib/refcount.c:28 of_platform_bus_create+0x33c/0x3dc
+refcount_t: underflow; use-after-free.
+
+I won't report again unless there are new problems or any of the known
+issues are fixed.
+
+Guenter

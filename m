@@ -2,170 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BE1573E6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E81573E73
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237063AbiGMVBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S237217AbiGMVCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiGMVBG (ORCPT
+        with ESMTP id S231348AbiGMVCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:01:06 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B7A31349
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:01:03 -0700 (PDT)
+        Wed, 13 Jul 2022 17:02:32 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6057A326E7;
+        Wed, 13 Jul 2022 14:02:30 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 23so11524328pgc.8;
+        Wed, 13 Jul 2022 14:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657746063; x=1689282063;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LhXI5ldx+R/isqL5mJTcb3Kqhseql2na+Zu9Y+5xW08=;
-  b=QI+7ydfC8JjS5pwjUzfLRLuNgh+gRoNEeBhAfrV2QynETZ9TswMd+3fN
-   8PZFvXt0GfCoks+dPwsq1ZQAD+2sfxsFKunNTQA2Pt8A/Sc1ozyclCSax
-   iloMpV7ebfc1bwHAaoLtIupmqorxI4eLy8gk63bczygm7swkQovZY14wF
-   g=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 14:01:03 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:01:03 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 14:01:02 -0700
-Received: from [10.110.120.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
- 2022 14:01:01 -0700
-Message-ID: <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
-Date:   Wed, 13 Jul 2022 14:01:00 -0700
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=IACsse4yCaH/W0ycTwk/vy14PGBR6WBNAjAh7uDmjMI=;
+        b=ZH9aAKkAPQctAeJMJowNLygXykxGTHv5RinJh8kiwMO10P4lPoJioYFfTfC2M2M9x9
+         alchSnHTwvnSsdJ/jYA6sVqYgyiZ9hobbdPi4Ex+QtkLt8A+A3RBeUKjDRQ6kOw5f1XW
+         j8g4KLrpLO2YKF7FT/Tuwhwf1Oa9Wcesv8GJ6jCBSkUfK89mG3CzcHfUWzDCYAYvl9sq
+         y/u1gKCI0oJxivP1s4y24+lAsygwnrpaY2ulaAuRUzSIbO7zJ2EQ0KLTiq++z3sZPqGt
+         qKt9nz7jl6dgzHbRQcg62l4rVyGz0eqhpYYBUzuHdqqx1GaEVzfrzVACBtaymzXKyTP2
+         OHbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IACsse4yCaH/W0ycTwk/vy14PGBR6WBNAjAh7uDmjMI=;
+        b=JkWUReTKGvUN/qRI1+Bg3VYb/A/gOIqzn2m1yz481hOoX1JJrDxwC38yB/6shiHva1
+         b+iY7jtV7dslTZUPWAVQTG9fG6iHF4x2hpaA1sPU4i3jVXHIJGhn+dbAUjvlJePBCZIR
+         cE/UQwoJeCgJoaKWgIf0Da45oybSyMYWDEDr7zGNZ3KGhYF/IRw1y50xaJA1Q06b4PiP
+         UTjvX4OqXN76THwB81lWpo9bhBeskYO6m2dHP/CKF1oeXwXm401P6ZsVjgqft1fwEfj0
+         eIINryVXzytiYafY8nJNTnR5qXVV5ctYnGRYywxnvg7myoUImrhYm/e2geBW3Saw0d44
+         AfuA==
+X-Gm-Message-State: AJIora98nDJ2Y9yUXTEu3MIUGILJxuY9tPYR6U0Cj2es/69hqca4TO8K
+        Q2YaPRfvQRwxe1S8YMo67R4=
+X-Google-Smtp-Source: AGRyM1sMBeNGf7BCwDsbQPzTpzivo7xoza87ytCquvdICLzlhbbw1COharHFaQ1uYbZFgi+sksLDtg==
+X-Received: by 2002:a63:4d66:0:b0:419:8648:194c with SMTP id n38-20020a634d66000000b004198648194cmr4571530pgl.32.1657746149763;
+        Wed, 13 Jul 2022 14:02:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d5-20020a623605000000b0052ac725ea3esm7696890pfa.97.2022.07.13.14.02.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 14:02:29 -0700 (PDT)
+Message-ID: <0ce123c1-1826-ddd2-6ded-e8dd319ef6ed@gmail.com>
+Date:   Wed, 13 Jul 2022 14:02:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [net-next PATCH] net: dsa: qca8k: move driver to qca dir
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
-        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
-        <tudor.ambarus@microchip.com>
-References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
- <20220711095042.2095360-1-michael@walle.cc>
- <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
- <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-In-Reply-To: <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220713205350.18357-1-ansuelsmth@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220713205350.18357-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On 7/13/2022 7:32 AM, Michael Walle wrote:
-> Hi,
+On 7/13/22 13:53, Christian Marangi wrote:
+> Move qca8k driver to qca dir in preparation for code split and
+> introduction of ipq4019 switch based on qca8k.
 > 
-> Am 2022-07-13 16:26, schrieb Jae Hyun Yoo:
->>>> +    { "w25q512nwq", INFO(0xef6020, 0, 64 * 1024, 1024)
->>>
->>> Please use INFO(0xef6020, 0, 0, 0) and test wether it will still
->>> work correctly. We will then be able to convert it to SNOR_ID3()
->>> later.
->>
->> Tested it but it doesn't work with INFO(0xef6020, 0, 0, 0). I'll keep
->> it as is.
-> 
-> Can you please look into this? I'd expect this to work if the SFDP
-> tables are correct because all this should come from the tables.
-> You can look at /sys/kernel/debug/spi-nor/spi0.0/params and see
-> what is changing there.
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-I tested it again but result is still the same. I can check the parsed
-info like below if I use INFO(0xef6020, 0, 64 * 1024, 1024) but I can't
-even check the debugfs info if I use INFO(0xef6020, 0, 0, 0) since it
-doesn't boot at all. I think, this patch should go as is and the size
-parsing issue could be fixed using a separate fix.
-
-Thanks,
-Jae
-
-$ cat /sys/kernel/debug/spi-nor/spi0.0/capabilities
-Supported read modes by the flash
-  1S-1S-1S
-   opcode        0x13
-   mode cycles   0
-   dummy cycles  0
-  1S-1S-1S (fast read)
-   opcode        0x0c
-   mode cycles   0
-   dummy cycles  8
-  1S-1S-2S
-   opcode        0x3c
-   mode cycles   0
-   dummy cycles  8
-  1S-2S-2S
-   opcode        0xbc
-   mode cycles   2
-   dummy cycles  2
-  1S-1S-4S
-   opcode        0x6c
-   mode cycles   0
-   dummy cycles  8
-  1S-4S-4S
-   opcode        0xec
-   mode cycles   2
-   dummy cycles  4
-  4S-4S-4S
-   opcode        0xec
-   mode cycles   2
-   dummy cycles  0
-
-Supported page program modes by the flash
-  1S-1S-1S
-   opcode        0x12
-  1S-1S-4S
-   opcode        0x34
-$ cat /sys/kernel/debug/spi-nor/spi0.0/params
-name            w25q512nwq
-id              ef 60 20
-size            64.0 MiB
-write size      1
-page size       256
-address width   4
-flags           4B_OPCODES | HAS_4BAIT | HAS_16BIT_SR | SOFT_RESET
-
-opcodes
-  read           0x6c
-   dummy cycles  8
-  erase          0xdc
-  program        0x12
-  8D extension   none
-
-protocols
-  read           1S-1S-4S
-  write          1S-1S-1S
-  register       1S-1S-1S
-
-erase commands
-  21 (4.00 KiB) [1]
-  dc (64.0 KiB) [3]
-  c7 (64.0 MiB)
-
-sector map
-  region (in hex)   | erase mask | flags
-  ------------------+------------+----------
-  00000000-03ffffff |     [ 123] |
-
-> Thanks,
-> -michael
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

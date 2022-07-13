@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3F15735F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263D85735FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235388AbiGMMGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
+        id S236234AbiGMMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiGMMGO (ORCPT
+        with ESMTP id S231389AbiGMMHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:06:14 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03061034F8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:06:12 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id c131-20020a1c3589000000b003a2cc290135so1092293wma.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cFzXm7FkqFEGmY7ZvWygg5JPqy1rrXb63f/H3RTjw5Q=;
-        b=juOeqYB/IHvxzcxziLjgU4xWOupolDlaODbTlG6FvpPD3xDBnH0GQxGui2SIml5Rcl
-         igb32w0V9g54LnYLDQoCdCtug1jYv7EUF/EVxJkNMJnfbuBo0HrjaMnAfN+guMMPv+jG
-         SqCmppCluiwhKlLwgnPHlHTwkHM5ydWXuW6hPEg0FARANUUg+4WBiWsNBI3hFsmlVUHx
-         cpM8opBxPgVV5erzkvtlEcmKHB2LA2qA6FhU0Fbtpbzg984cTBduJhqTM4qCNOaK6Z+X
-         dIztYOOWn0ke76zCnIFV7TkAhxeOfkB0lIxAAQqqZ7WCIQDcZC+0OF0Ap7TWiCL7Zgox
-         U1WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cFzXm7FkqFEGmY7ZvWygg5JPqy1rrXb63f/H3RTjw5Q=;
-        b=v4+J6PE73/e0yyCc4ZicNQkoa89lYL7F0EqtO5Osahss594tTDQHS7JfZ/+8spzz6v
-         ZQaSwEPXVIhoKnECkCvNSE94Wb/992MrGHOfgVXw0BPiTbkCHfcg8VZzbf1ZLDQE7xdm
-         7x3p5qglmQTgumnubKauhF2kf4Eu/kgp+pxj9jZnuItCJAeR/QpfHkRN0PqtUn+sZksZ
-         UHNgAhhQ+f9cYX/2MyETt8Ah3nhR+iALutC0/ocDRClV8SHjnE2/VCtUnC7dCO3/3kL8
-         /gQNyzP2lSs7wrs16lqHft6mia0cBazt67nYUS5qcD1OCrRVCPmkpTcriuROVwcGt9AS
-         KnJQ==
-X-Gm-Message-State: AJIora94GINDpUwe0Ejbn+dHn15AA7zRG9wGY9pxwzaZc3o5O4jrqzw6
-        XFGv38xk4cmrCF+Q3X+fISVBvw==
-X-Google-Smtp-Source: AGRyM1swYzam1sNiQvAydj9MjXOvIWnRc8kJtUr8l9k3XC1v6bhQu6SWwAo5FoeVNHcD2VJMg8Ek7Q==
-X-Received: by 2002:a05:600c:4e16:b0:3a2:ef34:dbe3 with SMTP id b22-20020a05600c4e1600b003a2ef34dbe3mr3305655wmq.71.1657713971324;
-        Wed, 13 Jul 2022 05:06:11 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id z8-20020a1c4c08000000b003942a244f40sm1932870wmf.25.2022.07.13.05.06.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 05:06:11 -0700 (PDT)
-Message-ID: <32f8770c-2440-742a-0282-0cfc437b27df@sifive.com>
-Date:   Wed, 13 Jul 2022 13:06:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Content-Language: en-GB
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Greentime Hu <greentime.hu@sifive.com>,
-        u.kleine-koenig@pengutronix.de,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <1657635972.108769.1805849.nullmailer@robh.at.kernel.org>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <1657635972.108769.1805849.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 08:07:23 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E41034F8;
+        Wed, 13 Jul 2022 05:07:22 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 8DE1AC022; Wed, 13 Jul 2022 14:07:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657714040; bh=GRD1T0eSpe8mmrBIO5ShPSs/U27oLpkzr10zWXsJ+78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cTViMyUNpB9DifHbqKo2DtbVueNEeoRefSCzGlFBlgi5ty911CTceluyfPl2ZtDbW
+         +9lsc8qOYpg/Q7Qn5uPU63QakbFS9/UvNKwxeUmiNPyVcMCy94CV0uVAAQYSNVqyQM
+         99uTYtXl8oPM0jntkRFq2PUYJD+Hy8ORFkBpMl2LpSk8owd0eXLp87ZWs/APZ+QVPs
+         HaXCOMFkcNGc167UisDrgmTm/E0aJPIT/b3Qhc+yNuWpPb/3i4rgafKDAyG3xGYFTH
+         /+GI0OdNeuEtfc/jAZAau56pK+Q1VvGyPNSZfQggpJtpeJ5XLn9ViNqikFYAIvSMwH
+         R9/ccp+FilKNg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 92090C009;
+        Wed, 13 Jul 2022 14:07:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1657714039; bh=GRD1T0eSpe8mmrBIO5ShPSs/U27oLpkzr10zWXsJ+78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J7wBfXDU4LL6fkHO2Y/bKgOTIstCZYW3ar1SItDrbH0/DK7hZKUIfvYTP9/MmR6AN
+         vtr5C9qJgMl2BrLUJDpIa11+nGtpbKtYr3XCcNispy9DJzWMkfgHUmvFYG1QdrzhMu
+         t7VmQJ+zV4loHxBHDc70tAAhuJklntTIrDvTOuJciBd078C1GqQRgLUfK+/UzOcbIv
+         nW/WaWCDLNKt2vwpWYgotIY1J4qc4dABKjTpi7W5y3ecWwh354CTR53KvHllo5Q1gJ
+         w537AfmQBcXbyBmwzU4dEE4vrZjyWd7W6x1xX1poq4TU62h7gia1shFKOqIa6E2Sq8
+         E+ip89lsY422A==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 6ead7bcb;
+        Wed, 13 Jul 2022 12:07:08 +0000 (UTC)
+Date:   Wed, 13 Jul 2022 21:06:53 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v6 21/23] samples/bpf: add new hid_mouse example
+Message-ID: <Ys61XcZL4Fh/VQu1@codewreck.org>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-22-benjamin.tissoires@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712145850.599666-22-benjamin.tissoires@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 15:26, Rob Herring wrote:
-> On Tue, 12 Jul 2022 11:01:09 +0100, Ben Dooks wrote:
->> The dwc pwm controller can be used in non-PCI systems, so allow
->> either platform or OF based probing.
->>
->> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->> ---
->>   .../devicetree/bindings/pwm/pwm-synposys.yaml | 40 ++++++++++++++
->>   drivers/pwm/Kconfig                           |  5 +-
->>   drivers/pwm/pwm-dwc.c                         | 53 +++++++++++++++++++
->>   3 files changed, 96 insertions(+), 2 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/pwm/pwm-synposys.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Benjamin Tissoires wrote on Tue, Jul 12, 2022 at 04:58:48PM +0200:
+> diff --git a/samples/bpf/hid_mouse.c b/samples/bpf/hid_mouse.c
+> new file mode 100644
+> index 000000000000..f6e5f09026eb
+> --- /dev/null
+> +++ b/samples/bpf/hid_mouse.c
+> @@ -0,0 +1,150 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2022 Benjamin Tissoires
+> + */
+> +
+> +/* not sure why but this doesn't get preoperly imported */
 
-Is the following equivalent:
+typo: properly
 
-> make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/pwm/snps,pwm.yaml 
+> +#define __must_check
 
+But more usefully, I don't think it should be needed -- we don't use
+__must_check at all in uapi includes; if this is needed that means some
+of the include here uses the kernel internal includes and that shouldn't
+be needed as they're not normally installed.
 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/pwm/pwm-synposys.yaml:11:4: [warning] wrong indentation: expected 2 but found 3 (indentation)
-> ./Documentation/devicetree/bindings/pwm/pwm-synposys.yaml:31:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-> 
-> dtschema/dtc warnings/errors:
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
+Didn't actually try to see but taking the compilation line that fails
+and running it with -E will probably show where that must_check comes
+from
 
-Whoops, turns out I hadn't installed yamllint.
-
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
-
+--
+Dominique Martinet | Asmadeus,
+just passing by

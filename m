@@ -2,131 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A49A573E47
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6EF573E4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbiGMUyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S236674AbiGMUyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237292AbiGMUx6 (ORCPT
+        with ESMTP id S237334AbiGMUya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:53:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBA79E0FB
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657745635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7w7ot88ijPbnC1AT4LUHy9diGggomsBqgUbIEyfXDts=;
-        b=aAqnKGzEGbfUFwFz3FD3AarShVeNFPstDmTQ2ajiCZl3AqGter+cFxwJ7/trAGCvYPTuQk
-        MVDV/Ykt330koTSn6QvZ/brnyxmc6e9XlZtvM71YKPZjJ4hgQ9hGHYG+itLAj8hKoVG7gq
-        FWN6MWNjzNmT226eFIwEzw5rXqLyn64=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-EoMCL5kLNRer3CF7dfIUOw-1; Wed, 13 Jul 2022 16:53:54 -0400
-X-MC-Unique: EoMCL5kLNRer3CF7dfIUOw-1
-Received: by mail-ed1-f69.google.com with SMTP id z14-20020a056402274e00b0043ae5c003c1so4774755edd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:53:54 -0700 (PDT)
+        Wed, 13 Jul 2022 16:54:30 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2A21FCE1;
+        Wed, 13 Jul 2022 13:54:22 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r18so15625681edb.9;
+        Wed, 13 Jul 2022 13:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M4Ea5DgMOs4/kGcfAXY6ynZjwhN2TjDtrd59QQ2UqLo=;
+        b=D4Nlq7uAp5YHU1mC82JZ4Ye+Vk0PUnTzrEc4JG4HAcNhvQXyHH8mPODxkSW0ICfJx/
+         hsWlq2SnFOGSzAvo39WbgP0EpJXIXPlk7h/YrfQ0Kde9u0Nt/1V68JyGpxO4UeN7PqAz
+         P7lpkAhRFCnirUk/I90n0l1uLy4kmbJEhMSl9RLFBloojPjNInXb9j+Eo1/bobZkaDm7
+         O3Dxv5U6tb4myRdGHrIbbn74ExLRUM95v6yLlbcAWa4j3VgQKTb2r5JmPnhOFOYydEig
+         ZjOZK50fi8YPi3V3EVbr7HoIZ3G0hy+9pqoczAi0diyDAZYRs/caGtYN5vijWBLCvGIK
+         gtUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7w7ot88ijPbnC1AT4LUHy9diGggomsBqgUbIEyfXDts=;
-        b=IgTR59PAfmbnGhCk4a79cuZr3d6KGvZcDirI8n0+6jsnsqTZjxtWf6K8o8/Wgs4/6c
-         TrfoUxfGvRkn2ezvYE7BUFg9/GeoX3WAiST+9x2CZS1f2SOHlFVQYlYWuO8y515WGFQE
-         CiSz58C0SRvpFqjZWeHQIdJ31ziIAJvPCsyT9ZFecQwYL//lLescOBBXpFYqqi6vQz2k
-         F/sNCGIOStQ0SZevub7QAh2FsVghx3T2ThBfjWKFdr/B0rlSunF7ew2U/ovyrSURrDiw
-         sSLva1xRKOFaM1Vxq9PsiUn4LS0PbkP+F6WCf7KSA0XxKck89E2+DbC94/1W8qJprBeR
-         4swA==
-X-Gm-Message-State: AJIora9aw0rEIMksmhmNH01dZYkfXX9cH1N9qYjo5muDe0qP1wcbEG/n
-        btu5QrfmwolhcMqOhgropcVN0EwHVWIuvPO36vhLHT6txV+W5ugDS5wYR4XbtOHWlgXionIS8b4
-        2w+aqDJPVf2tZypkaqBBiViGz
-X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr7479260edb.246.1657745633676;
-        Wed, 13 Jul 2022 13:53:53 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vlR6EbNyJesEQMqku98sgLM5hgx+Yvs+X+nBn4vuLAei8AgslBbSskvA81sVT/7Kgffh06BA==
-X-Received: by 2002:a05:6402:3708:b0:433:2d3b:ed5 with SMTP id ek8-20020a056402370800b004332d3b0ed5mr7479238edb.246.1657745633446;
-        Wed, 13 Jul 2022 13:53:53 -0700 (PDT)
-Received: from redhat.com ([2.52.24.42])
-        by smtp.gmail.com with ESMTPSA id s17-20020a056402037100b00437938c731fsm8578946edw.97.2022.07.13.13.53.51
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M4Ea5DgMOs4/kGcfAXY6ynZjwhN2TjDtrd59QQ2UqLo=;
+        b=llVZeezI6u/c/5Py0gRsSYplE0Ij32N7gxCcNKP0zDxB1w4aAsK8JR7Nhi3d7DWA5+
+         py/COiSdwWv79Xp1JzwQxS+jdJeQSvxd8cRijEACja88LYVYKqTgek0jSTTaS/6F4M8L
+         674YFz349/uTx+PrwkB+8FWaBDK9Zb09YTjN9z8WkmUSe12MDHT3/zfgRF94VFIuzfYY
+         koZooL4ClrWzxplqZEw0btOnMFm/lrZOavHtL37s+6fB7pHdW7XIRV17JerhuDik5hV8
+         DnEm7ZBTKGz6rcDYypY7oNqzulG6hhunR5JrwVVyoWCJS6RdKTxbtsr65JfBI1uxZFPs
+         OzRQ==
+X-Gm-Message-State: AJIora87Myigz6fgShQoGMcUC/wSqQheh7aYkwwgEcnQ3f00QuO0hynB
+        QNUTjRVFCdsMVXwblEkMbrQ=
+X-Google-Smtp-Source: AGRyM1tN7OBEDttw3PKwT8MYEqDyE8BNuNEu4mgPnw4NshH5f/3DYfyXgyWK8gtSAvvjrzXK6mPkqA==
+X-Received: by 2002:a05:6402:27ca:b0:43a:c342:b226 with SMTP id c10-20020a05640227ca00b0043ac342b226mr7598814ede.342.1657745660592;
+        Wed, 13 Jul 2022 13:54:20 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id k19-20020a05640212d300b0043a8f5ad272sm8617293edx.49.2022.07.13.13.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 13:53:52 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 16:53:49 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dapeng Mi <dapeng1.mi@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
- in Makefile
-Message-ID: <20220713165237-mutt-send-email-mst@kernel.org>
-References: <20220713082426.850911-1-dapeng1.mi@intel.com>
- <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
+        Wed, 13 Jul 2022 13:54:20 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [net-next PATCH] net: dsa: qca8k: move driver to qca dir
+Date:   Wed, 13 Jul 2022 22:53:50 +0200
+Message-Id: <20220713205350.18357-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 07:53:13PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi <dapeng1.mi@intel.com> wrote:
-> >
-> > As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
-> > select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But
-> > in current driver loading order acpi_idle driver is always loaded
-> > before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
-> > has no chance to be loaded when it's enabled.
-> >
-> > Thus, move cpuidle driver forward before acpi driver and make
-> > cpuidle-hatpoll driver has a chance to be run when it's enabled.
-> >
-> > Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
-> > ---
-> >  drivers/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/Makefile b/drivers/Makefile
-> > index 9a30842b22c5..921ed481b520 100644
-> > --- a/drivers/Makefile
-> > +++ b/drivers/Makefile
-> > @@ -26,6 +26,7 @@ obj-y                         += idle/
-> >  # IPMI must come before ACPI in order to provide IPMI opregion support
-> >  obj-y                          += char/ipmi/
-> >
-> > +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
-> >  obj-$(CONFIG_ACPI)             += acpi/
-> >
-> >  # PnP must come after ACPI since it will eventually need to check if acpi
-> > @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
-> >  obj-$(CONFIG_EISA)             += eisa/
-> >  obj-$(CONFIG_PM_OPP)           += opp/
-> >  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
-> > -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
-> >  obj-y                          += mmc/
-> >  obj-y                          += ufs/
-> >  obj-$(CONFIG_MEMSTICK)         += memstick/
-> > --
-> 
-> Well, this change doesn't guarantee loading haltpoll before ACPI idle.
-> 
-> Also what if haltpoll is enabled, but the user wants ACPI idle?
+Move qca8k driver to qca dir in preparation for code split and
+introduction of ipq4019 switch based on qca8k.
 
-Exactly. For example while on real boxes BIOS might often present broken
-ACPI idle, on VMs I am guessing if ACPI is present one can assume it's
-actually correct.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
 
+This is a start for the required changes for code
+split. Greg wasn't so negative about this kind of change
+so I think we can finally make the move.
+
+Still waiting some comments about the code split.
+(Can I split qca8k to common function that will be
+used by ipq4019? (and later propose the actual 
+ipq4019 driver?))
+
+ drivers/net/dsa/Kconfig           | 8 --------
+ drivers/net/dsa/Makefile          | 1 -
+ drivers/net/dsa/qca/Kconfig       | 8 ++++++++
+ drivers/net/dsa/qca/Makefile      | 1 +
+ drivers/net/dsa/{ => qca}/qca8k.c | 0
+ drivers/net/dsa/{ => qca}/qca8k.h | 0
+ 6 files changed, 9 insertions(+), 9 deletions(-)
+ rename drivers/net/dsa/{ => qca}/qca8k.c (100%)
+ rename drivers/net/dsa/{ => qca}/qca8k.h (100%)
+
+diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
+index 702d68ae435a..d8ae0e8af2a0 100644
+--- a/drivers/net/dsa/Kconfig
++++ b/drivers/net/dsa/Kconfig
+@@ -60,14 +60,6 @@ source "drivers/net/dsa/sja1105/Kconfig"
+ 
+ source "drivers/net/dsa/xrs700x/Kconfig"
+ 
+-config NET_DSA_QCA8K
+-	tristate "Qualcomm Atheros QCA8K Ethernet switch family support"
+-	select NET_DSA_TAG_QCA
+-	select REGMAP
+-	help
+-	  This enables support for the Qualcomm Atheros QCA8K Ethernet
+-	  switch chips.
+-
+ source "drivers/net/dsa/realtek/Kconfig"
+ 
+ config NET_DSA_RZN1_A5PSW
+diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
+index b32907afa702..16eb879e0cb4 100644
+--- a/drivers/net/dsa/Makefile
++++ b/drivers/net/dsa/Makefile
+@@ -8,7 +8,6 @@ endif
+ obj-$(CONFIG_NET_DSA_LANTIQ_GSWIP) += lantiq_gswip.o
+ obj-$(CONFIG_NET_DSA_MT7530)	+= mt7530.o
+ obj-$(CONFIG_NET_DSA_MV88E6060) += mv88e6060.o
+-obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
+ obj-$(CONFIG_NET_DSA_RZN1_A5PSW) += rzn1_a5psw.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303) += lan9303-core.o
+ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_I2C) += lan9303_i2c.o
+diff --git a/drivers/net/dsa/qca/Kconfig b/drivers/net/dsa/qca/Kconfig
+index 13b7e679b8b5..ba339747362c 100644
+--- a/drivers/net/dsa/qca/Kconfig
++++ b/drivers/net/dsa/qca/Kconfig
+@@ -7,3 +7,11 @@ config NET_DSA_AR9331
+ 	help
+ 	  This enables support for the Qualcomm Atheros AR9331 built-in Ethernet
+ 	  switch.
++
++config NET_DSA_QCA8K
++	tristate "Qualcomm Atheros QCA8K Ethernet switch family support"
++	select NET_DSA_TAG_QCA
++	select REGMAP
++	help
++	  This enables support for the Qualcomm Atheros QCA8K Ethernet
++	  switch chips.
+diff --git a/drivers/net/dsa/qca/Makefile b/drivers/net/dsa/qca/Makefile
+index 274022319066..40bb7c27285b 100644
+--- a/drivers/net/dsa/qca/Makefile
++++ b/drivers/net/dsa/qca/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_NET_DSA_AR9331)	+= ar9331.o
++obj-$(CONFIG_NET_DSA_QCA8K)	+= qca8k.o
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca/qca8k.c
+similarity index 100%
+rename from drivers/net/dsa/qca8k.c
+rename to drivers/net/dsa/qca/qca8k.c
+diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca/qca8k.h
+similarity index 100%
+rename from drivers/net/dsa/qca8k.h
+rename to drivers/net/dsa/qca/qca8k.h
 -- 
-MST
+2.36.1
 

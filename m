@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E681E572BCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C73D572BCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 05:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiGMDQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 23:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S231599AbiGMDRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 23:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiGMDQy (ORCPT
+        with ESMTP id S229982AbiGMDRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 23:16:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF39AD7A6A;
-        Tue, 12 Jul 2022 20:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657682212; x=1689218212;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=1Erh3CyyDV9THBc/EKhKsORANd2MPiX3UyCy+uJR4Fk=;
-  b=XfEig+POze3uyqJz1NAyvnwxgLx6erNB/bca4PaSasEpAdfi9xhZa8Jt
-   ycFd5sdZG1Afw3hfRtYsnlFwUwYx7I4hvB+S9UsKr+htOIOn9xD/fvfi3
-   HqtCSfHpyNeWCXrNMyrUAbMQ6Htel6g77H8EmAdYYMwGq7dhLUoDjTTzy
-   I6MJq9nO6bQnywEKajRm6HGUfj3c0JfgMKu+l7LLtTiI56Ukusoij+BML
-   inwF12oiFzde56pvlea2geAPgOPM6F48eq6FRfMRpho7OMMU87i2Af5Ih
-   hQsrZ3EA/s9dYUedf/zDlHhIzx0Dt9CSMReWs+g/yygJgcPq2reqmrZ3B
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371411118"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="371411118"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 20:16:52 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="722194206"
-Received: from ifatima-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.196])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 20:16:50 -0700
-Message-ID: <ce0e84a0504c1af4ad672b7d4802af8b3d27c32c.camel@intel.com>
-Subject: Re: [PATCH v7 003/102] KVM: Refactor CPU compatibility check on
- module initialiization
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        Tue, 12 Jul 2022 23:17:00 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D144D7A7B
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:16:58 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id u6so9594976iop.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 20:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NOar6MnEqXDwtrvK2AQRJKKT3Ik/UOEZ7FiGAzg0z3I=;
+        b=gWnkKtkYhbBlUSQWnVOU6Z4mkgThELPIxFQ6XfFxLao6p09xGmBlhs1vROXxR2pdhi
+         yv57GMfJ36NdK9pu5AarTj+bQMdtTnwdr/ZVudUt6kfDV+e6FqEDm9mXXw8gfsDfJ4Xk
+         qe4kJd2dmqc8y13graokDpOMsP8nQWiAnspMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NOar6MnEqXDwtrvK2AQRJKKT3Ik/UOEZ7FiGAzg0z3I=;
+        b=mLDUBHYUlB718Hhun2DPcWNsncgoM+acm5bBEmR9Kr6VumUqqGkp8RItLwzC6qGJD6
+         lHmAAXsAja/BqVpzGX76L8Gi8whmBV4bqurICQqT/BzAdlkvdD+JZjmxQssVNcOl1EU7
+         J14H6gavsuWKoBHWOt9y3J9tjlkHLKUAF9geWX9h/Yg3muEEd4td4KanAiXYZcWdODFb
+         h8YWsIhafqikT6FpBMFYptP54LAtYD93aQIDaxmnjkcW00z4iKW8OnFy5asN6lHcUP65
+         LSSMSauEfOF+ozKsmAoumliqAr/m8WAL03Fd9vHuQ1ytK42JvyCOHz0ofa+H2JoNS3g/
+         CmLQ==
+X-Gm-Message-State: AJIora+9cG2a/MKUnHqImwxEWnWhi5JD9ZgDiuEyE36FFktNH0dxlKdS
+        Wr0bdTKbrplxV38b+3dvEYFm8Vfb0aly+g==
+X-Google-Smtp-Source: AGRyM1vmqZ30pQeW5eGceJziZlGF7mRuL7z7QxE4dc7LNV1ESwzK0EK9/Nldb9DQjAKsZE8ZvJYDVQ==
+X-Received: by 2002:a05:6638:3722:b0:33f:4948:a91c with SMTP id k34-20020a056638372200b0033f4948a91cmr767877jav.283.1657682217851;
+        Tue, 12 Jul 2022 20:16:57 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id j63-20020a026342000000b0033f8312ee5bsm184798jac.41.2022.07.12.20.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 20:16:57 -0700 (PDT)
+Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Wed, 13 Jul 2022 15:16:48 +1200
-In-Reply-To: <1b5e06b237ad9f2bcbee320e95b94e336109b484.camel@intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <e1f72040effd7b4ed31f9941e009f959d6345129.1656366338.git.isaku.yamahata@intel.com>
-         <1b5e06b237ad9f2bcbee320e95b94e336109b484.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220712183236.931648980@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <89cdeb96-6227-4f6e-5ca0-f78adf3c7e07@linuxfoundation.org>
+Date:   Tue, 12 Jul 2022 21:16:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/12/22 12:38 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.12 release.
+> There are 61 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+>
 
-> > +	/* hardware_enable_nolock() checks CPU compatibility on each CPUs. */
-> > +	r =3D hardware_enable_all();
-> > +	if (r)
-> > +		goto out_free_2;
-> > +	/*
-> > +	 * Arch specific initialization that requires to enable virtualizatio=
-n
-> > +	 * feature.  e.g. TDX module initialization requires VMXON on all
-> > +	 * present CPUs.
-> > +	 */
-> > +	kvm_arch_post_hardware_enable_setup(opaque);
->=20
-> Please see my reply to your patch  "KVM: TDX: Initialize TDX module when =
-loading
-> kvm_intel.ko".
->=20
-> The introduce of __weak kvm_arch_post_hardware_enable_setup() should be i=
-n that
-> patch since it has nothing to do the job you claimed to do in this patch.
->=20
-> And by removing it, this patch can be taken out of TDX series and upstrea=
-med
-> separately.
+Compiled and booted on my test system. No dmesg regressions.
 
-I tried to dig more about the history.  Please see my another reply and ign=
-ore
-this.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
+
 

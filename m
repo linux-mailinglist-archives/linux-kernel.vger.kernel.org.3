@@ -2,545 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0F5572F38
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9CD572F3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiGMH2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S234685AbiGMH2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiGMH2K (ORCPT
+        with ESMTP id S234519AbiGMH21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:28:10 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54ECE3C1E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:28:08 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eq6so12980207edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wwzETJKIQrlU+8+QLl9F0AGowG0zSA3uMJrcnyFEu/c=;
-        b=ornLNe9OOfq6PnB/k5Z5tWvTBEd/cGXmE13J9IbhA1+7I9SLxu2WcQiRYvY8Y6fgGi
-         lHvSm3XOxH4JV5MHPqHaPI6mFZ6SXXYC8e+ap9cyr0e8AtbYBt+uR8Gj9uhW9a3/99gZ
-         M9YLWVml/J/d2Mnf1vyXW7SZu+YG4UTRCmCb3P9795f8BjGqC68ComatjWZRvZBXQpGq
-         dsEa53pNz2Pj+bYpzUycIbAPPShd72qCRmZc6N5Gz1Y0aWnM2opW8xHbb8ahwp7pgUPZ
-         h1DRxgZ5volkY3d2opjGX/Kdmj3FZL+z3SZCprwNNPXMk3OzjzEXOLCzf5kboMCysuLn
-         plEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wwzETJKIQrlU+8+QLl9F0AGowG0zSA3uMJrcnyFEu/c=;
-        b=0Hhm9BJNNWSrEIuAtX+skJzB3mRsLen38Fw+iA89IgU0Jn7snjQjopqLtEniNz6TcU
-         MX9DK1NqnprUGbe4WR1SDiJ7NMlCmQnyrZNMdrCiZU/e1PgjoXpTj7+xAN+ox03p2KFA
-         ckxbN9ncIN3Q+oCdU8V01MUBCG1dNc08Zjacew4ZRUseV/wFRIW+ShlhEyxXer6SDXcl
-         RwEQFxVHnyk5oGuJpMX7Hw7qsGykGDWiRs3IL+sg9+r7zqKSzIdHnW0lzkq6jTI2twfn
-         eDVgi/H4MX5P8nLL5HXf2wg7DSJjIHRAHGVJKAxLubdTDG2Nx9499cq0Ys+ThoLrPygv
-         9G4w==
-X-Gm-Message-State: AJIora/vjs7yzaYInqta3uJeE+cdasqydRzyVwWOTBLdDGM+u2mcHWl3
-        dm7WmxyZxAEgqhlWsRqx9azF/ad5y4s9nTcE0uzpyQ==
-X-Google-Smtp-Source: AGRyM1sQw++6I/l2EhVW6jlBTxMvQTO3mfdwwI8tvG/HGB7ECkghVpYMQmg1p1shY2t/qsrgvuXSo7B6SPggglIdLvM=
-X-Received: by 2002:a05:6402:27c8:b0:43a:f392:8fdd with SMTP id
- c8-20020a05640227c800b0043af3928fddmr2857035ede.328.1657697287109; Wed, 13
- Jul 2022 00:28:07 -0700 (PDT)
+        Wed, 13 Jul 2022 03:28:27 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFE2E474F;
+        Wed, 13 Jul 2022 00:28:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tv3lAUOEcsb7RAYEsUnzkJeg4uWJcnKDEGCHnqjCkhVaWygNIX3puyZ8Eb11f1tGLPmSUz1oTTWh5C17PGtu5EoFl1+WZlFc4K4rYmFSyTekO9A3SnbKFzSr+F5jzzy2o3u/VHqxHskwCoL/w70Wgo9IZpSJt8jNcf5Hp+vz78w/1qu1y+i2IuGqgDmNXv+ddV872UuJPg0q+tJNpAcGYGo9nmeixT4oU+zZp7/8eIpDg+9I+smmz1JDVbbGXB0VMnkN8ejVL8cegSY4bxwEHWtY1gMv0tmBl/Qv1Bw0NNaEXobBjmL4KR1Y8KXu5Dc6f4UkaAp2paX8sKgaKKcboQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qTGH/1ng40sAS0k1gHLsvrz+P88R7+4+DIOmRr6gxns=;
+ b=RRLWXhFu7m9KM42ae3EHi2Mol8uGiSRC8hHyPdCSk9w0cG2M2iS+K6rg9vsXaH9xxmrG1RnYce5JzxaEHVT0Fik7p/pUgIHOImJJwwxZjHw1TfikYIhwG6z08ic/NeEEewzGxipBxRr6i5MBt/S6f/ai4Sgq09A7Tv1f/DYL7Q+2qVH8TgDvvijLmikh8jPnzXIpGXeR6FBUuJFgAAGi6oNiAxcnHrN3zkLGH+xu5KgzmIAfgv96dgMweZD/vypDOl50E1OcaJ80nZctNk1u5RPZYoWepfJSpl1C2SZOdalGGWYccA2ai+BVQLlPfbqNrsf/pIvOaYAm4moAHpH+gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qTGH/1ng40sAS0k1gHLsvrz+P88R7+4+DIOmRr6gxns=;
+ b=olAL/sfpDK1fNj0GGRfkDZVmSNwXJfGplLW2Y9pl1+ksXFHOiRRe2rn99ekoWoZb9ra1mXVDkdcW9lRdarmaM+hEUu+x3q8HYFf0TOQcDYYoIsEloJfb79DI0gCC71pFK8DSCamd0gUFzhV3tBtldtclRlpGCOd1VKhO6SVG66LRxWXIWRMRsbsoy/8Kj9jH1hEtKvscwfHmseZhbyr6gGrC7TVvukjC09yz0t44Hl/Hp91woYjnxveAyc9Fh9IsiwE6eEi5pfzY24pEyjHVAYN3sn085hGpU4ltDDbZH0PI+GtGQnRc1fe5J6Ef74RTFz23fCh14Op028hNdSGkaA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5979.namprd12.prod.outlook.com (2603:10b6:208:37e::15)
+ by SJ1PR12MB6268.namprd12.prod.outlook.com (2603:10b6:a03:455::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Wed, 13 Jul
+ 2022 07:28:17 +0000
+Received: from MN0PR12MB5979.namprd12.prod.outlook.com
+ ([fe80::6cf7:d2b:903c:282]) by MN0PR12MB5979.namprd12.prod.outlook.com
+ ([fe80::6cf7:d2b:903c:282%3]) with mapi id 15.20.5417.023; Wed, 13 Jul 2022
+ 07:28:17 +0000
+Date:   Wed, 13 Jul 2022 09:28:12 +0200
+From:   Jiri Pirko <jiri@nvidia.com>
+To:     Vikas Gupta <vikas.gupta@broadcom.com>
+Cc:     Jiri Pirko <jiri@resnulli.us>, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
+        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
+        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net,
+        Michael Chan <michael.chan@broadcom.com>,
+        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
+Subject: Re: [PATCH net-next v2 1/3] devlink: introduce framework for
+ selftests
+Message-ID: <Ys50DGXCi5lPaRBB@nanopsycho>
+References: <20220628164241.44360-1-vikas.gupta@broadcom.com>
+ <20220707182950.29348-1-vikas.gupta@broadcom.com>
+ <20220707182950.29348-2-vikas.gupta@broadcom.com>
+ <YswaKcUs6nOndU2V@nanopsycho>
+ <CAHLZf_t9ihOQPvcQa8cZsDDVUX1wisrBjC30tHG_-Dz13zg=qQ@mail.gmail.com>
+ <Ys0UpFtcOGWjK/sZ@nanopsycho>
+ <CAHLZf_s7s4rqBkDnB+KH-YJRDBDzeZB6VhKMMndk+dxxY11h3g@mail.gmail.com>
+ <Ys24l4O1M/8Kf4/o@nanopsycho>
+ <CAHLZf_tzpG9J=_orUsD9xto_Q818S-YqOTFvWchFjRkR3LXhvA@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHLZf_tzpG9J=_orUsD9xto_Q818S-YqOTFvWchFjRkR3LXhvA@mail.gmail.com>
+X-ClientProxiedBy: VI1PR06CA0176.eurprd06.prod.outlook.com
+ (2603:10a6:803:c8::33) To MN0PR12MB5979.namprd12.prod.outlook.com
+ (2603:10b6:208:37e::15)
 MIME-Version: 1.0
-References: <20220712143237.13992-1-henning.schild@siemens.com> <20220712143237.13992-2-henning.schild@siemens.com>
-In-Reply-To: <20220712143237.13992-2-henning.schild@siemens.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 13 Jul 2022 09:27:56 +0200
-Message-ID: <CAMRc=Md7uVpwSweCSfrNJKqhQLYs2sVv9UasL59ZpqJ50fSC5w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] gpio: nct6116d: add new driver for several Nuvoton
- super io chips
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Kuan-Wei Ho <cwho@nuvoton.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3ff11602-51b9-4e33-d112-08da64a140e7
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6268:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /6xLTUjo5aXx9EaBjZ+opWAx+fbwHd19mbI+STuQrobMz3wx8V/1u1/nueqSyVceF2TqvT1OKMPDDJMuJQ/d8XoPofvYR1To/V1cQDSevJRNVphku0Y1Ny4BUmkR468ra1agcfaH26GhIv+Tt3Aaw51ugv6i34omUTzzZakQON+RpRzMG1epsZCNoA8/RyRYNDwJ697+zxUOiDLQe9qshvHX79QZO9k30QnglH6/53lngPL9mYW6g+/f3SseFKo0XJIfhW83L9LVpiOHaaoEusS0HP0zuV1iSvMVAYR/VLxeJD8YqNUqdvP4r4HuaKdNYcIDLc32wPU+GV9kQJaKy7sZHL35gxJQGdxfzUmd1rx6fddrEqgQoM7BMhQWqYWQQZmLA5tTvK04B1x1nnl/znnkGweaTNWiZXVQYnxdEdYSmt8ENCkA9XMKZRYJNKzvZA5QUc3J8+84tR01c1/LwnrTHWsawrSpLjfY6DxveVooiDE2kXSDRKB87GEVL1NBT4AwiMpOzEm55uztmRneeRSO0rxOab+/hnmFSZvu3SkrfEhiq2MrRV0xz7GnCuKNw/FjsGIx8WUd4sob5CNIZbBsK6waiaLgLw4iOoVt/GpfY1iiF8ZPSppxtCxQ9hwc4ffLFDuQe/S4/d7wTEI5df3IQIZtNdfPCqU5UVMKtDbaG3QmiAPgC0C0nT++BpwvNL4yJR7lNiIr9Ve1ws/MDGuoMJuLAqjtPZPXao+PIzuS3ypuZA538WP5smt/vEFaIpct1WLYiAxBcKi3SQEV+Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5979.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(376002)(136003)(346002)(396003)(39860400002)(366004)(5660300002)(6512007)(83380400001)(2906002)(7416002)(8936002)(33716001)(38100700002)(6916009)(6486002)(478600001)(54906003)(86362001)(316002)(66556008)(8676002)(4326008)(9686003)(41300700001)(66476007)(6666004)(6506007)(66946007)(186003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/DslvnYa0LR9+Mb8eYM2KoTN9FeL1YWLRuoAPvb29dqZ2DG88aKiRg3F2Z63?=
+ =?us-ascii?Q?Z31WJI15bsBSgdjcQ5fUXBEDwcik1phXUo/MfWzHMC5QcezWP3nqIjcuyb6w?=
+ =?us-ascii?Q?xnUNudNDF6arE8vuTvYIzz9a9rIr8lSAg0Wek4c7uWSl9mebjr0YoAS6RiTc?=
+ =?us-ascii?Q?5pQKKJn/A3jYoRZ31aNh3S4gqpCSkhsz2/XL+ZVsQPK9ZcHdwbJKxGW6ern4?=
+ =?us-ascii?Q?BhIXOdFZaOq7K55MYObeUm7wtiblQgddK8M3euVY5I92EqfjuW4y77xDCg9r?=
+ =?us-ascii?Q?9pj17z79aZRfiwr5jm9m5HAU7X3yE2T1O5DSGCDUtyyZikWJRjbvxD3WZbss?=
+ =?us-ascii?Q?HgEbt7VX7auQtozu9zGZoBT+3YZsEcgxctmUM2HaA5t76TXVWQiIvVhUPjZG?=
+ =?us-ascii?Q?/hYuFLOZN4JkIvSlAnDf5GvbX35Q5Ys38kdlQVs/CS4Rf/Gefs/7Vxr+upcu?=
+ =?us-ascii?Q?zefQgtM5w3rkYZ5w2Jxf+SjZQy+tEblpNifgO54xaRt9F5UvYajoSkjZkNBi?=
+ =?us-ascii?Q?IVx5FKLk25yYuafCKpMnsMkA+lpvibYY9TZQSF7meQl99aRhc9xCTWn94GVW?=
+ =?us-ascii?Q?w9oN+qQkSQNxaITjDyS58vRDuchIUqHEru+XzDUk2RBKc/0rPwMSFpYymJK+?=
+ =?us-ascii?Q?eq8lGWGzmVEj+zaP9FXIUuU/PvNhzVahblp6hB1vqrJrGJo+QdfKH09sBsJA?=
+ =?us-ascii?Q?j0CtEnVNvWiuCudPLa+j22qxZpfBOmHspCzPB0iw/6XRWIvZjhmlINOBi925?=
+ =?us-ascii?Q?NGBHnlZQO5WETqKpB2TwGhTxI38SgJ/MyIAP4Q0ZZKNKZPFcRx639Y08lJdP?=
+ =?us-ascii?Q?jfbD3fU2z0m3OvMuUkmN5eXAh/p2yTu3QtpVuitOqjLNu9gv2K/RUibu583v?=
+ =?us-ascii?Q?VklTmk8eITw8ifDqxjXF2ok83rqDzW6eJtOReZGUaXIrRUByp2Q34dvqCpd5?=
+ =?us-ascii?Q?Z90hih/cDYcmvjUggqLQnMHLPCE8Xcpq0VZkBXL3N64Y2yVxe1bciLNcYZ/M?=
+ =?us-ascii?Q?MPOVHaVamgaOm14iCQX2T5oso22dNwyxJz4dK5jHa1uls/5ckJsPUjDBxnF0?=
+ =?us-ascii?Q?nBn0AASD4h7nCj9HGmSRyW6Kel/VB4g7KsxhWdDRv9/Zw29u/a6AFWXZuvuR?=
+ =?us-ascii?Q?v4EKHkkTvyImv1dS4/ACN1VO7A5EvnLKl9fPN34Ng7QthtONaBhh0rGIPHg7?=
+ =?us-ascii?Q?vLVFKLw4mwru32Vi8UuybMRs0yViBMuaP5hsZWdNPovSHJiih8QHPwHUHpxu?=
+ =?us-ascii?Q?7gEP/iCV6M8kYYs9Xo0y/9FyHtK6EbFew6Q7NO2D42z12CHfyLZx+DWzA0OX?=
+ =?us-ascii?Q?gIWlFt+V/2/e6WtKFnrUhWb0NlgtbYc+RqT5TfNsWmkRxdW2AJun7HG3K+GD?=
+ =?us-ascii?Q?ulU8hdIiLg5QK9buyUOk6SsDcl/fSQ5YzDQYrymQ9RhHsDi0AbFB+M4JHu4D?=
+ =?us-ascii?Q?gQNLtzgtmi/U0O85kZy47GA/gXxffk70H/W+u8e+fA+MaaeixbFkobDRx0XV?=
+ =?us-ascii?Q?CdbygP1gQ6GqnedGBHLDd22K5WIxPhRakX5gjNyxYYDHKksv70oSxtixmGWu?=
+ =?us-ascii?Q?9Vjf/X95PVMPZmpu8uJvENfW/8zQJv2eHbzpwve2?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ff11602-51b9-4e33-d112-08da64a140e7
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5979.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 07:28:16.9511
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qLgGWVVqkPw8u16ERXxurXUErzBt1wItZmeRmkocBHWGMg6Coj+MHbZC/5IAkDNQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6268
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:32 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+Wed, Jul 13, 2022 at 08:40:50AM CEST, vikas.gupta@broadcom.com wrote:
+>Hi Jiri,
 >
-> This patch adds gpio support for several Nuvoton NCTXXX chips. These
-> Super-I/O chips offer multiple functions of which several already have
-> drivers in the kernel, i.e. hwmon and watchdog.
+>On Tue, Jul 12, 2022 at 11:38 PM Jiri Pirko <jiri@resnulli.us> wrote:
+>>
+>> Tue, Jul 12, 2022 at 06:41:49PM CEST, vikas.gupta@broadcom.com wrote:
+>> >Hi Jiri,
+>> >
+>> >On Tue, Jul 12, 2022 at 11:58 AM Jiri Pirko <jiri@nvidia.com> wrote:
+>> >>
+>> >> Tue, Jul 12, 2022 at 08:16:11AM CEST, vikas.gupta@broadcom.com wrote:
+>> >> >Hi Jiri,
+>> >> >
+>> >> >On Mon, Jul 11, 2022 at 6:10 PM Jiri Pirko <jiri@nvidia.com> wrote:
+>> >> >
+>> >> >> Thu, Jul 07, 2022 at 08:29:48PM CEST, vikas.gupta@broadcom.com wrote:
+>>
+>> [...]
+>>
+>>
+>> >> >> >  * enum devlink_trap_action - Packet trap action.
+>> >> >> >  * @DEVLINK_TRAP_ACTION_DROP: Packet is dropped by the device and a copy
+>> >> >> is not
+>> >> >> >@@ -576,6 +598,10 @@ enum devlink_attr {
+>> >> >> >       DEVLINK_ATTR_LINECARD_TYPE,             /* string */
+>> >> >> >       DEVLINK_ATTR_LINECARD_SUPPORTED_TYPES,  /* nested */
+>> >> >> >
+>> >> >> >+      DEVLINK_ATTR_SELFTESTS_MASK,            /* u32 */
+>> >> >>
+>> >> >> I don't see why this is u32 bitset. Just have one attr per test
+>> >> >> (NLA_FLAG) in a nested attr instead.
+>> >> >>
+>> >> >
+>> >> >As per your suggestion, for an example it should be like as below
+>> >> >
+>> >> >        DEVLINK_ATTR_SELFTESTS,                 /* nested */
+>> >> >
+>> >> >        DEVLINK_ATTR_SELFTESTS_SOMETEST1            /* flag */
+>> >> >
+>> >> >        DEVLINK_ATTR_SELFTESTS_SOMETEST2           /* flag */
+>> >>
+>> >> Yeah, but have the flags in separate enum, no need to pullute the
+>> >> devlink_attr enum by them.
+>> >>
+>> >>
+>> >> >
+>> >> >....    <SOME MORE TESTS>
+>> >> >
+>> >> >.....
+>> >> >
+>> >> >        DEVLINK_ATTR_SLEFTESTS_RESULT_VAL,      /* u8 */
+>> >> >
+>> >> >
+>> >> >
+>> >> > If we have this way then we need to have a mapping (probably a function)
+>> >> >for drivers to tell them what tests need to be executed based on the flags
+>> >> >that are set.
+>> >> > Does this look OK?
+>> >> >  The rationale behind choosing a mask is that we could directly pass the
+>> >> >mask-value to the drivers.
+>> >>
+>> >> If you have separate enum, you can use the attrs as bits internally in
+>> >> kernel. Add a helper that would help the driver to work with it.
+>> >> Pass a struct containing u32 (or u8) not to drivers. Once there are more
+>> >> tests than that, this structure can be easily extended and the helpers
+>> >> changed. This would make this scalable. No need for UAPI change or even
+>> >> internel driver api change.
+>> >
+>> >As per your suggestion, selftest attributes can be declared in separate
+>> >enum as below
+>> >
+>> >enum {
+>> >
+>> >        DEVLINK_SELFTEST_SOMETEST,         /* flag */
+>> >
+>> >        DEVLINK_SELFTEST_SOMETEST1,
+>> >
+>> >        DEVLINK_SELFTEST_SOMETEST2,
+>> >
+>> >....
+>> >
+>> >......
+>> >
+>> >        __DEVLINK_SELFTEST_MAX,
+>> >
+>> >        DEVLINK_SELFTEST_MAX = __DEVLINK_SELFTEST_MAX - 1
+>> >
+>> >};
+>> >Below  examples could be the flow of parameters/data from user to
+>> >kernel and vice-versa
+>> >
+>> >
+>> >Kernel to user for show command . Users can know what all tests are
+>> >supported by the driver. A return from kernel to user.
+>> >______
+>> >|NEST |
+>> >|_____ |TEST1|TEST4|TEST7|...
+>> >
+>> >
+>> >User to kernel to execute test: If user wants to execute test4, test8, test1...
+>> >______
+>> >|NEST |
+>> >|_____ |TEST4|TEST8|TEST1|...
+>> >
+>> >
+>> >Result Kernel to user execute test RES(u8)
+>> >______
+>> >|NEST |
+>> >|_____ |RES4|RES8|RES1|...
+>>
+>> Hmm, I think it is not good idea to rely on the order, a netlink library
+>> can perhaps reorder it? Not sure here.
+>>
+>> >
+>> >Results are populated in the same order as the user passed the TESTs
+>> >flags. Does the above result format from kernel to user look OK ?
+>> >Else we need to have below way to form a result format, a nest should
+>> >be made for <test_flag,
+>> >result> but since test flags are in different enum other than
+>> >devlink_attr and RES being part of devlink_attr, I believe it's not
+>> >good practice to make the below structure.
+>>
+>> Not a structure, no. Have it as another nest (could be the same attr as
+>> the parent nest:
+>>
+>> ______
+>> |NEST |
+>> |_____ |NEST|       |NEST|       |NEST|
+>>         TEST4,RES4   TEST8,RES8   TEST1, RES1
+>>
+>> also, it is flexible to add another attr if needed (like maybe result
+>> message string containing error message? IDK).
 >
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/gpio/Kconfig         |   9 +
->  drivers/gpio/Makefile        |   1 +
->  drivers/gpio/gpio-nct6116d.c | 412 +++++++++++++++++++++++++++++++++++
->  3 files changed, 422 insertions(+)
->  create mode 100644 drivers/gpio/gpio-nct6116d.c
+>For above nesting we can have the attributes defined as below
 >
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index b01961999ced..1f1ec035f3c6 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -899,6 +899,15 @@ config GPIO_IT87
->           To compile this driver as a module, choose M here: the module will
->           be called gpio_it87.
+>Attribute in  devlink_attr
+>enum devlink_attr {
+>  ....
+>  ....
+>        DEVLINK_SELFTESTS_INFO, /* nested */
+>  ...
+>...
+>}
 >
-> +config GPIO_NCT6116D
-> +       tristate "Nuvoton Super-I/O GPIO support"
-> +       help
-> +         This option enables support for GPIOs found on Nuvoton Super-I/O
-> +         chips NCT5104D, NCT6106D, NCT6116D, NCT6122D.
-> +
-> +         To compile this driver as a module, choose M here: the module will
-> +         be called gpio_nct6116d.
-> +
->  config GPIO_SCH
->         tristate "Intel SCH/TunnelCreek/Centerton/Quark X1000 GPIO"
->         depends on (X86 || COMPILE_TEST) && ACPI
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 14352f6dfe8e..87f1b0a0cda2 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -107,6 +107,7 @@ obj-$(CONFIG_GPIO_MT7621)           += gpio-mt7621.o
->  obj-$(CONFIG_GPIO_MVEBU)               += gpio-mvebu.o
->  obj-$(CONFIG_GPIO_MXC)                 += gpio-mxc.o
->  obj-$(CONFIG_GPIO_MXS)                 += gpio-mxs.o
-> +obj-$(CONFIG_GPIO_NCT6116D)            += gpio-nct6116d.o
->  obj-$(CONFIG_GPIO_OCTEON)              += gpio-octeon.o
->  obj-$(CONFIG_GPIO_OMAP)                        += gpio-omap.o
->  obj-$(CONFIG_GPIO_PALMAS)              += gpio-palmas.o
-> diff --git a/drivers/gpio/gpio-nct6116d.c b/drivers/gpio/gpio-nct6116d.c
-> new file mode 100644
-> index 000000000000..2ff92f3e11aa
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-nct6116d.c
-> @@ -0,0 +1,412 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * GPIO driver for Nuvoton Super-I/O chips NCT5104D, NCT6106D, NCT6116D, NCT6122D
-> + *
-> + * Authors:
-> + *  Tasanakorn Phaipool <tasanakorn@gmail.com>
-> + *  Sheng-Yuan Huang <syhuang3@nuvoton.com>
-> + *  Kuan-Wei Ho <cwho@nuvoton.com>
-> + *  Henning Schild <henning.schild@siemens.com>
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/gpio/driver.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +/*
-> + * Super-I/O registers
-> + */
-> +#define SIO_LDSEL              0x07    /* Logical device select */
-> +#define SIO_CHIPID             0x20    /* Chaip ID (2 bytes) */
-> +#define SIO_GPIO_ENABLE                0x30    /* GPIO enable */
-> +
-> +#define SIO_LD_GPIO            0x07    /* GPIO logical device */
-> +#define SIO_UNLOCK_KEY         0x87    /* Key to enable Super-I/O */
-> +#define SIO_LOCK_KEY           0xAA    /* Key to disable Super-I/O */
-> +
-> +#define SIO_ID_MASK            GENMASK(15, 4)
-> +#define SIO_NCT5104D_ID                0x1061
-> +#define SIO_NCT6106D_ID                0xC452
-> +#define SIO_NCT6116D_ID                0xD282
-> +#define SIO_NCT6122D_ID                0xD2A3
-> +
-> +enum chips {
-> +       nct5104d,
-> +       nct6106d,
-> +       nct6116d,
-> +       nct6122d,
-> +};
-> +
-> +static const char * const nct6116d_names[] = {
-> +       [nct5104d] = "nct5104d",
-> +       [nct6106d] = "nct6106d",
-> +       [nct6116d] = "nct6116d",
-> +       [nct6122d] = "nct6122d",
-> +};
-> +
-> +struct nct6116d_sio {
-> +       int addr;
-> +       enum chips type;
-> +};
-> +
-> +struct nct6116d_gpio_bank {
-> +       struct gpio_chip chip;
-> +       unsigned int regbase;
-> +       struct nct6116d_gpio_data *data;
-> +};
-> +
-> +struct nct6116d_gpio_data {
-> +       struct nct6116d_sio *sio;
-> +       int nr_bank;
-> +       struct nct6116d_gpio_bank *bank;
-> +};
-> +
-> +/*
-> + * Super-I/O functions.
-> + */
-> +
-> +static inline int superio_inb(int base, int reg)
-> +{
-> +       outb(reg, base);
-> +       return inb(base + 1);
-> +}
-> +
-> +static int superio_inw(int base, int reg)
-> +{
-> +       int val;
-> +
-> +       outb(reg++, base);
-> +       val = inb(base + 1) << 8;
-> +       outb(reg, base);
-> +       val |= inb(base + 1);
-> +
-> +       return val;
-> +}
-> +
-> +static inline void superio_outb(int base, int reg, int val)
-> +{
-> +       outb(reg, base);
-> +       outb(val, base + 1);
-> +}
-> +
-> +static inline int superio_enter(int base)
-> +{
-> +       /* Don't step on other drivers' I/O space by accident. */
-> +       if (!request_muxed_region(base, 2, KBUILD_MODNAME)) {
-> +               pr_err("I/O address 0x%04x already in use\n", base);
-> +               return -EBUSY;
-> +       }
-> +
-> +       /* According to the datasheet the key must be send twice. */
-> +       outb(SIO_UNLOCK_KEY, base);
-> +       outb(SIO_UNLOCK_KEY, base);
-> +
-> +       return 0;
-> +}
-> +
-> +static inline void superio_select(int base, int ld)
-> +{
-> +       outb(SIO_LDSEL, base);
-> +       outb(ld, base + 1);
-> +}
-> +
-> +static inline void superio_exit(int base)
-> +{
-> +       outb(SIO_LOCK_KEY, base);
-> +       release_region(base, 2);
-> +}
-> +
-> +/*
-> + * GPIO chip.
-> + */
-> +
-> +#define gpio_dir(base) ((base) + 0)
-> +#define gpio_data(base) ((base) + 1)
-> +
-> +static inline void *nct6116d_to_gpio_bank(struct gpio_chip *chip)
-> +{
-> +       return container_of(chip, struct nct6116d_gpio_bank, chip);
-> +}
-> +
-> +static int nct6116d_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
-> +       struct nct6116d_sio *sio = bank->data->sio;
-> +       int err;
-> +       u8 dir;
-> +
-> +       err = superio_enter(sio->addr);
-> +       if (err)
-> +               return err;
-> +       superio_select(sio->addr, SIO_LD_GPIO);
-> +
-> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
-> +
-> +       superio_exit(sio->addr);
-> +
-> +       if (dir & 1 << offset)
-> +               return GPIO_LINE_DIRECTION_OUT;
-> +
-> +       return GPIO_LINE_DIRECTION_IN;
-> +}
-> +
-> +static int nct6116d_gpio_direction_in(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
-> +       struct nct6116d_sio *sio = bank->data->sio;
-> +       int err;
-> +       u8 dir;
-> +
-> +       err = superio_enter(sio->addr);
-> +       if (err)
-> +               return err;
-> +       superio_select(sio->addr, SIO_LD_GPIO);
-> +
-> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
-> +       dir |= BIT(offset);
-> +       superio_outb(sio->addr, gpio_dir(bank->regbase), dir);
-> +
-> +       superio_exit(sio->addr);
-> +
-> +       return 0;
-> +}
-> +
-> +static int nct6116d_gpio_get(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
-> +       struct nct6116d_sio *sio = bank->data->sio;
-> +       int err;
-> +       u8 data;
-> +
-> +       err = superio_enter(sio->addr);
-> +       if (err)
-> +               return err;
-> +       superio_select(sio->addr, SIO_LD_GPIO);
-> +
-> +       data = superio_inb(sio->addr, gpio_data(bank->regbase));
-> +
-> +       superio_exit(sio->addr);
-> +
-> +       return !!(data & BIT(offset));
-> +}
-> +
-> +static int nct6116d_gpio_direction_out(struct gpio_chip *chip,
-> +                                    unsigned int offset, int value)
-> +{
-> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
-> +       struct nct6116d_sio *sio = bank->data->sio;
-> +       u8 dir, data_out;
-> +       int err;
-> +
-> +       err = superio_enter(sio->addr);
-> +       if (err)
-> +               return err;
-> +       superio_select(sio->addr, SIO_LD_GPIO);
-> +
-> +       data_out = superio_inb(sio->addr, gpio_data(bank->regbase));
-> +       if (value)
-> +               data_out |= BIT(offset);
-> +       else
-> +               data_out &= ~BIT(offset);
-> +       superio_outb(sio->addr, gpio_data(bank->regbase), data_out);
-> +
-> +       dir = superio_inb(sio->addr, gpio_dir(bank->regbase));
-> +       dir &= ~BIT(offset);
-> +       superio_outb(sio->addr, gpio_dir(bank->regbase), dir);
-> +
-> +       superio_exit(sio->addr);
-> +
-> +       return 0;
-> +}
-> +
-> +static void nct6116d_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-> +{
-> +       struct nct6116d_gpio_bank *bank = nct6116d_to_gpio_bank(chip);
-> +       struct nct6116d_sio *sio = bank->data->sio;
-> +       u8 data_out;
-> +       int err;
-> +
-> +       err = superio_enter(sio->addr);
-> +       if (err)
-> +               return;
-> +       superio_select(sio->addr, SIO_LD_GPIO);
-> +
-> +       data_out = superio_inb(sio->addr, gpio_data(bank->regbase));
-> +       if (value)
-> +               data_out |= BIT(offset);
-> +       else
-> +               data_out &= ~BIT(offset);
-> +       superio_outb(sio->addr, gpio_data(bank->regbase), data_out);
-> +
-> +       superio_exit(sio->addr);
-> +}
-> +
-> +#define NCT6116D_GPIO_BANK(_base, _ngpio, _regbase, _label)                    \
-> +       {                                                                       \
-> +               .chip = {                                                       \
-> +                       .label            = _label,                             \
-> +                       .owner            = THIS_MODULE,                        \
-> +                       .get_direction    = nct6116d_gpio_get_direction,        \
-> +                       .direction_input  = nct6116d_gpio_direction_in,         \
-> +                       .get              = nct6116d_gpio_get,                  \
-> +                       .direction_output = nct6116d_gpio_direction_out,        \
-> +                       .set              = nct6116d_gpio_set,                  \
-> +                       .base             = _base,                              \
-> +                       .ngpio            = _ngpio,                             \
-> +                       .can_sleep        = false,                              \
-> +               },                                                              \
-> +               .regbase = _regbase,                                            \
-> +       }
-> +
-> +static struct nct6116d_gpio_bank nct6116d_gpio_bank[] = {
-> +       NCT6116D_GPIO_BANK(0, 8, 0xE0, KBUILD_MODNAME "-0"),
-> +       NCT6116D_GPIO_BANK(10, 8, 0xE4, KBUILD_MODNAME "-1"),
-> +       NCT6116D_GPIO_BANK(20, 8, 0xE8, KBUILD_MODNAME "-2"),
-> +       NCT6116D_GPIO_BANK(30, 8, 0xEC, KBUILD_MODNAME "-3"),
-> +       NCT6116D_GPIO_BANK(40, 8, 0xF0, KBUILD_MODNAME "-4"),
-> +};
-> +
-> +/*
-> + * Platform device and driver.
-> + */
-> +
-> +static int nct6116d_gpio_probe(struct platform_device *pdev)
-> +{
-> +       struct nct6116d_sio *sio = pdev->dev.platform_data;
-> +       struct nct6116d_gpio_data *data;
-> +       int err;
-> +       int i;
-> +
-> +       data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +       if (!data)
-> +               return -ENOMEM;
-> +
-> +       data->nr_bank = ARRAY_SIZE(nct6116d_gpio_bank);
-> +       data->bank = nct6116d_gpio_bank;
-> +       data->sio = sio;
-> +
-> +       platform_set_drvdata(pdev, data);
-> +
-> +       /* For each GPIO bank, register a GPIO chip. */
-> +       for (i = 0; i < data->nr_bank; i++) {
-> +               struct nct6116d_gpio_bank *bank = &data->bank[i];
-> +
-> +               bank->chip.parent = &pdev->dev;
-> +               bank->data = data;
-> +
-> +               err = devm_gpiochip_add_data(&pdev->dev, &bank->chip, bank);
-> +               if (err)
-> +                       return dev_err_probe(&pdev->dev, err,
-> +                               "Failed to register gpiochip %d\n", i);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int __init nct6116d_find(int addr, struct nct6116d_sio *sio)
-> +{
-> +       u16 devid;
-> +       int err;
-> +
-> +       err = superio_enter(addr);
-> +       if (err)
-> +               return err;
-> +
-> +       devid = superio_inw(addr, SIO_CHIPID);
-> +       superio_exit(addr);
-> +       switch (devid & SIO_ID_MASK) {
-> +       case SIO_NCT5104D_ID & SIO_ID_MASK:
-> +               sio->type = nct5104d;
-> +               break;
-> +       case SIO_NCT6106D_ID & SIO_ID_MASK:
-> +               sio->type = nct6106d;
-> +               break;
-> +       case SIO_NCT6116D_ID & SIO_ID_MASK:
-> +               sio->type = nct6116d;
-> +               break;
-> +       case SIO_NCT6122D_ID & SIO_ID_MASK:
-> +               sio->type = nct6122d;
-> +               break;
-> +       default:
-> +               pr_info("Unsupported device 0x%04x\n", devid);
-> +               return -ENODEV;
-> +       }
-> +       sio->addr = addr;
-> +
-> +       pr_info("Found %s at 0x%x chip id 0x%04x\n",
-> +               nct6116d_names[sio->type], addr, devid);
-> +       return 0;
-> +}
-> +
-> +static struct platform_device *nct6116d_gpio_pdev;
-> +
-> +static int __init
-> +nct6116d_gpio_device_add(const struct nct6116d_sio *sio)
-> +{
-> +       int err;
-> +
-> +       nct6116d_gpio_pdev = platform_device_alloc(KBUILD_MODNAME, -1);
-> +       if (!nct6116d_gpio_pdev)
-> +               return -ENOMEM;
-> +
-> +       err = platform_device_add_data(nct6116d_gpio_pdev, sio, sizeof(*sio));
-> +       if (err) {
-> +               pr_err("Platform data allocation failed\n");
-> +               goto err;
-> +       }
-> +
-> +       err = platform_device_add(nct6116d_gpio_pdev);
-> +       if (err) {
-> +               pr_err("Device addition failed\n");
-> +               goto err;
-> +       }
-> +
-> +       return 0;
-> +
-> +err:
-> +       platform_device_put(nct6116d_gpio_pdev);
-> +
-> +       return err;
-> +}
-> +
-> +static struct platform_driver nct6116d_gpio_driver = {
-> +       .driver = {
-> +               .name   = KBUILD_MODNAME,
-> +       },
-> +       .probe          = nct6116d_gpio_probe,
-> +};
-> +
-> +static int __init nct6116d_gpio_init(void)
-> +{
-> +       struct nct6116d_sio sio;
-> +       int err;
-> +
-> +       if (nct6116d_find(0x2e, &sio) &&
-> +           nct6116d_find(0x4e, &sio))
-> +               return -ENODEV;
-> +
-> +       err = platform_driver_register(&nct6116d_gpio_driver);
-> +       if (!err) {
-> +               err = nct6116d_gpio_device_add(&sio);
-> +               if (err)
-> +                       platform_driver_unregister(&nct6116d_gpio_driver);
-> +       }
-> +
-> +       return err;
-> +}
+>enum devlink_selftests {
+>        DEVLINK_SELFTESTS_SOMETEST0,   /* flag */
+>        DEVLINK_SELFTESTS_SOMETEST1,
+>        DEVLINK_SELFTESTS_SOMETEST2,
+>        ...
+>        ...
+>}
+>
+>enum devlink_selftest_result {
 
-I'm confused - have we not discussed removing this part?
+for attrs, have "attr" in the name of the enum and "ATTR" in name of the
+value.
 
-Bart
+>        DEVLINK_SELFTESTS_RESULT,       /* nested */
+>        DEVLINK_SELFTESTS_TESTNUM,      /* u32  indicating the test
 
-> +
-> +static void __exit nct6116d_gpio_exit(void)
-> +{
-> +       platform_device_unregister(nct6116d_gpio_pdev);
-> +       platform_driver_unregister(&nct6116d_gpio_driver);
-> +}
-> +module_init(nct6116d_gpio_init);
-> +module_exit(nct6116d_gpio_exit);
-> +
-> +MODULE_DESCRIPTION("GPIO driver for Nuvoton Super-I/O chips  NCT5104D, NCT6106D, NCT6116D, NCT6122D");
-> +MODULE_AUTHOR("Tasanakorn Phaipool <tasanakorn@gmail.com>");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.35.1
+You can have 1 enum, containing both these and the test flags from
+above.
+
+
+>number in devlink_selftests enum */
+>        DEVLINK_SELFTESTS_RESULT_VAL,   /* u8  skip, pass, fail.. */
+
+Put enum name in the comment, instead of list possible values.
+
+
+>        ...some future attrr...
 >
+>}
+>enums in devlink_selftest_result can be put in devlink_attr though.
+
+You can have them separate, I think it is about the time we try to put
+new attrs what does not have potencial to be re-used to a separate enum.
+
+
+>
+>Does this look OK?
+>
+>Thanks,
+>Vikas
+>
+>>
+>>
+>>
+>> >______
+>> >|NEST |
+>> >|_____ | TEST4, RES4|TEST8,RES8|TEST1,RES1|...
+>> >
+>> >Let me know if my understanding is correct.
+>>
+>> [...]
+
+

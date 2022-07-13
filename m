@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B4C572DC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533BC572DCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 07:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbiGMF5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 01:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S232142AbiGMF61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 01:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiGMF5h (ORCPT
+        with ESMTP id S233669AbiGMF6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 01:57:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2999431233
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657691856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=boFEgVNblenrHqqVS1jnj2EIYdHHRnh1yN8Lis/KYmM=;
-        b=ithWByiWa3G8piXnpKay9MC+AmX3p2ALeFlfOkqc8Y56mkKD0D9IkUBaBklAUftZUJc6qV
-        GRtYvLXT9CpY3s0DpUmeY6Kh5F55TVzjx9RWHks0Vyqv+evBiVEGtlDn2pQdDYAWZSyowU
-        POzPmX6B/831KWU7R84Xh7zcfRYxqd8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-272-owzbgF2wP06sAeml8LoNEA-1; Wed, 13 Jul 2022 01:57:28 -0400
-X-MC-Unique: owzbgF2wP06sAeml8LoNEA-1
-Received: by mail-wm1-f72.google.com with SMTP id z24-20020a1c4c18000000b003a2e963c399so507108wmf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 22:57:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=boFEgVNblenrHqqVS1jnj2EIYdHHRnh1yN8Lis/KYmM=;
-        b=K04drWmrZciWTAE7mR9N+li2CS+M/rMJxY4kBB5vpX2a1cYlhFuAjo9X8nhTN+75DL
-         ECGvTU1fuqa7n0tdt1gwPLSL6OGSaBDqKXxUx8yXzjpHkwtDUZCKULtJAlB7na0A3rJK
-         vhoQR6x53+o5zwnd9p+KKnEbxxfqslloCoiRtDXykCHh6Qxs6nGS3e21siK5BD12ALRQ
-         8Vbn3PBYmOb2q3P+tQcXSXLM6uk67TLszZVswmBXeIlbAgQfBQTGW7zGOqP01NP1EFTg
-         yJMX30A+AQwplrME/zb7c0DibmiHsngZ2CPmwYoFuvQcJsIwbdGEo+P+Lb+bCL6EHEwP
-         mXmA==
-X-Gm-Message-State: AJIora96J68yQf628gimCQHjb+1S8yTrEKhzLU9MFT1AGen3R2F1BPrz
-        XdliOna/7UIDSLNMxKHF6aDGdiunbCXsBr7rs/JCSkaecCmr2QpyOk8G7iQEZesFuNya7ukhHDz
-        F7h85i/iv/c6jn6vc+t4YkGU+
-X-Received: by 2002:a1c:e90c:0:b0:3a0:4c68:f109 with SMTP id q12-20020a1ce90c000000b003a04c68f109mr1621690wmc.56.1657691847728;
-        Tue, 12 Jul 2022 22:57:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uSytF+rvA1u+0E60+EIyQ2fAAbilzoYpgj7lzqFVhdTGbFXS0W78UwvlB3/qhIbzv2YWWIHw==
-X-Received: by 2002:a1c:e90c:0:b0:3a0:4c68:f109 with SMTP id q12-20020a1ce90c000000b003a04c68f109mr1621674wmc.56.1657691847492;
-        Tue, 12 Jul 2022 22:57:27 -0700 (PDT)
-Received: from redhat.com ([2.52.24.42])
-        by smtp.gmail.com with ESMTPSA id co1-20020a0560000a0100b0021cf31e1f7csm9833670wrb.102.2022.07.12.22.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 22:57:26 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 01:57:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     jasowang@redhat.com, xiaodong.liu@intel.com,
-        maxime.coquelin@redhat.com, stefanha@redhat.com,
-        songmuchun@bytedance.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] vduse: Remove unnecessary spin lock protection
-Message-ID: <20220713015352-mutt-send-email-mst@kernel.org>
-References: <20220706050503.171-1-xieyongji@bytedance.com>
- <20220706050503.171-2-xieyongji@bytedance.com>
+        Wed, 13 Jul 2022 01:58:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71414735BF;
+        Tue, 12 Jul 2022 22:58:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7F09B81D05;
+        Wed, 13 Jul 2022 05:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B401C34114;
+        Wed, 13 Jul 2022 05:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657691887;
+        bh=+TFecpe9VYqNJy3cLeqbEtIOTbGwOcH+jyHof4F95ls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IsYLPU1Bjagy0Wep8RytHKxRpNtS30kzPubfzlikEyjPw/ExMjGxAGav4P+/99i36
+         OaQOrrzkM2yQPa58rSwFx57FHmxUpG+VEarOKajzEv9kPTBvkIZeAjiuf3mIUPUsnM
+         zTDKVhyWMekJyQYgETZGZ2Xivd69UjLMgRa7yDqrEMsD/6RLet6aX9AaZOZg95LwHN
+         GZWmFZAKu4zfIJJ74KREfuKVr5Dil0UFdETQbDLNfPVVBCWOJj920BJ7jbQaAXHXog
+         VL/gUZv+YVTVcNPrf7EebY0W9Bax8aHtRJVumxqomKF8JExBPOKDM6sKM1yP6r5lnv
+         HFIoC4PoOkfJA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBVNx-0000Cp-2E; Wed, 13 Jul 2022 07:58:09 +0200
+Date:   Wed, 13 Jul 2022 07:58:09 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Add lost ranges for timer
+Message-ID: <Ys5e8StvLMj5LBLm@hovoldconsulting.com>
+References: <20220707160858.3178771-1-bjorn.andersson@linaro.org>
+ <Ysvlqw/+eMk5XLRY@hovoldconsulting.com>
+ <YszcSgnSrbsncw0J@ripper>
+ <Ys2K/BH/kAeTBz5t@hovoldconsulting.com>
+ <Ys4lnuVncPiWkjbH@builder.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706050503.171-2-xieyongji@bytedance.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ys4lnuVncPiWkjbH@builder.lan>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +66,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 01:04:59PM +0800, Xie Yongji wrote:
-> Taking iotlb lock to access bounce page in page fault
-> handler is meaningless since vduse_domain_free_bounce_pages()
-> would only be called during file release.
+On Tue, Jul 12, 2022 at 08:53:34PM -0500, Bjorn Andersson wrote:
+> On Tue 12 Jul 09:53 CDT 2022, Johan Hovold wrote:
+> > On Mon, Jul 11, 2022 at 07:28:26PM -0700, Bjorn Andersson wrote:
+> > > On Mon 11 Jul 01:56 PDT 2022, Johan Hovold wrote:
+
+> > > > While addressing the current issue, this looks odd to me. Why not use a
+> > > > non-zero parent bus address here instead?
+> > > > 
+> > > 
+> > > I guess we could express the frames relative the timer range, but that
+> > > would imply that anyone porting downstream dts snippets would have to
+> > > translate these addresses - or more likely would end up just copying the
+> > > existing cases.
+> > > 
+> > > > And please use hex notation consistently for the addresses.
+> > > 
+> > > That seems like a reasonable ask, I can fix that up. But on both
+> > > accounts this matches what I merged for all the other platforms in:
+> > > 
+> > > 458ebdbb8e5d ("arm64: dts: qcom: timer should use only 32-bit size")
+> > > 
+> > > 
+> > > So I guess we'll also need to go back and fix up the style of all the
+> > > other platforms - just because we're not allowed to express the frames
+> > > in 64-bits according to the binding...
+> > 
+> > Would have been easier to just amend the binding. I don't think that
+> > #size-cells = 1 constraint is set in stone as it was added when
+> > converting to DT schema.
 > 
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> Rob disagrees with this idea:
+> https://lore.kernel.org/all/CAL_JsqJMMCBnukFZLJ8X14s1PwqT=VEwKjDVj8mm4h55pZpcuw@mail.gmail.com/
 
-vduse_domain_free_bounce_pages is not the
-only one taking this lock. This commit log needs more
-analysis documenting all points of access to bounce_maps
-and why vduse_domain_get_bounce_page and file
-release are the only two.
+Ok, thanks for the link. I'd still prefer a non-zero parent-bus address
+in that ranges, but we can change that later too.
 
-> ---
->  drivers/vdpa/vdpa_user/iova_domain.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> > But you probably should amend the commit message and mention that this
+> > fixes time keeping. I had recently noticed that something was off
+> > (journals rotating, and erratic cursor blinking) but didn't realise that
+> > timers were broken until you posted this.
+> > 
 > 
-> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-> index 6daa3978d290..bca1f0b8850c 100644
-> --- a/drivers/vdpa/vdpa_user/iova_domain.c
-> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
-> @@ -211,17 +211,14 @@ static struct page *
->  vduse_domain_get_bounce_page(struct vduse_iova_domain *domain, u64 iova)
->  {
->  	struct vduse_bounce_map *map;
-> -	struct page *page = NULL;
-> +	struct page *page;
->  
-> -	spin_lock(&domain->iotlb_lock);
->  	map = &domain->bounce_maps[iova >> PAGE_SHIFT];
->  	if (!map->bounce_page)
-> -		goto out;
-> +		return NULL;
->  
->  	page = map->bounce_page;
->  	get_page(page);
-> -out:
-> -	spin_unlock(&domain->iotlb_lock);
->  
->  	return page;
->  }
-> -- 
-> 2.20.1
+> That sounds like a good idea, thanks for the suggestion.
 
+I guess you're posting a v2, but otherwise feel free to add my 
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+when applying.
+
+Johan

@@ -2,90 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27635733F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3C0573400
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbiGMKRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S231856AbiGMKTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiGMKR3 (ORCPT
+        with ESMTP id S234934AbiGMKTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:17:29 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687CFF54E2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:17:28 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id C7AA51003DC83
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:17:17 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id BZQjomfOlUff9BZQjoG3NW; Wed, 13 Jul 2022 10:17:17 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62ce9bad
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49g1BY1oxgyutxOluTAA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1xsjzETUwFF2kRT2MVDQvzVNAq/vWxPE19w2vYipV6Q=; b=UPsBEq+N9b4HbZ4zU7mH7vCfLQ
-        azEqwrJjeKlvdkbQDthtT5HAmmEyBsGx6masjXQI9b0KZYVYkjqbty7zYylRrzax3vBaxVMYDpw1s
-        ixDKiJSFq9+0Rstqj/ajX3JfbXDS77Y2M10iave2rI0l97KjnDd3IUXTPwV47qCMzKW5UZuF40Zgf
-        2qs/gHJyCWTiK0m3Do7dldZXuDUB18iafJqrGEWYcSTSQ77raLBY68km0Lvlo2VmoAQc9CGpAy3wj
-        x1i3cM/4DDkp6v6pz/ySa4SU35zObMPJ0R/TJFOkil0NhKG3ZkAVets8XXlfu6dBwrl60VpqNXFLQ
-        74XXR0Dw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35696 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oBZQi-002PCq-2f;
-        Wed, 13 Jul 2022 04:17:16 -0600
-Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220712183236.931648980@linuxfoundation.org>
-In-Reply-To: <20220712183236.931648980@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f0856bed-9c36-15fc-f76c-67bcf51e5669@w6rz.net>
-Date:   Wed, 13 Jul 2022 03:17:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 13 Jul 2022 06:19:41 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEE6E0251;
+        Wed, 13 Jul 2022 03:19:40 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31c86fe1dddso107723397b3.1;
+        Wed, 13 Jul 2022 03:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K7K9RIsTB7qhaxVyNzqwwrUpbCvrSnTsy4cv/fUmIs4=;
+        b=Y/0nPTRgiekpHs3vqhMQjlZgVGd/asaU6Il9ZzErijaqBx9WUk+ztSFtsEEd1fNq24
+         AA5nRZBeFv1iFSHAQDbQdi5BSyxVcn3lh+kAPIJN02uCmNMmb5/AXb+doaHQ6BfCp50L
+         YXtySiaZpEDiHYmg7eVbXusE4nFjqAJ380bqEUCSyPRR6nDz5jXIQED2tUE5KASivuN0
+         IqVZSYbj5NEN8D95h5Y3FWQTlYvl8hjAg02J++JSSNW/lNVaHhulRO7yy8SR+A6t5GM3
+         zHhr6okuiw5f5OInU7dkA2rQdsKNAZrtEJGuN54vUB6OkldnkU+lhtgGhoFGj0Rp+QYX
+         Dk9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K7K9RIsTB7qhaxVyNzqwwrUpbCvrSnTsy4cv/fUmIs4=;
+        b=dzfnqvVqwKF+LE9abWy4qdXTngOwcnFD1bDOfriGxxZBe9TdZPRWxS6C1wvUHDCfhT
+         gcCFDJ7Y97sbt9mY+Ft69YrNjoAstXs5tmGzsMGYSVxMCRCCrVt1UFzAjEe6PV3UmxgC
+         mUWxZwAOuJuK/pupI4Nqk9tJUhlzy0bspmr15bS3JVEUJTd13WHgDwe8LmarYRPv+dky
+         ok9sMNWtgWX01FKT/U+vvqNGfk9BN63iKu9jvbC3PjAqtdd9yu9DVBqjsGoXIwysRpAF
+         bJ3X6a+vRVarR9fnXEmfqCF8rhi44R/mguepZMatdscxSbt5QV3bZbMDAABxpOqn8xGE
+         aYlw==
+X-Gm-Message-State: AJIora/uRO7tJIq794AlMxO3oR5gjCcmamHzcPckngsN/FzJiH/d4tQe
+        mwvxebhvlITIg7j0rsofdyc8Czs5chdeVsDvA24SeELm9/VEVg==
+X-Google-Smtp-Source: AGRyM1uwaHf3qYYg6VKkIaiqRo1dXuxB06b+DzNgeG9a2XCfGxbs/vPoG2fMw5wXZkoizyNIPRY6kch9+bA1ZEZtx3Y=
+X-Received: by 2002:a81:72c4:0:b0:31c:b309:c4e8 with SMTP id
+ n187-20020a8172c4000000b0031cb309c4e8mr3318340ywc.520.1657707579858; Wed, 13
+ Jul 2022 03:19:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oBZQi-002PCq-2f
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:35696
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+References: <20220712131523.1874428-1-vamshigajjela@google.com>
+ <CAHp75VecnJSv9P4ZXf5g4Yi7rYySRN=73KwZ_OBFUyFtaSq00w@mail.gmail.com> <CAMTSyjrhSSYVEBq=bdu9wBCcuPdrkmxS4jszOgOQBBvSKyaa_g@mail.gmail.com>
+In-Reply-To: <CAMTSyjrhSSYVEBq=bdu9wBCcuPdrkmxS4jszOgOQBBvSKyaa_g@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Jul 2022 12:19:03 +0200
+Message-ID: <CAHp75VffbgrMq1ozyvci9MMed=MP2OadujCzXz8PTUCwnmY1Jw@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250_dw: Avoid pslverr on reading empty receiver fifo
+To:     VAMSHI GAJJELA <vamshigajjela@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Manu Gautam <manugautam@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,26 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 11:38 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.12 release.
-> There are 61 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Jul 13, 2022 at 10:13 AM VAMSHI GAJJELA
+<vamshigajjela@google.com> wrote:
+> On Tue, Jul 12, 2022 at 6:56 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Tue, Jul 12, 2022 at 3:16 PM Vamshi Gajjela <vamshigajjela@google.com> wrote:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+...
 
-Tested-by: Ron Economos <re@w6rz.net>
+> > > +       lsr = p->serial_in(p, UART_LSR);
+> >
+> > The only caller of this function already has the lsr value, why you
+> > can't (re)use it?
+> lsr is not read before, caller function (dw8250_check_lcr) reads lcr.
 
+I see, thanks for elaboration.
+
+-- 
+With Best Regards,
+Andy Shevchenko

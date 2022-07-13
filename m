@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE35573C7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86ABB573C7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiGMSY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S236676AbiGMS0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232305AbiGMSYU (ORCPT
+        with ESMTP id S232305AbiGMS0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:24:20 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220F818E0F;
-        Wed, 13 Jul 2022 11:24:20 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so5039824pjl.5;
-        Wed, 13 Jul 2022 11:24:20 -0700 (PDT)
+        Wed, 13 Jul 2022 14:26:03 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B1D2E9D0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:26:02 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id r6so15166736edd.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IQYaS9k5ojuuAez/KlcCMDap25vy0a+Fzv+USTDn99U=;
-        b=B9moJQ9cFhCxVBbJjcGabuBEjnJexLChQq1/dICXG2G16Mow8XDCwKK0LgGMJB+ODG
-         OJOkVQTIDJjhlkjkgLFh2lN4F7QqP6RlbFUnCTFw61NpW/ZF8brq/8kg2moSwP3vDued
-         K6vfUlo5tYZ372hsgyGfgdRbuyiv9pSsnn7tTiZXrEK3Lsd8CxykD7nDDQDx7r95SNdO
-         kGvcDenkEoLbBU2pf+kUz4UPWLNlzAhcGOhX6NVtmxbFgyZQNY4/gLpa45ETuuIyhl58
-         ZCL5gnlXqJwB+7wkShoEQ63r29ABnRwNKOaP/JGh68empXbFElP4VTje/unXO1g29tgi
-         pEqw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6E/hA4MyH1jo4zKVeY77z+U8Ko/RGXbnbI2vCOCv4aM=;
+        b=kVEsE8P6B37JNnIPhEAO+o4fp2kcRu+KbAmwyo1FUVOlC8YgSJpIizLMx3fNkwV0N6
+         2V8z/66b+oU+UFYGOaA7yZlxzYgOsLDo8FCtAEf5DQc4OSKciJhayVEWDX5MZwDRgLjH
+         IdZEAdJn9ZWpvYwkQjuYK/h3P0+oujngLkuEp2S8Oy9t4t5kMSdAzG9m2RAQNv90Zv20
+         C/qT50wZ/qpOPlPDZxVSnscVT3xCn0SjJZEWBK4ZmQ4ajjIXTjW2PyZ1EFUVRqG+csKw
+         y/atRGKCBglR7N/t0tuuJlt1Vu98Q0No59ISpmWq7wMJrmZ7FlKJd6JwPWol+nfVAw/j
+         JE7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IQYaS9k5ojuuAez/KlcCMDap25vy0a+Fzv+USTDn99U=;
-        b=i1Mu32ca8NtjNVfblkkDyiiUwwH0HO58iYnML2RuFpRHyUCZpuYXxIxM9BzLfjgQaz
-         1Jdg0ViJvMe5fL3euAXHyIVPH2JRAJpjJrMEHiNvwLC6sw08kRGXf8T35aFxc7+rENVm
-         Q5ZJBBS6ibT75cMirz1riNe7poYLO/ub94a9TrRYrxkov7pcDt498ab1jcSYHJ3t7KKs
-         xYbl2ySZsWaolc3jSG8apivXLVtC36pqu3alb1DCyUntnqOQLyC/w+ceuMFA9HLU7851
-         podBSY/nGUrJCSzCAHoSRmmSaWljAxempN+LTsTE+N54ww70R/FkDzQIwetn/GE9Bev1
-         yaLg==
-X-Gm-Message-State: AJIora82rqOhKZB7lOAl53KLkXFg4GtdO1wWWpBUJsaH3l0/zJC2CkXw
-        0/FNnw2c+tKBzQSgdq7Anpw=
-X-Google-Smtp-Source: AGRyM1vcvr5UFFx0SqGohZovZlt1Wg+FldYoEgrWgQRCQ+x7RP2JfD8lZaMRkmpoqK1vnKWWcdFNsg==
-X-Received: by 2002:a17:902:cf11:b0:16b:e1a5:aee with SMTP id i17-20020a170902cf1100b0016be1a50aeemr4377856plg.132.1657736659471;
-        Wed, 13 Jul 2022 11:24:19 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c5-20020a170902d48500b001638a171558sm9151471plg.202.2022.07.13.11.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 11:24:18 -0700 (PDT)
-Message-ID: <d7c01069-0b6a-447b-442a-b911a6375156@gmail.com>
-Date:   Wed, 13 Jul 2022 11:24:16 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6E/hA4MyH1jo4zKVeY77z+U8Ko/RGXbnbI2vCOCv4aM=;
+        b=HHBaZrUEmnJ+7etszAN+jeu5bXSANJ99HSUKINZBL0nkAxbuWRwfGKgOywo7yoTmM7
+         hKkVNbghUKRqbJvEIUu0kKI/rcZb44mShO7Pxb6/TWdGYZctBLeG3vWy8fD9vI86CbiK
+         Z/QNr3j9A9KhtQ/HrjGzp18uKZSywTnrulHE/vwnNWyjXjHBl86WB9AqlI8Cju615p83
+         0upFSX6uCKEjFiUdLS5TQ/zgtRK2tNvbljEWuH7G2CQvBZHzGn/+ORy/9uUnMxLiE0/T
+         IN4WEamebeBGQKKVTBNXoDW/M673A9ygfvmkfynWTtqQAdjItZ6jI9e6GPSzjpfOPdD2
+         uzqA==
+X-Gm-Message-State: AJIora9GThh3kiKeqvM6fMqMkWIiBY2WsDxiCoPR8mj0njBpTUv/769G
+        bAEiW8PBbtq9tXbpNi+izJNbZ65v9eEf21AayzyylQ==
+X-Google-Smtp-Source: AGRyM1tSACFNWUDNHletif+Y+sKlH7qNHpGCdNBV+K/6dOgFwy1BPUa/JcjPA1ErKpT/S8qeXbn0xB/Kd3XgxiZZiDg=
+X-Received: by 2002:aa7:d389:0:b0:43a:56c0:c863 with SMTP id
+ x9-20020aa7d389000000b0043a56c0c863mr6609524edq.373.1657736760905; Wed, 13
+ Jul 2022 11:26:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.10 000/131] 5.10.131-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220713094820.698453505@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220713094820.698453505@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-12-tzungbi@kernel.org>
+In-Reply-To: <20220628024913.1755292-12-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 13 Jul 2022 11:25:49 -0700
+Message-ID: <CABXOdTe+M909H8J2QcAY2_OF1jw=4d9EXb6oerWHNdqjFndPfA@mail.gmail.com>
+Subject: Re: [RESEND PATCH 11/11] platform/chrome: cros_ec_proto: return
+ -EPROTO if empty payload
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 06:10, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.131 release.
-> There are 131 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 15 Jul 2022 09:47:55 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_wait_until_complete() sends EC_CMD_GET_COMMS_STATUS which expects
+> to receive sizeof(struct ec_response_get_comms_status) from
+> cros_ec_xfer_command().
+>
+> Return -EPROTO if cros_ec_xfer_command() returns 0.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 5323edddb540..0c7042aa2640 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -166,6 +166,11 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
+>                         break;
+>                 }
+>
+> +               if (ret == 0) {
+> +                       ret = -EPROTO;
+> +                       break;
+> +               }
+> +
+>                 if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
+>                         break;
+>         }
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

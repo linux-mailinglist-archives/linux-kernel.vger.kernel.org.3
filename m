@@ -2,421 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CC1574020
+	by mail.lfdr.de (Postfix) with ESMTP id D1011574021
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbiGMXlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        id S229843AbiGMXll convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 19:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiGMXku (ORCPT
+        with ESMTP id S231706AbiGMXl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:40:50 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8A352DD1;
-        Wed, 13 Jul 2022 16:40:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so6319093pjm.2;
-        Wed, 13 Jul 2022 16:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XQu2Y0N0pC8ziwr02mU+W0MxcF97hu7nA9diSOBkYdE=;
-        b=Bklqb/zJQ710B6296z/RAdirpGZ2CBV2h/6i/n1cXbzE8ocQbhEwYQ9CO7YJzmMj/q
-         2HCcbXHbT90W784IBKCJQ9qThswSXM6/NWdDDo+0FvU//5eHlC1q1IY0f7MA/SZvX6pr
-         LuiBaE1Zfykn3y96IJ2eE+QZ7o1anycyLnaJH65O7aON5LnEYYlgab1R7aNgp6lOdmFR
-         q2vD7qlw5VbEEnHCMpaM7t3e/hvDhmawvUdYN8a7wSyXIHzZCUEcRi/VmWLb8j8137SC
-         4L9L5VSOp/GbpF5UqQl0A3Lsw4ZIaNurjgpKEnWZDeAeslaIeB0YbR8F/kFhNdG2TeOJ
-         Ol6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XQu2Y0N0pC8ziwr02mU+W0MxcF97hu7nA9diSOBkYdE=;
-        b=3HmO3Gp8Yx3VvPJf/gHn7b3gs9lqsRNjAJLVW3yzz3J94qVcPzLqXG+mnbh5Gg3nFM
-         7UhUyavg4pG+8g8pQdrxBiFcOSvX8BZBL9QB6igscDTrIiF093Luz+M4N1r1NwT1ovD7
-         noR9UBBWs4byDapuA7OmN/BbDAUY0maj9mgqexKqbRP4Cu6YA29Vm3EgMrawqyOMC4Ud
-         kMxDiR4B7NAgjmWkXc8Y2XitxtHgC5EiZLPh8SgnAdA9cHc5tRpq0QdkzizqUG5qaP4x
-         C8DZB0Om/+2ZA8RTlcCoBR/6Mu3U7X6I8SlQlNgVu6EC+qA2Nm21wAFMtOisS7sZ2P92
-         d7SQ==
-X-Gm-Message-State: AJIora/TwPlup702Q0+TcbaVFnf5IJ1GA1nFXF2awTmgvcABX2rj5Sk8
-        M/5qgtxkNdkJaGNH3Lqg5kY+1eZFknCIbll4e7k=
-X-Google-Smtp-Source: AGRyM1u4Ib0UPA2vfnfTlfN2cE4Nl0SMECfAPG2FdYsPADNNOjBl9pMzs8CG5SIPuwj3JeOADkQpvw==
-X-Received: by 2002:a17:90b:4f85:b0:1f0:95d:c02b with SMTP id qe5-20020a17090b4f8500b001f0095dc02bmr12580177pjb.89.1657755648132;
-        Wed, 13 Jul 2022 16:40:48 -0700 (PDT)
-Received: from localhost.localdomain ([64.141.80.140])
-        by smtp.gmail.com with ESMTPSA id 188-20020a6216c5000000b005286a4ca9c8sm87653pfw.211.2022.07.13.16.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 16:40:47 -0700 (PDT)
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        dsahern@gmail.com, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        aajith@arista.com, roopa@nvidia.com, roopa.prabhu@gmail.com,
-        aroulin@nvidia.com, sbrivio@redhat.com, jhpark1013@gmail.com
-Subject: [PATCH v3 net-next 3/3] selftests: net: arp_ndisc_untracked_subnets: test for arp_accept and accept_untracked_na
-Date:   Wed, 13 Jul 2022 16:40:49 -0700
-Message-Id: <3b39a02e86681948bc6424c40dd630e3b4640c91.1657755189.git.jhpark1013@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1657755188.git.jhpark1013@gmail.com>
-References: <cover.1657755188.git.jhpark1013@gmail.com>
+        Wed, 13 Jul 2022 19:41:27 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB9552DC3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:41:19 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oBlym-0008AU-FZ; Thu, 14 Jul 2022 01:41:16 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christian =?ISO-8859-1?Q?Kohlsch=FCtter?= 
+        <christian@kohlschutter.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Fix SD card init on rk3399-nanopi4
+Date:   Thu, 14 Jul 2022 01:41:15 +0200
+Message-ID: <12878108.O9o76ZdvQC@diego>
+In-Reply-To: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
+References: <C639AD88-77A1-4485-BAEA-2FF8FC15A844@kohlschutter.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ipv4 arp_accept has a new option '2' to create new neighbor entries
-only if the src ip is in the same subnet as an address configured on
-the interface that received the garp message. This selftest tests all
-options in arp_accept.
+Hi Christian,
 
-ipv6 has a sysctl endpoint, accept_untracked_na, that defines the
-behavior for accepting untracked neighbor advertisements. A new option
-similar to that of arp_accept for learning only from the same subnet is
-added to accept_untracked_na. This selftest tests this new feature.
+Am Donnerstag, 14. Juli 2022, 00:22:23 CEST schrieb Christian Kohlschütter:
+> mmc/SD-card initialization may sometimes fail on NanoPi r4s with
+> "mmc1: problem reading SD Status register" /
+> "mmc1: error -110 whilst initialising SD card"
+> 
+> Moreover, rebooting would also sometimes hang.
+> 
 
-Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-Suggested-by: Roopa Prabhu <roopa@nvidia.com>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../net/arp_ndisc_untracked_subnets.sh        | 308 ++++++++++++++++++
- 2 files changed, 309 insertions(+)
- create mode 100755 tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
+Nit: here the commit message should continue with something like:
+-----
+This is caused by the vcc3v0-sd regulator referencing the wrong gpio.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index ddad703ace34..9c2e9e303c37 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -38,6 +38,7 @@ TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
- TEST_PROGS += vrf_strict_mode_test.sh
- TEST_PROGS += arp_ndisc_evict_nocarrier.sh
- TEST_PROGS += ndisc_unsolicited_na_test.sh
-+TEST_PROGS += arp_ndisc_untracked_subnets.sh
- TEST_PROGS += stress_reuseport_listen.sh
- TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
- TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
-diff --git a/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-new file mode 100755
-index 000000000000..c899b446acb6
---- /dev/null
-+++ b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-@@ -0,0 +1,308 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# 2 namespaces: one host and one router. Use arping from the host to send a
-+# garp to the router. Router accepts or ignores based on its arp_accept
-+# or accept_untracked_na configuration.
-+
-+TESTS="arp ndisc"
-+
-+ROUTER_NS="ns-router"
-+ROUTER_NS_V6="ns-router-v6"
-+ROUTER_INTF="veth-router"
-+ROUTER_ADDR="10.0.10.1"
-+ROUTER_ADDR_V6="2001:db8:abcd:0012::1"
-+
-+HOST_NS="ns-host"
-+HOST_NS_V6="ns-host-v6"
-+HOST_INTF="veth-host"
-+HOST_ADDR="10.0.10.2"
-+HOST_ADDR_V6="2001:db8:abcd:0012::2"
-+
-+SUBNET_WIDTH=24
-+PREFIX_WIDTH_V6=64
-+
-+cleanup() {
-+	ip netns del ${HOST_NS}
-+	ip netns del ${ROUTER_NS}
-+}
-+
-+cleanup_v6() {
-+	ip netns del ${HOST_NS_V6}
-+	ip netns del ${ROUTER_NS_V6}
-+}
-+
-+setup() {
-+	set -e
-+	local arp_accept=$1
-+
-+	# Set up two namespaces
-+	ip netns add ${ROUTER_NS}
-+	ip netns add ${HOST_NS}
-+
-+	# Set up interfaces veth0 and veth1, which are pairs in separate
-+	# namespaces. veth0 is veth-router, veth1 is veth-host.
-+	# first, set up the inteface's link to the namespace
-+	# then, set the interface "up"
-+	ip netns exec ${ROUTER_NS} ip link add name ${ROUTER_INTF} \
-+		type veth peer name ${HOST_INTF}
-+
-+	ip netns exec ${ROUTER_NS} ip link set dev ${ROUTER_INTF} up
-+	ip netns exec ${ROUTER_NS} ip link set dev ${HOST_INTF} netns ${HOST_NS}
-+
-+	ip netns exec ${HOST_NS} ip link set dev ${HOST_INTF} up
-+	ip netns exec ${ROUTER_NS} ip addr add ${ROUTER_ADDR}/${SUBNET_WIDTH} \
-+		dev ${ROUTER_INTF}
-+
-+	ip netns exec ${HOST_NS} ip addr add ${HOST_ADDR}/${SUBNET_WIDTH} \
-+		dev ${HOST_INTF}
-+	ip netns exec ${HOST_NS} ip route add default via ${HOST_ADDR} \
-+		dev ${HOST_INTF}
-+	ip netns exec ${ROUTER_NS} ip route add default via ${ROUTER_ADDR} \
-+		dev ${ROUTER_INTF}
-+
-+	ROUTER_CONF=net.ipv4.conf.${ROUTER_INTF}
-+	ip netns exec ${ROUTER_NS} sysctl -w \
-+		${ROUTER_CONF}.arp_accept=${arp_accept} >/dev/null 2>&1
-+	set +e
-+}
-+
-+setup_v6() {
-+	set -e
-+	local accept_untracked_na=$1
-+
-+	# Set up two namespaces
-+	ip netns add ${ROUTER_NS_V6}
-+	ip netns add ${HOST_NS_V6}
-+
-+	# Set up interfaces veth0 and veth1, which are pairs in separate
-+	# namespaces. veth0 is veth-router, veth1 is veth-host.
-+	# first, set up the inteface's link to the namespace
-+	# then, set the interface "up"
-+	ip -6 -netns ${ROUTER_NS_V6} link add name ${ROUTER_INTF} \
-+		type veth peer name ${HOST_INTF}
-+
-+	ip -6 -netns ${ROUTER_NS_V6} link set dev ${ROUTER_INTF} up
-+	ip -6 -netns ${ROUTER_NS_V6} link set dev ${HOST_INTF} netns \
-+		${HOST_NS_V6}
-+
-+	ip -6 -netns ${HOST_NS_V6} link set dev ${HOST_INTF} up
-+	ip -6 -netns ${ROUTER_NS_V6} addr add \
-+		${ROUTER_ADDR_V6}/${PREFIX_WIDTH_V6} dev ${ROUTER_INTF} nodad
-+
-+	HOST_CONF=net.ipv6.conf.${HOST_INTF}
-+	ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.ndisc_notify=1
-+	ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.disable_ipv6=0
-+	ip -6 -netns ${HOST_NS_V6} addr add ${HOST_ADDR_V6}/${PREFIX_WIDTH_V6} \
-+		dev ${HOST_INTF}
-+
-+	ROUTER_CONF=net.ipv6.conf.${ROUTER_INTF}
-+
-+	ip netns exec ${ROUTER_NS_V6} sysctl -w \
-+		${ROUTER_CONF}.forwarding=1 >/dev/null 2>&1
-+	ip netns exec ${ROUTER_NS_V6} sysctl -w \
-+		${ROUTER_CONF}.drop_unsolicited_na=0 >/dev/null 2>&1
-+	ip netns exec ${ROUTER_NS_V6} sysctl -w \
-+		${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na} \
-+		>/dev/null 2>&1
-+	set +e
-+}
-+
-+verify_arp() {
-+	local arp_accept=$1
-+	local same_subnet=$2
-+
-+	neigh_show_output=$(ip netns exec ${ROUTER_NS} ip neigh get \
-+		${HOST_ADDR} dev ${ROUTER_INTF} 2>/dev/null)
-+
-+	if [ ${arp_accept} -eq 1 ]; then
-+		# Neighbor entries expected
-+		[[ ${neigh_show_output} ]]
-+	elif [ ${arp_accept} -eq 2 ]; then
-+		if [ ${same_subnet} -eq 1 ]; then
-+			# Neighbor entries expected
-+			[[ ${neigh_show_output} ]]
-+		else
-+			[[ -z "${neigh_show_output}" ]]
-+		fi
-+	else
-+		[[ -z "${neigh_show_output}" ]]
-+	fi
-+ }
-+
-+arp_test_gratuitous() {
-+	set -e
-+	local arp_accept=$1
-+	local same_subnet=$2
-+
-+	if [ ${arp_accept} -eq 2 ]; then
-+		test_msg=("test_arp: "
-+			  "accept_arp=$1 "
-+			  "same_subnet=$2")
-+		if [ ${same_subnet} -eq 0 ]; then
-+			HOST_ADDR=10.0.11.3
-+		else
-+			HOST_ADDR=10.0.10.3
-+		fi
-+	else
-+		test_msg=("test_arp: "
-+			  "accept_arp=$1")
-+	fi
-+	# Supply arp_accept option to set up which sets it in sysctl
-+	setup ${arp_accept}
-+	ip netns exec ${HOST_NS} arping -A -U ${HOST_ADDR} -c1 2>&1 >/dev/null
-+
-+	if verify_arp $1 $2; then
-+		printf "    TEST: %-60s  [ OK ]\n" "${test_msg[*]}"
-+	else
-+		printf "    TEST: %-60s  [FAIL]\n" "${test_msg[*]}"
-+	fi
-+	cleanup
-+	set +e
-+}
-+
-+arp_test_gratuitous_combinations() {
-+	arp_test_gratuitous 0
-+	arp_test_gratuitous 1
-+	arp_test_gratuitous 2 0 # Second entry indicates subnet or not
-+	arp_test_gratuitous 2 1
-+}
-+
-+cleanup_tcpdump() {
-+	set -e
-+	[[ ! -z  ${tcpdump_stdout} ]] && rm -f ${tcpdump_stdout}
-+	[[ ! -z  ${tcpdump_stderr} ]] && rm -f ${tcpdump_stderr}
-+	tcpdump_stdout=
-+	tcpdump_stderr=
-+	set +e
-+}
-+
-+start_tcpdump() {
-+	set -e
-+	tcpdump_stdout=`mktemp`
-+	tcpdump_stderr=`mktemp`
-+	ip netns exec ${ROUTER_NS_V6} timeout 15s \
-+		tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
-+		"icmp6 && icmp6[0] == 136 && src ${HOST_ADDR_V6}" \
-+		> ${tcpdump_stdout} 2> /dev/null
-+	set +e
-+}
-+
-+verify_ndisc() {
-+	local accept_untracked_na=$1
-+	local same_subnet=$2
-+
-+	neigh_show_output=$(ip -6 -netns ${ROUTER_NS_V6} neigh show \
-+		to ${HOST_ADDR_V6} dev ${ROUTER_INTF} nud stale)
-+
-+	if [ ${accept_untracked_na} -eq 1 ]; then
-+		# Neighbour entry expected to be present
-+		[[ ${neigh_show_output} ]]
-+	elif [ ${accept_untracked_na} -eq 2 ]; then
-+		if [ ${same_subnet} -eq 1 ]; then
-+			[[ ${neigh_show_output} ]]
-+		else
-+			[[ -z "${neigh_show_output}" ]]
-+		fi
-+	else
-+		# Neighbour entry expected to be absent for all other cases
-+		[[ -z "${neigh_show_output}" ]]
-+	fi
-+}
-+
-+ndisc_test_untracked_advertisements() {
-+	set -e
-+	test_msg=("test_ndisc: "
-+		  "accept_untracked_na=$1")
-+
-+	local accept_untracked_na=$1
-+	local same_subnet=$2
-+	if [ ${accept_untracked_na} -eq 2 ]; then
-+		test_msg=("test_ndisc: "
-+			  "accept_untracked_na=$1 "
-+			  "same_subnet=$2")
-+		if [ ${same_subnet} -eq 0 ]; then
-+			# Not same subnet
-+			HOST_ADDR_V6=2000:db8:abcd:0013::4
-+		else
-+			HOST_ADDR_V6=2001:db8:abcd:0012::3
-+		fi
-+	fi
-+	setup_v6 $1 $2
-+	start_tcpdump
-+
-+	if verify_ndisc $1 $2; then
-+		printf "    TEST: %-60s  [ OK ]\n" "${test_msg[*]}"
-+	else
-+		printf "    TEST: %-60s  [FAIL]\n" "${test_msg[*]}"
-+	fi
-+
-+	cleanup_tcpdump
-+	cleanup_v6
-+	set +e
-+}
-+
-+ndisc_test_untracked_combinations() {
-+	ndisc_test_untracked_advertisements 0
-+	ndisc_test_untracked_advertisements 1
-+	ndisc_test_untracked_advertisements 2 0
-+	ndisc_test_untracked_advertisements 2 1
-+}
-+
-+################################################################################
-+# usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+	-t <test>       Test(s) to run (default: all)
-+			(options: $TESTS)
-+EOF
-+}
-+
-+################################################################################
-+# main
-+
-+while getopts ":t:h" opt; do
-+	case $opt in
-+		t) TESTS=$OPTARG;;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
-+
-+if [ "$(id -u)" -ne 0 ];then
-+	echo "SKIP: Need root privileges"
-+	exit $ksft_skip;
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+if [ ! -x "$(command -v tcpdump)" ]; then
-+	echo "SKIP: Could not run test without tcpdump tool"
-+	exit $ksft_skip
-+fi
-+
-+if [ ! -x "$(command -v arping)" ]; then
-+	echo "SKIP: Could not run test without arping tool"
-+	exit $ksft_skip
-+fi
-+
-+# start clean
-+cleanup &> /dev/null
-+cleanup_v6 &> /dev/null
-+
-+for t in $TESTS
-+do
-+	case $t in
-+	arp_test_gratuitous_combinations|arp) arp_test_gratuitous_combinations;;
-+	ndisc_test_untracked_combinations|ndisc) \
-+		ndisc_test_untracked_combinations;;
-+	help) echo "Test names: $TESTS"; exit 0;;
-+esac
-+done
--- 
-2.30.2
+Fix the regulator to use the correct pin and drop the always-on property.
+-----
+> Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+> index 8c0ff6c96e03..91789801ab03 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+> @@ -67,10 +67,10 @@ vcc1v8_s3: vcc1v8-s3 {
+>  	vcc3v0_sd: vcc3v0-sd {
+>  		compatible = "regulator-fixed";
+>  		enable-active-high;
+> -		gpio = <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
+> +		gpio = <&gpio0 RK_PD6 GPIO_ACTIVE_HIGH>;
+
+The interesting question would be how nano-pi-specific that gpio is.
+
+I.e. this is the rk3399-nanopi4.dtsi that is shared by multiple board types,
+so can you check in schematics if gpio0-d6 is always used on all of them?
+
+Thanks
+Heiko
+
+>  		pinctrl-names = "default";
+>  		pinctrl-0 = <&sdmmc0_pwr_h>;
+> -		regulator-always-on;
+> +		regulator-boot-on;
+>  		regulator-min-microvolt = <3000000>;
+>  		regulator-max-microvolt = <3000000>;
+>  		regulator-name = "vcc3v0_sd";
+> @@ -580,7 +580,7 @@ wifi_reg_on_h: wifi-reg_on-h {
+>  
+>  	sdmmc {
+>  		sdmmc0_det_l: sdmmc0-det-l {
+> -			rockchip,pins = <0 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>;
+> +			rockchip,pins = <0 RK_PD6 RK_FUNC_GPIO &pcfg_pull_up>;
+>  		};
+>  
+>  		sdmmc0_pwr_h: sdmmc0-pwr-h {
+> 
+
+
+
 

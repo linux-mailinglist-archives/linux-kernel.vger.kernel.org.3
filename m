@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77260573C70
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19436573C71
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiGMSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S236439AbiGMSSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiGMSSI (ORCPT
+        with ESMTP id S229749AbiGMSSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:18:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9E12E6A2;
-        Wed, 13 Jul 2022 11:18:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB4EF61D6F;
-        Wed, 13 Jul 2022 18:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DB4C3411E;
-        Wed, 13 Jul 2022 18:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657736287;
-        bh=UiiI7ZQF6fW9XcgdR7ASAKtT4jh/y8Ot3nQUt4Q8KCg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=YwzUFjNh/NPPJ3CP5NByxyIOJMSovqEMhSA771v0Et6IGd8wgzKxAuNNSD8r3+RHa
-         bBoJmL9H9dgozWlRhu56k+NGBpkniluCtWgjHeRCDY0xyKWw7Rb4uswsUjPR48w8Mf
-         swxIMiyleL38BQaPcIYL7jc2y2KWtRQsteWgepEnCf/y0tfBawtlTxODwud9GNUQAS
-         UvUrByHcQqhmHN1I8m+rmNRXivl7lmc4raZvN583y+kRLqXmHaMfpNtT+G+mSRbU54
-         Uz3N7tFpRje6E8IMfTKkH44OVp9B/8wPb6qI13dRfWyc28JYXbNOskKf4VCNHhP60/
-         +iI/qowucQa8A==
-Date:   Wed, 13 Jul 2022 13:18:05 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ajay Garg <ajaygargnsit@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: No controller seen in /sys/kernel/config/pci_ep/controllers
-Message-ID: <20220713181805.GA841376@bhelgaas>
+        Wed, 13 Jul 2022 14:18:47 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C319C1B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:18:45 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id ss3so15265233ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MLaLblQd1msZWwY9FiReYrNm7ZLhdWFbMkP58jqCGA8=;
+        b=LBXWbxHrwlSAa2xQU0mbSSLoCYx7g55A+eR9KWl97wN1VeT8uphM+HgXqYIYO4Aur2
+         EdpfiOasKKdceP2dm3EIrp02LI0czYATVPeoJbqXxXkllYv9Qt/SAT5N+e6pT2B3OzZ1
+         XnSFN6xmmOdT972YMzrJ8VNw/5Fzx0hEfCHiXpWdHERP1l/4Ij6ns0YligN0JsPWL+fe
+         yXB2sw3wm7JPANQlMqIDXfs+ubX1zmNFVX2QEqPsHIwyxHTSXlVoQXkll/nTqnYti14k
+         cSm/Z/olJTDzjY9pDEJZOSOik/E3of86mI0HkkUUv3r68LguOz+NysGB4IRQUyclLF2x
+         W8oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MLaLblQd1msZWwY9FiReYrNm7ZLhdWFbMkP58jqCGA8=;
+        b=d0F6bGrSftz2ocTkBWhIuaOllycfi7mgb57ulOuI0BIDer/a8grqJqCN5L8YgzDz+A
+         XikmjpqsP9ltQO34SzSEoo84TVj0OYuFKlk397QYzOYMffSYcpYXTf4AhIkhfarUxnP3
+         9TqfBv6uS8E9oVS4UHaTXV3XtJJkEY0yn4X11S8iBi5WYeIzOc0iwbOOSjTWuzXQ9xXb
+         QxsWLAI7dKt72SyBUXabE/VBSrSQ5l35ToXhcUTJwAGjcaRSX3YQYD7sWBr8ZwRr5wH8
+         vgaSmihnuND3iZRsinbGEorXXxbsoXWot+DI7/PiVVsF3G8wZiKr2SGno6kI3NYEKkZt
+         ceag==
+X-Gm-Message-State: AJIora+/2XxkgXy0dihw6Z9pwu+0Rl8fZxPoiy9hIR1Gl6wwolXVG5cd
+        H/PjWz4JNNp7tTfMbjxm2gEdgF4+m4w38TLNw/5mbA==
+X-Google-Smtp-Source: AGRyM1teizRCFtWFKbPHLS6yIUMTOL2oH8WTlV4P3Mml7SNEMBR21p9JLUZzeig/m9tzX0V1nujmXSJmHdnx6euZw80=
+X-Received: by 2002:a17:907:a06f:b0:72b:564c:465b with SMTP id
+ ia15-20020a170907a06f00b0072b564c465bmr4793767ejc.344.1657736324173; Wed, 13
+ Jul 2022 11:18:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHP4M8VuX6NrqyKQU1KS3DdTzZRQTdPK+nF0-eXXeQqhHyOypw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220628024913.1755292-1-tzungbi@kernel.org> <20220628024913.1755292-8-tzungbi@kernel.org>
+In-Reply-To: <20220628024913.1755292-8-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 13 Jul 2022 11:18:32 -0700
+Message-ID: <CABXOdTft0Nu_hJQuXwepBXE3tWZf7jaidGE5mamq_=1Zi4hevg@mail.gmail.com>
+Subject: Re: [RESEND PATCH 07/11] platform/chrome: cros_ec_proto: return
+ -EAGAIN when retries timed out
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+to Kishon, endpoint maintainer, +cc LKML]
+On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> While EC_COMMS_STATUS_PROCESSING flag is still on after it tries
+> EC_COMMAND_RETRIES times for sending EC_CMD_GET_COMMS_STATUS,
+> cros_ec_wait_until_complete() doesn't return an error code.
+>
+> Return -EAGAIN in the case instead.
 
-On Wed, Jul 13, 2022 at 12:53:06PM +0530, Ajay Garg wrote:
-> Hello everyone.
-> 
-> The kernel has been built with :
-> 
-> ###################################
-> CONFIG_PCI_ENDPOINT=y
-> CONFIG_PCI_ENDPOINT_CONFIGFS=y
-> CONFIG_PCI_EPF_TEST=y
-> CONFIG_PCI_ENDPOINT_TEST=y
-> ###################################
-> 
-> 
-> Thereafter, following are seen :
-> 
-> ###################################
-> $ sudo mount none /sys/kernel/config/ -t configfs
-> mount: /sys/kernel/config: none already mounted or mount point busy.
-> 
-> $ ls -lrth /sys/class/pci_epc/
-> total 0
-> 
-> $ ls -lrth /sys/kernel/config
-> total 0
-> drwxr-xr-x 4 root root 0 Jul 13 10:58 pci_ep
-> drwxr-xr-x 2 root root 0 Jul 13 10:58 usb_gadget
-> 
-> $ ls -lrth /sys/kernel/config/pci_ep/functions
-> total 0
-> drwxr-xr-x 2 root root 0 Jul 13 10:58 pci_epf_test
-> 
-> $ ls -lrth /sys/kernel/config/pci_ep/controllers
-> total 0
-> 
-> $
-> ###################################
-> 
-> What is being missed?
-> 
-> Side Queries : Is the controller that is expected to be listed, a
-> virtual-controller (like the one provided by CONFIG_USB_DUMMY_HCD in
-> case of USB)?
-> 
-> Or there must be a real additional controller for pci-endpoint purpose?
-> If yes, then :
-> 
->               * I guess no listing is expected currently, as my machine has just
->                 one controller (as pci-host).
-> 
->               * Is there a way to have an additional virtual pci-controller?
-> 
-> 
-> Thanks and Regards,
-> Ajay
+Does this make sense, or should it be -ETIMEDOUT ? What does the EC do
+if it is still busy (stuck ?) with executing a command and it gets
+another one ?
+
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 466ecb063bd6..49772a4c5353 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -167,6 +167,9 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
+>                         break;
+>         }
+>
+> +       if (i >= EC_COMMAND_RETRIES)
+> +               ret = -EAGAIN;
+> +
+>         kfree(msg);
+>         return ret;
+>  }
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

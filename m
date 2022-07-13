@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355CE572E58
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA7C572DEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 08:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233769AbiGMGmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 02:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S234247AbiGMGJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 02:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiGMGmR (ORCPT
+        with ESMTP id S230249AbiGMGJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:42:17 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124D8DE1A7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:42:17 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id g4so9662457pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=HzERyUX8r42O7EeoFdBNAgcejWeBbz5fOTEqqjH+TQQ=;
-        b=UT72qyLSZTrNN2pPbYlxDZHIt0TY7vGtUxtCTRLe5e0vEmuHSDaSboOiXm9eEcuiS7
-         s0WvG7aHhKjCHb/xn4qrj47u5jfgEJ7UFLbn1AYZgauI23jEN57NQMrG0lPl1zc3aclP
-         tmEhMqhfvyyjwBKZeAhk0SSb/HXSsE+GimnSqdEVNWToPnsaIKHP2Blz1jYDBKnSQmwZ
-         XpMu6F5XG9VeIcPNLW+mCccOi1omNDQAeSGYP7Jk+dJ3f9LX3scil2ZBDEituPlKJbUI
-         FwdqEXsUoCIWqKVlWHtV37m/BWrbUJt1cu0r+yU0g6LW6gILdkMLDiaYrbjlbK+wmtpF
-         UL3A==
+        Wed, 13 Jul 2022 02:09:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA80C7482
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657692596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rycGqxN/Gg4LcgOpWK/Qy+DWH4iGydCM0L3/eUzUN/k=;
+        b=PU5vk46Mh3Ne75EJXg4gH+flQ/JQ+Ha8bRQrIs+yKbgZJHExfdraGcij089pxLKEX8+rI0
+        jbucv5V/U/AWK3v6ZSCfFDfI0NRLhDdnoMJHDb2I4KGGHYmYoZU0EkeJOAWsQOuWbeFB3H
+        cPDnBZvrK2oHrTe0h6d4kqsv8NfeyLg=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-395-vxM0isrQMDaYfDLiEpFEzQ-1; Wed, 13 Jul 2022 02:09:54 -0400
+X-MC-Unique: vxM0isrQMDaYfDLiEpFEzQ-1
+Received: by mail-ed1-f71.google.com with SMTP id n8-20020a05640205c800b00434fb0c150cso7593247edx.19
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 23:09:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=HzERyUX8r42O7EeoFdBNAgcejWeBbz5fOTEqqjH+TQQ=;
-        b=O8z7aAnShUqmpuTwOyoS8LKK5qDyE88UpijPhRY5HcOdh2BUFIfbr1VDyZUvVt6Opo
-         fnwTvo6DiddzVgH+/nNRJdazH+S8xP8Ps5lNTM0oezoi5NCSQ+M+oI5sWw5tugJPxTe8
-         LVwS9SlOv8csoNwXlSdzBoi5rxKHuq5BIuS+afzvN4zsX3XZ91TN9jJQEqJVh95c4dBF
-         PZJCPBGALWnZCO9f7rqh+/PsjQXltnLxA1znv06+PYzqZpbEGkpVCrMFe2LVA98xbpfw
-         nMP5MR1fBoDjcCAtmZr0ZSCEObCu9oG2f614nTVA4OaOLvKU4YUobXY+QUXMywI4YVnE
-         UKXw==
-X-Gm-Message-State: AJIora/MjjlrDJ8oP3CJnA7rRcuD2A5rKyFOogsIWWUjSB+AwuTHQnFf
-        TlGHPpkY5odxZqwJeTn2u0vsX8DLqljyRlGQ
-X-Google-Smtp-Source: AGRyM1s5JTP58vkFg4ZOzYsjyYwvU5vCEwBwoiCMvXMn+O/ixwKG0a5JqRypQMu37KDrrWbcxg9EWA==
-X-Received: by 2002:a63:d1e:0:b0:40d:379e:bff8 with SMTP id c30-20020a630d1e000000b0040d379ebff8mr1782207pgl.215.1657694536487;
-        Tue, 12 Jul 2022 23:42:16 -0700 (PDT)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id h27-20020aa79f5b000000b005251fff13dfsm7980873pfr.155.2022.07.12.23.42.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 23:42:15 -0700 (PDT)
-References: <20220707090501.55483-1-schspa@gmail.com>
- <Ys4zVkJCH04cnSGX@xsang-OptiPlex-9020>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
-        guobing.chen@intel.com, ming.a.chen@intel.com, frank.du@intel.com,
-        Shuhua.Fan@intel.com, wangyang.guo@intel.com,
-        Wenhuan.Huang@intel.com, jessica.ji@intel.com, shan.kang@intel.com,
-        guangli.li@intel.com, tiejun.li@intel.com, yu.ma@intel.com,
-        dapeng1.mi@intel.com, jiebin.sun@intel.com, gengxin.xie@intel.com,
-        fan.zhao@intel.com, tj@kernel.org, jiangshanlai@gmail.com
-Subject: Re: [workqueue]  1a0a67f5ef:
- phoronix-test-suite.fio.SequentialRead.IO_uring.Yes.No.1MB.DefaultTestDirectory.mb_s
- -17.7% regression
-Date:   Wed, 13 Jul 2022 14:09:28 +0800
-In-reply-to: <Ys4zVkJCH04cnSGX@xsang-OptiPlex-9020>
-Message-ID: <m2bkttms3w.fsf@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rycGqxN/Gg4LcgOpWK/Qy+DWH4iGydCM0L3/eUzUN/k=;
+        b=vA3gygk9XQWBjuycgQYFwZ10kYfMwPgxDXrSRIvQ9bl/JMfaityJWO/wxbaeSzJ54K
+         BQLS1pXbVFIqIIDEoi+zkI5Lkk8oemEn1PwNX9liWqGbPTT1qoOmnqSJHYwxK2rUZLjg
+         mpCjQ9pjklX4BivQi4J0TwaIhUHFHVOCJgATL1utcGJWigVDdR+gv11w+KNociDlHEmR
+         w85k59vSUfNn4nC4n4A2uerWbk4muLzPNFgyt4y1LKYaTJCNjZ4HokPqEqLZCVPZTV5M
+         w7jes9BeiCjFLPg9MllbH+RsFjWAdssNzGGf/orw5+0zQ/p7FCPe0aKEGgRmSifZJQSd
+         RayA==
+X-Gm-Message-State: AJIora/EvzwCOf+Axt0W3HF5EUOhxKt7bkIptgRUKlvoE6c+om4I6dfN
+        XGFl1c59kzlwxI5Fsxx8s8jxU6oxzq5gdh0xQXFC6xjS6J8ekd7f/cx4xfcMw4fTEOxScANE1vL
+        RNQko18+H/D8GpSt4ho1unFoz
+X-Received: by 2002:a17:906:8475:b0:72b:12c7:effe with SMTP id hx21-20020a170906847500b0072b12c7effemr1745559ejc.337.1657692593451;
+        Tue, 12 Jul 2022 23:09:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ul7GlkRy7udbTX/Vs/6L1EBonL23POvjBUN7N0DNV2mt6ZMpvJB3ZgWypD78EGz8spBLMv7w==
+X-Received: by 2002:a17:906:8475:b0:72b:12c7:effe with SMTP id hx21-20020a170906847500b0072b12c7effemr1745544ejc.337.1657692593275;
+        Tue, 12 Jul 2022 23:09:53 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id ky18-20020a170907779200b00715a02874acsm4516224ejc.35.2022.07.12.23.09.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 23:09:52 -0700 (PDT)
+Message-ID: <c2a3fc9c-82e7-939c-b183-6dd57ccf9444@redhat.com>
+Date:   Wed, 13 Jul 2022 08:09:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: manual merge of the kvm tree with Linus' tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
+Cc:     Borislav Petkov <bp@suse.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Like Xu <likexu@tencent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luwei Kang <luwei.kang@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+References: <20220713160238.3bfcdb26@canb.auug.org.au>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220713160238.3bfcdb26@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,18 +86,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/13/22 08:02, Stephen Rothwell wrote:
+> I didn't know if the new includes needed to be prefixed with "../"
+> as well ... I though it was better safe than sorry.
 
-kernel test robot <oliver.sang@intel.com> writes:
+If it compiles, it's perfect. :)
 
-> Greeting,
->
-> FYI, we noticed a -17.7% regression of phoronix-test-suite.fio.SequentialRead.IO_uring.Yes.No.1MB.DefaultTestDirectory.mb_s due to commit:
->
+Thanks, I'll check it out and report to Linus the reason for the conflict.
 
-This performance drop can be fixed by convert to wq_pool_attach_mutex
-to a rwsem, or add another lock for this. I will upload a new PATCH
-version for this.
+Paolo
 
--- 
-BRs
-Schspa Shi
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+

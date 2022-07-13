@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204295736ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85395736F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbiGMNK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S235972AbiGMNKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235819AbiGMNKW (ORCPT
+        with ESMTP id S235769AbiGMNKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981D0D59;
-        Wed, 13 Jul 2022 06:10:20 -0700 (PDT)
+        Wed, 13 Jul 2022 09:10:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF89DDEC6;
+        Wed, 13 Jul 2022 06:10:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2450B61C3D;
-        Wed, 13 Jul 2022 13:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0784C34114;
-        Wed, 13 Jul 2022 13:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657717819;
-        bh=/VQmzTJORw9hSIzUb4OiL8rmEXgNx162cN1VYvflhSk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uDrQP0ui3XV9iynKhNbUqwZrswU6rPkM2OBxD7S3w7gVawq+nBCKGY3wFK7+Lptj9
-         OUil/DJ9gLDRggArob8tAtNiHgy86MAYfkuoXklLsAdz5BwefAbMoZxXT7sakirYPP
-         elt47g6mcRYl5S0rsKjuuKPbD8DfcMfC4wLxXg8c=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.10 000/131] 5.10.131-rc2 review
-Date:   Wed, 13 Jul 2022 15:10:15 +0200
-Message-Id: <20220713094820.698453505@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.0
-MIME-Version: 1.0
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.10.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.10.131-rc2
-X-KernelTest-Deadline: 2022-07-15T09:48+00:00
-Content-Transfer-Encoding: 8bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A0E061C44;
+        Wed, 13 Jul 2022 13:10:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D90C34114;
+        Wed, 13 Jul 2022 13:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657717841;
+        bh=grGkUc3D+IG+DZrJbKuNKawjh32B2s20ZjA++y40M1k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qRkyDkrvAUpQmZqGueeCpxzDaKUXet2jxabh06alBveQOw2Pjqyw1VgdM2X9ymlVC
+         Mr0SJCEHHPhivTdLPh/efvnNYLeTX686lp+n7GwXRfYq5ULzSxH2sLutBv0Ddrdxbo
+         l/d+d08/wl+eYJYHpmp3nFl4dfApssvDdGbeofa+g6by3Mv9p9wilmES9T2sp/JCKg
+         2U5erzg0g8ds3MZFZHqRRNbXuQXBZ1JylpzVr8jrjZloiJtNGso6X+elevPDARYtw8
+         EuX9BTVM5EmM1pOfD/yB7G+h0br2ozWI3ytIlXRQ3xQTaBBoX/hxSjdxNYPrJ2IGlp
+         nqU32Juzk/SCw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oBc8V-007Dgp-Iz;
+        Wed, 13 Jul 2022 14:10:39 +0100
+Date:   Wed, 13 Jul 2022 14:10:39 +0100
+Message-ID: <874jzl17lc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+In-Reply-To: <CAOX2RU4MpyEQ0RtcrZ07VXRbB+SWWU=1zWfYUXhQFtvh=MCiDw@mail.gmail.com>
+References: <20220624195112.894916-1-robimarko@gmail.com>
+        <87edyq1ujr.wl-maz@kernel.org>
+        <20220712124445.GC21746@workstation>
+        <87czea1i2f.wl-maz@kernel.org>
+        <CAOX2RU5RX+H=omuKGye2fBy9dOFmfC9HC_3pekeGMxDJuReCUw@mail.gmail.com>
+        <d8912a0d811b5eb924b8c4136b099f72@kernel.org>
+        <CAOX2RU4MpyEQ0RtcrZ07VXRbB+SWWU=1zWfYUXhQFtvh=MCiDw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robimarko@gmail.com, manivannan.sadhasivam@linaro.org, bjorn.andersson@linaro.org, agross@kernel.org, linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,632 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.10.131 release.
-There are 131 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Fri, 15 Jul 2022 09:47:55 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.131-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.10.131-rc2
-
-Borislav Petkov <bp@suse.de>
-    tools/insn: Restore the relative include paths for cross building
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/static_call: Serialize __static_call_fixup() properly
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/speculation: Disable RRSBA behavior
-
-Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-    x86/kexec: Disable RET on kexec
-
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-    x86/bugs: Do not enable IBPB-on-entry when IBPB is not supported
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/bugs: Add Cannon lake to RETBleed affected CPU list
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retbleed: Add fine grained Kconfig knobs
-
-Andrew Cooper <andrew.cooper3@citrix.com>
-    x86/cpu/amd: Enumerate BTC_NO
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/common: Stamp out the stepping madness
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fill RSB on vmexit for IBRS
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Fix IBRS handling after vmexit
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Convert launched argument to flags
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    KVM: VMX: Flatten __vmx_vcpu_run()
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    objtool: Re-add UNWIND_HINT_{SAVE_RESTORE}
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Remove x86_spec_ctrl_mask
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Use cached host SPEC_CTRL value for guest entry/exit
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix SPEC_CTRL write on SMT state change
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix firmware entry SPEC_CTRL handling
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/cpu/amd: Add Spectral Chicken
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Add entry UNRET validation
-
-Josh Poimboeuf <jpoimboe@kernel.org>
-    x86/bugs: Do IBPB fallback check only once
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Add retbleed=ibpb
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/xen: Rename SYS* entry points
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Update Retpoline validation
-
-Peter Zijlstra <peterz@infradead.org>
-    intel_idle: Disable IBRS during long idle
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Report Intel retbleed vulnerability
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Split spectre_v2_select_mitigation() and spectre_v2_user_select_mitigation()
-
-Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-    x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Optimize SPEC_CTRL MSR writes
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/entry: Add kernel IBRS implementation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/bugs: Enable STIBP for JMP2RET
-
-Alexandre Chartre <alexandre.chartre@oracle.com>
-    x86/bugs: Add AMD retbleed= boot parameter
-
-Alexandre Chartre <alexandre.chartre@oracle.com>
-    x86/bugs: Report AMD retbleed vulnerability
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Add magic AMD return-thunk
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Treat .text.__x86.* as noinstr
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Use return-thunk in asm code
-
-Kim Phillips <kim.phillips@amd.com>
-    x86/sev: Avoid using __x86_return_thunk
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/vsyscall_emu/64: Don't use RET in vsyscall emulation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/kvm: Fix SETcc emulation for return thunks
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/bpf: Use alternative RET encoding
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/ftrace: Use alternative RET encoding
-
-Peter Zijlstra <peterz@infradead.org>
-    x86,static_call: Use alternative RET encoding
-
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-    objtool: skip non-text sections when adding return-thunk sites
-
-Peter Zijlstra <peterz@infradead.org>
-    x86,objtool: Create .return_sites
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Undo return-thunk damage
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Use -mfunction-return
-
-Ben Hutchings <ben@decadent.org.uk>
-    Makefile: Set retpoline cflags based on CONFIG_CC_IS_{CLANG,GCC}
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Swizzle retpoline thunk
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Cleanup some #ifdefery
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/cpufeatures: Move RETPOLINE flags to word 11
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/kvm/vmx: Make noinstr clean
-
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-    x86/realmode: build with -D__DISABLE_EXPORTS
-
-Mikulas Patocka <mpatocka@redhat.com>
-    objtool: Fix objtool regression on x32 systems
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/entry: Remove skip_r11rcx
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Fix symbol creation
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Fix type of reloc::addend
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Fix code relocs vs weak symbols
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Fix SLS validation for kcov tail-call replacement
-
-Peter Zijlstra <peterz@infradead.org>
-    crypto: x86/poly1305 - Fixup SLS
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Default ignore INT3 for unreachable
-
-Borislav Petkov <bp@suse.de>
-    kvm/emulate: Fix SETcc emulation function offsets with SLS
-
-Arnaldo Carvalho de Melo <acme@redhat.com>
-    tools arch: Update arch/x86/lib/mem{cpy,set}_64.S copies used in 'perf bench mem memcpy'
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Add straight-line-speculation mitigation
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Add straight-line-speculation validation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternative: Relax text_poke_bp() constraint
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Prepare inline-asm for straight-line-speculation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86: Prepare asm files for straight-line-speculation
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/lib/atomic64_386_32: Rename things
-
-Peter Zijlstra <peterz@infradead.org>
-    bpf,x86: Respect X86_FEATURE_RETPOLINE*
-
-Peter Zijlstra <peterz@infradead.org>
-    bpf,x86: Simplify computing label offsets
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternative: Add debug prints to apply_retpolines()
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternative: Try inline spectre_v2=retpoline,amd
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternative: Handle Jcc __x86_indirect_thunk_\reg
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternative: Implement .retpoline_sites support
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Create a retpoline thunk array
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Move the retpoline thunk declarations to nospec-branch.h
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/asm: Fixup odd GEN-for-each-reg.h usage
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/asm: Fix register order
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Remove unused replacement symbols
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool,x86: Replace alternatives with .retpoline_sites
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Explicitly avoid self modifying code in .altinstr_replacement
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Classify symbols
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Handle __sanitize_cov*() tail calls
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Introduce CFI hash
-
-Joe Lawrence <joe.lawrence@redhat.com>
-    objtool: Make .altinstructions section entry size consistent
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Remove reloc symbol type checks in get_alt_entry()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    objtool: print out the symbol type when complaining about it
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Teach get_alt_entry() about more relocation types
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Don't make .altinstructions writable
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool/x86: Ignore __x86_indirect_alt_* symbols
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Only rewrite unconditional retpoline thunk calls
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Fix .symtab_shndx handling for elf_create_undef_symbol()
-
-Borislav Petkov <bp@suse.de>
-    x86/alternative: Optimize single-byte NOPs at an arbitrary position
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Support asm jump tables
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool/x86: Rewrite retpoline thunk calls
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Skip magical retpoline .altinstr_replacement
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Cache instruction relocs
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Keep track of retpoline call sites
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Add elf_create_undef_symbol()
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Extract elf_symbol_add()
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Extract elf_strtab_concat()
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Create reloc sections implicitly
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Add elf_create_reloc() helper
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Rework the elf_rebuild_reloc_section() logic
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Handle per arch retpoline naming
-
-Peter Zijlstra <peterz@infradead.org>
-    objtool: Correctly handle retpoline thunk calls
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/retpoline: Simplify retpolines
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/alternatives: Optimize optimize_nops()
-
-Ben Hutchings <ben@decadent.org.uk>
-    x86: Add insn_decode_kernel()
-
-Borislav Petkov <bp@suse.de>
-    x86/alternative: Use insn_decode()
-
-Borislav Petkov <bp@suse.de>
-    x86/insn-eval: Handle return values from the decoder
-
-Borislav Petkov <bp@suse.de>
-    x86/insn: Add an insn_decode() API
-
-Borislav Petkov <bp@suse.de>
-    x86/insn: Add a __ignore_sync_check__ marker
-
-Borislav Petkov <bp@suse.de>
-    x86/insn: Rename insn_decode() to insn_decode_from_regs()
-
-Juergen Gross <jgross@suse.com>
-    x86/alternative: Use ALTERNATIVE_TERNARY() in _static_cpu_has()
-
-Juergen Gross <jgross@suse.com>
-    x86/alternative: Support ALTERNATIVE_TERNARY
-
-Juergen Gross <jgross@suse.com>
-    x86/alternative: Support not-feature
-
-Juergen Gross <jgross@suse.com>
-    x86/alternative: Merge include files
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/xen: Support objtool vmlinux.o validation in xen-head.S
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    x86/xen: Support objtool validation in xen-asm.S
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Combine UNWIND_HINT_RET_OFFSET and UNWIND_HINT_FUNC
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Assume only ELF functions do sibling calls
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Support retpoline jump detection for vmlinux.o
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Support stack layout changes in alternatives
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Add 'alt_group' struct
-
-Josh Poimboeuf <jpoimboe@redhat.com>
-    objtool: Refactor ORC section generation
-
-Uros Bizjak <ubizjak@gmail.com>
-    KVM/nVMX: Use __vmx_vcpu_run in nested_vmx_check_vmentry_hw
-
-Uros Bizjak <ubizjak@gmail.com>
-    KVM/VMX: Use TEST %REG,%REG instead of CMP $0,%REG in vmenter.S
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/kernel-parameters.txt  |   25 +
- Makefile                                         |   24 +-
- arch/um/kernel/um_arch.c                         |    4 +
- arch/x86/Kconfig                                 |   91 +-
- arch/x86/Makefile                                |    8 +-
- arch/x86/boot/compressed/efi_thunk_64.S          |    2 +-
- arch/x86/boot/compressed/head_64.S               |    4 +-
- arch/x86/boot/compressed/mem_encrypt.S           |    4 +-
- arch/x86/crypto/aegis128-aesni-asm.S             |   48 +-
- arch/x86/crypto/aes_ctrby8_avx-x86_64.S          |    2 +-
- arch/x86/crypto/aesni-intel_asm.S                |   52 +-
- arch/x86/crypto/aesni-intel_avx-x86_64.S         |   40 +-
- arch/x86/crypto/blake2s-core.S                   |    4 +-
- arch/x86/crypto/blowfish-x86_64-asm_64.S         |   12 +-
- arch/x86/crypto/camellia-aesni-avx-asm_64.S      |   18 +-
- arch/x86/crypto/camellia-aesni-avx2-asm_64.S     |   18 +-
- arch/x86/crypto/camellia-x86_64-asm_64.S         |   12 +-
- arch/x86/crypto/cast5-avx-x86_64-asm_64.S        |   12 +-
- arch/x86/crypto/cast6-avx-x86_64-asm_64.S        |   16 +-
- arch/x86/crypto/chacha-avx2-x86_64.S             |    6 +-
- arch/x86/crypto/chacha-avx512vl-x86_64.S         |    6 +-
- arch/x86/crypto/chacha-ssse3-x86_64.S            |    8 +-
- arch/x86/crypto/crc32-pclmul_asm.S               |    2 +-
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S        |    2 +-
- arch/x86/crypto/crct10dif-pcl-asm_64.S           |    2 +-
- arch/x86/crypto/des3_ede-asm_64.S                |    4 +-
- arch/x86/crypto/ghash-clmulni-intel_asm.S        |    6 +-
- arch/x86/crypto/nh-avx2-x86_64.S                 |    2 +-
- arch/x86/crypto/nh-sse2-x86_64.S                 |    2 +-
- arch/x86/crypto/poly1305-x86_64-cryptogams.pl    |   38 +-
- arch/x86/crypto/serpent-avx-x86_64-asm_64.S      |   16 +-
- arch/x86/crypto/serpent-avx2-asm_64.S            |   16 +-
- arch/x86/crypto/serpent-sse2-i586-asm_32.S       |    6 +-
- arch/x86/crypto/serpent-sse2-x86_64-asm_64.S     |    6 +-
- arch/x86/crypto/sha1_avx2_x86_64_asm.S           |    2 +-
- arch/x86/crypto/sha1_ni_asm.S                    |    2 +-
- arch/x86/crypto/sha1_ssse3_asm.S                 |    2 +-
- arch/x86/crypto/sha256-avx-asm.S                 |    2 +-
- arch/x86/crypto/sha256-avx2-asm.S                |    2 +-
- arch/x86/crypto/sha256-ssse3-asm.S               |    2 +-
- arch/x86/crypto/sha256_ni_asm.S                  |    2 +-
- arch/x86/crypto/sha512-avx-asm.S                 |    2 +-
- arch/x86/crypto/sha512-avx2-asm.S                |    2 +-
- arch/x86/crypto/sha512-ssse3-asm.S               |    2 +-
- arch/x86/crypto/twofish-avx-x86_64-asm_64.S      |   16 +-
- arch/x86/crypto/twofish-i586-asm_32.S            |    4 +-
- arch/x86/crypto/twofish-x86_64-asm_64-3way.S     |    6 +-
- arch/x86/crypto/twofish-x86_64-asm_64.S          |    4 +-
- arch/x86/entry/Makefile                          |    2 +-
- arch/x86/entry/calling.h                         |   72 +-
- arch/x86/entry/entry.S                           |   22 +
- arch/x86/entry/entry_32.S                        |    6 +-
- arch/x86/entry/entry_64.S                        |   62 +-
- arch/x86/entry/entry_64_compat.S                 |   21 +-
- arch/x86/entry/thunk_32.S                        |    2 +-
- arch/x86/entry/thunk_64.S                        |    2 +-
- arch/x86/entry/vdso/Makefile                     |    1 +
- arch/x86/entry/vdso/vdso32/system_call.S         |    4 +-
- arch/x86/entry/vsyscall/vsyscall_emu_64.S        |    3 +
- arch/x86/include/asm/GEN-for-each-reg.h          |   14 +-
- arch/x86/include/asm/alternative-asm.h           |  114 ---
- arch/x86/include/asm/alternative.h               |  137 ++-
- arch/x86/include/asm/asm-prototypes.h            |   17 -
- arch/x86/include/asm/cpufeature.h                |   41 +-
- arch/x86/include/asm/cpufeatures.h               |   14 +-
- arch/x86/include/asm/disabled-features.h         |   21 +-
- arch/x86/include/asm/inat.h                      |    2 +-
- arch/x86/include/asm/insn-eval.h                 |    4 +-
- arch/x86/include/asm/insn.h                      |   28 +-
- arch/x86/include/asm/linkage.h                   |   22 +
- arch/x86/include/asm/msr-index.h                 |   13 +
- arch/x86/include/asm/nospec-branch.h             |  140 +--
- arch/x86/include/asm/paravirt.h                  |    2 +-
- arch/x86/include/asm/qspinlock_paravirt.h        |    4 +-
- arch/x86/include/asm/smap.h                      |    5 +-
- arch/x86/include/asm/static_call.h               |   19 +-
- arch/x86/include/asm/unwind_hints.h              |   23 +-
- arch/x86/kernel/acpi/wakeup_32.S                 |    6 +-
- arch/x86/kernel/alternative.c                    |  406 +++++++-
- arch/x86/kernel/cpu/amd.c                        |   46 +-
- arch/x86/kernel/cpu/bugs.c                       |  475 +++++++--
- arch/x86/kernel/cpu/common.c                     |   61 +-
- arch/x86/kernel/cpu/cpu.h                        |    2 +
- arch/x86/kernel/cpu/hygon.c                      |    6 +
- arch/x86/kernel/cpu/scattered.c                  |    1 +
- arch/x86/kernel/ftrace.c                         |    7 +-
- arch/x86/kernel/ftrace_32.S                      |    6 +-
- arch/x86/kernel/ftrace_64.S                      |   12 +-
- arch/x86/kernel/head_32.S                        |    2 +-
- arch/x86/kernel/head_64.S                        |    5 +
- arch/x86/kernel/irqflags.S                       |    4 +-
- arch/x86/kernel/kprobes/core.c                   |    2 +-
- arch/x86/kernel/module.c                         |   15 +-
- arch/x86/kernel/paravirt.c                       |    2 +-
- arch/x86/kernel/process.c                        |    2 +-
- arch/x86/kernel/relocate_kernel_32.S             |   15 +-
- arch/x86/kernel/relocate_kernel_64.S             |   13 +-
- arch/x86/kernel/sev-es.c                         |    2 +-
- arch/x86/kernel/sev_verify_cbit.S                |    2 +-
- arch/x86/kernel/static_call.c                    |   52 +-
- arch/x86/kernel/umip.c                           |    2 +-
- arch/x86/kernel/verify_cpu.S                     |    4 +-
- arch/x86/kernel/vmlinux.lds.S                    |   23 +-
- arch/x86/kvm/emulate.c                           |   33 +-
- arch/x86/kvm/svm/vmenter.S                       |   11 +-
- arch/x86/kvm/vmx/nested.c                        |   32 +-
- arch/x86/kvm/vmx/run_flags.h                     |    8 +
- arch/x86/kvm/vmx/vmenter.S                       |  170 ++--
- arch/x86/kvm/vmx/vmx.c                           |   78 +-
- arch/x86/kvm/vmx/vmx.h                           |    5 +
- arch/x86/kvm/x86.c                               |    4 +-
- arch/x86/lib/atomic64_386_32.S                   |   88 +-
- arch/x86/lib/atomic64_cx8_32.S                   |   18 +-
- arch/x86/lib/checksum_32.S                       |    8 +-
- arch/x86/lib/clear_page_64.S                     |    6 +-
- arch/x86/lib/cmpxchg16b_emu.S                    |    4 +-
- arch/x86/lib/cmpxchg8b_emu.S                     |    4 +-
- arch/x86/lib/copy_mc_64.S                        |    6 +-
- arch/x86/lib/copy_page_64.S                      |    6 +-
- arch/x86/lib/copy_user_64.S                      |   14 +-
- arch/x86/lib/csum-copy_64.S                      |    2 +-
- arch/x86/lib/error-inject.c                      |    3 +-
- arch/x86/lib/getuser.S                           |   22 +-
- arch/x86/lib/hweight.S                           |    6 +-
- arch/x86/lib/inat.c                              |    2 +-
- arch/x86/lib/insn-eval.c                         |   40 +-
- arch/x86/lib/insn.c                              |  222 ++++-
- arch/x86/lib/iomap_copy_64.S                     |    2 +-
- arch/x86/lib/memcpy_64.S                         |   14 +-
- arch/x86/lib/memmove_64.S                        |   11 +-
- arch/x86/lib/memset_64.S                         |    8 +-
- arch/x86/lib/msr-reg.S                           |    4 +-
- arch/x86/lib/putuser.S                           |    6 +-
- arch/x86/lib/retpoline.S                         |  118 ++-
- arch/x86/math-emu/div_Xsig.S                     |    2 +-
- arch/x86/math-emu/div_small.S                    |    2 +-
- arch/x86/math-emu/mul_Xsig.S                     |    6 +-
- arch/x86/math-emu/polynom_Xsig.S                 |    2 +-
- arch/x86/math-emu/reg_norm.S                     |    6 +-
- arch/x86/math-emu/reg_round.S                    |    2 +-
- arch/x86/math-emu/reg_u_add.S                    |    2 +-
- arch/x86/math-emu/reg_u_div.S                    |    2 +-
- arch/x86/math-emu/reg_u_mul.S                    |    2 +-
- arch/x86/math-emu/reg_u_sub.S                    |    2 +-
- arch/x86/math-emu/round_Xsig.S                   |    4 +-
- arch/x86/math-emu/shr_Xsig.S                     |    8 +-
- arch/x86/math-emu/wm_shrx.S                      |   16 +-
- arch/x86/mm/mem_encrypt_boot.S                   |    6 +
- arch/x86/net/bpf_jit_comp.c                      |  185 ++--
- arch/x86/net/bpf_jit_comp32.c                    |   22 +-
- arch/x86/platform/efi/efi_stub_32.S              |    2 +-
- arch/x86/platform/efi/efi_stub_64.S              |    2 +-
- arch/x86/platform/efi/efi_thunk_64.S             |    2 +-
- arch/x86/platform/olpc/xo1-wakeup.S              |    6 +-
- arch/x86/power/hibernate_asm_32.S                |    4 +-
- arch/x86/power/hibernate_asm_64.S                |    4 +-
- arch/x86/um/checksum_32.S                        |    4 +-
- arch/x86/um/setjmp_32.S                          |    2 +-
- arch/x86/um/setjmp_64.S                          |    2 +-
- arch/x86/xen/Makefile                            |    1 -
- arch/x86/xen/setup.c                             |    6 +-
- arch/x86/xen/xen-asm.S                           |   43 +-
- arch/x86/xen/xen-head.S                          |    6 +-
- arch/x86/xen/xen-ops.h                           |    6 +-
- drivers/base/cpu.c                               |    8 +
- drivers/idle/intel_idle.c                        |   43 +-
- include/linux/cpu.h                              |    2 +
- include/linux/kvm_host.h                         |    2 +-
- include/linux/objtool.h                          |   14 +-
- samples/ftrace/ftrace-direct-modify.c            |    4 +-
- samples/ftrace/ftrace-direct-too.c               |    2 +-
- samples/ftrace/ftrace-direct.c                   |    2 +-
- scripts/Makefile.build                           |    6 +
- scripts/link-vmlinux.sh                          |    6 +
- security/Kconfig                                 |   11 -
- tools/arch/x86/include/asm/inat.h                |    2 +-
- tools/arch/x86/include/asm/insn.h                |   28 +-
- tools/arch/x86/include/asm/msr-index.h           |    9 +
- tools/arch/x86/lib/inat.c                        |    2 +-
- tools/arch/x86/lib/insn.c                        |  222 ++++-
- tools/arch/x86/lib/memcpy_64.S                   |   12 +-
- tools/arch/x86/lib/memset_64.S                   |    6 +-
- tools/include/linux/kconfig.h                    |   73 ++
- tools/include/linux/objtool.h                    |   14 +-
- tools/objtool/Documentation/stack-validation.txt |   16 +-
- tools/objtool/Makefile                           |    4 -
- tools/objtool/arch.h                             |   13 +-
- tools/objtool/arch/x86/decode.c                  |   58 +-
- tools/objtool/arch/x86/include/arch_special.h    |    2 +-
- tools/objtool/builtin-check.c                    |    6 +-
- tools/objtool/builtin-orc.c                      |    6 +-
- tools/objtool/builtin.h                          |    3 +-
- tools/objtool/cfi.h                              |    2 +
- tools/objtool/check.c                            | 1140 +++++++++++++++++-----
- tools/objtool/check.h                            |   35 +-
- tools/objtool/elf.c                              |  434 ++++++--
- tools/objtool/elf.h                              |   22 +-
- tools/objtool/objtool.c                          |    2 +
- tools/objtool/objtool.h                          |    5 +-
- tools/objtool/orc_gen.c                          |  324 +++---
- tools/objtool/special.c                          |   22 +-
- tools/objtool/sync-check.sh                      |   17 +-
- tools/objtool/weak.c                             |    7 +-
- tools/perf/check-headers.sh                      |   15 +-
- 204 files changed, 4557 insertions(+), 1916 deletions(-)
-
-
+On Wed, 13 Jul 2022 13:33:32 +0100,
+Robert Marko <robimarko@gmail.com> wrote:
+> 
+> On Wed, 13 Jul 2022 at 13:47, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On 2022-07-13 12:08, Robert Marko wrote:
+> > > I will look at IRQ GPIO docs, but in this case, then we have more
+> > > conversions that
+> > > are not correct.
+> >
+> > Then please point them out.
+> 
+> Oh, now I get the issue, I was misunderstanding it completely.
+> gpiochip_enable_irq and gpiochip_disable_irq are not being called
+> at all.
+> 
+> However, I dont see them being called before the conversion as well.
+> I am not really familiar with the PMIC IRQ-s, looked like an easy conversion
+> to get rid of the warning.
+
+They definitely were. Look at how gpiochip_add_data() eventually ends
+up calling gpiochip_set_irq_hooks((), which hijacks the irq_chip
+function pointers to insert the calls to these helpers.
+
+This is what this conversion process is all about, and you absolutely
+need to understand that code before blindly changing drivers to squash
+a run-time warning.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

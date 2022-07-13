@@ -2,81 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521C75736BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AAF573690
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiGMM6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S231861AbiGMMsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 08:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiGMM6P (ORCPT
+        with ESMTP id S229774AbiGMMsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:58:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEBCD74791
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657717093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYC8Yec1GTbUtaYK7RYva4XXz/xl1ExjZYRMzojC8yQ=;
-        b=L8Y2U5FFfXvBLvZ0piQufktp3doNmsC2UCEjTpIsr+X915Ip6KGs8+mi3Izz0vWY9oVht7
-        URrVz3IpVGvbQtQ2/WlzEztZV87ac4MHWrEh2EpJtVirKnHt31pQNoxKmt4x0isLoa6+lV
-        8GQq/UAjqE7Nj4/uRlPsl2vCx7BvVRM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-y1PoGr-KObSmF7vKk7zy-g-1; Wed, 13 Jul 2022 08:58:12 -0400
-X-MC-Unique: y1PoGr-KObSmF7vKk7zy-g-1
-Received: by mail-wm1-f70.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso5526993wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:58:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iYC8Yec1GTbUtaYK7RYva4XXz/xl1ExjZYRMzojC8yQ=;
-        b=6h4bUoxkuynX6dUN0l7a+80zFpktLh9VLn4Hn4EJypMY0ITqNEgAk2IbmZYiH8Sxik
-         qFM6QDU50BC6zXtp0iO/w2ykZ2GYSWtD5jhck4KSzs9RYjr6WsioLDcivn5Z0Mxw/AXv
-         oj9E4/OXi7+eQSDGFF3TT0NgYWWj/4BwFGiVIsY40qP8JHkibaxdWvIcLOKszCmVjJKV
-         E9rwLDGSkOBumXThu1OmAlKa8I9u/JR5kbaOUe+y4zbzsiG/LaQJU5wxwSY3NUT7B+A3
-         iTpSBApy1lVkulKr7jqXg/Tzf/1w/K2OSeQ/HIE+6HaFbPWZ0TuDc6DpkwpaOLQIUjgM
-         vJVA==
-X-Gm-Message-State: AJIora8O7ghpS8rmvWHGfexT/k2lNq3cTioijkdBKXOCeq1K601pcJQW
-        KafMn+H/z6k7QuTyMXJoMJh6lZ42eHCof8H42L8NeYhOEKX+8ihVIALu6poYOVOiIhanTh4TRwB
-        GBy7MGz+fK6I2ZpQarrTwmizI
-X-Received: by 2002:a1c:7910:0:b0:3a2:e033:cdbc with SMTP id l16-20020a1c7910000000b003a2e033cdbcmr9660887wme.122.1657717091470;
-        Wed, 13 Jul 2022 05:58:11 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sRsnqWu8rRP2FIUsaOp6/GcdlWCvwK0G1/Y1QaiEpMZI2+dk3VkUEbOS2ulOuht+mJNcB7qA==
-X-Received: by 2002:a1c:7910:0:b0:3a2:e033:cdbc with SMTP id l16-20020a1c7910000000b003a2e033cdbcmr9660859wme.122.1657717091160;
-        Wed, 13 Jul 2022 05:58:11 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.54.26])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1c7402000000b003a2fdde48d1sm944864wmc.25.2022.07.13.05.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 05:58:10 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 14:58:08 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH] sched/deadline: Fix BUG_ON condition for deboosted tasks
-Message-ID: <Ys7BYCvlgphAwQ+Y@localhost.localdomain>
-References: <20220713075014.411739-1-juri.lelli@redhat.com>
- <Ys6wgxiZbdjxyh8C@hirez.programming.kicks-ass.net>
+        Wed, 13 Jul 2022 08:48:13 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75882224;
+        Wed, 13 Jul 2022 05:48:11 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LjcmG5Tvnz1L96G;
+        Wed, 13 Jul 2022 20:45:34 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 20:48:07 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
+ 2022 20:48:06 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <ebiederm@xmission.com>, <willy@infradead.org>, <bhe@redhat.com>,
+        <bfoster@redhat.com>, <akpm@linux-foundation.org>,
+        <kaleshsingh@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH v5] proc: Fix a dentry lock race between release_task and lookup
+Date:   Wed, 13 Jul 2022 21:00:29 +0800
+Message-ID: <20220713130029.4133533-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys6wgxiZbdjxyh8C@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,40 +52,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/22 13:46, Peter Zijlstra wrote:
-> On Wed, Jul 13, 2022 at 09:50:14AM +0200, Juri Lelli wrote:
-> > Tasks the are being deboosted from SCHED_DEADLINE might enter
-> > enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
-> > since they are not boosted anymore, the if (is_dl_boosted()) branch is
-> > not taken, but the else if (!dl_prio) is and inside this one we
-> > BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
-> > otherwise we had entered the if branch above. Long story short, the
-> > current condition doesn't make sense and always leads to triggering of a
-> > BUG.
-> > 
-> > Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
-> > to be present, but additional flags are not a problem.
-> > 
-> > Fixes: 2279f540ea7d ("sched/deadline: Fix priority inheritance with multiple scheduling classes")
-> > Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> > ---
-> >  kernel/sched/deadline.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> > index 5867e186c39a..0447d46f4718 100644
-> > --- a/kernel/sched/deadline.c
-> > +++ b/kernel/sched/deadline.c
-> > @@ -1703,7 +1703,7 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags)
-> >  		 * the throttle.
-> >  		 */
-> >  		p->dl.dl_throttled = 0;
-> > -		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
-> > +		BUG_ON(!(flags & ENQUEUE_REPLENISH));
-> 
-> While there, can we perhaps make it less fatal? 
+Commit 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+moved proc_flush_task() behind __exit_signal(). Then, process systemd
+can take long period high cpu usage during releasing task in following
+concurrent processes:
 
-Yep. On it. Thanks!
+  systemd                                 ps
+kernel_waitid                 stat(/proc/tgid)
+  do_wait                       filename_lookup
+    wait_consider_task            lookup_fast
+      release_task
+        __exit_signal
+          __unhash_process
+            detach_pid
+              __change_pid // remove task->pid_links
+                                     d_revalidate -> pid_revalidate  // 0
+                                     d_invalidate(/proc/tgid)
+                                       shrink_dcache_parent(/proc/tgid)
+                                         d_walk(/proc/tgid)
+                                           spin_lock_nested(/proc/tgid/fd)
+                                           // iterating opened fd
+        proc_flush_pid                                    |
+           d_invalidate (/proc/tgid/fd)                   |
+              shrink_dcache_parent(/proc/tgid/fd)         |
+                shrink_dentry_list(subdirs)               ↓
+                  shrink_lock_dentry(/proc/tgid/fd) --> race on dentry lock
 
-Juri
+Function d_invalidate() will remove dentry from hash firstly, but why does
+proc_flush_pid() process dentry '/proc/tgid/fd' before dentry '/proc/tgid'?
+That's because proc_pid_make_inode() adds proc inode in reverse order by
+invoking hlist_add_head_rcu(). But proc should not add any inodes under
+'/proc/tgid' except '/proc/tgid/task/pid', fix it by adding inode into
+'pid->inodes' only if the inode is /proc/tgid or /proc/tgid/task/pid.
+
+Performance regression:
+Create 200 tasks, each task open one file for 50,000 times. Kill all
+tasks when opened files exceed 10,000,000 (cat /proc/sys/fs/file-nr).
+
+Before fix:
+$ time killall -wq aa
+  real    4m40.946s   # During this period, we can see 'ps' and 'systemd'
+			taking high cpu usage.
+
+After fix:
+$ time killall -wq aa
+  real    1m20.732s   # During this period, we can see 'systemd' taking
+			high cpu usage.
+
+Fixes: 7bc3e6e55acf06 ("proc: Use a list of inodes to flush from proc")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216054
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Suggested-by: Brian Foster <bfoster@redhat.com>
+---
+ v1->v2: Add new helper proc_pid_make_base_inode that performs the extra
+	 work of adding to the pid->list.
+ v2->v3: Add performance regression in commit message.
+ v3->v4: Make proc_pid_make_base_inode() static
+ v4->v5: Add notes to explain what proc_pid_make_base_inode() does
+ fs/proc/base.c | 46 ++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 38 insertions(+), 8 deletions(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 8dfa36a99c74..93f7e3d971e4 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1885,7 +1885,7 @@ void proc_pid_evict_inode(struct proc_inode *ei)
+ 	put_pid(pid);
+ }
+ 
+-struct inode *proc_pid_make_inode(struct super_block * sb,
++struct inode *proc_pid_make_inode(struct super_block *sb,
+ 				  struct task_struct *task, umode_t mode)
+ {
+ 	struct inode * inode;
+@@ -1914,11 +1914,6 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 
+ 	/* Let the pid remember us for quick removal */
+ 	ei->pid = pid;
+-	if (S_ISDIR(mode)) {
+-		spin_lock(&pid->lock);
+-		hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
+-		spin_unlock(&pid->lock);
+-	}
+ 
+ 	task_dump_owner(task, 0, &inode->i_uid, &inode->i_gid);
+ 	security_task_to_inode(task, inode);
+@@ -1931,6 +1926,39 @@ struct inode *proc_pid_make_inode(struct super_block * sb,
+ 	return NULL;
+ }
+ 
++/*
++ * Generating an inode and adding it into @pid->inodes, so that task will
++ * invalidate inode's dentry before being released.
++ *
++ * This helper is used for creating dir-type entries under '/proc' and
++ * '/proc/<tgid>/task'. Other entries(eg. fd, stat) under '/proc/<tgid>'
++ * can be released by invalidating '/proc/<tgid>' dentry.
++ * In theory, dentries under '/proc/<tgid>/task' can also be released by
++ * invalidating '/proc/<tgid>' dentry, we reserve it to handle single
++ * thread exiting situation: Any one of threads should invalidate its
++ * '/proc/<tgid>/task/<pid>' dentry before released.
++ */
++static struct inode *proc_pid_make_base_inode(struct super_block *sb,
++				struct task_struct *task, umode_t mode)
++{
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct pid *pid;
++
++	inode = proc_pid_make_inode(sb, task, mode);
++	if (!inode)
++		return NULL;
++
++	/* Let proc_flush_pid find this directory inode */
++	ei = PROC_I(inode);
++	pid = ei->pid;
++	spin_lock(&pid->lock);
++	hlist_add_head_rcu(&ei->sibling_inodes, &pid->inodes);
++	spin_unlock(&pid->lock);
++
++	return inode;
++}
++
+ int pid_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		struct kstat *stat, u32 request_mask, unsigned int query_flags)
+ {
+@@ -3369,7 +3397,8 @@ static struct dentry *proc_pid_instantiate(struct dentry * dentry,
+ {
+ 	struct inode *inode;
+ 
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+@@ -3671,7 +3700,8 @@ static struct dentry *proc_task_instantiate(struct dentry *dentry,
+ 	struct task_struct *task, const void *ptr)
+ {
+ 	struct inode *inode;
+-	inode = proc_pid_make_inode(dentry->d_sb, task, S_IFDIR | S_IRUGO | S_IXUGO);
++	inode = proc_pid_make_base_inode(dentry->d_sb, task,
++					 S_IFDIR | S_IRUGO | S_IXUGO);
+ 	if (!inode)
+ 		return ERR_PTR(-ENOENT);
+ 
+-- 
+2.31.1
 

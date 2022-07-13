@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC203573D92
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB97573DA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbiGMUHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S237068AbiGMULR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiGMUHV (ORCPT
+        with ESMTP id S229759AbiGMULH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:07:21 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D205930F4E;
-        Wed, 13 Jul 2022 13:07:19 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8189B2DC;
-        Wed, 13 Jul 2022 20:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8189B2DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1657742839; bh=Gg0x3XgAR86RJogBY3e5HKNUB7GioqlXEzqUCv/sLD0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UkhcQCwhctMMn34ABbQ1G8480kJFTNxxxaZGGoMgkxYzyXxOS+43URD4cQq6CrkHA
-         R/JJETgcITMmYuPke++8blkcmRfdTxdQZ/q1CnDvYfqjwYBQvsW7FGZk3a+i6+yHbu
-         n9368RxHfv9M5SkU98wnsiAN4//KX1bmoGELObpMMgY4Eh3qWly52JjkdDILb9pCtp
-         gzGOX1rYFd2U90NggiEOLHZayfxad9fc3TJgrlxnKHza1gEeDgzZaJMDJyrAup6EN4
-         TKAJxDMGmcKXVs6paq78O2gRLWNn+v6SKkFZfnTKjhC0JRs0WErXkmIAd5dXVU6G7s
-         LRYItmm3+LoUA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: Re: [PATCH 1/5] docs: sysctl: remove references to inode-max
-In-Reply-To: <20220712172619.359052-1-steve@sk2.org>
-References: <20220712172619.359052-1-steve@sk2.org>
-Date:   Wed, 13 Jul 2022 14:07:18 -0600
-Message-ID: <87y1ww3hft.fsf@meer.lwn.net>
+        Wed, 13 Jul 2022 16:11:07 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C371D29CB2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:11:05 -0700 (PDT)
+Received: from localhost.localdomain (abxj14.neoplus.adsl.tpnet.pl [83.9.3.14])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 30C693F79E;
+        Wed, 13 Jul 2022 22:11:02 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] dt-bindings: arm: qcom: Document Sony Xperia 1 IV (PDX223)
+Date:   Wed, 13 Jul 2022 22:10:44 +0200
+Message-Id: <20220713201047.1449786-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Kitt <steve@sk2.org> writes:
+Document the compatible for the PDX223 device.
 
-> inode-max was removed in 2.3.20pre1, remove references to it in the
-> sysctl documentation.
->
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-These patches look good to me, but I'd feel better if you would post the
-set, with a proper cover letter, to linux-fsdevel to get the attention
-of folks who know this stuff a bit better.
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 5c06d1bfc046..e19f5511ebc1 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -305,6 +305,7 @@ properties:
+           - enum:
+               - qcom,sm8450-hdk
+               - qcom,sm8450-qrd
++              - sony,pdx223
+           - const: qcom,sm8450
+ 
+ additionalProperties: true
+-- 
+2.37.0
 
-Thanks,
-
-jon

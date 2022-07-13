@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68625572F9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7AD572F9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiGMHut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S234803AbiGMHvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiGMHuq (ORCPT
+        with ESMTP id S230249AbiGMHu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:50:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D574B313A4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657698643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UUUAyRjzYTQJMt+N0hTGhBJ/lch625duUKNPGtSQaX4=;
-        b=RxKzGtlFqBQxL5g6hDySHpSI/8Cl1YWx4VuZMX2h6VXuHyroT2tJkecROBSq98L/uAhz+1
-        1/DaDd7udqJWA5pW8xTFutbqkt+50hA3wnwXpE4bmmMIYGA++dxrvZQn5g3ueEjG3UfNYk
-        YLi5PFRVYn65vZ7zs5G53O+5nOwNWYA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-bTeqqciWMX23RezB32E6HA-1; Wed, 13 Jul 2022 03:50:39 -0400
-X-MC-Unique: bTeqqciWMX23RezB32E6HA-1
-Received: by mail-wm1-f70.google.com with SMTP id a6-20020a05600c348600b003a2d72b7a15so711421wmq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:39 -0700 (PDT)
+        Wed, 13 Jul 2022 03:50:56 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20568DB2ED
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z25so17774147lfr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NYflSyzJGWVmdo/FfUNnh/uWyzXsbzDiU5Kfi3yNT/s=;
+        b=T8PSBsSZ/kqgVoJWl1fOj4dHcsCxbJGi1zOLnZJzpdNI3O5NOJwql6sobP0r3Z1OQd
+         oFnUu6Vr5VpQoaF5ZA2ltfQIhfhw0KOj0IC7ZY6BXomA+yv50aY2SHmUkNJi1T7t1iuK
+         clsGR5WG4tBsWwsBQDdKv9WX3smAnXnZ1/NdCLShi1x1Aztc3iwzPdK2r7QbfLOgJ8SY
+         Bsctvhnv3CXHSZT1zMF9vzwZ8fBXuRXU0B0dcBY8wsCLgCTsR3y5JEc9lYDqF74bBdJU
+         ErJWwbjZs6rYngrmSRBQggbaEzWhRoPB6mj3QhoDpZVLZfjP5SK3mLs9nwpO/54HNeDt
+         rd2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=UUUAyRjzYTQJMt+N0hTGhBJ/lch625duUKNPGtSQaX4=;
-        b=yi28+s1tmAsSZ97VJIiC6gmg9VZqHIf6YGrNugJtBUEzd13wlMzPueaMnXTqgGNIjV
-         1wEWMaA1asVhIzXMKOxhCDYhXH2kGDT58PuUpK00LLQEf62mQ8Ni1N3Z8FzYiut3CkQH
-         ot7de1Ud8IH3MLLulesaJ1XSuZQAG+eiSJlw4qliADLKCa0BkpS2MwEZvXjflFxdhBn7
-         XqriN3KIwjzhx9H5vzgLWqLaaY+aNtjr9B+z/+1bWtmgFbOq00BeyV9YFIhb1poGHMFF
-         mzzbbEO9sJP3+gyE2T/wmlwgRLTOFs5LJSmQn8k2BY+E/DJY6ugeevfbHpv9CtDEVAmS
-         PNCA==
-X-Gm-Message-State: AJIora+frCwNeRs5wgD9AAY2Btf/PPY7MOIW0moLhRUgF7xwS6lmFWbd
-        TdXyBwnuqI6xsrnSHuMfm1YJ43SfkXlelYkRCNZFJlVwp7yi0rXZKFA2BXB5m1yY2wf5X7G5K9Z
-        Ohh9pR/TSHKp7uHY06d9N6PHNkCgwKKC+aEwrsGKvy92zVLTqgVUT0/8pw3B3LDAlgMWhsfeV3x
-        iMPzQ=
-X-Received: by 2002:a05:6000:12c8:b0:21d:6913:89af with SMTP id l8-20020a05600012c800b0021d691389afmr1868516wrx.546.1657698638250;
-        Wed, 13 Jul 2022 00:50:38 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tVAaqjUmmT74Sd86HbMQeLDUALnySAzJYvk/gvhv1S4gh1URgjketeKTeNtjKaCdqglG2bdQ==
-X-Received: by 2002:a05:6000:12c8:b0:21d:6913:89af with SMTP id l8-20020a05600012c800b0021d691389afmr1868479wrx.546.1657698637897;
-        Wed, 13 Jul 2022 00:50:37 -0700 (PDT)
-Received: from localhost.localdomain.com ([151.29.54.26])
-        by smtp.gmail.com with ESMTPSA id c10-20020adffb4a000000b0021db7b0162esm2220413wrs.105.2022.07.13.00.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:50:37 -0700 (PDT)
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH] sched/deadline: Fix BUG_ON condition for deboosted tasks
-Date:   Wed, 13 Jul 2022 09:50:14 +0200
-Message-Id: <20220713075014.411739-1-juri.lelli@redhat.com>
-X-Mailer: git-send-email 2.36.1
+        bh=NYflSyzJGWVmdo/FfUNnh/uWyzXsbzDiU5Kfi3yNT/s=;
+        b=dELbrYEf7Azv4dHCsho7DkFMRxjQP764hnRpF2bRPYLAmv5IlKX/oxttBQQCGxkUOL
+         vfGsGVMOnDN/gWR6r5Ol8e2CgVzp/h3spEuJ+eRW01k1dqYplNTSytM1gRJWNaWQilG7
+         hMJfb96XsdGw5Fg+pr9H9w83ePlcIuerP1jMC6HQPetnvABY1ny2vsUS9BHfN17kWoYe
+         7TwipF3huGqgmZacBghp+aetYqAgzZQe6493zO0zvITlBjn4MeKep41er2U21uKaF4KA
+         DEYE18/700kM4x1hZXcDhuFZP4L+JIlfQrwD+5/YFARL56Y+Ti6nQIy+YNrGxtDXJxbO
+         dZTw==
+X-Gm-Message-State: AJIora+C0Il1NeoOUvAtDpa9FEcizJ8GHwI82CALtemH+AVFvKim0VCM
+        KjKahSmaK2t6Op6c4Alm0CjFyA==
+X-Google-Smtp-Source: AGRyM1uhLHRvLlcQa7QUDMxWa/Z5td7UZ9SmBf3XHNCP14Y3Qepv291ZjDvXremjm/dWmogsSMB6og==
+X-Received: by 2002:a05:6512:150e:b0:481:60af:a5a5 with SMTP id bq14-20020a056512150e00b0048160afa5a5mr1161136lfb.524.1657698650422;
+        Wed, 13 Jul 2022 00:50:50 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id 3-20020a2e0503000000b0025d39993856sm2955769ljf.127.2022.07.13.00.50.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 00:50:50 -0700 (PDT)
+Message-ID: <27cd6e98-50c6-14b2-aec0-b4bbd49a9da8@linaro.org>
+Date:   Wed, 13 Jul 2022 09:50:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v10 2/2] dt-bindings: thermal: Add Sunplus schema
+Content-Language: en-US
+To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lh.kuo@sunplus.com
+References: <cover.1654660009.git.lhjeff911@gmail.com>
+ <5d2c95959dd6efaa204bc80ca9b24a8be9293d2f.1654660009.git.lhjeff911@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5d2c95959dd6efaa204bc80ca9b24a8be9293d2f.1654660009.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,37 +77,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tasks the are being deboosted from SCHED_DEADLINE might enter
-enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
-since they are not boosted anymore, the if (is_dl_boosted()) branch is
-not taken, but the else if (!dl_prio) is and inside this one we
-BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
-otherwise we had entered the if branch above. Long story short, the
-current condition doesn't make sense and always leads to triggering of a
-BUG.
+On 12/07/2022 09:30, Li-hao Kuo wrote:
+> Add bindings for Sunplus thermal driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v10:
+>  - Fix wrong indentation.
+>  - Change the setting of compatible.
+>  - Mosdify the setting of remove funciton.
+> 
+>  .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> new file mode 100644
+> index 0000000..52094da
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus Thermal controller
+> +
+> +maintainers:
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-thermal
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    maxItems: 1
+> +
+> +  nvmem-cell-names:
+> +    const: calib
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    thermal@9c000280 {
+> +        compatible = "sunplus,sp7021-thermal";
+> +        reg = <0x9c000280 0xc>;
+> +        nvmem-cells = <&calib>;
+> +        nvmem-cell-names = "calib";
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 23bde07..a8c44eb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19107,6 +19107,7 @@ SUNPLUS THERMAL DRIVER
+>  M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  L:	linux-pm@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
 
-Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
-to be present, but additional flags are not a problem.
+Not a correct path anymore.
 
-Fixes: 2279f540ea7d ("sched/deadline: Fix priority inheritance with multiple scheduling classes")
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
----
- kernel/sched/deadline.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Around v7 I asked to name the file either sunplus,thermal.yaml or
+sunplus,sp7021-thermal.yaml, but actually that was my mistake a bit
+which I learnt later. The only recommended name is the latter, based on
+compatible, so:
+sunplus,sp7021-thermal.yaml
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 5867e186c39a..0447d46f4718 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1703,7 +1703,7 @@ static void enqueue_task_dl(struct rq *rq, struct task_struct *p, int flags)
- 		 * the throttle.
- 		 */
- 		p->dl.dl_throttled = 0;
--		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
-+		BUG_ON(!(flags & ENQUEUE_REPLENISH));
- 		return;
- 	}
- 
--- 
-2.36.1
+Please name the bindings "sunplus,sp7021-thermal.yaml", change the $id
+and maintainers entry to new filename.
 
+Best regards,
+Krzysztof

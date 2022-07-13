@@ -2,130 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A444573E6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BE1573E6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbiGMVBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
+        id S237063AbiGMVBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiGMVBM (ORCPT
+        with ESMTP id S231348AbiGMVBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:01:12 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703F331349
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:01:11 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id e15so15685526edj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:01:11 -0700 (PDT)
+        Wed, 13 Jul 2022 17:01:06 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B7A31349
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kbIu/poYX3pcBRKw4rWzgBK7lbECGzr212jL4ni35Ho=;
-        b=AtG4IkPgTHTpMOC2ZaVbLGwklzeeYCkSobIUg+wLPqmDM/EP68Zf2UaEi3lCCa3HSF
-         elEUtK4updH7BuSxzT3/RHGXRG2/7d7ChVwuh0HliLbnqLLDBeVj4Q+MITKt1hxGA6WH
-         uUAOMlXj+leugjBrhlUgu0zzMeN/vO6lHDahiSxdq8MSGtyi8J3xnogdpunfORYkp7l6
-         XmM+jftVjFwUOHdTYwSxxzzrRgNA77x5d99SUwyjFmf88troHfbTAo0YYSloa9rwCTVE
-         fF4128kbfxA2Gd3LuXZHCEYX2O6giQlNMMCqwgiz3cUHz8ZXIJ3LN4FgS6dwyGC/zlpf
-         vZBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kbIu/poYX3pcBRKw4rWzgBK7lbECGzr212jL4ni35Ho=;
-        b=ZVQVTqx2KE5e2XVFzojOHMpdoVHPGaZoQiljf6PGIDvNY1Iu6UTXqTycSWWp3MChKi
-         NJCbwjlVNzsZlhoYZAwELhffA7y9B96387ocu3KLFuz+JDdVExClh/sPm2mbTkdN5IdR
-         lF6k2Hulo63ltzMbn4VfpimGW0f5jKsvJdC2c0oHGlgB0bcPuBjaP+A7n/OZNexquJ/J
-         Pz2NtQfzb131f360tfIvk+FUmIO+hKlqTbeyY6ulk7dwnMUyC9H8lZBMoCqWSDAEbAUw
-         ZArEim8rFMd3/HzciUHKOG/AnS2+L59zCx052uMidlMY2sdbAw2XqY0/VlpvCoilfWlc
-         sLfg==
-X-Gm-Message-State: AJIora+MnqyFyvOiBWe9/a7XP5g1j6hm8shuE2By3Bztt34BcWdfUCyf
-        c0CB7zVFpSzFlwJ56q91Hw/WfU/ZRN3cA1IhXTo=
-X-Google-Smtp-Source: AGRyM1u+KjIBAW04aIMbzYtbKQ1e5saRu8r0r/mIv48udUXeFG75Z/LC+D2+ip4Z1OCCCzpQDRSSeUjdCCLnrqqrQtg=
-X-Received: by 2002:a05:6402:13:b0:439:ffe8:bec9 with SMTP id
- d19-20020a056402001300b00439ffe8bec9mr7648986edu.297.1657746069894; Wed, 13
- Jul 2022 14:01:09 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657746063; x=1689282063;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LhXI5ldx+R/isqL5mJTcb3Kqhseql2na+Zu9Y+5xW08=;
+  b=QI+7ydfC8JjS5pwjUzfLRLuNgh+gRoNEeBhAfrV2QynETZ9TswMd+3fN
+   8PZFvXt0GfCoks+dPwsq1ZQAD+2sfxsFKunNTQA2Pt8A/Sc1ozyclCSax
+   iloMpV7ebfc1bwHAaoLtIupmqorxI4eLy8gk63bczygm7swkQovZY14wF
+   g=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 14:01:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:01:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 14:01:02 -0700
+Received: from [10.110.120.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 14:01:01 -0700
+Message-ID: <2260955b-354d-ceda-cadc-49453bfca3e4@quicinc.com>
+Date:   Wed, 13 Jul 2022 14:01:00 -0700
 MIME-Version: 1.0
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
-In-Reply-To: <a804b76e-159f-dbc2-f8dc-62a58552e88d@roeck-us.net>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 13 Jul 2022 17:00:58 -0400
-Message-ID: <CADnq5_O6Tp2QPXyDCvpWuRXhDr6H1PM50Ow5YG2WeukqUd-GnQ@mail.gmail.com>
-Subject: Re: Linux 5.19-rc6
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mtd: spi-nor: winbond: add support for W25Q512NW-IQ/IN
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+CC:     <clg@kaod.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <p.yadav@ti.com>,
+        <quic_ggregory@quicinc.com>, <quic_jiles@quicinc.com>,
+        <tudor.ambarus@microchip.com>
+References: <20220710145721.1207157-1-quic_jaehyoo@quicinc.com>
+ <20220711095042.2095360-1-michael@walle.cc>
+ <a42fbef2-3eff-9e88-233e-a805cfbe2376@quicinc.com>
+ <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+In-Reply-To: <4972a85d04e39ebb7b4a5872f6632c45@walle.cc>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 4:46 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 7/13/22 12:36, Linus Torvalds wrote:
-> > On Tue, Jul 12, 2022 at 10:07 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> Same problems as every week.
-> >>
-> >> Building powerpc:allmodconfig ... failed
-> >
-> > Ok, this has been going on since -rc1, which is much too long.
-> >
-> >>From your patch submission that that was rejected:
-> >
-> >> The problem was introduced with commit 41b7a347bf14 ("powerpc: Book3S
-> >> 64-bit outline-only KASAN support") which adds support for KASAN. This
-> >> commit in turn enables DRM_AMD_DC_DCN because KCOV_INSTRUMENT_ALL and
-> >> KCOV_ENABLE_COMPARISONS are no longer enabled. As result, new files are
-> >> compiled which lack the selection of hard-float.
-> >
-> > And considering that neither the ppc people nor the drm people seem
-> > interested in fixing this, and it doesn't revert cleanly I think the
-> > sane solution seems to be to just remove PPC64 support for DRM_AMD_DC
-> > entirely.
-> >
-> > IOW, does something like this (obviously nor a proper patch, but you
-> > get the idea) fix the ppc build for you?
-> >
-> >    @@ -6,7 +6,7 @@ config DRM_AMD_DC
-> >            bool "AMD DC - Enable new display engine"
-> >            default y
-> >            select SND_HDA_COMPONENT if SND_HDA_CORE
-> >    -       select DRM_AMD_DC_DCN if (X86 || PPC64) &&
-> > !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-> >    +       select DRM_AMD_DC_DCN if X86 && !(KCOV_INSTRUMENT_ALL &&
-> > KCOV_ENABLE_COMPARISONS)
-> >            help
-> >              Choose this option if you want to use the new display engine
-> >              support for AMDGPU. This adds required support for Vega and
-> >
->
-> It does, but I can't imagine that the drm or ppc people would be happy
-> about it.
+Hi Michael,
 
-If you want to apply Guenter's patch original patch:
-https://patchwork.freedesktop.org/patch/490184/
-That's fine with me.  It just kind of slipped off my radar.  We can
-dig deeper on a better fix next cycle.
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
+On 7/13/2022 7:32 AM, Michael Walle wrote:
+> Hi,
+> 
+> Am 2022-07-13 16:26, schrieb Jae Hyun Yoo:
+>>>> +    { "w25q512nwq", INFO(0xef6020, 0, 64 * 1024, 1024)
+>>>
+>>> Please use INFO(0xef6020, 0, 0, 0) and test wether it will still
+>>> work correctly. We will then be able to convert it to SNOR_ID3()
+>>> later.
+>>
+>> Tested it but it doesn't work with INFO(0xef6020, 0, 0, 0). I'll keep
+>> it as is.
+> 
+> Can you please look into this? I'd expect this to work if the SFDP
+> tables are correct because all this should come from the tables.
+> You can look at /sys/kernel/debug/spi-nor/spi0.0/params and see
+> what is changing there.
 
->
-> Guenter
+I tested it again but result is still the same. I can check the parsed
+info like below if I use INFO(0xef6020, 0, 64 * 1024, 1024) but I can't
+even check the debugfs info if I use INFO(0xef6020, 0, 0, 0) since it
+doesn't boot at all. I think, this patch should go as is and the size
+parsing issue could be fixed using a separate fix.
+
+Thanks,
+Jae
+
+$ cat /sys/kernel/debug/spi-nor/spi0.0/capabilities
+Supported read modes by the flash
+  1S-1S-1S
+   opcode        0x13
+   mode cycles   0
+   dummy cycles  0
+  1S-1S-1S (fast read)
+   opcode        0x0c
+   mode cycles   0
+   dummy cycles  8
+  1S-1S-2S
+   opcode        0x3c
+   mode cycles   0
+   dummy cycles  8
+  1S-2S-2S
+   opcode        0xbc
+   mode cycles   2
+   dummy cycles  2
+  1S-1S-4S
+   opcode        0x6c
+   mode cycles   0
+   dummy cycles  8
+  1S-4S-4S
+   opcode        0xec
+   mode cycles   2
+   dummy cycles  4
+  4S-4S-4S
+   opcode        0xec
+   mode cycles   2
+   dummy cycles  0
+
+Supported page program modes by the flash
+  1S-1S-1S
+   opcode        0x12
+  1S-1S-4S
+   opcode        0x34
+$ cat /sys/kernel/debug/spi-nor/spi0.0/params
+name            w25q512nwq
+id              ef 60 20
+size            64.0 MiB
+write size      1
+page size       256
+address width   4
+flags           4B_OPCODES | HAS_4BAIT | HAS_16BIT_SR | SOFT_RESET
+
+opcodes
+  read           0x6c
+   dummy cycles  8
+  erase          0xdc
+  program        0x12
+  8D extension   none
+
+protocols
+  read           1S-1S-4S
+  write          1S-1S-1S
+  register       1S-1S-1S
+
+erase commands
+  21 (4.00 KiB) [1]
+  dc (64.0 KiB) [3]
+  c7 (64.0 MiB)
+
+sector map
+  region (in hex)   | erase mask | flags
+  ------------------+------------+----------
+  00000000-03ffffff |     [ 123] |
+
+> Thanks,
+> -michael

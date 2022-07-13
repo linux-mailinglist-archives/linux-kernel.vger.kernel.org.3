@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C6E573528
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE315734D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiGMLPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S236118AbiGMK7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbiGMLPN (ORCPT
+        with ESMTP id S235833AbiGMK7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:15:13 -0400
-X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jul 2022 04:14:55 PDT
-Received: from 3.mo560.mail-out.ovh.net (3.mo560.mail-out.ovh.net [46.105.58.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015E4100CF8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:14:53 -0700 (PDT)
-Received: from player792.ha.ovh.net (unknown [10.109.156.133])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id C7BCF241CC
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:58:33 +0000 (UTC)
-Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player792.ha.ovh.net (Postfix) with ESMTPSA id 177F12C96E135;
-        Wed, 13 Jul 2022 10:58:21 +0000 (UTC)
+        Wed, 13 Jul 2022 06:59:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C0F788C;
+        Wed, 13 Jul 2022 03:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657709971; x=1689245971;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rHJ8pfgSYGoRDUoZjLb9byAvTc/xy4lLBNG8ZQycNYM=;
+  b=b36RPMLgXneMQVaOvIPtEeB7fjGt72ypQzSO3f8t55QQmvoNXt7Mvrgo
+   RzG3bGi5OI4+4Owxhqo5gmOTS8LioyVJ3qrm/aPuT84sq1dLoBijVwjyw
+   scLrrtFwW4jBhj3IlT1IQJX5y6SHcxyHeuojCFae/xsbAy7s3b2LsGLCl
+   DBV6XsJ2UaeIJLBiDYxsXOE6Uz7QlySPCVtJha+bpoNjBzjMEkSihRnqC
+   o+YpAlxmD8ZK7rdtCdL+o6SSkbnFhtRedq7A4apJws8Uy1lId4a2A/RYA
+   vodhARs7yNqVovCWxBQQAPAaeMKU54ePUerx9xGGmNguHdy0Um1NFojqJ
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="181936814"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2022 03:59:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 13 Jul 2022 03:59:30 -0700
+Received: from dev-powerhorse.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 13 Jul 2022 03:59:28 -0700
+From:   <lewis.hanly@microchip.com>
+To:     <linux-gpio@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-kernel@vger.kernel.org>, <palmer@dabbelt.com>,
+        <maz@kernel.org>
+CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <lewis.hanly@microchip.com>
+Subject: [PATCH v2 0/1] Add Polarfire SoC GPIO support
+Date:   Wed, 13 Jul 2022 11:59:09 +0100
+Message-ID: <20220713105910.931983-1-lewis.hanly@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Wed, 13 Jul 2022 12:58:20 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] dt-bindings: arm64: bcmbca: Merge BCM4908 into
- BCMBCA
-In-Reply-To: <e4356c5e89492eb690e3dc863ba281bd@milecki.pl>
-References: <20220712021144.7068-1-william.zhang@broadcom.com>
- <20220712021144.7068-2-william.zhang@broadcom.com>
- <ca8c3003-1bcb-6658-592c-566609fd7bd2@linaro.org>
- <94b0ab39-279d-d3c2-98a4-054c10ad041c@broadcom.com>
- <c40f20c7-59ee-99f4-9a11-e928b41eda9f@linaro.org>
- <6efb1cfe-6129-276a-eeb3-44147304d211@broadcom.com>
- <e4356c5e89492eb690e3dc863ba281bd@milecki.pl>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <85219d59e2906534409fc24ad2e5e4c9@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 11914554292197501915
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedgfeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevjefhffffveeludejfedtvdfftdekgffghfegieeliedvfeeigfejteejjeekfeenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejledvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedt
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-13 12:50, Rafał Miłecki wrote:
-> On 2022-07-13 02:57, William Zhang wrote:
->> On 7/12/22 11:18, Krzysztof Kozlowski wrote:
->>> On 12/07/2022 19:37, William Zhang wrote:
->>>>>> +      - description: BCM4908 Family based boards
->>>>>> +        items:
->>>>>> +          - enum:
->>>>>> +              # BCM4908 SoC based boards
->>>>>> +              - brcm,bcm94908
->>>>>> +              - asus,gt-ac5300
->>>>>> +              - netgear,raxe500
->>>>>> +              # BCM4906 SoC based boards
->>>>>> +              - brcm,bcm94906
->>>>>> +              - netgear,r8000p
->>>>>> +              - tplink,archer-c2300-v1
->>>>>> +          - enum:
->>>>>> +              - brcm,bcm4908
->>>>>> +              - brcm,bcm4906
->>>>>> +              - brcm,bcm49408
->>>>> 
->>>>> This is wrong.  brcm,bcm94908 followed by brcm,bcm4906 does not 
->>>>> look
->>>>> like valid list of compatibles.
->>>>> 
->>>> For 4908 board variant, it will need to be followed by 4908 chip. 
->>>> Sorry
->>>> for the basic question but is there any requirement to enforce this 
->>>> kind
->>>> of rule?  I would assume dts writer know what he/she is doing and 
->>>> select
->>>> the right combination.
->>> 
->>> The entire point of DT schema is to validate DTS. Combination like 
->>> above
->>> prevents that goal.
->>> 
->>> Best regards,
->>> Krzysztof
->> Understand the DT schema purpose. But items property allows multiple
->> enums in the list which gives a lot of flexibility but make it hard to
->> validate. I am not familiar with DT schema, is there any directive to
->> specify one enum value depending on another so dts validation tool can
->> report error if combination is wrong?
->> 
->> This is our preferred format of all bcmbca compatible string
->> especially when we could have more than 10 chip variants for the same
->> chip family and we really want to work on the chip family id.  We will
->> make sure they are in the right combination in our own patch and patch
->> from other contributors. Would this work? If not, I will probably have
->> to revert the change of 4908(maybe append brcm,bcmbca as this chip
->> belongs to the same bca group) and use "enum board variant", "const
->> main chip id", "brcm,bca" for all other chips as our secondary choice.
-> 
-> I'm not sure why I didn't even receive 1/3 and half of discussion
-> e-mails.
-> 
-> You can't just put all strings into a single bag and allow mixing them
-> in any combos. Please check how it's properly handled in the current
-> existing binding:
-> Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
-> 
-> Above binding enforces that non-matching compatible strings are not 
-> used
-> together.
+From: Lewis Hanly <lewis.hanly@microchip.com>
 
-I just noticed you're actually removing brcm,bcm4908.yaml in the 2/3 so
-you must be aware of that file.
+Add a driver to support the Polarfire SoC gpio controller.
+Tested with 5.19-rc5
 
-So you see a cleanly working binding in the brcm,bcm4908.yaml but
-instead copying it you decided to wrote your own one from scratch.
-Incorrectly.
+MPFS gpio interrupts can be configured as direct or
+non direct connections to the PLIC (Platform Level Interrupt Controller).
+GPIO_INTERRUPT_FAB_CR(31:0) system register will enable GPIO2(31:0)
+corresponding interrupt on PLIC. e.g. If GPIO_INTERRUPT_FAB_CR bit0 is set
+then GPIO2 bit0 interrupt is available on the direct input pin on the PLIC.
 
-This smells of NIH (not invented here). Please just use that binding I
-wrote and move if it needed.
+
+Changes in v2:
+Use raw_spinlock.
+Use __assign_bit() to assign bit, added a bool variable for value.
+Remove unnecessary checking gpio_index.
+Remove default from switch statement.
+Use const for irq_chip, name updated and use mask/unmask.
+Use latest kernel api irq set_chip.
+Implemented hierarchical interrupt chip support, although
+suggested to use chained interrupt flow I believe this fits better.
+
+Lewis Hanly (1):
+  gpio: mpfs: add polarfire soc gpio support
+
+ drivers/gpio/Kconfig     |   9 +
+ drivers/gpio/Makefile    |   1 +
+ drivers/gpio/gpio-mpfs.c | 379 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 389 insertions(+)
+ create mode 100644 drivers/gpio/gpio-mpfs.c
+
+-- 
+2.25.1
+

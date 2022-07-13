@@ -2,156 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB10573F41
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAC2573F48
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237397AbiGMV7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S237464AbiGMWBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGMV7b (ORCPT
+        with ESMTP id S237381AbiGMWBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:59:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DD74B4BF
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657749569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=guTnNvlqH6K4wA2UCt8wsczuHAK4rJrHvdvd+slq1vY=;
-        b=PaJL5TCXeuePAPaMSss7rA+geG0YxgpL9PwxTe1vBujK4FUBrIBkbVJdn8mjxI92NIFy1s
-        jP1veKpKRmN6XwWqYHYpC5Pb5IMfSNEhCpWnH0MvGdi+BuxsYrybx/qEPivNL8jT2HBWqB
-        AguXnGK4iLq10k2OkTwjMNuTOan5d6k=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-YNK84_wLOa-q21GsbDX6FA-1; Wed, 13 Jul 2022 17:59:27 -0400
-X-MC-Unique: YNK84_wLOa-q21GsbDX6FA-1
-Received: by mail-oi1-f198.google.com with SMTP id e8-20020aca1308000000b0033a17c9dfcaso71516oii.20
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=guTnNvlqH6K4wA2UCt8wsczuHAK4rJrHvdvd+slq1vY=;
-        b=bU/Qh2VWm72MqMqGWoPtbQEFBc4/5xyzD3XJDZ7GC52J4L8/LymMGnmoUFcZKWjey4
-         6Jaqgp/wlg8XwnbQXTBQYcGb7IxFDixeocEYHrLruw6uvbuEn++Kx+wc9GbfV8pkn8Mb
-         EU27HZUI3ZPZ/l7LyVqkZnhJ0BTJJI4k/nbnOfBmWXVGZ1okS/hBxX+6/koPQ3f8mfZy
-         UKRPCGeaa05LZw1Y6GsjToqNz2rsPtyNy/A5Ssdbw65FylRc9kbzOlLi7FoJ9pRoTq3J
-         M+f1q+toqmwih3oSVuvcT7+j4eI2P4aPjrB8Ui2LrW8sWK/Zc1Xx2UYMNS+GTe2PiD72
-         gNXw==
-X-Gm-Message-State: AJIora+z3/ueyDyCQjysO0HmJJQUPwQokjEK2/l74CLg99mz7Di+ADOf
-        EJDQfoy74AspUyx4sB4QC2xp48QQfsHXegNLx3d+fwaEvVQmeQ4NY9eZ/KdJIou8TD8hA0K4wI5
-        i6BYnvk752rMV3ZWXHcVQGxJM
-X-Received: by 2002:a05:6870:56a9:b0:10b:fca8:b578 with SMTP id p41-20020a05687056a900b0010bfca8b578mr3019413oao.78.1657749567198;
-        Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vXUp0wlYWszzuHD0u8u82/GNIF0Dw1ziwn/JICNJZfYCbi3V26XmDeIVoOS/Lkfl6sMd8o8w==
-X-Received: by 2002:a05:6870:56a9:b0:10b:fca8:b578 with SMTP id p41-20020a05687056a900b0010bfca8b578mr3019398oao.78.1657749567008;
-        Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id x13-20020a056870b40d00b001089aef1815sm32984oap.20.2022.07.13.14.59.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 14:59:26 -0700 (PDT)
-Subject: Re: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
- C6100 cards
-To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
-        yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
-        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com
-References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
- <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <0c2affef-9a62-3422-ecdb-a8f196ce739c@redhat.com>
-Date:   Wed, 13 Jul 2022 14:59:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 13 Jul 2022 18:01:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB69233374
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657749667; x=1689285667;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=1B0qs1fQLQN0sErzVjOwi0VqwL9fAz2cLad6tGhysIY=;
+  b=g9S4KzdYtKMk7LSWxw2k6SUT0qXYkaAZn1/pBbkv8bWbP5GnYEuJYlPm
+   OplWO/35T7y+BYKQwO8KMM069QxtuwmX/zS7xhIMMM6QT+xcEEZU/jSUV
+   f/rstrC/NaGLQVG/9IUjan8re6WV9DGvsWpzCWbnTDKrgBnDqpHH4R/7H
+   /CQ3BIk4GiiF8oc6mJNHRcF7DfUJX4G4eSI7tDOBVbpXjpu2EW8ojZXWv
+   8RCAK5JZfCBb6CS3dv9HMXLwxHAhM56AcP5lP5g8iK9V1gFCzABud1fx6
+   IpnE7kxDR3ryWa7XmUiTJOoxXVMalXc5bjotOZl1/hDiwQHlkbTMNUTSh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268388380"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="268388380"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 15:01:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="722505767"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 13 Jul 2022 15:01:07 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 13 Jul 2022 15:01:06 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 13 Jul 2022 15:01:06 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 13 Jul 2022 15:01:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PDPQVdtulI6lKhjBMHmLeKiMLHU7ghVc3N5u51NaaDV+NaeJapoARGJo95+pBfgNjkZ9e5GYG55+OFeWnKqSRdRqRyJSl8x8QY2FkKhtRajSt9v2/kNvytQ6CpVtXiBY8vvZKhFwZGD3t0WuhB+0gRpdEnp8V71kZWNvo4CpNlsKI8sgnkRtvckoAqwm/xGSgCVqCNl2QCxIJwiz1124JH6aoZ1Df4EFDmHcv/vdaJzYfO5A7JUD6STTHohAeeQJIqYcrlvHWPvuVDus0mUFlC7AYs/FgKKU+zTdQCNc4h506KOter+DGJFK/d0Th/IT9lkohvyTXsn19SuEOjIqkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hcmuN3HERKuDjjmYde5MVk5tZ83uvE+qzBYWyM19g0w=;
+ b=bg/rgXqUHl8o0zAAQYssRKbfu7C7p1+BhjE5k+LCnEd3Y531cbn2cI3JV2EYtTP5W2T7Rj69c2N7GTtV4A5bZdt2yMcjCb/UlVKn3h4DFmvfStSvtOFwhZ72wQAkTZZIxQZwSsCBnDYGagLyox9YqKC7rXiKj2kgG9njY7WJkf+0h/Wcmp9VS7rkpPabtv1wxtg32EbduIx+LM6PhOjn63BG29gXnUs156jKSx3eCP0dulmUqiMogf6iuwPxAz4vwlTjYGNY/wxmfuXIh7io7BkpjI3EGVrUr+fG39TJfu6+n/GKjQQpDwzaXZza2AtSj5BhGG2q9M/BxozTTgQD9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by PH0PR11MB4902.namprd11.prod.outlook.com (2603:10b6:510:37::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
+ 2022 22:01:05 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::8053:3c59:9f5d:b615]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::8053:3c59:9f5d:b615%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 22:01:05 +0000
+Date:   Wed, 13 Jul 2022 18:00:59 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        <intel-gfx@lists.freedesktop.org>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Subject: Re: [PATCH v2 01/39] drm/i915/gvt: Fix kernel-doc for
+ intel_gvt_switch_mmio()
+Message-ID: <Ys9Am6jkPiVnA+uW@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+ <72db6b58c1f223e326f84978267ba064eaf67ff0.1657699522.git.mchehab@kernel.org>
+ <Ys8/JP3ITMKF1aHp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Ys8/JP3ITMKF1aHp@intel.com>
+X-ClientProxiedBy: SJ0PR13CA0189.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c3::14) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
-In-Reply-To: <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 76e0583b-0d23-4f23-a64d-08da651b2ed4
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4902:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0xl39QSOSI10onyWubMB4GuvWNhu8bPrvzwMcSzW2bY5njfNuFx0rHN0/UrrUnzVBQ3O6dQ6Lz9Pa/DEmphWuggICA3CAy5nfDPPMl/H4/Gvg/4XDZwOkbd5pPQXtSoPVRLYCU+fw8ENfvkEBWNGl0BjOhrISdH3dDsI0Q/8W5ZPd4Q+SJihQPidc7CBHopoQMlqb54DULj1Q9A0Hr69//Ou0tsfMZ6LS0wiTrs7ANUEn5UFibUhMfGhZjMTCpHQCGlPgmyPFbA7S0blBod/yx+882kAkHZQlmfoWTPAThnaTm9htXcDl7mzHPIrs6r538jYj+JKIwqes0H0o/0x+DKG/vcbXlBo/4ZQHA+H380iN8T2vpN7Trwnm03bdyxs/jaavYgbNlaK9L5ulpgkHHZU6Nz1ZF2gcfESPJQDIDSeLD+hEV9ETkKVXU/1rf8ESVqb4JFr8tsUKgsZvKe7VBI0kHygKoBhLf7/rWIq6xOesdEoKlTqRgUtQ4fLXYD0eJ/ftfqaYF74ioo16llJ/86KPsM0HnVc5dJhAyuP+HdBVJYeUSz/uzmdh8+MyJbtBGTxAimasOUAJUTDqwuieyIcNTe+giGAF3G6Pmgy+N9lg0zUfcLCunDGMCFeERX2zn3k4wQJiQddmHpRo1OXJzEIpiQvU8AVaehyoGJruFsFscefrLDMod1Us8iT/5x+2OX0HcKYDMWje2EOhvLMA0bi2Wt+gYQLQ9AF72pYUPjNDd1IXzmvgmYq7uOLNJZP814U485Zd/4/8k8XLyOkATt41ilAQgwVHegU7RfFJaa29m1TVy/LKoEHfIlYi/tY5oQo+fJ4wJBDwsx59jU+9g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(39860400002)(376002)(396003)(346002)(26005)(316002)(38100700002)(66556008)(66476007)(41300700001)(8936002)(2906002)(44832011)(4326008)(5660300002)(186003)(82960400001)(8676002)(6486002)(83380400001)(66946007)(966005)(6512007)(6666004)(54906003)(36756003)(2616005)(6506007)(478600001)(86362001)(6916009)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eyr78Tke/wez8tWDJD5psapR7vJm6B94/VePxODJaX6qY+hZoxGTiYFeNkZD?=
+ =?us-ascii?Q?ubBzQ96I7jBVshSSLUpb2+QxKNsFfVJSN/Xb0ozcfAYCM/2plS7mo7tVLwTJ?=
+ =?us-ascii?Q?9B+LWM2Ys7coHVROOncyHTs9mFjwCEArmULX5wdUr4akerhf7nXBoY5m+Tbr?=
+ =?us-ascii?Q?4HPYQkllLspHKMvDzMFb91A158o41LHw3kGweBpzy8GSquO3OfMbupqiwgKL?=
+ =?us-ascii?Q?5uBW8rz7DbvLX50K/ONh0YRueQ9AhwUma3opdgn7/k6F7IqW0jTcS4ApGRez?=
+ =?us-ascii?Q?b9bE3VmmY0ds1Kqd/8b35fhv4ER3S89YV8SzKVGffsm5Q2wN3sDiXj13r819?=
+ =?us-ascii?Q?YmfZbW1yoR+9dPOJjUzO20B+mPxo4RLlxafhXsJOu2FoVGqeEGjDaTFa6Sqy?=
+ =?us-ascii?Q?MMn13lq0sJL8u5BKmWaPLAgUA/crz+PJG8EGj+vf+Pgu10fZrLzjqTXukiFn?=
+ =?us-ascii?Q?dxpiMP/vLERo8fv9QpxcN5SfJb8s0T3SKCKO0c0joMjlwjMkzu6riOxwKYoy?=
+ =?us-ascii?Q?DNhpy82pglN0oQtrjMfo9VwepgiaLdAK0bVRvR3/r1joiGkFcV8LMNn1ZOYB?=
+ =?us-ascii?Q?PXzzXaeOdhOwCDiwfTg5m2pl5OAYyjp5EUc9L2dzfKzDmXkFG3Daejk/rFbL?=
+ =?us-ascii?Q?hGKU03EAJPVreCat3i8IELQ+ntB8OwfX1udqXXI5+DyvJ7Uc61Rn9kA4jR8U?=
+ =?us-ascii?Q?Zc4IsLpoxtYs6w6r/OERHsHeN28EOvNvqKDZlBDjJHhIiTv3R5BrY57diGZi?=
+ =?us-ascii?Q?ff70DNuItDGY+L0F0Tz1DFYU/N1imo2yHGcm+8eGiGAhZKlt2V3DF0fuu0Ls?=
+ =?us-ascii?Q?oYgtbQ+qqciPb9vGslhhuEmVGU3t+KgnrWlfKXIMWm4RgVY47xTrRXyhpuyX?=
+ =?us-ascii?Q?yrFW5TC1xIqzYyAwf5DwBpHzyjab/Y3hxKEAKusxgBhL1V9xLIZUE6HM73nQ?=
+ =?us-ascii?Q?hTGJPVP0g6f87iMp/YkDWGOBxRH7883ChPxUBvMgyPlIsMN2Rrc6OsbzJowk?=
+ =?us-ascii?Q?DxII+gW3L28+XLPX/cP7fpRCFx0TsMv9ZIfYYWjShzaeedFBNuDU7PxXlMUt?=
+ =?us-ascii?Q?tnUvXO263/UECIiIdNjSfG1eo/wZbjEwJ57G4cbmzxbl/1ndZ87OToRZkWoV?=
+ =?us-ascii?Q?wW/vL/ABEZ7SD1EFG7BHFhr9ql/13uUnlxhaU0UiEb6f4N6bL3nFNxOMdzF4?=
+ =?us-ascii?Q?hnk9fXV5cRo233STaNQnWd02aC8AvQ+zE7BSzZsagecq7rD/cIBnkkfeeeMG?=
+ =?us-ascii?Q?b8waya46qMGraxZAWIVoaTejwlkaXWHV+fy+veokodiUvdNYeGhH88CGs70X?=
+ =?us-ascii?Q?qUgr8MFJwkI/bk/AM0tPCrmCbcLVNTjpEwGgD/K4zW1uIgPstKtfTBJWZOG5?=
+ =?us-ascii?Q?1o6k6ijftgU7mI/++3qG59dmkdHhiAX2WBkX+eZKxrenjcXkkOeHspDyD2CO?=
+ =?us-ascii?Q?JqF4a73WrApD09ATEYQlwvrwBhyvoOjJ+CR3T+vdgumazlOqDWyVl2TZHO0y?=
+ =?us-ascii?Q?tEY0r9KSN2vrMr34d/765wXIj6cP2ZBDOiC+jOCRjGWXY81G/g4Q8rhvCk3L?=
+ =?us-ascii?Q?crThaRZBhNUWfKrtj+B9S7IBiREq7Z45lj7qSuKT6IvF6mCpADyI1vka8d3U?=
+ =?us-ascii?Q?1A=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76e0583b-0d23-4f23-a64d-08da651b2ed4
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 22:01:05.3993
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DgMPEpZi3qdI37MmglLOH+Lrisvd1cY3EGZvONf+blzMo2SHeN6zQr06OSnjYGuiW9pVuptuAdYW1S5XpKUZKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4902
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 13, 2022 at 05:54:44PM -0400, Rodrigo Vivi wrote:
+> On Wed, Jul 13, 2022 at 09:11:49AM +0100, Mauro Carvalho Chehab wrote:
+> > From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > 
+> > Fix the following W=1 kernel warnings:
+> > 
+> > drivers/gpu/drm/i915/gvt/mmio_context.c:560: warning: expecting
+> > prototype for intel_gvt_switch_render_mmio(). Prototype was for
+> > intel_gvt_switch_mmio() instead.
+> > 
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> 
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-On 7/7/22 8:05 AM, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> Add pci_dev_table entries supporting the Intel N6000, N6001
-> and C6100 cards to the dfl-pci driver.
->
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
-> v3: added necessary subdevice ids
->      removed 'drivers: ' from title
->
-> v2: changed names from INTEL_OFS to INTEL_DFL
-> ---
->   drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
->
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index fd1fa55c9113..94eabdf1d2f7 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
->   #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
->   #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
->   #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
-> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
->   
->   /* VF Device */
->   #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
->   #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
->   #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
->   #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
-> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
-> +
-> +/* PCI Subdevice ID */
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
-> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
->   
->   static struct pci_device_id cci_pcie_id_tbl[] = {
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
-> @@ -96,6 +103,18 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
->   	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
->   	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
-> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
-> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
+I actually changed my mind after seeing that in most cases you use "()"
+for the functions and you didn't use for this case...
 
-Matt,
+which one should we pick for consistency?
 
-Thanks for making this change, this addresses my concerns with the 
-earlier patch.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
->   	{0,}
->   };
->   MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
-
+> 
+> > ---
+> > 
+> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> > 
+> >  drivers/gpu/drm/i915/gvt/mmio_context.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/gvt/mmio_context.c b/drivers/gpu/drm/i915/gvt/mmio_context.c
+> > index c85bafe7539e..1c6e941c9666 100644
+> > --- a/drivers/gpu/drm/i915/gvt/mmio_context.c
+> > +++ b/drivers/gpu/drm/i915/gvt/mmio_context.c
+> > @@ -546,7 +546,7 @@ static void switch_mmio(struct intel_vgpu *pre,
+> >  }
+> >  
+> >  /**
+> > - * intel_gvt_switch_render_mmio - switch mmio context of specific engine
+> > + * intel_gvt_switch_mmio - switch mmio context of specific engine
+> >   * @pre: the last vGPU that own the engine
+> >   * @next: the vGPU to switch to
+> >   * @engine: the engine
+> > -- 
+> > 2.36.1
+> > 

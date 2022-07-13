@@ -2,135 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FE7573C9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB95573C9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 20:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiGMSjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 14:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        id S236758AbiGMSjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 14:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiGMSjF (ORCPT
+        with ESMTP id S236732AbiGMSjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:39:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05F661AF35
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 11:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657737543;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w9ISA9tgFxM9CIk2iQzh4LVvlpFF6ft7yZ2ywOZt+mg=;
-        b=HDMRoYa88OFmOX8FkcYkG5tt1bszCdrSSxvMUJzW+JHN1hc25DIX1Q0bLhcJXDMthrI3hE
-        Xino+YZMjQP+lbXA5Y99CYIP1fgEZ+rSklWf75+UYLvtRLTNR3LuOI7uleSjrpGe9RPrgc
-        /2yzV3WCS+1gJqYbYmqsVoi3GwelC1o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-Nq5ZVIjBM5KxOSlR5OFdhg-1; Wed, 13 Jul 2022 14:38:57 -0400
-X-MC-Unique: Nq5ZVIjBM5KxOSlR5OFdhg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 13 Jul 2022 14:39:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416F0201AE;
+        Wed, 13 Jul 2022 11:39:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A6B9185A794;
-        Wed, 13 Jul 2022 18:38:57 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0485318EBB;
-        Wed, 13 Jul 2022 18:38:56 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>
-Subject: [PATCH v3] drivers/base/node.c: fix userspace break from using bin_attributes for cpumap and cpulist
-Date:   Wed, 13 Jul 2022 14:38:55 -0400
-Message-Id: <20220713183855.2188201-1-pauld@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id E069BB82123;
+        Wed, 13 Jul 2022 18:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39028C34114;
+        Wed, 13 Jul 2022 18:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657737547;
+        bh=tO5x8vlQaYbiXWOT1V2EnWLVdJW7QJQ7UgkTW94PdK8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=u/XRi340W0jDA+Jvki+5euQb2QKoxeniHCg2XsOQ8H/brEetZ5U3cAtVXp3p2nLDp
+         4/Qi37pTrI48NCfk8C8uwNHQYr41UNgmDkw5E0q6qrEtM0rImfZPWsXfn5mQ/kkEcD
+         7VOIeY6JWN+pBxpjBhUeG5Fh4XXdwCIvorJ1ov9drIb6XNQ7MyclHdIi49JIjfR7Be
+         GoQW9mAkdMyyGjhVXzECDbCm2wjbYC91ohOqWBhdkdT6Y9Ij8P5Gle+i8LB3tt2VZ1
+         FqBX4MGmGIIMEkwJiakKJzsGhEzuxGXW38hdSqJMlEkyrF/vkYzgUAoIbL5RVz9lHr
+         dyfkWg0r6+EHA==
+Message-ID: <9cf7711a-f36a-608d-1605-179f3037b644@kernel.org>
+Date:   Wed, 13 Jul 2022 20:38:59 +0200
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V4 03/20] rv/include: Add helper functions for
+ deterministic automata
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1655368610.git.bristot@kernel.org>
+ <2b5b14c821ee4b069f68571e7f78fbc2ee4e9626.1655368610.git.bristot@kernel.org>
+ <YsXV+KTbOU0E5dU+@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YsXV+KTbOU0E5dU+@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-This breaks userspace code that retrieves the size before reading the file. Rather
-than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960
-(8192 * 5). In order to get near that you'd need a system with every other CPU on one
-node or something similar. e.g. (0,2,4,... 1024,1026...). To simplify the math and
-support larger NR_CPUS we are using NR_CPUS * 7 to support a future with much larger NR_CPUS.
-We also set it to a min of PAGE_SIZE to retain the older behavior for smaller NR_CPUS.
-The cpumap file wants to be something like NR_CPUS/4 + NR_CPUS/32, for the ","s so for
-simplicity we are using NR_CPUS/2.
+On 7/6/22 20:35, Tao Zhou wrote:
+> On Thu, Jun 16, 2022 at 10:44:45AM +0200, Daniel Bristot de Oliveira wrote:
+> 
+>> Formally, a deterministic automaton, denoted by G, is defined as a
+>> quintuple:
+>>
+>>   G = { X, E, f, x_0, X_m }
+>>
+>> where:
+>> 	- X is the set of states;
+>> 	- E is the finite set of events;
+>> 	- x_0 is the initial state;
+>> 	- X_m (subset of X) is the set of marked states.
+>> 	- f : X x E -> X $ is the transition function. It defines the
+>> 	  state transition in the occurrence of a event from E in
+>> 	  the state X. In the special case of deterministic automata,
+>> 	  the occurrence of the event in E in a state in X has a
+>> 	  deterministic next state from X.
+>>
+>> An automaton can also be represented using a graphical format of
+>> vertices (nodes) and edges. The open-source tool Graphviz can produce
+>> this graphic format using the (textual) DOT language as the source code.
+>>
+>> The dot2c tool presented in this paper:
+>>
+>> DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo
+>> Silva. Efficient formal verification for the Linux kernel. In:
+>> International Conference on Software Engineering and Formal Methods.
+>> Springer, Cham, 2019. p. 315-332.
+>>
+>> Translates a deterministic automaton in the DOT format into a C
+>> surce code representation that to be used for monitoring.
+>>
+>> This header file implements helper functions to facilitate the usage
+>> of the C output from dot2c for monitoring.
+>>
+>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Marco Elver <elver@google.com>
+>> Cc: Dmitry Vyukov <dvyukov@google.com>
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: Gabriele Paoloni <gpaoloni@redhat.com>
+>> Cc: Juri Lelli <juri.lelli@redhat.com>
+>> Cc: Clark Williams <williams@redhat.com>
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: linux-trace-devel@vger.kernel.org
+>> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+>> ---
+>>  include/rv/automata.h | 49 +++++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 49 insertions(+)
+>>  create mode 100644 include/rv/automata.h
+>>
+>> diff --git a/include/rv/automata.h b/include/rv/automata.h
+>> new file mode 100644
+>> index 000000000000..0c0aa54bd820
+>> --- /dev/null
+>> +++ b/include/rv/automata.h
+>> @@ -0,0 +1,49 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Deterministic automata helper functions, to be used with the automata
+>> + * models in C generated by the dot2k tool.
+>> + *
+>> + * Copyright (C) 2019-2022 Daniel Bristot de Oliveira <bristot@kernel.org>
+>> + */
+>> +
+>> +#define DECLARE_AUTOMATA_HELPERS(name, type)					\
+>> +										\
+>> +static inline void *model_get_model_##name(void)				\
+>> +{										\
+>> +	return (void *) &automaton_##name;					\
+>> +}									\
+>> +										\
+>> +static char *model_get_state_name_##name(enum states_##name state)		\
+>> +{										\
+>> +	return automaton_##name.state_names[state];				\
+>> +}										\
+>> +										\
+>> +static char *model_get_event_name_##name(enum events_##name event)		\
+>> +{										\
+>> +	return automaton_##name.event_names[event];				\
+>> +}										\
+>> +										\
+>> +static inline type model_get_init_state_##name(void)				\
+>> +{										\
+>> +	return automaton_##name.initial_state;					\
+>> +}										\
+>> +										\
+>> +static inline type model_get_next_state_##name(enum states_##name curr_state,	\
+>> +					       enum events_##name event)	\
+>> +{										\
+>> +	if ((curr_state < 0) || (curr_state > state_max_##name))		\
+>> +		return -1;							\
+> 
+> curr_state can not be state_max_xxx. curr_state must be not bigger
+> than state_max_xxx. Or am I miss something?
+> 
+>> +	if ((event < 0) || (event > event_max_##name))				\
+>> +		return -1;							\
+>> +										\
+> 
+> Same here for the event boundary check.
+> 
+>> +	return automaton_##name.function[curr_state][event];			\
+>> +}										\
+>> +										\
+>> +static inline bool model_is_final_state_##name(enum states_##name state)	\
+>> +{										\
+>> +	if ((state < 0) || (state > state_max_##name))				\
+>> +		return 0;							\
+>> +										\
+> 
+> Same here.
+> 
+>> +	return !!automaton_##name.final_states[state];				\
+> 
+> If the value of .final_states[state] is 0 or 1, can the type of
+> .final_states[state] be befined to bool. Or not need to use !! to
+> explicitly transfer the type to bool. I remember that you define
+> this as char array and the matrix model value of this array is 0 or 1
+> see from the next patche. 1 delegate the state it is the initial state.
+> 0 for others.
 
-On an 80 cpu 4-node sytem (NR_CPUS == 8192)
-
-before:
-
--r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
--r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
-
-after:
-
--r--r--r--. 1 root root 57344 Jul 13 11:32 /sys/devices/system/node/node0/cpulist
--r--r--r--. 1 root root  4096 Jul 13 11:31 /sys/devices/system/node/node0/cpumap
-
-NR_CPUS = 16384
--r--r--r--. 1 root root 114688 Jul 13 14:03 /sys/devices/system/node/node0/cpulist
--r--r--r--. 1 root root   8192 Jul 13 14:02 /sys/devices/system/node/node0/cpumap
-
-Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Phil Auld <pauld@redhat.com>
----
- drivers/base/node.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 0ac6376ef7a1..89c932a1d8ca 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -45,7 +45,11 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
- 	return n;
- }
- 
--static BIN_ATTR_RO(cpumap, 0);
-+/* Report a valid max size for this file to avoid breaking userspace. We use NR_CPUS/2 as 
-+ * a simplification of NR_CPUS/8 + NR_CPUS/32.  Use PAGE_SIZE as a minimum for smaller 
-+ * configurations. 
-+ */ 
-+static BIN_ATTR_RO(cpumap, (((NR_CPUS >> 1) > PAGE_SIZE) ? NR_CPUS >> 1 : PAGE_SIZE));
- 
- static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
- 				   struct bin_attribute *attr, char *buf,
-@@ -66,7 +70,15 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
- 	return n;
- }
- 
--static BIN_ATTR_RO(cpulist, 0);
-+/* Report a valid maximum size for this file since 0 breaks userspace, which
-+ * may use the size from fstat to allocate a read buffer. 
-+ * The value 7 is a hardcoded version of ceil(log10(NR_CPUS)) + 1 for future values
-+ * of NR_CPUS that may be upto 2 orders of magnitude larger than 8192.
-+ * In a worst case system every other cpu is on one of two nodes. This leads to 
-+ * a file like "0,2,4,6,8...1024,...8190,...". Use PAGE_SIZE as a minimum for smaller
-+ * NR_CPUS.  
-+*/
-+static BIN_ATTR_RO(cpulist, (((NR_CPUS * 7) > PAGE_SIZE) ? NR_CPUS * 7 : PAGE_SIZE));
- 
- /**
-  * struct node_access_nodes - Access class device to hold user visible
--- 
-2.31.1
-
+All points addressed!
+-- Daniel

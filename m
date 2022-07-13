@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB255732FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E08D573303
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiGMJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S236110AbiGMJji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiGMJhu (ORCPT
+        with ESMTP id S234588AbiGMJjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:37:50 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77312AE67;
-        Wed, 13 Jul 2022 02:37:49 -0700 (PDT)
-Received: from [192.168.88.254] (unknown [125.163.212.174])
-        by gnuweeb.org (Postfix) with ESMTPSA id A329F7E257;
-        Wed, 13 Jul 2022 09:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1657705068;
-        bh=57SLDvvXl7rAug93QDj0lqPFPcMCMvcdhau9G4XvILU=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=IIgI5xu30CTTbc0kQQGgSjypt0Hk5DiHNiL/CQqUKg2f1xwjVTQJvrayg3lEvY1Ky
-         pLGGFNJx+DrsdLyTmBh7iqFipkB7+XXjMfZRkcI0rjy7bXEpYt8/3IlQYPigzcdeMj
-         /M/Gnrk8M/3ytApnaizbieBLjX1mA/WsB8cYdUZgoivbx8x4TKNGq5sziF14bkWpZC
-         pWPmXO0sBDZIoRDfhNU+xzFIJF90xQzZ0NsNnqPbDZM+ZYpjboO9mf9oktmoV3mwYq
-         lS2wQ7Zr+MICXCtX0p1Iv2R+zZXHR44HmyUKIl0Se5Kwk0xKrQqKY8h4sSYLMUFAJC
-         h4CHGGibu/s3g==
-Message-ID: <c5336d2f-bb63-1799-f4c0-effc11048998@gnuweeb.org>
-Date:   Wed, 13 Jul 2022 16:37:32 +0700
+        Wed, 13 Jul 2022 05:39:36 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC10F54E9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:39:36 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c9b70c382so106695947b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B/bZLQ21BnbCxpHA4zoKoOFFh9G3ZriCKWCB4lTGRTU=;
+        b=ZO6UB9xl2PomzSnA9P0ERrfsb+F0CnXxcbeTNjkLpFEo+2za3/xXWGbmqKTihGXER4
+         mUgRTu0USH+xA3FoCVjWLUFkdgJyDitP/5IlrEykEULV55mtPO57VI6rmC/VX416o04i
+         kwQ2YtAApJmvL4GOZ2EoIzNaIBDWwqYuzIng2KRohWNuuIVHdS8JipjKP99t92jluQsC
+         SISG6PGesDj5oYOmbT0cXN8DLCLKvFQyDUy4LXMu77z2q11E2r0MZC87PvFMpE1f/3gy
+         HcQxarJCB6amUiC0bsTHYF7BFZRv9dnUrP+YMZZZOKyEzJfLzJ57y79Rrry3IR8It8sz
+         VUxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B/bZLQ21BnbCxpHA4zoKoOFFh9G3ZriCKWCB4lTGRTU=;
+        b=iZAPOrK1QPZTm0N9NfBeVLdV8dbDG1SflV3EQk66NlLJS0vhWSsffFWjFIgmklPGaC
+         KSs4j9xMgmvah15k/aRbv6K9knlAHr5TBOYsnmgafLQtMPgH7OxuM3qwCAlnkW3rjtS9
+         mDK8VUlBU2vEuZNs/pcgjwH469Lkmj/gxlgCMnbuErnAaDt6aZbeRedJTp0J3ucUmePj
+         petS888Rj/0QKhAobZyggrDUutbs7Q0CyiO5HCkSuuRN609d4TB2fNdc69fXBTzwcpyO
+         NlurnBhI+9L0D8F/tYOGZr+I7Dj38Bk3EwvbBsupINSZJGgNaHw8NQowcuvYyzkwmPjf
+         56rg==
+X-Gm-Message-State: AJIora/aBnrdI1EewK181aS9nBopw6WyI85X0fE6cUGSX94FPuL/ykgf
+        TY9CBzU91GcpGqNjp1DZyD8ZMPqWbXJa0zNSlSM=
+X-Google-Smtp-Source: AGRyM1uNbxKaJof5c0AAkDGC552d0gWxId5xZzgbfSrWHBy/aP1poMmgkbYdzJkcBPwCKqdNXqAArZSaWfKIFxdFASo=
+X-Received: by 2002:a81:4986:0:b0:31d:388b:d08d with SMTP id
+ w128-20020a814986000000b0031d388bd08dmr3002440ywa.185.1657705175260; Wed, 13
+ Jul 2022 02:39:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     John Johansen <john.johansen@canonical.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        James Morris <jmorris@namei.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
+References: <20220707091301.1282291-1-cezary.rojewski@intel.com>
+ <CAHp75VceKBoxXVPP4dRYb8LQqHMMDHFp6-E2iuZ-h2RTK8PWQQ@mail.gmail.com>
+ <e0c7d254-ace3-625c-cc83-52ca0b45e9fc@intel.com> <CAHp75VckU2ZraLJ-frjWXjUu9pFW+-XmWgTbYqUXOUNAD-1HGA@mail.gmail.com>
+ <6c8e4104-2239-a188-649d-585f059cabdd@intel.com> <YsgjdKEtE7pMDTnZ@smile.fi.intel.com>
+ <a73b3ec0-5abb-ddfd-414b-b9807f05413e@linux.intel.com> <CAHp75Vd4D0KF7ik+aMOwv-+bofWja_tDe4YUmihQBF+RiHZTmA@mail.gmail.com>
+ <e2fe6351-f9ee-48eb-ad7f-280249f7f3f7@intel.com> <17c91bfb3a864ae1be2ac3226f170f55@AcuMS.aculab.com>
+In-Reply-To: <17c91bfb3a864ae1be2ac3226f170f55@AcuMS.aculab.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Jul 2022 11:38:58 +0200
+Message-ID: <CAHp75VdOq5-2h_ojRaGKs1sJqM-wsYtv4543FeBW4_eH4+gMVg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] lib/string_helpers: Introduce strsplit_u32()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "amadeuszx.slawinski@linux.intel.com" 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
- <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
- <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
- <87r1414y5v.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
- <266e648a-c537-66bc-455b-37105567c942@canonical.com>
- <Yp5iOlrgELc9SkSI@casper.infradead.org>
- <dd654ee2-ae10-e247-f98b-f5057dbb380b@canonical.com>
- <Yqe+zE4f7uo8YdBE@casper.infradead.org>
- <cd2a4ea4-52d2-cf95-7769-859b0a35b564@canonical.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: Linux 5.18-rc4
-In-Reply-To: <cd2a4ea4-52d2-cf95-7769-859b0a35b564@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/22 3:27 AM, John Johansen wrote:
->    99cc45e48678 apparmor: Use an IDR to allocate apparmor secids
-> 
-> but I would like some other peoples opinions on doing that, because we
-> don't understand why we are getting the current lock splat, and without
-> understanding it is a fix by avoiding the issue rather than being sure
-> the actual issue is fixed.
+On Wed, Jul 13, 2022 at 11:14 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> >          if (pint)
+> > -               *pint = value;
+> > +               memcpy(pint, &value, min(nsize, sizeof(value)));
+>
+> That is just soooooo broken.
 
-Update from me:
+OK.
 
-I can't reproduce the splat in 5.19.0-rc4. Not sure if it's already
-fixed though, since it happened randomly and I didn't realize what
-action provoked the splat. I am running Ubuntu 22.04 for my daily
-desktop activity.
-
-I'll keep my lockdep on and will send you update if it's still
-triggering.
 
 -- 
-Ammar Faizi
-
+With Best Regards,
+Andy Shevchenko

@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47753573414
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF544573415
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbiGMKYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
+        id S235916AbiGMKYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234823AbiGMKYV (ORCPT
+        with ESMTP id S234823AbiGMKYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:24:21 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0993DBD6AA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:24:19 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-219-CLD2JCRYMxC7Om6KS1TDPw-1; Wed, 13 Jul 2022 11:24:17 +0100
-X-MC-Unique: CLD2JCRYMxC7Om6KS1TDPw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 13 Jul 2022 11:24:15 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 13 Jul 2022 11:24:15 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andrey Semashev' <andrey.semashev@gmail.com>,
-        'Yu-Jen Chang' <arthurchang09@gmail.com>
-CC:     "andy@kernel.org" <andy@kernel.org>,
-        "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] lib/string.c: Optimize memchr()
-Thread-Topic: [PATCH 2/2] lib/string.c: Optimize memchr()
-Thread-Index: AQHYlf/m+SYzYfFyd0Sny8eSVHr68K18CeuggAAJgkmAAAQUQA==
-Date:   Wed, 13 Jul 2022 10:24:15 +0000
-Message-ID: <658586b208ea4339b3ead19378484434@AcuMS.aculab.com>
-References: <20220710142822.52539-1-arthurchang09@gmail.com>
- <20220710142822.52539-3-arthurchang09@gmail.com>
- <3a1b50d2-a7aa-3e89-56fe-5d14ef9da22f@gmail.com>
- <CAD4RrFPihC+8LScC1RJ5GfOsLs4kze0QwALS1ykNH_m89Z1NGg@mail.gmail.com>
- <48db247e-f6fd-cb4b-7cc5-455bf26bb153@gmail.com>
- <CAD4RrFPfwu4Ascj5tdz8qq2Qgnu5GN2eHjVwMW5AqUa1H7JapA@mail.gmail.com>
- <49a8be9269ee47de9fc2d0d7f09eb0b1@AcuMS.aculab.com>
- <5d14cf64-46b7-dc37-bbb8-dd6be82d06af@gmail.com>
- <999057a9-d209-323b-90eb-5756b7c0e91e@gmail.com>
-In-Reply-To: <999057a9-d209-323b-90eb-5756b7c0e91e@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 13 Jul 2022 06:24:46 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE1FDA78D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:24:45 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a9so18299733lfk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PQ7TlErz9smov0rfx19Na+1VuDOymVWccAObGubD7hE=;
+        b=j3Im0x2bE4D19GrrzFvEHiywctG624H/V6PfGPXeeKLO89ES02QmxTzGtZiHoSfIIt
+         WQo8N59T2vYLPAiWh1ERS+CrQ9vxZBCNvCvU+KvuTIlx1M/nz1kBTeif1g8+mTRj4P+j
+         ZfZVvzS5GEqgZ26cUr8/o34YBYoTItxb6hJze7yK33Z4zmygVaSrOj9nE+/ZmUn509G2
+         B+XGIYZWMD7Pp9QwwIrjFvEJsH09twOKr/GGqBORBJfmMhXv+bpSVlh8BKatiMg4LjPM
+         Q+R3zzd0vuxbJgKsJ08pDTK4ivem9OatHJqy8v3a/Ovaj1kwIkPWE/UV+QuKb9pZ34w0
+         4tew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PQ7TlErz9smov0rfx19Na+1VuDOymVWccAObGubD7hE=;
+        b=HnTZ0+AbNdPykTvH5iCVOiCADfgU+DkRPoZmIYsS8yYdcXS5jVL8CTk/xBpMeF/uA6
+         e3uAO94se7BIdC5xWW/HwQrRYV0pnREyhWEwBmANdkZOFmY4WqHSH3X72+WyfP5y0+/I
+         gQCvv8kYPNe/VupbK9fra+9+ZVh6rxolOrc6mkvX8RUwTtHbTXirdqwTEqjVEOL9QdnE
+         HsaxUX7iUAmcJyIXFEH9ZqWC6dED32k9WGP5bXcHtpCVyIWOQRFcttL3DCBYK4EM5OSY
+         4JAH8qgxgvXGJviTGTFb7IuJ4755SpXm9lknl9fGi6K4nwHAR3HP3S0kzs6lXSbtC2bO
+         Gu1g==
+X-Gm-Message-State: AJIora80GFkOx8u7xbpAEcQsYzb6XEcvVPKCM6K1McmhOQqK0KsdmRWD
+        UUVSlNN0enaP6zuAHBrOoi8=
+X-Google-Smtp-Source: AGRyM1skQh9Jgh7G2eTiKQGhgpSh87g4zJf6atlVqh7gkzR/TrDYVBtdFIgudz1CX+zJh/nVmujKPw==
+X-Received: by 2002:a05:6512:2254:b0:489:d168:20cf with SMTP id i20-20020a056512225400b00489d16820cfmr1537677lfu.97.1657707883409;
+        Wed, 13 Jul 2022 03:24:43 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.63])
+        by smtp.gmail.com with ESMTPSA id a28-20020a2eb17c000000b0025d3c2e6b8dsm2943803ljm.105.2022.07.13.03.24.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 03:24:42 -0700 (PDT)
+Message-ID: <5445d915-0c6c-b84f-158e-160e7645cbbd@gmail.com>
+Date:   Wed, 13 Jul 2022 13:24:41 +0300
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] staging: r888eu: use dynamic allocation for efuse buffer
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220713075804.140986-1-martin@kaiser.cx>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220713075804.140986-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQW5kcmV5IFNlbWFzaGV2DQo+IFNlbnQ6IDEzIEp1bHkgMjAyMiAxMTowMw0KPiANCj4g
-T24gNy8xMy8yMiAxMjo0OSwgQW5kcmV5IFNlbWFzaGV2IHdyb3RlOg0KPiA+IE9uIDcvMTMvMjIg
-MTI6MzksIERhdmlkIExhaWdodCB3cm90ZToNCj4gPj4gRnJvbTogWXUtSmVuIENoYW5nDQo+ID4+
-PiBTZW50OiAxMiBKdWx5IDIwMjIgMTU6NTkNCj4gPj4gLi4uDQo+ID4+Pj4gSSB0aGluayB5b3Un
-cmUgbWlzc2luZyB0aGUgcG9pbnQuIExvYWRzIGF0IHVuYWxpZ25lZCBhZGRyZXNzZXMgbWF5IG5v
-dA0KPiA+Pj4+IGJlIGFsbG93ZWQgYnkgaGFyZHdhcmUgdXNpbmcgY29udmVudGlvbmFsIGxvYWQg
-aW5zdHJ1Y3Rpb25zIG9yIG1heSBiZQ0KPiA+Pj4+IGluZWZmaWNpZW50LiBHaXZlbiB0aGF0IHRo
-aXMgbWVtY2hyIGltcGxlbWVudGF0aW9uIGlzIHVzZWQgYXMgYSBmYWxsYmFjaw0KPiA+Pj4+IHdo
-ZW4gbm8gaGFyZHdhcmUtc3BlY2lmaWMgdmVyc2lvbiBpcyBhdmFpbGFibGUsIHlvdSBzaG91bGQg
-YmUNCj4gPj4+PiBjb25zZXJ2YXRpdmUgd3J0LiBoYXJkd2FyZSBjYXBhYmlsaXRpZXMgYW5kIGJl
-aGF2aW9yLiBZb3Ugc2hvdWxkDQo+ID4+Pj4gcHJvYmFibHkgaGF2ZSBhIHByZS1hbGlnbm1lbnQg
-bG9vcC4NCj4gPj4+DQo+ID4+PiBHb3QgaXQuIEkgYWRkICBwcmUtYWxpZ25tZW50IGxvb3AuIEl0
-IGFsaWducyB0aGUgYWRkcmVzcyB0byA4IG9yIDRieXRlcy4NCj4gPj4NCj4gPj4gVGhhdCBzaG91
-bGQgYmUgcHJlZGljYXRlZCBvbiAhSEFTX0VGRklDSUVOVF9VTkFMSUdORURfQUNDRVNTLg0KPiA+
-Pg0KPiA+PiAuLi4NCj4gPj4+ICAgICAgICAgZm9yICg7IHAgPD0gZW5kIC0gODsgcCArPSA4KSB7
-DQo+ID4+PiAgICAgICAgICAgICB2YWwgPSAqKHU2NCopcCBeIG1hc2s7DQo+ID4+PiAgICAgICAg
-ICAgICBpZiAoKHZhbCArIDB4ZmVmZWZlZmVmZWZlZmVmZnVsbCkNCj4gPj4+ICYgKH52YWwgJiAw
-eDgwODA4MDgwODA4MDgwODB1bGwpKQ0KPiA+Pj4gICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+
-Pg0KPiA+PiBJIHdvdWxkIGFkZCBhIGNvdXBsZSBvZiBjb21tZW50cywgbGlrZToNCj4gPj4gCS8v
-IENvbnZlcnQgdG8gY2hlY2sgZm9yIHplcm8gYnl0ZS4NCj4gPj4gCS8vIFN0YW5kYXJkIGNoZWNr
-IGZvciBhIHplcm8gYnl0ZSBpbiBhIHdvcmQuDQo+ID4+IChCdXQgbm90IHRoZSBiaWcgNCBsaW5l
-IGV4cGxhbmF0aW9uIHlvdSBoYWQuDQo+ID4+DQo+ID4+IEl0IGlzIGFsc28gd29ydGggbG9va2lu
-ZyBhdCBob3cgdGhhdCBjb2RlIGNvbXBpbGVzDQo+ID4+IG9uIDMyYml0IGFyY2ggdGhhdCBkb24n
-dCBoYXZlIGEgY2FycnkgZmxhZy4NCj4gPj4gVGhhdCBpcyBldmVyeXRoaW5nIGJhc2VkIG9uIE1J
-UFMsIGluY2x1ZGluZyByaXNjdi4NCj4gPg0KPiA+IEl0IG1heSBiZSB3b3J0aCBsb29raW5nIGF0
-IGhvdyBnbGliYyBkb2VzIGl0Og0KPiA+DQo+ID4NCj4gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9n
-aXQvP3A9Z2xpYmMuZ2l0O2E9YmxvYjtmPXN0cmluZy9tZW1jaHIuYztoPTQyMmJjZDBjZDY0NmVh
-NDY3MTFhNTdmYTNjYmRiOGEzMzI5DQo+IGZjMzAyO2hiPXJlZnMvaGVhZHMvcmVsZWFzZS8yLjM1
-L21hc3RlciNsNDYNCj4gPg0KPiA+IFRoZXkgZG8gdXNlIDMyLWJpdCB3b3JkcyBvbiAzMi1iaXQg
-dGFyZ2V0cyBhbmQgNjQtYml0IG9uIDY0LWJpdCBvbmVzLiBJDQo+ID4gdGhpbmsgbWVtY2hyIGlu
-IHRoZSBrZXJuZWwgc2hvdWxkIGZvbGxvdyB0aGlzLg0KPiANCj4gQWxzbywgaWYgYnkgY2hhbmNl
-IHRoaXMgb3B0aW1pemF0aW9uIGlzIGFpbWVkIGZvciB4ODYtNjQsIGl0IG1heSBiZQ0KPiB3b3J0
-aCBhZGRpbmcgYW4gYXJjaC1zcGVjaWZpYyB2ZXJzaW9uIHRoYXQgdXNlcyBFUk1TLg0KDQpEb24n
-dCBiZWxpZXZlIGV2ZXJ5dGhpbmcgeW91IHNlZSBpbiBnbGliYy4NClRoZSBjb21tb24gY2FzZXMg
-aW4gdGhlIGtlcm5lbCBhcmUgZGlmZmVyZW50IGZyb20gdGhlIG9uZXMgdGhleQ0KdGVuZCB0byBv
-cHRpbWlzZSBmb3IuLg0KDQpZb3UgbWlnaHQgdHJ5IHVzaW5nOg0KCSNkZWZpbmUgR0VOX01BU0so
-eCkgKHggKiAodW5zaWduZWQgbG9uZykweDAxMDEwMTAxMDEwMTAxMDF1bGwpDQpmb3IgdGhlIG1h
-c2sgYW5kIHRoZSB0d28gY29uc3RhbnRzLg0KVGhlbiBtYWtlIGFsbCB0aGUgdmFyaWFibGVzICds
-b25nJy4NCg0KSSdtIG5vdCBhdCBhbGwgc3VyZSB3aGF0IHRoZSB0ZXN0IGZvciBmYXN0IG11bHRp
-cGx5IGlzIGFib3V0Lg0KSXQgbWF5IGJlIHZlcnkgaGlzdG9yaWMsIGZvciBtb2Rlcm4gY3B1IGdl
-bmVyYXRpbmcgdGhlIDY0Yml0DQpjb25zdGFudCBpcyBsaWtlbHkgdG8gYmUgbW9yZSBwcm9ibGVt
-YXRpYyAoY2hlY2sgYXJtNjQpLg0KSWYgdGhlIGlucHV0IHZhbHVlIGlzICd1bnNpZ25lZCBjaGFy
-JyAob3IgbWFza2VkKSB0aGVuIHRoZQ0KY29tcGlsZXIgbWF5IGRlY2lkZSB0byBkbyB0aGUgcmVw
-ZWF0ZWQgPDw9IGl0c2VsZi4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
-c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
-Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hi Martin,
 
+Martin Kaiser <martin@kaiser.cx> says:
+> Use kmalloc to allocate the efuse buffer in ReadAdapterInfo8188EU and
+> free it on exit. This is better than using a 512 byte array on the stack.
+> 
+> It's ok to drop the __aligned(4) qualifier. kmalloc aligns to
+> ARCH_KMALLOC_MINALIGN, this is at least 8 bytes.
+> 
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Suggested-by: Larry Finger <Larry.Finger@lwfinger.net>
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+>   drivers/staging/r8188eu/hal/usb_halinit.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+> index 8902dda7b8d8..421fe7c40390 100644
+> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
+> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+> @@ -926,7 +926,7 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
+>   {
+>   	struct eeprom_priv *eeprom = &Adapter->eeprompriv;
+>   	struct led_priv *ledpriv = &Adapter->ledpriv;
+> -	u8 efuse_buf[EFUSE_MAP_LEN_88E] __aligned(4);
+> +	u8 *efuse_buf;
+>   	u8 eeValue;
+>   	int res;
+>   
+> @@ -937,7 +937,10 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
+>   
+>   	eeprom->bautoload_fail_flag	= !(eeValue & EEPROM_EN);
+>   
+> -	memset(efuse_buf, 0xFF, sizeof(efuse_buf));
+> +	efuse_buf = kmalloc(EFUSE_MAP_LEN_88E, GFP_KERNEL);
+> +	if (!efuse_buf)
+> +		return;
+
+I think, it worth returning an error to caller. Functions right after 
+the allocation do initialization, so leaving fields as-is seems to be 
+dangerous
+
+
+
+
+
+Thanks,
+--Pavel Skripkin

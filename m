@@ -2,156 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C83E573F1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A841573F20
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236922AbiGMVnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S236836AbiGMVpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiGMVnB (ORCPT
+        with ESMTP id S231860AbiGMVpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:43:01 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0C133E15;
-        Wed, 13 Jul 2022 14:43:01 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id e16so120801pfm.11;
-        Wed, 13 Jul 2022 14:43:01 -0700 (PDT)
+        Wed, 13 Jul 2022 17:45:34 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F643C169
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:45:33 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id k30so40567edk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f+NhKyzppDv/2IvxpOEHkasVtdb6OH3y3PQ0MVNgHPs=;
-        b=o0uaAhIIC6tyC6F2t0kp91snxL/aTvAzHKrsGKgA8zyNxnYKajXsAPMWy6VrZgMJJS
-         Rscx0NsOWvkF8BM//TFwdfrGZZQyrZsVPLDoSLnfk+lCzht1IqNgCB6DgbORabzMYx5q
-         PlLSshUGgK8y+ApDX5Am5LgYg9n99byIRXvrL7tUeKqLU3SuAB/up4iORhFR+4JRNnv0
-         SPTQV6Z8KKN0Yxu3sSWxWOCkwOEBEODvn/a0S7SNXC9jB3at9o+GBMlbqvqGbt7utssb
-         Ny4tLEBFI8wCZd0Tr9WidLYwjBP19Cg44jBnTBLYDSiuuzXSSIbwOMjargW2kY5ASbUD
-         NceQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xryg/wyAEmcgAFZe/2FGYSAJQ5pYUeWTkKhjNYqQp04=;
+        b=AdGnrzwQyk+BkYsu8V/E2oDFORdr7gasa29EuHtC3fdSF1wxQ97TWw10RMsUyVPeyi
+         paiwWxijYZ/Ejbq7QJuQopODRVp8UWSEJdxm02AltWOPBW7jgLsV7cb8ILrX8QKcATKk
+         7ekEPZGvOkl5y4D2u7O1u+O6jffe3hJs6QRik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f+NhKyzppDv/2IvxpOEHkasVtdb6OH3y3PQ0MVNgHPs=;
-        b=NQiSlDQNEE20pNjNZdRYoPDA36M07fXu33qdhuwgvPYJmup23swxe/0mXvt2ef0wKJ
-         BT00o6nYmsU+ypFYBlaKwHYYR/YbHoAM30045tKbPd8x0b6/7Gu0nzMbE1ax+lTr9RQg
-         D27K6Ow0IAcMATWTejBco/X529intZT9kEBx3XJAl95wNt80+3rUAmm/3B/XejgNohMk
-         0UhIhvE85VsDKttCPQuAsBEvAY3bzNB5KV8YpYLGD7u85egKeYdN2XVpemjqAC4huyGX
-         rsIL1iw1kGYWHpD36B8Db5EaQ//fb17VyHXu4nmJxFtjjxoMfNRZqG2qEOquySNSHu1/
-         vhnQ==
-X-Gm-Message-State: AJIora9TYe6jESqHaD00vjkrfGR0ol8ZB2WHSMOqQssGMhLzxzoA+YYa
-        rBF58iFAyRZ3iwZW24cHgA==
-X-Google-Smtp-Source: AGRyM1vugRHzL8XuDBv8N6yX77axqffKQHpKzuttlh42JNkkLCU/mfEB7BTk4CrHW26/U6JMTvSr2w==
-X-Received: by 2002:a63:1220:0:b0:411:f661:f819 with SMTP id h32-20020a631220000000b00411f661f819mr4643273pgl.250.1657748580523;
-        Wed, 13 Jul 2022 14:43:00 -0700 (PDT)
-Received: from jevburton3.c.googlers.com.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id e29-20020aa7981d000000b0052ab54a4711sm1194pfl.150.2022.07.13.14.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 14:43:00 -0700 (PDT)
-From:   Joe Burton <jevburton.kernel@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Joe Burton <jevburton@google.com>
-Subject: [PATCH bpf-next] libbpf: Add bpf_map__set_name()
-Date:   Wed, 13 Jul 2022 21:42:46 +0000
-Message-Id: <20220713214246.2545204-1-jevburton.kernel@gmail.com>
-X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xryg/wyAEmcgAFZe/2FGYSAJQ5pYUeWTkKhjNYqQp04=;
+        b=sr6k20JWc1Y30sMS8nBwJuT+RNIe1pwN2wx5FQYzOigeZ98yNhxSqSunVHpheKQ+GM
+         nqAdweRbA+dpfDuZ+YG4g8XyxL7HRHBxTbONiQnVOM7j8WM11MSYZ2Hh4KiJYsGrcHvF
+         bS0oALWVHSHrp7LjfqbCCq+FKUY9uZYbl+mkZkAwL/y3vQILCLREkAJqf2L2enQy6W3X
+         juVW7rgMA64htKxbDqAIPrsgZ5+PcIOuZOIThg8FuI8fant+Oh1Xwrqt/nOxcmOEoQq1
+         HTLh6/d7L/d0b2LakMNe+3KvnQEdRkAv1Wb0ta9XbrB1nqkywaSZZDfZPsFFkSHxyXcl
+         TEeg==
+X-Gm-Message-State: AJIora94B7/l8muU3Kd0VrqbcW6S+Ge3M6oj6vNCKVcmPLR2hQPZE1W7
+        gz3HOWwL1R6G2tX6R4LqUn+YhWMwtjKhGxhJdFU=
+X-Google-Smtp-Source: AGRyM1tdlm2RItsOgOVwDci+As863XFyU/v8GevUt25TwdzaN7sj/QdeetvZCs4Gyu2+ODs6KBAMXg==
+X-Received: by 2002:a05:6402:40ce:b0:43a:918d:a73f with SMTP id z14-20020a05640240ce00b0043a918da73fmr7827338edb.387.1657748731466;
+        Wed, 13 Jul 2022 14:45:31 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id fn15-20020a1709069d0f00b006fecf74395bsm5419511ejc.8.2022.07.13.14.45.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 14:45:31 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 9-20020a1c0209000000b003a2dfdebe47so1992222wmc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:45:30 -0700 (PDT)
+X-Received: by 2002:a1c:4455:0:b0:3a2:d929:917a with SMTP id
+ r82-20020a1c4455000000b003a2d929917amr5761713wma.38.1657748730445; Wed, 13
+ Jul 2022 14:45:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+ <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+ <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk> <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+ <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
+In-Reply-To: <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 13 Jul 2022 14:45:14 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
+Message-ID: <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
+Subject: Re: Linux 5.19-rc6
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Burton <jevburton@google.com>
+On Wed, Jul 13, 2022 at 2:36 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> > >
+> > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
+> >
+> > That patch looks sane to me, but I guess Guenter would need to check
+>
+> I still see the failure in my builds with this patch. But surprisingly
+> I dont see the build failure (with or without this patch) with gcc-12,
+> only with gcc-11.
 
-Add the capability to set a `struct bpf_map` name.
+Arrghs. "build failure"?
 
-bpf_map__reuse_fd(struct bpf_map *map, int fd) does the following:
+So is there another problem than the runtime issue that Guenter reports:
 
-1. get the bpf_map_info of the passed-in fd
-2. strdup the name from the bpf_map_info
-3. assign that name to the map
-4. and some other stuff
+  OF: amba_device_add() failed (-19) for /amba/smc@10100000
 
-While `map.name` may initially be arbitrarily long, this operation
-truncates it after 15 characters.
+in this area? That patch looks harmless from a build standpoint, but
+that's not saying much, so can you please quote the actual build
+failure here?
 
-We have some infrastructure that uses bpf_map__reuse_fd() to preserve
-maps across upgrades. Some of our users have long map names, and are
-seeing their maps 'disappear' after an upgrade, due to the name
-truncation.
-
-By invoking `bpf_map__set_name()` after `bpf_map__reuse_fd()`, we can
-trivially work around the issue.
-
-Signed-off-by: Joe Burton <jevburton@google.com>
----
- tools/lib/bpf/libbpf.c | 22 ++++++++++++++++++++++
- tools/lib/bpf/libbpf.h |  3 ++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 72548798126b..725baf508e6f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9089,6 +9089,28 @@ const char *bpf_map__name(const struct bpf_map *map)
- 	return map->name;
- }
- 
-+int bpf_map__set_name(struct bpf_map *map, const char *name)
-+{
-+	char *new_name;
-+
-+	if (!map)
-+		return libbpf_err(-EINVAL);
-+
-+	new_name = strdup(name);
-+	if (!new_name)
-+		return libbpf_err(-ENOMEM);
-+
-+	if (map_uses_real_name(map)) {
-+		free(map->real_name);
-+		map->real_name = new_name;
-+	} else {
-+		free(map->name);
-+		map->name = new_name;
-+	}
-+
-+	return 0;
-+}
-+
- enum bpf_map_type bpf_map__type(const struct bpf_map *map)
- {
- 	return map->def.type;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index e4d5353f757b..e898c4cb514a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -731,8 +731,9 @@ LIBBPF_API bool bpf_map__autocreate(const struct bpf_map *map);
-  */
- LIBBPF_API int bpf_map__fd(const struct bpf_map *map);
- LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
--/* get map name */
-+/* get/set map name */
- LIBBPF_API const char *bpf_map__name(const struct bpf_map *map);
-+LIBBPF_API int bpf_map__set_name(struct bpf_map *map, const char *name);
- /* get/set map type */
- LIBBPF_API enum bpf_map_type bpf_map__type(const struct bpf_map *map);
- LIBBPF_API int bpf_map__set_type(struct bpf_map *map, enum bpf_map_type type);
--- 
-2.37.0.144.g8ac04bfd2-goog
-
+                  Linus

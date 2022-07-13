@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F05C573203
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A65573206
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbiGMJEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S235993AbiGMJHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbiGMJEm (ORCPT
+        with ESMTP id S231223AbiGMJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:04:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C113E7AF0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:04:41 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oBYIC-0008Su-7I; Wed, 13 Jul 2022 11:04:24 +0200
-Message-ID: <c090c39d171b3bd248dc613c120660f07efc6b6c.camel@pengutronix.de>
-Subject: Re: [PATCH v14 16/17] PCI: imx6: Move the imx6_pcie_ltssm_disable()
- earlier
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        festevam@gmail.com, francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 13 Jul 2022 11:04:22 +0200
-In-Reply-To: <1656645935-1370-17-git-send-email-hongxing.zhu@nxp.com>
-References: <1656645935-1370-1-git-send-email-hongxing.zhu@nxp.com>
-         <1656645935-1370-17-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 05:06:57 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDCD286CD;
+        Wed, 13 Jul 2022 02:06:56 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so2624109pjm.2;
+        Wed, 13 Jul 2022 02:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=y5g+g4Wo+o19kQAE0fo44H2kWR0Y0l61IsNjeKb+644=;
+        b=jmETtGr3eP2DhxmH6rJIXCrUC6Z6+HlK4YR+wsVsOt+nj6BfyveFYJkZTzgW/08Uk0
+         rM7UHb/aQy46gblqKXCpEHQinbpmF3PP0Mv9uGkja7L/yJjghs3rUeX0QOtWwZ3YPZ0B
+         g6sxkVOEaEgVazFhsOaMQNtDVFIPfquZ7naLb9j+ZQWimFYVKAlGOQ3DItTAXbkTo3J+
+         y6BJH8tuBHXvIyXigC1LuDb+SUDD0Tg9UCAeOfCgrFdAUCfxGsmESvVZcZ4WKp6AvWJJ
+         H5PXJ2i9tQ55mYM29O+wgqteF07XEB35UNXoxKgsHimTz4KwZBK+xXx4UtohzV1DEGIU
+         JhLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=y5g+g4Wo+o19kQAE0fo44H2kWR0Y0l61IsNjeKb+644=;
+        b=GRDO+xEwzkHTMc2ks7jB2zFCNCUheZLcyVgtDd0O6eJU++oiiiySMP/AJGwO5u/AuR
+         LtE42QoB1YMebd3fsjl4e6LSyE1vdrIycqugZAqJnze1//yXDh/gVAhgxjZIxY61/tKR
+         u9vFU68zPcxzYUKym/SYUTBM/r9zpZGTYc0gEq8z+/r0q784O3oRrmU+b4q/zyF3TDYt
+         mVMEUgWL16tA6XGLbVjAnWCHvtGxSCfr8fkvMiHc5kJlB2shli8fDfT/P4AZr9AIxX1o
+         a2hq66QSmB4cl5F1V9eeZbr2C9fA4CSHlz4ym9LqEbW5nhQp3HhLHFUtbShOYKfhrj73
+         OhTA==
+X-Gm-Message-State: AJIora/+6nlyZn0tC8bUbO2lGOb8WPbZcSKYzjMSyrAy78p+OwslOd2v
+        pNI3sYLtj6DSm4mUsTmcG1Q=
+X-Google-Smtp-Source: AGRyM1vWxb3GMUCfWNl9c5VytfK+GlcaW8s0PShjS5RQUJTTYzPKGP+F0OjAGD6fTfHLgAfNnSYeDw==
+X-Received: by 2002:a17:90a:6008:b0:1ef:abc7:a740 with SMTP id y8-20020a17090a600800b001efabc7a740mr2671643pji.179.1657703215712;
+        Wed, 13 Jul 2022 02:06:55 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id gg10-20020a17090b0a0a00b001ef917f1c30sm1051975pjb.6.2022.07.13.02.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 02:06:55 -0700 (PDT)
+From:   Mia Lin <mimi05633@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        ctcchien@nuvoton.com, medadyoung@gmail.com, mimi05633@gmail.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, KFTING@nuvoton.com,
+        JJLIU0@nuvoton.com, mylin1@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] RTC: nuvoton: Add nuvoton real time clock driver
+Date:   Wed, 13 Jul 2022 17:06:44 +0800
+Message-Id: <20220713090647.8028-1-mimi05633@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 01.07.2022 um 11:25 +0800 schrieb Richard Zhu:
-> Move the imx6_pcie_ltssm_disable() earlier and place it just behind the
-> imx6_pcie_ltssm_enable(), since it might not be only used by suspend
-> callback directly.
-> To be symmetric with imx6_pcie_ltssm_enable(), add the IMX6Q switch
-> case in the imx6_pcie_ltssm_disable().
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 39 ++++++++++++++-------------
->  1 file changed, 20 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 79a05e190016..1cf8bf9035f2 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -805,6 +805,26 @@ static void imx6_pcie_ltssm_enable(struct device *dev)
->  	}
->  }
->  
-> +static void imx6_pcie_ltssm_disable(struct device *dev)
-> +{
-> +	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
-> +
-> +	switch (imx6_pcie->drvdata->variant) {
-> +	case IMX6Q:
-> +	case IMX6SX:
-> +	case IMX6QP:
-> +		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-> +				   IMX6Q_GPR12_PCIE_CTL_2, 0);
-> +		break;
-> +	case IMX7D:
-> +	case IMX8MM:
-> +		reset_control_assert(imx6_pcie->apps_reset);
-> +		break;
-This is missing the IMX8MQ case.
+Support Nuvoton NCT3018Y real time clock.
 
-> +	default:
-> +		dev_err(dev, "ltssm_disable not supported\n");
+Changes since version 6:
+ - Add review tag.
+ - Add blank line in dts.
 
-Drop the default, we want a compile time warning if a variant isn't
-covered by this switch statement.
+Changes since version 5:
+ - Add battery voltage level check by NCT3018Y_REG_ST.
+ - Remove disable clock output.
+ - Fix errors in rtc-nct3018y.c.
 
-Regards,
-Lucas
+Changes since version 4:
+ - Fix warnings in rtc-nct3018y.c.
+ - Reduce the number of error messages.
+ - Add time vaild check.
+ - Add functionality check.
+ - Add maintainer.
 
-> +	}
-> +}
-> +
->  static int imx6_pcie_start_link(struct dw_pcie *pci)
->  {
->  	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
-> @@ -947,25 +967,6 @@ static const struct dw_pcie_ops dw_pcie_ops = {
->  };
->  
->  #ifdef CONFIG_PM_SLEEP
-> -static void imx6_pcie_ltssm_disable(struct device *dev)
-> -{
-> -	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
-> -
-> -	switch (imx6_pcie->drvdata->variant) {
-> -	case IMX6SX:
-> -	case IMX6QP:
-> -		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
-> -				   IMX6Q_GPR12_PCIE_CTL_2, 0);
-> -		break;
-> -	case IMX7D:
-> -	case IMX8MM:
-> -		reset_control_assert(imx6_pcie->apps_reset);
-> -		break;
-> -	default:
-> -		dev_err(dev, "ltssm_disable not supported\n");
-> -	}
-> -}
-> -
->  static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
->  {
->  	struct device *dev = imx6_pcie->pci->dev;
+Changes since version 3:
+ - Add part number in Kconfig.
+ - Refactor rtc-nct3018y.c.
 
+Changes since version 2:
+ - Fix errors in rtc-nct3018y.c.
+ - Fix warnings in rtc-nct3018y.c.
+
+Changes since version 1:
+ - Add nuvoton,nct3018y property in NPCM devicetree.
+ - Add new property in rtc binding document.
+ - Add new driver for nuvoton real time clock driver.
+
+Mia Lin (3):
+  dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+  ARM: dts: nuvoton: Add nuvoton RTC3018Y node
+  RTC: nuvoton: Add NCT3018Y real time clock driver
+
+ .../bindings/rtc/nuvoton,nct3018y.yaml        |  45 ++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts     |   5 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nct3018y.c                    | 553 ++++++++++++++++++
+ 6 files changed, 616 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
+
+-- 
+2.17.1
 

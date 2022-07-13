@@ -2,187 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A35573840
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DE157386F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236552AbiGMOBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S236549AbiGMOJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236549AbiGMOB3 (ORCPT
+        with ESMTP id S236484AbiGMOJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:01:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 060BE2ED40
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657720872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9KGqf/qeI+POrrn3TKUE5pxqC/C4LValvbrjKc6vdrc=;
-        b=A7L44shEIPWrKzHiA3jX07oVBUHTZ3DcrUDroLqPIINmq2yURySaihjcjwrYQTKqn5XJyG
-        hu8A+Vu9j3NaVSiEIeaCvr1u6fE0g4Qq3MM0bCZ6k2U6Y9rcE/WnSLJoEiLR0IjvVn1ZoD
-        SoVguAtMMvU6bkNX7IgD3hWdp3YWQJ4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-d2vSy4s3OZuk7caKbD9P9w-1; Wed, 13 Jul 2022 10:01:03 -0400
-X-MC-Unique: d2vSy4s3OZuk7caKbD9P9w-1
-Received: by mail-ej1-f71.google.com with SMTP id l2-20020a170906078200b006fed42bfeacso3485606ejc.16
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:01:03 -0700 (PDT)
+        Wed, 13 Jul 2022 10:09:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCCC12763
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:09:28 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id p9so12154646pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IZUCsCUFTB3hUkWYK46U+VsvZBxdvNM3Fkqu8Dxi8pc=;
+        b=Cn/jpQyig6YQIyCLHkn4YaP7UZR5ml4Q9/jM/qWHFT8jzNZxvfWZdaVAlBy206ad7N
+         pE1scK5mgeZYVQq6z/R/5AN20t9Gs/e1e3BMDsMtvjpaEz9mjHwlsnYQFxSHMYdQORKu
+         LmZEmrcfGRK9gCw6EuVk5VVOaH+qxczVX007bw+bmQxmVuA0T9S5lzOdLP98F/7Pem51
+         WvIdP9WAI41JgutJjyTuzGlSXvXFrZy7i2fr8AnhnCXEvDyJfpinG3E8ntorApKIcLYT
+         d5WQDwlJ2jhRZQK9hAGuhEi9JkrbEXHlQEiHSYzbXixem49nWfplucI2sNSKjaF1tH3O
+         ss1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=9KGqf/qeI+POrrn3TKUE5pxqC/C4LValvbrjKc6vdrc=;
-        b=KDYAPZH5IQpnE21Qkv07rODPqyfg3fsE9PVRK/JoR55chC+lj2s96bTQcw98hcqAJx
-         sDpy159B6yJ3Hx2jpj0a4q0dOPNDc7VHTBUua1dcGeemN+eNkDMTf0gqVEH2i97ABBBM
-         UIl7scO+/IHIzVjdBQ5w3EbLelWLMHdq/6lM5nPEivlsyeS+7XGUHC3+iFK5Bh+CllDn
-         sn2rOSVZa1GAQ7Cg4jO4vLGxUxq4S3fRIS7Bt4QLxrDVqLRy0/nKb1/UgX3zPIXV6hOV
-         ZiFiuyIcAw+tK9ehkJqN+uSy5zShVnGwgXFRHa9zR9Pd7811na7anv8bugAfFDonZsWj
-         jlSw==
-X-Gm-Message-State: AJIora/3EMutjBnKa7UhLB6LAuVfhDwYTbyOlrbEUfsjzWxv5nRu9fb+
-        Zzou72dIwCU+0Bxj8B+G9vPBIupN3JaEwXlP3B+Ukqs2CY+FJVELxIcEgX/OdQvoUm8hWUaB+zO
-        2wRGaMu4jnOUvubDhi/kvDDyv
-X-Received: by 2002:a05:6402:194d:b0:43a:82da:b0f3 with SMTP id f13-20020a056402194d00b0043a82dab0f3mr5153367edz.104.1657720862043;
-        Wed, 13 Jul 2022 07:01:02 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tfg+NQpq62PNkTi+9zGICpZjxIA1/V35s1b3D7GuzEpMEmnElvJd01BSGXkYV7V6mf4wtNGg==
-X-Received: by 2002:a05:6402:194d:b0:43a:82da:b0f3 with SMTP id f13-20020a056402194d00b0043a82dab0f3mr5153326edz.104.1657720861765;
-        Wed, 13 Jul 2022 07:01:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:5800:5009:e8d0:d95e:544d? (p200300cbc70758005009e8d0d95e544d.dip0.t-ipconnect.de. [2003:cb:c707:5800:5009:e8d0:d95e:544d])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056402088200b0042dcbc3f302sm7975139edy.36.2022.07.13.07.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 07:01:01 -0700 (PDT)
-Message-ID: <397f3cb2-1351-afcf-cd87-e8f9fb482059@redhat.com>
-Date:   Wed, 13 Jul 2022 16:00:59 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IZUCsCUFTB3hUkWYK46U+VsvZBxdvNM3Fkqu8Dxi8pc=;
+        b=0zDYCdIo8hM8t9QPWUCoVaomtlPZiP9RP7Ch8gS8kACsUSu5vpvPYj1xZnY86hIsvd
+         9nxa9VJzSRf5+k7v6tukzTFzQP9Mc+bDQNN5xX/hsnh0OlI4spI0LnJVfGjelE9Q/xRJ
+         ivF2LFtCCs5xITMREwhpFPAVUwjCYOsZUigA/W3sortLPsUjYdB6E+xHsNzF368WNQcE
+         yMWe1dNbJMxINoDO43U5TtvJj1Dp3AzwBH4fASn4ldvMy7qVjLcIEE5rPDOnUVkDoqXf
+         /lCANZGD52eWJgu1cQBl+8Oc3b+dF1QOGY512WtCUsyo0SirOg/lPLup1Ao86V2Er/Vs
+         s78A==
+X-Gm-Message-State: AJIora8KtBgEeRwm8vksZf1sY26VcZzMzGn//V12vD7/uvpx15E9znVA
+        8f+XNd/Sc4Ghu4kErk4uCJ6LM4exFp1PI4xE
+X-Google-Smtp-Source: AGRyM1ue1MoP4IWh46nK55SBZDgiY7nb8CbRRXsJl/DmE7gN3+60bd97mvAZFdyOMgJmskZsh3ZRLg==
+X-Received: by 2002:a17:90a:e008:b0:1ef:831a:1fff with SMTP id u8-20020a17090ae00800b001ef831a1fffmr10183337pjy.221.1657721367885;
+        Wed, 13 Jul 2022 07:09:27 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18d5:ce0:b14a:8f36:de08:545f])
+        by smtp.gmail.com with ESMTPSA id y4-20020a655b44000000b004126f343fc9sm7920738pgr.67.2022.07.13.07.09.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:09:27 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     axboe@kernel.dk, snitzer@kernel.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] block: fix missing blkcg_bio_issue_init
+Date:   Wed, 13 Jul 2022 22:02:26 +0800
+Message-Id: <20220713140226.68135-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     willy@infradead.org, aneesh.kumar@linux.ibm.com, arnd@arndb.de,
-        21cnbao@gmail.com, corbet@lwn.net, dave.hansen@linux.intel.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-References: <cover.1656531090.git.khalid.aziz@oracle.com>
- <20220701212403.77ab8139b6e1aca87fae119e@linux-foundation.org>
- <0864a811-53c8-a87b-a32d-d6f4c7945caa@redhat.com>
- <357da99d-d096-a790-31d7-ee477e37c705@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 0/9] Add support for shared PTEs across processes
-In-Reply-To: <357da99d-d096-a790-31d7-ee477e37c705@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.07.22 21:36, Khalid Aziz wrote:
-> On 7/8/22 05:47, David Hildenbrand wrote:
->> On 02.07.22 06:24, Andrew Morton wrote:
->>> On Wed, 29 Jun 2022 16:53:51 -0600 Khalid Aziz <khalid.aziz@oracle.com> wrote:
->>>
->>>> This patch series implements a mechanism in kernel to allow
->>>> userspace processes to opt into sharing PTEs. It adds a new
->>>> in-memory filesystem - msharefs.
->>>
->>> Dumb question: why do we need a new filesystem for this?  Is it not
->>> feasible to permit PTE sharing for mmaps of tmpfs/xfs/ext4/etc files?
->>>
->>
->> IIRC, the general opinion at LSF/MM was that this approach at hand is
->> makes people nervous and I at least am not convinced that we really want
->> to have this upstream.
-> 
-> Hi David,
+The commit 513616843d73 ("block: remove superfluous calls to
+blkcg_bio_issue_init") has removed blkcg_bio_issue_init from
+__bio_clone since submit_bio will override ->bi_issue.
+However, __blk_queue_split is called after blkcg_bio_issue_init
+(see blk_mq_submit_bio) in submit_bio. In this case, the
+->bi_issue is 0. Fix it.
 
-Hi Khalid,
+Fixes: 513616843d73 ("block: remove superfluous calls to blkcg_bio_issue_init")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ block/blk-merge.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> You are right that sharing page tables across processes feels scary, but at the same time threads already share PTEs and 
-> this just extends that concept to processes.
-
-They share a *mm* including a consistent virtual memory layout (VMA
-list). Page table sharing is just a side product of that. You could even
-call page tables just an implementation detail to produce that
-consistent virtual memory layout -- described for that MM via a
-different data structure.
-
-> A number of people have commented on potential usefulness of this concept 
-> and implementation.
-
-... and a lot of people raised concerns. Yes, page table sharing to
-reduce memory consumption/tlb misses/... is something reasonable to
-have. But that doesn't require mshare, as hugetlb has proven.
-
-The design might be useful for a handful of corner (!) cases, but as the
-cover letter only talks about memory consumption of page tables, I'll
-not care about those. Once these corner cases are explained and deemed
-important, we might want to think of possible alternatives to explore
-the solution space.
-
-> There were concerns raised about being able to make this safe and reliable.
-> I had agreed to send a 
-> second version of the patch incorporating feedback from last review and LSF/MM, and that is what v2 patch is about. The 
-
-Okay, most of the changes I saw are related to the user interface, not
-to any of the actual dirty implementation-detail concerns. And the cover
-letter is not really clear what's actually happening under the hood and
-what the (IMHO) weird semantics of the design imply (as can be seen from
-Andrews reply).
-
-> suggestion to extend hugetlb PMD sharing was discussed briefly. Conclusion from that discussion and earlier discussion 
-> on mailing list was hugetlb PMD sharing is built with special case code in too many places in the kernel and it is 
-> better to replace it with something more general purpose than build even more on it. Mike can correct me if I got that 
-> wrong.
-
-Yes, I pushed for the removal of that yet-another-hugetlb-special-stuff,
-and asked the honest question if we can just remove it and replace it by
-something generic in the future. And as I learned, we most probably
-cannot rip that out without affecting existing user space. Even
-replacing it by mshare() would degrade existing user space.
-
-So the natural thing to reduce page table consumption (again, what this
-cover letter talks about) for user space (semi- ?)automatically for
-MAP_SHARED files is to factor out what hugetlb has, and teach generic MM
-code to cache and reuse page tables (PTE and PMD tables should be
-sufficient) where suitable.
-
-For reasonably aligned mappings and mapping sizes, it shouldn't be too
-hard (I know, locking ...), to cache and reuse page tables attached to
-files -- similar to what hugetlb does, just in a generic way. We might
-want a mechanism to enable/disable this for specific processes and/or
-VMAs, but these are minor details.
-
-And that could come for free for existing user space, because page
-tables, and how they are handled, would just be an implementation detail.
-
-
-I'd be really interested into what the major roadblocks/downsides
-file-based page table sharing has. Because I am not convinced that a
-mechanism like mshare() -- that has to be explicitly implemented+used by
-user space -- is required for that.
-
+diff --git a/block/blk-merge.c b/block/blk-merge.c
+index 5abf5aa5a5f0..a5bfe7f18f42 100644
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -355,6 +355,7 @@ void __blk_queue_split(struct request_queue *q, struct bio **bio,
+ 		/* there isn't chance to merge the splitted bio */
+ 		split->bi_opf |= REQ_NOMERGE;
+ 
++		blkcg_bio_issue_init(split);
+ 		bio_chain(split, *bio);
+ 		trace_block_split(split, (*bio)->bi_iter.bi_sector);
+ 		submit_bio_noacct(*bio);
 -- 
-Thanks,
-
-David / dhildenb
+2.11.0
 

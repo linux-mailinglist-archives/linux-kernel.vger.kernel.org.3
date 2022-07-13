@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3705737CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3BF5737D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbiGMNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S236194AbiGMNsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGMNr3 (ORCPT
+        with ESMTP id S235795AbiGMNsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:47:29 -0400
-Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1B2105;
-        Wed, 13 Jul 2022 06:47:28 -0700 (PDT)
-Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id 580C9CAFC5;
-        Wed, 13 Jul 2022 16:47:26 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx4-2022; t=1657720046;
-        bh=vOOalNQ9r9QRquMExxnzKYoMS7P4s1dLtt3mNir4PW4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-        b=ANCTOIT4KS7uvUfMlXU2CGXcGYfNwh5Rx/e/jUQUBq5fd640Fwng2rLv5tgnGGYqH
-         K16LLp6tw21JrvQ5t+saL3Mn9b4j8NdM0lZjYTojFN6AEz36wfSovmzx3Wqq/Tdiz6
-         2e2RcjSc71OELSYb2iZlpqdPeaj+VuJd9I5IdvgWnac/Nw50qLVkUSXJy4JoDYkG5x
-         ZG/i2VgeGBkPfz1FMA05Eysy7i3QB7ZuZca4pZRCwHlVr0R35grSiQmw843ay2q+PZ
-         n6o0QKUoeBD4Hcl1IrtTK13bWV4GwomlXhwkvx7DolQzGcROK2NTviyyFKJIDkBDt4
-         Z3IHqVPGhR3bA==
-Received: from [172.24.11.83] (172.24.11.83) by prgmbx01.amust.local
- (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Wed, 13 Jul
- 2022 15:47:23 +0200
-Message-ID: <51e3fc9e-5b46-ab23-bbf8-5d0ad9dada29@veeam.com>
-Date:   Wed, 13 Jul 2022 15:47:23 +0200
+        Wed, 13 Jul 2022 09:48:40 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6449E31
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:35 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id m10so3586900qvu.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rsPzgItEmasBgXFAgzpCJf64H76lDRgEa1O19PDOaMU=;
+        b=TbuSYP1O3BZRafZZTNs19zV3al2KhShvsbFm2cJiU4MA0osbPZaKUd9wL2Cs/YTK1n
+         1N+hcHmA7ieDpFf3q8yXPfidIS0M0v4ZBPNGKt2/ZbFqgzaJDrBxniq/AjfqnKYgT2sL
+         5j3uLaB/V5LlZrt4O79T2v4XQoz0XvV0H4zEjvMTgFO1RtIYigrlchEPLmsfddeGcWrn
+         PmYZuuTcSOkUmkjCesvFtFdKLDbm8NqqkPMLzPtUpbRiWHEp6ZMkmuSv4tE1ZFwHeMdW
+         xCobQG+I/IyWOAm3PzRz3AvJHggrH0Q+Kz286uhciVgbu6UWMEWbQauYWgM7HKkyfXNG
+         lh9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rsPzgItEmasBgXFAgzpCJf64H76lDRgEa1O19PDOaMU=;
+        b=28DfONPd2uDD59PGaEAXb2lzjz9H+tbVQiD4+B0EuG4lEvxommPFQKXH1p5/xeYJ5f
+         CQ12W7yPCA7/0yj4+awjmRjVpq1x+fmCMawtUqs6ZxTKin3ac0kvmmpdZChvrAvJ1pMD
+         1iD+e2Uo8KojH/9grpS9y1bPxrY4Id8vpKAXLBHVi2i+6ZhotVYet0ITYw3/U/ldaxoF
+         E0zuopGKjEwhmGmLn+h5xgjJ4NKLeEaAzXjWwbH0nTUyFKS2ZbOgIBKYfOfvnztFWYk3
+         HU3xi8iqAZqqKqOazb7EiBdiNpR54pLm2h8q8EVAg2wqa1CxEujQkPCRaSm9oxXfL1ck
+         dlCQ==
+X-Gm-Message-State: AJIora9xF6uIedFwjRszH4h5/gv+t50yCPGYWoybAhqR0VgsCQJYaFel
+        Q6LpGPygDPm2vLmhRt2pGubpTl5iFGDxOqN5
+X-Google-Smtp-Source: AGRyM1vD9Ksp+2GEOze3I/p5khOdfRuSPGJrjaeTY2OJNS1RnfoeSN3Q0j3o7v/sm55hYUMtHCIQ6g==
+X-Received: by 2002:a0c:fe02:0:b0:473:1ca:51f1 with SMTP id x2-20020a0cfe02000000b0047301ca51f1mr3051950qvr.5.1657720114787;
+        Wed, 13 Jul 2022 06:48:34 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id bl22-20020a05620a1a9600b006af45243e15sm1458083qkb.114.2022.07.13.06.48.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Jul 2022 06:48:34 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH v7 1/2] sched/rt: fix bad task migration for rt tasks
+Date:   Wed, 13 Jul 2022 21:48:22 +0800
+Message-Id: <20220713134823.95141-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
- <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
- <YsWHHcCfSVFklh4M@infradead.org>
- <ff78a1ee-8bc5-6e8e-040f-978cd07eacfe@veeam.com>
- <YscXTGXumE5Ust15@infradead.org>
- <aec88137-070e-7c1d-215f-86a1e6d4b10a@veeam.com>
- <Ys6y1AYTl8r/i3UX@infradead.org>
-From:   Sergei Shtepa <sergei.shtepa@veeam.com>
-In-Reply-To: <Ys6y1AYTl8r/i3UX@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.11.83]
-X-ClientProxiedBy: prgmbx01.amust.local (172.24.128.102) To
- prgmbx01.amust.local (172.24.128.102)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29D2A50A54647160
-X-Veeam-MMEX: True
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,74 +71,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 13:56, Christoph Hellwig wrote:
-> 
-> On Fri, Jul 08, 2022 at 12:45:33PM +0200, Sergei Shtepa wrote:
->> 1. Work at the partition or disk level?
->> At the user level, programs operate with block devices.
->> In fact, the "disk" entity makes sense only for the kernel level. 
->> When the user chooses which block devices to backup and which not,
->> he operates with mounting points, which are converted into block
->> devices, partitions. Therefore, it is better to handle bio before
->> remapping to disk.
->> If the filtering is performed after remapping, then we will be
->> forced to apply a filter to the entire disk, or complicate the
->> filtering algorithm by calculating which range of sectors bio is
->> addressed to. And if bio is addressed to the partition boundary...
->> Filtering at the block device level seems to me a simpler solution.
->> But this is not the biggest problem.
-> Note that bi_bdev stays for the partition things came from.  So we
-> could still do filtering after blk_partition_remap has been called,
-> the filter driver just needs to be careful on how to interpret the
-> sector numbers.
+Commit 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+allow find_lock_lowest_rq to pick a task with migration disabled.
+This commit is intended to push the current running task on this CPU
+away.
 
-Thanks. I'll check it out.
+There is a race scenario, which allows a migration disabled task to
+be migrated to another CPU.
 
-> 
->> 2. Can the filter sleep or postpone bio processing to the worker thread?
-> I think all of te above is fine, just for normal submit_bio based
-> drivers.
+When there is a RT task with higher priority, rt sched class was
+intended to migrate higher priority task to lowest rq via push_rt_tasks,
+this BUG will happen here.
+
+With the system running on PREEMPT_RT, rt_spin_lock will disable
+migration, this will make the problem easier to reproduce.
+
+I have seen this crash on PREEMPT_RT, from the logs, there is a race
+when trying to migrate higher priority tasks to the lowest rq.
+
+Please refer to the following scenarios.
+
+           CPU0                                  CPU1
+------------------------------------------------------------------
+push_rt_task
+  check is_migration_disabled(next_task)
+                                        task not running and
+                                        migration_disabled == 0
+  find_lock_lowest_rq(next_task, rq);
+    _double_lock_balance(this_rq, busiest);
+      raw_spin_rq_unlock(this_rq);
+      double_rq_lock(this_rq, busiest);
+        <<wait for busiest rq>>
+                                            <wakeup>
+                                        task become running
+                                        migrate_disable();
+                                          <context out>
+  deactivate_task(rq, next_task, 0);
+  set_task_cpu(next_task, lowest_rq->cpu);
+    WARN_ON_ONCE(is_migration_disabled(p));
+      ---------OOPS-------------
+
+Crash logs are as follows:
+[123671.996430] WARNING: CPU: 2 PID: 13470 at kernel/sched/core.c:2485
+set_task_cpu+0x8c/0x108
+[123671.996800] pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
+[123671.996811] pc : set_task_cpu+0x8c/0x108
+[123671.996820] lr : set_task_cpu+0x7c/0x108
+[123671.996828] sp : ffff80001268bd30
+[123671.996832] pmr_save: 00000060
+[123671.996835] x29: ffff80001268bd30 x28: ffff0001a3d68e80
+[123671.996844] x27: ffff80001225f4a8 x26: ffff800010ab62cb
+[123671.996854] x25: ffff80026d95e000 x24: 0000000000000005
+[123671.996864] x23: ffff00019746c1b0 x22: 0000000000000000
+[123671.996873] x21: ffff00027ee33a80 x20: 0000000000000000
+[123671.996882] x19: ffff00019746ba00 x18: 0000000000000000
+[123671.996890] x17: 0000000000000000 x16: 0000000000000000
+[123671.996899] x15: 000000000000000a x14: 000000000000349e
+[123671.996908] x13: ffff800012f4503d x12: 0000000000000001
+[123671.996916] x11: 0000000000000000 x10: 0000000000000000
+[123671.996925] x9 : 00000000000c0000 x8 : ffff00027ee58700
+[123671.996933] x7 : ffff00027ee8da80 x6 : ffff00027ee8e580
+[123671.996942] x5 : ffff00027ee8dcc0 x4 : 0000000000000005
+[123671.996951] x3 : ffff00027ee8e338 x2 : 0000000000000000
+[123671.996959] x1 : 00000000000000ff x0 : 0000000000000002
+[123671.996969] Call trace:
+[123671.996975]  set_task_cpu+0x8c/0x108
+[123671.996984]  push_rt_task.part.0+0x144/0x184
+[123671.996995]  push_rt_tasks+0x28/0x3c
+[123671.997002]  task_woken_rt+0x58/0x68
+[123671.997009]  ttwu_do_wakeup+0x5c/0xd0
+[123671.997019]  ttwu_do_activate+0xc0/0xd4
+[123671.997028]  try_to_wake_up+0x244/0x288
+[123671.997036]  wake_up_process+0x18/0x24
+[123671.997045]  __irq_wake_thread+0x64/0x80
+[123671.997056]  __handle_irq_event_percpu+0x110/0x124
+[123671.997064]  handle_irq_event_percpu+0x50/0xac
+[123671.997072]  handle_irq_event+0x84/0xfc
+
+To fix it, we need to check migration_disabled flag again to avoid
+bad migration.
+
+Fixes: 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+--
+
+Changelog:
+v1 -> v2:
+        - Modify commit message to add fixed commit information.
+        - Going to retry to push the current running task on this CPU
+          away, instead doing nothing for this migrate disabled task.
+v2 -> v3:
+        - Change migration disabled check to the correct position
+v3 -> v4:
+        - Check migrate disabled in find_lock_lowest_rq to avoid not
+        necessary check when task rq is not released as Steven advised.
+v4 -> v5:
+        - Adjust the comment as Steve advised to make it clear.
+v5 -> v6:
+        - Adjust the comment again as Steve advised.
+v6 -> v7:
+        - Add missing put_task_struct && add this task migration
+        disable check to deadline scheduler too as Dietmar advised.
+---
+ kernel/sched/deadline.c | 1 +
+ kernel/sched/rt.c       | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index b5152961b743..cb3b886a081c 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2238,6 +2238,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq)
+ 				     !cpumask_test_cpu(later_rq->cpu, &task->cpus_mask) ||
+ 				     task_running(rq, task) ||
+ 				     !dl_task(task) ||
++				     is_migration_disabled(task) ||
+ 				     !task_on_rq_queued(task))) {
+ 				double_unlock_balance(rq, later_rq);
+ 				later_rq = NULL;
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 8c9ed9664840..7bd3e6ecbe45 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1998,11 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
+ 			 * the mean time, task could have
+ 			 * migrated already or had its affinity changed.
+ 			 * Also make sure that it wasn't scheduled on its rq.
++			 * It is possible the task was scheduled, set
++			 * "migrate_disabled" and then got preempted, so we must
++			 * check the task migration disable flag here too.
+ 			 */
+ 			if (unlikely(task_rq(task) != rq ||
+ 				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
+ 				     task_running(rq, task) ||
+ 				     !rt_task(task) ||
++				     is_migration_disabled(task) ||
+ 				     !task_on_rq_queued(task))) {
  
-Good. But I'm starting to think that for request-based block devices,
-filtering should be different. I need to check it out.
+ 				double_unlock_balance(rq, lowest_rq);
+-- 
+2.29.0
 
->> The problem is in the implementation of the COW algorithm.
->> If I send a bio to read a chunk (one bio), and then pass a write bio,
->> then with some probability I am reading partially overwritten data.
->> Writing overtakes reading. And flags REQ_SYNC and REQ_PREFLUSH don't help.
->> Maybe it's a disk driver issue, or a hypervisor, or a NAS, or a RAID,
->> or maybe normal behavior. I don't know. Although, maybe I'm not working
->> correctly with flags. I have seen the comments on patch 11/20, but I am
->> not sure that the fixes will solve this problem.
->> But because of this, I have to postpone the write until the read completes.
-> In the I/O stack there really isn't any ordering.  While a general
-> reordering looks a bit odd to be, it absolutely it always possible.
-> 
-
-Thank you!
-So this is normal behavior and locking the writing is necessary.
-When designing the module, I mistakenly thought that it would be enough
-to set the correct order of sending bios.
-
->> 2.1 The easiest way to solve the problem is to block the writer's thread
->> with a semaphore. And for bio with a flag REQ_NOWAIT, complete processing
->> with bio_wouldblock_error(). This is the solution currently being used.
-> This sounds ok.  The other option would be to put the write on hold and
-> only queue it up from the read completion (or rather a workqueue kicked
-> off from the read completion).  But this is basically the same, just
-> without blocking the I/O submitter, so we could do the semaphore first
-> and optimize later as needed.
-> 
->> If I am blocked by the q->q_usage_counter counter, then I will not
->> be able to execute COW in the context of the current thread due to deadlocks.
->> I will have to use a scheme with an additional worker thread.
->> Bio filtering will become much more complicated.
-> q_usage_counter itself doesn't really block you from doing anything.
-> You can still sleep inside of it, and most driver do that.
-> 
-Ok. I will try to lower the handle point under the protection of the
-q_usage_counter. Maybe I'm mistaken about deadlocks.
-
-Thank you so much for the review and for the explanatory answers!
-I got a lot of useful recommendations.
-I have a lot of work to do to improve the patch.

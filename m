@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6095731A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE825731A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbiGMI4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S235333AbiGMI4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbiGMI4L (ORCPT
+        with ESMTP id S235127AbiGMI4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 04:56:11 -0400
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB966D214F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:56:10 -0700 (PDT)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
-        id 1oBYAB-000ABm-R4
-        for linux-kernel@vger.kernel.org; Wed, 13 Jul 2022 10:56:07 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-kernel@vger.kernel.org
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
-Date:   Wed, 13 Jul 2022 10:56:00 +0200
-Message-ID: <90594bd1-0ff1-0510-6d49-45d9935514b6@wanadoo.fr>
-References: <20220713084247.3090353-1-bbara93@gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8397C04D3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:56:09 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id BYABo66oB3kbdBYABofk55; Wed, 13 Jul 2022 10:56:07 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 13 Jul 2022 10:56:07 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <9d799a6a-edbd-c7d7-1b20-b033fe38bcf7@wanadoo.fr>
+Date:   Wed, 13 Jul 2022 10:56:06 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Cc:     linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
 Content-Language: en-US
+To:     Benjamin Bara <bbara93@gmail.com>, dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+References: <20220713084247.3090353-1-bbara93@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -170,5 +174,4 @@ CJ
 >   
 >   	return 0;
 >   }
-
 

@@ -2,56 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337C3573A93
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424E0573A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237065AbiGMPuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S237044AbiGMPwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237032AbiGMPuf (ORCPT
+        with ESMTP id S229753AbiGMPwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:50:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A126924BFB;
-        Wed, 13 Jul 2022 08:50:34 -0700 (PDT)
-Received: from localhost.localdomain ([37.4.249.155]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mw99Y-1nJYVH2GyC-00s74U; Wed, 13 Jul 2022 17:50:15 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 3/3] clk: bcm: rpi: Show clock id limit in error case
-Date:   Wed, 13 Jul 2022 17:49:53 +0200
-Message-Id: <20220713154953.3336-4-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220713154953.3336-1-stefan.wahren@i2se.com>
-References: <20220713154953.3336-1-stefan.wahren@i2se.com>
+        Wed, 13 Jul 2022 11:52:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B95814F19E;
+        Wed, 13 Jul 2022 08:52:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC1C315A1;
+        Wed, 13 Jul 2022 08:52:32 -0700 (PDT)
+Received: from [10.1.29.153] (e121487-lin.cambridge.arm.com [10.1.29.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 933993F792;
+        Wed, 13 Jul 2022 08:52:31 -0700 (PDT)
+Message-ID: <88d9e600-b687-7d09-53cb-727601612e21@arm.com>
+Date:   Wed, 13 Jul 2022 16:52:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:8mnJLUyPm2j8Dg6SBPoCNRDkohg99QfXZh8VkkEFevhN5A6P6sP
- nBIu5b5oVOrVqz3RSRFIq/uvpy8hRPJ76z3/Gq8xekVgq9nMbwd+DKEpOsafopJTe3ZoNbG
- rg5Nf2ARTxJpVuqZ/sVPOG3PCFWDRbwpP96G9qAh7D6ZqiRcSYeg7WVA+H1/fmHiZucdO4v
- EoZpfSGSrYOSQd0Rzhbow==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xh7qk7C8uOs=:qEDdAYmcQ/dTXZQ1jLyBfq
- zkdBlORYvpKG8v663Z5MWcbMXp/+tH3PPt/IuLuSRAo/l2mhH/pkwu5bkqXPxDB7X14qPGJxG
- GW8/PIKtVkXTnCH/uyTEGbptdwjzV6s8FIV3Y7oj8WUFX1ukITic9N0+BgjzpRnn+pK7MoI7T
- PqmR3ow9dHX6X/9nrjaCEmsEGpI+R2eMCW6tOv8kCoQXxM+Q5FgYM58wW72vbD/S9Xxv+NIsT
- 0pMEYL3EkHbfIqs9Dor2KA7NmJIzzDBvGoyUBRon1Bu00cAkcWZZ8rLkcz/W0aRTRgBpkWKVn
- HE9A9Zxri71tFjALCWelIGJJX9Pcm//cjuspEclemlYfLbIUacpEIRpigPnI4qR+KAFL83tCV
- XjcPrOzPXzY0pce1xjTcywqqU1quRtF/j+3SG87gsrQjOhlwBl5CfPXNIzAtF9pJ7SKQBZT6t
- borKQtg4eBXem6TBwqadm91XxwzY/bEfwKB6BYbzLLh7nUtd5KpQGzFLCLOxmPXN/ozrFBPzu
- cw4KZZZ1Bvtq8qFiNopEwXO0zg1FL1WPO8sNBHw0zcdr7xODpEGs3E1YdMsS8ZPk0QEHQQgXN
- Yf9/zYSZqItmIfGVIhqp+LPue1j+z1rK4CHzqgU4tXmFK4noCFz6BNT8zbHemLbk3BRpN5Kh8
- P+xzDl9qszO4rH00teRQ76adlSrzG4zdCWypPaOIzCAWJwtz6DvHeGLd0LHCb8eUMUHRUIyXg
- K74mW/gBeft29x6gkJzdlykFaDmH0mwYaWczEcxVGvfUnw6eLsXhfySBfbU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] random: cap jitter samples per bit to factor of HZ
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-crypto@vger.kernel.org, ebiggers@google.com, tytso@mit.edu,
+        torvalds@linux-foundation.org
+References: <CAHmME9rrQVm72P6cLL4dUnSw+9nnXszDbQXRd3epRaQgKTy8BQ@mail.gmail.com>
+ <20220713151115.1014188-1-Jason@zx2c4.com>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <20220713151115.1014188-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock id limit will be extended in the future, so it would be
-helpful to see the actual clock id limit in case the firmware
-response has been rejected.
+On 7/13/22 16:11, Jason A. Donenfeld wrote:
+> Currently the jitter mechanism will require two timer ticks per
+> iteration, and it requires N iterations per bit. This N is determined
+> with a small measurement, and if it's too big, it won't waste time with
+> jitter entropy because it'd take too long or not have sufficient entropy
+> anyway.
+> 
+> With the current max N of 32, there are large timeouts on systems with a
+> small CONFIG_HZ. Rather than set that maximum to 32, instead choose a
+> factor of CONFIG_HZ. In this case, 1/30 seems to yield sane values for
+> different configurations of CONFIG_HZ.
+> 
+> Reported-by: Vladimir Murzin <vladimir.murzin@arm.com>
+> Fixes: 78c768e619fb ("random: vary jitter iterations based on cycle counter speed")
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Vladimir - Can you let me know if this appears to fix the issue you're
+> seeing? -Jason
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
----
- drivers/clk/bcm/clk-raspberrypi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Works for me, thanks! :) 
 
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index b3b629516182..676e5379ebce 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -365,7 +365,8 @@ static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
- 		struct raspberrypi_clk_variant *variant;
- 
- 		if (clks->id > RPI_FIRMWARE_NUM_CLK_ID) {
--			dev_err(rpi->dev, "Unknown clock id: %u\n", clks->id);
-+			dev_err(rpi->dev, "Unknown clock id: %u (max: %u)\n",
-+					   clks->id, RPI_FIRMWARE_NUM_CLK_ID);
- 			return -EINVAL;
- 		}
- 
--- 
-2.25.1
+> 
+>  drivers/char/random.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index e3dd1dd3dd22..a1af90bacc9f 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -1174,7 +1174,7 @@ static void __cold entropy_timer(struct timer_list *timer)
+>   */
+>  static void __cold try_to_generate_entropy(void)
+>  {
+> -	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = 32 };
+> +	enum { NUM_TRIAL_SAMPLES = 8192, MAX_SAMPLES_PER_BIT = HZ / 30 };
+>  	struct entropy_timer_state stack;
+>  	unsigned int i, num_different = 0;
+>  	unsigned long last = random_get_entropy();
 
+FWIW
+
+Tested-by: Vladimir Murzin <vladimir.murzin@arm.com>
+
+Cheers
+Vladimir

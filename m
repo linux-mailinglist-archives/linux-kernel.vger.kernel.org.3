@@ -2,193 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF395733B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936A45733C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbiGMKE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S235311AbiGMKGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbiGMKE4 (ORCPT
+        with ESMTP id S234289AbiGMKGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:04:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD32ED4449
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:04:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id i204-20020a1c3bd5000000b003a2fa488efdso570792wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=f6Y9qjwogxCtal7OxlGnHDAF4wB3anj4wqmO3ly+ml0=;
-        b=he3+yyZi6Tsrcv7LH0IV7Ke1Rsii76jKm9NNxzRjpskQ6BJuY6vU4yOQTSEts/c11L
-         djSaAdwjki0dcFTLJh+YzipCWg4yVHQU3VlTKfFaB9iq77W3kRpG91Ed74Q8nYfad4VR
-         izYayhzzyj1J7Juuf1UWdOh1+9NNA9HTztb9LkL2b/UKb4qEksvXWffDeZNa4OV4BYv2
-         uqbIuHe184MFeTmBmGHh1zB2RsJDoCQhrwonLCtAB8CFMh/CrqaGMDZoMrGbsE/vMB5E
-         vbjhht34Ff64Ouirs+J801C6TEtd+J/hdGatsmmUlrhZeW813xb/9+vlIFxclfXi4TKb
-         n8jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f6Y9qjwogxCtal7OxlGnHDAF4wB3anj4wqmO3ly+ml0=;
-        b=TYNFn2GsWA6yDCypgkIo7oq4Xh05rved94H07DOPuezOat5To4pxap4IzaF6QnHt/N
-         PjPTc5lDZpazqQzYg+sqZNpWwtYSitXbMv7NNLDUW2TloQh0T/AWZN2MqeaFy5ypRUqf
-         v/vPSuuxp1hnYe8LDxJaDPyryigN1am58tol9x5A+ed6j8gzaJM8bKvP9/rTxleVmWE2
-         SUg9rqp5pAx8v6h/O0j8f9dSYrTyZzWDBLKie+Z63Tnpiobb28hX5MecPOe/d2M1Bb7g
-         N5QxoLVjo+gDPaZEJKS++84y5TpLAhSH7Asg/iSIK5Uwaj4fFF72E3L7XNZLi3iCWxq0
-         ox8g==
-X-Gm-Message-State: AJIora+QlysXfEeGXpzj2u9uHAJz9ne4PcmB+q3321kzlSz6tazSoMKG
-        SbtceVcg/3otaYYt3/qFVtHCtQ==
-X-Google-Smtp-Source: AGRyM1t4kKJQ4vgidG20/yf+55cwZ/s8XmwO5zrExibZnNYkLFCJUhP6tqcV1d66FnnJvjA9dY3kiA==
-X-Received: by 2002:a1c:1902:0:b0:3a2:ee85:3934 with SMTP id 2-20020a1c1902000000b003a2ee853934mr7963222wmz.31.1657706693167;
-        Wed, 13 Jul 2022 03:04:53 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:63e6:a6c0:5e2a:ac17])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b003a2e2ba94ecsm1640729wmq.40.2022.07.13.03.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 03:04:52 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 12:04:46 +0200
-From:   Marco Elver <elver@google.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Wed, 13 Jul 2022 06:06:19 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B2DDAB86
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 03:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=OFtpbHyPxPsBorl70r188hepc7O
+        Li4w0ef89SaUq7CI=; b=1hrGRpKahehHPT1CueheTInAqe/tt6vqLN8aQkzirdN
+        rWiLp78tETZecuMbydhDQQ10VvfcMV1dsN1sfJWd8Nil2hiL0CWPvnE8EaWrjkvV
+        MegpmNUXMq50EouLVzBVG5tUV6JNY2shTmi3KgdR5050Q2B+Cd/djLcrbYJKaeIQ
+        =
+Received: (qmail 123341 invoked from network); 13 Jul 2022 12:06:13 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jul 2022 12:06:13 +0200
+X-UD-Smtp-Session: l3s3148p1@1rUt76zjzLwgAwDtxwdRAEXXn+yo/Rze
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
-Message-ID: <Ys6YvvARDX6pWmWv@elver.google.com>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-12-glider@google.com>
+Subject: [PATCH 0/3] clocksource: sh_cmt: add Gen4 and r8a779f0 support
+Date:   Wed, 13 Jul 2022 12:06:00 +0200
+Message-Id: <20220713100603.3391-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701142310.2188015-12-glider@google.com>
-User-Agent: Mutt/2.2.3 (2022-04-12)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-dev wrote:
-[...]
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 2e24db4bff192..59819e6fa5865 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -963,6 +963,7 @@ config DEBUG_STACKOVERFLOW
->  
->  source "lib/Kconfig.kasan"
->  source "lib/Kconfig.kfence"
-> +source "lib/Kconfig.kmsan"
->  
->  endmenu # "Memory Debugging"
->  
-> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> new file mode 100644
-> index 0000000000000..8f768d4034e3c
-> --- /dev/null
-> +++ b/lib/Kconfig.kmsan
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config HAVE_ARCH_KMSAN
-> +	bool
-> +
-> +config HAVE_KMSAN_COMPILER
-> +	# Clang versions <14.0.0 also support -fsanitize=kernel-memory, but not
-> +	# all the features necessary to build the kernel with KMSAN.
-> +	depends on CC_IS_CLANG && CLANG_VERSION >= 140000
-> +	def_bool $(cc-option,-fsanitize=kernel-memory -mllvm -msan-disable-checks=1)
-> +
-> +config HAVE_KMSAN_PARAM_RETVAL
-> +	# Separate check for -fsanitize-memory-param-retval support.
+These three patches update the bindings and the CMT driver for Renesas
+R-Car Gen4 and the r8a779f0 SoC.
 
-This comment doesn't add much value, maybe instead say that "Supported
-only by Clang >= 15."
+Wolfram Sang (3):
+  dt-bindings: timer: renesas,cmt: Add r8a779f0 and generic Gen4 CMT
+    support
+  dt-bindings: timer: renesas,cmt: R-Car V3U is R-Car Gen4
+  clocksource/drivers/sh_cmt: Add R-Car Gen4 support
 
-> +	depends on CC_IS_CLANG && CLANG_VERSION >= 140000
+ .../devicetree/bindings/timer/renesas,cmt.yaml     | 14 ++++++++++++--
+ drivers/clocksource/sh_cmt.c                       |  8 ++++++++
+ 2 files changed, 20 insertions(+), 2 deletions(-)
 
-Why not just "depends on HAVE_KMSAN_COMPILER"? (All
-fsanitize-memory-param-retval supporting compilers must also be KMSAN
-compilers.)
+-- 
+2.35.1
 
-> +	def_bool $(cc-option,-fsanitize=kernel-memory -fsanitize-memory-param-retval)
-> +
-> +
-
-HAVE_KMSAN_PARAM_RETVAL should be moved under "if KMSAN" so that this
-isn't unnecessarily evaluated in every kernel build (saving 1 shelling
-out to clang in most builds).
-
-> +config KMSAN
-> +	bool "KMSAN: detector of uninitialized values use"
-> +	depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
-> +	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
-> +	select STACKDEPOT
-> +	select STACKDEPOT_ALWAYS_INIT
-> +	help
-> +	  KernelMemorySanitizer (KMSAN) is a dynamic detector of uses of
-> +	  uninitialized values in the kernel. It is based on compiler
-> +	  instrumentation provided by Clang and thus requires Clang to build.
-> +
-> +	  An important note is that KMSAN is not intended for production use,
-> +	  because it drastically increases kernel memory footprint and slows
-> +	  the whole system down.
-> +
-> +	  See <file:Documentation/dev-tools/kmsan.rst> for more details.
-> +
-> +if KMSAN
-> +
-> +config KMSAN_CHECK_PARAM_RETVAL
-> +	bool "Check for uninitialized values passed to and returned from functions"
-> +	default HAVE_KMSAN_PARAM_RETVAL
-
-This can be enabled even if !HAVE_KMSAN_PARAM_RETVAL. Should this be:
-
-	default y
-	depends on HAVE_KMSAN_PARAM_RETVAL
-
-instead?
-
-> +	help
-> +	  If the compiler supports -fsanitize-memory-param-retval, KMSAN will
-> +	  eagerly check every function parameter passed by value and every
-> +	  function return value.
-> +
-> +	  Disabling KMSAN_CHECK_PARAM_RETVAL will result in tracking shadow for
-> +	  function parameters and return values across function borders. This
-> +	  is a more relaxed mode, but it generates more instrumentation code and
-> +	  may potentially report errors in corner cases when non-instrumented
-> +	  functions call instrumented ones.
-> +

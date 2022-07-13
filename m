@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2993357384C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89434573850
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbiGMOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S235886AbiGMOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234001AbiGMOEC (ORCPT
+        with ESMTP id S229786AbiGMOFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:04:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993572FFF9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:04:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EBADB81FC6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5C2C34114;
-        Wed, 13 Jul 2022 14:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657721039;
-        bh=9IGH4MQdi/KGvLaBbSpVE1u3UFTp0yNqx8UIwCBrNzk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N41phYccyuE63ABZmUcfr3okC4jpwzGUm6l59osfsReDlNcsLoQqadbj6yYHvKIEc
-         CTHf8yXBLNGIsUZbTiOGA9CPSrUtf2EQ/O4BKi9wy8tw++1A3LCCK/1RScJ0nvGRB4
-         0iiS5yJURy2dzfKYlYx/pNYrE0vxjZ09F+qdWmTM=
-Date:   Wed, 13 Jul 2022 16:03:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, conor.dooley@microchip.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH -next] arch_topology: Fix cache attributes detection in
- the CPU hotplug path
-Message-ID: <Ys7QzJ14brtz23XY@kroah.com>
-References: <20220713133344.1201247-1-sudeep.holla@arm.com>
+        Wed, 13 Jul 2022 10:05:35 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30BD31DDD
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1657721132; x=1689257132;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+  b=M983RYJnxHo5v/vBvRs9/z+utWNFpFViWwyFatlml8//R7Thfxmf8L24
+   Gm5yTHQ0PbPwjFtfVw9m5kjnYdf9IQxyAxzTw+sYw5oq4E8WWspuPIXXW
+   pv9k9JHDAzScz1qlVssrnqVZLyBgzP2u96qOJOQBIh36T3SKcjMPyCOte
+   l44qnBj0jHcBo+2R6S+SYiEiOd7MZtDZXz66D3hv+FupLu5UAbws0PS8j
+   T7DRFRYvCaF+vPgIwUPjgIF4AHXTuxquWKTaIxZbrwAlmNaeToFEv4/ci
+   Z84bg7MbWfF0lPE25HeN8J66x2PxdMeoFG6GKQiNWkGImC+wSfDGIty9r
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650902400"; 
+   d="scan'208";a="204242545"
+Received: from mail-mw2nam12lp2044.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.44])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Jul 2022 22:05:30 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fVGUC0lgtOILrtheRGJzHtHqU1yCvo69c10HoZe/JQ+1YfmB0hZzhuAEeX3fzVH5FwpJyMeqMlwX400MmDBCwKPOTltwHOdr+yJcrx10a9VYW+JSNXV2iIcPSYNvA239UVJGf/GyK0pCua0PES23KXtD3gFt0b5rJDeu70cgnRm7fqsY4NEK2pTtRaGqyrMrV6FVobcIPrOj4IvQKp1vOmCXbNRAwd5AbaVe3FVFnm1KxowmjYGax1INLtxZmt48ft6njsPEeMhqu25gmsdk8ECPHWs8VTH4STANGRo05aAMIREbFJMeLzUudzRii9UIKD5ZdzAT6B/tPfRN+tf7GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+ b=CvFcN/xh8ipyAK45Pme1cA1gtT+78lyUHfDOkLi+gZyPiGz5Bri3YuGa5kbbuYuQmLRJpbrgbhuVNAaPK+kovZ5y88N527vXA+RALgipN2+UItZMcGhwDueuVZsGEXxYM4dtdTB09luQwlgfSRtFVAWACgpm3+1AG/9c79iGDJlQQJV9ltcWVD/bAGkhl+Va8ZqbyyWU0BNv6anGPxn5A6d/9w7SQ4CJMSt0d0bQdKFvvqT5AOWrMue5tV1fAUpAckrgGoqYA1C8pQKXAc7w6aNr3LQo8jCxxpJ2lUJooOpC49w7jSatiwbHlGi9K6W3UVWNoMlH7yogV8vVB2KdNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+ b=XLwEoe6E+kSWdTUd15GqdGkGEK/U7vGxtu43iHh6FdbB4Y23S6GbDMTb8NhdRuFAvMm4X574EC13X4gWN1RgDK31Vav1jOR8YJPb//aKs6VOuoyayG3IX63FvgGy5q1bAX33h0yM8b2uTygq+jIi4pDNSnd8YrWMjSHJ7P4G4FA=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by CH2PR04MB6933.namprd04.prod.outlook.com (2603:10b6:610:97::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Wed, 13 Jul
+ 2022 14:05:29 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::d54b:24e1:a45b:ab91]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::d54b:24e1:a45b:ab91%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 14:05:29 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "neilb@suse.de" <neilb@suse.de>, "jack@suse.cz" <jack@suse.cz>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "mgorman@techsingularity.net" <mgorman@techsingularity.net>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] writeback: Cleanup bdi_sched_wait()
+Thread-Topic: [PATCH -next] writeback: Cleanup bdi_sched_wait()
+Thread-Index: AQHYlrflJxzM6cohnEOO6d3eUt5F7g==
+Date:   Wed, 13 Jul 2022 14:05:28 +0000
+Message-ID: <PH0PR04MB7416A3BEC24B9D471FB79A369B899@PH0PR04MB7416.namprd04.prod.outlook.com>
+References: <20220713125314.171345-1-xiujianfeng@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 30bf46ba-e191-437c-647e-08da64d8be04
+x-ms-traffictypediagnostic: CH2PR04MB6933:EE_
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7UyvL/V6UPPrnxifQn+25EQZKX6VnYLGMH6wN3yUphAkSMCvSClPceKbu3HoG7wBAmUVFKBWhHqB26OxEqljoFk0Teu+Oq2wURYdGa8tD/tsrr662+04jZscNR0uwe4ymqxIEhgvcT4EVszBatYqrNtlTegqYafyzc+hAo7kfFl6hOpK7kz9tcYJc8BRHuG0K6m6PHak+QB7+hNul+LWdNI8YrWLHawrIFLhnole/2+yUXJ4uz/Lo4tqBk6uhKu706vx7M6Ou4dvQxkT92X0TVvBB/uaNtbpkfWMyuOV2Yl9mikeqZsIrwFtmGNljfTrZl4z9LTH2JaIcbHcH6XOcPVZ2FL95+g7bUpHkj3I7XC9f57U1ELxpnrRzmSJIRFHjblDHeEuzP9pdTyC97n/2+xFOVD2PIkCUCsNo+OY5IzoVZ7QRDOp4iDUqIA8bmdiRbg4fQlZd1tSkUdz6kGbOmnC61ROiZCZ2MTwGMEp3z/Tc74t19djjGJddnpAQL8HvWr03nrxQOUQ/V8INs2kmBAoryHcwTMpNJjgToWqpBCHGv5MSHZQXnnUUvmX0h80irfLQIx3Cs6W84Ye5BsKLKwjIHv9ABG0Q5f2LGbmvr0ezHKoM8u5VlHPuXjgFYU/sWFqdFdwZ6Om3LZKpAS6uGrKFaqbxyOwuLiDEUtEPyK/DBqGLmDRdVXfQG+RvepQcIPFCtrW3LMdO0hMiX4QvX5twCtaTI0WraSNzD4qT646RdeTNHsegX1MpLsHHww+o+kxt1jP4ll1cEM3/IGtOuMEV0aYrejUsMlZg3jPOgQcI4Ri/kWs5sT1NhytDtav
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(376002)(136003)(366004)(55016003)(19618925003)(186003)(33656002)(38100700002)(2906002)(6506007)(110136005)(316002)(86362001)(66446008)(5660300002)(91956017)(52536014)(66476007)(66946007)(7696005)(41300700001)(38070700005)(478600001)(8936002)(76116006)(8676002)(64756008)(66556008)(122000001)(4270600006)(82960400001)(9686003)(71200400001)(558084003)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6RCDwXh13cZbNKDk80Ei79QtH4JZ9WxyDjhYQNSuCMxtP0DXEPLlZCx5GoXU?=
+ =?us-ascii?Q?am/YCpJUo444R3iYB7fsIhy02Mdh2zYSlWWjVqN9pcd8fEILavOGgfifjb/p?=
+ =?us-ascii?Q?cdL6Trudgtzu55ca68IrAJgxlmS33b/kBTS3nreuxQqPl58yO8Ld2+51zVpr?=
+ =?us-ascii?Q?APIGH7rtlqCF+G3RVVF3Es/sCv8CK4wWzlCt61YDR3imedUtlzAKzEra0lbE?=
+ =?us-ascii?Q?dHzVb8+/4u/N1tbkm1dU3xw/44+RQu3TFWLXkxtLeBzXwmfH1Epl0ia60jWA?=
+ =?us-ascii?Q?DBA2ErijLRPJXna1KXeARqcW9P6eOgMwiI0YeVhch3FydmobD6Orob8wWTzX?=
+ =?us-ascii?Q?eLdq/j/obp6ae9CIFKOAw3qr34Xo6oxZ1DDHO0q2eFuoWR70ZHA7zx4hYVTB?=
+ =?us-ascii?Q?8oNTNw5osSYXEYcvsRZ11HkZglExAgiq4CGDKmR6FJbKO6hdHBB+NzgLcgr3?=
+ =?us-ascii?Q?s1/zNvhDUe2qc+I6vImkqLNWX+bY370Xb7Gw03zcnurUEzuLetvfwax0Htuv?=
+ =?us-ascii?Q?2DC6GiqHxrS6SzmLtsQUw/fDCbU62NyDOBAc2IM4QW/zUSX1EsNKjOPIaNNF?=
+ =?us-ascii?Q?L1R191MwlDmz6iQHuZ5l+hNqc1NIYQMpccCav/lw6hZEdNYirhOFYysP0B89?=
+ =?us-ascii?Q?QdqbAendY2+TbXl1PvVxjqDpzsjQUDU7NnExUBM8whJohrIzAryGq3VygdLt?=
+ =?us-ascii?Q?ufJ+JgpjLlX0yMGB6LPK7OzdH8s9Y3zaN4H6Ymg51NagwswsuyobwWMjz0RI?=
+ =?us-ascii?Q?PTMqorcJbDmbhkIpSgLp2d6NgrLLlLq1W9t1cKfPIKr/3OWLnYNi89xKDYYq?=
+ =?us-ascii?Q?PKJAaa2ydk4GtqGoUz4qAIdBCU+/k1tesnM93AGdRsY4jZ37E2sFlZJ/K/uY?=
+ =?us-ascii?Q?jdrD9Pi4EvsgVLUGXoXtoaL7/BzNpdLEwb4JKvNIDt5dNxIZ5Q5cdXf7q9Jh?=
+ =?us-ascii?Q?8ipsoqYPer59voJoGEKFbPyrXDRY+v34qO6AEsuIODIOEFdG/XIws3D++1uE?=
+ =?us-ascii?Q?nPal605JScAO1AS1X4IFPsqh2ctTP3EGyueQaaUZBiSJulnJwV9Y/oebxi7+?=
+ =?us-ascii?Q?fTB3go7p3Xs1G0sT5ElON/cfQTNiYV9dWYOl02mOofJQ3xdI2RurltQoI2zA?=
+ =?us-ascii?Q?I1OXpKLFRyFgOkE7bJHR+B4CEYtgGoMpONEeYbO6TCvec19OtPyVkspsvFDa?=
+ =?us-ascii?Q?1Ph2OtrVkKjEgS67PlWqHvRrY6TG1lzlZB6RFXmy7cum/dg6/jbmbEsIE1kM?=
+ =?us-ascii?Q?MGRPAEkascfuMQjd9n1t6YMsxa8clORy/0KT0HOIanCjICIozupzyZ4it1VV?=
+ =?us-ascii?Q?28KmL4psgq4ruWNm82m8ZIne3B5US4OZ7E1q+FIrhvEM7RsRdoUIUFP4acFk?=
+ =?us-ascii?Q?RfsB9UKXByVj77dm4yXZX9Qcb124R1bsXZT4uQ7z6rY6tF9LHJrfoqidWLDm?=
+ =?us-ascii?Q?VxEkmgrKvqAAOwDCG1u9DwReD/KVaEqyubpM42qny+2ZF1JCIBHYkFoBkj5n?=
+ =?us-ascii?Q?SN3rzWAMNrcAGTf1RwOSiHbPSDqUuv8P8lXYFCcPIYo2Qb6TBLyGYkA3IH+t?=
+ =?us-ascii?Q?pyC3pMK8bcuYfpDaH5Yfu0tQYn4sjcYasfM4tnXw/obJ3hRojtJQ2q67vD7D?=
+ =?us-ascii?Q?MyuXA3n5fSBu2dIwhhxelqRZ1YbDcDc6jYiJWqAziveYZBYSxKytmmp9sSTz?=
+ =?us-ascii?Q?QTyXPoMUu1j49bG/+iXiFVtzHBU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713133344.1201247-1-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30bf46ba-e191-437c-647e-08da64d8be04
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 14:05:28.9706
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TPtUZ3tRWL1qj2vQCoM3U91txY/s6egjSbhs1Oeegg+Af6yebjUnPJGxth72TIazQlMTjKjNuLX9AS4d5AmihnYRLbg+AN3JieREO6BeUWs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6933
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 02:33:44PM +0100, Sudeep Holla wrote:
-> init_cpu_topology() is called only once at the boot and all the cache
-> attributes are detected early for all the possible CPUs. However when
-> the CPUs are hotplugged out, the cacheinfo gets removed. While the
-> attributes are added back when the CPUs are hotplugged back in as part
-> of CPU hotplug state machine, it ends up called quite late after the
-> update_siblings_masks() are called in the secondary_start_kernel()
-> resulting in wrong llc_sibling_masks.
-> 
-> Move the call to detect_cache_attributes() inside update_siblings_masks()
-> to ensure the cacheinfo is updated before the LLC sibling masks are
-> updated. This will fix the incorrect LLC sibling masks generated when
-> the CPUs are hotplugged out and hotplugged back in again.
-> 
-> Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/base/arch_topology.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> Hi Conor,
-> 
-> Ionela reported an issue with the CPU hotplug and as a fix I need to
-> move the call to detect_cache_attributes() which I had thought to keep
-> it there from first but for no reason had moved it to init_cpu_topology().
-> 
-> Wonder if this fixes the -ENOMEM on RISC-V as this one is called on the
-> cpu in the secondary CPUs init path while init_cpu_topology executed
-> detect_cache_attributes() for all possible CPUs much earlier. I think
-> this might help as the percpu memory might be initialised in this case.
-> 
-> Anyways give this a try, also test the CPU hotplug and check if nothing
-> is broken on RISC-V. We noticed this bug only on one platform while
-> 
-> Regards,
-> Sudeep
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 441e14ac33a4..0424b59b695e 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -732,7 +732,11 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
->  void update_siblings_masks(unsigned int cpuid)
->  {
->  	struct cpu_topology *cpu_topo, *cpuid_topo = &cpu_topology[cpuid];
-> -	int cpu;
-> +	int cpu, ret;
-> +
-> +	ret = detect_cache_attributes(cpuid);
-> +	if (ret)
-> +		pr_info("Early cacheinfo failed, ret = %d\n", ret);
-
-No erroring out?
-
-thanks,
-
-greg k-h
+Looks good,=0A=
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=

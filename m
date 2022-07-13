@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F87573937
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBDA573939
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbiGMOvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S235163AbiGMOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiGMOvP (ORCPT
+        with ESMTP id S234652AbiGMOvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:51:15 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE82B26C;
-        Wed, 13 Jul 2022 07:51:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a39so13749750ljq.11;
-        Wed, 13 Jul 2022 07:51:14 -0700 (PDT)
+        Wed, 13 Jul 2022 10:51:18 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB443C142;
+        Wed, 13 Jul 2022 07:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mkvXwyXw/bzhYex6cozMZMYvSmlbOw/F0RDr0JxPoCw=;
-        b=jQh6xeqT+Y6Ki5J436a0Th5YoFQnrEIqTMpRHU8Kce5a+/UIO2lYW5/lFa1+vKHif/
-         +vgiXsnypYDq5rqLWPkKY/H2s9pEAvvq+k2Nn9858TvGTxNKoSfgB/2+BmmKtyjlYAE/
-         elSX7mcb7soaQVXRiTDheQ+tqwHwksc7vU+uxBH4X4sn9qQ6MtzRMq92WcyTeStczoqx
-         fSM5n34/SmQWOTOfxBRkJUMuoEc60KRSxHhSXA93RCJxJU32V6xwFYWBqo0XLCcUVYLu
-         lycQEFzMu8MjsuhwNY45beIZaDWKEDh5ZisnCcGU7iakt09piKZmBvTjXdzJdxp3Dajq
-         C18Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mkvXwyXw/bzhYex6cozMZMYvSmlbOw/F0RDr0JxPoCw=;
-        b=E4CGYdv86QXrDXKC6LYjmndqSZfd0I3zCceagOdcsa6xtEX6tMyPpQI6UbMrWB83Ca
-         ROhtUVqgZ8XULyGWxcwLH5Vbz+vYm8pLLlRF91soxGNX/HslXmCAgLJE842kjSraZ85t
-         YpvVElc/tx4Nuw+HWEWsahew2QJ+Ct8KbM9raZ5Teyp1P3Rheb9TzImOcS5imKE4uoQD
-         zO38YhsUCiAzLQKkWIrQ75iRa5hWvgDV9Rq/3qSMjsPCegqOiWqgP+0F+QZWvaSzx0B3
-         UrOTaRQPNF+PPAGbSRTE+20e822/NTwPDeL4rNYMzkAxowY0Fc8XdPC4TjhGRLx6yJ93
-         2JeA==
-X-Gm-Message-State: AJIora+zs05hX7+sU2A3MdFUg1i4GVd5/tCBBocT4RIcpPQ+uDP9WaDg
-        xg34KMTY5zFyHa5LuKmvARZKHXsvFyYa8E4Cndk=
-X-Google-Smtp-Source: AGRyM1vh21YnVuz6etYVlI+CNEjVeXDQ4+b9pRjJCkzY5B8/snbbD68747zNPcfRkAZQlSnUw6MrDr+/TqSgoMhCsaw=
-X-Received: by 2002:a2e:9b0b:0:b0:25d:866b:5de7 with SMTP id
- u11-20020a2e9b0b000000b0025d866b5de7mr1941252lji.50.1657723872657; Wed, 13
- Jul 2022 07:51:12 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657723878; x=1689259878;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=usEfZWG3K+DfGjkb7INoXNmqgT2ynC9Rk8m0pztykNE=;
+  b=G3bBANNsQFl/6rkTep8Od1gu3IbsEY8UjhpdGqkFi3imoB1sngbcRHOR
+   xLGr80hS2SV0pFguyCmF7mu31IeWLVjTsJuLlInCS+DvHgQdedTYtya6Q
+   1ABFILm7IJVgJmSdNVE1bbGYf2ZAlyz6KoHszH9oQEAHaFd99shj8DxPb
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jul 2022 07:51:18 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:51:17 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 07:51:17 -0700
+Received: from [10.216.22.132] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 07:51:10 -0700
+Message-ID: <b5776efd-4d30-3dbf-796d-4f29ed1e3a92@quicinc.com>
+Date:   Wed, 13 Jul 2022 20:21:07 +0530
 MIME-Version: 1.0
-References: <20220710102110.39748-1-tmaimon77@gmail.com> <20220710102110.39748-3-tmaimon77@gmail.com>
- <95d12b72-be9d-5503-c4ea-801303bb7776@linaro.org> <CAP6Zq1geFJsKrdQEN5Vqjw6e8bsiArDe1tzJ-jkQm-2XT-0KyQ@mail.gmail.com>
- <d8bc7a14-a9c5-4d34-997a-48a8d27c5edd@linaro.org>
-In-Reply-To: <d8bc7a14-a9c5-4d34-997a-48a8d27c5edd@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 13 Jul 2022 17:51:01 +0300
-Message-ID: <CAP6Zq1iAPmV9KVrBVqmRix8sTq0zLsw3T1vPo-t1Q+2RgO4qsA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] soundwire: qcom: Update error prints to debug prints
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>
+CC:     <vkoul@kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+References: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
+ <20220713135603.4vkyofw6x4mldxzp@halaneylaptop>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <20220713135603.4vkyofw6x4mldxzp@halaneylaptop>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 at 17:29, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 13/07/2022 15:35, Tomer Maimon wrote:
->
-> >>> +static int npcm8xx_pinctrl_probe(struct platform_device *pdev)
-> >>> +{
-> >>> +     struct npcm8xx_pinctrl *pctrl;
-> >>> +     int ret;
-> >>> +
-> >>> +     pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
-> >>> +     if (!pctrl)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     pctrl->dev = &pdev->dev;
-> >>> +     dev_set_drvdata(&pdev->dev, pctrl);
-> >>> +
-> >>> +     pctrl->gcr_regmap =
-> >>> +             syscon_regmap_lookup_by_compatible("nuvoton,npcm845-gcr");
-> >>
-> >> No. Use property. By this patchset, I would expect that you learnt from
-> >> previous mistakes around this. Why repeating the same trouble second time?
-> > You suggest to use phandle property like nuvoton,sysgcr even that the
-> > NPCM8XX pin controller driver is used only NPCM8XX SoC, so the only
-> > GCR node in the NPCM8XX SoC is nuvoton,npcm845-gcr?
->
-> Yes. The previous case (reset driver, AFAIR) was also about driver used
-> only in one SoC, wasn't it?
-Actually not, the NPCM reset driver serves NPCM7XX and NPCM8XX and
-probably other future BMC SoC's
-Still, you suggest using the phandle property in the driver even if
-the driver serves one SoC?
->
-> Best regards,
-> Krzysztof
 
-Best regards,
-
-Tomer
+On 7/13/2022 7:26 PM, Andrew Halaney wrote:
+Thanks for your time Andrew.
+> A couple of drive by nits:
+>
+> On Wed, Jul 13, 2022 at 05:52:01PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Upadte error prints to debug prints to avoid redundant logging in kernel
+>> boot time, as these prints are informative prints in irq handler.
+> s/Upadte/Update/
+Okay. Will fix it.
+>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>>   drivers/soundwire/qcom.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+>> index 9df970e..a4293d0 100644
+>> --- a/drivers/soundwire/qcom.c
+>> +++ b/drivers/soundwire/qcom.c
+>> @@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>>   				break;
+>>   			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
+>>   			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
+>> -				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
+>> -					__func__);
+>> +				dev_dbg(swrm->dev, "%s: SWR new slave attached\n", __func__);
+> There's no need for __func__ usage with dev_dbg() when giving +f flag
+> when enabling adds this for you!
+Okay. Will remove __func__ and change dev_dbg() to dev_dbg_ratelimited().
+>
+> With those changes feel free to add:
+>
+>      Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+>
+> Thanks,
+> Andrew
+>
+>>   				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
+>>   				if (swrm->slave_status == slave_status) {
+>> -					dev_err(swrm->dev, "Slave status not changed %x\n",
+>> +					dev_dbg(swrm->dev, "Slave status not changed %x\n",
+>>   						slave_status);
+>>   				} else {
+>>   					qcom_swrm_get_device_status(swrm);
+>> -- 
+>> 2.7.4
+>>

@@ -2,141 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1730573B81
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D083B573B7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiGMQp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S236805AbiGMQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237071AbiGMQps (ORCPT
+        with ESMTP id S237285AbiGMQpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:45:48 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744C22ED7E;
-        Wed, 13 Jul 2022 09:45:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YFi4L0tj3F3mpE12qFziAo/TJHfvYUL+DsoJHf6R3kcOEmFMHfqQDA5TzEH2RmrUNNgC9d3FXmufBbtQOUvNpuG7am1cZtk8A49qAJV+ukoF8k89LafTswX8Lj0atxpT24gqulEAPM6Ab5uu5yVLxhDWQ9yx3QJw8YklESXuzdyuzuTDlDREiNSeDeXyYXC990JFDLn1hvmzIiQEUeZ6nzx8tocMEi09BH/FAHJF5vYduKpEBFV9IAKkKRoXHvOXpvsijhhZ+OcxgM5nMV8KgaP90MNYO7KjDg7o8vrqoJo1BtFw803B/ASb1/R7g27inlfFE2uglLXr0ufIIZLMBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zt1gCQg3+36czYujOsSLn6+E7/HctvUgKWEkaf7kqME=;
- b=fngOImSI/P/DVWv9YDZMxBnOzTT4Vy0Mppujxxh0e3aP68dmarFzmR7Jxll50di5g++DWLkqhwEnTI2559zoc3xi1ceLLVxLntJNVJez+5e2uwLVO3ft43puUNs4O3j+miHJXASdDgR1lupl5v9pH5pcOyeO63VMS5Th8sIpwpiHouIKTYbbdq3YOF7ULxank5aFcKxAV6teM2L0vy3Sis8bIAC+8XSiYFNOiXwf25C8eevXdEhKtueFJ+ntqJNRzF/CQRYrLhnkekz/artvhcbM7P3aYfzDZ6Kt116JBDJtyq+CHuC3+FzfEhKpwqJqjFmQGn+rMyouKgptIasxAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Wed, 13 Jul 2022 12:45:50 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E732C669;
+        Wed, 13 Jul 2022 09:45:46 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id D2D3D1DDC;
+        Wed, 13 Jul 2022 16:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zt1gCQg3+36czYujOsSLn6+E7/HctvUgKWEkaf7kqME=;
- b=EVnNkS3fQ6OGlhGIEW3uFQ22ohA3KHoZrExYPH3uoXfOE/YRCkp+5Ywho293TFBYwYfKTCprfkZMzAlvRjUvBcUSK0oomEZcdLmwX/I1Az2rBejR1uJuEZzhSA8E3T2m33Xkm42iBRcrv5LITDAm4ut0lYAbuAcZrc6ew+DY3Bk=
-Received: from SA0PR11CA0070.namprd11.prod.outlook.com (2603:10b6:806:d2::15)
- by SJ0PR02MB7423.namprd02.prod.outlook.com (2603:10b6:a03:295::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20; Wed, 13 Jul
- 2022 16:45:35 +0000
-Received: from SN1NAM02FT0048.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:d2:cafe::ed) by SA0PR11CA0070.outlook.office365.com
- (2603:10b6:806:d2::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.20 via Frontend
- Transport; Wed, 13 Jul 2022 16:45:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0048.mail.protection.outlook.com (10.97.4.223) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 16:45:34 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+        d=paragon-software.com; s=mail; t=1657730676;
+        bh=raVitv4uLmBGjDXXskOugDvCAIghEdNUkGSibLI4t/U=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=eiY/UG/C0YTT7vmRhpYY/EPQfI+Knv55P0QCl6iPDXKxBMOCCAwe+kiwDD60OP/GA
+         KUWt3W/ePw5ni9uyXoMp+lBlL+j15KEMpQshiwGPYHKkdvKb1Cx2lPL/xG9NK3ayZe
+         /kyHdlv3UMJCn1tLzwvsSqwXuUcCn3kqnCPjdMOU=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 5E7F1213E;
+        Wed, 13 Jul 2022 16:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1657730744;
+        bh=raVitv4uLmBGjDXXskOugDvCAIghEdNUkGSibLI4t/U=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=JcsgYFS+dEUKN40DgtikQRFqVyM/0EfgEAssb7md2NTBFm06NQqBROHmhiycMKG9G
+         i7x6UoIvf2NuTBUoiqdw9/h96cvN5zSqKrqFRKgF9CjZH7AuV5jc0/wY+RNeU8hIQD
+         VGQHEzKMR2HPAwScfNfBLsfekyLWKP/7H8dBheW8=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 13 Jul 2022 09:45:34 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 13 Jul 2022 09:45:34 -0700
-Envelope-to: broonie@kernel.org,
- linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- git@amd.com,
- sai.krishna.potthuri@amd.com,
- amit.kumar-mahapatra@amd.com
-Received: from [10.140.6.18] (port=54602 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1oBfUT-000DCq-Ql; Wed, 13 Jul 2022 09:45:34 -0700
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-To:     <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@amd.com>, <sai.krishna.potthuri@amd.com>,
-        <amit.kumar-mahapatra@amd.com>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [PATCH] spi: spi-cadence: Fix SPI NO Slave Select macro definition
-Date:   Wed, 13 Jul 2022 22:15:29 +0530
-Message-ID: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2375.7; Wed, 13 Jul 2022 19:45:43 +0300
+Message-ID: <38c24791-2c5f-0784-efe5-c9055dc99848@paragon-software.com>
+Date:   Wed, 13 Jul 2022 19:45:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4fd882d-6deb-4f51-4a5f-08da64ef1b7d
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB7423:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gOsPBBLO5uKdC8y9vwK+dmekys8ej7iXADh2lgWEJ+0N5q9H7nLaroHDru10JAKeOBwTH6ka1JbbeS+hvOvHwNJpHat80pmXRGlzkvfQStucRBfFrMBoxEgNZ5oHxArEF1C2f7jIvnP8JU8q8F4Vk1dMgzRZqlg+5ds75WDLFIwpDQQdlbopWi7aioDXSLej7LPJ6e36npTThsW+dIkQyQFzajiUcrOj0GhTFNVZHuVcHULngLipNtqiIuLj/lkPN5YKAwV+r3Wc+yuAMfb5h/ccr57U/NTC4UY1gDMZ3sXbXcmQlh3a9uGbMeECERmTGCxreuXcOKmR9l19CMlPtpiIrtPxi6+v1676q04XY4Azypdy2qiAQ7+iV5ZYJAJTRILMa7pWTetLbSVaUd1KiSQemsXZmLm3E9rQ4HXc2lKOXyl67jK4C8RMKkICX5qOUrExowTrJtgPgd3/LOhWUGKKvbp6pPVOsFcBbsTjGQMamuh+rRJ/I5c9BLiDDcR+WYgtVtj3rb8oyXz6IghV32+em2flo8hHAMwlrN1jOD9WrQhKX3poUDgfdb+c1Cq8pGWNZa1a3ahgE3a2QEf58On91NYSCAtUXN65kcIQrkVPhuciyzBdbIKehXPV9V194d2aQYvCfvgnrlc49qZ5vP78AHlWIOi7Vor3Q7NtIBXlXhq+s+1sdO616a0MrOFK1cGFsThsrWIfj+YWbJFvpsvy1G2jSj3aW1jT07Xkz3wo9O/k5+SyBzXfyGl5sn5KBlhhw6clvoH1QvJlr5gjpNQ/bOqZqV50uXw6/fxgnDudIi8AwwKUhnqJng1E0x9HYesMcWaUVyqju7C2zBZtcwXngrTT4xKEJDoALfbZ6+E=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(376002)(346002)(36840700001)(40470700004)(46966006)(9786002)(186003)(8936002)(40480700001)(356005)(5660300002)(2906002)(26005)(40460700003)(36860700001)(82310400005)(82740400003)(83380400001)(47076005)(107886003)(8676002)(478600001)(70586007)(70206006)(54906003)(6916009)(41300700001)(316002)(7636003)(4326008)(1076003)(336012)(426003)(6666004)(36756003)(7696005)(2616005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 16:45:34.6722
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4fd882d-6deb-4f51-4a5f-08da64ef1b7d
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0048.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7423
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 2/6] fs/ntfs3: Refactoring attr_set_size to restore after
+ errors
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <2101d95b-be41-6e6d-e019-bc70f816b2e8@paragon-software.com>
+In-Reply-To: <2101d95b-be41-6e6d-e019-bc70f816b2e8@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Added comments to code
+Added two undo labels for restoring after errors
 
-Fix SPI NO Slave Select macro definition, when all the SPI CS bits
-are high which means no slave is selected.
-
-Fixes: 21b511ddee09 ("spi: spi-cadence: Fix SPI CS gets toggling sporadically")
-Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
-BRANCH: for-next
----
- drivers/spi/spi-cadence.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  fs/ntfs3/attrib.c | 180 ++++++++++++++++++++++++++++++++--------------
+  1 file changed, 126 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 31d778e9d255..6a7f7df1e776 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -69,7 +69,7 @@
- #define CDNS_SPI_BAUD_DIV_SHIFT		3 /* Baud rate divisor shift in CR */
- #define CDNS_SPI_SS_SHIFT		10 /* Slave Select field shift in CR */
- #define CDNS_SPI_SS0			0x1 /* Slave Select zero */
--#define CDNS_SPI_NOSS			0x3C /* No Slave select */
-+#define CDNS_SPI_NOSS			0xF /* No Slave select */
- 
- /*
-  * SPI Interrupt Registers bit Masks
+diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+index d096d77ea042..7bcae3094712 100644
+--- a/fs/ntfs3/attrib.c
++++ b/fs/ntfs3/attrib.c
+@@ -173,7 +173,6 @@ int attr_allocate_clusters(struct ntfs_sb_info *sbi, struct runs_tree *run,
+  {
+  	int err;
+  	CLST flen, vcn0 = vcn, pre = pre_alloc ? *pre_alloc : 0;
+-	struct wnd_bitmap *wnd = &sbi->used.bitmap;
+  	size_t cnt = run->count;
+  
+  	for (;;) {
+@@ -196,9 +195,7 @@ int attr_allocate_clusters(struct ntfs_sb_info *sbi, struct runs_tree *run,
+  		/* Add new fragment into run storage. */
+  		if (!run_add_entry(run, vcn, lcn, flen, opt == ALLOCATE_MFT)) {
+  			/* Undo last 'ntfs_look_for_free_space' */
+-			down_write_nested(&wnd->rw_lock, BITMAP_MUTEX_CLUSTERS);
+-			wnd_set_free(wnd, lcn, flen);
+-			up_write(&wnd->rw_lock);
++			mark_as_free_ex(sbi, lcn, len, false);
+  			err = -ENOMEM;
+  			goto out;
+  		}
+@@ -419,40 +416,44 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  	struct mft_inode *mi, *mi_b;
+  	CLST alen, vcn, lcn, new_alen, old_alen, svcn, evcn;
+  	CLST next_svcn, pre_alloc = -1, done = 0;
+-	bool is_ext;
++	bool is_ext, is_bad = false;
+  	u32 align;
+  	struct MFT_REC *rec;
+  
+  again:
++	alen = 0;
+  	le_b = NULL;
+  	attr_b = ni_find_attr(ni, NULL, &le_b, type, name, name_len, NULL,
+  			      &mi_b);
+  	if (!attr_b) {
+  		err = -ENOENT;
+-		goto out;
++		goto bad_inode;
+  	}
+  
+  	if (!attr_b->non_res) {
+  		err = attr_set_size_res(ni, attr_b, le_b, mi_b, new_size, run,
+  					&attr_b);
+-		if (err || !attr_b->non_res)
+-			goto out;
++		if (err)
++			return err;
++
++		/* Return if file is still resident. */
++		if (!attr_b->non_res)
++			goto ok1;
+  
+  		/* Layout of records may be changed, so do a full search. */
+  		goto again;
+  	}
+  
+  	is_ext = is_attr_ext(attr_b);
+-
+-again_1:
+  	align = sbi->cluster_size;
+-
+  	if (is_ext)
+  		align <<= attr_b->nres.c_unit;
+  
+  	old_valid = le64_to_cpu(attr_b->nres.valid_size);
+  	old_size = le64_to_cpu(attr_b->nres.data_size);
+  	old_alloc = le64_to_cpu(attr_b->nres.alloc_size);
++
++again_1:
+  	old_alen = old_alloc >> cluster_bits;
+  
+  	new_alloc = (new_size + align - 1) & ~(u64)(align - 1);
+@@ -475,24 +476,27 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		mi = mi_b;
+  	} else if (!le_b) {
+  		err = -EINVAL;
+-		goto out;
++		goto bad_inode;
+  	} else {
+  		le = le_b;
+  		attr = ni_find_attr(ni, attr_b, &le, type, name, name_len, &vcn,
+  				    &mi);
+  		if (!attr) {
+  			err = -EINVAL;
+-			goto out;
++			goto bad_inode;
+  		}
+  
+  next_le_1:
+  		svcn = le64_to_cpu(attr->nres.svcn);
+  		evcn = le64_to_cpu(attr->nres.evcn);
+  	}
+-
++	/*
++	 * Here we have:
++	 * attr,mi,le - last attribute segment (containing 'vcn').
++	 * attr_b,mi_b,le_b - base (primary) attribute segment.
++	 */
+  next_le:
+  	rec = mi->mrec;
+-
+  	err = attr_load_runs(attr, ni, run, NULL);
+  	if (err)
+  		goto out;
+@@ -507,6 +511,13 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  			goto ok;
+  		}
+  
++		/*
++		 * Add clusters. In simple case we have to:
++		 *  - allocate space (vcn, lcn, len)
++		 *  - update packed run in 'mi'
++		 *  - update attr->nres.evcn
++		 *  - update attr_b->nres.data_size/attr_b->nres.alloc_size
++		 */
+  		to_allocate = new_alen - old_alen;
+  add_alloc_in_same_attr_seg:
+  		lcn = 0;
+@@ -520,9 +531,11 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  			pre_alloc = 0;
+  			if (type == ATTR_DATA && !name_len &&
+  			    sbi->options->prealloc) {
+-				CLST new_alen2 = bytes_to_cluster(
+-					sbi, get_pre_allocated(new_size));
+-				pre_alloc = new_alen2 - new_alen;
++				pre_alloc =
++					bytes_to_cluster(
++						sbi,
++						get_pre_allocated(new_size)) -
++					new_alen;
+  			}
+  
+  			/* Get the last LCN to allocate from. */
+@@ -580,7 +593,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  pack_runs:
+  		err = mi_pack_runs(mi, attr, run, vcn - svcn);
+  		if (err)
+-			goto out;
++			goto undo_1;
+  
+  		next_svcn = le64_to_cpu(attr->nres.evcn) + 1;
+  		new_alloc_tmp = (u64)next_svcn << cluster_bits;
+@@ -614,7 +627,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		if (type == ATTR_LIST) {
+  			err = ni_expand_list(ni);
+  			if (err)
+-				goto out;
++				goto undo_2;
+  			if (next_svcn < vcn)
+  				goto pack_runs;
+  
+@@ -624,8 +637,9 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  
+  		if (!ni->attr_list.size) {
+  			err = ni_create_attr_list(ni);
++			/* In case of error layout of records is not changed. */
+  			if (err)
+-				goto out;
++				goto undo_2;
+  			/* Layout of records is changed. */
+  		}
+  
+@@ -638,47 +652,56 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		err = ni_insert_nonresident(ni, type, name, name_len, run,
+  					    next_svcn, vcn - next_svcn,
+  					    attr_b->flags, &attr, &mi, NULL);
+-		if (err)
+-			goto out;
+-
+-		if (!is_mft)
+-			run_truncate_head(run, evcn + 1);
+  
+-		svcn = le64_to_cpu(attr->nres.svcn);
+-		evcn = le64_to_cpu(attr->nres.evcn);
+-
+-		le_b = NULL;
+  		/*
+  		 * Layout of records maybe changed.
+  		 * Find base attribute to update.
+  		 */
++		le_b = NULL;
+  		attr_b = ni_find_attr(ni, NULL, &le_b, type, name, name_len,
+  				      NULL, &mi_b);
+  		if (!attr_b) {
+-			err = -ENOENT;
+-			goto out;
++			err = -EINVAL;
++			goto bad_inode;
+  		}
+  
+-		attr_b->nres.alloc_size = cpu_to_le64((u64)vcn << cluster_bits);
+-		attr_b->nres.data_size = attr_b->nres.alloc_size;
+-		attr_b->nres.valid_size = attr_b->nres.alloc_size;
++		if (err) {
++			/* ni_insert_nonresident failed. */
++			attr = NULL;
++			goto undo_2;
++		}
++
++		if (!is_mft)
++			run_truncate_head(run, evcn + 1);
++
++		svcn = le64_to_cpu(attr->nres.svcn);
++		evcn = le64_to_cpu(attr->nres.evcn);
++
++		/*
++		 * Attribute is in consistency state.
++		 * Save this point to restore to if next steps fail.
++		 */
++		old_valid = old_size = old_alloc = (u64)vcn << cluster_bits;
++		attr_b->nres.valid_size = attr_b->nres.data_size =
++			attr_b->nres.alloc_size = cpu_to_le64(old_size);
+  		mi_b->dirty = true;
+  		goto again_1;
+  	}
+  
+  	if (new_size != old_size ||
+  	    (new_alloc != old_alloc && !keep_prealloc)) {
++		/*
++		 * Truncate clusters. In simple case we have to:
++		 *  - update packed run in 'mi'
++		 *  - update attr->nres.evcn
++		 *  - update attr_b->nres.data_size/attr_b->nres.alloc_size
++		 *  - mark and trim clusters as free (vcn, lcn, len)
++		 */
++		CLST dlen = 0;
++
+  		vcn = max(svcn, new_alen);
+  		new_alloc_tmp = (u64)vcn << cluster_bits;
+  
+-		alen = 0;
+-		err = run_deallocate_ex(sbi, run, vcn, evcn - vcn + 1, &alen,
+-					true);
+-		if (err)
+-			goto out;
+-
+-		run_truncate(run, vcn);
+-
+  		if (vcn > svcn) {
+  			err = mi_pack_runs(mi, attr, run, vcn - svcn);
+  			if (err)
+@@ -697,7 +720,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  
+  			if (!al_remove_le(ni, le)) {
+  				err = -EINVAL;
+-				goto out;
++				goto bad_inode;
+  			}
+  
+  			le = (struct ATTR_LIST_ENTRY *)((u8 *)le - le_sz);
+@@ -723,12 +746,20 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  				attr_b->nres.valid_size =
+  					attr_b->nres.alloc_size;
+  		}
++		mi_b->dirty = true;
+  
+-		if (is_ext)
++		err = run_deallocate_ex(sbi, run, vcn, evcn - vcn + 1, &dlen,
++					true);
++		if (err)
++			goto out;
++
++		if (is_ext) {
++			/* dlen - really deallocated clusters. */
+  			le64_sub_cpu(&attr_b->nres.total_size,
+-				     ((u64)alen << cluster_bits));
++				     ((u64)dlen << cluster_bits));
++		}
+  
+-		mi_b->dirty = true;
++		run_truncate(run, vcn);
+  
+  		if (new_alloc_tmp <= new_alloc)
+  			goto ok;
+@@ -747,7 +778,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		if (le->type != type || le->name_len != name_len ||
+  		    memcmp(le_name(le), name, name_len * sizeof(short))) {
+  			err = -EINVAL;
+-			goto out;
++			goto bad_inode;
+  		}
+  
+  		err = ni_load_mi(ni, le, &mi);
+@@ -757,7 +788,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		attr = mi_find_attr(mi, NULL, type, name, name_len, &le->id);
+  		if (!attr) {
+  			err = -EINVAL;
+-			goto out;
++			goto bad_inode;
+  		}
+  		goto next_le_1;
+  	}
+@@ -772,13 +803,13 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		}
+  	}
+  
+-out:
+-	if (!err && attr_b && ret)
++ok1:
++	if (ret)
+  		*ret = attr_b;
+  
+  	/* Update inode_set_bytes. */
+-	if (!err && ((type == ATTR_DATA && !name_len) ||
+-		     (type == ATTR_ALLOC && name == I30_NAME))) {
++	if (((type == ATTR_DATA && !name_len) ||
++	     (type == ATTR_ALLOC && name == I30_NAME))) {
+  		bool dirty = false;
+  
+  		if (ni->vfs_inode.i_size != new_size) {
+@@ -786,7 +817,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  			dirty = true;
+  		}
+  
+-		if (attr_b && attr_b->non_res) {
++		if (attr_b->non_res) {
+  			new_alloc = le64_to_cpu(attr_b->nres.alloc_size);
+  			if (inode_get_bytes(&ni->vfs_inode) != new_alloc) {
+  				inode_set_bytes(&ni->vfs_inode, new_alloc);
+@@ -800,6 +831,47 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		}
+  	}
+  
++	return 0;
++
++undo_2:
++	vcn -= alen;
++	attr_b->nres.data_size = cpu_to_le64(old_size);
++	attr_b->nres.valid_size = cpu_to_le64(old_valid);
++	attr_b->nres.alloc_size = cpu_to_le64(old_alloc);
++
++	/* Restore 'attr' and 'mi'. */
++	if (attr)
++		goto restore_run;
++
++	if (le64_to_cpu(attr_b->nres.svcn) <= svcn &&
++	    svcn <= le64_to_cpu(attr_b->nres.evcn)) {
++		attr = attr_b;
++		le = le_b;
++		mi = mi_b;
++	} else if (!le_b) {
++		err = -EINVAL;
++		goto bad_inode;
++	} else {
++		le = le_b;
++		attr = ni_find_attr(ni, attr_b, &le, type, name, name_len,
++				    &svcn, &mi);
++		if (!attr)
++			goto bad_inode;
++	}
++
++restore_run:
++	if (mi_pack_runs(mi, attr, run, evcn - svcn + 1))
++		is_bad = true;
++
++undo_1:
++	run_deallocate_ex(sbi, run, vcn, alen, NULL, false);
++
++	run_truncate(run, vcn);
++out:
++	if (is_bad) {
++bad_inode:
++		_ntfs_bad_inode(&ni->vfs_inode);
++	}
+  	return err;
+  }
+  
 -- 
-2.17.1
+2.37.0
+
 

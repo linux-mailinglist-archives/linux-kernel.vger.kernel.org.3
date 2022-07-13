@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F662573B5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71490573B5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237266AbiGMQf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
+        id S237268AbiGMQgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiGMQf1 (ORCPT
+        with ESMTP id S229913AbiGMQgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:35:27 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E31DFF6;
-        Wed, 13 Jul 2022 09:35:26 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id f11so10065571pgj.7;
-        Wed, 13 Jul 2022 09:35:26 -0700 (PDT)
+        Wed, 13 Jul 2022 12:36:41 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA7823BC3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:36:40 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id a15so12861076pjs.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=o7YYzHzRtbkclJ1dhZwxcUPrq4NvCPI4BIS17oQmiyI=;
-        b=BwgbUAj/rkUIu2N2il8kHNbl6Q0K7fIysaUmm4b+GjM4gsFOf4XnBWRDPqi8nQUffZ
-         N/VXTsZgtTLDTC+dZpacjUrWZBdgGnJ2zpxMb2IZNZ8bFUkIdPzVLQsb3p+1L0061XWe
-         7JO4S+zA/nRBk13FC2YWbzkHfWl3T2GhIi8TeyEQLEm6V5g/h1R9m87H7wH99TjIgG1W
-         8Bod0ZIZJxTcibMCY3//3vzroI37D2IH3mz1fpMoH+wlsx00qI8uq5e6HMpOtCHI2RVV
-         MnwYvLPqD9U9bztJreGWk5sed1/FEvKVQvi/90k3JCQ/EjDHcopUV/u4wXdUi53ocxff
-         6NDA==
+        bh=ItKnbriqKUGJi50cU88gaVhly72ngfljKMGXtWnuHAI=;
+        b=CyV6rMEL2jtqvWttADJIETxjexdkKis4+nr3kdlX0oT4KPb8XhPZ8ayOX8GRg1bLbD
+         rcz/e02kU6BO+2voCrVHZNbSzL2XsW9N8tnRGdB/5Sluolz4qJCGKe9twW4HqR6HxVIR
+         zOugybnj0BQah8+MnYv8e2nezSg5QQXuBaxYqnB3xM0vuremDaM5LM/+cgL8F8Oj1ZCA
+         LYrveVg6N5UJgBKRig2xqZqJL5qxvetvWw2cFG6hgKCAyQdIwKQ9+8zO+K3tpVwiNDNR
+         kWfNhsYaLlkcrquk4NwTx2zniBsHcHYiw+/VZFoJwvjzoFjIRTMXWR7txf5ibQza8Smp
+         D/ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=o7YYzHzRtbkclJ1dhZwxcUPrq4NvCPI4BIS17oQmiyI=;
-        b=bBXf7CbG2Aw/BSNaSB7kSneVgIzSZllXcZSHH14fA52CKv/ZPsoWT5/ocAcYJcclTT
-         vWgN2dClFUFY+gOkgs46iVRbM/SkvNqTZ2DL2lJ1a8OmnhBzaY+7LPt4RqiVSkZ95i5e
-         h911HRxUqIcKQwfEVHedW3Mn2vGqXxOSgevhZxGnzja/Mfl2P5zHNhhxWSF1mDsrw0b1
-         OkCP71C/lWMKJGgZ5uYz6LPFcohT/DVwxx1J7bWbk66fYnbXOEgJiNjHqZnLcWVsyzE2
-         ofA979BGrVEgU+pazyJFcy7JS2TEHWwXuQSk7r1cKF+IcUtbjIo3KBmuoESCe+2kv6Ij
-         EY0g==
-X-Gm-Message-State: AJIora8Q3dSBhgyTTHDba/dJAZV0OUlUKpFk3SfQHu99b/AIaN7N+ivQ
-        /R95q2XFjckNOu7+pydC8KM=
-X-Google-Smtp-Source: AGRyM1tO0SKrl38orlze+qkf0akSz/oeJOz4cBwMOq1GXUHj2ao1hhrmhxBTyJJ7VwOa+P0mfN+ArA==
-X-Received: by 2002:a63:4711:0:b0:415:ff46:ba5 with SMTP id u17-20020a634711000000b00415ff460ba5mr3675367pga.133.1657730125871;
-        Wed, 13 Jul 2022 09:35:25 -0700 (PDT)
+        bh=ItKnbriqKUGJi50cU88gaVhly72ngfljKMGXtWnuHAI=;
+        b=GkFgfnChJzbFwrOSkrfZ7vzK3Ca3MwfvQJRNSKhroAgDZzJRRD6O0JfzVmOIa8n62v
+         36zmD358vk6pQunShAMzuK/9aq9sM2NjcAS+hA6n9RhC28pZNcEqCqezps1goOutW0qH
+         c+5cs10r+eZStcmum5F5Uga9AbUr26fJ88s5e2BlT+mmXagq4U+i652B2EsPMtS1GaAL
+         szi2RlIJAhrrqQiQN3PF162mOcCTPpQX/j7zxIeqR36cZXwzEPPDVVilZvi64wbxwc0u
+         8DF/B1Jom+MGae1q7CXMi+VTKQd9ETMm/SiOflppIh2poDaAF8nDBJ9swf1XFWsQU0ti
+         qUtA==
+X-Gm-Message-State: AJIora9JzvFC++sVAfQFR0O8/d00UbahVe+mlW7xtl3vXu8m/zfg2bDB
+        UkxMv3YgBdarXWXK9+DBVcM=
+X-Google-Smtp-Source: AGRyM1vhi+uwVryoe4QNCEr6iP8FleiyH97tNUlyZIi8LBjhAzMUdzukwohcmkQ1KW67m866y0zT+Q==
+X-Received: by 2002:a17:902:e848:b0:16c:41d1:19cf with SMTP id t8-20020a170902e84800b0016c41d119cfmr3872775plg.40.1657730200206;
+        Wed, 13 Jul 2022 09:36:40 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id r29-20020a63a55d000000b00412a9c2217asm8095477pgu.64.2022.07.13.09.35.24
+        by smtp.googlemail.com with ESMTPSA id w9-20020a63c109000000b0040d87299ca3sm8248700pgf.54.2022.07.13.09.36.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 09:35:25 -0700 (PDT)
-Message-ID: <8b11eac7-cabe-a0bc-061f-7b9936c3696f@gmail.com>
-Date:   Wed, 13 Jul 2022 09:35:23 -0700
+        Wed, 13 Jul 2022 09:36:39 -0700 (PDT)
+Message-ID: <97256a3a-6d54-9d60-06e9-480a8f2aa9e5@gmail.com>
+Date:   Wed, 13 Jul 2022 09:36:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/8] ARM: dts: Move BCM963138DVT board dts to
+Subject: Re: [PATCH v2 5/8] arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to
  ARCH_BCMBCA
 Content-Language: en-US
 To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
@@ -63,16 +63,15 @@ To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
 Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
         kursad.oney@broadcom.com, f.fainelli@gmail.com,
-        anand.gore@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, soc@kernel.org
+        anand.gore@broadcom.com, Ray Jui <rjui@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kernel@vger.kernel.org
 References: <20220707070037.261532-1-william.zhang@broadcom.com>
- <20220707070037.261532-3-william.zhang@broadcom.com>
- <304678bb-f49c-9c3b-e15e-df6c9e8a4ea2@gmail.com>
+ <20220707070037.261532-6-william.zhang@broadcom.com>
+ <3cc9a340-1403-9a90-0d2b-49f719ca31fd@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <304678bb-f49c-9c3b-e15e-df6c9e8a4ea2@gmail.com>
+In-Reply-To: <3cc9a340-1403-9a90-0d2b-49f719ca31fd@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,55 +84,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 08:26, Rafał Miłecki wrote:
+On 7/13/22 08:31, Rafał Miłecki wrote:
 > On 7.07.2022 09:00, William Zhang wrote:
->> Use CONFIG_ARCH_BCMBCA to build all the BCMBCA SoC dts and remove
->> CONFIG_ARCH_BCM_63XX from the makefile
+>> Remove ARCH_BCM_63XX Kconfig for BCM63138 and merge its selections to
+>> ARCH_BCMBCA. Delete bcm63xx.c as it is no longer needed.
 >>
 >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->> ---
->>
->> (no changes since v1)
->>
->>   arch/arm/boot/dts/Makefile | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index 38d9c60aece7..1bf8e2f8ee68 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -147,8 +147,6 @@ dtb-$(CONFIG_ARCH_BCM_53573) += \
->>       bcm47189-luxul-xap-810.dtb \
->>       bcm47189-tenda-ac9.dtb \
->>       bcm947189acdbmr.dtb
->> -dtb-$(CONFIG_ARCH_BCM_63XX) += \
->> -    bcm963138dvt.dtb
->>   dtb-$(CONFIG_ARCH_BCM_CYGNUS) += \
->>       bcm911360_entphn.dtb \
->>       bcm911360k.dtb \
->> @@ -184,6 +182,7 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
->>       bcm7445-bcm97445svmb.dtb
->>   dtb-$(CONFIG_ARCH_BCMBCA) += \
->>       bcm947622.dtb \
->> +    bcm963138dvt.dtb \
->>       bcm963148.dtb \
->>       bcm963178.dtb \
->>       bcm96756.dtb \
 > 
-> Do we want to mix all that DT files? Are ARCH_BCM_63XX (ex-)users
-> interested in compiling all of them?
+> What about ARCH_BCM_63XX references in
+> 1. arch/arm/Kconfig.debug
+
+That one was dealt with:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=fa0ef5a086a05306fc5322bbda73459725eda923
+
+
+> 2. arch/arm/configs/multi_v7_defconfig
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a65ee523a9e41d0bf046cf0107e6bbf05d068af2
+
+patch 8/8 of this series
+
 > 
-> For IPROC SoCs we have separated symbols: ARCH_BCM_CYGNUS / ARCH_BCM_HR2
-> / ARCH_BCM_NSP / ARCH_BCM_5301X and we compile arch specific DT files
-> only.
+> Did you handle them in some other patchset?
+> 
+> 
+> This change is probably going to break "make oldconfig" for users. Is
+> there any kernel policy for that? Do we care about it? Should we leave
+> old symbol as hidden and make ARCH_BCMBCA auto-selected if it's set?
 
-I am fine with that and build systems (buildroot and OpenWrt at least) 
-typically offer a way to produce a device specific image that will 
-contain a single DTB fit for the target device.
+I do not believe anyone but me was enabling CONFIG_ARCH_BCM_63XX so this 
+did not have any users until the BCA team decided to take over.
 
-What we would be optimizing for would be build time vs. coverage, as a 
-maintainer I favor coverage as it allows me to build everyone in one 
-sweep. We could make the building of the 63138 conditional upon 
-BCMBCA_CORTEXA9 if that bothers you.
+> 
+> 
+> Finally it'd probably be more clean to first introduce
+> ARCH_BCMBCA_CORTEXA9 and then get rid of ARCH_BCM_63XX.
+
+That is fair, however a bit late now that the pull requests have been 
+accepted by the soc maintainers.
+
+Thanks!
 -- 
 Florian

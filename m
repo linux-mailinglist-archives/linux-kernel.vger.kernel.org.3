@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE17572C89
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9948572C77
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 06:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiGME2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 00:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S233396AbiGMEZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 00:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiGME2U (ORCPT
+        with ESMTP id S233861AbiGMEZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 00:28:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D575C9F4;
-        Tue, 12 Jul 2022 21:28:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id s21so10327355pjq.4;
-        Tue, 12 Jul 2022 21:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=cVU0VI6SHUHssnCSIRaLHSdROjTj9L70izUE69+SVQI=;
-        b=VadUZY6UnFi1GZKkPTGWEx6p9p8OtGaFA8ixYPSj5oPo47HbSqaCLJSuzmgeAZ0Vfz
-         +hyQsZsfgrH4hv80taG+hAdxskgo57toHAXDrvzDXPBH+denvHxvWQCpaunJP0tJ0xol
-         AHvqBkgeUdvJ7aAl/BT37D6kx2g+d34x/9HciKNxvAGHSpjUuwh2LWuhJiLt4h1XuAbI
-         3RS9mPHe1IltNeKEfrbJ6aViRlvFoBHDcL586oFZ/Bch29MsjtJYXfttAPizPgiwIlB0
-         b6f//RPGXzIJWXRgAd+AHzT37UpzmdOF2osy+3s1FeOiTIfxzCkgEzZd+14TFy6DET4d
-         KqNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=cVU0VI6SHUHssnCSIRaLHSdROjTj9L70izUE69+SVQI=;
-        b=SfZPnZtL+aomgADbqkK5RX/pylrCttZlp4jfdlbchmfEDCs/oscqC2eanAm7nqUP/a
-         O0RptdliP0Tsd1XpPPVWgp3EQtAlsCfmOcxGDYu/AQXpZJWnDl6M7KzUharAkxx7pAf+
-         UN9QMzTeShUNAjG+zpyB6cmlNRWHZKAQLlXbuQncDv39n4Yn3SASF7wh9WFlMhpLiXA8
-         xjWmLXehjUC1ppLHaI3EGppVe/e2/Xq0q4tzPVlU7tObAylVuSS8L8dgYsYNHEhE8U+q
-         ubbB9lZ+yYPr3yE1Mrf8SuYNcCPlmfiwEgSoHwcjZZRnRa60oTWbYJfdEMk2i10xFXvH
-         /M9w==
-X-Gm-Message-State: AJIora/hgZFjf6ncwLqv4yO2x5oV0lXlWB51pYKg3CgksSo2WXYAxx4w
-        SKfGjTqODkWzzkiYfMGLIFZeHVlRVLg=
-X-Google-Smtp-Source: AGRyM1tatiGwuci6RJxBxVvQPCr3zGspVZ/NLawV19EmxifvkxeY8ns2E9FstJPf5054KmMmFH4zqg==
-X-Received: by 2002:a17:902:ec8b:b0:16c:1cc2:6794 with SMTP id x11-20020a170902ec8b00b0016c1cc26794mr1290201plg.17.1657686498612;
-        Tue, 12 Jul 2022 21:28:18 -0700 (PDT)
-Received: from linux-l9pv.suse (123-194-153-158.dynamic.kbronet.com.tw. [123.194.153.158])
-        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016c4f006603sm4732513plh.54.2022.07.12.21.28.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Jul 2022 21:28:18 -0700 (PDT)
-From:   "Lee, Chun-Yi" <joeyli.kernel@gmail.com>
-X-Google-Original-From: "Lee, Chun-Yi" <jlee@suse.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ben Boeckel <me@benboeckel.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Malte Gell <malte.gell@gmx.de>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Subject: [PATCH v9,4/4] Documentation/admin-guide/module-signing.rst: add openssl command option example for CodeSign EKU
-Date:   Wed, 13 Jul 2022 12:24:21 +0800
-Message-Id: <20220713042421.21680-5-jlee@suse.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20220713042421.21680-1-jlee@suse.com>
-References: <20220713042421.21680-1-jlee@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 13 Jul 2022 00:25:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25170DA5A4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 21:24:49 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LjPbT0qWhzhZDH;
+        Wed, 13 Jul 2022 12:22:13 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 12:24:47 +0800
+Subject: Re: [mm-unstable PATCH v6 4/8] mm, hwpoison: make unpoison aware of
+ raw error info in hwpoisoned hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, <linux-mm@kvack.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220712032858.170414-1-naoya.horiguchi@linux.dev>
+ <20220712032858.170414-5-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1ebd5240-7298-5d1d-cc1d-d289d843472d@huawei.com>
+Date:   Wed, 13 Jul 2022 12:24:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220712032858.170414-5-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,31 +59,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an openssl command option example for generating CodeSign extended
-key usage in X.509 when CONFIG_CHECK_CODESIGN_EKU is enabled.
+On 2022/7/12 11:28, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> Raw error info list needs to be removed when hwpoisoned hugetlb is
+> unpoisoned.  And unpoison handler needs to know how many errors there
+> are in the target hugepage. So add them.
+> 
+> HPageVmemmapOptimized(hpage) and HPageRawHwpUnreliable(hpage)) can't be
+> unpoisoned, so let's skip them.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
----
- Documentation/admin-guide/module-signing.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch looks good to me with some nits below.
 
-diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/admin-guide/module-signing.rst
-index 7d7c7c8a545c..ca3b8f19466c 100644
---- a/Documentation/admin-guide/module-signing.rst
-+++ b/Documentation/admin-guide/module-signing.rst
-@@ -170,6 +170,12 @@ generate the public/private key files::
- 	   -config x509.genkey -outform PEM -out kernel_key.pem \
- 	   -keyout kernel_key.pem
- 
-+When ``CONFIG_CHECK_CODESIGN_EKU`` option is enabled, the following openssl
-+command option should be added where for generating CodeSign extended key usage
-+in X.509::
-+
-+        -addext "extendedKeyUsage=codeSigning"
-+
- The full pathname for the resulting kernel_key.pem file can then be specified
- in the ``CONFIG_MODULE_SIG_KEY`` option, and the certificate and key therein will
- be used instead of an autogenerated keypair.
--- 
-2.26.2
+> ---
+...
+>  
+> -void hugetlb_clear_page_hwpoison(struct page *hpage)
+> +static unsigned long free_raw_hwp_pages(struct page *hpage, bool move_flag)
+>  {
+>  	struct llist_head *head;
+>  	struct llist_node *t, *tnode;
+> +	unsigned long count = 0;
+>  
+> -	if (!HPageRawHwpUnreliable(hpage))
+> -		ClearPageHWPoison(hpage);
+> +	/*
+> +	 * HPageVmemmapOptimized hugepages can't be unpoisoned because
+> +	 * struct pages for tail pages are required to free hwpoisoned
+> +	 * hugepages.  HPageRawHwpUnreliable hugepages shouldn't be
+> +	 * unpoisoned by definition.
+> +	 */
+> +	if (HPageVmemmapOptimized(hpage) || HPageRawHwpUnreliable(hpage))
 
+If move_flag == false, i.e. in unpoison case, tail pages are not touched. So HPageVmemmapOptimized
+can be ignored in this case? Or leave it as above to keep the code simple?
+
+> +		return 0;
+>  	head = raw_hwp_list_head(hpage);
+>  	llist_for_each_safe(tnode, t, head->first) {
+>  		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
+>  
+> -		SetPageHWPoison(p->page);
+> +		if (move_flag)
+> +			SetPageHWPoison(p->page);
+>  		kfree(p);
+> +		count++;
+>  	}
+>  	llist_del_all(head);
+> +	return count;
+> +}
+> +
+> +void hugetlb_clear_page_hwpoison(struct page *hpage)
+> +{
+> +	if (!HPageRawHwpUnreliable(hpage))
+
+It seems we can return here if HPageRawHwpUnreliable as there's nothing to do?
+
+Anyway, for what it worth,
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks.
+
+> +		ClearPageHWPoison(hpage);
+> +	free_raw_hwp_pages(hpage, true);
+>  }
+>  
+>  /*

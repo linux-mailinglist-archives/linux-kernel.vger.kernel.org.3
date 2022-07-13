@@ -2,160 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5E8573F3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB10573F41
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237337AbiGMV6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S237397AbiGMV7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGMV6T (ORCPT
+        with ESMTP id S229470AbiGMV7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:58:19 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFBC41D08
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:58:18 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31c8bb90d09so126816407b3.8
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Y/kMPSFak6KTkDH8JrbRublyvpU6jPq482xurs5eSI=;
-        b=Pg8WFVRV86+5cOKU60Qmv48iCaAGyTTjOhRWK3NKVzBIbS/gpDDLSZqiEOvAwGhA1w
-         eC+Rpyx6Ranio0sdXI60+nvvCdWxK/oy3Lg5TfHGhVqSseUCZiZFdLIFn3WE5gmHC+Iu
-         eGp12EEND6O4XUTvWCyBwcnm44P/YV+oYrBVk=
+        Wed, 13 Jul 2022 17:59:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DD74B4BF
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657749569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=guTnNvlqH6K4wA2UCt8wsczuHAK4rJrHvdvd+slq1vY=;
+        b=PaJL5TCXeuePAPaMSss7rA+geG0YxgpL9PwxTe1vBujK4FUBrIBkbVJdn8mjxI92NIFy1s
+        jP1veKpKRmN6XwWqYHYpC5Pb5IMfSNEhCpWnH0MvGdi+BuxsYrybx/qEPivNL8jT2HBWqB
+        AguXnGK4iLq10k2OkTwjMNuTOan5d6k=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-YNK84_wLOa-q21GsbDX6FA-1; Wed, 13 Jul 2022 17:59:27 -0400
+X-MC-Unique: YNK84_wLOa-q21GsbDX6FA-1
+Received: by mail-oi1-f198.google.com with SMTP id e8-20020aca1308000000b0033a17c9dfcaso71516oii.20
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Y/kMPSFak6KTkDH8JrbRublyvpU6jPq482xurs5eSI=;
-        b=W5yZSbiXYXVlqujRnNBmxMDOH/+sli4ULL/BB0qrm6BZpwZk9BiTfNgdziewk++LG6
-         CEH0smxCTHmT/gfMKIqWUoQQQvKNdSC68tp+NYumbpi05StwDYz9LghIaFDz5pbwh8qY
-         JeY7nQMFltMSaPduzjbKmH6ri/YWZ1BaS64+ZGfSvxbe2S66fWypjzqbsvEr5eilmIIC
-         POUDk2S4qJ40tNMlRBXkA4J0yjacSgsosY3U8k/SZemVifdh7u2TXON7xzFO0o/71IxG
-         ERHJmyRLuEd1AI+MiVZCwePJ8nfnczscB4hwtFHWf1NkULbQWo/q/2pf76EOnCRaC2BG
-         K+nQ==
-X-Gm-Message-State: AJIora+nYHgVXhu0zHk9BYsNp2WTaySG+iATuWY4lYMc6aiO8rqX6DJr
-        QL5gJH2wp1K7vpGU4Cov9nv/WYX8B1OJdlPTFBCsQg==
-X-Google-Smtp-Source: AGRyM1uOLl/nyHKXS2jhjDxyKbBGONhgOkRFVWmPxxPn9Mf/Wi0UT72Je7hCFLzPAuLiJemb/Bk4TEMynSpqwiPKvDM=
-X-Received: by 2002:a81:7b8b:0:b0:31d:17d1:4666 with SMTP id
- w133-20020a817b8b000000b0031d17d14666mr6695386ywc.269.1657749497528; Wed, 13
- Jul 2022 14:58:17 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=guTnNvlqH6K4wA2UCt8wsczuHAK4rJrHvdvd+slq1vY=;
+        b=bU/Qh2VWm72MqMqGWoPtbQEFBc4/5xyzD3XJDZ7GC52J4L8/LymMGnmoUFcZKWjey4
+         6Jaqgp/wlg8XwnbQXTBQYcGb7IxFDixeocEYHrLruw6uvbuEn++Kx+wc9GbfV8pkn8Mb
+         EU27HZUI3ZPZ/l7LyVqkZnhJ0BTJJI4k/nbnOfBmWXVGZ1okS/hBxX+6/koPQ3f8mfZy
+         UKRPCGeaa05LZw1Y6GsjToqNz2rsPtyNy/A5Ssdbw65FylRc9kbzOlLi7FoJ9pRoTq3J
+         M+f1q+toqmwih3oSVuvcT7+j4eI2P4aPjrB8Ui2LrW8sWK/Zc1Xx2UYMNS+GTe2PiD72
+         gNXw==
+X-Gm-Message-State: AJIora+z3/ueyDyCQjysO0HmJJQUPwQokjEK2/l74CLg99mz7Di+ADOf
+        EJDQfoy74AspUyx4sB4QC2xp48QQfsHXegNLx3d+fwaEvVQmeQ4NY9eZ/KdJIou8TD8hA0K4wI5
+        i6BYnvk752rMV3ZWXHcVQGxJM
+X-Received: by 2002:a05:6870:56a9:b0:10b:fca8:b578 with SMTP id p41-20020a05687056a900b0010bfca8b578mr3019413oao.78.1657749567198;
+        Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vXUp0wlYWszzuHD0u8u82/GNIF0Dw1ziwn/JICNJZfYCbi3V26XmDeIVoOS/Lkfl6sMd8o8w==
+X-Received: by 2002:a05:6870:56a9:b0:10b:fca8:b578 with SMTP id p41-20020a05687056a900b0010bfca8b578mr3019398oao.78.1657749567008;
+        Wed, 13 Jul 2022 14:59:27 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x13-20020a056870b40d00b001089aef1815sm32984oap.20.2022.07.13.14.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 14:59:26 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
+ C6100 cards
+To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org, corbet@lwn.net,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com
+References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
+ <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <0c2affef-9a62-3422-ecdb-a8f196ce739c@redhat.com>
+Date:   Wed, 13 Jul 2022 14:59:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220627210407.GA2905757-robh@kernel.org> <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
- <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
- <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
- <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
- <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com>
- <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
- <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com> <20220712174551.GG1823936-robh@kernel.org>
-In-Reply-To: <20220712174551.GG1823936-robh@kernel.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 13 Jul 2022 14:58:05 -0700
-Message-ID: <CACeCKafRuzk3nWbkgjM1kz9aUhcnttaVq9P1q9M8Pfba-hBpvQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:45 AM Rob Herring <robh@kernel.org> wrote:
+
+On 7/7/22 8:05 AM, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >
-> > I agree with you; I'm saying my interpretation of the comments of this
-> > thread are that it's not the intended usage of the it6505 part, so the driver
-> > shouldn't be updated to support that.
+> Add pci_dev_table entries supporting the Intel N6000, N6001
+> and C6100 cards to the dfl-pci driver.
 >
-> That's not the right interpretation. There should not be some Type-C
-> specific child mux/switch node because the device has no such h/w within
-> it. Assuming all the possibilities Stephen outlined are valid, it's
-> clear this lane selection has nothing to do with Type-C. It does have an
-> output port for its DP output already and using that to describe the
-> connection to DP connector(s) and/or Type-C connector(s) should be
-> handled.
-
-Got it. Thanks for the clarification.
-
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+> v3: added necessary subdevice ids
+>      removed 'drivers: ' from title
 >
-> Whether the driver is type-C aware is a separate question from the
-> binding. I would think the driver just needs to be told (or it can ask)
-> which endpoint should be active and it just enables output on the
-> corresponding lanes for that endpoint.
+> v2: changed names from INTEL_OFS to INTEL_DFL
+> ---
+>   drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+>
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index fd1fa55c9113..94eabdf1d2f7 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+>   #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
+>   #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
+>   #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
+> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
+>   
+>   /* VF Device */
+>   #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
+>   #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
+>   #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
+>   #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
+> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
+> +
+> +/* PCI Subdevice ID */
+> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
+> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
+> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
+>   
+>   static struct pci_device_id cci_pcie_id_tbl[] = {
+>   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_PF_INT_5_X),},
+> @@ -96,6 +103,18 @@ static struct pci_device_id cci_pcie_id_tbl[] = {
+>   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_PAC_D5005_VF),},
+>   	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5010),},
+>   	{PCI_DEVICE(PCI_VENDOR_ID_SILICOM_DENMARK, PCIE_DEVICE_ID_SILICOM_PAC_N5011),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6000),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_N6001),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
+> +	{PCI_DEVICE_SUB(PCI_VENDOR_ID_INTEL, PCIE_DEVICE_ID_INTEL_DFL_VF,
+> +			PCI_VENDOR_ID_INTEL, PCIE_SUBDEVICE_ID_INTEL_C6100),},
 
-Is it acceptable to tag the end-points with a "mode-switch" /
-"orientation-switch"
-property? Something like the following:
+Matt,
 
-```
-        dp-bridge@5c {
-            compatible = "ite,it6505";
-            ...
-            port {
-                #adderss-cells = <1>;
-                #size-cells = <0>;
+Thanks for making this change, this addresses my concerns with the 
+earlier patch.
 
-                ite_typec0: endpoint@0 {
-                    reg = <0>;
-                    mode-switch;
-                    remote-endpoint = <&typec_connector0>;
-                };
-                ite_typec1: endpoint@1 {
-                    reg = <1>;
-                    mode-switch;
-                    remote-endpoint = <&typec_connector1>;
-                };
-            };
-        };
-```
-Or should the DRM bridge device binding not have those properties in
-the end-points either?
-The reasons those are required are:
-- The Type-C matching code looks for the "mode-switch" identifier in
-the fwnode while performing the switch matching [1]
-- While we can look up whether the remote-endpoint is a
-"usb-c-connector" in the bridge driver the
-"mode-switch"/"orientation-switch" property tells the bridge driver
-whether to register just a mode-switch, an orientation switch or both.
+Reviewed-by: Tom Rix <trix@redhat.com>
 
-Best regards,
+>   	{0,}
+>   };
+>   MODULE_DEVICE_TABLE(pci, cci_pcie_id_tbl);
 
-- Prashant
-
-[1] https://elixir.bootlin.com/linux/v5.19-rc6/source/drivers/usb/typec/mux.c#L347

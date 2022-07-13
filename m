@@ -2,176 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FA75735A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893A15735AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 13:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbiGMLhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 07:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S236294AbiGMLjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 07:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbiGMLhd (ORCPT
+        with ESMTP id S236335AbiGMLjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:37:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D0AF102926
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 04:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657712251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ca2hqxD2vo7dTzCT1zAWwZZgtWxXxx3S9VI85jE2vLg=;
-        b=eubIJJKjfCV4PYsoGnwejp2vM86iYbdL5yjOQiFYoiQ7/GypJkFsP60soMSS7XuxjzL3Nr
-        qMOj53YkDD+Z/OKOmmL0aj7oWiQtPrXOMqSYQN9Oz+5kODmMS0Jq7OtA9Sn+A3Z7f1ZS3i
-        TEVeQ69B6RDPuu4tzdclZ3bcvqkOnco=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-GEfrtshfOvWDmN3BnE3VgQ-1; Wed, 13 Jul 2022 07:37:29 -0400
-X-MC-Unique: GEfrtshfOvWDmN3BnE3VgQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 502123C2F765;
-        Wed, 13 Jul 2022 11:37:29 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BEE522026D07;
-        Wed, 13 Jul 2022 11:37:28 +0000 (UTC)
-Date:   Wed, 13 Jul 2022 07:37:27 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki : --cc=" <rafael@kernel.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH] drivers/base/node.c: fix userspace break from using
- bin_attributes for cpumap and cpulist
-Message-ID: <Ys6ud4JmMGjktAlL@lorien.usersys.redhat.com>
-References: <20220712214301.809967-1-pauld@redhat.com>
- <CAGsJ_4xG0az1-g8DWL-mEv_cF3ZBMe6j87m_cxeL9abvxGNW=g@mail.gmail.com>
+        Wed, 13 Jul 2022 07:39:11 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28638357FE;
+        Wed, 13 Jul 2022 04:39:09 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31cf1adbf92so109542467b3.4;
+        Wed, 13 Jul 2022 04:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kYOcW9IOsSFEnSNVI3NabOAcHzwmMOPMhoi3vC/X7Hc=;
+        b=dfwZRxcxSwuilXXeR4b3QvFbxZjt/I6Tg7w6J53VQ+9j3eyYy6G+/dRqjASSaL7hL0
+         1W6c3cIeDRBmqFwsJqGMSjBAhzvEsZULBO6Uw9tObPOEqCAvrjFOPkEy9KAeI3Qkkrhf
+         zoGFBc3r8QeR0FSJmSM9hRG+Hg5DKmPKK79TylPGYxHUR9kN9/7n6kC2b/JNE6aFx4/B
+         I3KFTIjl2v/+F60H7z67h5AFpAKq4pEv9r9FeXhn9NTPLX1mzBh+x/agdfkobcUhL0bw
+         VC/T/JKSWq1QrqxlGUJdYybY5Kud928zjcgm7/hnuX3fdb2zM3tSb+nTjQM9tXPwXgh6
+         OZEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kYOcW9IOsSFEnSNVI3NabOAcHzwmMOPMhoi3vC/X7Hc=;
+        b=OrKmPMPlsVEbsgV6Kx15JiQM1ngrZr5fq2ik5Tx+b9a1kuoKw3C0iIU2hZqChld0d9
+         lkdUBySDIn5T8EOmaLYGLKWw7QK65ZCN+lqzB9MjzBbtxRz6oSj1ticHrHe9Go16+/jy
+         Qzmhd5Xfegnl08k8luTYffaiKoP3ABOQm5W7TKtY+TiXhwJB+baZLM5Cmw/cACXEK1IQ
+         uLmZQvcCV/zgNlG6i90/qZaQp2VjzC4jfeFeBhfvLnsAMfNPMyPNFpviEZ4gtxgI2OVN
+         l0oNsdPzCmqIuVz3bddDdlg+4JgFRexSxRgaJ70EBBbJP5TXXTKOvf6+RO0pqY2znRSJ
+         mnfg==
+X-Gm-Message-State: AJIora8mBRpyHM5mTbT4NAud5f8oUa9rWzu3b8azVFNVSbpis84g6+XR
+        KoezJ+Le3aBu2VokfxKKZSt8UY6j2hKlXMVEGIY=
+X-Google-Smtp-Source: AGRyM1uzHohqIj7ZTkoa06270nJ5xAK25DuTxZrQQd7rusScoT52Or0I7ljEBXlp2E/Wg/RbPubq5kFYRxEEa+wVIFM=
+X-Received: by 2002:a81:4bd7:0:b0:31c:91da:5a20 with SMTP id
+ y206-20020a814bd7000000b0031c91da5a20mr3954784ywa.131.1657712348183; Wed, 13
+ Jul 2022 04:39:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGsJ_4xG0az1-g8DWL-mEv_cF3ZBMe6j87m_cxeL9abvxGNW=g@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1657216200.git.william.gray@linaro.org> <6be749842a4ad629c8697101f170dc7e425ae082.1657216200.git.william.gray@linaro.org>
+ <CACRpkdZn-PV6H+uBcoONt=SThGBAODy-YG=rkx5OX-rcpeE+aw@mail.gmail.com>
+ <YszlP1+sBhxvz3Fo@fedora> <CAMRc=Mc0=nL_t9Fwmb1uNbsa_v4L4M5BJm2y-vZ8PV47Ryk+Sw@mail.gmail.com>
+ <CAHp75Vd5QThEE9S+iL0e3rG+FHoPdts082R4H_beMv990ouGzQ@mail.gmail.com> <Ys6jMPk/6MsFCjv3@fedora>
+In-Reply-To: <Ys6jMPk/6MsFCjv3@fedora>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Jul 2022 13:38:31 +0200
+Message-ID: <CAHp75VeBszkr7igtwgve2REMjgN7+rOmwwZs0BsouyECZcckfg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] gpio: i8255: Introduce the i8255 module
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fred Eckert <Frede@cmslaser.com>,
+        John Hentges <jhentges@accesio.com>,
+        Jay Dolan <jay.dolan@accesio.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 11:18:59AM +1200 Barry Song wrote:
-> On Wed, Jul 13, 2022 at 9:58 AM Phil Auld <pauld@redhat.com> wrote:
-> >
-> > Using bin_attributes with a 0 size causes fstat and friends to return that 0 size.
-> > This breaks userspace code that retrieves the size before reading the file. Rather
-> > than reverting 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size
-> > limitation of cpumap ABI") let's put in a size value at compile time. Use direct
-> > comparison and a worst-case maximum to ensure compile time constants. For cpulist the
-> > max is on the order of NR_CPUS * (ceil(log10(NR_CPUS)) + 1) which for 8192 is 40960.
-> > In order to get near that you'd need a system with every other CPU on one node or
-> > something similar. e.g. (0,2,4,... 1024,1026...). We set it to a min of PAGE_SIZE
-> > to retain the older behavior. For cpumap, PAGE_SIZE is plenty big.
-> >
-> > On an 80 cpu 4-node system (NR_CPUS == 8192)
-> >
-> > before:
-> >
-> > -r--r--r--. 1 root root 0 Jul 12 14:08 /sys/devices/system/node/node0/cpulist
-> > -r--r--r--. 1 root root 0 Jul 11 17:25 /sys/devices/system/node/node0/cpumap
-> 
-> it is a fundamental problem of bin_attr, isn't it? when we don't know the
-> exact size of an attribute, and this size might become more than one
-> PAGE_SIZE, we use bin_attr to break the limitation. but the fact is that
-> we really don't know or it is really hard to know the actual size of the
-> attribute.
->
+On Wed, Jul 13, 2022 at 12:49 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+> On Wed, Jul 13, 2022 at 12:10:51PM +0200, Andy Shevchenko wrote:
+> > On Wed, Jul 13, 2022 at 9:40 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > On Tue, Jul 12, 2022 at 5:06 AM William Breathitt Gray
+> > > <william.gray@linaro.org> wrote:
+> > > > On Mon, Jul 11, 2022 at 03:02:10PM +0200, Linus Walleij wrote:
 
-But it broke userspace applications. I figured rather than revert it maybe
-we can find a max size to put in there and make it continue to work.
+...
 
+> > > > I think I'll move this to gpio/driver.h as per Andy Shevchenko's
+> > >
+> > > I don't think this is what Andy meant. I think he suggested moving
+> > > this header into drivers/gpio/ because it doesn't make sense for it to
+> > > be publicly accessible for anyone else than the GPIO drivers.
+> > >
+> > > Andy: correct me if I'm wrong.
 > >
-> > after:
-> >
-> > -r--r--r--. 1 root root 40960 Jul 12 16:48 /sys/devices/system/node/node0/cpulist
-> > -r--r--r--. 1 root root  4096 Jul 12 15:50 /sys/devices/system/node/node0/cpumap
-> 
-> if we finally set a size which might be improper, it seems we defeat the
-> purpose we start to move to bin_attr?
-> 
-> >
-> > Fixes: 75bd50fa841 ("drivers/base/node.c: use bin_attribute to break the size limitation of cpumap ABI")
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > ---
-> >  drivers/base/node.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/node.c b/drivers/base/node.c
-> > index 0ac6376ef7a1..291c69671f23 100644
-> > --- a/drivers/base/node.c
-> > +++ b/drivers/base/node.c
-> > @@ -45,7 +45,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
-> >         return n;
-> >  }
-> >
-> > -static BIN_ATTR_RO(cpumap, 0);
-> > +static BIN_ATTR_RO(cpumap, PAGE_SIZE);
-> 
-> PAGE_SIZE is probably big enough, will we still calculate to get it rather than
-> hard coding?
+> > No, you are right. I was talking about localizing the header to drivers/gpio.
 
-This one is actually wrong. I did not realize how big a NR_CPUS people were actually using.
-It should be something like (NR_CPUS/4 + NR_CPUS/32). 
+> Sure, I can move it to drivers/gpio/i8255.h to keep it local to the GPIO
 
-> 
-> >
-> >  static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> >                                    struct bin_attribute *attr, char *buf,
-> > @@ -66,7 +66,7 @@ static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
-> >         return n;
-> >  }
-> >
-> > -static BIN_ATTR_RO(cpulist, 0);
-> > +static BIN_ATTR_RO(cpulist, (((NR_CPUS * 5) > PAGE_SIZE) ? NR_CPUS *5 : PAGE_SIZE));
-> 
-> I am still not sure why it is NR_CPUS * 5. Is 5 bytes big enough to
-> describe the number
-> of cpu id? technically it seems not,  for example,  for cpuid=100000,
-> we need at least 6
-> bytes.
+Please, keep it named in the same pattern as the C-file, but having .h
+extension. I believe it's gpio-i8255.h.
 
-Sure. As I said in the comment I wanted to do NR_CPUS * (ceil(log10(NR_CPUS)) + 1) but doing
-that math in the kernel was messy. So I used 5. Even that is probably way bigger than needed.
-Are there really 100000 cpus on one node with discontiguous cpuids? "0-99999" is only, what,
-9 characters?
+> drivers. It'll be trivia to move this out if the need ever arrives in
+> the future so I have no problem with that.
 
-We can put whatever number you want that is >= the size the read will return.
-
-Thanks,
-Phil
-
-> 
-> BTW, my silly question is that what if we set the size to MAXIMUM int?
-> Will it fix
-> the userspace fsstat?
-> 
-> >
-> >  /**
-> >   * struct node_access_nodes - Access class device to hold user visible
-> > --
-> > 2.31.1
-> >
-> 
-> Thanks
-> Barry
-> 
+Thanks!
 
 -- 
-
+With Best Regards,
+Andy Shevchenko

@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3EC573B6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E13B573B6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbiGMQmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S237157AbiGMQmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiGMQl6 (ORCPT
+        with ESMTP id S230451AbiGMQmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:41:58 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424FB2E9CD
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:41:58 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 728331004781D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:41:42 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id BfQjorCEKUff9BfQkoKYmA; Wed, 13 Jul 2022 16:41:42 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62cef5c6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49g1BY1oxgyutxOluTAA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Zp43Rlgx1Ca3JCLNCDCynVy3hwwskCO4Zuk3rhmEhOo=; b=vAcbDuwKbtTBCLpdK4q0vSclpU
-        nJ90g6ZIiF52iVYZ9g/wPaIpYTSZ/4nINtSJ+2VYX7KipZ3QoBQY+78R6BDaOqRXCn8cxDUQZeCQY
-        fRN7xT/yWSRbrXurVISVahsUsds/2jCStORgsBdW4QgexVmCJ8hup6k4E3hqraoTmgIQjx/28ax/6
-        su34a0LmlfsP6G5HMaEm889gR7a7e/WHHloYKppkAOgajS0PW89qOEtYGMndDdf/AA2PsgZKJ8VSZ
-        Vny89/LGNw97QdZvrnw2GexlhmEDuTO1eiLQY5OOd51aG8PmHmZ8/QBFH1hVuhqsLeuVBMmJNjvHA
-        GO6AIhxA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:35854 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oBfQi-000H0z-UI;
-        Wed, 13 Jul 2022 10:41:40 -0600
-Subject: Re: [PATCH 5.15 00/78] 5.15.55-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220712183238.844813653@linuxfoundation.org>
-In-Reply-To: <20220712183238.844813653@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <035bc11c-0c56-bfb2-157b-5c3a599777e6@w6rz.net>
-Date:   Wed, 13 Jul 2022 09:41:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 13 Jul 2022 12:42:04 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D76A2E9CD;
+        Wed, 13 Jul 2022 09:42:01 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id C9AA11DDC;
+        Wed, 13 Jul 2022 16:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1657730451;
+        bh=L/FOpnrzMfL9B4xoXMpZpviC2zK+4A0KAaRqNTQmhZY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fD/wiLtpHdPi5zklceAp1jL5Mdan5I/wPBuF4X5m0qk/aRwMcrt9SL0RmpdiWkB5Y
+         sQXSjMNJPSSKEP4JFbH0mvr2T67fVcnAvOOj/g2MtVa9UTUPq5zgu4agc+IrXbm1MV
+         iWyDV0Mhk6Db2Tx0a24eaz9jki3Kw40yqlyA70rI=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 5099D213E;
+        Wed, 13 Jul 2022 16:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1657730519;
+        bh=L/FOpnrzMfL9B4xoXMpZpviC2zK+4A0KAaRqNTQmhZY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=eEMc0T/Bw1CYM3EeINAdCe65oV6fPVNd4LlvXw+2uyoOaPpNIKkxs7Cq7Hxe++Ea2
+         XnmHXA28v4SDkSfLRg60o7YOPbBmWqKUJxMsY/FlmV0cxIvpS5tL39cNObQcSfP7Lr
+         jCwYhyh09adxkQzpD7o6KH3Ypw2S+Ex+1AP09mlM=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 13 Jul 2022 19:41:58 +0300
+Message-ID: <c8b65567-6a4d-2e61-b2a0-3a757ae9b36c@paragon-software.com>
+Date:   Wed, 13 Jul 2022 19:41:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/2] fs/ntfs3: Refactoring and improving logic in run_pack
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oBfQi-000H0z-UI
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:35854
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <d578fcbe-e1f7-ffc7-2535-52eecb271a01@paragon-software.com>
+ <YsZkQAsKC6qxY8gi@infradead.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <YsZkQAsKC6qxY8gi@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 11:38 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.55 release.
-> There are 78 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 14 Jul 2022 18:32:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.55-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 7/7/22 07:42, Christoph Hellwig wrote:
+> Hi Konstantin,
+> 
+> now that you have time to actively work on the ntfs3 driver again, can
+> you consider looking into converting the I/O path to iomap, as already
+> request during the merge?  Getting drivers off the old buffer head based
+> I/O helpers is something we need to address in the coming years, so
+> any relatively simple and actually maintained file system would be a
+> good start.
+> 
+> On Wed, Jul 06, 2022 at 08:31:25PM +0300, Konstantin Komarov wrote:
+>> 2 patches:
+>> - some comments and making function static;
+>> - improving speed of run_pack by checking runs in advance
+>>
+>> Konstantin Komarov (2):
+>>    fs/ntfs3: Added comments to frecord functions
+>>    fs/ntfs3: Check possible errors in run_pack in advance
+>>
+>>   fs/ntfs3/bitmap.c  |  3 +--
+>>   fs/ntfs3/frecord.c |  8 ++++----
+>>   fs/ntfs3/ntfs_fs.h |  1 -
+>>   fs/ntfs3/run.c     | 41 +++++++++++++++++++++++------------------
+>>   4 files changed, 28 insertions(+), 25 deletions(-)
+>>
+>> -- 
+>> 2.37.0
+>>
+> ---end quoted text---
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi Christoph
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+I will look into converting the I/O path to iomap.
+Thank you for reminding about it.

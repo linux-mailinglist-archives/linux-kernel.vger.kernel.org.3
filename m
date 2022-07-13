@@ -2,67 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8DA573156
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B755357314F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbiGMIk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S235724AbiGMIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235736AbiGMIkl (ORCPT
+        with ESMTP id S235702AbiGMIkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:40:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A668E3045
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657701640; x=1689237640;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fGU5qVYnZ44PhRhKnwGKDPYjJ6o5iYYEzvHLjp7lw+k=;
-  b=VxMcHZ3PwQ7z+QL8cYdA1HrR0zWxuF5j3XMIbEVHNRWA4UWs9hmLCvRu
-   PWpDJJ0k/+Zaz6oHtyS1tKNNTPNgAx79uz5JoieMChGuExxBnNGOHgybN
-   NonKRPr+6/j2jL/qiA/X2lTdUHfYcHixxDkQSRkrL0dhxfInGCXlNTt2X
-   GrUKEVdFiHBqO952toqEVOXanyWMeX4MMGj37CoPKf9ZHgXj8uOiilaCv
-   AjbVwZgdZ7qLaJ/ktF3+t1bj5+FgP3sJR6mySOhSU61gk114BSE9KnkvT
-   YhonXIVsKO4dplhZB1BpFaIWalrFQYN2LdOez3NzxFJRL8ifZaVOKc9VU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="265563095"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265563095"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:40 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="653284507"
-Received: from yijunwa1-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.215.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 01:40:36 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Subject: [PATCH -V4 RESEND 3/3] memory tiering: adjust hot threshold automatically
-Date:   Wed, 13 Jul 2022 16:39:53 +0800
-Message-Id: <20220713083954.34196-4-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220713083954.34196-1-ying.huang@intel.com>
-References: <20220713083954.34196-1-ying.huang@intel.com>
+        Wed, 13 Jul 2022 04:40:12 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31115E3C3F
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:11 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id p6so9874581ljc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rFBl54go6bbp895f6CpJo/cJgp+SQIq2apGuPfKEw8I=;
+        b=HJy70qwl9lN8HnV2r/htxl8ByNBeHMo2DaIIq8mk7an1rDp/Hy4hkXfktfvmdxUaxv
+         3A8sUvjtVkw53mw340DrAJeHLmOzxTyLbalQEkV/XibwwFuwinmbY8O4rPtYpX5yrLiy
+         JCufh3uEsQSrI+YvGbyX9Y+722Yi/OGL4EsdeTD0EdSrLJ29gdu6g6g4kPCs/WNN/s56
+         Ok1r003S2vR+FcsNad/mJW0vO/uHVdrcEbuS7mChc7ssvfhznEANrqB0zDNs+h4LpO7Z
+         +re5NfTf0wvT6R8Qp16Ggu7kuyCNhK8MTP9WtoFIw6A9JRGk4YAt/6tiRiaJDLitsXUv
+         FA8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rFBl54go6bbp895f6CpJo/cJgp+SQIq2apGuPfKEw8I=;
+        b=SWsSvX76WjdCD4lIsjGcHDh81yWIDcZGrC6XAC/IhwZBfYrhjsgGe2FcD78UkVgs1b
+         vCRrjtKoVXn7Br3aaSmkPu5AaboekjO+SJFlFRm4M7sVpDuLtiFLxhXVZdBrk3jU+ApN
+         krUBzaAgCtg7Ie34lzkiWYy9OSbUVWFZMSNTOL+wgootoxfzpiEVOr5WlisBVPJdBNYA
+         JxoKrBZSa/fmXSwrIz/MQpor+4lJvGi5NM/6N0rZgT+3FXwRjQSSU8udQ7JxQPSL4ejF
+         MSfNtMfTgSq8O9ATMWIPI95Ob747LTb6bQHjeeZ3U/LtZxQFtEzT3bxavb+ExTLZpr7k
+         uPYA==
+X-Gm-Message-State: AJIora9Xa+e05jB8xmj8yVn1T1xU+LeX1NLvdbponDt7PBxuCU8iac53
+        PvvNUpnWGw9cOldCMftwAoZkBQBrK+hedQ==
+X-Google-Smtp-Source: AGRyM1vqC3mk/Y63Y88qA3IPGzsb8ZUXDS2zCGPmro0xfJGvd0YSbgfDR3MJrICvvK8L1MwmkoFzRw==
+X-Received: by 2002:a05:651c:1038:b0:25d:53cb:ba22 with SMTP id w24-20020a05651c103800b0025d53cbba22mr1104823ljm.407.1657701609473;
+        Wed, 13 Jul 2022 01:40:09 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0025d6ecbc897sm1720865ljc.46.2022.07.13.01.40.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 01:40:08 -0700 (PDT)
+Message-ID: <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
+Date:   Wed, 13 Jul 2022 10:40:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        william.zhang@broadcom.com, anand.gore@broadcom.com,
+        Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+References: <20220712164235.40293-1-f.fainelli@gmail.com>
+ <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,177 +94,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The promotion hot threshold is workload and system configuration
-dependent.  So in this patch, a method to adjust the hot threshold
-automatically is implemented.  The basic idea is to control the number
-of the candidate promotion pages to match the promotion rate limit.
-If the hint page fault latency of a page is less than the hot
-threshold, we will try to promote the page, and the page is called the
-candidate promotion page.
+On 13/07/2022 10:25, Arnd Bergmann wrote:
+> On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> There are now multiple Broadcom SoCs supported so group them under their
+>> own menu such that the selection is visually more appealing and we can
+>> easily add new platforms there in the future. This allows us to move
+>> ARCH_BRCMSTB back to its siblings.
+>>
+>> No functional changes introduced.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>
+>> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
+> 
+> Hi Florian,
+> 
+> So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
+> mainly limiting it to company names and high-level families, but avoiding
+> sub-menus or adding too many sub-families.
+> 
+> If we add per-vendor submenus, we should probably first decide how we
+> want to structure this across vendors. I've added maintainers and lists to
+> Cc for a couple of the ones that are in a similar situation.
+> 
+> I can see a couple of ways we can do this:
+> 
+> a) keep the list of platforms as short as possible, combining related
+>   SoC families from a single vendor wherever possible, but no sub-menus
+>   (same as today)
+> 
+> b) Always use sub-menus when there is more than one family, but
+>    keep relatively coarse platform selection.
+> 
+> c) Use sub-menus and also move to a more fine-grained SoC
+>     selection, similar to what we have on 32-bit arm.
+> 
+> I would not really want to go to c), but a) and b) both make sense to
+> me as long as do it consistently across all platforms.
+> 
+> Any other ideas or opinions?
 
-If the number of the candidate promotion pages in the statistics
-interval is much more than the promotion rate limit, the hot threshold
-will be decreased to reduce the number of the candidate promotion
-pages.  Otherwise, the hot threshold will be increased to increase the
-number of the candidate promotion pages.
+Whatever we decide here, the SoC can override in drivers/soc, just like
+Renesas did. I think Renesas chose option c), but made it in
+drivers/soc. I would vote to have consistent policy, so if arch/arm64 is
+a) or b), sub-archs should not redefine it in drivers/soc.
 
-To make the above method works, in each statistics interval, the total
-number of the pages to check (on which the hint page faults occur) and
-the hot/cold distribution need to be stable.  Because the page tables
-are scanned linearly in NUMA balancing, but the hot/cold distribution
-isn't uniform along the address usually, the statistics interval
-should be larger than the NUMA balancing scan period.  So in the
-patch, the max scan period is used as statistics interval and it works
-well in our tests.
+Or we could choose d)
+d) keep arch/arm64 list of platforms as short as possible, but sub-archs
+can do whatever they like on drivers/soc.
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Mel Gorman <mgorman@techsingularity.net>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: osalvador <osalvador@suse.de>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
----
- include/linux/mmzone.h |  9 +++++++++
- kernel/sched/core.c    | 14 +++++++++++++
- kernel/sched/fair.c    | 46 +++++++++++++++++++++++++++++++++++++-----
- 3 files changed, 64 insertions(+), 5 deletions(-)
+Personally, I find fine-grained SoC selection a bit ridiculous
+optimization, like compiling kernel, Glibc and userspace with -O3,
+-funroll-loops and many other flags. One gets smaller size but looses
+multi-platform and ability to test one kernel on different boards.
+Therefore I would vote for b) with disallowing drivers/soc defining more
+ARCH_ and more SOC_.
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 994a0cd39595..33d875d23e9a 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -918,6 +918,15 @@ typedef struct pglist_data {
- 	unsigned int nbp_rl_start;
- 	/* number of promote candidate pages at start time of current rate limit period */
- 	unsigned long nbp_rl_nr_cand;
-+	/* promote threshold in ms */
-+	unsigned int nbp_threshold;
-+	/* start time in ms of current promote threshold adjustment period */
-+	unsigned int nbp_th_start;
-+	/*
-+	 * number of promote candidate pages at stat time of current promote
-+	 * threshold adjustment period
-+	 */
-+	unsigned long nbp_th_nr_cand;
- #endif
- 	/* Fields commonly accessed by the page reclaim scanner */
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index da0bf6fe9ecd..2183a368d4b0 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4361,6 +4361,17 @@ void set_numabalancing_state(bool enabled)
- }
- 
- #ifdef CONFIG_PROC_SYSCTL
-+static void reset_memory_tiering(void)
-+{
-+	struct pglist_data *pgdat;
-+
-+	for_each_online_pgdat(pgdat) {
-+		pgdat->nbp_threshold = 0;
-+		pgdat->nbp_th_nr_cand = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
-+		pgdat->nbp_th_start = jiffies_to_msecs(jiffies);
-+	}
-+}
-+
- int sysctl_numa_balancing(struct ctl_table *table, int write,
- 			  void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -4377,6 +4388,9 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
- 	if (err < 0)
- 		return err;
- 	if (write) {
-+		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-+		    (state & NUMA_BALANCING_MEMORY_TIERING))
-+			reset_memory_tiering();
- 		sysctl_numa_balancing_mode = state;
- 		__set_numabalancing_state(state);
- 	}
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d779a91a8ca0..cc5b26fefae8 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1503,6 +1503,35 @@ static bool numa_promotion_rate_limit(struct pglist_data *pgdat,
- 	return false;
- }
- 
-+#define NUMA_MIGRATION_ADJUST_STEPS	16
-+
-+static void numa_promotion_adjust_threshold(struct pglist_data *pgdat,
-+					    unsigned long rate_limit,
-+					    unsigned int ref_th)
-+{
-+	unsigned int now, start, th_period, unit_th, th;
-+	unsigned long nr_cand, ref_cand, diff_cand;
-+
-+	now = jiffies_to_msecs(jiffies);
-+	th_period = sysctl_numa_balancing_scan_period_max;
-+	start = pgdat->nbp_th_start;
-+	if (now - start > th_period &&
-+	    cmpxchg(&pgdat->nbp_th_start, start, now) == start) {
-+		ref_cand = rate_limit *
-+			sysctl_numa_balancing_scan_period_max / MSEC_PER_SEC;
-+		nr_cand = node_page_state(pgdat, PGPROMOTE_CANDIDATE);
-+		diff_cand = nr_cand - pgdat->nbp_th_nr_cand;
-+		unit_th = ref_th * 2 / NUMA_MIGRATION_ADJUST_STEPS;
-+		th = pgdat->nbp_threshold ? : ref_th;
-+		if (diff_cand > ref_cand * 11 / 10)
-+			th = max(th - unit_th, unit_th);
-+		else if (diff_cand < ref_cand * 9 / 10)
-+			th = min(th + unit_th, ref_th * 2);
-+		pgdat->nbp_th_nr_cand = nr_cand;
-+		pgdat->nbp_threshold = th;
-+	}
-+}
-+
- bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
- 				int src_nid, int dst_cpu)
- {
-@@ -1517,19 +1546,26 @@ bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
- 	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
- 	    !node_is_toptier(src_nid)) {
- 		struct pglist_data *pgdat;
--		unsigned long rate_limit, latency, th;
-+		unsigned long rate_limit;
-+		unsigned int latency, th, def_th;
- 
- 		pgdat = NODE_DATA(dst_nid);
--		if (pgdat_free_space_enough(pgdat))
-+		if (pgdat_free_space_enough(pgdat)) {
-+			/* workload changed, reset hot threshold */
-+			pgdat->nbp_threshold = 0;
- 			return true;
-+		}
-+
-+		def_th = sysctl_numa_balancing_hot_threshold;
-+		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
-+			(20 - PAGE_SHIFT);
-+		numa_promotion_adjust_threshold(pgdat, rate_limit, def_th);
- 
--		th = sysctl_numa_balancing_hot_threshold;
-+		th = pgdat->nbp_threshold ? : def_th;
- 		latency = numa_hint_fault_latency(page);
- 		if (latency >= th)
- 			return false;
- 
--		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
--			(20 - PAGE_SHIFT);
- 		return !numa_promotion_rate_limit(pgdat, rate_limit,
- 						  thp_nr_pages(page));
- 	}
--- 
-2.30.2
-
+Best regards,
+Krzysztof

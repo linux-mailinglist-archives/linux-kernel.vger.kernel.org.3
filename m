@@ -2,176 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DE5572A38
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0AF572A3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiGMAYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S230000AbiGMAdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiGMAYp (ORCPT
+        with ESMTP id S229514AbiGMAdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:24:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A3E5CD3DD
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657671883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SQg/ZuurNtuJGT4UxamLRinnCHuDLCOaHNIjKN/8jDQ=;
-        b=X8GwUm+RvrBaSqSnjofuFXVeEptdVhxMz3HqfQEbuFVyVky6B26GZzRG0iVVESJC3qmedT
-        EdGKV9CgrwYRCvtrMF8rdP+AHt4A2KrK7YHawVhAroD6E0kNqYP7oWJX/eWVIPMAYsghaw
-        RuRfcsPU1wU31mJLsPSkiPfA54qKZIc=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-nfiPejehNs2fCOlQNs1iSg-1; Tue, 12 Jul 2022 20:24:41 -0400
-X-MC-Unique: nfiPejehNs2fCOlQNs1iSg-1
-Received: by mail-qt1-f198.google.com with SMTP id f1-20020ac84641000000b0031ecb35e4d1so52835qto.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:24:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SQg/ZuurNtuJGT4UxamLRinnCHuDLCOaHNIjKN/8jDQ=;
-        b=6sufLvHLN5/Bn3NxjocWTRHel4PPh2V1HPsA+yKaPSRQO3ztDk++ahkvTofoEikxqY
-         jcTXL3avr4jRnyVqiCXAPJhORohY06C/Mq2jhljYQjOh76Z+awTxa8kHANSnkGYhBJOp
-         LT7j7fXESt+KDtf0Mm97ibHzWfgPuEypDfFsgRGoMfOli9CmuP3OQxGQCO+0mfAwiV57
-         aX3Vi/b7BbO7Bou5HVfoQTKmAHCMJkEr9S/36B9HeVkcMYqr1Ml/6F9SpoYKbxxw+9Bs
-         qZVl5TISqpNTTdXXS2p91FNgcDDxrJ2zbsJeLi9n959JB/0I6xo6+LmvjG+DVedAJBk0
-         N8HQ==
-X-Gm-Message-State: AJIora+Dno4k87VzsR0zJ+1yNQO8kjBkzp/BEKR4QyJY37txRLUnjhdt
-        zpUMpH03fpTh6wqqJfx/aJPjmX4ihvV+Grgcw13Gj3pTHfilMt+v/JDAofpAwojmOvUySmbQe+E
-        CQnJhD+qhnD8qA35pF19d/QU4
-X-Received: by 2002:a37:6541:0:b0:6b5:8ade:9dba with SMTP id z62-20020a376541000000b006b58ade9dbamr781890qkb.330.1657671881181;
-        Tue, 12 Jul 2022 17:24:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uYMT8ACHE8hPbNTCM0ua19jfLqlv/B9h6ELouoQCNktD1qaygNamgYNh8M/DbFYcJMQkir6w==
-X-Received: by 2002:a37:6541:0:b0:6b5:8ade:9dba with SMTP id z62-20020a376541000000b006b58ade9dbamr781877qkb.330.1657671880908;
-        Tue, 12 Jul 2022 17:24:40 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id w16-20020a05620a0e9000b006b4880b08a9sm4250840qkm.88.2022.07.12.17.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 17:24:40 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 20:24:39 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] KVM: x86/mmu: Shrink pte_list_desc size when KVM is
- using TDP
-Message-ID: <Ys4Qx1RxmWrtQ8it@xz-m1.local>
-References: <20220624232735.3090056-1-seanjc@google.com>
- <20220624232735.3090056-4-seanjc@google.com>
- <Ys33RtxeDz0egEM0@xz-m1.local>
- <Ys37fNK6uQ+YTcBh@google.com>
+        Tue, 12 Jul 2022 20:33:24 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BDC8CC91
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:33:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TXHaelqa9WpHLcqrOTlZAr60dRr+RK+FqLOG616U3LFyOOJeqUFOFPPhzgyUOMQVdg+D9wKoqa6VqB4IgU7oPWTC+hcXTQljZL9kPH/ho+6QOQlF/vVrDL+37rBx9W/lj31wCdrBuSsvqR49SwWCP0q83/6uBlHL2kpExlliIE8mXRbmkInzMe/Hpa/bXG0N1FSiqtLs4JqeGc9qEU4VNe/K3MQ4IFuODEDzvGC7AxSOb6kZeinFOFIs1YaOq1A6fbOOjSdnfOXP/m5jeGMrI1Cxfd0s9tYG8QxqTSrh55Iz/voGiPwGN14/0OQgL/PwW0Yd8gTNDSN+i6m0mNKnyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DTQbxnIZS/XtJOJX2eHa4KPNjg2AOQBDwiSZpUzG4vI=;
+ b=Andgm+FC5bZn5J2XdeCoiSxbswUSNGkD9NkU6+cPId6gHDXmdwo8hla5USoMh4ZUdY1jWboPVw+LEs9wPOB56uGBx9Jr76YtB9fxJAv7XPojSpikqAPyrzpRxhg3ouWhFKflp7jYtl++tEwSXsoW/PPe/RkRpmw7+hg9OLYWhY5RFpPnZdW4DsWdJcFGDQ4UAmLveeVjv7ojVcxpEjupsMNzR1cWB+KKOD53tx/bU511fAIKtSWx7GbIpcOnnbi6rjt/ZQ6J4pLcriNrQ2sSPAovXiwPgg24+znteBvFVkWEEQfb6eegK2Mz3JKnKO96RhU0iBR5VUnIZyu924wz4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DTQbxnIZS/XtJOJX2eHa4KPNjg2AOQBDwiSZpUzG4vI=;
+ b=b2h/8YJGZSwgI3nTDVmgdcyfWjM/2LkaB5uU89OO1c5KX/aO4YbSsH0PJvRjB2PGQZuaGDPCu7wpmV5V0z5K3dcI8K//67zySyBjIS+UWhRnAqnNIuAW/66pJCJ4d6vJsop0ayb3327X92bg5MKVy06MHwjC+U3XKVEXh3zG0WQ=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by DM6PR05MB7145.namprd05.prod.outlook.com (2603:10b6:5:200::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.11; Wed, 13 Jul
+ 2022 00:33:20 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::a4f8:718a:b2a0:977f]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::a4f8:718a:b2a0:977f%5]) with mapi id 15.20.5438.012; Wed, 13 Jul 2022
+ 00:33:20 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2] x86/mm/tlb: ignore f->new_tlb_gen when zero
+Thread-Topic: [PATCH v2] x86/mm/tlb: ignore f->new_tlb_gen when zero
+Thread-Index: AQHYlPRIBVYGglwRp0y21cAEvAmJeq15cHiAgAIF64A=
+Date:   Wed, 13 Jul 2022 00:33:19 +0000
+Message-ID: <3DC1239B-FBE4-4EE0-B0D1-641B64697712@vmware.com>
+References: <20220710232837.3618-1-namit@vmware.com>
+ <7672923F-D439-4867-9418-B1F44EE5CC44@vmware.com>
+In-Reply-To: <7672923F-D439-4867-9418-B1F44EE5CC44@vmware.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.100.31)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fcc0a909-dfa4-4f25-6ea1-08da64674941
+x-ms-traffictypediagnostic: DM6PR05MB7145:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KkIcQoHqq8oTYyVscH7HZcUcsBlbBm69OKP7J7AaXzNAwWEGt62v8KV9qVLc+MpaVLG+Hs6132GL0+G71fzp99mk+Sg/45IuzLUGLkaSrEXv33ksb9aOnMTcN2V5hJHgyXLcTtzOPoyHIutWePpAnQYSuWYkv+9lM7D6seWfEOzzK5Z6OC8B7b/9L24HaDR+wyQ3kYsgB6OXWR8lq+GHHoSGYXJvqQt19RdtFoccj3IlcKfEW+n7iZu54VeTUbapwd1pCV7rviLJ57X40AhYJmtikMqYVvIgLFUKiIIN7C1KH45N8DZdV3uKSPuFsXO043xz8MtlDjujUP7fsgVfmEc8YkbQi8EZ10wqkvd662E0bLO/+R34BSiX8O0tJhuHxFevVXFX0qi8od45WDI5CERHYJbyQPV8YqamJ73Lo9fXJD7YpDGe96ZXsk0z1AdfD5J3dcwb0Oe4Qw9k9P2dyuS2Yt3ESVOrAhaD7PcMOb2X57NthBC3jht7ftfURm++T1KSZCuUzxtnHm2jRrD9z2/dTog72kDRtFQgGg8fh/lnZhizZFM4iK5v4gDxDwjRkISiiV/Lh4yG7iRRF0zO/UmVXJXYgMWh2Ig3dipSGTH9/JYV0Khe7We5wPxe148s/rqJy2Lcb89D7HRiUiLJeEluzQ9k5LAaMf66TSessRDcgEhbThe/9uFInrbJ23SCXuew7VyVJqx5SMzDLeTO0OqZaWatAFCinpi3revZqtPBM6czfyuDRXSlGzVzN/mU4glXByJenHicVVeOkagNeNkvlHR2tWYc5+hqjVkUE+0CfmP8bTdXPhiQpUvsv894976DRuZACUUBS6Jr92LdgJDDxk7ESGUT8Qhu92V+VXs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(376002)(39860400002)(346002)(186003)(26005)(6506007)(2616005)(122000001)(6486002)(478600001)(53546011)(4744005)(6512007)(71200400001)(54906003)(110136005)(2906002)(86362001)(4326008)(5660300002)(64756008)(8676002)(66556008)(66446008)(38100700002)(33656002)(76116006)(66946007)(66476007)(41300700001)(316002)(8936002)(38070700005)(36756003)(7416002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?POabjnJ+coLpf/rOyZAotS6NLWIjCmsTxJ0cf6KTBsaLTFPI8AmJkVcZt/u4?=
+ =?us-ascii?Q?MkU62X88XT9XiFFOljQiBYlHvovFykY1DorXUhezSdFQW87QUcNviGMsbrJr?=
+ =?us-ascii?Q?rQ0ythCNE5SdSDjbhX/Ikq63T5OZ3AzIN8Vc43FkuRyQEXOwltEFwLvtNqkJ?=
+ =?us-ascii?Q?87FjbuZsJLx5ZogMu7go4qyfLjXR6NRR4Yn+Ds94Ueb3ZCtIH5DDmojbSr0X?=
+ =?us-ascii?Q?4jlktvsutKOPXSoO5BMaMOMW+xXU6tqPALZ4dXlCqOyNnwEpj9Bu1wyAR540?=
+ =?us-ascii?Q?EuR6ePE1u5xz7hSFNzssNzYBOQPKH8sxcaK1CrESJlO79W9ge2fCFzPP9vcv?=
+ =?us-ascii?Q?p2r99HHqVTu/PB0sxRHc3MXSHI/lJHe4oZvCXDkdGJ/WrtVY9rkPGLqF/h3a?=
+ =?us-ascii?Q?lD8KqSbTq/YijSGq5fOPv3oAJCXQGS3JDZIeGPK+0aqmOiLMwK4I/R/IeN1J?=
+ =?us-ascii?Q?d3U0vOk7ipRKF+xpPaWHL0wegomlJrKbCFni0NgMaaCMfijKooDHFfGqTfrA?=
+ =?us-ascii?Q?1GrvGHIOFPVR0z7udN4X2qgLPfEOoJ0XHhYZk9UixP6ukWfpncJwfP3YVLTa?=
+ =?us-ascii?Q?qdIc+Hhyc7J7N1/QuuV5P/96yD6Nv2i1ZExK+c/eyvSFh0Aa0Z2hpIn2jBZD?=
+ =?us-ascii?Q?RG6STWalOKoRFNcwpW7WBzl8ovLGkyXgB3jalkl+cCn16ypsFvXHaLuWtVQt?=
+ =?us-ascii?Q?ydfoFfvXl5T4xbh3rn/Q/dPG9zY4UTJPLfTBnHLkAyuGILh+OAeYlbZpW33e?=
+ =?us-ascii?Q?n+6AS641rbWUi9FS+u67zv2OcwXDpAnJehSplJFawVqCrKdXEObQsROfGKUf?=
+ =?us-ascii?Q?ECNGtDaqUzVyA9Bp9NEvCPX4MmSDBrtaWFcY6RzgUB+YGeOLnmDXATnYWsfI?=
+ =?us-ascii?Q?sTLOgreQaft8idIj/Vds1MyKT1Xi6K/k3kG0+FEuzYrmUnN//anZaGRUicse?=
+ =?us-ascii?Q?AWRrEpNmYWatOw0pSlvV1S97XfRIxDbrO+qAjBfGXM3GiLz7blppKDelD2zN?=
+ =?us-ascii?Q?3VoaQtW4wePuVdhAjx4BwfbLHrXd0IRhAKVf7EROk+8QFnJr/5aJg6sTafWt?=
+ =?us-ascii?Q?ch74J9+jycmaVTC4GXaebRxsjZbbT7ghmzs7Zk/4CaU1CrP9qpNYBOueldAb?=
+ =?us-ascii?Q?cKjiKI3Na3ExgJ7kLjp8UkTWzOqWcY0uyrxOWlHTdjIi4KWHqDYeU10QSuBE?=
+ =?us-ascii?Q?OP/6UAZVfPGLlj5f/IdfcJvmkjRrUfkxyvXCRaxUyqW204H4fPapLg3GwtsP?=
+ =?us-ascii?Q?3SzR0WkI06JePZCFQsHl+LCWFEjV7R1LYeGfLLfb692oA5pKofMnECi74Koh?=
+ =?us-ascii?Q?uOi7oU2x/Pm6e95qGCg+kq/+QnJA6IpbM9vSBA4sFM1XzfabyMdZ5We5yP8b?=
+ =?us-ascii?Q?D6G1mXWdieJGkrEQAwOCc0WcMz9Rwu0m4CPe+U4YpmcUPOf/NtkOCbX2l/RY?=
+ =?us-ascii?Q?GGWGrinB6wmeaNGoE4x1Vh6XLJImOznnIdIJzwmUFbrT1cIu6i3jD+HWRMyq?=
+ =?us-ascii?Q?xV520krXLs5PZvV74NxavfPKMAehOjxLW00/aLIHZnaBWsOhbg3+vw3o8ZyB?=
+ =?us-ascii?Q?6nE/CMGsrJq4H6Ln5IDg+FD1lH24pPD14swMdru8?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E75D2D5A27B67F45B73BB2D7D29E73B4@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ys37fNK6uQ+YTcBh@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcc0a909-dfa4-4f25-6ea1-08da64674941
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 00:33:19.9468
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +w59IHpDXi6uVolpTAGnS6nrEZiiyk461opJMqpsTmPRu9pRDZx3xaSWbSjZWt+asP8S9vyRRzDypPz2aYG1CA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB7145
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:53:48PM +0000, Sean Christopherson wrote:
-> On Tue, Jul 12, 2022, Peter Xu wrote:
-> > On Fri, Jun 24, 2022 at 11:27:34PM +0000, Sean Christopherson wrote:
-> > > Dynamically size struct pte_list_desc's array of sptes based on whether
-> > > or not KVM is using TDP.  Commit dc1cff969101 ("KVM: X86: MMU: Tune
-> > > PTE_LIST_EXT to be bigger") bumped the number of entries in order to
-> > > improve performance when using shadow paging, but its analysis that the
-> > > larger size would not affect TDP was wrong.  Consuming pte_list_desc
-> > > objects for nested TDP is indeed rare, but _allocating_ objects is not,
-> > > as KVM allocates 40 objects for each per-vCPU cache.  Reducing the size
-> > > from 128 bytes to 32 bytes reduces that per-vCPU cost from 5120 bytes to
-> > > 1280, and also provides similar savings when eager page splitting for
-> > > nested MMUs kicks in.
-> > > 
-> > > The per-vCPU overhead could be further reduced by using a custom, smaller
-> > > capacity for the per-vCPU caches, but that's more of an "and" than
-> > > an "or" change, e.g. it wouldn't help the eager page split use case.
-> > > 
-> > > Set the list size to the bare minimum without completely defeating the
-> > > purpose of an array (and because pte_list_add() assumes the array is at
-> > > least two entries deep).  A larger size, e.g. 4, would reduce the number
-> > > of "allocations", but those "allocations" only become allocations in
-> > > truth if a single vCPU depletes its cache to where a topup is needed,
-> > > i.e. if a single vCPU "allocates" 30+ lists.  Conversely, those 2 extra
-> > > entries consume 16 bytes * 40 * nr_vcpus in the caches the instant nested
-> > > TDP is used.
-> > > 
-> > > In the unlikely event that performance of aliased gfns for nested TDP
-> > > really is (or becomes) a priority for oddball workloads, KVM could add a
-> > > knob to let the admin tune the array size for their environment.
-> > > 
-> > > Note, KVM also unnecessarily tops up the per-vCPU caches even when not
-> > > using rmaps; this can also be addressed separately.
-> > 
-> > The only possible way of using pte_list_desc when tdp=1 is when the
-> > hypervisor tries to map the same host pages with different GPAs?
-> 
-> Yes, if by "host pages" you mean L1 GPAs.  It happens if the L1 VMM maps multiple
-> L2 GFNs to a single L1 GFN, in which case KVM's nTDP shadow MMU needs to rmap
-> that single L1 GFN to multiple L2 GFNs.
-> 
-> > And we don't really have a real use case of that, or.. do we?
-> 
-> QEMU does it during boot/pre-boot when BIOS remaps the flash region into the lower
-> 1mb, i.e. aliases high GPAs to low GPAs.
-> 
-> > Sorry to start with asking questions, it's just that if we know that
-> > pte_list_desc is probably not gonna be used then could we simply skip the
-> > cache layer as a whole?  IOW, we don't make the "array size of pte list
-> > desc" dynamic, instead we make the whole "pte list desc cache layer"
-> > dynamic.  Is it possible?
-> 
-> Not really?  It's theoretically possible, but it'd require pre-checking that aren't
-> aliases, and to do that race free we'd have to do it under mmu_lock, which means
-> having to support bailing from the page fault to topup the cache.  The memory
-> overhead for the cache isn't so significant that it's worth that level of complexity.
+On Jul 11, 2022, at 10:39 AM, Nadav Amit <namit@vmware.com> wrote:
 
-Ah, okay..
+> On Jul 10, 2022, at 4:28 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
+>=20
+>> From: Nadav Amit <namit@vmware.com>
+>>=20
+>> Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
+>> possible") introduced an optimization of skipping the flush if the TLB
+>> generation that is flushed (as provided in flush_tlb_info) was already
+>> flushed.
+>=20
+> Dave,
+>=20
+> Can you please review this patch today?
+>=20
+> I feel bad (for a good reason) for breaking swap/migration.
+>=20
+> Thanks,
+> Nadav
 
-So the other question is I'm curious how fundamentally this extra
-complexity could help us to save spaces.
+Ping?
 
-The thing is IIUC slub works in page sizes, so at least one slub cache eats
-one page which is 4096 anyway.  In our case if there was 40 objects
-allocated for 14 entries array, are you sure it'll still be 40 objects but
-only smaller?  I'd thought after the change each obj is smaller but slub
-could have cached more objects since min slub size is 4k for x86.
-
-I don't remember the details of the eager split work on having per-vcpu
-caches, but I'm also wondering if we cannot drop the whole cache layer
-whether we can selectively use slub in this case, then we can cache much
-less assuming we will use just less too.
-
-Currently:
-
-	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
-				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
-
-We could have the pte list desc cache layer to be managed manually
-(e.g. using kmalloc()?) for tdp=1, then we'll at least in control of how
-many objects we cache?  Then with a limited number of objects, the wasted
-memory is much reduced too.
-
-I think I'm fine with current approach too, but only if it really helps
-reduce memory footprint as we expected.
-
-Thanks,
-
--- 
-Peter Xu
-
+As you know, this really must go into 5.19 or otherwise aa44284960d5
+reverted.

@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C770D5738E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9255738B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236544AbiGMOcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S233322AbiGMOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiGMOcG (ORCPT
+        with ESMTP id S231576AbiGMOYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:32:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135443718A;
-        Wed, 13 Jul 2022 07:32:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657722725; x=1689258725;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=2J6SXMWdLRY7k+Xu1M4COjz6hfN05sGZcty/Ghsevy8=;
-  b=UUH+J11vKEtCi5lTeZbfIrwFel5xAeH6CSrktwn/MeI12TSsLLOFdC7x
-   l8n76fzuo9S/vSXt+P5MAx72419uqgM2apOmrJAOqbPTin+QW77umVbcC
-   rdU/y9oTU2d4f+iiFrpBKpZ636c/4/1XdaIPx26tSolarWdt2uW/s2yqu
-   H70umfn8NM1JC1vbQ2M9sNzvKl0lx2/DOn30NehkLd6ih48O+vtAiGT/w
-   AESa4meP9Nq0XdHMKIomjIM3YXoM8DtV2c76JdcgYcpnBQZ1Fv9hOF6J5
-   WfCkLSxt2OX+4NXKHSS9IyOYOohrmWd9FVxP8AmbGAWLq3ShiL0dFIPrC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265637981"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="265637981"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:31:55 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="593010229"
-Received: from melanief-mobl.amr.corp.intel.com (HELO [10.212.10.37]) ([10.212.10.37])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 07:31:53 -0700
-Message-ID: <75e9b775-3bbe-0b34-2bd6-b4ac74620672@linux.intel.com>
-Date:   Wed, 13 Jul 2022 09:23:28 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] soundwire: qcom: Update error prints to debug prints
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        vkoul@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        quic_plai@quicinc.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org
-References: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 13 Jul 2022 10:24:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E048023160;
+        Wed, 13 Jul 2022 07:24:07 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DEEgor004515;
+        Wed, 13 Jul 2022 14:23:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Kqd8S3YsVTupeYDsw/0CEjgSPyDSJBms6hyW9oBAQeM=;
+ b=QswoJDCWPAwTxoZHbdQEOYKJFNMNTb2KFlnGbq7oimxzEtYekgdpSiRH/HNBsveUdi/f
+ 1c4OgdZzQ7WLvfp5Gh+2GZ/LXRW8hApTxw75mJZhcsPDNNgnlyJ+Z89sKRqwNHEooqX+
+ czJ8NIQEa4koGb3HjCFShmMwZeEIocw9bWmvbkNOizW6cHrfWrta+3DFONOUT42z6MFV
+ u9nj5WHC2ENWupHa+kNzIwpjhdmcuVdSiuKRm7clv7Lfh9eh9b1idBzuyd7gxRNzD9hg
+ pQELC3clUGyVOLTRv8+FgiKBwKBoqzTxWvwdIrSC7/cs8xZ0bppXs2d8s5idEtkUeH9E Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ymvratk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 14:23:45 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26DEFSXF013891;
+        Wed, 13 Jul 2022 14:23:44 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ymvrasc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 14:23:44 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26DEKPjp000304;
+        Wed, 13 Jul 2022 14:23:42 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3h71a8w2sf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 14:23:41 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26DENdG921365098
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 14:23:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4C5D52051;
+        Wed, 13 Jul 2022 14:23:39 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.111.228])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 883BE5204F;
+        Wed, 13 Jul 2022 14:23:36 +0000 (GMT)
+Message-ID: <8bea9e61be96e0358a43e320f9b89b742e8ca992.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: force signature verification when
+ CONFIG_KEXEC_SIG is configured
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc:     kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Jiri Bohac <jbohac@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Date:   Wed, 13 Jul 2022 10:23:35 -0400
+In-Reply-To: <20220713072111.230333-1-coxu@redhat.com>
+References: <20220712093302.49490-1-coxu@redhat.com>
+         <20220713072111.230333-1-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Fr7HlAMLzOgY2q57u1UJRu5T-WiUxJYG
+X-Proofpoint-ORIG-GUID: FClJBHTbZacQzfCFbUO4Cd14E0SRbUrp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-13_03,2022-07-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207130055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/13/22 07:22, Srinivasa Rao Mandadapu wrote:
-> Upadte error prints to debug prints to avoid redundant logging in kernel
-
-update
-
-> boot time, as these prints are informative prints in irq handler.
+On Wed, 2022-07-13 at 15:21 +0800, Coiby Xu wrote:
+> Currently, an unsigned kernel could be kexec'ed when IMA arch specific
+> policy is configured unless lockdown is enabled. Enforce kernel
+> signature verification check in the kexec_file_load syscall when IMA
+> arch specific policy is configured.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Fixes: 99d5cadfde2b ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXEC_SIG_FORCE")
+> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 > ---
->  drivers/soundwire/qcom.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index 9df970e..a4293d0 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
->  				break;
->  			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
->  			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
-> -				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
-> -					__func__);
-> +				dev_dbg(swrm->dev, "%s: SWR new slave attached\n", __func__);
+> v2
+>  - don't include linux/kexec.h since it's already been included in
+>    linux/ima.h
+>  - fix build errors when KEXEC_FILE/KEXEC_CORE is disable as caught by
+>    kernel test robot <lkp@intel.com>
 
-any reason why the rate limitation was dropped?
+Thanks, Coiby.  This version of the patch is now queued in next-
+integrity/next-
+integrity-testing.
 
->  				swrm->reg_read(swrm, SWRM_MCP_SLV_STATUS, &slave_status);
->  				if (swrm->slave_status == slave_status) {
-> -					dev_err(swrm->dev, "Slave status not changed %x\n",
-> +					dev_dbg(swrm->dev, "Slave status not changed %x\n",
->  						slave_status);
->  				} else {
->  					qcom_swrm_get_device_status(swrm);
+Mimi
+

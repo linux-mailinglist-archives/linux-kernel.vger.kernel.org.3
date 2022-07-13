@@ -2,121 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9962572A2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43B3572A32
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiGMACp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S230050AbiGMAUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGMACl (ORCPT
+        with ESMTP id S229514AbiGMAUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:02:41 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D5CC920D;
-        Tue, 12 Jul 2022 17:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657670560; x=1689206560;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kdCtzz8hLTDNSKKBbslq6IoltGk6V2ylCavR3y0UtZY=;
-  b=ePJStqxRXYF9uhLc0V4ohLhDKxSK7eChZO12hLMTOUrcUTtCjNhb3GRU
-   NRtY4K9PGYeaKGvamTkFKN0JfkVH65u/Bk6yacgXlOYiR2Ks0R3Wfkv0G
-   l1bhy31B/KbOoqoer3iGPPdkHx1uf7y9qTV16l1WAtxKCWGTe1kK4lq2E
-   ExGg1Z80Kekbj7+gFTvBxXT/0XHrc0eeq58cURTv2A/xU1CgdIyduw7Fp
-   +D7k9LsDLMK2/SFV4vSkE7I5HJendvKG/qcas2jlMkIDQRX05jo1FPoV2
-   LJY5uQYVeLhEUqr1YYy5wXJEgl/TC8SXrJdehBhy4yG4lkT26H92MNlzL
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="268107882"
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="268107882"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 17:02:40 -0700
-X-IronPort-AV: E=Sophos;i="5.92,266,1650956400"; 
-   d="scan'208";a="653125591"
-Received: from jcai9-mobl2.ccr.corp.intel.com (HELO [10.255.29.95]) ([10.255.29.95])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 17:02:37 -0700
-Message-ID: <597af953-b09d-f893-cdce-fa5d840e5cfe@linux.intel.com>
-Date:   Wed, 13 Jul 2022 08:02:41 +0800
+        Tue, 12 Jul 2022 20:20:13 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6BB9B1BB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:20:10 -0700 (PDT)
+Received: from [192.168.1.101] (abxj14.neoplus.adsl.tpnet.pl [83.9.3.14])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 17BE23F479;
+        Wed, 13 Jul 2022 02:20:08 +0200 (CEST)
+Message-ID: <be04f034-5aa9-f931-3992-b0fb08fcd202@somainline.org>
+Date:   Wed, 13 Jul 2022 02:20:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Suresh Siddha <suresh.b.siddha@intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        iommu@lists.linux.dev, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/vt-d: avoid invalid memory access via
- node_online(NUMA_NO_NODE)
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/drivers/qcom: Code refactoring
 Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>
-References: <20220712153836.41599-1-alexandr.lobakin@intel.com>
- <20220712154407.42196-1-alexandr.lobakin@intel.com>
- <CAAH8bW8-JL=q_4c_AKROsjC7KyuRWDMFNKBz=6uT+d1mStTE2A@mail.gmail.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <CAAH8bW8-JL=q_4c_AKROsjC7KyuRWDMFNKBz=6uT+d1mStTE2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, amitk@kernel.org,
+        thara.gopinath@gmail.com, agross@kernel.org,
+        david.brown@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu
+References: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220712173127.3677491-1-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/12 23:54, Yury Norov wrote:
-> On Tue, Jul 12, 2022 at 8:45 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
->>
->> From: Alexander Lobakin <alexandr.lobakin@intel.com>
->> Date: Tue, 12 Jul 2022 17:38:36 +0200
->>
->>> KASAN reports:
->>>
->>> [ 4.668325][ T0] BUG: KASAN: wild-memory-access in dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
->>> [    4.676149][    T0] Read of size 8 at addr 1fffffff85115558 by task swapper/0/0
->>> [    4.683454][    T0]
->>> [    4.685638][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc3-00004-g0e862838f290 #1
->>> [    4.694331][    T0] Hardware name: Supermicro SYS-5018D-FN4T/X10SDV-8C-TLN4F, BIOS 1.1 03/02/2016
->>> [    4.703196][    T0] Call Trace:
->>> [    4.706334][    T0]  <TASK>
->>> [ 4.709133][ T0] ? dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
->>>
->>> after converting the type of the first argument (@nr, bit number)
->>> of arch_test_bit() from `long` to `unsigned long`[0].
->>>
->>> Under certain conditions (for example, when ACPI NUMA is disabled
->>> via command line), pxm_to_node() can return %NUMA_NO_NODE (-1).
->>> It is valid 'magic' number of NUMA node, but not valid bit number
->>> to use in bitops.
->>> node_online() eventually descends to test_bit() without checking
->>> for the input, assuming it's on caller side (which might be good
->>> for perf-critical tasks). There, -1 becomes %ULONG_MAX which leads
->>> to an insane array index when calculating bit position in memory.
->>>
->>> For now, add an explicit check for @node being not %NUMA_NO_NODE
->>> before calling test_bit(). The actual logics didn't change here
->>> at all.
->>
->> Bah, forgot to insert the link here. Hope not worth resending ._.
->>
->> [0] https://github.com/norov/linux/commit/0e862838f290147ea9c16db852d8d494b552d38d
+
+
+On 12.07.2022 19:31, Carlos Bilbao wrote:
+> Some functions in tsens-8960.c can directly return ret instead of doing an
+> extra check. In function calibrate_8960(), a second check for IS_ERR(data)
+> can also be avoided in some cases. A constant could be used to represent
+> the maximum number of sensors (11). Finally, function code_to_degc() can be
+> simplified, avoiding using an extra variable.
 > 
-> I'll add this link and apply the patch to the bitmap-for-next, after
-> some testing.
+> Include these small refactoring changes.
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+>  drivers/thermal/qcom/tsens-8960.c   | 25 +++++++++----------------
+>  drivers/thermal/qcom/tsens-common.c | 18 ++++++++----------
+>  drivers/thermal/qcom/tsens-v0_1.c   |  6 +++---
+>  drivers/thermal/qcom/tsens-v1.c     |  2 +-
+>  drivers/thermal/qcom/tsens.h        |  1 +
+>  5 files changed, 22 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 8d9b721dadb6..576bca871655 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -76,10 +76,8 @@ static int suspend_8960(struct tsens_priv *priv)
+>  		mask = SLP_CLK_ENA_8660 | EN;
+>  
+>  	ret = regmap_update_bits(map, CNTL_ADDR, mask, 0);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int resume_8960(struct tsens_priv *priv)
+> @@ -106,10 +104,8 @@ static int resume_8960(struct tsens_priv *priv)
+>  		return ret;
+>  
+>  	ret = regmap_write(map, CNTL_ADDR, priv->ctx.control);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int enable_8960(struct tsens_priv *priv, int id)
+> @@ -132,10 +128,8 @@ static int enable_8960(struct tsens_priv *priv, int id)
+>  		reg |= mask | SLP_CLK_ENA_8660 | EN;
+>  
+>  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static void disable_8960(struct tsens_priv *priv)
+> @@ -206,10 +200,8 @@ static int init_8960(struct tsens_priv *priv)
+>  
+>  	reg_cntl |= EN;
+>  	ret = regmap_write(priv->tm_map, CNTL_ADDR, reg_cntl);
+> -	if (ret)
+> -		return ret;
+>  
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static int calibrate_8960(struct tsens_priv *priv)
+> @@ -221,10 +213,11 @@ static int calibrate_8960(struct tsens_priv *priv)
+>  	struct tsens_sensor *s = priv->sensor;
+>  
+>  	data = qfprom_read(priv->dev, "calib");
+> -	if (IS_ERR(data))
+> +	if (IS_ERR(data)) {
+>  		data = qfprom_read(priv->dev, "calib_backup");
+> -	if (IS_ERR(data))
+> -		return PTR_ERR(data);
+> +		if (IS_ERR(data))
+> +			return PTR_ERR(data);
+> +	}
+>  
+>  	for (i = 0; i < num_read; i++, s++)
+>  		s->offset = data[i];
+> @@ -278,6 +271,6 @@ static const struct tsens_ops ops_8960 = {
+>  };
+>  
+>  const struct tsens_plat_data data_8960 = {
+> -	.num_sensors	= 11,
+> +	.num_sensors	= MAX_NUM_SENSORS,
+>  	.ops		= &ops_8960,
+>  };
+> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> index 528df8801254..fe5f4459e1cc 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -66,19 +66,17 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+>  
+>  static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+>  {
+> -	int degc, num, den;
+> +	int degc, den;
+>  
+> -	num = (adc_code * SLOPE_FACTOR) - s->offset;
+> +	degc = (adc_code * SLOPE_FACTOR) - s->offset;
+>  	den = s->slope;
+>  
+> -	if (num > 0)
+> -		degc = num + (den / 2);
+> -	else if (num < 0)
+> -		degc = num - (den / 2);
+> -	else
+> -		degc = num;
+> -
+> -	degc /= den;
+> +	if (degc != 0) {
+> +		if (degc > 0)
+> +			degc = (degc + (den / 2)) / den;
+> +		else
+> +			degc = (degc - (den / 2)) / den;
+> +	}
+>  
+>  	return degc;
+>  }
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index 6f26fadf4c27..42e897526345 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -188,7 +188,7 @@ static int calibrate_8916(struct tsens_priv *priv)
+>  static int calibrate_8974(struct tsens_priv *priv)
+>  {
+>  	int base1 = 0, base2 = 0, i;
+> -	u32 p1[11], p2[11];
+> +	u32 p1[MAX_NUM_SENSORS], p2[MAX_NUM_SENSORS];
+>  	int mode = 0;
+>  	u32 *calib, *bkp;
+>  	u32 calib_redun_sel;
+> @@ -324,7 +324,7 @@ static const struct tsens_features tsens_v0_1_feat = {
+>  	.crit_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+> -	.max_sensors	= 11,
+> +	.max_sensors	= MAX_NUM_SENSORS,
+>  };
+>  
+>  static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+> @@ -374,7 +374,7 @@ static const struct tsens_ops ops_8974 = {
+>  };
+>  
+>  const struct tsens_plat_data data_8974 = {
+> -	.num_sensors	= 11,
+> +	.num_sensors	= MAX_NUM_SENSORS,
+>  	.ops		= &ops_8974,
+>  	.feat		= &tsens_v0_1_feat,
+>  	.fields	= tsens_v0_1_regfields,
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 10b595d4f619..98acc9b64555 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -149,7 +149,7 @@ static const struct tsens_features tsens_v1_feat = {
+>  	.crit_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+> -	.max_sensors	= 11,
+> +	.max_sensors	= MAX_NUM_SENSORS,
+>  };
+>  
+>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 2fd94997245b..d2d78c7e20c8 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -6,6 +6,7 @@
+>  #ifndef __QCOM_TSENS_H__
+>  #define __QCOM_TSENS_H__
+>  
+> +#define MAX_NUM_SENSORS		11
+Hi, this number matching up for v0.1 and v1 is purely coincidental
+and will change when more platforms are added. Please keep them
+separate to avoid confusion in the future.
 
-Thank you!
-
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
-
+Konrad
+>  #define ONE_PT_CALIB		0x1
+>  #define ONE_PT_CALIB2		0x2
+>  #define TWO_PT_CALIB		0x3
+> 

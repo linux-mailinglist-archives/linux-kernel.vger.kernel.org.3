@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915C6572FB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E771572FB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiGMHyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S234062AbiGMHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiGMHxw (ORCPT
+        with ESMTP id S234816AbiGMHxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 03:53:52 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47AC910575;
-        Wed, 13 Jul 2022 00:53:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE9B611810;
+        Wed, 13 Jul 2022 00:53:41 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D7rRHH1015457, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26D7rRHI1015457, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D7rRHH1015457
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26D7rRHI1015457
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
         Wed, 13 Jul 2022 15:53:27 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
@@ -35,9 +35,9 @@ CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
         <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
         <kidman@realtek.com>
-Subject: [PATCH 4/5] Bluetooth: btusb: Add the support ID for Realtek RTL8852C
-Date:   Wed, 13 Jul 2022 15:53:17 +0800
-Message-ID: <20220713075318.18176-5-hildawu@realtek.com>
+Subject: [PATCH 5/5] Bluetooth: btusb: Add the support ID for Realtek RTL8852C
+Date:   Wed, 13 Jul 2022 15:53:18 +0800
+Message-ID: <20220713075318.18176-6-hildawu@realtek.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220713075318.18176-1-hildawu@realtek.com>
 References: <20220713075318.18176-1-hildawu@realtek.com>
@@ -72,14 +72,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hilda Wu <hildawu@realtek.com>
 
-Add the support ID(0x13D3, 0x3587) to usb_device_id table for
+Add the support ID(0x13D3, 0x3586) to usb_device_id table for
 Realtek RTL8852C.
 
 The device info from /sys/kernel/debug/usb/devices as below.
 
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
 D:  Ver= 1.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=13d3 ProdID=3587 Rev= 0.00
+P:  Vendor=13d3 ProdID=3586 Rev= 0.00
 S:  Manufacturer=Realtek
 S:  Product=Bluetooth Radio
 S:  SerialNumber=00e04c000001
@@ -113,14 +113,14 @@ Signed-off-by: Hilda Wu <hildawu@realtek.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 50f2b0094cc7..e2da9d2573c9 100644
+index e2da9d2573c9..aaba2d737178 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
-@@ -434,6 +434,8 @@ static const struct usb_device_id blacklist_table[] = {
+@@ -436,6 +436,8 @@ static const struct usb_device_id blacklist_table[] = {
  						     BTUSB_WIDEBAND_SPEECH },
- 	{ USB_DEVICE(0x0cb8, 0xc558), .driver_info = BTUSB_REALTEK |
+ 	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
  						     BTUSB_WIDEBAND_SPEECH },
-+	{ USB_DEVICE(0x13d3, 0x3587), .driver_info = BTUSB_REALTEK |
++	{ USB_DEVICE(0x13d3, 0x3586), .driver_info = BTUSB_REALTEK |
 +						     BTUSB_WIDEBAND_SPEECH },
  
  	/* Realtek Bluetooth devices */

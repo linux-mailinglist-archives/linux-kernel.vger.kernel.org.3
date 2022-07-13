@@ -2,147 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252415739DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6985739E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbiGMPSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S236824AbiGMPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiGMPSV (ORCPT
+        with ESMTP id S231448AbiGMPTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:18:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A203F300
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:18:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1A1D15A1;
-        Wed, 13 Jul 2022 08:18:20 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 538CC3F73D;
-        Wed, 13 Jul 2022 08:18:19 -0700 (PDT)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>
-Cc:     broonie@kernel.org, mark.rutland@arm.com, peterz@infradead.org
-Subject: [PATCH] lkdtm: cfi: add test for HW landing pad CFI
-Date:   Wed, 13 Jul 2022 16:18:15 +0100
-Message-Id: <20220713151815.295520-1-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 13 Jul 2022 11:19:44 -0400
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0443C8CF;
+        Wed, 13 Jul 2022 08:19:43 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id f2so15958576wrr.6;
+        Wed, 13 Jul 2022 08:19:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jb4nt965TNcwr+NhIm2x9TnJU/UEz0cJsDnLaQo41aA=;
+        b=M3M6IUjK5yDcXTDH8yOwKD4uA624A8lcyf1UhCRcwc2afvkJD4RGbNvp7RUvr62SDL
+         9MIajchKqyBpmLOuSPQXMfr2p0rA2sBDscwRqBNCL1vZHJiJLckqzcoUDL8QEKAr+odS
+         /4GOvdYOMTIakIPegQi1s1UhPLFw2+dC5rKO81+rrVVmaF9nIy+YYV5vhW47RxJCV0bD
+         UXIkuRFZeIEo8wQF88wckIUieWuk0N+icR/8R9Une3FEjAq4RqAUOr7tXiMqMaB9IUJi
+         UwOneG0hc5FBt5BfOSejKUWptYdZZRyEHr6YIKx1evC1XthixYaIQKb93WBumXMSoi4X
+         H9Hg==
+X-Gm-Message-State: AJIora8NGxEz80wKOm0xXOvH0YBjHVKt1VagPzvzM+FsP0YgNUmX/nVk
+        a2IIadmWl1MqQffT/z1yNSgTwo2IxUE=
+X-Google-Smtp-Source: AGRyM1vIer1iKcyJCkMxsZeIQCAvJ1RSW1ZL9x+hGsugTfHldrud3JXr9Os00Uz9Ehv9o8imfdvzOA==
+X-Received: by 2002:a5d:64ce:0:b0:21d:a952:31d5 with SMTP id f14-20020a5d64ce000000b0021da95231d5mr3745169wri.667.1657725581691;
+        Wed, 13 Jul 2022 08:19:41 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id p2-20020a1c7402000000b003a2fdde48d1sm1281802wmc.25.2022.07.13.08.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:19:41 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 15:19:27 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "kernel@openvz.org" <kernel@openvz.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/1] Create debugfs file with hyper-v balloon usage
+ information
+Message-ID: <20220713151927.e6w5gcb67ffh4zlx@liuwe-devbox-debian-v2>
+References: <PH0PR21MB3025D1111824156FB6B9D0DCD7819@PH0PR21MB3025.namprd21.prod.outlook.com>
+ <20220711181825.52318-1-alexander.atanasov@virtuozzo.com>
+ <BY3PR21MB30335CDAD39F927427DEF4EAD7869@BY3PR21MB3033.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BY3PR21MB30335CDAD39F927427DEF4EAD7869@BY3PR21MB3033.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures have coarse-grained HW CFI schemes where indirect
-branches must target a "landing pad" instruction (e.g. BTI on arm64,
-ENDBR on x86). These prevent gadgetization of arbitrary portions of
-functions.
+On Tue, Jul 12, 2022 at 04:24:12PM +0000, Michael Kelley (LINUX) wrote:
+> From: Alexander Atanasov <alexander.atanasov@virtuozzo.com> Sent: Monday, July 11, 2022 11:18 AM
+> > 
+> > Allow the guest to know how much it is ballooned by the host.
+> > It is useful when debugging out of memory conditions.
+> > 
+> > When host gets back memory from the guest it is accounted
+> > as used memory in the guest but the guest have no way to know
+> > how much it is actually ballooned.
+> > 
+> > Expose current state, flags and max possible memory to the guest.
+> > While at it - fix a 10+ years old typo.
+> > 
+> > Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+> > ---
+[...]
+> 
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-Add a test which checks these work as expected.
-
-For example, on arm64 HW with BTI this should result in a BTI exception
-being taken:
-
-| # echo CFI_FORWARD_LANDING_PAD > /sys/kernel/debug/provoke-crash/DIRECT
-| lkdtm: Performing direct entry CFI_FORWARD_LANDING_PAD
-| lkdtm: Calling gadget address ...
-| Unhandled 64-bit el1h sync exception on CPU0, ESR 0x0000000034000002 -- BTI
-| CPU: 0 PID: 152 Comm: bash Not tainted 5.19.0-rc6-00001-g1f3acfdc1799 #3
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 60400809 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=-c)
-| pc : lkdtm_increment_void+0x4/0x20
-| lr : lkdtm_CFI_FORWARD_LANDING_PAD+0x30/0x48
-| sp : ffff80000a763cf0
-| x29: ffff80000a763cf0 x28: ffff0000042c1d80 x27: 0000000000000000
-| x26: 0000000000000000 x25: 0000000000000000 x24: 0000000031a6fb80
-| x23: ffff000002c2a0c0 x22: ffff80000a763df0 x21: 0000000000000018
-| x20: ffff80000a231498 x19: ffff000004075000 x18: 0000000000000006
-| x17: 0000000000000000 x16: 0000000000000000 x15: 0720072007200720
-| x14: 0720072007200720 x13: ffff800009f82ca8 x12: 0000000000000429
-| x11: 0000000000000163 x10: ffff800009fdaca8 x9 : ffff800009f82ca8
-| x8 : 00000000ffffefff x7 : ffff800009fdaca8 x6 : 80000000fffff000
-| x5 : ffff00007fbcca08 x4 : 0000000000000000 x3 : 0000000000000000
-| x2 : 0000000000000000 x1 : ffff8000088a9c94 x0 : ffff80000a334b70
-| Kernel panic - not syncing: Unhandled exception
-| CPU: 0 PID: 152 Comm: bash Not tainted 5.19.0-rc6-00001-g1f3acfdc1799 #3
-| Hardware name: linux,dummy-virt (DT)
-| Call trace:
-|  dump_backtrace.part.0+0xcc/0xe0
-|  show_stack+0x18/0x6c
-|  dump_stack_lvl+0x64/0x80
-|  dump_stack+0x18/0x34
-|  panic+0x170/0x328
-|  arm64_exit_nmi.isra.0+0x0/0x80
-|  el1h_64_sync_handler+0x64/0xd0
-|  el1h_64_sync+0x64/0x68
-|  lkdtm_increment_void+0x4/0x20
-|  lkdtm_do_action+0x24/0x30
-|  direct_entry+0x160/0x174
-|  full_proxy_write+0x60/0xbc
-|  vfs_write+0xc4/0x2a0
-|  ksys_write+0x70/0x104
-|  __arm64_sys_write+0x20/0x2c
-|  invoke_syscall+0x48/0x114
-|  el0_svc_common.constprop.0+0xcc/0xec
-|  do_el0_svc+0xa0/0xc0
-|  el0_svc+0x2c/0x84
-|  el0t_64_sync_handler+0x11c/0x150
-|  el0t_64_sync+0x18c/0x190
-| Kernel Offset: disabled
-| CPU features: 0x000,0003a817,69a418cf
-| Memory Limit: none
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- drivers/misc/lkdtm/cfi.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-index 666a7f4bc137..7cfdda73f561 100644
---- a/drivers/misc/lkdtm/cfi.c
-+++ b/drivers/misc/lkdtm/cfi.c
-@@ -43,6 +43,23 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
- 	pr_expected_config(CONFIG_CFI_CLANG);
- }
- 
-+/*
-+ * This tries to call an indirect function with an address which is not a
-+ * function entry point. This should be caught by architectures with "landing
-+ * pad" instructions (e.g. BTI on arm64, or ENDBR on x86).
-+ */
-+static void lkdtm_CFI_FORWARD_LANDING_PAD(void)
-+{
-+	void (*func)(int *);
-+
-+	func = (void *)((unsigned long)lkdtm_increment_void + 4);
-+
-+	pr_info("Calling gadget address ...\n");
-+	func(&called_count);
-+
-+	pr_err("FAIL: survived gadget function call!\n");
-+}
-+
- /*
-  * This can stay local to LKDTM, as there should not be a production reason
-  * to disable PAC && SCS.
-@@ -177,6 +194,7 @@ static void lkdtm_CFI_BACKWARD(void)
- 
- static struct crashtype crashtypes[] = {
- 	CRASHTYPE(CFI_FORWARD_PROTO),
-+	CRASHTYPE(CFI_FORWARD_LANDING_PAD),
- 	CRASHTYPE(CFI_BACKWARD),
- };
- 
--- 
-2.30.2
-
+I added "Drivers: hv:" prefix to the subject line and applied it to
+hyperv-next. Thanks.

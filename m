@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDAA573B4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD48573B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237236AbiGMQcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S237257AbiGMQdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiGMQcr (ORCPT
+        with ESMTP id S237238AbiGMQdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:32:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8597C2CDEA;
-        Wed, 13 Jul 2022 09:32:45 -0700 (PDT)
+        Wed, 13 Jul 2022 12:33:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63A2CE3D;
+        Wed, 13 Jul 2022 09:33:13 -0700 (PDT)
 Received: from localhost (dynamic-002-247-252-243.2.247.pool.telefonica.de [2.247.252.243])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA4F9660191C;
-        Wed, 13 Jul 2022 17:32:43 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C3D46601926;
+        Wed, 13 Jul 2022 17:33:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657729964;
-        bh=CtMDQU5Rl7w4k3vdufuEIThSkeTfJG6tKC5YQsVp1HE=;
+        s=mail; t=1657729992;
+        bh=H45vKIVxYSOqYRL43Uz5XTwJe8yBD2CscZqG1frIUiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l7X7PfDkc+hZ1f2XHto4cpy0UH89XxDdmLj0Ti7BFrkFWH7znIArv+eo2ik6wBNpW
-         VhhxOdz3d+/YoqzFpVunEMwhiJ4O/3cYJWLKc+Z3sBGYa72C/rc6W1kRetOAPWUL8L
-         u0JOjtV/5s2GSGuiAJR20gCc4l2KmLxeOxfqPsmeW30U2XElck3j5VtOMV3urbPUwJ
-         hDf0Uz6VUKIXMezm5vuFfkKPBgEsHJPLKyvuK1jSwwu8PV+WRlomO0bKXUCfNVTsSK
-         n8YgUnRFPACdDgCJun8CLB26pYKIWDWoK1ovC9eqBU0cj45A5rLOcDB68+m9t+pFxA
-         /sfdRBCY8Y15g==
+        b=DVP/8OabOAVdwWtbUamryVmHMiU9imIDdQD/mdYFbP8mAUCazpTc1qPjmeSrtqx8n
+         jvq9kx5xIFzHL0H/6OXZYYq/GRnrRpR+JTL6f3ZKEoEiV4JjwFmlV1P3NpHfTP8iR4
+         5k4qcpDN4g4Xp5sTt4ajt8Z6i4t4ex7Iq2RqgD7wpBf5wY9Y0SzpqGDSSMuu28shk6
+         QgdZop99S4uetfY/+iAuSL/kt5tUpgR8Ndzfn0F/hMr5bTyz/qSRBzdk/X9cv7kkPd
+         54G4ehGJLgUHFJx/pNLCXkdzEBdlgWTqNUpswi11hLSwTz5kSS1XuG1OIarDAE5iAi
+         qi1IxfylXDNcw==
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     jernej.skrabec@gmail.com, knaerzche@gmail.com,
@@ -45,9 +45,9 @@ Cc:     jernej.skrabec@gmail.com, knaerzche@gmail.com,
         Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH 4/6] staging: media: rkvdec: Add valid pixel format check
-Date:   Wed, 13 Jul 2022 18:32:01 +0200
-Message-Id: <20220713163201.136202-2-sebastian.fricke@collabora.com>
+Subject: [PATCH 5/6] staging: media: rkvdec: Enable S_CTRL IOCTL
+Date:   Wed, 13 Jul 2022 18:32:03 +0200
+Message-Id: <20220713163201.136202-3-sebastian.fricke@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220713163201.136202-1-sebastian.fricke@collabora.com>
 References: <20220713163201.136202-1-sebastian.fricke@collabora.com>
@@ -62,141 +62,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a callback for codec variant drivers to indicate the correct
-output pixel-format after receiving the SPS of the byte-stream, on the
-initial s_ctrl ioctl call from user-space.
+Enable user-space to set the SPS of the current byte-stream on the
+decoder. This action will trigger the decoder to pick the optimal
+pixel-format for the capture queue.
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 ---
- drivers/staging/media/rkvdec/TODO     |  2 ++
- drivers/staging/media/rkvdec/rkvdec.c | 45 +++++++++++++++++++++++----
- drivers/staging/media/rkvdec/rkvdec.h |  2 ++
- 3 files changed, 43 insertions(+), 6 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 60 ++++++++++++++++++++-------
+ 1 file changed, 46 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/TODO b/drivers/staging/media/rkvdec/TODO
-index 2c0779383276..44e1e06ee6e4 100644
---- a/drivers/staging/media/rkvdec/TODO
-+++ b/drivers/staging/media/rkvdec/TODO
-@@ -9,3 +9,5 @@
-   code in rkvdec_request_validate and cedrus_request_validate.
-   The helper needs to the driver private data associated with
-   the videobuf2 queue, from a media request.
-+
-+* Implement the valid_fmt callback for H264 and VP9
 diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 7bab7586918c..2625e0a736f4 100644
+index 2625e0a736f4..f84579f764ab 100644
 --- a/drivers/staging/media/rkvdec/rkvdec.c
 +++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -27,6 +27,23 @@
+@@ -27,6 +27,17 @@
  #include "rkvdec.h"
  #include "rkvdec-regs.h"
  
-+/*
-+ * Fetch the optimal pixel-format directly from the codec variation. If the
-+ * valid_fmt callback is not implemented, then the context variable valid_fmt
-+ * will be unset.
-+ * When the `valid_fmt` variable is not set, the default pixel_format (the first
-+ * entry of the decoded_fmts) is used and `enum_capture_fmt` will return all
-+ * available formats for the current coded format.
-+ */
-+static int rkvdec_get_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
++static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
++				       struct v4l2_pix_format_mplane *pix_mp)
 +{
-+	const struct rkvdec_coded_fmt_desc *coded_desc = ctx->coded_fmt_desc;
++	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
++			    pix_mp->width, pix_mp->height);
++	pix_mp->plane_fmt[0].sizeimage += 128 *
++		DIV_ROUND_UP(pix_mp->width, 16) *
++		DIV_ROUND_UP(pix_mp->height, 16);
++	pix_mp->field = V4L2_FIELD_NONE;
++}
 +
-+	if (coded_desc->ops->valid_fmt)
-+		return coded_desc->ops->valid_fmt(ctx, ctrl);
+ /*
+  * Fetch the optimal pixel-format directly from the codec variation. If the
+  * valid_fmt callback is not implemented, then the context variable valid_fmt
+@@ -44,6 +55,27 @@ static int rkvdec_get_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
+ 	return 0;
+ }
+ 
++static int rkvdec_set_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
++{
++	struct v4l2_pix_format_mplane *pix_mp;
++
++	switch (ctrl->id) {
++	case V4L2_CID_STATELESS_H264_SPS:
++	case V4L2_CID_STATELESS_VP9_FRAME:
++	case V4L2_CID_STATELESS_HEVC_SPS:
++		ctx->valid_fmt = rkvdec_get_valid_fmt(ctx, ctrl);
++
++		pix_mp = &ctx->decoded_fmt.fmt.pix_mp;
++		pix_mp->pixelformat = ctx->valid_fmt;
++		rkvdec_fill_decoded_pixfmt(ctx, pix_mp);
++		break;
++	default:
++		dev_err(ctx->dev->dev, "Unsupported stateless control ID: %x\n", ctrl->id);
++		return -EINVAL;
++	};
 +	return 0;
 +}
 +
  static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
  {
  	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
-@@ -35,6 +52,9 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
- 	if (desc->ops->try_ctrl)
- 		return desc->ops->try_ctrl(ctx, ctrl);
- 
-+	if (ctx->valid_fmt && ctx->valid_fmt != rkvdec_get_valid_fmt(ctx, ctrl))
-+		/* Only allow the current valid format */
-+		return -EINVAL;
+@@ -58,8 +90,18 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
  	return 0;
  }
  
-@@ -190,6 +210,7 @@ static void rkvdec_reset_decoded_fmt(struct rkvdec_ctx *ctx)
- {
- 	struct v4l2_format *f = &ctx->decoded_fmt;
++static int rkvdec_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
++
++	if (!ctx->valid_fmt)
++		return rkvdec_set_valid_fmt(ctx, ctrl);
++	return 0;
++}
++
+ static const struct v4l2_ctrl_ops rkvdec_ctrl_ops = {
+ 	.try_ctrl = rkvdec_try_ctrl,
++	.s_ctrl = rkvdec_s_ctrl,
+ };
  
-+	ctx->valid_fmt = 0;
+ static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
+@@ -213,13 +255,9 @@ static void rkvdec_reset_decoded_fmt(struct rkvdec_ctx *ctx)
+ 	ctx->valid_fmt = 0;
  	rkvdec_reset_fmt(ctx, f, ctx->coded_fmt_desc->decoded_fmts[0]);
  	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
- 	v4l2_fill_pixfmt_mp(&f->fmt.pix_mp,
-@@ -249,14 +270,17 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
- 	if (WARN_ON(!coded_desc))
- 		return -EINVAL;
- 
--	for (i = 0; i < coded_desc->num_decoded_fmts; i++) {
--		if (coded_desc->decoded_fmts[i] == pix_mp->pixelformat)
--			break;
-+	if (ctx->valid_fmt) {
-+		pix_mp->pixelformat = ctx->valid_fmt;
-+	} else {
-+		for (i = 0; i < coded_desc->num_decoded_fmts; i++) {
-+			if (coded_desc->decoded_fmts[i] == pix_mp->pixelformat)
-+				break;
-+		}
-+		if (i == coded_desc->num_decoded_fmts)
-+			pix_mp->pixelformat = coded_desc->decoded_fmts[0];
- 	}
- 
--	if (i == coded_desc->num_decoded_fmts)
--		pix_mp->pixelformat = coded_desc->decoded_fmts[0];
--
- 	/* Always apply the frmsize constraint of the coded end. */
- 	pix_mp->width = max(pix_mp->width, ctx->coded_fmt.fmt.pix_mp.width);
- 	pix_mp->height = max(pix_mp->height, ctx->coded_fmt.fmt.pix_mp.height);
-@@ -325,6 +349,7 @@ static int rkvdec_s_capture_fmt(struct file *file, void *priv,
- 		return ret;
- 
- 	ctx->decoded_fmt = *f;
-+	ctx->valid_fmt = f->fmt.pix_mp.pixelformat;
- 	return 0;
+-	v4l2_fill_pixfmt_mp(&f->fmt.pix_mp,
+-			    ctx->coded_fmt_desc->decoded_fmts[0],
+-			    ctx->coded_fmt.fmt.pix_mp.width,
+-			    ctx->coded_fmt.fmt.pix_mp.height);
+-	f->fmt.pix_mp.plane_fmt[0].sizeimage += 128 *
+-		DIV_ROUND_UP(f->fmt.pix_mp.width, 16) *
+-		DIV_ROUND_UP(f->fmt.pix_mp.height, 16);
++	f->fmt.pix_mp.width = ctx->coded_fmt.fmt.pix_mp.width;
++	f->fmt.pix_mp.height = ctx->coded_fmt.fmt.pix_mp.height;
++	rkvdec_fill_decoded_pixfmt(ctx, &f->fmt.pix_mp);
  }
  
-@@ -428,6 +453,14 @@ static int rkvdec_enum_capture_fmt(struct file *file, void *priv,
- 	if (WARN_ON(!ctx->coded_fmt_desc))
- 		return -EINVAL;
+ static int rkvdec_enum_framesizes(struct file *file, void *priv,
+@@ -288,13 +326,7 @@ static int rkvdec_try_capture_fmt(struct file *file, void *priv,
+ 				       &pix_mp->height,
+ 				       &coded_desc->frmsize);
  
-+	if (ctx->valid_fmt) {
-+		if (f->index)
-+			return -EINVAL;
-+
-+		f->pixelformat = ctx->valid_fmt;
-+		return 0;
-+	}
-+
- 	if (f->index >= ctx->coded_fmt_desc->num_decoded_fmts)
- 		return -EINVAL;
+-	v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
+-			    pix_mp->width, pix_mp->height);
+-	pix_mp->plane_fmt[0].sizeimage +=
+-		128 *
+-		DIV_ROUND_UP(pix_mp->width, 16) *
+-		DIV_ROUND_UP(pix_mp->height, 16);
+-	pix_mp->field = V4L2_FIELD_NONE;
++	rkvdec_fill_decoded_pixfmt(ctx, pix_mp);
  
-diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-index 633335ebb9c4..b9e219438bc9 100644
---- a/drivers/staging/media/rkvdec/rkvdec.h
-+++ b/drivers/staging/media/rkvdec/rkvdec.h
-@@ -66,6 +66,7 @@ vb2_to_rkvdec_decoded_buf(struct vb2_buffer *buf)
- struct rkvdec_coded_fmt_ops {
- 	int (*adjust_fmt)(struct rkvdec_ctx *ctx,
- 			  struct v4l2_format *f);
-+	u32 (*valid_fmt)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
- 	int (*start)(struct rkvdec_ctx *ctx);
- 	void (*stop)(struct rkvdec_ctx *ctx);
- 	int (*run)(struct rkvdec_ctx *ctx);
-@@ -101,6 +102,7 @@ struct rkvdec_ctx {
- 	struct v4l2_fh fh;
- 	struct v4l2_format coded_fmt;
- 	struct v4l2_format decoded_fmt;
-+	u32 valid_fmt;
- 	const struct rkvdec_coded_fmt_desc *coded_fmt_desc;
- 	struct v4l2_ctrl_handler ctrl_hdl;
- 	struct rkvdec_dev *dev;
+ 	return 0;
+ }
 -- 
 2.25.1
 

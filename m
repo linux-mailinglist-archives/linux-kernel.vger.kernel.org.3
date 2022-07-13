@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F0357325D
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D495573260
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbiGMJV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S234638AbiGMJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiGMJV1 (ORCPT
+        with ESMTP id S231266AbiGMJWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:21:27 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46901F2E0F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:21:26 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id a5so14598290wrx.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EuZkOhoO/lITrLjgkVjvwTGd6HeRto8WBI5Hh6eby/E=;
-        b=lxpzLzJ2shualTR8sKZ9gN8OZks8zFo0iRo8BFAcwp2FMZRwgNsO18oikVjYyQKAgo
-         rMuIfcGIahdIM7l57u7/mG2Gyfbio0+KR1Oz7FgpVdxwH1ipuYjoMqUEprcgbshmg9rv
-         ELVKBizg2Y4CeidKhYIpjGaHNID9oH+ewrBMb593FOh+UJzGP1hL5cYBTi+mzIKN+sOT
-         F9WCYfbuxv0iLvoi0ehIrM9WMzNkqKLSDIMeLxG6xGLvevHOPaEeuGHX3N4ajNUMwzi7
-         jSAiaKaAwlIEyUsWxYZelMhXFi396sA+dTWjbi/W9Ex/hsM24+LrcVFxpicpVyV32ny2
-         NnRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EuZkOhoO/lITrLjgkVjvwTGd6HeRto8WBI5Hh6eby/E=;
-        b=69Qcrl/ycmUuZGKEZs63Gp9ehtMtKP3ZbTaSt0R4PxieQuyDgTl72V4vMi9RVuFzND
-         5GmQtiMSgwdqOqpNsI4AjIiu7Z0T12aNN/wJSLX101ulzMXZcSEDbnHZbbEAuJHDW99x
-         yqolhL5Zv1OhF86VbwO93hKiVYWM/Ozm/3GqYIFg0fX4Cf7BFxfvd+BT8/Q/VXTx1Qo3
-         KIhKUCde4S/Qlmcm5n79RflVILQxJIuCzBDa1vUpZ1C4DLdgez4HC78XoO4cOTIjfMCx
-         nC01mzCLMKMbulhib42110DPzmsoXqESW8yuV7tEaAErwsNdsDFX44QdaHE6EJIBRN6Z
-         CqkQ==
-X-Gm-Message-State: AJIora91gst76FTs9l4Kur6CtgLe3dpvTgQ9dPM3qhbvU+DoYkkKfM2P
-        BsLTEJWRYnvbqiRNTsnxE3NoAw==
-X-Google-Smtp-Source: AGRyM1uJ6l9+mYRUMQdWMVEP6Jn6AiXmM/gA+u1wvU08eiSPFXbHEqDDa7FPwtSdpFEBibAvtahShg==
-X-Received: by 2002:a5d:588b:0:b0:21d:a918:65a5 with SMTP id n11-20020a5d588b000000b0021da91865a5mr2285506wrf.210.1657704084868;
-        Wed, 13 Jul 2022 02:21:24 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id j25-20020adfd219000000b0021d7122ab80sm10359669wrh.110.2022.07.13.02.21.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:21:24 -0700 (PDT)
-Message-ID: <3a1eea1f-b598-58ad-60a6-c76b77cb08c4@sifive.com>
-Date:   Wed, 13 Jul 2022 10:21:23 +0100
+        Wed, 13 Jul 2022 05:22:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F260EA173;
+        Wed, 13 Jul 2022 02:22:19 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 76BD222C86;
+        Wed, 13 Jul 2022 09:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657704136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/rRcSr0LdG+YdTaRLjdffwvOM+zTDAbKuKoY3nQK3A=;
+        b=1sANN5OpLm5MMnf374XyYrYZkh2mg+WBG85fPf32+xJqHveYC/lrQb2XlWL4lYhgrCluvB
+        7ZW+UOkLwht5QJwa6tBruwYDi6wkQncJF8+vx1/AiLp2KOH3vxqWoEnV2XneqEpobmOWhq
+        5BF6p9J4cb6kIgmQbyr428kax4pj2tA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657704136;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/rRcSr0LdG+YdTaRLjdffwvOM+zTDAbKuKoY3nQK3A=;
+        b=Tiy9DwvhN5REdyRK1HjEBeDy6y4udrn8bY5EgBup7/E+aij6tZXTPAKpb2iEfDkigUkYAE
+        QmMzDbyalDNH6nCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67C9413754;
+        Wed, 13 Jul 2022 09:22:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l5s5GciOzmJIUQAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 13 Jul 2022 09:22:16 +0000
+Date:   Wed, 13 Jul 2022 11:21:30 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: Re: [PATCH 5.18 34/61] objtool: Update Retpoline validation
+Message-ID: <Ys6OiDQCuP072GCX@nazgul.tnic>
+References: <20220712183236.931648980@linuxfoundation.org>
+ <20220712183238.342232911@linuxfoundation.org>
+ <63e23f80-033f-f64e-7522-2816debbc367@kernel.org>
+ <509dd891-73cc-31b9-18ac-2e930084c02f@kernel.org>
+ <Ys5/ssHL076y4niP@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <fdef31b4-9c27-ddda-f1e5-ee881812aa4e@linaro.org>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <fdef31b4-9c27-ddda-f1e5-ee881812aa4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ys5/ssHL076y4niP@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 11:08, Krzysztof Kozlowski wrote:
-> On 12/07/2022 12:01, Ben Dooks wrote:
->> The dwc pwm controller can be used in non-PCI systems, so allow
->> either platform or OF based probing.
->>
->> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->> ---
->>   .../devicetree/bindings/pwm/pwm-synposys.yaml | 40 ++++++++++++++
-> 
-> Bindings must be a separate patch. Preferably first in the series. Use
-> proper subject prefix matching the subsystem.
-> 
-> Best regards,
-> Krzysztof
+On Wed, Jul 13, 2022 at 10:17:54AM +0200, Greg Kroah-Hartman wrote:
+> > A naive fix is:
+> > --- a/arch/x86/kernel/head_32.S
+> > +++ b/arch/x86/kernel/head_32.S
+> > @@ -23,6 +23,7 @@
+> >  #include <asm/cpufeatures.h>
+> >  #include <asm/percpu.h>
+> >  #include <asm/nops.h>
+> > +#include <asm/nospec-branch.h>
+> >  #include <asm/bootparam.h>
+> >  #include <asm/export.h>
+> >  #include <asm/pgtable_32.h>
 
-Thanks, seems counter-intuitive that one change is split up like that.
+Yap, pls send a proper patch.
+
+> I doubt it should be doing that, but I'll let others answer more
+> definitively.
+
+I'd leave that question to the objtool folks.
+
+Technically, the UNTRAIN_RET sequence is meant for both 32- and 64-bit
+so there should be no reason not to mitigate that on 32-bit too. Not
+that people should run 32-bit kernels...
+
+> Your commit seems sane, for some reason I thought Boris tested i386
+> builds, but maybe in the end something snuck in that broke it.
+
+I caught one build breakage in relocate_kernel_32.S but this is a new
+one.
+
+Thx.
 
 -- 
-Ben
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

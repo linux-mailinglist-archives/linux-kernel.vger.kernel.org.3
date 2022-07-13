@@ -2,92 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723CD5739E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30695739EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236859AbiGMPUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S236917AbiGMPUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236820AbiGMPUL (ORCPT
+        with ESMTP id S236892AbiGMPUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:20:11 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487845071;
-        Wed, 13 Jul 2022 08:20:11 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p9so12479795pjd.3;
-        Wed, 13 Jul 2022 08:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sfcwLMN8Ewi+9XLJ414pnukT/pEOQ51tGjnru+yDZWI=;
-        b=Q6pScKlpaBVzK+JhActGi643lCDIiwN0l+n2gIcAtZx5pBGqUzKfxOz0UjVpEkdLyR
-         JXSoXaySG7xX6nsyKKQEldFXS5iIXnQf9dHBxzhz6HIa23M+4gm5b8DIdlkt5stEMGk7
-         e53fdGWomOfTKAaoihiYCWx5GC3T/WApV1sN6MxqMvFkizFpIO8NwGGdzH1f679cQ1xm
-         Pv5nr92Yf9f7K4Qj5BAY5jImxaamdo9DEwbIbX4v+SLvJwU09unPsPdRN9rWR3h2+MfZ
-         oUMfXU2SkzbvM5jIqsXz81pHGDhak32fDYg9CkWaSPv5GmXTQ0bkUtqSs6bCCNMCezL9
-         Qjcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sfcwLMN8Ewi+9XLJ414pnukT/pEOQ51tGjnru+yDZWI=;
-        b=1rlu3j0XQy49jTtfTKDPmM/VDTabLMn70lTFbvoKkHVFL1WntASxkJsLo7yQkVhfw2
-         PsE1JTithbYdQ9INtcRx2I1WdS/oZiR2qA0YpGXv3uZiiTHb0p1v0dBfW4tNNkkbPufX
-         wHfpsrEOotp+FiaPpFlgdlvEqKGD/5bPsYmxFdj0gWi5G0GEmxCVWRoMckx4FW/GCfB0
-         IJnpUfn4pXOxLcFRhrlNPUfz0lnMV16pY+mqW/BeCkF2Avu4Wrk0Z53VUBUenweCsGd5
-         14syENBY/ZL2fuyLeKE8skOKEyqVgBBFBSvKw9hs91zGKuqYx9vSthhpIRe/q4WQncUW
-         G9gQ==
-X-Gm-Message-State: AJIora+YJcyn5v5vLdXHHsWaZ4jh5CVkjEGCN142roffN6LoRGPRMzwH
-        4yYT9HPutOfLMhuzXOGiFiY=
-X-Google-Smtp-Source: AGRyM1t2S8VoCUJrWmORCeo5mfBdRIAcU+wdvHCqqj7G7C9PJ54IKMLzXkyUHrvKhpv+pg3WS+nwFQ==
-X-Received: by 2002:a17:90b:17c9:b0:1f0:5678:5142 with SMTP id me9-20020a17090b17c900b001f056785142mr4418118pjb.205.1657725610103;
-        Wed, 13 Jul 2022 08:20:10 -0700 (PDT)
-Received: from localhost.localdomain ([136.185.227.196])
-        by smtp.googlemail.com with ESMTPSA id pi4-20020a17090b1e4400b001df264610c4sm6891758pjb.0.2022.07.13.08.20.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 08:20:09 -0700 (PDT)
-From:   sumadhurakalyan <sumadhurakalyan@gmail.com>
-Cc:     sumadhurakalyan <sumadhurakalyan@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] Subject: Fix 'void function return statements are not generally useful' warning
-Date:   Wed, 13 Jul 2022 20:49:52 +0530
-Message-Id: <20220713151953.9547-1-sumadhurakalyan@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Jul 2022 11:20:22 -0400
+Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0740148E81
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:20:21 -0700 (PDT)
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 1611220308
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:20:20 +0000 (UTC)
+Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.155])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id E4F41200FE;
+        Wed, 13 Jul 2022 15:20:15 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay4.mymailcheap.com (Postfix) with ESMTPS id 582762002B;
+        Wed, 13 Jul 2022 15:20:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id A7FD62A37A;
+        Wed, 13 Jul 2022 15:20:12 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Mjtnp9Yh_b5A; Wed, 13 Jul 2022 15:20:11 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Wed, 13 Jul 2022 15:20:11 +0000 (UTC)
+Received: from edelgard.icenowy.me (unknown [59.41.163.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 0FC58401DE;
+        Wed, 13 Jul 2022 15:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1657725611; bh=+yBjiaaM+sNFe9mQaPmsE4kvOTzDSDgxYxxc0Iq+MY8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LCrc1mO5Ay1rRkF9QUGl4hQizZ5rOnedJWUoAOdi3X+2wmQ49ho4zjByDepWWvL/M
+         m9R+2QlpsED2A+6C+02bn6FrwdibSyylTreJ3D/F8rSQBjEfds807pLbIz4fSLr33P
+         /HCg4HifkboydGfuh0ZYDWtag6yqzgYqTUy306ns=
+Message-ID: <c4b4ecdff302879fa73feab6038a8fe863f4e51b.camel@aosc.io>
+Subject: Re: [PATCH v1 2/2] riscv: dts: starfive: add the missing monitor
+ core
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Conor.Dooley@microchip.com, kernel@esmil.dk, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 13 Jul 2022 23:20:03 +0800
+In-Reply-To: <224a7ec2-62ca-a8a5-ff36-37de4186e05e@microchip.com>
+References: <20220711184325.1367393-1-mail@conchuod.ie>
+         <20220711184325.1367393-3-mail@conchuod.ie>
+         <2303fc91e5110f22fc9ea6008fa4bbc77c1bdb13.camel@aosc.io>
+         <224a7ec2-62ca-a8a5-ff36-37de4186e05e@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_HTTP,
+        RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix 'void function return statements are not generally useful' warning
----
- drivers/rtc/rtc-as3722.c | 1 -
- 1 file changed, 1 deletion(-)
+在 2022-07-13星期三的 15:16 +0000，Conor.Dooley@microchip.com写道：
+> On 13/07/2022 16:15, Icenowy Zheng wrote:
+> > 在 2022-07-11星期一的 19:43 +0100，Conor Dooley写道：
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > > 
+> > > The JH7100 has a 32 bit monitor core that is missing from the
+> > > device
+> > > tree. Add it (and its cpu-map entry) to more accurately reflect
+> > > the
+> > > actual topology of the SoC.
+> > > 
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > >  arch/riscv/boot/dts/starfive/jh7100.dtsi | 21
+> > > +++++++++++++++++++++
+> > >  1 file changed, 21 insertions(+)
+> > > 
+> > > diff --git a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> > > b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> > > index c617a61e26e2..92fce5b66d3d 100644
+> > > --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> > > +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> > > @@ -67,6 +67,23 @@ cpu1_intc: interrupt-controller {
+> > >                         };
+> > >                 };
+> > >  
+> > > +               E24: cpu@2 {
+> > > +                       compatible = "sifive,e24", "riscv";
+> > 
+> > Oh, by the way "sifive,e24" is not a documented compatible in the
+> > DT
+> > binding.
+> > 
+> > If you really want to add it here, you need to add the compatible
+> > string to the DT binding first.
+> 
+> Check patch 1/2.
 
-diff --git a/drivers/rtc/rtc-as3722.c b/drivers/rtc/rtc-as3722.c
-index 0f21af27f4cf..e19a68e4d128 100644
---- a/drivers/rtc/rtc-as3722.c
-+++ b/drivers/rtc/rtc-as3722.c
-@@ -48,7 +48,6 @@ static void as3722_reg_to_time(u8 *rbuff, struct rtc_time *tm)
- 	tm->tm_mday = bcd2bin(rbuff[3] & 0x3F);
- 	tm->tm_mon = bcd2bin(rbuff[4] & 0x1F) - 1;
- 	tm->tm_year = (AS3722_RTC_START_YEAR - 1900) + bcd2bin(rbuff[5] & 0x7F);
--	return;
- }
- 
- static int as3722_rtc_read_time(struct device *dev, struct rtc_time *tm)
--- 
-2.25.1
+Oh sorry I forgot this.
+
+Nevermind.
+
+> 
+> > 
+> > > +                       reg = <2>;
+> > > +                       device_type = "cpu";
+> > > +                       i-cache-block-size = <32>;
+> > > +                       i-cache-sets = <256>;
+> > > +                       i-cache-size = <16384>;
+> > > +                       riscv,isa = "rv32imafc";
+> > > +                       status = "disabled";
+> > > +
+> > > +                       cpu2_intc: interrupt-controller {
+> > > +                               compatible = "riscv,cpu-intc";
+> > > +                               interrupt-controller;
+> > > +                               #interrupt-cells = <1>;
+> > > +                       };
+> > > +               };
+> > > +
+> > >                 cpu-map {
+> > >                         cluster0 {
+> > >                                 core0 {
+> > > @@ -76,6 +93,10 @@ core0 {
+> > >                                 core1 {
+> > >                                         cpu = <&U74_1>;
+> > >                                 };
+> > > +
+> > > +                               core2 {
+> > > +                                       cpu = <&E24>;
+> > > +                               };
+> > >                         };
+> > >                 };
+> > >         };
+> > 
+> > 
+
 

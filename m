@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A6F573D85
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C809D573D89
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiGMUDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S237005AbiGMUEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiGMUDq (ORCPT
+        with ESMTP id S231860AbiGMUEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:03:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B068E2DF4;
-        Wed, 13 Jul 2022 13:03:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 13 Jul 2022 16:04:08 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E4CDFF8;
+        Wed, 13 Jul 2022 13:04:06 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05403B8214D;
-        Wed, 13 Jul 2022 20:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDCCC34114;
-        Wed, 13 Jul 2022 20:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657742619;
-        bh=WuHHTJxCbMvxN9wOlvDm7LaxQgBF717ppnpA3S+GxJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Otqhsatk+zG3w/OGnMokbqmkoqhqT+TdezG8+TfKHeMK7CjrnXZ6Ie8LvEb7A8Y+8
-         refthA7uSe93O7E9rXehuO0kU/a9MX9dsYLXlQ8sWAwUshIV278Otlz7MkmnIE0JZD
-         Tuqr9mdYtta8lkwTgidRGFw5zKelRtbKDSdK196Sgv1tFr6QK8BYMCJGvCqMtTKnD1
-         HegdRWGVJi4evBKktBfrRQi4pgcQJZoUfgoh+BiIqA1AXRSarL5fwmWLergtiMvXwB
-         Kr42lqFg9G4pqlWFcg8/HO9+UShkiEXMDBNI8905xf3QcY+dqs6BwYvFFL5dyKQp1k
-         6sNjrlgEJeR4w==
-Received: by pali.im (Postfix)
-        id D5D069D9; Wed, 13 Jul 2022 22:03:36 +0200 (CEST)
-Date:   Wed, 13 Jul 2022 22:03:36 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
- 3720 boards
-Message-ID: <20220713200336.addvyfjhakrx72am@pali>
-References: <20220713125644.3117-1-pali@kernel.org>
- <a9e1ccb7-6caa-2f7c-b879-b3ff4945794c@linaro.org>
+        by ms.lwn.net (Postfix) with ESMTPSA id 8E16A2DC;
+        Wed, 13 Jul 2022 20:04:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8E16A2DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1657742646; bh=EyGDr5V/Nt8GJzbAAi/OLJlDIoto10JJfP1ptrCCEb0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SBXTXtodqKS/SXrIKFhsjgX5P+Z+yiCLMy0/ZSVkZ2kwNpBiFfDsfx5U2Do8Vn2b1
+         NJT9UBNqud+wJXJ+PXpEtjIu7r4FHEOnsFFYtKcki70/w+VZQOHgMpjINZk8QY8LCK
+         mYXRkovFcJbb7zKspqKvfsAPlP46T8bc41aR5RGtUtV4nIuuHqEHUBDCsG0/MtwqsV
+         F1hdvofVVp+2uz5PjkKPOo4IJTO7dMHvyqaSvLGaYUJangkL2XuQyZpEskXbwmcKnp
+         UCd2ror2nf70zV8E/KJAn7VQM2CXF7EdDRorNmAVJpHuPDMh7CphgYPtB0CIas8uqO
+         bET8zcUo5q9yg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, siyanteng@loongson.cn
+Cc:     alexs@kernel.org, rppt@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+Subject: Re: [PATCH] Documentation/translations/zh_CN/mm/page_owner.rst:
+ adjust some words
+In-Reply-To: <20220708172351.20928-1-caoyixuan2019@email.szu.edu.cn>
+References: <20220708172351.20928-1-caoyixuan2019@email.szu.edu.cn>
+Date:   Wed, 13 Jul 2022 14:04:05 -0600
+Message-ID: <877d4g4w5m.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9e1ccb7-6caa-2f7c-b879-b3ff4945794c@linaro.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,25 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 13 July 2022 21:42:43 Krzysztof Kozlowski wrote:
-> On 13/07/2022 14:56, Pali Rohár wrote:
-> > All Armada 3720 boards have Armada 3720 processor which is of Armada 3700
-> > family and do not have Armada 3710 processor. So none of them should have
-> > compatible string for Armada 3710 processor.
-> > 
-> > Fix compatible string for all these boards by removing wrong processor
-> > string "marvell,armada3710" and adding family string "marvell,armada3700"
-> > as the last one. (Note that this is same way how are defined Armada 3710
-> > DTS files).
-> 
-> Please do not introduce some changes just in DTS, but start from the
-> bindings. Someone wrote the bindings like that and expected to be that
-> way, so first change the bindings with proper rationale. Then change the
-> DTS files.
-> 
-> 
-> Best regards,
-> Krzysztof
-
-Ok, I tried to update bindings and fix example in it, see patch:
-https://lore.kernel.org/linux-devicetree/20220713200123.22612-1-pali@kernel.org/
+WWl4dWFuIENhbyA8Y2FveWl4dWFuMjAxOUBlbWFpbC5zenUuZWR1LmNuPiB3cml0ZXM6DQoNCj4g
+SSBub3RpY2VkIHRoYXQgdGhlcmUgYXJlIHNvbWUgQ2hpbmVzZSB3b3JkcyB0aGF0IGNhbiBiZSBt
+b3JlIGFjY3VyYXRlLg0KPiBTbyBJIGZpeCB0aGVtIGFzIGZvbGxvd3MuDQo+DQo+IOmmluWFiO+8
+jOiLseaWh+WOn+aWh+S4reeahCJyZWxlYXNlIiDlnKjov5nkuKror63looPkuIsNCj4g5piv54mp
+55CG6aG16Z2i4oCc6YeK5pS+4oCd55qE5oSP5oCd77yM6ICM5LiN5piv4oCc5Y+R5biD4oCd44CC
+DQo+IOWFtuasoe+8jOagh+WHhuihqOeahOesrOS4gOWIl+WSjOesrOS6jOWIl++8jA0KPiDooajo
+vr7nmoTmmK/igJzplb/nn63plK7igJ3nmoTmhI/mgJ3vvIznrKzkuIDliJfmmK/igJznn63plK7i
+gJ3vvIwNCj4g6ICM56ys5LqM5YiX5piv4oCc6ZW/6ZSu4oCd44CC6L+Z5qC357+76K+R5oiW5Lya
+5pu05riF5pmw5LiA5Lqb44CCDQo+DQo+IFNpZ25lZC1vZmYtYnk6IFlpeHVhbiBDYW8gPGNhb3lp
+eHVhbjIwMTlAZW1haWwuc3p1LmVkdS5jbj4NCj4gLS0tDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5z
+bGF0aW9ucy96aF9DTi9tbS9wYWdlX293bmVyLnJzdCB8IDggKysrKy0tLS0NCj4gIDEgZmlsZSBj
+aGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQoNCkFwcGxpZWQsIHRoYW5r
+cy4NCg0Kam9uDQo=

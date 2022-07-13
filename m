@@ -2,96 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD42573B24
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB65573B26
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbiGMQZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S237164AbiGMQZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbiGMQZg (ORCPT
+        with ESMTP id S237167AbiGMQZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:25:36 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B300923E;
-        Wed, 13 Jul 2022 09:25:35 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so4486914pjo.3;
-        Wed, 13 Jul 2022 09:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NJbO4Rf7TW4PsWVYRG0jsf+QfXdUdOnvfPpzJkjdl10=;
-        b=K8CFPKXrzo/+w4DR3qbs+AiJ2G6A4nqZ+W4+EHcQsmTCrdVX0IOiIU/XHhgP1MEeoA
-         zlCphALP5QjYKNpWvxH0XoPDDCqEpDMuII/dpHBo6sUOc4KdlmAPZNHDnsIBMDMU17xk
-         mb94nVNeBorOUKnatbyq9HGsDF3Tkl2rJ9EYLM9M/X7k23Q+FypiNb9mSFv+9u2fcBsg
-         eS5JatyHkL9Yrrxq18JfoSRZ+ZOCNB+Kzl395OLZ+tPTmBkYywt1qSEFcV7N5O6n1I59
-         omX+FsBqhSPRvkjCsAuN/+79Xlq8OuT4BIvV975qQ4z+174YbAtMo6Z2G8q8qJ+IQEUB
-         bkNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NJbO4Rf7TW4PsWVYRG0jsf+QfXdUdOnvfPpzJkjdl10=;
-        b=M6CDqppVua3h2GJw38lG3c8WTfner6/9WzDlXo7SlrfIcT7mLoFfuZO5jRl2yQeHDV
-         H6Rg5cIzPv05sa6VnvdRwvf2r7sJOjFHPQgdOAJiO1MQep8Nl82v+6dc1krxO7/VErCP
-         x2cl91aoi9RCzmPMA9imRwcfurNG8sPSCx+qXY8dD+r7TYIteld6u/E8Ywu49IMTTjXO
-         rGEHEgePcCy2UNfdJy1zy8/EHenRaV5CiV3ze9meyvlbxS9z9/O9hdt3tbpMkFZWhZGc
-         hvo6a28mojyi0hVvI+RpHQR6MXoQ5QnSEfPXEbiaUBH7PkJjRax+WP1EoKQBG8A/qLWF
-         RwtA==
-X-Gm-Message-State: AJIora/kq/emMDa/vXl46Mi+P+gAFM/rrLE5cIyZiVz3CVjVGgAjz9qt
-        oil5KKIZ46efIgf1tWPuLNQ=
-X-Google-Smtp-Source: AGRyM1t5Ax5K3CFQ3IF1WTrSs4a59LOEuvGzfrnm9dnPEmKoOGt7ak6BqP/SE9amKPrt/ZHvrLpXew==
-X-Received: by 2002:a17:90a:eb09:b0:1ef:7df7:cdf7 with SMTP id j9-20020a17090aeb0900b001ef7df7cdf7mr4640215pjz.185.1657729535064;
-        Wed, 13 Jul 2022 09:25:35 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a63d345000000b0041245ccb6b1sm8100098pgi.62.2022.07.13.09.25.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 09:25:34 -0700 (PDT)
-Message-ID: <8dbb8841-6592-98c0-1da2-0673a28cb149@gmail.com>
-Date:   Wed, 13 Jul 2022 09:25:31 -0700
+        Wed, 13 Jul 2022 12:25:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEFC308;
+        Wed, 13 Jul 2022 09:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657729544; x=1689265544;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RktsUe463dGeJ6JVuFeGZ56J3iA/MJCDqhL6VP3o8oc=;
+  b=UTHQhH0McW/S9p1VrDqBUOH94eHB7gnrk62EryS/npHsQrSm5nHsAlmd
+   qcwzE5unVZ4Ml3ehxExBYAIhAhFAamMIq0VwOUfB/9X0zMvOmgxBqp92P
+   xOw3cuvhFv98BWeHVzMQQlb6dO6KA+zdUzD1+wEJ3SMkm3UwWcFvY0FoU
+   QHNqqoMuiX5fr2MFhj/9WxZiy8r6VflLdi9At2OZbGmWlDLLpMx0gtwZb
+   Vl377Ha+RII1CviX2o2/na4gPQldilnz5PV/7QlDtpiHYNBhalKesivKD
+   kdT3yeQ1tE8U6ReomjNVlFW+xiqfmDLCs52VkwIlc7jANa7cAG7FqPl1i
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="171953385"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2022 09:25:29 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 13 Jul 2022 09:25:27 -0700
+Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 13 Jul 2022 09:25:27 -0700
+From:   <Ryan.Wanner@microchip.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Ryan Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH] ASoC: dt-bindings: atmel-i2s: Convert to json-schema
+Date:   Wed, 13 Jul 2022 09:25:38 -0700
+Message-ID: <20220713162538.139115-1-Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] clk: bcm: rpi: Prevent out-of-bounds access
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>
-References: <20220713154953.3336-1-stefan.wahren@i2se.com>
- <20220713154953.3336-2-stefan.wahren@i2se.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220713154953.3336-2-stefan.wahren@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 08:49, Stefan Wahren wrote:
-> The while loop in raspberrypi_discover_clocks() relies on the assumption
-> that the id of the last clock element is zero. Because this data comes
-> from the Videocore firmware and it doesn't guarantuee such a behavior
-> this could lead to out-of-bounds access. So fix this by providing
-> a sentinel element.
-> 
-> Fixes: 93d2725affd6 ("clk: bcm: rpi: Discover the firmware clocks")
-> Link: https://github.com/raspberrypi/firmware/issues/1688
-> Suggested-by: Phil Elwell <phil@raspberrypi.com>
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Convert atmel i2s devicetree binding to json-schema.
+Change file name to match json-schema naming.
+
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+---
+ .../bindings/sound/atmel,sama5d2-i2s.yaml     | 83 +++++++++++++++++++
+ .../devicetree/bindings/sound/atmel-i2s.txt   | 46 ----------
+ 2 files changed, 83 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/atmel-i2s.txt
+
+diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+new file mode 100644
+index 000000000000..1cadc476565c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/atmel,sama5d2-i2s.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Atmel I2S controller
++
++maintainers:
++  - Nicolas Ferre <nicolas.ferre@microchip.com>
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++  - Claudiu Beznea <claudiu.beznea@microchip.com>
++
++description:
++  Atmel I2S (Inter-IC Sound Controller) bus is the standard
++  interface for connecting audio devices, such as audio codecs.
++
++properties:
++  compatible:
++    const: atmel,sama5d2-i2s
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    description:
++      Only the peripheral clock (pclk) is required. The generated clock (gclk)
++      and the I2S mux clock (muxclk) are optional and should only be set together,
++      when Master Mode is required.
++
++  clock-names:
++    items:
++      - const: pclk
++      - const: gclk
++      - const: muxclk
++    minItems: 1
++
++  dmas:
++    description:
++      Should be one per channel name listed in the dma-names property.
++    maxItems: 2
++
++  dma-names:
++    items:
++      - const: tx
++      - const: rx
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - dmas
++  - dma-names
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/dma/at91.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    i2s@f8050000 {
++        compatible = "atmel,sama5d2-i2s";
++        reg = <0xf8050000 0x300>;
++        interrupts = <54 IRQ_TYPE_LEVEL_HIGH 7>;
++        dmas = <&dma0
++                (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
++                AT91_XDMAC_DT_PERID(31))>,
++               <&dma0
++                (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
++                AT91_XDMAC_DT_PERID(32))>;
++        dma-names = "tx", "rx";
++        clocks = <&i2s0_clk>, <&i2s0_gclk>, <&i2s0muxck>;
++        clock-names = "pclk", "gclk", "muxclk";
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_i2s0_default>;
++    };
+diff --git a/Documentation/devicetree/bindings/sound/atmel-i2s.txt b/Documentation/devicetree/bindings/sound/atmel-i2s.txt
+deleted file mode 100644
+index 40549f496a81..000000000000
+--- a/Documentation/devicetree/bindings/sound/atmel-i2s.txt
++++ /dev/null
+@@ -1,46 +0,0 @@
+-* Atmel I2S controller
+-
+-Required properties:
+-- compatible:     Should be "atmel,sama5d2-i2s".
+-- reg:            Should be the physical base address of the controller and the
+-                  length of memory mapped region.
+-- interrupts:     Should contain the interrupt for the controller.
+-- dmas:           Should be one per channel name listed in the dma-names property,
+-                  as described in atmel-dma.txt and dma.txt files.
+-- dma-names:      Two dmas have to be defined, "tx" and "rx".
+-                  This IP also supports one shared channel for both rx and tx;
+-                  if this mode is used, one "rx-tx" name must be used.
+-- clocks:         Must contain an entry for each entry in clock-names.
+-                  Please refer to clock-bindings.txt.
+-- clock-names:    Should be one of each entry matching the clocks phandles list:
+-                  - "pclk" (peripheral clock) Required.
+-                  - "gclk" (generated clock) Optional (1).
+-                  - "muxclk" (I2S mux clock) Optional (1).
+-
+-Optional properties:
+-- pinctrl-0:      Should specify pin control groups used for this controller.
+-- princtrl-names: Should contain only one value - "default".
+-
+-
+-(1) : Only the peripheral clock is required. The generated clock and the I2S
+-      mux clock are optional and should only be set together, when Master Mode
+-      is required.
+-
+-Example:
+-
+-	i2s@f8050000 {
+-		compatible = "atmel,sama5d2-i2s";
+-		reg = <0xf8050000 0x300>;
+-		interrupts = <54 IRQ_TYPE_LEVEL_HIGH 7>;
+-		dmas = <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(31))>,
+-		       <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(32))>;
+-		dma-names = "tx", "rx";
+-		clocks = <&i2s0_clk>, <&i2s0_gclk>, <&i2s0muxck>;
+-		clock-names = "pclk", "gclk", "muxclk";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_i2s0_default>;
+-	};
 -- 
-Florian
+2.34.1
+

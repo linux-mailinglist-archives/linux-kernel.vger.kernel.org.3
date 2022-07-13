@@ -2,131 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61C3573F32
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5B3573F37
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbiGMVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S237308AbiGMVyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237287AbiGMVxr (ORCPT
+        with ESMTP id S230479AbiGMVyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 17:53:47 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4E1209D;
-        Wed, 13 Jul 2022 14:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657749226; x=1689285226;
+        Wed, 13 Jul 2022 17:54:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862AD41D14
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657749292; x=1689285292;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jpAc4UmL+hbbIRayobXbAS07B1tTi/T+zKwuYIkv7LM=;
-  b=Rkdtqs0KXncbvz37eiUwBKnTjAYRV3lhYhms3e5riw1spl1EKTVGLfpJ
-   NgPj+f8bJUtPeFnG90a567Lsj6tOA2EcEqq0nvbgL1yh8b61MZ4MXfIf7
-   a6h3lvCRV9oUgdn95bMzHZrfSEEAtU0ieopOweiDhwF9F0oSDsiIqxfOA
-   c=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 14:53:45 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:53:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+   in-reply-to:mime-version;
+  bh=sBAkPnhZb6fINHhue2+7k7PtvKHnt/YvWsZKlK64SYc=;
+  b=NgCYqfG9H/HakX63DSwTRdDsQVtftE10qE+jpSZpn0YOPBXz3DvrGp+c
+   P0J0EgEpzD2sdYxU72v7Ab1xkY40117JvGvQZ0GR8fJerN8jsf2CnW5aY
+   LnEuTCAR0n5frmuVPGLyEoeLCOvLXlgOMkEFXKfVooxtmp8F6u4ZEJ4pH
+   d6BsQi9WK4pEp1s6ydjsXnchUc5A5ikTNPAUUFQdNM01LtQ6C7BmBox1v
+   o7/66376hMS2e5TvCO29QZ310EIzRQ5dNnu44NS+NZV0yvn9CwRvLIe5p
+   hG8CnLLb4V3eBHxGeEBQaO5p3HqvjmxSMXLZfUACnApIFA/8g7DFkSkbW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="265766952"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="265766952"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 14:54:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="922812808"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jul 2022 14:54:52 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 13 Jul 2022 14:54:51 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 13 Jul 2022 14:54:51 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 14:53:45 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 14:53:44 -0700
-Date:   Wed, 13 Jul 2022 14:53:43 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     John Keeping <john@metanate.com>
-CC:     Wesley Cheng <quic_wcheng@quicinc.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v2 5/5] usb: dwc3: gadget: Increase DWC3 controller halt
- timeout
-Message-ID: <20220713215342.GD8200@jackp-linux.qualcomm.com>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-6-quic_wcheng@quicinc.com>
- <20220713025643.GC8200@jackp-linux.qualcomm.com>
- <Ys6vReAwrYbEavob@donbot>
-MIME-Version: 1.0
+ 15.1.2308.27; Wed, 13 Jul 2022 14:54:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CrgYyGIHV4VEh6lxT58ebl1k1zczyOz+fgc+dT/ApXKC+FtUknk12Xq37Ps/UaBM0RULEGK57azFGM/ovWEwwd7ryZqaoXytQHn+6Oj5t2Xs7YkExHm9pct9YjuRSi+e5rt9Q18nYCbyt5AjkNnCfdCfjubUqxgphG/R8yaWiZaqq0IjSWsowlBJC38Pf6TVbQi6WRB1DVrdEyblJgq4jCk2BMI7ZW/tsDYWvaK3hY4qrPf2IGh0UqcrTTkBOHTsMCkaXUPfqNnRi6Zmw0f2it1rblC+3Z1qI7jdEiM4tAng6E9mXsMu6fnU6RSlHEHswTyRwlj/KWAG7TvY4j8DiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PNHCdssa3TEBoqBXMrhZUA+F/Duqzyug8Rom+RmYPyw=;
+ b=nzcoer2L2pkzLVmfCv4hMzrMHxAce35msC0xQ+gvjxaec8nypRVjB25DAXVWf/YQJuaaCtRQF/Ua6jz3dLwselawaDv/POZ6yEJ07Zb0hMsjO+rEZXQbhPZljUiAa7iUlf+8XAEhGcJ3Bdfluxt74Nbr8rIAkKTgcDTygZQPo7IlL+PSsCq0SSQUt1ybRg0O5dIIPToh9K7BO2lnaUlR/wHjaVsybT0FGBCuJ+SBk5jH0o4gmzpCnkbO1e5a8BnIC7GyHC7vsY3fWK7nI5J8/AR+SFFmCEedCHbtPoE8SEPFjQpcVfT06wKe795QQ3nuap0eoDng32LaBGEb+XM5lA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by DM6PR11MB3947.namprd11.prod.outlook.com (2603:10b6:5:19f::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Wed, 13 Jul
+ 2022 21:54:50 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::8053:3c59:9f5d:b615]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::8053:3c59:9f5d:b615%9]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 21:54:49 +0000
+Date:   Wed, 13 Jul 2022 17:54:44 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        <dri-devel@lists.freedesktop.org>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        <linux-kernel@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, Zhi Wang <zhi.a.wang@intel.com>
+Subject: Re: [PATCH v2 01/39] drm/i915/gvt: Fix kernel-doc for
+ intel_gvt_switch_mmio()
+Message-ID: <Ys8/JP3ITMKF1aHp@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+ <72db6b58c1f223e326f84978267ba064eaf67ff0.1657699522.git.mchehab@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Ys6vReAwrYbEavob@donbot>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <72db6b58c1f223e326f84978267ba064eaf67ff0.1657699522.git.mchehab@kernel.org>
+X-ClientProxiedBy: BYAPR07CA0009.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::22) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0259215c-e397-45fa-6400-08da651a4ee3
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3947:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qS+k+Ae0BiW0gvPCmQ5MKaaz9v9AMImVzKbkWdrIvGDvy30VkQUsE9AeyaqZzdNjJxo4yCa6smitL37mQIfCkFdmmRt06/jC3azoTQXUxFw1IB/4MoVRgvRq9Y1LOc0AA9QjsFoSId9rhCdYJqKJra791OByZ2fqhM2hIV28hxOiJjzeh7C8GuJi4EHgVT7A0h3dhoFOKdc4wH1S6VtGiFcoC8JitWF8v0qxYT73ZfEzxKb5HsPFPli6huoy+1v/OCt3TGYzxPqLzXvEvXqcLBZtXKZNW2PsQ+tmPh+4xCRZ99ijzLi9dSe9lSRJRmMwKLcZHg/ftWnAnjnPRxX2uePV6mWsCOZTJy6p7Gm9HWfJ+8e00ULnF/72NWr82Pv4SpDnXPPrcza0+clZuRdUlI6zrbR9yN5Up8slOm04MZ2F4p/ISjdjO56uBjprCJuxYSzXAS7eFb8DBTKEBrXWFO6x9yHfsO5teF2NDo9HRfzEYRiXuFrs5LGlT+b34A0kebemU+QRaMosQvMXfMdrEBTa3X0XEg/7CFcSH5QWVMJk4SpqTjel7742PIQzSwvTPMXjmpAhS6308LU+eIf8wpbWCc/i8V4IDPGApnM0XJNFZy63C+38zNmN+5cVXKzqAoevONERqw1w8fGJhifFCA8onx36Bx09xJO5LSr2fRtrYab9CDsII1ig2R+R+4WIUG28Ny0P/kwTJAInzx7q/dpwrMOeIVS7fw4xy+qKQvBXiHCIIMmT8pu4skFbhgvQ3v39LcFnP0rly6wBloQfd/rrRI5N6Xlp6KtD73wuyDA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(376002)(136003)(396003)(366004)(186003)(66476007)(6506007)(86362001)(6512007)(4326008)(8676002)(2906002)(26005)(6486002)(478600001)(6666004)(54906003)(966005)(66946007)(6916009)(82960400001)(66556008)(2616005)(316002)(5660300002)(41300700001)(44832011)(38100700002)(36756003)(83380400001)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rTQHczcB94KOXpf22sMw4uHjlXm4h7UlNOvtr/c8PbDdYplEOQ9y6f5Qf57X?=
+ =?us-ascii?Q?FuzUJqloIuYlEoxaLo9kbRGf37PIfX5fZWi4/2zy9wVpHzXtxfWLl+QpIo2N?=
+ =?us-ascii?Q?sT0Qgczg6vdeVDgHjo2daJkLgZOXvDSaHcVUxP5Qf/6MMRZpdF7I68LY6nbS?=
+ =?us-ascii?Q?ZgSuDtPsaWQdw8i8ip/Vz7hK8miUw6gGr/zQl4Qek6+ICFccsQ9Q7G/uuZDM?=
+ =?us-ascii?Q?dHJeWgLOR0gNCd8R9NSltKmD61k+YvnpAeZiD9+cz1tMK9qPb/L5RSvfPlQN?=
+ =?us-ascii?Q?JL1yUR3OGuQyOXej56FoiCiKzmf1bm2XNWZOQpw+XLff2Fyrdv2o1r7dQMTi?=
+ =?us-ascii?Q?6rvZLnPS4ZuMAKkgpzjnwtLOdr8C/41AsiZlDyqi5rbJLhU+wQD8YIz8AaT/?=
+ =?us-ascii?Q?CHjZSu0C8I3dlW23HshfgGZvGs8jqrsSWBGLOuCxl0Rx/+Wqz1CpN5c3jviS?=
+ =?us-ascii?Q?y7F7BVGXMbo8sRUOdBQpEaRXjNXx+m+xS8lgWLPziOYQheI2fAiKO5TreuvQ?=
+ =?us-ascii?Q?22JSE/F+qTo0p6SF836QJPiXRJ2FgV0Hc5AN+eiOgbo46HT70uKDCqUCTCqE?=
+ =?us-ascii?Q?g2SyyHiOiLXoOjVeJO+e7FalXJoWRYcKFsHjth6EGnGidQK5BRpOTqw8CWXk?=
+ =?us-ascii?Q?5F6y2RLM1gfZtZ1BNaxAERDvhjsnCQ3OPxOUB6/QbAUtjX+z0tndRqzJyqrT?=
+ =?us-ascii?Q?ERSU2NofPuiiPx8TR+lfSTuwHWs2fiIQwAKIEqIIr+Nopd8fDfjZPDbWWbhK?=
+ =?us-ascii?Q?3HArD3c5B1frL0JtWWdxYZvRGi+ulanVrC5BL55R1c7g2kkCyrIg+jYyd7TM?=
+ =?us-ascii?Q?4Rtxxd2nWQR9ySuubxJF8dEDzjzNw09MfI6Xc/ro9RJckdG50gxIb/Ns27hh?=
+ =?us-ascii?Q?+R9GNzU1aiqaN5cMZ8Hx9lJ7uN5gf+H+7t5b3cNjlmihzXKwf2DmNG8WJAnM?=
+ =?us-ascii?Q?NyNhSNL1SPDNFJuhlVTOwqBmEstEDbzxNsClKstE0cA5bhbwMIi4eIbPNAIB?=
+ =?us-ascii?Q?XPYIKDRXrd6fa8uPEab1cXoy7d4M6WPu2hfRM+ZuZF8g1jExEfgyExVg3ycu?=
+ =?us-ascii?Q?pJ80mKxZZGX2w0xb0y1SplGhjlXluZxvM886gmBZTDwxz9Evjq0VA5sgNJHw?=
+ =?us-ascii?Q?Nv44n+lKXbjgDmjVzLXjrUBMVnZPnrVK1kuco62fEsFDzljgiUk4rmzomsZ3?=
+ =?us-ascii?Q?WEuGyM9YQlkUAo/PeSXUcHErHw9tRtQix6tz0pv2c/bsynjOgfFhHabahRId?=
+ =?us-ascii?Q?/afCHiV39ofxS8W6OW6k/QZRWO2dZfV+jq0HAb/d5c3iz8IDxL+4HuQB8p+H?=
+ =?us-ascii?Q?X2qIzo38PCWSMHfIP0weAcIV7w/kjQ+CH5bq0CcEy2r8bOJohHBdzYFEE1k4?=
+ =?us-ascii?Q?PP5oVp8/o17E+pJx0fzDfHcp8raH6KZ0ox4uDDDVdn2f8di29hxyL6FLCL4l?=
+ =?us-ascii?Q?c5X639GtcDfaLPE5OQ5XdoAPSQf6EdxCCK8h6z0NuEjVx1RVbykyiZSnR5Tj?=
+ =?us-ascii?Q?ltElhySAvNEHlltBNI+9kmq6073YgRbnFJWSfupikuiKn2Lrkx3zc/8LUhto?=
+ =?us-ascii?Q?m2saRUC3vyF+mukHkT86/Mrk7Ac12cI4K7gFsaQQOL9KNF4wCWgBmBdmWZsp?=
+ =?us-ascii?Q?Pg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0259215c-e397-45fa-6400-08da651a4ee3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 21:54:49.8894
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fry43E7kHjmJaguwVCR1bxCIgNl82HrFTa8iZUuLnmQ1V1iAIRE5Pcpb+QyXw7sWak+ZX9sqyTo0gGQ/QD8Bmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3947
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:40:53PM +0100, John Keeping wrote:
-> On Tue, Jul 12, 2022 at 07:56:43PM -0700, Jack Pham wrote:
-> > Hi Wesley,
-> > 
-> > On Tue, Jul 12, 2022 at 05:35:23PM -0700, Wesley Cheng wrote:
-> > > Since EP0 transactions need to be completed before the controller halt
-> > > sequence is finished, this may take some time depending on the host and the
-> > > enabled functions.  Increase the controller halt timeout, so that we give
-> > > the controller sufficient time to handle EP0 transfers.
-> > > 
-> > > Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
-> > > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > > ---
-> > > Link:
-> > >   https://lore.kernel.org/linux-usb/4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com/
-> > > 
-> > >  drivers/usb/dwc3/gadget.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index 41b7007358de..e32d7293c447 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -2476,6 +2476,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
-> > >  	dwc3_gadget_dctl_write_safe(dwc, reg);
-> > >  
-> > >  	do {
-> > > +		msleep(1);
-> > 
-> > Be aware that this probably won't sleep for *just* 1ms.  From
-> > Documentation/timers/timers-howto.rst:
-> > 
-> > 	msleep(1~20) may not do what the caller intends, and
-> > 	will often sleep longer (~20 ms actual sleep for any
-> > 	value given in the 1~20ms range). In many cases this
-> > 	is not the desired behavior.
-> > 
-> > So with timeout==500 this loop could very well end up iterating for up
-> > to 10 seconds.  Granted this shouldn't be called from any atomic context
-> > but just wanted to make sure that the effective increase in timeout as
-> > $SUBJECT intends is made clear here and that it's not overly generous.
-> > 
-> > >  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-> > >  		reg &= DWC3_DSTS_DEVCTRLHLT;
-> > >  	} while (--timeout && !(!is_on ^ !reg));
+On Wed, Jul 13, 2022 at 09:11:49AM +0100, Mauro Carvalho Chehab wrote:
+> From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > 
-> Does it make sense to convert this loop to use read_poll_timeout() and
-> make the timeout explicit, something like:
+> Fix the following W=1 kernel warnings:
 > 
-> 	ret = read_poll_timeout(dwc3_readl, reg, !(!is_on ^ !(reg & DWC3_DSTS_DEVCTRLHLT)),
-> 				100, timeout * USEC_PER_MSEC, true, dwc->regs, DWC3_DSTS);
+> drivers/gpu/drm/i915/gvt/mmio_context.c:560: warning: expecting
+> prototype for intel_gvt_switch_render_mmio(). Prototype was for
+> intel_gvt_switch_mmio() instead.
 > 
-> ?
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Acked-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Yeah I think it would make sense.  Might even be worthwhile to revisit
-similar loops being performed in dwc3_send_gadget_generic_command() and
-dwc3_send_gadget_ep_cmd() which are currently spinning delay-lessly for a
-fixed number of iterations.
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-Jack
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> 
+>  drivers/gpu/drm/i915/gvt/mmio_context.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/mmio_context.c b/drivers/gpu/drm/i915/gvt/mmio_context.c
+> index c85bafe7539e..1c6e941c9666 100644
+> --- a/drivers/gpu/drm/i915/gvt/mmio_context.c
+> +++ b/drivers/gpu/drm/i915/gvt/mmio_context.c
+> @@ -546,7 +546,7 @@ static void switch_mmio(struct intel_vgpu *pre,
+>  }
+>  
+>  /**
+> - * intel_gvt_switch_render_mmio - switch mmio context of specific engine
+> + * intel_gvt_switch_mmio - switch mmio context of specific engine
+>   * @pre: the last vGPU that own the engine
+>   * @next: the vGPU to switch to
+>   * @engine: the engine
+> -- 
+> 2.36.1
+> 

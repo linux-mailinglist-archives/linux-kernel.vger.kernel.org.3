@@ -2,916 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286F95731F0
+	by mail.lfdr.de (Postfix) with ESMTP id 9505E5731F1
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbiGMJBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S235973AbiGMJCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbiGMJBj (ORCPT
+        with ESMTP id S235981AbiGMJCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:01:39 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2055.outbound.protection.outlook.com [40.107.244.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D3CEF208;
-        Wed, 13 Jul 2022 02:01:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ioWJZp4gLIh3AMnRe/MfrQ7B71IhtH4mWA1r+oRHZ7pPzRD/y49NaptshSAEyEsiOoaBlWtoy7q6a8SEu7X6cXXIwuPFOqhHh9t/r7z87tB8Jg5RfBm6tcCd5ynJDN6jK2WBGa3H7gzGjeIq+RZP94KQvF+gpBftio5JZtBV/ywKAwAn2gJvU5bkICTh3PSHlE1yDpwZTy7du30EASikCN11SKgIqBN1PQpvCodEOMrk3xze27kuPY57vGCvHzxxsqrn/fBMVPZa3JwiWbpcUSrARRyoukkfDxdbRoxl1+A2RZWiaQTs7RtnzlECx0k09RB+9SzZXczT06tsAL49bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3s//1rgWVumPYty19AVcANhEIbOj5/8+Pb1hS+BW5es=;
- b=OVWMBjU05y83mgdQxnxtuSzaIcOnwUF4v9AKs+ubFkdNONTO2j/iKWROokKtAHUZHeAB81smYGqIRvpLtXZOWlaJeXl1p5AOVZclRtYkjsxTXJiu6ELh+2QCJrDXnKlGen/Oh/6DLJu836BkvTJpeq30cvXPWdIJUQ9IrmmcUxOAfPkZjfT0B7jhkEWS/d/sGUsR6HGYlcCO09bS6O+5HFo+83kY2dJaPn00U79umwy+uyhwHGJyUtlrVpc0PYgo82AckR1SDvC0yhuOPa78fcVojIvrdo5pnudIQq4eFMGh4XAT5BU2hbCgGTKhPvS016bHeTAkzfIL/j6wQ3gE3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3s//1rgWVumPYty19AVcANhEIbOj5/8+Pb1hS+BW5es=;
- b=tKaK2yMej4qAUrjAViPlGIWTWwnr4xdzDLh8nlDjLuVDPvEW8Ea842HPkvBMeRmQBMa0OBE9HNL1xHqXZaFgbs+9Q6TYE9/xrMgoRa4IbRhbRRD28qTeBFYGgDNHgVpmfCASFZwR4pCvMAUTp9Q4rNSotRhlv//CSqsLo3qi3axIr9s4KwMSzvBtKwWchhiSF0x0odW1AYMu+Ip90wGDA+FuHvQiSEGEX11mkJNL+utBgiLgVIhsTsEd9jzZO9ZtvT3iC+1MMVfvOvjgUrNC6tnjoAX1TOyCBhuvxusxihF9EEzYI04j1S0edAlxWTM+IqWJzO2lnH/laen4jOu5Lg==
-Received: from MW4PR03CA0291.namprd03.prod.outlook.com (2603:10b6:303:b5::26)
- by MW2PR12MB2347.namprd12.prod.outlook.com (2603:10b6:907:7::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.23; Wed, 13 Jul
- 2022 09:01:33 +0000
-Received: from CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::eb) by MW4PR03CA0291.outlook.office365.com
- (2603:10b6:303:b5::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.23 via Frontend
- Transport; Wed, 13 Jul 2022 09:01:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- CO1NAM11FT024.mail.protection.outlook.com (10.13.174.162) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5438.12 via Frontend Transport; Wed, 13 Jul 2022 09:01:32 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 13 Jul
- 2022 09:01:32 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 13 Jul
- 2022 02:01:31 -0700
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.26 via Frontend
- Transport; Wed, 13 Jul 2022 02:01:27 -0700
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <bhelgaas@google.com>, <lpieralisi@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>
-CC:     <kw@linux.com>, <kishon@ti.com>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kthota@nvidia.com>,
-        <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>, <sagar.tv@gmail.com>
-Subject: [PATCH V5 9/9] PCI: tegra: Add Tegra234 PCIe support
-Date:   Wed, 13 Jul 2022 14:30:29 +0530
-Message-ID: <20220713090029.30395-10-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220713090029.30395-1-vidyas@nvidia.com>
-References: <20220713090029.30395-1-vidyas@nvidia.com>
-X-NVConfidentiality: public
+        Wed, 13 Jul 2022 05:02:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9916FF2E1D;
+        Wed, 13 Jul 2022 02:01:44 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D8paQT019865;
+        Wed, 13 Jul 2022 09:01:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BLKBVkWEru6V4WEFaksNPeWnPKZk0hKmbPuo+7ppVYk=;
+ b=aZslUTFlfL82jmaI98cYn95/MwpeQbJF16KDUmKL+iChFx0LVW4qufXNQ7XVD3vTrwC0
+ PLf6nYLjeNzJqzVoa/3/zaFH6ooMfQsBjddIz7ZbEu6/qvU2lAto5XqmmsX0H8Ixud1f
+ p3rpU7JGDiuFACL5ND5RGrM1NdwImtUeYlnannaulcVYU/VaoO78PnEVaKBzxrNgllBP
+ xWpW2IZAfRfE8dtHTNlxbtWG2rfMOYyqdX50RIcOc5f98toGMGw+HOzXrgAAsFpabaRW
+ 92L3UH4BYF2xntMTVxR79/NHsTtmAG3ORry7s4wKLfvIQPZUaiXSgOaETycF7K4lXMAS Pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9twmr801-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:01:44 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26D8qUrs025239;
+        Wed, 13 Jul 2022 09:01:43 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9twmr7xq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:01:43 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26D8rbKS017568;
+        Wed, 13 Jul 2022 09:01:40 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncngsu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 09:01:40 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26D91bNB13435360
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 09:01:37 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D5654204C;
+        Wed, 13 Jul 2022 09:01:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5827042041;
+        Wed, 13 Jul 2022 09:01:36 +0000 (GMT)
+Received: from [9.145.184.105] (unknown [9.145.184.105])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Jul 2022 09:01:36 +0000 (GMT)
+Message-ID: <7cd9cf5b-d91e-f676-48e9-abbea94d62e0@linux.ibm.com>
+Date:   Wed, 13 Jul 2022 11:01:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5f443676-2d4e-4fb3-da68-08da64ae4895
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2347:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wjuxd6YjX4ytbBVF0te182vx+qVZ/ERXaljbzBpX/LCaNZrWjtoSo6LupbZ6FdEBvXVP2Tn3OYkBNfocgK1+6fc7qJ/BjVWzzHvvxGh/SHexLt+o2qfbukeh+hQM91Kmq5ivi2q25apC9OXBDetlwpepedfofFBlClNI0g2TqyIR0RkF7QtjxI0LIgsPimpLw6KIyxFRiSKu9g/gM10/23pVg+IKKttviD08NMhF/DJsxf9DUBDtUy5xPvoKbF1KhU+FiD88beNHb8RUjE1dih7b5Mv25IUzaNRSwh/a5pf10zsO9ieMoUoO4Xgzq1ncmZN7lqLQtGcm1iznOjotL6PsDV6w++ILQwY0LkgrLv9jsND4EuoDspB7P7cugEY4Oc73FeWL6bpuyiaMobRRZQDgRzZuPx4+4QyQ/UfQEJrncBjjjLra138Tkkd1hz359jOiNN0FyNa/CaUidUGcE7EiqcDaX8ekNhdlukEJx17Am7GP1NCfyWM6JXGDVF/avb0SksFz5w53pgrzOAeUeOUiQun7syPb0A0PAf0HEsE8a0Kj7p5QaFw4qDoMo7UQoiYlXU15nOkDMz9tUMBdmhfiDzBr9EXS2eUBNqgCFs2hO/Yrk/e2GomzE+DKWFHI5jUtzYWGmTW7EHWHojVUoO4qWAQv8NymOaSLOQtx+zYT+sCLrUza1ZagEJi9xdP2SQsRsxeCGN7YTO900saTfRuNPVO34SdYFnZHr1WWuU5h3QdvfW7a6oc4smPYe6SzykNxZ+P8GXA2H7p4+pWNGBGRaAm+XDC3tJb795aNQXdNnzU7B+xSPwalkA5UAFTCYm9sRkd6w3aA9mbM+uRqIUKrWO43tWfQQkYiRD4Ytmw1ULT4NYXmAvOIhubtTLDt
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(396003)(39860400002)(46966006)(36840700001)(40470700004)(81166007)(82310400005)(7696005)(5660300002)(316002)(2906002)(36860700001)(478600001)(30864003)(54906003)(110136005)(41300700001)(356005)(40460700003)(26005)(36756003)(40480700001)(47076005)(70206006)(83380400001)(426003)(336012)(8676002)(4326008)(8936002)(82740400003)(86362001)(70586007)(7416002)(1076003)(2616005)(186003)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 09:01:32.9964
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f443676-2d4e-4fb3-da68-08da64ae4895
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT024.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2347
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220711084148.25017-1-pmorel@linux.ibm.com>
+ <20220711084148.25017-4-pmorel@linux.ibm.com>
+ <58016efc-9053-b743-05d6-4ace4dcdc2a8@linux.ibm.com>
+ <a268d8b7-bbd8-089d-896c-e4e3e4167e46@linux.ibm.com>
+ <87c5514b-4971-b283-912c-573ab1b4d636@linux.ibm.com>
+ <0c73fc23-2cfe-86c6-b91d-77a73bc435b4@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v12 3/3] KVM: s390: resetting the Topology-Change-Report
+In-Reply-To: <0c73fc23-2cfe-86c6-b91d-77a73bc435b4@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0UBrVbUFkT4NAxLSfsnR92IqEQxZ-9Qp
+X-Proofpoint-ORIG-GUID: uFXz20BPwkZR8DSIEup2CVKFhabn0Qz4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_14,2022-07-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Synopsys DesignWare core IP based PCIe host controllers
-present in the Tegra234 SoC.
-
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
----
-V5:
-* None
-
-V4:
-* None
-
-V3:
-* Addressed review comment from Raul Tambre
-
-V2:
-* Rebased on top of the previous patch
-
- drivers/pci/controller/dwc/pcie-tegra194.c | 412 ++++++++++++++++-----
- 1 file changed, 319 insertions(+), 93 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-index bd16245fc2c4..f5dbfdfe3887 100644
---- a/drivers/pci/controller/dwc/pcie-tegra194.c
-+++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * PCIe host controller driver for Tegra194 SoC
-+ * PCIe host controller driver for the following SoCs
-+ * Tegra194
-+ * Tegra234
-  *
-- * Copyright (C) 2019 NVIDIA Corporation.
-+ * Copyright (C) 2019-2022 NVIDIA Corporation.
-  *
-  * Author: Vidya Sagar <vidyas@nvidia.com>
-  */
-@@ -35,6 +37,9 @@
- #include <soc/tegra/bpmp-abi.h>
- #include "../../pci.h"
- 
-+#define TEGRA194_DWC_IP_VER			0x490A
-+#define TEGRA234_DWC_IP_VER			0x562A
-+
- #define APPL_PINMUX				0x0
- #define APPL_PINMUX_PEX_RST			BIT(0)
- #define APPL_PINMUX_CLKREQ_OVERRIDE_EN		BIT(2)
-@@ -49,6 +54,7 @@
- #define APPL_CTRL_HW_HOT_RST_MODE_MASK		GENMASK(1, 0)
- #define APPL_CTRL_HW_HOT_RST_MODE_SHIFT		22
- #define APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST	0x1
-+#define APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST_LTSSM_EN	0x2
- 
- #define APPL_INTR_EN_L0_0			0x8
- #define APPL_INTR_EN_L0_0_LINK_STATE_INT_EN	BIT(0)
-@@ -243,6 +249,18 @@ static const unsigned int pcie_gen_freq[] = {
- 	GEN4_CORE_CLK_FREQ
- };
- 
-+struct tegra_pcie_dw_of_data {
-+	u32 version;
-+	enum dw_pcie_device_mode mode;
-+	bool msix_doorbell_access_fixup;
-+	bool sbr_reset_fixup;
-+	bool l1ss_exit_fixup;
-+	bool ltr_req_fixup;
-+	u32 cdm_chk_int_en;
-+	u32 gen4_preset_vec;
-+	u8 n_fts[2];
-+};
-+
- struct tegra_pcie_dw {
- 	struct device *dev;
- 	struct resource *appl_res;
-@@ -255,12 +273,14 @@ struct tegra_pcie_dw {
- 	struct dw_pcie pci;
- 	struct tegra_bpmp *bpmp;
- 
--	enum dw_pcie_device_mode mode;
-+	struct tegra_pcie_dw_of_data *of_data;
- 
- 	bool supports_clkreq;
- 	bool enable_cdm_check;
-+	bool enable_srns;
- 	bool link_state;
- 	bool update_fc_fixup;
-+	bool enable_ext_refclk;
- 	u8 init_link_width;
- 	u32 msi_ctrl_int;
- 	u32 num_lanes;
-@@ -284,13 +304,10 @@ struct tegra_pcie_dw {
- 	struct gpio_desc *pex_rst_gpiod;
- 	struct gpio_desc *pex_refclk_sel_gpiod;
- 	unsigned int pex_rst_irq;
-+	bool pex_rst_irq_enabled;
- 	int ep_state;
- };
- 
--struct tegra_pcie_dw_of_data {
--	enum dw_pcie_device_mode mode;
--};
--
- static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
- {
- 	return container_of(pci, struct tegra_pcie_dw, pci);
-@@ -350,15 +367,15 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 	struct tegra_pcie_dw *pcie = arg;
- 	struct dw_pcie *pci = &pcie->pci;
- 	struct pcie_port *pp = &pci->pp;
--	u32 val, tmp;
-+	u32 val, status_l0, status_l1;
- 	u16 val_w;
- 
--	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
--	if (val & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
--		if (val & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
--			appl_writel(pcie, val, APPL_INTR_STATUS_L1_0_0);
--
-+	status_l0 = appl_readl(pcie, APPL_INTR_STATUS_L0);
-+	if (status_l0 & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
-+		appl_writel(pcie, status_l1, APPL_INTR_STATUS_L1_0_0);
-+		if (pcie->of_data->sbr_reset_fixup &&
-+		    status_l1 & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
- 			/* SBR & Surprise Link Down WAR */
- 			val = appl_readl(pcie, APPL_CAR_RESET_OVRD);
- 			val &= ~APPL_CAR_RESET_OVRD_CYA_OVERRIDE_CORE_RST_N;
-@@ -374,15 +391,21 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 		}
- 	}
- 
--	if (val & APPL_INTR_STATUS_L0_INT_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
--		if (val & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
-+	if (status_l0 & APPL_INTR_STATUS_L0_INT_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
-+		if (status_l1 & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
- 			appl_writel(pcie,
- 				    APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS,
- 				    APPL_INTR_STATUS_L1_8_0);
- 			apply_bad_link_workaround(pp);
- 		}
--		if (val & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
-+			val_w = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+						  PCI_EXP_LNKSTA);
-+			val_w |= PCI_EXP_LNKSTA_LBMS;
-+			dw_pcie_writew_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA, val_w);
-+
- 			appl_writel(pcie,
- 				    APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS,
- 				    APPL_INTR_STATUS_L1_8_0);
-@@ -394,25 +417,24 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 		}
- 	}
- 
--	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
--	if (val & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
--		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
-+	if (status_l0 & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
-+		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
- 			dev_info(pci->dev, "CDM check complete\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
- 		}
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
- 			dev_err(pci->dev, "CDM comparison mismatch\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
- 		}
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
- 			dev_err(pci->dev, "CDM Logic error\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
- 		}
--		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, tmp);
--		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
--		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", tmp);
-+		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
-+		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
-+		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", val);
- 	}
- 
- 	return IRQ_HANDLED;
-@@ -454,6 +476,9 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
- 		PCI_EXP_LNKSTA_CLS;
- 	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
- 
-+	if (!pcie->of_data->ltr_req_fixup)
-+		return IRQ_HANDLED;
-+
- 	/* If EP doesn't advertise L1SS, just return */
- 	val = dw_pcie_readl_dbi(pci, pcie->cfg_link_cap_l1sub);
- 	if (!(val & (PCI_L1SS_CAP_ASPM_L1_1 | PCI_L1SS_CAP_ASPM_L1_2)))
-@@ -538,13 +563,18 @@ static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
- static int tegra_pcie_dw_rd_own_conf(struct pci_bus *bus, u32 devfn, int where,
- 				     int size, u32 *val)
- {
-+	struct pcie_port *pp = bus->sysdata;
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
-+
- 	/*
- 	 * This is an endpoint mode specific register happen to appear even
- 	 * when controller is operating in root port mode and system hangs
- 	 * when it is accessed with link being in ASPM-L1 state.
- 	 * So skip accessing it altogether
- 	 */
--	if (!PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL) {
-+	if (pcie->of_data->msix_doorbell_access_fixup &&
-+	    !PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL) {
- 		*val = 0x00000000;
- 		return PCIBIOS_SUCCESSFUL;
- 	}
-@@ -555,13 +585,18 @@ static int tegra_pcie_dw_rd_own_conf(struct pci_bus *bus, u32 devfn, int where,
- static int tegra_pcie_dw_wr_own_conf(struct pci_bus *bus, u32 devfn, int where,
- 				     int size, u32 val)
- {
-+	struct pcie_port *pp = bus->sysdata;
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
-+
- 	/*
- 	 * This is an endpoint mode specific register happen to appear even
- 	 * when controller is operating in root port mode and system hangs
- 	 * when it is accessed with link being in ASPM-L1 state.
- 	 * So skip accessing it altogether
- 	 */
--	if (!PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL)
-+	if (pcie->of_data->msix_doorbell_access_fixup &&
-+	    !PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL)
- 		return PCIBIOS_SUCCESSFUL;
- 
- 	return pci_generic_config_write(bus, devfn, where, size, val);
-@@ -709,13 +744,15 @@ static void tegra_pcie_enable_system_interrupts(struct pcie_port *pp)
- 	val |= APPL_INTR_EN_L0_0_LINK_STATE_INT_EN;
- 	appl_writel(pcie, val, APPL_INTR_EN_L0_0);
- 
--	val = appl_readl(pcie, APPL_INTR_EN_L1_0_0);
--	val |= APPL_INTR_EN_L1_0_0_LINK_REQ_RST_NOT_INT_EN;
--	appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_INTR_EN_L1_0_0);
-+		val |= APPL_INTR_EN_L1_0_0_LINK_REQ_RST_NOT_INT_EN;
-+		appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
-+	}
- 
- 	if (pcie->enable_cdm_check) {
- 		val = appl_readl(pcie, APPL_INTR_EN_L0_0);
--		val |= APPL_INTR_EN_L0_0_CDM_REG_CHK_INT_EN;
-+		val |= pcie->of_data->cdm_chk_int_en;
- 		appl_writel(pcie, val, APPL_INTR_EN_L0_0);
- 
- 		val = appl_readl(pcie, APPL_INTR_EN_L1_18);
-@@ -842,7 +879,8 @@ static void config_gen3_gen4_eq_presets(struct tegra_pcie_dw *pcie)
- 
- 	val = dw_pcie_readl_dbi(pci, GEN3_EQ_CONTROL_OFF);
- 	val &= ~GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_MASK;
--	val |= (0x360 << GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_SHIFT);
-+	val |= (pcie->of_data->gen4_preset_vec <<
-+		GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_SHIFT);
- 	val &= ~GEN3_EQ_CONTROL_OFF_FB_MODE_MASK;
- 	dw_pcie_writel_dbi(pci, GEN3_EQ_CONTROL_OFF, val);
- 
-@@ -856,6 +894,7 @@ static int tegra_pcie_dw_host_init(struct pcie_port *pp)
- 	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
- 	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
- 	u32 val;
-+	u16 val_16;
- 
- 	pp->bridge->ops = &tegra_pci_ops;
- 
-@@ -863,6 +902,11 @@ static int tegra_pcie_dw_host_init(struct pcie_port *pp)
- 		pcie->pcie_cap_base = dw_pcie_find_capability(&pcie->pci,
- 							      PCI_CAP_ID_EXP);
- 
-+	val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL);
-+	val_16 &= ~PCI_EXP_DEVCTL_PAYLOAD;
-+	val_16 |= PCI_EXP_DEVCTL_PAYLOAD_256B;
-+	dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL, val_16);
-+
- 	val = dw_pcie_readl_dbi(pci, PCI_IO_BASE);
- 	val &= ~(IO_BASE_IO_DECODE | IO_BASE_IO_DECODE_BIT8);
- 	dw_pcie_writel_dbi(pci, PCI_IO_BASE, val);
-@@ -887,6 +931,15 @@ static int tegra_pcie_dw_host_init(struct pcie_port *pp)
- 	val |= (pcie->num_lanes << PCI_EXP_LNKSTA_NLW_SHIFT);
- 	dw_pcie_writel_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKCAP, val);
- 
-+	/* Clear Slot Clock Configuration bit if SRNS configuration */
-+	if (pcie->enable_srns) {
-+		val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA);
-+		val_16 &= ~PCI_EXP_LNKSTA_SLC;
-+		dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA,
-+				   val_16);
-+	}
-+
- 	config_gen3_gen4_eq_presets(pcie);
- 
- 	init_host_aspm(pcie);
-@@ -897,9 +950,11 @@ static int tegra_pcie_dw_host_init(struct pcie_port *pp)
- 		disable_aspm_l12(pcie);
- 	}
- 
--	val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
--	val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
--	dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	if (pcie->of_data->l1ss_exit_fixup) {
-+		val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
-+		val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
-+		dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	}
- 
- 	if (pcie->update_fc_fixup) {
- 		val = dw_pcie_readl_dbi(pci, CFG_TIMER_CTRL_MAX_FUNC_NUM_OFF);
-@@ -919,8 +974,11 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
- 	struct pcie_port *pp = &pci->pp;
- 	bool retry = true;
- 
--	if (pcie->mode == DW_PCIE_EP_TYPE) {
--		enable_irq(pcie->pex_rst_irq);
-+	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
-+		if (!pcie->pex_rst_irq_enabled) {
-+			enable_irq(pcie->pex_rst_irq);
-+			pcie->pex_rst_irq_enabled = true;
-+		}
- 		return 0;
- 	}
- 
-@@ -978,7 +1036,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
- 		offset = dw_pcie_find_ext_capability(pci, PCI_EXT_CAP_ID_DLF);
- 		val = dw_pcie_readl_dbi(pci, offset + PCI_DLF_CAP);
- 		val &= ~PCI_DLF_EXCHANGE_ENABLE;
--		dw_pcie_writel_dbi(pci, offset, val);
-+		dw_pcie_writel_dbi(pci, offset + PCI_DLF_CAP, val);
- 
- 		tegra_pcie_dw_host_init(pp);
- 		dw_pcie_setup_rc(pp);
-@@ -1111,13 +1169,26 @@ static int tegra_pcie_dw_parse_dt(struct tegra_pcie_dw *pcie)
- 	if (of_property_read_bool(np, "nvidia,update-fc-fixup"))
- 		pcie->update_fc_fixup = true;
- 
-+	pcie->enable_ext_refclk =
-+		of_property_read_bool(pcie->dev->of_node,
-+				      "nvidia,enable-ext-refclk");
-+	/* RP using an external REFCLK is supported only in Tegra234 */
-+	if (pcie->of_data->version == TEGRA194_DWC_IP_VER) {
-+		if (pcie->of_data->mode == DW_PCIE_RC_TYPE)
-+			pcie->enable_ext_refclk = false;
-+		else
-+			pcie->enable_ext_refclk = true;
-+	}
-+
- 	pcie->supports_clkreq =
- 		of_property_read_bool(pcie->dev->of_node, "supports-clkreq");
- 
- 	pcie->enable_cdm_check =
- 		of_property_read_bool(np, "snps,enable-cdm-check");
- 
--	if (pcie->mode == DW_PCIE_RC_TYPE)
-+	pcie->enable_srns = of_property_read_bool(np, "nvidia,enable-srns");
-+
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE)
- 		return 0;
- 
- 	/* Endpoint mode specific DT entries */
-@@ -1161,8 +1232,11 @@ static int tegra_pcie_bpmp_set_ctrl_state(struct tegra_pcie_dw *pcie,
- 	struct tegra_bpmp_message msg;
- 	struct mrq_uphy_request req;
- 
--	/* Controller-5 doesn't need to have its state set by BPMP-FW */
--	if (pcie->cid == 5)
-+	/*
-+	 * Controller-5 doesn't need to have its state set by BPMP-FW in
-+	 * Tegra194
-+	 */
-+	if (pcie->cid == 5 && pcie->of_data->version == TEGRA194_DWC_IP_VER)
- 		return 0;
- 
- 	memset(&req, 0, sizeof(req));
-@@ -1328,6 +1402,14 @@ static int tegra_pcie_config_controller(struct tegra_pcie_dw *pcie,
- 		return ret;
- 	}
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+		if (ret) {
-+			dev_err(pcie->dev, "Failed to init UPHY: %d\n", ret);
-+			goto fail_pll_init;
-+		}
-+	}
-+
- 	ret = tegra_pcie_enable_slot_regulators(pcie);
- 	if (ret < 0)
- 		goto fail_slot_reg_en;
-@@ -1351,11 +1433,13 @@ static int tegra_pcie_config_controller(struct tegra_pcie_dw *pcie,
- 		goto fail_core_apb_rst;
- 	}
- 
--	if (en_hw_hot_rst) {
-+	if (en_hw_hot_rst || !pcie->of_data->sbr_reset_fixup) {
- 		/* Enable HW_HOT_RST mode */
- 		val = appl_readl(pcie, APPL_CTRL);
- 		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
- 			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= (APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST_LTSSM_EN <<
-+			APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
- 		val |= APPL_CTRL_HW_HOT_RST_EN;
- 		appl_writel(pcie, val, APPL_CTRL);
- 	}
-@@ -1382,6 +1466,19 @@ static int tegra_pcie_config_controller(struct tegra_pcie_dw *pcie,
- 	val |= (APPL_CFG_MISC_ARCACHE_VAL << APPL_CFG_MISC_ARCACHE_SHIFT);
- 	appl_writel(pcie, val, APPL_CFG_MISC);
- 
-+	if (pcie->enable_srns || pcie->enable_ext_refclk) {
-+		/*
-+		 * When Tegra PCIe RP is using external clock, it cannot
-+		 * supply same clock to its downstream hierarchy.
-+		 * Hence, gate PCIe RP REFCLK out pads when RP & EP are
-+		 * using separate clocks or RP is using an external REFCLK.
-+		 */
-+		val = appl_readl(pcie, APPL_PINMUX);
-+		val |= APPL_PINMUX_CLK_OUTPUT_IN_OVERRIDE_EN;
-+		val &= ~APPL_PINMUX_CLK_OUTPUT_IN_OVERRIDE;
-+		appl_writel(pcie, val, APPL_PINMUX);
-+	}
-+
- 	if (!pcie->supports_clkreq) {
- 		val = appl_readl(pcie, APPL_PINMUX);
- 		val |= APPL_PINMUX_CLKREQ_OVERRIDE_EN;
-@@ -1407,6 +1504,9 @@ static int tegra_pcie_config_controller(struct tegra_pcie_dw *pcie,
- fail_reg_en:
- 	tegra_pcie_disable_slot_regulators(pcie);
- fail_slot_reg_en:
-+	if (pcie->enable_ext_refclk)
-+		tegra_pcie_bpmp_set_pll_state(pcie, false);
-+fail_pll_init:
- 	tegra_pcie_bpmp_set_ctrl_state(pcie, false);
- 
- 	return ret;
-@@ -1434,6 +1534,12 @@ static void tegra_pcie_unconfig_controller(struct tegra_pcie_dw *pcie)
- 
- 	tegra_pcie_disable_slot_regulators(pcie);
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
-+		if (ret)
-+			dev_err(pcie->dev, "Failed to deinit UPHY: %d\n", ret);
-+	}
-+
- 	ret = tegra_pcie_bpmp_set_ctrl_state(pcie, false);
- 	if (ret)
- 		dev_err(pcie->dev, "Failed to disable controller %d: %d\n",
-@@ -1634,6 +1740,13 @@ static void pex_ep_event_pex_rst_assert(struct tegra_pcie_dw *pcie)
- 
- 	pm_runtime_put_sync(pcie->dev);
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
-+		if (ret)
-+			dev_err(pcie->dev, "Failed to turn off UPHY: %d\n",
-+				ret);
-+	}
-+
- 	ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
- 	if (ret)
- 		dev_err(pcie->dev, "Failed to turn off UPHY: %d\n", ret);
-@@ -1649,6 +1762,7 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
- 	struct device *dev = pcie->dev;
- 	u32 val;
- 	int ret;
-+	u16 val_16;
- 
- 	if (pcie->ep_state == EP_STATE_ENABLED)
- 		return;
-@@ -1660,10 +1774,20 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
- 		return;
- 	}
- 
--	ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+	ret = tegra_pcie_bpmp_set_ctrl_state(pcie, true);
- 	if (ret) {
--		dev_err(dev, "Failed to init UPHY for PCIe EP: %d\n", ret);
--		goto fail_pll_init;
-+		dev_err(pcie->dev, "Failed to enable controller %u: %d\n",
-+			pcie->cid, ret);
-+		goto fail_set_ctrl_state;
-+	}
-+
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+		if (ret) {
-+			dev_err(dev, "Failed to init UPHY for PCIe EP: %d\n",
-+				ret);
-+			goto fail_pll_init;
-+		}
- 	}
- 
- 	ret = clk_prepare_enable(pcie->core_clk);
-@@ -1760,12 +1884,29 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
- 		disable_aspm_l12(pcie);
- 	}
- 
--	val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
--	val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
--	dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	if (pcie->of_data->l1ss_exit_fixup) {
-+		val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
-+		val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
-+		dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	}
- 
- 	pcie->pcie_cap_base = dw_pcie_find_capability(&pcie->pci,
- 						      PCI_CAP_ID_EXP);
-+
-+	val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL);
-+	val_16 &= ~PCI_EXP_DEVCTL_PAYLOAD;
-+	val_16 |= PCI_EXP_DEVCTL_PAYLOAD_256B;
-+	dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL, val_16);
-+
-+	/* Clear Slot Clock Configuration bit if SRNS configuration */
-+	if (pcie->enable_srns) {
-+		val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA);
-+		val_16 &= ~PCI_EXP_LNKSTA_SLC;
-+		dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA,
-+				   val_16);
-+	}
-+
- 	clk_set_rate(pcie->core_clk, GEN4_CORE_CLK_FREQ);
- 
- 	val = (ep->msi_mem_phys & MSIX_ADDR_MATCH_LOW_OFF_MASK);
-@@ -1782,6 +1923,13 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
- 
- 	dw_pcie_ep_init_notify(ep);
- 
-+	/* Send LTR upstream */
-+	if (!pcie->of_data->ltr_req_fixup) {
-+		val = appl_readl(pcie, APPL_LTR_MSG_2);
-+		val |= APPL_LTR_MSG_2_LTR_MSG_REQ_STATE;
-+		appl_writel(pcie, val, APPL_LTR_MSG_2);
-+	}
-+
- 	/* Enable LTSSM */
- 	val = appl_readl(pcie, APPL_CTRL);
- 	val |= APPL_CTRL_LTSSM_EN;
-@@ -1802,6 +1950,8 @@ static void pex_ep_event_pex_rst_deassert(struct tegra_pcie_dw *pcie)
- fail_core_clk_enable:
- 	tegra_pcie_bpmp_set_pll_state(pcie, false);
- fail_pll_init:
-+	tegra_pcie_bpmp_set_ctrl_state(pcie, false);
-+fail_set_ctrl_state:
- 	pm_runtime_put_sync(dev);
- }
- 
-@@ -1931,6 +2081,7 @@ static int tegra_pcie_config_ep(struct tegra_pcie_dw *pcie,
- 
- 	irq_set_status_flags(pcie->pex_rst_irq, IRQ_NOAUTOEN);
- 
-+	pcie->pex_rst_irq_enabled = false;
- 	pcie->ep_state = EP_STATE_DISABLED;
- 
- 	ret = devm_request_threaded_irq(dev, pcie->pex_rst_irq, NULL,
-@@ -1978,14 +2129,13 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
- 	pci = &pcie->pci;
- 	pci->dev = &pdev->dev;
- 	pci->ops = &tegra_dw_pcie_ops;
--	pci->n_fts[0] = N_FTS_VAL;
--	pci->n_fts[1] = FTS_VAL;
--	pci->version = 0x490A;
--
-+	pcie->dev = &pdev->dev;
-+	pcie->of_data = (struct tegra_pcie_dw_of_data *)data;
-+	pci->n_fts[0] = pcie->of_data->n_fts[0];
-+	pci->n_fts[1] = pcie->of_data->n_fts[1];
-+	pci->version = pcie->of_data->version;
- 	pp = &pci->pp;
- 	pp->num_vectors = MAX_MSI_IRQS;
--	pcie->dev = &pdev->dev;
--	pcie->mode = (enum dw_pcie_device_mode)data->mode;
- 
- 	ret = tegra_pcie_dw_parse_dt(pcie);
- 	if (ret < 0) {
-@@ -2102,7 +2252,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, pcie);
- 
--	switch (pcie->mode) {
-+	switch (pcie->of_data->mode) {
- 	case DW_PCIE_RC_TYPE:
- 		ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
- 				       IRQF_SHARED, "tegra-pcie-intr", pcie);
-@@ -2137,7 +2287,8 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
- 		break;
- 
- 	default:
--		dev_err(dev, "Invalid PCIe device type %d\n", pcie->mode);
-+		dev_err(dev, "Invalid PCIe device type %d\n",
-+			pcie->of_data->mode);
- 	}
- 
- fail:
-@@ -2149,12 +2300,19 @@ static int tegra_pcie_dw_remove(struct platform_device *pdev)
- {
- 	struct tegra_pcie_dw *pcie = platform_get_drvdata(pdev);
- 
--	if (!pcie->link_state)
--		return 0;
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE) {
-+		if (!pcie->link_state)
-+			return 0;
-+
-+		debugfs_remove_recursive(pcie->debugfs);
-+		tegra_pcie_deinit_controller(pcie);
-+		pm_runtime_put_sync(pcie->dev);
-+	} else {
-+		if (pcie->pex_rst_irq_enabled)
-+			disable_irq(pcie->pex_rst_irq);
-+		pex_ep_event_pex_rst_assert(pcie);
-+	}
- 
--	debugfs_remove_recursive(pcie->debugfs);
--	tegra_pcie_deinit_controller(pcie);
--	pm_runtime_put_sync(pcie->dev);
- 	pm_runtime_disable(pcie->dev);
- 	tegra_bpmp_put(pcie->bpmp);
- 	if (pcie->pex_refclk_sel_gpiod)
-@@ -2168,15 +2326,22 @@ static int tegra_pcie_dw_suspend_late(struct device *dev)
- 	struct tegra_pcie_dw *pcie = dev_get_drvdata(dev);
- 	u32 val;
- 
-+	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
-+		dev_err(dev, "Failed to Suspend as Tegra PCIe is in EP mode\n");
-+		return -EPERM;
-+	}
-+
- 	if (!pcie->link_state)
- 		return 0;
- 
- 	/* Enable HW_HOT_RST mode */
--	val = appl_readl(pcie, APPL_CTRL);
--	val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
--		 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
--	val |= APPL_CTRL_HW_HOT_RST_EN;
--	appl_writel(pcie, val, APPL_CTRL);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_CTRL);
-+		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
-+			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= APPL_CTRL_HW_HOT_RST_EN;
-+		appl_writel(pcie, val, APPL_CTRL);
-+	}
- 
- 	return 0;
- }
-@@ -2231,7 +2396,7 @@ static int tegra_pcie_dw_resume_early(struct device *dev)
- 	struct tegra_pcie_dw *pcie = dev_get_drvdata(dev);
- 	u32 val;
- 
--	if (pcie->mode == DW_PCIE_EP_TYPE) {
-+	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
- 		dev_err(dev, "Suspend is not supported in EP mode");
- 		return -ENOTSUPP;
- 	}
-@@ -2240,13 +2405,15 @@ static int tegra_pcie_dw_resume_early(struct device *dev)
- 		return 0;
- 
- 	/* Disable HW_HOT_RST mode */
--	val = appl_readl(pcie, APPL_CTRL);
--	val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
--		 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
--	val |= APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST <<
--	       APPL_CTRL_HW_HOT_RST_MODE_SHIFT;
--	val &= ~APPL_CTRL_HW_HOT_RST_EN;
--	appl_writel(pcie, val, APPL_CTRL);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_CTRL);
-+		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
-+			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST <<
-+		       APPL_CTRL_HW_HOT_RST_MODE_SHIFT;
-+		val &= ~APPL_CTRL_HW_HOT_RST_EN;
-+		appl_writel(pcie, val, APPL_CTRL);
-+	}
- 
- 	return 0;
- }
-@@ -2255,36 +2422,95 @@ static void tegra_pcie_dw_shutdown(struct platform_device *pdev)
- {
- 	struct tegra_pcie_dw *pcie = platform_get_drvdata(pdev);
- 
--	if (!pcie->link_state)
--		return;
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE) {
-+		if (!pcie->link_state)
-+			return;
- 
--	debugfs_remove_recursive(pcie->debugfs);
--	tegra_pcie_downstream_dev_to_D0(pcie);
-+		debugfs_remove_recursive(pcie->debugfs);
-+		tegra_pcie_downstream_dev_to_D0(pcie);
- 
--	disable_irq(pcie->pci.pp.irq);
--	if (IS_ENABLED(CONFIG_PCI_MSI))
--		disable_irq(pcie->pci.pp.msi_irq);
-+		disable_irq(pcie->pci.pp.irq);
-+		if (IS_ENABLED(CONFIG_PCI_MSI))
-+			disable_irq(pcie->pci.pp.msi_irq);
- 
--	tegra_pcie_dw_pme_turnoff(pcie);
--	tegra_pcie_unconfig_controller(pcie);
-+		tegra_pcie_dw_pme_turnoff(pcie);
-+		tegra_pcie_unconfig_controller(pcie);
-+		pm_runtime_put_sync(pcie->dev);
-+	} else {
-+		if (pcie->pex_rst_irq_enabled)
-+			disable_irq(pcie->pex_rst_irq);
-+		pex_ep_event_pex_rst_assert(pcie);
-+	}
- }
- 
--static const struct tegra_pcie_dw_of_data tegra_pcie_dw_rc_of_data = {
-+static const struct tegra_pcie_dw_of_data tegra194_pcie_dw_rc_of_data = {
-+	.version = TEGRA194_DWC_IP_VER,
-+	.mode = DW_PCIE_RC_TYPE,
-+	.msix_doorbell_access_fixup = true,
-+	.sbr_reset_fixup = true,
-+	.l1ss_exit_fixup = true,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(19),
-+	/* Gen4 - 5, 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x360,
-+	.n_fts = { 52, 52 },
-+};
-+
-+static const struct tegra_pcie_dw_of_data tegra194_pcie_dw_ep_of_data = {
-+	.version = TEGRA194_DWC_IP_VER,
-+	.mode = DW_PCIE_EP_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = true,
-+	.ltr_req_fixup = true,
-+	.cdm_chk_int_en = BIT(19),
-+	/* Gen4 - 5, 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x360,
-+	.n_fts = { 52, 52 },
-+};
-+
-+static const struct tegra_pcie_dw_of_data tegra234_pcie_dw_rc_of_data = {
-+	.version = TEGRA234_DWC_IP_VER,
- 	.mode = DW_PCIE_RC_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = false,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(18),
-+	/* Gen4 - 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x340,
-+	.n_fts = { 52, 80 },
- };
- 
--static const struct tegra_pcie_dw_of_data tegra_pcie_dw_ep_of_data = {
-+static const struct tegra_pcie_dw_of_data tegra234_pcie_dw_ep_of_data = {
-+	.version = TEGRA234_DWC_IP_VER,
- 	.mode = DW_PCIE_EP_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = false,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(18),
-+	/* Gen4 - 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x340,
-+	.n_fts = { 52, 80 },
- };
- 
- static const struct of_device_id tegra_pcie_dw_of_match[] = {
- 	{
- 		.compatible = "nvidia,tegra194-pcie",
--		.data = &tegra_pcie_dw_rc_of_data,
-+		.data = &tegra194_pcie_dw_rc_of_data,
- 	},
- 	{
- 		.compatible = "nvidia,tegra194-pcie-ep",
--		.data = &tegra_pcie_dw_ep_of_data,
-+		.data = &tegra194_pcie_dw_ep_of_data,
-+	},
-+	{
-+		.compatible = "nvidia,tegra234-pcie",
-+		.data = &tegra234_pcie_dw_rc_of_data,
-+	},
-+	{
-+		.compatible = "nvidia,tegra234-pcie-ep",
-+		.data = &tegra234_pcie_dw_ep_of_data,
- 	},
- 	{},
- };
--- 
-2.34.1
+T24gNy8xMi8yMiAxMzoxNywgUGllcnJlIE1vcmVsIHdyb3RlOg0KPiANCj4gDQo+IE9uIDcv
+MTIvMjIgMTA6NDcsIEphbmlzIFNjaG9ldHRlcmwtR2xhdXNjaCB3cm90ZToNCj4+IE9uIDcv
+MTIvMjIgMDk6MjQsIFBpZXJyZSBNb3JlbCB3cm90ZToNCj4+Pg0KPj4+DQo+Pj4gT24gNy8x
+MS8yMiAxNToyMiwgSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIHdyb3RlOg0KPj4+PiBPbiA3
+LzExLzIyIDEwOjQxLCBQaWVycmUgTW9yZWwgd3JvdGU6DQo+Pj4+PiBEdXJpbmcgYSBzdWJz
+eXN0ZW0gcmVzZXQgdGhlIFRvcG9sb2d5LUNoYW5nZS1SZXBvcnQgaXMgY2xlYXJlZC4NCj4+
+Pj4+DQo+Pj4+PiBMZXQncyBnaXZlIHVzZXJsYW5kIHRoZSBwb3NzaWJpbGl0eSB0byBjbGVh
+ciB0aGUgTVRDUiBpbiB0aGUgY2FzZQ0KPj4+Pj4gb2YgYSBzdWJzeXN0ZW0gcmVzZXQuDQo+
+Pj4+Pg0KPj4+Pj4gVG8gbWlncmF0ZSB0aGUgTVRDUiwgd2UgZ2l2ZSB1c2VybGFuZCB0aGUg
+cG9zc2liaWxpdHkgdG8NCj4+Pj4+IHF1ZXJ5IHRoZSBNVENSIHN0YXRlLg0KPj4+Pj4NCj4+
+Pj4+IFdlIGluZGljYXRlIEtWTSBzdXBwb3J0IGZvciB0aGUgQ1BVIHRvcG9sb2d5IGZhY2ls
+aXR5IHdpdGggYSBuZXcNCj4+Pj4+IEtWTSBjYXBhYmlsaXR5OiBLVk1fQ0FQX1MzOTBfQ1BV
+X1RPUE9MT0dZLg0KPj4+Pj4NCj4+Pj4+IFNpZ25lZC1vZmYtYnk6IFBpZXJyZSBNb3JlbCA8
+cG1vcmVsQGxpbnV4LmlibS5jb20+DQo+Pj4+DQo+Pj4+IFJldmlld2VkLWJ5OiBKYW5pcyBT
+Y2hvZXR0ZXJsLUdsYXVzY2ggPHNjZ2xAbGludXguaWJtLmNvbT4NCj4+Pj4NCj4+Pg0KPj4+
+IFRoYW5rcyENCj4+Pg0KPj4+PiBTZWUgbml0cy9jb21tZW50cyBiZWxvdy4NCj4+Pj4NCj4+
+Pj4+IC0tLQ0KPj4+Pj4gICDCoCBEb2N1bWVudGF0aW9uL3ZpcnQva3ZtL2FwaS5yc3TCoMKg
+IHwgMjUgKysrKysrKysrKysrKysNCj4+Pj4+ICAgwqAgYXJjaC9zMzkwL2luY2x1ZGUvdWFw
+aS9hc20va3ZtLmggfMKgIDEgKw0KPj4+Pj4gICDCoCBhcmNoL3MzOTAva3ZtL2t2bS1zMzkw
+LmPCoMKgwqDCoMKgwqDCoMKgIHwgNTYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysNCj4+Pj4+ICAgwqAgaW5jbHVkZS91YXBpL2xpbnV4L2t2bS5owqDCoMKgwqDCoMKgwqDC
+oCB8wqAgMSArDQo+Pj4+PiAgIMKgIDQgZmlsZXMgY2hhbmdlZCwgODMgaW5zZXJ0aW9ucygr
+KQ0KPj4+Pj4NCj4+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3ZpcnQva3ZtL2Fw
+aS5yc3QgYi9Eb2N1bWVudGF0aW9uL3ZpcnQva3ZtL2FwaS5yc3QNCj4+Pj4+IGluZGV4IDEx
+ZTAwYTQ2YzYxMC4uNWUwODYxMjVkOGFkIDEwMDY0NA0KPj4+Pj4gLS0tIGEvRG9jdW1lbnRh
+dGlvbi92aXJ0L2t2bS9hcGkucnN0DQo+Pj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL3ZpcnQv
+a3ZtL2FwaS5yc3QNCj4+Pj4+IEBAIC03OTU2LDYgKzc5NTYsMzEgQEAgc2hvdWxkIGFkanVz
+dCBDUFVJRCBsZWFmIDB4QSB0byByZWZsZWN0IHRoYXQgdGhlIFBNVSBpcyBkaXNhYmxlZC4N
+Cj4+Pj4+ICAgwqAgV2hlbiBlbmFibGVkLCBLVk0gd2lsbCBleGl0IHRvIHVzZXJzcGFjZSB3
+aXRoIEtWTV9FWElUX1NZU1RFTV9FVkVOVCBvZg0KPj4+Pj4gICDCoCB0eXBlIEtWTV9TWVNU
+RU1fRVZFTlRfU1VTUEVORCB0byBwcm9jZXNzIHRoZSBndWVzdCBzdXNwZW5kIHJlcXVlc3Qu
+DQo+Pj4+PiAgIMKgICs4LjM3IEtWTV9DQVBfUzM5MF9DUFVfVE9QT0xPR1kNCj4+Pj4+ICst
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+Pj4+ICsNCj4+Pj4+ICs6Q2FwYWJp
+bGl0eTogS1ZNX0NBUF9TMzkwX0NQVV9UT1BPTE9HWQ0KPj4+Pj4gKzpBcmNoaXRlY3R1cmVz
+OiBzMzkwDQo+Pj4+PiArOlR5cGU6IHZtDQo+Pj4+PiArDQo+Pj4+PiArVGhpcyBjYXBhYmls
+aXR5IGluZGljYXRlcyB0aGF0IEtWTSB3aWxsIHByb3ZpZGUgdGhlIFMzOTAgQ1BVIFRvcG9s
+b2d5DQo+Pj4+PiArZmFjaWxpdHkgd2hpY2ggY29uc2lzdCBvZiB0aGUgaW50ZXJwcmV0YXRp
+b24gb2YgdGhlIFBURiBpbnN0cnVjdGlvbiBmb3INCj4+Pj4+ICt0aGUgZnVuY3Rpb24gY29k
+ZSAyIGFsb25nIHdpdGggaW50ZXJjZXB0aW9uIGFuZCBmb3J3YXJkaW5nIG9mIGJvdGggdGhl
+DQo+Pj4+PiArUFRGIGluc3RydWN0aW9uIHdpdGggZnVuY3Rpb24gY29kZXMgMCBvciAxIGFu
+ZCB0aGUgU1RTSSgxNSwxLHgpDQo+Pj4+DQo+Pj4+IElzIHRoZSBhcmNoaXRlY3R1cmUgYWxs
+b3dlZCB0byBleHRlbmQgU1RTSSB3aXRob3V0IGEgZmFjaWxpdHk/DQo+Pj4+IElmIHNvLCBp
+ZiB3ZSBzYXkgaGVyZSB0aGF0IFNUU0kgMTUuMS54IGlzIHBhc3NlZCB0byB1c2VyIHNwYWNl
+LCB0aGVuDQo+Pj4+IEkgdGhpbmsgd2Ugc2hvdWxkIGhhdmUgYQ0KPj4+Pg0KPj4+PiBpZiAo
+c2VsMSAhPSAxKQ0KPj4+PiAgIMKgwqDCoMKgZ290byBvdXRfbm9fZGF0YTsNCj4+Pj4NCj4+
+Pj4gb3IgbWF5YmUgZXZlbg0KPj4+Pg0KPj4+PiBpZiAoc2VsMSAhPSAxIHx8IHNlbDIgPCAy
+IHx8IHNlbDIgPiA2KQ0KPj4+PiAgIMKgwqDCoMKgZ290byBvdXRfbm9fZGF0YTsNCj4+Pj4N
+Cj4+Pj4gaW4gcHJpdi5jDQo+Pj4NCj4+PiBJIGFtIG5vdCBhIGJpZyBmYW4gb2YgZG9pbmcg
+ZXZlcnl0aGluZyBpbiB0aGUga2VybmVsLg0KPj4+IEhlcmUgd2UgaGF2ZSBubyBwZXJmb3Jt
+YW5jZSBpc3N1ZSBzaW5jZSBpdCBpcyBhbiBlcnJvciBvZiB0aGUgZ3Vlc3QgaWYgaXQgc2Vu
+ZHMgYSB3cm9uZyBzZWxlY3Rvci4NCj4+Pg0KPj4gSSBhZ3JlZSwgYnV0IEkgZGlkbid0IHN1
+Z2dlc3QgaXQgZm9yIHBlcmZvcm1hbmNlIHJlYXNvbnMuDQo+IA0KPiBZZXMsIGFuZCB0aGF0
+IGlzIHdoeSBJIGRvIG5vdCBhZ3JlZSA7KQ0KPiANCj4+IEkgd2FzIHRoaW5raW5nIGFib3V0
+IGZ1dHVyZSBwcm9vZmluZywgdGhhdCBpcyBpZiB0aGUgYXJjaGl0ZWN0dXJlIGlzIGV4dGVu
+ZGVkLg0KPj4gV2UgZG9uJ3Qga25vdyBpZiBmdXR1cmUgZXh0ZW5zaW9ucyBhcmUgYmVzdCBo
+YW5kbGVkIGluIHRoZSBrZXJuZWwgb3IgdXNlciBzcGFjZSwNCj4+IHNvIGlmIHdlIHByZXZl
+bnQgaXQgZnJvbSBnb2luZyB0byB1c2VyIHNwYWNlLCB3ZSBjYW4gZGVmZXIgdGhlIGRlY2lz
+aW9uIHRvIHdoZW4gd2Uga25vdyBtb3JlLg0KPiANCj4gSWYgZnV0dXJlIGV4dGVuc2lvbnMg
+YXJlIGJldHRlciBoYW5kbGUgaW4ga2VybmVsIHdlIHdpbGwgaGFuZGxlIHRoZW0gaW4NCj4g
+a2VybmVsLCBvYnZpb3VzbHksIGluIHRoaXMgY2FzZSB3ZSB3aWxsIG5lZWQgYSBwYXRjaC4N
+Cj4gDQo+IElmIGl0IGlzIG5vdCBiZXR0ZXIgaGFuZGxlIGluIGtlcm5lbCB3ZSB3aWxsIGhh
+bmRsZSB0aGUgZXh0ZW5zaW9ucyBpbg0KPiB1c2VybGFuZCBhbmQgd2Ugd2lsbCBub3QgbmVl
+ZCBhIGtlcm5lbCBwYXRjaCBtYWtpbmcgdGhlIHVwZGF0ZSBvZiB0aGUNCj4gdmlydHVhbCBh
+cmNoaXRlY3R1cmUgZWFzaWVyIGFuZCBmYXN0ZXIuDQo+IA0KPiBJZiB3ZSBwcm9oaWJpdCB0
+aGUgZXh0ZW5zaW9ucyBpbiBrZXJuZWwgd2Ugd2lsbCBuZWVkIGEga2VybmVsIHBhdGNoIGlu
+DQo+IGJvdGggY2FzZXMgYW5kIGEgdXNlcmxhbmQgcGF0Y2ggaWYgaXQgaXMgbm90IGNvbXBs
+ZXRlbHkgaGFuZGxlZCBpbiBrZXJuZWwuDQo+IA0KPiBJbiB1c2VybGFuZCB3ZSBjaGVjayBh
+bnkgd3Jvbmcgc2VsZWN0b3IgYmVmb3JlIHRoZSBpbnN0cnVjdGlvbiBnb2VzIGJhY2sNCj4g
+dG8gdGhlIGd1ZXN0Lg0KDQpJIG9wdCBmb3IgcGFzc2luZyB0aGUgbG93ZXIgc2VsZWN0b3Jz
+IGRvd24gZm9yIFFFTVUgdG8gaGFuZGxlLg0KDQo+IA0KPj4gQnV0IHRoYXQncyBvbmx5IHJl
+bGV2YW50IGlmIFNUU0kgY2FuIGJlIGV4dGVuZGVkIHdpdGhvdXQgYSBjYXBhYmlsaXR5LCB3
+aGljaCBpcyB3aHkgSSBhc2tlZCBhYm91dCB0aGF0Lg0KPiANCj4gTG9naWNhbHkgYW55IGNo
+YW5nZSwgZXh0ZW5zaW9uLCBpbiB0aGUgYXJjaGl0ZWN0dXJlIHNob3VsZCBiZSBzaWduYWxl
+ZA0KPiBieSBhIGZhY2lsaXR5IGJpdCBvciBzb21ldGhpbmcuDQo+IA0KPj4NCj4+PiBFdmVu
+IHRlc3RpbmcgdGhlIGZhY2lsaXR5IG9yIFBWIGluIHRoZSBrZXJuZWwgaXMgZm9yIG15IG9w
+aW5pb24gYXJndWFibGUgaW4gdGhlIGNhc2Ugd2UgZG8gbm90IGRvIGFueSB0cmVhdG1lbnQg
+aW4gdGhlIGtlcm5lbC4NCg0KVGhhdCdzIGFjdHVhbGx5IGEgZ29vZCBwb2ludC4NCg0KTmV3
+IGluc3RydWN0aW9uIGludGVyY2VwdGlvbnMgZm9yIFBWIHdpbGwgbmVlZCB0byBiZSBlbmFi
+bGVkIGJ5IEtWTSB2aWEgDQphIHN3aXRjaCBzb21ld2hlcmUgc2luY2UgdGhlIFVWIGNhbid0
+IHJlbHkgb24gdGhlIGZhY3QgdGhhdCBLVk0gd2lsbCANCmNvcnJlY3RseSBoYW5kbGUgaXQg
+d2l0aG91dCBhbiBlbmFibGVtZW50Lg0KDQoNClNvIHBsZWFzZSByZW1vdmUgdGhlIHB2IGNo
+ZWNrDQoNCj4+Pg0KPj4+IEkgZG8gbm90IHNlZSB3aGF0IGl0IGJyaW5ncyB0byB1cywgaXQg
+aW5jcmVhc2UgdGhlIExPQ3MgYW5kIG1ha2VzIHRoZSBpbXBsZW1lbnRhdGlvbiBsZXNzIGVh
+c3kgdG8gZXZvbHZlLg0KPj4+DQo+Pj4NCj4+Pj4NCj4+Pj4+ICtpbnN0cnVjdGlvbiB0byB0
+aGUgdXNlcmxhbmQgaHlwZXJ2aXNvci4NCj4+Pj4+ICsNCj4+Pj4+ICtUaGUgc3RmbGUgZmFj
+aWxpdHkgMTEsIENQVSBUb3BvbG9neSBmYWNpbGl0eSwgc2hvdWxkIG5vdCBiZSBpbmRpY2F0
+ZWQNCj4+Pj4+ICt0byB0aGUgZ3Vlc3Qgd2l0aG91dCB0aGlzIGNhcGFiaWxpdHkuDQo+Pj4+
+PiArDQo+Pj4+PiArV2hlbiB0aGlzIGNhcGFiaWxpdHkgaXMgcHJlc2VudCwgS1ZNIHByb3Zp
+ZGVzIGEgbmV3IGF0dHJpYnV0ZSBncm91cA0KPj4+Pj4gK29uIHZtIGZkLCBLVk1fUzM5MF9W
+TV9DUFVfVE9QT0xPR1kuDQo+Pj4+PiArVGhpcyBuZXcgYXR0cmlidXRlIGFsbG93cyB0byBn
+ZXQsIHNldCBvciBjbGVhciB0aGUgTW9kaWZpZWQgQ2hhbmdlDQo+Pj4+DQo+Pj4+IGdldCBv
+ciBzZXQsIG5vdyB0aGF0IHRoZXJlIGlzIG5vIGV4cGxpY2l0IGNsZWFyIGFueW1vcmUuDQo+
+Pj4NCj4+PiBZZXMgbm93IGl0IGlzIGEgc2V0IHRvIDAgYnV0IHRoZSBhY3Rpb24gb2YgY2xl
+YXJpbmcgcmVtYWlucy4NCg0KWWVzDQoNCj4+Pg0KPj4+Pg0KPj4+Pj4gK1RvcG9sb2d5IFJl
+cG9ydCAoTVRDUikgYml0IG9mIHRoZSBTQ0EgdGhyb3VnaCB0aGUga3ZtX2RldmljZV9hdHRy
+DQo+Pj4+PiArc3RydWN0dXJlLj4gKw0KPj4+Pj4gK1doZW4gZ2V0dGluZyB0aGUgTW9kaWZp
+ZWQgQ2hhbmdlIFRvcG9sb2d5IFJlcG9ydCB2YWx1ZSwgdGhlIGF0dHItPmFkZHINCj4+Pj4N
+Cj4+Pj4gV2hlbiBnZXR0aW5nL3NldHRpbmcgdGhlLi4uDQo+Pj4+DQo+Pj4+PiArbXVzdCBw
+b2ludCB0byBhIGJ5dGUgd2hlcmUgdGhlIHZhbHVlIHdpbGwgYmUgc3RvcmVkLg0KPj4+Pg0K
+Pj4+PiAuLi4gd2lsbCBiZSBzdG9yZWQvcmV0cmlldmVkIGZyb20uDQo+Pj4NCj4+PiBPSw0K
+Pj4NCj4+IFdhaXQgbm8sIEkgZGlkbid0IGdldCBob3cgdGhhdCB3b3Jrcy4gWW91J3JlIHBh
+c3NpbmcgdGhlIHZhbHVlIHZpYSBhdHRyLT5hdHRyLCBub3QgcmVhZGluZyBpdCBmcm9tIGFk
+ZHIuDQo+IA0KPiA6KSBPSw0KPiANCj4+Pg0KPj4+DQo+Pj4+PiArDQo+Pj4+PiAgIMKgIDku
+IEtub3duIEtWTSBBUEkgcHJvYmxlbXMNCj4+Pj4+ICAgwqAgPT09PT09PT09PT09PT09PT09
+PT09PT09PQ0KPj4+Pj4gICDCoCBkaWZmIC0tZ2l0IGEvYXJjaC9zMzkwL2luY2x1ZGUvdWFw
+aS9hc20va3ZtLmggYi9hcmNoL3MzOTAvaW5jbHVkZS91YXBpL2FzbS9rdm0uaA0KPj4+Pj4g
+aW5kZXggN2E2YjE0ODc0ZDY1Li5hNzNjZjAxYTE2MDYgMTAwNjQ0DQo+Pj4+PiAtLS0gYS9h
+cmNoL3MzOTAvaW5jbHVkZS91YXBpL2FzbS9rdm0uaA0KPj4+Pj4gKysrIGIvYXJjaC9zMzkw
+L2luY2x1ZGUvdWFwaS9hc20va3ZtLmgNCj4+Pj4+IEBAIC03NCw2ICs3NCw3IEBAIHN0cnVj
+dCBrdm1fczM5MF9pb19hZGFwdGVyX3JlcSB7DQo+Pj4+PiAgIMKgICNkZWZpbmUgS1ZNX1Mz
+OTBfVk1fQ1JZUFRPwqDCoMKgwqDCoMKgwqAgMg0KPj4+Pj4gICDCoCAjZGVmaW5lIEtWTV9T
+MzkwX1ZNX0NQVV9NT0RFTMKgwqDCoMKgwqDCoMKgIDMNCj4+Pj4+ICAgwqAgI2RlZmluZSBL
+Vk1fUzM5MF9WTV9NSUdSQVRJT07CoMKgwqDCoMKgwqDCoCA0DQo+Pj4+PiArI2RlZmluZSBL
+Vk1fUzM5MF9WTV9DUFVfVE9QT0xPR1nCoMKgwqAgNQ0KPj4+Pj4gICDCoCDCoCAvKiBrdm0g
+YXR0cmlidXRlcyBmb3IgbWVtX2N0cmwgKi8NCj4+Pj4+ICAgwqAgI2RlZmluZSBLVk1fUzM5
+MF9WTV9NRU1fRU5BQkxFX0NNTUHCoMKgwqAgMA0KPj4+Pj4gZGlmZiAtLWdpdCBhL2FyY2gv
+czM5MC9rdm0va3ZtLXMzOTAuYyBiL2FyY2gvczM5MC9rdm0va3ZtLXMzOTAuYw0KPj4+Pj4g
+aW5kZXggNzA0MzZiZmZmNTNhLi5iMThlMGI5NDBiMjYgMTAwNjQ0DQo+Pj4+PiAtLS0gYS9h
+cmNoL3MzOTAva3ZtL2t2bS1zMzkwLmMNCj4+Pj4+ICsrKyBiL2FyY2gvczM5MC9rdm0va3Zt
+LXMzOTAuYw0KPj4+Pj4gQEAgLTYwNiw2ICs2MDYsOSBAQCBpbnQga3ZtX3ZtX2lvY3RsX2No
+ZWNrX2V4dGVuc2lvbihzdHJ1Y3Qga3ZtICprdm0sIGxvbmcgZXh0KQ0KPj4+Pj4gICDCoMKg
+wqDCoMKgIGNhc2UgS1ZNX0NBUF9TMzkwX1BST1RFQ1RFRDoNCj4+Pj4+ICAgwqDCoMKgwqDC
+oMKgwqDCoMKgIHIgPSBpc19wcm90X3ZpcnRfaG9zdCgpOw0KPj4+Pj4gICDCoMKgwqDCoMKg
+wqDCoMKgwqAgYnJlYWs7DQo+Pj4+PiArwqDCoMKgIGNhc2UgS1ZNX0NBUF9TMzkwX0NQVV9U
+T1BPTE9HWToNCj4+Pj4+ICvCoMKgwqDCoMKgwqDCoCByID0gdGVzdF9mYWNpbGl0eSgxMSk7
+DQo+Pj4+PiArwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4+PiAgIMKgwqDCoMKgwqAgZGVm
+YXVsdDoNCj4+Pj4+ICAgwqDCoMKgwqDCoMKgwqDCoMKgIHIgPSAwOw0KPj4+Pj4gICDCoMKg
+wqDCoMKgIH0NCj4+Pj4+IEBAIC04MTcsNiArODIwLDIwIEBAIGludCBrdm1fdm1faW9jdGxf
+ZW5hYmxlX2NhcChzdHJ1Y3Qga3ZtICprdm0sIHN0cnVjdCBrdm1fZW5hYmxlX2NhcCAqY2Fw
+KQ0KPj4+Pj4gICDCoMKgwqDCoMKgwqDCoMKgwqAgaWNwdF9vcGVyZXhjX29uX2FsbF92Y3B1
+cyhrdm0pOw0KPj4+Pj4gICDCoMKgwqDCoMKgwqDCoMKgwqAgciA9IDA7DQo+Pj4+PiAgIMKg
+wqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+Pj4+ICvCoMKgwqAgY2FzZSBLVk1fQ0FQX1Mz
+OTBfQ1BVX1RPUE9MT0dZOg0KPj4+Pj4gK8KgwqDCoMKgwqDCoMKgIHIgPSAtRUlOVkFMOw0K
+Pj4+Pj4gK8KgwqDCoMKgwqDCoMKgIG11dGV4X2xvY2soJmt2bS0+bG9jayk7DQo+Pj4+PiAr
+wqDCoMKgwqDCoMKgwqAgaWYgKGt2bS0+Y3JlYXRlZF92Y3B1cykgew0KPj4+Pj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgciA9IC1FQlVTWTsNCj4+Pj4+ICvCoMKgwqDCoMKgwqDCoCB9
+IGVsc2UgaWYgKHRlc3RfZmFjaWxpdHkoMTEpKSB7DQo+Pj4+PiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBzZXRfa3ZtX2ZhY2lsaXR5KGt2bS0+YXJjaC5tb2RlbC5mYWNfbWFzaywgMTEp
+Ow0KPj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2V0X2t2bV9mYWNpbGl0eShrdm0t
+PmFyY2gubW9kZWwuZmFjX2xpc3QsIDExKTsNCj4+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIHIgPSAwOw0KPj4+Pj4gK8KgwqDCoMKgwqDCoMKgIH0NCj4+Pj4+ICvCoMKgwqDCoMKg
+wqDCoCBtdXRleF91bmxvY2soJmt2bS0+bG9jayk7DQo+Pj4+PiArwqDCoMKgwqDCoMKgwqAg
+Vk1fRVZFTlQoa3ZtLCAzLCAiRU5BQkxFOiBDQVBfUzM5MF9DUFVfVE9QT0xPR1kgJXMiLA0K
+Pj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByID8gIihub3QgYXZhaWxhYmxlKSIg
+OiAiKHN1Y2Nlc3MpIik7DQo+Pj4+PiArwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4+PiAg
+IMKgwqDCoMKgwqAgZGVmYXVsdDoNCj4+Pj4+ICAgwqDCoMKgwqDCoMKgwqDCoMKgIHIgPSAt
+RUlOVkFMOw0KPj4+Pj4gICDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4+PiBAQCAt
+MTcxNyw2ICsxNzM0LDM2IEBAIHN0YXRpYyB2b2lkIGt2bV9zMzkwX3VwZGF0ZV90b3BvbG9n
+eV9jaGFuZ2VfcmVwb3J0KHN0cnVjdCBrdm0gKmt2bSwgYm9vbCB2YWwpDQo+Pj4+PiAgIMKg
+wqDCoMKgwqAgcmVhZF91bmxvY2soJmt2bS0+YXJjaC5zY2FfbG9jayk7DQo+Pj4+PiAgIMKg
+IH0NCj4+Pj4+ICAgwqAgK3N0YXRpYyBpbnQga3ZtX3MzOTBfc2V0X3RvcG9sb2d5KHN0cnVj
+dCBrdm0gKmt2bSwgc3RydWN0IGt2bV9kZXZpY2VfYXR0ciAqYXR0cikNCj4+Pj4NCj4+Pj4g
+a3ZtX3MzOTBfc2V0X3RvcG9sb2d5X2NoYW5nZWQgbWF5YmU/DQo+Pj4+IGt2bV9zMzkwX2dl
+dF90b3BvbG9neV9jaGFuZ2VkIGJlbG93IHRoZW4uDQoNCmt2bV9zMzkwX3NldF90b3BvbG9n
+eV9jaGFuZ2VfaW5kaWNhdGlvbg0KDQpJdCdzIGxvbmcgYnV0IGl0J3MgcmFyZWx5IHVzZWQu
+DQpNYXliZSBzaG9ydGVuIHRvcG9sb2d5IHRvICJ0b3BvIg0KDQpbLi5dDQo+Pj4+IEkgZG9u
+J3QgdGhpbmsgeW91IG5lZWQgdGhlIFJFQURfT05DRSBhbnltb3JlLCBub3cgdGhhdCB0aGVy
+ZSBpcyBhIGxvY2sgaXQgc2hvdWxkIGFjdCBhcyBhIGNvbXBpbGUgYmFycmllci4NCj4+Pg0K
+Pj4+IEkgdGhpbmsgeW91IGFyZSByaWdodC4NCj4+Pg0KPj4+Pj4gK8KgwqDCoCByZWFkX3Vu
+bG9jaygma3ZtLT5hcmNoLnNjYV9sb2NrKTsNCj4+Pj4+ICvCoMKgwqAgdG9wbyA9IHV0aWxp
+dHkubXRjcjsNCj4+Pj4+ICsNCj4+Pj4+ICvCoMKgwqAgaWYgKGNvcHlfdG9fdXNlcigodm9p
+ZCBfX3VzZXIgKilhdHRyLT5hZGRyLCAmdG9wbywgc2l6ZW9mKHRvcG8pKSkNCj4+Pj4NCj4+
+Pj4gV2h5IHZvaWQgbm90IHU4Pw0KPj4+DQo+Pj4gSSBsaWtlIHRvIHNheSB3ZSB3cml0ZSBv
+biAidG9wbyIgd2l0aCB0aGUgc2l6ZSBvZiAidG9wbyIuDQo+Pj4gU28gd2UgZG8gbm90IG5l
+ZWQgdG8gdmVyaWZ5IHRoZSBlZmZlY3RpdmUgc2l6ZSBvZiB0b3BvLg0KPj4+IEJ1dCBJIHVu
+ZGVyc3RhbmQsIGl0IGlzIGEgVUFQSSwgc2V0dGluZyB1OCBpbiB0aGUgY29weV90b191c2Vy
+IG1ha2VzIHNlbnNlIHRvby4NCj4+PiBGb3IgbXkgcGVyc29uYWwgb3BpbmlvbiwgSSB3b3Vs
+ZCBoYXZlIHByZWZlciB0aGF0IHVzZXJsYW5kIHRlbGwgdXMgdGhlIHNpemUgaXQgYXdhaXRz
+IGV2ZW4gaGVyZSwgZm9yIHRoaXMgc3BlY2lhbCBjYXNlLCBzaW5jZSB3ZSB1c2UgYSBieXRl
+LCB3ZSBjYW4gbm90IGRvIHJlYWxseSB3cm9uZy4NCj4+IFlvdSdyZSByaWdodCwgaXQgZG9l
+c24ndCBtYWtlIGEgZGlmZmVyZW5jZS4NCj4+IFdoYXQgYWJvdXQgZG9pbmcgcHV0X3VzZXIo
+dG9wbywgKHU4ICopYXR0ci0+YWRkcikpLCBzZWVtcyBtb3JlIHN0cmFpZ2h0IGZvcndhcmQu
+DQo+IA0KPiBPSw0KDQoodTggX191c2VyICopDQoNCkFsd2F5cyBnbyB0aGUgZXhwbGljaXQg
+cm91dGUgaWYgcG9zc2libGUNCg0KPiANCj4+Pg0KPj4+Pg0KPj4+Pj4gK8KgwqDCoMKgwqDC
+oMKgIHJldHVybiAtRUZBVUxUOw0KPj4+Pj4gKw0KPj4+Pj4gK8KgwqDCoCByZXR1cm4gMDsN
+Cj4+Pj4+ICt9DQo+Pj4+PiArDQo+Pj4+IFsuLi5dDQo+Pj4+DQo+Pj4NCj4+DQo+IA0KDQo=
 

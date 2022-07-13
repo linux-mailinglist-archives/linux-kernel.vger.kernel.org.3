@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D66573EE1
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0A9573EE2
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 23:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiGMVVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 17:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S237513AbiGMVVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 17:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiGMVVW (ORCPT
+        with ESMTP id S237335AbiGMVVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 13 Jul 2022 17:21:22 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06A165B6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:45 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id w184so156681oie.3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:45 -0700 (PDT)
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50833B1D3
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:47 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso141244fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 14:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JSNOgX1qh7jhGjLbM6r9/+GLpFmurki5MvpbKU9Prwo=;
-        b=kIrg/rcAm+vdfD+EhFDKva6EpHx37lp4NHF7nZi9BLbP1CYmSDXylGAMgWuJyPCbCT
-         Ond1Pgk1zTrtci79E1vGQsbtvTYfI7GnGPOtbP7yp1dG0LSWu3m22/VvJf2xKpNKv7M1
-         W1/hEue8aOGNG5kaHnoQFVHvh7atVYYY+d4ZaBgKSHOzo0A+SzI8MndlPbQrTpp5cUJt
-         lxRgFK+yquXMPSlNtThka1S+JkbdiaexCs3xIZJZwpbXS2+xmNmTA7tTV9Bnky5mI9kP
-         sAg+mazG1O4j5vIPMvRcbIRuqh5lITExfkNZTz5RcxUPZ3waRLG6er6vms3Qx8il9ZHk
-         N0+Q==
+        bh=jDIsFRxXwtCqxyONdxF5c1K9paBtFr3+08L7z2qU5vA=;
+        b=j6cOJrctkCf7KseVBRdjSV7xlcfNt+7koxFBfEzD+TqfkyzpEbWiMDN5+d1JFAlUR1
+         4UWAlA7Y7QVimCdgfMGCV5T5leqdGRaLoe8ws+Uj9fgqQwS4b8SOpsIZtuehvXuI+xQo
+         UFJKWvgemXRzSTOEgy/A+jHJpgXoPOrnxi+IEalxaNKcrp0DgtDTmzaU9N6aQ+abSW1S
+         IilnnvVXk0xNL9DD52vVgrih36f14uWbKP9rFimyB5zdAH32DVassCoYu35wrNoqLNi7
+         lk9demUWCLl4bQ8ke7GM5ZQOmqIJbWNNbduoF8eLZRDgNLeyQB3Ohsx8x5GSTbEkfbnL
+         uufw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JSNOgX1qh7jhGjLbM6r9/+GLpFmurki5MvpbKU9Prwo=;
-        b=0Rn57omx7rVxp+qg+5qFK2NCNoeq7Y8nJ1KzkXdjnrwEq6MbnjuC2aKEs7ppA86YZ2
-         wLvUgy9jWo+Q/t9J/VATVFTeWDZ/2wFM7LpzrHfePFdb+UX8lj/EYxkiKqficaNg7KHm
-         4sBIGczOYTsdDE/MbfPvRVqUmYjLvL9Dp60LYON1asCPH7v3Y68SjMvXiW0WFEZQoXO/
-         dk1HBsCShy/LgUm1L3huu4OeNFT9RtJcRPLoyto5vFtEuT8bFOF3Wi2NnL0xSKj3JWWd
-         brydldmL6B4O4PjQoZ4073KvTD4mKno7aiZ/1Dd6xN8U+tDo4ChaBImaNrSXPwQ+SzuV
-         YD6g==
-X-Gm-Message-State: AJIora8lmQhXtquU7r4IscU1vlVjv2mBTkOzX1EUFN0MEoe8a08OaPpk
-        U9DYrWVhi5MAUXEytPMUIF/2/7K5Faw+yA==
-X-Google-Smtp-Source: AGRyM1t0ddgYG3I3aHAHy2c/m0NTsc9rq+mu62bVMF3BgnQw37sbezrjmiY4Q2bkXlW3w8LElj6RCA==
-X-Received: by 2002:a05:6808:4cd:b0:339:fdbe:ea4d with SMTP id a13-20020a05680804cd00b00339fdbeea4dmr2909762oie.229.1657747245190;
-        Wed, 13 Jul 2022 14:20:45 -0700 (PDT)
+        bh=jDIsFRxXwtCqxyONdxF5c1K9paBtFr3+08L7z2qU5vA=;
+        b=CRs9mxDIO7TaoqnXV0bIhDnr8vqlqUN+yUr9tX1SgeIx0XzrdK9ptZxU6KqU8mezLC
+         bRS0fSd5tnmSGOuit6EV5M8Mn6kFbCicLOA2Hudatw/x3md19C9nzIKWLHWx4A10uAcD
+         svl1ctt/zbXHyp34z8F5G4444rYJ3vbPptbDYMRzkICukPRYgae66pvAjIN4OzmoseVb
+         6o0yKzjg8dMdHefpU5PgrXKwfnnYUFA80aJsUPnvJFW7tAviAuco6dXXqWxxh5uHR9dr
+         GQ72RnADg6VBzF2Kc9hF0aijl3ES7aGkZWN0i42EURCRxgl3wQMlFZnzsYsQzAUd2CSe
+         lhWQ==
+X-Gm-Message-State: AJIora9b4Y2KWOc3qzOpU5+NoAGnih2E3IY8OhZcvO0XB7H8BDLuFZxi
+        tIj8Kwn2g777avwNfZ1PsSPrdA==
+X-Google-Smtp-Source: AGRyM1tJqqpZcbdmf0IjLs3JPzHYVSJn1XpT0FPSi1cB/Be9qVNnpyy+gRwJUYwTuBP+IukgYZYe8w==
+X-Received: by 2002:a05:6870:41ca:b0:101:d588:6241 with SMTP id z10-20020a05687041ca00b00101d5886241mr5611485oac.175.1657747246489;
+        Wed, 13 Jul 2022 14:20:46 -0700 (PDT)
 Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i19-20020a056871029300b0010c17e6c699sm6647897oae.47.2022.07.13.14.20.44
+        by smtp.gmail.com with ESMTPSA id i19-20020a056871029300b0010c17e6c699sm6647897oae.47.2022.07.13.14.20.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 14:20:44 -0700 (PDT)
+        Wed, 13 Jul 2022 14:20:45 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ Cc:     Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] ARM: dts: qcom: Add LPG node to pm8941
-Date:   Wed, 13 Jul 2022 14:23:08 -0700
-Message-Id: <20220713212309.130230-2-bjorn.andersson@linaro.org>
+Subject: [PATCH v2 2/2] ARM: dts: qcom: msm8974-sony: Enable LPG
+Date:   Wed, 13 Jul 2022 14:23:09 -0700
+Message-Id: <20220713212309.130230-3-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713212309.130230-1-bjorn.andersson@linaro.org>
 References: <20220713212309.130230-1-bjorn.andersson@linaro.org>
@@ -74,39 +74,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM8941 contains 8 LPG channels, as well as TRILED and LUT blocks.
-Add a node for these.
+Both Castor and Honami has RGB LEDs driven by the PM8941 LPG, define
+these.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
 
 Changes since v1:
-- Added #pwm-cells
+- Corrected unit addresses and sort order of channels
 
- arch/arm/boot/dts/qcom-pm8941.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../dts/qcom-msm8974-sony-xperia-rhine.dtsi   | 30 +++++++++++++++++++
+ ...-msm8974pro-sony-xperia-shinano-castor.dts | 30 +++++++++++++++++++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
-index a68634397938..59d0cde63251 100644
---- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-@@ -144,6 +144,16 @@ pm8941_1: pm8941@1 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+index d42b85bda33a..5a70683d9103 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+@@ -3,6 +3,7 @@
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
  
-+		pm8941_lpg: lpg {
-+			compatible = "qcom,pm8941-lpg";
+ / {
+@@ -172,6 +173,35 @@ gpio_keys_pin_a: gpio-keys-active-state {
+ 	};
+ };
+ 
++&pm8941_lpg {
++	status = "okay";
 +
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#pwm-cells = <2>;
++	qcom,power-source = <1>;
 +
-+			status = "disabled";
++	rgb-led {
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		led@5 {
++			reg = <5>;
++			color = <LED_COLOR_ID_BLUE>;
 +		};
 +
- 		pm8941_wled: wled@d800 {
- 			compatible = "qcom,pm8941-wled";
- 			reg = <0xd800>;
++		led@6 {
++			reg = <6>;
++			color = <LED_COLOR_ID_GREEN>;
++		};
++
++		led@7 {
++			reg = <7>;
++			color = <LED_COLOR_ID_RED>;
++		};
++	};
++};
++
+ &pm8941_wled {
+ 	status = "okay";
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+index 9fc696a7399a..3f45f5c5d37b 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+@@ -3,6 +3,7 @@
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+ #include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ 
+ / {
+@@ -288,6 +289,35 @@ lcd_dcdc_en_pin_a: lcd-dcdc-en-active-state {
+ 
+ };
+ 
++&pm8941_lpg {
++	status = "okay";
++
++	qcom,power-source = <1>;
++
++	rgb-led {
++		color = <LED_COLOR_ID_RGB>;
++		function = LED_FUNCTION_STATUS;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		led@5 {
++			reg = <5>;
++			color = <LED_COLOR_ID_BLUE>;
++		};
++
++		led@6 {
++			reg = <6>;
++			color = <LED_COLOR_ID_GREEN>;
++		};
++
++		led@7 {
++			reg = <7>;
++			color = <LED_COLOR_ID_RED>;
++		};
++	};
++};
++
+ &rpm_requests {
+ 	pm8941-regulators {
+ 		compatible = "qcom,rpm-pm8941-regulators";
 -- 
 2.35.1
 

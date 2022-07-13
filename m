@@ -2,77 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EA2573431
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D80057343F
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbiGMKaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 06:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S230516AbiGMKa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 06:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiGMK34 (ORCPT
+        with ESMTP id S236038AbiGMKaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 06:29:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1756EE5842;
-        Wed, 13 Jul 2022 03:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657708196; x=1689244196;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xCPTZdPlr/QKclHnOwFieHwilG0LSlbmNN9362YdJ2k=;
-  b=MyKRjAo4mnJiCq/UzI/B+Mhr5EoErog+xjUQeBiyWETk9DmLjW8OjUv0
-   ebF6J3WRAF26fPfwEUEK90TmbuT4QO80Wvc6u9HQpv0z4XG7rXanygQ77
-   jxMp2kSs3wCHPgEO37wJx+eMSDUn/Yojl9QbDkPWFU0MZ6sygfvnMrWC4
-   Go5q7eLvlOrYC9mijQHBuxpXcQ+o/klSnf5+fTydBChN4qzPV+GzwZ9h7
-   Mwngom/J/7YXhXHC3okFLJEKnVeeUdQVVC0KUevC9BYVUwGN3636VRcjZ
-   Jp/dyRqsJbUSWwWdsh15Yi4YycX3P8JPWjJ2huxX4wq6DJusBj2QSErDa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="371486768"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="371486768"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 03:29:55 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="570574395"
-Received: from ifatima-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.196])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 03:29:54 -0700
-Message-ID: <753184425e9d613841f4870a8a69f8cf96832f8d.camel@intel.com>
-Subject: Re: [PATCH v7 035/102] KVM: x86/mmu: Explicitly check for MMIO spte
- in fast page fault
-From:   Kai Huang <kai.huang@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Date:   Wed, 13 Jul 2022 22:29:51 +1200
-In-Reply-To: <20220713083515.GQ1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
-         <71e4c19d1dff8135792e6c5a17d3a483bc99875b.1656366338.git.isaku.yamahata@intel.com>
-         <cfeb3b8b02646b073d5355495ec8842ac33aeae5.camel@intel.com>
-         <20220713083515.GQ1379820@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 13 Jul 2022 06:30:22 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E45FC989;
+        Wed, 13 Jul 2022 03:30:20 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w185so9860993pfb.4;
+        Wed, 13 Jul 2022 03:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZlfFL39/OpL1t+nNlUxyQQyjvtZqYGz+VAIcGIn5k7U=;
+        b=Tg+JVr0gejtT6Gtt0QalhJ5sXABI5Fo4TmY+SNlaviNZINAV6b0vmpjgeS5UzyMBFd
+         P5C5tDmhBJHrbr/lUgWzOoVoLNPXZbMMtYJJvfBYZf3XLxHAdsPkc60FlYsfqBLOc4M5
+         28y+Q1rYWI+gdbZHGBHkRN3RB3WuZ3Q8OJ2bh+89OqWydhOHF7p3qqf60YyqR8Kldxpl
+         nh3rKBJuSChntx8JQvrkRT6l9Sa/SU5cXKBVNN4HNCn09cVjgPHIPxPYpRadoA59MD0j
+         dd5r+g9t75HmXrYmPvjCDoG2rgAfkjy1hZlwlMe5xiJiVU8yy8gWiPnsiZ8mSmdufplo
+         Usrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZlfFL39/OpL1t+nNlUxyQQyjvtZqYGz+VAIcGIn5k7U=;
+        b=lqKXokatn1TkQIEdGFW5clZdDxHBdM0RAGVOFqH1faEm7QgBUayInVYxMPIlzkAqcw
+         MsXBVSSXfurKh2eWDipubLyu3GmqR/C8HBZlIMyzQp+0dgWROmlgKi0920HnjyZv3PyK
+         nMod7OxtC7PEKChZO9T69s+SHfOfyx49HHblmKwLwgwaNvL+OlgP7rfGr/6psi8FGBak
+         uQ3WbOlGxltlc66WpwlmBo7elYkTQ6s6BI826rEu64x0yjLiTK4vtwmajcvG47TzwFR7
+         NGS8cQwMRwnpjmSOHE8tjqeuImqj0s34LeVDxuYJFQQweHQdlEJV6PGv9npcSgRcqm8L
+         aIxg==
+X-Gm-Message-State: AJIora+sI7ez6wVDiB0Ws0Gfc8n03GGRXwEyrdy24N/RGp+ZtrebV8fs
+        Q0maRUf7SQ3MtPybwQLFHq+N3zkAHsM=
+X-Google-Smtp-Source: AGRyM1uZwJyvbRdQMh+DANXB9i75JHJcaiqFxe4tp2/f1L+eEhVuTFXKKcn37hBBLaA8lfYhF3693Q==
+X-Received: by 2002:a63:5a1e:0:b0:411:f24a:a78 with SMTP id o30-20020a635a1e000000b00411f24a0a78mr2360910pgb.519.1657708219905;
+        Wed, 13 Jul 2022 03:30:19 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id u10-20020a17090341ca00b00163e06e1a99sm8609114ple.120.2022.07.13.03.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 03:30:19 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 18:30:14 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dipen Patel <dipenp@nvidia.com>
+Subject: Re: [PATCH 6/6] gpiolib: cdev: compile out HTE unless CONFIG_HTE
+ selected
+Message-ID: <20220713103014.GC113115@sol>
+References: <20220713013721.68879-1-warthog618@gmail.com>
+ <20220713013721.68879-7-warthog618@gmail.com>
+ <CAHp75Vd7je7U7qsoFDz+2jcNkwCzJHJOadsaSNwk6xD2_vgdpA@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vd7je7U7qsoFDz+2jcNkwCzJHJOadsaSNwk6xD2_vgdpA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
-> Although it was needed, I noticed the following commit made this patch
-> unnecessary.  So I'll drop this patch. Kudos to Sean.
->=20
-> edea7c4fc215c7ee1cc98363b016ad505cbac9f7
-> "KVM: x86/mmu: Use a dedicated bit to track shadow/MMU-present SPTEs"
->=20
+On Wed, Jul 13, 2022 at 12:03:07PM +0200, Andy Shevchenko wrote:
+> On Wed, Jul 13, 2022 at 3:39 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> > The majority of builds do not include HTE, so compile out hte
+> > functionality unless CONFIG_HTE is selected.
+> 
+> ...
+> 
+> > +#ifdef CONFIG_HTE
+> >         /*
+> >          * -- hte specific fields --
+> >          */
+> 
+> Now this comment seems useless to me and it takes 3 LoCs.
+> 
+> ...
+> 
+> > +       else if (IS_ENABLED(CONFIG_HTE) &&
+> > +                (test_bit(FLAG_EVENT_CLOCK_HTE, &line->desc->flags)))
+> 
+> Too many parentheses.
+> 
+> ...
+> 
+> > +               if (!IS_ENABLED(CONFIG_HTE) ||
+> > +                   !test_bit(FLAG_EVENT_CLOCK_HTE, &line->desc->flags)) {
+> 
+> if (!(x && y)) ?
+> 
+> ...
+> 
+> > +       if (!IS_ENABLED(CONFIG_HTE) &&
+> > +           (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HTE))
+> > +               return -EOPNOTSUPP;
+> 
+> Ditto for consistency?
+> 
 
-Yes is_shadow_present_pte() always return false for MMIO so this patch isn'=
-t
-needed anymore.
+Those all make sense - will do.
+
+Thanks for the prompt review.
+
+Cheers,
+Kent.

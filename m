@@ -2,70 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A5A572A62
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A03B572A66
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 02:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiGMAuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 20:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S232752AbiGMAu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 20:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiGMAt6 (ORCPT
+        with ESMTP id S232206AbiGMAuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 20:49:58 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250FEBD6B2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:49:58 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10bf634bc50so12380426fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:49:58 -0700 (PDT)
+        Tue, 12 Jul 2022 20:50:19 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7273FBD6BB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:50:18 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id g4so16817132ybg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Jul 2022 17:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=/EtJDXI2fz8pm2wa/kg91uhQuEMJnLZy4xD2Ju9pYIk=;
-        b=s39mIbAI2ALNtOBYHbU/VkwT73TA80TaeGinWpvDDpg5H3a9LBgudo/v3+1ifSaEm5
-         shcfXZjErGnl/uDUS1oZNGTfzdalN26eaFp4zzyZZYAzlWpxt5La07ynkHXjaA0FIKtU
-         H9+YJ9qCCC93KqGRcZTJciCP/ummIwsp4+CLskjVdNJzcB+rzuKlMsxZTGxjYPGBXxMZ
-         TZzuslVwc00c+XxHr4mwN6e61+Vxc9OgDcS09N29D0RNxNL6DtXsVwDaMdpb20k2DluW
-         p5HMpYB1Xc1Wi1gugZR3rhE/upgrMpEL1SWcHh2JU7mdnVBVKPHlQFWFOuxQoYWy4aAg
-         QcDw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eVIBXNYPXflbhDmPqNeN1vaRHXCTr9TZKw/Aud6ynFk=;
+        b=Nu3pXsQlpr+nHQz8QjjrfuPjjPgEQqhb8j1ylQsPAXC6P8SvTDsCeuasC2zzotvpBc
+         Xe0UikySBB08ir1wMpHcEMIWWvUq3ha/ChC5IVOZjIWe7MUZxnp1RL6fVd070TXj6WRj
+         yP+3DG+zkKtk4aiDmfo1TXbN1T7wY8aU8waLlNo4ksz5F0vQSczmeTXt0aQK519fECUI
+         HB1+d1QQ3ZY+Jv+x4Vfrx/wZ87sna0vI5yskR0cno2XD6bRijQ1pC9IOSuWmVds2J3ZV
+         bF89sWT/Mdik1KR3fT+VI0E0iHZnqAS3JxalCLCRRmZVQevNvNNnSm7jtXbpWfev6rac
+         f98Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=/EtJDXI2fz8pm2wa/kg91uhQuEMJnLZy4xD2Ju9pYIk=;
-        b=ZlHCLZatMQB8vNAPZa+dAAnkmzauuewqWO+QBr/wezblGPd4VzlKPxSaDamU9OZZEJ
-         zlBGgX+N76aIKVHYMP3ggtbd+4vgETnKHsU8JmRMrg0s1bsPDD6fOajJRa3NS7sE7ADt
-         L1ulzZJVb+ySp6SWnKNQ6m0Bj0ilg4g2vEqqUghwBL6/PeI0OlChVQvWqjykxl12P3vZ
-         edzFb7ydA2m9jmoIMzBo2FWCDMTo5lwPbJ6jIpFsdnmKW9VYcn4L5hw3M4FLep2Kld6V
-         nWzLXEdJRfJmxxqmZx+9QUMt/JuOznh5cir/VJZ9SyR2VBpY1C7+1s9hB5GWXsmRVF0y
-         1jQw==
-X-Gm-Message-State: AJIora/khVQwSu6ofuulzx/wTNNzPQQiw7OVMKwVf3p4yXlc2ynEUW5m
-        qFrFPWncA0WG1beHuln5v7rYJw==
-X-Google-Smtp-Source: AGRyM1t0fpQLal72HAql1XzV9CLiMdeHHv4podegGh1GBikvn7WR33caIu3r4SfrlgquDp+WfaiknA==
-X-Received: by 2002:a05:6870:a999:b0:10c:9df7:28ad with SMTP id ep25-20020a056870a99900b0010c9df728admr466405oab.119.1657673396720;
-        Tue, 12 Jul 2022 17:49:56 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id l84-20020acabb57000000b003264a325ecdsm4789880oif.5.2022.07.12.17.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 17:49:56 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 17:49:40 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Nadav Amit <namit@vmware.com>
-cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH v2] x86/mm/tlb: ignore f->new_tlb_gen when zero
-In-Reply-To: <3DC1239B-FBE4-4EE0-B0D1-641B64697712@vmware.com>
-Message-ID: <b6bcd4c5-2311-451a-4792-6c2bc450b6@google.com>
-References: <20220710232837.3618-1-namit@vmware.com> <7672923F-D439-4867-9418-B1F44EE5CC44@vmware.com> <3DC1239B-FBE4-4EE0-B0D1-641B64697712@vmware.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eVIBXNYPXflbhDmPqNeN1vaRHXCTr9TZKw/Aud6ynFk=;
+        b=AhpYLuvLOUSelkvnwNgoLkbNxUxbJZpnTMVySshZL2vxRmU5Ij1HCilAfhrKipfxFu
+         rnXC0ouRhxjR7V7IEblN7MuF8CNyhHsp5qrh3nySI2nfMspQ3ssbtyxiY3/5VU8Sd2YY
+         yddA8wHtqdRBvPsF6MIDuydSU6SmRQ1uqe4l8wV9pFnlNefLynoZGDpJ1c94JTS1LdFB
+         korDZEXq1ak2SOf955f3V7++5SCZ60EqbwtZR3oO0INuyGlxzv437C10F0CFw0iU6kV7
+         vjivW3E4CdcI/2n17+ThFpZONQuE8PN1IKKQpIQuzUmdCUE5te/RdbzDJYTpoN7XY0jp
+         8ysg==
+X-Gm-Message-State: AJIora99x0fswWZQ+ReXcJv4QEjSA8VPJWA4WRuwV3yleg2Qd1vZpPpQ
+        1jHoIpn1nO7ljDsSg0UJ4+FB9vd8x3ZZp11otpP8pA==
+X-Google-Smtp-Source: AGRyM1sXEWzOoeg1U8/u/4j1RYqldWG9lxWSBF6cTvrLkXZVlMxc4bTQnunavx6CE6WqvYGm7jSY/6dJZSFqgBtr2fU=
+X-Received: by 2002:a25:9947:0:b0:663:ec43:61eb with SMTP id
+ n7-20020a259947000000b00663ec4361ebmr1164051ybo.115.1657673417598; Tue, 12
+ Jul 2022 17:50:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <CAGETcx9aFBzMcuOiTAEy5SJyWw3UfajZ8DVQfW2DGmzzDabZVg@mail.gmail.com>
+ <Yrlz/P6Un2fACG98@atomide.com> <CAGETcx8c+P0r6ARmhv+ERaz9zAGBOVJQu3bSDXELBycEGfkYQw@mail.gmail.com>
+ <CAL_JsqJd3J6k6pRar7CkHVaaPbY7jqvzAePd8rVDisRV-dLLtg@mail.gmail.com>
+ <CAGETcx9ZmeTyP1sJCFZ9pBbMyXeifQFohFvWN3aBPx0sSOJ2VA@mail.gmail.com>
+ <Yr6HQOtS4ctUYm9m@atomide.com> <Yr6QUzdoFWv/eAI6@atomide.com>
+ <CAGETcx-0bStPx8sF3BtcJFiu74NwiB0btTQ+xx_B=8B37TEb8w@mail.gmail.com>
+ <CAGETcx-Yp2JKgCNfaGD0SzZg9F2Xnu8A3zXmV5=WX1hY7uR=0g@mail.gmail.com>
+ <Yr7wA8d4J7xtjwsH@atomide.com> <Ys0ewNYFB25RWNju@atomide.com>
+In-Reply-To: <Ys0ewNYFB25RWNju@atomide.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 12 Jul 2022 17:49:41 -0700
+Message-ID: <CAGETcx8H9je6Yg-fciU5-dh22xB0_h6XzAfH5UsCSeET97wrpA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,30 +97,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022, Nadav Amit wrote:
-> On Jul 11, 2022, at 10:39 AM, Nadav Amit <namit@vmware.com> wrote:
-> > On Jul 10, 2022, at 4:28 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
-> >> From: Nadav Amit <namit@vmware.com>
-> >> 
-> >> Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
-> >> possible") introduced an optimization of skipping the flush if the TLB
-> >> generation that is flushed (as provided in flush_tlb_info) was already
-> >> flushed.
-> > 
-> > Dave,
-> > 
-> > Can you please review this patch today?
-> > 
-> > I feel bad (for a good reason) for breaking swap/migration.
-> > 
-> > Thanks,
-> > Nadav
-> 
-> Ping?
-> 
-> As you know, this really must go into 5.19 or otherwise aa44284960d5
-> reverted.
+On Tue, Jul 12, 2022 at 12:12 AM Tony Lindgren <tony@atomide.com> wrote:
+>
+> * Tony Lindgren <tony@atomide.com> [220701 16:00]:
+> > Also, looks like both with the initcall change for prm, and the patch
+> > below, there seems to be also another problem where my test devices no
+> > longer properly idle somehow compared to reverting the your two patches
+> > in next.
+>
+> Sorry looks like was a wrong conclusion. While trying to track down this
+> issue, I cannot reproduce it. So I don't see issues idling with either
+> the initcall change or your test patch.
+>
+> Not sure what caused my earlier tests to fail though. Maybe a config
+> change to enable more debugging, or possibly some kind of warm reset vs
+> cold reset type issue.
 
-No, aa44284960d5 is not in 5.19-rc: it's in linux-next heading for 5.20.
+Thanks for getting back to me about the false alarm.
 
-Hugh
+OK, so it looks like my patch to drivers/of/property.c fixed the issue
+for you. In that case, let me test that a bit more thoroughly on my
+end to make sure it's not breaking any existing functionality. And if
+it's not breaking, I'll land that in the kernel eventually. Might be a
+bit too late for 5.19. I'm considering temporarily reverting my series
+depending on how the rest of the issues from my series go.
+
+-Saravana

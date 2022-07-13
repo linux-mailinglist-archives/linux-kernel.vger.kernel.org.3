@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79301573211
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8485F573213
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiGMJHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S232094AbiGMJIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236053AbiGMJH0 (ORCPT
+        with ESMTP id S231162AbiGMJIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:07:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA395F4236
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:07:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oBYKr-0000bg-3E; Wed, 13 Jul 2022 11:07:09 +0200
-Message-ID: <eb64cbf58ae6b6fd1e6b993f15e2c5871f4e1650.camel@pengutronix.de>
-Subject: Re: [PATCH v14 17/17] PCI: imx6: Reformat suspend callback to keep
- symmetric with resume
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        robh+dt@kernel.org, broonie@kernel.org, lorenzo.pieralisi@arm.com,
-        festevam@gmail.com, francesco.dolcini@toradex.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Wed, 13 Jul 2022 11:07:08 +0200
-In-Reply-To: <1656645935-1370-18-git-send-email-hongxing.zhu@nxp.com>
-References: <1656645935-1370-1-git-send-email-hongxing.zhu@nxp.com>
-         <1656645935-1370-18-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 13 Jul 2022 05:08:09 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9672E7AFA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:08:08 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i8-20020a056e02152800b002dc3cddda9cso6068312ilu.16
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:08:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IjUx3jvjrE3LSejVCszDwxlxPoVo6L4bZafVfTgekgo=;
+        b=Zhck9JKK1F4YeRqaw3id3YahwAbjy89dcqXHu0uUI7He+Ukia+PMwzk/mUWxor8+fm
+         vbjoTnEtCcOcP9TufKENQSTOVgq4gg5vZCKb1Qtp4i7h+O8TzHyTmE5Z18HDOGx63TS3
+         A7URhdLAYFDtmLRYZ18A6gf4reQcI/mzEQqx+5waLctogVKjAlCcabDHd9EGJhD4McFF
+         ZqW5T2onMRyMG+9mLTxOD29n97Cm2MfMTAKUnOaOUnLvitb9AnzeNyf+ka67eLpEbTL2
+         bbz818/3cx6jlAth5JsVnwqD7sgNaK+zYLCYwCEHhBcBCNkgIZ0D/72aC06JaKVPyzJe
+         /nkA==
+X-Gm-Message-State: AJIora8CCgti23qKb0Yz0tQc+jGbr+xMJ1hYmpQoXcL2G9DF2HGXQoen
+        LBC1t7XUp51SaDoLg/5VX3lzTsBC61rz/AbOebxVDNA6rtkF
+X-Google-Smtp-Source: AGRyM1sRr07Kgyknni0yh+KomEWofavQWWh71RoatCmXTlY9LIWi0y/klNu3SnXwp1O1Wel8ZK1E+uD1bDxKjrRJW1BO6Ic3Mg5K
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6e02:1069:b0:2dc:7233:740b with SMTP id
+ q9-20020a056e02106900b002dc7233740bmr1253741ilj.229.1657703288282; Wed, 13
+ Jul 2022 02:08:08 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 02:08:08 -0700
+In-Reply-To: <181f6c7ee61.6fd1462c198214.9029235269763018181@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a4271f05e3ac1ff8@google.com>
+Subject: Re: [syzbot] memory leak in cfg80211_inform_single_bss_frame_data
+From:   syzbot <syzbot+7a942657a255a9d9b18a@syzkaller.appspotmail.com>
+To:     code@siddh.me, davem@davemloft.net, johannes@sipsolutions.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,140 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 01.07.2022 um 11:25 +0800 schrieb Richard Zhu:
-> Create imx6_pcie_stop_link() and imx6_pcie_host_exit() functions.
-> Encapsulate clocks, regulators disables and PHY uninitialization into
-> imx6_pcie_host_exit().
-> To keep suspend/resume symmetric as much as possible, invoke these two
-> new created functions in suspend callback.
-> 
-> To be symmetric with imx6_pcie_host_exit(), move imx6_pcie_clk_enable()
-> to imx6_pcie_host_init() from imx6_pcie_deassert_core_reset().
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+Hello,
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+memory leak in regulatory_init_db
 
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 60 ++++++++++++++++-----------
->  1 file changed, 36 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 1cf8bf9035f2..bf8992a6c238 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -703,13 +703,6 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
->  {
->  	struct dw_pcie *pci = imx6_pcie->pci;
->  	struct device *dev = pci->dev;
-> -	int ret;
-> -
-> -	ret = imx6_pcie_clk_enable(imx6_pcie);
-> -	if (ret) {
-> -		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
-> -		return ret;
-> -	}
->  
->  	switch (imx6_pcie->drvdata->variant) {
->  	case IMX8MQ:
-> @@ -905,6 +898,14 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	return 0;
->  }
->  
-> +static void imx6_pcie_stop_link(struct dw_pcie *pci)
-> +{
-> +	struct device *dev = pci->dev;
-> +
-> +	/* Turn off PCIe LTSSM */
-> +	imx6_pcie_ltssm_disable(dev);
-> +}
-> +
->  static int imx6_pcie_host_init(struct pcie_port *pp)
->  {
->  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> @@ -922,11 +923,17 @@ static int imx6_pcie_host_init(struct pcie_port *pp)
->  			return ret;
->  		}
->  	}
-> +	ret = imx6_pcie_clk_enable(imx6_pcie);
-> +	if (ret) {
-> +		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
-> +		goto err_reg_disable;
-> +	}
-> +
->  	if (imx6_pcie->phy) {
->  		ret = phy_power_on(imx6_pcie->phy);
->  		if (ret) {
->  			dev_err(dev, "pcie phy power up failed.\n");
-> -			goto err_reg_disable;
-> +			goto err_clk_disable;
->  		}
->  	}
->  
-> @@ -947,17 +954,33 @@ static int imx6_pcie_host_init(struct pcie_port *pp)
->  
->  	return 0;
->  
-> -err_clk_disable:
-> -	imx6_pcie_clk_disable(imx6_pcie);
->  err_phy_off:
->  	if (imx6_pcie->phy)
->  		phy_power_off(imx6_pcie->phy);
-> +err_clk_disable:
-> +	imx6_pcie_clk_disable(imx6_pcie);
->  err_reg_disable:
->  	if (imx6_pcie->vpcie)
->  		regulator_disable(imx6_pcie->vpcie);
->  	return ret;
->  }
->  
-> +static void imx6_pcie_host_exit(struct pcie_port *pp)
-> +{
-> +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> +	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
-> +
-> +	if (imx6_pcie->phy) {
-> +		if (phy_power_off(imx6_pcie->phy))
-> +			dev_err(pci->dev, "unable to power off PHY\n");
-> +		phy_exit(imx6_pcie->phy);
-> +	}
-> +	imx6_pcie_clk_disable(imx6_pcie);
-> +
-> +	if (imx6_pcie->vpcie)
-> +		regulator_disable(imx6_pcie->vpcie);
-> +}
-> +
->  static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
->  	.host_init = imx6_pcie_host_init,
->  };
-> @@ -1007,25 +1030,14 @@ static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
->  static int imx6_pcie_suspend_noirq(struct device *dev)
->  {
->  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
-> +	struct pcie_port *pp = &imx6_pcie->pci->pp;
->  
->  	if (!(imx6_pcie->drvdata->flags & IMX6_PCIE_FLAG_SUPPORTS_SUSPEND))
->  		return 0;
->  
->  	imx6_pcie_pm_turnoff(imx6_pcie);
-> -	imx6_pcie_ltssm_disable(dev);
-> -	imx6_pcie_clk_disable(imx6_pcie);
-> -	switch (imx6_pcie->drvdata->variant) {
-> -	case IMX8MM:
-> -		if (phy_power_off(imx6_pcie->phy))
-> -			dev_err(dev, "unable to power off PHY\n");
-> -		phy_exit(imx6_pcie->phy);
-> -		break;
-> -	default:
-> -		break;
-> -	}
-> -
-> -	if (imx6_pcie->vpcie)
-> -		regulator_disable(imx6_pcie->vpcie);
-> +	imx6_pcie_stop_link(imx6_pcie->pci);
-> +	imx6_pcie_host_exit(pp);
->  
->  	return 0;
->  }
+BUG: memory leak
+unreferenced object 0xffff8881450dc880 (size 64):
+  comm "swapper/0", pid 1, jiffies 4294937974 (age 80.900s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    ff ff ff ff 00 00 00 00 00 00 00 00 30 30 00 00  ............00..
+  backtrace:
+    [<ffffffff86ff026b>] kmalloc include/linux/slab.h:600 [inline]
+    [<ffffffff86ff026b>] kzalloc include/linux/slab.h:733 [inline]
+    [<ffffffff86ff026b>] regulatory_hint_core net/wireless/reg.c:3216 [inline]
+    [<ffffffff86ff026b>] regulatory_init_db+0x22f/0x2de net/wireless/reg.c:4277
+    [<ffffffff81000fe3>] do_one_initcall+0x63/0x2e0 init/main.c:1295
+    [<ffffffff86f4eb10>] do_initcall_level init/main.c:1368 [inline]
+    [<ffffffff86f4eb10>] do_initcalls init/main.c:1384 [inline]
+    [<ffffffff86f4eb10>] do_basic_setup init/main.c:1403 [inline]
+    [<ffffffff86f4eb10>] kernel_init_freeable+0x255/0x2cf init/main.c:1610
+    [<ffffffff845b427a>] kernel_init+0x1a/0x1c0 init/main.c:1499
+    [<ffffffff8100225f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+[   88.
 
 
+Tested on:
+
+commit:         b047602d Merge tag 'trace-v5.19-rc5' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d4252a080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=689b5fe7168a1260
+dashboard link: https://syzkaller.appspot.com/bug?extid=7a942657a255a9d9b18a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.

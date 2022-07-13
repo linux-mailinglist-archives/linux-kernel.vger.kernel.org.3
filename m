@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD79C573DC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59604573DD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237029AbiGMUZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S237072AbiGMU11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiGMUZa (ORCPT
+        with ESMTP id S229604AbiGMU1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:25:30 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9218C25C5A
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so5689317pjn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
-        b=t8kPJVCKtimxDlTtyzRgs6JNvOaLECNuXxarQU5OqBNA+ziab/DxNvRTorr+G98Cl5
-         2n5ZybUVwcbsU+P2E2FnhFqF/mDjUjQRVf+6EFKX70Vbyzk6vKllj0cfGMjRaaH7wV46
-         OJqqnL5CnvYZ/tMqCZLuH5USn/gtG52kAARi3QGK/WoJbpmkwcRGlqfg+bv7QswLkwWF
-         sqTDGUA8vN6GDwxQrdyDse3TUfWV6rQR1erg83hXbDszgJFa74wrL8rWeUtIlOlOn2rW
-         idSQYSMMEmA6NKhXQnU+1DLRu0Ph3fLJmWMrp5S4wqtLYYQgpiVlQDtmbrMJhScjh0kg
-         U6CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
-        b=a9byf8s5o8up0vy16mKrBe6GiJGW7kk3SbkbCb5puLXOSb8qKUSLK/98GXrk5xOdNH
-         UUKLbNfZpConYUa3Jf4pCo2lWAVoyN1tuU0OW9aibtNHmSGs8KxUFPY9N0/8FVXHerJv
-         +5hzmSIujeVtV+c9y6PhyK86RXqnZzDn9lWfQO2qCCnVPeCEAGoDJ0ECMTrrpZQxPfLe
-         RaQUcKqGzNywhLz+NlutTzaYrn08VTlvPkiPqoJ6X+PjiVo4Od4ip+cG5Fq81wI2lsLG
-         e16N1PeryjjxoPSyXQD6lBXzZozfwE6MDH9Y6isBf0CJ+iWnUlonrddtsB+2Htq9BHeU
-         RQZw==
-X-Gm-Message-State: AJIora+bLfrlbky9YVVWkkv6n9mbrQgyICaI+AgoMS8THzjfPMFGP3g1
-        R4lOXARWoydMoaq3eBFnOsX9MA==
-X-Google-Smtp-Source: AGRyM1uMWJM21AdMA4hg31Ti1BfbhNdmhNhNqXCJYSv6TufmkF9YayM6wEk9gfkZAYCsy7kM3FFnog==
-X-Received: by 2002:a17:90b:240b:b0:1ef:8a68:1596 with SMTP id nr11-20020a17090b240b00b001ef8a681596mr5542909pjb.234.1657743927006;
-        Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0016bedcced2fsm9332014pll.35.2022.07.13.13.25.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 13:25:26 -0700 (PDT)
-Message-ID: <6e5d590b-448d-ea75-f29d-877a2cd6413b@kernel.dk>
-Date:   Wed, 13 Jul 2022 14:25:25 -0600
+        Wed, 13 Jul 2022 16:27:25 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65602D1E8;
+        Wed, 13 Jul 2022 13:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aMwCqCZv7KMm7FPwRBaOPDqNH5Xzn53rKrd3wy7Qd0w=; b=dbi9CHnMFf07cd9TO0b63y6NJ/
+        EFhxQwRZ5INwn4lK+g3Xz52wZ1Ufh6bit0UjcgJ+ztc/Ic7AFmYpzlaC1rFNuplCSZ9FyeIc3FSXv
+        /4HhcZz6vPKRNDsfkskAQk73c0dCn9m2f/szsziEdotI2rgMKhqvCwQ/hFO26QJf0Tb9M6Ah7mZES
+        S7RHI2AGYAb+v8ebY/6QeatcDMl0i1Hz8UWulpNU0uTHHyrSMTmGxAIwQ7OmYz7F0OvLHwpwU7HHT
+        Gf6+HN8T0OGeF6o9/M5cjr/Ou6QOdPGH6eOvtD2YaVjxbDS2H6SKg+TKN7P75ztpBqrfbWyfIqC1f
+        dAVn1iXg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBiwR-003er4-6q; Wed, 13 Jul 2022 20:26:39 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 50F5D980082; Wed, 13 Jul 2022 22:26:37 +0200 (CEST)
+Date:   Wed, 13 Jul 2022 22:26:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <Ys8qfRwkTbUYwmKM@worktop.programming.kicks-ass.net>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
+ <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
+ <7C927986-3665-4BD6-A339-D3FE4A71E3D4@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V5 0/2] ublk: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220713140711.97356-1-ming.lei@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220713140711.97356-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7C927986-3665-4BD6-A339-D3FE4A71E3D4@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 8:07 AM, Ming Lei wrote:
-> Hello Guys,
+On Wed, Jul 13, 2022 at 03:48:35PM +0000, Song Liu wrote:
+
+> > So how about instead we separate them? Then much of the problem goes
+> > away, you don't need to track these 2M chunks at all.
 > 
-> ublk driver is one kernel driver for implementing generic userspace block
-> device/driver, which delivers io request from ublk block device(/dev/ublkbN) into
-> ublk server[1] which is the userspace part of ublk for communicating
-> with ublk driver and handling specific io logic by its target module.
+> If we manage the memory in < 2MiB granularity, either 4kB or smaller, 
+> we still need some way to track which parts are being used, no? I mean
+> the bitmap.  
 
-Ming, is this ready to get merged in an experimental state?
-
--- 
-Jens Axboe
-
+I was thinking the vmalloc vmap_area tree could help out there.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0795572ECE
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE20572ECF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 09:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiGMHIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 03:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
+        id S234762AbiGMHIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 03:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiGMHIF (ORCPT
+        with ESMTP id S234652AbiGMHIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:08:05 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95C2E3C13
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:53 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bf13so9640294pgb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:53 -0700 (PDT)
+        Wed, 13 Jul 2022 03:08:17 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39FBE3040
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so9676972pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1rI3NJLOWsk4vsP7I8W/i/0iO2V6TYGkyq9mbykMWmc=;
-        b=JsG4DJjxtIuzRTGePgkVD534zkcZvQCGsVUdko8T5lmNcAPW6UZ7mQdZa+W/ofasOE
-         h5F3pi8R+hkkB5uAtv/dql08ZOT7mM58lvtRP/IBEX+ST37A5TKH5bwD4EkrUGO6pEAH
-         dvNoRUjBgeP79D0rAESigx29AySMMKB/IsH+z6Aye6NLNHvjH6HEoluYULQfUzp3bFYj
-         QHB+rmvpmJEhlSc89WoUiwUTIYcwLy6uh8N+c7PVtZ7IQAkK3HtKoBBnemQv5jEaU+mR
-         ArdWpkHEGRn0pdJt7xetbSGN4qYvVL4ozKMaoqb33FCtCm9wtwUpWegMri03ixXOiAWK
-         rLmg==
+        bh=KnPsdcwpQ6/HQ7udB+nfFkQyTndFGEtXQDYIXdw9bEk=;
+        b=PLK7bYe85Cz+0uz8atHvvMpo9qGTWHUXGvGGlyMJo31WZFkqhtWTOXNSWXKjq6Ce2/
+         vQ3OrCVv1GKVRnMViqSVhjttJnmif33+dTNDBjOmiWvjzmNhwkRejjtg9IW4mXhH50kT
+         KXSoX8XBgZhvu1eJu25dbPck28ETryRCX1GICM2cLjG53X7Hmd1dpaae3065E9AFt0J2
+         egCs5Uxfxngncyv1GmD4bset3emzypyEHATQyZQPHLmRpf1PC8MyJae3BbsvLELPrkLr
+         X0I0mOxPH9OwNeTO3QY327VjgphadnVM2Au2cFu2L9xgLDzk2d4ntbRZb6cCVKc9kBIg
+         9oEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1rI3NJLOWsk4vsP7I8W/i/0iO2V6TYGkyq9mbykMWmc=;
-        b=d/hMn2QCPeCR9Xbb7qEq7ej7yqXL5S12goihyW7btYaoftpMv356eS3OLAGR8RU3t1
-         YK5RgoaAjeGEE8QJe4XE2MAeCFQv36+15Bw7yGdiai5LMumta9HyUxzk+cqMod/arMLZ
-         PMgZdIhVUaikk+cAV8jCpvkgL2wAItQvVEWectYIXmqG6w65Llo7+9I/kHVaX63PR/Wu
-         08jD65Q0FRFz1eHyRz2viULQP1D1sv4be4sPGCH6F9tkvSpVYyZrO+7M8IIcAhJK5LYf
-         jmdp90CBVUFwvjZcW1eBJflFRtJz4D35BKIJQ648n8QqrPlhcNuW+O4QyNZowv36ZW5V
-         dPFg==
-X-Gm-Message-State: AJIora8xNAmQFEXqUsV9PSm3jN5yYvecuLqhEo+DJa3289KWmAXw5ARn
-        ysDeJciorkrK/iogC5nvTsM=
-X-Google-Smtp-Source: AGRyM1urJp8NIccTLGHfoWd9dsGyW7nWtFqiBcPbYT+WiGVzK84rVNCszlItvcBCs3a43wT/qk2u7A==
-X-Received: by 2002:a05:6a00:23d4:b0:52a:e5c1:caa7 with SMTP id g20-20020a056a0023d400b0052ae5c1caa7mr1775750pfc.62.1657696073495;
-        Wed, 13 Jul 2022 00:07:53 -0700 (PDT)
+        bh=KnPsdcwpQ6/HQ7udB+nfFkQyTndFGEtXQDYIXdw9bEk=;
+        b=cAFmDDcFxErvfNavi5XFkhXtMvG7wZ8J/hHMGvZuGI0LcgU5YeUsvEWNhkErZhmkVc
+         igSpdoGPwuMztnyJw2SCur89YjfdDOcEeqjp7gQYjXkjjxLqFpSHvFfHvkZjEnMRSlU8
+         tDKLByt8gH+6+rAoZmwHB+O3a+7ppE6G9ma3A97yrHYHDXuLeU/JcDDy70PUe5uRB2LA
+         YpAEzIWd5p0QhOQD5VmeTZt7C9Uw2k4aZf2a3E0F6XVBU6GN3iE6JgtDpv3mQUCvZ62v
+         8FMzcZEWH9s2Pv6FoWnAgnE9bLggOkrzLU7hFZ2BabGhwermJzpO2fC49gQfnN8QVmOj
+         eeUg==
+X-Gm-Message-State: AJIora+h1pIWanhOjBzk3HhJA7RJzGK3Z5AMH2R134IhWP7ihdXqiSlX
+        uMB9OIRC6h0NUJGr09Jrx0w=
+X-Google-Smtp-Source: AGRyM1v85scKwcrTA7w9VhbsWNy4SnwwYrtxNZ9GzmAAXjSEmP85SYKD7FToZencVhaEeh+MLZPKdA==
+X-Received: by 2002:a63:d341:0:b0:412:ace8:b0ed with SMTP id u1-20020a63d341000000b00412ace8b0edmr1770283pgi.169.1657696077187;
+        Wed, 13 Jul 2022 00:07:57 -0700 (PDT)
 Received: from bobo.ozlabs.ibm.com (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b0016bd5da20casm8099061plg.134.2022.07.13.00.07.50
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b0016bd5da20casm8099061plg.134.2022.07.13.00.07.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 00:07:53 -0700 (PDT)
+        Wed, 13 Jul 2022 00:07:56 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -55,9 +55,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         "linux-kernel @ vger . kernel . org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 11/12] locking/qspinlock: separate pv_wait_node from the non-paravirt path
-Date:   Wed, 13 Jul 2022 17:07:03 +1000
-Message-Id: <20220713070704.308394-12-npiggin@gmail.com>
+Subject: [PATCH v2 12/12] locking/qspinlock: simplify pv_wait_head_or_lock calling scheme
+Date:   Wed, 13 Jul 2022 17:07:04 +1000
+Message-Id: <20220713070704.308394-13-npiggin@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713070704.308394-1-npiggin@gmail.com>
 References: <20220713070704.308394-1-npiggin@gmail.com>
@@ -73,100 +73,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pv_wait_node waits until node->locked is non-zero, no need for the
-pv case to wait again by also executing the !pv code path.
+pv_wait_head_or_lock returns the lock word value ORed with a constant,
+which was done to achieve a constant folding compiler optimisation
+when the code was generated for both pv and !pv cases. This is no
+longer necessary with the explicit paravirt test, so make the calling
+convention simpler.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- kernel/locking/qspinlock.c | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ kernel/locking/qspinlock.c | 37 +++++++++++++++----------------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
 
 diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index 2ebb946a6b80..3255e7804842 100644
+index 3255e7804842..251980783079 100644
 --- a/kernel/locking/qspinlock.c
 +++ b/kernel/locking/qspinlock.c
-@@ -506,15 +506,18 @@ static void pv_init_node(struct qnode *node)
-  * pv_kick_node() is used to set _Q_SLOW_VAL and fill in hash table on its
-  * behalf.
+@@ -608,8 +608,7 @@ static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
+  *
+  * The current value of the lock will be returned for additional processing.
   */
--static void pv_wait_node(struct qnode *node, struct qnode *prev)
-+static void pv_wait_node_acquire(struct qnode *node, struct qnode *prev)
+-static u32
+-pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
++static void pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
  {
- 	int loop;
- 	bool wait_early;
+ 	struct qspinlock **lp = NULL;
+ 	int waitcnt = 0;
+@@ -641,7 +640,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
+ 		set_pending(lock);
+ 		for (loop = SPIN_THRESHOLD; loop; loop--) {
+ 			if (trylock_clear_pending(lock))
+-				goto gotlock;
++				return; /* got lock */
+ 			cpu_relax();
+ 		}
+ 		clear_pending(lock);
+@@ -669,7 +668,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
+ 				 */
+ 				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
+ 				WRITE_ONCE(*lp, NULL);
+-				goto gotlock;
++				return; /* got lock */
+ 			}
+ 		}
+ 		WRITE_ONCE(node->state, vcpu_hashed);
+@@ -685,12 +684,8 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct qnode *node)
  
- 	for (;;) {
- 		for (wait_early = false, loop = SPIN_THRESHOLD; loop; loop--) {
--			if (READ_ONCE(node->locked))
-+			if (READ_ONCE(node->locked)) {
-+				/* Provide the acquire ordering. */
-+				smp_load_acquire(&node->locked);
- 				return;
-+			}
- 			if (pv_wait_early(prev, loop)) {
- 				wait_early = true;
- 				break;
-@@ -556,29 +559,23 @@ static void pv_wait_node(struct qnode *node, struct qnode *prev)
- 		lockevent_cond_inc(pv_spurious_wakeup,
- 				  !READ_ONCE(node->locked));
- 	}
--
--	/*
--	 * By now our node->locked should be 1 and our caller will not actually
--	 * spin-wait for it. We do however rely on our caller to do a
--	 * load-acquire for us.
--	 */
+ 	/*
+ 	 * The cmpxchg() or xchg() call before coming here provides the
+-	 * acquire semantics for locking. The dummy ORing of _Q_LOCKED_VAL
+-	 * here is to indicate to the compiler that the value will always
+-	 * be nozero to enable better code optimization.
++	 * acquire semantics for locking.
+ 	 */
+-gotlock:
+-	return (u32)(atomic_read(&lock->val) | _Q_LOCKED_VAL);
  }
  
  /*
-  * Called after setting next->locked = 1 when we're the lock owner.
-  *
-- * Instead of waking the waiters stuck in pv_wait_node() advance their state
-- * such that they're waiting in pv_wait_head_or_lock(), this avoids a
-+ * Instead of waking the waiters stuck in pv_wait_node_acquire() advance their
-+ * state such that they're waiting in pv_wait_head_or_lock(), this avoids a
-  * wake/sleep cycle.
-  */
- static void pv_kick_node(struct qspinlock *lock, struct qnode *node)
- {
- 	/*
- 	 * If the vCPU is indeed halted, advance its state to match that of
--	 * pv_wait_node(). If OTOH this fails, the vCPU was running and will
--	 * observe its next->locked value and advance itself.
-+	 * pv_wait_node_acquire(). If OTOH this fails, the vCPU was running and
-+	 * will observe its next->locked value and advance itself.
- 	 *
--	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node()
-+	 * Matches with smp_store_mb() and cmpxchg() in pv_wait_node_acquire()
- 	 *
- 	 * The write to next->locked in arch_mcs_spin_unlock_contended()
- 	 * must be ordered before the read of node->state in the cmpxchg()
-@@ -765,8 +762,8 @@ EXPORT_SYMBOL(__pv_queued_spin_unlock);
- 
- #else /* CONFIG_PARAVIRT_SPINLOCKS */
- static __always_inline void pv_init_node(struct qnode *node) { }
--static __always_inline void pv_wait_node(struct qnode *node,
--					 struct qnode *prev) { }
-+static __always_inline void pv_wait_node_acquire(struct qnode *node,
-+						 struct qnode *prev) { }
+@@ -766,9 +761,8 @@ static __always_inline void pv_wait_node_acquire(struct qnode *node,
+ 						 struct qnode *prev) { }
  static __always_inline void pv_kick_node(struct qspinlock *lock,
  					 struct qnode *node) { }
- static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
-@@ -864,10 +861,11 @@ static __always_inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, b
- 		/* Link @node into the waitqueue. */
- 		WRITE_ONCE(prev->next, node);
+-static __always_inline u32  pv_wait_head_or_lock(struct qspinlock *lock,
+-						 struct qnode *node)
+-						   { return 0; }
++static __always_inline void pv_wait_head_or_lock(struct qspinlock *lock,
++						 struct qnode *node) { }
+ static __always_inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock) { BUILD_BUG(); }
+ #endif /* CONFIG_PARAVIRT_SPINLOCKS */
  
--		if (paravirt)
--			pv_wait_node(node, prev);
- 		/* Wait for mcs node lock to be released */
--		smp_cond_load_acquire(&node->locked, VAL);
-+		if (paravirt)
-+			pv_wait_node_acquire(node, prev);
-+		else
-+			smp_cond_load_acquire(&node->locked, VAL);
+@@ -889,24 +883,23 @@ static __always_inline void queued_spin_lock_mcs_queue(struct qspinlock *lock, b
+ 	 * sequentiality; this is because the set_locked() function below
+ 	 * does not imply a full barrier.
+ 	 *
+-	 * The PV pv_wait_head_or_lock function, if active, will acquire
+-	 * the lock and return a non-zero value. So we have to skip the
+-	 * atomic_cond_read_acquire() call. As the next PV queue head hasn't
+-	 * been designated yet, there is no way for the locked value to become
+-	 * _Q_SLOW_VAL. So both the set_locked() and the
++	 * The PV pv_wait_head_or_lock function will acquire the lock, so
++	 * skip the atomic_cond_read_acquire() call. As the next PV queue head
++	 * hasn't been designated yet, there is no way for the locked value to
++	 * become _Q_SLOW_VAL. So both the set_locked() and the
+ 	 * atomic_cmpxchg_relaxed() calls will be safe.
+ 	 *
+ 	 * If PV isn't active, 0 will be returned instead.
+ 	 *
+ 	 */
+ 	if (paravirt) {
+-		if ((val = pv_wait_head_or_lock(lock, node)))
+-			goto locked;
++		pv_wait_head_or_lock(lock, node);
++		val = atomic_read(&lock->val);
++	} else {
++		val = atomic_cond_read_acquire(&lock->val,
++				!(VAL & _Q_LOCKED_PENDING_MASK));
+ 	}
  
- 		/*
- 		 * While waiting for the MCS lock, the next pointer may have
+-	val = atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_PENDING_MASK));
+-
+-locked:
+ 	/*
+ 	 * claim the lock:
+ 	 *
 -- 
 2.35.1
 

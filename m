@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9416D573BD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B37573BDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 19:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiGMRP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 13:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S231923AbiGMRSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 13:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiGMRP0 (ORCPT
+        with ESMTP id S230451AbiGMRSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 13:15:26 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB7F2BB1F;
-        Wed, 13 Jul 2022 10:15:25 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id 185so11339153vse.6;
-        Wed, 13 Jul 2022 10:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FNhWWVuVJ8AgLU34I59QylRUnNfYnm28cwECwrsC7kk=;
-        b=bOi9XDyKvc7me8eleJ9IUJZuABmfK/z6GZRMKLAPpKX6w5q8Kbo1zev1g/Gday0Yi1
-         eKQAVDwxSCnEO43apQQ5rTqLl0eqV8om8jyTuFR94GxmjPi2F9atsn3M6TJHyKvtRxmp
-         rFRYyKR5zHU844fnkrZ7UqMRr+dH+5mP2z8mxWBwHW3dg5FviEDII59byo6Xii/0kl26
-         qvdkbtv1RYlvb1Jh0HGflG9AYerjMrZFBEliHftUoaMlatJaXVHIsnd79GuI2Kc3rX6Z
-         j8jlnFHFXjJFr3pJlsi0bOATQS+Xbgxtgr52fAOp0+N5aYMKBCgYkpjRkeYPUyC7401L
-         E0hA==
+        Wed, 13 Jul 2022 13:18:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EBB765FD
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657732726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fB/Zu9mPceWP00NpRs7DLfPE5RMK6XwHrPMxpRqk4mQ=;
+        b=GHJbG+UIjINUJ4PLHhz60NQnzActF9iry78siHDVxcMIIu18PVH01FjEm5VCmVfiMfwHII
+        kYxRsqBlEUay//mXIbJuCjTn7p+JwDIOx1o9b0SO80JiGudE27p9tvp3OTRQVHTSUrFYiP
+        Uzqc5tR4VwmqwTq77dOKCxCBlSwbV4w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-UTamI9ibPTSKxOXCum6iiA-1; Wed, 13 Jul 2022 13:18:45 -0400
+X-MC-Unique: UTamI9ibPTSKxOXCum6iiA-1
+Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so1152861wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 10:18:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FNhWWVuVJ8AgLU34I59QylRUnNfYnm28cwECwrsC7kk=;
-        b=ja9dPMTRZ5mVan7aewS3JBhSndcOyaXZayXEBGTok1t4DpG7o2nUSTI7jiiNU2xUgf
-         QBcZl44Ew0uuy8ienIZW5mYNy+N+cLAwq/OvkRbmUSyPLrDmmAYRZgPP6M17p4JyCdch
-         7yJaMfKPOCD4PcfNIHlbpVrgvCEd28MjmNkEcet0STHAXrlRLHKsTOvJE60axuQQk1WU
-         pia2BNy4eRzWzZONsDxsVX5K5OzLCJbvT5k7srJr1KTEQJ9GQ0TG7qOLRnDxwnbr7WzB
-         PHm1JxZHDN9kBI1VV/6kDn/rUDHXzl8mPv4TIOzEtXpwwHQ1t1+KvWK1GG7YdRNFoRSL
-         0Xwg==
-X-Gm-Message-State: AJIora97YMaCD4sDvAsPOM1g73V+lSeIKGxZqoN9460se7s+rZbqc9T9
-        mxWig678Fy1e/TG3RggktD/LUA1PYQ7Dqzt88ic=
-X-Google-Smtp-Source: AGRyM1u/seuYA2B7iAhAWjtIi4U7nsJzuoj4k9nY8IfNCS5f9L4mt03GqyiBiB+ZhsK/ZsuLQMMEbMcC2gaMqZcFAuE=
-X-Received: by 2002:a67:e311:0:b0:357:58a3:6878 with SMTP id
- j17-20020a67e311000000b0035758a36878mr1991841vsf.2.1657732524580; Wed, 13 Jul
- 2022 10:15:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220712071513.420542604@linuxfoundation.org>
-In-Reply-To: <20220712071513.420542604@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 13 Jul 2022 10:15:14 -0700
-Message-ID: <CAJq+SaAHdBsi9CawLnxi6ftXc7g48_J3h4VL_U1sz7Hnncz5KQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/226] 5.15.54-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        Guenter Roeck <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        slade@sladewatkins.com
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=fB/Zu9mPceWP00NpRs7DLfPE5RMK6XwHrPMxpRqk4mQ=;
+        b=7htXV861+dcnfSSDucstcsJ7Sd2XQqiVefiA8Rly7IdLOdqPufLEiBJdFFYVX+Td9d
+         umYTwtj4/DCTX/RY2exKUsKMSZEhL1xcAcd+RfXBOO8E86SVnPPlFUpMtW7RBCbDYl9N
+         km4qRaHUvLQ9X0iyBKeV+gweumygMlQhaxuUsMBMYK12o0Ykuhi5qJP4TyAhobNtg5TC
+         u6+baB20KhnAeyqO4snSFbeCXMWvCWG4WDUOjGAxzmrsHfCbvcSNdOzCWXPmmqJfZgIe
+         H8LzbyKggUVnWzbUxU1UXVtG0Q4SKLFko3Qw/k17ahonkd9aMuWE9zddNhzB7HVSDN+h
+         X/jA==
+X-Gm-Message-State: AJIora9T4XpQn5WfFeIbXFwFdOq8ufjEHgTaQR1Q8KLk8TyJ6ERM4cVr
+        K+zWdoh9FWACHN5lNJp2UDdwyJnUDH+vdrHKXJcOFh5CL5wiIg4bdgj0rvG/w/+uy0xEkoOdQeh
+        hPRbR3yWjOR/uWdzZX3KVMBfUpQqbQgaKMSFWraRAcJF+vTe1tItXy7L5DW7SlhbqJtKJyv9Ern
+        W9
+X-Received: by 2002:a05:600c:3b95:b0:3a2:e579:d196 with SMTP id n21-20020a05600c3b9500b003a2e579d196mr4847007wms.185.1657732724227;
+        Wed, 13 Jul 2022 10:18:44 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u2tPaJyngwX1DO+Jqswo8UUqSE+a95Ncc+2bom+h2dbMWGyFJVyguTt9e8faRyz0pG5vqenA==
+X-Received: by 2002:a05:600c:3b95:b0:3a2:e579:d196 with SMTP id n21-20020a05600c3b9500b003a2e579d196mr4846971wms.185.1657732723930;
+        Wed, 13 Jul 2022 10:18:43 -0700 (PDT)
+Received: from ?IPv6:2a0c:5a80:3e07:e200:5f92:8384:b0a4:8063? ([2a0c:5a80:3e07:e200:5f92:8384:b0a4:8063])
+        by smtp.gmail.com with ESMTPSA id v8-20020a05600c214800b003a2cf1535aasm3257593wml.17.2022.07.13.10.18.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 10:18:43 -0700 (PDT)
+Message-ID: <a508ce3c711ebac73695af98a5d17187e22e74cb.camel@redhat.com>
+Subject: Re: [PATCH] nohz/full, sched/rt: Fix missed tick-reenabling bug in
+ dequeue_task_rt
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     linux-kernel@vger.kernel.org, fweisbec@gmail.com
+Cc:     bristot@redhat.com, vschneid@redhat.com, cmetcalf@ezchip.com,
+        mgorman@suse.de, bsegall@google.com, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
+        juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
+        mtosatti@redhat.com
+Date:   Wed, 13 Jul 2022 19:18:42 +0200
+In-Reply-To: <20220628092259.330171-1-nsaenzju@redhat.com>
+References: <20220628092259.330171-1-nsaenzju@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.54 release.
-> There are 226 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 14 Jul 2022 07:13:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.54-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-> -------------
-> Pseudo-Shortlog of commits:
->
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->     Linux 5.15.54-rc3
->
-> Hangbin Liu <liuhangbin@gmail.com>
->     selftests/net: fix section name when using xdp_dummy.o
->
+On Tue, 2022-06-28 at 11:22 +0200, Nicolas Saenz Julienne wrote:
+> dequeue_task_rt() only decrements 'rt_rq->rt_nr_running' after having
+> called sched_update_tick_dependency() preventing it from re-enabling the
+> tick on systems that no longer have pending SCHED_RT tasks but have
+> multiple runnable SCHED_OTHER tasks:
+>=20
+>   dequeue_task_rt()
+>     dequeue_rt_entity()
+>       dequeue_rt_stack()
+>         dequeue_top_rt_rq()
+> 	  sub_nr_running()	// decrements rq->nr_running
+> 	    sched_update_tick_dependency()
+> 	      sched_can_stop_tick()	// checks rq->rt.rt_nr_running,
+> 	      ...
+>         __dequeue_rt_entity()
+>           dec_rt_tasks()	// decrements rq->rt.rt_nr_running
+> 	  ...
+>=20
+> Every other scheduler class performs the operation in the opposite
+> order, and sched_update_tick_dependency() expects the values to be
+> updated as such. So avoid the misbehaviour by inverting the order in
+> which the above operations are performed in the RT scheduler.
+>=20
+> Fixes: 76d92ac305f2 ("sched: Migrate sched to use new tick dependency mas=
+k model")
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> ---
 
-Compiled and booted on x86 and arm64 machines.. No dmesg regressions.
+Ping :)
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+--=20
+Nicol=C3=A1s S=C3=A1enz
+

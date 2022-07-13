@@ -2,435 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59E0574030
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F5357403A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiGMXvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S231768AbiGMXwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiGMXvC (ORCPT
+        with ESMTP id S230142AbiGMXwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:51:02 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E3B52DE7;
-        Wed, 13 Jul 2022 16:51:01 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ez10so435777ejc.13;
-        Wed, 13 Jul 2022 16:51:01 -0700 (PDT)
+        Wed, 13 Jul 2022 19:52:31 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1343B52DE7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:52:30 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DNjXnl019277;
+        Wed, 13 Jul 2022 23:52:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Z7lLcptb/IeWoP31/xOGH53PdZBk800rC9MNpZuAQdo=;
+ b=uuzdLF/W1gVopedndhSaqiVz5KGwXLWf+RWD/1QMJIspRfiONmhiMKHoRSo7xZh+cf3+
+ zRJIzY/XMGSWH0xo6Q1ruG8PLzYD5j1WDVc5N51TPmhH/K9s4qIF9rCKP2QRxXD/XiSP
+ JjuaM2NvyWypAEdbmBhySO25nMPc+uJOgTZertXMlH82mxUgkPtbigaA0bVcLkQArTiV
+ XZMx5uEJKFbhMe5pAnjvkDOsjGCjlCso2StHjMjQ5IqQjdBT5Hx1W4FC/1fNDA6Nti1e
+ d2UaN09k+Ji9DKwdUyxZnvwl/31rRP2hSvANV4cDng9uhh4AK57phdSdOA4/yoibmCek Iw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71xrknav-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 23:52:16 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26DNorEQ028600;
+        Wed, 13 Jul 2022 23:52:16 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h7044ws6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 23:52:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D+WRIRHKcMvaFHefFgdSv/tHjT1oGVw2KIA3s2fqx69ezKzTsn06VapkJBMk4ovS+HF4Iru9GFUnzvGEDChTnet+NSMRZm4XxG2EDA4nKvptFOiTU/k3JhTgewtOZgTYg/Ze8KHHn9dnwBkVvMcyQROzRsO/IF7iTCbTxwEfIqf39UdqusH+QW7hjTKeFFL2S86oYrpN0hHRkgYJ8iKUtSaBUAUqIzYnBRotR6yYcaWUmktqO4G73kDt5Y2DL6aFhscV6zznL8KByzGMtvFpGDWAwso7Lx3jmclhUgMQHdXkyxHaLKSNdhxzPfL/pbLJBlci9liYT5n2TWYKTYFi1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z7lLcptb/IeWoP31/xOGH53PdZBk800rC9MNpZuAQdo=;
+ b=U0gNYBlg23PZHOBHGP6uzccFVnyUCJ6ACWFu+L2WrNbGp5APvad6VbxNcD6XUfX1LC+N849sNc9lLV+49z/qCbSAHCmZBXxNdSUR3qRs2Qw4es8hW161f56LeQnFx1VLJRBhpGFSGg/F8lsH5mZQJ8Q3z6oKizbufv90iSDIulDzzwqUYKo5oi79ZweuCDYCFDOQ628OU4IGTstPwLDU/ABrecC4d4TkNXK+Xxqe5dtooX1F/NXuOWSajglTrRD5ubWjzQ373Ax5kXBLiLxsTGHwMXgsuYsODgllhsMs3sIubCqBNgBxGX56/szgSlEVrOyewZ5rbpUCpcCpuJzV8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z7t/XikED1GrBgAk91sAA2PO/Z9j37ofymS87tdO76U=;
-        b=JsE9SyDQFepNYPZxpdGunX8fi6n5/pAkF72yLch5x1TDs4NQOYwapnE7jOqySt2vH5
-         JHm/YhmBJrcnfjLabNmeG06qeWyDdbHh3+JODu0Jh27goGdg/Twx71cj1f/HCeFQj85N
-         xNzpGG5ur44HRm0xWTxC2Sw0pzCr+P04G6tMpQf2qGJFJQkg/0Bte2hp7E3BjI3C+7+c
-         G2ZZLThSogB6GgfmVbmuTATIuACpGY2a3GxMaOVCV1uXHm2L348kON0rPeApKA047IDn
-         +EkCJr2uvN+brEBNXAP6HrMLteiT6/N22At7ev/qB4IJsWS8nAd5XYHTXpBuWzVDEQrs
-         P/UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z7t/XikED1GrBgAk91sAA2PO/Z9j37ofymS87tdO76U=;
-        b=UGKr6WYkFoGOUO6bV47sEXBfoc7DKQQLeH06NSpjTm/EgV/T9vAU2Z6aVUmDIwirWc
-         daKZ4vIuVubb4JiVvACDmJzTqJDRVfTymGR0/aclhjSt6wfASx5ez3bT0Y2LyywT2y72
-         IetI3I34Pvz/h4R7oBXo8xuX4zjcFx5ljMvLT4dmj3iIneQjZrzh5Yfag0WBS/oUVkHT
-         2s3Iy2bIJa35TjzJ7W5b1PzBF/3JR3ybUEPm3dc9rA6c8Lyy4S5/rIHbvwn9UXszgfif
-         aJJgff1uDXAoXR6rQSORhBuzVsFgsBYamHdH1PKEZlwg7+N31OaJo+KK2YslAcCh/1mv
-         FeIw==
-X-Gm-Message-State: AJIora+B3HDc+/iL0KeCKatcMppz94UexH4uyTNARyID8BTAjyt5Q+Ux
-        mboo4dOi3d1Lq0J4g/6NkQAVrLoWba/V4/zY3ILTC9EbFgVzN/iH
-X-Google-Smtp-Source: AGRyM1sjYmo4Q3LjoA9Gtnw+lvcUKbaDOMXSRX8mXBdTosyO5+IA9orKrGb8pR2ZM+7gku+IojhRUVZ6LnL+RQR0Y6Q=
-X-Received: by 2002:a17:907:1612:b0:722:e1b9:45d0 with SMTP id
- hb18-20020a170907161200b00722e1b945d0mr5902103ejc.439.1657756259578; Wed, 13
- Jul 2022 16:50:59 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z7lLcptb/IeWoP31/xOGH53PdZBk800rC9MNpZuAQdo=;
+ b=wn50lvEVnxMcjyMUkr8Kp36RMrN+w13FyykW6FcBhfOOmXN8Py8IFE5T1is9j/UyB8jB++LKyOODRBHTZ7Te9jkJgpWCHEubdDigfLA1y80gJOxC4DqKNGUOPJdcLOGQmPmZm1LRDCnqU0Lvs0VnpGG/ASEt565+IyOP5IZUJD4=
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
+ by PH0PR10MB5657.namprd10.prod.outlook.com (2603:10b6:510:fc::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Wed, 13 Jul
+ 2022 23:52:13 +0000
+Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::2ce3:447b:f3ee:bf1e]) by SJ0PR10MB4429.namprd10.prod.outlook.com
+ ([fe80::2ce3:447b:f3ee:bf1e%4]) with mapi id 15.20.5417.028; Wed, 13 Jul 2022
+ 23:52:13 +0000
+From:   Jane Chu <jane.chu@oracle.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] acpi/nfit: badrange report spill over to clean range
+Thread-Topic: [PATCH] acpi/nfit: badrange report spill over to clean range
+Thread-Index: AQHYlX3HVbDs2AmFoUigIZUcRQZQvK17eX+AgAGCqQA=
+Date:   Wed, 13 Jul 2022 23:52:13 +0000
+Message-ID: <09df842d-d8e4-0594-56b0-b4bb9ea37b67@oracle.com>
+References: <20220711232658.536064-1-jane.chu@oracle.com>
+ <62ce16518e7d3_6070c29447@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <62ce16518e7d3_6070c29447@dwillia2-xfh.jf.intel.com.notmuch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5ed1f40-0f50-4ced-8f54-08da652ab547
+x-ms-traffictypediagnostic: PH0PR10MB5657:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yZ6htCcwyco/uOG6sc72kxlLr4E4FsldtoniefDMvTM4PxGdzZg4VrWCyW7lQQeQ5Rw6AoKrqgYu4tkLf2QfauaQNunQiW/+7IU87AF0b/CMqh7A0hjGI04uYQ/XPhW0i4QkoeeRhdsx7RoEKrUIWgNOpsnXhgcqohJVJ9UL2F9WnSv0OLzN7dlkYBssh8t+mndYbtcMFEVOtsbir/K0KIPEPsSu+ATl+ejDqNIXyE68B4d3CEmbAHx6dZbSeDY3+vAt1X0WVoUrcTbAfO95DflXCEn97hLVaiXYhYFgnKA806Slw9ah3GCXoRugPIojF/ClTI5HB1psRI6z7RZaNlb61+ehIUXLEYu8eCTAApZcltO5VELoHl8qg3GCzMK7xDMDyigqNnkesnDNNAOiD17ZUKSh/IegbcYxzqv3xQcdtzbK6M3oWX5qZEP3BRTcLyn5ZNHXcrYbUQzHm3trmgCyXEcEVkxJ3u3oifzZycp/4s8gmMUM8rCoQqGiNFsvkDqTR+AXYJ5YR31flkyJL3pOcZ5/3cMEaiiOxhDkuqf/2pQzC8FMD2MufOHaaoJowRkKnX/zHRRXQK+G8Y45utIQa8xbaWLjyskaPPBbFmO+0j/sZUREqo+fQ5uySDeC2j0nybJs3Scuz+gVr6TErBhcIwsW9EidyKc+idBjlsU/5dGAcun4whi5mc9WSI/T8r7RiAr++OVsOkfGRh8L4C5oztIDYTdJkcwSyhFFHlapurNTxSEi1ZKeIhISBE/WhjRYggE0yRF6HIjsfvq1cJeTUcPmtGlKId1cjJZBHG98euoiJBsaT581sOwS6k8o+jI8nj150G3ZZB4nLJPCqwZ5QgXOKNeBWC1aOItQqguDgD0hAUV7Z1ggKnBlCD+MtkIhjzKTnVsCyJgc34ThXw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(366004)(136003)(346002)(2616005)(186003)(6512007)(38070700005)(478600001)(2906002)(8676002)(64756008)(316002)(44832011)(41300700001)(53546011)(66476007)(66946007)(66556008)(66446008)(76116006)(6506007)(71200400001)(86362001)(8936002)(91956017)(83380400001)(5660300002)(31686004)(122000001)(26005)(31696002)(36756003)(6486002)(38100700002)(110136005)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dFB5MUNXWW9EemFVTGQ4LytvRzdQZ3d6YnkvWDJpU09qZkFOQjgrOEMyYTdp?=
+ =?utf-8?B?bCtsdElQNTh5K1ZyeU9RSTdFcEZHTTZpSzhGNHRpa25yVEpuU2Y5YTA2SjE1?=
+ =?utf-8?B?aHEwcktvZU1nck4xTVdWSnlINDlBYTdnYUQxa242YmNsZlBtM3JadGZVb2FH?=
+ =?utf-8?B?eGNZT1BUWmN3UkdFRVh0OFRycW5BQmRDQ25HZHhiTzd6RWIwdGt0Slp3eXl1?=
+ =?utf-8?B?MlJEK3pOSFBEdG9FSFRPU1p5cmlWUStBR3YxNEdONVNDalk4aHVpRFRzNDA4?=
+ =?utf-8?B?aXpHdHFDd0NtYVF4U0tmR2JLQ2UzQWJKUjNOMkdydElwak9TdE5vU24rQ001?=
+ =?utf-8?B?NC9MNnJpNDNwYUx1eGhuQmNSdlF6c0I1eFhYUmhBSlRZQ1dPeHNHYnZOL2Ju?=
+ =?utf-8?B?L1NNa2VVTlRuNHZCdUwzWEpRaXllOFA1UU16NjJ6NE9UTFExM0hGZWJzSFA0?=
+ =?utf-8?B?QlExY21ManhaZ25hNmlWcEx1OFpHQW1ONUpzcFJXTmpnRWJVeGo1clV0UDhy?=
+ =?utf-8?B?Z1ViMFloZ1FkbSs1R2RaYm80OXNzRU1vcjRCM1pUa0lua0s5WlZFc0hFRVhm?=
+ =?utf-8?B?MHVIT3lKejZVOERjczdNQytYd1FGNnJRQXBQYmZHaktPSUtUaGVnZXZ2ek95?=
+ =?utf-8?B?SnZmT0FLQnNWbU5RS2JuMGlCK1Q4UUp0V2NLcXByaWNGRHFFZWdZZnpKNkx2?=
+ =?utf-8?B?NStZSW5Fc055Nng3dHYrajNNaS9YTE5MejBIU2tOYkpmbk9RRElSaXZaZGxY?=
+ =?utf-8?B?MGh5NXozVm4zM0VNaHpOc0lyUGRoSE1RenVpQ3RqTUxVei9Nb3hzTnpqY1o2?=
+ =?utf-8?B?dDJHNUZIaGpCYXZzZU5INHN6LzZDVmNZbzIyMDFuVE56anMxanpVZEk1Z2dH?=
+ =?utf-8?B?MmpZL2xyZHYwMGVlSEJ0dDU5Nk1QU1VPYXBBTHJtdlN2a093ZHdROTFPWFU5?=
+ =?utf-8?B?Q0t6VWpmZWJUMkc3ZEtzd0x6RU10NHdjSkhUaFpnbDFkcjRhRWpkK3JFQWJw?=
+ =?utf-8?B?WnZaa0M5UXN1SUpwSkQ4VEtTbGNvc3JFcVBPcG5hSStCRFlHa05XelFMTnh0?=
+ =?utf-8?B?Vng5eld6U1NHR2ZCU2VYalFPMllPYmwza3loVVFZNmt2K0Nqdmd3a0JoR2Jp?=
+ =?utf-8?B?amFEeGNkMWRQQXZleERXZlV3bG1aajVYY0h5dTRXd3hMbG9iQ2VpV2JQMmJ6?=
+ =?utf-8?B?c2w2N0pmMVVRdXVBb3BlWVBoRWVvWHV3RTJYY05GZHZITTEyQXJwTWlZdmt0?=
+ =?utf-8?B?N21xbnJwNXhoaVA3WlAzcjNLUHdVRWVnclhFbVdpRG5rZDdxNlo0REZ2T1Ro?=
+ =?utf-8?B?TFlQaitqMWpDYkUzVVU1bFJLVnN5Z1NsZ1JtR2hzMjNNRFUwTGc0R2NacE0y?=
+ =?utf-8?B?WjJ4MmJFUVN1V1QvWmszaVlha3BhRHVRNklkR0lPczBJcjlMdmdXM3V3b0dE?=
+ =?utf-8?B?cG9mY3A2VTJIRkVqaSs3T1NTbzdJSjU4b3FZVXVyQ0xFN3BMMS9xZjEwNENx?=
+ =?utf-8?B?djVRL254VFBRUFJuR0FCa2VoNVJOemE1V3E5dzA4NXRWN2wwbFpMcDN4eGJP?=
+ =?utf-8?B?bWZqaFlnOUk4UnNlNWhEZndzZUNNWE8xTm12MEgvbExHZ0UwVGZ1cmpycENx?=
+ =?utf-8?B?R1E1TDlPOTVEemhoSDhJWHZ4R2xFOW1GdnZmV2lEc0VPM2tlL2ttVEF2elY5?=
+ =?utf-8?B?MmMvKzNZajQxbzg5bVNUMlpmdTN5dWl2Q2RCclBYVk8yWjdPelRUUmVRSU5B?=
+ =?utf-8?B?TGpKdlc2QVVYQXB5SVVCMTY4L2VZbUF4QnpPSVRtd1owckhYbWVXUm5PRzFm?=
+ =?utf-8?B?NHh5K1ZZcGc4WDZ2cmRFc3BnTCtPRmM1Y0ZoYWV2NGE0aWZHRlcvTXFFNFlL?=
+ =?utf-8?B?R1hCSUtMa2FJUHdxVG85cC9DTVo4ZUFTSWNvaDR4dnYxcGxiVzBjenA4c3g1?=
+ =?utf-8?B?RmYzU09YMWdMSXBGSWJ4V2U4K2pWVGVITjVrQlJ1UkYvdklOYkszV283eExn?=
+ =?utf-8?B?c2lxakYyNXhXa3F6T1EwSy9JNEZrSkloMUZRTHlDcDNVbEQxb3V4RXpPTjRT?=
+ =?utf-8?B?V1IzQy9LeWZkWS9iNjNmbmRiMk14SU0xalpCallWYmdMWC94cUVraHBYOHlF?=
+ =?utf-8?Q?G3Rk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E400ACE463D3A8499B90C0B153377B72@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <cover.1657750543.git.jhpark1013@gmail.com> <4f9916058458b8d802ce47f5d19aba213e50b6bc.1657750543.git.jhpark1013@gmail.com>
-In-Reply-To: <4f9916058458b8d802ce47f5d19aba213e50b6bc.1657750543.git.jhpark1013@gmail.com>
-From:   Jaehee <jhpark1013@gmail.com>
-Date:   Wed, 13 Jul 2022 16:50:55 -0700
-Message-ID: <CAA1TwFCuG5LWGE1eEmt1j7_jD-HXW1WaMgEA9W2J7s7Z3ZqxLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 3/3] selftests: net: arp_ndisc_untracked_subnets:
- test for arp_accept and accept_untracked_na
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, David Ahern <dsahern@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, Arun Ajith S <aajith@arista.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Roopa Prabhu <roopa.prabhu@gmail.com>,
-        Andy Roulin <aroulin@nvidia.com>,
-        Stefano Brivio <sbrivio@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5ed1f40-0f50-4ced-8f54-08da652ab547
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2022 23:52:13.0275
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: e/0199JNcbAVQs9Y6lbDPSPAaodTyKBoF1a70PmGqKeYCYkxVqkCG9qfOJUP+UMKOOfI0lWbM3oU0DbxmR0C7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5657
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-07-13_13:2022-07-13,2022-07-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130095
+X-Proofpoint-GUID: yC0mu8Ky8-ho9pAUAF_ew9ytJVTf26c6
+X-Proofpoint-ORIG-GUID: yC0mu8Ky8-ho9pAUAF_ew9ytJVTf26c6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Sorry -- I noticed this selftest is using spaces instead of tabs.
-
-I just sent in a v3 patchset with this fix. Sorry about sending a 3rd
-version so close to the 2nd.
-
-Thanks,
-Jaehee
-
-On Wed, Jul 13, 2022 at 3:37 PM Jaehee Park <jhpark1013@gmail.com> wrote:
->
-> ipv4 arp_accept has a new option '2' to create new neighbor entries
-> only if the src ip is in the same subnet as an address configured on
-> the interface that received the garp message. This selftest tests all
-> options in arp_accept.
->
-> ipv6 has a sysctl endpoint, accept_untracked_na, that defines the
-> behavior for accepting untracked neighbor advertisements. A new option
-> similar to that of arp_accept for learning only from the same subnet is
-> added to accept_untracked_na. This selftest tests this new feature.
->
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> Suggested-by: Roopa Prabhu <roopa@nvidia.com>
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../net/arp_ndisc_untracked_subnets.sh        | 308 ++++++++++++++++++
->  2 files changed, 309 insertions(+)
->  create mode 100755 tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
->
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index ddad703ace34..9c2e9e303c37 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -38,6 +38,7 @@ TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
->  TEST_PROGS += vrf_strict_mode_test.sh
->  TEST_PROGS += arp_ndisc_evict_nocarrier.sh
->  TEST_PROGS += ndisc_unsolicited_na_test.sh
-> +TEST_PROGS += arp_ndisc_untracked_subnets.sh
->  TEST_PROGS += stress_reuseport_listen.sh
->  TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
->  TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
-> diff --git a/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-> new file mode 100755
-> index 000000000000..689ecfacee10
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/arp_ndisc_untracked_subnets.sh
-> @@ -0,0 +1,308 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# 2 namespaces: one host and one router. Use arping from the host to send a
-> +# garp to the router. Router accepts or ignores based on its arp_accept
-> +# or accept_untracked_na configuration.
-> +
-> +TESTS="arp ndisc"
-> +
-> +ROUTER_NS="ns-router"
-> +ROUTER_NS_V6="ns-router-v6"
-> +ROUTER_INTF="veth-router"
-> +ROUTER_ADDR="10.0.10.1"
-> +ROUTER_ADDR_V6="2001:db8:abcd:0012::1"
-> +
-> +HOST_NS="ns-host"
-> +HOST_NS_V6="ns-host-v6"
-> +HOST_INTF="veth-host"
-> +HOST_ADDR="10.0.10.2"
-> +HOST_ADDR_V6="2001:db8:abcd:0012::2"
-> +
-> +SUBNET_WIDTH=24
-> +PREFIX_WIDTH_V6=64
-> +
-> +cleanup() {
-> +        ip netns del ${HOST_NS}
-> +        ip netns del ${ROUTER_NS}
-> +}
-> +
-> +cleanup_v6() {
-> +        ip netns del ${HOST_NS_V6}
-> +        ip netns del ${ROUTER_NS_V6}
-> +}
-> +
-> +setup() {
-> +        set -e
-> +        local arp_accept=$1
-> +
-> +        # Set up two namespaces
-> +        ip netns add ${ROUTER_NS}
-> +        ip netns add ${HOST_NS}
-> +
-> +        # Set up interfaces veth0 and veth1, which are pairs in separate
-> +        # namespaces. veth0 is veth-router, veth1 is veth-host.
-> +        # first, set up the inteface's link to the namespace
-> +        # then, set the interface "up"
-> +        ip netns exec ${ROUTER_NS} ip link add name ${ROUTER_INTF} \
-> +                type veth peer name ${HOST_INTF}
-> +
-> +        ip netns exec ${ROUTER_NS} ip link set dev ${ROUTER_INTF} up
-> +        ip netns exec ${ROUTER_NS} ip link set dev ${HOST_INTF} netns ${HOST_NS}
-> +
-> +        ip netns exec ${HOST_NS} ip link set dev ${HOST_INTF} up
-> +        ip netns exec ${ROUTER_NS} ip addr add ${ROUTER_ADDR}/${SUBNET_WIDTH} \
-> +                dev ${ROUTER_INTF}
-> +
-> +        ip netns exec ${HOST_NS} ip addr add ${HOST_ADDR}/${SUBNET_WIDTH} \
-> +                dev ${HOST_INTF}
-> +        ip netns exec ${HOST_NS} ip route add default via ${HOST_ADDR} \
-> +                dev ${HOST_INTF}
-> +        ip netns exec ${ROUTER_NS} ip route add default via ${ROUTER_ADDR} \
-> +                dev ${ROUTER_INTF}
-> +
-> +        ROUTER_CONF=net.ipv4.conf.${ROUTER_INTF}
-> +        ip netns exec ${ROUTER_NS} sysctl -w \
-> +                ${ROUTER_CONF}.arp_accept=${arp_accept} >/dev/null 2>&1
-> +        set +e
-> +}
-> +
-> +setup_v6() {
-> +        set -e
-> +        local accept_untracked_na=$1
-> +
-> +        # Set up two namespaces
-> +        ip netns add ${ROUTER_NS_V6}
-> +        ip netns add ${HOST_NS_V6}
-> +
-> +        # Set up interfaces veth0 and veth1, which are pairs in separate
-> +        # namespaces. veth0 is veth-router, veth1 is veth-host.
-> +        # first, set up the inteface's link to the namespace
-> +        # then, set the interface "up"
-> +        ip -6 -netns ${ROUTER_NS_V6} link add name ${ROUTER_INTF} \
-> +                type veth peer name ${HOST_INTF}
-> +
-> +        ip -6 -netns ${ROUTER_NS_V6} link set dev ${ROUTER_INTF} up
-> +        ip -6 -netns ${ROUTER_NS_V6} link set dev ${HOST_INTF} netns \
-> +                ${HOST_NS_V6}
-> +
-> +        ip -6 -netns ${HOST_NS_V6} link set dev ${HOST_INTF} up
-> +        ip -6 -netns ${ROUTER_NS_V6} addr add \
-> +                ${ROUTER_ADDR_V6}/${PREFIX_WIDTH_V6} dev ${ROUTER_INTF} nodad
-> +
-> +        HOST_CONF=net.ipv6.conf.${HOST_INTF}
-> +        ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.ndisc_notify=1
-> +        ip netns exec ${HOST_NS_V6} sysctl -qw ${HOST_CONF}.disable_ipv6=0
-> +        ip -6 -netns ${HOST_NS_V6} addr add ${HOST_ADDR_V6}/${PREFIX_WIDTH_V6} \
-> +                dev ${HOST_INTF}
-> +
-> +        ROUTER_CONF=net.ipv6.conf.${ROUTER_INTF}
-> +
-> +        ip netns exec ${ROUTER_NS_V6} sysctl -w \
-> +                ${ROUTER_CONF}.forwarding=1 >/dev/null 2>&1
-> +        ip netns exec ${ROUTER_NS_V6} sysctl -w \
-> +                ${ROUTER_CONF}.drop_unsolicited_na=0 >/dev/null 2>&1
-> +        ip netns exec ${ROUTER_NS_V6} sysctl -w \
-> +                ${ROUTER_CONF}.accept_untracked_na=${accept_untracked_na} \
-> +                >/dev/null 2>&1
-> +        set +e
-> +}
-> +
-> +verify_arp() {
-> +        local arp_accept=$1
-> +        local same_subnet=$2
-> +
-> +        neigh_show_output=$(ip netns exec ${ROUTER_NS} ip neigh get \
-> +                ${HOST_ADDR} dev ${ROUTER_INTF} 2>/dev/null)
-> +
-> +        if [ ${arp_accept} -eq 1 ]; then
-> +                # Neighbor entries expected
-> +                [[ ${neigh_show_output} ]]
-> +        elif [ ${arp_accept} -eq 2 ]; then
-> +                if [ ${same_subnet} -eq 1 ]; then
-> +                        # Neighbor entries expected
-> +                        [[ ${neigh_show_output} ]]
-> +                else
-> +                        [[ -z "${neigh_show_output}" ]]
-> +                fi
-> +        else
-> +                [[ -z "${neigh_show_output}" ]]
-> +        fi
-> + }
-> +
-> +arp_test_gratuitous() {
-> +        set -e
-> +        local arp_accept=$1
-> +        local same_subnet=$2
-> +
-> +        if [ ${arp_accept} -eq 2 ]; then
-> +                test_msg=("test_arp: "
-> +                          "accept_arp=$1 "
-> +                          "same_subnet=$2")
-> +                if [ ${same_subnet} -eq 0 ]; then
-> +                        HOST_ADDR=10.0.11.3
-> +                else
-> +                        HOST_ADDR=10.0.10.3
-> +                fi
-> +        else
-> +                test_msg=("test_arp: "
-> +                          "accept_arp=$1")
-> +        fi
-> +        # Supply arp_accept option to set up which sets it in sysctl
-> +        setup ${arp_accept}
-> +        ip netns exec ${HOST_NS} arping -A -U ${HOST_ADDR} -c1 2>&1 >/dev/null
-> +
-> +        if verify_arp $1 $2; then
-> +                printf "    TEST: %-60s  [ OK ]\n" "${test_msg[*]}"
-> +        else
-> +                printf "    TEST: %-60s  [FAIL]\n" "${test_msg[*]}"
-> +        fi
-> +        cleanup
-> +        set +e
-> +}
-> +
-> +arp_test_gratuitous_combinations() {
-> +        arp_test_gratuitous 0
-> +        arp_test_gratuitous 1
-> +        arp_test_gratuitous 2 0 # Second entry indicates subnet or not
-> +        arp_test_gratuitous 2 1
-> +}
-> +
-> +cleanup_tcpdump() {
-> +        set -e
-> +        [[ ! -z  ${tcpdump_stdout} ]] && rm -f ${tcpdump_stdout}
-> +        [[ ! -z  ${tcpdump_stderr} ]] && rm -f ${tcpdump_stderr}
-> +        tcpdump_stdout=
-> +        tcpdump_stderr=
-> +        set +e
-> +}
-> +
-> +start_tcpdump() {
-> +        set -e
-> +        tcpdump_stdout=`mktemp`
-> +        tcpdump_stderr=`mktemp`
-> +        ip netns exec ${ROUTER_NS_V6} timeout 15s \
-> +                tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
-> +                "icmp6 && icmp6[0] == 136 && src ${HOST_ADDR_V6}" \
-> +                > ${tcpdump_stdout} 2> /dev/null
-> +        set +e
-> +}
-> +
-> +verify_ndisc() {
-> +        local accept_untracked_na=$1
-> +        local same_subnet=$2
-> +
-> +        neigh_show_output=$(ip -6 -netns ${ROUTER_NS_V6} neigh show \
-> +                to ${HOST_ADDR_V6} dev ${ROUTER_INTF} nud stale)
-> +
-> +        if [ ${accept_untracked_na} -eq 1 ]; then
-> +                # Neighbour entry expected to be present
-> +                [[ ${neigh_show_output} ]]
-> +        elif [ ${accept_untracked_na} -eq 2 ]; then
-> +                if [ ${same_subnet} -eq 1 ]; then
-> +                        [[ ${neigh_show_output} ]]
-> +                else
-> +                        [[ -z "${neigh_show_output}" ]]
-> +                fi
-> +        else
-> +                # Neighbour entry expected to be absent for all other cases
-> +                [[ -z "${neigh_show_output}" ]]
-> +        fi
-> +}
-> +
-> +ndisc_test_untracked_advertisements() {
-> +        set -e
-> +        test_msg=("test_ndisc: "
-> +                  "accept_untracked_na=$1")
-> +
-> +        local accept_untracked_na=$1
-> +        local same_subnet=$2
-> +        if [ ${accept_untracked_na} -eq 2 ]; then
-> +                test_msg=("test_ndisc: "
-> +                          "accept_untracked_na=$1 "
-> +                          "same_subnet=$2")
-> +                if [ ${same_subnet} -eq 0 ]; then
-> +                        # Not same subnet
-> +                        HOST_ADDR_V6=2000:db8:abcd:0013::4
-> +                else
-> +                        HOST_ADDR_V6=2001:db8:abcd:0012::3
-> +                fi
-> +        fi
-> +        setup_v6 $1 $2
-> +        start_tcpdump
-> +
-> +        if verify_ndisc $1 $2; then
-> +                printf "    TEST: %-60s  [ OK ]\n" "${test_msg[*]}"
-> +        else
-> +                printf "    TEST: %-60s  [FAIL]\n" "${test_msg[*]}"
-> +        fi
-> +
-> +        cleanup_tcpdump
-> +        cleanup_v6
-> +        set +e
-> +}
-> +
-> +ndisc_test_untracked_combinations() {
-> +        ndisc_test_untracked_advertisements 0
-> +        ndisc_test_untracked_advertisements 1
-> +        ndisc_test_untracked_advertisements 2 0
-> +        ndisc_test_untracked_advertisements 2 1
-> +}
-> +
-> +################################################################################
-> +# usage
-> +
-> +usage()
-> +{
-> +        cat <<EOF
-> +usage: ${0##*/} OPTS
-> +
-> +        -t <test>       Test(s) to run (default: all)
-> +                        (options: $TESTS)
-> +EOF
-> +}
-> +
-> +################################################################################
-> +# main
-> +
-> +while getopts ":t:h" opt; do
-> +        case $opt in
-> +                t) TESTS=$OPTARG;;
-> +                h) usage; exit 0;;
-> +                *) usage; exit 1;;
-> +        esac
-> +done
-> +
-> +if [ "$(id -u)" -ne 0 ];then
-> +       echo "SKIP: Need root privileges"
-> +       exit $ksft_skip;
-> +fi
-> +
-> +if [ ! -x "$(command -v ip)" ]; then
-> +       echo "SKIP: Could not run test without ip tool"
-> +       exit $ksft_skip
-> +fi
-> +
-> +if [ ! -x "$(command -v tcpdump)" ]; then
-> +       echo "SKIP: Could not run test without tcpdump tool"
-> +       exit $ksft_skip
-> +fi
-> +
-> +if [ ! -x "$(command -v arping)" ]; then
-> +       echo "SKIP: Could not run test without arping tool"
-> +       exit $ksft_skip
-> +fi
-> +
-> +# start clean
-> +cleanup &> /dev/null
-> +cleanup_v6 &> /dev/null
-> +
-> +for t in $TESTS
-> +do
-> +        case $t in
-> +        arp_test_gratuitous_combinations|arp) arp_test_gratuitous_combinations;;
-> +        ndisc_test_untracked_combinations|ndisc) \
-> +                ndisc_test_untracked_combinations;;
-> +        help) echo "Test names: $TESTS"; exit 0;;
-> +esac
-> +done
-> --
-> 2.30.2
->
+T24gNy8xMi8yMDIyIDU6NDggUE0sIERhbiBXaWxsaWFtcyB3cm90ZToNCj4gSmFuZSBDaHUgd3Jv
+dGU6DQo+PiBDb21taXQgNzkxN2Y5Y2RiNTAzICgiYWNwaS9uZml0OiByZWx5IG9uIG1jZS0+bWlz
+YyB0byBkZXRlcm1pbmUgcG9pc29uDQo+PiBncmFudWxhcml0eSIpIGNoYW5nZWQgbmZpdF9oYW5k
+bGVfbWNlKCkgY2FsbGJhY2sgdG8gcmVwb3J0IGJhZHJhbmdlIGZvcg0KPj4gZWFjaCBwb2lzb24g
+YXQgYW4gYWxpZ25tZW50IGluZGljYXRlZCBieSAxVUxMIDw8IE1DSV9NSVNDX0FERFJfTFNCKG1j
+ZS0+bWlzYykNCj4+IGluc3RlYWQgb2YgdGhlIGhhcmRjb2RlZCBMMV9DQUNIRV9CWVRFUy4gSG93
+ZXZlciByZWNlbnRseSBvbiBhIHNlcnZlcg0KPj4gcG9wdWxhdGVkIHdpdGggSW50ZWwgRENQTUVN
+IHYyIGRpbW1zLCBpdCBhcHBlYXJzIHRoYXQNCj4+IDFVTCA8PCBNQ0lfTUlTQ19BRERSX0xTQiht
+Y2UtPm1pc2MpIHR1cm5zIG91dCBpcyA0S2lCLCBvciA4IDUxMi1ieXRlIGJsb2Nrcy4NCj4+IENv
+bnNlcXVlbnRseSwgaW5qZWN0aW5nIDIgYmFjay10by1iYWNrIHBvaXNvbnMgdmlhIG5kY3RsLCBh
+bmQgaXQgcmVwb3J0cw0KPj4gOCBwb2lzb25zLg0KPj4NCj4+IFsyOTA3Ni41OTAyODFdIHszfVtI
+YXJkd2FyZSBFcnJvcl06ICAgcGh5c2ljYWxfYWRkcmVzczogMHgwMDAwMDA0MGEwNjAyNDAwDQo+
+PiBbLi5dDQo+PiBbMjkwNzYuNjE5NDQ3XSBNZW1vcnkgZmFpbHVyZTogMHg0MGEwNjAyOiByZWNv
+dmVyeSBhY3Rpb24gZm9yIGRheCBwYWdlOiBSZWNvdmVyZWQNCj4+IFsyOTA3Ni42Mjc1MTldIG1j
+ZTogW0hhcmR3YXJlIEVycm9yXTogTWFjaGluZSBjaGVjayBldmVudHMgbG9nZ2VkDQo+PiBbMjkw
+NzYuNjM0MDMzXSBuZml0IEFDUEkwMDEyOjAwOiBhZGRyIGluIFNQQSAxICgweDQwODAwMDAwMDAs
+IDB4MWY4MDAwMDAwMCkNCj4+IFsyOTA3Ni42NDg4MDVdIG5kX2J1cyBuZGJ1czA6IFhYWCBudmRp
+bW1fYnVzX2FkZF9iYWRyYW5nZTogKDB4NDBhMDYwMjAwMCwgMHgxMDAwKQ0KPj4gWy4uXQ0KPj4g
+WzI5MDc4LjYzNDgxN10gezR9W0hhcmR3YXJlIEVycm9yXTogICBwaHlzaWNhbF9hZGRyZXNzOiAw
+eDAwMDAwMDQwYTA2MDI2MDANCj4+IFsuLl0NCj4+IFsyOTA3OS41OTUzMjddIG5maXQgQUNQSTAw
+MTI6MDA6IGFkZHIgaW4gU1BBIDEgKDB4NDA4MDAwMDAwMCwgMHgxZjgwMDAwMDAwKQ0KPj4gWzI5
+MDc5LjYxMDEwNl0gbmRfYnVzIG5kYnVzMDogWFhYIG52ZGltbV9idXNfYWRkX2JhZHJhbmdlOiAo
+MHg0MGEwNjAyMDAwLCAweDEwMDApDQo+PiBbLi5dDQo+PiB7DQo+PiAgICAiZGV2IjoibmFtZXNw
+YWNlMC4wIiwNCj4+ICAgICJtb2RlIjoiZnNkYXgiLA0KPj4gICAgIm1hcCI6ImRldiIsDQo+PiAg
+ICAic2l6ZSI6MzM4MjA3NzAzMDQsDQo+PiAgICAidXVpZCI6ImExYjBmMDdmLTc0N2YtNDBhOC1i
+Y2Q0LWRlMTU2MGExZWY3NSIsDQo+PiAgICAic2VjdG9yX3NpemUiOjUxMiwNCj4+ICAgICJhbGln
+biI6MjA5NzE1MiwNCj4+ICAgICJibG9ja2RldiI6InBtZW0wIiwNCj4+ICAgICJiYWRibG9ja19j
+b3VudCI6OCwNCj4+ICAgICJiYWRibG9ja3MiOlsNCj4+ICAgICAgew0KPj4gICAgICAgICJvZmZz
+ZXQiOjgyMDgsDQo+PiAgICAgICAgImxlbmd0aCI6OCwNCj4+ICAgICAgICAiZGltbXMiOlsNCj4+
+ICAgICAgICAgICJubWVtMCINCj4+ICAgICAgICBdDQo+PiAgICAgIH0NCj4+ICAgIF0NCj4+IH0N
+Cj4+DQo+PiBTbywgMVVMIDw8IE1DSV9NSVNDX0FERFJfTFNCKG1jZS0+bWlzYykgaXMgYW4gdW5y
+ZWxpYWJsZSBpbmRpY2F0b3IgZm9yIHBvaXNvbg0KPj4gcmFkaXVzIGFuZCBzaG91bGRuJ3QgYmUg
+dXNlZC4gIE1vcmUgb3ZlciwgYXMgZWFjaCBpbmplY3RlZCBwb2lzb24gaXMgYmVpbmcNCj4+IHJl
+cG9ydGVkIGluZGVwZW5kZW50bHksIGFueSBhbGlnbm1lbnQgdW5kZXIgNTEyLWJ5dGUgYXBwZWFy
+IHdvcmtzOg0KPj4gTDFfQ0FDSEVfQllURVMgKHRob3VnaCBpbmFjY3VyYXRlKSwgb3IgMjU2LWJ5
+dGVzIChhcyBhcnMtPmxlbmd0aCByZXBvcnRzKSwNCj4+IG9yIDUxMi1ieXRlLg0KPj4NCj4+IFRv
+IGdldCBhcm91bmQgdGhpcyBpc3N1ZSwgNTEyLWJ5dGVzIGlzIGNob3NlbiBhcyB0aGUgYWxpZ25t
+ZW50IGJlY2F1c2UNCj4+ICAgIGEuIGl0IGhhcHBlbnMgdG8gYmUgdGhlIGJhZGJsb2NrIGdyYW51
+bGFyaXR5LA0KPj4gICAgYi4gbmRjdGwgaW5qZWN0LWVycm9yIGNhbm5vdCBpbmplY3QgbW9yZSB0
+aGFuIG9uZSBwb2lzb24gdG8gYSA1MTItYnl0ZSBibG9jaywNCj4+ICAgIGMuIGFyY2hpdGVjdHVy
+ZSBhZ25vc3RpYw0KPiANCj4gSSBhbSBmYWlsaW5nIHRvIHNlZSB0aGUga2VybmVsIGJ1Zz8gWWVz
+LCB5b3UgaW5qZWN0ZWQgbGVzcyB0aGFuIDgNCj4gImJhZGJsb2NrcyIgb2YgcG9pc29uIGFuZCB0
+aGUgaGFyZHdhcmUgcmVwb3J0ZWQgOCBibG9ja3Mgb2YgcG9pc29uLCBidXQNCj4gdGhhdCdzIG5v
+dCB0aGUga2VybmVsJ3MgZmF1bHQsIHRoYXQncyB0aGUgaGFyZHdhcmUuIFdoYXQgaGFwcGVucyB3
+aGVuDQo+IGhhcmR3YXJlIHJlYWxseSBkb2VzIGRldGVjdCA4IGJsb2NrcyBvZiBjb25zZWN0aXZl
+IHBvaXNvbiBhbmQgdGhpcw0KPiBpbXBsZW1lbnRhdGlvbiBkZWNpZGVzIHRvIG9ubHkgcmVjb3Jk
+IDEgYXQgYSB0aW1lPw0KDQpJbiB0aGF0IGNhc2UsIHRoZXJlIHdpbGwgYmUgOCByZXBvcnRzIG9m
+IHRoZSBwb2lzb25zIGJ5IEFQRUkgR0hFUywgYW5kDQpBUkMgc2NhbiB3aWxsIGFsc28gcmVwb3J0
+IDggcG9pc29ucywgZWFjaCB3aWxsIGdldCB0byBiZSBhZGRlZCB0byB0aGUgDQpiYWQgcmFuZ2Ug
+dmlhIG52ZGltbV9idXNfYWRkX2JhZHJhbmdlKCksIHNvIG5vbmUgb2YgdGhlbSB3aWxsIGJlIG1p
+c3NlZC4NCg0KSW4gdGhlIGFib3ZlIDIgcG9pc29uIGV4YW1wbGUsIHRoZSBwb2lzb24gaW4gMHgw
+MDAwMDA0MGEwNjAyNDAwIGFuZCBpbiANCjB4MDAwMDAwNDBhMDYwMjYwMCB3ZXJlIHNlcGFyYXRl
+bHkgcmVwb3J0ZWQuDQoNCj4gDQo+IEl0IHNlZW1zIHRoZSBmaXggeW91IHdhbnQgaXMgZm9yIHRo
+ZSBoYXJkd2FyZSB0byByZXBvcnQgdGhlIHByZWNpc2UNCj4gZXJyb3IgYm91bmRzIGFuZCB0aGF0
+IDFVTCA8PCBNQ0lfTUlTQ19BRERSX0xTQihtY2UtPm1pc2MpIGRvZXMgbm90IGhhdmUNCj4gdGhh
+dCBwcmVjaXNpb24gaW4gdGhpcyBjYXNlLg0KDQpUaGF0IGZpZWxkIGRlc2NyaWJlcyBhIDRLIHJh
+bmdlIGV2ZW4gZm9yIGEgc2luZ2xlIHBvaXNvbiwgaXQgY29uZnVzZXMgDQpwZW9wbGUgdW5uZWNl
+c3NhcmlseS4NCg0KPiANCj4gSG93ZXZlciwgdGhlIEFSUyBlbmdpbmUgbGlrZWx5IGNhbiByZXR1
+cm4gdGhlIHByZWNpc2UgZXJyb3IgcmFuZ2VzIHNvIEkNCj4gdGhpbmsgdGhlIGZpeCBpcyB0byBq
+dXN0IHVzZSB0aGUgYWRkcmVzcyByYW5nZSBpbmRpY2F0ZWQgYnkgMVVMIDw8DQo+IE1DSV9NSVND
+X0FERFJfTFNCKG1jZS0+bWlzYykgdG8gZmlsdGVyIHRoZSByZXN1bHRzIGZyb20gYSBzaG9ydCBB
+UlMNCj4gc2NydWIgcmVxdWVzdCB0byBhc2sgdGhlIGRldmljZSBmb3IgdGhlIHByZWNpc2UgZXJy
+b3IgbGlzdC4NCg0KWW91IG1lYW4gZm9yIG5maXRfaGFuZGxlX21jZSgpIGNhbGxiYWNrIHRvIGlz
+c3VlIGEgc2hvcnQgQVJTIHBlciBlYWNoIA0KcG9pc29uIHJlcG9ydCBvdmVyIGEgNEsgcmFuZ2Ug
+aW4gb3JkZXIgdG8gZGVjaWRlIHRoZSBwcmVjaXNlIHJhbmdlIGFzIGEgDQp3b3JrYXJvdW5kIG9m
+IHRoZSBoYXJkd2FyZSBpc3N1ZT8gIGlmIHRoZXJlIGFyZSA4IHBvaXNvbmVkIGRldGVjdGVkLCAN
+CnRoZXJlIHdpbGwgYmUgOCBzaG9ydCBBUlMsIHN1cmUgd2Ugd2FudCB0byBkbyB0aGF0PyAgYWxz
+bywgZm9yIG5vdywgaXMgDQppdCBwb3NzaWJsZSB0byBsb2cgbW9yZSB0aGFuIDEgcG9pc29uIHBl
+ciA1MTJieXRlIGJsb2NrPw0KDQp0aGFua3MhDQotamFuZQ0KDQo=

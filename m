@@ -2,385 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1894B5737A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6765737AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 15:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbiGMNjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 09:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S236258AbiGMNjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 09:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbiGMNis (ORCPT
+        with ESMTP id S234677AbiGMNio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:38:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2217667
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 06:38:46 -0700 (PDT)
-Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D76F96601A47;
-        Wed, 13 Jul 2022 14:38:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657719525;
-        bh=Yl1XEZbrkHnzVcWcXJexMKIDImLbuTydhrPuaociHvA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oMyqZ8/P8ju3QFe1kmxWFyAFU1mYbKdTs5TFClEBFxQIZG+FYeNUaAfHdV9aFimzn
-         1gwcWebHZ0yw60D2suQqjJmQ97ugxzP8tTAWuPmI1vY0XP7YfxKk3aY2MHmBCjRRTr
-         plZ2axD75UKamvUUuFlJ7B9pFhqG7vvF7dh6y2+uawBANdNu7qp2daPvd2B1kc6BIa
-         E9ve8BEUupeUYaJVItcBv/iA/0FKOLGpNCh8wkOrDobVylijUDUVePDy7zr9cWP53k
-         kNuMmvz41AOSAQd07JKKpy7g09P+FsiFTOriUx6ckzIXENXW39dlSALhXQHSEsZo8b
-         a8Lwrj1tbvkpw==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] drm/i915: internal buffers use ttm backend
-Date:   Wed, 13 Jul 2022 14:38:18 +0100
-Message-Id: <20220713133818.3699604-9-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220713133818.3699604-1-bob.beckett@collabora.com>
-References: <20220713133818.3699604-1-bob.beckett@collabora.com>
-MIME-Version: 1.0
+        Wed, 13 Jul 2022 09:38:44 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2073.outbound.protection.outlook.com [40.107.93.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8260D634A;
+        Wed, 13 Jul 2022 06:38:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hH44kr5mKDUWs+Psi2oHiCksnnosIjklgKELa0E0Klde1jw1CPHO6sqnLoK8RiduPBniccv4jZg3rgMtebqR8SA0tDtdgOLUCD14fjH5tlXhOmrzt2oVfTcBI7Ff6RjXMxJw9N8ooJaUqAVs5bnidwZnVWIxn+VU+o91NO3+VQ+epCSTUwM/bhdW96OBnFfabUjXqY2bKgozfE945VqYNm0YZYS57JW5W+OADAuNzQrDvuZKL189nmvqjuCy6lpbWx4NAFmYn9KHOXeoNlE+lc1qmyfQR1VDI+GIL0ljQ4TZXkQaI4CMveJF0PGDggHzoZvmY8yBgUGyCy82rujMDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BYyJqw0p9Hmifk22a5F97TFVkIBLUaHpD3XjkgTocao=;
+ b=YBLdBV0iitK/tTjqCwqU7dQzE1w4K8zkB1jPYsHSmV2a1VxMwKy6LIvqQr6IIGSBOpJVa6eDqQoncWAAfRdiffcJIjRxk8q4e/Mtnee6eYqwImgwcmHxdbjBjGJhAkGd2F4YDj80tT94q26mTThdKcsJLPmEXSqqyK3Wd0OGBualI+wq7IkxvznahHiNfGlLIVDBBWL9kH6IrU7NcR3hsyDnAFyiCCxUGjstm6FnmAmJsigEYtdXk90AZdsSfQu7BvIkDZ3iP2GXev1/KnoQkvXwkoKQLlj1lUxlNVSEK0PQ2WZRe0aw1ORRao6xm/VTY1nfpaOCbGAeU7DtAt4fsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BYyJqw0p9Hmifk22a5F97TFVkIBLUaHpD3XjkgTocao=;
+ b=YWXQuDsZiaOAchSx9CVAFEUDbJ1DZMtm8OrcKbpgavDOtDKvOlqgatjLr3lg2RLWoL9FfkXkrOo7kDmwBCx2ddlXaS0AOoS6B2QdaD3JE7OR5iU9DKVgYB1tRG2v2F9/rMi2dGWgLyc45rH4MYNedEYOL1QWi8GDcpY3KqHjfyWX/VvwiBeHREQ84ixAQX2tIh+MdPT8BJdX6VkFR1d9IClKy5lyrcYwAzdvdr7zFwogc/gAgLeI3WsvOTFZXqqkB2WMMd19OM7XfrWzxqruFVqnNIM832RUwydoLEdAPmleIyf99lUdtXSbeXR2opWyaxQLfoFafQuMbneVWGL3SQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3437.namprd12.prod.outlook.com (2603:10b6:208:c3::20)
+ by LV2PR12MB5800.namprd12.prod.outlook.com (2603:10b6:408:178::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Wed, 13 Jul
+ 2022 13:38:40 +0000
+Received: from MN2PR12MB3437.namprd12.prod.outlook.com
+ ([fe80::4966:ba15:be03:dcd1]) by MN2PR12MB3437.namprd12.prod.outlook.com
+ ([fe80::4966:ba15:be03:dcd1%6]) with mapi id 15.20.5417.026; Wed, 13 Jul 2022
+ 13:38:40 +0000
+Message-ID: <a9c31668-eb44-d8c1-1c66-eb1affcae3ad@nvidia.com>
+Date:   Wed, 13 Jul 2022 09:38:23 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with
+ .aqrl annotation
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>, Guo Ren <guoren@kernel.org>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
+ <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
+ <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
+ <20220614110258.GA32157@anparri> <YrPei6q4rIAx6Ymf@boqun-archlinux>
+ <fd664673-c4cc-be8f-9824-5272c5c79b40@nvidia.com>
+ <CAJF2gTSEBQd75VWyyMwKuSDsLFoiBqB0WJfYsiEHVQbJgAgBvA@mail.gmail.com>
+ <YsYivaDEksXPQPaH@boqun-archlinux>
+From:   Dan Lustig <dlustig@nvidia.com>
+In-Reply-To: <YsYivaDEksXPQPaH@boqun-archlinux>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR03CA0022.namprd03.prod.outlook.com
+ (2603:10b6:208:2d::35) To MN2PR12MB3437.namprd12.prod.outlook.com
+ (2603:10b6:208:c3::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: db370ab3-a83c-4d39-6970-08da64d4ff0b
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5800:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?NUlMMkN0RHhRdFRqVlZrWU1GRzhNQlRkS0kzMzAycU9PYU9DeGwzeU8rQXNn?=
+ =?utf-8?B?N2NnYWRrdW0zNkVvQWxUSjdSZVQ0RWttajVqaHhiU0RnTG5lNjEyUVJwTmpG?=
+ =?utf-8?B?N2pUYytUUm51OWV6TmVNOHRtQUlzcTAvRklPeHVOaHQxTk5ZY2VTWk84Qjg2?=
+ =?utf-8?B?d2h2NnVVUzBVRFp3ZVVqK090RTZaWmhRbWxnOTJEU0QxZlhrdExoRWFyUGh4?=
+ =?utf-8?B?VmFMMk5WcTdGakJKcGp2WFBBNSswalNaN2R1ay9yZ0hMYzBILzY2d3NVbHhM?=
+ =?utf-8?B?VGd4YTl6LzN4MXF6dEFlSHNmWlBxbEFKQitVbk9uVlZOTHd6WHhQZlRsaXZN?=
+ =?utf-8?B?NlltNHliSHY0alRCOVBRVFBUUmhhM3FkQ0Y3NHRYUndsWXBFWEg0eVR4TlFk?=
+ =?utf-8?B?Y251THBmRURtSVd4THp1c3BhaVlCL21MQWNWZVdOODN0Z0pIY0VGdW41WXBa?=
+ =?utf-8?B?UkFMVE1CUko1N3dmWjJCV3hWY0xtdE1xWS9pM1E4QU9XdG9RckVVUXF6eVZI?=
+ =?utf-8?B?cE9HRTJUc1ZoVXorLzBxMU5uZUEvdXN1STEvOE0zTlltZWlHekxuZjYybmxR?=
+ =?utf-8?B?NWYraTlQell5dmJHV3ROTFExMS81S1dwRzZlZ29ieEg3L1VnUU9pa2VUNzNs?=
+ =?utf-8?B?NDVQUkN6K1pVUHowMlFwNjVVb0Fmbno0VVZyTVRZcGxzeTNscFJwbXpHOEQz?=
+ =?utf-8?B?ZWZaM3FnUVBUMGlLRFhvQXhtYS9jTkwrc0dQQnNlWkU0MzdFajJsZTFoYjNq?=
+ =?utf-8?B?cWlnWmZJc0hiN1FHRTZzanVPRzRMVTljRVZ4ZnZWeFhMWWpYRG4rN29Rbnhn?=
+ =?utf-8?B?ZThFcEpGRmplUE4rdndRSGdXcGJUUzlLdTJmZVdaR3h1Z3hzNVkxbVhPb1Vo?=
+ =?utf-8?B?VmFZZElZV0I2L3lKWGMrOVRTN3FGaXNuY2o5QURIdE5Bd25CZlFOR1NKZVBw?=
+ =?utf-8?B?NHMyaVlOWXlwK2pHOGZHdXF6THFGMkwyMHZsV1RheWZPZlk4ZkE2ZnR4NlNs?=
+ =?utf-8?B?elNTcWk1bkV2aUJQWVVxYzUzc1JaZnVPVUw1TG1jSmFMNjVEMlJrQ2NMMW8x?=
+ =?utf-8?B?d1N5aGwwYnpmVkF4VEVkaG5vNEx5M3NFWVJYTmg4bGlwckNmWFVsWDhkaGNV?=
+ =?utf-8?B?OEtEMm1nZEE5QVF5WFExcXZXMlRtckFkbnhjWnljamlZankvRENFZVBxQldz?=
+ =?utf-8?B?cnRHaURMcEY3RldMcCtUYzJDYmN5dUdqQmt4eXFkc0N1ZEFQcjRBQWdObGty?=
+ =?utf-8?B?cGttN1l6UVVhRUNnM1hEdENFTGN5SXdIY0Mvem55djJVU0k1YTZmVUY5Zkx6?=
+ =?utf-8?Q?9qe0udRl542r0=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3437.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(366004)(39860400002)(136003)(396003)(2616005)(6506007)(53546011)(4326008)(8676002)(66476007)(66946007)(66556008)(36756003)(31686004)(41300700001)(26005)(6512007)(6666004)(8936002)(7416002)(316002)(5660300002)(38100700002)(186003)(478600001)(6486002)(31696002)(110136005)(83380400001)(54906003)(86362001)(2906002)(966005)(142923001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TFFnblJXS1ZXenJSSjZ3dC9LKy8zZ3d6TlBWN3dFQ002WEtsWDNIUTVCNG5X?=
+ =?utf-8?B?MFAzVWhGUHM0aFZBOHpFVi85cS9XNEZxU0hrQzJ1dEVuODI4T0k2TlZZZFZZ?=
+ =?utf-8?B?Z0ZQNDRoWlNINXRId0x3YUR6U2MrM1R0SWFKNVlzZHVyNjQybmQ0K2JOd2Nj?=
+ =?utf-8?B?a1NGUmR3a24xazNSeXpZNkd2RW51WHFuakVHdkdXNEY1U2N5NGhyZUxTbDBD?=
+ =?utf-8?B?emY4KzRRQTljTjQrZGJXRmVXWm8xRnBmRDZ3MGNYdXVhTVZZV1dHZ21sRklL?=
+ =?utf-8?B?WHFqUDk4QVA0VXFxRXRZMFNZbkZpOERGN04yODRBL2p1Skd4Y0I4ZytDTzha?=
+ =?utf-8?B?d0QxOVBpZ3R3TWJiRm50NGlyaUlxVHZEYktrZzlTUHY4bW53YU0vRFNLQXNK?=
+ =?utf-8?B?UlUrUlV2bHBIeTBHZ1MxQzNacmpPRzhPd05aYkRsN0xKRTdyajJuWUkxOHlj?=
+ =?utf-8?B?dVJZYXBkd3FmNks5VmxCc1FmOXczRkdpd3lZSGRZcHNicG5oWUUxWmZDNDlL?=
+ =?utf-8?B?THNRQ1l0citwOUxqM3hRZGc2VGJnNXNRak9wTGU4MFgralBnbEdxam5PQUN3?=
+ =?utf-8?B?TzZWNytBd0xHMmRZMnJCRlFSSmFmWlFQWVI4MVlPNy9sOE55NmFhYTEvbGtl?=
+ =?utf-8?B?aWsvTHpxNGN2aGNoKzFJNGVUdFV3UTZmei9Rb1NOM2JudmxkT0NRc2hiZm5C?=
+ =?utf-8?B?bmV4WXZkOHREVWVtNGtTTUpKVllXcG13Zlo2K2I3Ulh0L20yT1hwNmJ0WE5s?=
+ =?utf-8?B?dUxEWHliQjlKc2pYSXFjTkNTdGhZSjZzS2JBa2hyMTFFRkNHU2dRcndxdVJV?=
+ =?utf-8?B?bkRVdEdhekZ6L3RDek1kQlBRS3dDYkhlS0taZE8yZldLamdNVU50WHJQb1BQ?=
+ =?utf-8?B?NlBMVldWcHdZUEdCNHVqY051V0RwMnAwbGo3U1FIcVBOek5NazI3ajRDNldQ?=
+ =?utf-8?B?SU96RG5hNStnTlVHZnRYeVk4YkhnNDZ0N2FmMU1oMlk3UnpwUVAwd3lWSUdx?=
+ =?utf-8?B?cGdpVHZMRys3TmJmTlVBVXdyQzdjS3hMcXkzUWNpMkxUcWtjaVlVMFBlLzJF?=
+ =?utf-8?B?YnFSaXBJQ0Q3NVlYRVNwY0dyV3FCZFdKUW9YOFpYQVBHL29EM1NoRVpUMFhh?=
+ =?utf-8?B?b0pyYXpIY0FpUW9kbGFnUHdsckxtNnRJUjRGd0NrMWZvbGo1c3RVRS84MDR1?=
+ =?utf-8?B?OTZjeFpicWkrRURTdDVKdTZEa1o5czFqNFE4emRMN3EreGNLa1MzTXM1eFpj?=
+ =?utf-8?B?c1I2WEpoK1QxRWVIdDQ2N28wUmlybDNQWHpBVFlxc1g5TEpqa01IUytaU080?=
+ =?utf-8?B?Rmg4c2o4N1picnRPRDloVFhoMkdmWXo4NDIwUFF3MTg5ZVAyZnRNVk9vVlVJ?=
+ =?utf-8?B?dGFZQ3FxTExyT2tDODNKQ2hUbzcrM3NzV2s4K2wycVRWUkNjSVpsVUU3UDk3?=
+ =?utf-8?B?NVRQVmVUeG5tNkMzczNWbklnRWxNckdTTWZvZEwxckFjMDNRd1dnUklyZEhF?=
+ =?utf-8?B?bDdUbk5iRnRRa2RpS1pHMDBnbE9ienMrcVU2VHVuTlNYWE5ZcG43VldMWXBo?=
+ =?utf-8?B?VmVrUnBKNUMrSVNIOHRGUU1IZy9nK1VQbDVMeUVnRWliUWVKcnBKQzRvelow?=
+ =?utf-8?B?bTB5cTlIc3M2VDBuVWVHMzMyQjZrYXRjUkpWME5xa0pXRlNCWXM1b3VNMFdV?=
+ =?utf-8?B?enB4dGM4elJBVFp2WWdkU2IxeVNyY3Q5UmJuMEsrby9XVGsydGU4Wm03RTN4?=
+ =?utf-8?B?bndxRWNqL05XRHlOZ2NiLzVVbVIrZ01CQkhvbWZDbUduWlM2NTdkUjhTS296?=
+ =?utf-8?B?SkpkbGpvSEZqdkVwUG1pUDcrUVVFOGJ6MHp0T0R6eURGRGYxV2RNaVNiK3Jh?=
+ =?utf-8?B?eVE2bHV1NmJWbzlHRGpCd0tONGZYSVBvM1NDNEJzd2ErTGpwQVlFc1JrVm9q?=
+ =?utf-8?B?Z2p6dy8xbGpIT3gxQUpTNm8yRDhuMFJRbGlQQzdCQmlScGNOcGJIMzFBSWhm?=
+ =?utf-8?B?NTg5OVJYNFB3R0VkZTBBZjF3Rmh0QWdlOS9ZMjN4MkIxZ2RYRVNiNVZmaG5o?=
+ =?utf-8?B?L0hrc2R3cy9rSzJoLytZUC9ETjR5eVNKRGhiakNwUU9aV3RRUTkyNm9ReWZi?=
+ =?utf-8?Q?8U6W4Z+uFwnIUBUaMkKckIDAk?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db370ab3-a83c-4d39-6970-08da64d4ff0b
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3437.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2022 13:38:40.2534
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DswOCu4ik2EVJMAQe7m0Xc0VAEH7HaWOOGiqYEXGYJJ825Q262HgominsQOnCuksgXPuIWMVMQU1lOKIXzKygw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5800
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a kernel only internal memory region that uses ttm pool allocator to
-allocate volatile system pages.
-Refactor internal buffer backend to simply allocate from this new
-region.
+On 7/6/2022 8:03 PM, Boqun Feng wrote:
+> On Sat, Jun 25, 2022 at 01:29:50PM +0800, Guo Ren wrote:
+>> On Fri, Jun 24, 2022 at 1:09 AM Dan Lustig <dlustig@nvidia.com> wrote:
+>>>
+>>> On 6/22/2022 11:31 PM, Boqun Feng wrote:
+>>>> Hi,
+>>>>
+>>>> On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
+>>>> [...]
+>>>>>> 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+>>>>>> is about fixup wrong spinlock/unlock implementation and not relate to
+>>>>>> this patch.
+>>>>>
+>>>>> No.  The commit in question is evidence of the fact that the changes
+>>>>> you are presenting here (as an optimization) were buggy/incorrect at
+>>>>> the time in which that commit was worked out.
+>>>>>
+>>>>>
+>>>>>> Actually, sc.w.aqrl is very strong and the same with:
+>>>>>> fence rw, rw
+>>>>>> sc.w
+>>>>>> fence rw,rw
+>>>>>>
+>>>>>> So "which do not give full-ordering with .aqrl" is not writen in
+>>>>>> RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
+>>>>>>
+>>>>>>>
+>>>>>>>>> describes the issue more specifically, that's when we added these
+>>>>>>>>> fences.  There have certainly been complains that these fences are too
+>>>>>>>>> heavyweight for the HW to go fast, but IIUC it's the best option we have
+>>>>>>>> Yeah, it would reduce the performance on D1 and our next-generation
+>>>>>>>> processor has optimized fence performance a lot.
+>>>>>>>
+>>>>>>> Definately a bummer that the fences make the HW go slow, but I don't
+>>>>>>> really see any other way to go about this.  If you think these mappings
+>>>>>>> are valid for LKMM and RVWMO then we should figure this out, but trying
+>>>>>>> to drop fences to make HW go faster in ways that violate the memory
+>>>>>>> model is going to lead to insanity.
+>>>>>> Actually, this patch is okay with the ISA spec, and Dan also thought
+>>>>>> it was valid.
+>>>>>>
+>>>>>> ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+>>>>>
+>>>>> "Thoughts" on this regard have _changed_.  Please compare that quote
+>>>>> with, e.g.
+>>>>>
+>>>>>   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
+>>>>>
+>>>>> So here's a suggestion:
+>>>>>
+>>>>> Reviewers of your patches have asked:  How come that code we used to
+>>>>> consider as buggy is now considered "an optimization" (correct)?
+>>>>>
+>>>>> Denying the evidence or going around it is not making their job (and
+>>>>> this upstreaming) easier, so why don't you address it?  Take time to
+>>>>> review previous works and discussions in this area, understand them,
+>>>>> and integrate such knowledge in future submissions.
+>>>>>
+>>>>
+>>>> I agree with Andrea.
+>>>>
+>>>> And I actually took a look into this, and I think I find some
+>>>> explanation. There are two versions of RISV memory model here:
+>>>>
+>>>> Model 2017: released at Dec 1, 2017 as a draft
+>>>>
+>>>>       https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
+>>>>
+>>>> Model 2018: released at May 2, 2018
+>>>>
+>>>>       https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
+>>>>
+>>>> Noted that previous conversation about commit 5ce6c1f3535f happened at
+>>>> March 2018. So the timeline is roughly:
+>>>>
+>>>>       Model 2017 -> commit 5ce6c1f3535f -> Model 2018
+>>>>
+>>>> And in the email thread of Model 2018, the commit related to model
+>>>> changes also got mentioned:
+>>>>
+>>>>       https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
+>>>>
+>>>> in that commit, we can see the changes related to sc.aqrl are:
+>>>>
+>>>>        to have occurred between the LR and a successful SC.  The LR/SC
+>>>>        sequence can be given acquire semantics by setting the {\em aq} bit on
+>>>>       -the SC instruction.  The LR/SC sequence can be given release semantics
+>>>>       -by setting the {\em rl} bit on the LR instruction.  Setting both {\em
+>>>>       -  aq} and {\em rl} bits on the LR instruction, and setting the {\em
+>>>>       -  aq} bit on the SC instruction makes the LR/SC sequence sequentially
+>>>>       -consistent with respect to other sequentially consistent atomic
+>>>>       -operations.
+>>>>       +the LR instruction.  The LR/SC sequence can be given release semantics
+>>>>       +by setting the {\em rl} bit on the SC instruction.  Setting the {\em
+>>>>       +  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
+>>>>       +  rl} bit on the SC instruction makes the LR/SC sequence sequentially
+>>>>       +consistent, meaning that it cannot be reordered with earlier or
+>>>>       +later memory operations from the same hart.
+>>>>
+>>>> note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
+>>>> against "earlier or later memory operations from the same hart", and
+>>>> this statement was not in Model 2017.
+>>>>
+>>>> So my understanding of the story is that at some point between March and
+>>>> May 2018, RISV memory model folks decided to add this rule, which does
+>>>> look more consistent with other parts of the model and is useful.
+>>>>
+>>>> And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
+>>>> barrier ;-)
+>>>>
+>>>> Now if my understanding is correct, to move forward, it's better that 1)
+>>>> this patch gets resend with the above information (better rewording a
+>>>> bit), and 2) gets an Acked-by from Dan to confirm this is a correct
+>>>> history ;-)
+>>>
+>>> I'm a bit lost as to why digging into RISC-V mailing list history is
+>>> relevant here...what's relevant is what was ratified in the RVWMO
+>>> chapter of the RISC-V spec, and whether the code you're proposing
+>>> is the most optimized code that is correct wrt RVWMO.
+>>>
+>>> Is your claim that the code you're proposing to fix was based on a
+>>> pre-RVWMO RISC-V memory model definition, and you're updating it to
+>>> be more RVWMO-compliant?
+>> Could "lr + beq + sc.aqrl" provides a conditional RCsc here with
+>> current spec? I only found "lr.aq + sc.aqrl" despcriton which is
+>> un-conditional RCsc.
+>>
+> 
+> /me put the temporary RISCV memory model hat on and pretend to be a
+> RISCV memory expert.
+> 
+> I think the answer is yes, it's actually quite straightforwards given
+> that RISCV treats PPO (Preserved Program Order) as part of GMO (Global
+> Memory Order), considering the following (A and B are memory accesses):
+> 
+> 	A
+> 	..
+> 	sc.aqrl // M
+> 	..
+> 	B
+> 
+> , A has a ->ppo ordering to M since "sc.aqrl" is a RELEASE, and M has
+> a ->ppo ordeing to B since "sc.aqrl" is an AQUIRE, so
+> 
+> 	A ->ppo M ->ppo B
+> 
+> And since RISCV describes that PPO is part of GMO:
+> 
+> """
+> The subset of program order that must be respected by the global memory
+> order is known as preserved program order.
+> """
+> 
+> also in the herd model:
+> 
+> 	(* Main model axiom *)
+> 	acyclic co | rfe | fr | ppo as Model
+> 
+> , therefore the ordering between A and B is GMO and GMO should be
+> respected by all harts.
+> 
+> Regards,
+> Boqun
 
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_internal.c  | 187 +-----------------
- drivers/gpu/drm/i915/gem/i915_gem_internal.h  |   5 -
- drivers/gpu/drm/i915/i915_pci.c               |   4 +-
- drivers/gpu/drm/i915/intel_memory_region.c    |   8 +-
- drivers/gpu/drm/i915/intel_memory_region.h    |   2 +
- .../gpu/drm/i915/selftests/mock_gem_device.c  |   2 +-
- 6 files changed, 17 insertions(+), 191 deletions(-)
+I agree with Boqun's reasoning, at least for the case where there
+is no branch.
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-index c698f95af15f..a83751867ac7 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-@@ -4,188 +4,9 @@
-  * Copyright © 2014-2016 Intel Corporation
-  */
- 
--#include <linux/scatterlist.h>
--#include <linux/slab.h>
--#include <linux/swiotlb.h>
--
-+#include "gem/i915_gem_internal.h"
-+#include "gem/i915_gem_region.h"
- #include "i915_drv.h"
--#include "i915_gem.h"
--#include "i915_gem_internal.h"
--#include "i915_gem_object.h"
--#include "i915_scatterlist.h"
--#include "i915_utils.h"
--
--#define QUIET (__GFP_NORETRY | __GFP_NOWARN)
--#define MAYFAIL (__GFP_RETRY_MAYFAIL | __GFP_NOWARN)
--
--static void internal_free_pages(struct sg_table *st)
--{
--	struct scatterlist *sg;
--
--	for (sg = st->sgl; sg; sg = __sg_next(sg)) {
--		if (sg_page(sg))
--			__free_pages(sg_page(sg), get_order(sg->length));
--	}
--
--	sg_free_table(st);
--	kfree(st);
--}
--
--static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
--{
--	struct drm_i915_private *i915 = to_i915(obj->base.dev);
--	struct sg_table *st;
--	struct scatterlist *sg;
--	unsigned int sg_page_sizes;
--	unsigned int npages;
--	int max_order;
--	gfp_t gfp;
--
--	max_order = MAX_ORDER;
--#ifdef CONFIG_SWIOTLB
--	if (is_swiotlb_active(obj->base.dev->dev)) {
--		unsigned int max_segment;
--
--		max_segment = swiotlb_max_segment();
--		if (max_segment) {
--			max_segment = max_t(unsigned int, max_segment,
--					    PAGE_SIZE) >> PAGE_SHIFT;
--			max_order = min(max_order, ilog2(max_segment));
--		}
--	}
--#endif
--
--	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
--	if (IS_I965GM(i915) || IS_I965G(i915)) {
--		/* 965gm cannot relocate objects above 4GiB. */
--		gfp &= ~__GFP_HIGHMEM;
--		gfp |= __GFP_DMA32;
--	}
--
--create_st:
--	st = kmalloc(sizeof(*st), GFP_KERNEL);
--	if (!st)
--		return -ENOMEM;
--
--	npages = obj->base.size / PAGE_SIZE;
--	if (sg_alloc_table(st, npages, GFP_KERNEL)) {
--		kfree(st);
--		return -ENOMEM;
--	}
--
--	sg = st->sgl;
--	st->nents = 0;
--	sg_page_sizes = 0;
--
--	do {
--		int order = min(fls(npages) - 1, max_order);
--		struct page *page;
--
--		do {
--			page = alloc_pages(gfp | (order ? QUIET : MAYFAIL),
--					   order);
--			if (page)
--				break;
--			if (!order--)
--				goto err;
--
--			/* Limit subsequent allocations as well */
--			max_order = order;
--		} while (1);
--
--		sg_set_page(sg, page, PAGE_SIZE << order, 0);
--		sg_page_sizes |= PAGE_SIZE << order;
--		st->nents++;
--
--		npages -= 1 << order;
--		if (!npages) {
--			sg_mark_end(sg);
--			break;
--		}
--
--		sg = __sg_next(sg);
--	} while (1);
--
--	if (i915_gem_gtt_prepare_pages(obj, st)) {
--		/* Failed to dma-map try again with single page sg segments */
--		if (get_order(st->sgl->length)) {
--			internal_free_pages(st);
--			max_order = 0;
--			goto create_st;
--		}
--		goto err;
--	}
--
--	__i915_gem_object_set_pages(obj, st, sg_page_sizes);
--
--	return 0;
--
--err:
--	sg_set_page(sg, NULL, 0, 0);
--	sg_mark_end(sg);
--	internal_free_pages(st);
--
--	return -ENOMEM;
--}
--
--static void i915_gem_object_put_pages_internal(struct drm_i915_gem_object *obj,
--					       struct sg_table *pages)
--{
--	i915_gem_gtt_finish_pages(obj, pages);
--	internal_free_pages(pages);
--
--	obj->mm.dirty = false;
--
--	__start_cpu_write(obj);
--}
--
--static const struct drm_i915_gem_object_ops i915_gem_object_internal_ops = {
--	.name = "i915_gem_object_internal",
--	.flags = I915_GEM_OBJECT_IS_SHRINKABLE,
--	.get_pages = i915_gem_object_get_pages_internal,
--	.put_pages = i915_gem_object_put_pages_internal,
--};
--
--struct drm_i915_gem_object *
--__i915_gem_object_create_internal(struct drm_i915_private *i915,
--				  const struct drm_i915_gem_object_ops *ops,
--				  phys_addr_t size)
--{
--	static struct lock_class_key lock_class;
--	struct drm_i915_gem_object *obj;
--	unsigned int cache_level;
--
--	GEM_BUG_ON(!size);
--	GEM_BUG_ON(!IS_ALIGNED(size, PAGE_SIZE));
--
--	if (overflows_type(size, obj->base.size))
--		return ERR_PTR(-E2BIG);
--
--	obj = i915_gem_object_alloc();
--	if (!obj)
--		return ERR_PTR(-ENOMEM);
--
--	drm_gem_private_object_init(&i915->drm, &obj->base, size);
--	i915_gem_object_init(obj, ops, &lock_class, 0);
--	obj->mem_flags |= I915_BO_FLAG_STRUCT_PAGE;
--
--	/*
--	 * Mark the object as volatile, such that the pages are marked as
--	 * dontneed whilst they are still pinned. As soon as they are unpinned
--	 * they are allowed to be reaped by the shrinker, and the caller is
--	 * expected to repopulate - the contents of this object are only valid
--	 * whilst active and pinned.
--	 */
--	i915_gem_object_set_volatile(obj);
--
--	obj->read_domains = I915_GEM_DOMAIN_CPU;
--	obj->write_domain = I915_GEM_DOMAIN_CPU;
--
--	cache_level = HAS_LLC(i915) ? I915_CACHE_LLC : I915_CACHE_NONE;
--	i915_gem_object_set_cache_coherency(obj, cache_level);
--
--	return obj;
--}
- 
- /**
-  * i915_gem_object_create_internal: create an object with volatile pages
-@@ -206,5 +27,7 @@ struct drm_i915_gem_object *
- i915_gem_object_create_internal(struct drm_i915_private *i915,
- 				phys_addr_t size)
- {
--	return __i915_gem_object_create_internal(i915, &i915_gem_object_internal_ops, size);
-+	return i915_gem_object_create_region(i915->mm.regions[INTEL_REGION_INTERNAL],
-+					     size, 0, I915_BO_ALLOC_VOLATILE);
- }
-+
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.h b/drivers/gpu/drm/i915/gem/i915_gem_internal.h
-index 6664e06112fc..524e1042b20f 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_internal.h
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.h
-@@ -15,9 +15,4 @@ struct drm_i915_private;
- struct drm_i915_gem_object *
- i915_gem_object_create_internal(struct drm_i915_private *i915,
- 				phys_addr_t size);
--struct drm_i915_gem_object *
--__i915_gem_object_create_internal(struct drm_i915_private *i915,
--				  const struct drm_i915_gem_object_ops *ops,
--				  phys_addr_t size);
--
- #endif /* __I915_GEM_INTERNAL_H__ */
-diff --git a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
-index aacc10f2e73f..48b27de8cbba 100644
---- a/drivers/gpu/drm/i915/i915_pci.c
-+++ b/drivers/gpu/drm/i915/i915_pci.c
-@@ -162,7 +162,7 @@
- 	.page_sizes = I915_GTT_PAGE_SIZE_4K
- 
- #define GEN_DEFAULT_REGIONS \
--	.memory_regions = REGION_SMEM | REGION_STOLEN_SMEM
-+	.memory_regions = REGION_SMEM | REGION_STOLEN_SMEM | REGION_INTERNAL
- 
- #define I830_FEATURES \
- 	GEN(2), \
-@@ -908,7 +908,7 @@ static const struct intel_device_info rkl_info = {
- };
- 
- #define DGFX_FEATURES \
--	.memory_regions = REGION_SMEM | REGION_LMEM | REGION_STOLEN_LMEM, \
-+	.memory_regions = REGION_SMEM | REGION_LMEM | REGION_STOLEN_LMEM | REGION_INTERNAL, \
- 	.has_llc = 0, \
- 	.has_pxp = 0, \
- 	.has_snoop = 1, \
-diff --git a/drivers/gpu/drm/i915/intel_memory_region.c b/drivers/gpu/drm/i915/intel_memory_region.c
-index 9a4a7fb55582..e950b0a125ad 100644
---- a/drivers/gpu/drm/i915/intel_memory_region.c
-+++ b/drivers/gpu/drm/i915/intel_memory_region.c
-@@ -31,6 +31,10 @@ static const struct {
- 		.class = INTEL_MEMORY_STOLEN_LOCAL,
- 		.instance = 0,
- 	},
-+	[INTEL_REGION_INTERNAL] = {
-+		.class = INTEL_MEMORY_SYSTEM,
-+		.instance = 1,
-+	}
- };
- 
- static int __iopagetest(struct intel_memory_region *mem,
-@@ -321,12 +325,14 @@ int intel_memory_regions_hw_probe(struct drm_i915_private *i915)
- 		instance = intel_region_map[i].instance;
- 		switch (type) {
- 		case INTEL_MEMORY_SYSTEM:
--			if (IS_DGFX(i915))
-+			if (IS_DGFX(i915) || i == INTEL_REGION_INTERNAL)
- 				mem = i915_gem_ttm_system_setup(i915, type,
- 								instance);
- 			else
- 				mem = i915_gem_shmem_setup(i915, type,
- 							   instance);
-+			if (i == INTEL_REGION_INTERNAL)
-+				mem->private = true;
- 			break;
- 		case INTEL_MEMORY_STOLEN_LOCAL:
- 			mem = i915_gem_stolen_lmem_setup(i915, type, instance);
-diff --git a/drivers/gpu/drm/i915/intel_memory_region.h b/drivers/gpu/drm/i915/intel_memory_region.h
-index 2953ed5c3248..d9cc1d8044b1 100644
---- a/drivers/gpu/drm/i915/intel_memory_region.h
-+++ b/drivers/gpu/drm/i915/intel_memory_region.h
-@@ -35,6 +35,7 @@ enum intel_region_id {
- 	INTEL_REGION_LMEM_3,
- 	INTEL_REGION_STOLEN_SMEM,
- 	INTEL_REGION_STOLEN_LMEM,
-+	INTEL_REGION_INTERNAL,
- 	INTEL_REGION_UNKNOWN, /* Should be last */
- };
- 
-@@ -42,6 +43,7 @@ enum intel_region_id {
- #define REGION_LMEM     BIT(INTEL_REGION_LMEM_0)
- #define REGION_STOLEN_SMEM   BIT(INTEL_REGION_STOLEN_SMEM)
- #define REGION_STOLEN_LMEM   BIT(INTEL_REGION_STOLEN_LMEM)
-+#define REGION_INTERNAL	BIT(INTEL_REGION_INTERNAL)
- 
- #define I915_ALLOC_CONTIGUOUS     BIT(0)
- 
-diff --git a/drivers/gpu/drm/i915/selftests/mock_gem_device.c b/drivers/gpu/drm/i915/selftests/mock_gem_device.c
-index 9c31a16f8380..eaa169effedc 100644
---- a/drivers/gpu/drm/i915/selftests/mock_gem_device.c
-+++ b/drivers/gpu/drm/i915/selftests/mock_gem_device.c
-@@ -179,7 +179,7 @@ struct drm_i915_private *mock_gem_device(void)
- 		I915_GTT_PAGE_SIZE_64K |
- 		I915_GTT_PAGE_SIZE_2M;
- 
--	mkwrite_device_info(i915)->memory_regions = REGION_SMEM;
-+	mkwrite_device_info(i915)->memory_regions = REGION_SMEM | REGION_INTERNAL;
- 	intel_memory_regions_hw_probe(i915);
- 
- 	spin_lock_init(&i915->gpu_error.lock);
--- 
-2.25.1
+But to confirm, was the original question about also having a branch,
+I assume to the instruction immediately after the sc?  If so, then
+yes, that would make the .aqrl effect conditional.
 
+Dan
+
+> 
+>>>
+>>> Dan
+>>>
+>>>> Regards,
+>>>> Boqun
+>>>>
+>>>>>   Andrea
+>>>>>
+>>>>>
+>>>> [...]
+>>
+>>
+>>
+>> --
+>> Best Regards
+>>  Guo Ren
+>>
+>> ML: https://lore.kernel.org/linux-csky/

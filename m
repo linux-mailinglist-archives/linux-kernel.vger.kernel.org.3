@@ -2,144 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D10573383
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E12573384
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiGMJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S235614AbiGMJxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbiGMJwD (ORCPT
+        with ESMTP id S230381AbiGMJxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:52:03 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529B6F897D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:52:02 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7667D2222E;
-        Wed, 13 Jul 2022 11:52:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1657705920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YwnhdLLIH/ztIf1B0luePvRjqCfvKsdMVxFwIwlVIUQ=;
-        b=StaWDPjXVzfBqSyBYE1HKYApzxrbhlNbcDTJ7750A2SUTCjOS4RlxPF0E+QkmoMOftYK5q
-        rPOyXRD7ROB9VjR7IuNbJP4//ILzppLN2Il7yhB9Z+hzBvvT6JlDr2P2yK8RTRn9Od8WzA
-        x2qI1N/H9X326CjGYXEAf86HrS+tGeU=
+        Wed, 13 Jul 2022 05:53:04 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829CCF90CB
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:53:03 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q5-20020a17090a304500b001efcc885cc4so2701330pjl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iqox5ElpuuJLfeOhCrK3mRieKVQov3zq0OlnwAVVh9E=;
+        b=eglvEC3/5079MjgvxFT+uezit/T7cwu5EW/csDGDSdA3+7AfBFqC8QV0fCfIK6Mbg6
+         VZty7pzFt9RQWmC8i1R9uQC5ZGU6bGCM6FRhI2iwqpWOVebt2emmeUFxPcClLeQ/HyXd
+         5nsfsQXUSorz+b8MAzLSsB0qT7aO9Nokz2LTY1/5M99iH6CeMronAlUPXg3zVycKap/S
+         va/wZ4eQhOpYSVh46SiII2hjWKSw2tdn04C9DF/Vfgy31960ZxEZhTzetXKlmibd5NVi
+         muEnbi8EP9t7BqstzqUFkASL2DmAbtweTf0zrNpEjeLuhdqIE++ZTnXviMauW47MfKCc
+         q0bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iqox5ElpuuJLfeOhCrK3mRieKVQov3zq0OlnwAVVh9E=;
+        b=EvlOaSqgVTfJZn5TCxrWeoKA9mQZpLxiTBGMxQIYby8nj5QtLrHLvDynG29GeNPm2W
+         kBbtdUtS5ZeA/YiCD2oqx+ZAayeIEjxBDX3k4FXaeXZwGVcmPviUAlYjJI5DDmeo5H2X
+         J7xcmcXkKEDhKUXI0Wv9kEMEVfe0vXxS0dKCYulKbwcixZwA+ugGou+sJT7WYASm9ckO
+         YBLsBG1iXJ9N/VQQxc6bRlKqycRxRKSjrH4lDyjZyGpp/wt3HWcR8R4V2Hf7kbo/00Zv
+         5B6eltRUW2j+979Wv6P13WhFUx7v6/rfmnAo7mYFYYCytV0EDAipe5dNrvwk5i9nRIys
+         pCZg==
+X-Gm-Message-State: AJIora8G1Egya/Cf5VRJYm26bsrtENM/5EZCPuTc53vV1nXbnhIMzHqe
+        EyC3lqj0h7zjPS3U1YL+/SU=
+X-Google-Smtp-Source: AGRyM1upORHMivF10L9TXCuqHqvv7daddvzN0siBg4zphIcJZAk4dPughWsU/7yEV2H4cmSCS/BVSQ==
+X-Received: by 2002:a17:90b:3d82:b0:1f0:5894:7e39 with SMTP id pq2-20020a17090b3d8200b001f058947e39mr2921512pjb.187.1657705982928;
+        Wed, 13 Jul 2022 02:53:02 -0700 (PDT)
+Received: from [30.46.241.33] ([47.246.98.177])
+        by smtp.gmail.com with ESMTPSA id g14-20020aa796ae000000b0052536c695c0sm8640476pfk.170.2022.07.13.02.53.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 02:53:02 -0700 (PDT)
+Message-ID: <0320c5f9-cbda-1652-1f97-24d1a22fb298@gmail.com>
+Date:   Wed, 13 Jul 2022 17:52:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 13 Jul 2022 11:52:00 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        =?UTF-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: Re: [PATCH] Revert "reset: microchip-sparx5: allow building as a
- module"
-In-Reply-To: <ba905391f3258c2d780677e09e4f89192df7bc31.camel@microchip.com>
-References: <20220713084010.168720-1-p.zabel@pengutronix.de>
- <73dc6fcedebcae098751bd093fe2d028@walle.cc>
- <ba905391f3258c2d780677e09e4f89192df7bc31.camel@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <595347d292ee31a9f0de031d6349f44e@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH] workqueue: Use active mask for new worker when pool is
+ DISASSOCIATED
+Content-Language: en-US
+To:     Schspa Shi <schspa@gmail.com>, tj@kernel.org
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220707090501.55483-1-schspa@gmail.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+In-Reply-To: <20220707090501.55483-1-schspa@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+ Horatiu, I missed you earlier, sorry]
 
-Hi Steen,
 
-Am 2022-07-13 11:40, schrieb Steen Hegelund:
-> I am afraid that the exact list of affected modules is not available,
-> so using the
-> RESET_PROT_STAT.SYS_RST_PROT_VCORE bit is the best known way of
-> resetting as much as possible, and
-> still continue execution.
+CC Peter.
+Peter has changed the CPU binding code in workqueue.c.
 
-Mh, you are designing that chip (at least the LAN966x) no? Shouldn't
-that information be available anywhere at Microchip? ;)
+I'm not understanding the problem enough, if kthread_bind_mask() is buggy
+in workqueue.c, it would be buggy in other places too.
 
-Anyway, it looks like almost the whole chip is reset
-except some minor things. So the driver has actually a
-wrong name. Until recently only the switch driver was the
-sole user of it (at least on the lan966x). So, my question
-remains, is this correct? I mean the switch driver says,
-"reset the switch core", but what actually happens is that
-the the entire SoC except the CPU and maybe the io mux is reset.
-What about the watchdog for example? Will that be reset, too?
 
--michael
+On 2022/7/7 17:05, Schspa Shi wrote:
 
-> This is what the Sparx5 datasheet has to say about the
-> SYS_RST_PROT_VCORE protect bit:
-> 
-> The device can be soft-reset by writing SOFT_RST.SOFT_CHIP_RST. The
-> VCore system and CPU can be
-> protected from a device soft-reset by writing
-> RESET_PROT_STAT.SYS_RST_PROT_VCORE = 1 before
-> initiating soft-reset. 
-> 
-> In this case, a chip-level soft reset is applied to all other blocks
-> except the VCore system and the
-> VCore CPU. When protecting the VCore system and CPU from a soft reset,
-> the frame DMA must be
-> disabled prior to a chip-level soft reset. The SERDES and PLL blocks
-> can be protected from reset by
-> writing to SOFT_RST.SOFT_SWC_RST instead of SOFT_CHIP_RST.
-> 
-> The VCore general purpose registers (CPU::GPR) and GPIO alternate
-> modes (DEVCPU_GCB::GPIO_ALT) are
-> not affected by a soft-reset. These registers are only reset when an
-> external reset is asserted.
-> 
-> BR
-> Steen
-> 
-> On Wed, 2022-07-13 at 11:03 +0200, Michael Walle wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the content is safe
->> 
->> [+ Claudiu, Kavyasree ]
->> Am 2022-07-13 10:40, schrieb Philipp Zabel:
->> > This reverts commit b6b9585876da018bdde2d5f15d206a689c0d70f3.
->> >
->> > This breaks MDIO on kswitch-d10, presumably because the global switch
->> > reset is not released early enough anymore.
->> >
->> > Reported-by: Michael Walle <michael@walle.cc>
->> > Cc: Clément Léger <clement.leger@bootlin.com>
->> > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
->> 
->> Thanks!
->> 
->> Tested-by: Michael Walle <michael@walle.cc>
->> 
->> And maybe Microchip can chime in here and tell us what
->> subsystems in the SoC will actually be reset by this.
->> I fear this reset will affect almost every part of the
->> SoC. So it would have to be bound to every single
->> device? Or maybe adding that reset to the switch driver
->> was a mistake in the first place?
->> 
->> I mean, if it wouldn't be for the guard bit, it would
->> also reset the CPU core..
->> 
->> -michael
+>   
+> -	if (worker->rescue_wq)
+> -		set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask);
+> +	if (worker->rescue_wq) {
+> +		if (pool->flags & POOL_DISASSOCIATED)
+> +			set_cpus_allowed_ptr(worker->task, cpu_active_mask);
+> +		else
+> +			set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask);
+> +	}
+>   
+
+For unbound pools (which also has POOL_DISASSOCIATED), pool->attrs->cpumask
+should be used if pool->attrs->cpumask has active cpu.
+
+
+> +
+> +	mutex_lock(&wq_pool_attach_mutex);
+> +	if ((pool->flags & POOL_DISASSOCIATED)) {
+> +		/* We can't call get_online_cpus, there will be deadlock
+> +		 * cpu_active_mask will no change, because we have
+> +		 * wq_pool_attach_mutex hold.
+> +		 **/
+> +		kthread_bind_mask(worker->task, cpu_active_mask);
+> +	} else {
+> +		kthread_bind_mask(worker->task, pool->attrs->cpumask);
+> +	}
+> +	mutex_unlock(&wq_pool_attach_mutex);
+
+
+For unbound pools, pool->attrs->cpumask should be used if pool->attrs->cpumask
+has active cpu.
+
+wq_pool_attach_mutex is held here and in worker_attach_to_pool() which smells bad.
+
+
+
+The change is complex.  And if kthread_bind_mask() can't work as expected here,
+the change I prefer would be:
+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 4056f2a3f9d5..1ad8aef5fe98 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1862,6 +1862,12 @@ static void worker_attach_to_pool(struct worker *worker,
+  {
+  	mutex_lock(&wq_pool_attach_mutex);
+
++	/*
++	 * set_cpus_allowed_ptr() will fail if the cpumask doesn't have any
++	 * online CPUs.  It'll be re-applied when any of the CPUs come up.
++	 */
++	set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask);
++
+  	/*
+  	 * The wq_pool_attach_mutex ensures %POOL_DISASSOCIATED remains
+  	 * stable across this function.  See the comments above the flag
+@@ -1872,9 +1877,6 @@ static void worker_attach_to_pool(struct worker *worker,
+  	else
+  		kthread_set_per_cpu(worker->task, pool->cpu);
+
+-	if (worker->rescue_wq)
+-		set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask);
+-
+  	list_add_tail(&worker->node, &pool->workers);
+  	worker->pool = pool;
+
+@@ -1952,7 +1954,7 @@ static struct worker *create_worker(struct worker_pool *pool)
+  		goto fail;
+
+  	set_user_nice(worker->task, pool->attrs->nice);
+-	kthread_bind_mask(worker->task, pool->attrs->cpumask);
++	worker->flags |= PF_NO_SETAFFINITY;
+
+  	/* successful, attach the worker to the pool */
+  	worker_attach_to_pool(worker, pool);
+@@ -4270,7 +4272,7 @@ static int init_rescuer(struct workqueue_struct *wq)
+  	}
+
+  	wq->rescuer = rescuer;
+-	kthread_bind_mask(rescuer->task, cpu_possible_mask);
++	rescuer->flags |= PF_NO_SETAFFINITY;
+  	wake_up_process(rescuer->task);
+
+  	return 0;
+
+
+It is untested.  It effectively reverts the commit 640f17c82460e
+("workqueue: Restrict affinity change to rescuer").
+It avoids using kthread_bind_mask().
+
+

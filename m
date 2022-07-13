@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5C7573931
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F87573937
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiGMOua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S235820AbiGMOvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236533AbiGMOu2 (ORCPT
+        with ESMTP id S234652AbiGMOvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:50:28 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F0D2A96F
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:50:26 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sz17so20282752ejc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:50:26 -0700 (PDT)
+        Wed, 13 Jul 2022 10:51:15 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE82B26C;
+        Wed, 13 Jul 2022 07:51:14 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a39so13749750ljq.11;
+        Wed, 13 Jul 2022 07:51:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PFfpDJGT4PNf8FSYCBYfqXx0Q1xvxmhJUB5l+xgWtvQ=;
-        b=pIPeyIaox6m0EXw/IH9l//aBnuftu81VskGFUdVXxGuqlXehJu8DcdWIyjsGlkooiU
-         4AIFXvWJaDnwd25nKsYCHqZNBGmWjujUludVdSVOgYpwLpzWQhZDZ2FJ6UWNXUpMgp1t
-         3iu7VPa1mxafmejeAQ41Jh8GpK3C9jIv4GQns=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mkvXwyXw/bzhYex6cozMZMYvSmlbOw/F0RDr0JxPoCw=;
+        b=jQh6xeqT+Y6Ki5J436a0Th5YoFQnrEIqTMpRHU8Kce5a+/UIO2lYW5/lFa1+vKHif/
+         +vgiXsnypYDq5rqLWPkKY/H2s9pEAvvq+k2Nn9858TvGTxNKoSfgB/2+BmmKtyjlYAE/
+         elSX7mcb7soaQVXRiTDheQ+tqwHwksc7vU+uxBH4X4sn9qQ6MtzRMq92WcyTeStczoqx
+         fSM5n34/SmQWOTOfxBRkJUMuoEc60KRSxHhSXA93RCJxJU32V6xwFYWBqo0XLCcUVYLu
+         lycQEFzMu8MjsuhwNY45beIZaDWKEDh5ZisnCcGU7iakt09piKZmBvTjXdzJdxp3Dajq
+         C18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PFfpDJGT4PNf8FSYCBYfqXx0Q1xvxmhJUB5l+xgWtvQ=;
-        b=5lyFucdTDeVQHcUA9MeVeeTaWGRyoYOIixtumJi6x7yojVpVmGNvJ4iOGDgOyLrs51
-         wLiIgLCpE61phFNkH/59ivk5r/CaIr47hdeKvQ9c92cDshvEHXV7Y1K269e64rK5le/h
-         ry6shH9RLqRoDScXyPZO83DjerrmApflIo7Tb0h2/at5cVHX1l49293IQ6r83AdgUO2d
-         IOQ5YS6zhhHJ/jHPXG8EK8sgndJy1NxJzSC0ZhWtVAlfIc6xny1RUqd7nEb/yAe5bfKd
-         xqxP6AmR8GaedU7z9E5D9m4vZNm1Nn/VU3YvYnStJLHRkxCnOytdTc2zAJt2hNyQ+X+s
-         yc5g==
-X-Gm-Message-State: AJIora9Pfr0+ia7ivhyOfhjqy9LM6gbcy1xHGa312utdV5wvzGenfLlF
-        0w7hx8zWkc7ToAE0WBexZaYdzA==
-X-Google-Smtp-Source: AGRyM1vHVa1QVOqctlVNbsSYF3nfBtpJmh2+U+f3a78unuHF6Qxh1Lc/2D/beRfuqjRd/l8BzC0h+g==
-X-Received: by 2002:a17:907:8690:b0:72b:552e:67c0 with SMTP id qa16-20020a170907869000b0072b552e67c0mr3787036ejc.600.1657723825485;
-        Wed, 13 Jul 2022 07:50:25 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:b372])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709060cca00b00704fa2748ffsm5094321ejh.99.2022.07.13.07.50.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 07:50:24 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 15:50:23 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: design: was: Re: [RFC PATCH v2] printk: console: Allow each
- console to have its own loglevel
-Message-ID: <Ys7brwCVmQ2iH9xK@chrisdown.name>
-References: <YoeQLxhDeIk4VSmx@chrisdown.name>
- <YshL2M8VdIEONDdc@alley>
- <87o7xz5su4.fsf@jogness.linutronix.de>
- <YsvgDRQICB3nEc1l@alley>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mkvXwyXw/bzhYex6cozMZMYvSmlbOw/F0RDr0JxPoCw=;
+        b=E4CGYdv86QXrDXKC6LYjmndqSZfd0I3zCceagOdcsa6xtEX6tMyPpQI6UbMrWB83Ca
+         ROhtUVqgZ8XULyGWxcwLH5Vbz+vYm8pLLlRF91soxGNX/HslXmCAgLJE842kjSraZ85t
+         YpvVElc/tx4Nuw+HWEWsahew2QJ+Ct8KbM9raZ5Teyp1P3Rheb9TzImOcS5imKE4uoQD
+         zO38YhsUCiAzLQKkWIrQ75iRa5hWvgDV9Rq/3qSMjsPCegqOiWqgP+0F+QZWvaSzx0B3
+         UrOTaRQPNF+PPAGbSRTE+20e822/NTwPDeL4rNYMzkAxowY0Fc8XdPC4TjhGRLx6yJ93
+         2JeA==
+X-Gm-Message-State: AJIora+zs05hX7+sU2A3MdFUg1i4GVd5/tCBBocT4RIcpPQ+uDP9WaDg
+        xg34KMTY5zFyHa5LuKmvARZKHXsvFyYa8E4Cndk=
+X-Google-Smtp-Source: AGRyM1vh21YnVuz6etYVlI+CNEjVeXDQ4+b9pRjJCkzY5B8/snbbD68747zNPcfRkAZQlSnUw6MrDr+/TqSgoMhCsaw=
+X-Received: by 2002:a2e:9b0b:0:b0:25d:866b:5de7 with SMTP id
+ u11-20020a2e9b0b000000b0025d866b5de7mr1941252lji.50.1657723872657; Wed, 13
+ Jul 2022 07:51:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YsvgDRQICB3nEc1l@alley>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220710102110.39748-1-tmaimon77@gmail.com> <20220710102110.39748-3-tmaimon77@gmail.com>
+ <95d12b72-be9d-5503-c4ea-801303bb7776@linaro.org> <CAP6Zq1geFJsKrdQEN5Vqjw6e8bsiArDe1tzJ-jkQm-2XT-0KyQ@mail.gmail.com>
+ <d8bc7a14-a9c5-4d34-997a-48a8d27c5edd@linaro.org>
+In-Reply-To: <d8bc7a14-a9c5-4d34-997a-48a8d27c5edd@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Wed, 13 Jul 2022 17:51:01 +0300
+Message-ID: <CAP6Zq1iAPmV9KVrBVqmRix8sTq0zLsw3T1vPo-t1Q+2RgO4qsA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] pinctrl: nuvoton: add NPCM8XX pinctrl and GPIO driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        zhengbin13@huawei.com, OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek writes:
->> Of course, it would mean that the type of option would need to be
->> specified. Something like:
->>
->> console=ttyS0,115200n8,loglevel=3
+On Wed, 13 Jul 2022 at 17:29, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
->I like this. It is longer but it makes the meaning very obvious.
+> On 13/07/2022 15:35, Tomer Maimon wrote:
+>
+> >>> +static int npcm8xx_pinctrl_probe(struct platform_device *pdev)
+> >>> +{
+> >>> +     struct npcm8xx_pinctrl *pctrl;
+> >>> +     int ret;
+> >>> +
+> >>> +     pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
+> >>> +     if (!pctrl)
+> >>> +             return -ENOMEM;
+> >>> +
+> >>> +     pctrl->dev = &pdev->dev;
+> >>> +     dev_set_drvdata(&pdev->dev, pctrl);
+> >>> +
+> >>> +     pctrl->gcr_regmap =
+> >>> +             syscon_regmap_lookup_by_compatible("nuvoton,npcm845-gcr");
+> >>
+> >> No. Use property. By this patchset, I would expect that you learnt from
+> >> previous mistakes around this. Why repeating the same trouble second time?
+> > You suggest to use phandle property like nuvoton,sysgcr even that the
+> > NPCM8XX pin controller driver is used only NPCM8XX SoC, so the only
+> > GCR node in the NPCM8XX SoC is nuvoton,npcm845-gcr?
+>
+> Yes. The previous case (reset driver, AFAIR) was also about driver used
+> only in one SoC, wasn't it?
+Actually not, the NPCM reset driver serves NPCM7XX and NPCM8XX and
+probably other future BMC SoC's
+Still, you suggest using the phandle property in the driver even if
+the driver serves one SoC?
+>
+> Best regards,
+> Krzysztof
 
-Yes, this looks good to me and I'll implement it for v3. Thanks!
+Best regards,
 
->I just think about using ':' instead of '=' to distinguish
->the assignment of outer 'console' vs the inner 'loglevel' parameters.
-
-Agreed, I'll use ":".
+Tomer

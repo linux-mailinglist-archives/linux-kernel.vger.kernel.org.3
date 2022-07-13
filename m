@@ -2,715 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A4F573617
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE95573607
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 14:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236371AbiGMMJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 08:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S236268AbiGMMJE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 08:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbiGMMJY (ORCPT
+        with ESMTP id S235037AbiGMMJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 08:09:24 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38549F78B2;
-        Wed, 13 Jul 2022 05:09:23 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DAn4nT019759;
-        Wed, 13 Jul 2022 14:09:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Esev2Ft5AoudSCci7DO6XtcHQybY8a+pQIM0kZsEdmM=;
- b=PF87V0WTF5JbiT+9qzfAzkq2rCETEbs5C8CqavBumvNrEXxvv6QcYFRuodZPD7igCOis
- ZgDqB3/YjY4gdMRcVeBwl0q36MkvZifElF/YkNjqOg5BsU7x1aZCKWlnO9LlgvUkVLR6
- 51+SPDcO1GqR2AydReYUPlapfwPAOKBdp0+Y+zXq/qGwsaZQyCfsIBJyYcVQe/gYUeus
- uY8u2Bf08e2q1h+Yll+9DVzS6CRZOmJLlgqSMBZ1NPhv+no8i/I0Q8joBo7uBd6KqPF3
- MfppkFIx4iULLKSE/93iNnwv/ZxsmMpRwQNnGVXnTTl1dev4riVa3jxVm6fgcrgzbho5 aA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h94gugv3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 14:09:06 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C535210002A;
-        Wed, 13 Jul 2022 14:09:05 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF2C221ED52;
-        Wed, 13 Jul 2022 14:09:05 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 13 Jul
- 2022 14:09:03 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <christophe.jaillet@wanadoo.fr>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v3 3/3] usb: typec: ucsi: stm32g0: add bootloader support
-Date:   Wed, 13 Jul 2022 14:08:42 +0200
-Message-ID: <20220713120842.560902-4-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220713120842.560902-1-fabrice.gasnier@foss.st.com>
-References: <20220713120842.560902-1-fabrice.gasnier@foss.st.com>
+        Wed, 13 Jul 2022 08:09:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF27B8149C
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 05:09:02 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBbAr-0002Oe-3V; Wed, 13 Jul 2022 14:09:01 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBbAp-000hWx-V2; Wed, 13 Jul 2022 14:08:59 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBbAo-0006a0-SV; Wed, 13 Jul 2022 14:08:58 +0200
+Message-ID: <4a12868d0bffbaef9912fbc54e5998e0c50bccf6.camel@pengutronix.de>
+Subject: Re: [PATCH] Revert "reset: microchip-sparx5: allow building as a
+ module"
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>,
+        Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        =?ISO-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Date:   Wed, 13 Jul 2022 14:08:58 +0200
+In-Reply-To: <595347d292ee31a9f0de031d6349f44e@walle.cc>
+References: <20220713084010.168720-1-p.zabel@pengutronix.de>
+         <73dc6fcedebcae098751bd093fe2d028@walle.cc>
+         <ba905391f3258c2d780677e09e4f89192df7bc31.camel@microchip.com>
+         <595347d292ee31a9f0de031d6349f44e@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_14,2022-07-13_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32G0 comes with STM32 bootloader in its system memory. Add support
-for some I2C bootloader commands as described in application notes
-AN2606 and AN4221, to enable STM32G0 UCSI firmware update.
+Hi,
 
-Upon probing, the driver needs to know the STM32G0 state:
-- In bootloader mode, STM32 G0 answers at i2c addr 0x51.
-- In running mode, STM32 G0 firmware may answer at two address.
-  - The main address specified in DT is used for UCSI.
-  - 0x51 addr can be re-used for FW controls like getting software version
-    or jump to booloader request.
+On Mi, 2022-07-13 at 11:52 +0200, Michael Walle wrote:
+> [+ Horatiu, I missed you earlier, sorry]
+> 
+> Hi Steen,
+> 
+> Am 2022-07-13 11:40, schrieb Steen Hegelund:
+> > I am afraid that the exact list of affected modules is not available,
+> > so using the
+> > RESET_PROT_STAT.SYS_RST_PROT_VCORE bit is the best known way of
+> > resetting as much as possible, and
+> > still continue execution.
+> 
+> Mh, you are designing that chip (at least the LAN966x) no? Shouldn't
+> that information be available anywhere at Microchip? ;)
+> 
+> Anyway, it looks like almost the whole chip is reset
+> except some minor things. So the driver has actually a
+> wrong name. Until recently only the switch driver was the
+> sole user of it (at least on the lan966x). So, my question
+> remains, is this correct? I mean the switch driver says,
+> "reset the switch core", but what actually happens is that
+> the the entire SoC except the CPU and maybe the io mux is reset.
+> What about the watchdog for example? Will that be reset, too?
 
-So probe using the main firmware i2c address first, before attempting
-bootloader address (e.g. check for blank, erased or previously aborted
-firmware update).
+If [1-3] are to be trusted, RESET_PROT_STAT[VCORE_RST_PROT_WDT], which
+protects the watchdog from soft reset, is not set by default. So yes?
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
-Changes in v3:
-- Small update for PM support squashed from v2 series as suggested by
-  Heikki
+There are also AMBA, PCIe, PDBG protection bits against Vcore soft
+reset in this register, depending on the platform.
 
-Changes in V2:
-- use kmalloc instead of kzalloc (update since Christophe's remarks on
-  previous patch)
----
- drivers/usb/typec/ucsi/ucsi_stm32g0.c | 539 +++++++++++++++++++++++++-
- 1 file changed, 526 insertions(+), 13 deletions(-)
+[1] https://microchip-ung.github.io/sparx-5_reginfo/reginfo_sparx-5.html?select=cpu,cpu_regs,reset_prot_stat
+[2] https://microchip-ung.github.io/lan9662_reginfo/reginfo_LAN9662.html?select=cpu,cpu_regs,reset_prot_stat
+[3] https://microchip-ung.github.io/lan9668_reginfo/reginfo_LAN9668.html?select=cpu,cpu_regs,reset_prot_stat
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index e3965cbff058e..061551d464f12 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -6,23 +6,326 @@
-  * Author: Fabrice Gasnier <fabrice.gasnier@foss.st.com>.
-  */
- 
-+#include <linux/delay.h>
-+#include <linux/firmware.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <asm/unaligned.h>
- 
- #include "ucsi.h"
- 
-+/* STM32G0 I2C bootloader addr: 0b1010001x (See AN2606) */
-+#define STM32G0_I2C_BL_ADDR	(0xa2 >> 1)
-+
-+/* STM32G0 I2C bootloader max data size */
-+#define STM32G0_I2C_BL_SZ	256
-+
-+/* STM32 I2C bootloader commands (See AN4221) */
-+#define STM32_CMD_GVR		0x01	/* Gets the bootloader version */
-+#define STM32_CMD_GVR_LEN	1
-+#define STM32_CMD_RM		0x11	/* Reag memory */
-+#define STM32_CMD_WM		0x31	/* Write memory */
-+#define STM32_CMD_ADDR_LEN	5	/* Address len for go, mem write... */
-+#define STM32_CMD_ERASE		0x44	/* Erase page, bank or all */
-+#define STM32_CMD_ERASE_SPECIAL_LEN	3
-+#define STM32_CMD_GLOBAL_MASS_ERASE	0xffff /* All-bank erase */
-+
-+/* STM32 I2C bootloader answer status */
-+#define STM32G0_I2C_BL_ACK	0x79
-+#define STM32G0_I2C_BL_NACK	0x1f
-+#define STM32G0_I2C_BL_BUSY	0x76
-+
-+/* STM32G0 flash definitions */
-+#define STM32G0_USER_OPTION_BYTES	0x1fff7800
-+#define STM32G0_USER_OB_NBOOT0		BIT(26)
-+#define STM32G0_USER_OB_NBOOT_SEL	BIT(24)
-+#define STM32G0_USER_OB_BOOT_MAIN	(STM32G0_USER_OB_NBOOT0 | STM32G0_USER_OB_NBOOT_SEL)
-+#define STM32G0_MAIN_MEM_ADDR		0x08000000
-+
-+/* STM32 Firmware definitions: additional commands */
-+#define STM32G0_FW_GETVER	0x00	/* Gets the firmware version */
-+#define STM32G0_FW_GETVER_LEN	4
-+#define STM32G0_FW_RSTGOBL	0x21	/* Reset and go to bootloader */
-+#define STM32G0_FW_KEYWORD	0xa56959a6
-+
-+/* ucsi_stm32g0_fw_info located at the end of the firmware */
-+struct ucsi_stm32g0_fw_info {
-+	u32 version;
-+	u32 keyword;
-+};
-+
- struct ucsi_stm32g0 {
- 	struct i2c_client *client;
-+	struct i2c_client *i2c_bl;
-+	bool in_bootloader;
-+	u8 bl_version;
- 	struct completion complete;
- 	struct device *dev;
- 	unsigned long flags;
-+	const char *fw_name;
- 	struct ucsi *ucsi;
- 	bool suspended;
- 	bool wakeup_event;
- };
- 
-+/*
-+ * Bootloader commands helpers:
-+ * - send command (2 bytes)
-+ * - check ack
-+ * Then either:
-+ * - receive data
-+ * - receive data + check ack
-+ * - send data + check ack
-+ * These operations depends on the command and have various length.
-+ */
-+static int ucsi_stm32g0_bl_check_ack(struct ucsi *ucsi)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->i2c_bl;
-+	unsigned char ack;
-+	struct i2c_msg msg[] = {
-+		{
-+			.addr	= client->addr,
-+			.flags  = I2C_M_RD,
-+			.len	= 1,
-+			.buf	= &ack,
-+		},
-+	};
-+	int ret;
-+
-+	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-+	if (ret != ARRAY_SIZE(msg)) {
-+		dev_err(g0->dev, "i2c bl ack (%02x), error: %d\n", client->addr, ret);
-+
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	/* The 'ack' byte should contain bootloader answer: ack/nack/busy */
-+	switch (ack) {
-+	case STM32G0_I2C_BL_ACK:
-+		return 0;
-+	case STM32G0_I2C_BL_NACK:
-+		return -ENOENT;
-+	case STM32G0_I2C_BL_BUSY:
-+		return -EBUSY;
-+	default:
-+		dev_err(g0->dev, "i2c bl ack (%02x), invalid byte: %02x\n",
-+			client->addr, ack);
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ucsi_stm32g0_bl_cmd_check_ack(struct ucsi *ucsi, unsigned int cmd, bool check_ack)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->i2c_bl;
-+	unsigned char buf[2];
-+	struct i2c_msg msg[] = {
-+		{
-+			.addr	= client->addr,
-+			.flags  = 0,
-+			.len	= sizeof(buf),
-+			.buf	= buf,
-+		},
-+	};
-+	int ret;
-+
-+	/*
-+	 * Send STM32 bootloader command format is two bytes:
-+	 * - command code
-+	 * - XOR'ed command code
-+	 */
-+	buf[0] = cmd;
-+	buf[1] = cmd ^ 0xff;
-+
-+	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-+	if (ret != ARRAY_SIZE(msg)) {
-+		dev_dbg(g0->dev, "i2c bl cmd %d (%02x), error: %d\n", cmd, client->addr, ret);
-+
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	if (check_ack)
-+		return ucsi_stm32g0_bl_check_ack(ucsi);
-+
-+	return 0;
-+}
-+
-+static int ucsi_stm32g0_bl_cmd(struct ucsi *ucsi, unsigned int cmd)
-+{
-+	return ucsi_stm32g0_bl_cmd_check_ack(ucsi, cmd, true);
-+}
-+
-+static int ucsi_stm32g0_bl_rcv_check_ack(struct ucsi *ucsi, void *data, size_t len, bool check_ack)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->i2c_bl;
-+	struct i2c_msg msg[] = {
-+		{
-+			.addr	= client->addr,
-+			.flags  = I2C_M_RD,
-+			.len	= len,
-+			.buf	= data,
-+		},
-+	};
-+	int ret;
-+
-+	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-+	if (ret != ARRAY_SIZE(msg)) {
-+		dev_err(g0->dev, "i2c bl rcv %02x, error: %d\n", client->addr, ret);
-+
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	if (check_ack)
-+		return ucsi_stm32g0_bl_check_ack(ucsi);
-+
-+	return 0;
-+}
-+
-+static int ucsi_stm32g0_bl_rcv(struct ucsi *ucsi, void *data, size_t len)
-+{
-+	return ucsi_stm32g0_bl_rcv_check_ack(ucsi, data, len, true);
-+}
-+
-+static int ucsi_stm32g0_bl_rcv_woack(struct ucsi *ucsi, void *data, size_t len)
-+{
-+	return ucsi_stm32g0_bl_rcv_check_ack(ucsi, data, len, false);
-+}
-+
-+static int ucsi_stm32g0_bl_send(struct ucsi *ucsi, void *data, size_t len)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->i2c_bl;
-+	struct i2c_msg msg[] = {
-+		{
-+			.addr	= client->addr,
-+			.flags  = 0,
-+			.len	= len,
-+			.buf	= data,
-+		},
-+	};
-+	int ret;
-+
-+	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-+	if (ret != ARRAY_SIZE(msg)) {
-+		dev_err(g0->dev, "i2c bl send %02x, error: %d\n", client->addr, ret);
-+
-+		return ret < 0 ? ret : -EIO;
-+	}
-+
-+	return ucsi_stm32g0_bl_check_ack(ucsi);
-+}
-+
-+/* Bootloader commands */
-+static int ucsi_stm32g0_bl_get_version(struct ucsi *ucsi, u8 *bl_version)
-+{
-+	int ret;
-+
-+	ret = ucsi_stm32g0_bl_cmd(ucsi, STM32_CMD_GVR);
-+	if (ret)
-+		return ret;
-+
-+	return ucsi_stm32g0_bl_rcv(ucsi, bl_version, STM32_CMD_GVR_LEN);
-+}
-+
-+static int ucsi_stm32g0_bl_send_addr(struct ucsi *ucsi, u32 addr)
-+{
-+	u8 data8[STM32_CMD_ADDR_LEN];
-+
-+	/* Address format: 4 bytes addr (MSB first) + XOR'ed addr bytes */
-+	put_unaligned_be32(addr, data8);
-+	data8[4] = data8[0] ^ data8[1] ^ data8[2] ^ data8[3];
-+
-+	return ucsi_stm32g0_bl_send(ucsi, data8, STM32_CMD_ADDR_LEN);
-+}
-+
-+static int ucsi_stm32g0_bl_global_mass_erase(struct ucsi *ucsi)
-+{
-+	u8 data8[4];
-+	u16 *data16 = (u16 *)&data8[0];
-+	int ret;
-+
-+	data16[0] = STM32_CMD_GLOBAL_MASS_ERASE;
-+	data8[2] = data8[0] ^ data8[1];
-+
-+	ret = ucsi_stm32g0_bl_cmd(ucsi, STM32_CMD_ERASE);
-+	if (ret)
-+		return ret;
-+
-+	return ucsi_stm32g0_bl_send(ucsi, data8, STM32_CMD_ERASE_SPECIAL_LEN);
-+}
-+
-+static int ucsi_stm32g0_bl_write(struct ucsi *ucsi, u32 addr, const void *data, size_t len)
-+{
-+	u8 *data8;
-+	int i, ret;
-+
-+	if (!len || len > STM32G0_I2C_BL_SZ)
-+		return -EINVAL;
-+
-+	/* Write memory: len bytes -1, data up to 256 bytes + XOR'ed bytes */
-+	data8 = kmalloc(STM32G0_I2C_BL_SZ + 2, GFP_KERNEL);
-+	if (!data8)
-+		return -ENOMEM;
-+
-+	ret = ucsi_stm32g0_bl_cmd(ucsi, STM32_CMD_WM);
-+	if (ret)
-+		goto free;
-+
-+	ret = ucsi_stm32g0_bl_send_addr(ucsi, addr);
-+	if (ret)
-+		goto free;
-+
-+	data8[0] = len - 1;
-+	memcpy(data8 + 1, data, len);
-+	data8[len + 1] = data8[0];
-+	for (i = 1; i <= len; i++)
-+		data8[len + 1] ^= data8[i];
-+
-+	ret = ucsi_stm32g0_bl_send(ucsi, data8, len + 2);
-+free:
-+	kfree(data8);
-+
-+	return ret;
-+}
-+
-+static int ucsi_stm32g0_bl_read(struct ucsi *ucsi, u32 addr, void *data, size_t len)
-+{
-+	int ret;
-+
-+	if (!len || len > STM32G0_I2C_BL_SZ)
-+		return -EINVAL;
-+
-+	ret = ucsi_stm32g0_bl_cmd(ucsi, STM32_CMD_RM);
-+	if (ret)
-+		return ret;
-+
-+	ret = ucsi_stm32g0_bl_send_addr(ucsi, addr);
-+	if (ret)
-+		return ret;
-+
-+	ret = ucsi_stm32g0_bl_cmd(ucsi, len - 1);
-+	if (ret)
-+		return ret;
-+
-+	return ucsi_stm32g0_bl_rcv_woack(ucsi, data, len);
-+}
-+
-+/* Firmware commands (the same address as the bootloader) */
-+static int ucsi_stm32g0_fw_cmd(struct ucsi *ucsi, unsigned int cmd)
-+{
-+	return ucsi_stm32g0_bl_cmd_check_ack(ucsi, cmd, false);
-+}
-+
-+static int ucsi_stm32g0_fw_rcv(struct ucsi *ucsi, void *data, size_t len)
-+{
-+	return ucsi_stm32g0_bl_rcv_woack(ucsi, data, len);
-+}
-+
-+/* UCSI ops */
- static int ucsi_stm32g0_read(struct ucsi *ucsi, unsigned int offset, void *val, size_t len)
- {
- 	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-@@ -138,6 +441,191 @@ static const struct ucsi_operations ucsi_stm32g0_ops = {
- 	.async_write = ucsi_stm32g0_async_write,
- };
- 
-+static int ucsi_stm32g0_register(struct ucsi *ucsi)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->client;
-+	int ret;
-+
-+	/* Request alert interrupt */
-+	ret = request_threaded_irq(client->irq, NULL, ucsi_stm32g0_irq_handler, IRQF_ONESHOT,
-+				   dev_name(g0->dev), g0);
-+	if (ret) {
-+		dev_err(g0->dev, "request IRQ failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = ucsi_register(ucsi);
-+	if (ret) {
-+		dev_err_probe(g0->dev, ret, "ucsi_register failed\n");
-+		free_irq(client->irq, g0);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ucsi_stm32g0_unregister(struct ucsi *ucsi)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	struct i2c_client *client = g0->client;
-+
-+	ucsi_unregister(ucsi);
-+	free_irq(client->irq, g0);
-+}
-+
-+static void ucsi_stm32g0_fw_cb(const struct firmware *fw, void *context)
-+{
-+	struct ucsi_stm32g0 *g0;
-+	const u8 *data, *end;
-+	const struct ucsi_stm32g0_fw_info *fw_info;
-+	u32 addr = STM32G0_MAIN_MEM_ADDR, ob, fw_version;
-+	int ret, size;
-+
-+	if (!context)
-+		return;
-+
-+	g0 = ucsi_get_drvdata(context);
-+
-+	if (!fw)
-+		goto fw_release;
-+
-+	fw_info = (struct ucsi_stm32g0_fw_info *)(fw->data + fw->size - sizeof(*fw_info));
-+
-+	if (!g0->in_bootloader) {
-+		/* Read running firmware version */
-+		ret = ucsi_stm32g0_fw_cmd(g0->ucsi, STM32G0_FW_GETVER);
-+		if (ret) {
-+			dev_err(g0->dev, "Get version cmd failed %d\n", ret);
-+			goto fw_release;
-+		}
-+		ret = ucsi_stm32g0_fw_rcv(g0->ucsi, &fw_version,
-+					  STM32G0_FW_GETVER_LEN);
-+		if (ret) {
-+			dev_err(g0->dev, "Get version failed %d\n", ret);
-+			goto fw_release;
-+		}
-+
-+		/* Sanity check on keyword and firmware version */
-+		if (fw_info->keyword != STM32G0_FW_KEYWORD || fw_info->version == fw_version)
-+			goto fw_release;
-+
-+		dev_info(g0->dev, "Flashing FW: %08x (%08x cur)\n", fw_info->version, fw_version);
-+
-+		/* Switch to bootloader mode */
-+		ucsi_stm32g0_unregister(g0->ucsi);
-+		ret = ucsi_stm32g0_fw_cmd(g0->ucsi, STM32G0_FW_RSTGOBL);
-+		if (ret) {
-+			dev_err(g0->dev, "bootloader cmd failed %d\n", ret);
-+			goto fw_release;
-+		}
-+		g0->in_bootloader = true;
-+
-+		/* STM32G0 reboot delay */
-+		msleep(100);
-+	}
-+
-+	ret = ucsi_stm32g0_bl_global_mass_erase(g0->ucsi);
-+	if (ret) {
-+		dev_err(g0->dev, "Erase failed %d\n", ret);
-+		goto fw_release;
-+	}
-+
-+	data = fw->data;
-+	end = fw->data + fw->size;
-+	while (data < end) {
-+		if ((end - data) < STM32G0_I2C_BL_SZ)
-+			size = end - data;
-+		else
-+			size = STM32G0_I2C_BL_SZ;
-+
-+		ret = ucsi_stm32g0_bl_write(g0->ucsi, addr, data, size);
-+		if (ret) {
-+			dev_err(g0->dev, "Write failed %d\n", ret);
-+			goto fw_release;
-+		}
-+		addr += size;
-+		data += size;
-+	}
-+
-+	dev_dbg(g0->dev, "Configure to boot from main flash\n");
-+
-+	ret = ucsi_stm32g0_bl_read(g0->ucsi, STM32G0_USER_OPTION_BYTES, &ob, sizeof(ob));
-+	if (ret) {
-+		dev_err(g0->dev, "read user option bytes failed %d\n", ret);
-+		goto fw_release;
-+	}
-+
-+	dev_dbg(g0->dev, "STM32G0_USER_OPTION_BYTES 0x%08x\n", ob);
-+
-+	/* Configure user option bytes to boot from main flash next time */
-+	ob |= STM32G0_USER_OB_BOOT_MAIN;
-+
-+	/* Writing option bytes will also reset G0 for updates to be loaded */
-+	ret = ucsi_stm32g0_bl_write(g0->ucsi, STM32G0_USER_OPTION_BYTES, &ob, sizeof(ob));
-+	if (ret) {
-+		dev_err(g0->dev, "write user option bytes failed %d\n", ret);
-+		goto fw_release;
-+	}
-+
-+	dev_info(g0->dev, "Starting, option bytes:0x%08x\n", ob);
-+
-+	/* STM32G0 FW boot delay */
-+	msleep(500);
-+
-+	/* Register UCSI interface */
-+	if (!ucsi_stm32g0_register(g0->ucsi))
-+		g0->in_bootloader = false;
-+
-+fw_release:
-+	release_firmware(fw);
-+}
-+
-+static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
-+{
-+	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
-+	int ret;
-+	u16 ucsi_version;
-+
-+	/* firmware-name is optional */
-+	if (device_property_present(g0->dev, "firmware-name")) {
-+		ret = device_property_read_string(g0->dev, "firmware-name", &g0->fw_name);
-+		if (ret < 0)
-+			return dev_err_probe(g0->dev, ret, "Error reading firmware-name\n");
-+	}
-+
-+	if (g0->fw_name) {
-+		/* STM32G0 in bootloader mode communicates at reserved address 0x51 */
-+		g0->i2c_bl = i2c_new_dummy_device(g0->client->adapter, STM32G0_I2C_BL_ADDR);
-+		if (IS_ERR(g0->i2c_bl)) {
-+			ret = dev_err_probe(g0->dev, PTR_ERR(g0->i2c_bl),
-+					    "Failed to register booloader I2C address\n");
-+			return ret;
-+		}
-+	}
-+
-+	/*
-+	 * Try to guess if the STM32G0 is running a UCSI firmware. First probe the UCSI FW at its
-+	 * i2c address. Fallback to bootloader i2c address only if firmware-name is specified.
-+	 */
-+	ret = ucsi_stm32g0_read(ucsi, UCSI_VERSION, &ucsi_version, sizeof(ucsi_version));
-+	if (!ret || !g0->fw_name)
-+		return ret;
-+
-+	/* Speculatively read the bootloader version that has a known length. */
-+	ret = ucsi_stm32g0_bl_get_version(ucsi, &g0->bl_version);
-+	if (ret < 0) {
-+		i2c_unregister_device(g0->i2c_bl);
-+		return ret;
-+	}
-+
-+	/* Device in bootloader mode */
-+	g0->in_bootloader = true;
-+	dev_info(g0->dev, "Bootloader Version 0x%02x\n", g0->bl_version);
-+
-+	return 0;
-+}
-+
- static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-@@ -159,24 +647,41 @@ static int ucsi_stm32g0_probe(struct i2c_client *client, const struct i2c_device
- 
- 	ucsi_set_drvdata(g0->ucsi, g0);
- 
--	/* Request alert interrupt */
--	ret = request_threaded_irq(client->irq, NULL, ucsi_stm32g0_irq_handler, IRQF_ONESHOT,
--				   dev_name(&client->dev), g0);
--	if (ret) {
--		dev_err_probe(dev, ret, "request IRQ failed\n");
-+	ret = ucsi_stm32g0_probe_bootloader(g0->ucsi);
-+	if (ret < 0)
- 		goto destroy;
-+
-+	/*
-+	 * Don't register in bootloader mode: wait for the firmware to be loaded and started before
-+	 * registering UCSI device.
-+	 */
-+	if (!g0->in_bootloader) {
-+		ret = ucsi_stm32g0_register(g0->ucsi);
-+		if (ret < 0)
-+			goto freei2c;
- 	}
- 
--	ret = ucsi_register(g0->ucsi);
--	if (ret) {
--		dev_err_probe(dev, ret, "ucsi_register failed\n");
--		goto freeirq;
-+	if (g0->fw_name) {
-+		/*
-+		 * Asynchronously flash (e.g. bootloader mode) or update the running firmware,
-+		 * not to hang the boot process
-+		 */
-+		ret = request_firmware_nowait(THIS_MODULE, FW_ACTION_UEVENT, g0->fw_name, g0->dev,
-+					      GFP_KERNEL, g0->ucsi, ucsi_stm32g0_fw_cb);
-+		if (ret < 0) {
-+			dev_err_probe(dev, ret, "firmware request failed\n");
-+			goto unregister;
-+		}
- 	}
- 
- 	return 0;
- 
--freeirq:
--	free_irq(client->irq, g0);
-+unregister:
-+	if (!g0->in_bootloader)
-+		ucsi_stm32g0_unregister(g0->ucsi);
-+freei2c:
-+	if (g0->fw_name)
-+		i2c_unregister_device(g0->i2c_bl);
- destroy:
- 	ucsi_destroy(g0->ucsi);
- 
-@@ -187,8 +692,10 @@ static int ucsi_stm32g0_remove(struct i2c_client *client)
- {
- 	struct ucsi_stm32g0 *g0 = i2c_get_clientdata(client);
- 
--	ucsi_unregister(g0->ucsi);
--	free_irq(client->irq, g0);
-+	if (!g0->in_bootloader)
-+		ucsi_stm32g0_unregister(g0->ucsi);
-+	if (g0->fw_name)
-+		i2c_unregister_device(g0->i2c_bl);
- 	ucsi_destroy(g0->ucsi);
- 
- 	return 0;
-@@ -199,6 +706,9 @@ static int ucsi_stm32g0_suspend(struct device *dev)
- 	struct ucsi_stm32g0 *g0 = dev_get_drvdata(dev);
- 	struct i2c_client *client = g0->client;
- 
-+	if (g0->in_bootloader)
-+		return 0;
-+
- 	/* Keep the interrupt disabled until the i2c bus has been resumed */
- 	disable_irq(client->irq);
- 
-@@ -216,6 +726,9 @@ static int ucsi_stm32g0_resume(struct device *dev)
- 	struct ucsi_stm32g0 *g0 = dev_get_drvdata(dev);
- 	struct i2c_client *client = g0->client;
- 
-+	if (g0->in_bootloader)
-+		return 0;
-+
- 	if (device_may_wakeup(dev) || device_wakeup_path(dev))
- 		disable_irq_wake(client->irq);
- 
--- 
-2.25.1
-
+regards
+Philipp

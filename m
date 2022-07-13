@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3AE573DB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C46573DBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 22:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbiGMUWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 16:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S237074AbiGMUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 16:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbiGMUWK (ORCPT
+        with ESMTP id S236537AbiGMUXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 16:22:10 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6EE2E694
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:22:08 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id va17so21893913ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:22:08 -0700 (PDT)
+        Wed, 13 Jul 2022 16:23:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8012C30F56
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:23:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id j22so21860505ejs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GJflsK92JuV59E3RXCQjvHWgsAc9fN7oPHKEHYO4/Yw=;
-        b=Pf5e5dY4ycmPKNE+mP4Y1lGkQifW/vnVMda6koFE/ah0VebtYYKLeXhDl0yxQe5PN8
-         Ov9ax8+x8Ob7EqWRSwBhLfOhk63lN23ULz/lIIuRWUQ9ib0LZZLoZI3TgLrOhA2Xefog
-         AqJViDcTGsK2uzCBoJV5UDYv+qKYmCLgZGKss=
+        bh=d1P5rX72RXyRvGR7JCZ4qVZh1CiP/TKW9UtB14PFhaQ=;
+        b=hp43ldtRziA5PUHZyd4RJvKAVLE41k/JKMzhpS//B1rETg03AmLcMxtVsSmgdzCMlb
+         t44JOsl9PL+s6wYOQEJPZD0NHxYo63Bm3DBi/uPpvJFGrf3vZkmlu45wXZNa4Qj4zXqW
+         mz1WdEdTJ8v9A+xQt4LlwhRS6fDVV8/nYc5Hs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GJflsK92JuV59E3RXCQjvHWgsAc9fN7oPHKEHYO4/Yw=;
-        b=8KOGAuLk3vqsHesIqDQf8DsbaybOYBqKLfp1N0Bg28t2BiT+b+RuGgv6CH76Y64Llx
-         UKkUuoeW3q698x0zTuu6l+P4W4MRIGpesXRL+72oEe0pI8zZrq6gZF/isEubW9p/NNdR
-         bcLIAjzH5P6Gj1Nn42sCxxLUNL5QtWD8moLtLedNjeY+rnIGExO7GdB6h1Z/J5+lrltN
-         luhikF0NA8EnDHx6oVskTQ6SOxqPaqEZ79INwC3DXFB9gNegLUGGWmoPzZvofJLikSdg
-         ZN+cdkiRhurUe7SHCebKdfFzAi/JNC8gyKTo/N9BZzh/J8PZku++sh2mKILh+t4VCb77
-         JJRQ==
-X-Gm-Message-State: AJIora8DaU/OcAO7yEiUWvmux13q8UTq4Y26jVd48kFCFQgC5TH1I3as
-        Lkey+sirXO8SmLb5QxcEWuyqc5kG8sSdh9QIIxY=
-X-Google-Smtp-Source: AGRyM1uBwil10I/jdu5shLj49JWaVng8NYtELAGtzL//foLLyaXDY+W41P+Ek0g/0HZJiuSW7Py+KQ==
-X-Received: by 2002:a17:906:4482:b0:70a:19e3:d18a with SMTP id y2-20020a170906448200b0070a19e3d18amr5235356ejo.510.1657743726888;
-        Wed, 13 Jul 2022 13:22:06 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id pv5-20020a170907208500b0072af4af2f46sm5332152ejb.74.2022.07.13.13.22.05
+        bh=d1P5rX72RXyRvGR7JCZ4qVZh1CiP/TKW9UtB14PFhaQ=;
+        b=37we87Zg80bBZdJ3hL4t1uhn1CFXYxy6eblho4UvT4bRbQINVNkcvHTglzZRqm9be9
+         GKKWJSS1kQaZz0pmMeJKuWkpGmZPAsXlYFX/g/Cufxv1XtFbrTgwHrNu16fFzUOwtV7R
+         55jwzW5oIT2WOwfc8erU6/GnHBpkHM6+sCMrQA+yBVUeK0wy/GpNRnVo0PGcKhHFM/bl
+         T3EN2cdRwMyH3nbQY76NbcMg8KuWzq+Rt1i6zicBUQa8R5ecC46HmJMXhnGsI/n8Ui84
+         vUnF42YtYMDCSxQmXn9PBLMvNaGMR6C6ZSOj4pUmoCiqtkau8CSHvOJCew474jyc2zm8
+         7Gdg==
+X-Gm-Message-State: AJIora/lHTodZscZa6TWJAn3NEDryCslnykN3dP4rft2jHstUE4tk+bW
+        M5HyNQUf3SnOIEfIhjMpgKV6mrwdFSi/44dfs1w=
+X-Google-Smtp-Source: AGRyM1sF1KZFH4veBYr4QY+Y+w/iPaMRwmqf8QbTcYDZ1ccVg3a5zexrPHg/WpAtZsSpNw3etzIVKw==
+X-Received: by 2002:a17:907:97d3:b0:726:a5db:3a3a with SMTP id js19-20020a17090797d300b00726a5db3a3amr5286527ejc.654.1657743781842;
+        Wed, 13 Jul 2022 13:23:01 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id f17-20020a17090631d100b0072b6d93b9afsm2917494ejf.210.2022.07.13.13.22.59
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 13:22:05 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id a5so17039361wrx.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:22:05 -0700 (PDT)
-X-Received: by 2002:a05:6000:180f:b0:21d:68f8:c4ac with SMTP id
- m15-20020a056000180f00b0021d68f8c4acmr5115827wrh.193.1657743724966; Wed, 13
- Jul 2022 13:22:04 -0700 (PDT)
+        Wed, 13 Jul 2022 13:23:00 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id o19-20020a05600c511300b003a2de48b4bbso1856936wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 13:22:59 -0700 (PDT)
+X-Received: by 2002:a7b:cd97:0:b0:3a2:dfcf:dd2d with SMTP id
+ y23-20020a7bcd97000000b003a2dfcfdd2dmr11342692wmj.68.1657743779568; Wed, 13
+ Jul 2022 13:22:59 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
  <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
-In-Reply-To: <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
+ <CADnq5_Ma2oe-6+WG4ZRAm97G7TyS0Nuhdxt=7oqdNLcMP5nKeg@mail.gmail.com>
+In-Reply-To: <CADnq5_Ma2oe-6+WG4ZRAm97G7TyS0Nuhdxt=7oqdNLcMP5nKeg@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 13 Jul 2022 13:21:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
-Message-ID: <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+Date:   Wed, 13 Jul 2022 13:22:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgW-g5jAMmKjnG0_mhqtEKzbKxs=Lo8DDv1D2wZvhL-8Q@mail.gmail.com>
+Message-ID: <CAHk-=wgW-g5jAMmKjnG0_mhqtEKzbKxs=Lo8DDv1D2wZvhL-8Q@mail.gmail.com>
 Subject: Re: Linux 5.19-rc6
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Harry Wentland <harry.wentland@amd.com>,
         Leo Li <sunpeng.li@amd.com>,
@@ -71,6 +71,7 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Paul Mackerras <paulus@ozlabs.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         amd-gfx list <amd-gfx@lists.freedesktop.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -84,15 +85,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:49 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Wed, Jul 13, 2022 at 12:53 PM Alex Deucher <alexdeucher@gmail.com> wrote:
 >
-> There may be a patch that solves that, but it's never been submitted to
-> my patch system:
->
-> https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
+> Does this patch fix it?
+> https://patchwork.freedesktop.org/patch/493799/
 
-That patch looks sane to me, but I guess Guenter would need to check
-... Guenter?
+Guenter? Willing to check this one too for your setup, and we can
+hopefully close down both issues?
 
-             Linus
+                 Linus

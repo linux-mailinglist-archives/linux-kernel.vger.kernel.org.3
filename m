@@ -2,114 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06536572B9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9EE572B6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 04:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiGMC4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Jul 2022 22:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S229750AbiGMCrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Jul 2022 22:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbiGMC4r (ORCPT
+        with ESMTP id S229674AbiGMCrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Jul 2022 22:56:47 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB12D64D7;
-        Tue, 12 Jul 2022 19:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657681006; x=1689217006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j+pIU+Vim4PMSxlEaF3xva7X5PqjxMIjOw7jLEzSTsU=;
-  b=cmykBuR6rAfi1BkTf6UhoatwBC6RVRou7GeU4yYsI6zXQDpUxd2rg9H4
-   DRLKBv5YE6McwJafsmcD6B7VmWZuItwS7Tq6mR3fUa9u+bKnZ5g55N2Xz
-   /1QrZNJUCb92ctvKBseFi3S92wTqZa6nbHgEhnaH9xSYSN1UxSSvflLo+
-   c=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jul 2022 19:56:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 19:56:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Jul 2022 19:56:45 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Jul 2022 19:56:44 -0700
-Date:   Tue, 12 Jul 2022 19:56:43 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v2 5/5] usb: dwc3: gadget: Increase DWC3 controller halt
- timeout
-Message-ID: <20220713025643.GC8200@jackp-linux.qualcomm.com>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-6-quic_wcheng@quicinc.com>
+        Tue, 12 Jul 2022 22:47:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD5DCC03C;
+        Tue, 12 Jul 2022 19:47:35 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LjMRk0tbwzkWx4;
+        Wed, 13 Jul 2022 10:45:22 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 13 Jul 2022 10:47:33 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Jul
+ 2022 10:47:33 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <broonie@kernel.org>
+Subject: [PATCH -next v2 0/3] spi: microchip-core: fix and cleanups
+Date:   Wed, 13 Jul 2022 10:56:54 +0800
+Message-ID: <20220713025657.3524506-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220713003523.29309-6-quic_wcheng@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wesley,
+Patch #1 fix a UAF in mchp_corespi_remove().
+Patch #2 and #3 some cleanups to simpify code.
 
-On Tue, Jul 12, 2022 at 05:35:23PM -0700, Wesley Cheng wrote:
-> Since EP0 transactions need to be completed before the controller halt
-> sequence is finished, this may take some time depending on the host and the
-> enabled functions.  Increase the controller halt timeout, so that we give
-> the controller sufficient time to handle EP0 transfers.
-> 
-> Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
-> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
-> Link:
->   https://lore.kernel.org/linux-usb/4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com/
-> 
->  drivers/usb/dwc3/gadget.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 41b7007358de..e32d7293c447 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2476,6 +2476,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->  	dwc3_gadget_dctl_write_safe(dwc, reg);
->  
->  	do {
-> +		msleep(1);
+v1 -> v2:
+  add patch #3 to use dev_err_probe to simpify code.
 
-Be aware that this probably won't sleep for *just* 1ms.  From
-Documentation/timers/timers-howto.rst:
+Yang Yingliang (3):
+  spi: microchip-core: fix UAF in mchp_corespi_remove()
+  spi: microchip-core: switch to use devm_spi_alloc_master()
+  spi: microchip-core: switch to use dev_err_probe()
 
-	msleep(1~20) may not do what the caller intends, and
-	will often sleep longer (~20 ms actual sleep for any
-	value given in the 1~20ms range). In many cases this
-	is not the desired behavior.
+ drivers/spi/spi-microchip-core.c | 56 ++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 36 deletions(-)
 
-So with timeout==500 this loop could very well end up iterating for up
-to 10 seconds.  Granted this shouldn't be called from any atomic context
-but just wanted to make sure that the effective increase in timeout as
-$SUBJECT intends is made clear here and that it's not overly generous.
+-- 
+2.25.1
 
->  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->  		reg &= DWC3_DSTS_DEVCTRLHLT;
->  	} while (--timeout && !(!is_on ^ !reg));
-
-Jack

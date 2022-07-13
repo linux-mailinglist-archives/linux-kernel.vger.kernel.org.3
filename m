@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777B0574009
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4086D574007
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 01:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiGMX1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 19:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S229871AbiGMX0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 19:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiGMX1F (ORCPT
+        with ESMTP id S229451AbiGMX0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:27:05 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C5548CBA
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:27:04 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id h62so393959ybb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:27:04 -0700 (PDT)
+        Wed, 13 Jul 2022 19:26:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BF146D82;
+        Wed, 13 Jul 2022 16:26:44 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso560565pjk.3;
+        Wed, 13 Jul 2022 16:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sLq1U+d1bmcNfWsFJ6K/IL9XxkkFgeH5akYdfwOXkK0=;
-        b=FBksoOy+S0aCWxyI2UXUB//mYF0XarHhcELqYLWfX3aGKjJxSFOD66c7QrR8mpgvCh
-         ml1NaWom7AqZ77+nocy4d9LotD5hYlTKy5970upnY2Gv00mmNhdx5Zx8p6JhT1ACiZvo
-         wkTY46EsuUBjwFTrS+n79bQRzJI4cWK1C8+NeuN7ggVr53XJHDy8ddXfdytSOz2Q1SN0
-         1RC1HFTkSFmAzlO2eYvoLQYCopfJY2AUgxgaiQGtlJ/+eSb4qqrOdXilLT+6WLc4nKk7
-         SppEjQZXkFXd/egJyHTziLcw1TVnnVxpDRCgtJ+0WdijwURE2AwGUivYMsc1azFQLp8p
-         g+Ig==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PnsH/rzjlHhH91hBVi1N1J8lv6U1Lk9dQ+G06Dj91pc=;
+        b=k8rO8PGtaYTYg3cEA+f5u/w7Rav+orTpIczJ1DQsYtLTfS4OF5+3ByCAP/PVZ/MzpR
+         y0ETgXeXrpQVG/0MW+grpKDjpImI23flwTQb066kzUaYsZrYfzhF2SSK8x3DtrTTNY0t
+         UXjd28kalMawS+FZ7GgTg83PNL4LbHBkv8mtaUWQflA5wPGEgFWMpyaaDuGbEsWZ7dZn
+         lYirkc9W1pB6PYbBHK3rdUBBR8dQJl1VgV2br3hrHUBk4JgQ1Kzy0i55AT7eSgl82m+W
+         wHDiXK9C/9VZvt0ctyWRB9rkWwbGXYpoBgBZOyX4sWFGLxIsNTF1WLx/1fzHnorav8jn
+         ynMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sLq1U+d1bmcNfWsFJ6K/IL9XxkkFgeH5akYdfwOXkK0=;
-        b=a8Gdbq83BEtS7XrgeUNVPJvJ+h4Vc9/e6p/dNZh5RLAk4HDiCbJuW6UCpnnwrAayli
-         7aP1b677+drPGq9Ldt9QnE1Z/cRQcEssMyFAVU1fCmqDtTfFnyGrm8tqwYJqe1SzK1+K
-         F32c2+OgXyczK3/LuO9JEnRUf8yBtnR/nHeG9cXRTtiDfj5ATWOjEEMj1465WiqUZwR/
-         /fHSBHYyNWYrLd62RSHZOWYEJL4mSRizC3V7Buw/HBFrsaLxIxCVU9p2k7nc1ynd6huO
-         XJsMnsT8QbmgH5ZFNU3Go9zvYQunUm1bo4uGmZ3PsCJwb4ajcMv4QqbFF5SBBUE8XBBI
-         qDOA==
-X-Gm-Message-State: AJIora84cy78a0abiai1UVvhWp27cu4SNJzZFQUaToIevsPUFpmbJRns
-        xt1V6j+dz/Zl0TWF6feKbHGZs9qm5l9IMC6lFKY=
-X-Google-Smtp-Source: AGRyM1tf2PHunlzOKcP68GnhEt7k26NxZu9hWDuRWB/2Njj21U6X5rwz525eL9VplaSor2/TBOx6Em3oBgtWDaurbG8=
-X-Received: by 2002:a5b:20d:0:b0:66e:3b19:82c5 with SMTP id
- z13-20020a5b020d000000b0066e3b1982c5mr6229993ybl.517.1657754823917; Wed, 13
- Jul 2022 16:27:03 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PnsH/rzjlHhH91hBVi1N1J8lv6U1Lk9dQ+G06Dj91pc=;
+        b=PGzmkvyQTKMjbOHkLWbSiYx+Z0xgdaJU2KzZeJ/0A0c1D3d5M71aukfZ4L5JTaMCaI
+         3WO6wiJ1zLpnduelISEj1+u9KQEpYrj4TjauGJIiawuk9xlq/Zo/6VfFjGjtiNoWSzQN
+         TqrWTfSraNKuAhyevKqaDi/YTGeHtnhCQl+WrvqAcvXDND3wHxjQAZPYEQWdVJ05Qe8O
+         VpIJpN5N++9B9EoTIxk38iYwxsHGXKUVBS7Cwc7ccpyyID4VVJFei4a2BXouN/ii6uYG
+         WIWpOpX3bJn0r/OcTEEWHAbFtEy5FV4NUtmt4Lt6Iu5PXXG1aA9eh/64Dfu+ghR5VmXi
+         DeQA==
+X-Gm-Message-State: AJIora+/XhJ0xTpzV5u/2Ve8reMKWpmLxxJKLsmTbqelxipOIvB5fPD/
+        VvplbqcW5lsPKswiCfPwkAc=
+X-Google-Smtp-Source: AGRyM1tFZ4adlJu3CfLsP7JosSH3B5ELiXwpY8eowsQR36GEWeBo6GYD8IGt8yckPWzB9t8GrlWb6A==
+X-Received: by 2002:a17:903:2308:b0:16c:47a6:c026 with SMTP id d8-20020a170903230800b0016c47a6c026mr5439247plh.160.1657754803904;
+        Wed, 13 Jul 2022 16:26:43 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 31-20020a63165f000000b00416073ced8csm5894141pgw.73.2022.07.13.16.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 16:26:43 -0700 (PDT)
+Message-ID: <8a37363d-f4d9-669c-9cc6-3e76b9417352@gmail.com>
+Date:   Wed, 13 Jul 2022 16:26:33 -0700
 MIME-Version: 1.0
-References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
- <20220713050724.GA2471738@roeck-us.net> <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
- <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk> <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
- <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
- <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
- <CADVatmPx=T_i1oaX2i_d5crbWkixFZU7s-_wky_kz58wDgwGDQ@mail.gmail.com>
- <20220713225627.GC32544@roeck-us.net> <CADVatmM=JR4d4WU_53PtA6g-y40qc=CbHL9uhsJc2cSW=uoOXA@mail.gmail.com>
- <20220713231211.GF32544@roeck-us.net>
-In-Reply-To: <20220713231211.GF32544@roeck-us.net>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Thu, 14 Jul 2022 00:26:27 +0100
-Message-ID: <CADVatmOAnoiZ1WE7iDBYCXVSiMo8RvC_P6mBhR_F75asfDWr4w@mail.gmail.com>
-Subject: Re: Linux 5.19-rc6
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: manual merge of the broadcom tree with the spdx tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220711095520.4fad4c97@canb.auug.org.au>
+ <20220714091321.4ecfe830@canb.auug.org.au>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220714091321.4ecfe830@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,54 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jul 14, 2022 at 12:09:24AM +0100, Sudip Mukherjee wrote:
-> > On Wed, Jul 13, 2022 at 11:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > On Wed, Jul 13, 2022 at 10:50:06PM +0100, Sudip Mukherjee wrote:
-> > > > On Wed, Jul 13, 2022 at 10:45 PM Linus Torvalds
-> > > > <torvalds@linux-foundation.org> wrote:
-> > > > >
-> > > > > On Wed, Jul 13, 2022 at 2:36 PM Sudip Mukherjee
-> > > > > <sudipm.mukherjee@gmail.com> wrote:
-> > > > > >
-> > > > > > > >
-> > > > > > > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
-> > > > > > >
-> > > > > > > That patch looks sane to me, but I guess Guenter would need to check
-> > > > > >
-> > > > > > I still see the failure in my builds with this patch. But surprisingly
-> > > > > > I dont see the build failure (with or without this patch) with gcc-12,
-> > > > > > only with gcc-11.
-> > > > >
-> > > > > Arrghs. "build failure"?
-> > > >
-> > > > Uhh.. no, sorry.. I meant the same problem which Guenter reported with
-> > > > powerpc64-linux-ld, hard float and soft float.
-> > > > But I dont see this problem with gcc-12, only with gcc-11.
-> > > >
-> > >
-> > > Weird. It works for me with gcc 11.3.0 / binutils 2.38 as well as with
-> > > gcc 11.2.0 / binutils 2.36.1.
-> >
-> > Its entirely possible that I have messed up, there are references to
-> > many patches in this thread. :)
-> > Can you please paste the link of the patch that you say is working for
-> > you. I will try a clean build with that.
-> >
->
-> The patch is at:
->
-> https://lore.kernel.org/lkml/20220618232737.2036722-1-linux@roeck-us.net/raw
+On 7/13/22 16:13, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 11 Jul 2022 09:55:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the broadcom tree got a conflict in:
+>>
+>>    arch/arm/mach-bcm/bcm63xx.c
+>>
+>> between commit:
+>>
+>>    52e6676ef56f ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_30.RULE (part 1)")
+>>
+>> from the spdx tree and commit:
+>>
+>>    889390f83d4e ("arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA")
+>>
+>> from the broadcom tree.
+>>
+>> I fixed it up (I just removed the file) and can carry the fix as
+>> necessary. This is now fixed as far as linux-next is concerned, but any
+>> non trivial conflicts should be mentioned to your upstream maintainer
+>> when your tree is submitted for merging.  You may also want to consider
+>> cooperating with the maintainer of the conflicting tree to minimise any
+>> particularly complex conflicts.
+> 
+> This is now a conflict between the arm-soc tree and the spdx tree.
 
-Thanks, that works. tested with gcc-11.3.1, and binutils 2.38 on top
-of latest mainline (4a57a8400075bc5287c5c877702c68aeae2a033d)
-
-When I said I still had the problem, I tested with
-https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
-
-
+There was a link in the cover letter that I sent to the arm-soc 
+maintainers referencing your first email. Not sure what else we could 
+have done to prevent that conflict.
 -- 
-Regards
-Sudip
+Florian

@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCED573AD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED47573B34
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbiGMQKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S237192AbiGMQ1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234823AbiGMQKr (ORCPT
+        with ESMTP id S234823AbiGMQ1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:10:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D0D3F31B
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657728646; x=1689264646;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YaTZAb4onP27jQNy4FL6qTy43D/CKE44lCvGOyD7eXI=;
-  b=iUNPIGc/O72QWS2AfXOnCVTWi+3MMkoh9YZvl0GrR2lc54YjoXvbb4v5
-   izATsUzCnC0+zr8THYEa9VmOlN1eF0YXBQ9snuAgzPNFSXowjtofHvva5
-   MxW+2UnEr3dDUrrMPDPJjQZ9SLaBWhL0uXxo9nL0pHOvS0TA64fa4dE/a
-   /h8jD1knKafzVCdX1SvUtVsoDd07Izk0iel8eE0xf56Sj40+UgJgbKZRy
-   OiFMco/RpSOxE7d8ci5xVBKzvMDK8bOG89xp0lVyaEkuL2KiQKXwy5X5Q
-   FtPOHhMa4uLsTz1d3lLtwlMC/WLfSPZad52iDnmwp5q9yJxnuUrGYPWhl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="286013180"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="286013180"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:10:46 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="545912177"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:10:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oBeue-001CSM-1N;
-        Wed, 13 Jul 2022 19:08:32 +0300
-Date:   Wed, 13 Jul 2022 19:08:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Provide an SSP type to the SPI
- driver
-Message-ID: <Ys7uAFAXqczXm6Se@smile.fi.intel.com>
-References: <20220702211903.9093-1-andriy.shevchenko@linux.intel.com>
- <Ys593spfcFtoILhS@google.com>
- <Ys6lFqm4/T/Kb3et@smile.fi.intel.com>
- <Ys7Eu72Xf5EnGDWM@google.com>
+        Wed, 13 Jul 2022 12:27:40 -0400
+X-Greylist: delayed 82505 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jul 2022 09:27:39 PDT
+Received: from 19.mo581.mail-out.ovh.net (19.mo581.mail-out.ovh.net [178.33.251.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48160DE2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 09:27:39 -0700 (PDT)
+Received: from player759.ha.ovh.net (unknown [10.108.20.216])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id 7A5192441A
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 16:09:06 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player759.ha.ovh.net (Postfix) with ESMTPSA id 3AE122CA29113;
+        Wed, 13 Jul 2022 16:08:58 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-101G004d41d503d-8019-4142-ac48-19dc98630b84,
+                    E7234B73E98B8DBC7B685B4C32F27E263784F647) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Stephen Kitt <steve@sk2.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] arch/x86/Kconfig: specify idle=poll instead of no-hlt
+Date:   Wed, 13 Jul 2022 18:08:40 +0200
+Message-Id: <20220713160840.1577569-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys7Eu72Xf5EnGDWM@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17159277531323926235
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudejjedgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeehledrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 02:12:27PM +0100, Lee Jones wrote:
-> On Wed, 13 Jul 2022, Andy Shevchenko wrote:
-> > On Wed, Jul 13, 2022 at 09:10:06AM +0100, Lee Jones wrote:
-> > > On Sun, 03 Jul 2022, Andy Shevchenko wrote:
+Commit 27be45700021 ("x86 idle: remove 32-bit-only "no-hlt" parameter,
+hlt_works_ok flag") removed no-hlt, but CONFIG_APM still refers to
+it. Suggest "idle=poll" instead, based on the commit message:
 
-...
+> If a user wants to avoid HLT, then "idle=poll"
+> is much more useful, as it avoids invocation of HLT
+> in idle, while "no-hlt" failed to do so.
 
-> > > > +static const struct property_entry spt_spi_properties[] = {
-> > > > +	PROPERTY_ENTRY_U32("intel,spi-pxa2xx-type", LPSS_SPT_SSP),
-> > > > +	{ }
-> > > > +};
-> > > > +
-> > > > +static const struct software_node spt_spi_node = {
-> > > > +	.properties = spt_spi_properties,
-> > > > +};
-> > > > +
-> > > >  static const struct intel_lpss_platform_info spt_info = {
-> > > >  	.clk_rate = 120000000,
-> > > > +	.swnode = &spt_spi_node,
-> > > >  };
-> > > 
-> > > IMHO, this is a rubbish interface.
-> > > 
-> > > The amount of 10-line changes required to store a 32-bit value is
-> > > depressing.  Is there not a reduced interface for storing small pieces
-> > > of data that doesn't require arrays of structs?
-> > 
-> > The part of it that makes it longer because of differentiating the hardware,
-> > but see the difference here:
-> > 
-> > In this change:
-> > 	95 insertions(+), 46 deletions(-)
-> > 
-> > In the follow up SPI driver cleaning (not yet submitted):
-> > 	14 insertions(+), 121 deletions(-)
-> 
-> Not sure we are understanding each other.
-> 
-> The patch is fine.  I'm referring to the software_node interface.
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ah, I see, sorry for the confusion.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index a293a30e4cdd..bb4fa31bec4d 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2517,7 +2517,7 @@ menuconfig APM
+ 
+ 	  1) make sure that you have enough swap space and that it is
+ 	  enabled.
+-	  2) pass the "no-hlt" option to the kernel
++	  2) pass the "idle=poll" option to the kernel
+ 	  3) switch on floating point emulation in the kernel and pass
+ 	  the "no387" option to the kernel
+ 	  4) pass the "floppy=nodma" option to the kernel
 
+base-commit: 50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.31.1
 

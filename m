@@ -2,243 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313B6573AA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794CF573AA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236668AbiGMPzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S236494AbiGMP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiGMPzs (ORCPT
+        with ESMTP id S236954AbiGMP4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:55:48 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC04E852
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id o10-20020a655bca000000b00412787983b3so5433887pgr.12
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
+        Wed, 13 Jul 2022 11:56:07 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F286250041
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id j3so1777341oif.8
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=TjHjMkxHdrjtTtLaLLkPMs792kod3mIYtSimCy6NVweAsJU75rtvhot4VpXsblBqly
-         qHRf5/L3tn7yMu364MBoudvFOE15V1qz4sWU7IX1ZmSnyAtwoN3kNYw02DuKnsDO5gjp
-         M7RQmANYsVuNDbgNtkXvd3a8DnuUQH+hZV3ikimvffMZd8joeIgwo7GaoFBX8DFrddDF
-         llsAFJQV9aU6qv7H1VvM3a3PUKiZyeNUhvRUKDT5CnUoj9OxYRKgWhY0+MNYPlyo3vp0
-         JKfjLrkj60y7DnOnKgIUy/4L8UmsN/TA25iA1sJPVSruP4sBdSbj5QDwOKoVzrQcwL4a
-         C7Kw==
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=WkSQGMlzkcg7F25RRv5rghI0mHalOBr7A56+aczRN84=;
+        b=TokE2vNEcYXOMc500qMsLWmfRFBNAnA2uXvm+HMyhAe7V5c3ZxWMyZwZjtBi0haXR8
+         HGp/59n2cy5qMOW13Jyx/nBGhBVCuc6cMJxHpAoFEJJ9MFF04rbMfzejGcBRYpGcHnDF
+         uU/p+EDK/T7/nTWm44yWdQkH6kFZhK08PL4dZLmzKRWuJE5MivwpMoBoBnqbLRiCWJJ+
+         9O6zXKo+ZRqjSyBM1B1rzvxLRRI5TZ7k3QfmKYp9djPkN3F9qDEdRSE8FJC0YsaPaCBb
+         o4Xv5RiCw4ZJycv+SCfQBsaKaSOy8KzJnrn7cuMWTP19XQJ88fmZHW5gvIwV5cuR82X+
+         iPNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=6xpwqTiVy4x4Y05AFn1ILHGNMOg6MA3CciQcAaQJpibyhUgJ2NJJdJizFPUbnYJmsH
-         Qle4x69KnnSHx3RP/UiMZiuU7rIOOWDRlRLRvVUJFic4V8fqBCm8vJ+BQBCoXjgqTHGh
-         lpAmBquxyI1k01K3CHRBkn2tIFr7Ayk1t7XQnAP8p1F1dX0Un4y628NB9hx8ApoqCdRC
-         itqVTrotHHmzJAKETGDFzPDpWe9xoUP04uBwsVbIki7ZkfdXWoCUXt4+DWh3Cta0DNet
-         DrO8r/qce2e5SxQ+Uwczmv082EUbDovCF4eyPW0zyN0DWKeoYVxa9qDCICy2dhUQgBWw
-         1Qmw==
-X-Gm-Message-State: AJIora+2QQHenyNA2Za5OIyQkVXMTl/6ryfrz2keAWQuNlnuVJe9y6Zg
-        2oWH/xF5AW0jrAHbvX4lI3bHz80=
-X-Google-Smtp-Source: AGRyM1vCSrU7O6O9FOIV8kUv1lP2Lkoiv9Ln98VM/44THqm2zXjHACWzfrfMXWhmXMTgZeZAsBg2f70=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id
- m2-20020a170902db0200b0016c5568d740mr3785558plx.100.1657727746774; Wed, 13
- Jul 2022 08:55:46 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 08:55:45 -0700
-In-Reply-To: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Message-Id: <Ys7rAaRKbTEzvjFY@google.com>
-Mime-Version: 1.0
-References: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-From:   sdf@google.com
-To:     xiaolinkui <xiaolinkui@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=WkSQGMlzkcg7F25RRv5rghI0mHalOBr7A56+aczRN84=;
+        b=Qax+1LpOMXZYTfWakWiGkGyiqow3VPAyAMMK51OGVYeGLBNy8HvTOAFdlY3/FKUxrh
+         yB1vEx9oNiZRNyannGaQvw3OgqWMg83kpRIaCAqn9+pdIJgNLXuZwHKfreXMBU0bdyCi
+         Akll/+/pwTcY9Vlmp3GTVQF7FXyIgSpRZLzBRvKkLNMN6U//h7AXrD0/f8d/bPBiUBYA
+         0UlTvK22Cz7YAavUox7EXD2TW50zTjnic8FBv6ZDYuqoXmzyIPmDonj/GtjVHSdmYqAg
+         +86aHCHz//5wetFiynOqH7jgMrCXF7j+U1NVD1niWnNf5fZ+v3d8tkWZTqVJIoU9G/1X
+         f4Hw==
+X-Gm-Message-State: AJIora93yRrMMvFxQr3hRltrkFxjk2mHrkTzx+/zSSs+vqcY3/IZ8TWp
+        9jtine1VjoBCfbAwx2fJ5mdvOA==
+X-Google-Smtp-Source: AGRyM1uf0Tdw2UqbBNRwyWQHGpfHBB44kcUu4QCB3PbjhmzP3bihR91dHuYa4cms3heNmXYpoaGk7A==
+X-Received: by 2002:a05:6808:19a5:b0:335:cffd:b276 with SMTP id bj37-20020a05680819a500b00335cffdb276mr2134313oib.226.1657727766210;
+        Wed, 13 Jul 2022 08:56:06 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q16-20020a9d7c90000000b0061c35e7aceesm5016860otn.42.2022.07.13.08.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:56:05 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 08:55:53 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Liam Howlett <liam.howlett@oracle.com>
+cc:     David Hildenbrand <david@redhat.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
+In-Reply-To: <20220713132926.3sl7gs67dyjj7kit@revolver>
+Message-ID: <44a478e8-2ccc-e82-bd5a-172778c01529@google.com>
+References: <20220712142441.4184969-1-Liam.Howlett@oracle.com> <653cc1da-e45a-9a93-7158-cee3e710ba35@redhat.com> <20220713132926.3sl7gs67dyjj7kit@revolver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/13, xiaolinkui wrote:
-> From: Linkui Xiao<xiaolinkui@kylinos.cn>
-                    ^ space here?
+On Wed, 13 Jul 2022, Liam Howlett wrote:
+> * David Hildenbrand <david@redhat.com> [220713 04:34]:
+> > On 12.07.22 16:24, Liam Howlett wrote:
+> > > When building with C=1, the maple tree had some rcu type mismatch &
+> > > locking mismatches in the destroy functions.  There were cosmetic only
+> > > since this happens after the nodes are removed from the tree.
+> > > 
+> > > Fixes: f8acc5e9581e (Maple Tree: add new data structure)
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > 
+> > Sorry to say, but the fixes become hard to follow (what/where/why). :)
+> > 
+> > I guess it's time for a new series soon. Eventually it makes sense to
+> > send the fixes as reply to the individual problematic patches. (instead
+> > of fixes to commit ids that are not upstream)
+> > 
+> > [yes, I'll do more review soon :) ]
+> 
+> I appreciate the feedback, it's much better than yelling into the void.
+> I have one more fix in the works - for __vma_adjust() of all functions
+> so that'll be impossible to follow anyways :)  I'll work on a v11 to
+> include that last one.
 
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
+Please do also post the incremental for that "one more fix" once it's
+ready: I have been keeping up with what you've been posting so far,
+folding them into my debugging here, and believe we have made some but
+still not enough progress on the bugs I hit.  Folding in one more fix
+will be easy for me, advancing to v11 of a 69-part patchset will be...
+dispiriting.
 
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-> return of 0/1 in function 'decap_v4' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-> return of 0/1 in function 'decap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-> return of 0/1 in function 'encap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-> return of 0/1 in function 'parse_tcp' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-> return of 0/1 in function 'parse_udp' with return type bool
-
-> Generated by: scripts/coccinelle/misc/boolreturn.cocci
-
-> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
-
-This patch likely needs a resend with proper [PATCH bpf] or
-[PATCH bpf-next] subject to end up in patchwork and to be picked up.
-
-Take a look at Documentation/bpf/bpf_devel_QA.rst section "Q: How do I
-indicate which tree (bpf vs. bpf-next) my patch should be applied to?".
-
-Since that's a cleanup, you most likely want to target bpf-next.
-
-> ---
->   .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
->   1 file changed, 15 insertions(+), 15 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c  
-> b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> index 125d872d7981..ba48fcb98ab2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
->   	udp = data + off;
-
->   	if (udp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (!is_icmp) {
->   		pckt->flow.port16[0] = udp->source;
->   		pckt->flow.port16[1] = udp->dest;
-> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
->   		pckt->flow.port16[0] = udp->dest;
->   		pckt->flow.port16[1] = udp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
-
->   	tcp = data + off;
->   	if (tcp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (tcp->syn)
->   		pckt->flags |= (1 << 1);
->   	if (!is_icmp) {
-> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
->   		pckt->flow.port16[0] = tcp->dest;
->   		pckt->flow.port16[1] = tcp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	void *data;
-
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct ipv6hdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 56710;
-> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
->   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
->   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip_suffix <<= 15;
->   	ip_suffix ^= pckt->flow.src;
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct iphdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || iph + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
-> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   		csum += *next_iph_u16++;
->   	iph->check = ~((csum & 0xffff) + (csum >> 16));
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> -	return 1;
-> +		return false;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void  
-> **data_end, bool inner_v4)
->   	else
->   		new_eth->eth_proto = 56710;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void  
-> **data_end)
->   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> --
-> 2.17.1
-
+Thanks,
+Hugh

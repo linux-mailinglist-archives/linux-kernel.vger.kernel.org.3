@@ -2,176 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE825731A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F735731A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235333AbiGMI4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S235471AbiGMI4d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 04:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbiGMI4L (ORCPT
+        with ESMTP id S235824AbiGMI41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:56:11 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8397C04D3
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:56:09 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id BYABo66oB3kbdBYABofk55; Wed, 13 Jul 2022 10:56:07 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 13 Jul 2022 10:56:07 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <9d799a6a-edbd-c7d7-1b20-b033fe38bcf7@wanadoo.fr>
-Date:   Wed, 13 Jul 2022 10:56:06 +0200
+        Wed, 13 Jul 2022 04:56:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048A8D2153
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:56:26 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBYAK-0006wb-Ea; Wed, 13 Jul 2022 10:56:16 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBYAJ-000fxr-LF; Wed, 13 Jul 2022 10:56:15 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oBYAI-0002b8-JK; Wed, 13 Jul 2022 10:56:14 +0200
+Message-ID: <23196dd7ad4eacbee3ad7f4f29b94917a5451450.camel@pengutronix.de>
+Subject: Re: [PATCH] reset: microchip-sparx5: allow building as a module
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        allan.nielsen@microchip.com, clement.leger@bootlin.com,
+        horatiu.vultur@microchip.com, lars.povlsen@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Date:   Wed, 13 Jul 2022 10:56:14 +0200
+In-Reply-To: <20220712125836.2676525-1-michael@walle.cc>
+References: <99cba2d231c5971525ec976611e66f86259dd1e0.camel@pengutronix.de>
+         <20220712125836.2676525-1-michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] Input: tsc2007 - enable GPIO chips that can sleep
-Content-Language: en-US
-To:     Benjamin Bara <bbara93@gmail.com>, dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-References: <20220713084247.3090353-1-bbara93@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220713084247.3090353-1-bbara93@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 13/07/2022 à 10:42, Benjamin Bara a écrit :
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+Hi Michael,
+
+On Di, 2022-07-12 at 14:58 +0200, Michael Walle wrote:
+> Hi,
 > 
-> This enables the usage of "can_sleep" GPIO chips as "pin up" GPIO.
-> This might be the case if the GPIO chip is an expander behind i2c.
-
-Hi,
-
-should you care and/or should there be a v2, some nitpick below.
-
-CJ
-
+> > On Fr, 2022-06-17 at 12:37 +0200, Clément Léger wrote:
+> > > Set RESET_MCHP_SPARX5 as a tristate and add MODULE_DEVICE_TABLE() to
+> > > allow building this driver as a module.
+> > > 
+> > > Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> > 
+> > Thank you, applied to reset/next.
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
-> ---
->   drivers/input/touchscreen/tsc2007.h      |  1 +
->   drivers/input/touchscreen/tsc2007_core.c | 38 ++++++++++++++++++++----
->   2 files changed, 34 insertions(+), 5 deletions(-)
+> Unfortunately, this is breaking ethernet on my board
+> (lan966x-kontron-kswitch-d10-mmt-6g-2gs, see dts in arch/arm/).
 > 
-> diff --git a/drivers/input/touchscreen/tsc2007.h b/drivers/input/touchscreen/tsc2007.h
-> index 69b08dd6c8df..29bd1ff22c72 100644
-> --- a/drivers/input/touchscreen/tsc2007.h
-> +++ b/drivers/input/touchscreen/tsc2007.h
-> @@ -78,6 +78,7 @@ struct tsc2007 {
->   	bool			stopped;
->   
->   	int			(*get_pendown_state)(struct device *);
-> +	int			(*get_pendown_state_cansleep)(struct device *);
->   	void			(*clear_penirq)(void);
->   
->   	struct mutex		mlock;
-> diff --git a/drivers/input/touchscreen/tsc2007_core.c b/drivers/input/touchscreen/tsc2007_core.c
-> index 3e871d182c40..0ad4c3c41297 100644
-> --- a/drivers/input/touchscreen/tsc2007_core.c
-> +++ b/drivers/input/touchscreen/tsc2007_core.c
-> @@ -20,6 +20,7 @@
->   #include <linux/module.h>
->   #include <linux/slab.h>
->   #include <linux/gpio/consumer.h>
-> +#include <linux/gpio/driver.h>
->   #include <linux/input.h>
->   #include <linux/interrupt.h>
->   #include <linux/i2c.h>
-> @@ -108,6 +109,14 @@ bool tsc2007_is_pen_down(struct tsc2007 *ts)
->   	return ts->get_pendown_state(&ts->client->dev);
->   }
->   
-> +bool tsc2007_is_pen_down_cansleep(struct tsc2007 *ts)
-> +{
-> +	if (!ts->get_pendown_state_cansleep)
-> +		return true;
-> +
-> +	return ts->get_pendown_state_cansleep(&ts->client->dev);
-> +}
-> +
->   static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
->   {
->   	struct tsc2007 *ts = handle;
-> @@ -115,7 +124,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
->   	struct ts_event tc;
->   	u32 rt;
->   
-> -	while (!ts->stopped && tsc2007_is_pen_down(ts)) {
-> +	while (!ts->stopped && tsc2007_is_pen_down_cansleep(ts)) {
->   
->   		/* pen is down, continue with the measurement */
->   
-> @@ -125,7 +134,7 @@ static irqreturn_t tsc2007_soft_irq(int irq, void *handle)
->   
->   		rt = tsc2007_calculate_resistance(ts, &tc);
->   
-> -		if (!rt && !ts->get_pendown_state) {
-> +		if (!rt && !ts->get_pendown_state_cansleep) {
->   			/*
->   			 * If pressure reported is 0 and we don't have
->   			 * callback to check pendown state, we have to
-> @@ -229,6 +238,14 @@ static int tsc2007_get_pendown_state_gpio(struct device *dev)
->   	return gpiod_get_value(ts->gpiod);
->   }
->   
-> +static int tsc2007_get_pendown_state_gpio_cansleep(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct tsc2007 *ts = i2c_get_clientdata(client);
-> +
-> +	return gpiod_get_value_cansleep(ts->gpiod);
-> +}
-> +
->   static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
->   {
->   	u32 val32;
-> @@ -264,10 +281,21 @@ static int tsc2007_probe_properties(struct device *dev, struct tsc2007 *ts)
->   	if (IS_ERR(ts->gpiod))
->   		return PTR_ERR(ts->gpiod);
->   
-> -	if (ts->gpiod)
-> -		ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
-> -	else
-> +	if (ts->gpiod) {
-> +		/* to support detection during the hard IRQ, the GPIO chip is required to not sleep.
+> I suspect this is because the postcore_initcall() was called earlier
+> in the kernel startup. Now, somehow the MDIO controller isn't working
+> anymore.
+> 
+> For a bit of a background, on the LAN9668 (I guess this is also true
+> on most other microchip switch platforms), there is a global switch
+> reset which is shared among most subsystems, i.e GPIO, SGPIO and
+> switch core. The switch driver will use this reset as there is no other
+> reset available (e.g. one which only reset the switching core). But when
+> it asserts the reset it will also reset other devices on the SoC. This
+> was for example the case for the GPIO, see commit 453200af8a85 ("pinctrl:
+> ocelot: add optional shared reset"). It seems like the MIIM is also
+> affected by this global reset, thus it needs the same fix.
+> 
+> I tried the obvious by adding the reset to the MIIM, but that didn't
+> help for all broken interfaces. I have to dig deeper into that.
+> 
+> In the meantime I'd appreciate it if this commit can be reverted until
+> the other fixes (at least the missing MIIM reset) will be merged.
 
-There should be /* alone on the first line of the comment.
+Thank you for catching this so quickly, I've sent a revert [1].
+I'll add that to reset/next, please let me know when this is fixed.
 
-> +		 * this might be the case if the GPIO is e.g. behind an i2c-based GPIO expander.
-> +		 * it is fine to sleep later in the soft IRQ, as it is threaded.
-> +		 */
-> +		ts->get_pendown_state_cansleep = tsc2007_get_pendown_state_gpio_cansleep;
-> +		if (gpiod_to_chip(ts->gpiod) && !gpiod_to_chip(ts->gpiod)->can_sleep) {
-> +			ts->get_pendown_state = tsc2007_get_pendown_state_gpio;
-> +		} else {
-> +			dev_dbg(dev, "Pen down GPIO chip can sleep\n");
-> +		}
+[1] https://lore.kernel.org/all/20220713084010.168720-1-p.zabel@pengutronix.de/
 
-Un-needed extra { } around each branch of this "if".
-
-Just my 2c,
-CJ
-
-> +
-> +	} else {
->   		dev_warn(dev, "Pen down GPIO is not specified in properties\n");
-> +	}
->   
->   	return 0;
->   }
-
+regards
+Philipp

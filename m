@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47385573974
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4B2573979
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbiGMO66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S236672AbiGMO7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbiGMO6e (ORCPT
+        with ESMTP id S236671AbiGMO7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:58:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D1A8DA2
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:58:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 210C71424;
-        Wed, 13 Jul 2022 07:58:33 -0700 (PDT)
-Received: from bogus (unknown [10.57.7.85])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4E683F73D;
-        Wed, 13 Jul 2022 07:58:29 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 15:58:27 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] amba: Remove deferred device addition
-Message-ID: <20220713145827.yxeoqj6vmkzhrrpv@bogus>
-References: <CGME20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5@eucas1p2.samsung.com>
- <20220705083934.3974140-1-saravanak@google.com>
- <7482d3af-4b02-4c1d-0386-b0a4ddf529da@samsung.com>
- <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com>
- <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
+        Wed, 13 Jul 2022 10:59:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 196FC186CF
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657724342;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=w0hQGbL9sUey3asO5//RVCwLG4Fv9JCcj/VgRL7bqrA=;
+        b=J1vRRnWY//5U4zehULQDsB4hOYYgQNh4pdnZHi46kGnfefYSZEcoONw+Ajbpclw+3ywaYM
+        Qf9PEIhfdCgV8Nu1yjge1/izuOy21R5Pb41vsOr4mt4qv3dgo96I1s1j4LvQO9dmXeI8of
+        l6D8nvfJe84bk3tYhA5eNFxioHT13eo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-z1xXtB4MP9-llpg5yvzC_A-1; Wed, 13 Jul 2022 10:58:57 -0400
+X-MC-Unique: z1xXtB4MP9-llpg5yvzC_A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC9DC3C2F762;
+        Wed, 13 Jul 2022 14:58:56 +0000 (UTC)
+Received: from raketa.redhat.com (unknown [10.40.192.102])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84B2B2026D07;
+        Wed, 13 Jul 2022 14:58:55 +0000 (UTC)
+From:   Maurizio Lombardi <mlombard@redhat.com>
+To:     alexander.duyck@gmail.com
+Cc:     kuba@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        chen45464546@163.com
+Subject: [PATCH] mm: prevent page_frag_alloc() from corrupting the memory
+Date:   Wed, 13 Jul 2022 16:58:54 +0200
+Message-Id: <20220713145854.147356-1-mlombard@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,29 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 12:38:33PM -0700, Saravana Kannan wrote:
-> Sudeep,
-> 
-> This makes me think the issue you are seeing is related to your
-> hardware drivers. Can you look into those please? I'm leaning towards
-> merging this amba clean up and adding delays (say 1ms) to your
-> clock/power domain drivers to avoid the crash you are seeing. And then
-> you can figure out the actual delays needed and update it.
+A number of drivers call page_frag_alloc() with a
+fragment's size > PAGE_SIZE.
+In low memory conditions, __page_frag_cache_refill() may fail the order 3
+cache allocation and fall back to order 0;
+In this case, the cache will be smaller than the fragment, causing
+memory corruptions.
 
-I haven't got a chance to debug the issue on Juno much further. One thing
-about the platform is that we can't turn off the debug power domain that
-most of the coresight devices share.
+Prevent this from happening by checking if the newly allocated cache
+is large enough for the fragment; if not, the allocation will fail
+and page_frag_alloc() will return NULL.
 
-One thing I also observed with -next+this patch is that with a little log
-it can access the registers while adding first few devices and then crash
-which doesn't align with platform behaviour as we can't turn off the domain
-though we attached and turn on in amba_read_periphid and then turn off and
-detach the power domain. Ideally if first device amba_read_periphid was
-successful, it must be the case for all, but I see different behaviour.
+V2: do not free the cache page because this could make memory pressure
+even worse, just return NULL.
 
-I need to check again to confirm if it is issue with platform power domain
-driver. It is based on SCMI so there is some role played by the f/w as well.
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+---
+ mm/page_alloc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---
-Regards,
-Sudeep
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..b1407254a826 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5617,6 +5617,8 @@ void *page_frag_alloc_align(struct page_frag_cache *nc,
+ 		/* reset page count bias and offset to start of new frag */
+ 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
+ 		offset = size - fragsz;
++		if (unlikely(offset < 0))
++			return NULL;
+ 	}
+ 
+ 	nc->pagecnt_bias--;
+-- 
+2.31.1
+

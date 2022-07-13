@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2879C573B7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03424573B86
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 18:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbiGMQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 12:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S236841AbiGMQqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 12:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbiGMQp6 (ORCPT
+        with ESMTP id S236826AbiGMQqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 12:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547CA2F3AC;
-        Wed, 13 Jul 2022 09:45:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E1661C39;
-        Wed, 13 Jul 2022 16:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CDBC341C6;
-        Wed, 13 Jul 2022 16:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657730756;
-        bh=YyGcbZI3NL+Y5QVRHRBFY4N+xrsu0kQktnkufuB1ylA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JtQcrHn+iu4Eljtfil3G+w7ZnCIPnV/De30FpvG+OHvYj36UIb5UT1YpVDdafVwMo
-         Uj5us1IxN+NAxZQkdLOWXkYXyJCNdoroNMnLxH9GCEAqEmodRqoub0jmLGJF39/c/m
-         wq/R4WRukhVKfYaXhp5aa6gXbwyVN17Jw453LpwclumMbDgcdc8pOflJMzCvabaY0N
-         QVUOTicRojC0z4KssmMQHp7MkPqjNE0GGLTZ05ZvNvlv8fmZm4D3m/hPuLxsSNX0zb
-         RQIxkEIYqOAVEVmfxxjfob6rrr+pg+oHO17nC2ebQJM0cJlqCj2c+mOgyMR+hJcmoi
-         ub+5AYgaFGhug==
-Date:   Wed, 13 Jul 2022 11:45:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v14 0/17] PCI: imx6: refine codes and add the error
- propagation
-Message-ID: <20220713164554.GA833183@bhelgaas>
+        Wed, 13 Jul 2022 12:46:31 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21F52FFE3;
+        Wed, 13 Jul 2022 09:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657730783; x=1689266783;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=kqLgUdZi53D6drYvYhKcGz92QsRtwzVgO8AAS9UQ2q0=;
+  b=y21v731/ufUxDI49JyraQWlz4OhYm+dpXUZTDEBK2aFDqXh2agnNXmCx
+   hHpwyIO3FqaP9bDi6aV6W8i4ysYZ/EV+TyuhqjQSzesFyD+riNF8Afddj
+   5GR/RcTeAsOMTm8onCYQxqDsMp1SqlYLRxOqDq7hyPPLkxA8LEIdwDiUA
+   c=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jul 2022 09:46:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 09:46:22 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 09:46:22 -0700
+Received: from [10.216.11.138] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 09:46:05 -0700
+Message-ID: <3def0f92-6784-df60-9533-e2902cda0185@quicinc.com>
+Date:   Wed, 13 Jul 2022 22:15:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711222959.GA701423@bhelgaas>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] soundwire: qcom: Update error prints to debug prints
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <vkoul@kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+References: <1657714921-28072-1-git-send-email-quic_srivasam@quicinc.com>
+ <75e9b775-3bbe-0b34-2bd6-b4ac74620672@linux.intel.com>
+ <8cde58d2-3b10-b88b-2d10-88e76fbcac06@quicinc.com>
+ <75404573094d1c46172fcd51dad6a4e564da1542.camel@perches.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <75404573094d1c46172fcd51dad6a4e564da1542.camel@perches.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,49 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:29:59PM -0500, Bjorn Helgaas wrote:
-> On Fri, Jul 01, 2022 at 11:25:18AM +0800, Richard Zhu wrote:
-> > ...
 
-> > Bjorn Helgaas (5):
-> >   PCI: imx6: Move imx6_pcie_grp_offset(), imx6_pcie_configure_type()
-> >     earlier
-> >   PCI: imx6: Move PHY management functions together
-> >   PCI: imx6: Move imx6_pcie_enable_ref_clk() earlier
-> >   PCI: imx6: Factor out ref clock disable to match enable
-> >   PCI: imx6: Disable clocks in reverse order of enable
-> > 
-> > Richard Zhu (12):
-> >   PCI: imx6: Move imx6_pcie_clk_disable() earlier
-> >   PCI: imx6: Collect clock enables in imx6_pcie_clk_enable()
-> >   PCI: imx6: Propagate .host_init() errors to caller
-> >   PCI: imx6: Disable i.MX6QDL clock when disabling ref clocks
-> >   PCI: imx6: Call host init function directly in resume
-> >   PCI: imx6: Turn off regulator when system is in suspend mode
-> >   PCI: imx6: Move regulator enable out of
-> >     imx6_pcie_deassert_core_reset()
-> >   PCI: imx6: Mark the link down as non-fatal error
-> >   PCI: imx6: Reduce resume time by only starting link if it was up
-> >     before suspend
-> >   PCI: imx6: Do not hide phy driver callbacks and refine the error
-> >     handling
-> >   PCI: imx6: Reformat suspend callback to keep symmetric with resume
-> >   PCI: imx6: Move the imx6_pcie_ltssm_disable() earlier
-> > 
-> > drivers/pci/controller/dwc/pci-imx6.c | 661 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------------------------------------------------------------------------
-> > 1 file changed, 358 insertions(+), 303 deletions(-)
-> 
-> Applied to pci/ctrl/imx6 for v5.20, thanks a lot for all your work
-> here!
-
-I updated the branch with Lucas' acks and with the minor
-imx6_pcie_start_link() return value check he suggested.
-
-I did not do anything about the missing IMX8MQ case in
-imx6_pcie_ltssm_disable() or the PHY init or regulator or shutdown
-issues.  If you want changes there, please make them starting with the
-pci/ctrl/imx6 branch and I can just replace it:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/imx6&id=7d652ce95e70
-
-Bjorn
+On 7/13/2022 9:31 PM, Joe Perches wrote:
+Thanks for your time Joe!!!
+> On Wed, 2022-07-13 at 20:22 +0530, Srinivasa Rao Mandadapu wrote:
+>> On 7/13/2022 7:53 PM, Pierre-Louis Bossart wrote:
+>> Thanks for your time Pierre-Louis!!!
+>>> On 7/13/22 07:22, Srinivasa Rao Mandadapu wrote:
+>>>> Upadte error prints to debug prints to avoid redundant logging in kernel
+>>> update
+> []
+>>>> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> []
+>>>> @@ -573,11 +573,10 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
+>>>>    				break;
+>>>>    			case SWRM_INTERRUPT_STATUS_NEW_SLAVE_ATTACHED:
+>>>>    			case SWRM_INTERRUPT_STATUS_CHANGE_ENUM_SLAVE_STATUS:
+>>>> -				dev_err_ratelimited(swrm->dev, "%s: SWR new slave attached\n",
+>>>> -					__func__);
+>>>> +				dev_dbg(swrm->dev, "%s: SWR new slave attached\n", __func__);
+> Could also drop the "%s: ", __func__ as it's already a unique message
+> and dynamic debug could add it back if really desired.
+Okay. It's removed and posted v2 patch.
+>

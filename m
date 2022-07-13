@@ -2,122 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9255738B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3175738BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiGMOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S236063AbiGMOYV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 13 Jul 2022 10:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiGMOYI (ORCPT
+        with ESMTP id S233250AbiGMOYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:24:08 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E048023160;
-        Wed, 13 Jul 2022 07:24:07 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DEEgor004515;
-        Wed, 13 Jul 2022 14:23:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Kqd8S3YsVTupeYDsw/0CEjgSPyDSJBms6hyW9oBAQeM=;
- b=QswoJDCWPAwTxoZHbdQEOYKJFNMNTb2KFlnGbq7oimxzEtYekgdpSiRH/HNBsveUdi/f
- 1c4OgdZzQ7WLvfp5Gh+2GZ/LXRW8hApTxw75mJZhcsPDNNgnlyJ+Z89sKRqwNHEooqX+
- czJ8NIQEa4koGb3HjCFShmMwZeEIocw9bWmvbkNOizW6cHrfWrta+3DFONOUT42z6MFV
- u9nj5WHC2ENWupHa+kNzIwpjhdmcuVdSiuKRm7clv7Lfh9eh9b1idBzuyd7gxRNzD9hg
- pQELC3clUGyVOLTRv8+FgiKBwKBoqzTxWvwdIrSC7/cs8xZ0bppXs2d8s5idEtkUeH9E Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ymvratk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 14:23:45 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26DEFSXF013891;
-        Wed, 13 Jul 2022 14:23:44 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9ymvrasc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 14:23:44 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26DEKPjp000304;
-        Wed, 13 Jul 2022 14:23:42 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3h71a8w2sf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 14:23:41 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26DENdG921365098
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 14:23:39 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4C5D52051;
-        Wed, 13 Jul 2022 14:23:39 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.111.228])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 883BE5204F;
-        Wed, 13 Jul 2022 14:23:36 +0000 (GMT)
-Message-ID: <8bea9e61be96e0358a43e320f9b89b742e8ca992.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima: force signature verification when
- CONFIG_KEXEC_SIG is configured
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 13 Jul 2022 10:23:35 -0400
-In-Reply-To: <20220713072111.230333-1-coxu@redhat.com>
-References: <20220712093302.49490-1-coxu@redhat.com>
-         <20220713072111.230333-1-coxu@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Fr7HlAMLzOgY2q57u1UJRu5T-WiUxJYG
-X-Proofpoint-ORIG-GUID: FClJBHTbZacQzfCFbUO4Cd14E0SRbUrp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-13_03,2022-07-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207130055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 10:24:13 -0400
+Received: from elephants.elehost.com (elephants.elehost.com [216.66.27.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2087623160;
+        Wed, 13 Jul 2022 07:24:12 -0700 (PDT)
+Received: from Mazikeen (ec2-99-79-53-255.ca-central-1.compute.amazonaws.com [99.79.53.255])
+        (authenticated bits=0)
+        by elephants.elehost.com (8.16.1/8.16.1) with ESMTPSA id 26DENsUJ022968
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 13 Jul 2022 10:23:59 -0400 (EDT)
+        (envelope-from rsbecker@nexbridge.com)
+Reply-To: <rsbecker@nexbridge.com>
+From:   <rsbecker@nexbridge.com>
+To:     <rsbecker@nexbridge.com>, "'Junio C Hamano'" <gitster@pobox.com>,
+        <git@vger.kernel.org>
+Cc:     "'Linux Kernel'" <linux-kernel@vger.kernel.org>,
+        <git-packagers@googlegroups.com>
+References: <xmqqv8s2fefi.fsf@gitster.g> <01af01d896b1$a48e32f0$edaa98d0$@nexbridge.com>
+In-Reply-To: <01af01d896b1$a48e32f0$edaa98d0$@nexbridge.com>
+Subject: RE: [Test Failures] Git v2.37.1 (was RE: [ANNOUNCE] Git v2.37.1 and others)
+Date:   Wed, 13 Jul 2022 10:23:47 -0400
+Organization: Nexbridge Inc.
+Message-ID: <01b101d896c4$31761bd0$94625370$@nexbridge.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQOax8rq/kYLSctl3duwOPHxjLu0zAJkQfEUqeS4cGA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-13 at 15:21 +0800, Coiby Xu wrote:
-> Currently, an unsigned kernel could be kexec'ed when IMA arch specific
-> policy is configured unless lockdown is enabled. Enforce kernel
-> signature verification check in the kexec_file_load syscall when IMA
-> arch specific policy is configured.
-> 
-> Fixes: 99d5cadfde2b ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXEC_SIG_FORCE")
-> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> ---
-> v2
->  - don't include linux/kexec.h since it's already been included in
->    linux/ima.h
->  - fix build errors when KEXEC_FILE/KEXEC_CORE is disable as caught by
->    kernel test robot <lkp@intel.com>
+On July 13, 2022 8:11 AM, I wrote:
+>On July 12, 2022 1:07 PM, Junio C Hamano wrote:
+>>Git v2.37.1, together with v2.30.5, v2.31.4, v2.32.3, v2.33.4, v2.34.4,
+>>v2.35.4, and
+>>v2.36.2 for older maintenance tracks, are now available at the usual places.
+>>
+>>These are to address CVE-2022-29187, where the fixes in v2.36.1 and
+>>below to address CVE-2022-24765 released earlier may not have been complete.
+>
+>Following are net new test failures with 2.37.1 compared with 2.37.0 are as follows
+>on NonStop ia64 and x86 platforms:
+>
+>t5516-fetch-push subtests 53, 113
+>
+>t5545-push-options subtest 9
 
-Thanks, Coiby.  This version of the patch is now queued in next-
-integrity/next-
-integrity-testing.
+Test passes when not run in Jenkins CI/CD
 
-Mimi
+>t5601-clone subtest 8
+
+Test passes when not run in Jenkins CI/CD
+
+>t7502-commit-porcelain subtests 20-26, 29-33, 42-47
+
+Test passes when not run in Jenkins CI/CD
+
+>t7528-signed-commit-ssh subtests 4, 5
+
+Test passes when not run in Jenkins CI/CD 
+
+So it looks like a Jenkins/git test interaction is the issue here. I'm wondering whether running the test with </dev/null and 2>/dev/null might make a difference when running in Jenkins. The tty where Jenkins was started is in a permanently disconnected state.
+
+Mostly ignore the subtest failures, but still, would like to know why these subtests in particular.
+
+--Randall
 

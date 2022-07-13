@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB4D573D02
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFAC573D04
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236688AbiGMTLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 15:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S236846AbiGMTMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 15:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGMTLu (ORCPT
+        with ESMTP id S231758AbiGMTMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:11:50 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E974F1F63D
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:11:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso5315393pjc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:11:49 -0700 (PDT)
+        Wed, 13 Jul 2022 15:12:13 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A831F63D
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:12:10 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x91so15359650ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 12:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6WniWrj3ZgV51g7LWc0uoxvElrFWWSWmqIiBeCx0TGA=;
-        b=ftc2b3pp6VR3l1NA92GZ1N4vRKA+MEjmtdqoxsl3Ilze+gmL3NDB39Xm1aCUdHFAve
-         ViqgNdDyRFizVooQRLgGQH4tRCDVbf4YL5Uh6mby/MBunMDDoadRWmyj+YL3qrHF0ypW
-         MkAabV2guUnjUXJVxtpso92ITWK0U905ay0RjCxncmkv0mJM8tDNb4SXV8BKG4ELjF+V
-         lgFX2eOjqFWohepJI+Jle2fvaTfUeWje32HNTboIhc2w6V2+2S5ky6HHrX0eWNVnaMfo
-         UpJP2oGxGfI7HhWKRl9gQIMdw38F9HGZxfy6d326Dhx08QkiR6O7njqSDrStBulkTbw+
-         NdSg==
+        bh=PLq+vxmSJZQVlzojHgHWzYyGYj9NCZYGnKKKS15nhgc=;
+        b=z+8/nuDj0YhTITREu8tEiSYhUaWtxa2u8s/WCri+GGAhIqC1JlOWNr5amsXORQhXvC
+         HIjrp0W+dC6fYVhLJKT+zqPvpxBtXVbp5QUhil9xtDc9gq6HbcU1o/Av4IlXLCjJ5llM
+         YBYmLJc5gwMUNbqCkOvUx+7S8DxrCJZp0WqnPxLynzfopX5/QBU/GlyE22MUUgPuPwEZ
+         YUzweQU4YvgVe010Jf1Tj2yM79HPjV+GDG1DzxV0mn//ddaGYYgso77VgA6wl9Cnceov
+         NyVS1PjEJgD/kOTaQSkTPG+cdImEbh3mU2gEU3pSs8lCD/S9namtcGgmYawjdFqtiMYs
+         c18g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6WniWrj3ZgV51g7LWc0uoxvElrFWWSWmqIiBeCx0TGA=;
-        b=aaSSMc5wcWTD6BPwc2aE12frsiz/qAzd6OgI40hmrMo4KOEL/SBtW04OejysF5Wo4w
-         S1DzAWwgiIIoquafTg27eLm0D5SsW4tm+PVfEORdPGUk25MZT2Y72ezwcbWbZzKgZ+Tp
-         ZCVgjgDFqreyvxHElTB9ShrIvCdMXXK84JggvTmMqJwhKKR5rulR8gYlK7wNnVmOvO0w
-         BeXgv4vo4YQnZ9q41hoR0brpQvNMyMGLX9M2ZSwKJ2I3t0rw/K1xCNexxUzxA8oQw22Q
-         wmVwjf+SkLSEJvJ3JFjGx/DjRO/ZmixrT8ZZg98X+S2vjQuehci/Hgl7ElosaL52EejE
-         68dg==
-X-Gm-Message-State: AJIora/9BxdDE3TBXDFI02H4C/VqSoZiPXRw4MeD5FZMNLqKiwW+EdbQ
-        Soq1Jro2aPlJ8tK32P5rOSLwwKRC2wWSx1C3y3R7Eg==
-X-Google-Smtp-Source: AGRyM1s7h95SkBhPctIM6Jk4WHc6HW94JZP5f9ql2cZvctg5a76kUb6rS1bFK6/zTvkzmwLovIkP/1ZWeMRAm34h4vI=
-X-Received: by 2002:a17:903:244d:b0:16c:5bfe:2e87 with SMTP id
- l13-20020a170903244d00b0016c5bfe2e87mr4671742pls.148.1657739509327; Wed, 13
- Jul 2022 12:11:49 -0700 (PDT)
+        bh=PLq+vxmSJZQVlzojHgHWzYyGYj9NCZYGnKKKS15nhgc=;
+        b=s+xYr8RMjin/xuvbucPLgOrN0pDPlAcHHcfajKwX9F0Xj2l6RrvBM7vAmrbMbLY0Zb
+         oWw3f/RmrKTsrVFXZ2N2CKdjkKWtcZF6f3HRsokoFZlQ4W+keooXPcEEhTg4jHuwlsFR
+         tNuqBr32SDuOvYmr14ZVDBflLRyYCcUWfP6a1HpGWEZSxz7NfRkN8/+gOuO9eGWNrojT
+         ffAkYp9Y2GQSBORhtzdUHMeZyX9s4PEs07ZuE7kKHrEMsCdF1ZvzVk0nAdM1FHKHI3/q
+         YjVRVqRPP9EPRJhcU5Z+zmviRka5giPVuLSVuxwPE8lr++ntgOIa7cWRX36Fyj+DRuR0
+         LnPw==
+X-Gm-Message-State: AJIora96UAR+M694YmBmNInTL6XKl+C94Jd2xrSCPmHEduS+USIs4nU8
+        BxGandw66cCm5jWqz7+ddJ/Gc5ddWCNyJ7KFkJ/eFbxWs/Cpzg==
+X-Google-Smtp-Source: AGRyM1ubxyRQpxoVT6CAxq4vQ0utB7Mdt4cgjhd5Fh5373cKkbymnqNFUGq1gmsYNG8qOCThsrxESBTdiHe6Uajwe7M=
+X-Received: by 2002:a05:6402:4396:b0:43a:77b5:41f7 with SMTP id
+ o22-20020a056402439600b0043a77b541f7mr6804147edc.45.1657739529010; Wed, 13
+ Jul 2022 12:12:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713173503.3889486-1-nathan@kernel.org>
-In-Reply-To: <20220713173503.3889486-1-nathan@kernel.org>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 13 Jul 2022 12:11:38 -0700
-Message-ID: <CAKH8qBsTJcipS65962_hTLhpqzv42YWQpXntVkkt4RhCYubT7g@mail.gmail.com>
-Subject: Re: [PATCH] bpf, arm64: Mark dummy_tramp as global
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Sami Tolvanen <samitolvanen@google.com>
+References: <20220713163201.136202-1-sebastian.fricke@collabora.com> <20220713163201.136202-3-sebastian.fricke@collabora.com>
+In-Reply-To: <20220713163201.136202-3-sebastian.fricke@collabora.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Wed, 13 Jul 2022 16:11:57 -0300
+Message-ID: <CAAEAJfAD49kc_zQsjKjB+v5PNcQXTEyT_fL98a2cSyzhTuk1Zg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] staging: media: rkvdec: Enable S_CTRL IOCTL
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:35 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When building with clang + CONFIG_CFI_CLANG=y, the following error
-> occurs at link time:
->
->   ld.lld: error: undefined symbol: dummy_tramp
->
-> dummy_tramp is declared globally in C but its definition in inline
-> assembly does not use .global, which prevents clang from properly
-> resolving the references to it when creating the CFI jump tables.
->
-> Mark dummy_tramp as global so that the reference can be properly
-> resolved.
->
-> Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1661
-> Suggested-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Sebastian,
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
-
+On Wed, Jul 13, 2022 at 1:33 PM Sebastian Fricke
+<sebastian.fricke@collabora.com> wrote:
+>
+> Enable user-space to set the SPS of the current byte-stream on the
+> decoder. This action will trigger the decoder to pick the optimal
+> pixel-format for the capture queue.
+>
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 > ---
->  arch/arm64/net/bpf_jit_comp.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/staging/media/rkvdec/rkvdec.c | 60 ++++++++++++++++++++-------
+>  1 file changed, 46 insertions(+), 14 deletions(-)
 >
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index fd1cb0d2aaa6..dcc572b7d4da 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -604,6 +604,7 @@ void dummy_tramp(void);
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index 2625e0a736f4..f84579f764ab 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -27,6 +27,17 @@
+>  #include "rkvdec.h"
+>  #include "rkvdec-regs.h"
 >
->  asm (
->  "      .pushsection .text, \"ax\", @progbits\n"
-> +"      .global dummy_tramp\n"
->  "      .type dummy_tramp, %function\n"
->  "dummy_tramp:"
->  #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+> +static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
+> +                                      struct v4l2_pix_format_mplane *pix_mp)
+> +{
+> +       v4l2_fill_pixfmt_mp(pix_mp, pix_mp->pixelformat,
+> +                           pix_mp->width, pix_mp->height);
+> +       pix_mp->plane_fmt[0].sizeimage += 128 *
+> +               DIV_ROUND_UP(pix_mp->width, 16) *
+> +               DIV_ROUND_UP(pix_mp->height, 16);
+> +       pix_mp->field = V4L2_FIELD_NONE;
+> +}
+> +
+>  /*
+>   * Fetch the optimal pixel-format directly from the codec variation. If the
+>   * valid_fmt callback is not implemented, then the context variable valid_fmt
+> @@ -44,6 +55,27 @@ static int rkvdec_get_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
+>         return 0;
+>  }
 >
-> base-commit: ace2bee839e08df324cb320763258dfd72e6120e
-> --
-> 2.37.1
+> +static int rkvdec_set_valid_fmt(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
+> +{
+> +       struct v4l2_pix_format_mplane *pix_mp;
+> +
+> +       switch (ctrl->id) {
+> +       case V4L2_CID_STATELESS_H264_SPS:
+> +       case V4L2_CID_STATELESS_VP9_FRAME:
+> +       case V4L2_CID_STATELESS_HEVC_SPS:
+> +               ctx->valid_fmt = rkvdec_get_valid_fmt(ctx, ctrl);
+> +
+> +               pix_mp = &ctx->decoded_fmt.fmt.pix_mp;
+> +               pix_mp->pixelformat = ctx->valid_fmt;
+> +               rkvdec_fill_decoded_pixfmt(ctx, pix_mp);
+> +               break;
+> +       default:
+> +               dev_err(ctx->dev->dev, "Unsupported stateless control ID: %x\n", ctrl->id);
+> +               return -EINVAL;
+> +       };
+> +       return 0;
+> +}
+> +
+>  static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+>         struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
+> @@ -58,8 +90,18 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+>         return 0;
+>  }
 >
+> +static int rkvdec_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +       struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
+> +
+> +       if (!ctx->valid_fmt)
+> +               return rkvdec_set_valid_fmt(ctx, ctrl);
+
+We've discussed this approach with Jonas.
+See "[PATCH v2 10/12] media: rkvdec: Lock capture pixel format in
+s_ctrl and s_fmt".
+
+https://lore.kernel.org/all/f26407dbf3efc6cc046daaabdbe75c516743a187.camel@collabora.com/
+
+The outcome of the discussion is:
+* setting SPS resets the CAPTURE format (as per the spec).
+* the application uses ENUM/TRY/S_FMT to negotiate a format, and uses
+SPS to filter formats.
+
+Thanks!
+Ezequiel

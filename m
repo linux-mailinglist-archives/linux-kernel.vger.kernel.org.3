@@ -2,86 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B7D573884
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BBB573881
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 16:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiGMOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 10:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S236296AbiGMOMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 10:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiGMOMt (ORCPT
+        with ESMTP id S235187AbiGMOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:12:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1F032EC9;
-        Wed, 13 Jul 2022 07:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wGRPtxM9zwJmyc5jc5elK4XE4EFRYrearKDZedH3sTg=; b=Z4A+w2PH9rZGkZa1+jFMumRm4R
-        8JDguw6Sbit9O1V65ZDAPzRELm91U/PbJsV4AFPD30IdPTRL56sLpWv8e7fhuABFvOHUeAWWOTUJw
-        FjLUI77YIqr8N7i6FOBGsVo6tti6QRrIatCQhIRjtWLVc6oUNaWaWi3ve3kCXzmvN/id8m3Sq3H5W
-        FXsqV8L9L+fRNVtMlLo4KgpZgIky2yGzVByls6IqBSGkpZqRbGx+Z+ehGgSc8pR+YCEN4JwjPAk34
-        WQp4hzRkmIffrCel9ogdZtu2uzQ+U78SOXT2HKTyMMqly1sIuxoPrd4Z2JDE/Uzz+QIZHZMlm2oO5
-        uIDJS7nA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBd68-003aDZ-Ui; Wed, 13 Jul 2022 14:12:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C3B25300238;
-        Wed, 13 Jul 2022 16:12:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AD62A20595D02; Wed, 13 Jul 2022 16:12:13 +0200 (CEST)
-Date:   Wed, 13 Jul 2022 16:12:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        kvm list <kvm@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH 5.18 00/61] 5.18.12-rc1 review
-Message-ID: <Ys7Sved3UZOtzJLf@hirez.programming.kicks-ass.net>
-References: <20220712183236.931648980@linuxfoundation.org>
- <CA+G9fYvRQ9gzee8pjRmsyedz6oGyh5pzSYEPkuDoKEE+X2RZDg@mail.gmail.com>
- <Ys7Cm17ShWUOXkRw@kroah.com>
+        Wed, 13 Jul 2022 10:12:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C261326FF
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657721555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
+        b=F6qLBuj9pKEp6bXdUjd6VVQrE7ky+YlCw+mVa79DE85vIIGH3+p6pyMpRzAdIrP44/nBic
+        l+p8+jJlpcPLYKJ88ale6dC0iW7yodHat9G6MQZG2IUHbUwyQYPsvpSIt36FXo2TOlU6La
+        0VDi7amcNGKaVERKuFlcHraFYmW0eKo=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-325-nYOuzBz5Oa-QQHeb58jLNQ-1; Wed, 13 Jul 2022 10:12:33 -0400
+X-MC-Unique: nYOuzBz5Oa-QQHeb58jLNQ-1
+Received: by mail-oi1-f198.google.com with SMTP id ay32-20020a056808302000b002f96abff093so7051926oib.23
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 07:12:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
+        b=vD0AFl3XE5MSHC0H+eGxUQGh9ZQL1+9F3ti41e3iq3WCQ01QwOVEjx/Ku13hea6YdQ
+         xKWtEAvEnWrWq2iN9XCKD8e4wfuU9uDX1MDVWzapW3iKvCtbiRS+xAEy0KihE/Qek4PX
+         KBqCduQnZQMfQvZWLlHD2VjsC3hyl0fvAJe5fiH+03zTe1DLyE0bgi2lDcy1zaocEtF1
+         +SA286uO2pFC7rfb6C6hkqKmW/WkUTptf1Nbmd4fFWbGIdU5Mtw1cRNSgtyJuB653CTw
+         QLekjXYJgRszV6CLRQp+XyCpC8KQNc+yT1kPiZcMZBSYT5tAnQtnEPXUnyS8dKYQVqdX
+         o5lQ==
+X-Gm-Message-State: AJIora/bkhy8aRxFrnQ6ZF1H4bDhiPFAKsQhupYnUoA0NDdeiGaK3yRP
+        cOfm1zwJbt1wB3PUCa4Kmz3NjBxBLPyab5/IXV89CobXOs5h5hrGSpT3A8fNcZRUH2w4JadPb+j
+        fKjH17+MM5yrmkaYW+ONAA5Xf
+X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824442oan.76.1657721551042;
+        Wed, 13 Jul 2022 07:12:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1spJxbEpfi2ss2QX18y+16qhda8NVczHl6f2bXHBKRgiIdBeWnn3ihlz7RHzcUQDgWHPCHuqg==
+X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824432oan.76.1657721550855;
+        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id t17-20020a056830225100b00616929b93d6sm4860341otd.14.2022.07.13.07.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:12:28 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
+Message-ID: <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
+References: <20220713131340.29401-1-johan+linaro@kernel.org>
+ <20220713131340.29401-6-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ys7Cm17ShWUOXkRw@kroah.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220713131340.29401-6-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:03:23PM +0200, Greg Kroah-Hartman wrote:
-
-> > 2) qemu_x86_64 boot warning
-> >    - WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558
-> > apply_returns+0x19c/0x1d0
+On Wed, Jul 13, 2022 at 03:13:38PM +0200, Johan Hovold wrote:
+> The two single-port SC8280XP USB controllers do not have an hs_phy_irq
+> interrupt. Instead they have a pwr_event interrupt which is distinct
+> from the former and not yet supported by the driver.
 > 
-> Warning, but does everything still work?
+> Fix the USB node interrupt names so that they match the devicetree
+> binding.
 > 
-> And again, still on Linus's tree?
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 45cc7d714fd2..4a7aa9992f3a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
+>  					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> -					  "dm_hs_phy_irq", "ss_phy_irq";
+> +			interrupt-names = "pwr_event",
+> +					  "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "ss_phy_irq";
+>  
+>  			power-domains = <&gcc USB30_PRIM_GDSC>;
+>  
+> @@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
+>  					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> -					  "dm_hs_phy_irq", "ss_phy_irq";
+> +			interrupt-names = "pwr_event",
+> +					  "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "ss_phy_irq";
 
-Working on it: https://lkml.kernel.org/r/Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net
+For this specific change to pwr_event:
+
+    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+
+That being said, I was reviewing this against the (fairly old)
+downstream release I have, and the IRQs defined there look like this:
+
+		interrupts-extended = <&pdc 12 IRQ_TYPE_EDGE_RISING>,
+				<&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 136 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 13 IRQ_TYPE_EDGE_RISING>;
+		interrupt-names = "dp_hs_phy_irq", "pwr_event_irq",
+				"ss_phy_irq", "dm_hs_phy_irq";
+
+The part I want to highlight is that the "pwr_event" irq downstream maps
+to <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>, but the current upstream
+devicetree I'm looking at has it mapped to <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>
+
+Do you happen to have any source you can also check to confirm if this
+is a bug or not?
+
+Thanks,
+Andrew
+
+>  
+>  			power-domains = <&gcc USB30_SEC_GDSC>;
+>  
+> -- 
+> 2.35.1
+> 
+

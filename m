@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A64B573129
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0A557312E
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 10:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiGMIck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 04:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S235522AbiGMIeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 04:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235512AbiGMIcf (ORCPT
+        with ESMTP id S234649AbiGMIeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 04:32:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4653D71BF8;
-        Wed, 13 Jul 2022 01:32:33 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D88mnb009690;
-        Wed, 13 Jul 2022 08:32:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XthJH8wzL3yWkM9sa0P7yz1BR1xHDRm1vPLyUsDI/hA=;
- b=hlTaPaMD89c7CaSRKFywkxFGrG1p1cbr1vdZfZeBjbWcYxMmJ5CIjQ8LD+WYJgA6x9A8
- Y17mZF8L+wclRaZmyq/n6Em+kYBtdWWbu+GlSPfVHc3Zp0q4QL+Pv3OCUrRWg0n67qT9
- 89Vot4kB6ryr0yC+88ZrjkLpm8SK9Vo+rMgt4gVrNyB6Wv/ndR2Kn3dGSZhSbb9o9rVg
- mBSNlMCu0vX/rZVnhu60axJtGPAn6iTrngw6wPoG3g03CecYr/u5kNUeELcR3OVyoOO8
- zRhY8doBIlDqd7y/l75IbViRDLf4vBTWb7pGzkGTjsb9TDFGrZztuIH4rj7+BMwxQ/Ez Gg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9au06j2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 08:32:28 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26D8K93Z026011;
-        Wed, 13 Jul 2022 08:32:25 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3h71a8wbtq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Jul 2022 08:32:25 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26D8Upuh20709812
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Jul 2022 08:30:51 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19C9E42042;
-        Wed, 13 Jul 2022 08:32:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AD90642041;
-        Wed, 13 Jul 2022 08:32:21 +0000 (GMT)
-Received: from [9.152.224.153] (unknown [9.152.224.153])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 13 Jul 2022 08:32:21 +0000 (GMT)
-Message-ID: <4132ba2a-f5ad-25ba-7f74-72369b8a140b@linux.ibm.com>
-Date:   Wed, 13 Jul 2022 10:32:21 +0200
+        Wed, 13 Jul 2022 04:34:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16B3E74DF7
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657701239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=74dW0jhlKIvaOyEGuXtY/bgXjn9zQ+zDadO8O10/PE4=;
+        b=SMv+Iu7EAeuL+yWjWOWrnayc+ViPMHiQXmDiUcgOjJUYHNpasMZEe8b/KXFAzw1EEyiyyc
+        vTHc0Qcr4NjYmjLKBl/m0OrJidw3rFVi6UQxkzPRdrvsPc42t40NKjWRsxuz12Pa66r9+2
+        6DqY/6DnFQBzwXiIgrx6NxfTyWogkks=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-urwJOxn_PGKRj9tdTYG6VA-1; Wed, 13 Jul 2022 04:33:57 -0400
+X-MC-Unique: urwJOxn_PGKRj9tdTYG6VA-1
+Received: by mail-wm1-f69.google.com with SMTP id i184-20020a1c3bc1000000b003a026f48333so5240899wma.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 01:33:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=74dW0jhlKIvaOyEGuXtY/bgXjn9zQ+zDadO8O10/PE4=;
+        b=m1ltqHrtbEMLnW4yHP+8MKFCMSjrIx1+2roQq5TjwMyBKo8rKrxljybkyBP4vI6YnF
+         75kqHvZNDCQg85hVgJwogXi5K0YqW2/bOLlXZT0lvY60gZ1OTZLKaSGjMizumGn/yh78
+         vaXK6TGGUuLBn1OnpdbJoYovc4bl8uE7DDxCqmbVCu7qM9lnSOMe+vUAdpOmmuFblVQi
+         pM4ixrooQpARdxL3nJsZZxo2BbobuhR42NdDJ7z0sDstwrPb1iK9AbbHkM221utNlVLL
+         KrpaK7lhWla6//TXUpOdjUhRuBCzDWtbhfQYbrjVAsnZnoR0PIQCQ0/ShpvIyjvz84CI
+         0oQQ==
+X-Gm-Message-State: AJIora9r6EcxfMxQIjSdzqZEX/IHfjeoP/9ed4XgpiU4PZT6PORXwV1I
+        Ykm1fFvJ2ripZXXNRkNRmJ2PS5fto/wjBvdhhFxgctw7R8QITzQCFGH0phrK/AAB4/FiiEEQmnq
+        upCoV5nkI2391po1sCL4nZHcM
+X-Received: by 2002:adf:eccb:0:b0:21d:7b41:22c7 with SMTP id s11-20020adfeccb000000b0021d7b4122c7mr1924338wro.543.1657701236586;
+        Wed, 13 Jul 2022 01:33:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u8ITw976yDjianJL9XwDcoXz2Y6QyUbFXu8PB3MPkowu/ymg7juX4C+XbujXlltHzYiurZOQ==
+X-Received: by 2002:adf:eccb:0:b0:21d:7b41:22c7 with SMTP id s11-20020adfeccb000000b0021d7b4122c7mr1924318wro.543.1657701236338;
+        Wed, 13 Jul 2022 01:33:56 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-238.dyn.eolo.it. [146.241.97.238])
+        by smtp.gmail.com with ESMTPSA id l26-20020a056000023a00b0021d96b3b6adsm10266971wrz.106.2022.07.13.01.33.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 01:33:55 -0700 (PDT)
+Message-ID: <2dc058285c524363b93ebf9468ff85186b9c72c2.camel@redhat.com>
+Subject: Re: [PATCH net v6] net: rose: fix null-ptr-deref caused by
+ rose_kill_by_neigh
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     duoming@zju.edu.cn
+Cc:     linux-hams@vger.kernel.org, ralf@linux-mips.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 13 Jul 2022 10:33:54 +0200
+In-Reply-To: <540ab034.3f081.181f6895dba.Coremail.duoming@zju.edu.cn>
+References: <20220711013111.33183-1-duoming@zju.edu.cn>
+         <daa2b799956c286b2cce898bee22fb2a043f5177.camel@redhat.com>
+         <540ab034.3f081.181f6895dba.Coremail.duoming@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 1/3] s390/cpufeature: rework to allow more than only hwcap
- bits
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, nrb@linux.ibm.com
-References: <20220712105220.325010-1-seiden@linux.ibm.com>
- <20220712105220.325010-2-seiden@linux.ibm.com> <Ys3Kt7nG2jtE8H3H@osiris>
-From:   Steffen Eiden <seiden@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <Ys3Kt7nG2jtE8H3H@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VjTRiqoGWyJs1k1ypXkStQs3wv4BBLNP
-X-Proofpoint-ORIG-GUID: VjTRiqoGWyJs1k1ypXkStQs3wv4BBLNP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_14,2022-07-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207130034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,103 +82,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/12/22 21:25, Heiko Carstens wrote:
-> On Tue, Jul 12, 2022 at 12:52:18PM +0200, Steffen Eiden wrote:
->> Rework cpufeature implementation to allow for various cpu feature
->> indications, which is not only limited to hwcap bits. This is achieved
->> by adding a sequential list of cpu feature numbers, where each of them
->> is mapped to an entry which indicates what this number is about.
->>
->> Each entry contains a type member, which indicates what feature
->> name space to look into (e.g. hwcap, or cpu facility). If wanted this
->> allows also to automatically load modules only in e.g. z/VM
->> configurations.
->>
->> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
->> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ...
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright IBM Corp. 2022
->> + * Author(s): Steffen Eiden <seiden@linux.ibm.com>
->> + *            Heiko Carstens <hca@linux.ibm.com>
+On Wed, 2022-07-13 at 15:50 +0800, duoming@zju.edu.cn wrote:
+> Hello,
 > 
-> Please don't add my name + email address in source code. I just
-> recently removed that everywhere since email addresses may change, and
-> git history is more than enough for me. It's up to you if you want to
-> keep your name + email address here.
-
-OK, makes sense.
-
+> On Tue, 12 Jul 2022 13:00:49 +0200 Paolo Abeni wrote:
 > 
->> +static struct s390_cpu_feature s390_cpu_features[MAX_CPU_FEATURES] = {
->> +	[S390_CPU_FEATURE_ESAN3]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_ESAN3},
->> +	[S390_CPU_FEATURE_ZARCH]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_ZARCH},
->> +	[S390_CPU_FEATURE_STFLE]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_STFLE},
->> +	[S390_CPU_FEATURE_MSA]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_MSA},
->> +	[S390_CPU_FEATURE_LDISP]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_LDISP},
->> +	[S390_CPU_FEATURE_EIMM]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_EIMM},
->> +	[S390_CPU_FEATURE_DFP]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_DFP},
->> +	[S390_CPU_FEATURE_HPAGE]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_HPAGE},
->> +	[S390_CPU_FEATURE_ETF3EH]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_ETF3EH},
->> +	[S390_CPU_FEATURE_HIGH_GPRS]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_HIGH_GPRS},
->> +	[S390_CPU_FEATURE_TE]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_TE},
->> +	[S390_CPU_FEATURE_VXRS]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS},
->> +	[S390_CPU_FEATURE_VXRS_BCD]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS_BCD},
->> +	[S390_CPU_FEATURE_VXRS_EXT]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS_EXT},
->> +	[S390_CPU_FEATURE_GS]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_GS},
->> +	[S390_CPU_FEATURE_VXRS_EXT2]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS_EXT2},
->> +	[S390_CPU_FEATURE_VXRS_PDE]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS_PDE},
->> +	[S390_CPU_FEATURE_SORT]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_SORT},
->> +	[S390_CPU_FEATURE_DFLT]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_DFLT},
->> +	[S390_CPU_FEATURE_VXRS_PDE2]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_VXRS_PDE2},
->> +	[S390_CPU_FEATURE_NNPA]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_NNPA},
->> +	[S390_CPU_FEATURE_PCI_MIO]	= {.type = TYPE_HWCAP, .num = HWCAP_NR_PCI_MIO},
->> +	[S390_CPU_FEATURE_SIE]		= {.type = TYPE_HWCAP, .num = HWCAP_NR_SIE},
->> +};
+> > On Mon, 2022-07-11 at 09:31 +0800, Duoming Zhou wrote:
+> > > When the link layer connection is broken, the rose->neighbour is
+> > > set to null. But rose->neighbour could be used by rose_connection()
+> > > and rose_release() later, because there is no synchronization among
+> > > them. As a result, the null-ptr-deref bugs will happen.
+> > > 
+> > > One of the null-ptr-deref bugs is shown below:
+> > > 
+> > >     (thread 1)                  |        (thread 2)
+> > >                                 |  rose_connect
+> > > rose_kill_by_neigh              |    lock_sock(sk)
+> > >   spin_lock_bh(&rose_list_lock) |    if (!rose->neighbour)
+> > >   rose->neighbour = NULL;//(1)  |
+> > >                                 |    rose->neighbour->use++;//(2)
+> > > 
+> > > The rose->neighbour is set to null in position (1) and dereferenced
+> > > in position (2).
+> > > 
+> > > The KASAN report triggered by POC is shown below:
+> > > 
+> > > KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+> > > ...
+> > > RIP: 0010:rose_connect+0x6c2/0xf30
+> > > RSP: 0018:ffff88800ab47d60 EFLAGS: 00000206
+> > > RAX: 0000000000000005 RBX: 000000000000002a RCX: 0000000000000000
+> > > RDX: ffff88800ab38000 RSI: ffff88800ab47e48 RDI: ffff88800ab38309
+> > > RBP: dffffc0000000000 R08: 0000000000000000 R09: ffffed1001567062
+> > > R10: dfffe91001567063 R11: 1ffff11001567061 R12: 1ffff11000d17cd0
+> > > R13: ffff8880068be680 R14: 0000000000000002 R15: 1ffff11000d17cd0
+> > > ...
+> > > Call Trace:
+> > >   <TASK>
+> > >   ? __local_bh_enable_ip+0x54/0x80
+> > >   ? selinux_netlbl_socket_connect+0x26/0x30
+> > >   ? rose_bind+0x5b0/0x5b0
+> > >   __sys_connect+0x216/0x280
+> > >   __x64_sys_connect+0x71/0x80
+> > >   do_syscall_64+0x43/0x90
+> > >   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > > 
+> > > This patch adds lock_sock() in rose_kill_by_neigh() in order to
+> > > synchronize with rose_connect() and rose_release(). Then, changing
+> > > type of 'neighbour->use' from unsigned short to atomic_t in order to
+> > > mitigate race conditions caused by holding different socket lock while
+> > > updating 'neighbour->use'.
+> > > 
+> > > Meanwhile, this patch adds sock_hold() protected by rose_list_lock
+> > > that could synchronize with rose_remove_socket() in order to mitigate
+> > > UAF bug caused by lock_sock() we add.
+> > > 
+> > > What's more, there is no need using rose_neigh_list_lock to protect
+> > > rose_kill_by_neigh(). Because we have already used rose_neigh_list_lock
+> > > to protect the state change of rose_neigh in rose_link_failed(), which
+> > > is well synchronized.
+> > > 
+> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> > > ---
+> > > Changes in v6:
+> > >   - Change sk_for_each() to sk_for_each_safe().
+> > >   - Change type of 'neighbour->use' from unsigned short to atomic_t.
+> > > 
+> > >  include/net/rose.h    |  2 +-
+> > >  net/rose/af_rose.c    | 19 +++++++++++++------
+> > >  net/rose/rose_in.c    | 12 ++++++------
+> > >  net/rose/rose_route.c | 24 ++++++++++++------------
+> > >  net/rose/rose_timer.c |  2 +-
+> > >  5 files changed, 33 insertions(+), 26 deletions(-)
+> > > 
+> > > diff --git a/include/net/rose.h b/include/net/rose.h
+> > > index 0f0a4ce0fee..d5ddebc556d 100644
+> > > --- a/include/net/rose.h
+> > > +++ b/include/net/rose.h
+> > > @@ -95,7 +95,7 @@ struct rose_neigh {
+> > >  	ax25_cb			*ax25;
+> > >  	struct net_device		*dev;
+> > >  	unsigned short		count;
+> > > -	unsigned short		use;
+> > > +	atomic_t		use;
+> > >  	unsigned int		number;
+> > >  	char			restarted;
+> > >  	char			dce_mode;
+> > > diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
+> > > index bf2d986a6bc..54e7b76c4f3 100644
+> > > --- a/net/rose/af_rose.c
+> > > +++ b/net/rose/af_rose.c
+> > > @@ -163,16 +163,23 @@ static void rose_remove_socket(struct sock *sk)
+> > >  void rose_kill_by_neigh(struct rose_neigh *neigh)
+> > >  {
+> > >  	struct sock *s;
+> > > +	struct hlist_node *tmp;
+> > >  
+> > >  	spin_lock_bh(&rose_list_lock);
+> > > -	sk_for_each(s, &rose_list) {
+> > > +	sk_for_each_safe(s, tmp, &rose_list) {
+> > >  		struct rose_sock *rose = rose_sk(s);
+> > >  
+> > > +		sock_hold(s);
+> > > +		spin_unlock_bh(&rose_list_lock);
+> > > +		lock_sock(s);
+> > >  		if (rose->neighbour == neigh) {
+> > >  			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
+> > > -			rose->neighbour->use--;
+> > > +			atomic_dec(&rose->neighbour->use);
+> > >  			rose->neighbour = NULL;
+> > >  		}
+> > > +		release_sock(s);
+> > > +		sock_put(s);
+> > 
+> > I'm sorry, this does not work. At this point both 's' and 'tmp' sockets
+> > can be freed and reused. Both iterators are not valid anymore when you
+> > acquire the 'rose_list_lock' later.
 > 
-> I only realized now that you added all HWCAP bits here. It was
-> intentional that I added only the two bits which are currently used
-> for several reasons:
+> Thank you for your time and reply! But I think both 's' and 'tmp' can not
+> be freed and reused in rose_kill_by_neigh(). Because rose_remove_socket()
+> calls sk_del_node_init() which is protected by rose_list_lock to delete the
+> socket node from the hlist and if sk->sk_refcnt equals to 1, the socket will
+> be deallocated.
 > 
-> - Keep the array as small as possible.
-> - No need to keep this array in sync with HWCAPs, if new ones are added.
-> - There is a for loop in print_cpu_modalias() which iterates over all
->    MAX_CPU_FEATURES entries; this should be as fast as possible. Adding
->    extra entries burns cycles for no added value.
-The loop in print_cpu_modalias() was the reason why I added all
-current HWCAPs. The current implementation runs through all HWCAPs
-using cpu_have_feature() and I feared that reducing to just MSA and
-VXRS has effects in the reporting of CPU-features to userspace.
+> static void rose_remove_socket(struct sock *sk)
+> {
+> 	spin_lock_bh(&rose_list_lock);
+> 	sk_del_node_init(sk);
+> 	spin_unlock_bh(&rose_list_lock);
+> }
+> 
+> https://elixir.bootlin.com/linux/v5.19-rc6/source/net/rose/af_rose.c#L152
+> 
+> Both 's' and 'tmp' in rose_kill_by_neigh() is also protected by rose_list_lock.
 
-I double checked the output of 'grep features /proc/cpuinfo' and it
-stays the same, for 5.19-rc6, 5.19-rc6+this series, 5.19-rc6+this series 
-with just the two S390_CPU_FEATUREs. I might have misunderstood what 
-happens in that loop in print_cpu_modalias().
+The above loop explicitly releases the rose_list_lock at each
+iteration. Additionally, the reference count to 's' is released before
+re-acquiring such lock. By the time rose_list_lock is re-acquired, some
+other process could have removed from the list both 's' and 'tmp' and
+even de-allocate them.
 
-Now that I think again over this piece of code my additions do not make
-sense at all for me.
+Moving the 'sock_put(s);' after re-acquiring the rose_list_lock could
+protect from 's' being de-allocated, but can't protect from 'tmp' being
+deallocated, neither from 's' and 'tmp' being removed from the list.
 
-I will reduce that array again to the two explicitly needed entries.
+The above code is not safe.
+
+/P
 
 
-> 
-> Any future user which requires a not yet listed feature, can simply
-> add it when needed.
-> 
->> +int cpu_have_feature(unsigned int num)
->> +{
->> +	struct s390_cpu_feature *feature;
->> +
->> +	feature = &s390_cpu_features[num];
->> +	switch (feature->type) {
->> +	case TYPE_HWCAP:
->> +		return !!(elf_hwcap & (1UL << feature->num));
-> 
-> Before somebody else mentions it, I could have done better. Nowadays
-> this should be:
-> 
-> 		return !!(elf_hwcap & BIT(feature->num));
-I'll change it.

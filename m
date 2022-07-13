@@ -2,65 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63521573252
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1998B573259
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 11:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbiGMJTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 05:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S234696AbiGMJVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 05:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiGMJTT (ORCPT
+        with ESMTP id S231704AbiGMJVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 05:19:19 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE9E65D40
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:19:18 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id s3-20020a5eaa03000000b0067b8e40a536so4166590ioe.17
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 02:19:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
-        b=THUD/M/DkJ8qRRZV3pKQJ5wQVMQSJKCich5Us6AwjMXqGBCXYHwSvE5aiTduxsW4Ei
-         ElZ74a8Tt5+dbYF40qCDnLtdNobmVZQPVk7sZ6tuWDM4V9fEOq5cjqiTcX9Gwl7m3sPA
-         cIiuGiYteJO0vwT1xDWYVcVb11XLx9N4GbUskFfUD1640vsU4LFypY3kfWLxxuApLRuS
-         iwn3OHSdDoE0gzCugWJqsEEpHrIoMi2NM6p2H96BUQZ0HNf9Uu3+naPC0UYQXqwGMUFa
-         KS5y07bwriOmSi6l+X/EC1/GBW5R+CowSH2OIi8+8qXFzhg7+BZopzhj7P4T89Jb4p9d
-         dCgQ==
-X-Gm-Message-State: AJIora8y/t9Bao8fCZxUMpDeJKK0usEZqiUUsJ20BLeir2a5YUzydSqc
-        GoRKTUMXlwvxTbb/f84vNA7xxN93fg+b7F0DbxUrBpPSWCxY
-X-Google-Smtp-Source: AGRyM1tGKk8L7CaPoHPZN3L32agR0DF5b8G/3cjRJ3OTHH6uwupEEMGc5Zzm463FDp7p6zPKyV8fHNejR4x+ih82L8fDnCC6iM8z
+        Wed, 13 Jul 2022 05:21:02 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817D3EA173;
+        Wed, 13 Jul 2022 02:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=3OMBEO5LvXeVeXcuw8XZnY/HAiyjTi9UKlfBZPl5QP8=; b=Slm1e9jU7K4DAnTnTe9ef5cc1e
+        ETVKJ7ydj1dspJaa4koBUTFNxfpbCMYcoBpXeX+zf+Bkm6si98X8V/ovJ591qHYufKtQrK3eZbw6n
+        49vMysZFCwC3OE76jLV/FyFhilfM4PS9Ff0JKVM1kX3QnVkmThUNp3/S78VSEKVFBBGsxF5dTa04x
+        GJmidfCSY8b4yo4FNR0mK1DrN3AFA+QBQCVhY3iAltI10WymSLlspIoQXi3TjyXqCacuxjXZ4px9F
+        99ySG+mN5ALZ7ey0nbGdWP2gU5hU3/wFdcDEU5HgbU/NcJqj7+9s0vYSRdTHJHCgiqqab6FRnNYr7
+        Z32rXS8S0OwgViX2/TG0IdnQy+oS/fQoZPYeKhYiUBsic85M2NoSQ+cxvT/tYO83MU9z2rq1Qhzqa
+        IaHJelMtOxqz/9slzOAqNlTckLef85dIsny2u5SQi5SEl53USpw4vLauOPUbpyXGBG1YYQI55WI1z
+        xT28VzM1rGa0s1lADYqV/j/dcFPpkfSqiy5ufxw25DrqgXxGWWQeI7+b57BcgidztLkb9twKfAM0M
+        l8PBJn07CsJR8wthQYPbevqvDf69i7NDePtO/QPsFUbneW0NQlUH6i7mEOoksmKj0mMbwh3Z0O+E/
+        RaPIIbYUboDZUtOeyXabcST0VclZH6qE6xCk6/P10=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Latchesar Ionkov <lucho@ionkov.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        Nikolay Kichukov <nikolay@oldum.net>
+Subject: Re: [V9fs-developer] [PATCH v5 11/11] net/9p: allocate appropriate reduced
+ message buffers
+Date:   Wed, 13 Jul 2022 11:19:48 +0200
+Message-ID: <4284956.GYXQZuIPEp@silver>
+In-Reply-To: <Ys3jjg52EIyITPua@codewreck.org>
+References: <cover.1657636554.git.linux_oss@crudebyte.com>
+ <Ys3Mj+SgWLzhQGWK@codewreck.org> <Ys3jjg52EIyITPua@codewreck.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1412:b0:33f:7cd8:6a79 with SMTP id
- k18-20020a056638141200b0033f7cd86a79mr1282583jad.119.1657703957555; Wed, 13
- Jul 2022 02:19:17 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 02:19:17 -0700
-In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008870ab05e3ac4783@google.com>
-Subject: Re: [syzbot] general protection fault in fscache_free_cookie
-From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
-To:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
-        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
-        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-fscache: fix GPF in fscache_free_cookie
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
-Until then the bug is still considered open and
-new crashes with the same signature are ignored.
+On Dienstag, 12. Juli 2022 23:11:42 CEST Dominique Martinet wrote:
+> Dominique Martinet wrote on Wed, Jul 13, 2022 at 04:33:35AM +0900:
+> > Christian Schoenebeck wrote on Tue, Jul 12, 2022 at 04:31:36PM +0200:
+> > > So far 'msize' was simply used for all 9p message types, which is far
+> > > too much and slowed down performance tremendously with large values
+> > > for user configurable 'msize' option.
+> > > 
+> > > Let's stop this waste by using the new p9_msg_buf_size() function for
+> > > allocating more appropriate, smaller buffers according to what is
+> > > actually sent over the wire.
+> > > 
+> > > Only exception: RDMA transport is currently excluded from this, as
+> > > it would not cope with it. [1]
+> 
+> Thinking back on RDMA:
+> - vs. one or two buffers as discussed in another thread, rdma will still
+> require two buffers, we post the receive buffer before sending as we
+> could otherwise be raced (reply from server during the time it'd take to
+> recycle the send buffer)
+> In practice the recv buffers should act liks a fifo and we might be able
+> to post the buffer we're about to send for recv before sending it and it
+> shouldn't be overwritten until it's sent, but that doesn't look quite good.
+> 
+> - for this particular patch, we can still allocate smaller short buffers
+> for requests, so we should probably keep tsize to 0.
+> rsize there really isn't much we can do without a protocol change
+> though...
+
+Good to know! I don't have any RDMA setup here to test, so I rely on what you 
+say and adjust this in v6 accordingly, along with the strcmp -> flag change of 
+course.
+
+As this flag is going to be very RDMA-transport specific, I'm still scratching 
+my head for a good name though.
+
+Best regards,
+Christian Schoenebeck
+
+

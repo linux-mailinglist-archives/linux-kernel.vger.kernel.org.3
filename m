@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC6E573FC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925FC573FC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Jul 2022 00:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiGMWwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 18:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S229635AbiGMW4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 18:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiGMWwM (ORCPT
+        with ESMTP id S229478AbiGMW4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:52:12 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECF74F65E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:52:06 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r6so217962edd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:52:06 -0700 (PDT)
+        Wed, 13 Jul 2022 18:56:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88894F67B
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:56:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id fz10so512841pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 15:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=stZpBbowQ4JXsl3+qFdFMsOHzSSp0WYkDAkDM37YMIA=;
-        b=v+KZEubMaBdREU/pP/e/zkd+MvLexj34FKRa5LqBSjS0H68kqV4FXUFZQd7Sq1BX/b
-         B5w7e/1L28hdLlSd1urjSpu87u7qRGiFVQCexts/UGf+hblsXX/eOx8CRAocd8vldqwl
-         yTUcoX5jRRQi4n9nBxgaWMQ0QaSHeQJjBm330Ex01pWHCw3zRAx38ilNE+PAnlv/ms35
-         j3TIW4kOSO7YJRCt/muUqk+uRaXZSa+YOy7IeVOCv6zyb1t9Lz0bgDc6Ilb6TZMDc+eq
-         a0fo1DfTv/Y5WbU6DEDKbYdMSgbVkuzjH76Py5YksBYIqdU6s+MEIms5AO6o4kUPyfKt
-         kWXg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ALmsjo20iDq07XHHp8hpMGpJ3WDhp0g9JmzUyOXBoCM=;
+        b=JHtzZWeUscDe/NjfuYFmLnY1UjC/BzmUB4H+A2+N3HrOgtyNPI0iG5FaA1VaXxybCp
+         mHZVBAhRW9cXndUaawFFIXstvQ6oojNbyZmEvvWPXCd9nxggREDJlDVQk+1aDN6Bq5Vc
+         Ej/MBMxV71S3F1TZqh5POlcnQRkVcg6haDsv8est59YY8SzzTsQEZ9rFPxnY6oZMZI7O
+         maJ4x/HoxSBZbupP2IkXd0WPHa3PWS4JfuyMJmxl6x0iu+xHWGSQZh4CSHlQZsBQJdlS
+         stuDk4v/KIZv1gMLII6nxGLnx8L4iAWUr68vzt/G9+pQfpsQHTZW/UWyEQwZfXthBpVf
+         q/wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=stZpBbowQ4JXsl3+qFdFMsOHzSSp0WYkDAkDM37YMIA=;
-        b=KJd9UR18dJ+h85vykv50+7i+1e+h40V/knlOC+l1d66RCIQvl5et6i317kLG4aKz9w
-         xqzVNTpq1zBcBytitBXI8GeW6dHdUb+w3ffucxFaCvj3Q7VC+DzH2QHpGQXQk6e44DP2
-         2ksNqUkjsoiQph1S35kohBbBoGRWwNujHi/pisHqhkjdn4Qwt3ciceuxalncpbwo5o0C
-         AQauOLNmXJSmTA3aKL2/xfrfRd3NSHtGRQwbU2sk1dU/Agp9avp4zw4uOsXaZ7qECQ8T
-         gmrgu9cLpK6h9mhOmwr675ruSLkdUNBCkfi7FgEMqKvExb1VDxHdrn78/MCrAwO69SyP
-         XhfQ==
-X-Gm-Message-State: AJIora8cw0SnUgV8uK4nUn9L6Ecyp4Sif3IH4tmxexAHyQCZaqj4VpzV
-        Y//Yn6Zarptvn6f5tuhMxmZfow==
-X-Google-Smtp-Source: AGRyM1umGO0qrr8AgNbz3XiiWBS3vkCRIXdxYww4o+K9pPN8OPoKZNwsBYV7kQSbfnMatopz/e2R7w==
-X-Received: by 2002:aa7:dcc2:0:b0:43a:b180:bb12 with SMTP id w2-20020aa7dcc2000000b0043ab180bb12mr7869979edu.119.1657752725014;
-        Wed, 13 Jul 2022 15:52:05 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-197.xnet.hr. [88.207.98.197])
-        by smtp.googlemail.com with ESMTPSA id kw11-20020a170907770b00b006f3ef214e27sm5538254ejc.141.2022.07.13.15.52.04
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ALmsjo20iDq07XHHp8hpMGpJ3WDhp0g9JmzUyOXBoCM=;
+        b=5yClwImjWvgq3QGW9QBfQKfd6P0HFd/twkIz42tWTcD4coNW1q5FWagaCuJgWObWbj
+         RpJv4/09+a4HjdoZEzNn4/8w4YjaBIURoepV4WPwLCVNvmJ9zRrU2CNfTkPjXoedkBV6
+         K+TrVXI6v1+oK3IQ9ZC5/kIpSpx4qlu7pEVAf0Tds6t4UONC26Kq9usqWoIen1HBu6PD
+         plbv6JZMeYy8+7lMbLOKB3KzErW0pV7Cv7sRF+mVcd5VI5YqqrtDIaRkpjxR0oCvP1S5
+         aQucZcZ18tPAKhCvEXxCqJ3V60V0MX9I6UJPst4HK3YZAdF52xmkv3ntfZvzZgCSCMcx
+         a4Xg==
+X-Gm-Message-State: AJIora+2GHt3wzycOk4+4hswtTkPPXgvG7NF85KekV7KTx/DpR9t0bNF
+        tQr7lV8Bx6ZCKFpYP6rZyCA=
+X-Google-Smtp-Source: AGRyM1ssTP6Thy3UB20epNnuCWSDPBTNSUJXlSgGX6sg8IBzM8ZlJakJTn9/vCXGS5PpybokpfWpXA==
+X-Received: by 2002:a17:90a:590e:b0:1f0:1dd9:bf6c with SMTP id k14-20020a17090a590e00b001f01dd9bf6cmr6148501pji.15.1657752989217;
+        Wed, 13 Jul 2022 15:56:29 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa79af4000000b00518764d09cdsm59039pfp.164.2022.07.13.15.56.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 15:52:04 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     linus.walleij@linaro.org, colin.foster@in-advantage.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 2/2] pinctrl: ocelot: fix pinconf
-Date:   Thu, 14 Jul 2022 00:51:51 +0200
-Message-Id: <20220713225151.1476041-2-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220713225151.1476041-1-robert.marko@sartura.hr>
-References: <20220713225151.1476041-1-robert.marko@sartura.hr>
+        Wed, 13 Jul 2022 15:56:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Jul 2022 15:56:27 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Subject: Re: Linux 5.19-rc6
+Message-ID: <20220713225627.GC32544@roeck-us.net>
+References: <CAHk-=wgTmGaToVFdSdoFqT2sNkk7jg2rSWasUYv-tASUZ2j_0Q@mail.gmail.com>
+ <20220713050724.GA2471738@roeck-us.net>
+ <CAHk-=widUqghhXus_GCM9+FESa5vHqMb_pO3=0dGYH8C+yix2w@mail.gmail.com>
+ <Ys8hqoiN5iWbslsM@shell.armlinux.org.uk>
+ <CAHk-=wjNxyXQqn=k0KipzUPoBYWQhUwybxee8GTkF_Oz6RPVFw@mail.gmail.com>
+ <CADVatmMJ4f+3-z1SWOSXuygee3fMsLqjcWhEY=NLhSCj61OB5Q@mail.gmail.com>
+ <CAHk-=wgUGp96_Wup3=Utws=Mn+07vi7ZXknv4nKZkAJv8Ezhnw@mail.gmail.com>
+ <CADVatmPx=T_i1oaX2i_d5crbWkixFZU7s-_wky_kz58wDgwGDQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADVatmPx=T_i1oaX2i_d5crbWkixFZU7s-_wky_kz58wDgwGDQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit "pinctrl: ocelot: convert pinctrl to regmap" moved to using
-regmap_read/write, however it neglected to also carry out alignment
-to register stride of 4.
+On Wed, Jul 13, 2022 at 10:50:06PM +0100, Sudip Mukherjee wrote:
+> On Wed, Jul 13, 2022 at 10:45 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Wed, Jul 13, 2022 at 2:36 PM Sudip Mukherjee
+> > <sudipm.mukherjee@gmail.com> wrote:
+> > >
+> > > > >
+> > > > > https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/
+> > > >
+> > > > That patch looks sane to me, but I guess Guenter would need to check
+> > >
+> > > I still see the failure in my builds with this patch. But surprisingly
+> > > I dont see the build failure (with or without this patch) with gcc-12,
+> > > only with gcc-11.
+> >
+> > Arrghs. "build failure"?
+> 
+> Uhh.. no, sorry.. I meant the same problem which Guenter reported with
+> powerpc64-linux-ld, hard float and soft float.
+> But I dont see this problem with gcc-12, only with gcc-11.
+> 
 
-This would cause the following error:
-[    1.720873] pinctrl-ocelot 6110101e0.pinctrl: pin_config_set op failed for pin 34
-[    1.728110] sdhci-sparx5 600800000.mmc: Error applying setting, reverse things back
+Weird. It works for me with gcc 11.3.0 / binutils 2.38 as well as with
+gcc 11.2.0 / binutils 2.36.1.
 
-So, regmap_read would return -EINVAL as it was being passed address
-of the pin without stride, so for example pin 34 would end up being
-0x22 in hex.
-
-Fix this by accouting for the stride in register address.
-
-Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- drivers/pinctrl/pinctrl-ocelot.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index 84bfbe649b67..a71145367b15 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -1327,7 +1327,9 @@ static int ocelot_hw_get_value(struct ocelot_pinctrl *info,
- 	if (info->pincfg) {
- 		u32 regcfg;
- 
--		ret = regmap_read(info->pincfg, pin, &regcfg);
-+		ret = regmap_read(info->pincfg,
-+				  pin * regmap_get_reg_stride(info->pincfg),
-+				  &regcfg);
- 		if (ret)
- 			return ret;
- 
-@@ -1359,14 +1361,18 @@ static int ocelot_pincfg_clrsetbits(struct ocelot_pinctrl *info, u32 regaddr,
- 	u32 val;
- 	int ret;
- 
--	ret = regmap_read(info->pincfg, regaddr, &val);
-+	ret = regmap_read(info->pincfg,
-+			  regaddr * regmap_get_reg_stride(info->pincfg),
-+			  &val);
- 	if (ret)
- 		return ret;
- 
- 	val &= ~clrbits;
- 	val |= setbits;
- 
--	ret = regmap_write(info->pincfg, regaddr, val);
-+	ret = regmap_write(info->pincfg,
-+			   regaddr * regmap_get_reg_stride(info->pincfg),
-+			   val);
- 
- 	return ret;
- }
--- 
-2.36.1
-
+Guenter

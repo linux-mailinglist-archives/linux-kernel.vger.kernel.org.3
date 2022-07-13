@@ -2,122 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D547573A1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C412573A23
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 17:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbiGMP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 11:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S236764AbiGMP24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 11:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbiGMP0s (ORCPT
+        with ESMTP id S236335AbiGMP2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:26:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9347A4D15C;
-        Wed, 13 Jul 2022 08:26:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ss3so14444779ejc.11;
-        Wed, 13 Jul 2022 08:26:47 -0700 (PDT)
+        Wed, 13 Jul 2022 11:28:53 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B101EAC1
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:28:52 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id sz17so20482790ejc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Jul 2022 08:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=kzxlcZi7f09uxzv1rHERdurRhsF4h+KpHejIZNkN6qs=;
-        b=PsC622FxZFBDQOCQvYNUeIA/Yj2Pus0JFG2MtQUPE1AWqF/6SMV+HObPyO9XeBNBGV
-         ETK6zX0s6ydwbz8LcNXgFngZHNMLf9PvTFCXAU4DZLyZW4WQ50LGvHFqaRFULVvjUhrJ
-         xchpdta58xXRV8qL5fHWTWKnM4dy4JXCN3tASpkbyRbFKtQ1LMFS95e3j3shhwe7Gf8i
-         f4pF7tzGCB9DzmLlZMbjwB4tXIIdRuJbk5hTee5rLiUCnOin8rX8cWNGZmX2QayoKYx7
-         ++hFJ2xyxN7im6gf8eZhNA5kwIJyRbnp/GKsu7yB8yD6WLHqLKl4V7ND8GaWtkPIZKyY
-         URow==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RXBbWBM75/ahyxyt/rX+gGKyoO6HVWAhyJ5ys4KYc5Y=;
+        b=h5pVaH/ybq6nKQe9QdWLLrv0ehKiYPwxogc3FObax6srqYjbUChQ9sjgq09Xqhlo3u
+         383fmR1rwoCtFBwU551rCtTzumyL3NETloR+LqMlQ+yBUu4meVAbXL+OHjDBDgfWiH1D
+         7LLEKW+TOhzJEL/rXwNwGANE1qUPiu1Z9zLAwzHuJh3nDQckxUocRSIGDnrG3cv+9WVi
+         VDypulNL2ZtmCvdusYLheJTLk2oIIf8l6ljF+TYHcuk2R//pi1omxu5Px16lsAi+G2ue
+         RatcuhW3Z5L7MYeDp4EozZ3k709DTbQjKcUlk/3kzZuq1rU/mGl8Dk8Y1atrDh8gUWYp
+         gRhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kzxlcZi7f09uxzv1rHERdurRhsF4h+KpHejIZNkN6qs=;
-        b=pGoe74Telgh5y1s1nMdeH0FZqzkw5B4xMQyL99vLb9+J06+RdMHCEbXd6gb1NX53p/
-         0Hovee54rnvK59lb8PtO23632uOyKZ88q9FHLyen78Pkf84+YBB24PzN0Idh7OL3HeA/
-         3EPji17GsD0oWy5f4G187a2hQfFYNBYn//O6C7tUkYmvdB+h6q61+5dGqjI4aiKcUGWh
-         Dhlzhs599YI8bUi3o5eTJZm0z2H4M79kAIw/N9C4hNNtBevEyhI4dcKN6Ez9veE9ymYF
-         rUP3jPpwWMiWrJeRNZenwv0eEVpd9I2FbJVA2QpNf08CjMamJCysBm5uo0LX+50SAz10
-         7gwg==
-X-Gm-Message-State: AJIora9T947Jt20HJ681giqKTBExnqjAlrwNIIhT0MWXBoAtJZYisQzV
-        saufXRwtj4WRFtcOqDEf/xFR4L5JXXE=
-X-Google-Smtp-Source: AGRyM1sFoaG6MHmbm4bR0mniczE6xP/FYB4PAOFc3Y1NHX7ZS+t/NGK9re79B7JJdKwLGBDyLh2qOw==
-X-Received: by 2002:a17:906:58cf:b0:726:97db:4f6d with SMTP id e15-20020a17090658cf00b0072697db4f6dmr4031917ejs.261.1657726006002;
-        Wed, 13 Jul 2022 08:26:46 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id ch15-20020a0564021bcf00b0043a71c376a2sm8116926edb.33.2022.07.13.08.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 08:26:45 -0700 (PDT)
-Message-ID: <304678bb-f49c-9c3b-e15e-df6c9e8a4ea2@gmail.com>
-Date:   Wed, 13 Jul 2022 17:26:44 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RXBbWBM75/ahyxyt/rX+gGKyoO6HVWAhyJ5ys4KYc5Y=;
+        b=RXe5EnS+VRwwEHsZosxaBcGfPBqUsHi/EItE1ndpjOwyxSF8/NShoiLGahozGqRJ3S
+         IPpA+GCZvHMujzFn5BvL7og1T+vieVUtHrnzjoe0GRTNW6cY7U4t8ToqRi5YiDZSiAXi
+         qSjNJ/59Y97Rv33AOLqOZt9fEVoe7UUqI4gktfOQmESBBhjbcAYohJUUhvbHyPj8bpAW
+         99a4wPAvkbkcmWWLCKcdV9E+IHwpuA3OfSBJ2SHAsW+hVY2gJPiLNt3BPM0SX7uT2G6o
+         XRDBa9vZUkTf0AoaEjmLPEr63MDewMwRj21dO80KiuVufX67j9hASJnWZOQQuUbxqnXE
+         dFoQ==
+X-Gm-Message-State: AJIora9VjvW3d/2AlfETEyVqbrORUBRN1bl2Ie20LZgdvFYv45qo6PFU
+        PcOkNTRexS2HHsTYHRSGHS8grw==
+X-Google-Smtp-Source: AGRyM1soQHvm01/6uaS0m2SGJ7gGCr/sRtil3nOppibKMGoUMJRgYpn4kNQIx+zyv+hQ/ud7t2S8nw==
+X-Received: by 2002:a17:907:2cca:b0:72b:4188:f95b with SMTP id hg10-20020a1709072cca00b0072b4188f95bmr4093932ejc.153.1657726131404;
+        Wed, 13 Jul 2022 08:28:51 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id p13-20020a17090653cd00b006fed85c1a8fsm5008210ejo.202.2022.07.13.08.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:28:50 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH] remoteproc: qcom_q6v5_pas: Deal silently with optional px and cx regulators
+Date:   Wed, 13 Jul 2022 18:28:35 +0300
+Message-Id: <20220713152835.3848875-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v2 2/8] ARM: dts: Move BCM963138DVT board dts to
- ARCH_BCMBCA
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        kursad.oney@broadcom.com, f.fainelli@gmail.com,
-        anand.gore@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, soc@kernel.org
-References: <20220707070037.261532-1-william.zhang@broadcom.com>
- <20220707070037.261532-3-william.zhang@broadcom.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20220707070037.261532-3-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.07.2022 09:00, William Zhang wrote:
-> Use CONFIG_ARCH_BCMBCA to build all the BCMBCA SoC dts and remove
-> CONFIG_ARCH_BCM_63XX from the makefile
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
-> 
-> (no changes since v1)
-> 
->   arch/arm/boot/dts/Makefile | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 38d9c60aece7..1bf8e2f8ee68 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -147,8 +147,6 @@ dtb-$(CONFIG_ARCH_BCM_53573) += \
->   	bcm47189-luxul-xap-810.dtb \
->   	bcm47189-tenda-ac9.dtb \
->   	bcm947189acdbmr.dtb
-> -dtb-$(CONFIG_ARCH_BCM_63XX) += \
-> -	bcm963138dvt.dtb
->   dtb-$(CONFIG_ARCH_BCM_CYGNUS) += \
->   	bcm911360_entphn.dtb \
->   	bcm911360k.dtb \
-> @@ -184,6 +182,7 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
->   	bcm7445-bcm97445svmb.dtb
->   dtb-$(CONFIG_ARCH_BCMBCA) += \
->   	bcm947622.dtb \
-> +	bcm963138dvt.dtb \
->   	bcm963148.dtb \
->   	bcm963178.dtb \
->   	bcm96756.dtb \
+Use _get_optional as some platforms might not provide the px
+and cx regulators. This avoids printing the following for each
+unavailable regulator:
 
-Do we want to mix all that DT files? Are ARCH_BCM_63XX (ex-)users
-interested in compiling all of them?
+[    4.350229] qcom_q6v5_pas 5c00000.remoteproc: supply cx not found,
+using dummy regulator
+[    4.374224] qcom_q6v5_pas 5c00000.remoteproc: supply px not found,
+using dummy regulator
 
-For IPROC SoCs we have separated symbols: ARCH_BCM_CYGNUS / ARCH_BCM_HR2
-/ ARCH_BCM_NSP / ARCH_BCM_5301X and we compile arch specific DT files
-only.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ drivers/remoteproc/qcom_q6v5_pas.c | 32 +++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6ae39c5653b1..3c3affaff7ac 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -185,13 +185,17 @@ static int adsp_start(struct rproc *rproc)
+ 	if (ret)
+ 		goto disable_xo_clk;
+ 
+-	ret = regulator_enable(adsp->cx_supply);
+-	if (ret)
+-		goto disable_aggre2_clk;
++	if (adsp->cx_supply) {
++		ret = regulator_enable(adsp->cx_supply);
++		if (ret)
++			goto disable_aggre2_clk;
++	}
+ 
+-	ret = regulator_enable(adsp->px_supply);
+-	if (ret)
+-		goto disable_cx_supply;
++	if (adsp->px_supply) {
++		ret = regulator_enable(adsp->px_supply);
++		if (ret)
++			goto disable_cx_supply;
++	}
+ 
+ 	ret = qcom_scm_pas_auth_and_reset(adsp->pas_id);
+ 	if (ret) {
+@@ -212,9 +216,11 @@ static int adsp_start(struct rproc *rproc)
+ 	return 0;
+ 
+ disable_px_supply:
+-	regulator_disable(adsp->px_supply);
++	if (adsp->px_supply)
++		regulator_disable(adsp->px_supply);
+ disable_cx_supply:
+-	regulator_disable(adsp->cx_supply);
++	if (adsp->cx_supply)
++		regulator_disable(adsp->cx_supply);
+ disable_aggre2_clk:
+ 	clk_disable_unprepare(adsp->aggre2_clk);
+ disable_xo_clk:
+@@ -231,8 +237,10 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
+ {
+ 	struct qcom_adsp *adsp = container_of(q6v5, struct qcom_adsp, q6v5);
+ 
+-	regulator_disable(adsp->px_supply);
+-	regulator_disable(adsp->cx_supply);
++	if (adsp->px_supply)
++		regulator_disable(adsp->px_supply);
++	if (adsp->cx_supply)
++		regulator_disable(adsp->cx_supply);
+ 	clk_disable_unprepare(adsp->aggre2_clk);
+ 	clk_disable_unprepare(adsp->xo);
+ 	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+@@ -326,13 +334,13 @@ static int adsp_init_clock(struct qcom_adsp *adsp)
+ 
+ static int adsp_init_regulator(struct qcom_adsp *adsp)
+ {
+-	adsp->cx_supply = devm_regulator_get(adsp->dev, "cx");
++	adsp->cx_supply = devm_regulator_get_optional(adsp->dev, "cx");
+ 	if (IS_ERR(adsp->cx_supply))
+ 		return PTR_ERR(adsp->cx_supply);
+ 
+ 	regulator_set_load(adsp->cx_supply, 100000);
+ 
+-	adsp->px_supply = devm_regulator_get(adsp->dev, "px");
++	adsp->px_supply = devm_regulator_get_optional(adsp->dev, "px");
+ 	return PTR_ERR_OR_ZERO(adsp->px_supply);
+ }
+ 
+-- 
+2.34.3
+

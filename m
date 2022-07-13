@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96B9573D0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514B573D12
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Jul 2022 21:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiGMTPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Jul 2022 15:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S236871AbiGMTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Jul 2022 15:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiGMTPo (ORCPT
+        with ESMTP id S229959AbiGMTUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:15:44 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306E71F2D8;
-        Wed, 13 Jul 2022 12:15:43 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 64so20901012ybt.12;
-        Wed, 13 Jul 2022 12:15:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WadcFO2ofb7EmxBEnBo4nXzeB9hmmz1tEajKg3FY4pw=;
-        b=wQ1Ej2xwmFxM1BV1Bj/sR7phdL/sKceGh4e7NJ4a0k+gkDLXfiTi4+jCrn3Np0bx2I
-         MXC4TrhHRMlJw9OgALVMMWQcTePLzJdeXKvGcvhaCyrNtVXd7wHtIDT6nWQaUXgo0nTi
-         g8oVYj03EtQLBL982TlZMQUI+ORKX08tbcojwHReOuZesL/VMp6czRx52Z+lZG5WZ2m0
-         qPeX21J+1k/lmZN8nsTomkFfmDyWGr4GG3cHhx2C3F7Zdews3qweEzppJGI7P/GULrEb
-         CX5rpsJYZujTPpp3tOLR84i9cD0J3sq2NBrxiE2yvrUyP40WU7fBjWIsQMNsJcZQXgMb
-         ysvg==
-X-Gm-Message-State: AJIora9z3uI4ec9paqeQo0hymSgGypBPUieGcf6/bwWTr4U3uQvz0oHz
-        wRlHO+eLaQEsP7roSWhbrw+M3Ens7GhMRD6lWLw=
-X-Google-Smtp-Source: AGRyM1uhuP1kfMx0XnXYPp6aAIlao66vkvbDAB8FNec0u0hroyZAwmVi1g5v8ayI2pw1PKnj2S6J+zmCVyzAzoqiwWA=
-X-Received: by 2002:a25:a2ca:0:b0:66e:719e:279 with SMTP id
- c10-20020a25a2ca000000b0066e719e0279mr4946716ybn.622.1657739742431; Wed, 13
- Jul 2022 12:15:42 -0700 (PDT)
+        Wed, 13 Jul 2022 15:20:03 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F1721818;
+        Wed, 13 Jul 2022 12:20:02 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9E9E242685E;
+        Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kKbS3WRHe1BQ; Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 112C0426C13;
+        Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 112C0426C13
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1657740000;
+        bh=RMWgUjxlJ5h9ifad36+paV2jGXpFbQkk5sUyLZfsdlU=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=EARasB/73KXy5eMCnFCiftad+GY4PfT9vwRYEREFi4KXWiDE0Pa5mTT8LNfVjS2cV
+         aiYjyjO4EfYYiJh3JhkpbEfbHGDHeGYMaLWFM1cGYPp7ggL4rHOR/vnFsZEQCXCpnj
+         41DCR8a6bV6YiAU7NgQSsiqQRRnJZqzH0Mfxu/Nq2Hgmk/TS3NE9ZhFPJnnInRjH/l
+         0aq0BaYpqf91Ko8fKoJb3/XJ4r53Fg1KUcGgtlc0FW0b9iDi80k2C5i5haygpt71Fk
+         3KFZnBttk7V5Zvmc7Cj7jEiT4ha8WdFFBCfaHffiwaXa7vFGpHCosb5KvSbBbwDLP9
+         G/4i3WZQt2r2w==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LbT8Uuda7r0a; Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id DBA664268F3;
+        Wed, 13 Jul 2022 15:19:59 -0400 (EDT)
+Date:   Wed, 13 Jul 2022 15:19:59 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>,
+        linuxtools-dev@eclipse.org, lttng-dev <lttng-dev@lists.lttng.org>,
+        lwn <lwn@lwn.net>,
+        Trace Compass Developer Discussions 
+        <tracecompass-dev@eclipse.org>
+Message-ID: <1084656607.67311.1657739999848.JavaMail.zimbra@efficios.com>
+Subject: Tracing Summit 2022: Announcement and Call for Proposals, October
+ 11th - 13th, 2022, London, United Kingdom
 MIME-Version: 1.0
-References: <20220713175346.630-1-mario.limonciello@amd.com>
-In-Reply-To: <20220713175346.630-1-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Jul 2022 21:15:31 +0200
-Message-ID: <CAJZ5v0h4m+efJGQT6uKpPLdqLgHOpp1mXw5pLO_TBY+NimhMog@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: CPPC: Fix enabling CPPC on AMD systems with shared memory
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        "Yuan, Perry" <perry.yuan@amd.com>, Huang Rui <ray.huang@amd.com>,
-        Stable <stable@vger.kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
+Thread-Index: GhFp6sgYm5dGm85QpgTZYdYT1/wVUg==
+Thread-Topic: Tracing Summit 2022: Announcement and Call for Proposals, October 11th - 13th, 2022, London, United Kingdom
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_GREY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 7:54 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> When commit 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all
-> and when CPPC_LIB is supported") was introduced, we found collateral
-> damage that a number of AMD systems that supported CPPC but
-> didn't advertise support in _OSC stopped having a functional
-> amd-pstate driver. The _OSC was only enforced on Intel systems at that
-> time.
->
-> This was fixed for the MSR based designs by commit 8b356e536e69f
-> ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-> but some shared memory based designs also support CPPC but haven't
-> advertised support in the _OSC.  Add support for those designs as well by
-> hardcoding the list of systems.
->
-> Fixes: 72f2ecb7ece7 ("ACPI: bus: Set CPPC _OSC bits for all and when CPPC_LIB is supported")
-> Fixes: 8b356e536e69f ("ACPI: CPPC: Don't require _OSC if X86_FEATURE_CPPC is supported")
-> Link: https://lore.kernel.org/all/3559249.JlDtxWtqDm@natalenko.name/
-> Cc: stable@vger.kernel.org # 5.18
-> Reported-and-tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  arch/x86/kernel/acpi/cppc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
-> index 734b96454896..8d8752b44f11 100644
-> --- a/arch/x86/kernel/acpi/cppc.c
-> +++ b/arch/x86/kernel/acpi/cppc.c
-> @@ -16,6 +16,12 @@ bool cpc_supported_by_cpu(void)
->         switch (boot_cpu_data.x86_vendor) {
->         case X86_VENDOR_AMD:
->         case X86_VENDOR_HYGON:
-> +               if (boot_cpu_data.x86 == 0x19 && ((boot_cpu_data.x86_model <= 0x0f) ||
-> +                   (boot_cpu_data.x86_model >= 0x20 && boot_cpu_data.x86_model <= 0x2f)))
-> +                       return true;
-> +               else if (boot_cpu_data.x86 == 0x17 &&
-> +                        boot_cpu_data.x86_model >= 0x70 && boot_cpu_data.x86_model <= 0x7f)
-> +                       return true;
->                 return boot_cpu_has(X86_FEATURE_CPPC);
->         }
->         return false;
-> --
+Hi all,
 
-Applied as 5.19-rc material, thanks!
+This is a Call for Proposals for the Tracing Summit 2022[0] which will be held in London, United Kingdom on 11th to 13th of October, 2022.
+
+- Location: Google, 6 Pancras Sq, London N1C 4AG, UK
+- Event dates: Tuesday the 11th to Thursday the 13th of October, 2022
+- Cost: Free
+- CFP link: [1]
+- Register to attend: [2]
+
+Timeline:
+
+- CFP Opens: July 13th, 2022
+- Registration opens: July 13th, 2022
+- CFP Closes: September 1st, 2022
+- Registration closes: October 3rd, 2022
+
+You can subscribe to the mailing list to get the latest information on the event: [3]
+
+The Tracing Summit is a three-day, single-track conference on the topic of tracing. The event focuses on software and hardware tracing, gathering developers and end-users of tracing and trace analysis tools. The main goal of the Tracing Summit is to provide space for discussion between people of the various areas that benefit from tracing, namely parallel, distributed and/or real-time systems, as well as kernel development.
+
+We are welcoming 30 minute presentations on topics covering, but not limited to:
+
+- Investigation workflow of real-time, latency, and throughput issues,
+- Trace collection and extraction,
+- Trace filtering,
+- Trace aggregation,
+- Trace formats,
+- Tracing multi-core systems,
+- Trace abstraction,
+- Trace modeling,
+- Automated trace analysis (e.g. dependency analysis),
+- Tracing large clusters and distributed systems,
+- Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+- Trace visualization,
+- Interaction between debugging and tracing,
+- Tracing remote control,
+- Analysis of large trace datasets,
+- Cloud trace collection and analysis,
+- Integration between trace tools,
+- Live tracing & monitoring,
+- Programmable tracing (e.g. eBPF).
+
+Those can cover available technologies, ongoing work, and yet non-existent technologies (which are compelling to end-users).
+Please understand that this open forum is not the proper place to present sales or marketing pitches, nor technologies which are prevented from being freely used in open source.
+
+This year tickets are free and seating is limited to 80 people.
+
+To register use the following link: [2]
+
+Please send any queries about this conference to info@tracingsummit.org .
+
+[0]: https://tracingsummit.org
+[1]: https://docs.google.com/forms/d/e/1FAIpQLSf65-LaD5EiYSxSN6D6XGRazExSur0SW7oG6ZIpGpDN4ra_rg/viewform
+[2]: https://docs.google.com/forms/d/e/1FAIpQLSdq4whieesZeoHJq1h2CDbWeO5FuQnPk6G257hfSLgnWRenvg/viewform
+[3]: http://eepurl.com/goakfv
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
